@@ -1,5 +1,4 @@
-import { I18nProvider } from "@/lib/i18n";
-import { useI18n } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import GroupCourseForm from "@/components/GroupCourseForm";
@@ -11,22 +10,16 @@ const PageContent = () => {
   const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-background cedar-pattern">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      
-      {/* Lebanese stripe divider */}
-      <div className="lebanese-stripe" />
-      
       <GroupCourseForm />
+      <div className="flag-stripe" />
       <PrivateLessonsForm />
       <KidsCourseForm />
-
-      {/* Lebanese stripe divider */}
-      <div className="lebanese-stripe" />
-
-      <footer className="py-10 text-center border-t border-border">
-        <CedarTree className="text-secondary mx-auto mb-3" size={32} />
+      <div className="flag-stripe" />
+      <footer className="py-12 text-center">
+        <CedarTree className="text-secondary/30 mx-auto mb-4" size={28} />
         <p className="text-sm text-muted-foreground">{t.footer}</p>
       </footer>
     </div>

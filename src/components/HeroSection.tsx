@@ -1,44 +1,50 @@
 import { useI18n } from "@/lib/i18n";
 import CedarTree from "@/components/CedarTree";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 const HeroSection = () => {
   const { t } = useI18n();
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-      {/* Lebanese flag background */}
-      <div className="absolute inset-0 flex flex-col">
-        <div className="flex-1 bg-primary" />
-        <div className="flex-[2] bg-card flex items-center justify-center">
-          <CedarTree className="text-secondary opacity-10" size={300} />
-        </div>
-        <div className="flex-1 bg-primary" />
-      </div>
+    <section className="relative min-h-screen flex items-center justify-center pt-20">
+      {/* Background image */}
+      <img
+        src={heroBanner}
+        alt="Lebanese landscape"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-3 mb-6">
-          <CedarTree className="text-secondary" size={40} />
-        </div>
+      <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
+        <CedarTree className="text-secondary mx-auto mb-8 drop-shadow-lg" size={56} />
 
-        <p className="text-secondary text-sm tracking-[0.3em] uppercase mb-4 font-medium">
+        <p className="text-sm md:text-base tracking-[0.35em] uppercase mb-6 font-medium" style={{ color: "hsl(152, 65%, 55%)" }}>
           {t.heroSubtitle}
         </p>
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight text-foreground">
-          Curs Arabă{" "}
-          <span className="text-primary">Libaneză</span>
+
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.95] tracking-tight" style={{ color: "white" }}>
+          Curs Arabă
+          <br />
+          <span style={{ color: "hsl(0, 72%, 58%)" }}>Libaneză</span>
         </h1>
-        <p className="text-muted-foreground text-lg md:text-xl max-w-xl mx-auto mb-10 font-light leading-relaxed">
+
+        <p className="text-lg md:text-xl max-w-lg mx-auto mb-12 font-light leading-relaxed" style={{ color: "hsla(0, 0%, 100%, 0.8)" }}>
           {t.heroDesc}
         </p>
+
         <a
           href="#inscriere"
-          className="inline-block px-10 py-4 rounded-lg font-semibold bg-primary text-primary-foreground transition-all duration-300 hover:scale-105 text-lg"
-          style={{ boxShadow: "var(--shadow-warm)" }}
+          className="inline-block px-10 py-4 rounded font-semibold text-lg bg-primary text-primary-foreground transition-all duration-300 hover:brightness-110 hover:scale-[1.03]"
+          style={{ boxShadow: "0 8px 30px hsla(0, 72%, 45%, 0.4)" }}
         >
           {t.heroCta}
         </a>
       </div>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 };

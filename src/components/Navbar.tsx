@@ -5,29 +5,30 @@ const Navbar = () => {
   const { t, toggle, lang } = useI18n();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
-      {/* Lebanese flag stripe */}
-      <div className="lebanese-stripe h-1" />
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <CedarTree className="text-secondary" size={28} />
-          <span className="font-bold text-lg text-foreground" style={{ fontFamily: "var(--font-display)" }}>
-            Raduga
-          </span>
-        </div>
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      <div className="flag-stripe" />
+      <div className="bg-card/95 backdrop-blur-lg border-b border-border">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <CedarTree className="text-secondary" size={24} />
+            <span className="font-semibold text-foreground tracking-wide text-sm uppercase">
+              Raduga
+            </span>
+          </div>
 
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-          <a href="#inscriere" className="hover:text-primary transition-colors">{t.navGroup}</a>
-          <a href="#private" className="hover:text-primary transition-colors">{t.navPrivate}</a>
-          <a href="#kids" className="hover:text-primary transition-colors">{t.navKids}</a>
-        </div>
+          <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+            <a href="#inscriere" className="hover:text-primary transition-colors duration-200">{t.navGroup}</a>
+            <a href="#private" className="hover:text-primary transition-colors duration-200">{t.navPrivate}</a>
+            <a href="#kids" className="hover:text-primary transition-colors duration-200">{t.navKids}</a>
+          </div>
 
-        <button
-          onClick={toggle}
-          className="px-3 py-1.5 text-sm font-semibold rounded-md border border-border hover:bg-muted transition-colors"
-        >
-          {lang === "ro" ? "🇬🇧 EN" : "🇷🇴 RO"}
-        </button>
+          <button
+            onClick={toggle}
+            className="text-xs font-semibold tracking-wider uppercase px-3 py-1.5 rounded border border-border hover:bg-muted transition-colors duration-200"
+          >
+            {lang === "ro" ? "🇬🇧 EN" : "🇷🇴 RO"}
+          </button>
+        </div>
       </div>
     </nav>
   );
