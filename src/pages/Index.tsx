@@ -1,6 +1,7 @@
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import FeaturesSection from "@/components/FeaturesSection";
 import GroupCourseForm from "@/components/GroupCourseForm";
 import PrivateLessonsForm from "@/components/PrivateLessonsForm";
 import KidsCourseForm from "@/components/KidsCourseForm";
@@ -13,6 +14,8 @@ const PageContent = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
+      <FeaturesSection />
+      <div className="flag-stripe" />
       <GroupCourseForm />
       <div className="flag-stripe" />
       <PrivateLessonsForm />
