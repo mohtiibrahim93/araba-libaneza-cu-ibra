@@ -47,6 +47,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        cedar: "hsl(var(--cedar-green))",
+        "lebanese-red": "hsl(var(--lebanese-red))",
+        "stone-gold": "hsl(var(--stone-gold))",
+        parchment: "hsl(var(--parchment))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
