@@ -74,6 +74,17 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
+    // Features
+    featTitle: "Ce îți oferim",
+    feat1Title: "Lecții personalizate",
+    feat1Desc: "Lecții video și live, explicate clar pentru începători și avansați.",
+    feat2Title: "Exerciții ghidate",
+    feat2Desc: "Materiale practice și exerciții pentru a-ți consolida cunoștințele.",
+    feat3Title: "Accesibilitate totală",
+    feat3Desc: "Acces online de pe computer, tabletă sau telefon mobil.",
+    feat4Title: "Certificat de absolvire",
+    feat4Desc: "Obține un certificat care atestă cunoștințele dobândite.",
+
     // Footer
     footer: "© 2026 Raduga — Cursuri de Arabă Libaneză",
   },
@@ -141,6 +152,17 @@ const translations = {
     placeholderName: "John Smith",
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
+
+    // Features
+    featTitle: "What we offer",
+    feat1Title: "Personalized lessons",
+    feat1Desc: "Video and live lessons, clearly explained for beginners and advanced.",
+    feat2Title: "Guided exercises",
+    feat2Desc: "Practical materials and exercises to consolidate your knowledge.",
+    feat3Title: "Total accessibility",
+    feat3Desc: "Access online from computer, tablet, or mobile phone.",
+    feat4Title: "Completion certificate",
+    feat4Desc: "Get a certificate that validates your acquired skills.",
 
     footer: "© 2026 Raduga — Lebanese Arabic Courses",
   },
