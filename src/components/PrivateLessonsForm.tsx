@@ -29,43 +29,43 @@ const PrivateLessonsForm = () => {
   };
 
   return (
-    <section id="private" className="py-20 px-4 bg-muted/30 scroll-mt-16">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
-            <UserCheck className="w-4 h-4" />
+    <section id="private" className="py-24 px-6 bg-muted/40 scroll-mt-20">
+      <div className="max-w-xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-xs font-semibold uppercase tracking-wider mb-6">
+            <UserCheck className="w-3.5 h-3.5" />
             {t.privateBadge}
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.privateTitle}</h2>
-          <p className="text-muted-foreground max-w-lg mx-auto">{t.privateDesc}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">{t.privateTitle}</h2>
+          <p className="text-muted-foreground max-w-md mx-auto leading-relaxed">{t.privateDesc}</p>
         </div>
-        <form onSubmit={handleSubmit} className="bg-card rounded-xl p-8 border border-border space-y-5" style={{ boxShadow: "var(--shadow-card)" }}>
-          <div className="space-y-2">
-            <Label htmlFor="priv-name">{t.labelName} *</Label>
-            <Input id="priv-name" name="name" required maxLength={100} placeholder={t.placeholderName} />
+        <form onSubmit={handleSubmit} className="rounded-2xl p-8 bg-card border border-border space-y-6" style={{ boxShadow: "var(--shadow-md)" }}>
+          <div className="space-y-1.5">
+            <Label htmlFor="priv-name" className="text-sm font-medium">{t.labelName} *</Label>
+            <Input id="priv-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="priv-phone" className="text-sm font-medium">{t.labelPhone} *</Label>
+            <Input id="priv-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="priv-email" className="text-sm font-medium">{t.labelEmail}</Label>
+            <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="priv-phone">{t.labelPhone} *</Label>
-            <Input id="priv-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="priv-email">{t.labelEmail}</Label>
-            <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} />
-          </div>
-          <div className="space-y-2">
-            <Label>{t.labelFormat} *</Label>
-            <RadioGroup value={format} onValueChange={setFormat} className="flex gap-4">
+            <Label className="text-sm font-medium">{t.labelFormat} *</Label>
+            <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="fizic" id="priv-fizic" />
-                <Label htmlFor="priv-fizic" className="cursor-pointer font-normal">{t.privateFormatPhysical}</Label>
+                <Label htmlFor="priv-fizic" className="cursor-pointer font-normal text-sm">{t.privateFormatPhysical}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="online" id="priv-online" />
-                <Label htmlFor="priv-online" className="cursor-pointer font-normal">{t.privateFormatOnline}</Label>
+                <Label htmlFor="priv-online" className="cursor-pointer font-normal text-sm">{t.privateFormatOnline}</Label>
               </div>
             </RadioGroup>
           </div>
-          <button type="submit" disabled={submitting} className="w-full py-3 rounded-lg font-semibold bg-secondary text-secondary-foreground transition-all duration-300 hover:scale-[1.02] disabled:opacity-60">
+          <button type="submit" disabled={submitting} className="w-full py-3.5 rounded-lg font-semibold bg-secondary text-secondary-foreground transition-all duration-200 hover:brightness-110 disabled:opacity-50">
             {submitting ? t.privateSubmitting : t.privateSubmit}
           </button>
         </form>
