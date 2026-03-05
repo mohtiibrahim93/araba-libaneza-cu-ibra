@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,47 +6,48 @@
 
 @layer base {
   :root {
-    --background: 30 25% 97%;
-    --foreground: 0 0% 12%;
+    --background: 35 30% 95%;
+    --foreground: 25 20% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 12%;
+    --card: 38 35% 97%;
+    --card-foreground: 25 20% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
+    --popover: 38 35% 97%;
+    --popover-foreground: 25 20% 15%;
 
-    /* Lebanese Red - deep, rich */
+    /* Lebanese Red */
     --primary: 0 72% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Cedar Green - dark, elegant */
+    /* Cedar Green */
     --secondary: 152 65% 28%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 30 15% 92%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 35 25% 90%;
+    --muted-foreground: 25 10% 45%;
 
-    --accent: 35 60% 52%;
+    --accent: 35 55% 52%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 0 72% 45%;
+    --border: 35 20% 85%;
+    --input: 35 20% 85%;
+    --ring: 152 65% 28%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --cedar: 152 65% 28%;
     --lebanese-red: 0 72% 45%;
+    --warm-sand: 35 40% 88%;
 
     --font-display: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
 
-    --shadow-sm: 0 1px 3px hsla(0 0% 0% / 0.06);
-    --shadow-md: 0 4px 16px hsla(0 0% 0% / 0.08);
-    --shadow-lg: 0 12px 40px hsla(0 0% 0% / 0.1);
+    --shadow-sm: 0 1px 3px hsla(25 20% 15% / 0.06);
+    --shadow-md: 0 4px 20px hsla(25 20% 15% / 0.08);
+    --shadow-lg: 0 12px 40px hsla(25 20% 15% / 0.12);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -59,27 +60,28 @@
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 30 15% 90%;
-    --card: 0 0% 10%;
-    --card-foreground: 30 15% 90%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 30 15% 90%;
+    --background: 25 15% 8%;
+    --foreground: 35 20% 90%;
+    --card: 25 15% 11%;
+    --card-foreground: 35 20% 90%;
+    --popover: 25 15% 11%;
+    --popover-foreground: 35 20% 90%;
     --primary: 0 72% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 152 55% 35%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 30 10% 55%;
-    --accent: 35 60% 52%;
+    --muted: 25 10% 18%;
+    --muted-foreground: 35 15% 55%;
+    --accent: 35 55% 52%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 0 72% 50%;
+    --border: 25 10% 20%;
+    --input: 25 10% 20%;
+    --ring: 152 55% 35%;
     --cedar: 152 55% 35%;
     --lebanese-red: 0 72% 50%;
+    --warm-sand: 25 15% 15%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -116,4 +118,12 @@
     hsl(0 72% 45%) 70%,
     hsl(0 72% 45%) 100%
   );
+}
+
+/* Warm parchment texture overlay */
+.parchment-bg {
+  background: 
+    radial-gradient(ellipse at 20% 50%, hsla(35 40% 88% / 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, hsla(35 55% 85% / 0.3) 0%, transparent 50%),
+    hsl(var(--background));
 }
