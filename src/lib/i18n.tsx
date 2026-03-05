@@ -11,10 +11,15 @@ const translations = {
     langSwitch: "EN",
 
     // Hero
-    heroSubtitle: "Raduga — Cursuri de limbă arabă",
-    heroTitle: "Curs Arabă Libaneză",
-    heroDesc: "Descoperă frumusețea limbii arabe libaneze. Cursuri de grup, lecții private și cursuri pentru copii — înscrie-te acum!",
-    heroCta: "Înscrie-te acum ↓",
+    heroSubtitle: "Raduga · Cursuri de limbă",
+    heroTitle: "Arabă libaneză",
+    heroDesc: "Lecții practice, accent pe conversație. Alege: grup · privat · copii.",
+    heroBullet1: "Conversație din prima săptămână",
+    heroBullet2: "Materiale incluse",
+    heroBullet3: "Online sau în București",
+    heroCta: "Înscrie-te",
+    heroCtaSecondary: "Vezi programul",
+    navCta: "Înscriere",
 
     // Group
     groupTitle: "Curs de Grup — Arabă Libaneză",
@@ -78,10 +83,15 @@ const translations = {
     navKids: "Kids",
     langSwitch: "RO",
 
-    heroSubtitle: "Raduga — Arabic Language Courses",
-    heroTitle: "Lebanese Arabic Course",
-    heroDesc: "Discover the beauty of Lebanese Arabic. Group courses, private lessons, and kids courses — register now!",
-    heroCta: "Register now ↓",
+    heroSubtitle: "Raduga · Language Courses",
+    heroTitle: "Lebanese Arabic",
+    heroDesc: "Practical lessons, conversation-focused. Choose: group · private · kids.",
+    heroBullet1: "Conversation from week one",
+    heroBullet2: "Materials included",
+    heroBullet3: "Online or in Bucharest",
+    heroCta: "Register",
+    heroCtaSecondary: "See schedule",
+    navCta: "Register",
 
     groupTitle: "Group Course — Lebanese Arabic",
     groupDesc: "Physical or online presence. Starting March 17, 2026!",
