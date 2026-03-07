@@ -15,23 +15,23 @@ const CulturalBand = () => {
   ];
 
   return (
-    <section className="py-16 px-6 parchment-bg">
+    <section className="py-16 px-6 bg-card border-y border-border">
       <div className="max-w-4xl mx-auto text-center">
-        <h2
-          className="text-2xl md:text-3xl font-bold mb-12 tracking-tight"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
+        <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-semibold mb-2">—</p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-12">
           {t.culturalTitle}
         </h2>
-        <div className="flex justify-center items-end gap-10 md:gap-16 flex-wrap">
+        <div className="flex justify-center items-end gap-12 md:gap-20 flex-wrap">
           {items.map(({ img, label }) => (
             <div key={label} className="flex flex-col items-center gap-3 group">
-              <img
-                src={img}
-                alt={label}
-                className="w-20 h-20 md:w-24 md:h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-              />
-              <span className="text-xs md:text-sm text-muted-foreground font-medium">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-muted flex items-center justify-center p-3 transition-transform duration-300 group-hover:scale-105">
+                <img
+                  src={img}
+                  alt={label}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-xs text-muted-foreground font-medium tracking-wide">
                 {label}
               </span>
             </div>

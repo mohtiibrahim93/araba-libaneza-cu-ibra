@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,48 +6,40 @@
 
 @layer base {
   :root {
-    --background: 35 30% 95%;
-    --foreground: 25 20% 15%;
+    --background: 40 25% 96%;
+    --foreground: 0 0% 15%;
 
-    --card: 38 35% 97%;
-    --card-foreground: 25 20% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
 
-    --popover: 38 35% 97%;
-    --popover-foreground: 25 20% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
 
     /* Lebanese Red */
-    --primary: 0 72% 45%;
+    --primary: 350 74% 42%;
     --primary-foreground: 0 0% 100%;
 
     /* Cedar Green */
-    --secondary: 152 65% 28%;
+    --secondary: 152 56% 33%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 35 25% 90%;
-    --muted-foreground: 25 10% 45%;
+    --muted: 40 18% 91%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 35 55% 52%;
+    --accent: 36 45% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 20% 85%;
-    --input: 35 20% 85%;
-    --ring: 152 65% 28%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 152 56% 33%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --cedar: 152 65% 28%;
-    --lebanese-red: 0 72% 45%;
-    --warm-sand: 35 40% 88%;
-
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'DM Sans', sans-serif;
-
-    --shadow-sm: 0 1px 3px hsla(25 20% 15% / 0.06);
-    --shadow-md: 0 4px 20px hsla(25 20% 15% / 0.08);
-    --shadow-lg: 0 12px 40px hsla(25 20% 15% / 0.12);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Lato', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -60,28 +52,25 @@
   }
 
   .dark {
-    --background: 25 15% 8%;
-    --foreground: 35 20% 90%;
-    --card: 25 15% 11%;
-    --card-foreground: 35 20% 90%;
-    --popover: 25 15% 11%;
-    --popover-foreground: 35 20% 90%;
-    --primary: 0 72% 50%;
+    --background: 0 0% 7%;
+    --foreground: 40 20% 90%;
+    --card: 0 0% 10%;
+    --card-foreground: 40 20% 90%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 40 20% 90%;
+    --primary: 350 74% 48%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 152 55% 35%;
+    --secondary: 152 50% 38%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 25 10% 18%;
-    --muted-foreground: 35 15% 55%;
-    --accent: 35 55% 52%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 40 10% 55%;
+    --accent: 36 45% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 25 10% 20%;
-    --input: 25 10% 20%;
-    --ring: 152 55% 35%;
-    --cedar: 152 55% 35%;
-    --lebanese-red: 0 72% 50%;
-    --warm-sand: 25 15% 15%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 152 50% 38%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -108,22 +97,14 @@
 
 /* Lebanese flag decorative stripe */
 .flag-stripe {
-  height: 6px;
+  height: 4px;
   background: linear-gradient(
     90deg,
-    hsl(0 72% 45%) 0%,
-    hsl(0 72% 45%) 30%,
-    hsl(0 0% 100%) 30%,
-    hsl(0 0% 100%) 70%,
-    hsl(0 72% 45%) 70%,
-    hsl(0 72% 45%) 100%
+    hsl(350 74% 42%) 0%,
+    hsl(350 74% 42%) 33%,
+    hsl(0 0% 100%) 33%,
+    hsl(0 0% 100%) 67%,
+    hsl(350 74% 42%) 67%,
+    hsl(350 74% 42%) 100%
   );
-}
-
-/* Warm parchment texture overlay */
-.parchment-bg {
-  background: 
-    radial-gradient(ellipse at 20% 50%, hsla(35 40% 88% / 0.5) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, hsla(35 55% 85% / 0.3) 0%, transparent 50%),
-    hsl(var(--background));
 }
