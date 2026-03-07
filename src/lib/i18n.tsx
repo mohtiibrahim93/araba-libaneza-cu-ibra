@@ -9,17 +9,52 @@ const translations = {
     navPrivate: "Lecții Private",
     navKids: "Copii",
     langSwitch: "EN",
+    navCta: "Înscriere",
 
     // Hero
     heroSubtitle: "Raduga · Cursuri de limbă",
     heroTitle: "Arabă libaneză",
-    heroDesc: "Lecții practice, accent pe conversație. Alege: grup · privat · copii.",
-    heroBullet1: "Conversație din prima săptămână",
-    heroBullet2: "Materiale incluse",
-    heroBullet3: "Online sau în București",
-    heroCta: "Înscrie-te",
-    heroCtaSecondary: "Vezi programul",
-    navCta: "Înscriere",
+    heroCulture: "Cultură libaneză",
+    heroDesc: "Învață limba. Descoperă cultura. Alege: grup · privat · copii.",
+    heroCta: "Înscrie-te acum",
+    heroAboutCourse: "Despre curs",
+    heroPhotoPlaceholder: "Poza ta va apărea aici",
+
+    // Cultural Band
+    culturalTitle: "Învață să vorbești araba libaneză",
+    cultureCoffee: "Cafea libaneză",
+    cultureCedar: "Cedrul Libanului",
+    cultureArabic: "Litere arabe",
+    cultureMezze: "Mezze tradițional",
+
+    // Features
+    featTitle: "Ce îți oferim",
+    feat1Title: "Structură profesională",
+    feat1Desc: "Lecții structurate clar, de la baze la conversație avansată.",
+    feat2Title: "Exerciții ghidate",
+    feat2Desc: "Materiale practice și exerciții pentru a-ți consolida cunoștințele.",
+    feat3Title: "Accesibilitate totală",
+    feat3Desc: "Acces online de pe computer, tabletă sau telefon mobil.",
+    feat4Title: "Certificat de absolvire",
+    feat4Desc: "Obține un certificat care atestă cunoștințele dobândite.",
+
+    // Testimonials
+    testimonialsTitle: "Ce spun cursanții noștri",
+    testimonialVideoLabel: "▶ Video testimonial",
+    testimonial1: "Am învățat mai mult în 3 luni decât într-un an de studiu individual. Lecțiile sunt incredibil de bine structurate!",
+    testimonial1Author: "Maria P. — Cursantă, nivel intermediar",
+    testimonial2: "Profesorul e pasionat și foarte răbdător. Recomand cu încredere!",
+    testimonial2Author: "Andrei T. — Cursant, nivel începător",
+    testimonial3: "Acum pot să port o conversație în arabă libaneză cu prietenii mei libanezi!",
+    testimonial3Author: "Elena R. — Cursantă, nivel avansat",
+
+    // Culture section
+    cultureTitle: "Descoperă cultura libaneză",
+    cultureDesc: "Mai mult decât o limbă — o experiență culturală completă.",
+
+    // CTA
+    ctaTitle: "Pregătit să începi?",
+    ctaDesc: "Locurile sunt limitate. Înscrie-te acum și începe călătoria ta în araba libaneză!",
 
     // Group
     groupTitle: "Curs de Grup — Arabă Libaneză",
@@ -74,17 +109,6 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
-    // Features
-    featTitle: "Ce îți oferim",
-    feat1Title: "Lecții personalizate",
-    feat1Desc: "Lecții video și live, explicate clar pentru începători și avansați.",
-    feat2Title: "Exerciții ghidate",
-    feat2Desc: "Materiale practice și exerciții pentru a-ți consolida cunoștințele.",
-    feat3Title: "Accesibilitate totală",
-    feat3Desc: "Acces online de pe computer, tabletă sau telefon mobil.",
-    feat4Title: "Certificat de absolvire",
-    feat4Desc: "Obține un certificat care atestă cunoștințele dobândite.",
-
     // Footer
     footer: "© 2026 Raduga — Cursuri de Arabă Libaneză",
   },
@@ -93,16 +117,46 @@ const translations = {
     navPrivate: "Private Lessons",
     navKids: "Kids",
     langSwitch: "RO",
+    navCta: "Register",
 
     heroSubtitle: "Raduga · Language Courses",
     heroTitle: "Lebanese Arabic",
-    heroDesc: "Practical lessons, conversation-focused. Choose: group · private · kids.",
-    heroBullet1: "Conversation from week one",
-    heroBullet2: "Materials included",
-    heroBullet3: "Online or in Bucharest",
-    heroCta: "Register",
-    heroCtaSecondary: "See schedule",
-    navCta: "Register",
+    heroCulture: "Lebanese Culture",
+    heroDesc: "Learn the language. Discover the culture. Choose: group · private · kids.",
+    heroCta: "Register Now",
+    heroAboutCourse: "About the course",
+    heroPhotoPlaceholder: "Your photo will appear here",
+
+    culturalTitle: "Learn to speak Lebanese Arabic",
+    cultureCoffee: "Lebanese coffee",
+    cultureCedar: "Cedar of Lebanon",
+    cultureArabic: "Arabic letters",
+    cultureMezze: "Traditional mezze",
+
+    featTitle: "What we offer",
+    feat1Title: "Professional structure",
+    feat1Desc: "Clearly structured lessons, from basics to advanced conversation.",
+    feat2Title: "Guided exercises",
+    feat2Desc: "Practical materials and exercises to consolidate your knowledge.",
+    feat3Title: "Total accessibility",
+    feat3Desc: "Access online from computer, tablet, or mobile phone.",
+    feat4Title: "Completion certificate",
+    feat4Desc: "Get a certificate that validates your acquired skills.",
+
+    testimonialsTitle: "What our students say",
+    testimonialVideoLabel: "▶ Video testimonial",
+    testimonial1: "I learned more in 3 months than in a year of self-study. The lessons are incredibly well structured!",
+    testimonial1Author: "Maria P. — Student, intermediate level",
+    testimonial2: "The teacher is passionate and very patient. Highly recommended!",
+    testimonial2Author: "Andrei T. — Student, beginner level",
+    testimonial3: "Now I can hold a conversation in Lebanese Arabic with my Lebanese friends!",
+    testimonial3Author: "Elena R. — Student, advanced level",
+
+    cultureTitle: "Discover Lebanese culture",
+    cultureDesc: "More than a language — a complete cultural experience.",
+
+    ctaTitle: "Ready to start?",
+    ctaDesc: "Spots are limited. Register now and begin your journey into Lebanese Arabic!",
 
     groupTitle: "Group Course — Lebanese Arabic",
     groupDesc: "Physical or online presence. Starting March 17, 2026!",
@@ -152,17 +206,6 @@ const translations = {
     placeholderName: "John Smith",
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
-
-    // Features
-    featTitle: "What we offer",
-    feat1Title: "Personalized lessons",
-    feat1Desc: "Video and live lessons, clearly explained for beginners and advanced.",
-    feat2Title: "Guided exercises",
-    feat2Desc: "Practical materials and exercises to consolidate your knowledge.",
-    feat3Title: "Total accessibility",
-    feat3Desc: "Access online from computer, tablet, or mobile phone.",
-    feat4Title: "Completion certificate",
-    feat4Desc: "Get a certificate that validates your acquired skills.",
 
     footer: "© 2026 Raduga — Lebanese Arabic Courses",
   },
