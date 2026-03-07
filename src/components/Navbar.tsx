@@ -5,35 +5,33 @@ const Navbar = () => {
   const { t, toggle, lang } = useI18n();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <CedarTree className="text-secondary" size={28} />
-          <span className="font-bold text-foreground tracking-wide text-lg" style={{ fontFamily: "var(--font-display)" }}>
-            RADUGA
+        <div className="flex items-center gap-2">
+          <CedarTree className="text-secondary" size={24} />
+          <span className="font-bold text-foreground tracking-wide text-base uppercase" style={{ fontFamily: "var(--font-display)", letterSpacing: "0.12em" }}>
+            Raduga
           </span>
         </div>
 
-        <div className="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
-          <a href="#inscriere" className="px-4 py-2 hover:text-foreground transition-colors duration-200">{t.navGroup}</a>
-          <span className="text-border">|</span>
-          <a href="#private" className="px-4 py-2 hover:text-foreground transition-colors duration-200">{t.navPrivate}</a>
-          <span className="text-border">|</span>
-          <a href="#kids" className="px-4 py-2 hover:text-foreground transition-colors duration-200">{t.navKids}</a>
+        <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground font-medium">
+          <a href="#inscriere" className="hover:text-foreground transition-colors">{t.navGroup}</a>
+          <a href="#private" className="hover:text-foreground transition-colors">{t.navPrivate}</a>
+          <a href="#kids" className="hover:text-foreground transition-colors">{t.navKids}</a>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <a
             href="#inscriere"
-            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold bg-secondary text-secondary-foreground transition-all duration-200 hover:brightness-110"
+            className="hidden sm:inline-flex px-4 py-2 rounded text-sm font-semibold bg-primary text-primary-foreground transition-all hover:brightness-110"
           >
-            ✦ {t.navCta}
+            {t.navCta}
           </a>
           <button
             onClick={toggle}
-            className="text-xs font-semibold tracking-wider uppercase px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors duration-200"
+            className="text-xs font-bold tracking-wider uppercase px-3 py-2 rounded border border-border hover:bg-muted transition-colors"
           >
-            {lang === "ro" ? "🇬🇧 EN" : "🇷🇴 RO"}
+            {lang === "ro" ? "EN" : "RO"}
           </button>
         </div>
       </div>

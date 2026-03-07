@@ -19,20 +19,18 @@ const PageContent = () => {
       <Navbar />
       <HeroSection />
       <CulturalBand />
-      <div className="flag-stripe" />
       <FeaturesSection />
-      <TestimonialsSection />
       <div className="flag-stripe" />
+      <TestimonialsSection />
       <GroupCourseForm />
       <div className="flag-stripe" />
       <PrivateLessonsForm />
       <KidsCourseForm />
       <LebaneseCultureSection />
       <CTASection />
-      <div className="flag-stripe" />
-      <footer className="py-12 text-center">
-        <CedarTree className="text-secondary/30 mx-auto mb-4" size={28} />
-        <p className="text-sm text-muted-foreground">{t.footer}</p>
+      <footer className="py-10 text-center border-t border-border">
+        <CedarTree className="text-secondary/20 mx-auto mb-3" size={24} />
+        <p className="text-xs text-muted-foreground">{t.footer}</p>
       </footer>
     </div>
   );
