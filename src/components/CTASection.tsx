@@ -4,15 +4,15 @@ const CTASection = () => {
   const { t } = useI18n();
 
   return (
-    <section className="py-20 px-6 bg-secondary text-secondary-foreground">
+    <section className="py-28 px-6">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
           {t.ctaTitle}
         </h2>
-        <p className="text-secondary-foreground/70 mb-8 text-lg">{t.ctaDesc}</p>
+        <p className="text-muted-foreground mb-10 text-base max-w-md mx-auto">{t.ctaDesc}</p>
         <a
           href="#inscriere"
-          className="inline-flex items-center gap-2 px-10 py-3.5 rounded font-semibold text-base bg-card text-secondary transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+          className="inline-flex px-10 py-4 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90"
         >
           {t.heroCta}
         </a>
