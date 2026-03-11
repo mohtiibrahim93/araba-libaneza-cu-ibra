@@ -1,12 +1,15 @@
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import FeaturesSection from "@/components/FeaturesSection";
+import WhySection from "@/components/WhySection";
+import ProgramsSection from "@/components/ProgramsSection";
+import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import FAQSection from "@/components/FAQSection";
+import CTASection from "@/components/CTASection";
 import GroupCourseForm from "@/components/GroupCourseForm";
 import PrivateLessonsForm from "@/components/PrivateLessonsForm";
 import KidsCourseForm from "@/components/KidsCourseForm";
-import CTASection from "@/components/CTASection";
 
 const PageContent = () => {
   const { t } = useI18n();
@@ -15,18 +18,17 @@ const PageContent = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <div className="flag-stripe" />
-      <FeaturesSection />
-      <div className="flag-stripe" />
+      <WhySection />
+      <ProgramsSection />
+      <PricingSection />
       <TestimonialsSection />
-      <div className="flag-stripe" />
+      <FAQSection />
       <GroupCourseForm />
       <PrivateLessonsForm />
       <KidsCourseForm />
-      <div className="flag-stripe" />
       <CTASection />
-      <footer className="py-10 text-center border-t border-border">
-        <p className="text-[12px] text-muted-foreground tracking-wide">{t.footer}</p>
+      <footer className="py-8 text-center border-t border-border">
+        <p className="text-xs text-muted-foreground">{t.footer}</p>
       </footer>
     </div>
   );

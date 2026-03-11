@@ -13,13 +13,7 @@ const KidsCourseForm = () => {
     e.preventDefault();
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
-    console.log("Kids course interest:", {
-      parentName: formData.get("parentName"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      childAge: formData.get("childAge"),
-      notes: formData.get("notes"),
-    });
+    console.log("Kids course:", Object.fromEntries(formData));
     setTimeout(() => {
       toast.success(t.kidsSuccess);
       (e.target as HTMLFormElement).reset();
@@ -28,38 +22,39 @@ const KidsCourseForm = () => {
   };
 
   return (
-    <section id="kids" className="py-24 px-6 scroll-mt-20">
+    <section id="kids" className="py-20 px-6 scroll-mt-20">
       <div className="max-w-xl mx-auto">
-        <p className="text-[11px] tracking-[0.4em] uppercase text-muted-foreground font-medium text-center mb-4">—</p>
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-3 tracking-tight">{t.kidsTitle}</h2>
-        <p className="text-muted-foreground text-center mb-12 max-w-md mx-auto text-sm">{t.kidsDesc}</p>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2">{t.kidsTitle}</h2>
+          <p className="text-muted-foreground text-sm">{t.kidsDesc}</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="py-3 px-4 border-l-2 border-primary/40 text-sm text-foreground/80">
+        <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
+          <div className="bg-primary/10 text-primary text-sm font-medium rounded-lg px-4 py-3">
             {t.kidsAlready}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="kid-parent" className="text-[13px] font-medium">{t.kidsParentName} *</Label>
-            <Input id="kid-parent" name="parentName" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
+            <Label htmlFor="kid-parent" className="text-sm">{t.kidsParentName} *</Label>
+            <Input id="kid-parent" name="parentName" required maxLength={100} placeholder={t.placeholderName} className="h-11" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="kid-phone" className="text-[13px] font-medium">{t.labelPhone} *</Label>
-            <Input id="kid-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
+            <Label htmlFor="kid-phone" className="text-sm">{t.labelPhone} *</Label>
+            <Input id="kid-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="kid-email" className="text-[13px] font-medium">{t.labelEmail}</Label>
-            <Input id="kid-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
+            <Label htmlFor="kid-email" className="text-sm">{t.labelEmail}</Label>
+            <Input id="kid-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="kid-age" className="text-[13px] font-medium">{t.kidsChildAge}</Label>
-            <Input id="kid-age" name="childAge" maxLength={20} placeholder={t.kidsChildAgePlaceholder} className="h-11 border-border bg-background" />
+            <Label htmlFor="kid-age" className="text-sm">{t.kidsChildAge}</Label>
+            <Input id="kid-age" name="childAge" maxLength={20} placeholder={t.kidsChildAgePlaceholder} className="h-11" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="kid-notes" className="text-[13px] font-medium">{t.kidsNotes}</Label>
-            <Textarea id="kid-notes" name="notes" maxLength={500} placeholder={t.kidsNotesPlaceholder} rows={3} className="border-border bg-background" />
+            <Label htmlFor="kid-notes" className="text-sm">{t.kidsNotes}</Label>
+            <Textarea id="kid-notes" name="notes" maxLength={500} placeholder={t.kidsNotesPlaceholder} rows={3} />
           </div>
-          <p className="text-[13px] text-muted-foreground">📍 {t.kidsPhysicalOnly}</p>
-          <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90 disabled:opacity-50">
+          <p className="text-xs text-muted-foreground">📍 {t.kidsPhysicalOnly}</p>
+          <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">
             {submitting ? t.kidsSubmitting : t.kidsSubmit}
           </button>
         </form>

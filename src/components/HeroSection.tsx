@@ -1,40 +1,77 @@
 import { useI18n } from "@/lib/i18n";
+import { Users, GraduationCap, Clock, BookOpen } from "lucide-react";
+import heroImg from "@/assets/hero-students.jpg";
 
 const HeroSection = () => {
   const { t } = useI18n();
 
   return (
-    <section className="min-h-[85vh] flex items-center justify-center pt-20 px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-[11px] tracking-[0.4em] uppercase text-muted-foreground font-medium mb-8">
-          {t.heroSubtitle}
-        </p>
+    <section className="pt-28 pb-16 px-6">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        {/* Left: Text */}
+        <div>
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+            ⭐ {t.heroBadge}
+          </span>
 
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.9] tracking-tight text-foreground mb-4">
-          {t.heroTitle}
-        </h1>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-foreground mb-6">
+            {t.heroTitle1}
+            <br />
+            <span className="text-primary">{t.heroTitle2}</span>
+            <br />
+            {t.heroTitle3}
+          </h1>
 
-        <p className="text-xl md:text-2xl font-light italic text-primary mb-6" style={{ fontFamily: "var(--font-display)" }}>
-          {t.heroCulture}
-        </p>
+          <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
+            {t.heroDesc}
+          </p>
 
-        <p className="text-base text-muted-foreground max-w-md mx-auto mb-12 leading-relaxed font-light">
-          {t.heroDesc}
-        </p>
+          <div className="flex flex-col sm:flex-row gap-3 mb-10">
+            <a
+              href="#inscriere"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
+            >
+              {t.heroCta} →
+            </a>
+            <a
+              href="#courses"
+              className="inline-flex items-center justify-center px-7 py-3 text-sm font-medium border border-border text-foreground rounded-lg transition-colors hover:bg-muted"
+            >
+              {t.heroExplore}
+            </a>
+          </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#inscriere"
-            className="px-8 py-3.5 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90"
-          >
-            {t.heroCta}
-          </a>
-          <a
-            href="#despre"
-            className="px-8 py-3.5 text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {t.heroAboutCourse} →
-          </a>
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-primary" /> {t.heroStat1}</span>
+            <span className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-primary" /> {t.heroStat2}</span>
+            <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-primary" /> {t.heroStat3}</span>
+          </div>
+        </div>
+
+        {/* Right: Image with floating cards */}
+        <div className="relative">
+          <img
+            src={heroImg}
+            alt="Students learning Lebanese Arabic"
+            className="w-full rounded-2xl shadow-lg object-cover aspect-[4/3]"
+          />
+
+          {/* Floating card: Lessons */}
+          <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-foreground">{t.heroLessons}</p>
+              <p className="text-xs text-muted-foreground">{t.heroComplete}</p>
+            </div>
+          </div>
+
+          {/* Floating card: Students */}
+          <div className="absolute top-4 right-4 bg-background/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-3">
+            <p className="text-sm font-bold text-foreground">{t.heroJoin}</p>
+            <p className="text-xs text-muted-foreground">{t.heroHappy}</p>
+          </div>
         </div>
       </div>
     </section>
