@@ -1,34 +1,38 @@
 import { useI18n } from "@/lib/i18n";
+import { MessageCircle } from "lucide-react";
 
 const Navbar = () => {
   const { t, toggle, lang } = useI18n();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-      <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="text-lg tracking-[0.15em] uppercase font-semibold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="#" className="text-xl font-bold text-foreground tracking-tight">
           Raduga
         </a>
 
-        <div className="hidden md:flex items-center gap-8 text-[13px] text-muted-foreground font-medium tracking-wide">
-          <a href="#inscriere" className="hover:text-foreground transition-colors">{t.navGroup}</a>
-          <a href="#private" className="hover:text-foreground transition-colors">{t.navPrivate}</a>
-          <a href="#kids" className="hover:text-foreground transition-colors">{t.navKids}</a>
+        <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
+          <a href="#courses" className="hover:text-foreground transition-colors">{t.navCourses}</a>
+          <a href="#pricing" className="hover:text-foreground transition-colors">{t.navPricing}</a>
+          <a href="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</a>
+          <a href="#faq" className="hover:text-foreground transition-colors">{t.navFaq}</a>
+          <a href="#contact" className="hover:text-foreground transition-colors">{t.navContact}</a>
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="#inscriere"
-            className="hidden sm:inline-flex px-5 py-2 text-[13px] font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90"
-          >
-            {t.navCta}
-          </a>
           <button
             onClick={toggle}
-            className="text-[11px] font-semibold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs font-semibold tracking-wider uppercase px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
           >
             {lang === "ro" ? "EN" : "RO"}
           </button>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span className="hidden sm:inline">{t.navCta}</span>
+          </a>
         </div>
       </div>
     </nav>
