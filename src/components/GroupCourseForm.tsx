@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n";
 const GroupCourseForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
+  const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
