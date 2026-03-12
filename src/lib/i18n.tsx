@@ -177,10 +177,8 @@ const translations = {
 
     // Center select
     centerLabel: "Centru / Locație",
-    centerPlaceholder: "Alege un centru",
+    centerPlaceholder: "Alege o opțiune",
     centerBucharest: "București — Raduga Creative Center",
-    centerCluj: "Cluj-Napoca",
-    centerTimisoara: "Timișoara",
     centerOnline: "Online",
 
     // Common
@@ -381,10 +379,8 @@ const translations = {
     kidsSuccess: "Request registered!",
 
     centerLabel: "Center / Location",
-    centerPlaceholder: "Choose a center",
+    centerPlaceholder: "Choose an option",
     centerBucharest: "Bucharest — Raduga Creative Center",
-    centerCluj: "Cluj-Napoca",
-    centerTimisoara: "Timișoara",
     centerOnline: "Online",
 
     labelName: "Full Name",

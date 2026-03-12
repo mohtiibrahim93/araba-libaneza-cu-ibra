@@ -53,8 +53,6 @@ const PrivateLessonsForm = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
-                <SelectItem value="cluj">{t.centerCluj}</SelectItem>
-                <SelectItem value="timisoara">{t.centerTimisoara}</SelectItem>
                 <SelectItem value="online">{t.centerOnline}</SelectItem>
               </SelectContent>
             </Select>
