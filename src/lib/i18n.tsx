@@ -380,6 +380,13 @@ const translations = {
     kidsSubmitting: "Submitting...",
     kidsSuccess: "Request registered!",
 
+    centerLabel: "Center / Location",
+    centerPlaceholder: "Choose a center",
+    centerBucharest: "Bucharest — Raduga Creative Center",
+    centerCluj: "Cluj-Napoca",
+    centerTimisoara: "Timișoara",
+    centerOnline: "Online",
+
     labelName: "Full Name",
     labelPhone: "Phone",
     labelEmail: "Email",
