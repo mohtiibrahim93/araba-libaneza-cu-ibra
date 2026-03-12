@@ -185,7 +185,7 @@ const translations = {
     placeholderEmail: "ion@email.com",
 
     // Footer
-    footer: "© 2026 Raduga — Cursuri de Arabă Libaneză",
+    footer: "© 2026 Arabă Libaneză cu Ibra",
 
     // Unused but kept for compat
     heroSubtitle: "",
