@@ -74,6 +74,20 @@ const GroupCourseForm = () => {
               <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail}</Label>
               <Input id="group-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
             </div>
+            <div className="space-y-1.5">
+              <Label className="text-[13px] font-medium">{t.centerLabel} *</Label>
+              <Select value={center} onValueChange={setCenter} required>
+                <SelectTrigger className="h-11 border-border bg-background">
+                  <SelectValue placeholder={t.centerPlaceholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                  <SelectItem value="cluj">{t.centerCluj}</SelectItem>
+                  <SelectItem value="timisoara">{t.centerTimisoara}</SelectItem>
+                  <SelectItem value="online">{t.centerOnline}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
               <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
               <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">

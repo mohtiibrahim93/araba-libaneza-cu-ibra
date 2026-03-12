@@ -45,6 +45,20 @@ const PrivateLessonsForm = () => {
             <Label htmlFor="priv-email" className="text-sm">{t.labelEmail}</Label>
             <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
           </div>
+          <div className="space-y-1.5">
+            <Label className="text-sm">{t.centerLabel} *</Label>
+            <Select value={center} onValueChange={setCenter} required>
+              <SelectTrigger className="h-11">
+                <SelectValue placeholder={t.centerPlaceholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                <SelectItem value="cluj">{t.centerCluj}</SelectItem>
+                <SelectItem value="timisoara">{t.centerTimisoara}</SelectItem>
+                <SelectItem value="online">{t.centerOnline}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="space-y-2">
             <Label className="text-sm">{t.labelFormat} *</Label>
             <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
