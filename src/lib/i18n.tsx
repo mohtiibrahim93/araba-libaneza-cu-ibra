@@ -380,7 +380,7 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
 
-    footer: "© 2026 Raduga — Lebanese Arabic Courses",
+    footer: "© 2026 Arabă Libaneză cu Ibra",
 
     heroSubtitle: "",
     heroTitle: "",
