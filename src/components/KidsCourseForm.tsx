@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 
 const KidsCourseForm = () => {
   const { t } = useI18n();
+  const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,6 +54,19 @@ const KidsCourseForm = () => {
           <div className="space-y-1.5">
             <Label htmlFor="kid-notes" className="text-sm">{t.kidsNotes}</Label>
             <Textarea id="kid-notes" name="notes" maxLength={500} placeholder={t.kidsNotesPlaceholder} rows={3} />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-sm">{t.centerLabel} *</Label>
+            <Select value={center} onValueChange={setCenter} required>
+              <SelectTrigger className="h-11">
+                <SelectValue placeholder={t.centerPlaceholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                <SelectItem value="cluj">{t.centerCluj}</SelectItem>
+                <SelectItem value="timisoara">{t.centerTimisoara}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <p className="text-xs text-muted-foreground">📍 {t.kidsPhysicalOnly}</p>
           <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">

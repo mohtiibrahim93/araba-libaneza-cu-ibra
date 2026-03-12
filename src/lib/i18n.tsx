@@ -175,6 +175,14 @@ const translations = {
     kidsSubmitting: "Se trimite...",
     kidsSuccess: "Cererea a fost înregistrată!",
 
+    // Center select
+    centerLabel: "Centru / Locație",
+    centerPlaceholder: "Alege un centru",
+    centerBucharest: "București — Raduga Creative Center",
+    centerCluj: "Cluj-Napoca",
+    centerTimisoara: "Timișoara",
+    centerOnline: "Online",
+
     // Common
     labelName: "Nume complet",
     labelPhone: "Telefon",
@@ -371,6 +379,13 @@ const translations = {
     kidsSubmit: "Register Child",
     kidsSubmitting: "Submitting...",
     kidsSuccess: "Request registered!",
+
+    centerLabel: "Center / Location",
+    centerPlaceholder: "Choose a center",
+    centerBucharest: "Bucharest — Raduga Creative Center",
+    centerCluj: "Cluj-Napoca",
+    centerTimisoara: "Timișoara",
+    centerOnline: "Online",
 
     labelName: "Full Name",
     labelPhone: "Phone",

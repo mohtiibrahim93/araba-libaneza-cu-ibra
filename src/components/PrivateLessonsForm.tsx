@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 
 const PrivateLessonsForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
+  const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,6 +44,20 @@ const PrivateLessonsForm = () => {
           <div className="space-y-1.5">
             <Label htmlFor="priv-email" className="text-sm">{t.labelEmail}</Label>
             <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-sm">{t.centerLabel} *</Label>
+            <Select value={center} onValueChange={setCenter} required>
+              <SelectTrigger className="h-11">
+                <SelectValue placeholder={t.centerPlaceholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                <SelectItem value="cluj">{t.centerCluj}</SelectItem>
+                <SelectItem value="timisoara">{t.centerTimisoara}</SelectItem>
+                <SelectItem value="online">{t.centerOnline}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label className="text-sm">{t.labelFormat} *</Label>
