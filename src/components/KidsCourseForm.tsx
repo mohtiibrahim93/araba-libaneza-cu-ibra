@@ -5,22 +5,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
+import { supabase } from "@/integrations/supabase/client";
 
 const KidsCourseForm = () => {
   const { t } = useI18n();
   const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
-    console.log("Kids course:", Object.fromEntries(formData));
-    setTimeout(() => {
+
+    const { error } = await supabase.from("registrations").insert({
+      form_type: "kids",
+      name: String(formData.get("parentName") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      email: String(formData.get("email") || "").trim() || null,
+      center,
+      child_age: String(formData.get("childAge") || "").trim() || null,
+      notes: String(formData.get("notes") || "").trim() || null,
+    });
+
+    if (error) {
+      toast.error("A apărut o eroare. Încercați din nou.");
+      console.error("Registration error:", error);
+    } else {
       toast.success(t.kidsSuccess);
       (e.target as HTMLFormElement).reset();
-      setSubmitting(false);
-    }, 600);
+      setCenter("");
+    }
+    setSubmitting(false);
   };
 
   return (

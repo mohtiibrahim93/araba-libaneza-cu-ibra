@@ -1,6 +1,8 @@
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle } from "lucide-react";
 
+const WHATSAPP_URL = "https://wa.me/40763124514";
+
 const Navbar = () => {
   const { t, toggle, lang } = useI18n();
 
@@ -27,7 +29,9 @@ const Navbar = () => {
             {lang === "ro" ? "EN" : "RO"}
           </button>
           <a
-            href="#contact"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
           >
             <MessageCircle className="w-4 h-4" />
