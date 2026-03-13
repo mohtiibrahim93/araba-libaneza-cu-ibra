@@ -331,7 +331,7 @@ const translations = {
     ctaWhatsapp: "WhatsApp",
     ctaWhatsappDesc: "Contact us anytime",
     ctaEmail: "Email",
-    ctaEmailVal: "contact@raduga.ro",
+    ctaEmailVal: "mohtiibrahim@gmail.com",
     ctaLocation: "Location",
     ctaLocationVal: "Raduga Creative Center, Bucharest",
     ctaButton: "Chat on WhatsApp",

@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
+import { supabase } from "@/integrations/supabase/client";
 
 const GroupCourseForm = () => {
   const { t } = useI18n();
@@ -12,21 +13,30 @@ const GroupCourseForm = () => {
   const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
-    console.log("Group course registration:", {
-      name: formData.get("name"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
+
+    const { error } = await supabase.from("registrations").insert({
+      form_type: "group",
+      name: String(formData.get("name") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      email: String(formData.get("email") || "").trim() || null,
+      center,
       format,
     });
-    setTimeout(() => {
+
+    if (error) {
+      toast.error("A apărut o eroare. Încercați din nou.");
+      console.error("Registration error:", error);
+    } else {
       toast.success(t.groupSuccess);
       (e.target as HTMLFormElement).reset();
-      setSubmitting(false);
-    }, 600);
+      setCenter("");
+      setFormat("fizic");
+    }
+    setSubmitting(false);
   };
 
   const details = [

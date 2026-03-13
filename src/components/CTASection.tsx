@@ -1,6 +1,9 @@
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
 
+const WHATSAPP_URL = "https://wa.me/40763124514";
+const EMAIL = "mohtiibrahim@gmail.com";
+
 const CTASection = () => {
   const { t } = useI18n();
 
@@ -14,16 +17,16 @@ const CTASection = () => {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-6 mb-10">
-          <div className="bg-background rounded-2xl border border-border p-6 text-center">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <MessageCircle className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaWhatsapp}</h3>
             <p className="text-xs text-muted-foreground mt-1">{t.ctaWhatsappDesc}</p>
-          </div>
-          <div className="bg-background rounded-2xl border border-border p-6 text-center">
+          </a>
+          <a href={`mailto:${EMAIL}`} className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <Mail className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaEmail}</h3>
             <p className="text-xs text-muted-foreground mt-1">{t.ctaEmailVal}</p>
-          </div>
+          </a>
           <div className="bg-background rounded-2xl border border-border p-6 text-center">
             <MapPin className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaLocation}</h3>
@@ -33,7 +36,9 @@ const CTASection = () => {
 
         <div className="text-center">
           <a
-            href="#"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
