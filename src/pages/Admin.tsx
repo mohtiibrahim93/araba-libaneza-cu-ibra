@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -11,7 +12,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Lock, LogOut, Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface Registration {
   id: string;
@@ -34,10 +47,13 @@ const formTypeLabels: Record<string, string> = {
 
 const Admin = () => {
   const [password, setPassword] = useState("");
+  const [storedPassword, setStoredPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +73,7 @@ const Admin = () => {
       }
 
       setRegistrations(data.data);
+      setStoredPassword(password);
       setAuthenticated(true);
     } catch {
       setError("Eroare la autentificare. Încearcă din nou.");
@@ -68,8 +85,105 @@ const Admin = () => {
   const handleLogout = () => {
     setAuthenticated(false);
     setPassword("");
+    setStoredPassword("");
     setRegistrations([]);
+    setSelected(new Set());
   };
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selected.size === registrations.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(registrations.map((r) => r.id)));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selected.size === 0) return;
+    setDeleting(true);
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "admin-registrations",
+        {
+          body: {
+            password: storedPassword,
+            action: "delete",
+            ids: Array.from(selected),
+          },
+        }
+      );
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+
+      setRegistrations((prev) =>
+        prev.filter((r) => !selected.has(r.id))
+      );
+      toast({
+        title: `${selected.size} înscrier${selected.size === 1 ? "e" : "i"} ștears${selected.size === 1 ? "ă" : "e"}`,
+      });
+      setSelected(new Set());
+    } catch {
+      toast({
+        title: "Eroare la ștergere",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleExport = useCallback(() => {
+    const headers = [
+      "Data",
+      "Tip",
+      "Nume",
+      "Telefon",
+      "Email",
+      "Centru",
+      "Format",
+      "Vârsta copil",
+      "Note",
+    ];
+
+    const rows = registrations.map((r) => [
+      new Date(r.created_at).toLocaleString("ro-RO"),
+      formTypeLabels[r.form_type] || r.form_type,
+      r.name,
+      r.phone,
+      r.email || "",
+      r.center || "",
+      r.format || "",
+      r.child_age || "",
+      r.notes || "",
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob(["\uFEFF" + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `inscrieri_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [registrations]);
 
   if (!authenticated) {
     return (
@@ -120,12 +234,53 @@ const Admin = () => {
           <h1 className="text-lg font-bold text-foreground">
             Înscrieri ({registrations.length})
           </h1>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="w-4 h-4" />
-            Ieși
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              <Download className="w-4 h-4" />
+              Export CSV
+            </Button>
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <LogOut className="w-4 h-4" />
+              Ieși
+            </Button>
+          </div>
         </div>
       </header>
+
+      {selected.size > 0 && (
+        <div className="border-b border-border bg-muted">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">
+              {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
+            </span>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={deleting}>
+                  {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  <Trash2 className="w-4 h-4" />
+                  Șterge
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Ești sigur că vrei să ștergi {selected.size} înscrier
+                    {selected.size === 1 ? "e" : "i"}? Acțiunea nu poate fi
+                    anulată.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Anulează</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Șterge definitiv
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {registrations.length === 0 ? (
@@ -137,6 +292,15 @@ const Admin = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-10">
+                    <Checkbox
+                      checked={
+                        selected.size === registrations.length &&
+                        registrations.length > 0
+                      }
+                      onCheckedChange={toggleAll}
+                    />
+                  </TableHead>
                   <TableHead>Data</TableHead>
                   <TableHead>Tip</TableHead>
                   <TableHead>Nume</TableHead>
@@ -150,7 +314,16 @@ const Admin = () => {
               </TableHeader>
               <TableBody>
                 {registrations.map((r) => (
-                  <TableRow key={r.id}>
+                  <TableRow
+                    key={r.id}
+                    data-state={selected.has(r.id) ? "selected" : undefined}
+                  >
+                    <TableCell>
+                      <Checkbox
+                        checked={selected.has(r.id)}
+                        onCheckedChange={() => toggleSelect(r.id)}
+                      />
+                    </TableCell>
                     <TableCell className="whitespace-nowrap text-muted-foreground text-xs">
                       {new Date(r.created_at).toLocaleDateString("ro-RO", {
                         day: "2-digit",
