@@ -1,7 +1,8 @@
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { I18nProvider } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WhySection from "@/components/WhySection";
+import InstructorSection from "@/components/InstructorSection";
 import ProgramsSection from "@/components/ProgramsSection";
 import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -10,15 +11,15 @@ import CTASection from "@/components/CTASection";
 import GroupCourseForm from "@/components/GroupCourseForm";
 import PrivateLessonsForm from "@/components/PrivateLessonsForm";
 import KidsCourseForm from "@/components/KidsCourseForm";
+import Footer from "@/components/Footer";
 
 const PageContent = () => {
-  const { t } = useI18n();
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
       <WhySection />
+      <InstructorSection />
       <ProgramsSection />
       <PricingSection />
       <TestimonialsSection />
@@ -27,9 +28,7 @@ const PageContent = () => {
       <PrivateLessonsForm />
       <KidsCourseForm />
       <CTASection />
-      <footer className="py-8 text-center border-t border-border">
-        <p className="text-xs text-muted-foreground">{t.footer}</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
