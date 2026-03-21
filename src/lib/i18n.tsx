@@ -100,7 +100,7 @@ const translations = {
     testimonial3Author: "Laura",
     testimonial4: "Ibrahim este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
     testimonial4Author: "Harry",
-    testimonial5: "Prima lecție de „descoperire" pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
+    testimonial5: "Prima lecție de descoperire pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
     testimonial5Author: "Razvan",
     testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibrahim a arătat-o. Voi relua sesiunile cu el cu siguranță.",
     testimonial6Author: "Cimpan",
