@@ -430,7 +430,7 @@ const translations = {
     instructorStat1Label: "In Bucharest",
     instructorStat2: "5+ years",
     instructorStat2Label: "Teaching exp.",
-    instructorStat3: "4.9★",
+    instructorStat3: "5.0★",
     instructorStat3Label: "Preply Rating",
 
     heroSubtitle: "",
