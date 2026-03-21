@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import { Star } from "lucide-react";
+import { Star, ExternalLink } from "lucide-react";
 
 const TestimonialsSection = () => {
   const { t } = useI18n();
@@ -9,6 +9,8 @@ const TestimonialsSection = () => {
     { text: t.testimonial2, author: t.testimonial2Author },
     { text: t.testimonial3, author: t.testimonial3Author },
     { text: t.testimonial4, author: t.testimonial4Author },
+    { text: t.testimonial5, author: t.testimonial5Author },
+    { text: t.testimonial6, author: t.testimonial6Author },
   ];
 
   return (
@@ -20,7 +22,7 @@ const TestimonialsSection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.testimonialsDesc}</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map(({ text, author }, i) => (
             <div key={i} className="bg-background rounded-2xl border border-border p-6 shadow-sm">
               <div className="flex gap-1 mb-3">
@@ -37,6 +39,18 @@ const TestimonialsSection = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <a
+            href="https://preply.com/en/tutor/471612"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            Toate cele 21 recenzii pe Preply.com
+            <ExternalLink className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </section>
