@@ -12,6 +12,8 @@ import GroupCourseForm from "@/components/GroupCourseForm";
 import PrivateLessonsForm from "@/components/PrivateLessonsForm";
 import KidsCourseForm from "@/components/KidsCourseForm";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const PageContent = () => {
   return (
@@ -29,6 +31,8 @@ const PageContent = () => {
       <KidsCourseForm />
       <CTASection />
       <Footer />
+      <WhatsAppButton />
+      <ScrollToTop />
     </div>
   );
 };

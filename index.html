@@ -25,5 +25,43 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Arabă Libaneză cu Ibra",
+      "description": "Cursuri de arabă libaneză pentru începători (A0-A1) cu profesori nativi în București sau online.",
+      "url": "https://araba-libaneza-cu-ibra.lovable.app",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "București",
+        "addressCountry": "RO"
+      },
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Course",
+            "name": "Curs de Arabă Libaneză — Grup",
+            "description": "Curs de grup pentru începători, nivel A0-A1, 24 lecții.",
+            "provider": { "@type": "Organization", "name": "Arabă Libaneză cu Ibra" },
+            "inLanguage": "ar",
+            "educationalLevel": "Beginner"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Course",
+            "name": "Lecții Private de Arabă Libaneză",
+            "description": "Lecții individuale personalizate cu profesor nativ.",
+            "provider": { "@type": "Organization", "name": "Arabă Libaneză cu Ibra" },
+            "inLanguage": "ar",
+            "educationalLevel": "Beginner"
+          }
+        }
+      ]
+    }
+    </script>
   </body>
 </html>
