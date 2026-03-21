@@ -206,7 +206,7 @@ const translations = {
     instructorStat1Label: "În București",
     instructorStat2: "5+ ani",
     instructorStat2Label: "Experiență predare",
-    instructorStat3: "4.9★",
+    instructorStat3: "5.0★",
     instructorStat3Label: "Rating Preply",
 
     heroSubtitle: "",
