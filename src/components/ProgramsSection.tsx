@@ -149,7 +149,7 @@ const ProgramsSection = () => {
               </div>
             </div>
           ))}
-      </div>
+        </div>
     </section>
   );
 };
