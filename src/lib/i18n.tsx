@@ -63,6 +63,14 @@ const translations = {
     privateFeat3: "Sesiuni de 90 minute",
     privateFeat4: "Atenție individuală",
     privateRegister: "Înscrie-te la lecții private",
+    kidsBadgeCard: "Pentru copii",
+    kidsCardTitle: "Cursuri pentru Copii",
+    kidsCardDesc: "Cursuri interactive de arabă libaneză pentru copii. Învățare prin joc, cântece și activități creative într-un mediu prietenos.",
+    kidsFeat1: "Activități adaptate vârstei",
+    kidsFeat2: "Învățare prin joc și cântece",
+    kidsFeat3: "Doar prezență fizică",
+    kidsFeat4: "Locuri limitate disponibile",
+    kidsRegister: "Înscrie copilul",
 
     // Pricing
     pricingBadge: "Prețuri transparente",
