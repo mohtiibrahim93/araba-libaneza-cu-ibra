@@ -6,15 +6,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import GdprCheckbox from "@/components/GdprCheckbox";
+import PaymentInstructions from "@/components/PaymentInstructions";
 
 const PrivateLessonsForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
   const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [gdpr, setGdpr] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!gdpr) {
+      toast.error(t.gdprRequired);
+      return;
+    }
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
@@ -35,6 +43,8 @@ const PrivateLessonsForm = () => {
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
+      setGdpr(false);
+      setSubmitted(true);
     }
     setSubmitting(false);
   };
@@ -47,48 +57,53 @@ const PrivateLessonsForm = () => {
           <p className="text-muted-foreground text-sm">{t.privateDesc}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="priv-name" className="text-sm">{t.labelName} *</Label>
-            <Input id="priv-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11" />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="priv-phone" className="text-sm">{t.labelPhone} *</Label>
-            <Input id="priv-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11" />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="priv-email" className="text-sm">{t.labelEmail}</Label>
-            <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-sm">{t.centerLabel} *</Label>
-            <Select value={center} onValueChange={setCenter} required>
-              <SelectTrigger className="h-11">
-                <SelectValue placeholder={t.centerPlaceholder} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
-                <SelectItem value="online">{t.centerOnline}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label className="text-sm">{t.labelFormat} *</Label>
-            <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="fizic" id="priv-fizic" />
-                <Label htmlFor="priv-fizic" className="cursor-pointer text-sm font-normal">{t.privateFormatPhysical}</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="online" id="priv-online" />
-                <Label htmlFor="priv-online" className="cursor-pointer text-sm font-normal">{t.privateFormatOnline}</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">
-            {submitting ? t.privateSubmitting : t.privateSubmit}
-          </button>
-        </form>
+        {submitted ? (
+          <PaymentInstructions />
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="priv-name" className="text-sm">{t.labelName} *</Label>
+              <Input id="priv-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="priv-phone" className="text-sm">{t.labelPhone} *</Label>
+              <Input id="priv-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="priv-email" className="text-sm">{t.labelEmail}</Label>
+              <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-sm">{t.centerLabel} *</Label>
+              <Select value={center} onValueChange={setCenter} required>
+                <SelectTrigger className="h-11">
+                  <SelectValue placeholder={t.centerPlaceholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                  <SelectItem value="online">{t.centerOnline}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm">{t.labelFormat} *</Label>
+              <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="fizic" id="priv-fizic" />
+                  <Label htmlFor="priv-fizic" className="cursor-pointer text-sm font-normal">{t.privateFormatPhysical}</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="online" id="priv-online" />
+                  <Label htmlFor="priv-online" className="cursor-pointer text-sm font-normal">{t.privateFormatOnline}</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+            <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">
+              {submitting ? t.privateSubmitting : t.privateSubmit}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );

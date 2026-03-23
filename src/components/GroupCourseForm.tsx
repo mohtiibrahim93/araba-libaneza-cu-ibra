@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import GdprCheckbox from "@/components/GdprCheckbox";
+import PaymentInstructions from "@/components/PaymentInstructions";
 
 const GroupCourseForm = () => {
   const { t } = useI18n();
@@ -13,9 +15,15 @@ const GroupCourseForm = () => {
   const [center, setCenter] = useState("");
   const [level, setLevel] = useState("A1");
   const [submitting, setSubmitting] = useState(false);
+  const [gdpr, setGdpr] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!gdpr) {
+      toast.error(t.gdprRequired);
+      return;
+    }
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
@@ -38,6 +46,8 @@ const GroupCourseForm = () => {
       setCenter("");
       setFormat("fizic");
       setLevel("A1");
+      setGdpr(false);
+      setSubmitted(true);
     }
     setSubmitting(false);
   };
@@ -72,70 +82,75 @@ const GroupCourseForm = () => {
             </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-2">{t.groupFormTitle}</h3>
-            <div className="space-y-1.5">
-              <Label htmlFor="group-name" className="text-[13px] font-medium">{t.labelName} *</Label>
-              <Input id="group-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="group-phone" className="text-[13px] font-medium">{t.labelPhone} *</Label>
-              <Input id="group-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail}</Label>
-              <Input id="group-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-[13px] font-medium">{t.centerLabel} *</Label>
-              <Select value={center} onValueChange={setCenter} required>
-                <SelectTrigger className="h-11 border-border bg-background">
-                  <SelectValue placeholder={t.centerPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
-                  <SelectItem value="online">{t.centerOnline}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-[13px] font-medium">{t.levelLabel} *</Label>
-              <Select value={level} onValueChange={setLevel}>
-                <SelectTrigger className="h-11 border-border bg-background">
-                  <SelectValue placeholder={t.levelSelectPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
-                  <SelectItem value="A2" disabled>A2 — {t.levelComingSoon}</SelectItem>
-                  <SelectItem value="B1" disabled>B1 — {t.levelComingSoon}</SelectItem>
-                  <SelectItem value="B2" disabled>B2 — {t.levelComingSoon}</SelectItem>
-                  <SelectItem value="C1" disabled>C1 — {t.levelComingSoon}</SelectItem>
-                  <SelectItem value="C2" disabled>C2 — {t.levelComingSoon}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
-              <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="fizic" id="fizic" />
-                  <Label htmlFor="fizic" className="cursor-pointer font-normal text-sm">{t.groupPhysical}</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="online" id="online" />
-                  <Label htmlFor="online" className="cursor-pointer font-normal text-sm">{t.groupOnline}</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full py-3 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90 disabled:opacity-50"
-            >
-              {submitting ? t.groupSubmitting : t.groupSubmit}
-            </button>
-          </form>
+          {/* Form or Payment Instructions */}
+          {submitted ? (
+            <PaymentInstructions />
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-2">{t.groupFormTitle}</h3>
+              <div className="space-y-1.5">
+                <Label htmlFor="group-name" className="text-[13px] font-medium">{t.labelName} *</Label>
+                <Input id="group-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="group-phone" className="text-[13px] font-medium">{t.labelPhone} *</Label>
+                <Input id="group-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail}</Label>
+                <Input id="group-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[13px] font-medium">{t.centerLabel} *</Label>
+                <Select value={center} onValueChange={setCenter} required>
+                  <SelectTrigger className="h-11 border-border bg-background">
+                    <SelectValue placeholder={t.centerPlaceholder} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
+                    <SelectItem value="online">{t.centerOnline}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[13px] font-medium">{t.levelLabel} *</Label>
+                <Select value={level} onValueChange={setLevel}>
+                  <SelectTrigger className="h-11 border-border bg-background">
+                    <SelectValue placeholder={t.levelSelectPlaceholder} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
+                    <SelectItem value="A2" disabled>A2 — {t.levelComingSoon}</SelectItem>
+                    <SelectItem value="B1" disabled>B1 — {t.levelComingSoon}</SelectItem>
+                    <SelectItem value="B2" disabled>B2 — {t.levelComingSoon}</SelectItem>
+                    <SelectItem value="C1" disabled>C1 — {t.levelComingSoon}</SelectItem>
+                    <SelectItem value="C2" disabled>C2 — {t.levelComingSoon}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
+                <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="fizic" id="fizic" />
+                    <Label htmlFor="fizic" className="cursor-pointer font-normal text-sm">{t.groupPhysical}</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="online" id="online" />
+                    <Label htmlFor="online" className="cursor-pointer font-normal text-sm">{t.groupOnline}</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90 disabled:opacity-50"
+              >
+                {submitting ? t.groupSubmitting : t.groupSubmit}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </section>
