@@ -99,6 +99,22 @@ const GroupCourseForm = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-1.5">
+              <Label className="text-[13px] font-medium">{t.levelLabel} *</Label>
+              <Select value={level} onValueChange={setLevel}>
+                <SelectTrigger className="h-11 border-border bg-background">
+                  <SelectValue placeholder={t.levelSelectPlaceholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
+                  <SelectItem value="A2" disabled>A2 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="B1" disabled>B1 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="B2" disabled>B2 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="C1" disabled>C1 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="C2" disabled>C2 — {t.levelComingSoon}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
               <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
               <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">

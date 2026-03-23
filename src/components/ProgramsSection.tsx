@@ -1,22 +1,29 @@
+import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Check } from "lucide-react";
+import { Check, Clock, MessageCircle } from "lucide-react";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 
+const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+type Level = (typeof LEVELS)[number];
+
 const ProgramsSection = () => {
   const { t } = useI18n();
+  const [activeLevel, setActiveLevel] = useState<Level>("A1");
 
-  const programs = [
-    {
-      badge: t.groupBadge,
-      title: t.groupCardTitle,
-      desc: t.groupCardDesc,
-      feats: [t.groupFeat1, t.groupFeat2, t.groupFeat3, t.groupFeat4],
-      cta: t.groupRegister,
-      href: "#inscriere",
-      img: groupImg,
-    },
+  const levelSubtitles: Record<Level, string> = {
+    A1: t.levelA1Subtitle,
+    A2: t.levelA2Subtitle,
+    B1: t.levelB1Subtitle,
+    B2: t.levelB2Subtitle,
+    C1: t.levelC1Subtitle,
+    C2: t.levelC2Subtitle,
+  };
+
+  const isAvailable = (level: Level) => level === "A1";
+
+  const otherPrograms = [
     {
       badge: t.privateBadge,
       title: t.privateCardTitle,
@@ -46,8 +53,79 @@ const ProgramsSection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {programs.map((p) => (
+        {/* Group Course Card with Level Tabs */}
+        <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow mb-8">
+          <div className="grid md:grid-cols-2">
+            <img src={groupImg} alt={t.groupCardTitle} className="w-full h-full min-h-[240px] object-cover" />
+            <div className="p-6 md:p-8">
+              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                {t.groupBadge}
+              </span>
+              <h3 className="text-xl font-bold text-foreground mb-4">{t.groupCardTitle}</h3>
+
+              {/* Level Pills */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                {LEVELS.map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setActiveLevel(level)}
+                    className={`px-3.5 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
+                      activeLevel === level
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+
+              {/* Level subtitle */}
+              <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[activeLevel]}</p>
+
+              {isAvailable(activeLevel) ? (
+                <>
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
+                  <ul className="space-y-2 mb-6">
+                    {[t.groupFeat1, t.groupFeat2, t.groupFeat3, t.groupFeat4].map((f, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href="#inscriere"
+                    className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    {t.groupRegister}
+                  </a>
+                </>
+              ) : (
+                <div className="mt-2">
+                  <div className="flex items-center gap-2 text-muted-foreground mb-3">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-sm font-medium">{t.levelComingSoon}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{t.levelComingSoonDesc}</p>
+                  <a
+                    href="https://wa.me/40784943955"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg bg-[#25D366] text-white hover:bg-[#1fb855] transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    {t.levelContactUs}
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Private & Kids Cards */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {otherPrograms.map((p) => (
             <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
               <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
               <div className="p-6">
