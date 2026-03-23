@@ -26,6 +26,7 @@ const GroupCourseForm = () => {
       email: String(formData.get("email") || "").trim() || null,
       center,
       format,
+      notes: `Level: ${level}`,
     });
 
     if (error) {
