@@ -11,6 +11,7 @@ const GroupCourseForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
   const [center, setCenter] = useState("");
+  const [level, setLevel] = useState("A1");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,6 +26,7 @@ const GroupCourseForm = () => {
       email: String(formData.get("email") || "").trim() || null,
       center,
       format,
+      notes: `Level: ${level}`,
     });
 
     if (error) {
@@ -35,6 +37,7 @@ const GroupCourseForm = () => {
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
+      setLevel("A1");
     }
     setSubmitting(false);
   };
@@ -93,6 +96,22 @@ const GroupCourseForm = () => {
                 <SelectContent>
                   <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
                   <SelectItem value="online">{t.centerOnline}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[13px] font-medium">{t.levelLabel} *</Label>
+              <Select value={level} onValueChange={setLevel}>
+                <SelectTrigger className="h-11 border-border bg-background">
+                  <SelectValue placeholder={t.levelSelectPlaceholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
+                  <SelectItem value="A2" disabled>A2 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="B1" disabled>B1 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="B2" disabled>B2 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="C1" disabled>C1 — {t.levelComingSoon}</SelectItem>
+                  <SelectItem value="C2" disabled>C2 — {t.levelComingSoon}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
