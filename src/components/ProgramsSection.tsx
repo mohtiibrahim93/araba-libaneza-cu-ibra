@@ -121,14 +121,12 @@ const ProgramsSection = () => {
               )}
             </div>
           </div>
-        </div>
 
-        {/* Private & Kids Cards */}
-        <div className="grid md:grid-cols-2 gap-8">
+          {/* Private & Kids Cards */}
           {otherPrograms.map((p) => (
-            <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
               <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
                   {p.badge}
                 </span>
@@ -144,14 +142,13 @@ const ProgramsSection = () => {
                 </ul>
                 <a
                   href={p.href}
-                  className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
+                  className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors mt-auto"
                 >
                   {p.cta}
                 </a>
               </div>
             </div>
           ))}
-        </div>
       </div>
     </section>
   );
