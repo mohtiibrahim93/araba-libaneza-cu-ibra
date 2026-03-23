@@ -37,6 +37,7 @@ const GroupCourseForm = () => {
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
+      setLevel("A1");
     }
     setSubmitting(false);
   };
