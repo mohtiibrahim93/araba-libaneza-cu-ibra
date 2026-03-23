@@ -150,6 +150,7 @@ const ProgramsSection = () => {
             </div>
           ))}
         </div>
+      </div>
     </section>
   );
 };
