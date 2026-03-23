@@ -2,6 +2,7 @@ import { useI18n } from "@/lib/i18n";
 import { Check } from "lucide-react";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
+import kidsImg from "@/assets/kids-course.jpg";
 
 const ProgramsSection = () => {
   const { t } = useI18n();
@@ -25,6 +26,15 @@ const ProgramsSection = () => {
       href: "#private",
       img: privateImg,
     },
+    {
+      badge: t.kidsBadgeCard,
+      title: t.kidsCardTitle,
+      desc: t.kidsCardDesc,
+      feats: [t.kidsFeat1, t.kidsFeat2, t.kidsFeat3, t.kidsFeat4],
+      cta: t.kidsRegister,
+      href: "#kids",
+      img: kidsImg,
+    },
   ];
 
   return (
@@ -36,7 +46,7 @@ const ProgramsSection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {programs.map((p) => (
             <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
               <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
