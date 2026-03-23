@@ -109,7 +109,7 @@ const ProgramsSection = () => {
                   </div>
                   <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{t.levelComingSoonDesc}</p>
                   <a
-                    href="https://wa.me/40784943955"
+                    href="https://wa.me/40763124514"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg bg-[#25D366] text-white hover:bg-[#1fb855] transition-colors"
