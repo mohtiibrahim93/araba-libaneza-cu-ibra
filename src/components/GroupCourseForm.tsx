@@ -11,6 +11,7 @@ const GroupCourseForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
   const [center, setCenter] = useState("");
+  const [level, setLevel] = useState("A1");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
