@@ -72,6 +72,25 @@ const translations = {
     kidsFeat4: "Locuri limitate disponibile",
     kidsRegister: "Înscrie copilul",
 
+    // Levels
+    levelA1: "A1",
+    levelA2: "A2",
+    levelB1: "B1",
+    levelB2: "B2",
+    levelC1: "C1",
+    levelC2: "C2",
+    levelA1Subtitle: "Nivel A0 → A1",
+    levelA2Subtitle: "Nivel A1 → A2",
+    levelB1Subtitle: "Nivel A2 → B1",
+    levelB2Subtitle: "Nivel B1 → B2",
+    levelC1Subtitle: "Nivel B2 → C1",
+    levelC2Subtitle: "Nivel C1 → C2",
+    levelComingSoon: "În curând",
+    levelComingSoonDesc: "Acest nivel va fi disponibil în curând. Contactează-ne pentru mai multe detalii.",
+    levelContactUs: "Contactează-ne pe WhatsApp",
+    levelLabel: "Nivel",
+    levelSelectPlaceholder: "Alege nivelul",
+
     // Pricing
     pricingBadge: "Prețuri transparente",
     pricingTitle: "Prețuri simple, transparente",
