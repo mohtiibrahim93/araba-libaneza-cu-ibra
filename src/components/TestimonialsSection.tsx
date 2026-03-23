@@ -48,7 +48,7 @@ const TestimonialsSection = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
           >
-            Toate cele 21 recenzii pe Preply.com
+            {t.testimonialsAllReviews}
             <ExternalLink className="w-4 h-4" />
           </a>
         </div>

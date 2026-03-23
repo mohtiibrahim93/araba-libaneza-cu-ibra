@@ -6,16 +6,18 @@ const WhySection = () => {
 
   const points = [t.why1, t.why2, t.why3, t.why4, t.why5];
 
+  const stats = [
+    { val: t.whyStat1Val, label: t.whyStat1Label },
+    { val: t.whyStat2Val, label: t.whyStat2Label },
+    { val: t.whyStat3Val, label: t.whyStat3Label },
+  ];
+
   return (
     <section id="about" className="py-20 px-6">
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
-          {[
-            { val: "30+", label: t.heroStat1.replace("30+ ", "") },
-            { val: "50+", label: "Reviews" },
-            { val: "4.9", label: "Rating" },
-          ].map(({ val, label }) => (
+          {stats.map(({ val, label }) => (
             <div key={val} className="bg-muted rounded-2xl p-6 text-center">
               <p className="text-3xl font-extrabold text-foreground">{val}</p>
               <p className="text-sm text-muted-foreground mt-1">{label}</p>
