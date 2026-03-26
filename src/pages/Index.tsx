@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { I18nProvider } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -14,8 +15,22 @@ import KidsCourseForm from "@/components/KidsCourseForm";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import CookieConsent from "@/components/CookieConsent";
+import { toast } from "sonner";
 
 const PageContent = () => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get("payment");
+    if (payment === "success") {
+      toast.success("Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.");
+      window.history.replaceState({}, "", "/");
+    } else if (payment === "canceled") {
+      toast.info("Plata a fost anulată. Poți încerca din nou oricând.");
+      window.history.replaceState({}, "", "/");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -33,6 +48,7 @@ const PageContent = () => {
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
+      <CookieConsent />
     </div>
   );
 };
