@@ -58,7 +58,7 @@ const PrivateLessonsForm = () => {
         </div>
 
         {submitted ? (
-          <PaymentInstructions />
+          <PaymentInstructions courseType="private" />
         ) : (
           <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
             <div className="space-y-1.5">

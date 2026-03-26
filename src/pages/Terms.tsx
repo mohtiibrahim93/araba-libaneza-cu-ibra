@@ -15,7 +15,7 @@ const TermsContent = () => (
         <p>Acești termeni și condiții reglementează utilizarea site-ului web și a serviciilor educaționale oferite de „Arabă Libaneză cu Ibra".</p>
 
         <h2 className="text-lg font-semibold text-foreground">2. Servicii oferite</h2>
-        <p>Oferim cursuri de arabă libaneză pentru adulți (grup și privat) și copii, atât fizic la Raduga Creative Center din București, cât și online. Cursurile sunt destinate nivelului A0-A1 (începători).</p>
+        <p>Oferim cursuri de arabă libaneză pentru adulți (grup și privat) și copii, atât fizic la Raduga Creative Center din București, cât și online. Cursurile acoperă toate nivelurile CEFR (A1–C2).</p>
 
         <h2 className="text-lg font-semibold text-foreground">3. Înscriere și plăți</h2>
         <p>Înscrierea se face prin formularele de pe site sau prin WhatsApp. Plata se efectuează conform instrucțiunilor primite după confirmare. Acceptăm plata în LEI, EUR sau USD.</p>

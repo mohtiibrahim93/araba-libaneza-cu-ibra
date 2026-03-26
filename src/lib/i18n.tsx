@@ -230,8 +230,9 @@ const translations = {
     paymentCash: "Cash la centru (Raduga Creative Center, București)",
     paymentTransfer: "Transfer bancar",
     paymentIban: "IBAN: contactează-ne pe WhatsApp pentru detalii",
-    paymentCard: "Card (contactează-ne pentru link de plată)",
     paymentPaypal: "PayPal (contactează-ne pentru detalii)",
+    paymentStripe: "💳 Plătește online cu cardul",
+    paymentStripeError: "Eroare la inițierea plății. Încearcă din nou.",
     paymentNote: "După înscriere, te vom contacta pe WhatsApp pentru a finaliza plata.",
     paymentWhatsapp: "Contactează-ne pe WhatsApp",
 
@@ -478,8 +479,9 @@ const translations = {
     paymentCash: "Cash at the center (Raduga Creative Center, Bucharest)",
     paymentTransfer: "Bank transfer",
     paymentIban: "IBAN: contact us on WhatsApp for details",
-    paymentCard: "Card (contact us for payment link)",
     paymentPaypal: "PayPal (contact us for details)",
+    paymentStripe: "💳 Pay online with card",
+    paymentStripeError: "Payment error. Please try again.",
     paymentNote: "After registration, we'll contact you on WhatsApp to finalize payment.",
     paymentWhatsapp: "Contact us on WhatsApp",
 

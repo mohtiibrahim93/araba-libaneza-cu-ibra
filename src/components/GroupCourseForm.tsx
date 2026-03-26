@@ -84,7 +84,7 @@ const GroupCourseForm = () => {
 
           {/* Form or Payment Instructions */}
           {submitted ? (
-            <PaymentInstructions />
+            <PaymentInstructions courseType="group" />
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-2">{t.groupFormTitle}</h3>

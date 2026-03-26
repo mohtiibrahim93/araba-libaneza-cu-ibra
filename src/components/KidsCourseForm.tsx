@@ -54,7 +54,7 @@ const KidsCourseForm = () => {
         </div>
 
         {submitted ? (
-          <PaymentInstructions />
+           <PaymentInstructions />
         ) : (
           <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
             <div className="bg-primary/10 text-primary text-sm font-medium rounded-lg px-4 py-3">
