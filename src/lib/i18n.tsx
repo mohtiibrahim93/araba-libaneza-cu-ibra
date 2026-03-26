@@ -236,6 +236,13 @@ const translations = {
     paymentNote: "După înscriere, te vom contacta pe WhatsApp pentru a finaliza plata.",
     paymentWhatsapp: "Contactează-ne pe WhatsApp",
 
+    // Cookie consent
+    cookieTitle: "🍪 Cookies",
+    cookieDesc: "Folosim cookie-uri pentru a îmbunătăți experiența ta pe site.",
+    cookieLink: "Politica de confidențialitate",
+    cookieAccept: "Accept",
+    cookieDecline: "Refuz",
+
     // Common
     labelName: "Nume complet",
     labelPhone: "Telefon",
@@ -484,6 +491,13 @@ const translations = {
     paymentStripeError: "Payment error. Please try again.",
     paymentNote: "After registration, we'll contact you on WhatsApp to finalize payment.",
     paymentWhatsapp: "Contact us on WhatsApp",
+
+    // Cookie consent
+    cookieTitle: "🍪 Cookies",
+    cookieDesc: "We use cookies to improve your experience on this site.",
+    cookieLink: "Privacy Policy",
+    cookieAccept: "Accept",
+    cookieDecline: "Decline",
 
     labelName: "Full Name",
     labelPhone: "Phone",
