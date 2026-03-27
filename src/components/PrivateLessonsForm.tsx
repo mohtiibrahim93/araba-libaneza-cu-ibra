@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
+import { trackFormSubmit } from "@/lib/tracking";
 
 const PrivateLessonsForm = () => {
   const { t } = useI18n();
@@ -40,6 +41,10 @@ const PrivateLessonsForm = () => {
       console.error("Registration error:", error);
     } else {
       toast.success(t.privateSuccess);
+      trackFormSubmit("private");
+      supabase.functions.invoke("notify-registration", {
+        body: { name: String(formData.get("name")), phone: String(formData.get("phone")), email: String(formData.get("email")), form_type: "private", center, format },
+      }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
