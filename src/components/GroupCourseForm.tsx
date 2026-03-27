@@ -42,11 +42,23 @@ const GroupCourseForm = () => {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
+      const studentName = String(formData.get("name")).trim();
+      const studentEmail = String(formData.get("email")).trim();
       toast.success(t.groupSuccess);
       trackFormSubmit("group");
       supabase.functions.invoke("notify-registration", {
-        body: { name: String(formData.get("name")), phone: String(formData.get("phone")), email: String(formData.get("email")), form_type: "group", center, format, notes: `Level: ${level}` },
+        body: { name: studentName, phone: String(formData.get("phone")), email: studentEmail, form_type: "group", center, format, notes: `Level: ${level}` },
       }).catch(console.error);
+      if (studentEmail) {
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "registration-confirmation",
+            recipientEmail: studentEmail,
+            idempotencyKey: `reg-confirm-group-${Date.now()}`,
+            templateData: { name: studentName, formType: "group", level },
+          },
+        }).catch(console.error);
+      }
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
