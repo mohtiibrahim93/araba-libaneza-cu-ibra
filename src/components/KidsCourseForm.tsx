@@ -7,6 +7,7 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
+import { trackFormSubmit } from "@/lib/tracking";
 
 const KidsCourseForm = () => {
   const { t } = useI18n();
@@ -38,6 +39,10 @@ const KidsCourseForm = () => {
       console.error("Registration error:", error);
     } else {
       toast.success(t.kidsSuccess);
+      trackFormSubmit("kids");
+      supabase.functions.invoke("notify-registration", {
+        body: { name: String(formData.get("parentName")), phone: String(formData.get("phone")), email: String(formData.get("email")), form_type: "kids" },
+      }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setGdpr(false);
       setSubmitted(true);

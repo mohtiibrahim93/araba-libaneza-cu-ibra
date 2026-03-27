@@ -17,13 +17,18 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
 import { toast } from "sonner";
+import { initTracking, trackEvent } from "@/lib/tracking";
 
 const PageContent = () => {
   useEffect(() => {
+    // Init tracking if consent was previously given
+    initTracking();
+
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");
     if (payment === "success") {
       toast.success("Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.");
+      trackEvent("Purchase", { content_name: "course" });
       window.history.replaceState({}, "", "/");
     } else if (payment === "canceled") {
       toast.info("Plata a fost anulată. Poți încerca din nou oricând.");

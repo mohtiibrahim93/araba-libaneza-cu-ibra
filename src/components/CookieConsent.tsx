@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
 import { X } from "lucide-react";
+import { initTracking } from "@/lib/tracking";
 
 const COOKIE_KEY = "cookie_consent";
 
@@ -19,6 +20,7 @@ const CookieConsent = () => {
   const accept = () => {
     localStorage.setItem(COOKIE_KEY, "accepted");
     setVisible(false);
+    initTracking();
   };
 
   const dismiss = () => {

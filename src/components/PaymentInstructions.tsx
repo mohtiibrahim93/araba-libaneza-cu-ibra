@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Banknote, CreditCard, Building2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { trackCheckoutStart } from "@/lib/tracking";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -19,6 +20,7 @@ const PaymentInstructions = ({ courseType, email, name }: PaymentInstructionsPro
   const handleStripeCheckout = async () => {
     if (!courseType) return;
     setLoading(true);
+    trackCheckoutStart(courseType);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { courseType, email, name },
