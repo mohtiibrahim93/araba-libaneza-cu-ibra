@@ -38,11 +38,23 @@ const KidsCourseForm = () => {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
+      const parentName = String(formData.get("parentName")).trim();
+      const parentEmail = String(formData.get("email")).trim();
       toast.success(t.kidsSuccess);
       trackFormSubmit("kids");
       supabase.functions.invoke("notify-registration", {
-        body: { name: String(formData.get("parentName")), phone: String(formData.get("phone")), email: String(formData.get("email")), form_type: "kids" },
+        body: { name: parentName, phone: String(formData.get("phone")), email: parentEmail, form_type: "kids" },
       }).catch(console.error);
+      if (parentEmail) {
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "registration-confirmation",
+            recipientEmail: parentEmail,
+            idempotencyKey: `reg-confirm-kids-${Date.now()}`,
+            templateData: { name: parentName, formType: "kids" },
+          },
+        }).catch(console.error);
+      }
       (e.target as HTMLFormElement).reset();
       setGdpr(false);
       setSubmitted(true);

@@ -40,11 +40,23 @@ const PrivateLessonsForm = () => {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
+      const studentName = String(formData.get("name")).trim();
+      const studentEmail = String(formData.get("email")).trim();
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
-        body: { name: String(formData.get("name")), phone: String(formData.get("phone")), email: String(formData.get("email")), form_type: "private", center, format },
+        body: { name: studentName, phone: String(formData.get("phone")), email: studentEmail, form_type: "private", center, format },
       }).catch(console.error);
+      if (studentEmail) {
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "registration-confirmation",
+            recipientEmail: studentEmail,
+            idempotencyKey: `reg-confirm-private-${Date.now()}`,
+            templateData: { name: studentName, formType: "private" },
+          },
+        }).catch(console.error);
+      }
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
