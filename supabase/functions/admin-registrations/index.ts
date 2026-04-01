@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
     const adminPassword = Deno.env.get("ADMIN_PASSWORD");
 
     if (!adminPassword || password !== adminPassword) {
-      return jsonResponse({ error: "Parolă incorectă" }, 401);
+      return jsonResponse({ error: "Parolă incorectă" });
     }
 
     const supabase = createClient(
