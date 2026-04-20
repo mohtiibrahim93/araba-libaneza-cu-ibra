@@ -11,9 +11,10 @@ interface PaymentInstructionsProps {
   courseType?: "group" | "private";
   email?: string;
   name?: string;
+  registrationId?: string;
 }
 
-const PaymentInstructions = ({ courseType, email, name }: PaymentInstructionsProps) => {
+const PaymentInstructions = ({ courseType, email, name, registrationId }: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,7 @@ const PaymentInstructions = ({ courseType, email, name }: PaymentInstructionsPro
     trackCheckoutStart(courseType);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { courseType, email, name },
+        body: { courseType, email, name, registrationId },
       });
       if (error) throw error;
       if (data?.url) {

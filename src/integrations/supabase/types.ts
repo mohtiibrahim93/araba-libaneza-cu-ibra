@@ -112,7 +112,10 @@ export type Database = {
           id: string
           name: string
           notes: string | null
+          paid_at: string | null
+          payment_status: string
           phone: string
+          stripe_session_id: string | null
         }
         Insert: {
           center?: string | null
@@ -124,7 +127,10 @@ export type Database = {
           id?: string
           name: string
           notes?: string | null
+          paid_at?: string | null
+          payment_status?: string
           phone: string
+          stripe_session_id?: string | null
         }
         Update: {
           center?: string | null
@@ -136,7 +142,10 @@ export type Database = {
           id?: string
           name?: string
           notes?: string | null
+          paid_at?: string | null
+          payment_status?: string
           phone?: string
+          stripe_session_id?: string | null
         }
         Relationships: []
       }
