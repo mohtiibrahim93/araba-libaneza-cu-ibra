@@ -17,6 +17,9 @@ const PrivateLessonsForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [registrationId, setRegistrationId] = useState<string | undefined>();
+  const [studentEmail, setStudentEmail] = useState<string>("");
+  const [studentName, setStudentName] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,33 +30,37 @@ const PrivateLessonsForm = () => {
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
-    const { error } = await supabase.from("registrations").insert({
-      form_type: "private",
-      name: String(formData.get("name") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      email: String(formData.get("email") || "").trim() || null,
-      center,
-      format,
-    });
+    const { data: inserted, error } = await supabase
+      .from("registrations")
+      .insert({
+        form_type: "private",
+        name: String(formData.get("name") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        email: String(formData.get("email") || "").trim() || null,
+        center,
+        format,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const studentName = String(formData.get("name")).trim();
-      const studentEmail = String(formData.get("email")).trim();
+      const sName = String(formData.get("name")).trim();
+      const sEmail = String(formData.get("email")).trim();
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
-        body: { name: studentName, phone: String(formData.get("phone")), email: studentEmail, form_type: "private", center, format },
+        body: { name: sName, phone: String(formData.get("phone")), email: sEmail, form_type: "private", center, format },
       }).catch(console.error);
-      if (studentEmail) {
+      if (sEmail) {
         supabase.functions.invoke("send-transactional-email", {
           body: {
             templateName: "registration-confirmation",
-            recipientEmail: studentEmail,
-            idempotencyKey: `reg-confirm-private-${Date.now()}`,
-            templateData: { name: studentName, formType: "private" },
+            recipientEmail: sEmail,
+            idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
+            templateData: { name: sName, formType: "private" },
           },
         }).catch(console.error);
       }
@@ -61,6 +68,9 @@ const PrivateLessonsForm = () => {
       setCenter("");
       setFormat("fizic");
       setGdpr(false);
+      setRegistrationId(inserted?.id);
+      setStudentEmail(sEmail);
+      setStudentName(sName);
       setSubmitted(true);
     }
     setSubmitting(false);
@@ -75,7 +85,7 @@ const PrivateLessonsForm = () => {
         </div>
 
         {submitted ? (
-          <PaymentInstructions courseType="private" />
+          <PaymentInstructions courseType="private" registrationId={registrationId} email={studentEmail} name={studentName} />
         ) : (
           <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
             <div className="space-y-1.5">

@@ -18,6 +18,9 @@ const GroupCourseForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [registrationId, setRegistrationId] = useState<string | undefined>();
+  const [studentEmail, setStudentEmail] = useState<string>("");
+  const [studentName, setStudentName] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,34 +31,38 @@ const GroupCourseForm = () => {
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
-    const { error } = await supabase.from("registrations").insert({
-      form_type: "group",
-      name: String(formData.get("name") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      email: String(formData.get("email") || "").trim() || null,
-      center,
-      format,
-      notes: `Level: ${level}`,
-    });
+    const { data: inserted, error } = await supabase
+      .from("registrations")
+      .insert({
+        form_type: "group",
+        name: String(formData.get("name") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        email: String(formData.get("email") || "").trim() || null,
+        center,
+        format,
+        notes: `Level: ${level}`,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const studentName = String(formData.get("name")).trim();
-      const studentEmail = String(formData.get("email")).trim();
+      const sName = String(formData.get("name")).trim();
+      const sEmail = String(formData.get("email")).trim();
       toast.success(t.groupSuccess);
       trackFormSubmit("group");
       supabase.functions.invoke("notify-registration", {
-        body: { name: studentName, phone: String(formData.get("phone")), email: studentEmail, form_type: "group", center, format, notes: `Level: ${level}` },
+        body: { name: sName, phone: String(formData.get("phone")), email: sEmail, form_type: "group", center, format, notes: `Level: ${level}` },
       }).catch(console.error);
-      if (studentEmail) {
+      if (sEmail) {
         supabase.functions.invoke("send-transactional-email", {
           body: {
             templateName: "registration-confirmation",
-            recipientEmail: studentEmail,
-            idempotencyKey: `reg-confirm-group-${Date.now()}`,
-            templateData: { name: studentName, formType: "group", level },
+            recipientEmail: sEmail,
+            idempotencyKey: `reg-confirm-group-${inserted?.id ?? Date.now()}`,
+            templateData: { name: sName, formType: "group", level },
           },
         }).catch(console.error);
       }
@@ -64,6 +71,9 @@ const GroupCourseForm = () => {
       setFormat("fizic");
       setLevel("A1");
       setGdpr(false);
+      setRegistrationId(inserted?.id);
+      setStudentEmail(sEmail);
+      setStudentName(sName);
       setSubmitted(true);
     }
     setSubmitting(false);
@@ -101,7 +111,7 @@ const GroupCourseForm = () => {
 
           {/* Form or Payment Instructions */}
           {submitted ? (
-            <PaymentInstructions courseType="group" />
+            <PaymentInstructions courseType="group" registrationId={registrationId} email={studentEmail} name={studentName} />
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-2">{t.groupFormTitle}</h3>
