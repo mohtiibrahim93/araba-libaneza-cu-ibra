@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,7 +18,7 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name } = await req.json();
+    const { courseType, email, name, registrationId } = await req.json();
 
     if (!courseType || !PRICES[courseType]) {
       throw new Error("Invalid course type");
@@ -51,10 +52,29 @@ serve(async (req) => {
       metadata: {
         course_type: courseType,
         student_name: name || "",
+        registration_id: registrationId || "",
       },
     });
 
-    return new Response(JSON.stringify({ url: session.url }), {
+    // Persist Stripe session id on the registration so the webhook can match it
+    if (registrationId) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      );
+      const { error: updateError } = await supabase
+        .from("registrations")
+        .update({
+          stripe_session_id: session.id,
+          payment_status: "pending",
+        })
+        .eq("id", registrationId);
+      if (updateError) {
+        console.error("Failed to attach stripe_session_id to registration:", updateError);
+      }
+    }
+
+    return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
