@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type Lang = "ro" | "en";
 
@@ -554,8 +554,16 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | null>(null);
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>("ro");
+  const [lang, setLang] = useState<Lang>(() => {
+    const savedLang = window.localStorage.getItem("site-language");
+    return savedLang === "en" || savedLang === "ro" ? savedLang : "ro";
+  });
   const toggle = () => setLang((l) => (l === "ro" ? "en" : "ro"));
+
+  useEffect(() => {
+    window.localStorage.setItem("site-language", lang);
+  }, [lang]);
+
   return (
     <I18nContext.Provider value={{ lang, t: translations[lang], toggle, setLang }}>
       {children}
