@@ -12,7 +12,7 @@ const Footer = () => {
         {/* Brand */}
         <div>
           <p className="text-lg font-bold text-foreground mb-2">
-            Arabă Libaneză cu Ibra
+            {t.siteTitle}
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
