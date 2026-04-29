@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -26,7 +27,18 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#" className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight">
-          <span aria-hidden="true" className="text-xl sm:text-2xl leading-none">🇱🇧</span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span
+                role="img"
+                aria-label="Steagul Libanului"
+                className="text-xl sm:text-2xl leading-none"
+              >
+                🇱🇧
+              </span>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Steagul Libanului</TooltipContent>
+          </Tooltip>
           <span>{t.siteTitle}</span>
         </a>
 
