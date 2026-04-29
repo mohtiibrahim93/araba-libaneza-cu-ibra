@@ -48,6 +48,14 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Status invalid" });
       }
 
+      const { data: existing, error: existingError } = await supabase
+        .from("registrations")
+        .select("lead_status")
+        .eq("id", id)
+        .single();
+
+      if (existingError) throw existingError;
+
       const { data, error } = await supabase
         .from("registrations")
         .update({ lead_status })
@@ -56,7 +64,46 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
+
+      if ((existing?.lead_status || "new") !== lead_status) {
+        const { error: historyError } = await supabase
+          .from("lead_status_history")
+          .insert({
+            registration_id: id,
+            previous_status: existing?.lead_status || "new",
+            new_status: lead_status,
+            changed_by: "admin",
+          });
+
+        if (historyError) throw historyError;
+      }
+
       return jsonResponse({ success: true, data });
+    }
+
+    if (action === "get_private_lead") {
+      if (typeof id !== "string") {
+        return jsonResponse({ error: "Lead invalid" });
+      }
+
+      const { data: registration, error: registrationError } = await supabase
+        .from("registrations")
+        .select("*")
+        .eq("id", id)
+        .eq("form_type", "private")
+        .single();
+
+      if (registrationError) throw registrationError;
+
+      const { data: history, error: historyError } = await supabase
+        .from("lead_status_history")
+        .select("*")
+        .eq("registration_id", id)
+        .order("created_at", { ascending: false });
+
+      if (historyError) throw historyError;
+
+      return jsonResponse({ data: { registration, history } });
     }
 
     // Default: list all
