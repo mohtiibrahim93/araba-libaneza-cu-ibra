@@ -31,13 +31,13 @@ const Navbar = () => {
             <TooltipTrigger asChild>
               <span
                 role="img"
-                aria-label="Steagul Libanului"
+                aria-label={t.lebanonFlagLabel}
                 className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-[22px] leading-none sm:h-7 sm:w-7 sm:text-[26px]"
               >
                 🇱🇧
               </span>
             </TooltipTrigger>
-            <TooltipContent side="bottom">Steagul Libanului</TooltipContent>
+            <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
           </Tooltip>
           <span className="truncate">{t.siteTitle}</span>
         </a>
