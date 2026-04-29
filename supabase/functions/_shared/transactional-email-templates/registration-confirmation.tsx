@@ -10,6 +10,8 @@ interface RegistrationConfirmationProps {
   name?: string
   formType?: string
   level?: string
+  format?: string
+  message?: string
 }
 
 const formTypeLabels: Record<string, string> = {
@@ -18,7 +20,12 @@ const formTypeLabels: Record<string, string> = {
   kids: 'Cursuri pentru Copii',
 }
 
-const RegistrationConfirmationEmail = ({ name, formType, level }: RegistrationConfirmationProps) => (
+const formatLabels: Record<string, string> = {
+  fizic: 'față în față',
+  online: 'online',
+}
+
+const RegistrationConfirmationEmail = ({ name, formType, level, format, message }: RegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
     <Preview>Mulțumim pentru înscrierea ta la {SITE_NAME}!</Preview>
@@ -41,6 +48,14 @@ const RegistrationConfirmationEmail = ({ name, formType, level }: RegistrationCo
           Am primit cererea ta și te vom contacta în curând cu toate detaliile necesare 
           pentru a începe călătoria ta de învățare a limbii arabe libaneze.
         </Text>
+
+        {formType === 'private' && (
+          <Section style={detailsBox}>
+            <Text style={infoTitle}>Detaliile cererii tale:</Text>
+            {format && <Text style={infoText}>Format preferat: {formatLabels[format] || format}</Text>}
+            {message && <Text style={infoText}>Mesaj: {message}</Text>}
+          </Section>
+        )}
 
         <Section style={infoBox}>
           <Text style={infoTitle}>📋 Următorii pași:</Text>
@@ -73,7 +88,7 @@ export const template = {
   component: RegistrationConfirmationEmail,
   subject: 'Confirmare înscriere — Arabă Libaneză cu Ibra',
   displayName: 'Confirmare înscriere',
-  previewData: { name: 'Maria', formType: 'group', level: 'A1' },
+  previewData: { name: 'Maria', formType: 'private', format: 'online', message: 'Aș prefera conversație și gramatică, seara după ora 18:00.' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
@@ -82,6 +97,7 @@ const headerSection = { textAlign: 'center' as const, padding: '20px 0 10px' }
 const logo = { fontSize: '18px', fontWeight: '700' as const, color: '#1a1a2e', margin: '0' }
 const h1 = { fontSize: '24px', fontWeight: '700' as const, color: '#1a1a2e', margin: '20px 0 16px', lineHeight: '1.3' }
 const text = { fontSize: '15px', color: '#4a4a5a', lineHeight: '1.6', margin: '0 0 16px' }
+const detailsBox = { backgroundColor: '#ffffff', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '18px', margin: '20px 0' }
 const infoBox = { backgroundColor: '#fef2f2', borderRadius: '12px', padding: '20px', margin: '24px 0' }
 const infoTitle = { fontSize: '15px', fontWeight: '600' as const, color: '#1a1a2e', margin: '0 0 12px' }
 const infoText = { fontSize: '14px', color: '#4a4a5a', lineHeight: '1.5', margin: '0 0 6px' }
