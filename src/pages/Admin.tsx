@@ -344,9 +344,56 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label>Tip curs</Label>
+              <Select value={courseTypeFilter} onValueChange={(value) => setCourseTypeFilter(value as CourseTypeFilter)}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toate cursurile</SelectItem>
+                  <SelectItem value="group">{formTypeLabels.group}</SelectItem>
+                  <SelectItem value="private">{formTypeLabels.private}</SelectItem>
+                  <SelectItem value="kids">{formTypeLabels.kids}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status lead</Label>
+              <Select value={leadStatusFilter} onValueChange={(value) => setLeadStatusFilter(value as LeadStatusFilter)}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toate statusurile</SelectItem>
+                  <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
+                  <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
+                  <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setCourseTypeFilter("all");
+              setLeadStatusFilter("all");
+            }}
+          >
+            Resetează filtrele
+          </Button>
+        </div>
+
         {registrations.length === 0 ? (
           <p className="text-center text-muted-foreground py-12">
             Nu există înscrieri momentan.
+          </p>
+        ) : filteredRegistrations.length === 0 ? (
+          <p className="text-center text-muted-foreground py-12">
+            Nu există lead-uri pentru filtrele selectate.
           </p>
         ) : (
           <div className="border border-border rounded-lg overflow-hidden">
@@ -356,8 +403,8 @@ const Admin = () => {
                   <TableHead className="w-10">
                     <Checkbox
                       checked={
-                        selected.size === registrations.length &&
-                        registrations.length > 0
+                        filteredRegistrations.length > 0 &&
+                        filteredRegistrations.every((r) => selected.has(r.id))
                       }
                       onCheckedChange={toggleAll}
                     />
@@ -375,7 +422,7 @@ const Admin = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {registrations.map((r) => (
+                {filteredRegistrations.map((r) => (
                   <TableRow
                     key={r.id}
                     data-state={selected.has(r.id) ? "selected" : undefined}
