@@ -84,6 +84,7 @@ const Admin = () => {
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<{ id: string; status: LeadStatus } | null>(null);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -216,6 +217,7 @@ const Admin = () => {
 
   const handleStatusChange = async (id: string, leadStatus: LeadStatus) => {
     const previous = registrations;
+    setUpdatingStatus({ id, status: leadStatus });
     setRegistrations((current) =>
       current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
     );
@@ -241,6 +243,8 @@ const Admin = () => {
         title: "Statusul nu a putut fi actualizat",
         variant: "destructive",
       });
+    } finally {
+      setUpdatingStatus((current) => (current?.id === id && current.status === leadStatus ? null : current));
     }
   };
 
