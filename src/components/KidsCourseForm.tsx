@@ -8,6 +8,16 @@ import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import { trackFormSubmit } from "@/lib/tracking";
+import { z } from "zod";
+
+const kidsRegistrationSchema = z.object({
+  parentName: z.string().trim().min(2).max(100),
+  phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
+  email: z.string().trim().email().max(255),
+  childName: z.string().trim().min(2).max(100),
+  childAge: z.string().trim().min(1).max(20),
+  notes: z.string().trim().max(500).optional(),
+});
 
 const KidsCourseForm = () => {
   const { t } = useI18n();
@@ -23,38 +33,51 @@ const KidsCourseForm = () => {
     }
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
+    const parsed = kidsRegistrationSchema.safeParse({
+      parentName: formData.get("parentName"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      childName: formData.get("childName"),
+      childAge: formData.get("childAge"),
+      notes: formData.get("notes"),
+    });
+
+    if (!parsed.success) {
+      toast.error("Verifică datele părintelui și detaliile copilului.");
+      setSubmitting(false);
+      return;
+    }
+
+    const registration = parsed.data;
 
     const { error } = await supabase.from("registrations").insert({
       form_type: "kids",
-      name: String(formData.get("parentName") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      email: String(formData.get("email") || "").trim() || null,
+      name: registration.parentName,
+      phone: registration.phone,
+      email: registration.email,
       center: "bucuresti",
-      child_age: String(formData.get("childAge") || "").trim() || null,
-      notes: String(formData.get("notes") || "").trim() || null,
+      format: "fizic",
+      child_age: registration.childAge,
+      notes: `Child: ${registration.childName}; Format: fizic; ${registration.notes || ""}`.trim(),
     });
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const parentName = String(formData.get("parentName")).trim();
-      const parentEmail = String(formData.get("email")).trim();
       toast.success(t.kidsSuccess);
       trackFormSubmit("kids");
       supabase.functions.invoke("notify-registration", {
-        body: { name: parentName, phone: String(formData.get("phone")), email: parentEmail, form_type: "kids" },
+        body: { name: registration.parentName, phone: registration.phone, email: registration.email, form_type: "kids", center: "bucuresti", format: "fizic", notes: `Child: ${registration.childName}; Age: ${registration.childAge}` },
       }).catch(console.error);
-      if (parentEmail) {
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "registration-confirmation",
-            recipientEmail: parentEmail,
-            idempotencyKey: `reg-confirm-kids-${Date.now()}`,
-            templateData: { name: parentName, formType: "kids" },
-          },
-        }).catch(console.error);
-      }
+      supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "registration-confirmation",
+          recipientEmail: registration.email,
+          idempotencyKey: `reg-confirm-kids-${Date.now()}`,
+          templateData: { name: registration.parentName, formType: "kids" },
+        },
+      }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setGdpr(false);
       setSubmitted(true);
@@ -87,11 +110,15 @@ const KidsCourseForm = () => {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="kid-email" className="text-sm">{t.labelEmail}</Label>
-              <Input id="kid-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
+              <Input id="kid-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="kid-age" className="text-sm">{t.kidsChildAge}</Label>
-              <Input id="kid-age" name="childAge" maxLength={20} placeholder={t.kidsChildAgePlaceholder} className="h-11" />
+              <Label htmlFor="kid-name" className="text-sm">{t.kidsChildName} *</Label>
+              <Input id="kid-name" name="childName" required maxLength={100} placeholder={t.kidsChildNamePlaceholder} className="h-11" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="kid-age" className="text-sm">{t.kidsChildAge} *</Label>
+              <Input id="kid-age" name="childAge" required maxLength={20} placeholder={t.kidsChildAgePlaceholder} className="h-11" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="kid-notes" className="text-sm">{t.kidsNotes}</Label>
