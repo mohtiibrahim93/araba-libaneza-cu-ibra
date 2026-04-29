@@ -214,7 +214,7 @@ const Admin = () => {
       "Note",
     ];
 
-    const rows = registrations.map((r) => [
+    const rows = filteredRegistrations.map((r) => [
       new Date(r.created_at).toLocaleString("ro-RO"),
       formTypeLabels[r.form_type] || r.form_type,
       r.name,
@@ -239,10 +239,12 @@ const Admin = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `inscrieri_${new Date().toISOString().slice(0, 10)}.csv`;
+    const courseSuffix = courseTypeFilter === "all" ? "toate" : courseTypeFilter;
+    const statusSuffix = leadStatusFilter === "all" ? "toate-statusurile" : leadStatusFilter;
+    a.download = `inscrieri_${courseSuffix}_${statusSuffix}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [registrations]);
+  }, [filteredRegistrations, courseTypeFilter, leadStatusFilter]);
 
   if (!authenticated) {
     return (
@@ -291,10 +293,10 @@ const Admin = () => {
       <header className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <h1 className="text-lg font-bold text-foreground">
-            Înscrieri ({registrations.length})
+            Înscrieri ({filteredRegistrations.length}/{registrations.length})
           </h1>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleExport}>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
               <Download className="w-4 h-4" />
               Export CSV
             </Button>
