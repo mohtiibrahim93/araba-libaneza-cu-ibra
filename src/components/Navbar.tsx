@@ -26,20 +26,20 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight">
+        <a href="#" className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0">
           <Tooltip>
             <TooltipTrigger asChild>
               <span
                 role="img"
                 aria-label="Steagul Libanului"
-                className="text-xl sm:text-2xl leading-none"
+                className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-[22px] leading-none sm:h-7 sm:w-7 sm:text-[26px]"
               >
                 🇱🇧
               </span>
             </TooltipTrigger>
             <TooltipContent side="bottom">Steagul Libanului</TooltipContent>
           </Tooltip>
-          <span>{t.siteTitle}</span>
+          <span className="truncate">{t.siteTitle}</span>
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
