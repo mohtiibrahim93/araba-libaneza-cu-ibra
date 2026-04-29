@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,14 +14,12 @@ const privateRegistrationSchema = z.object({
   name: z.string().trim().min(2).max(100),
   phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
   email: z.string().trim().email().max(255),
-  center: z.enum(["bucuresti", "online"]),
   format: z.enum(["fizic", "online"]),
 });
 
 const PrivateLessonsForm = () => {
   const { t } = useI18n();
   const [format, setFormat] = useState("fizic");
-  const [center, setCenter] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -42,7 +39,6 @@ const PrivateLessonsForm = () => {
       name: formData.get("name"),
       phone: formData.get("phone"),
       email: formData.get("email"),
-      center,
       format,
     });
 
@@ -61,9 +57,9 @@ const PrivateLessonsForm = () => {
         name: registration.name,
         phone: registration.phone,
         email: registration.email,
-        center: registration.center,
+        center: registration.format === "fizic" ? "bucuresti" : "online",
         format: registration.format,
-        notes: `Center: ${registration.center}; Format: ${registration.format}`,
+        notes: `Private lesson format: ${registration.format}`,
       })
       .select("id")
       .single();
@@ -75,7 +71,7 @@ const PrivateLessonsForm = () => {
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
-        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "private", center: registration.center, format: registration.format },
+        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "private", center: registration.format === "fizic" ? "bucuresti" : "online", format: registration.format },
       }).catch(console.error);
       supabase.functions.invoke("send-transactional-email", {
         body: {
@@ -86,7 +82,6 @@ const PrivateLessonsForm = () => {
         },
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
-      setCenter("");
       setFormat("fizic");
       setGdpr(false);
       setRegistrationId(inserted?.id);
@@ -120,18 +115,6 @@ const PrivateLessonsForm = () => {
             <div className="space-y-1.5">
               <Label htmlFor="priv-email" className="text-sm">{t.labelEmail} *</Label>
               <Input id="priv-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-sm">{t.centerLabel} *</Label>
-              <Select value={center} onValueChange={setCenter} required>
-                <SelectTrigger className="h-11">
-                  <SelectValue placeholder={t.centerPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
-                  <SelectItem value="online">{t.centerOnline}</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <div className="space-y-2">
               <Label className="text-sm">{t.labelFormat} *</Label>
