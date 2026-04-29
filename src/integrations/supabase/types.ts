@@ -110,6 +110,7 @@ export type Database = {
           form_type: string
           format: string | null
           id: string
+          lead_status: string
           name: string
           notes: string | null
           paid_at: string | null
@@ -125,6 +126,7 @@ export type Database = {
           form_type: string
           format?: string | null
           id?: string
+          lead_status?: string
           name: string
           notes?: string | null
           paid_at?: string | null
@@ -140,6 +142,7 @@ export type Database = {
           form_type?: string
           format?: string | null
           id?: string
+          lead_status?: string
           name?: string
           notes?: string | null
           paid_at?: string | null

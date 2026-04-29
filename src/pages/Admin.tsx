@@ -23,8 +23,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+
+type LeadStatus = "new" | "contacted" | "confirmed";
 
 interface Registration {
   id: string;
@@ -37,12 +40,19 @@ interface Registration {
   format: string | null;
   child_age: string | null;
   notes: string | null;
+  lead_status: LeadStatus;
 }
 
 const formTypeLabels: Record<string, string> = {
   group: "Curs Grup",
   private: "Lecții Private",
   kids: "Curs Copii",
+};
+
+const leadStatusLabels: Record<LeadStatus, string> = {
+  new: "Nou",
+  contacted: "Contactat",
+  confirmed: "Confirmat",
 };
 
 const Admin = () => {
@@ -143,6 +153,36 @@ const Admin = () => {
     }
   };
 
+  const handleStatusChange = async (id: string, leadStatus: LeadStatus) => {
+    const previous = registrations;
+    setRegistrations((current) =>
+      current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
+    );
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "admin-registrations",
+        {
+          body: {
+            password: storedPassword,
+            action: "update_status",
+            id,
+            lead_status: leadStatus,
+          },
+        }
+      );
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+    } catch {
+      setRegistrations(previous);
+      toast({
+        title: "Statusul nu a putut fi actualizat",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleExport = useCallback(() => {
     const headers = [
       "Data",
@@ -152,6 +192,7 @@ const Admin = () => {
       "Email",
       "Centru",
       "Format",
+      "Status lead",
       "Vârsta copil",
       "Note",
     ];
@@ -164,6 +205,7 @@ const Admin = () => {
       r.email || "",
       r.center || "",
       r.format || "",
+      leadStatusLabels[r.lead_status || "new"],
       r.child_age || "",
       r.notes || "",
     ]);
@@ -308,6 +350,7 @@ const Admin = () => {
                   <TableHead>Email</TableHead>
                   <TableHead>Centru</TableHead>
                   <TableHead>Format</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Vârstă copil</TableHead>
                   <TableHead>Note</TableHead>
                 </TableRow>
@@ -345,6 +388,21 @@ const Admin = () => {
                     </TableCell>
                     <TableCell>{r.center || "—"}</TableCell>
                     <TableCell>{r.format || "—"}</TableCell>
+                    <TableCell>
+                      <Select
+                        value={r.lead_status || "new"}
+                        onValueChange={(value) => handleStatusChange(r.id, value as LeadStatus)}
+                      >
+                        <SelectTrigger className="h-8 w-[130px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
+                          <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
+                          <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </TableCell>
                     <TableCell>{r.child_age || "—"}</TableCell>
                     <TableCell className="max-w-[200px] truncate">
                       {r.notes || "—"}
