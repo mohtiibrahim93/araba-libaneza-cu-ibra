@@ -1,38 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
-import PaymentInstructions from "@/components/PaymentInstructions";
 import { trackFormSubmit } from "@/lib/tracking";
 import { z } from "zod";
 
-const groupRegistrationSchema = z.object({
-  name: z.string().trim().min(2).max(100),
-  phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
-  email: z.string().trim().email().max(255),
-  center: z.enum(["bucuresti", "online"]),
+const mainLeadSchema = z.object({
+  courseType: z.enum(["group", "private", "kids"]),
   format: z.enum(["fizic", "online"]),
-  level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]),
+  name: z.string().trim().min(2).max(100),
+  phone: z
+    .string()
+    .trim()
+    .max(40)
+    .transform((value) => value.replace(/[\u00A0\u2007\u202F]/g, " ").replace(/\s+/g, " "))
+    .refine((value) => value.replace(/\D/g, "").length >= 7, "Phone number is too short")
+    .refine((value) => value.replace(/\D/g, "").length <= 15, "Phone number is too long")
+    .refine((value) => /^[+\d\s().\-/]+$/.test(value), "Phone number contains unsupported characters"),
+  email: z.string().trim().email().max(255),
+  message: z.string().trim().max(1000).optional(),
+}).refine((data) => data.courseType !== "kids" || data.format === "fizic", {
+  path: ["format"],
+  message: "Kids courses are physical only",
 });
 
 const GroupCourseForm = () => {
   const { t } = useI18n();
-  const [format, setFormat] = useState("fizic");
-  const [center, setCenter] = useState("");
-  const [level, setLevel] = useState("A1");
+  const [courseType, setCourseType] = useState<"group" | "private" | "kids">("group");
+  const [format, setFormat] = useState<"fizic" | "online">("fizic");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
-  const [smsOptIn, setSmsOptIn] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [registrationId, setRegistrationId] = useState<string | undefined>();
-  const [studentEmail, setStudentEmail] = useState<string>("");
-  const [studentName, setStudentName] = useState<string>("");
+
+  useEffect(() => {
+    if (courseType === "kids") setFormat("fizic");
+  }, [courseType]);
+
+  const details = [
+    { label: t.mainLeadDetailGroupLabel, value: t.mainLeadDetailGroupValue },
+    { label: t.mainLeadDetailPrivateLabel, value: t.mainLeadDetailPrivateValue },
+    { label: t.mainLeadDetailKidsLabel, value: t.mainLeadDetailKidsValue },
+  ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,86 +54,104 @@ const GroupCourseForm = () => {
       toast.error(t.gdprRequired);
       return;
     }
+
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
-    const parsed = groupRegistrationSchema.safeParse({
+    const parsed = mainLeadSchema.safeParse({
+      courseType,
+      format,
       name: formData.get("name"),
       phone: formData.get("phone"),
       email: formData.get("email"),
-      center,
-      format,
-      level,
+      message: formData.get("message") || undefined,
     });
 
     if (!parsed.success) {
-      toast.error("Verifică numele, emailul, telefonul și opțiunile selectate.");
+      toast.error(t.mainLeadValidationError);
       setSubmitting(false);
       return;
     }
 
     const registration = parsed.data;
+    const center = registration.format === "fizic" ? "bucuresti" : "online";
+    const courseLabel =
+      registration.courseType === "group"
+        ? t.mainLeadCourseGroup
+        : registration.courseType === "private"
+          ? t.mainLeadCoursePrivate
+          : t.mainLeadCourseKids;
+
+    const notes = [
+      `Course type: ${registration.courseType}`,
+      `Requested callback: yes`,
+      registration.message ? `Message: ${registration.message}` : undefined,
+    ].filter(Boolean).join("\n");
 
     const { data: inserted, error } = await supabase
       .from("registrations")
       .insert({
-        form_type: "group",
+        form_type: registration.courseType,
         name: registration.name,
         phone: registration.phone,
         email: registration.email,
-        center: registration.center,
+        center,
         format: registration.format,
-        sms_confirmation_opt_in: smsOptIn,
-        notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}; SMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}`,
+        notes,
       })
       .select("id")
       .single();
 
     if (error) {
-      toast.error("A apărut o eroare. Încercați din nou.");
+      toast.error(t.mainLeadError);
       console.error("Registration error:", error);
     } else {
-      toast.success(t.groupSuccess);
-      trackFormSubmit("group");
+      toast.success(t.mainLeadSuccess);
+      trackFormSubmit(registration.courseType);
+
       supabase.functions.invoke("notify-registration", {
-        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "group", center: registration.center, format: registration.format, notes: `Level: ${registration.level}` },
+        body: {
+          name: registration.name,
+          phone: registration.phone,
+          email: registration.email,
+          form_type: registration.courseType,
+          center,
+          format: registration.format,
+          notes: `${courseLabel}; ${notes}`,
+        },
       }).catch(console.error);
+
       supabase.functions.invoke("send-transactional-email", {
         body: {
           templateName: "registration-confirmation",
           recipientEmail: registration.email,
-          idempotencyKey: `reg-confirm-group-${Date.now()}`,
-          templateData: { name: registration.name, formType: "group", level: registration.level },
+          idempotencyKey: `reg-confirm-${registration.courseType}-${inserted?.id ?? Date.now()}`,
+          templateData: {
+            name: registration.name,
+            formType: registration.courseType,
+            format: registration.format,
+            message: registration.message,
+          },
         },
       }).catch(console.error);
+
       (e.target as HTMLFormElement).reset();
-      setCenter("");
+      setCourseType("group");
       setFormat("fizic");
-      setLevel("A1");
-      setSmsOptIn(false);
       setGdpr(false);
-      setRegistrationId(inserted?.id);
-      setStudentEmail(registration.email);
-      setStudentName(registration.name);
       setSubmitted(true);
     }
+
     setSubmitting(false);
   };
-
-  const details = [
-    { label: t.groupStartDate, value: t.groupStartDateVal },
-    { label: t.groupSchedule, value: t.groupScheduleVal },
-    { label: t.groupDuration, value: t.groupDurationVal },
-  ];
 
   return (
     <section id="inscriere" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-4xl mx-auto">
         <p className="text-[11px] tracking-[0.4em] uppercase text-muted-foreground font-medium text-center mb-4">—</p>
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-3 tracking-tight">{t.groupTitle}</h2>
-        <p className="text-muted-foreground text-center mb-16 max-w-md mx-auto text-sm">{t.groupDesc}</p>
+        <h2 className="text-3xl md:text-5xl font-bold text-center mb-3 tracking-tight">{t.mainLeadTitle}</h2>
+        <p className="text-muted-foreground text-center mb-16 max-w-md mx-auto text-sm">{t.mainLeadDesc}</p>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Details */}
           <div>
             <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-8">{t.groupDetails}</h3>
             <div className="space-y-6">
@@ -131,79 +163,63 @@ const GroupCourseForm = () => {
               ))}
             </div>
             <div className="mt-8 py-3 px-4 border-l-2 border-primary/30">
-              <p className="text-sm text-muted-foreground">{t.groupFormatNote}</p>
+              <p className="text-sm text-muted-foreground">{t.mainLeadCallbackNote}</p>
             </div>
           </div>
 
-          {/* Form or Payment Instructions */}
           {submitted ? (
-            <PaymentInstructions courseType="group" registrationId={registrationId} email={studentEmail} name={studentName} />
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+              <h3 className="text-lg font-bold text-foreground mb-2">{t.mainLeadSuccessTitle}</h3>
+              <p className="text-sm text-muted-foreground">{t.mainLeadSuccessDesc}</p>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-2">{t.groupFormTitle}</h3>
+
               <div className="space-y-1.5">
-                <Label htmlFor="group-name" className="text-[13px] font-medium">{t.labelName} *</Label>
-                <Input id="group-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="group-phone" className="text-[13px] font-medium">{t.labelPhone} *</Label>
-                <Input id="group-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail} *</Label>
-                <Input id="group-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[13px] font-medium">{t.centerLabel} *</Label>
-                <Select value={center} onValueChange={setCenter} required>
+                <Label className="text-[13px] font-medium">{t.mainLeadCourseTypeLabel} *</Label>
+                <Select value={courseType} onValueChange={(value) => setCourseType(value as "group" | "private" | "kids")}>
                   <SelectTrigger className="h-11 border-border bg-background">
-                    <SelectValue placeholder={t.centerPlaceholder} />
+                    <SelectValue placeholder={t.mainLeadCourseTypePlaceholder} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bucuresti">{t.centerBucharest}</SelectItem>
-                    <SelectItem value="online">{t.centerOnline}</SelectItem>
+                    <SelectItem value="group">{t.mainLeadCourseGroup}</SelectItem>
+                    <SelectItem value="private">{t.mainLeadCoursePrivate}</SelectItem>
+                    <SelectItem value="kids">{t.mainLeadCourseKids}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[13px] font-medium">{t.levelLabel} *</Label>
-                <Select value={level} onValueChange={setLevel}>
-                  <SelectTrigger className="h-11 border-border bg-background">
-                    <SelectValue placeholder={t.levelSelectPlaceholder} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
-                    <SelectItem value="A2" disabled>A2 — {t.levelComingSoon}</SelectItem>
-                    <SelectItem value="B1" disabled>B1 — {t.levelComingSoon}</SelectItem>
-                    <SelectItem value="B2" disabled>B2 — {t.levelComingSoon}</SelectItem>
-                    <SelectItem value="C1" disabled>C1 — {t.levelComingSoon}</SelectItem>
-                    <SelectItem value="C2" disabled>C2 — {t.levelComingSoon}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+
               <div className="space-y-2">
                 <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
-                <RadioGroup value={format} onValueChange={setFormat} className="flex gap-6 pt-1">
+                <RadioGroup value={format} onValueChange={(value) => setFormat(value as "fizic" | "online")} className="flex gap-6 pt-1">
                   <div className="flex items-center gap-2">
-                    <RadioGroupItem value="fizic" id="fizic" />
-                    <Label htmlFor="fizic" className="cursor-pointer font-normal text-sm">{t.groupPhysical}</Label>
+                    <RadioGroupItem value="fizic" id="main-fizic" />
+                    <Label htmlFor="main-fizic" className="cursor-pointer font-normal text-sm">{t.groupPhysical}</Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <RadioGroupItem value="online" id="online" />
-                    <Label htmlFor="online" className="cursor-pointer font-normal text-sm">{t.groupOnline}</Label>
+                    <RadioGroupItem value="online" id="main-online" disabled={courseType === "kids"} />
+                    <Label htmlFor="main-online" className="cursor-pointer font-normal text-sm data-[disabled=true]:opacity-50">{t.groupOnline}</Label>
                   </div>
                 </RadioGroup>
+                {courseType === "kids" && <p className="text-xs text-muted-foreground">{t.kidsPhysicalOnly}</p>}
               </div>
-              <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/30 p-3">
-                <Checkbox
-                  id="group-sms-opt-in"
-                  checked={smsOptIn}
-                  onCheckedChange={(value) => setSmsOptIn(value === true)}
-                  className="mt-0.5"
-                />
-                <Label htmlFor="group-sms-opt-in" className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground">
-                  {t.smsConfirmationOptIn}
-                </Label>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="main-name" className="text-[13px] font-medium">{t.labelName} *</Label>
+                <Input id="main-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="main-phone" className="text-[13px] font-medium">{t.labelPhone} *</Label>
+                <Input id="main-phone" name="phone" type="tel" required maxLength={40} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="main-email" className="text-[13px] font-medium">{t.labelEmail} *</Label>
+                <Input id="main-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="main-message" className="text-[13px] font-medium">{t.mainLeadMessageLabel}</Label>
+                <Textarea id="main-message" name="message" maxLength={1000} placeholder={t.mainLeadMessagePlaceholder} className="min-h-24 resize-none border-border bg-background" />
               </div>
               <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
               <button
@@ -211,7 +227,7 @@ const GroupCourseForm = () => {
                 disabled={submitting}
                 className="w-full py-3 text-sm font-semibold tracking-wide bg-foreground text-background rounded-full transition-all hover:opacity-90 disabled:opacity-50"
               >
-                {submitting ? t.groupSubmitting : t.groupSubmit}
+                {submitting ? t.groupSubmitting : t.mainLeadSubmit}
               </button>
             </form>
           )}
