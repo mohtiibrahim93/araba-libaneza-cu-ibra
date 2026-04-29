@@ -50,16 +50,20 @@ const KidsCourseForm = () => {
 
     const registration = parsed.data;
 
-    const { error } = await supabase.from("registrations").insert({
-      form_type: "kids",
-      name: registration.parentName,
-      phone: registration.phone,
-      email: registration.email,
-      center: "bucuresti",
-      format: "fizic",
-      child_age: registration.childAge,
-      notes: `Child: ${registration.childName}; Format: fizic; ${registration.notes || ""}`.trim(),
-    });
+    const { data: inserted, error } = await supabase
+      .from("registrations")
+      .insert({
+        form_type: "kids",
+        name: registration.parentName,
+        phone: registration.phone,
+        email: registration.email,
+        center: "bucuresti",
+        format: "fizic",
+        child_age: registration.childAge,
+        notes: `Child: ${registration.childName}; Format: fizic; ${registration.notes || ""}`.trim(),
+      })
+      .select("id")
+      .single();
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
@@ -74,8 +78,14 @@ const KidsCourseForm = () => {
         body: {
           templateName: "registration-confirmation",
           recipientEmail: registration.email,
-          idempotencyKey: `reg-confirm-kids-${Date.now()}`,
-          templateData: { name: registration.parentName, formType: "kids" },
+          idempotencyKey: `reg-confirm-kids-${inserted?.id ?? Date.now()}`,
+          templateData: {
+            name: registration.parentName,
+            formType: "kids",
+            childName: registration.childName,
+            childAge: registration.childAge,
+            message: registration.notes,
+          },
         },
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
