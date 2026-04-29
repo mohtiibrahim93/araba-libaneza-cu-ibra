@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { MessageCircle, Menu, X } from "lucide-react";
+import { ChevronDown, MessageCircle, Menu, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
 const Navbar = () => {
-  const { t, toggle, lang } = useI18n();
+  const { t, setLang, lang } = useI18n();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -19,8 +25,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" className="text-xl font-bold text-foreground tracking-tight">
-          Arabă Libaneză cu Ibra
+        <a href="#" className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
+          {t.siteTitle}
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
@@ -30,12 +36,29 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={toggle}
-            className="text-xs font-semibold tracking-wider uppercase px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {lang === "ro" ? "EN" : "RO"}
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label={t.languageLabel}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <span aria-hidden="true">{lang === "ro" ? "🇷🇴" : "🇬🇧"}</span>
+                <span className="hidden sm:inline uppercase">{lang}</span>
+                <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-36">
+              <DropdownMenuItem onClick={() => setLang("ro")} className="gap-2">
+                <span aria-hidden="true">🇷🇴</span>
+                <span>{t.languageRomanian}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("en")} className="gap-2">
+                <span aria-hidden="true">🇬🇧</span>
+                <span>{t.languageEnglish}</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <a
             href={WHATSAPP_URL}
             target="_blank"
