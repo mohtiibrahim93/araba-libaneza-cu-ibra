@@ -31,7 +31,7 @@ const Navbar = () => {
             <a
               href="#"
               aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
-              className="flex h-10 min-w-0 flex-1 items-center gap-2.5 pr-2 text-base font-bold text-foreground tracking-tight sm:text-xl md:flex-none md:pr-0"
+              className="flex h-10 min-w-0 flex-1 items-center gap-2.5 pr-2 text-base font-bold text-foreground tracking-tight sm:text-xl md:max-w-none md:flex-none md:pr-0"
             >
               <span
                 role="img"
@@ -40,7 +40,9 @@ const Navbar = () => {
               >
                 🇱🇧
               </span>
-              <span className="block min-w-0 truncate leading-none">{t.siteTitle}</span>
+              <span className="line-clamp-2 min-w-0 max-w-[9.5rem] leading-tight sm:max-w-[16rem] sm:line-clamp-1 md:max-w-none">
+                {t.siteTitle}
+              </span>
             </a>
           </TooltipTrigger>
           <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
