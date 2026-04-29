@@ -9,6 +9,15 @@ import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import { trackFormSubmit } from "@/lib/tracking";
+import { z } from "zod";
+
+const privateRegistrationSchema = z.object({
+  name: z.string().trim().min(2).max(100),
+  phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
+  email: z.string().trim().email().max(255),
+  center: z.enum(["bucuresti", "online"]),
+  format: z.enum(["fizic", "online"]),
+});
 
 const PrivateLessonsForm = () => {
   const { t } = useI18n();
@@ -29,16 +38,32 @@ const PrivateLessonsForm = () => {
     }
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
+    const parsed = privateRegistrationSchema.safeParse({
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      center,
+      format,
+    });
+
+    if (!parsed.success) {
+      toast.error("Verifică numele, emailul, telefonul și opțiunile selectate.");
+      setSubmitting(false);
+      return;
+    }
+
+    const registration = parsed.data;
 
     const { data: inserted, error } = await supabase
       .from("registrations")
       .insert({
         form_type: "private",
-        name: String(formData.get("name") || "").trim(),
-        phone: String(formData.get("phone") || "").trim(),
-        email: String(formData.get("email") || "").trim() || null,
-        center,
-        format,
+        name: registration.name,
+        phone: registration.phone,
+        email: registration.email,
+        center: registration.center,
+        format: registration.format,
+        notes: `Center: ${registration.center}; Format: ${registration.format}`,
       })
       .select("id")
       .single();
@@ -47,30 +72,26 @@ const PrivateLessonsForm = () => {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const sName = String(formData.get("name")).trim();
-      const sEmail = String(formData.get("email")).trim();
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
-        body: { name: sName, phone: String(formData.get("phone")), email: sEmail, form_type: "private", center, format },
+        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "private", center: registration.center, format: registration.format },
       }).catch(console.error);
-      if (sEmail) {
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "registration-confirmation",
-            recipientEmail: sEmail,
-            idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
-            templateData: { name: sName, formType: "private" },
-          },
-        }).catch(console.error);
-      }
+      supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "registration-confirmation",
+          recipientEmail: registration.email,
+          idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
+          templateData: { name: registration.name, formType: "private" },
+        },
+      }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
       setGdpr(false);
       setRegistrationId(inserted?.id);
-      setStudentEmail(sEmail);
-      setStudentName(sName);
+      setStudentEmail(registration.email);
+      setStudentName(registration.name);
       setSubmitted(true);
     }
     setSubmitting(false);
@@ -85,7 +106,7 @@ const PrivateLessonsForm = () => {
         </div>
 
         {submitted ? (
-          <PaymentInstructions courseType="private" registrationId={registrationId} email={studentEmail} name={studentName} />
+          <PaymentInstructions registrationId={registrationId} email={studentEmail} name={studentName} />
         ) : (
           <form onSubmit={handleSubmit} className="bg-background rounded-2xl border border-border p-6 space-y-4">
             <div className="space-y-1.5">
@@ -97,8 +118,8 @@ const PrivateLessonsForm = () => {
               <Input id="priv-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="priv-email" className="text-sm">{t.labelEmail}</Label>
-              <Input id="priv-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
+              <Label htmlFor="priv-email" className="text-sm">{t.labelEmail} *</Label>
+              <Input id="priv-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11" />
             </div>
             <div className="space-y-1.5">
               <Label className="text-sm">{t.centerLabel} *</Label>
