@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,8 @@ import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
+type CourseTypeFilter = "all" | "group" | "private" | "kids";
+type LeadStatusFilter = "all" | LeadStatus;
 
 interface Registration {
   id: string;
@@ -64,6 +66,18 @@ const Admin = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
+  const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
+  const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
+
+  const filteredRegistrations = useMemo(
+    () =>
+      registrations.filter((r) => {
+        const matchesCourse = courseTypeFilter === "all" || r.form_type === courseTypeFilter;
+        const matchesStatus = leadStatusFilter === "all" || (r.lead_status || "new") === leadStatusFilter;
+        return matchesCourse && matchesStatus;
+      }),
+    [registrations, courseTypeFilter, leadStatusFilter]
+  );
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,10 +124,13 @@ const Admin = () => {
   };
 
   const toggleAll = () => {
-    if (selected.size === registrations.length) {
+    const filteredIds = filteredRegistrations.map((r) => r.id);
+    const allFilteredSelected = filteredIds.length > 0 && filteredIds.every((id) => selected.has(id));
+
+    if (allFilteredSelected) {
       setSelected(new Set());
     } else {
-      setSelected(new Set(registrations.map((r) => r.id)));
+      setSelected(new Set(filteredIds));
     }
   };
 
