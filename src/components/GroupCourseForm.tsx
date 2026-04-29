@@ -57,15 +57,19 @@ const GroupCourseForm = () => {
 
     const registration = parsed.data;
 
-    const { error } = await supabase.from("registrations").insert({
-      form_type: "group",
-      name: registration.name,
-      phone: registration.phone,
-      email: registration.email,
-      center: registration.center,
-      format: registration.format,
-      notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}`,
-    });
+    const { data: inserted, error } = await supabase
+      .from("registrations")
+      .insert({
+        form_type: "group",
+        name: registration.name,
+        phone: registration.phone,
+        email: registration.email,
+        center: registration.center,
+        format: registration.format,
+        notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}`,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
@@ -89,7 +93,7 @@ const GroupCourseForm = () => {
       setFormat("fizic");
       setLevel("A1");
       setGdpr(false);
-      setRegistrationId(undefined);
+      setRegistrationId(inserted?.id);
       setStudentEmail(registration.email);
       setStudentName(registration.name);
       setSubmitted(true);
@@ -142,8 +146,8 @@ const GroupCourseForm = () => {
                 <Input id="group-phone" name="phone" type="tel" required maxLength={20} placeholder={t.placeholderPhone} className="h-11 border-border bg-background" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail}</Label>
-                <Input id="group-email" name="email" type="email" maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
+                <Label htmlFor="group-email" className="text-[13px] font-medium">{t.labelEmail} *</Label>
+                <Input id="group-email" name="email" type="email" required maxLength={255} placeholder={t.placeholderEmail} className="h-11 border-border bg-background" />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[13px] font-medium">{t.centerLabel} *</Label>
