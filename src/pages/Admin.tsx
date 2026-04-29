@@ -153,6 +153,36 @@ const Admin = () => {
     }
   };
 
+  const handleStatusChange = async (id: string, leadStatus: LeadStatus) => {
+    const previous = registrations;
+    setRegistrations((current) =>
+      current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
+    );
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "admin-registrations",
+        {
+          body: {
+            password: storedPassword,
+            action: "update_status",
+            id,
+            lead_status: leadStatus,
+          },
+        }
+      );
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+    } catch {
+      setRegistrations(previous);
+      toast({
+        title: "Statusul nu a putut fi actualizat",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleExport = useCallback(() => {
     const headers = [
       "Data",
@@ -162,6 +192,7 @@ const Admin = () => {
       "Email",
       "Centru",
       "Format",
+      "Status lead",
       "Vârsta copil",
       "Note",
     ];
@@ -174,6 +205,7 @@ const Admin = () => {
       r.email || "",
       r.center || "",
       r.format || "",
+      leadStatusLabels[r.lead_status || "new"],
       r.child_age || "",
       r.notes || "",
     ]);
