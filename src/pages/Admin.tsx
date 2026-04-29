@@ -453,8 +453,8 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="grid gap-3 sm:grid-cols-2">
+        <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[180px_180px_minmax(260px,360px)]">
             <div className="space-y-1.5">
               <Label>Tip curs</Label>
               <Select value={courseTypeFilter} onValueChange={(value) => setCourseTypeFilter(value as CourseTypeFilter)}>
@@ -483,6 +483,19 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="private-message-search">Caută în mesaj</Label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="private-message-search"
+                  value={privateMessageSearch}
+                  onChange={(e) => setPrivateMessageSearch(e.target.value)}
+                  placeholder="ex: online, program, seară"
+                  className="pl-9"
+                />
+              </div>
+            </div>
           </div>
           <Button
             variant="ghost"
@@ -490,6 +503,7 @@ const Admin = () => {
             onClick={() => {
               setCourseTypeFilter("all");
               setLeadStatusFilter("all");
+              setPrivateMessageSearch("");
             }}
           >
             Resetează filtrele
