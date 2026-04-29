@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
@@ -27,6 +28,7 @@ const GroupCourseForm = () => {
   const [level, setLevel] = useState("A1");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
+  const [smsOptIn, setSmsOptIn] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | undefined>();
   const [studentEmail, setStudentEmail] = useState<string>("");
@@ -66,7 +68,8 @@ const GroupCourseForm = () => {
         email: registration.email,
         center: registration.center,
         format: registration.format,
-        notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}`,
+        sms_confirmation_opt_in: smsOptIn,
+        notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}; SMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}`,
       })
       .select("id")
       .single();
@@ -92,6 +95,7 @@ const GroupCourseForm = () => {
       setCenter("");
       setFormat("fizic");
       setLevel("A1");
+      setSmsOptIn(false);
       setGdpr(false);
       setRegistrationId(inserted?.id);
       setStudentEmail(registration.email);
@@ -189,6 +193,17 @@ const GroupCourseForm = () => {
                     <Label htmlFor="online" className="cursor-pointer font-normal text-sm">{t.groupOnline}</Label>
                   </div>
                 </RadioGroup>
+              </div>
+              <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/30 p-3">
+                <Checkbox
+                  id="group-sms-opt-in"
+                  checked={smsOptIn}
+                  onCheckedChange={(value) => setSmsOptIn(value === true)}
+                  className="mt-0.5"
+                />
+                <Label htmlFor="group-sms-opt-in" className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground">
+                  {t.smsConfirmationOptIn}
+                </Label>
               </div>
               <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
               <button

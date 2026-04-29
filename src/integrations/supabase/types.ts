@@ -151,6 +151,7 @@ export type Database = {
           paid_at: string | null
           payment_status: string
           phone: string
+          sms_confirmation_opt_in: boolean
           stripe_session_id: string | null
         }
         Insert: {
@@ -167,6 +168,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone: string
+          sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
         }
         Update: {
@@ -183,6 +185,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone?: string
+          sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
         }
         Relationships: []
