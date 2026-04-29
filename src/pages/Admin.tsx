@@ -1,5 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -262,6 +264,73 @@ const Admin = () => {
     URL.revokeObjectURL(url);
   }, [filteredRegistrations, courseTypeFilter, leadStatusFilter]);
 
+  const privateFilteredRegistrations = useMemo(
+    () => filteredRegistrations.filter((r) => r.form_type === "private"),
+    [filteredRegistrations]
+  );
+
+  const getPrivateExportFilename = useCallback((extension: "csv" | "pdf") => {
+    const statusSuffix = leadStatusFilter === "all" ? "toate-statusurile" : leadStatusFilter;
+    return `leaduri_private_${statusSuffix}_${new Date().toISOString().slice(0, 10)}.${extension}`;
+  }, [leadStatusFilter]);
+
+  const handlePrivateCsvExport = useCallback(() => {
+    const headers = ["Data", "Nume", "Telefon", "Email", "Format", "Status lead", "Mesaj"];
+    const rows = privateFilteredRegistrations.map((r) => [
+      new Date(r.created_at).toLocaleString("ro-RO"),
+      r.name,
+      r.phone,
+      r.email || "",
+      r.format || "",
+      leadStatusLabels[r.lead_status || "new"],
+      r.notes || "",
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = getPrivateExportFilename("csv");
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [privateFilteredRegistrations, getPrivateExportFilename]);
+
+  const handlePrivatePdfExport = useCallback(() => {
+    const doc = new jsPDF({ orientation: "landscape" });
+    const statusLabel = leadStatusFilter === "all" ? "Toate statusurile" : leadStatusLabels[leadStatusFilter];
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Lead-uri lectii private", 14, 16);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`Filtru status: ${statusLabel} · Total: ${privateFilteredRegistrations.length}`, 14, 24);
+
+    autoTable(doc, {
+      startY: 32,
+      head: [["Data", "Nume", "Telefon", "Email", "Format", "Status", "Mesaj"]],
+      body: privateFilteredRegistrations.map((r) => [
+        new Date(r.created_at).toLocaleString("ro-RO"),
+        r.name,
+        r.phone,
+        r.email || "—",
+        r.format || "—",
+        leadStatusLabels[r.lead_status || "new"],
+        r.notes || "—",
+      ]),
+      styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: "linebreak" },
+      headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255] },
+      columnStyles: { 6: { cellWidth: 78 } },
+      margin: { left: 14, right: 14 },
+    });
+
+    doc.save(getPrivateExportFilename("pdf"));
+  }, [privateFilteredRegistrations, leadStatusFilter, getPrivateExportFilename]);
+
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -312,6 +381,14 @@ const Admin = () => {
             Înscrieri ({filteredRegistrations.length}/{registrations.length})
           </h1>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+              <Download className="w-4 h-4" />
+              Private CSV
+            </Button>
+            <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
+              <Download className="w-4 h-4" />
+              Private PDF
+            </Button>
             <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
               <Download className="w-4 h-4" />
               Export CSV
