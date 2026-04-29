@@ -13,7 +13,14 @@ import { z } from "zod";
 
 const privateRegistrationSchema = z.object({
   name: z.string().trim().min(2).max(100),
-  phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
+  phone: z
+    .string()
+    .trim()
+    .max(40)
+    .transform((value) => value.replace(/[\u00A0\u2007\u202F]/g, " ").replace(/\s+/g, " "))
+    .refine((value) => value.replace(/\D/g, "").length >= 7, "Phone number is too short")
+    .refine((value) => value.replace(/\D/g, "").length <= 15, "Phone number is too long")
+    .refine((value) => /^[+\d\s().\-/]+$/.test(value), "Phone number contains unsupported characters"),
   email: z.string().trim().email().max(255),
   format: z.enum(["fizic", "online"]),
   message: z.string().trim().max(1000).optional(),
