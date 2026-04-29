@@ -129,14 +129,19 @@ const Navbar = () => {
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-4 gap-3">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-              >
-                {l.label}
-              </a>
+              <Tooltip key={l.href}>
+                <TooltipTrigger asChild>
+                  <a
+                    href={l.href}
+                    aria-label={l.label}
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  >
+                    {l.label}
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent side="right">{l.label}</TooltipContent>
+              </Tooltip>
             ))}
           </div>
         </div>
