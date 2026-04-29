@@ -13,6 +13,7 @@ interface RegistrationConfirmationProps {
   format?: string
   message?: string
   statusUrl?: string
+  senderName?: string
 }
 
 const formTypeLabels: Record<string, string> = {
@@ -26,7 +27,7 @@ const formatLabels: Record<string, string> = {
   online: 'online',
 }
 
-const RegistrationConfirmationEmail = ({ name, formType, level, format, message, statusUrl }: RegistrationConfirmationProps) => (
+const RegistrationConfirmationEmail = ({ name, formType, level, format, message, statusUrl, senderName }: RegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
     <Preview>Mulțumim pentru înscrierea ta la {SITE_NAME}!</Preview>
@@ -80,7 +81,7 @@ const RegistrationConfirmationEmail = ({ name, formType, level, format, message,
         <Hr style={hr} />
 
         <Text style={footer}>
-          Cu drag, echipa {SITE_NAME}
+          Cu drag, echipa {senderName || SITE_NAME}
         </Text>
         <Text style={footerSmall}>
           📍 București, România | 📞 +40 763 124 514
