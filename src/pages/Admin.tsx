@@ -350,6 +350,7 @@ const Admin = () => {
                   <TableHead>Email</TableHead>
                   <TableHead>Centru</TableHead>
                   <TableHead>Format</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Vârstă copil</TableHead>
                   <TableHead>Note</TableHead>
                 </TableRow>
@@ -387,6 +388,21 @@ const Admin = () => {
                     </TableCell>
                     <TableCell>{r.center || "—"}</TableCell>
                     <TableCell>{r.format || "—"}</TableCell>
+                    <TableCell>
+                      <Select
+                        value={r.lead_status || "new"}
+                        onValueChange={(value) => handleStatusChange(r.id, value as LeadStatus)}
+                      >
+                        <SelectTrigger className="h-8 w-[130px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
+                          <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
+                          <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </TableCell>
                     <TableCell>{r.child_age || "—"}</TableCell>
                     <TableCell className="max-w-[200px] truncate">
                       {r.notes || "—"}
