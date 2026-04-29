@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink } from "lucide-react";
+import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
@@ -71,15 +71,28 @@ const Admin = () => {
   const [deleting, setDeleting] = useState(false);
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
+  const [privateMessageSearch, setPrivateMessageSearch] = useState("");
 
   const filteredRegistrations = useMemo(
-    () =>
-      registrations.filter((r) => {
+    () => {
+      const messageTerms = privateMessageSearch
+        .trim()
+        .toLocaleLowerCase("ro-RO")
+        .split(/\s+/)
+        .filter(Boolean);
+
+      return registrations.filter((r) => {
         const matchesCourse = courseTypeFilter === "all" || r.form_type === courseTypeFilter;
         const matchesStatus = leadStatusFilter === "all" || (r.lead_status || "new") === leadStatusFilter;
-        return matchesCourse && matchesStatus;
-      }),
-    [registrations, courseTypeFilter, leadStatusFilter]
+        const matchesPrivateMessage =
+          messageTerms.length === 0 ||
+          (r.form_type === "private" &&
+            messageTerms.every((term) => (r.notes || "").toLocaleLowerCase("ro-RO").includes(term)));
+
+        return matchesCourse && matchesStatus && matchesPrivateMessage;
+      });
+    },
+    [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch]
   );
 
   const privateLeadCounts = useMemo(
@@ -271,8 +284,11 @@ const Admin = () => {
 
   const getPrivateExportFilename = useCallback((extension: "csv" | "pdf") => {
     const statusSuffix = leadStatusFilter === "all" ? "toate-statusurile" : leadStatusFilter;
-    return `leaduri_private_${statusSuffix}_${new Date().toISOString().slice(0, 10)}.${extension}`;
-  }, [leadStatusFilter]);
+    const searchSuffix = privateMessageSearch.trim()
+      ? `_mesaj-${privateMessageSearch.trim().toLocaleLowerCase("ro-RO").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "")}`
+      : "";
+    return `leaduri_private_${statusSuffix}${searchSuffix}_${new Date().toISOString().slice(0, 10)}.${extension}`;
+  }, [leadStatusFilter, privateMessageSearch]);
 
   const handlePrivateCsvExport = useCallback(() => {
     const headers = ["Data", "Nume", "Telefon", "Email", "Format", "Status lead", "Mesaj"];
@@ -437,8 +453,8 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="grid gap-3 sm:grid-cols-2">
+        <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[180px_180px_minmax(260px,360px)]">
             <div className="space-y-1.5">
               <Label>Tip curs</Label>
               <Select value={courseTypeFilter} onValueChange={(value) => setCourseTypeFilter(value as CourseTypeFilter)}>
@@ -467,6 +483,19 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="private-message-search">Caută în mesaj</Label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="private-message-search"
+                  value={privateMessageSearch}
+                  onChange={(e) => setPrivateMessageSearch(e.target.value)}
+                  placeholder="ex: online, program, seară"
+                  className="pl-9"
+                />
+              </div>
+            </div>
           </div>
           <Button
             variant="ghost"
@@ -474,6 +503,7 @@ const Admin = () => {
             onClick={() => {
               setCourseTypeFilter("all");
               setLeadStatusFilter("all");
+              setPrivateMessageSearch("");
             }}
           >
             Resetează filtrele
