@@ -30,6 +30,12 @@ const mainLeadSchema = z.object({
   message: "Kids courses are physical only",
 });
 
+const templateByCourseType = {
+  group: "group-registration-confirmation",
+  private: "private-registration-confirmation",
+  kids: "kids-registration-confirmation",
+} as const;
+
 const GroupCourseForm = () => {
   const { t } = useI18n();
   const [courseType, setCourseType] = useState<"group" | "private" | "kids">("group");
@@ -122,13 +128,13 @@ const GroupCourseForm = () => {
 
       supabase.functions.invoke("send-transactional-email", {
         body: {
-          templateName: "registration-confirmation",
+          templateName: templateByCourseType[registration.courseType],
           recipientEmail: registration.email,
           idempotencyKey: `reg-confirm-${registration.courseType}-${inserted?.id ?? Date.now()}`,
           templateData: {
             name: registration.name,
-            formType: registration.courseType,
             format: registration.format,
+            center,
             message: registration.message,
           },
         },

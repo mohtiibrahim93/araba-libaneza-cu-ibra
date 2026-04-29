@@ -76,12 +76,11 @@ const KidsCourseForm = () => {
       }).catch(console.error);
       supabase.functions.invoke("send-transactional-email", {
         body: {
-          templateName: "registration-confirmation",
+          templateName: "kids-registration-confirmation",
           recipientEmail: registration.email,
           idempotencyKey: `reg-confirm-kids-${inserted?.id ?? Date.now()}`,
           templateData: {
             name: registration.parentName,
-            formType: "kids",
             childName: registration.childName,
             childAge: registration.childAge,
             message: registration.notes,

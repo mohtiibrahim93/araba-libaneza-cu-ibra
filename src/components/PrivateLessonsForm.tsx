@@ -92,10 +92,10 @@ const PrivateLessonsForm = () => {
       }).catch(console.error);
       supabase.functions.invoke("send-transactional-email", {
         body: {
-          templateName: "registration-confirmation",
+          templateName: "private-registration-confirmation",
           recipientEmail: registration.email,
           idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
-          templateData: { name: registration.name, formType: "private", format: registration.format, message: registration.message, statusUrl },
+          templateData: { name: registration.name, format: registration.format, message: registration.message, statusUrl },
         },
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
