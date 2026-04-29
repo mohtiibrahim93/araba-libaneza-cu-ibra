@@ -83,6 +83,8 @@ const PrivateLessonsForm = () => {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
+      const statusUrl = inserted?.id ? `${window.location.origin}/private-status/${inserted.id}` : undefined;
+
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
@@ -93,7 +95,7 @@ const PrivateLessonsForm = () => {
           templateName: "registration-confirmation",
           recipientEmail: registration.email,
           idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
-          templateData: { name: registration.name, formType: "private", format: registration.format, message: registration.message },
+          templateData: { name: registration.name, formType: "private", format: registration.format, message: registration.message, statusUrl },
         },
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
