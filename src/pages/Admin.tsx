@@ -577,19 +577,36 @@ const Admin = () => {
                     <TableCell>{r.center || "—"}</TableCell>
                     <TableCell>{r.format || "—"}</TableCell>
                     <TableCell>
-                      <Select
-                        value={r.lead_status || "new"}
-                        onValueChange={(value) => handleStatusChange(r.id, value as LeadStatus)}
-                      >
-                        <SelectTrigger className="h-8 w-[130px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
-                          <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
-                          <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      {r.form_type === "private" ? (
+                        <div className="flex min-w-[252px] gap-1">
+                          {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => (
+                            <Button
+                              key={status}
+                              type="button"
+                              size="sm"
+                              variant={(r.lead_status || "new") === status ? "default" : "outline"}
+                              className="h-8 px-2 text-xs"
+                              onClick={() => handleStatusChange(r.id, status)}
+                            >
+                              {leadStatusLabels[status]}
+                            </Button>
+                          ))}
+                        </div>
+                      ) : (
+                        <Select
+                          value={r.lead_status || "new"}
+                          onValueChange={(value) => handleStatusChange(r.id, value as LeadStatus)}
+                        >
+                          <SelectTrigger className="h-8 w-[130px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
+                            <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
+                            <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
                     </TableCell>
                     <TableCell>{r.child_age || "—"}</TableCell>
                     <TableCell className="max-w-[200px] truncate">
