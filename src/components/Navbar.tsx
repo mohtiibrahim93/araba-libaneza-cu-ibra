@@ -26,9 +26,13 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <a
+              href="#"
+              aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
+              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0"
+            >
               <span
                 role="img"
                 aria-label={t.lebanonFlagLabel}
@@ -36,11 +40,11 @@ const Navbar = () => {
               >
                 🇱🇧
               </span>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
-          </Tooltip>
-          <span className="truncate">{t.siteTitle}</span>
-        </a>
+              <span className="truncate">{t.siteTitle}</span>
+            </a>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
+        </Tooltip>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
           {links.map((l) => (
@@ -125,14 +129,19 @@ const Navbar = () => {
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-4 gap-3">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-              >
-                {l.label}
-              </a>
+              <Tooltip key={l.href}>
+                <TooltipTrigger asChild>
+                  <a
+                    href={l.href}
+                    aria-label={l.label}
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  >
+                    {l.label}
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent side="right">{l.label}</TooltipContent>
+              </Tooltip>
             ))}
           </div>
         </div>
