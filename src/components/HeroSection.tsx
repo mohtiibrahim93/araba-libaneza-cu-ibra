@@ -3,16 +3,48 @@ import { Users, GraduationCap, Clock, BookOpen } from "lucide-react";
 import heroImg from "@/assets/hero-students.jpg";
 
 const HeroSection = () => {
-  const { t } = useI18n();
+  const { t, lang, setLang } = useI18n();
 
   return (
     <section className="pt-28 pb-16 px-6">
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
         {/* Left: Text */}
         <div>
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            ⭐ {t.heroBadge}
-          </span>
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              ⭐ {t.heroBadge}
+            </span>
+            <div
+              className="inline-flex h-9 items-center rounded-full border border-border bg-background p-1 shadow-sm"
+              role="group"
+              aria-label={t.languageLabel}
+            >
+              <button
+                type="button"
+                aria-pressed={lang === "ro"}
+                onClick={() => setLang("ro")}
+                className={`h-7 rounded-full px-3 text-xs font-semibold transition-colors ${
+                  lang === "ro"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                RO
+              </button>
+              <button
+                type="button"
+                aria-pressed={lang === "en"}
+                onClick={() => setLang("en")}
+                className={`h-7 rounded-full px-3 text-xs font-semibold transition-colors ${
+                  lang === "en"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                EN
+              </button>
+            </div>
+          </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-foreground mb-6">
             {t.heroTitle1}
