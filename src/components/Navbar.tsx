@@ -44,23 +44,39 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="hover:text-foreground transition-colors">{l.label}</a>
+            <Tooltip key={l.href}>
+              <TooltipTrigger asChild>
+                <a
+                  href={l.href}
+                  aria-label={l.label}
+                  className="hover:text-foreground transition-colors"
+                >
+                  {l.label}
+                </a>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{l.label}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
 
         <div className="flex items-center gap-3">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                aria-label={t.languageLabel}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <span aria-hidden="true">{lang === "ro" ? "🇷🇴" : "🇬🇧"}</span>
-                <span className="hidden sm:inline uppercase">{lang}</span>
-                <ChevronDown className="h-3.5 w-3.5" />
-              </button>
-            </DropdownMenuTrigger>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label={t.languageLabel}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <span aria-hidden="true">{lang === "ro" ? "🇷🇴" : "🇬🇧"}</span>
+                    <span className="hidden sm:inline uppercase">{lang}</span>
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </button>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{t.languageLabel}</TooltipContent>
+            </Tooltip>
             <DropdownMenuContent align="end" className="min-w-36">
               <DropdownMenuItem onClick={() => setLang("ro")} className="gap-2">
                 <span aria-hidden="true">🇷🇴</span>
