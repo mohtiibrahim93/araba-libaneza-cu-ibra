@@ -20,6 +20,7 @@ const content = {
   en: {
     title: "Terms & Conditions",
     updated: "Last updated:",
+    updatedValue: "March 2026",
     sections: [
       ["1. Overview", "These terms and conditions govern the use of the website and educational services provided by “lebanese arabic center”."],
       ["2. Services", "We offer Lebanese Arabic courses for adults (group and private) and children, in person at Raduga Creative Center in Bucharest and online. Courses cover all CEFR levels (A1–C2)."],
@@ -43,7 +44,7 @@ const TermsContent = () => {
       <main className="max-w-3xl mx-auto px-6 py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
         <div className="prose prose-sm text-muted-foreground space-y-6">
-          <p><strong>{page.updated}</strong> Martie 2026</p>
+          <p><strong>{page.updated}</strong> {"updatedValue" in page ? page.updatedValue : "Martie 2026"}</p>
           {page.sections.map(([title, body]) => (
             <section key={title} className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">{title}</h2>
