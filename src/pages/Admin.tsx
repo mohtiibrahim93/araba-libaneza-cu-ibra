@@ -84,6 +84,7 @@ const Admin = () => {
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<{ id: string; status: LeadStatus } | null>(null);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -216,6 +217,7 @@ const Admin = () => {
 
   const handleStatusChange = async (id: string, leadStatus: LeadStatus) => {
     const previous = registrations;
+    setUpdatingStatus({ id, status: leadStatus });
     setRegistrations((current) =>
       current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
     );
@@ -241,6 +243,8 @@ const Admin = () => {
         title: "Statusul nu a putut fi actualizat",
         variant: "destructive",
       });
+    } finally {
+      setUpdatingStatus((current) => (current?.id === id && current.status === leadStatus ? null : current));
     }
   };
 
@@ -740,18 +744,24 @@ const Admin = () => {
                     <TableCell>
                       {r.form_type === "private" ? (
                         <div className="flex min-w-[252px] gap-1">
-                          {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => (
-                            <Button
-                              key={status}
-                              type="button"
-                              size="sm"
-                              variant={(r.lead_status || "new") === status ? "default" : "outline"}
-                              className="h-8 px-2 text-xs"
-                              onClick={() => handleStatusChange(r.id, status)}
-                            >
-                              {leadStatusLabels[status]}
-                            </Button>
-                          ))}
+                          {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => {
+                            const isLoading = updatingStatus?.id === r.id && updatingStatus.status === status;
+
+                            return (
+                              <Button
+                                key={status}
+                                type="button"
+                                size="sm"
+                                variant={(r.lead_status || "new") === status ? "default" : "outline"}
+                                className="h-8 min-w-[78px] px-2 text-xs"
+                                onClick={() => handleStatusChange(r.id, status)}
+                                disabled={updatingStatus?.id === r.id}
+                                aria-busy={isLoading}
+                              >
+                                {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : leadStatusLabels[status]}
+                              </Button>
+                            );
+                          })}
                         </div>
                       ) : (
                         <Select
