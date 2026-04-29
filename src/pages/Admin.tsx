@@ -381,6 +381,14 @@ const Admin = () => {
             Înscrieri ({filteredRegistrations.length}/{registrations.length})
           </h1>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+              <Download className="w-4 h-4" />
+              Private CSV
+            </Button>
+            <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
+              <Download className="w-4 h-4" />
+              Private PDF
+            </Button>
             <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
               <Download className="w-4 h-4" />
               Export CSV
