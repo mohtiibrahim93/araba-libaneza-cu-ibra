@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
@@ -15,6 +16,7 @@ const privateRegistrationSchema = z.object({
   phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
   email: z.string().trim().email().max(255),
   format: z.enum(["fizic", "online"]),
+  message: z.string().trim().max(1000).optional(),
 });
 
 const PrivateLessonsForm = () => {
@@ -40,6 +42,7 @@ const PrivateLessonsForm = () => {
       phone: formData.get("phone"),
       email: formData.get("email"),
       format,
+      message: formData.get("message") || undefined,
     });
 
     if (!parsed.success) {
@@ -59,7 +62,9 @@ const PrivateLessonsForm = () => {
         email: registration.email,
         center: registration.format === "fizic" ? "bucuresti" : "online",
         format: registration.format,
-        notes: `Private lesson format: ${registration.format}`,
+        notes: registration.message
+          ? `Private lesson format: ${registration.format}\nMessage: ${registration.message}`
+          : `Private lesson format: ${registration.format}`,
       })
       .select("id")
       .single();
@@ -71,7 +76,7 @@ const PrivateLessonsForm = () => {
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
       supabase.functions.invoke("notify-registration", {
-        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "private", center: registration.format === "fizic" ? "bucuresti" : "online", format: registration.format },
+        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "private", center: registration.format === "fizic" ? "bucuresti" : "online", format: registration.format, notes: registration.message },
       }).catch(console.error);
       supabase.functions.invoke("send-transactional-email", {
         body: {
@@ -128,6 +133,16 @@ const PrivateLessonsForm = () => {
                   <Label htmlFor="priv-online" className="cursor-pointer text-sm font-normal">{t.privateFormatOnline}</Label>
                 </div>
               </RadioGroup>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="priv-message" className="text-sm">Mesaj opțional</Label>
+              <Textarea
+                id="priv-message"
+                name="message"
+                maxLength={1000}
+                placeholder="Subiecte preferate, disponibilitate sau alte detalii"
+                className="min-h-24 resize-none"
+              />
             </div>
             <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
             <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">
