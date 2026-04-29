@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
+import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
@@ -462,6 +463,7 @@ const Admin = () => {
                   <TableHead>Status</TableHead>
                   <TableHead>Vârstă copil</TableHead>
                   <TableHead>Note</TableHead>
+                  <TableHead>Detalii</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -515,6 +517,18 @@ const Admin = () => {
                     <TableCell>{r.child_age || "—"}</TableCell>
                     <TableCell className="max-w-[200px] truncate">
                       {r.notes || "—"}
+                    </TableCell>
+                    <TableCell>
+                      {r.form_type === "private" ? (
+                        <Button asChild variant="outline" size="sm">
+                          <Link to={`/admin/private-leads/${r.id}`}>
+                            <ExternalLink className="h-4 w-4" />
+                            Detalii
+                          </Link>
+                        </Button>
+                      ) : (
+                        "—"
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -101,6 +101,41 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_status_history: {
+        Row: {
+          changed_by: string
+          created_at: string
+          id: string
+          new_status: string
+          previous_status: string | null
+          registration_id: string
+        }
+        Insert: {
+          changed_by?: string
+          created_at?: string
+          id?: string
+          new_status: string
+          previous_status?: string | null
+          registration_id: string
+        }
+        Update: {
+          changed_by?: string
+          created_at?: string
+          id?: string
+          new_status?: string
+          previous_status?: string | null
+          registration_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_status_history_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registrations: {
         Row: {
           center: string | null
