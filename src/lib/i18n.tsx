@@ -225,6 +225,7 @@ const translations = {
     gdprConsent: "Sunt de acord cu prelucrarea datelor personale conform",
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
+    smsConfirmationOptIn: "Doresc să primesc confirmarea cererii prin SMS când opțiunea devine disponibilă.",
 
     // Payment instructions
     paymentTitle: "Instrucțiuni de plată",
@@ -483,6 +484,7 @@ const translations = {
     gdprConsent: "I agree to the processing of my personal data according to the",
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
+    smsConfirmationOptIn: "I want to receive the request confirmation by SMS when this option becomes available.",
 
     // Payment instructions
     paymentTitle: "Payment Instructions",
