@@ -23,14 +23,33 @@ Deno.serve(async (req) => {
     const { password, action, ids, id, lead_status } = body;
     const adminPassword = Deno.env.get("ADMIN_PASSWORD");
 
-    if (!adminPassword || password !== adminPassword) {
-      return jsonResponse({ error: "Parolă incorectă" });
-    }
-
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
+
+    if (action === "get_private_status") {
+      if (typeof id !== "string") {
+        return jsonResponse({ error: "Cerere invalidă" });
+      }
+
+      const { data: registration, error: registrationError } = await supabase
+        .from("registrations")
+        .select("id, created_at, name, format, lead_status")
+        .eq("id", id)
+        .eq("form_type", "private")
+        .single();
+
+      if (registrationError) {
+        return jsonResponse({ error: "Cererea nu a fost găsită" });
+      }
+
+      return jsonResponse({ data: registration });
+    }
+
+    if (!adminPassword || password !== adminPassword) {
+      return jsonResponse({ error: "Parolă incorectă" });
+    }
 
     // Delete action
     if (action === "delete" && Array.isArray(ids) && ids.length > 0) {
