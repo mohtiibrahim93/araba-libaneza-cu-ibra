@@ -83,7 +83,7 @@ const PrivateLessonsForm = () => {
           templateName: "registration-confirmation",
           recipientEmail: registration.email,
           idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
-          templateData: { name: registration.name, formType: "private" },
+          templateData: { name: registration.name, formType: "private", format: registration.format, message: registration.message },
         },
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
