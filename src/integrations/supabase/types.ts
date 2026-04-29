@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      email_confirmation_settings: {
+        Row: {
+          id: number
+          sender_email: string
+          sender_name: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          sender_email?: string
+          sender_name?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          sender_email?: string
+          sender_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
