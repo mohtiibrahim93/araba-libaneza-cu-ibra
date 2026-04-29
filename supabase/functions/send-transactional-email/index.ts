@@ -127,7 +127,12 @@ Deno.serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
   let fromAddress = DEFAULT_FROM
-  if (templateName === 'registration-confirmation') {
+  if (
+    templateName === 'registration-confirmation' ||
+    templateName === 'group-registration-confirmation' ||
+    templateName === 'private-registration-confirmation' ||
+    templateName === 'kids-registration-confirmation'
+  ) {
     const { data: settings, error: settingsError } = await supabase
       .from('email_confirmation_settings')
       .select('sender_name, sender_email')
