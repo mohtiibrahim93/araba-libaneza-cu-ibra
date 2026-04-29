@@ -13,6 +13,14 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
+const allowedSenderDomains = ["arabalibanezacuibra.ro", "notify.arabalibanezacuibra.ro"];
+
+function isAllowedSenderEmail(email: string) {
+  const normalized = email.trim().toLowerCase();
+  const domain = normalized.split("@")[1];
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) && allowedSenderDomains.includes(domain);
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -20,7 +28,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { password, action, ids, id, lead_status } = body;
+    const { password, action, ids, id, lead_status, sender_name, sender_email } = body;
     const adminPassword = Deno.env.get("ADMIN_PASSWORD");
 
     const supabase = createClient(
@@ -49,6 +57,24 @@ Deno.serve(async (req) => {
 
     if (!adminPassword || password !== adminPassword) {
       return jsonResponse({ error: "Parolă incorectă" });
+    }
+
+    if (action === "update_email_settings") {
+      const senderName = typeof sender_name === "string" ? sender_name.trim() : "";
+      const senderEmail = typeof sender_email === "string" ? sender_email.trim().toLowerCase() : "";
+
+      if (senderName.length < 2 || senderName.length > 80 || !isAllowedSenderEmail(senderEmail)) {
+        return jsonResponse({ error: "Numele sau emailul expeditorului este invalid" });
+      }
+
+      const { data, error } = await supabase
+        .from("email_confirmation_settings")
+        .upsert({ id: 1, sender_name: senderName, sender_email: senderEmail }, { onConflict: "id" })
+        .select("sender_name, sender_email")
+        .single();
+
+      if (error) throw error;
+      return jsonResponse({ success: true, settings: data });
     }
 
     // Delete action
@@ -133,7 +159,15 @@ Deno.serve(async (req) => {
 
     if (error) throw error;
 
-    return jsonResponse({ data });
+    const { data: settings, error: settingsError } = await supabase
+      .from("email_confirmation_settings")
+      .select("sender_name, sender_email")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (settingsError) throw settingsError;
+
+    return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@arabalibanezacuibra.ro" } });
   } catch (err) {
     return jsonResponse({ error: err.message }, 500);
   }

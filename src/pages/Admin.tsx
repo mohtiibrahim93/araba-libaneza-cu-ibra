@@ -48,6 +48,11 @@ interface Registration {
   lead_status: LeadStatus;
 }
 
+interface EmailSettings {
+  sender_name: string;
+  sender_email: string;
+}
+
 const formTypeLabels: Record<string, string> = {
   group: "Curs Grup",
   private: "Lecții Private",
@@ -72,6 +77,11 @@ const Admin = () => {
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
+  const [emailSettings, setEmailSettings] = useState<EmailSettings>({
+    sender_name: "Arabă Libaneză cu Ibra",
+    sender_email: "noreply@arabalibanezacuibra.ro",
+  });
+  const [savingEmailSettings, setSavingEmailSettings] = useState(false);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -128,6 +138,7 @@ const Admin = () => {
       }
 
       setRegistrations(data.data);
+      if (data.settings) setEmailSettings(data.settings);
       setStoredPassword(password);
       setAuthenticated(true);
     } catch {
@@ -228,6 +239,31 @@ const Admin = () => {
         title: "Statusul nu a putut fi actualizat",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleEmailSettingsSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSavingEmailSettings(true);
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+        body: {
+          password: storedPassword,
+          action: "update_email_settings",
+          sender_name: emailSettings.sender_name,
+          sender_email: emailSettings.sender_email,
+        },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      if (data?.settings) setEmailSettings(data.settings);
+      toast({ title: "Setările expeditorului au fost salvate" });
+    } catch {
+      toast({ title: "Setările nu au putut fi salvate", variant: "destructive" });
+    } finally {
+      setSavingEmailSettings(false);
     }
   };
 
@@ -453,6 +489,43 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <form onSubmit={handleEmailSettingsSubmit} className="mb-6 rounded-lg border border-border bg-card p-4">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-foreground">Setări email confirmare</h2>
+            <p className="text-sm text-muted-foreground">Configurează numele și adresa afișate ca expeditor.</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-[1fr_1fr_auto] md:items-end">
+            <div className="space-y-1.5">
+              <Label htmlFor="sender-name">Nume expeditor</Label>
+              <Input
+                id="sender-name"
+                value={emailSettings.sender_name}
+                onChange={(e) => setEmailSettings((current) => ({ ...current, sender_name: e.target.value }))}
+                maxLength={80}
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="sender-email">Email expeditor</Label>
+              <Input
+                id="sender-email"
+                type="email"
+                value={emailSettings.sender_email}
+                onChange={(e) => setEmailSettings((current) => ({ ...current, sender_email: e.target.value }))}
+                placeholder="noreply@arabalibanezacuibra.ro"
+                required
+              />
+            </div>
+            <Button type="submit" disabled={savingEmailSettings}>
+              {savingEmailSettings && <Loader2 className="h-4 w-4 animate-spin" />}
+              Salvează
+            </Button>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Folosește doar domeniile verificate: arabalibanezacuibra.ro sau notify.arabalibanezacuibra.ro.
+          </p>
+        </form>
+
         <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[180px_180px_minmax(260px,360px)]">
             <div className="space-y-1.5">
