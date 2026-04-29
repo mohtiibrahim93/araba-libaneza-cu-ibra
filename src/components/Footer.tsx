@@ -11,8 +11,15 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
-          <p className="text-lg font-bold text-foreground mb-2">
-            {t.siteTitle}
+          <p className="inline-flex items-center gap-2 text-lg font-bold text-foreground mb-2">
+            <span
+              role="img"
+              aria-label="Steagul Libanului"
+              className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-[22px] leading-none"
+            >
+              🇱🇧
+            </span>
+            <span>{t.siteTitle}</span>
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
