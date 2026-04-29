@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { password, action, ids } = body;
+    const { password, action, ids, id, lead_status } = body;
     const adminPassword = Deno.env.get("ADMIN_PASSWORD");
 
     if (!adminPassword || password !== adminPassword) {
@@ -41,6 +41,22 @@ Deno.serve(async (req) => {
 
       if (error) throw error;
       return jsonResponse({ success: true });
+    }
+
+    if (action === "update_status") {
+      if (typeof id !== "string" || !["new", "contacted", "confirmed"].includes(lead_status)) {
+        return jsonResponse({ error: "Status invalid" });
+      }
+
+      const { data, error } = await supabase
+        .from("registrations")
+        .update({ lead_status })
+        .eq("id", id)
+        .select("*")
+        .single();
+
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
     }
 
     // Default: list all
