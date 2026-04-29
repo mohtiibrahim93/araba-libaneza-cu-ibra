@@ -25,22 +25,22 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         <Tooltip>
           <TooltipTrigger asChild>
             <a
               href="#"
               aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
-              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0"
+              className="flex h-10 min-w-0 flex-1 items-center gap-2.5 pr-2 text-base font-bold text-foreground tracking-tight sm:text-xl md:flex-none md:pr-0"
             >
               <span
                 role="img"
                 aria-label={t.lebanonFlagLabel}
-                className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-[22px] leading-none sm:h-7 sm:w-7 sm:text-[26px]"
+                className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-[24px] leading-none"
               >
                 🇱🇧
               </span>
-              <span className="truncate">{t.siteTitle}</span>
+              <span className="block min-w-0 truncate leading-none">{t.siteTitle}</span>
             </a>
           </TooltipTrigger>
           <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
@@ -63,7 +63,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <DropdownMenu>
             <Tooltip>
               <TooltipTrigger asChild>
