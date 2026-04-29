@@ -19,6 +19,7 @@ const content = {
   en: {
     title: "Privacy Policy",
     updated: "Last updated:",
+    updatedValue: "March 2026",
     sections: [
       ["1. Who we are", "“lebanese arabic center” is an educational project offering Lebanese Arabic language courses in Bucharest and online. Contact details: mohtiibrahim@gmail.com."],
       ["2. What data we collect", "We collect only the data you voluntarily provide through the website forms: name, phone number, email address, preferred center/location, and desired course format. For kids courses, we also collect the child’s age."],
@@ -41,7 +42,7 @@ const PrivacyContent = () => {
       <main className="max-w-3xl mx-auto px-6 py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
         <div className="prose prose-sm text-muted-foreground space-y-6">
-          <p><strong>{page.updated}</strong> Martie 2026</p>
+          <p><strong>{page.updated}</strong> {"updatedValue" in page ? page.updatedValue : "Martie 2026"}</p>
           {page.sections.map(([title, body]) => (
             <section key={title} className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">{title}</h2>
