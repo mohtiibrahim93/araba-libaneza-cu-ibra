@@ -23,8 +23,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+
+type LeadStatus = "new" | "contacted" | "confirmed";
 
 interface Registration {
   id: string;
@@ -37,12 +40,19 @@ interface Registration {
   format: string | null;
   child_age: string | null;
   notes: string | null;
+  lead_status: LeadStatus;
 }
 
 const formTypeLabels: Record<string, string> = {
   group: "Curs Grup",
   private: "Lecții Private",
   kids: "Curs Copii",
+};
+
+const leadStatusLabels: Record<LeadStatus, string> = {
+  new: "Nou",
+  contacted: "Contactat",
+  confirmed: "Confirmat",
 };
 
 const Admin = () => {
