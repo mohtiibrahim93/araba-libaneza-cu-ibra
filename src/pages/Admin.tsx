@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,8 @@ import { Lock, LogOut, Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
+type CourseTypeFilter = "all" | "group" | "private" | "kids";
+type LeadStatusFilter = "all" | LeadStatus;
 
 interface Registration {
   id: string;
@@ -64,6 +66,18 @@ const Admin = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
+  const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
+  const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
+
+  const filteredRegistrations = useMemo(
+    () =>
+      registrations.filter((r) => {
+        const matchesCourse = courseTypeFilter === "all" || r.form_type === courseTypeFilter;
+        const matchesStatus = leadStatusFilter === "all" || (r.lead_status || "new") === leadStatusFilter;
+        return matchesCourse && matchesStatus;
+      }),
+    [registrations, courseTypeFilter, leadStatusFilter]
+  );
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,10 +124,13 @@ const Admin = () => {
   };
 
   const toggleAll = () => {
-    if (selected.size === registrations.length) {
+    const filteredIds = filteredRegistrations.map((r) => r.id);
+    const allFilteredSelected = filteredIds.length > 0 && filteredIds.every((id) => selected.has(id));
+
+    if (allFilteredSelected) {
       setSelected(new Set());
     } else {
-      setSelected(new Set(registrations.map((r) => r.id)));
+      setSelected(new Set(filteredIds));
     }
   };
 
@@ -197,7 +214,7 @@ const Admin = () => {
       "Note",
     ];
 
-    const rows = registrations.map((r) => [
+    const rows = filteredRegistrations.map((r) => [
       new Date(r.created_at).toLocaleString("ro-RO"),
       formTypeLabels[r.form_type] || r.form_type,
       r.name,
@@ -222,10 +239,12 @@ const Admin = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `inscrieri_${new Date().toISOString().slice(0, 10)}.csv`;
+    const courseSuffix = courseTypeFilter === "all" ? "toate" : courseTypeFilter;
+    const statusSuffix = leadStatusFilter === "all" ? "toate-statusurile" : leadStatusFilter;
+    a.download = `inscrieri_${courseSuffix}_${statusSuffix}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [registrations]);
+  }, [filteredRegistrations, courseTypeFilter, leadStatusFilter]);
 
   if (!authenticated) {
     return (
@@ -274,10 +293,10 @@ const Admin = () => {
       <header className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <h1 className="text-lg font-bold text-foreground">
-            Înscrieri ({registrations.length})
+            Înscrieri ({filteredRegistrations.length}/{registrations.length})
           </h1>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleExport}>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
               <Download className="w-4 h-4" />
               Export CSV
             </Button>
@@ -325,9 +344,56 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label>Tip curs</Label>
+              <Select value={courseTypeFilter} onValueChange={(value) => setCourseTypeFilter(value as CourseTypeFilter)}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toate cursurile</SelectItem>
+                  <SelectItem value="group">{formTypeLabels.group}</SelectItem>
+                  <SelectItem value="private">{formTypeLabels.private}</SelectItem>
+                  <SelectItem value="kids">{formTypeLabels.kids}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status lead</Label>
+              <Select value={leadStatusFilter} onValueChange={(value) => setLeadStatusFilter(value as LeadStatusFilter)}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toate statusurile</SelectItem>
+                  <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
+                  <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
+                  <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setCourseTypeFilter("all");
+              setLeadStatusFilter("all");
+            }}
+          >
+            Resetează filtrele
+          </Button>
+        </div>
+
         {registrations.length === 0 ? (
           <p className="text-center text-muted-foreground py-12">
             Nu există înscrieri momentan.
+          </p>
+        ) : filteredRegistrations.length === 0 ? (
+          <p className="text-center text-muted-foreground py-12">
+            Nu există lead-uri pentru filtrele selectate.
           </p>
         ) : (
           <div className="border border-border rounded-lg overflow-hidden">
@@ -337,8 +403,8 @@ const Admin = () => {
                   <TableHead className="w-10">
                     <Checkbox
                       checked={
-                        selected.size === registrations.length &&
-                        registrations.length > 0
+                        filteredRegistrations.length > 0 &&
+                        filteredRegistrations.every((r) => selected.has(r.id))
                       }
                       onCheckedChange={toggleAll}
                     />
@@ -356,7 +422,7 @@ const Admin = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {registrations.map((r) => (
+                {filteredRegistrations.map((r) => (
                   <TableRow
                     key={r.id}
                     data-state={selected.has(r.id) ? "selected" : undefined}
