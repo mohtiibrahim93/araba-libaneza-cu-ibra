@@ -19,6 +19,7 @@ const translations = {
     languageLabel: "Alege limba site-ului",
     languageRomanian: "Română",
     languageEnglish: "Engleză",
+    lebanonFlagLabel: "Steagul Libanului",
     navCta: "WhatsApp",
 
     // Hero
@@ -337,6 +338,7 @@ const translations = {
     languageLabel: "Choose site language",
     languageRomanian: "Romanian",
     languageEnglish: "English",
+    lebanonFlagLabel: "Lebanese flag",
     navCta: "WhatsApp",
 
     heroBadge: "Lebanese Arabic Courses · All Levels",
