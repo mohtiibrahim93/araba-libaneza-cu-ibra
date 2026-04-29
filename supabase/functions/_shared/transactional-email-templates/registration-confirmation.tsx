@@ -1,6 +1,6 @@
 import * as React from 'npm:react@18.3.1'
 import {
-  Body, Container, Head, Heading, Html, Preview, Text, Button, Hr, Section,
+  Body, Container, Head, Heading, Html, Preview, Text, Button, Hr, Section, Link,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
@@ -12,6 +12,7 @@ interface RegistrationConfirmationProps {
   level?: string
   format?: string
   message?: string
+  statusUrl?: string
 }
 
 const formTypeLabels: Record<string, string> = {
@@ -25,7 +26,7 @@ const formatLabels: Record<string, string> = {
   online: 'online',
 }
 
-const RegistrationConfirmationEmail = ({ name, formType, level, format, message }: RegistrationConfirmationProps) => (
+const RegistrationConfirmationEmail = ({ name, formType, level, format, message, statusUrl }: RegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
     <Preview>Mulțumim pentru înscrierea ta la {SITE_NAME}!</Preview>
@@ -54,6 +55,11 @@ const RegistrationConfirmationEmail = ({ name, formType, level, format, message 
             <Text style={infoTitle}>Detaliile cererii tale:</Text>
             {format && <Text style={infoText}>Format preferat: {formatLabels[format] || format}</Text>}
             {message && <Text style={infoText}>Mesaj: {message}</Text>}
+            {statusUrl && (
+              <Text style={infoText}>
+                Status cerere: <Link href={statusUrl} style={link}>vezi stadiul aici</Link>
+              </Text>
+            )}
           </Section>
         )}
 
@@ -66,8 +72,8 @@ const RegistrationConfirmationEmail = ({ name, formType, level, format, message 
         </Section>
 
         <Section style={ctaSection}>
-          <Button style={button} href="https://wa.me/40763124514">
-            Contactează-ne pe WhatsApp
+          <Button style={button} href={statusUrl || "https://wa.me/40763124514"}>
+            {statusUrl ? 'Vezi statusul cererii' : 'Contactează-ne pe WhatsApp'}
           </Button>
         </Section>
 
@@ -88,7 +94,7 @@ export const template = {
   component: RegistrationConfirmationEmail,
   subject: 'Confirmare înscriere — Arabă Libaneză cu Ibra',
   displayName: 'Confirmare înscriere',
-  previewData: { name: 'Maria', formType: 'private', format: 'online', message: 'Aș prefera conversație și gramatică, seara după ora 18:00.' },
+  previewData: { name: 'Maria', formType: 'private', format: 'online', message: 'Aș prefera conversație și gramatică, seara după ora 18:00.', statusUrl: 'https://araba-libaneza-cu-ibra.lovable.app/private-status/demo' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
@@ -101,6 +107,7 @@ const detailsBox = { backgroundColor: '#ffffff', border: '1px solid #e5e5e5', bo
 const infoBox = { backgroundColor: '#fef2f2', borderRadius: '12px', padding: '20px', margin: '24px 0' }
 const infoTitle = { fontSize: '15px', fontWeight: '600' as const, color: '#1a1a2e', margin: '0 0 12px' }
 const infoText = { fontSize: '14px', color: '#4a4a5a', lineHeight: '1.5', margin: '0 0 6px' }
+const link = { color: '#dc2626', textDecoration: 'underline' }
 const ctaSection = { textAlign: 'center' as const, margin: '28px 0' }
 const button = {
   backgroundColor: '#25D366', color: '#ffffff', padding: '14px 28px',

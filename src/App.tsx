@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import PrivateLead from "./pages/PrivateLead";
+import PrivateStatus from "./pages/PrivateStatus";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/private-leads/:id" element={<PrivateLead />} />
+          <Route path="/private-status/:id" element={<PrivateStatus />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
