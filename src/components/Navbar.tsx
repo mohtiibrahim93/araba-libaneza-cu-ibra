@@ -88,28 +88,41 @@ const Navbar = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">{t.navCta}</span>
-          </a>
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.navWhatsappLabel}
+                className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
+              >
+                <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                <span className="hidden sm:inline">{t.navCta}</span>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{t.navWhatsappLabel}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setOpen(!open)}
+                className="md:hidden p-2 text-foreground"
+                aria-label={open ? t.navCloseMenuLabel : t.navOpenMenuLabel}
+                aria-expanded={open}
+                aria-controls="mobile-navigation"
+              >
+                {open ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{open ? t.navCloseMenuLabel : t.navOpenMenuLabel}</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
+        <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-4 gap-3">
             {links.map((l) => (
               <a
