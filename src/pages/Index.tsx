@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { I18nProvider } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WhySection from "@/components/WhySection";
@@ -20,6 +20,13 @@ import { toast } from "sonner";
 import { initTracking, trackEvent } from "@/lib/tracking";
 
 const PageContent = () => {
+  const { lang, t } = useI18n();
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.title = t.siteTitle;
+  }, [lang, t.siteTitle]);
+
   useEffect(() => {
     // Init tracking if consent was previously given
     initTracking();
