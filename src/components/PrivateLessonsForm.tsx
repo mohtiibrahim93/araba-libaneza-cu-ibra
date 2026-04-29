@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,6 +32,7 @@ const PrivateLessonsForm = () => {
   const [format, setFormat] = useState("fizic");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
+  const [smsOptIn, setSmsOptIn] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | undefined>();
   const [studentEmail, setStudentEmail] = useState<string>("");
@@ -69,9 +71,10 @@ const PrivateLessonsForm = () => {
         email: registration.email,
         center: registration.format === "fizic" ? "bucuresti" : "online",
         format: registration.format,
+        sms_confirmation_opt_in: smsOptIn,
         notes: registration.message
-          ? `Private lesson format: ${registration.format}\nMessage: ${registration.message}`
-          : `Private lesson format: ${registration.format}`,
+          ? `Private lesson format: ${registration.format}\nSMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}\nMessage: ${registration.message}`
+          : `Private lesson format: ${registration.format}\nSMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}`,
       })
       .select("id")
       .single();
@@ -95,6 +98,7 @@ const PrivateLessonsForm = () => {
       }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setFormat("fizic");
+      setSmsOptIn(false);
       setGdpr(false);
       setRegistrationId(inserted?.id);
       setStudentEmail(registration.email);
@@ -150,6 +154,17 @@ const PrivateLessonsForm = () => {
                 placeholder="Subiecte preferate, disponibilitate sau alte detalii"
                 className="min-h-24 resize-none"
               />
+            </div>
+            <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/30 p-3">
+              <Checkbox
+                id="priv-sms-opt-in"
+                checked={smsOptIn}
+                onCheckedChange={(value) => setSmsOptIn(value === true)}
+                className="mt-0.5"
+              />
+              <Label htmlFor="priv-sms-opt-in" className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground">
+                {t.smsConfirmationOptIn}
+              </Label>
             </div>
             <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
             <button type="submit" disabled={submitting} className="w-full py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 disabled:opacity-50">
