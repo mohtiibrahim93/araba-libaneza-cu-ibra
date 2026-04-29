@@ -26,9 +26,13 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <a
+              href="#"
+              aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
+              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight min-w-0"
+            >
               <span
                 role="img"
                 aria-label={t.lebanonFlagLabel}
@@ -36,11 +40,11 @@ const Navbar = () => {
               >
                 🇱🇧
               </span>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
-          </Tooltip>
-          <span className="truncate">{t.siteTitle}</span>
-        </a>
+              <span className="truncate">{t.siteTitle}</span>
+            </a>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">{t.lebanonFlagLabel}</TooltipContent>
+        </Tooltip>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
           {links.map((l) => (
