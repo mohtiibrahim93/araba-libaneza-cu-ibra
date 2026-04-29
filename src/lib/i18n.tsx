@@ -4,6 +4,7 @@ type Lang = "ro" | "en";
 
 const translations = {
   ro: {
+    siteTitle: "centrul de araba libaneza",
     // Nav
     navHome: "Acasă",
     navCourses: "Cursuri",
@@ -15,6 +16,9 @@ const translations = {
     navPrivate: "Lecții Private",
     navKids: "Copii",
     langSwitch: "EN",
+    languageLabel: "Alege limba site-ului",
+    languageRomanian: "Română",
+    languageEnglish: "Engleză",
     navCta: "WhatsApp",
 
     // Hero
@@ -255,7 +259,7 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
-    footer: "© 2026 Arabă Libaneză cu Ibra. Toate drepturile rezervate.",
+    footer: "© 2026 centrul de araba libaneza. Toate drepturile rezervate.",
     footerTagline: "Învață arabă libaneză autentică cu profesori nativi în București sau online.",
     footerQuickLinks: "Navigare",
     footerContact: "Contact",
@@ -275,6 +279,7 @@ const translations = {
     instructorStat3Label: "Rating Preply",
   },
   en: {
+    siteTitle: "lebanese arabic center",
     navHome: "Home",
     navCourses: "Courses",
     navPricing: "Pricing",
@@ -285,6 +290,9 @@ const translations = {
     navPrivate: "Private Lessons",
     navKids: "Kids",
     langSwitch: "RO",
+    languageLabel: "Choose site language",
+    languageRomanian: "Romanian",
+    languageEnglish: "English",
     navCta: "WhatsApp",
 
     heroBadge: "Lebanese Arabic Courses · All Levels",
@@ -513,7 +521,7 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
 
-    footer: "© 2026 Arabă Libaneză cu Ibra. All rights reserved.",
+    footer: "© 2026 lebanese arabic center. All rights reserved.",
     footerTagline: "Learn authentic Lebanese Arabic with native speakers in Bucharest or online.",
     footerQuickLinks: "Navigation",
     footerContact: "Contact",
@@ -540,6 +548,7 @@ interface I18nContextType {
   lang: Lang;
   t: Translations;
   toggle: () => void;
+  setLang: (lang: Lang) => void;
 }
 
 const I18nContext = createContext<I18nContextType | null>(null);
@@ -548,7 +557,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>("ro");
   const toggle = () => setLang((l) => (l === "ro" ? "en" : "ro"));
   return (
-    <I18nContext.Provider value={{ lang, t: translations[lang], toggle }}>
+    <I18nContext.Provider value={{ lang, t: translations[lang], toggle, setLang }}>
       {children}
     </I18nContext.Provider>
   );
