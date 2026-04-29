@@ -15,7 +15,7 @@ const Footer = () => {
             <span
               role="img"
               aria-label={t.lebanonFlagLabel}
-              className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-[22px] leading-none"
+              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-[22px] leading-none"
             >
               🇱🇧
             </span>
