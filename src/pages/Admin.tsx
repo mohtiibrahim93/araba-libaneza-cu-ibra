@@ -219,6 +219,16 @@ const Admin = () => {
 
   const handleStatusChange = async (id: string, leadStatus: LeadStatus) => {
     const previous = registrations;
+    const previousLead = registrations.find((r) => r.id === id);
+    const previousStatus = previousLead?.lead_status || "new";
+
+    if (previousStatus === leadStatus) return;
+
+    if (undoTimeoutRef.current) {
+      clearTimeout(undoTimeoutRef.current);
+      undoTimeoutRef.current = null;
+    }
+
     setUpdatingStatus({ id, status: leadStatus });
     setRegistrations((current) =>
       current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
@@ -239,6 +249,56 @@ const Admin = () => {
 
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
+
+      const undoToast = toast({
+        title: `Status schimbat în ${leadStatusLabels[leadStatus]}`,
+        description: "Poți reveni la statusul anterior pentru câteva secunde.",
+        action: (
+          <ToastAction
+            altText="Anulează schimbarea de status"
+            onClick={async () => {
+              if (undoTimeoutRef.current) {
+                clearTimeout(undoTimeoutRef.current);
+                undoTimeoutRef.current = null;
+              }
+
+              setUpdatingStatus({ id, status: previousStatus });
+              setRegistrations((current) =>
+                current.map((r) => (r.id === id ? { ...r, lead_status: previousStatus } : r))
+              );
+
+              try {
+                const { data: undoData, error: undoFnError } = await supabase.functions.invoke("admin-registrations", {
+                  body: {
+                    password: storedPassword,
+                    action: "update_status",
+                    id,
+                    lead_status: previousStatus,
+                  },
+                });
+
+                if (undoFnError) throw undoFnError;
+                if (undoData?.error) throw new Error(undoData.error);
+                undoToast.dismiss();
+              } catch {
+                setRegistrations((current) =>
+                  current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r))
+                );
+                toast({ title: "Undo nu a putut fi aplicat", variant: "destructive" });
+              } finally {
+                setUpdatingStatus(null);
+              }
+            }}
+          >
+            Undo
+          </ToastAction>
+        ),
+      });
+
+      undoTimeoutRef.current = setTimeout(() => {
+        undoToast.dismiss();
+        undoTimeoutRef.current = null;
+      }, 6000);
     } catch {
       setRegistrations(previous);
       toast({
