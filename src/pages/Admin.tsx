@@ -79,6 +79,21 @@ const Admin = () => {
     [registrations, courseTypeFilter, leadStatusFilter]
   );
 
+  const privateLeadCounts = useMemo(
+    () =>
+      registrations.reduce(
+        (counts, r) => {
+          if (r.form_type !== "private") return counts;
+          const status = r.lead_status || "new";
+          counts.total += 1;
+          counts[status] += 1;
+          return counts;
+        },
+        { total: 0, new: 0, contacted: 0, confirmed: 0 } as Record<LeadStatus | "total", number>
+      ),
+    [registrations]
+  );
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -355,7 +370,7 @@ const Admin = () => {
                 <SelectContent>
                   <SelectItem value="all">Toate cursurile</SelectItem>
                   <SelectItem value="group">{formTypeLabels.group}</SelectItem>
-                  <SelectItem value="private">{formTypeLabels.private}</SelectItem>
+                  <SelectItem value="private">Lead-uri lecții private</SelectItem>
                   <SelectItem value="kids">{formTypeLabels.kids}</SelectItem>
                 </SelectContent>
               </Select>
@@ -385,6 +400,34 @@ const Admin = () => {
           >
             Resetează filtrele
           </Button>
+        </div>
+
+        <div className="mb-6 grid gap-3 sm:grid-cols-4">
+          <button
+            type="button"
+            onClick={() => {
+              setCourseTypeFilter("private");
+              setLeadStatusFilter("all");
+            }}
+            className="rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
+          >
+            <p className="text-xs font-medium text-muted-foreground">Lead-uri private</p>
+            <p className="mt-1 text-2xl font-bold text-foreground">{privateLeadCounts.total}</p>
+          </button>
+          {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => {
+                setCourseTypeFilter("private");
+                setLeadStatusFilter(status);
+              }}
+              className="rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
+            >
+              <p className="text-xs font-medium text-muted-foreground">Private · {leadStatusLabels[status]}</p>
+              <p className="mt-1 text-2xl font-bold text-foreground">{privateLeadCounts[status]}</p>
+            </button>
+          ))}
         </div>
 
         {registrations.length === 0 ? (
