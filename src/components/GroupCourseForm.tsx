@@ -48,6 +48,12 @@ const GroupCourseForm = () => {
     if (courseType === "kids") setFormat("fizic");
   }, [courseType]);
 
+  useEffect(() => {
+    const context = { courseType, format };
+    window.localStorage.setItem("lead-contact-context", JSON.stringify(context));
+    window.dispatchEvent(new CustomEvent("lead-contact-context-change", { detail: context }));
+  }, [courseType, format]);
+
   const details = [
     { label: t.mainLeadDetailGroupLabel, value: t.mainLeadDetailGroupValue },
     { label: t.mainLeadDetailPrivateLabel, value: t.mainLeadDetailPrivateValue },
