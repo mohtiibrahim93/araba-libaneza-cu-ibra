@@ -12,7 +12,7 @@ const content = {
       ["3. Înscriere și plăți", "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Plata se efectuează conform instrucțiunilor primite după confirmare. Acceptăm plata în LEI, EUR sau USD."],
       ["4. Anulare și rambursare", "Anularea înscrierii se poate face cu cel puțin 7 zile înainte de începerea cursului pentru o rambursare completă. După începerea cursului, rambursările se fac proporțional cu lecțiile rămase, minus o taxă administrativă de 10%."],
       ["5. Obligațiile cursantului", "Cursanții se obligă să participe activ la lecții, să respecte programul stabilit și să mențină un comportament adecvat în cadrul grupului. În cazul lecțiilor online, este necesară o conexiune stabilă la internet."],
-      ["6. Proprietate intelectuală", "Toate materialele de curs, inclusiv prezentări, exerciții și înregistrări, sunt proprietatea „centrul de araba libaneza" și nu pot fi distribuite fără acord scris."],
+      ["6. Proprietate intelectuală", "Toate materialele de curs, inclusiv prezentări, exerciții și înregistrări, sunt proprietatea „centrul de araba libaneza” și nu pot fi distribuite fără acord scris."],
       ["7. Limitarea responsabilității", "Ne rezervăm dreptul de a modifica programul cursurilor sau de a anula un curs în cazul în care numărul minim de participanți nu este atins, cu notificarea prealabilă a cursanților înscriși."],
       ["8. Contact", "Pentru orice întrebare, contactați-ne la mohtiibrahim@gmail.com sau pe WhatsApp la +40 763 124 514."],
     ],
