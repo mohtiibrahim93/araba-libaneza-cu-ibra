@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search } from "lucide-react";
+import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
@@ -82,6 +82,8 @@ const Admin = () => {
     sender_email: "noreply@arabalibanezacuibra.ro",
   });
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
+  const [sendingTestEmail, setSendingTestEmail] = useState(false);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -264,6 +266,38 @@ const Admin = () => {
       toast({ title: "Setările nu au putut fi salvate", variant: "destructive" });
     } finally {
       setSavingEmailSettings(false);
+    }
+  };
+
+  const handleTestEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recipient = testEmail.trim();
+    if (!recipient) return;
+
+    setSendingTestEmail(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "registration-confirmation",
+          recipientEmail: recipient,
+          idempotencyKey: `reg-confirm-test-${Date.now()}`,
+          templateData: {
+            name: "Maria Popescu",
+            formType: "private",
+            format: "online",
+            message: "Aș prefera lecții seara, după ora 18:00, cu accent pe conversație.",
+            statusUrl: `${window.location.origin}/private-status/exemplu`,
+          },
+        },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      toast({ title: "Emailul de test a fost trimis" });
+    } catch {
+      toast({ title: "Emailul de test nu a putut fi trimis", variant: "destructive" });
+    } finally {
+      setSendingTestEmail(false);
     }
   };
 
