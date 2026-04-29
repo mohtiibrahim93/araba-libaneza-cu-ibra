@@ -10,7 +10,13 @@ export interface TemplateEntry {
 }
 
 import { template as registrationConfirmation } from './registration-confirmation.tsx'
+import { template as groupRegistrationConfirmation } from './group-registration-confirmation.tsx'
+import { template as privateRegistrationConfirmation } from './private-registration-confirmation.tsx'
+import { template as kidsRegistrationConfirmation } from './kids-registration-confirmation.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
+  'group-registration-confirmation': groupRegistrationConfirmation,
+  'private-registration-confirmation': privateRegistrationConfirmation,
+  'kids-registration-confirmation': kidsRegistrationConfirmation,
 }
