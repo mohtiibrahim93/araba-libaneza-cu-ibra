@@ -24,6 +24,8 @@ const translations = {
     navWhatsappLabel: "Contactează-ne pe WhatsApp",
     navOpenMenuLabel: "Deschide meniul de navigare",
     navCloseMenuLabel: "Închide meniul de navigare",
+    mobileEnrollmentCta: "Înscrie-te rapid",
+    mobileEnrollmentCtaLabel: "Deschide formularul de înscriere",
 
     // Hero
     heroBadge: "Cursuri de arabă libaneză · Toate nivelurile",
@@ -346,6 +348,8 @@ const translations = {
     navWhatsappLabel: "Contact us on WhatsApp",
     navOpenMenuLabel: "Open navigation menu",
     navCloseMenuLabel: "Close navigation menu",
+    mobileEnrollmentCta: "Register quickly",
+    mobileEnrollmentCtaLabel: "Open registration form",
 
     heroBadge: "Lebanese Arabic Courses · All Levels",
     heroTitle1: "Learn Authentic",
