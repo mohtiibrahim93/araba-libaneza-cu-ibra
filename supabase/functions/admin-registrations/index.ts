@@ -159,7 +159,15 @@ Deno.serve(async (req) => {
 
     if (error) throw error;
 
-    return jsonResponse({ data });
+    const { data: settings, error: settingsError } = await supabase
+      .from("email_confirmation_settings")
+      .select("sender_name, sender_email")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (settingsError) throw settingsError;
+
+    return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@arabalibanezacuibra.ro" } });
   } catch (err) {
     return jsonResponse({ error: err.message }, 500);
   }
