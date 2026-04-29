@@ -28,6 +28,11 @@ const ProgramsSection = () => {
       badge: t.privateBadge,
       title: t.privateCardTitle,
       desc: t.privateCardDesc,
+      meta: [
+        { label: t.programFormatLabel, value: t.privateFormat },
+        { label: t.programDurationLabel, value: t.privateDuration },
+        { label: t.programConditionsLabel, value: t.privateConditions },
+      ],
       feats: [t.privateFeat1, t.privateFeat2, t.privateFeat3, t.privateFeat4],
       cta: t.privateRegister,
       href: "#private",
@@ -37,6 +42,11 @@ const ProgramsSection = () => {
       badge: t.kidsBadgeCard,
       title: t.kidsCardTitle,
       desc: t.kidsCardDesc,
+      meta: [
+        { label: t.programFormatLabel, value: t.kidsFormat },
+        { label: t.programDurationLabel, value: t.kidsDuration },
+        { label: t.programConditionsLabel, value: t.kidsConditions },
+      ],
       feats: [t.kidsFeat1, t.kidsFeat2, t.kidsFeat3, t.kidsFeat4],
       cta: t.kidsRegister,
       href: "#kids",
@@ -86,6 +96,18 @@ const ProgramsSection = () => {
               {isAvailable(activeLevel) ? (
                 <>
                   <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
+                  <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                    {[
+                      { label: t.programFormatLabel, value: t.groupFormat },
+                      { label: t.programDurationLabel, value: t.programGroupDuration },
+                      { label: t.programConditionsLabel, value: t.groupConditions },
+                    ].map((item) => (
+                      <div key={item.label}>
+                        <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
+                        <dd className="text-sm font-medium text-foreground">{item.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                   <ul className="space-y-2 mb-6">
                     {[t.groupFeat1, t.groupFeat2, t.groupFeat3, t.groupFeat4].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-foreground">
@@ -132,6 +154,14 @@ const ProgramsSection = () => {
                 </span>
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
+                <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                  {p.meta.map((item) => (
+                    <div key={item.label}>
+                      <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
+                      <dd className="text-sm font-medium text-foreground">{item.value}</dd>
+                    </div>
+                  ))}
+                </dl>
                 <ul className="space-y-2 mb-6">
                   {p.feats.map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-foreground">
