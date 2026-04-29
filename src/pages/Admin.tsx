@@ -48,6 +48,11 @@ interface Registration {
   lead_status: LeadStatus;
 }
 
+interface EmailSettings {
+  sender_name: string;
+  sender_email: string;
+}
+
 const formTypeLabels: Record<string, string> = {
   group: "Curs Grup",
   private: "Lecții Private",
@@ -72,6 +77,11 @@ const Admin = () => {
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
+  const [emailSettings, setEmailSettings] = useState<EmailSettings>({
+    sender_name: "Arabă Libaneză cu Ibra",
+    sender_email: "noreply@arabalibanezacuibra.ro",
+  });
+  const [savingEmailSettings, setSavingEmailSettings] = useState(false);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -128,6 +138,7 @@ const Admin = () => {
       }
 
       setRegistrations(data.data);
+      if (data.settings) setEmailSettings(data.settings);
       setStoredPassword(password);
       setAuthenticated(true);
     } catch {
@@ -228,6 +239,31 @@ const Admin = () => {
         title: "Statusul nu a putut fi actualizat",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleEmailSettingsSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSavingEmailSettings(true);
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+        body: {
+          password: storedPassword,
+          action: "update_email_settings",
+          sender_name: emailSettings.sender_name,
+          sender_email: emailSettings.sender_email,
+        },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      if (data?.settings) setEmailSettings(data.settings);
+      toast({ title: "Setările expeditorului au fost salvate" });
+    } catch {
+      toast({ title: "Setările nu au putut fi salvate", variant: "destructive" });
+    } finally {
+      setSavingEmailSettings(false);
     }
   };
 
