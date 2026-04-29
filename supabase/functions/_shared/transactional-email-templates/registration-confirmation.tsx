@@ -14,6 +14,8 @@ interface RegistrationConfirmationProps {
   message?: string
   statusUrl?: string
   senderName?: string
+  childName?: string
+  childAge?: string
 }
 
 const formTypeLabels: Record<string, string> = {
@@ -27,7 +29,7 @@ const formatLabels: Record<string, string> = {
   online: 'online',
 }
 
-const RegistrationConfirmationEmail = ({ name, formType, level, format, message, statusUrl, senderName }: RegistrationConfirmationProps) => (
+const RegistrationConfirmationEmail = ({ name, formType, level, format, message, statusUrl, senderName, childName, childAge }: RegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
     <Preview>Mulțumim pentru înscrierea ta la {SITE_NAME}!</Preview>
@@ -64,6 +66,16 @@ const RegistrationConfirmationEmail = ({ name, formType, level, format, message,
           </Section>
         )}
 
+        {formType === 'kids' && (
+          <Section style={detailsBox}>
+            <Text style={infoTitle}>Detaliile cererii pentru copil:</Text>
+            {childName && <Text style={infoText}>Nume copil: {childName}</Text>}
+            {childAge && <Text style={infoText}>Vârstă copil: {childAge}</Text>}
+            <Text style={infoText}>Format: față în față, București</Text>
+            {message && <Text style={infoText}>Observații: {message}</Text>}
+          </Section>
+        )}
+
         <Section style={infoBox}>
           <Text style={infoTitle}>📋 Următorii pași:</Text>
           <Text style={infoText}>1. Te vom contacta pe WhatsApp sau email</Text>
@@ -95,7 +107,7 @@ export const template = {
   component: RegistrationConfirmationEmail,
   subject: 'Confirmare înscriere — Arabă Libaneză cu Ibra',
   displayName: 'Confirmare înscriere',
-  previewData: { name: 'Maria', formType: 'private', format: 'online', message: 'Aș prefera conversație și gramatică, seara după ora 18:00.', statusUrl: 'https://araba-libaneza-cu-ibra.lovable.app/private-status/demo' },
+  previewData: { name: 'Maria', formType: 'kids', childName: 'Maya', childAge: '8 ani', message: 'Îi plac cântecele și activitățile creative.' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
