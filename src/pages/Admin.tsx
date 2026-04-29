@@ -344,12 +344,11 @@ const Admin = () => {
     try {
       const { data, error: fnError } = await supabase.functions.invoke("send-transactional-email", {
         body: {
-          templateName: "registration-confirmation",
+          templateName: "private-registration-confirmation",
           recipientEmail: recipient,
           idempotencyKey: `reg-confirm-test-${Date.now()}`,
           templateData: {
             name: "Maria Popescu",
-            formType: "private",
             format: "online",
             message: "Aș prefera lecții seara, după ora 18:00, cu accent pe conversație.",
             statusUrl: `${window.location.origin}/private-status/exemplu`,
