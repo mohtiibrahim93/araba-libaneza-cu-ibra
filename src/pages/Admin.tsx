@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search } from "lucide-react";
+import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
@@ -82,6 +82,8 @@ const Admin = () => {
     sender_email: "noreply@arabalibanezacuibra.ro",
   });
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
+  const [sendingTestEmail, setSendingTestEmail] = useState(false);
 
   const filteredRegistrations = useMemo(
     () => {
@@ -264,6 +266,38 @@ const Admin = () => {
       toast({ title: "Setările nu au putut fi salvate", variant: "destructive" });
     } finally {
       setSavingEmailSettings(false);
+    }
+  };
+
+  const handleTestEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recipient = testEmail.trim();
+    if (!recipient) return;
+
+    setSendingTestEmail(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "registration-confirmation",
+          recipientEmail: recipient,
+          idempotencyKey: `reg-confirm-test-${Date.now()}`,
+          templateData: {
+            name: "Maria Popescu",
+            formType: "private",
+            format: "online",
+            message: "Aș prefera lecții seara, după ora 18:00, cu accent pe conversație.",
+            statusUrl: `${window.location.origin}/private-status/exemplu`,
+          },
+        },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      toast({ title: "Emailul de test a fost trimis" });
+    } catch {
+      toast({ title: "Emailul de test nu a putut fi trimis", variant: "destructive" });
+    } finally {
+      setSendingTestEmail(false);
     }
   };
 
@@ -524,6 +558,30 @@ const Admin = () => {
           <p className="mt-3 text-xs text-muted-foreground">
             Folosește doar domeniile verificate: arabalibanezacuibra.ro sau notify.arabalibanezacuibra.ro.
           </p>
+        </form>
+
+        <form onSubmit={handleTestEmailSubmit} className="mb-6 rounded-lg border border-border bg-card p-4">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-foreground">Test email confirmare</h2>
+            <p className="text-sm text-muted-foreground">Trimite template-ul de confirmare cu date exemplu către o adresă de test.</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-[minmax(260px,420px)_auto] md:items-end">
+            <div className="space-y-1.5">
+              <Label htmlFor="test-email">Email destinatar</Label>
+              <Input
+                id="test-email"
+                type="email"
+                value={testEmail}
+                onChange={(e) => setTestEmail(e.target.value)}
+                placeholder="test@email.com"
+                required
+              />
+            </div>
+            <Button type="submit" disabled={sendingTestEmail}>
+              {sendingTestEmail ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              Trimite test
+            </Button>
+          </div>
         </form>
 
         <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
