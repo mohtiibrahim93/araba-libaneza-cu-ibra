@@ -9,6 +9,16 @@ import { supabase } from "@/integrations/supabase/client";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import { trackFormSubmit } from "@/lib/tracking";
+import { z } from "zod";
+
+const groupRegistrationSchema = z.object({
+  name: z.string().trim().min(2).max(100),
+  phone: z.string().trim().min(7).max(20).regex(/^[+\d\s().-]+$/),
+  email: z.string().trim().email().max(255),
+  center: z.enum(["bucuresti", "online"]),
+  format: z.enum(["fizic", "online"]),
+  level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]),
+});
 
 const GroupCourseForm = () => {
   const { t } = useI18n();
@@ -30,50 +40,58 @@ const GroupCourseForm = () => {
     }
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
+    const parsed = groupRegistrationSchema.safeParse({
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      center,
+      format,
+      level,
+    });
 
-    const { data: inserted, error } = await supabase
-      .from("registrations")
-      .insert({
-        form_type: "group",
-        name: String(formData.get("name") || "").trim(),
-        phone: String(formData.get("phone") || "").trim(),
-        email: String(formData.get("email") || "").trim() || null,
-        center,
-        format,
-        notes: `Level: ${level}`,
-      })
-      .select("id")
-      .single();
+    if (!parsed.success) {
+      toast.error("Verifică numele, emailul, telefonul și opțiunile selectate.");
+      setSubmitting(false);
+      return;
+    }
+
+    const registration = parsed.data;
+
+    const { error } = await supabase.from("registrations").insert({
+      form_type: "group",
+      name: registration.name,
+      phone: registration.phone,
+      email: registration.email,
+      center: registration.center,
+      format: registration.format,
+      notes: `Level: ${registration.level}; Center: ${registration.center}; Format: ${registration.format}`,
+    });
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const sName = String(formData.get("name")).trim();
-      const sEmail = String(formData.get("email")).trim();
       toast.success(t.groupSuccess);
       trackFormSubmit("group");
       supabase.functions.invoke("notify-registration", {
-        body: { name: sName, phone: String(formData.get("phone")), email: sEmail, form_type: "group", center, format, notes: `Level: ${level}` },
+        body: { name: registration.name, phone: registration.phone, email: registration.email, form_type: "group", center: registration.center, format: registration.format, notes: `Level: ${registration.level}` },
       }).catch(console.error);
-      if (sEmail) {
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "registration-confirmation",
-            recipientEmail: sEmail,
-            idempotencyKey: `reg-confirm-group-${inserted?.id ?? Date.now()}`,
-            templateData: { name: sName, formType: "group", level },
-          },
-        }).catch(console.error);
-      }
+      supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "registration-confirmation",
+          recipientEmail: registration.email,
+          idempotencyKey: `reg-confirm-group-${Date.now()}`,
+          templateData: { name: registration.name, formType: "group", level: registration.level },
+        },
+      }).catch(console.error);
       (e.target as HTMLFormElement).reset();
       setCenter("");
       setFormat("fizic");
       setLevel("A1");
       setGdpr(false);
-      setRegistrationId(inserted?.id);
-      setStudentEmail(sEmail);
-      setStudentName(sName);
+      setRegistrationId(undefined);
+      setStudentEmail(registration.email);
+      setStudentName(registration.name);
       setSubmitted(true);
     }
     setSubmitting(false);
