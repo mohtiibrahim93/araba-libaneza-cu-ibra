@@ -14,6 +14,7 @@ const SENDER_DOMAIN = "notify.arabalibanezacuibra.ro"
 // When display_from_root is enabled, this can be the root domain for cleaner branding,
 // even though actual sending uses the subdomain above.
 const FROM_DOMAIN = "arabalibanezacuibra.ro"
+const DEFAULT_FROM = `${SITE_NAME} <noreply@${FROM_DOMAIN}>`
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -124,6 +125,22 @@ Deno.serve(async (req) => {
 
   // Create Supabase client with service role (bypasses RLS)
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+  let fromAddress = DEFAULT_FROM
+  if (templateName === 'registration-confirmation') {
+    const { data: settings, error: settingsError } = await supabase
+      .from('email_confirmation_settings')
+      .select('sender_name, sender_email')
+      .eq('id', 1)
+      .maybeSingle()
+
+    if (settingsError) {
+      console.warn('Could not load email confirmation sender settings', { error: settingsError })
+    } else if (settings?.sender_name && settings?.sender_email) {
+      fromAddress = `${settings.sender_name} <${settings.sender_email}>`
+      templateData = { senderName: settings.sender_name, ...templateData }
+    }
+  }
 
   // 2. Check suppression list (fail-closed: if we can't verify, don't send)
   const { data: suppressed, error: suppressionError } = await supabase
@@ -313,7 +330,7 @@ Deno.serve(async (req) => {
     payload: {
       message_id: messageId,
       to: effectiveRecipient,
-      from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+      from: fromAddress,
       sender_domain: SENDER_DOMAIN,
       subject: resolvedSubject,
       html,
