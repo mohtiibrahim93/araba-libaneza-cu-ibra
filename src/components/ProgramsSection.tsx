@@ -48,7 +48,8 @@ const ProgramsSection = () => {
       href: "#private",
       img: privateImg,
       price: t.pricingPrivatePrice,
-      per: t.pricingPrivatePer,
+      per: t.pricingPerSessionSuffix,
+      perNote: t.pricingPrivateRateNote,
       discount: t.pricingPrivateDiscount,
     },
     {
@@ -66,6 +67,7 @@ const ProgramsSection = () => {
       img: kidsImg,
       price: undefined as string | undefined,
       per: undefined as string | undefined,
+      perNote: undefined as string | undefined,
       discount: undefined as string | undefined,
     },
   ];
@@ -196,10 +198,17 @@ const ProgramsSection = () => {
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
                 {p.price && (
-                  <p className="text-sm text-muted-foreground mb-2">
-                    <span className="text-base font-bold text-foreground">{p.price} LEI</span>
-                    {p.per && <span className="ml-1">· {p.per.replace(/^LEI\s*\/?\s*/i, "")}</span>}
-                  </p>
+                  <div className="mb-3">
+                    <div className="flex items-baseline flex-wrap gap-x-2">
+                      <span className="text-2xl font-extrabold text-foreground leading-none">{p.price}</span>
+                      {p.per && (
+                        <span className="text-sm font-semibold text-muted-foreground">{p.per}</span>
+                      )}
+                    </div>
+                    {p.perNote && (
+                      <p className="text-xs text-muted-foreground mt-1">{p.perNote}</p>
+                    )}
+                  </div>
                 )}
                 {p.discount && (
                   <p className="text-xs font-medium text-primary mb-4">{p.discount}</p>
