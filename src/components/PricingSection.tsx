@@ -118,14 +118,6 @@ const PricingSection = () => {
               {p.seeLevelsHref && (
                 <a
                   href={p.seeLevelsHref}
-                  onClick={(e) => {
-                    const target = document.querySelector(p.seeLevelsHref!);
-                    if (target) {
-                      e.preventDefault();
-                      target.scrollIntoView({ behavior: "smooth", block: "start" });
-                      history.replaceState(null, "", p.seeLevelsHref);
-                    }
-                  }}
                   className="inline-block text-xs font-semibold text-primary hover:underline mb-5"
                 >
                   {p.seeLevelsLabel}
