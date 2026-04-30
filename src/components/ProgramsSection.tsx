@@ -44,6 +44,9 @@ const ProgramsSection = () => {
       cta: t.privateRegister,
       href: "#private",
       img: privateImg,
+      price: t.pricingPrivatePrice,
+      per: t.pricingPrivatePer,
+      discount: t.pricingPrivateDiscount,
     },
     {
       badge: t.kidsBadgeCard,
@@ -58,6 +61,9 @@ const ProgramsSection = () => {
       cta: t.kidsRegister,
       href: "#kids",
       img: kidsImg,
+      price: undefined as string | undefined,
+      per: undefined as string | undefined,
+      discount: undefined as string | undefined,
     },
   ];
 
@@ -168,6 +174,15 @@ const ProgramsSection = () => {
                 </span>
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
+                {p.price && (
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <span className="text-base font-bold text-foreground">{p.price} LEI</span>
+                    {p.per && <span className="ml-1">/ {p.per}</span>}
+                  </p>
+                )}
+                {p.discount && (
+                  <p className="text-xs font-medium text-primary mb-4">{p.discount}</p>
+                )}
                 <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
                   {p.meta.map((item) => (
                     <div key={item.label}>
