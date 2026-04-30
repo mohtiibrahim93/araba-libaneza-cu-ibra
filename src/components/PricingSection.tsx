@@ -15,6 +15,7 @@ const PricingSection = () => {
       feats: [t.pricingPrivateFeat1, t.pricingPrivateFeat2, t.pricingPrivateFeat3, t.pricingPrivateFeat4],
       popular: false,
       discount: t.pricingPrivateDiscount,
+      allLevelsLabel: t.pricingPrivateAllLevels,
     },
     {
       label: t.pricingGroupLabel,
@@ -82,7 +83,13 @@ const PricingSection = () => {
                   {p.seeLevelsLabel}
                 </a>
               )}
-              {!("seeLevelsHref" in p && p.seeLevelsHref) && <div className="mb-6" />}
+              {"allLevelsLabel" in p && p.allLevelsLabel ? (
+                <span className="inline-block text-xs font-semibold text-primary mb-6">
+                  ✓ {p.allLevelsLabel}
+                </span>
+              ) : !("seeLevelsHref" in p && p.seeLevelsHref) ? (
+                <div className="mb-6" />
+              ) : null}
 
               <ul className="space-y-3 mb-8">
                 {p.feats.map((f, i) => (

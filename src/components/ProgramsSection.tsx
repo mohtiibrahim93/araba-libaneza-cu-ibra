@@ -198,7 +198,7 @@ const ProgramsSection = () => {
                 {p.price && (
                   <p className="text-sm text-muted-foreground mb-2">
                     <span className="text-base font-bold text-foreground">{p.price} LEI</span>
-                    {p.per && <span className="ml-1">/ {p.per}</span>}
+                    {p.per && <span className="ml-1">· {p.per.replace(/^LEI\s*\/?\s*/i, "")}</span>}
                   </p>
                 )}
                 {p.discount && (
