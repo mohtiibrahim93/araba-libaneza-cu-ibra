@@ -62,9 +62,13 @@ const PrivateLessonsForm = () => {
 
     const registration = parsed.data;
 
-    const { data: inserted, error } = await supabase
+    const newId = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const { error } = await supabase
       .from("registrations")
       .insert({
+        id: newId,
         form_type: "private",
         name: registration.name,
         phone: registration.phone,
@@ -75,15 +79,13 @@ const PrivateLessonsForm = () => {
         notes: registration.message
           ? `Private lesson format: ${registration.format}\nSMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}\nMessage: ${registration.message}`
           : `Private lesson format: ${registration.format}\nSMS confirmation opt-in: ${smsOptIn ? "yes" : "no"}`,
-      })
-      .select("id")
-      .single();
+      });
 
     if (error) {
       toast.error("A apărut o eroare. Încercați din nou.");
       console.error("Registration error:", error);
     } else {
-      const statusUrl = inserted?.id ? `${window.location.origin}/private-status/${inserted.id}` : undefined;
+      const statusUrl = `${window.location.origin}/private-status/${newId}`;
 
       toast.success(t.privateSuccess);
       trackFormSubmit("private");
@@ -94,7 +96,7 @@ const PrivateLessonsForm = () => {
         body: {
           templateName: "private-registration-confirmation",
           recipientEmail: registration.email,
-          idempotencyKey: `reg-confirm-private-${inserted?.id ?? Date.now()}`,
+          idempotencyKey: `reg-confirm-private-${newId}`,
           templateData: { name: registration.name, format: registration.format, message: registration.message, statusUrl },
         },
       }).catch(console.error);
@@ -102,7 +104,7 @@ const PrivateLessonsForm = () => {
       setFormat("fizic");
       setSmsOptIn(false);
       setGdpr(false);
-      setRegistrationId(inserted?.id);
+      setRegistrationId(newId);
       setStudentEmail(registration.email);
       setStudentName(registration.name);
       setSubmitted(true);
