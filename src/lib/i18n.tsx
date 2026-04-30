@@ -122,9 +122,9 @@ const translations = {
     // Pricing
     pricingBadge: "Prețuri transparente",
     pricingTitle: "Prețuri simple, transparente",
-    pricingDesc: "Alege planul care ți se potrivește cel mai bine. Toate prețurile sunt în LEI.",
+    pricingDesc: "Lecțiile private au un preț unic, indiferent de nivel. La cursul de grup, tariful crește treptat de la A1 la B2. Toate prețurile sunt în LEI.",
     pricingPrivateLabel: "Lecție privată",
-    pricingPrivateSub: "Sesiune individuală 1-la-1",
+    pricingPrivateSub: "Sesiune individuală 1-la-1 · preț fix pentru orice nivel",
     pricingPrivatePrice: "150",
     pricingPrivatePer: "LEI / sesiune 90 min · preț unic pentru toate nivelurile (A1–C2)",
     pricingPerSessionSuffix: "LEI / sesiune (90 min)",
@@ -136,7 +136,7 @@ const translations = {
     pricingPrivateFeat4: "Plată în LEI/EUR/USD",
     pricingPrivateDiscount: "🎁 -15% la pachetul de 20 de lecții plătit în avans (≈127,5 LEI/lecție)",
     pricingGroupLabel: "Curs de Grup",
-    pricingGroupSub: "Program de 3 luni",
+    pricingGroupSub: "Program de 3 luni · tariful variază în funcție de nivel (A1 → B2)",
     pricingGroupPriceByLevel: "Preț în funcție de nivel:",
     pricingGroupLevelPrices: "A1: 500 · A2: 600 · B1: 700 · B2: 800 LEI / lună",
     pricingFromPrefix: "de la",
@@ -154,7 +154,7 @@ const translations = {
     pricingGroupAfterDiscount: "după reducere",
     pricingPopular: "Cel mai popular",
     pricingStart: "Începe acum",
-    pricingNote: "* Prețurile sunt afișate în LEI. Se acceptă plata echivalentă în EUR sau USD.",
+    pricingNote: "* Prețurile sunt afișate în LEI. Se acceptă plata echivalentă în EUR sau USD. La grup, prețul depinde de nivel; la lecțiile private, tariful este același pentru toate nivelurile (A1–C2).",
 
     // Testimonials
     testimonialsTitle: "Ce spun cursanții noștri",
