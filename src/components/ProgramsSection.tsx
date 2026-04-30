@@ -30,6 +30,9 @@ const ProgramsSection = () => {
     B2: "800",
   };
 
+  const formatLei = (n: number) =>
+    n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
+
   const otherPrograms = [
     {
       badge: t.privateBadge,
@@ -112,6 +115,24 @@ const ProgramsSection = () => {
                   <span className="ml-1">/ {t.pricingGroupPer}</span>
                 </p>
               )}
+
+              {levelPrices[activeLevel] && (() => {
+                const monthly = Number(levelPrices[activeLevel]);
+                const total = monthly * 3;
+                const discounted = total * 0.9;
+                return (
+                  <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-muted-foreground">{t.pricingGroup3MonthsLabel}</span>
+                      <span className="font-semibold text-foreground">{formatLei(total)} LEI</span>
+                    </div>
+                    <div className="mt-1 flex items-baseline justify-between gap-2 text-primary">
+                      <span className="font-medium">{t.pricingGroupDiscount}</span>
+                      <span className="font-bold whitespace-nowrap">{formatLei(discounted)} LEI</span>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {isAvailable(activeLevel) ? (
                 <>
