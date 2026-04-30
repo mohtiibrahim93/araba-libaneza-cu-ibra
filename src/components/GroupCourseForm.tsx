@@ -14,6 +14,9 @@ import { z } from "zod";
 const GROUP_LEVELS = ["A1", "A2", "B1", "B2"] as const;
 type GroupLevel = (typeof GROUP_LEVELS)[number];
 
+const PHYSICAL_LOCATIONS = ["bucuresti-centru", "bucuresti-nord", "bucuresti-sud", "alt-oras"] as const;
+type PhysicalLocation = (typeof PHYSICAL_LOCATIONS)[number];
+
 const mainLeadSchema = z.object({
   courseType: z.enum(["group", "private", "kids"], {
     errorMap: () => ({ message: "courseType_invalid" }),
@@ -22,6 +25,7 @@ const mainLeadSchema = z.object({
     errorMap: () => ({ message: "format_invalid" }),
   }),
   level: z.enum(GROUP_LEVELS).optional(),
+  location: z.enum(PHYSICAL_LOCATIONS).optional(),
   name: z.string().trim().min(2).max(100),
   phone: z
     .string()
@@ -39,6 +43,9 @@ const mainLeadSchema = z.object({
 }).refine((data) => data.courseType !== "group" || !!data.level, {
   path: ["level"],
   message: "level_required",
+}).refine((data) => data.format !== "fizic" || !!data.location, {
+  path: ["location"],
+  message: "location_required",
 });
 
 const templateByCourseType = {
@@ -52,14 +59,15 @@ const GroupCourseForm = () => {
   const [courseType, setCourseType] = useState<"group" | "private" | "kids">("group");
   const [format, setFormat] = useState<"fizic" | "online">("fizic");
   const [level, setLevel] = useState<GroupLevel>("A1");
+  const [location, setLocation] = useState<PhysicalLocation>("bucuresti-centru");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<{ courseType?: string; format?: string; level?: string }>({});
+  const [errors, setErrors] = useState<{ courseType?: string; format?: string; level?: string; location?: string }>({});
 
   useEffect(() => {
     if (courseType === "kids") setFormat("fizic");
-    setErrors((prev) => ({ ...prev, courseType: undefined, format: undefined, level: undefined }));
+    setErrors((prev) => ({ ...prev, courseType: undefined, format: undefined, level: undefined, location: undefined }));
   }, [courseType]);
 
   useEffect(() => {
@@ -87,6 +95,7 @@ const GroupCourseForm = () => {
       courseType,
       format,
       level: courseType === "group" ? level : undefined,
+      location: format === "fizic" ? location : undefined,
       name: formData.get("name"),
       phone: formData.get("phone"),
       email: formData.get("email"),
@@ -101,9 +110,10 @@ const GroupCourseForm = () => {
         format_invalid: t.mainLeadErrorFormat,
         kids_format: t.mainLeadErrorKidsFormat,
         level_required: t.mainLeadErrorLevel,
+        location_required: t.mainLeadErrorLocation,
       };
       let firstMsg: string | undefined;
-      (["courseType", "format", "level"] as const).forEach((key) => {
+      (["courseType", "format", "level", "location"] as const).forEach((key) => {
         const code = fieldErrors[key]?.[0];
         if (code) {
           const msg = codeToMsg[code] ?? t.mainLeadValidationError;
@@ -120,7 +130,7 @@ const GroupCourseForm = () => {
     setErrors({});
 
     const registration = parsed.data;
-    const center = registration.format === "fizic" ? "bucuresti" : "online";
+    const center = registration.format === "fizic" ? (registration.location ?? "bucuresti-centru") : "online";
     const courseLabel =
       registration.courseType === "group"
         ? t.mainLeadCourseGroup
@@ -131,6 +141,7 @@ const GroupCourseForm = () => {
     const notes = [
       `Course type: ${registration.courseType}`,
       registration.level ? `Level: ${registration.level}` : undefined,
+      registration.format === "fizic" && registration.location ? `Location: ${registration.location}` : undefined,
       `Requested callback: yes`,
       registration.message ? `Message: ${registration.message}` : undefined,
     ].filter(Boolean).join("\n");
@@ -186,6 +197,7 @@ const GroupCourseForm = () => {
       setCourseType("group");
       setFormat("fizic");
       setLevel("A1");
+      setLocation("bucuresti-centru");
       setGdpr(false);
       setErrors({});
       setSubmitted(true);
