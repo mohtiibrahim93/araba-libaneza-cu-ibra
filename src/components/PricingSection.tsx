@@ -12,6 +12,7 @@ const PricingSection = () => {
       per: t.pricingPrivatePer,
       feats: [t.pricingPrivateFeat1, t.pricingPrivateFeat2, t.pricingPrivateFeat3, t.pricingPrivateFeat4],
       popular: false,
+      discount: t.pricingPrivateDiscount,
     },
     {
       label: t.pricingGroupLabel,
@@ -20,6 +21,7 @@ const PricingSection = () => {
       per: t.pricingGroupPer,
       feats: [t.pricingGroupFeat1, t.pricingGroupFeat2, t.pricingGroupFeat3, t.pricingGroupFeat4],
       popular: true,
+      discount: undefined as string | undefined,
     },
   ];
 
@@ -65,6 +67,12 @@ const PricingSection = () => {
                   </li>
                 ))}
               </ul>
+
+              {p.discount && (
+                <div className="mb-6 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm font-medium text-primary">
+                  {p.discount}
+                </div>
+              )}
 
               <a
                 href="#inscriere"
