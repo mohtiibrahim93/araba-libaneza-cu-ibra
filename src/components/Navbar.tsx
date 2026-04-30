@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { ChevronDown, MessageCircle, Menu, X } from "lucide-react";
+import { ChevronDown, MessageCircle, Menu, X, GraduationCap } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,29 @@ const Navbar = () => {
   const { t, setLang, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Navigate to an in-page anchor; if currently on a different route,
+  // route to "/" first then scroll once the target mounts.
+  const goToAnchor = (hash: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    const id = hash.replace(/^#/, "");
+    setOpen(false);
+    if (location.pathname !== "/") {
+      navigate("/" + hash);
+      // Defer until Index renders
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", hash);
+    }
+  };
 
   // Publish actual navbar height as a CSS var so anchor scrolling
   // (native href="#..." and programmatic scrollIntoView) lands below it.
@@ -74,6 +98,7 @@ const Navbar = () => {
               <TooltipTrigger asChild>
                 <a
                   href={l.href}
+                  onClick={goToAnchor(l.href)}
                   aria-label={l.label}
                   className="hover:text-foreground transition-colors"
                 >
@@ -86,6 +111,21 @@ const Navbar = () => {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {/* Quick access: jump to Programs from any page */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href="/#courses"
+                onClick={goToAnchor("#courses")}
+                aria-label={t.navCourses}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:hidden lg:inline-flex"
+              >
+                <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
+                <span className="hidden sm:inline">{t.navCourses}</span>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{t.navCourses}</TooltipContent>
+          </Tooltip>
           <DropdownMenu>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -156,7 +196,7 @@ const Navbar = () => {
                   <a
                     href={l.href}
                     aria-label={l.label}
-                    onClick={() => setOpen(false)}
+                  onClick={goToAnchor(l.href)}
                     className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
                   >
                     {l.label}
