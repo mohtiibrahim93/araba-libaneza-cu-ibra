@@ -135,7 +135,7 @@ const GroupCourseForm = () => {
       registration.message ? `Message: ${registration.message}` : undefined,
     ].filter(Boolean).join("\n");
 
-    const { data: inserted, error } = await supabase
+    const { error } = await supabase
       .from("registrations")
       .insert({
         form_type: registration.courseType,
@@ -145,9 +145,7 @@ const GroupCourseForm = () => {
         center,
         format: registration.format,
         notes,
-      })
-      .select("id")
-      .single();
+      });
 
     if (error) {
       toast.error(t.mainLeadError);
@@ -173,7 +171,7 @@ const GroupCourseForm = () => {
         body: {
           templateName: templateByCourseType[registration.courseType],
           recipientEmail: registration.email,
-          idempotencyKey: `reg-confirm-${registration.courseType}-${inserted?.id ?? Date.now()}`,
+          idempotencyKey: `reg-confirm-${registration.courseType}-${registration.email}-${Date.now()}`,
           templateData: {
             name: registration.name,
             format: registration.format,
