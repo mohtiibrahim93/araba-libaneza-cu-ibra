@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { Users, GraduationCap, Clock, BookOpen } from "lucide-react";
-import heroImg from "@/assets/hero-students.jpg";
+import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 
 const HeroSection = () => {
   const { t } = useI18n();
@@ -50,13 +50,17 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Right: Image with floating cards */}
+        {/* Right: Lebanese cedar illustration with floating cards */}
         <div className="relative">
-          <img
-            src={heroImg}
-            alt="Students learning Lebanese Arabic"
-            className="w-full rounded-2xl shadow-lg object-cover aspect-[4/3]"
-          />
+          <div className="w-full rounded-2xl bg-gradient-to-br from-primary/5 via-background to-primary/10 border border-border/60 shadow-lg overflow-hidden aspect-[4/3] flex items-center justify-center">
+            <img
+              src={heroImg}
+              alt="Cedrul libanez — simbolul Libanului"
+              width={1024}
+              height={1024}
+              className="w-full h-full object-contain p-4"
+            />
+          </div>
 
           {/* Floating card: Lessons */}
           <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
