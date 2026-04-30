@@ -11,7 +11,8 @@ const PricingSection = () => {
       label: t.pricingPrivateLabel,
       sub: t.pricingPrivateSub,
       price: t.pricingPrivatePrice as string | undefined,
-      per: t.pricingPrivatePer as string | undefined,
+      per: t.pricingPerSessionSuffix as string | undefined,
+      perNote: t.pricingPrivateRateNote as string | undefined,
       priceByLevelLabel: undefined as string | undefined,
       priceByLevelText: undefined as string | undefined,
       feats: [t.pricingPrivateFeat1, t.pricingPrivateFeat2, t.pricingPrivateFeat3, t.pricingPrivateFeat4],
@@ -21,14 +22,17 @@ const PricingSection = () => {
       seeLevelsHref: undefined as string | undefined,
       seeLevelsLabel: undefined as string | undefined,
       totals: undefined as { level: string; total: number; discounted: number }[] | undefined,
+      levelPills: undefined as { level: string; monthly: number }[] | undefined,
+      fromPrefix: undefined as string | undefined,
     },
     {
       label: t.pricingGroupLabel,
       sub: t.pricingGroupSub,
-      price: undefined as string | undefined,
-      per: undefined as string | undefined,
-      priceByLevelLabel: t.pricingGroupPriceByLevel,
-      priceByLevelText: t.pricingGroupLevelPrices,
+      price: t.pricingGroupPriceRange as string | undefined,
+      per: t.pricingPerMonthSuffix as string | undefined,
+      perNote: t.pricingGroupRangeNote as string | undefined,
+      priceByLevelLabel: undefined as string | undefined,
+      priceByLevelText: undefined as string | undefined,
       feats: [t.pricingGroupFeat1, t.pricingGroupFeat2, t.pricingGroupFeat3, t.pricingGroupFeat4],
       popular: true,
       discount: t.pricingGroupDiscount,
@@ -40,6 +44,11 @@ const PricingSection = () => {
         total: m * 3,
         discounted: m * 3 * 0.9,
       })),
+      levelPills: GROUP_LEVEL_PRICES.map((m, i) => ({
+        level: ["A1", "A2", "B1", "B2"][i],
+        monthly: m,
+      })),
+      fromPrefix: t.pricingFromPrefix as string | undefined,
     },
   ];
 
@@ -72,26 +81,40 @@ const PricingSection = () => {
               )}
 
               <h3 className="text-lg font-bold text-foreground">{p.label}</h3>
-              <p className="text-sm text-muted-foreground mb-4">{p.sub}</p>
+              <p className="text-sm text-muted-foreground mb-5">{p.sub}</p>
 
-              {p.priceByLevelText ? (
-                <div className="mb-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
-                    {p.priceByLevelLabel}
-                  </p>
-                  <p className="text-base font-bold text-foreground leading-snug">
-                    {p.priceByLevelText}
-                  </p>
+              <div className="mb-2">
+                <div className="flex items-baseline flex-wrap gap-x-2 gap-y-1">
+                  {p.fromPrefix && (
+                    <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {p.fromPrefix}
+                    </span>
+                  )}
+                  <span className="text-4xl sm:text-5xl font-extrabold text-foreground leading-none tracking-tight">
+                    {p.price}
+                  </span>
+                  <span className="text-sm font-semibold text-muted-foreground">{p.per}</span>
                 </div>
-              ) : (
-                <>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-4xl font-extrabold text-foreground">{p.price}</span>
-                    <span className="text-base font-semibold text-foreground">LEI</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-2">{p.per}</p>
-                </>
+                {p.perNote && (
+                  <p className="text-xs text-muted-foreground mt-1.5">{p.perNote}</p>
+                )}
+              </div>
+
+              {p.levelPills && (
+                <div className="mt-4 mb-4 flex flex-wrap gap-1.5">
+                  {p.levelPills.map((pill) => (
+                    <span
+                      key={pill.level}
+                      className="inline-flex items-baseline gap-1 rounded-full border border-border bg-muted/50 px-2.5 py-1 text-[11px] font-medium text-foreground"
+                    >
+                      <span className="font-bold text-primary">{pill.level}</span>
+                      <span className="text-muted-foreground">·</span>
+                      <span>{formatLei(pill.monthly)} LEI</span>
+                    </span>
+                  ))}
+                </div>
               )}
+
               {p.seeLevelsHref && (
                 <a
                   href={p.seeLevelsHref}
@@ -103,17 +126,17 @@ const PricingSection = () => {
                       history.replaceState(null, "", p.seeLevelsHref);
                     }
                   }}
-                  className="inline-block text-xs font-semibold text-primary hover:underline mb-6"
+                  className="inline-block text-xs font-semibold text-primary hover:underline mb-5"
                 >
                   {p.seeLevelsLabel}
                 </a>
               )}
               {p.allLevelsLabel ? (
-                <span className="inline-block text-xs font-semibold text-primary mb-6">
+                <span className="inline-block text-xs font-semibold text-primary mb-5">
                   ✓ {p.allLevelsLabel}
                 </span>
               ) : !p.seeLevelsHref ? (
-                <div className="mb-6" />
+                <div className="mb-5" />
               ) : null}
 
               <ul className="space-y-3 mb-8">
