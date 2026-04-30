@@ -48,7 +48,8 @@ const ProgramsSection = () => {
       href: "#private",
       img: privateImg,
       price: t.pricingPrivatePrice,
-      per: t.pricingPrivatePer,
+      per: t.pricingPerSessionSuffix,
+      perNote: t.pricingPrivateRateNote,
       discount: t.pricingPrivateDiscount,
     },
     {
