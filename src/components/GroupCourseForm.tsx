@@ -11,9 +11,13 @@ import GdprCheckbox from "@/components/GdprCheckbox";
 import { trackFormSubmit } from "@/lib/tracking";
 import { z } from "zod";
 
+const GROUP_LEVELS = ["A1", "A2", "B1", "B2"] as const;
+type GroupLevel = (typeof GROUP_LEVELS)[number];
+
 const mainLeadSchema = z.object({
   courseType: z.enum(["group", "private", "kids"]),
   format: z.enum(["fizic", "online"]),
+  level: z.enum(GROUP_LEVELS).optional(),
   name: z.string().trim().min(2).max(100),
   phone: z
     .string()
@@ -28,6 +32,9 @@ const mainLeadSchema = z.object({
 }).refine((data) => data.courseType !== "kids" || data.format === "fizic", {
   path: ["format"],
   message: "Kids courses are physical only",
+}).refine((data) => data.courseType !== "group" || !!data.level, {
+  path: ["level"],
+  message: "Level is required for group courses",
 });
 
 const templateByCourseType = {
@@ -40,6 +47,7 @@ const GroupCourseForm = () => {
   const { t } = useI18n();
   const [courseType, setCourseType] = useState<"group" | "private" | "kids">("group");
   const [format, setFormat] = useState<"fizic" | "online">("fizic");
+  const [level, setLevel] = useState<GroupLevel>("A1");
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -72,6 +80,7 @@ const GroupCourseForm = () => {
     const parsed = mainLeadSchema.safeParse({
       courseType,
       format,
+      level: courseType === "group" ? level : undefined,
       name: formData.get("name"),
       phone: formData.get("phone"),
       email: formData.get("email"),
@@ -95,6 +104,7 @@ const GroupCourseForm = () => {
 
     const notes = [
       `Course type: ${registration.courseType}`,
+      registration.level ? `Level: ${registration.level}` : undefined,
       `Requested callback: yes`,
       registration.message ? `Message: ${registration.message}` : undefined,
     ].filter(Boolean).join("\n");
@@ -128,6 +138,7 @@ const GroupCourseForm = () => {
           form_type: registration.courseType,
           center,
           format: registration.format,
+          level: registration.level,
           notes: `${courseLabel}; ${notes}`,
         },
       }).catch(console.error);
@@ -141,6 +152,7 @@ const GroupCourseForm = () => {
             name: registration.name,
             format: registration.format,
             center,
+            level: registration.level,
             message: registration.message,
           },
         },
@@ -149,6 +161,7 @@ const GroupCourseForm = () => {
       (e.target as HTMLFormElement).reset();
       setCourseType("group");
       setFormat("fizic");
+      setLevel("A1");
       setGdpr(false);
       setSubmitted(true);
     }
@@ -201,6 +214,23 @@ const GroupCourseForm = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {courseType === "group" && (
+                <div className="space-y-1.5">
+                  <Label className="text-[13px] font-medium">{t.mainLeadLevelLabel} *</Label>
+                  <Select value={level} onValueChange={(v) => setLevel(v as GroupLevel)}>
+                    <SelectTrigger className="h-11 border-border bg-background">
+                      <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {GROUP_LEVELS.map((lvl) => (
+                        <SelectItem key={lvl} value={lvl}>{lvl}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
