@@ -9,9 +9,6 @@ import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
-import GroupCourseForm from "@/components/GroupCourseForm";
-import PrivateLessonsForm from "@/components/PrivateLessonsForm";
-import KidsCourseForm from "@/components/KidsCourseForm";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -54,9 +51,6 @@ const PageContent = () => {
       <PricingSection />
       <TestimonialsSection />
       <FAQSection />
-      <GroupCourseForm />
-      <PrivateLessonsForm />
-      <KidsCourseForm />
       <CTASection />
       <Footer />
       <WhatsAppButton />
