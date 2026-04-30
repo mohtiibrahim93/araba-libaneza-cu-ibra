@@ -32,7 +32,6 @@ const PricingSection = () => {
     },
   ];
 
-  const plansWithTotals = plans.map((p) => p);
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
