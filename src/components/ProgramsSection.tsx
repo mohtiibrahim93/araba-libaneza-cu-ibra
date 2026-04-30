@@ -23,6 +23,13 @@ const ProgramsSection = () => {
 
   const isAvailable = (level: Level) => level === "A1";
 
+  const levelPrices: Partial<Record<Level, string>> = {
+    A1: "500",
+    A2: "600",
+    B1: "700",
+    B2: "800",
+  };
+
   const otherPrograms = [
     {
       badge: t.privateBadge,
@@ -92,6 +99,13 @@ const ProgramsSection = () => {
 
               {/* Level subtitle */}
               <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[activeLevel]}</p>
+
+              {levelPrices[activeLevel] && (
+                <p className="text-sm text-muted-foreground mb-2">
+                  <span className="text-base font-bold text-foreground">{levelPrices[activeLevel]} LEI</span>
+                  <span className="ml-1">/ {t.pricingGroupPer}</span>
+                </p>
+              )}
 
               {isAvailable(activeLevel) ? (
                 <>
