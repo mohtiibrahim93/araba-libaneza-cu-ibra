@@ -32,7 +32,7 @@ const PricingSection = () => {
       feats: [t.pricingGroupFeat1, t.pricingGroupFeat2, t.pricingGroupFeat3, t.pricingGroupFeat4],
       popular: true,
       discount: t.pricingGroupDiscount,
-      seeLevelsHref: "#courses",
+      seeLevelsHref: "#group-levels",
       seeLevelsLabel: t.pricingGroupSeeLevels,
       allLevelsLabel: undefined as string | undefined,
       totals: GROUP_LEVEL_PRICES.map((m) => ({
