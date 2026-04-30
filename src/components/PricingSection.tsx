@@ -32,7 +32,7 @@ const PricingSection = () => {
       feats: [t.pricingGroupFeat1, t.pricingGroupFeat2, t.pricingGroupFeat3, t.pricingGroupFeat4],
       popular: true,
       discount: t.pricingGroupDiscount,
-      seeLevelsHref: "#courses",
+      seeLevelsHref: "#group-levels",
       seeLevelsLabel: t.pricingGroupSeeLevels,
       allLevelsLabel: undefined as string | undefined,
       totals: GROUP_LEVEL_PRICES.map((m) => ({
@@ -95,6 +95,14 @@ const PricingSection = () => {
               {p.seeLevelsHref && (
                 <a
                   href={p.seeLevelsHref}
+                  onClick={(e) => {
+                    const target = document.querySelector(p.seeLevelsHref!);
+                    if (target) {
+                      e.preventDefault();
+                      target.scrollIntoView({ behavior: "smooth", block: "start" });
+                      history.replaceState(null, "", p.seeLevelsHref);
+                    }
+                  }}
                   className="inline-block text-xs font-semibold text-primary hover:underline mb-6"
                 >
                   {p.seeLevelsLabel}
