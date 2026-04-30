@@ -15,8 +15,12 @@ const GROUP_LEVELS = ["A1", "A2", "B1", "B2"] as const;
 type GroupLevel = (typeof GROUP_LEVELS)[number];
 
 const mainLeadSchema = z.object({
-  courseType: z.enum(["group", "private", "kids"]),
-  format: z.enum(["fizic", "online"]),
+  courseType: z.enum(["group", "private", "kids"], {
+    errorMap: () => ({ message: "courseType_invalid" }),
+  }),
+  format: z.enum(["fizic", "online"], {
+    errorMap: () => ({ message: "format_invalid" }),
+  }),
   level: z.enum(GROUP_LEVELS).optional(),
   name: z.string().trim().min(2).max(100),
   phone: z
@@ -31,10 +35,10 @@ const mainLeadSchema = z.object({
   message: z.string().trim().max(1000).optional(),
 }).refine((data) => data.courseType !== "kids" || data.format === "fizic", {
   path: ["format"],
-  message: "Kids courses are physical only",
+  message: "kids_format",
 }).refine((data) => data.courseType !== "group" || !!data.level, {
   path: ["level"],
-  message: "Level is required for group courses",
+  message: "level_required",
 });
 
 const templateByCourseType = {
@@ -51,9 +55,11 @@ const GroupCourseForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [gdpr, setGdpr] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<{ courseType?: string; format?: string; level?: string }>({});
 
   useEffect(() => {
     if (courseType === "kids") setFormat("fizic");
+    setErrors((prev) => ({ ...prev, courseType: undefined, format: undefined, level: undefined }));
   }, [courseType]);
 
   useEffect(() => {
@@ -88,10 +94,30 @@ const GroupCourseForm = () => {
     });
 
     if (!parsed.success) {
-      toast.error(t.mainLeadValidationError);
+      const fieldErrors = parsed.error.flatten().fieldErrors;
+      const next: typeof errors = {};
+      const codeToMsg: Record<string, string> = {
+        courseType_invalid: t.mainLeadErrorCourseType,
+        format_invalid: t.mainLeadErrorFormat,
+        kids_format: t.mainLeadErrorKidsFormat,
+        level_required: t.mainLeadErrorLevel,
+      };
+      let firstMsg: string | undefined;
+      (["courseType", "format", "level"] as const).forEach((key) => {
+        const code = fieldErrors[key]?.[0];
+        if (code) {
+          const msg = codeToMsg[code] ?? t.mainLeadValidationError;
+          next[key] = msg;
+          firstMsg = firstMsg ?? msg;
+        }
+      });
+      setErrors(next);
+      toast.error(firstMsg ?? t.mainLeadValidationError);
       setSubmitting(false);
       return;
     }
+
+    setErrors({});
 
     const registration = parsed.data;
     const center = registration.format === "fizic" ? "bucuresti" : "online";
@@ -163,6 +189,7 @@ const GroupCourseForm = () => {
       setFormat("fizic");
       setLevel("A1");
       setGdpr(false);
+      setErrors({});
       setSubmitted(true);
     }
 
@@ -204,7 +231,10 @@ const GroupCourseForm = () => {
               <div className="space-y-1.5">
                 <Label className="text-[13px] font-medium">{t.mainLeadCourseTypeLabel} *</Label>
                 <Select value={courseType} onValueChange={(value) => setCourseType(value as "group" | "private" | "kids")}>
-                  <SelectTrigger className="h-11 border-border bg-background">
+                  <SelectTrigger
+                    aria-invalid={!!errors.courseType}
+                    className={`h-11 border-border bg-background ${errors.courseType ? "border-destructive ring-1 ring-destructive/30" : ""}`}
+                  >
                     <SelectValue placeholder={t.mainLeadCourseTypePlaceholder} />
                   </SelectTrigger>
                   <SelectContent>
@@ -213,13 +243,19 @@ const GroupCourseForm = () => {
                     <SelectItem value="kids">{t.mainLeadCourseKids}</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.courseType && (
+                  <p role="alert" className="text-xs text-destructive">{errors.courseType}</p>
+                )}
               </div>
 
               {courseType === "group" && (
                 <div className="space-y-1.5">
                   <Label className="text-[13px] font-medium">{t.mainLeadLevelLabel} *</Label>
                   <Select value={level} onValueChange={(v) => setLevel(v as GroupLevel)}>
-                    <SelectTrigger className="h-11 border-border bg-background">
+                    <SelectTrigger
+                      aria-invalid={!!errors.level}
+                      className={`h-11 border-border bg-background ${errors.level ? "border-destructive ring-1 ring-destructive/30" : ""}`}
+                    >
                       <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
                     </SelectTrigger>
                     <SelectContent>
@@ -228,13 +264,22 @@ const GroupCourseForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
+                  {errors.level ? (
+                    <p role="alert" className="text-xs text-destructive">{errors.level}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
+                  )}
                 </div>
               )}
 
               <div className="space-y-2">
                 <Label className="text-[13px] font-medium">{t.groupFormatLabel} *</Label>
-                <RadioGroup value={format} onValueChange={(value) => setFormat(value as "fizic" | "online")} className="flex gap-6 pt-1">
+                <RadioGroup
+                  value={format}
+                  onValueChange={(value) => setFormat(value as "fizic" | "online")}
+                  className="flex gap-6 pt-1"
+                  aria-invalid={!!errors.format}
+                >
                   <div className="flex items-center gap-2">
                     <RadioGroupItem value="fizic" id="main-fizic" />
                     <Label htmlFor="main-fizic" className="cursor-pointer font-normal text-sm">{t.groupPhysical}</Label>
@@ -244,7 +289,11 @@ const GroupCourseForm = () => {
                     <Label htmlFor="main-online" className="cursor-pointer font-normal text-sm data-[disabled=true]:opacity-50">{t.groupOnline}</Label>
                   </div>
                 </RadioGroup>
-                {courseType === "kids" && <p className="text-xs text-muted-foreground">{t.kidsPhysicalOnly}</p>}
+                {errors.format ? (
+                  <p role="alert" className="text-xs text-destructive">{errors.format}</p>
+                ) : courseType === "kids" ? (
+                  <p className="text-xs text-muted-foreground">{t.kidsPhysicalOnly}</p>
+                ) : null}
               </div>
 
               <div className="space-y-1.5">
