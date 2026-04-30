@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { ChevronDown, MessageCircle, Menu, X } from "lucide-react";
 import {
@@ -14,6 +14,26 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
   const [open, setOpen] = useState(false);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  // Publish actual navbar height as a CSS var so anchor scrolling
+  // (native href="#..." and programmatic scrollIntoView) lands below it.
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const apply = () => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      if (h > 0) document.documentElement.style.setProperty("--nav-h", `${h}px`);
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    window.addEventListener("resize", apply);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", apply);
+    };
+  }, []);
 
   const links = [
     { href: "#courses", label: t.navCourses },
@@ -24,7 +44,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+    <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         <Tooltip>
           <TooltipTrigger asChild>
