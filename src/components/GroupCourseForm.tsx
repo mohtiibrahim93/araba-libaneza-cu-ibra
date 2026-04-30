@@ -306,6 +306,36 @@ const GroupCourseForm = () => {
                 ) : null}
               </div>
 
+              {format === "fizic" ? (
+                <div className="space-y-1.5">
+                  <Label className="text-[13px] font-medium">{t.mainLeadLocationLabel} *</Label>
+                  <Select value={location} onValueChange={(v) => setLocation(v as PhysicalLocation)}>
+                    <SelectTrigger
+                      aria-invalid={!!errors.location}
+                      className={`h-11 border-border bg-background ${errors.location ? "border-destructive ring-1 ring-destructive/30" : ""}`}
+                    >
+                      <SelectValue placeholder={t.mainLeadLocationPlaceholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bucuresti-centru">{t.mainLeadLocationBucharestCentru}</SelectItem>
+                      <SelectItem value="bucuresti-nord">{t.mainLeadLocationBucharestNord}</SelectItem>
+                      <SelectItem value="bucuresti-sud">{t.mainLeadLocationBucharestSud}</SelectItem>
+                      <SelectItem value="alt-oras">{t.mainLeadLocationOtherCity}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.location ? (
+                    <p role="alert" className="text-xs text-destructive">{errors.location}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">{t.mainLeadLocationHelp}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                  <p className="text-[13px] font-semibold text-foreground">{t.mainLeadOnlineInfoTitle}</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{t.mainLeadOnlineInfoDesc}</p>
+                </div>
+              )}
+
               <div className="space-y-1.5">
                 <Label htmlFor="main-name" className="text-[13px] font-medium">{t.labelName} *</Label>
                 <Input id="main-name" name="name" required maxLength={100} placeholder={t.placeholderName} className="h-11 border-border bg-background" />
