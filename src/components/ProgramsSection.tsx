@@ -112,7 +112,7 @@ const ProgramsSection = () => {
               {levelPrices[activeLevel] && (
                 <p className="text-sm text-muted-foreground mb-2">
                   <span className="text-base font-bold text-foreground">{levelPrices[activeLevel]} LEI</span>
-                  <span className="ml-1">/ {t.pricingGroupPer}</span>
+                  <span className="ml-1">/ {t.pricingGroupPerMonth}</span>
                 </p>
               )}
 

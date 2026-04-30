@@ -10,24 +10,31 @@ const PricingSection = () => {
     {
       label: t.pricingPrivateLabel,
       sub: t.pricingPrivateSub,
-      price: t.pricingPrivatePrice,
-      per: t.pricingPrivatePer,
+      price: t.pricingPrivatePrice as string | undefined,
+      per: t.pricingPrivatePer as string | undefined,
+      priceByLevelLabel: undefined as string | undefined,
+      priceByLevelText: undefined as string | undefined,
       feats: [t.pricingPrivateFeat1, t.pricingPrivateFeat2, t.pricingPrivateFeat3, t.pricingPrivateFeat4],
       popular: false,
       discount: t.pricingPrivateDiscount,
       allLevelsLabel: t.pricingPrivateAllLevels,
+      seeLevelsHref: undefined as string | undefined,
+      seeLevelsLabel: undefined as string | undefined,
+      totals: undefined as { level: string; total: number; discounted: number }[] | undefined,
     },
     {
       label: t.pricingGroupLabel,
       sub: t.pricingGroupSub,
-      price: t.pricingGroupPrice,
-      per: t.pricingGroupPer,
+      price: undefined as string | undefined,
+      per: undefined as string | undefined,
+      priceByLevelLabel: t.pricingGroupPriceByLevel,
+      priceByLevelText: t.pricingGroupLevelPrices,
       feats: [t.pricingGroupFeat1, t.pricingGroupFeat2, t.pricingGroupFeat3, t.pricingGroupFeat4],
       popular: true,
       discount: t.pricingGroupDiscount,
-      priceFrom: t.pricingGroupPriceFrom,
       seeLevelsHref: "#courses",
       seeLevelsLabel: t.pricingGroupSeeLevels,
+      allLevelsLabel: undefined as string | undefined,
       totals: GROUP_LEVEL_PRICES.map((m) => ({
         level: ["A1", "A2", "B1", "B2"][GROUP_LEVEL_PRICES.indexOf(m)],
         total: m * 3,
@@ -67,15 +74,25 @@ const PricingSection = () => {
               <h3 className="text-lg font-bold text-foreground">{p.label}</h3>
               <p className="text-sm text-muted-foreground mb-4">{p.sub}</p>
 
-              <div className="flex items-baseline gap-2 mb-1">
-                {"priceFrom" in p && p.priceFrom && (
-                  <span className="text-sm font-medium text-muted-foreground">{p.priceFrom}</span>
-                )}
-                <span className="text-4xl font-extrabold text-foreground">{p.price}</span>
-                <span className="text-base font-semibold text-foreground">LEI</span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-2">{p.per}</p>
-              {"seeLevelsHref" in p && p.seeLevelsHref && (
+              {p.priceByLevelText ? (
+                <div className="mb-2">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                    {p.priceByLevelLabel}
+                  </p>
+                  <p className="text-base font-bold text-foreground leading-snug">
+                    {p.priceByLevelText}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-4xl font-extrabold text-foreground">{p.price}</span>
+                    <span className="text-base font-semibold text-foreground">LEI</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-2">{p.per}</p>
+                </>
+              )}
+              {p.seeLevelsHref && (
                 <a
                   href={p.seeLevelsHref}
                   className="inline-block text-xs font-semibold text-primary hover:underline mb-6"
@@ -83,11 +100,11 @@ const PricingSection = () => {
                   {p.seeLevelsLabel}
                 </a>
               )}
-              {"allLevelsLabel" in p && p.allLevelsLabel ? (
+              {p.allLevelsLabel ? (
                 <span className="inline-block text-xs font-semibold text-primary mb-6">
                   ✓ {p.allLevelsLabel}
                 </span>
-              ) : !("seeLevelsHref" in p && p.seeLevelsHref) ? (
+              ) : !p.seeLevelsHref ? (
                 <div className="mb-6" />
               ) : null}
 
@@ -100,7 +117,7 @@ const PricingSection = () => {
                 ))}
               </ul>
 
-              {"totals" in p && p.totals && (
+              {p.totals && (
                 <div className="mb-6 rounded-lg border border-border bg-muted/40 p-4">
                   <p className="text-xs font-semibold uppercase text-muted-foreground mb-2">
                     {t.pricingGroup3MonthsLabel}
