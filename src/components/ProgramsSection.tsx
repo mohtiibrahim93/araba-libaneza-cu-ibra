@@ -81,7 +81,7 @@ const ProgramsSection = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Group Course Card with Level Tabs */}
-          <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+          <div id="group-levels" className="scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
             <img src={groupImg} alt={t.groupCardTitle} className="w-full h-52 object-cover" />
             <div className="p-6 flex flex-col flex-1">
               <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
