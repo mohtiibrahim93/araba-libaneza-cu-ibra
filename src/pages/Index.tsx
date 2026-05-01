@@ -6,6 +6,7 @@ import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
 import ProgramsSection from "@/components/ProgramsSection";
 import PricingSection from "@/components/PricingSection";
+import RegistrationFormSection from "@/components/RegistrationFormSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
@@ -49,6 +50,7 @@ const PageContent = () => {
       <InstructorSection />
       <ProgramsSection />
       <PricingSection />
+      <RegistrationFormSection />
       <TestimonialsSection />
       <FAQSection />
       <CTASection />

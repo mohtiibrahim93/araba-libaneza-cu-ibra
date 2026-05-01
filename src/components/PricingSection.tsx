@@ -171,10 +171,8 @@ const PricingSection = () => {
                 </div>
               )}
 
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <AnchorLink
+                to="#inscriere"
                 className={`block w-full text-center py-3 text-sm font-semibold rounded-lg transition-colors ${
                   p.popular
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
@@ -182,6 +180,14 @@ const PricingSection = () => {
                 }`}
               >
                 {t.pricingStart}
+              </AnchorLink>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block text-center text-xs text-muted-foreground hover:text-primary transition-colors"
+              >
+                {t.ctaButton}
               </a>
             </div>
           ))}

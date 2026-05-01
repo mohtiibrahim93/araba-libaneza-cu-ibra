@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Check, Clock, MessageCircle } from "lucide-react";
+import AnchorLink from "@/components/AnchorLink";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -165,13 +166,20 @@ const ProgramsSection = () => {
                       </li>
                     ))}
                   </ul>
+                  <AnchorLink
+                    to="#inscriere"
+                    className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                  >
+                    {t.groupRegister}
+                  </AnchorLink>
                   <a
                     href={WA_GROUP}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
+                    className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-center text-xs text-muted-foreground hover:text-primary transition-colors"
                   >
-                    {t.groupRegister}
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    WhatsApp
                   </a>
                 </>
               ) : (
@@ -237,14 +245,23 @@ const ProgramsSection = () => {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors mt-auto"
-                >
-                  {p.cta}
-                </a>
+                <div className="mt-auto">
+                  <AnchorLink
+                    to="#inscriere"
+                    className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                  >
+                    {p.cta}
+                  </AnchorLink>
+                  <a
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
           ))}
