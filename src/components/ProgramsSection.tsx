@@ -5,6 +5,12 @@ import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 
+const wa = (msg: string) =>
+  "https://wa.me/40763124514?text=" + encodeURIComponent(msg);
+const WA_GROUP = wa("Salut! Vreau să mă înscriu la cursul de grup de arabă libaneză.");
+const WA_PRIVATE = wa("Salut! Sunt interesat(ă) de lecții private de arabă libaneză.");
+const WA_KIDS = wa("Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru copii.");
+
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 type Level = (typeof LEVELS)[number];
 
@@ -45,7 +51,7 @@ const ProgramsSection = () => {
       ],
       feats: [t.privateFeat1, t.privateFeat2, t.privateFeat3, t.privateFeat4],
       cta: t.privateRegister,
-      href: "#private",
+      href: WA_PRIVATE,
       img: privateImg,
       price: t.pricingPrivatePrice,
       per: t.pricingPerSessionSuffix,
@@ -63,7 +69,7 @@ const ProgramsSection = () => {
       ],
       feats: [t.kidsFeat1, t.kidsFeat2, t.kidsFeat3, t.kidsFeat4],
       cta: t.kidsRegister,
-      href: "#kids",
+      href: WA_KIDS,
       img: kidsImg,
       price: undefined as string | undefined,
       per: undefined as string | undefined,
@@ -160,7 +166,9 @@ const ProgramsSection = () => {
                     ))}
                   </ul>
                   <a
-                    href="#inscriere"
+                    href={WA_GROUP}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
                   >
                     {t.groupRegister}
@@ -231,6 +239,8 @@ const ProgramsSection = () => {
                 </ul>
                 <a
                   href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full text-center py-3 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors mt-auto"
                 >
                   {p.cta}
