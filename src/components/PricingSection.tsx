@@ -1,5 +1,10 @@
 import { useI18n } from "@/lib/i18n";
 import { Check } from "lucide-react";
+import AnchorLink from "@/components/AnchorLink";
+
+const WHATSAPP_URL =
+  "https://wa.me/40763124514?text=" +
+  encodeURIComponent("Salut! Vreau să mă înscriu la cursul de arabă libaneză.");
 
 const GROUP_LEVEL_PRICES = [500, 600, 700, 800] as const;
 
@@ -116,12 +121,12 @@ const PricingSection = () => {
               )}
 
               {p.seeLevelsHref && (
-                <a
-                  href={p.seeLevelsHref}
+                <AnchorLink
+                  to={p.seeLevelsHref}
                   className="inline-block text-xs font-semibold text-primary hover:underline mb-5"
                 >
                   {p.seeLevelsLabel}
-                </a>
+                </AnchorLink>
               )}
               {p.allLevelsLabel ? (
                 <span className="inline-block text-xs font-semibold text-primary mb-5">
@@ -167,7 +172,9 @@ const PricingSection = () => {
               )}
 
               <a
-                href="#inscriere"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`block w-full text-center py-3 text-sm font-semibold rounded-lg transition-colors ${
                   p.popular
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
