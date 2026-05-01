@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
+import AnchorLink from "@/components/AnchorLink";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -30,10 +31,10 @@ const Footer = () => {
         <div>
           <p className="text-sm font-semibold text-foreground mb-3">{t.footerQuickLinks}</p>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="#courses" className="hover:text-foreground transition-colors">{t.navCourses}</a></li>
-            <li><a href="#pricing" className="hover:text-foreground transition-colors">{t.navPricing}</a></li>
-            <li><a href="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</a></li>
-            <li><a href="#faq" className="hover:text-foreground transition-colors">{t.navFaq}</a></li>
+            <li><AnchorLink to="#courses" className="hover:text-foreground transition-colors">{t.navCourses}</AnchorLink></li>
+            <li><AnchorLink to="#pricing" className="hover:text-foreground transition-colors">{t.navPricing}</AnchorLink></li>
+            <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
+            <li><AnchorLink to="#faq" className="hover:text-foreground transition-colors">{t.navFaq}</AnchorLink></li>
           </ul>
         </div>
 
