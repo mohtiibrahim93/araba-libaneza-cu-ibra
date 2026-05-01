@@ -73,7 +73,15 @@ const Navbar = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <a
-              href="#"
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                if (location.pathname === "/") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  navigate("/");
+                }
+              }}
               aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
               className="flex h-10 min-w-0 flex-1 items-center gap-2.5 pr-2 text-base font-bold text-foreground tracking-tight sm:text-xl md:max-w-none md:flex-none md:pr-0"
             >
