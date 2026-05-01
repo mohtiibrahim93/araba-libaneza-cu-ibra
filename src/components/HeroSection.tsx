@@ -1,6 +1,11 @@
 import { useI18n } from "@/lib/i18n";
 import { Users, GraduationCap, Clock, BookOpen } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
+import AnchorLink from "@/components/AnchorLink";
+
+const WHATSAPP_URL =
+  "https://wa.me/40763124514?text=" +
+  encodeURIComponent("Salut! Sunt interesat(ă) de cursurile de arabă libaneză.");
 
 const HeroSection = () => {
   const { t } = useI18n();
@@ -30,17 +35,19 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 mb-10">
             <a
-              href="#inscriere"
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
             </a>
-            <a
-              href="#courses"
+            <AnchorLink
+              to="#courses"
               className="inline-flex items-center justify-center px-7 py-3 text-sm font-medium border border-border text-foreground rounded-lg transition-colors hover:bg-muted"
             >
               {t.heroExplore}
-            </a>
+            </AnchorLink>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
