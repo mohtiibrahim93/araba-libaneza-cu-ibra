@@ -174,6 +174,7 @@ export type Database = {
           phone: string
           sms_confirmation_opt_in: boolean
           stripe_session_id: string | null
+          whatsapp_sent_at: string | null
         }
         Insert: {
           center?: string | null
@@ -191,6 +192,7 @@ export type Database = {
           phone: string
           sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
+          whatsapp_sent_at?: string | null
         }
         Update: {
           center?: string | null
@@ -208,6 +210,7 @@ export type Database = {
           phone?: string
           sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
+          whatsapp_sent_at?: string | null
         }
         Relationships: []
       }
