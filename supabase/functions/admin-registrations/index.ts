@@ -13,7 +13,7 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
-const allowedSenderDomains = ["arabalibanezacuibra.ro", "notify.arabalibanezacuibra.ro"];
+const allowedSenderDomains = ["centruldearabalibaneza.com", "notify.centruldearabalibaneza.com"];
 
 function isAllowedSenderEmail(email: string) {
   const normalized = email.trim().toLowerCase();
@@ -289,7 +289,7 @@ Deno.serve(async (req) => {
 
     if (settingsError) throw settingsError;
 
-    return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@arabalibanezacuibra.ro" } });
+    return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@centruldearabalibaneza.com" } });
   } catch (err) {
     return jsonResponse({ error: err.message }, 500);
   }
