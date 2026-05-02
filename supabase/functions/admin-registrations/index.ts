@@ -59,6 +59,128 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Parolă incorectă" });
     }
 
+    if (action === "list_notifications") {
+      const { data: regs, error: regsError } = await supabase
+        .from("registrations")
+        .select("id, created_at, name, phone, email, form_type, format, center, whatsapp_sent_at, lead_status")
+        .order("created_at", { ascending: false });
+      if (regsError) throw regsError;
+
+      const emails = (regs || [])
+        .map((r) => r.email)
+        .filter((e): e is string => !!e)
+        .map((e) => e.toLowerCase());
+
+      const templates = [
+        "group-registration-confirmation",
+        "private-registration-confirmation",
+        "kids-registration-confirmation",
+      ];
+
+      let logs: Array<{
+        recipient_email: string;
+        template_name: string;
+        status: string;
+        created_at: string;
+        message_id: string | null;
+      }> = [];
+
+      if (emails.length > 0) {
+        const { data: logData, error: logError } = await supabase
+          .from("email_send_log")
+          .select("recipient_email, template_name, status, created_at, message_id")
+          .in("template_name", templates)
+          .in("recipient_email", emails)
+          .order("created_at", { ascending: false });
+        if (logError) throw logError;
+        logs = logData || [];
+      }
+
+      // Latest status per (email, template)
+      const latestByKey = new Map<string, { status: string; created_at: string }>();
+      for (const log of logs) {
+        const key = `${log.recipient_email.toLowerCase()}|${log.template_name}`;
+        if (!latestByKey.has(key)) {
+          latestByKey.set(key, { status: log.status, created_at: log.created_at });
+        }
+      }
+
+      const templateByForm: Record<string, string> = {
+        group: "group-registration-confirmation",
+        private: "private-registration-confirmation",
+        kids: "kids-registration-confirmation",
+      };
+
+      const enriched = (regs || []).map((r) => {
+        const tmpl = templateByForm[r.form_type];
+        const latest =
+          r.email && tmpl
+            ? latestByKey.get(`${r.email.toLowerCase()}|${tmpl}`)
+            : undefined;
+        return {
+          ...r,
+          email_status: latest?.status || (r.email ? "not_sent" : "no_email"),
+          email_sent_at: latest?.created_at || null,
+        };
+      });
+
+      return jsonResponse({ data: enriched });
+    }
+
+    if (action === "mark_whatsapp_sent") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const clear = body.clear === true;
+      const { data, error } = await supabase
+        .from("registrations")
+        .update({ whatsapp_sent_at: clear ? null : new Date().toISOString() })
+        .eq("id", id)
+        .select("id, whatsapp_sent_at")
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "resend_confirmation") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const { data: reg, error: regError } = await supabase
+        .from("registrations")
+        .select("id, name, email, form_type")
+        .eq("id", id)
+        .single();
+      if (regError) throw regError;
+      if (!reg.email) return jsonResponse({ error: "Lead-ul nu are email" });
+
+      const templateByForm: Record<string, string> = {
+        group: "group-registration-confirmation",
+        private: "private-registration-confirmation",
+        kids: "kids-registration-confirmation",
+      };
+      const templateName = templateByForm[reg.form_type];
+      if (!templateName) return jsonResponse({ error: "Tip înscriere necunoscut" });
+
+      const invokeResp = await fetch(
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          },
+          body: JSON.stringify({
+            templateName,
+            recipientEmail: reg.email,
+            idempotencyKey: `reg-resend-${reg.id}-${Date.now()}`,
+            templateData: { name: reg.name },
+          }),
+        }
+      );
+      const invokeData = await invokeResp.json().catch(() => ({}));
+      if (!invokeResp.ok || invokeData?.error) {
+        return jsonResponse({ error: invokeData?.error || "Trimitere eșuată" });
+      }
+      return jsonResponse({ success: true });
+    }
+
     if (action === "update_email_settings") {
       const senderName = typeof sender_name === "string" ? sender_name.trim() : "";
       const senderEmail = typeof sender_email === "string" ? sender_email.trim().toLowerCase() : "";
