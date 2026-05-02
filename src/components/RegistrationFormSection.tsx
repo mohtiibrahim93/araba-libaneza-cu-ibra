@@ -100,7 +100,8 @@ const RegistrationFormSection = () => {
     setSubmitting(true);
     try {
       const id = crypto.randomUUID();
-      const formType =
+      const formType = courseType; // DB check constraint requires 'group' | 'private' | 'kids'
+      const formTypeLabel =
         courseType === "group" ? "Grup" : courseType === "private" ? "Privat" : "Copii";
 
       const notesParts: string[] = [];
@@ -134,7 +135,7 @@ const RegistrationFormSection = () => {
           name: recipientName,
           phone,
           email,
-          form_type: formType,
+          form_type: formTypeLabel,
           center,
           format,
           notes,
@@ -152,7 +153,7 @@ const RegistrationFormSection = () => {
         });
       }
 
-      trackEvent("Lead", { content_name: formType });
+      trackEvent("Lead", { content_name: formTypeLabel });
       toast.success(t.mainLeadSuccess);
       setSubmitted(true);
     } catch (err) {
