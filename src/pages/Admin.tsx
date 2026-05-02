@@ -80,7 +80,7 @@ const Admin = () => {
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
   const [emailSettings, setEmailSettings] = useState<EmailSettings>({
     sender_name: "Arabă Libaneză cu Ibra",
-    sender_email: "noreply@arabalibanezacuibra.ro",
+    sender_email: "noreply@centruldearabalibaneza.com",
   });
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
   const [testEmail, setTestEmail] = useState("");
@@ -617,7 +617,7 @@ const Admin = () => {
                 type="email"
                 value={emailSettings.sender_email}
                 onChange={(e) => setEmailSettings((current) => ({ ...current, sender_email: e.target.value }))}
-                placeholder="noreply@arabalibanezacuibra.ro"
+                placeholder="noreply@centruldearabalibaneza.com"
                 required
               />
             </div>
@@ -627,7 +627,7 @@ const Admin = () => {
             </Button>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Folosește doar domeniile verificate: arabalibanezacuibra.ro sau notify.arabalibanezacuibra.ro.
+            Folosește doar domeniile verificate: centruldearabalibaneza.com sau notify.centruldearabalibaneza.com.
           </p>
         </form>
 
