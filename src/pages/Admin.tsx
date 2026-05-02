@@ -548,6 +548,12 @@ const Admin = () => {
               <LogOut className="w-4 h-4" />
               Ieși
             </Button>
+            <Link
+              to="/admin/notifications"
+              className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+            >
+              <Send className="w-4 h-4" /> Notificări
+            </Link>
           </div>
         </div>
       </header>
