@@ -340,6 +340,56 @@ const RegistrationFormSection = () => {
             </div>
           )}
 
+          {/* Private lessons quantity */}
+          {courseType === "private" && (
+            <div className="space-y-2">
+              <Label htmlFor="privateQuantity">{t.privateQuantityLabel} *</Label>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPrivateQuantity((q) => Math.max(1, q - 1))}
+                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
+                  aria-label="−"
+                >
+                  −
+                </button>
+                <Input
+                  id="privateQuantity"
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={privateQuantity}
+                  onChange={(e) => {
+                    const n = Number.parseInt(e.target.value, 10);
+                    setPrivateQuantity(Number.isFinite(n) ? Math.min(100, Math.max(1, n)) : 1);
+                  }}
+                  className="text-center font-semibold w-20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPrivateQuantity((q) => Math.min(100, q + 1))}
+                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
+                  aria-label="+"
+                >
+                  +
+                </button>
+                <div className="ml-auto text-right">
+                  <p className="text-sm font-semibold text-foreground">
+                    {(privateQuantity * 150 * (privateQuantity >= 15 ? 0.9 : 1)).toLocaleString("ro-RO")} LEI
+                  </p>
+                  {privateQuantity >= 15 ? (
+                    <p className="text-xs font-medium text-primary">{t.privateQuantityDiscountApplied}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      {t.privateQuantityDiscountHint.replace("{n}", String(15 - privateQuantity))}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">{t.privateQuantityHelp}</p>
+            </div>
+          )}
+
           {/* Center for physical */}
           {format === "fizic" && (
             <div className="space-y-2">
