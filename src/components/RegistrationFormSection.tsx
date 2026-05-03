@@ -46,11 +46,13 @@ const RegistrationFormSection = () => {
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
     name: string;
     registrationId: string;
+    quantity?: number;
   } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
@@ -61,6 +63,7 @@ const RegistrationFormSection = () => {
       setFormat("");
     }
     setCenter("");
+    if (value !== "private") setPrivateQuantity(1);
   };
 
   const reset = () => {
@@ -76,6 +79,7 @@ const RegistrationFormSection = () => {
     setMessage("");
     setGdpr(false);
     setSubmitted(false);
+    setPrivateQuantity(1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,6 +117,9 @@ const RegistrationFormSection = () => {
 
       const notesParts: string[] = [];
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
+      if (courseType === "private") {
+        notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 15 ? " (−10% auto)" : ""}`);
+      }
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
         if (childAge) notesParts.push(`Vârstă: ${childAge}`);
@@ -167,6 +174,7 @@ const RegistrationFormSection = () => {
         email: email || "",
         name: recipientName,
         registrationId: id,
+        quantity: courseType === "private" ? privateQuantity : undefined,
       });
       setSubmitted(true);
     } catch (err) {
