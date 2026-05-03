@@ -23,8 +23,19 @@ import {
   XCircle,
   RefreshCw,
   ArrowLeft,
+  Trash2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type EmailStatus = "sent" | "pending" | "failed" | "dlq" | "suppressed" | "not_sent" | "no_email";
 
@@ -98,6 +109,8 @@ const AdminNotifications = () => {
   const [rows, setRows] = useState<NotificationRow[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
+  const [deleteTarget, setDeleteTarget] = useState<NotificationRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const refresh = useCallback(async (pwd: string) => {
     const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
@@ -192,6 +205,25 @@ const AdminNotifications = () => {
       toast({ title: "Eroare", variant: "destructive" });
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+        body: { password: storedPassword, action: "delete", ids: [deleteTarget.id] },
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      setRows((prev) => prev.filter((x) => x.id !== deleteTarget.id));
+      toast({ title: "Înscriere ștearsă" });
+      setDeleteTarget(null);
+    } catch (err: any) {
+      toast({ title: "Ștergere eșuată", description: err?.message, variant: "destructive" });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -401,6 +433,16 @@ const AdminNotifications = () => {
                               <XCircle className="w-3 h-3" />
                             </Button>
                           )}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            disabled={isBusy}
+                            onClick={() => setDeleteTarget(r)}
+                            title="Șterge înscrierea"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -411,6 +453,33 @@ const AdminNotifications = () => {
           </Table>
         </div>
       </div>
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Șterge înscrierea?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteTarget && (
+                <>Înscrierea pentru <strong>{deleteTarget.name}</strong> ({deleteTarget.phone}) va fi ștearsă definitiv. Acțiunea nu poate fi anulată.</>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Anulează</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Șterge
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
