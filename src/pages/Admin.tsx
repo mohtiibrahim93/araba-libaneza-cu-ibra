@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -28,8 +28,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
+import { Lock, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import AdminNav from "@/components/AdminNav";
+import {
+  getStoredAdminPassword,
+  setStoredAdminPassword,
+  clearStoredAdminPassword,
+} from "@/lib/adminAuth";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
 type CourseTypeFilter = "all" | "group" | "private" | "kids";
@@ -88,6 +94,31 @@ const Admin = () => {
   const [updatingStatus, setUpdatingStatus] = useState<{ id: string; status: LeadStatus } | null>(null);
   const undoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const loadData = useCallback(async (pwd: string) => {
+    const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+      body: { password: pwd },
+    });
+    if (fnError) throw fnError;
+    if (data?.error) throw new Error(data.error);
+    setRegistrations(data.data);
+    if (data.settings) setEmailSettings(data.settings);
+  }, []);
+
+  // Restore session on mount
+  useEffect(() => {
+    const stored = getStoredAdminPassword();
+    if (!stored) return;
+    (async () => {
+      try {
+        await loadData(stored);
+        setStoredPassword(stored);
+        setAuthenticated(true);
+      } catch {
+        clearStoredAdminPassword();
+      }
+    })();
+  }, [loadData]);
+
   const filteredRegistrations = useMemo(
     () => {
       const messageTerms = privateMessageSearch
@@ -131,29 +162,19 @@ const Admin = () => {
     setError("");
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke(
-        "admin-registrations",
-        { body: { password } }
-      );
-
-      if (fnError) throw fnError;
-      if (data?.error) {
-        setError(data.error);
-        return;
-      }
-
-      setRegistrations(data.data);
-      if (data.settings) setEmailSettings(data.settings);
+      await loadData(password);
       setStoredPassword(password);
+      setStoredAdminPassword(password);
       setAuthenticated(true);
-    } catch {
-      setError("Eroare la autentificare. Încearcă din nou.");
+    } catch (err: any) {
+      setError(err?.message === "Parolă incorectă" ? "Parolă incorectă" : "Eroare la autentificare. Încearcă din nou.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogout = () => {
+    clearStoredAdminPassword();
     setAuthenticated(false);
     setPassword("");
     setStoredPassword("");
