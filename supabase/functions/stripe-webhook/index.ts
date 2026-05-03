@@ -108,6 +108,45 @@ serve(async (req) => {
         break;
       }
 
+      case "payment_intent.succeeded": {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        const registrationId = intent.metadata?.registration_id;
+        const matchColumn = registrationId ? "id" : "stripe_session_id";
+        const matchValue = registrationId || intent.id;
+
+        const { data: updated, error: updateError } = await supabase
+          .from("registrations")
+          .update({
+            payment_status: "paid",
+            paid_at: new Date().toISOString(),
+            stripe_session_id: intent.id,
+          })
+          .eq(matchColumn, matchValue)
+          .select("id")
+          .maybeSingle();
+
+        if (updateError) {
+          console.error("Failed to mark registration as paid (PI):", updateError);
+          throw updateError;
+        }
+        if (!updated) {
+          console.warn(`No registration found for PI ${matchColumn}=${matchValue}`);
+        }
+        break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        const registrationId = intent.metadata?.registration_id;
+        const matchColumn = registrationId ? "id" : "stripe_session_id";
+        const matchValue = registrationId || intent.id;
+        await supabase
+          .from("registrations")
+          .update({ payment_status: "failed" })
+          .eq(matchColumn, matchValue);
+        break;
+      }
+
       case "charge.refunded": {
         const charge = event.data.object as Stripe.Charge;
         // Best effort: find by payment_intent → session
