@@ -547,37 +547,32 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-foreground">
-            Înscrieri ({filteredRegistrations.length}/{registrations.length})
-          </h1>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+      <AdminNav
+        onLogout={handleLogout}
+        rightSlot={
+          <>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0} className="h-8 hidden sm:inline-flex">
               <Download className="w-4 h-4" />
-              Private CSV
+              <span className="hidden md:inline ml-1">CSV</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
-              <Download className="w-4 h-4" />
-              Private PDF
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
-              <Download className="w-4 h-4" />
-              Export CSV
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              Ieși
-            </Button>
-            <Link
-              to="/admin/notifications"
-              className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-            >
-              <Send className="w-4 h-4" /> Notificări
-            </Link>
-          </div>
+          </>
+        }
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-between gap-2">
+        <h1 className="text-lg font-bold text-foreground">
+          Înscrieri <span className="text-muted-foreground font-normal">({filteredRegistrations.length}/{registrations.length})</span>
+        </h1>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Private CSV</span>
+          </Button>
+          <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Private PDF</span>
+          </Button>
         </div>
-      </header>
+      </div>
 
       {selected.size > 0 && (
         <div className="border-b border-border bg-muted">
