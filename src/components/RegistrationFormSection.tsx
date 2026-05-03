@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import GdprCheckbox from "@/components/GdprCheckbox";
+import PaymentInstructions from "@/components/PaymentInstructions";
 import { toast } from "sonner";
 import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
@@ -45,6 +46,12 @@ const RegistrationFormSection = () => {
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState<{
+    courseType: CourseType;
+    email: string;
+    name: string;
+    registrationId: string;
+  } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
     setCourseType(value);
@@ -155,6 +162,12 @@ const RegistrationFormSection = () => {
 
       trackEvent("Lead", { content_name: formTypeLabel });
       toast.success(t.mainLeadSuccess);
+      setSubmittedData({
+        courseType: courseType as CourseType,
+        email: email || "",
+        name: recipientName,
+        registrationId: id,
+      });
       setSubmitted(true);
     } catch (err) {
       console.error("Registration error", err);
@@ -167,7 +180,8 @@ const RegistrationFormSection = () => {
   if (submitted) {
     return (
       <section id="inscriere" className="py-20 px-6 scroll-mt-24">
-        <div className="max-w-2xl mx-auto text-center bg-background rounded-2xl border border-border p-10 shadow-sm">
+        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="text-center bg-background rounded-2xl border border-border p-10 shadow-sm">
           <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground mb-2">
             {t.mainLeadSuccessTitle}
@@ -191,6 +205,15 @@ const RegistrationFormSection = () => {
               {t.mainLeadSubmit.split(" ")[0]} ↺
             </button>
           </div>
+        </div>
+        {submittedData && submittedData.courseType !== "kids" && (
+          <PaymentInstructions
+            courseType={submittedData.courseType as "group" | "private"}
+            email={submittedData.email}
+            name={submittedData.name}
+            registrationId={submittedData.registrationId}
+          />
+        )}
         </div>
       </section>
     );
