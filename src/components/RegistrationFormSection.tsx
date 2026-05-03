@@ -118,7 +118,7 @@ const RegistrationFormSection = () => {
       const notesParts: string[] = [];
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
-        notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 15 ? " (−10% auto)" : ""}`);
+        notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`);
       }
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
@@ -375,13 +375,13 @@ const RegistrationFormSection = () => {
                 </button>
                 <div className="ml-auto text-right">
                   <p className="text-sm font-semibold text-foreground">
-                    {(privateQuantity * 150 * (privateQuantity >= 15 ? 0.9 : 1)).toLocaleString("ro-RO")} LEI
+                    {(privateQuantity * 150 * (privateQuantity >= 20 ? 0.85 : 1)).toLocaleString("ro-RO")} LEI
                   </p>
-                  {privateQuantity >= 15 ? (
+                  {privateQuantity >= 20 ? (
                     <p className="text-xs font-medium text-primary">{t.privateQuantityDiscountApplied}</p>
                   ) : (
                     <p className="text-xs text-muted-foreground">
-                      {t.privateQuantityDiscountHint.replace("{n}", String(15 - privateQuantity))}
+                      {t.privateQuantityDiscountHint.replace("{n}", String(20 - privateQuantity))}
                     </p>
                   )}
                 </div>

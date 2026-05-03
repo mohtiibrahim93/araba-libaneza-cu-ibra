@@ -26,7 +26,7 @@ serve(async (req) => {
     }
 
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(rawQuantity ?? 1), 10) || 1));
-    const discountApplied = courseType === "private" && quantity >= 15;
+    const discountApplied = courseType === "private" && quantity >= 20;
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
@@ -56,7 +56,7 @@ serve(async (req) => {
     }
 
     const baseAmount = price.unit_amount * quantity;
-    const finalAmount = discountApplied ? Math.round(baseAmount * 0.9) : baseAmount;
+    const finalAmount = discountApplied ? Math.round(baseAmount * 0.85) : baseAmount;
 
     const intent = await stripe.paymentIntents.create({
       amount: finalAmount,
@@ -69,7 +69,7 @@ serve(async (req) => {
         student_name: name || "",
         registration_id: registrationId || "",
         quantity: String(quantity),
-        discount_applied: discountApplied ? "10" : "0",
+        discount_applied: discountApplied ? "15" : "0",
       },
     });
 
