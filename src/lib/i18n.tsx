@@ -674,6 +674,15 @@ const translations = {
     paymentStripeError: "Payment error. Please try again.",
     paymentNote: "After registration, we'll contact you on WhatsApp to finalize payment.",
     paymentWhatsapp: "Contact us on WhatsApp",
+    paymentPrimaryCta: "Pay now with card",
+    paymentPrimaryHint: "Instant, secure payment via Stripe. Your spot is confirmed immediately.",
+    paymentAlternativesToggle: "See other payment methods",
+    paymentAlternativesHide: "Hide other methods",
+    paymentSecure: "Secure payment · 3D Secure · SSL",
+    successNextStepsTitle: "What's next?",
+    successStepConfirm: "We'll reach out on WhatsApp within a few hours to confirm.",
+    successStepPay: "Pay now to reserve your spot instantly.",
+    successAgain: "Submit another request",
 
     // Cookie consent
     cookieTitle: "🍪 Cookies",
