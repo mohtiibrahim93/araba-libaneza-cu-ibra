@@ -241,6 +241,7 @@ const RegistrationFormSection = () => {
               email={submittedData.email}
               name={submittedData.name}
               registrationId={submittedData.registrationId}
+              quantity={submittedData.quantity}
             />
           )}
 
