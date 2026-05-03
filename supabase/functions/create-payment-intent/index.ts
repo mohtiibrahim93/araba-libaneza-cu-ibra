@@ -19,11 +19,14 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId } = await req.json();
+    const { courseType, email, name, registrationId, quantity: rawQuantity } = await req.json();
 
     if (!courseType || !PRICES[courseType]) {
       throw new Error("Invalid course type");
     }
+
+    const quantity = Math.max(1, Math.min(100, Number.parseInt(String(rawQuantity ?? 1), 10) || 1));
+    const discountApplied = courseType === "private" && quantity >= 15;
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
@@ -52,8 +55,11 @@ serve(async (req) => {
       }
     }
 
+    const baseAmount = price.unit_amount * quantity;
+    const finalAmount = discountApplied ? Math.round(baseAmount * 0.9) : baseAmount;
+
     const intent = await stripe.paymentIntents.create({
-      amount: price.unit_amount,
+      amount: finalAmount,
       currency: price.currency,
       customer: customerId,
       receipt_email: email || undefined,
@@ -62,6 +68,8 @@ serve(async (req) => {
         course_type: courseType,
         student_name: name || "",
         registration_id: registrationId || "",
+        quantity: String(quantity),
+        discount_applied: discountApplied ? "10" : "0",
       },
     });
 
@@ -83,7 +91,10 @@ serve(async (req) => {
       JSON.stringify({
         clientSecret: intent.client_secret,
         paymentIntentId: intent.id,
-        amount: price.unit_amount,
+        amount: finalAmount,
+        unitAmount: price.unit_amount,
+        quantity,
+        discountApplied,
         currency: price.currency,
         publishableKey: stripePublishableKey,
       }),

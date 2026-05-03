@@ -46,11 +46,13 @@ const RegistrationFormSection = () => {
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
     name: string;
     registrationId: string;
+    quantity?: number;
   } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
@@ -61,6 +63,7 @@ const RegistrationFormSection = () => {
       setFormat("");
     }
     setCenter("");
+    if (value !== "private") setPrivateQuantity(1);
   };
 
   const reset = () => {
@@ -76,6 +79,7 @@ const RegistrationFormSection = () => {
     setMessage("");
     setGdpr(false);
     setSubmitted(false);
+    setPrivateQuantity(1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,6 +117,9 @@ const RegistrationFormSection = () => {
 
       const notesParts: string[] = [];
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
+      if (courseType === "private") {
+        notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 15 ? " (−10% auto)" : ""}`);
+      }
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
         if (childAge) notesParts.push(`Vârstă: ${childAge}`);
@@ -167,6 +174,7 @@ const RegistrationFormSection = () => {
         email: email || "",
         name: recipientName,
         registrationId: id,
+        quantity: courseType === "private" ? privateQuantity : undefined,
       });
       setSubmitted(true);
     } catch (err) {
@@ -233,6 +241,7 @@ const RegistrationFormSection = () => {
               email={submittedData.email}
               name={submittedData.name}
               registrationId={submittedData.registrationId}
+              quantity={submittedData.quantity}
             />
           )}
 
@@ -328,6 +337,56 @@ const RegistrationFormSection = () => {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
+            </div>
+          )}
+
+          {/* Private lessons quantity */}
+          {courseType === "private" && (
+            <div className="space-y-2">
+              <Label htmlFor="privateQuantity">{t.privateQuantityLabel} *</Label>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPrivateQuantity((q) => Math.max(1, q - 1))}
+                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
+                  aria-label="−"
+                >
+                  −
+                </button>
+                <Input
+                  id="privateQuantity"
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={privateQuantity}
+                  onChange={(e) => {
+                    const n = Number.parseInt(e.target.value, 10);
+                    setPrivateQuantity(Number.isFinite(n) ? Math.min(100, Math.max(1, n)) : 1);
+                  }}
+                  className="text-center font-semibold w-20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPrivateQuantity((q) => Math.min(100, q + 1))}
+                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
+                  aria-label="+"
+                >
+                  +
+                </button>
+                <div className="ml-auto text-right">
+                  <p className="text-sm font-semibold text-foreground">
+                    {(privateQuantity * 150 * (privateQuantity >= 15 ? 0.9 : 1)).toLocaleString("ro-RO")} LEI
+                  </p>
+                  {privateQuantity >= 15 ? (
+                    <p className="text-xs font-medium text-primary">{t.privateQuantityDiscountApplied}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      {t.privateQuantityDiscountHint.replace("{n}", String(15 - privateQuantity))}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">{t.privateQuantityHelp}</p>
             </div>
           )}
 

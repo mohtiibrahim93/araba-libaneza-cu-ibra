@@ -74,6 +74,7 @@ const Checkout = () => {
   const email = params.get("email") || "";
   const name = params.get("name") || "";
   const registrationId = params.get("registrationId") || "";
+  const quantity = Math.max(1, Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1));
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
@@ -91,7 +92,7 @@ const Checkout = () => {
         trackCheckoutStart(courseType);
         const { data, error: invokeError } = await supabase.functions.invoke(
           "create-payment-intent",
-          { body: { courseType, email, name, registrationId } },
+          { body: { courseType, email, name, registrationId, quantity } },
         );
         if (invokeError) throw invokeError;
         if (!data?.clientSecret || !data?.publishableKey) {
@@ -111,7 +112,7 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseType, email, name, registrationId]);
+  }, [courseType, email, name, registrationId, quantity]);
 
   const options = useMemo(
     () =>
