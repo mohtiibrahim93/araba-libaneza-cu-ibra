@@ -19,9 +19,10 @@ interface PaymentInstructionsProps {
   email?: string;
   name?: string;
   registrationId?: string;
+  quantity?: number;
 }
 
-const PaymentInstructions = ({ courseType, email, name, registrationId }: PaymentInstructionsProps) => {
+const PaymentInstructions = ({ courseType, email, name, registrationId, quantity }: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [showAlternatives, setShowAlternatives] = useState(false);
@@ -33,6 +34,7 @@ const PaymentInstructions = ({ courseType, email, name, registrationId }: Paymen
     if (email) params.set("email", email);
     if (name) params.set("name", name);
     if (registrationId) params.set("registrationId", registrationId);
+    if (quantity && quantity > 1) params.set("quantity", String(quantity));
     navigate(`/checkout?${params.toString()}`);
   };
 
