@@ -322,6 +322,15 @@ const translations = {
     paymentStripeError: "Eroare la inițierea plății. Încearcă din nou.",
     paymentNote: "După înscriere, te vom contacta pe WhatsApp pentru a finaliza plata.",
     paymentWhatsapp: "Contactează-ne pe WhatsApp",
+    paymentPrimaryCta: "Plătește acum cu cardul",
+    paymentPrimaryHint: "Plată instant, securizată prin Stripe. Locul tău este confirmat imediat.",
+    paymentAlternativesToggle: "Vezi alte metode de plată",
+    paymentAlternativesHide: "Ascunde alte metode",
+    paymentSecure: "Plată securizată · 3D Secure · SSL",
+    successNextStepsTitle: "Ce urmează?",
+    successStepConfirm: "Te contactăm pe WhatsApp în câteva ore pentru confirmare.",
+    successStepPay: "Plătește acum pentru a-ți rezerva locul instant.",
+    successAgain: "Trimite o cerere nouă",
 
     // Cookie consent
     cookieTitle: "🍪 Cookies",
@@ -665,6 +674,15 @@ const translations = {
     paymentStripeError: "Payment error. Please try again.",
     paymentNote: "After registration, we'll contact you on WhatsApp to finalize payment.",
     paymentWhatsapp: "Contact us on WhatsApp",
+    paymentPrimaryCta: "Pay now with card",
+    paymentPrimaryHint: "Instant, secure payment via Stripe. Your spot is confirmed immediately.",
+    paymentAlternativesToggle: "See other payment methods",
+    paymentAlternativesHide: "Hide other methods",
+    paymentSecure: "Secure payment · 3D Secure · SSL",
+    successNextStepsTitle: "What's next?",
+    successStepConfirm: "We'll reach out on WhatsApp within a few hours to confirm.",
+    successStepPay: "Pay now to reserve your spot instantly.",
+    successAgain: "Submit another request",
 
     // Cookie consent
     cookieTitle: "🍪 Cookies",

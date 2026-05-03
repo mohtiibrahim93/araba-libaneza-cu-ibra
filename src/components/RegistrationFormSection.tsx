@@ -15,7 +15,7 @@ import {
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import { toast } from "sonner";
-import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
+import { CheckCircle2, Loader2, MessageCircle, RotateCcw, Phone, CreditCard } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -178,42 +178,84 @@ const RegistrationFormSection = () => {
   };
 
   if (submitted) {
+    const isPayable = submittedData && submittedData.courseType !== "kids";
     return (
       <section id="inscriere" className="py-20 px-6 scroll-mt-24">
         <div className="max-w-2xl mx-auto space-y-6">
-        <div className="text-center bg-background rounded-2xl border border-border p-10 shadow-sm">
-          <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-foreground mb-2">
-            {t.mainLeadSuccessTitle}
-          </h2>
-          <p className="text-muted-foreground mb-6">{t.mainLeadSuccessDesc}</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {/* Confirmation header */}
+          <div className="bg-background rounded-2xl border border-border p-8 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle2 className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-2xl font-bold text-foreground">
+                  {t.mainLeadSuccessTitle}
+                </h2>
+                <p className="text-muted-foreground mt-1">{t.mainLeadSuccessDesc}</p>
+              </div>
+            </div>
+
+            {/* Next steps */}
+            <div className="mt-6 pt-6 border-t border-border">
+              <h3 className="text-sm font-semibold text-foreground mb-3">
+                {t.successNextStepsTitle}
+              </h3>
+              <ol className="space-y-3">
+                <li className="flex items-start gap-3 text-sm text-foreground">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-xs font-semibold flex items-center justify-center text-foreground">
+                    1
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    {t.successStepConfirm}
+                  </span>
+                </li>
+                {isPayable && (
+                  <li className="flex items-start gap-3 text-sm text-foreground">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-xs font-semibold flex items-center justify-center text-primary">
+                      2
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-primary" />
+                      {t.successStepPay}
+                    </span>
+                  </li>
+                )}
+              </ol>
+            </div>
+          </div>
+
+          {/* Payment card (primary action) */}
+          {isPayable && submittedData && (
+            <PaymentInstructions
+              courseType={submittedData.courseType as "group" | "private"}
+              email={submittedData.email}
+              name={submittedData.name}
+              registrationId={submittedData.registrationId}
+            />
+          )}
+
+          {/* Utility actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg bg-[#25D366] text-white hover:bg-[#1fb855] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-4 h-4 text-[#25D366]" />
               WhatsApp
             </a>
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground transition-colors"
             >
-              {t.mainLeadSubmit.split(" ")[0]} ↺
+              <RotateCcw className="w-4 h-4" />
+              {t.successAgain}
             </button>
           </div>
-        </div>
-        {submittedData && submittedData.courseType !== "kids" && (
-          <PaymentInstructions
-            courseType={submittedData.courseType as "group" | "private"}
-            email={submittedData.email}
-            name={submittedData.name}
-            registrationId={submittedData.registrationId}
-          />
-        )}
         </div>
       </section>
     );
