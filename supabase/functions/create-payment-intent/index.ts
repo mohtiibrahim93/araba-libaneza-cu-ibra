@@ -80,6 +80,7 @@ serve(async (req) => {
         paymentIntentId: intent.id,
         amount: price.unit_amount,
         currency: price.currency,
+        publishableKey: Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "",
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
