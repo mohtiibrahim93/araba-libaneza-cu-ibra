@@ -25,6 +25,11 @@ serve(async (req) => {
       throw new Error("Invalid course type");
     }
 
+    const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
+    if (!stripePublishableKey.startsWith("pk_")) {
+      throw new Error("Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.");
+    }
+
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
     });
@@ -80,7 +85,7 @@ serve(async (req) => {
         paymentIntentId: intent.id,
         amount: price.unit_amount,
         currency: price.currency,
-        publishableKey: Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "",
+        publishableKey: stripePublishableKey,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
