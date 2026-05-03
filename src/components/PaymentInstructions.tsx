@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { MessageCircle, Banknote, CreditCard, Building2, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { MessageCircle, Banknote, CreditCard, Building2 } from "lucide-react";
 import { trackCheckoutStart } from "@/lib/tracking";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -16,26 +14,16 @@ interface PaymentInstructionsProps {
 
 const PaymentInstructions = ({ courseType, email, name, registrationId }: PaymentInstructionsProps) => {
   const { t } = useI18n();
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleStripeCheckout = async () => {
+  const handleStripeCheckout = () => {
     if (!courseType) return;
-    setLoading(true);
     trackCheckoutStart(courseType);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { courseType, email, name, registrationId },
-      });
-      if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, "_blank");
-      }
-    } catch (err) {
-      console.error("Stripe checkout error:", err);
-      toast.error(t.paymentStripeError);
-    } finally {
-      setLoading(false);
-    }
+    const params = new URLSearchParams({ courseType });
+    if (email) params.set("email", email);
+    if (name) params.set("name", name);
+    if (registrationId) params.set("registrationId", registrationId);
+    navigate(`/checkout?${params.toString()}`);
   };
 
   return (
@@ -48,10 +36,9 @@ const PaymentInstructions = ({ courseType, email, name, registrationId }: Paymen
           <li>
             <button
               onClick={handleStripeCheckout}
-              disabled={loading}
-              className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4 flex-shrink-0" />}
+              <CreditCard className="w-4 h-4 flex-shrink-0" />
               {t.paymentStripe}
             </button>
           </li>
