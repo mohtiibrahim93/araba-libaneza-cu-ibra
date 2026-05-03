@@ -1,9 +1,16 @@
-import { useState, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -14,7 +21,6 @@ import {
 } from "@/components/ui/table";
 import {
   Lock,
-  LogOut,
   Loader2,
   Send,
   MessageCircle,
@@ -22,7 +28,6 @@ import {
   Clock,
   XCircle,
   RefreshCw,
-  ArrowLeft,
   Trash2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -36,6 +41,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import AdminNav from "@/components/AdminNav";
+import {
+  getStoredAdminPassword,
+  setStoredAdminPassword,
+  clearStoredAdminPassword,
+} from "@/lib/adminAuth";
 
 type EmailStatus = "sent" | "pending" | "failed" | "dlq" | "suppressed" | "not_sent" | "no_email";
 
@@ -109,6 +120,10 @@ const AdminNotifications = () => {
   const [rows, setRows] = useState<NotificationRow[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
+  const [courseFilter, setCourseFilter] = useState<"all" | "group" | "private" | "kids">("all");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [confirmBulkOpen, setConfirmBulkOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<NotificationRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -121,6 +136,21 @@ const AdminNotifications = () => {
     setRows(data.data || []);
   }, []);
 
+  // Persisted login: try stored password on mount
+  useEffect(() => {
+    const stored = getStoredAdminPassword();
+    if (!stored) return;
+    (async () => {
+      try {
+        await refresh(stored);
+        setStoredPassword(stored);
+        setAuthenticated(true);
+      } catch {
+        clearStoredAdminPassword();
+      }
+    })();
+  }, [refresh]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -128,6 +158,7 @@ const AdminNotifications = () => {
     try {
       await refresh(password);
       setStoredPassword(password);
+      setStoredAdminPassword(password);
       setAuthenticated(true);
     } catch (err: any) {
       setError(err?.message === "Parolă incorectă" ? "Parolă incorectă" : "Eroare la autentificare");
@@ -137,10 +168,12 @@ const AdminNotifications = () => {
   };
 
   const handleLogout = () => {
+    clearStoredAdminPassword();
     setAuthenticated(false);
     setPassword("");
     setStoredPassword("");
     setRows([]);
+    setSelected(new Set());
   };
 
   const handleResendEmail = async (id: string) => {
@@ -218,6 +251,11 @@ const AdminNotifications = () => {
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((x) => x.id !== deleteTarget.id));
+      setSelected((prev) => {
+        const next = new Set(prev);
+        next.delete(deleteTarget.id);
+        return next;
+      });
       toast({ title: "Înscriere ștearsă" });
       setDeleteTarget(null);
     } catch (err: any) {
@@ -227,31 +265,81 @@ const AdminNotifications = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selected.size === 0) return;
+    setBulkDeleting(true);
+    const ids = Array.from(selected);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+        body: { password: storedPassword, action: "delete", ids },
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      setRows((prev) => prev.filter((x) => !selected.has(x.id)));
+      toast({ title: `${ids.length} înscrier${ids.length === 1 ? "e ștearsă" : "i șterse"}` });
+      setSelected(new Set());
+      setConfirmBulkOpen(false);
+    } catch (err: any) {
+      toast({ title: "Ștergere eșuată", description: err?.message, variant: "destructive" });
+    } finally {
+      setBulkDeleting(false);
+    }
+  };
+
   const filtered = useMemo(() => {
-    if (filter === "all") return rows;
+    let list = rows;
+    if (courseFilter !== "all") list = list.filter((r) => r.form_type === courseFilter);
     if (filter === "pending") {
-      return rows.filter(
+      list = list.filter(
         (r) =>
           (r.email_status !== "sent" && r.email_status !== "no_email") || !r.whatsapp_sent_at
       );
+    } else if (filter === "done") {
+      list = list.filter(
+        (r) =>
+          (r.email_status === "sent" || r.email_status === "no_email") && r.whatsapp_sent_at
+      );
     }
-    return rows.filter(
-      (r) =>
-        (r.email_status === "sent" || r.email_status === "no_email") && r.whatsapp_sent_at
-    );
-  }, [rows, filter]);
+    return list;
+  }, [rows, filter, courseFilter]);
 
   const counts = useMemo(() => {
+    const scope = courseFilter === "all" ? rows : rows.filter((r) => r.form_type === courseFilter);
     let pending = 0;
     let done = 0;
-    for (const r of rows) {
+    for (const r of scope) {
       const emailOk = r.email_status === "sent" || r.email_status === "no_email";
       const waOk = !!r.whatsapp_sent_at;
       if (emailOk && waOk) done++;
       else pending++;
     }
-    return { total: rows.length, pending, done };
-  }, [rows]);
+    return { total: scope.length, pending, done };
+  }, [rows, courseFilter]);
+
+  const allFilteredSelected =
+    filtered.length > 0 && filtered.every((r) => selected.has(r.id));
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        filtered.forEach((r) => next.delete(r.id));
+        return next;
+      });
+    } else {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        filtered.forEach((r) => next.add(r.id));
+        return next;
+      });
+    }
+  };
+  const toggleSelect = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   if (!authenticated) {
     return (
@@ -284,9 +372,6 @@ const AdminNotifications = () => {
             {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
             Intră
           </Button>
-          <Link to="/admin" className="block text-center text-xs text-muted-foreground hover:text-primary">
-            ← Panou principal
-          </Link>
         </form>
       </div>
     );
@@ -294,35 +379,51 @@ const AdminNotifications = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Link
-              to="/admin"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-            >
-              <ArrowLeft className="w-4 h-4" /> Admin
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <h1 className="text-lg font-bold text-foreground">Notificări</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refresh(storedPassword)}
-              disabled={loading}
-            >
-              <RefreshCw className="w-4 h-4 mr-1" /> Reîncarcă
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-1" /> Ieși
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminNav
+        onLogout={handleLogout}
+        rightSlot={
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refresh(storedPassword)}
+            disabled={loading}
+            className="h-8"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span className="hidden sm:inline ml-1">Reîncarcă</span>
+          </Button>
+        }
+      />
 
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
+      <div className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-end justify-between">
+          <div className="space-y-1.5">
+            <Label className="text-xs">Tip curs</Label>
+            <Select value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+              <SelectTrigger className="w-full sm:w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toate cursurile</SelectItem>
+                <SelectItem value="group">Grup</SelectItem>
+                <SelectItem value="private">Lecții private</SelectItem>
+                <SelectItem value="kids">Copii</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {selected.size > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setConfirmBulkOpen(true)}
+              className="h-9"
+            >
+              <Trash2 className="w-4 h-4 mr-1" />
+              Șterge {selected.size} selectat{selected.size === 1 ? "ă" : "e"}
+            </Button>
+          )}
+        </div>
+
         <div className="grid grid-cols-3 gap-3">
           {([
             ["all", `Toate · ${counts.total}`],
@@ -347,6 +448,13 @@ const AdminNotifications = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-10">
+                  <Checkbox
+                    checked={allFilteredSelected}
+                    onCheckedChange={toggleSelectAll}
+                    aria-label="Selectează toate"
+                  />
+                </TableHead>
                 <TableHead>Data</TableHead>
                 <TableHead>Lead</TableHead>
                 <TableHead>Tip</TableHead>
@@ -358,7 +466,7 @@ const AdminNotifications = () => {
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground py-12">
+                  <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
                     Nicio înscriere de afișat
                   </TableCell>
                 </TableRow>
@@ -366,7 +474,14 @@ const AdminNotifications = () => {
                 filtered.map((r) => {
                   const isBusy = busyId === r.id;
                   return (
-                    <TableRow key={r.id}>
+                    <TableRow key={r.id} data-state={selected.has(r.id) ? "selected" : undefined}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selected.has(r.id)}
+                          onCheckedChange={() => toggleSelect(r.id)}
+                          aria-label={`Selectează ${r.name}`}
+                        />
+                      </TableCell>
                       <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
                         {new Date(r.created_at).toLocaleString("ro-RO")}
                       </TableCell>
@@ -476,6 +591,31 @@ const AdminNotifications = () => {
             >
               {deleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Șterge
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmBulkOpen} onOpenChange={setConfirmBulkOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Șterge {selected.size} înscrieri?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Toate înscrierile selectate vor fi șterse definitiv. Acțiunea nu poate fi anulată.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkDeleting}>Anulează</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleBulkDelete();
+              }}
+              disabled={bulkDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {bulkDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Șterge tot
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

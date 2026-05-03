@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -28,8 +28,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, LogOut, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
+import { Lock, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import AdminNav from "@/components/AdminNav";
+import {
+  getStoredAdminPassword,
+  setStoredAdminPassword,
+  clearStoredAdminPassword,
+} from "@/lib/adminAuth";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
 type CourseTypeFilter = "all" | "group" | "private" | "kids";
@@ -88,6 +94,31 @@ const Admin = () => {
   const [updatingStatus, setUpdatingStatus] = useState<{ id: string; status: LeadStatus } | null>(null);
   const undoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const loadData = useCallback(async (pwd: string) => {
+    const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
+      body: { password: pwd },
+    });
+    if (fnError) throw fnError;
+    if (data?.error) throw new Error(data.error);
+    setRegistrations(data.data);
+    if (data.settings) setEmailSettings(data.settings);
+  }, []);
+
+  // Restore session on mount
+  useEffect(() => {
+    const stored = getStoredAdminPassword();
+    if (!stored) return;
+    (async () => {
+      try {
+        await loadData(stored);
+        setStoredPassword(stored);
+        setAuthenticated(true);
+      } catch {
+        clearStoredAdminPassword();
+      }
+    })();
+  }, [loadData]);
+
   const filteredRegistrations = useMemo(
     () => {
       const messageTerms = privateMessageSearch
@@ -131,29 +162,19 @@ const Admin = () => {
     setError("");
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke(
-        "admin-registrations",
-        { body: { password } }
-      );
-
-      if (fnError) throw fnError;
-      if (data?.error) {
-        setError(data.error);
-        return;
-      }
-
-      setRegistrations(data.data);
-      if (data.settings) setEmailSettings(data.settings);
+      await loadData(password);
       setStoredPassword(password);
+      setStoredAdminPassword(password);
       setAuthenticated(true);
-    } catch {
-      setError("Eroare la autentificare. Încearcă din nou.");
+    } catch (err: any) {
+      setError(err?.message === "Parolă incorectă" ? "Parolă incorectă" : "Eroare la autentificare. Încearcă din nou.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogout = () => {
+    clearStoredAdminPassword();
     setAuthenticated(false);
     setPassword("");
     setStoredPassword("");
@@ -526,37 +547,32 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-foreground">
-            Înscrieri ({filteredRegistrations.length}/{registrations.length})
-          </h1>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+      <AdminNav
+        onLogout={handleLogout}
+        rightSlot={
+          <>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0} className="h-8 hidden sm:inline-flex">
               <Download className="w-4 h-4" />
-              Private CSV
+              <span className="hidden md:inline ml-1">CSV</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
-              <Download className="w-4 h-4" />
-              Private PDF
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredRegistrations.length === 0}>
-              <Download className="w-4 h-4" />
-              Export CSV
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              Ieși
-            </Button>
-            <Link
-              to="/admin/notifications"
-              className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-            >
-              <Send className="w-4 h-4" /> Notificări
-            </Link>
-          </div>
+          </>
+        }
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-between gap-2">
+        <h1 className="text-lg font-bold text-foreground">
+          Înscrieri <span className="text-muted-foreground font-normal">({filteredRegistrations.length}/{registrations.length})</span>
+        </h1>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handlePrivateCsvExport} disabled={privateFilteredRegistrations.length === 0}>
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Private CSV</span>
+          </Button>
+          <Button variant="outline" size="sm" onClick={handlePrivatePdfExport} disabled={privateFilteredRegistrations.length === 0}>
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Private PDF</span>
+          </Button>
         </div>
-      </header>
+      </div>
 
       {selected.size > 0 && (
         <div className="border-b border-border bg-muted">

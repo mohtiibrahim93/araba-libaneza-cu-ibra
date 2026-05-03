@@ -47,6 +47,7 @@ const RegistrationFormSection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
+  const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
@@ -64,6 +65,7 @@ const RegistrationFormSection = () => {
     }
     setCenter("");
     if (value !== "private") setPrivateQuantity(1);
+    if (value !== "group") setGroupMonths(1);
   };
 
   const reset = () => {
@@ -80,6 +82,7 @@ const RegistrationFormSection = () => {
     setGdpr(false);
     setSubmitted(false);
     setPrivateQuantity(1);
+    setGroupMonths(1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -119,6 +122,9 @@ const RegistrationFormSection = () => {
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
         notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`);
+      }
+      if (courseType === "group") {
+        notesParts.push(`Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${groupMonths >= 3 ? " (−10% auto)" : ""}`);
       }
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
@@ -174,7 +180,12 @@ const RegistrationFormSection = () => {
         email: email || "",
         name: recipientName,
         registrationId: id,
-        quantity: courseType === "private" ? privateQuantity : undefined,
+        quantity:
+          courseType === "private"
+            ? privateQuantity
+            : courseType === "group"
+              ? groupMonths
+              : undefined,
       });
       setSubmitted(true);
     } catch (err) {
@@ -337,6 +348,53 @@ const RegistrationFormSection = () => {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
+            </div>
+          )}
+
+          {/* Group payment plan */}
+          {courseType === "group" && level && (
+            <div className="space-y-2">
+              <Label>{t.groupMonthsLabel} *</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {([1, 3] as const).map((m) => {
+                  const monthly = { A1: 500, A2: 600, B1: 700, B2: 800 }[level as "A1" | "A2" | "B1" | "B2"] || 500;
+                  const base = monthly * m;
+                  const total = m === 3 ? Math.round(base * 0.9) : base;
+                  const active = groupMonths === m;
+                  return (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => setGroupMonths(m)}
+                      className={`text-left rounded-lg border p-3 transition-colors ${
+                        active
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-background hover:bg-muted"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-foreground">
+                          {m === 1 ? t.groupMonthsOption1 : t.groupMonthsOption3}
+                        </span>
+                        {m === 3 && (
+                          <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                            −10%
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-1 text-base font-bold text-foreground">
+                        {total.toLocaleString("ro-RO")} LEI
+                      </p>
+                      {m === 3 && (
+                        <p className="text-[11px] text-muted-foreground line-through">
+                          {base.toLocaleString("ro-RO")} LEI
+                        </p>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">{t.groupMonthsHelp}</p>
             </div>
           )}
 
