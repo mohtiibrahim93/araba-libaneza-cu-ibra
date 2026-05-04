@@ -22,7 +22,7 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 
 type CourseType = "group" | "private" | "kids";
 type FormatType = "fizic" | "online";
-type LevelType = "A1" | "A2" | "B1" | "B2";
+type LevelType = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 
 const TEMPLATE_BY_COURSE: Record<CourseType, string> = {
   group: "group-registration-confirmation",
@@ -345,6 +345,8 @@ const RegistrationFormSection = () => {
                   <SelectItem value="A2">A2 — {t.levelA2Subtitle}</SelectItem>
                   <SelectItem value="B1">B1 — {t.levelB1Subtitle}</SelectItem>
                   <SelectItem value="B2">B2 — {t.levelB2Subtitle}</SelectItem>
+                  <SelectItem value="C1">C1 — {t.levelC1Subtitle}</SelectItem>
+                  <SelectItem value="C2">C2 — {t.levelC2Subtitle}</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
@@ -357,7 +359,7 @@ const RegistrationFormSection = () => {
               <Label>{t.groupMonthsLabel} *</Label>
               <div className="grid grid-cols-2 gap-2">
                 {([1, 3] as const).map((m) => {
-                  const monthly = { A1: 500, A2: 600, B1: 700, B2: 800 }[level as "A1" | "A2" | "B1" | "B2"] || 500;
+                  const monthly = { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 }[level as LevelType] || 500;
                   const base = monthly * m;
                   const total = m === 3 ? Math.round(base * 0.9) : base;
                   const active = groupMonths === m;
