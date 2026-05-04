@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Check, Clock, MessageCircle } from "lucide-react";
+import { Check, Clock, MessageCircle, BookOpen } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
+import RegistrationFormSection from "@/components/RegistrationFormSection";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -18,6 +19,7 @@ type Level = (typeof LEVELS)[number];
 const ProgramsSection = () => {
   const { t } = useI18n();
   const [activeLevel, setActiveLevel] = useState<Level>("A1");
+  const [inlineForm, setInlineForm] = useState<null | "group" | "private" | "kids">(null);
 
   const levelSubtitles: Record<Level, string> = {
     A1: t.levelA1Subtitle,
@@ -30,11 +32,13 @@ const ProgramsSection = () => {
 
   const isAvailable = (level: Level) => level === "A1";
 
-  const levelPrices: Partial<Record<Level, string>> = {
+  const levelPrices: Record<Level, string> = {
     A1: "500",
     A2: "600",
     B1: "700",
     B2: "800",
+    C1: "900",
+    C2: "1000",
   };
 
   const formatLei = (n: number) =>
@@ -91,6 +95,16 @@ const ProgramsSection = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Group Course Card with Level Tabs */}
           <div id="group-levels" className="scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+            {inlineForm === "group" ? (
+              <div className="p-6">
+                <RegistrationFormSection
+                  defaultCourseType="group"
+                  embedded
+                  onBack={() => setInlineForm(null)}
+                />
+              </div>
+            ) : (
+            <>
             <img src={groupImg} alt={t.groupCardTitle} className="w-full h-52 object-cover" />
             <div className="p-6 flex flex-col flex-1">
               <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
@@ -143,6 +157,13 @@ const ProgramsSection = () => {
                 );
               })()}
 
+              <a
+                href={`#curriculum-${activeLevel.toLowerCase()}`}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-4"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                {t.curriculumViewLevel ?? "Vezi curriculum"}
+              </a>
               {isAvailable(activeLevel) ? (
                 <>
                   <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
@@ -166,12 +187,13 @@ const ProgramsSection = () => {
                       </li>
                     ))}
                   </ul>
-                  <AnchorLink
-                    to="#inscriere"
+                  <button
+                    type="button"
+                    onClick={() => setInlineForm("group")}
                     className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     {t.groupRegister}
-                  </AnchorLink>
+                  </button>
                   <a
                     href={WA_GROUP}
                     target="_blank"
@@ -201,10 +223,27 @@ const ProgramsSection = () => {
                 </div>
               )}
             </div>
+            </>
+            )}
           </div>
 
           {/* Private & Kids Cards */}
-          {otherPrograms.map((p) => (
+          {otherPrograms.map((p) => {
+            const key = p.badge === t.kidsBadgeCard ? "kids" : "private";
+            if (inlineForm === key) {
+              return (
+                <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col">
+                  <div className="p-6">
+                    <RegistrationFormSection
+                      defaultCourseType={key as "private" | "kids"}
+                      embedded
+                      onBack={() => setInlineForm(null)}
+                    />
+                  </div>
+                </div>
+              );
+            }
+            return (
             <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
               <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
               <div className="p-6 flex flex-col flex-1">
@@ -246,12 +285,13 @@ const ProgramsSection = () => {
                   ))}
                 </ul>
                 <div className="mt-auto">
-                  <AnchorLink
-                    to="#inscriere"
+                  <button
+                    type="button"
+                    onClick={() => setInlineForm(key as "private" | "kids")}
                     className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     {p.cta}
-                  </AnchorLink>
+                  </button>
                   <a
                     href={p.href}
                     target="_blank"
@@ -264,7 +304,8 @@ const ProgramsSection = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
