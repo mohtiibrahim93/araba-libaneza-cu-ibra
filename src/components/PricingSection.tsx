@@ -6,7 +6,8 @@ const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
   encodeURIComponent("Salut! Vreau să mă înscriu la cursul de arabă libaneză.");
 
-const GROUP_LEVEL_PRICES = [500, 600, 700, 800] as const;
+const GROUP_LEVEL_PRICES = [500, 600, 700, 800, 900, 1000] as const;
+const GROUP_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
 const PricingSection = () => {
   const { t } = useI18n();
@@ -44,13 +45,13 @@ const PricingSection = () => {
       seeLevelsHref: "#group-levels",
       seeLevelsLabel: t.pricingGroupSeeLevels,
       allLevelsLabel: undefined as string | undefined,
-      totals: GROUP_LEVEL_PRICES.map((m) => ({
-        level: ["A1", "A2", "B1", "B2"][GROUP_LEVEL_PRICES.indexOf(m)],
+      totals: GROUP_LEVEL_PRICES.map((m, i) => ({
+        level: GROUP_LEVELS[i],
         total: m * 3,
         discounted: m * 3 * 0.9,
       })),
       levelPills: GROUP_LEVEL_PRICES.map((m, i) => ({
-        level: ["A1", "A2", "B1", "B2"][i],
+        level: GROUP_LEVELS[i],
         monthly: m,
       })),
       fromPrefix: t.pricingFromPrefix as string | undefined,

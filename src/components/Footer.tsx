@@ -31,10 +31,10 @@ const Footer = () => {
         <div>
           <p className="text-sm font-semibold text-foreground mb-3">{t.footerQuickLinks}</p>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><AnchorLink to="#courses" className="hover:text-foreground transition-colors">{t.navCourses}</AnchorLink></li>
-            <li><AnchorLink to="#pricing" className="hover:text-foreground transition-colors">{t.navPricing}</AnchorLink></li>
+            <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
+            <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
-            <li><AnchorLink to="#faq" className="hover:text-foreground transition-colors">{t.navFaq}</AnchorLink></li>
+            <li><AnchorLink to="#inscriere" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
           </ul>
         </div>
 
