@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import {
   Accordion,
@@ -10,6 +11,24 @@ import AnchorLink from "@/components/AnchorLink";
 
 const CurriculumSection = () => {
   const { t } = useI18n();
+  const [openLevel, setOpenLevel] = useState<string>("");
+
+  useEffect(() => {
+    const apply = () => {
+      const hash = window.location.hash.replace("#", "").toLowerCase();
+      const match = hash.match(/^curriculum-(a1|a2|b1|b2|c1|c2)$/);
+      if (match) {
+        setOpenLevel(match[1]);
+        setTimeout(() => {
+          const el = document.getElementById(`curriculum-${match[1]}`);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
+      }
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
 
   const levels = [
     { id: "a1", title: t.curriculumA1Title, obj: t.curriculumA1Obj, mods: [t.curriculumA1M1, t.curriculumA1M2, t.curriculumA1M3] },
@@ -31,12 +50,19 @@ const CurriculumSection = () => {
           <p className="text-muted-foreground">{t.curriculumDesc}</p>
         </div>
 
-        <Accordion type="single" collapsible className="space-y-3">
+        <Accordion
+          type="single"
+          collapsible
+          value={openLevel}
+          onValueChange={setOpenLevel}
+          className="space-y-3"
+        >
           {levels.map((lvl) => (
             <AccordionItem
               key={lvl.id}
               value={lvl.id}
-              className="rounded-xl border border-border bg-background px-5 data-[state=open]:border-primary/40"
+              id={`curriculum-${lvl.id}`}
+              className="rounded-xl border border-border bg-background px-5 data-[state=open]:border-primary/40 scroll-mt-24"
             >
               <AccordionTrigger className="text-left text-base font-semibold text-foreground hover:no-underline">
                 {lvl.title}
