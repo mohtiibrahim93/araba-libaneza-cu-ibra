@@ -435,6 +435,11 @@ const translations = {
     curriculumC2M2: "Modul 17 (Traducere): Traducere și interpretare.",
     curriculumC2M3: "Modul 18 (Perfecționare): Eliminarea micilor erori.",
     curriculumCta: "Înscrie-te",
+    curriculumViewLevel: "Vezi curriculum-ul acestui nivel",
+    bookingBadge: "Programare",
+    bookingTitle: "Rezervă o întâlnire pe Zoom",
+    bookingDesc: "Alege un slot disponibil în calendar. Vei primi automat un link Zoom pentru lecție.",
+    bookingPlaceholder: "Calendarul de programări va fi disponibil în curând. Pentru a rezerva o sesiune, contactează-ne pe WhatsApp.",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -851,6 +856,11 @@ const translations = {
     curriculumC2M2: "Module 17 (Translation): Translation and interpretation.",
     curriculumC2M3: "Module 18 (Refinement): Eliminating minor errors.",
     curriculumCta: "Enroll",
+    curriculumViewLevel: "View this level's curriculum",
+    bookingBadge: "Booking",
+    bookingTitle: "Book a Zoom session",
+    bookingDesc: "Pick an available time slot. You'll automatically receive a Zoom link for the lesson.",
+    bookingPlaceholder: "Booking calendar coming soon. To schedule a session, message us on WhatsApp.",
   },
 } as const;
 

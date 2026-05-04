@@ -30,11 +30,23 @@ const TEMPLATE_BY_COURSE: Record<CourseType, string> = {
   kids: "kids-registration-confirmation",
 };
 
-const RegistrationFormSection = () => {
+interface RegistrationFormSectionProps {
+  defaultCourseType?: CourseType;
+  embedded?: boolean;
+  onBack?: () => void;
+}
+
+const RegistrationFormSection = ({
+  defaultCourseType,
+  embedded = false,
+  onBack,
+}: RegistrationFormSectionProps = {}) => {
   const { t } = useI18n();
 
-  const [courseType, setCourseType] = useState<CourseType | "">("");
-  const [format, setFormat] = useState<FormatType | "">("");
+  const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
+  const [format, setFormat] = useState<FormatType | "">(
+    defaultCourseType === "kids" ? "fizic" : "",
+  );
   const [level, setLevel] = useState<LevelType | "">("A1");
   const [center, setCenter] = useState<string>("");
   const [name, setName] = useState("");
@@ -199,8 +211,11 @@ const RegistrationFormSection = () => {
   if (submitted) {
     const isPayable = submittedData && submittedData.courseType !== "kids";
     return (
-      <section id="inscriere" className="py-20 px-6 scroll-mt-24">
-        <div className="max-w-2xl mx-auto space-y-6">
+      <section
+        id={embedded ? undefined : "inscriere"}
+        className={embedded ? "" : "py-20 px-6 scroll-mt-24"}
+      >
+        <div className={embedded ? "space-y-6" : "max-w-2xl mx-auto space-y-6"}>
           {/* Confirmation header */}
           <div className="bg-background rounded-2xl border border-border p-8 shadow-sm">
             <div className="flex items-start gap-4">
@@ -282,18 +297,36 @@ const RegistrationFormSection = () => {
   }
 
   return (
-    <section id="inscriere" className="py-20 px-6 scroll-mt-24">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
-            {t.mainLeadTitle}
-          </h2>
-          <p className="text-muted-foreground">{t.mainLeadDesc}</p>
-        </div>
+    <section
+      id={embedded ? undefined : "inscriere"}
+      className={embedded ? "" : "py-20 px-6 scroll-mt-24"}
+    >
+      <div className={embedded ? "" : "max-w-2xl mx-auto"}>
+        {!embedded && (
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+              {t.mainLeadTitle}
+            </h2>
+            <p className="text-muted-foreground">{t.mainLeadDesc}</p>
+          </div>
+        )}
+        {embedded && onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ← {t.navCourses}
+          </button>
+        )}
 
         <form
           onSubmit={handleSubmit}
-          className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm space-y-5"
+          className={
+            embedded
+              ? "space-y-5"
+              : "bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm space-y-5"
+          }
         >
           {/* Course type */}
           <div className="space-y-2">
