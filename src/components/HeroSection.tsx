@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import { Users, GraduationCap, Clock, BookOpen } from "lucide-react";
+import { Users, GraduationCap, Clock, BookOpen, Star, ShieldCheck, BadgeCheck } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 import AnchorLink from "@/components/AnchorLink";
 
@@ -18,6 +18,9 @@ const HeroSection = () => {
           <div className="mb-6 flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
               ⭐ {t.heroBadge}
+            </span>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-background text-foreground text-sm font-medium">
+              {t.heroPill}
             </span>
           </div>
 
@@ -54,6 +57,13 @@ const HeroSection = () => {
             <span className="flex items-center gap-2"><Users className="w-4 h-4 text-primary" /> {t.heroStat1}</span>
             <span className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-primary" /> {t.heroStat2}</span>
             <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-primary" /> {t.heroStat3}</span>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><Star className="w-3.5 h-3.5 text-primary" /> {t.heroTrustRating}</span>
+            <span className="inline-flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-primary" /> {t.heroTrustStudents}</span>
+            <span className="inline-flex items-center gap-1.5"><BadgeCheck className="w-3.5 h-3.5 text-primary" /> {t.heroTrustVerified}</span>
+            <span className="inline-flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-primary" /> {t.heroTrustSecure}</span>
           </div>
         </div>
 
