@@ -162,7 +162,7 @@ const ProgramsSection = () => {
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-4"
               >
                 <BookOpen className="w-3.5 h-3.5" />
-                {t.curriculumViewLevel ?? "Vezi curriculum"}
+                {t.curriculumViewLevel}
               </a>
               {isAvailable(activeLevel) ? (
                 <>
