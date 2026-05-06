@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Check, Clock, MessageCircle, BookOpen } from "lucide-react";
+import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import groupImg from "@/assets/group-course.jpg";
@@ -28,6 +28,15 @@ const ProgramsSection = () => {
     B2: t.levelB2Subtitle,
     C1: t.levelC1Subtitle,
     C2: t.levelC2Subtitle,
+  };
+
+  const levelCurriculum: Record<Level, { obj: string; mods: string[] }> = {
+    A1: { obj: t.curriculumA1Obj, mods: [t.curriculumA1M1, t.curriculumA1M2, t.curriculumA1M3] },
+    A2: { obj: t.curriculumA2Obj, mods: [t.curriculumA2M1, t.curriculumA2M2, t.curriculumA2M3] },
+    B1: { obj: t.curriculumB1Obj, mods: [t.curriculumB1M1, t.curriculumB1M2, t.curriculumB1M3] },
+    B2: { obj: t.curriculumB2Obj, mods: [t.curriculumB2M1, t.curriculumB2M2, t.curriculumB2M3] },
+    C1: { obj: t.curriculumC1Obj, mods: [t.curriculumC1M1, t.curriculumC1M2, t.curriculumC1M3] },
+    C2: { obj: t.curriculumC2Obj, mods: [t.curriculumC2M1, t.curriculumC2M2, t.curriculumC2M3] },
   };
 
   const isAvailable = (level: Level) => level === "A1";
@@ -157,13 +166,20 @@ const ProgramsSection = () => {
                 );
               })()}
 
-              <a
-                href={`#curriculum-${activeLevel.toLowerCase()}`}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-4"
-              >
-                <BookOpen className="w-3.5 h-3.5" />
-                {t.curriculumViewLevel}
-              </a>
+              <div className="mb-4 rounded-lg border border-border bg-muted/30 p-4">
+                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
+                  {t.curriculumObjective}
+                </p>
+                <p className="text-sm text-foreground mb-3">{levelCurriculum[activeLevel].obj}</p>
+                <ul className="space-y-2">
+                  {levelCurriculum[activeLevel].mods.map((m, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{m}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               {isAvailable(activeLevel) ? (
                 <>
                   <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>

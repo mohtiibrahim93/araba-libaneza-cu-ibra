@@ -6,7 +6,6 @@ import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
 import ProgramsSection from "@/components/ProgramsSection";
 import CulturalValueSection from "@/components/CulturalValueSection";
-import CurriculumSection from "@/components/CurriculumSection";
 import PricingSection from "@/components/PricingSection";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import BookingSection from "@/components/BookingSection";
@@ -53,7 +52,6 @@ const PageContent = () => {
       <InstructorSection />
       <ProgramsSection />
       <CulturalValueSection />
-      <CurriculumSection />
       <PricingSection />
       <RegistrationFormSection />
       <BookingSection />
