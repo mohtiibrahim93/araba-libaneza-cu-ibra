@@ -173,7 +173,7 @@ const PricingSection = () => {
               )}
 
               <AnchorLink
-                to="#inscriere"
+                to="#courses"
                 className={`block w-full text-center py-3 text-sm font-semibold rounded-lg transition-colors ${
                   p.popular
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
