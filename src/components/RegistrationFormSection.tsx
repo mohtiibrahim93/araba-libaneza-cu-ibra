@@ -45,7 +45,7 @@ const RegistrationFormSection = ({
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
   const [format, setFormat] = useState<FormatType | "">(
-    defaultCourseType === "kids" ? "fizic" : "",
+    defaultCourseType === "kids" ? "online" : "",
   );
   const [level, setLevel] = useState<LevelType | "">("A1");
   const [center, setCenter] = useState<string>("");
@@ -71,7 +71,7 @@ const RegistrationFormSection = ({
   const onCourseChange = (value: CourseType) => {
     setCourseType(value);
     if (value === "kids") {
-      setFormat("fizic");
+      setFormat("online");
     } else {
       setFormat("");
     }
