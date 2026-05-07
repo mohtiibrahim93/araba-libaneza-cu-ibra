@@ -38,7 +38,7 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 mb-10">
             <AnchorLink
-              to="#inscriere"
+              to="#courses"
               className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
