@@ -476,7 +476,7 @@ const translations = {
     heroStat3: "Flexible Schedule",
     heroLessons: "24+ Lessons",
     heroComplete: "Complete Course",
-    heroJoin: "Join 30+",
+    heroJoin: "Join 100+",
     heroHappy: "Happy Students",
 
     whyBadge: "Why Choose Us",
