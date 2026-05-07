@@ -185,6 +185,24 @@ const RegistrationFormSection = ({
         });
       }
 
+      // Notify site owner / instructor with full lead details
+      void supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "admin-new-registration",
+          recipientEmail: "mohtiibrahim@gmail.com",
+          idempotencyKey: `admin-reg-${id}`,
+          templateData: {
+            name: recipientName,
+            phone,
+            email: email || "",
+            formType: formTypeLabel,
+            format,
+            center,
+            notes: notes || "",
+          },
+        },
+      });
+
       trackEvent("Lead", { content_name: formTypeLabel });
       toast.success(t.mainLeadSuccess);
       setSubmittedData({
