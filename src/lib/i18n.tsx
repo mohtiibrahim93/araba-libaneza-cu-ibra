@@ -52,7 +52,7 @@ const translations = {
     why3: "Program flexibil adaptat stilului tău de viață",
     why4: "Perspective culturale alături de învățarea limbii",
     why5: "Curriculum structurat pe niveluri (A1–C2)",
-    whyStat1Val: "30+",
+    whyStat1Val: "100+",
     whyStat1Label: "Cursanți",
     whyStat2Val: "50+",
     whyStat2Label: "Recenzii",
@@ -383,7 +383,7 @@ const translations = {
     // Hero extras
     heroPill: "Lecții 1:1 · Online & Fizic",
     heroTrustRating: "5.0★ pe Preply",
-    heroTrustStudents: "30+ cursanți",
+    heroTrustStudents: "100+ cursanți",
     heroTrustVerified: "Instructor verificat",
     heroTrustSecure: "Plată securizată",
 
@@ -487,7 +487,7 @@ const translations = {
     why3: "Flexible scheduling to fit your lifestyle",
     why4: "Cultural insights alongside language learning",
     why5: "Structured curriculum across levels (A1–C2)",
-    whyStat1Val: "30+",
+    whyStat1Val: "100+",
     whyStat1Label: "Students",
     whyStat2Val: "50+",
     whyStat2Label: "Reviews",
@@ -806,7 +806,7 @@ const translations = {
 
     heroPill: "1:1 Lessons · Online & In-person",
     heroTrustRating: "5.0★ on Preply",
-    heroTrustStudents: "30+ students",
+    heroTrustStudents: "100+ students",
     heroTrustVerified: "Verified instructor",
     heroTrustSecure: "Secure payment",
 
