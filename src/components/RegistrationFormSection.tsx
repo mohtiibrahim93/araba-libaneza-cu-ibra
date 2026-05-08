@@ -597,6 +597,33 @@ const RegistrationFormSection = ({
             </div>
           )}
 
+          {/* Capacity banner: group (after level) + kids */}
+          {capacity && (courseType === "group" || courseType === "kids") && (
+            <div
+              className={`rounded-lg border px-4 py-3 ${
+                capacity.full
+                  ? "border-destructive/40 bg-destructive/5"
+                  : capacity.belowMin
+                    ? "border-amber-500/40 bg-amber-500/5"
+                    : "border-primary/30 bg-primary/5"
+              }`}
+            >
+              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <Users className="w-4 h-4 text-primary" />
+                <span>
+                  {capacity.taken} / {capacity.max} {t.capSeatsLabel}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {capacity.full
+                  ? t.capFull
+                  : capacity.belowMin
+                    ? t.capNeedToStart.replace("{n}", String(capacity.needToStart))
+                    : t.capSpotsLeft.replace("{n}", String(capacity.seatsLeft))}
+              </p>
+            </div>
+          )}
+
           {/* Kids extra */}
           {courseType === "kids" && (
             <div className="grid sm:grid-cols-2 gap-4">
@@ -622,6 +649,27 @@ const RegistrationFormSection = ({
                   maxLength={20}
                 />
               </div>
+            </div>
+          )}
+
+          {/* Kids waitlist deposit */}
+          {courseType === "kids" && capacity?.belowMin && (
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-3">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{t.kidsWaitlistTitle}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t.kidsWaitlistDesc}</p>
+                </div>
+              </div>
+              <label className="flex items-start gap-2 cursor-pointer">
+                <Checkbox
+                  checked={payDeposit}
+                  onCheckedChange={(v) => setPayDeposit(v === true)}
+                  className="mt-0.5"
+                />
+                <span className="text-sm text-foreground">{t.kidsWaitlistCheckbox}</span>
+              </label>
             </div>
           )}
 
