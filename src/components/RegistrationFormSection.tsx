@@ -14,8 +14,11 @@ import {
 } from "@/components/ui/select";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import PaymentInstructions from "@/components/PaymentInstructions";
+import CalendlyEmbed from "@/components/CalendlyEmbed";
+import { useGroupCapacities } from "@/hooks/useGroupCapacity";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { CheckCircle2, Loader2, MessageCircle, RotateCcw, Phone, CreditCard } from "lucide-react";
+import { CheckCircle2, Loader2, MessageCircle, RotateCcw, Phone, CreditCard, Users, AlertTriangle } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -42,6 +45,7 @@ const RegistrationFormSection = ({
   onBack,
 }: RegistrationFormSectionProps = {}) => {
   const { t } = useI18n();
+  const { get: getCapacity } = useGroupCapacities();
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
   const [format, setFormat] = useState<FormatType | "">(
@@ -60,12 +64,14 @@ const RegistrationFormSection = ({
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
+  const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
     name: string;
     registrationId: string;
     quantity?: number;
+    waitlistDeposit?: boolean;
   } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
@@ -76,6 +82,7 @@ const RegistrationFormSection = ({
       setFormat("");
     }
     setCenter("");
+    setPayDeposit(false);
     if (value !== "private") setPrivateQuantity(1);
     if (value !== "group") setGroupMonths(1);
   };
@@ -95,7 +102,15 @@ const RegistrationFormSection = ({
     setSubmitted(false);
     setPrivateQuantity(1);
     setGroupMonths(1);
+    setPayDeposit(false);
   };
+
+  const capacity =
+    courseType === "group"
+      ? getCapacity("group", level || null)
+      : courseType === "kids"
+        ? getCapacity("kids", null)
+        : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,6 +172,8 @@ const RegistrationFormSection = ({
         format,
         notes,
         child_age: courseType === "kids" ? childAge || null : null,
+        level: courseType === "group" ? level || null : null,
+        is_waitlist_deposit: courseType === "kids" && payDeposit,
       });
 
       if (error) throw error;
@@ -216,8 +233,27 @@ const RegistrationFormSection = ({
             : courseType === "group"
               ? groupMonths
               : undefined,
+        waitlistDeposit: courseType === "kids" && payDeposit,
       });
       setSubmitted(true);
+
+      // If kids + deposit, immediately redirect to Stripe
+      if (courseType === "kids" && payDeposit) {
+        try {
+          const { data: ck, error: ckErr } = await supabase.functions.invoke(
+            "create-checkout",
+            { body: { courseType: "kids_deposit", email, name: recipientName, registrationId: id } },
+          );
+          if (ckErr) throw ckErr;
+          if (ck?.url) {
+            toast.info(t.kidsWaitlistRedirect);
+            window.location.href = ck.url;
+          }
+        } catch (e) {
+          console.error("Kids deposit checkout failed", e);
+          toast.error(t.mainLeadError);
+        }
+      }
     } catch (err) {
       console.error("Registration error", err);
       toast.error(t.mainLeadError);
@@ -227,7 +263,10 @@ const RegistrationFormSection = ({
   };
 
   if (submitted) {
-    const isPayable = submittedData && submittedData.courseType !== "kids";
+    const isPayable =
+      submittedData &&
+      submittedData.courseType !== "kids" &&
+      !submittedData.waitlistDeposit;
     return (
       <section
         id={embedded ? undefined : "inscriere"}
@@ -289,6 +328,23 @@ const RegistrationFormSection = ({
             />
           )}
 
+          {/* Free trial booking — Calendly */}
+          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+              </div>
+            </div>
+            <CalendlyEmbed
+              compact
+              prefill={{ name: submittedData?.name, email: submittedData?.email }}
+            />
+          </div>
+
           {/* Utility actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <a
@@ -308,6 +364,11 @@ const RegistrationFormSection = ({
               <RotateCcw className="w-4 h-4" />
               {t.successAgain}
             </button>
+            {submittedData && !isPayable && (
+              <span className="hidden" aria-hidden="true">
+                {t.bookingIntroSkip}
+              </span>
+            )}
           </div>
         </div>
       </section>
