@@ -20,7 +20,7 @@ serve(async (req) => {
   try {
     const { courseType, email, name, registrationId } = await req.json();
 
-    if (!courseType || !PRICES[courseType]) {
+    if (!courseType || (!PRICES[courseType] && courseType !== "kids_deposit")) {
       throw new Error("Invalid course type");
     }
 
@@ -37,15 +37,24 @@ serve(async (req) => {
       }
     }
 
+    const lineItems = courseType === "kids_deposit"
+      ? [{
+          price_data: {
+            currency: "ron",
+            product_data: {
+              name: "Avans loc grupa Copii — Arabă Libaneză",
+              description: "Avans rambursabil 25% (125 LEI) pentru rezervarea locului în grupa de copii.",
+            },
+            unit_amount: 12500,
+          },
+          quantity: 1,
+        }]
+      : [{ price: PRICES[courseType], quantity: 1 }];
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : email || undefined,
-      line_items: [
-        {
-          price: PRICES[courseType],
-          quantity: 1,
-        },
-      ],
+      line_items: lineItems,
       mode: "payment",
       success_url: `${req.headers.get("origin")}/?payment=success`,
       cancel_url: `${req.headers.get("origin")}/?payment=canceled`,
