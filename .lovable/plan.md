@@ -1,78 +1,65 @@
-## Scope
+## Plan: Capacități grupe + Calendly inline + avans waitlist Kids
 
-Add the missing items from the mockups, keeping current "Cu Ibra" branding, red accents, and no marketplace/AI features.
+### 1. Bază de date (migration)
 
----
+**Adaug coloană `level`** în `registrations` (text, nullable) — pentru a distinge A1/A2/.../C2 sau "kids".
 
-## 1. Curriculum: extend to C1 + C2 (bookable)
+**Tabel nou `group_capacities`** — configurabil din admin:
+- `form_type` (text: 'group' | 'kids')
+- `level` (text, nullable; pentru kids = null sau 'kids')
+- `max_seats` (int, default 10)
+- `min_seats` (int, default 4)
+- unique (form_type, level)
+- RLS: anyone read; service role write.
+- Seed: rânduri pentru group A1..C2 (10/4) și kids (10/4).
 
-**`src/components/PricingSection.tsx`**
-- Extend the level pills and per-level totals from `["A1","A2","B1","B2"]` → `["A1","A2","B1","B2","C1","C2"]`.
-- Add 2 new monthly prices to `GROUP_LEVEL_PRICES` (proposed: C1 = 900, C2 = 1000 LEI/month — confirm at implementation, easy to tweak).
+**Adaug `is_waitlist_deposit` (bool)** în `registrations` pentru a marca înscrierile cu avans.
 
-**`src/components/RegistrationFormSection.tsx`**
-- `LevelType` → adds `"C1" | "C2"`.
-- Two new `<SelectItem>` entries for C1 and C2.
-- Extend the local `monthly` price map with C1/C2 (matches PricingSection).
+### 2. Logica de capacitate (frontend)
 
-**`src/lib/i18n.tsx`** (RO + EN)
-- Add `levelC2`, `levelC2Subtitle`.
-- Update curriculum copy keys to include modules 13–18 with the exact text from the mockups:
-  - C1 "Avansat (Competență Operațională Efectivă)" — Modul 13 Analiză Critică, 14 Literatură & Film, 15 Dialecte (libanez/sirian/iordanian).
-  - C2 "Masterat (Aproape Nativ)" — Modul 16 Domenii de Nișă, 17 Traducere, 18 Perfecționare.
+**Nou: `src/hooks/useGroupCapacity.ts`** — fetch `group_capacities` + count registrations per (form_type, level). Returnează `{ taken, max, min, remainingToStart, seatsLeft }`. Folosește realtime subscription pe `registrations` ca să se actualizeze live.
 
-**Curriculum display**
-- The existing curriculum lives inside `PricingSection`'s level pills/totals (no dedicated accordion component). Add a new lightweight `CurriculumSection.tsx` with an Accordion (we already have `ui/accordion`) listing all 6 levels with their modules — anchored at `#curriculum` so the new hero CTA "Vezi curriculum" can scroll there. Render between `WhySection` and `PricingSection` in `src/pages/Index.tsx`.
+**ProgramsSection (Adulți):** sub fiecare pill A1–C2 afișez mic indicator: `"3/10 locuri • mai e nevoie de 1 pentru start"` sau `"7/10 ocupate"`. Card-ul Group highlight nivelul activ cu seat info.
 
----
+**RegistrationFormSection (Group + Kids):** afișez seat info live deasupra formularului în funcție de form_type și (pentru group) nivel selectat. Salvez `level` la insert.
 
-## 2. New section: "O Perspectivă Mai Largă"
+### 3. Calendly inline în formular
 
-New file **`src/components/CulturalValueSection.tsx`** — 3 cards:
-- Conexiunea cu Moștenirea
-- Oportunități Profesionale
-- Fluență Autentică
+În `RegistrationFormSection`, după submit reușit (toast "Te-am înregistrat!"), card-ul de mulțumire afișează:
+- Mesaj: "Ultimul pas: rezervă-ți **sesiunea gratuită de probă** (30 min cu Ibra)"
+- Iframe Calendly inline (folosește `CALENDLY_URL` env / placeholder ca în BookingSection)
+- Buton "Sar peste, mă suni" → închide.
 
-CTA button "Începe Călătoria" → `#inscriere`. Inserted in `Index.tsx` between `WhySection` and the new `CurriculumSection`. New i18n keys (RO + EN).
+Se aplică pentru toate 3 form-uri (Group, Private, Kids).
 
----
+### 4. Avans 25% (Kids waitlist)
 
-## 3. Hero polish
+În card-ul Kids din formular: dacă `taken < min` (sub 4 înscriși), afișez:
+- Banner: "Grupa nu e încă completă (X/4). Rezervă-ți locul cu un avans rambursabil de **125 LEI** (25%)."
+- Checkbox `sms_confirmation_opt_in`-style: "Vreau să plătesc avansul acum"
+- La submit cu acest flag → invocă `create-checkout` edge function cu `mode: payment`, line_items: 125 LEI o singură dată; redirect la Stripe Checkout.
+- La return cu `?payment=success`, marchez `is_waitlist_deposit=true` și `payment_status='paid'`.
 
-**`src/components/HeroSection.tsx`**
-- Keep existing badge, but add a small secondary pill row: "Lecții 1:1 • Online & Fizic" (single instructor — no plural "tutori nativi").
-- Add a 4-item trust strip below current 3 stats: ⭐ rating, students, verified instructor, secure payment. Pull from existing testimonial/instructor i18n keys where possible; add new keys for the missing ones.
-- No structural rework — same layout, same image, same CTAs.
+**Edge function**: extind `create-checkout` existent să accepte `productType: 'kids_deposit'` cu price_data 12500 RON cents (sau price_id nou). Folosesc `price_data` doar dacă nu există price_id; preferabil creez un Stripe product nou "Avans loc grupa Kids" / 125 LEI.
 
----
+### 5. Admin UI
 
-## 4. Footer cleanup
+În `src/pages/Admin.tsx` adaug tab nou "Capacități":
+- Listă cu rânduri group A1..C2 + kids
+- Pentru fiecare: input `max_seats`, `min_seats`
+- Buton "Salvează" → invocă edge function nouă `update-group-capacity` (verify admin password header) → service role update.
 
-**`src/components/Footer.tsx`**
-- Replace Quick Links with: De Ce Noi (`#why`) · Curriculum (`#curriculum`) · Recenzii (`#testimonials`) · Înscrie-te (`#inscriere`).
-- Keep all existing real contact info (WhatsApp, email, address) — do NOT use mockup placeholders.
-- Add new i18n key `navWhy` if missing.
+### 6. Email admin notification
 
----
+Include `level` și `is_waitlist_deposit` în template `admin-new-registration` și subiect.
 
-## Files to change
+### Fișiere
 
-```text
-src/components/HeroSection.tsx              edit
-src/components/Footer.tsx                   edit
-src/components/PricingSection.tsx           edit (+C1, +C2)
-src/components/RegistrationFormSection.tsx  edit (+C1, +C2 in select)
-src/components/CulturalValueSection.tsx     new
-src/components/CurriculumSection.tsx        new
-src/pages/Index.tsx                         edit (mount 2 new sections)
-src/lib/i18n.tsx                            edit (RO + EN keys)
-mem://course/curriculum-levels              update memory (C1/C2 now bookable)
-```
+**Modificate:** `src/components/ProgramsSection.tsx`, `src/components/RegistrationFormSection.tsx`, `src/components/BookingSection.tsx` (extragere logic Calendly în component reutilizabil `CalendlyEmbed.tsx`), `src/pages/Admin.tsx`, `src/lib/i18n.tsx`, `supabase/functions/create-checkout/index.ts`, `supabase/functions/_shared/transactional-email-templates/admin-new-registration.tsx`.
 
-No backend/database changes. No edge function changes. No new dependencies.
+**Create:** `src/hooks/useGroupCapacity.ts`, `src/components/CalendlyEmbed.tsx`, `supabase/functions/update-group-capacity/index.ts`, migration nouă (level + group_capacities + is_waitlist_deposit + seed).
 
----
-
-## Out of scope (confirmed)
-
-Tutor marketplace · "Selectează Tutorul Preferat" dropdown · Devino Tutor flow · AI Virtual Tutor · green-only repalette · per-tutor pricing.
+### Note
+- Calendly URL rămâne placeholder; când îl ai, îl pun într-un secret/const și se activează automat.
+- Capacitate inițială: 10 max / 4 min pentru toate. Le modifici din admin.
+- Avansul 125 LEI: produs Stripe nou, plata one-off, redirect success → marchez paid.
