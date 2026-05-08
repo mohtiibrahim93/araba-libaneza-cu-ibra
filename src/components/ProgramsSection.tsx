@@ -288,6 +288,21 @@ const ProgramsSection = () => {
                 </span>
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
+                {key === "kids" && kidsCap && (
+                  <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
+                    <span className="font-semibold text-foreground">
+                      {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
+                    </span>
+                    <span className="text-muted-foreground">·</span>
+                    <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                      {kidsCap.full
+                        ? t.capFull
+                        : kidsCap.belowMin
+                          ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
+                          : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
+                    </span>
+                  </div>
+                )}
                 {p.price && (
                   <div className="mb-3">
                     <div className="flex items-baseline flex-wrap gap-x-2">
