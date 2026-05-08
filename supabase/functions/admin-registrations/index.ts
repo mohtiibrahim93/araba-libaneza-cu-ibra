@@ -59,6 +59,34 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Parolă incorectă" });
     }
 
+    if (action === "list_capacities") {
+      const { data, error } = await supabase
+        .from("group_capacities")
+        .select("id, form_type, level, max_seats, min_seats")
+        .order("form_type", { ascending: true })
+        .order("level", { ascending: true, nullsFirst: false });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "update_capacity") {
+      const { id: capId, max_seats, min_seats } = body;
+      if (typeof capId !== "string") return jsonResponse({ error: "ID invalid" });
+      const max = Number(max_seats);
+      const min = Number(min_seats);
+      if (!Number.isInteger(max) || !Number.isInteger(min) || max < 1 || min < 1 || min > max) {
+        return jsonResponse({ error: "Valori invalide (min ≤ max, ambele ≥ 1)" });
+      }
+      const { data, error } = await supabase
+        .from("group_capacities")
+        .update({ max_seats: max, min_seats: min, updated_at: new Date().toISOString() })
+        .eq("id", capId)
+        .select("id, form_type, level, max_seats, min_seats")
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
     if (action === "list_notifications") {
       const { data: regs, error: regsError } = await supabase
         .from("registrations")

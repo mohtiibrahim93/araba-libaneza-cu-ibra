@@ -31,6 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Lock, Loader2, Trash2, Download, ExternalLink, Search, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import AdminNav from "@/components/AdminNav";
+import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import {
   getStoredAdminPassword,
   setStoredAdminPassword,
@@ -610,6 +611,8 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <CapacitiesAdmin password={storedPassword} />
+
         <form onSubmit={handleEmailSettingsSubmit} className="mb-6 rounded-lg border border-border bg-card p-4">
           <div className="mb-4">
             <h2 className="text-base font-semibold text-foreground">Setări email confirmare</h2>

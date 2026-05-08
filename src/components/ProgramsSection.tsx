@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -20,6 +21,9 @@ const ProgramsSection = () => {
   const { t } = useI18n();
   const [activeLevel, setActiveLevel] = useState<Level>("A1");
   const [inlineForm, setInlineForm] = useState<null | "group" | "private" | "kids">(null);
+  const { get: getCapacity } = useGroupCapacities();
+  const activeCap = getCapacity("group", activeLevel);
+  const kidsCap = getCapacity("kids", null);
 
   const levelSubtitles: Record<Level, string> = {
     A1: t.levelA1Subtitle,
@@ -137,6 +141,22 @@ const ProgramsSection = () => {
                   </button>
                 ))}
               </div>
+
+              {activeCap && (
+                <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+                  <span className="font-semibold text-foreground">
+                    {activeCap.taken}/{activeCap.max} {t.capSeatsLabel}
+                  </span>
+                  <span className="text-muted-foreground">·</span>
+                  <span className={activeCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                    {activeCap.full
+                      ? t.capFull
+                      : activeCap.belowMin
+                        ? t.capNeedToStart.replace("{n}", String(activeCap.needToStart))
+                        : t.capSpotsLeft.replace("{n}", String(activeCap.seatsLeft))}
+                  </span>
+                </div>
+              )}
 
               {/* Level subtitle */}
               <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[activeLevel]}</p>
@@ -268,6 +288,21 @@ const ProgramsSection = () => {
                 </span>
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
+                {key === "kids" && kidsCap && (
+                  <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
+                    <span className="font-semibold text-foreground">
+                      {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
+                    </span>
+                    <span className="text-muted-foreground">·</span>
+                    <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                      {kidsCap.full
+                        ? t.capFull
+                        : kidsCap.belowMin
+                          ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
+                          : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
+                    </span>
+                  </div>
+                )}
                 {p.price && (
                   <div className="mb-3">
                     <div className="flex items-baseline flex-wrap gap-x-2">

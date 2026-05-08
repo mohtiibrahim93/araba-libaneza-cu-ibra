@@ -122,6 +122,33 @@ export type Database = {
         }
         Relationships: []
       }
+      group_capacities: {
+        Row: {
+          form_type: string
+          id: string
+          level: string | null
+          max_seats: number
+          min_seats: number
+          updated_at: string
+        }
+        Insert: {
+          form_type: string
+          id?: string
+          level?: string | null
+          max_seats?: number
+          min_seats?: number
+          updated_at?: string
+        }
+        Update: {
+          form_type?: string
+          id?: string
+          level?: string | null
+          max_seats?: number
+          min_seats?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lead_status_history: {
         Row: {
           changed_by: string
@@ -166,7 +193,9 @@ export type Database = {
           form_type: string
           format: string | null
           id: string
+          is_waitlist_deposit: boolean
           lead_status: string
+          level: string | null
           name: string
           notes: string | null
           paid_at: string | null
@@ -184,7 +213,9 @@ export type Database = {
           form_type: string
           format?: string | null
           id?: string
+          is_waitlist_deposit?: boolean
           lead_status?: string
+          level?: string | null
           name: string
           notes?: string | null
           paid_at?: string | null
@@ -202,7 +233,9 @@ export type Database = {
           form_type?: string
           format?: string | null
           id?: string
+          is_waitlist_deposit?: boolean
           lead_status?: string
+          level?: string | null
           name?: string
           notes?: string | null
           paid_at?: string | null
