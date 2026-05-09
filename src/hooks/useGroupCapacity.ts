@@ -64,7 +64,7 @@ export function useGroupCapacities() {
     load();
 
     const channel = supabase
-      .channel("capacity-updates")
+      .channel(`capacity-updates-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "registrations" }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "group_capacities" }, load)
       .subscribe();
