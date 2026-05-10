@@ -692,6 +692,25 @@ const RegistrationFormSection = ({
             />
           </div>
 
+          {/* Inline Calendly picker for Private & Kids — pick a slot before submitting */}
+          {(courseType === "private" || courseType === "kids") && (
+            <div className="rounded-xl border border-border bg-muted/30 p-4 sm:p-5 space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">{t.bookingIntroTitle}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{t.bookingIntroDesc}</p>
+                </div>
+              </div>
+              <CalendlyEmbed
+                compact
+                prefill={{ name: name || undefined, email: email || undefined }}
+              />
+            </div>
+          )}
+
           <p className="text-xs text-muted-foreground">{t.mainLeadCallbackNote}</p>
 
           <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
