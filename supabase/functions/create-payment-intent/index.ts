@@ -24,6 +24,41 @@ serve(async (req) => {
     if (!courseType || !PRICES[courseType]) {
       throw new Error("Invalid course type");
     }
+    if (!registrationId || typeof registrationId !== "string") {
+      throw new Error("registrationId is required");
+    }
+
+    // Validate the registration exists and is not already paid / in flight.
+    // This prevents anonymous callers from creating Stripe intents for
+    // unrelated registrations or overwriting their payment metadata.
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    );
+    const { data: regRow, error: regErr } = await supabaseAdmin
+      .from("registrations")
+      .select("id, form_type, payment_status, stripe_session_id, email")
+      .eq("id", registrationId)
+      .maybeSingle();
+
+    if (regErr || !regRow) {
+      return new Response(JSON.stringify({ error: "Registration not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (regRow.form_type !== courseType) {
+      return new Response(JSON.stringify({ error: "Course type mismatch" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (regRow.payment_status === "paid") {
+      return new Response(JSON.stringify({ error: "Registration already paid" }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(rawQuantity ?? 1), 10) || 1));
     const discountApplied =
@@ -85,18 +120,16 @@ serve(async (req) => {
       },
     });
 
-    if (registrationId) {
-      const supabase = createClient(
-        Deno.env.get("SUPABASE_URL") ?? "",
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      );
-      await supabase
+    // Only set the session id if there isn't already one — never overwrite.
+    if (!regRow.stripe_session_id) {
+      await supabaseAdmin
         .from("registrations")
         .update({
           stripe_session_id: intent.id,
           payment_status: "pending",
         })
-        .eq("id", registrationId);
+        .eq("id", registrationId)
+        .is("stripe_session_id", null);
     }
 
     return new Response(
