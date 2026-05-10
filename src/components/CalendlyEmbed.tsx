@@ -1,8 +1,7 @@
 import { useI18n } from "@/lib/i18n";
 import { Calendar, MessageCircle } from "lucide-react";
 
-// TODO: replace with the real Calendly URL once available, e.g. "https://calendly.com/ibra/intro-30min"
-export const CALENDLY_URL = "";
+export const CALENDLY_URL = "https://calendly.com/learnwithibra/lectia-de-proba";
 
 const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
