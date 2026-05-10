@@ -178,46 +178,12 @@ const RegistrationFormSection = ({
 
       if (error) throw error;
 
-      // Fire-and-forget admin notification + confirmation email
+      // Fire-and-forget: server-side function looks up the row and sends
+      // both the confirmation email (to the registrant) and the admin
+      // notification using the service role. This avoids exposing the
+      // transactional email endpoint to anonymous callers.
       void supabase.functions.invoke("notify-registration", {
-        body: {
-          name: recipientName,
-          phone,
-          email,
-          form_type: formTypeLabel,
-          center,
-          format,
-          notes,
-        },
-      });
-
-      if (email) {
-        void supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: TEMPLATE_BY_COURSE[courseType],
-            recipientEmail: email,
-            idempotencyKey: `reg-${id}`,
-            templateData: { name: recipientName },
-          },
-        });
-      }
-
-      // Notify site owner / instructor with full lead details
-      void supabase.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "admin-new-registration",
-          recipientEmail: "mohtiibrahim@gmail.com",
-          idempotencyKey: `admin-reg-${id}`,
-          templateData: {
-            name: recipientName,
-            phone,
-            email: email || "",
-            formType: formTypeLabel,
-            format,
-            center,
-            notes: notes || "",
-          },
-        },
+        body: { registrationId: id },
       });
 
       trackEvent("Lead", { content_name: formTypeLabel });
