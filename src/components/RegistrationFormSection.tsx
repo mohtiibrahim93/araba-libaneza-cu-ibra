@@ -65,6 +65,11 @@ const RegistrationFormSection = ({
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
   const [payDeposit, setPayDeposit] = useState(false);
+  // Private only: first lesson defaults to a free trial. Student can opt out
+  // and pay normally from the start (tutor isn't paid for the trial).
+  const [wantTrial, setWantTrial] = useState<boolean>(true);
+  // Post-submit: lets a private+trial student skip the trial and go to payment.
+  const [skipTrialPostSubmit, setSkipTrialPostSubmit] = useState(false);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
@@ -72,6 +77,7 @@ const RegistrationFormSection = ({
     registrationId: string;
     quantity?: number;
     waitlistDeposit?: boolean;
+    wantTrial?: boolean;
   } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
@@ -103,6 +109,8 @@ const RegistrationFormSection = ({
     setPrivateQuantity(1);
     setGroupMonths(1);
     setPayDeposit(false);
+    setWantTrial(true);
+    setSkipTrialPostSubmit(false);
   };
 
   const capacity =
@@ -149,6 +157,7 @@ const RegistrationFormSection = ({
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
         notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`);
+        notesParts.push(`Probă gratuită: ${wantTrial ? "da" : "nu"}`);
       }
       if (courseType === "group") {
         notesParts.push(`Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${groupMonths >= 3 ? " (−10% auto)" : ""}`);
@@ -200,6 +209,7 @@ const RegistrationFormSection = ({
               ? groupMonths
               : undefined,
         waitlistDeposit: courseType === "kids" && payDeposit,
+        wantTrial: courseType === "private" ? wantTrial : false,
       });
       setSubmitted(true);
 
@@ -229,10 +239,19 @@ const RegistrationFormSection = ({
   };
 
   if (submitted) {
+    // Trial only applies to Private. If student wants the trial, payment is
+    // deferred until they decide to continue (next lesson). If they skipped
+    // trial (either in the form or post-submit), they pay now.
+    const isPrivateTrial =
+      !!submittedData &&
+      submittedData.courseType === "private" &&
+      submittedData.wantTrial === true &&
+      !skipTrialPostSubmit;
     const isPayable =
-      submittedData &&
+      !!submittedData &&
       submittedData.courseType !== "kids" &&
-      !submittedData.waitlistDeposit;
+      !submittedData.waitlistDeposit &&
+      !isPrivateTrial;
     return (
       <section
         id={embedded ? undefined : "inscriere"}
