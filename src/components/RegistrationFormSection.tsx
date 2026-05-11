@@ -313,22 +313,37 @@ const RegistrationFormSection = ({
             />
           )}
 
-          {/* Free trial booking — Calendly */}
-          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+          {/* Free trial booking — Calendly. Only for Private + trial opt-in. */}
+          {isPrivateTrial && submittedData && (
+            <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+              <CalendlyEmbed
+                compact
+                eventType="trial"
+                prefill={{ name: submittedData?.name, email: submittedData?.email }}
+              />
+              <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-xs text-muted-foreground">
+                  {t.trialSkipNote}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSkipTrialPostSubmit(true)}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-primary/30 text-primary hover:bg-primary/5 transition-colors"
+                >
+                  {t.trialSkipCta}
+                </button>
               </div>
             </div>
-            <CalendlyEmbed
-              compact
-              prefill={{ name: submittedData?.name, email: submittedData?.email }}
-            />
-          </div>
+          )}
 
           {/* Utility actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
