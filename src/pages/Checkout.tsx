@@ -20,7 +20,15 @@ const COURSE_LABEL: Record<CourseType, string> = {
   private: "Lecție Privată",
 };
 
-const PaymentForm = ({ amount, currency }: { amount: number; currency: string }) => {
+const PaymentForm = ({
+  amount,
+  currency,
+  courseType,
+}: {
+  amount: number;
+  currency: string;
+  courseType: CourseType;
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
@@ -32,7 +40,7 @@ const PaymentForm = ({ amount, currency }: { amount: number; currency: string })
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/?payment=success`,
+        return_url: `${window.location.origin}/?payment=success&type=${courseType}`,
       },
     });
     if (error) {
@@ -156,7 +164,7 @@ const Checkout = () => {
             </div>
           ) : (
             <Elements stripe={stripePromise} options={options}>
-              <PaymentForm amount={amount} currency={currency} />
+              <PaymentForm amount={amount} currency={currency} courseType={courseType as CourseType} />
             </Elements>
           )}
         </div>

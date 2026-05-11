@@ -65,6 +65,11 @@ const RegistrationFormSection = ({
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
   const [payDeposit, setPayDeposit] = useState(false);
+  // Private only: first lesson defaults to a free trial. Student can opt out
+  // and pay normally from the start (tutor isn't paid for the trial).
+  const [wantTrial, setWantTrial] = useState<boolean>(true);
+  // Post-submit: lets a private+trial student skip the trial and go to payment.
+  const [skipTrialPostSubmit, setSkipTrialPostSubmit] = useState(false);
   const [submittedData, setSubmittedData] = useState<{
     courseType: CourseType;
     email: string;
@@ -72,6 +77,7 @@ const RegistrationFormSection = ({
     registrationId: string;
     quantity?: number;
     waitlistDeposit?: boolean;
+    wantTrial?: boolean;
   } | null>(null);
 
   const onCourseChange = (value: CourseType) => {
@@ -103,6 +109,8 @@ const RegistrationFormSection = ({
     setPrivateQuantity(1);
     setGroupMonths(1);
     setPayDeposit(false);
+    setWantTrial(true);
+    setSkipTrialPostSubmit(false);
   };
 
   const capacity =
@@ -149,6 +157,7 @@ const RegistrationFormSection = ({
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
         notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`);
+        notesParts.push(`Probă gratuită: ${wantTrial ? "da" : "nu"}`);
       }
       if (courseType === "group") {
         notesParts.push(`Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${groupMonths >= 3 ? " (−10% auto)" : ""}`);
@@ -200,6 +209,7 @@ const RegistrationFormSection = ({
               ? groupMonths
               : undefined,
         waitlistDeposit: courseType === "kids" && payDeposit,
+        wantTrial: courseType === "private" ? wantTrial : false,
       });
       setSubmitted(true);
 
@@ -229,10 +239,19 @@ const RegistrationFormSection = ({
   };
 
   if (submitted) {
+    // Trial only applies to Private. If student wants the trial, payment is
+    // deferred until they decide to continue (next lesson). If they skipped
+    // trial (either in the form or post-submit), they pay now.
+    const isPrivateTrial =
+      !!submittedData &&
+      submittedData.courseType === "private" &&
+      submittedData.wantTrial === true &&
+      !skipTrialPostSubmit;
     const isPayable =
-      submittedData &&
+      !!submittedData &&
       submittedData.courseType !== "kids" &&
-      !submittedData.waitlistDeposit;
+      !submittedData.waitlistDeposit &&
+      !isPrivateTrial;
     return (
       <section
         id={embedded ? undefined : "inscriere"}
@@ -294,22 +313,37 @@ const RegistrationFormSection = ({
             />
           )}
 
-          {/* Free trial booking — Calendly */}
-          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+          {/* Free trial booking — Calendly. Only for Private + trial opt-in. */}
+          {isPrivateTrial && submittedData && (
+            <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+              <CalendlyEmbed
+                compact
+                eventType="trial"
+                prefill={{ name: submittedData?.name, email: submittedData?.email }}
+              />
+              <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-xs text-muted-foreground">
+                  {t.trialSkipNote}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSkipTrialPostSubmit(true)}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-primary/30 text-primary hover:bg-primary/5 transition-colors"
+                >
+                  {t.trialSkipCta}
+                </button>
               </div>
             </div>
-            <CalendlyEmbed
-              compact
-              prefill={{ name: submittedData?.name, email: submittedData?.email }}
-            />
-          </div>
+          )}
 
           {/* Utility actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
@@ -692,22 +726,21 @@ const RegistrationFormSection = ({
             />
           </div>
 
-          {/* Inline Calendly picker for Private & Kids — pick a slot before submitting */}
-          {(courseType === "private" || courseType === "kids") && (
-            <div className="rounded-xl border border-border bg-muted/30 p-4 sm:p-5 space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-primary" />
+          {/* Private: free trial toggle (default on). Tutor isn't paid for trial. */}
+          {courseType === "private" && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <Checkbox
+                  checked={wantTrial}
+                  onCheckedChange={(v) => setWantTrial(v === true)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">{t.privateTrialTitle}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t.privateTrialDesc}</p>
+                  <p className="text-xs text-muted-foreground mt-2 italic">{t.privateTrialDisclaimer}</p>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-foreground">{t.bookingIntroTitle}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{t.bookingIntroDesc}</p>
-                </div>
-              </div>
-              <CalendlyEmbed
-                compact
-                prefill={{ name: name || undefined, email: email || undefined }}
-              />
+              </label>
             </div>
           )}
 

@@ -455,6 +455,11 @@ const translations = {
     bookingIntroTitle: "Ultimul pas: rezervă-ți sesiunea gratuită de probă",
     bookingIntroDesc: "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
     bookingIntroSkip: "Sar peste, mă suni tu",
+    privateTrialTitle: "Vreau lecție de probă gratuită (30 min)",
+    privateTrialDesc: "Prima lecție individuală este gratuită — o oportunitate să ne cunoaștem și să stabilim obiectivele tale.",
+    privateTrialDisclaimer: "Notă: tutorul nu primește plată pentru lecția de probă. Dacă preferi, poți renunța la probă și plăti normal de la prima lecție.",
+    trialSkipNote: "Vrei să sari peste proba și să plătești de la prima lecție?",
+    trialSkipCta: "Sari peste, plătește acum",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -891,6 +896,11 @@ const translations = {
     bookingIntroTitle: "Last step: book your free trial session",
     bookingIntroDesc: "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
     bookingIntroSkip: "Skip, you'll call me",
+    privateTrialTitle: "I want a free trial lesson (30 min)",
+    privateTrialDesc: "Your first private lesson is free — a chance to meet and set your goals.",
+    privateTrialDisclaimer: "Note: the tutor is not paid for the trial lesson. If you prefer, you can skip the trial and pay normally from the first lesson.",
+    trialSkipNote: "Want to skip the trial and pay from the first lesson?",
+    trialSkipCta: "Skip, pay now",
   },
 } as const;
 

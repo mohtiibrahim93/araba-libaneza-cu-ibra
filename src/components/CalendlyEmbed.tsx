@@ -1,7 +1,12 @@
 import { useI18n } from "@/lib/i18n";
 import { Calendar, MessageCircle } from "lucide-react";
 
-export const CALENDLY_URL = "https://calendly.com/learnwithibra/lectia-de-proba";
+// Two Calendly event types — availability is managed once in Calendly and
+// inherited by both. The site picks which one to show based on context.
+export const CALENDLY_TRIAL_URL = "https://calendly.com/learnwithibra/lectia-de-proba";
+export const CALENDLY_PAID_URL = "https://calendly.com/learnwithibra/lectia-individuala";
+// Back-compat alias (used elsewhere — defaults to trial).
+export const CALENDLY_URL = CALENDLY_TRIAL_URL;
 
 const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
@@ -10,14 +15,16 @@ const WHATSAPP_URL =
 interface CalendlyEmbedProps {
   prefill?: { name?: string; email?: string };
   compact?: boolean;
+  eventType?: "trial" | "paid";
 }
 
-const CalendlyEmbed = ({ prefill, compact = false }: CalendlyEmbedProps) => {
+const CalendlyEmbed = ({ prefill, compact = false, eventType = "trial" }: CalendlyEmbedProps) => {
   const { t } = useI18n();
 
   const url = (() => {
-    if (!CALENDLY_URL) return "";
-    const u = new URL(CALENDLY_URL);
+    const base = eventType === "paid" ? CALENDLY_PAID_URL : CALENDLY_TRIAL_URL;
+    if (!base) return "";
+    const u = new URL(base);
     if (prefill?.name) u.searchParams.set("name", prefill.name);
     if (prefill?.email) u.searchParams.set("email", prefill.email);
     u.searchParams.set("hide_gdpr_banner", "1");
