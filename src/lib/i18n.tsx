@@ -896,6 +896,11 @@ const translations = {
     bookingIntroTitle: "Last step: book your free trial session",
     bookingIntroDesc: "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
     bookingIntroSkip: "Skip, you'll call me",
+    privateTrialTitle: "I want a free trial lesson (30 min)",
+    privateTrialDesc: "Your first private lesson is free — a chance to meet and set your goals.",
+    privateTrialDisclaimer: "Note: the tutor is not paid for the trial lesson. If you prefer, you can skip the trial and pay normally from the first lesson.",
+    trialSkipNote: "Want to skip the trial and pay from the first lesson?",
+    trialSkipCta: "Skip, pay now",
   },
 } as const;
 
