@@ -726,22 +726,21 @@ const RegistrationFormSection = ({
             />
           </div>
 
-          {/* Inline Calendly picker for Private & Kids — pick a slot before submitting */}
-          {(courseType === "private" || courseType === "kids") && (
-            <div className="rounded-xl border border-border bg-muted/30 p-4 sm:p-5 space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-primary" />
+          {/* Private: free trial toggle (default on). Tutor isn't paid for trial. */}
+          {courseType === "private" && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <Checkbox
+                  checked={wantTrial}
+                  onCheckedChange={(v) => setWantTrial(v === true)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">{t.privateTrialTitle}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t.privateTrialDesc}</p>
+                  <p className="text-xs text-muted-foreground mt-2 italic">{t.privateTrialDisclaimer}</p>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-foreground">{t.bookingIntroTitle}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{t.bookingIntroDesc}</p>
-                </div>
-              </div>
-              <CalendlyEmbed
-                compact
-                prefill={{ name: name || undefined, email: email || undefined }}
-              />
+              </label>
             </div>
           )}
 
