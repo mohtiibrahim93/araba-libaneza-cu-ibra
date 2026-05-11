@@ -18,6 +18,7 @@ import CookieConsent from "@/components/CookieConsent";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { initTracking, trackEvent } from "@/lib/tracking";
+import { CALENDLY_PAID_URL } from "@/components/CalendlyEmbed";
 
 const PageContent = () => {
   const { lang, t } = useI18n();
@@ -33,9 +34,22 @@ const PageContent = () => {
 
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");
+    const type = params.get("type");
     if (payment === "success") {
-      toast.success("Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.");
-      trackEvent("Purchase", { content_name: "course" });
+      if (type === "private") {
+        // Private lessons are paid → next step is to pick a slot on the
+        // paid Calendly event. Show a persistent toast with the booking link.
+        toast.success("Plata reușită! 🎉 Programează-ți lecția acum.", {
+          duration: 15000,
+          action: {
+            label: "Programează",
+            onClick: () => window.open(CALENDLY_PAID_URL, "_blank", "noopener,noreferrer"),
+          },
+        });
+      } else {
+        toast.success("Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.");
+      }
+      trackEvent("Purchase", { content_name: type || "course" });
       window.history.replaceState({}, "", "/");
     } else if (payment === "canceled") {
       toast.info("Plata a fost anulată. Poți încerca din nou oricând.");
