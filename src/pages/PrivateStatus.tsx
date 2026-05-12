@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, Clock, Loader2, MessageCircle } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle2, Clock, Loader2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { CALENDLY_PAID_URL } from "@/components/CalendlyEmbed";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
 
@@ -97,6 +98,11 @@ const PrivateStatus = () => {
               </div>
 
               <Button asChild className="mt-8 w-full">
+                <a href={CALENDLY_PAID_URL} target="_blank" rel="noopener noreferrer">
+                  <Calendar className="h-4 w-4" /> Programează lecția
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="mt-3 w-full">
                 <a href="https://wa.me/40763124514" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="h-4 w-4" /> Contactează-ne pe WhatsApp
                 </a>
