@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { ChevronDown, MessageCircle, Menu, X, GraduationCap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,17 +27,10 @@ const Navbar = () => {
     setOpen(false);
     if (location.pathname !== "/") {
       navigate("/" + hash);
-      // Defer until Index renders
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 80);
+      scrollToAnchorWhenReady(id);
       return;
     }
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-      history.replaceState(null, "", hash);
-    }
+    scrollToAnchor(id, { updateHash: true });
   };
 
   // Publish actual navbar height as a CSS var so anchor scrolling
