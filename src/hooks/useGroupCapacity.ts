@@ -78,9 +78,12 @@ export function useGroupCapacities() {
   const get = (formType: "group" | "kids", level?: string | null): CapacityInfo | null => {
     const row = data[buildKey(formType, level ?? null)];
     if (!row) return null;
-    const taken = row.taken;
     const max = row.max_seats;
     const min = row.min_seats;
+    // Guard against missing/invalid capacity rows so the UI never renders
+    // impossible values like "10 / 0 locuri ocupate".
+    if (!max || max <= 0) return null;
+    const taken = Math.min(row.taken, max);
     return {
       taken,
       max,
