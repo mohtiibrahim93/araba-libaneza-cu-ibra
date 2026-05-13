@@ -53,7 +53,7 @@ const WhatsAppButton = () => {
   }, [context]);
 
   return (
-    <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-2 md:bottom-6 md:right-6">
+    <div className="fixed bottom-6 right-6 z-50 hidden flex-col items-end gap-2 md:flex">
       <a
         href={PHONE_URL}
         aria-label={`Sună la ${DISPLAY_NUMBER}`}
