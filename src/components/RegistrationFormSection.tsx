@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,25 +11,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import GdprCheckbox from "@/components/GdprCheckbox";
-import PaymentInstructions from "@/components/PaymentInstructions";
-import CalendlyEmbed from "@/components/CalendlyEmbed";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { CheckCircle2, Loader2, MessageCircle, RotateCcw, Phone, CreditCard, Users, AlertTriangle } from "lucide-react";
+import { Loader2, MessageCircle } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 
+import GroupFields from "./RegistrationForm/GroupFields";
+import PrivateFields from "./RegistrationForm/PrivateFields";
+import KidsFields from "./RegistrationForm/KidsFields";
+import LeadFields from "./RegistrationForm/LeadFields";
+import CapacityBanner from "./RegistrationForm/CapacityBanner";
+import PostSubmitView from "./RegistrationForm/PostSubmitView";
+import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
+
 const WHATSAPP_URL = "https://wa.me/40763124514";
-
-type CourseType = "group" | "private" | "kids";
-type FormatType = "fizic" | "online";
-type LevelType = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-
-const TEMPLATE_BY_COURSE: Record<CourseType, string> = {
-  group: "group-registration-confirmation",
-  private: "private-registration-confirmation",
-  kids: "kids-registration-confirmation",
-};
 
 interface RegistrationFormSectionProps {
   defaultCourseType?: CourseType;
@@ -65,20 +58,7 @@ const RegistrationFormSection = ({
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
   const [payDeposit, setPayDeposit] = useState(false);
-  // Private only: first lesson defaults to a free trial. Student can opt out
-  // and pay normally from the start (tutor isn't paid for the trial).
-  const [wantTrial, setWantTrial] = useState<boolean>(true);
-  // Post-submit: lets a private+trial student skip the trial and go to payment.
-  const [skipTrialPostSubmit, setSkipTrialPostSubmit] = useState(false);
-  const [submittedData, setSubmittedData] = useState<{
-    courseType: CourseType;
-    email: string;
-    name: string;
-    registrationId: string;
-    quantity?: number;
-    waitlistDeposit?: boolean;
-    wantTrial?: boolean;
-  } | null>(null);
+  const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
 
   const onCourseChange = (value: CourseType) => {
     setCourseType(value);
@@ -109,8 +89,6 @@ const RegistrationFormSection = ({
     setPrivateQuantity(1);
     setGroupMonths(1);
     setPayDeposit(false);
-    setWantTrial(true);
-    setSkipTrialPostSubmit(false);
   };
 
   const capacity =
@@ -128,9 +106,7 @@ const RegistrationFormSection = ({
       return;
     }
     if (!format) {
-      toast.error(
-        courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat,
-      );
+      toast.error(courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat);
       return;
     }
     if (courseType === "group" && !level) {
@@ -149,18 +125,25 @@ const RegistrationFormSection = ({
     setSubmitting(true);
     try {
       const id = crypto.randomUUID();
-      const formType = courseType; // DB check constraint requires 'group' | 'private' | 'kids'
+      const formType = courseType;
       const formTypeLabel =
         courseType === "group" ? "Grup" : courseType === "private" ? "Privat" : "Copii";
 
       const notesParts: string[] = [];
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
-        notesParts.push(`Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`);
-        notesParts.push(`Probă gratuită: ${wantTrial ? "da" : "nu"}`);
+        notesParts.push(
+          `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`,
+        );
+        // Default flow: first lesson is a free trial (handled post-submit).
+        notesParts.push(`Probă gratuită: da (default)`);
       }
       if (courseType === "group") {
-        notesParts.push(`Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${groupMonths >= 3 ? " (−10% auto)" : ""}`);
+        notesParts.push(
+          `Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${
+            groupMonths >= 3 ? " (−10% auto)" : ""
+          }`,
+        );
       }
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
@@ -187,10 +170,6 @@ const RegistrationFormSection = ({
 
       if (error) throw error;
 
-      // Fire-and-forget: server-side function looks up the row and sends
-      // both the confirmation email (to the registrant) and the admin
-      // notification using the service role. This avoids exposing the
-      // transactional email endpoint to anonymous callers.
       void supabase.functions.invoke("notify-registration", {
         body: { registrationId: id },
       });
@@ -209,24 +188,21 @@ const RegistrationFormSection = ({
               ? groupMonths
               : undefined,
         waitlistDeposit: courseType === "kids" && payDeposit,
-        wantTrial: courseType === "private" ? wantTrial : false,
       });
       setSubmitted(true);
 
-      // If kids + deposit, immediately redirect to Stripe
       if (courseType === "kids" && payDeposit) {
         try {
-          const { data: ck, error: ckErr } = await supabase.functions.invoke(
-            "create-checkout",
-            { body: { courseType: "kids_deposit", email, name: recipientName, registrationId: id } },
-          );
+          const { data: ck, error: ckErr } = await supabase.functions.invoke("create-checkout", {
+            body: { courseType: "kids_deposit", email, name: recipientName, registrationId: id },
+          });
           if (ckErr) throw ckErr;
           if (ck?.url) {
             toast.info(t.kidsWaitlistRedirect);
             window.location.href = ck.url;
           }
-        } catch (e) {
-          console.error("Kids deposit checkout failed", e);
+        } catch (err) {
+          console.error("Kids deposit checkout failed", err);
           toast.error(t.mainLeadError);
         }
       }
@@ -238,141 +214,8 @@ const RegistrationFormSection = ({
     }
   };
 
-  if (submitted) {
-    // Trial only applies to Private. If student wants the trial, payment is
-    // deferred until they decide to continue (next lesson). If they skipped
-    // trial (either in the form or post-submit), they pay now.
-    const isPrivateTrial =
-      !!submittedData &&
-      submittedData.courseType === "private" &&
-      submittedData.wantTrial === true &&
-      !skipTrialPostSubmit;
-    const isPayable =
-      !!submittedData &&
-      submittedData.courseType !== "kids" &&
-      !submittedData.waitlistDeposit &&
-      !isPrivateTrial;
-    return (
-      <section
-        id={embedded ? undefined : "inscriere"}
-        className={embedded ? "" : "py-20 px-6 scroll-mt-24"}
-      >
-        <div className={embedded ? "space-y-6" : "max-w-2xl mx-auto space-y-6"}>
-          {/* Confirmation header */}
-          <div className="bg-background rounded-2xl border border-border p-8 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <CheckCircle2 className="w-6 h-6 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-2xl font-bold text-foreground">
-                  {t.mainLeadSuccessTitle}
-                </h2>
-                <p className="text-muted-foreground mt-1">{t.mainLeadSuccessDesc}</p>
-              </div>
-            </div>
-
-            {/* Next steps */}
-            <div className="mt-6 pt-6 border-t border-border">
-              <h3 className="text-sm font-semibold text-foreground mb-3">
-                {t.successNextStepsTitle}
-              </h3>
-              <ol className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-foreground">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-xs font-semibold flex items-center justify-center text-foreground">
-                    1
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-muted-foreground" />
-                    {t.successStepConfirm}
-                  </span>
-                </li>
-                {isPayable && (
-                  <li className="flex items-start gap-3 text-sm text-foreground">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-xs font-semibold flex items-center justify-center text-primary">
-                      2
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-primary" />
-                      {t.successStepPay}
-                    </span>
-                  </li>
-                )}
-              </ol>
-            </div>
-          </div>
-
-          {/* Payment card (primary action) */}
-          {isPayable && submittedData && (
-            <PaymentInstructions
-              courseType={submittedData.courseType as "group" | "private"}
-              email={submittedData.email}
-              name={submittedData.name}
-              registrationId={submittedData.registrationId}
-              quantity={submittedData.quantity}
-            />
-          )}
-
-          {/* Free trial booking — Calendly. Only for Private + trial opt-in. */}
-          {isPrivateTrial && submittedData && (
-            <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
-                </div>
-              </div>
-              <CalendlyEmbed
-                compact
-                eventType="trial"
-                prefill={{ name: submittedData?.name, email: submittedData?.email }}
-              />
-              <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <p className="text-xs text-muted-foreground">
-                  {t.trialSkipNote}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setSkipTrialPostSubmit(true)}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-primary/30 text-primary hover:bg-primary/5 transition-colors"
-                >
-                  {t.trialSkipCta}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Utility actions */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 text-[#25D366]" />
-              WhatsApp
-            </a>
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <RotateCcw className="w-4 h-4" />
-              {t.successAgain}
-            </button>
-            {submittedData && !isPayable && (
-              <span className="hidden" aria-hidden="true">
-                {t.bookingIntroSkip}
-              </span>
-            )}
-          </div>
-        </div>
-      </section>
-    );
+  if (submitted && submittedData) {
+    return <PostSubmitView data={submittedData} embedded={embedded} onReset={reset} />;
   }
 
   return (
@@ -444,122 +287,22 @@ const RegistrationFormSection = ({
             </div>
           )}
 
-          {/* Level (group only) */}
+          {/* Group: level + months */}
           {courseType === "group" && (
-            <div className="space-y-2">
-              <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
-              <Select value={level} onValueChange={(v) => setLevel(v as LevelType)}>
-                <SelectTrigger id="level">
-                  <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
-                  <SelectItem value="A2">A2 — {t.levelA2Subtitle}</SelectItem>
-                  <SelectItem value="B1">B1 — {t.levelB1Subtitle}</SelectItem>
-                  <SelectItem value="B2">B2 — {t.levelB2Subtitle}</SelectItem>
-                  <SelectItem value="C1">C1 — {t.levelC1Subtitle}</SelectItem>
-                  <SelectItem value="C2">C2 — {t.levelC2Subtitle}</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
-            </div>
+            <GroupFields
+              level={level}
+              onLevelChange={setLevel}
+              groupMonths={groupMonths}
+              onGroupMonthsChange={setGroupMonths}
+            />
           )}
 
-          {/* Group payment plan */}
-          {courseType === "group" && level && (
-            <div className="space-y-2">
-              <Label>{t.groupMonthsLabel} *</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {([1, 3] as const).map((m) => {
-                  const monthly = { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 }[level as LevelType] || 500;
-                  const base = monthly * m;
-                  const total = m === 3 ? Math.round(base * 0.9) : base;
-                  const active = groupMonths === m;
-                  return (
-                    <button
-                      key={m}
-                      type="button"
-                      onClick={() => setGroupMonths(m)}
-                      className={`text-left rounded-lg border p-3 transition-colors ${
-                        active
-                          ? "border-primary bg-primary/5"
-                          : "border-border bg-background hover:bg-muted"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-foreground">
-                          {m === 1 ? t.groupMonthsOption1 : t.groupMonthsOption3}
-                        </span>
-                        {m === 3 && (
-                          <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                            −10%
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-1 text-base font-bold text-foreground">
-                        {total.toLocaleString("ro-RO")} LEI
-                      </p>
-                      {m === 3 && (
-                        <p className="text-[11px] text-muted-foreground line-through">
-                          {base.toLocaleString("ro-RO")} LEI
-                        </p>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-muted-foreground">{t.groupMonthsHelp}</p>
-            </div>
-          )}
-
-          {/* Private lessons quantity */}
+          {/* Private: quantity */}
           {courseType === "private" && (
-            <div className="space-y-2">
-              <Label htmlFor="privateQuantity">{t.privateQuantityLabel} *</Label>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setPrivateQuantity((q) => Math.max(1, q - 1))}
-                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
-                  aria-label="−"
-                >
-                  −
-                </button>
-                <Input
-                  id="privateQuantity"
-                  type="number"
-                  min={1}
-                  max={100}
-                  value={privateQuantity}
-                  onChange={(e) => {
-                    const n = Number.parseInt(e.target.value, 10);
-                    setPrivateQuantity(Number.isFinite(n) ? Math.min(100, Math.max(1, n)) : 1);
-                  }}
-                  className="text-center font-semibold w-20"
-                />
-                <button
-                  type="button"
-                  onClick={() => setPrivateQuantity((q) => Math.min(100, q + 1))}
-                  className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
-                  aria-label="+"
-                >
-                  +
-                </button>
-                <div className="ml-auto text-right">
-                  <p className="text-sm font-semibold text-foreground">
-                    {(privateQuantity * 150 * (privateQuantity >= 20 ? 0.85 : 1)).toLocaleString("ro-RO")} LEI
-                  </p>
-                  {privateQuantity >= 20 ? (
-                    <p className="text-xs font-medium text-primary">{t.privateQuantityDiscountApplied}</p>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">
-                      {t.privateQuantityDiscountHint.replace("{n}", String(20 - privateQuantity))}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground">{t.privateQuantityHelp}</p>
-            </div>
+            <PrivateFields
+              privateQuantity={privateQuantity}
+              onPrivateQuantityChange={setPrivateQuantity}
+            />
           )}
 
           {/* Center for physical */}
@@ -574,15 +317,9 @@ const RegistrationFormSection = ({
                   <SelectItem value="Bucuresti - Centru (Raduga)">
                     {t.mainLeadLocationBucharestCentru}
                   </SelectItem>
-                  <SelectItem value="Bucuresti - Nord">
-                    {t.mainLeadLocationBucharestNord}
-                  </SelectItem>
-                  <SelectItem value="Bucuresti - Sud">
-                    {t.mainLeadLocationBucharestSud}
-                  </SelectItem>
-                  <SelectItem value="Alt oras">
-                    {t.mainLeadLocationOtherCity}
-                  </SelectItem>
+                  <SelectItem value="Bucuresti - Nord">{t.mainLeadLocationBucharestNord}</SelectItem>
+                  <SelectItem value="Bucuresti - Sud">{t.mainLeadLocationBucharestSud}</SelectItem>
+                  <SelectItem value="Alt oras">{t.mainLeadLocationOtherCity}</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">{t.mainLeadLocationHelp}</p>
@@ -597,152 +334,40 @@ const RegistrationFormSection = ({
             </div>
           )}
 
-          {/* Capacity banner: group (after level) + kids */}
+          {/* Capacity banner: group + kids */}
           {capacity && (courseType === "group" || courseType === "kids") && (
-            <div
-              className={`rounded-lg border px-4 py-3 ${
-                capacity.full
-                  ? "border-destructive/40 bg-destructive/5"
-                  : capacity.belowMin
-                    ? "border-amber-500/40 bg-amber-500/5"
-                    : "border-primary/30 bg-primary/5"
-              }`}
-            >
-              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Users className="w-4 h-4 text-primary" />
-                <span>
-                  {capacity.taken} / {capacity.max} {t.capSeatsLabel}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {capacity.full
-                  ? t.capFull
-                  : capacity.belowMin
-                    ? t.capNeedToStart.replace("{n}", String(capacity.needToStart))
-                    : t.capSpotsLeft.replace("{n}", String(capacity.seatsLeft))}
-              </p>
-            </div>
+            <CapacityBanner capacity={capacity} />
           )}
 
-          {/* Kids extra */}
+          {/* Kids: child fields + (conditional) waitlist deposit */}
           {courseType === "kids" && (
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="childName">{t.kidsChildName} *</Label>
-                <Input
-                  id="childName"
-                  value={childName}
-                  onChange={(e) => setChildName(e.target.value)}
-                  placeholder={t.kidsChildNamePlaceholder}
-                  required
-                  maxLength={100}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="childAge">{t.kidsChildAge} *</Label>
-                <Input
-                  id="childAge"
-                  value={childAge}
-                  onChange={(e) => setChildAge(e.target.value)}
-                  placeholder={t.kidsChildAgePlaceholder}
-                  required
-                  maxLength={20}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Kids waitlist deposit */}
-          {courseType === "kids" && capacity?.belowMin && (
-            <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-3">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-foreground">{t.kidsWaitlistTitle}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{t.kidsWaitlistDesc}</p>
-                </div>
-              </div>
-              <label className="flex items-start gap-2 cursor-pointer">
-                <Checkbox
-                  checked={payDeposit}
-                  onCheckedChange={(v) => setPayDeposit(v === true)}
-                  className="mt-0.5"
-                />
-                <span className="text-sm text-foreground">{t.kidsWaitlistCheckbox}</span>
-              </label>
-            </div>
-          )}
-
-          {/* Contact details */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="name">
-                {courseType === "kids" ? t.kidsParentName : t.labelName} *
-              </Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t.placeholderName}
-                required
-                maxLength={100}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">{t.labelPhone} *</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder={t.placeholderPhone}
-                required
-                maxLength={30}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">{t.labelEmail}</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t.placeholderEmail}
-                maxLength={255}
-              />
-            </div>
-          </div>
-
-          {/* Message */}
-          <div className="space-y-2">
-            <Label htmlFor="message">{t.mainLeadMessageLabel}</Label>
-            <Textarea
-              id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder={t.mainLeadMessagePlaceholder}
-              rows={3}
-              maxLength={1000}
+            <KidsFields
+              childName={childName}
+              childAge={childAge}
+              payDeposit={payDeposit}
+              capacity={capacity}
+              onChildNameChange={setChildName}
+              onChildAgeChange={setChildAge}
+              onPayDepositChange={setPayDeposit}
             />
-          </div>
-
-          {/* Private: free trial toggle (default on). Tutor isn't paid for trial. */}
-          {courseType === "private" && (
-            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 space-y-3">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <Checkbox
-                  checked={wantTrial}
-                  onCheckedChange={(v) => setWantTrial(v === true)}
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">{t.privateTrialTitle}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{t.privateTrialDesc}</p>
-                  <p className="text-xs text-muted-foreground mt-2 italic">{t.privateTrialDisclaimer}</p>
-                </div>
-              </label>
-            </div>
           )}
+
+          {/* Contact + message */}
+          <LeadFields
+            courseType={courseType}
+            name={name}
+            phone={phone}
+            email={email}
+            message={message}
+            onNameChange={setName}
+            onPhoneChange={setPhone}
+            onEmailChange={setEmail}
+            onMessageChange={setMessage}
+          />
+
+          {/* Trial UX (Option A): no toggle here. Private students are
+              defaulted into the free trial flow post-submit, with a
+              subtle "pay directly" link below the booking embed. */}
 
           <p className="text-xs text-muted-foreground">{t.mainLeadCallbackNote}</p>
 

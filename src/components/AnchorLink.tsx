@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   /** In-page anchor like "#courses" (or full path with hash like "/#courses") */
@@ -27,16 +28,10 @@ const AnchorLink = forwardRef<HTMLAnchorElement, Props>(
       e.preventDefault();
       if (location.pathname !== "/") {
         navigate("/" + hash);
-        setTimeout(() => {
-          document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-        }, 80);
+        scrollToAnchorWhenReady(id);
         return;
       }
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-        history.replaceState(null, "", hash);
-      }
+      scrollToAnchor(id, { updateHash: true });
     };
 
     return (
