@@ -1,0 +1,10 @@
+# centrul de araba libaneza
+
+> Cursuri de arabă libaneză cu profesor nativ în București și online — pentru adulți (grup și privat) și copii. Toate nivelurile CEFR (A1–C2).
+
+## Pages
+
+- [Home](/): Prezentare generală a cursurilor, instructorul Ibra, programe, prețuri, înscriere și FAQ.
+- [Privacy Policy](/privacy): Cum sunt colectate, folosite și protejate datele personale (GDPR).
+- [Terms & Conditions](/terms): Termenii de utilizare a serviciilor educaționale, înscriere, plăți, anulare.
+- [Unsubscribe](/unsubscribe): Dezabonare de la comunicările prin email.
