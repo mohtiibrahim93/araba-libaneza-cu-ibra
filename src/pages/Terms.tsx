@@ -1,4 +1,5 @@
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -38,8 +39,23 @@ const TermsContent = () => {
   const { lang } = useI18n();
   const page = content[lang];
 
+  const title = lang === "ro"
+    ? "Termeni și Condiții — centrul de araba libaneza"
+    : "Terms & Conditions — lebanese arabic center";
+  const description = lang === "ro"
+    ? "Termenii și condițiile de utilizare a serviciilor educaționale oferite de centrul de araba libaneza."
+    : "Terms and conditions for using the educational services provided by the lebanese arabic center.";
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href="https://centruldearabalibaneza.com/terms" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content="https://centruldearabalibaneza.com/terms" />
+      </Helmet>
       <Navbar />
       <main className="max-w-3xl mx-auto px-6 py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
