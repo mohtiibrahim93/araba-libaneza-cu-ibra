@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -57,8 +58,38 @@ const PageContent = () => {
     }
   }, []);
 
+  const homeTitle = lang === "ro"
+    ? "Cursuri de Arabă Libaneză în București și Online — cu Ibra"
+    : "Lebanese Arabic Courses in Bucharest & Online — with Ibra";
+  const homeDescription = lang === "ro"
+    ? "Învață arabă libaneză cu profesor nativ. Cursuri de grup, private și pentru copii — fizic în București sau online. Toate nivelurile CEFR (A1–C2)."
+    : "Learn Lebanese Arabic with a native instructor. Group, private, and kids courses — in person in Bucharest or online. All CEFR levels (A1–C2).";
+
+  const faqEntries = [
+    { q: t.faq1Q, a: t.faq1A }, { q: t.faq2Q, a: t.faq2A }, { q: t.faq3Q, a: t.faq3A },
+    { q: t.faq4Q, a: t.faq4A }, { q: t.faq5Q, a: t.faq5A }, { q: t.faq6Q, a: t.faq6A },
+  ];
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqEntries.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{homeTitle}</title>
+        <meta name="description" content={homeDescription} />
+        <link rel="canonical" href="https://centruldearabalibaneza.com/" />
+        <meta property="og:title" content={homeTitle} />
+        <meta property="og:description" content={homeDescription} />
+        <meta property="og:url" content="https://centruldearabalibaneza.com/" />
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+      </Helmet>
       <Navbar />
       <HeroSection />
       <WhySection />

@@ -1,4 +1,5 @@
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -36,8 +37,23 @@ const PrivacyContent = () => {
   const { lang } = useI18n();
   const page = content[lang];
 
+  const title = lang === "ro"
+    ? "Politica de Confidențialitate — centrul de araba libaneza"
+    : "Privacy Policy — lebanese arabic center";
+  const description = lang === "ro"
+    ? "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la centrul de araba libaneza."
+    : "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.";
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href="https://centruldearabalibaneza.com/privacy" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content="https://centruldearabalibaneza.com/privacy" />
+      </Helmet>
       <Navbar />
       <main className="max-w-3xl mx-auto px-6 py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
