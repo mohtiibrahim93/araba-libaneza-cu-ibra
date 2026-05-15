@@ -14,6 +14,177 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability_rules: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          is_active: boolean
+          start_time: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          is_active?: boolean
+          start_time: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
+      booking_event_types: {
+        Row: {
+          buffer_after_min: number
+          buffer_before_min: number
+          created_at: string
+          description_en: string | null
+          description_ro: string | null
+          duration_min: number
+          id: string
+          is_active: boolean
+          max_advance_days: number
+          min_notice_hours: number
+          name_en: string
+          name_ro: string
+          price_cents: number
+          requires_payment: boolean
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          buffer_after_min?: number
+          buffer_before_min?: number
+          created_at?: string
+          description_en?: string | null
+          description_ro?: string | null
+          duration_min: number
+          id?: string
+          is_active?: boolean
+          max_advance_days?: number
+          min_notice_hours?: number
+          name_en: string
+          name_ro: string
+          price_cents?: number
+          requires_payment?: boolean
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          buffer_after_min?: number
+          buffer_before_min?: number
+          created_at?: string
+          description_en?: string | null
+          description_ro?: string | null
+          duration_min?: number
+          id?: string
+          is_active?: boolean
+          max_advance_days?: number
+          min_notice_hours?: number
+          name_en?: string
+          name_ro?: string
+          price_cents?: number
+          requires_payment?: boolean
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          cancelled_at: string | null
+          created_at: string
+          end_at: string
+          event_type_slug: string
+          format: string
+          google_event_id: string | null
+          id: string
+          language: string
+          manage_token: string
+          meet_link: string | null
+          notes: string | null
+          original_booking_id: string | null
+          reminder_1h_sent_at: string | null
+          reminder_24h_sent_at: string | null
+          start_at: string
+          status: string
+          student_email: string
+          student_name: string
+          student_phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          created_at?: string
+          end_at: string
+          event_type_slug: string
+          format?: string
+          google_event_id?: string | null
+          id?: string
+          language?: string
+          manage_token?: string
+          meet_link?: string | null
+          notes?: string | null
+          original_booking_id?: string | null
+          reminder_1h_sent_at?: string | null
+          reminder_24h_sent_at?: string | null
+          start_at: string
+          status?: string
+          student_email: string
+          student_name: string
+          student_phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          created_at?: string
+          end_at?: string
+          event_type_slug?: string
+          format?: string
+          google_event_id?: string | null
+          id?: string
+          language?: string
+          manage_token?: string
+          meet_link?: string | null
+          notes?: string | null
+          original_booking_id?: string | null
+          reminder_1h_sent_at?: string | null
+          reminder_24h_sent_at?: string | null
+          start_at?: string
+          status?: string
+          student_email?: string
+          student_name?: string
+          student_phone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_event_type_slug_fkey"
+            columns: ["event_type_slug"]
+            isOneToOne: false
+            referencedRelation: "booking_event_types"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "bookings_original_booking_id_fkey"
+            columns: ["original_booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_confirmation_settings: {
         Row: {
           id: number
