@@ -25,3 +25,5 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.booking-create]
     verify_jwt = false
+  [functions.booking-manage]
+    verify_jwt = false
