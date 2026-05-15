@@ -1,65 +1,169 @@
-## Plan: Capacități grupe + Calendly inline + avans waitlist Kids
+# Native Scheduler — înlocuiește Calendly
 
-### 1. Bază de date (migration)
+Sistem nativ de programare cu sync bidirecțional Google Calendar, reschedule self-service și remindere automate. Zero mentenanță manuală pentru Ibra.
 
-**Adaug coloană `level`** în `registrations` (text, nullable) — pentru a distinge A1/A2/.../C2 sau "kids".
+## Scope
 
-**Tabel nou `group_capacities`** — configurabil din admin:
-- `form_type` (text: 'group' | 'kids')
-- `level` (text, nullable; pentru kids = null sau 'kids')
-- `max_seats` (int, default 10)
-- `min_seats` (int, default 4)
-- unique (form_type, level)
-- RLS: anyone read; service role write.
-- Seed: rânduri pentru group A1..C2 (10/4) și kids (10/4).
+**Inclus:**
+- Disponibilitate auto-sincronizată din Google Calendar (citire freebusy)
+- Bookings scrise ca evenimente în GCal cu Google Meet auto pentru online
+- 2 tipuri de eveniment: `trial` (30 min, gratuit) și `paid` (60 min)
+- UI nativ de programare (zi → slot → confirmare)
+- Reschedule + cancel via link tokenizat (fără login)
+- Email confirmare + remindere T-24h și T-1h + email cancel/reschedule
+- Admin UI: editare reguli disponibilitate + listă programări cu cancel/reschedule manual
+- Timezone fix Europe/Bucharest
 
-**Adaug `is_waitlist_deposit` (bool)** în `registrations` pentru a marca înscrierile cu avans.
+**Exclus (poate veni mai târziu):**
+- Multi-instructor
+- Selector timezone pe partea studentului
+- Plată în pasul de booking (paid lesson rămâne flux Stripe → booking)
+- Webhook GCal push (folosim freebusy on-demand, suficient pentru un singur instructor)
+- SMS reminders
 
-### 2. Logica de capacitate (frontend)
+## Arhitectură
 
-**Nou: `src/hooks/useGroupCapacity.ts`** — fetch `group_capacities` + count registrations per (form_type, level). Returnează `{ taken, max, min, remainingToStart, seatsLeft }`. Folosește realtime subscription pe `registrations` ca să se actualizeze live.
+```text
+Student                  App (React)              Edge Functions             Supabase DB           Google Calendar
+   |                          |                          |                         |                       |
+   |--- alege tip & zi ------>|                          |                         |                       |
+   |                          |--- booking-availability->|                         |                       |
+   |                          |                          |--- read rules --------->|                       |
+   |                          |                          |--- read bookings ------>|                       |
+   |                          |                          |--- freebusy ----------------------------------->|
+   |                          |<------ slots --- --------|                         |                       |
+   |--- confirma slot ------->|                          |                         |                       |
+   |                          |--- booking-create ------>|                         |                       |
+   |                          |                          |--- re-check + insert -->|                       |
+   |                          |                          |--- create event ------------------------------->|
+   |                          |                          |--- enqueue email ------>|                       |
+   |<--- email confirmare + manage link -------------------------------------------|                       |
+   |                                                                                                       |
+   |--- /booking/manage/:token -> reschedule sau cancel -> update DB + GCal -> email                       |
+                                                                                                           |
+pg_cron la fiecare 15 min ----> booking-reminders ----> trimite T-24h și T-1h
+```
 
-**ProgramsSection (Adulți):** sub fiecare pill A1–C2 afișez mic indicator: `"3/10 locuri • mai e nevoie de 1 pentru start"` sau `"7/10 ocupate"`. Card-ul Group highlight nivelul activ cu seat info.
+## Schema DB (migrație nouă)
 
-**RegistrationFormSection (Group + Kids):** afișez seat info live deasupra formularului în funcție de form_type și (pentru group) nivel selectat. Salvez `level` la insert.
+```text
+booking_event_types
+  id, slug ('trial'|'paid'), name, duration_min, buffer_before_min,
+  buffer_after_min, min_notice_hours, max_advance_days,
+  price_cents, requires_payment, is_active
 
-### 3. Calendly inline în formular
+availability_rules
+  id, weekday (0=Dum..6=Sâm), start_time, end_time, is_active
 
-În `RegistrationFormSection`, după submit reușit (toast "Te-am înregistrat!"), card-ul de mulțumire afișează:
-- Mesaj: "Ultimul pas: rezervă-ți **sesiunea gratuită de probă** (30 min cu Ibra)"
-- Iframe Calendly inline (folosește `CALENDLY_URL` env / placeholder ca în BookingSection)
-- Buton "Sar peste, mă suni" → închide.
+bookings
+  id, event_type_slug, start_at, end_at,
+  student_name, student_email, student_phone,
+  format ('online'|'physical'), notes,
+  google_event_id, meet_link,
+  status ('confirmed'|'cancelled'|'rescheduled'|'completed'),
+  manage_token (uuid unique),
+  reminder_24h_sent_at, reminder_1h_sent_at,
+  cancelled_at, original_booking_id (FK self),
+  created_at, updated_at
+```
 
-Se aplică pentru toate 3 form-uri (Group, Private, Kids).
+**RLS:**
+- `bookings`: insert anonim permis (ca `registrations`); select doar via service role (acces prin edge function tokenizat)
+- `availability_rules` + `booking_event_types`: select public, write doar service role
+- Unique partial index pe `bookings(start_at) WHERE status='confirmed'` ca safety net pentru concurență
 
-### 4. Avans 25% (Kids waitlist)
+**Seed:**
+- `trial`: 30 min, buffer 5/5, min_notice 12h, max_advance 30 zile, price 0
+- `paid`: 60 min, buffer 5/5, min_notice 12h, max_advance 30 zile, price (existent)
+- `availability_rules`: L–V 10:00–18:00 (editabil din admin)
 
-În card-ul Kids din formular: dacă `taken < min` (sub 4 înscriși), afișez:
-- Banner: "Grupa nu e încă completă (X/4). Rezervă-ți locul cu un avans rambursabil de **125 LEI** (25%)."
-- Checkbox `sms_confirmation_opt_in`-style: "Vreau să plătesc avansul acum"
-- La submit cu acest flag → invocă `create-checkout` edge function cu `mode: payment`, line_items: 125 LEI o singură dată; redirect la Stripe Checkout.
-- La return cu `?payment=success`, marchez `is_waitlist_deposit=true` și `payment_status='paid'`.
+## Edge Functions noi
 
-**Edge function**: extind `create-checkout` existent să accepte `productType: 'kids_deposit'` cu price_data 12500 RON cents (sau price_id nou). Folosesc `price_data` doar dacă nu există price_id; preferabil creez un Stripe product nou "Avans loc grupa Kids" / 125 LEI.
+1. **`booking-availability`** (verify_jwt=false, public)
+   - Input: `event_type_slug`, `date_from`, `date_to`
+   - Output: array de sloturi disponibile (ISO + label local)
+   - Algoritm: expand rules pe weekday → slice în sloturi de `duration_min` → filtrează `min_notice` → scade GCal busy (call freebusy) → scade bookings DB confirmate (cu buffer) → return
 
-### 5. Admin UI
+2. **`booking-create`** (public)
+   - Input: `event_type_slug`, `start_at`, `format`, lead info
+   - Re-check disponibilitate (anti race)
+   - Insert booking, generează `manage_token`
+   - Creează eveniment în GCal cu attendees + Meet (dacă online)
+   - Enqueue email confirmare cu link manage și .ics
+   - Return: `{ booking_id, manage_token }`
 
-În `src/pages/Admin.tsx` adaug tab nou "Capacități":
-- Listă cu rânduri group A1..C2 + kids
-- Pentru fiecare: input `max_seats`, `min_seats`
-- Buton "Salvează" → invocă edge function nouă `update-group-capacity` (verify admin password header) → service role update.
+3. **`booking-manage`** (public, autorizat prin token)
+   - GET: returnează detalii booking
+   - PATCH (reschedule): re-check slot nou, update GCal event, email reschedule
+   - DELETE (cancel): șterge GCal event, status=cancelled, email cancel
 
-### 6. Email admin notification
+4. **`booking-reminders`** (cron, service role)
+   - Caută booking-uri confirmed cu `start_at` în [now+23h45m, now+24h15m] fără `reminder_24h_sent_at`
+   - Idem pentru T-1h
+   - Enqueue emailuri, marchează timestampuri
 
-Include `level` și `is_waitlist_deposit` în template `admin-new-registration` și subiect.
+## UI nou
 
-### Fișiere
+- **`<NativeScheduler eventType prefill onBooked />`** — înlocuiește `<CalendlyEmbed>`. 3 pași: zi (grid 14 zile cu badge sloturi) → slot (listă cards pe zi) → confirmare (form compact, prefilled din lead)
+- **`/booking/manage/:token`** — pagină self-service: detalii + butoane Reschedule (deschide scheduler în modul reprogramare) și Cancel (cu confirm dialog)
+- **Admin → tab "Disponibilitate"** — editor reguli (weekday + ore start/end, add/remove)
+- **Admin → tab "Programări"** — tabel filtrabil (zi/tip/status), acțiuni cancel/reschedule manual
 
-**Modificate:** `src/components/ProgramsSection.tsx`, `src/components/RegistrationFormSection.tsx`, `src/components/BookingSection.tsx` (extragere logic Calendly în component reutilizabil `CalendlyEmbed.tsx`), `src/pages/Admin.tsx`, `src/lib/i18n.tsx`, `supabase/functions/create-checkout/index.ts`, `supabase/functions/_shared/transactional-email-templates/admin-new-registration.tsx`.
+## Email templates noi (în `_shared/transactional-email-templates/`)
 
-**Create:** `src/hooks/useGroupCapacity.ts`, `src/components/CalendlyEmbed.tsx`, `supabase/functions/update-group-capacity/index.ts`, migration nouă (level + group_capacities + is_waitlist_deposit + seed).
+- `booking-confirmation` (cu .ics atașat, link manage, detalii Meet)
+- `booking-reminder-24h` și `booking-reminder-1h`
+- `booking-cancelled`
+- `booking-rescheduled`
 
-### Note
-- Calendly URL rămâne placeholder; când îl ai, îl pun într-un secret/const și se activează automat.
-- Capacitate inițială: 10 max / 4 min pentru toate. Le modifici din admin.
-- Avansul 125 LEI: produs Stripe nou, plata one-off, redirect success → marchez paid.
+## Înlocuiri în codul existent
+
+| Fișier | Schimbare |
+|---|---|
+| `src/components/BookingSection.tsx` | folosește `<NativeScheduler eventType="trial" />` |
+| `src/components/RegistrationForm/PostSubmitView.tsx` | înlocuiește `<CalendlyEmbed>` cu `<NativeScheduler>` (trial pentru private) |
+| `src/pages/Index.tsx` | toast post-payment redirect → `/booking?type=paid` în loc de Calendly URL |
+| `src/pages/PrivateStatus.tsx` | buton "Programează" → pagina nativă |
+| `src/components/CalendlyEmbed.tsx` | șters la final |
+
+## Conector Google Calendar
+
+- Folosim conectorul Lovable Google Calendar (contul Ibra completează OAuth o singură dată)
+- Edge functions accesează GCal via gateway: `https://connector-gateway.lovable.dev/google_calendar/calendar/v3/...`
+- Calendar țintă: `primary` al lui Ibra
+- Endpoints folosite:
+  - `POST /freeBusy` — pentru disponibilitate
+  - `POST /calendars/primary/events?conferenceDataVersion=1` — pentru creare cu Meet
+  - `PATCH /calendars/primary/events/{id}` — pentru reschedule
+  - `DELETE /calendars/primary/events/{id}` — pentru cancel
+- Fallback: dacă conectorul pică, folosim doar bookings DB pentru disponibilitate + warning în admin
+
+## Activări necesare în Supabase
+
+- Extensii: `pg_cron`, `pg_net` (în prima migrație)
+- Cron job: `*/15 * * * *` → invocă `booking-reminders` cu service role key (SQL via insert tool, nu migrație, conține anon key specific proiectului)
+
+## Plan de livrare (incremental, fiecare etapă rulabilă)
+
+1. **Conector + DB + seed** — link Google Calendar, migrație schema, seed event types + reguli default L–V 10–18
+2. **Backend availability + create** — edge functions `booking-availability` și `booking-create` cu integrare GCal, fără reminders
+3. **UI scheduler + integrare în 3 puncte** — `<NativeScheduler>` + înlocuire în `BookingSection`, `PostSubmitView`, `Checkout` success redirect
+4. **Manage page + reschedule/cancel** — `/booking/manage/:token` + `booking-manage`
+5. **Email templates + reminders + cron** — toate cele 5 templates, `booking-reminders`, pg_cron schedule
+6. **Admin UI** — tab Disponibilitate + tab Programări
+7. **Cleanup** — șterge `CalendlyEmbed`, update i18n strings RO/EN, regression test pe fluxurile group/private/kids
+
+## Riscuri & atenție
+
+- **One-time OAuth**: Ibra trebuie să conecteze Google Calendar via conectorul Lovable înainte de etapa 2. Fără asta, sloturile nu țin cont de programul lui personal.
+- **Concurență**: dublu-booking prevenit prin re-check + unique partial index. Pe coliziune → 409, frontend re-fetch.
+- **GCal freebusy latency**: ~200–500ms per call. Cache pe 60s în memoria edge function pentru request-uri rapide consecutive.
+- **i18n**: toate stringurile noi adăugate în RO și EN simultan (proiectul are i18n custom).
+- **Manage token în clar**: acceptabil pentru că link-ul pleacă doar la emailul studentului. Nu rotim, expiră implicit la cancel/in trecut.
+
+## Confirmări înainte de implementare
+
+1. Calendar țintă: `primary` al lui Ibra (cel din contul cu care conectează GCal). Confirmi?
+2. Disponibilitate inițială default: **L–V 10:00–18:00**, sloturi de 30/60 min, **min notice 12h**, **max 30 zile în avans**. OK sau ai alte valori?
+3. Pentru lecțiile online vrei **Google Meet auto-generat** atașat la eveniment (link în email)?
+4. Tipul `paid` (60 min) — vrei să fie bookable direct fără plată în avans (modelul Calendly actual), sau doar după Stripe success ca acum?
