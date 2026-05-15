@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Calendar, CheckCircle2, Clock, Loader2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { CALENDLY_PAID_URL } from "@/components/CalendlyEmbed";
 
 type LeadStatus = "new" | "contacted" | "confirmed";
 
@@ -98,7 +97,7 @@ const PrivateStatus = () => {
               </div>
 
               <Button asChild className="mt-8 w-full">
-                <a href={CALENDLY_PAID_URL} target="_blank" rel="noopener noreferrer">
+                <a href="/booking?type=paid">
                   <Calendar className="h-4 w-4" /> Programează lecția
                 </a>
               </Button>
