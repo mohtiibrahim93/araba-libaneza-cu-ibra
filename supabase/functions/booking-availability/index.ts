@@ -97,6 +97,7 @@ Deno.serve(async (req) => {
         .gte("start_at", windowStart)
         .lte("start_at", windowEnd),
     ]);
+    console.log("[avail] window", windowStart, "->", windowEnd, "gcalBusy", busy.length, "dbBusy", (existing ?? []).length);
 
     const bookingBusy = (existing ?? []).map((b) => ({
       start: Date.parse(b.start_at) - et.buffer_before_min * 60_000,
