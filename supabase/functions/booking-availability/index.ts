@@ -62,10 +62,13 @@ Deno.serve(async (req) => {
       const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
       const wd = weekdayInTz(probe);
       const windows = rulesByDay.get(wd);
+      console.log("[avail] day", day, "wd", wd, "windows", windows?.length ?? 0);
       if (!windows) continue;
       const slots = generateSlotsForDate(day.y, day.m, day.d, windows, et.duration_min, 30);
+      console.log("[avail] generated", slots.length, "for", day);
       candidates.push(...slots);
     }
+    console.log("[avail] total candidates", candidates.length, "rulesByDay keys", [...rulesByDay.keys()]);
 
     // Min-notice + max-advance filtering
     const now = Date.now();
