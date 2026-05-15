@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import CalendlyEmbed from "@/components/CalendlyEmbed";
+import NativeScheduler from "@/components/NativeScheduler";
 
 const BookingSection = () => {
   const { t } = useI18n();
@@ -16,7 +16,7 @@ const BookingSection = () => {
         </div>
 
         <div className="rounded-2xl border border-border bg-background p-8 shadow-sm">
-          <CalendlyEmbed />
+          <NativeScheduler eventType="trial" />
         </div>
       </div>
     </section>
