@@ -62,13 +62,10 @@ Deno.serve(async (req) => {
       const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
       const wd = weekdayInTz(probe);
       const windows = rulesByDay.get(wd);
-      console.log("[avail] day", day, "wd", wd, "windows", windows?.length ?? 0);
       if (!windows) continue;
       const slots = generateSlotsForDate(day.y, day.m, day.d, windows, et.duration_min, 30);
-      console.log("[avail] generated", slots.length, "for", day);
       candidates.push(...slots);
     }
-    console.log("[avail] total candidates", candidates.length, "rulesByDay keys", [...rulesByDay.keys()]);
 
     // Min-notice + max-advance filtering
     const now = Date.now();
@@ -97,7 +94,6 @@ Deno.serve(async (req) => {
         .gte("start_at", windowStart)
         .lte("start_at", windowEnd),
     ]);
-    console.log("[avail] window", windowStart, "->", windowEnd, "gcalBusy", busy.length, "dbBusy", (existing ?? []).length);
 
     const bookingBusy = (existing ?? []).map((b) => ({
       start: Date.parse(b.start_at) - et.buffer_before_min * 60_000,
