@@ -19,7 +19,6 @@ import CookieConsent from "@/components/CookieConsent";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { initTracking, trackEvent } from "@/lib/tracking";
-import { CALENDLY_PAID_URL } from "@/components/CalendlyEmbed";
 
 const PageContent = () => {
   const { lang, t } = useI18n();
@@ -38,13 +37,13 @@ const PageContent = () => {
     const type = params.get("type");
     if (payment === "success") {
       if (type === "private") {
-        // Private lessons are paid → next step is to pick a slot on the
-        // paid Calendly event. Show a persistent toast with the booking link.
+        // Private lessons are paid → next step is to pick a slot in the
+        // native scheduler. Send them to the booking page (paid event).
         toast.success("Plata reușită! 🎉 Programează-ți lecția acum.", {
           duration: 15000,
           action: {
             label: "Programează",
-            onClick: () => window.open(CALENDLY_PAID_URL, "_blank", "noopener,noreferrer"),
+            onClick: () => { window.location.href = "/booking?type=paid"; },
           },
         });
       } else {

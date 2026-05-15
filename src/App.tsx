@@ -13,6 +13,8 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import Unsubscribe from "./pages/Unsubscribe";
 import Checkout from "./pages/Checkout";
+import Booking from "./pages/Booking";
+import BookingManage from "./pages/BookingManage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/booking/manage/:token" element={<BookingManage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

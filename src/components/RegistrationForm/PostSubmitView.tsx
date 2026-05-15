@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
-import CalendlyEmbed from "@/components/CalendlyEmbed";
+import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -104,8 +104,7 @@ const PostSubmitView = ({ data, embedded, onReset }: Props) => {
                 <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
               </div>
             </div>
-            <CalendlyEmbed
-              compact
+            <NativeScheduler
               eventType="trial"
               prefill={{ name: data.name, email: data.email }}
             />
