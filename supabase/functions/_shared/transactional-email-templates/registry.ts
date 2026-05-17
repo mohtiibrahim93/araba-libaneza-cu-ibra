@@ -13,10 +13,18 @@ import { template as registrationConfirmation } from './registration-confirmatio
 import { template as groupRegistrationConfirmation } from './group-registration-confirmation.tsx'
 import { template as privateRegistrationConfirmation } from './private-registration-confirmation.tsx'
 import { template as kidsRegistrationConfirmation } from './kids-registration-confirmation.tsx'
+import { template as bookingConfirmation } from './booking-confirmation.tsx'
+import { template as bookingReminder } from './booking-reminder.tsx'
+import { template as bookingCancelled } from './booking-cancelled.tsx'
+import { template as bookingRescheduled } from './booking-rescheduled.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
   'group-registration-confirmation': groupRegistrationConfirmation,
   'private-registration-confirmation': privateRegistrationConfirmation,
   'kids-registration-confirmation': kidsRegistrationConfirmation,
+  'booking-confirmation': bookingConfirmation,
+  'booking-reminder': bookingReminder,
+  'booking-cancelled': bookingCancelled,
+  'booking-rescheduled': bookingRescheduled,
 }
