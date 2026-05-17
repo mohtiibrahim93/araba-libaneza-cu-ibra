@@ -8,6 +8,7 @@ import {
   gcalFreebusy,
   overlaps,
 } from "../_shared/booking.ts";
+import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
 
 function client() {
   return createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -67,6 +68,16 @@ Deno.serve(async (req) => {
         .from("bookings")
         .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
         .eq("id", booking.id);
+      sendBookingEmail(
+        "booking-cancelled",
+        booking.student_email,
+        {
+          name: booking.student_name,
+          whenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          lang: booking.language ?? "ro",
+        },
+        `booking-cancel-${booking.id}`,
+      );
       return json({ ok: true, status: "cancelled" });
     }
 
@@ -139,6 +150,20 @@ Deno.serve(async (req) => {
 
       // Patch GCal event in place (keeps id + Meet link)
       if (booking.google_event_id) await gcalPatchEvent(booking.google_event_id, startISO, endISO);
+
+      sendBookingEmail(
+        "booking-rescheduled",
+        booking.student_email,
+        {
+          name: booking.student_name,
+          oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
+          meetLink: booking.meet_link,
+          manageUrl: manageUrl(created.manage_token),
+          lang: booking.language ?? "ro",
+        },
+        `booking-resched-${created.id}`,
+      );
 
       return json({ ok: true, manage_token: created.manage_token, start_at: startISO });
     }

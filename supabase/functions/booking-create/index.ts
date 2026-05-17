@@ -6,8 +6,8 @@ import {
   gcalCreateEvent,
   gcalFreebusy,
   overlaps,
-  utcToZonedParts,
 } from "../_shared/booking.ts";
+import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
 
 interface CreateBody {
   event_type: string;
@@ -20,16 +20,7 @@ interface CreateBody {
   language?: "ro" | "en";
 }
 
-function fmtLocal(iso: string, lang: "ro" | "en") {
-  const p = utcToZonedParts(new Date(iso));
-  const months: Record<"ro" | "en", string[]> = {
-    ro: ["ian.","feb.","mar.","apr.","mai","iun.","iul.","aug.","sep.","oct.","noi.","dec."],
-    en: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-  };
-  const hh = String(p.hour).padStart(2, "0");
-  const mm = String(p.minute).padStart(2, "0");
-  return `${p.day} ${months[lang][p.month - 1]} ${p.year}, ${hh}:${mm}`;
-}
+const fmtLocal = fmtBookingLocal;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -135,7 +126,7 @@ Deno.serve(async (req) => {
       body.student_phone ? `Telefon: ${body.student_phone}` : null,
       `Format: ${format === "online" ? "Online" : "Fizic"}`,
       body.notes ? `Note: ${body.notes}` : null,
-      `Manage: ${Deno.env.get("SUPABASE_URL")?.replace(".supabase.co", ".lovable.app") ?? ""}/booking/manage/${inserted.manage_token}`,
+      `Manage: ${manageUrl(inserted.manage_token)}`,
     ]
       .filter(Boolean)
       .join("\n");
@@ -156,6 +147,22 @@ Deno.serve(async (req) => {
         .update({ google_event_id: gcal.id, meet_link: gcal.meetLink ?? null })
         .eq("id", inserted.id);
     }
+
+    // Send confirmation email (best-effort, async)
+    sendBookingEmail(
+      "booking-confirmation",
+      body.student_email,
+      {
+        name: body.student_name,
+        whenLabel: fmtLocal(startISO, language),
+        durationMin: et.duration_min,
+        format,
+        meetLink: gcal.meetLink ?? null,
+        manageUrl: manageUrl(inserted.manage_token),
+        lang: language,
+      },
+      `booking-confirm-${inserted.id}`,
+    );
 
     return json({
       ok: true,
