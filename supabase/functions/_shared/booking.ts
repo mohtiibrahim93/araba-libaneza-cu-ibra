@@ -3,6 +3,7 @@
 
 export const TZ = "Europe/Bucharest";
 export const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
+export const SITE_URL = "https://centruldearabalibaneza.com";
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
