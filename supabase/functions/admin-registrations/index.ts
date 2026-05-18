@@ -87,6 +87,102 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, data });
     }
 
+    if (action === "list_availability_rules") {
+      const { data, error } = await supabase
+        .from("availability_rules")
+        .select("id, weekday, start_time, end_time, is_active")
+        .order("weekday", { ascending: true })
+        .order("start_time", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_availability_rule") {
+      const { id: ruleId, weekday, start_time, end_time, is_active } = body;
+      const wd = Number(weekday);
+      if (!Number.isInteger(wd) || wd < 0 || wd > 6) {
+        return jsonResponse({ error: "Weekday invalid" });
+      }
+      if (typeof start_time !== "string" || typeof end_time !== "string") {
+        return jsonResponse({ error: "Ore invalide" });
+      }
+      if (start_time >= end_time) {
+        return jsonResponse({ error: "Ora de început trebuie să fie înainte de ora de final" });
+      }
+      const payload = {
+        weekday: wd,
+        start_time,
+        end_time,
+        is_active: is_active !== false,
+        updated_at: new Date().toISOString(),
+      };
+      if (typeof ruleId === "string" && ruleId) {
+        const { data, error } = await supabase
+          .from("availability_rules")
+          .update(payload)
+          .eq("id", ruleId)
+          .select()
+          .single();
+        if (error) throw error;
+        return jsonResponse({ success: true, data });
+      }
+      const { data, error } = await supabase
+        .from("availability_rules")
+        .insert(payload)
+        .select()
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_availability_rule") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const { error } = await supabase.from("availability_rules").delete().eq("id", id);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "list_bookings") {
+      const { status_filter } = body;
+      let q = supabase
+        .from("bookings")
+        .select(
+          "id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at",
+        )
+        .order("start_at", { ascending: false })
+        .limit(500);
+      if (typeof status_filter === "string" && status_filter !== "all") {
+        q = q.eq("status", status_filter);
+      }
+      const { data, error } = await q;
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "cancel_booking") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select("manage_token")
+        .eq("id", id)
+        .single();
+      if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
+      const resp = await fetch(
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          },
+          body: JSON.stringify({ action: "cancel", token: booking.manage_token }),
+        },
+      );
+      const out = await resp.json().catch(() => ({}));
+      if (!resp.ok || out?.error) return jsonResponse({ error: out?.error || "Anulare eșuată" });
+      return jsonResponse({ success: true });
+    }
+
     if (action === "list_notifications") {
       const { data: regs, error: regsError } = await supabase
         .from("registrations")
