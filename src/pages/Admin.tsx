@@ -17,6 +17,8 @@ import { Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import AdminNav from "@/components/AdminNav";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
+import AvailabilityAdmin from "@/components/AvailabilityAdmin";
+import BookingsAdmin from "@/components/BookingsAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import EmailSettingsForm from "@/components/admin/EmailSettingsForm";
 import TestEmailForm from "@/components/admin/TestEmailForm";
@@ -446,6 +448,9 @@ const Admin = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <CapacitiesAdmin password={storedPassword} />
+
+        <AvailabilityAdmin password={storedPassword} />
+        <BookingsAdmin password={storedPassword} />
 
         <EmailSettingsForm
           settings={emailSettings}
