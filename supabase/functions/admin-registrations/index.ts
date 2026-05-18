@@ -168,14 +168,12 @@ Deno.serve(async (req) => {
         .single();
       if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
       const resp = await fetch(
-        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage`,
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage/${booking.manage_token}`,
         {
-          method: "POST",
+          method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
           },
-          body: JSON.stringify({ action: "cancel", token: booking.manage_token }),
         },
       );
       const out = await resp.json().catch(() => ({}));
