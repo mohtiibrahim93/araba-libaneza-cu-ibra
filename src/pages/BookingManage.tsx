@@ -147,7 +147,7 @@ const BookingManage = () => {
                 <p className="text-sm text-muted-foreground">{fmt(booking.start_at, lang)}</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {booking.format === "online"
-                    ? lang === "ro" ? "Online (Google Meet)" : "Online (Google Meet)"
+                    ? lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"
                     : lang === "ro" ? "Fizic (la centru)" : "In person (at the center)"}
                 </p>
               </div>
