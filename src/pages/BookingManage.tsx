@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Calendar, CheckCircle2, Loader2, X } from "lucide-react";
-import { useI18n } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
 
@@ -32,7 +32,7 @@ interface BookingInfo {
   student_email: string;
 }
 
-const BookingManage = () => {
+const BookingManageInner = () => {
   const { token } = useParams();
   const { lang } = useI18n();
   const navigate = useNavigate();
@@ -257,5 +257,11 @@ const RescheduleHelper = ({ onPick, disabled }: { onPick: (iso: string) => void;
     </div>
   );
 };
+
+const BookingManage = () => (
+  <I18nProvider>
+    <BookingManageInner />
+  </I18nProvider>
+);
 
 export default BookingManage;
