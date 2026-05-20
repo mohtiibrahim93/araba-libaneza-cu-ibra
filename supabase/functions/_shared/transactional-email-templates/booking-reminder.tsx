@@ -15,8 +15,8 @@ interface Props {
 }
 
 const T = {
-  ro: { preview: 'Reminder programare', hi: (n?: string) => n ? `Salut, ${n}!` : 'Salut!', body: (inLabel?: string) => `Acesta este un reminder pentru lecția ta${inLabel ? ` ${inLabel}` : ''}.`, when: 'Când', meet: 'Link Meet', online: 'Online (Google Meet)', physical: 'Fizic, în București', manage: 'Reprogramează sau anulează', manageCta: 'Gestionează programarea', footer: 'Pe curând,' },
-  en: { preview: 'Booking reminder', hi: (n?: string) => n ? `Hi, ${n}!` : 'Hi!', body: (inLabel?: string) => `This is a reminder for your lesson${inLabel ? ` ${inLabel}` : ''}.`, when: 'When', meet: 'Meet link', online: 'Online (Google Meet)', physical: 'In-person, Bucharest', manage: 'Reschedule or cancel', manageCta: 'Manage booking', footer: 'See you soon,' },
+  ro: { preview: 'Reminder programare', hi: (n?: string) => n ? `Salut, ${n}!` : 'Salut!', body: (inLabel?: string) => `Acesta este un reminder pentru lecția ta${inLabel ? ` ${inLabel}` : ''}.`, when: 'Când', meet: 'Link Zoom', online: 'Online (Zoom)', physical: 'Fizic, în București', manage: 'Reprogramează sau anulează', manageCta: 'Gestionează programarea', footer: 'Pe curând,' },
+  en: { preview: 'Booking reminder', hi: (n?: string) => n ? `Hi, ${n}!` : 'Hi!', body: (inLabel?: string) => `This is a reminder for your lesson${inLabel ? ` ${inLabel}` : ''}.`, when: 'When', meet: 'Zoom link', online: 'Online (Zoom)', physical: 'In-person, Bucharest', manage: 'Reschedule or cancel', manageCta: 'Manage booking', footer: 'See you soon,' },
 } as const
 
 const Email = ({ name, whenLabel, inLabel, format, meetLink, manageUrl, lang = 'ro' }: Props) => {

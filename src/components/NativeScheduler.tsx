@@ -297,7 +297,7 @@ const NativeScheduler = ({
             onChange={(e) => setFormat(e.target.value as Format)}
             className="w-full px-3 py-2 rounded-md border border-input text-sm bg-background"
           >
-            <option value="online">{lang === "ro" ? "Online (Google Meet)" : "Online (Google Meet)"}</option>
+            <option value="online">{lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"}</option>
             <option value="physical">{lang === "ro" ? "Fizic (la centru)" : "In person (at the center)"}</option>
           </select>
         </div>

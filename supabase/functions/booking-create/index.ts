@@ -91,6 +91,8 @@ Deno.serve(async (req) => {
 
     const format = body.format ?? "online";
     const language = body.language ?? "ro";
+    const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? null;
+    const onlineLink = format === "online" ? zoomUrl : null;
 
     // Insert (unique partial index protects against final race)
     const { data: inserted, error: insErr } = await supabase
@@ -125,6 +127,7 @@ Deno.serve(async (req) => {
       `Email: ${body.student_email}`,
       body.student_phone ? `Telefon: ${body.student_phone}` : null,
       `Format: ${format === "online" ? "Online" : "Fizic"}`,
+      onlineLink ? `Zoom: ${onlineLink}` : null,
       body.notes ? `Note: ${body.notes}` : null,
       `Manage: ${manageUrl(inserted.manage_token)}`,
     ]
@@ -138,13 +141,18 @@ Deno.serve(async (req) => {
       endISO,
       attendeeEmail: body.student_email,
       attendeeName: body.student_name,
-      withMeet: format === "online",
+      withMeet: false,
     });
 
     if (gcal.ok && gcal.id) {
       await supabase
         .from("bookings")
-        .update({ google_event_id: gcal.id, meet_link: gcal.meetLink ?? null })
+        .update({ google_event_id: gcal.id, meet_link: onlineLink })
+        .eq("id", inserted.id);
+    } else if (onlineLink) {
+      await supabase
+        .from("bookings")
+        .update({ meet_link: onlineLink })
         .eq("id", inserted.id);
     }
 
@@ -157,7 +165,7 @@ Deno.serve(async (req) => {
         whenLabel: fmtLocal(startISO, language),
         durationMin: et.duration_min,
         format,
-        meetLink: gcal.meetLink ?? null,
+        meetLink: onlineLink,
         manageUrl: manageUrl(inserted.manage_token),
         lang: language,
       },
@@ -168,7 +176,7 @@ Deno.serve(async (req) => {
       ok: true,
       booking_id: inserted.id,
       manage_token: inserted.manage_token,
-      meet_link: gcal.meetLink ?? null,
+      meet_link: onlineLink,
       start_at: startISO,
       end_at: endISO,
       tz: TZ,

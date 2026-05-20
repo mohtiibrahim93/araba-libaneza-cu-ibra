@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
-import { useI18n } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 
-const BookingPage = () => {
+const BookingInner = () => {
   const { t, lang } = useI18n();
   const [params] = useSearchParams();
   const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
@@ -37,5 +37,11 @@ const BookingPage = () => {
     </main>
   );
 };
+
+const BookingPage = () => (
+  <I18nProvider>
+    <BookingInner />
+  </I18nProvider>
+);
 
 export default BookingPage;
