@@ -460,6 +460,14 @@ const translations = {
     privateTrialDisclaimer: "Notă: tutorul nu primește plată pentru lecția de probă. Dacă preferi, poți renunța la probă și plăti normal de la prima lecție.",
     trialSkipNote: "Vrei să sari peste proba și să plătești de la prima lecție?",
     trialSkipCta: "Sari peste, plătește acum",
+    // Booking — extra
+    navBooking: "Programare",
+    bookingAddToCalendar: "Adaugă în calendar (.ics)",
+    bookingManageButton: "Gestionează programarea",
+    bookingReschedulePickTitle: "Alege un nou slot",
+    bookingRescheduleHelp: "Selectează ziua și ora dorită. Programarea va fi mutată automat.",
+    bookingRescheduleNoSlots: "Nu sunt sloturi disponibile. Încearcă mai târziu sau scrie-ne pe WhatsApp.",
+    bookingGdprRequired: "Trebuie să accepți politica de confidențialitate pentru a putea rezerva.",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -901,6 +909,14 @@ const translations = {
     privateTrialDisclaimer: "Note: the tutor is not paid for the trial lesson. If you prefer, you can skip the trial and pay normally from the first lesson.",
     trialSkipNote: "Want to skip the trial and pay from the first lesson?",
     trialSkipCta: "Skip, pay now",
+    // Booking — extra
+    navBooking: "Booking",
+    bookingAddToCalendar: "Add to calendar (.ics)",
+    bookingManageButton: "Manage booking",
+    bookingReschedulePickTitle: "Pick a new slot",
+    bookingRescheduleHelp: "Choose a day and time. Your booking will be moved automatically.",
+    bookingRescheduleNoSlots: "No slots available. Try later or message us on WhatsApp.",
+    bookingGdprRequired: "You must accept the privacy policy to book.",
   },
 } as const;
 
