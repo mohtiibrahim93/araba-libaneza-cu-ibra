@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { ChevronDown, MessageCircle, Menu, X, GraduationCap } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import {
   DropdownMenu,
@@ -99,6 +99,14 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <Link
+            to="/booking"
+            onClick={() => setOpen(false)}
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            <Calendar className="w-4 h-4" aria-hidden="true" />
+            {t.navBooking}
+          </Link>
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -171,6 +179,14 @@ const Navbar = () => {
                 {l.label}
               </a>
             ))}
+            <Link
+              to="/booking"
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
+            >
+              <Calendar className="w-4 h-4" aria-hidden="true" />
+              {t.navBooking}
+            </Link>
           </div>
         </div>
       )}
