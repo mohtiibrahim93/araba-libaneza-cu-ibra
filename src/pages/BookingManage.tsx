@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Calendar, CheckCircle2, Loader2, X } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle2, Download, Loader2, X } from "lucide-react";
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
+import { buildIcs, downloadIcs } from "@/lib/ics";
 
 const TZ = "Europe/Bucharest";
 function fmt(iso: string, lang: "ro" | "en") {
@@ -34,7 +35,7 @@ interface BookingInfo {
 
 const BookingManageInner = () => {
   const { token } = useParams();
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState<BookingInfo | null>(null);
@@ -84,6 +85,7 @@ const BookingManageInner = () => {
   };
 
   const handleReschedule = async (startAt: string) => {
+    if (!confirm(lang === "ro" ? "Confirmi mutarea programării la noul slot?" : "Move your booking to this new slot?")) return;
     setBusy(true);
     try {
       const res = await fetch(baseUrl, {
@@ -109,6 +111,30 @@ const BookingManageInner = () => {
     } finally {
       setBusy(false);
     }
+  };
+
+  const handleIcs = () => {
+    if (!booking) return;
+    const manageUrl = `${window.location.origin}/booking/manage/${token}`;
+    const ics = buildIcs({
+      uid: `${booking.id}@centruldearabalibaneza.com`,
+      title:
+        lang === "ro"
+          ? `Lecție Arabă Libaneză — ${booking.event_type_name_ro}`
+          : `Lebanese Arabic Lesson — ${booking.event_type_name_en}`,
+      description: booking.meet_link
+        ? (lang === "ro" ? `Zoom: ${booking.meet_link}\nGestionează: ${manageUrl}` : `Zoom: ${booking.meet_link}\nManage: ${manageUrl}`)
+        : (lang === "ro" ? `Gestionează: ${manageUrl}` : `Manage: ${manageUrl}`),
+      location: booking.meet_link ?? "Raduga Creative Center, București",
+      startISO: booking.start_at,
+      endISO: booking.end_at,
+      url: manageUrl,
+      organizerEmail: "mohtiibrahim@gmail.com",
+      organizerName: "Ibra — Centrul de Arabă Libaneză",
+      attendeeEmail: booking.student_email,
+      attendeeName: booking.student_name,
+    });
+    downloadIcs(`lectie-${booking.id}.ics`, ics);
   };
 
   return (
@@ -176,6 +202,13 @@ const BookingManageInner = () => {
             {booking.status === "confirmed" && (
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <button
+                  onClick={handleIcs}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
+                >
+                  <Download className="w-4 h-4" />
+                  {t.bookingAddToCalendar}
+                </button>
+                <button
                   onClick={() => setMode("reschedule")}
                   disabled={busy}
                   className="flex-1 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
@@ -210,51 +243,19 @@ const BookingManageInner = () => {
             >
               <ArrowLeft className="w-4 h-4" /> {lang === "ro" ? "Înapoi" : "Back"}
             </button>
+            <div>
+              <h2 className="font-semibold mb-1">{t.bookingReschedulePickTitle}</h2>
+              <p className="text-sm text-muted-foreground mb-4">{t.bookingRescheduleHelp}</p>
+            </div>
             <NativeScheduler
               eventType={booking.event_type_slug}
-              prefill={{ name: booking.student_name, email: booking.student_email }}
-              onBooked={(b) => {
-                // not used here — we use the local handler instead
-                void b;
-              }}
+              mode="pick"
+              onPick={handleReschedule}
             />
-            <p className="text-xs text-muted-foreground text-center">
-              {lang === "ro"
-                ? "Selectarea unui slot mai sus va crea o nouă programare. Pentru reprogramare în loc, folosește butonul de mai jos după ce alegi slotul."
-                : "Selecting a slot above creates a new booking. To reschedule in place after choosing a slot, use the button below."}
-            </p>
-            <RescheduleHelper onPick={handleReschedule} disabled={busy} />
           </div>
         )}
       </div>
     </main>
-  );
-};
-
-// Lightweight inline picker that mirrors NativeScheduler but submits to PATCH.
-// Kept simple to avoid over-engineering — uses the same availability function.
-const RescheduleHelper = ({ onPick, disabled }: { onPick: (iso: string) => void; disabled: boolean }) => {
-  const { lang } = useI18n();
-  const [iso, setIso] = useState("");
-  return (
-    <div className="rounded-lg border border-dashed border-border p-4 space-y-2">
-      <label className="block text-xs font-semibold text-muted-foreground">
-        {lang === "ro" ? "ISO al noului slot (copiază dintr-un buton de mai sus)" : "New slot ISO (copy from a button above)"}
-      </label>
-      <input
-        value={iso}
-        onChange={(e) => setIso(e.target.value)}
-        placeholder="2026-05-20T08:00:00.000Z"
-        className="w-full px-3 py-2 rounded-md border border-input text-sm font-mono"
-      />
-      <button
-        onClick={() => iso && onPick(iso)}
-        disabled={disabled || !iso}
-        className="w-full px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-50"
-      >
-        {lang === "ro" ? "Reprogramează la slotul ales" : "Reschedule to chosen slot"}
-      </button>
-    </div>
   );
 };
 

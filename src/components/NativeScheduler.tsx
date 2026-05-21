@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
+import GdprCheckbox from "@/components/GdprCheckbox";
+import { buildIcs, downloadIcs } from "@/lib/ics";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -17,6 +19,13 @@ interface Props {
   prefill?: { name?: string; email?: string; phone?: string };
   defaultFormat?: Format;
   onBooked?: (b: { booking_id: string; manage_token: string; meet_link?: string | null }) => void;
+  /**
+   * "create" (default) shows the full booking form and creates a new booking.
+   * "pick" simply calls onPick(iso) after the user selects a slot — used in the
+   * reschedule flow where we PATCH an existing booking instead of creating one.
+   */
+  mode?: "create" | "pick";
+  onPick?: (iso: string) => void;
 }
 
 interface AvailabilityResp {
@@ -59,6 +68,8 @@ const NativeScheduler = ({
   prefill,
   defaultFormat = "online",
   onBooked,
+  mode = "create",
+  onPick,
 }: Props) => {
   const { t, lang } = useI18n();
 
@@ -72,6 +83,8 @@ const NativeScheduler = ({
     start_at: string;
     meet_link?: string | null;
     manage_token: string;
+    end_at?: string;
+    booking_id?: string;
   } | null>(null);
 
   // Form fields
@@ -80,6 +93,7 @@ const NativeScheduler = ({
   const [phone, setPhone] = useState(prefill?.phone ?? "");
   const [format, setFormat] = useState<Format>(defaultFormat);
   const [notes, setNotes] = useState("");
+  const [gdpr, setGdpr] = useState(false);
 
   const dateRange = useMemo(() => {
     const today = new Date();
@@ -124,6 +138,10 @@ const NativeScheduler = ({
       toast.error(lang === "ro" ? "Completează numele și emailul" : "Fill in name and email");
       return;
     }
+    if (!gdpr) {
+      toast.error(t.bookingGdprRequired);
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await supabase.functions.invoke("booking-create", {
@@ -139,7 +157,7 @@ const NativeScheduler = ({
         },
       });
       if (res.error) throw res.error;
-      const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; code?: string; error?: string };
+      const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; end_at?: string; code?: string; error?: string };
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
           toast.error(lang === "ro" ? "Slotul tocmai a fost rezervat. Alege altul." : "Slot just got taken. Pick another.");
@@ -157,7 +175,13 @@ const NativeScheduler = ({
         }
         throw new Error(payload?.error ?? "booking failed");
       }
-      setConfirmed({ start_at: payload.start_at, meet_link: payload.meet_link ?? null, manage_token: payload.manage_token });
+      setConfirmed({
+        start_at: payload.start_at,
+        end_at: payload.end_at,
+        meet_link: payload.meet_link ?? null,
+        manage_token: payload.manage_token,
+        booking_id: payload.booking_id,
+      });
       onBooked?.({ booking_id: payload.booking_id, manage_token: payload.manage_token, meet_link: payload.meet_link });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "booking failed");
@@ -199,6 +223,30 @@ const NativeScheduler = ({
 
   if (confirmed) {
     const manageUrl = `${window.location.origin}/booking/manage/${confirmed.manage_token}`;
+    const handleIcs = () => {
+      const endIso =
+        confirmed.end_at ??
+        new Date(new Date(confirmed.start_at).getTime() + (data?.event_type.duration_min ?? 60) * 60000).toISOString();
+      const ics = buildIcs({
+        uid: `${confirmed.booking_id ?? confirmed.manage_token}@centruldearabalibaneza.com`,
+        title:
+          lang === "ro"
+            ? `Lecție Arabă Libaneză — ${data?.event_type.name_ro ?? ""}`
+            : `Lebanese Arabic Lesson — ${data?.event_type.name_en ?? ""}`,
+        description: confirmed.meet_link
+          ? (lang === "ro" ? `Zoom: ${confirmed.meet_link}\nGestionează: ${manageUrl}` : `Zoom: ${confirmed.meet_link}\nManage: ${manageUrl}`)
+          : (lang === "ro" ? `Gestionează: ${manageUrl}` : `Manage: ${manageUrl}`),
+        location: confirmed.meet_link ?? "Raduga Creative Center, București",
+        startISO: confirmed.start_at,
+        endISO: endIso,
+        url: manageUrl,
+        organizerEmail: "mohtiibrahim@gmail.com",
+        organizerName: "Ibra — Centrul de Arabă Libaneză",
+        attendeeEmail: email || undefined,
+        attendeeName: name || undefined,
+      });
+      downloadIcs(`lectie-${confirmed.booking_id ?? "araba"}.ics`, ics);
+    };
     return (
       <div className="rounded-lg border border-border bg-card p-6 space-y-4">
         <div className="flex items-center gap-3">
@@ -224,12 +272,24 @@ const NativeScheduler = ({
         )}
         <p className="text-xs text-muted-foreground">
           {lang === "ro"
-            ? "Vei primi un email cu detaliile. Poți reprograma sau anula de aici:"
-            : "You'll get an email with details. Manage or cancel here:"}{" "}
-          <a href={manageUrl} className="text-primary underline">
-            {lang === "ro" ? "deschide pagina" : "open page"}
-          </a>
+            ? "Vei primi un email cu detaliile."
+            : "You'll get an email with the details."}
         </p>
+        <div className="flex flex-col sm:flex-row gap-2 pt-1">
+          <button
+            onClick={handleIcs}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-semibold hover:bg-muted"
+          >
+            <Download className="w-4 h-4" />
+            {t.bookingAddToCalendar}
+          </button>
+          <a
+            href={manageUrl}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90"
+          >
+            {t.bookingManageButton}
+          </a>
+        </div>
       </div>
     );
   }
@@ -259,7 +319,7 @@ const NativeScheduler = ({
   }
 
   // Confirm form
-  if (selectedSlot) {
+  if (selectedSlot && mode === "create") {
     return (
       <div className="rounded-lg border border-border bg-card p-5 space-y-4">
         <button
@@ -308,9 +368,10 @@ const NativeScheduler = ({
           rows={2}
           className="w-full px-3 py-2 rounded-md border border-input text-sm resize-none"
         />
+        <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
         <button
           onClick={handleConfirm}
-          disabled={submitting}
+          disabled={submitting || !gdpr}
           className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 disabled:opacity-60"
         >
           {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -355,7 +416,13 @@ const NativeScheduler = ({
         {slotsForDate.map((iso) => (
           <button
             key={iso}
-            onClick={() => setSelectedSlot(iso)}
+            onClick={() => {
+              if (mode === "pick") {
+                onPick?.(iso);
+              } else {
+                setSelectedSlot(iso);
+              }
+            }}
             className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
           >
             {fmtSlotTime(iso)}
