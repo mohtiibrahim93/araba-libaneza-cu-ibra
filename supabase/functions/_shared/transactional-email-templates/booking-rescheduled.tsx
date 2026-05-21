@@ -51,7 +51,7 @@ export const template = {
   component: Email,
   subject: (d: Props) => d.lang === 'en' ? 'Booking rescheduled' : 'Programare reprogramată',
   displayName: 'Booking — reprogramare',
-  previewData: { name: 'Maria', oldWhenLabel: '12 iun. 2026, 14:00', newWhenLabel: '14 iun. 2026, 16:00', meetLink: 'https://meet.google.com/abc', manageUrl: 'https://example.com/booking/manage/xxx', lang: 'ro' },
+  previewData: { name: 'Maria', oldWhenLabel: '12 iun. 2026, 14:00', newWhenLabel: '14 iun. 2026, 16:00', meetLink: 'https://us02web.zoom.us/j/1234567890', manageUrl: 'https://example.com/booking/manage/xxx', lang: 'ro' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
