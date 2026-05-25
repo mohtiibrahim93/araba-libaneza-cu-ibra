@@ -33,6 +33,11 @@ interface Props {
    */
   mode?: "create" | "pick";
   onPick?: (iso: string) => void;
+  /**
+   * Required in "create" mode. Every booking must reference the registration
+   * that produced it; bookings without one are rejected by the backend.
+   */
+  registrationId?: string;
 }
 
 interface AvailabilityResp {
@@ -90,6 +95,7 @@ const NativeScheduler = ({
   onBooked,
   mode = "create",
   onPick,
+  registrationId,
 }: Props) => {
   const { t, lang } = useI18n();
   const showLocalTz = useShowLocalTz();
@@ -187,6 +193,10 @@ const NativeScheduler = ({
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
+    if (mode === "create" && !registrationId) {
+      toast.error(t.schedulerBookingFailed);
+      return;
+    }
     if (!name.trim() || !email.trim()) {
       toast.error(t.schedulerNameRequired);
       return;
@@ -199,6 +209,7 @@ const NativeScheduler = ({
     try {
       const res = await supabase.functions.invoke("booking-create", {
         body: {
+          registration_id: registrationId,
           event_type: eventType,
           start_at: selectedSlot,
           format,
