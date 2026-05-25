@@ -124,6 +124,7 @@ export type Database = {
           student_email: string
           student_name: string
           student_phone: string | null
+          trial_followup_sent_at: string | null
           updated_at: string
         }
         Insert: {
@@ -148,6 +149,7 @@ export type Database = {
           student_email: string
           student_name: string
           student_phone?: string | null
+          trial_followup_sent_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -172,6 +174,7 @@ export type Database = {
           student_email?: string
           student_name?: string
           student_phone?: string | null
+          trial_followup_sent_at?: string | null
           updated_at?: string
         }
         Relationships: [
