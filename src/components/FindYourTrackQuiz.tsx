@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Users, User, Baby, GraduationCap, ChevronRight } from "lucide-react";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import ComparisonPanel from "@/components/ComparisonPanel";
+import SpotsBadge from "@/components/SpotsBadge";
 
 type Audience = "self" | "kids";
 type Format = "group" | "private";
@@ -183,16 +184,20 @@ const FindYourTrackQuiz = () => {
           <h3 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ3}</h3>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             {levels.map((l) => (
-              <OptionCard
-                key={l.value}
-                title={l.label}
-                desc={l.value}
-                icon={<GraduationCap className="w-5 h-5" />}
-                onClick={() => {
-                  setLevel(l.value);
-                  setStep(4);
-                }}
-              />
+              <div key={l.value} className="relative">
+                <OptionCard
+                  title={l.label}
+                  desc={l.value}
+                  icon={<GraduationCap className="w-5 h-5" />}
+                  onClick={() => {
+                    setLevel(l.value);
+                    setStep(4);
+                  }}
+                />
+                <div className="absolute top-2 right-2 pointer-events-none">
+                  <SpotsBadge formType="group" level={l.value} compact />
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -236,6 +241,14 @@ const FindYourTrackQuiz = () => {
             <h3 className="text-2xl font-bold text-foreground mb-2">{title}</h3>
             <p className="text-muted-foreground mb-4 max-w-md mx-auto">{desc}</p>
             <p className="text-lg font-semibold text-foreground mb-6">{price}</p>
+            {(track === "group" || track === "kids") && (
+              <div className="flex justify-center mb-6 -mt-2">
+                <SpotsBadge
+                  formType={track === "kids" ? "kids" : "group"}
+                  level={track === "group" ? (level ?? "A1") : null}
+                />
+              </div>
+            )}
             <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowForm(true)}>
               {t.quizContinueCta}
             </Button>
