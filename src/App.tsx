@@ -11,6 +11,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import Unsubscribe from "./pages/Unsubscribe";
+import PrivateStatus from "./pages/PrivateStatus";
 import Booking from "./pages/Booking";
 import BookingManage from "./pages/BookingManage";
 
