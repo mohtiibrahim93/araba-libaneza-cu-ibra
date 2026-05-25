@@ -172,9 +172,7 @@ const BookingManageInner = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground">{fmt(booking.start_at, lang)}</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {booking.format === "online"
-                    ? lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"
-                    : lang === "ro" ? "Fizic (la centru)" : "In person (at the center)"}
+                  {booking.format === "online" ? t.bookingFormatOnline : t.bookingFormatPhysical}
                 </p>
               </div>
               <span
@@ -193,10 +191,17 @@ const BookingManageInner = () => {
               </span>
             </div>
 
-            {booking.meet_link && booking.status === "confirmed" && (
-              <a href={booking.meet_link} target="_blank" rel="noopener noreferrer" className="block text-sm text-primary underline break-all">
-                {booking.meet_link}
-              </a>
+            {booking.format === "online" && booking.status === "confirmed" && (
+              <div className="rounded-md bg-muted/40 border border-border p-3">
+                <p className="text-xs font-medium mb-1">{t.bookingZoomLinkLabel}</p>
+                {booking.meet_link ? (
+                  <a href={booking.meet_link} target="_blank" rel="noopener noreferrer" className="block text-sm text-primary underline break-all">
+                    {booking.meet_link}
+                  </a>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{t.bookingZoomNotice}</p>
+                )}
+              </div>
             )}
 
             {booking.status === "confirmed" && (
