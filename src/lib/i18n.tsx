@@ -627,6 +627,11 @@ const translations = {
     spotsBadgeCompactOne: "1 loc rămas",
     spotsWaitlist: "Lista de așteptare",
     spotsCohort: "Martie 2026",
+    // Trust band
+    trustStudents: "100+ cursanți",
+    trustNative: "Profesor nativ",
+    trustRefund: "Rambursare 7 zile",
+    trustReviews: "4.9/5 recenzii",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -1235,6 +1240,11 @@ const translations = {
     spotsBadgeCompactOne: "1 spot left",
     spotsWaitlist: "Waitlist",
     spotsCohort: "March 2026",
+    // Trust band
+    trustStudents: "100+ students",
+    trustNative: "Native teacher",
+    trustRefund: "7-day refund",
+    trustReviews: "4.9/5 reviews",
   },
 } as const;
 
