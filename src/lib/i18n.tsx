@@ -496,6 +496,8 @@ const translations = {
     paymentSuccessPrivateCta: "Programează",
     paymentSuccessGeneric: "Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.",
     paymentCanceled: "Plata a fost anulată. Poți încerca din nou oricând.",
+    referralCodeLabel: "Cod de referință (opțional)",
+    referralCodePlaceholder: "Ai un cod de la un prieten?",
     // Thank you page
     thankYouTitle: "Mulțumim pentru înregistrare!",
     thankYouSubtitle: "Plata ta a fost confirmată. Abia așteptăm să te avem alături!",
@@ -1141,6 +1143,8 @@ const translations = {
     paymentSuccessPrivateCta: "Schedule",
     paymentSuccessGeneric: "Payment processed successfully! 🎉 We'll be in touch shortly.",
     paymentCanceled: "Payment was canceled. You can try again anytime.",
+    referralCodeLabel: "Referral code (optional)",
+    referralCodePlaceholder: "Got a code from a friend?",
     // Thank you page
     thankYouTitle: "Thank you for registering!",
     thankYouSubtitle: "Your payment is confirmed. We can't wait to have you with us!",
