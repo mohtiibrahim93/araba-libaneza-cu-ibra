@@ -773,6 +773,8 @@ const translations = {
     gdprConsent: "I agree to the processing of my personal data according to the",
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
+    recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    recaptchaFailed: "Security check failed. Please try again.",
     smsConfirmationOptIn: "I want to receive the request confirmation by SMS when this option becomes available.",
 
     // Payment instructions
