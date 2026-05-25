@@ -551,6 +551,20 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_cohort_signup_counts: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          taken: number
+        }[]
+      }
+      get_kids_slot_signup_counts: {
+        Args: never
+        Returns: {
+          kids_slot_id: string
+          taken: number
+        }[]
+      }
       move_to_dlq: {
         Args: {
           dlq_name: string
