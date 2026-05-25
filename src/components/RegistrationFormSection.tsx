@@ -251,6 +251,7 @@ const RegistrationFormSection = ({
         child_age: courseType === "kids" ? childAge || null : null,
         level: courseType === "group" ? level || null : null,
         is_waitlist_deposit: courseType === "kids" && payDeposit,
+        referral_code: referralCode.trim() || null,
       });
 
       if (error) throw error;
