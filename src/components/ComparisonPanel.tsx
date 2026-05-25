@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, User, Baby, ArrowLeft, Check } from "lucide-react";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import SpotsBadge from "@/components/SpotsBadge";
 
 type Track = "group" | "private" | "kids";
 
@@ -110,7 +111,11 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 {col.icon}
               </div>
-              <span className="font-semibold text-foreground">{col.label}</span>
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-semibold text-foreground">{col.label}</span>
+                {col.track === "group" && <SpotsBadge formType="group" level="A1" compact />}
+                {col.track === "kids" && <SpotsBadge formType="kids" compact />}
+              </div>
             </div>
           ))}
 
@@ -165,7 +170,11 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     {col.icon}
                   </div>
-                  <span className="font-semibold text-foreground">{col.label}</span>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold text-foreground">{col.label}</span>
+                    {col.track === "group" && <SpotsBadge formType="group" level="A1" compact />}
+                    {col.track === "kids" && <SpotsBadge formType="kids" compact />}
+                  </div>
                 </div>
                 {rows.map((row, idx) => (
                   <div
