@@ -324,6 +324,12 @@ const NativeScheduler = ({
             <span className="text-muted-foreground">{t.confirmedTimeLabel}</span>
             <span className="font-medium text-right">{timeStr}</span>
           </div>
+          {showLocalTz && localTz !== TZ && (
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground">{t.tzYourTime} ({localTzLabel})</span>
+              <span className="font-medium text-right">{fmtTimeInTz(confirmed.start_at, localTz)}</span>
+            </div>
+          )}
           <div className="flex justify-between gap-4">
             <span className="text-muted-foreground">{t.confirmedCourseLabel}</span>
             <span className="font-medium text-right">{courseName}</span>
