@@ -134,6 +134,15 @@ const Navbar = () => {
             <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
             <span className="hidden sm:inline">{t.navCourses}</span>
           </a>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="rounded-full"
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
