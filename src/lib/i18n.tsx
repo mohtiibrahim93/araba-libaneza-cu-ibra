@@ -475,8 +475,7 @@ const translations = {
     bookingZoomLinkLabel: "Link-ul Zoom pentru lecție",
     bookingZoomNotice: "Te vei conecta prin Zoom. Link-ul va fi trimis pe email.",
     bookingPaidDesc: "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email. Te vei conecta prin Zoom — link-ul va fi trimis pe email.",
-    // Common navigation / shared
-    navHome: "Acasă",
+    // Common shared
     navBack: "Înapoi",
     // Index page payment toasts & SEO
     paymentSuccessPrivate: "Plata reușită! 🎉 Programează-ți lecția acum.",
