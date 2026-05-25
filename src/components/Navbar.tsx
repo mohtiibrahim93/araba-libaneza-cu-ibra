@@ -16,9 +16,22 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
   const [open, setOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Sync dark-mode state with <html> class on mount
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
 
   // Navigate to an in-page anchor; if currently on a different route,
   // route to "/" first then scroll once the target mounts.
