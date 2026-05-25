@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
-import ProgramsSection from "@/components/ProgramsSection";
+import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
 import CulturalValueSection from "@/components/CulturalValueSection";
 import PricingSection from "@/components/PricingSection";
 import BookingSection from "@/components/BookingSection";
@@ -90,7 +90,7 @@ const PageContent = () => {
       <HeroSection />
       <WhySection />
       <InstructorSection />
-      <ProgramsSection />
+      <FindYourTrackQuiz />
       <CulturalValueSection />
       <PricingSection />
       <BookingSection />
