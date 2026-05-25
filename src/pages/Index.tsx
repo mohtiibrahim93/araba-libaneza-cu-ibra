@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WhySection from "@/components/WhySection";
@@ -109,10 +109,6 @@ const PageContent = () => {
   );
 };
 
-const Index = () => (
-  <I18nProvider>
-    <PageContent />
-  </I18nProvider>
-);
+const Index = () => <PageContent />;
 
 export default Index;
