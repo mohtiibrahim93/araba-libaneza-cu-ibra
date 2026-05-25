@@ -18,6 +18,7 @@ interface CreateBody {
   student_phone?: string;
   notes?: string;
   language?: "ro" | "en";
+  gdpr_consent?: boolean;
 }
 
 const fmtLocal = fmtBookingLocal;
@@ -30,6 +31,9 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as CreateBody;
     if (!body?.event_type || !body?.start_at || !body?.student_name || !body?.student_email) {
       return json({ error: "missing fields" }, 400);
+    }
+    if (!body.gdpr_consent) {
+      return json({ error: "gdpr consent required" }, 400);
     }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.student_email)) {
       return json({ error: "invalid email" }, 400);
@@ -108,6 +112,7 @@ Deno.serve(async (req) => {
         notes: body.notes ?? null,
         status: "confirmed",
         language,
+        gdpr_consent_at: new Date().toISOString(),
       })
       .select()
       .single();

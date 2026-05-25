@@ -1,0 +1,1 @@
+ALTER TABLE public.bookings ADD COLUMN gdpr_consent_at timestamp with time zone;
