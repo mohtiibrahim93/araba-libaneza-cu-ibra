@@ -108,6 +108,7 @@ export type Database = {
           end_at: string
           event_type_slug: string
           format: string
+          gdpr_consent_at: string | null
           google_event_id: string | null
           id: string
           language: string
@@ -130,6 +131,7 @@ export type Database = {
           end_at: string
           event_type_slug: string
           format?: string
+          gdpr_consent_at?: string | null
           google_event_id?: string | null
           id?: string
           language?: string
@@ -152,6 +154,7 @@ export type Database = {
           end_at?: string
           event_type_slug?: string
           format?: string
+          gdpr_consent_at?: string | null
           google_event_id?: string | null
           id?: string
           language?: string
