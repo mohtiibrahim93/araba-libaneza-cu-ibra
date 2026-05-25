@@ -107,6 +107,7 @@ const PostSubmitView = ({ data, embedded, onReset }: Props) => {
             <NativeScheduler
               eventType="trial"
               prefill={{ name: data.name, email: data.email }}
+              registrationId={data.registrationId}
             />
             {/* Subtle secondary action — keeps the paid path accessible
                 without competing with the primary trial CTA. */}

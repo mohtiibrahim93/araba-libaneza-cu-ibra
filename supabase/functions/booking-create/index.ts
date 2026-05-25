@@ -19,6 +19,7 @@ interface CreateBody {
   notes?: string;
   language?: "ro" | "en";
   gdpr_consent?: boolean;
+  registration_id: string;
 }
 
 const fmtLocal = fmtBookingLocal;
@@ -32,6 +33,9 @@ Deno.serve(async (req) => {
     if (!body?.event_type || !body?.start_at || !body?.student_name || !body?.student_email) {
       return json({ error: "missing fields" }, 400);
     }
+    if (!body.registration_id || !/^[0-9a-f-]{36}$/i.test(body.registration_id)) {
+      return json({ error: "registration_id required" }, 400);
+    }
     if (!body.gdpr_consent) {
       return json({ error: "gdpr consent required" }, 400);
     }
@@ -43,6 +47,14 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
+    const { data: reg } = await supabase
+      .from("registrations")
+      .select("id")
+      .eq("id", body.registration_id)
+      .maybeSingle();
+    if (!reg) return json({ error: "registration not found" }, 404);
 
     const { data: et } = await supabase
       .from("booking_event_types")
@@ -102,6 +114,7 @@ Deno.serve(async (req) => {
     const { data: inserted, error: insErr } = await supabase
       .from("bookings")
       .insert({
+        registration_id: body.registration_id,
         event_type_slug: et.slug,
         start_at: startISO,
         end_at: endISO,

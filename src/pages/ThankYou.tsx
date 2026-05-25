@@ -15,6 +15,7 @@ interface SessionDetails {
   currency: string;
   customerEmail: string | null;
   courseType: CourseType | null;
+  registrationId: string | null;
 }
 
 const ThankYou = () => {
@@ -31,6 +32,7 @@ const ThankYou = () => {
     currency: fallbackCurrency,
     customerEmail: null,
     courseType: fallbackType,
+    registrationId: params.get("registration_id"),
   });
   const [errored, setErrored] = useState(false);
 
@@ -64,6 +66,7 @@ const ThankYou = () => {
           currency: data.currency || "ron",
           customerEmail: data.customerEmail,
           courseType: data.courseType,
+          registrationId: data.registrationId ?? null,
         });
       } catch (e) {
         if (!cancelled) setErrored(true);
@@ -232,10 +235,12 @@ const ThankYou = () => {
           </CardContent>
         </Card>
 
-        {details.courseType === "private" && (
+        {details.courseType === "private" && details.registrationId && (
           <div className="text-center mb-6">
             <Button asChild size="lg" variant="default">
-              <Link to="/booking?type=paid">{t.thankYouSchedulePrivateCta}</Link>
+              <Link to={`/booking?type=paid&registration_id=${details.registrationId}`}>
+                {t.thankYouSchedulePrivateCta}
+              </Link>
             </Button>
           </div>
         )}

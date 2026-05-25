@@ -97,7 +97,7 @@ const PrivateStatus = () => {
               </div>
 
               <Button asChild className="mt-8 w-full">
-                <a href="/booking?type=paid">
+                <a href={`/booking?type=paid&registration_id=${lead.id}`}>
                   <Calendar className="h-4 w-4" /> Programează lecția
                 </a>
               </Button>
