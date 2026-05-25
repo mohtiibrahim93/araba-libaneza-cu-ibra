@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
@@ -9,6 +9,13 @@ const BookingInner = () => {
   const { t } = useI18n();
   const [params] = useSearchParams();
   const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
+  const registrationId = params.get("registration_id");
+
+  // Bookings must be tied to a registration. If no id is present, send users
+  // back to the registration form (Step 1 of the journey).
+  if (!registrationId || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
+    return <Navigate to="/#inscriere" replace />;
+  }
 
   const title = `${type === "paid" ? t.bookingPageSeoTitlePaid : t.bookingPageSeoTitleTrial} — ${t.siteTitle}`;
   const description = type === "paid" ? t.bookingPaidDesc : t.bookingTrialSeoDesc;
@@ -44,7 +51,7 @@ const BookingInner = () => {
         <p className="text-muted-foreground mb-8">
           {type === "paid" ? t.bookingPageSubtitlePaid : t.bookingPageSubtitleTrial}
         </p>
-        <NativeScheduler eventType={type} />
+        <NativeScheduler eventType={type} registrationId={registrationId} />
       </div>
     </main>
   );
