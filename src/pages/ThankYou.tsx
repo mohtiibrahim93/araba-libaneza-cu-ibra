@@ -235,10 +235,12 @@ const ThankYou = () => {
           </CardContent>
         </Card>
 
-        {details.courseType === "private" && (
+        {details.courseType === "private" && details.registrationId && (
           <div className="text-center mb-6">
             <Button asChild size="lg" variant="default">
-              <Link to="/booking?type=paid">{t.thankYouSchedulePrivateCta}</Link>
+              <Link to={`/booking?type=paid&registration_id=${details.registrationId}`}>
+                {t.thankYouSchedulePrivateCta}
+              </Link>
             </Button>
           </div>
         )}
