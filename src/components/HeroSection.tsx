@@ -81,6 +81,8 @@ const HeroSection = () => {
               alt="Cedrul libanez — simbolul Libanului"
               width={1024}
               height={1024}
+              fetchPriority="high"
+              decoding="async"
               className="w-full h-full object-contain p-4"
             />
           </div>
