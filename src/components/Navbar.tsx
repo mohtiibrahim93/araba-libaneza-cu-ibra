@@ -202,7 +202,7 @@ const Navbar = () => {
       {open && (
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-2 gap-1">
-            {links.map((l) => (
+            {links.slice(0, 1).map((l) => (
               <a
                 key={l.href}
                 href={l.href}
@@ -220,6 +220,16 @@ const Navbar = () => {
               <Calendar className="w-4 h-4" aria-hidden="true" />
               {t.navBooking}
             </Link>
+            {links.slice(1).map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={goToAnchor(l.href)}
+                className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center"
+              >
+                {l.label}
+              </a>
+            ))}
           </div>
         </div>
       )}
