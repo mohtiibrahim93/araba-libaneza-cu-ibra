@@ -340,6 +340,95 @@ Deno.serve(async (req) => {
       return jsonResponse({ data: enriched });
     }
 
+    // ============ Trial → enrollment conversion funnel ============
+    if (action === "list_trial_funnel") {
+      // 1) All trial registrations
+      const { data: trials, error: trialErr } = await supabase
+        .from("registrations")
+        .select("id, created_at, name, email, phone, lead_status")
+        .eq("form_type", "trial")
+        .order("created_at", { ascending: false })
+        .limit(500);
+      if (trialErr) throw trialErr;
+
+      const trialIds = (trials ?? []).map((t) => t.id);
+      const trialEmails = (trials ?? [])
+        .map((t) => (t.email ?? "").toLowerCase())
+        .filter(Boolean);
+
+      // 2) Bookings tied to those trial registrations
+      let bookingsByReg = new Map<string, { start_at: string; end_at: string; status: string }>();
+      if (trialIds.length > 0) {
+        const { data: bookings, error: bErr } = await supabase
+          .from("bookings")
+          .select("registration_id, start_at, end_at, status")
+          .in("registration_id", trialIds);
+        if (bErr) throw bErr;
+        for (const b of bookings ?? []) {
+          bookingsByReg.set(b.registration_id as string, {
+            start_at: b.start_at as string,
+            end_at: b.end_at as string,
+            status: b.status as string,
+          });
+        }
+      }
+
+      // 3) Conversions = paid registrations (non-trial) with same email made
+      //    AFTER the trial registration.
+      const convertedEmails = new Map<string, { form_type: string; created_at: string }>();
+      if (trialEmails.length > 0) {
+        const { data: laterRegs, error: lErr } = await supabase
+          .from("registrations")
+          .select("email, form_type, created_at")
+          .in("email", trialEmails)
+          .neq("form_type", "trial")
+          .order("created_at", { ascending: true });
+        if (lErr) throw lErr;
+        for (const r of laterRegs ?? []) {
+          const key = (r.email ?? "").toLowerCase();
+          if (!key) continue;
+          if (!convertedEmails.has(key)) {
+            convertedEmails.set(key, {
+              form_type: r.form_type as string,
+              created_at: r.created_at as string,
+            });
+          }
+        }
+      }
+
+      const now = Date.now();
+      const enriched = (trials ?? []).map((t) => {
+        const booking = bookingsByReg.get(t.id) ?? null;
+        const emailKey = (t.email ?? "").toLowerCase();
+        const conversion = emailKey ? convertedEmails.get(emailKey) : undefined;
+        const validConversion =
+          conversion && Date.parse(conversion.created_at) > Date.parse(t.created_at)
+            ? conversion
+            : null;
+        const attended =
+          booking?.status === "confirmed" &&
+          Date.parse(booking.end_at) < now;
+        return {
+          ...t,
+          booked: !!booking && booking.status === "confirmed",
+          booking_start_at: booking?.start_at ?? null,
+          attended,
+          converted: !!validConversion,
+          converted_to: validConversion?.form_type ?? null,
+          converted_at: validConversion?.created_at ?? null,
+        };
+      });
+
+      const counts = {
+        registered: enriched.length,
+        booked: enriched.filter((r) => r.booked).length,
+        attended: enriched.filter((r) => r.attended).length,
+        converted: enriched.filter((r) => r.converted).length,
+      };
+
+      return jsonResponse({ data: enriched, counts });
+    }
+
     if (action === "cancel_booking") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
       const { data: booking, error: bErr } = await supabase
