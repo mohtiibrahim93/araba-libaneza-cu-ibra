@@ -154,6 +154,7 @@ const NativeScheduler = ({
           student_phone: phone.trim() || undefined,
           notes: notes.trim() || undefined,
           language: lang,
+          gdpr_consent: true,
         },
       });
       if (res.error) throw res.error;
