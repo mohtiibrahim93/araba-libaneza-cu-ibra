@@ -95,6 +95,11 @@ const FindYourTrackQuiz = () => {
           ? "group"
           : null;
 
+  // ----- Comparison panel -----
+  if (showComparison) {
+    return <ComparisonPanel onBack={() => setShowComparison(false)} />;
+  }
+
   // ----- Inline registration form (after CTA) -----
   if (showForm && track) {
     return (
@@ -235,12 +240,13 @@ const FindYourTrackQuiz = () => {
               {t.quizContinueCta}
             </Button>
             <div className="mt-4">
-              <a
-                href="#pricing"
+              <button
+                type="button"
+                onClick={() => setShowComparison(true)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {t.quizCompareAll}
-              </a>
+              </button>
             </div>
           </CardContent>
         </Card>
