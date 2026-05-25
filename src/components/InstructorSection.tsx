@@ -16,13 +16,14 @@ const InstructorSection = () => {
       <div className="max-w-5xl mx-auto grid md:grid-cols-[280px_1fr] gap-12 items-center">
         {/* Photo */}
         <div className="flex justify-center">
-          <div className="w-56 h-56 md:w-64 md:h-64 rounded-2xl overflow-hidden border-4 border-primary/20 shadow-lg">
+          <picture>
+            <source srcSet={instructorPhotoWebp} type="image/webp" />
             <img
-              src={instructorPhoto}
+              src={instructorPhotoPng}
               alt="Ibra — instructor"
               className="w-full h-full object-cover"
             />
-          </div>
+          </picture>
         </div>
 
         {/* Bio */}
