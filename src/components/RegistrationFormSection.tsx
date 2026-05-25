@@ -490,6 +490,8 @@ const RegistrationFormSection = ({
             </a>
           </div>
         </form>
+
+        {!submitted && <TrustBand />}
       </div>
     </section>
   );
