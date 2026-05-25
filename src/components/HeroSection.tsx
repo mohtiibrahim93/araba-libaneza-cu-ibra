@@ -51,6 +51,12 @@ const HeroSection = () => {
             >
               {t.heroExplore}
             </a>
+            <a
+              href="/trial"
+              className="inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-primary hover:underline underline-offset-4"
+            >
+              {t.heroTrialCta} →
+            </a>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-muted-foreground">

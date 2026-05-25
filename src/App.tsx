@@ -14,6 +14,7 @@ import Unsubscribe from "./pages/Unsubscribe";
 import PrivateStatus from "./pages/PrivateStatus";
 import Booking from "./pages/Booking";
 import BookingManage from "./pages/BookingManage";
+import Trial from "./pages/Trial";
 
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/booking/manage/:token" element={<BookingManage />} />
+            <Route path="/trial" element={<Trial />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
