@@ -244,6 +244,7 @@ const RegistrationFormSection = ({
         waitlistDeposit: courseType === "kids" && payDeposit,
       });
       setSubmitted(true);
+      sessionStorage.removeItem(STORAGE_KEY);
 
       if (courseType === "kids" && payDeposit) {
         try {
