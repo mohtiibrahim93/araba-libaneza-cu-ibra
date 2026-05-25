@@ -36,15 +36,11 @@ const content = {
 } as const;
 
 const TermsContent = () => {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const page = content[lang];
 
-  const title = lang === "ro"
-    ? "Termeni și Condiții — centrul de araba libaneza"
-    : "Terms & Conditions — lebanese arabic center";
-  const description = lang === "ro"
-    ? "Termenii și condițiile de utilizare a serviciilor educaționale oferite de centrul de araba libaneza."
-    : "Terms and conditions for using the educational services provided by the lebanese arabic center.";
+  const title = t.termsSeoTitle;
+  const description = t.termsSeoDescription;
 
   const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
 
