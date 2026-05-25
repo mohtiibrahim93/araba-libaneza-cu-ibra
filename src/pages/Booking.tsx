@@ -21,9 +21,7 @@ const BookingInner = () => {
 
   const description =
     type === "paid"
-      ? lang === "ro"
-        ? "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email și link Zoom."
-        : "Pick an available slot for your private Lebanese Arabic lesson. Email confirmation and Zoom link included."
+      ? t.bookingPaidDesc
       : lang === "ro"
         ? "Programează o lecție gratuită de 30 de minute de arabă libaneză. Fără obligații, confirmare pe email."
         : "Schedule a free 30-minute Lebanese Arabic lesson. No obligations, email confirmation provided.";
