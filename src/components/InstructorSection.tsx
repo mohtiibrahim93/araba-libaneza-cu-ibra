@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import instructorPhoto from "@/assets/instructor-photo.png";
+import instructorPhotoPng from "@/assets/instructor-photo.png";
+import instructorPhotoWebp from "@/assets/instructor-photo.webp";
 
 const InstructorSection = () => {
   const { t } = useI18n();
