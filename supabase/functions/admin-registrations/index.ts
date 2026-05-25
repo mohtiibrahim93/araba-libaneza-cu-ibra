@@ -87,6 +87,137 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, data });
     }
 
+    // ============ Group cohorts ============
+    if (action === "list_cohorts") {
+      const { data, error } = await supabase
+        .from("group_cohorts")
+        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, sort_order")
+        .order("form_type", { ascending: true })
+        .order("level", { ascending: true, nullsFirst: false })
+        .order("sort_order", { ascending: true })
+        .order("start_date", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_cohort") {
+      const {
+        id: cId,
+        form_type,
+        level: cLevel,
+        start_date,
+        schedule_label_ro,
+        schedule_label_en,
+        max_seats,
+        is_active,
+        sort_order,
+      } = body;
+      if (!["group", "kids"].includes(form_type)) {
+        return jsonResponse({ error: "Tip invalid (group/kids)" });
+      }
+      if (typeof start_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(start_date)) {
+        return jsonResponse({ error: "Data invalidă (YYYY-MM-DD)" });
+      }
+      const max = Number(max_seats);
+      if (!Number.isInteger(max) || max < 1) {
+        return jsonResponse({ error: "Locuri invalide" });
+      }
+      const payload = {
+        form_type,
+        level: form_type === "kids" ? null : (cLevel || null),
+        start_date,
+        schedule_label_ro: typeof schedule_label_ro === "string" ? schedule_label_ro : "",
+        schedule_label_en: typeof schedule_label_en === "string" ? schedule_label_en : "",
+        max_seats: max,
+        is_active: is_active !== false,
+        sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
+      };
+      if (typeof cId === "string" && cId) {
+        const { data, error } = await supabase
+          .from("group_cohorts").update(payload).eq("id", cId).select().single();
+        if (error) throw error;
+        return jsonResponse({ success: true, data });
+      }
+      const { data, error } = await supabase
+        .from("group_cohorts").insert(payload).select().single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_cohort") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const { error } = await supabase.from("group_cohorts").delete().eq("id", id);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+    // ============ Kids weekly slots ============
+    if (action === "list_kids_slots") {
+      const { data, error } = await supabase
+        .from("kids_class_slots")
+        .select("id, weekday, start_time, duration_min, format, location, max_seats, is_active, sort_order")
+        .order("weekday", { ascending: true })
+        .order("start_time", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_kids_slot") {
+      const {
+        id: sId,
+        weekday,
+        start_time,
+        duration_min,
+        format: kFormat,
+        location,
+        max_seats,
+        is_active,
+        sort_order,
+      } = body;
+      const wd = Number(weekday);
+      if (!Number.isInteger(wd) || wd < 1 || wd > 7) {
+        return jsonResponse({ error: "Zi invalidă (1-7)" });
+      }
+      if (typeof start_time !== "string" || !/^\d{2}:\d{2}(:\d{2})?$/.test(start_time)) {
+        return jsonResponse({ error: "Oră invalidă" });
+      }
+      if (!["online", "physical"].includes(kFormat)) {
+        return jsonResponse({ error: "Format invalid" });
+      }
+      const max = Number(max_seats);
+      const dur = Number(duration_min);
+      if (!Number.isInteger(max) || max < 1 || !Number.isInteger(dur) || dur < 15) {
+        return jsonResponse({ error: "Locuri/durată invalide" });
+      }
+      const payload = {
+        weekday: wd,
+        start_time,
+        duration_min: dur,
+        format: kFormat,
+        location: typeof location === "string" ? location.trim() || null : null,
+        max_seats: max,
+        is_active: is_active !== false,
+        sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
+      };
+      if (typeof sId === "string" && sId) {
+        const { data, error } = await supabase
+          .from("kids_class_slots").update(payload).eq("id", sId).select().single();
+        if (error) throw error;
+        return jsonResponse({ success: true, data });
+      }
+      const { data, error } = await supabase
+        .from("kids_class_slots").insert(payload).select().single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_kids_slot") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const { error } = await supabase.from("kids_class_slots").delete().eq("id", id);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
     if (action === "list_availability_rules") {
       const { data, error } = await supabase
         .from("availability_rules")
