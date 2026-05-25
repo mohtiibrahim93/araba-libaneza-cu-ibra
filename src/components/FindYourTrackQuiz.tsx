@@ -51,6 +51,7 @@ const FindYourTrackQuiz = () => {
   const [format, setFormat] = useState<Format | null>(null);
   const [level, setLevel] = useState<Level | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   // Compute total/current steps for the dots
   const isKidsPath = audience === "kids";
@@ -63,9 +64,14 @@ const FindYourTrackQuiz = () => {
     setFormat(null);
     setLevel(null);
     setShowForm(false);
+    setShowComparison(false);
   };
 
   const back = () => {
+    if (showComparison) {
+      setShowComparison(false);
+      return;
+    }
     if (step === 4) {
       // back from result
       if (isKidsPath) setStep(1);
