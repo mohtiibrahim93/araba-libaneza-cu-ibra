@@ -4,6 +4,14 @@ import { useKidsSlots, type KidsSlot } from "@/hooks/useKidsSlots";
 import { Label } from "@/components/ui/label";
 import { Loader2, Users, MapPin, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
+import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
+import {
+  BUCHAREST_TZ,
+  getLocalTz,
+  shortTzLabel,
+  useShowLocalTz,
+  weeklyBucharestInTz,
+} from "@/lib/timezone";
 
 interface Props {
   selectedSlotId: string | null;
@@ -30,6 +38,9 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
   const { t } = useI18n();
   const { slots, loading } = useKidsSlots();
   const [filter, setFilter] = useState<FormatFilter>("all");
+  const showLocalTz = useShowLocalTz();
+  const localTz = useMemo(() => getLocalTz(), []);
+  const localTzLabel = useMemo(() => shortTzLabel(localTz), [localTz]);
 
   const filtered = useMemo(
     () => (filter === "all" ? slots : slots.filter((s) => s.format === filter)),
@@ -81,11 +92,20 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
         ))}
       </div>
 
+      <LocalTimezoneToggle />
+
       <div className="grid gap-2 sm:grid-cols-2">
         {filtered.map((s) => {
           const active = s.id === selectedSlotId;
           const weekdayLabel = t[WEEKDAY_KEYS[Math.min(Math.max(s.weekday - 1, 0), 6)]];
           const lowSeats = s.seatsLeft > 0 && s.seatsLeft < 3;
+          const local =
+            showLocalTz && localTz !== BUCHAREST_TZ
+              ? weeklyBucharestInTz(s.weekday, s.start_time.slice(0, 5), localTz)
+              : null;
+          const localWeekdayLabel = local
+            ? t[WEEKDAY_KEYS[Math.min(Math.max(local.weekday - 1, 0), 6)]]
+            : null;
           return (
             <button
               key={s.id}
@@ -101,6 +121,11 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
               <p className="text-sm font-semibold text-foreground">
                 {t.kidsSlotEvery} {weekdayLabel.toLowerCase()} · {formatTime(s.start_time)}
               </p>
+              {local && localWeekdayLabel && !local.sameAsSource && (
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t.tzYourTime} ({localTzLabel}): {localWeekdayLabel.toLowerCase()} · {local.time}
+                </p>
+              )}
               <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                 {s.format === "online" ? (
                   <>
