@@ -127,6 +127,7 @@ const RegistrationFormSection = ({
   };
 
   const reset = () => {
+    sessionStorage.removeItem(STORAGE_KEY);
     setCourseType("");
     setFormat("");
     setLevel("A1");
