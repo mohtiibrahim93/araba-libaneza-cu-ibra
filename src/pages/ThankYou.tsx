@@ -5,7 +5,6 @@ import { CheckCircle2, Mail, Video, Calendar, Share2, Loader2, ArrowLeft } from 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
 
