@@ -66,7 +66,7 @@ const BookingManageInner = () => {
   }, [token]);
 
   const handleCancel = async () => {
-    if (!confirm(lang === "ro" ? "Sigur anulezi programarea?" : "Cancel this booking?")) return;
+    if (!confirm(t.manageConfirmCancel)) return;
     setBusy(true);
     try {
       const res = await fetch(baseUrl, {
@@ -74,18 +74,18 @@ const BookingManageInner = () => {
         headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.error ?? "failed");
-      toast.success(lang === "ro" ? "Programare anulată" : "Booking cancelled");
+      if (!res.ok) throw new Error(json?.error ?? t.manageGenericError);
+      toast.success(t.manageCancelledToast);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "failed");
+      toast.error(e instanceof Error ? e.message : t.manageGenericError);
     } finally {
       setBusy(false);
     }
   };
 
   const handleReschedule = async (startAt: string) => {
-    if (!confirm(lang === "ro" ? "Confirmi mutarea programării la noul slot?" : "Move your booking to this new slot?")) return;
+    if (!confirm(t.manageConfirmReschedule)) return;
     setBusy(true);
     try {
       const res = await fetch(baseUrl, {
@@ -99,15 +99,15 @@ const BookingManageInner = () => {
       const json = await res.json();
       if (!res.ok) {
         if (json?.code === "conflict") {
-          toast.error(lang === "ro" ? "Slotul tocmai a fost rezervat." : "Slot just got taken.");
+          toast.error(t.manageSlotTaken);
           return;
         }
-        throw new Error(json?.error ?? "failed");
+        throw new Error(json?.error ?? t.manageGenericError);
       }
-      toast.success(lang === "ro" ? "Programare reprogramată" : "Booking rescheduled");
+      toast.success(t.manageRescheduledToast);
       navigate(`/booking/manage/${json.manage_token}`);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "failed");
+      toast.error(e instanceof Error ? e.message : t.manageGenericError);
     } finally {
       setBusy(false);
     }
@@ -118,13 +118,10 @@ const BookingManageInner = () => {
     const manageUrl = `${window.location.origin}/booking/manage/${token}`;
     const ics = buildIcs({
       uid: `${booking.id}@centruldearabalibaneza.com`,
-      title:
-        lang === "ro"
-          ? `Lecție Arabă Libaneză — ${booking.event_type_name_ro}`
-          : `Lebanese Arabic Lesson — ${booking.event_type_name_en}`,
+      title: `${t.icsTitlePrefix} — ${lang === "ro" ? booking.event_type_name_ro : booking.event_type_name_en}`,
       description: booking.meet_link
-        ? (lang === "ro" ? `Zoom: ${booking.meet_link}\nGestionează: ${manageUrl}` : `Zoom: ${booking.meet_link}\nManage: ${manageUrl}`)
-        : (lang === "ro" ? `Gestionează: ${manageUrl}` : `Manage: ${manageUrl}`),
+        ? `${t.icsZoomLabel}: ${booking.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
+        : `${t.icsManageLabel}: ${manageUrl}`,
       location: booking.meet_link ?? "Raduga Creative Center, București",
       startISO: booking.start_at,
       endISO: booking.end_at,
@@ -141,22 +138,22 @@ const BookingManageInner = () => {
     <main className="min-h-screen bg-background py-12 px-6">
       <div className="max-w-2xl mx-auto">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
-          <ArrowLeft className="w-4 h-4" /> {lang === "ro" ? "Acasă" : "Home"}
+          <ArrowLeft className="w-4 h-4" /> {t.navHome}
         </Link>
         <h1 className="text-3xl font-bold mb-6">
-          {lang === "ro" ? "Programarea ta" : "Your booking"}
+          {t.manageHeading}
         </h1>
 
         {loading && (
           <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="w-5 h-5 animate-spin" />
-            {lang === "ro" ? "Se încarcă…" : "Loading…"}
+            {t.manageLoading}
           </div>
         )}
 
         {error && (
           <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-            {lang === "ro" ? "Programarea nu a fost găsită." : "Booking not found."}
+            {t.manageNotFound}
           </div>
         )}
 
@@ -184,10 +181,10 @@ const BookingManageInner = () => {
                     : "bg-muted text-muted-foreground"
                 }`}
               >
-                {booking.status === "confirmed" && (lang === "ro" ? "Confirmată" : "Confirmed")}
-                {booking.status === "cancelled" && (lang === "ro" ? "Anulată" : "Cancelled")}
-                {booking.status === "rescheduled" && (lang === "ro" ? "Reprogramată" : "Rescheduled")}
-                {booking.status === "completed" && (lang === "ro" ? "Finalizată" : "Completed")}
+                {booking.status === "confirmed" && t.manageStatusConfirmed}
+                {booking.status === "cancelled" && t.manageStatusCancelled}
+                {booking.status === "rescheduled" && t.manageStatusRescheduled}
+                {booking.status === "completed" && t.manageStatusCompleted}
               </span>
             </div>
 
@@ -218,7 +215,7 @@ const BookingManageInner = () => {
                   disabled={busy}
                   className="flex-1 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
                 >
-                  {lang === "ro" ? "Reprogramează" : "Reschedule"}
+                  {t.manageRescheduleButton}
                 </button>
                 <button
                   onClick={handleCancel}
@@ -226,7 +223,7 @@ const BookingManageInner = () => {
                   className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5"
                 >
                   <X className="w-4 h-4" />
-                  {lang === "ro" ? "Anulează" : "Cancel"}
+                  {t.manageCancelButton}
                 </button>
               </div>
             )}
@@ -234,7 +231,7 @@ const BookingManageInner = () => {
             {booking.status === "cancelled" && (
               <p className="text-sm text-muted-foreground inline-flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
-                {lang === "ro" ? "Această programare a fost anulată." : "This booking was cancelled."}
+                {t.manageCancelledNotice}
               </p>
             )}
           </div>
@@ -246,7 +243,7 @@ const BookingManageInner = () => {
               onClick={() => setMode("view")}
               className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
             >
-              <ArrowLeft className="w-4 h-4" /> {lang === "ro" ? "Înapoi" : "Back"}
+              <ArrowLeft className="w-4 h-4" /> {t.navBack}
             </button>
             <div>
               <h2 className="font-semibold mb-1">{t.bookingReschedulePickTitle}</h2>

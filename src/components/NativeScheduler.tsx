@@ -137,7 +137,7 @@ const NativeScheduler = ({
   const handleConfirm = async () => {
     if (!selectedSlot) return;
     if (!name.trim() || !email.trim()) {
-      toast.error(lang === "ro" ? "Completează numele și emailul" : "Fill in name and email");
+      toast.error(t.schedulerNameRequired);
       return;
     }
     if (!gdpr) {
@@ -163,7 +163,7 @@ const NativeScheduler = ({
       const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; end_at?: string; code?: string; error?: string };
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
-          toast.error(lang === "ro" ? "Slotul tocmai a fost rezervat. Alege altul." : "Slot just got taken. Pick another.");
+          toast.error(t.schedulerSlotTaken);
           // refresh
           setSelectedSlot(null);
           setLoading(true);
@@ -176,7 +176,7 @@ const NativeScheduler = ({
           setLoading(false);
           return;
         }
-        throw new Error(payload?.error ?? "booking failed");
+        throw new Error(payload?.error ?? t.schedulerBookingFailed);
       }
       setConfirmed({
         start_at: payload.start_at,
@@ -187,7 +187,7 @@ const NativeScheduler = ({
       });
       onBooked?.({ booking_id: payload.booking_id, manage_token: payload.manage_token, meet_link: payload.meet_link });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "booking failed");
+      toast.error(e instanceof Error ? e.message : t.schedulerBookingFailed);
     } finally {
       setSubmitting(false);
     }
@@ -198,7 +198,7 @@ const NativeScheduler = ({
       <div className="flex items-center justify-center py-12 rounded-lg border border-border">
         <Loader2 className="w-5 h-5 animate-spin text-primary" />
         <span className="ml-2 text-sm text-muted-foreground">
-          {lang === "ro" ? "Se încarcă sloturile…" : "Loading slots…"}
+          {t.schedulerLoadingSlots}
         </span>
       </div>
     );
@@ -232,13 +232,10 @@ const NativeScheduler = ({
         new Date(new Date(confirmed.start_at).getTime() + (data?.event_type.duration_min ?? 60) * 60000).toISOString();
       const ics = buildIcs({
         uid: `${confirmed.booking_id ?? confirmed.manage_token}@centruldearabalibaneza.com`,
-        title:
-          lang === "ro"
-            ? `Lecție Arabă Libaneză — ${data?.event_type.name_ro ?? ""}`
-            : `Lebanese Arabic Lesson — ${data?.event_type.name_en ?? ""}`,
+        title: `${t.icsTitlePrefix} — ${(lang === "ro" ? data?.event_type.name_ro : data?.event_type.name_en) ?? ""}`,
         description: confirmed.meet_link
-          ? (lang === "ro" ? `Zoom: ${confirmed.meet_link}\nGestionează: ${manageUrl}` : `Zoom: ${confirmed.meet_link}\nManage: ${manageUrl}`)
-          : (lang === "ro" ? `Gestionează: ${manageUrl}` : `Manage: ${manageUrl}`),
+          ? `${t.icsZoomLabel}: ${confirmed.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
+          : `${t.icsManageLabel}: ${manageUrl}`,
         location: confirmed.meet_link ?? "Raduga Creative Center, București",
         startISO: confirmed.start_at,
         endISO: endIso,
@@ -268,28 +265,28 @@ const NativeScheduler = ({
         </div>
         <div className="space-y-2">
           <h3 className="text-2xl font-bold">
-            {lang === "ro" ? "Programarea ta a fost confirmată!" : "Your booking is confirmed!"}
+            {t.confirmedHeading}
           </h3>
           <p className="text-sm text-muted-foreground">
-            {lang === "ro" ? "Vei primi un email cu detaliile." : "You'll get an email with the details."}
+            {t.confirmedEmailNote}
           </p>
         </div>
 
         <div className="rounded-lg bg-muted/40 border border-border p-4 text-left space-y-2 text-sm">
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{lang === "ro" ? "Data" : "Date"}</span>
+            <span className="text-muted-foreground">{t.confirmedDateLabel}</span>
             <span className="font-medium text-right">{dateStr}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{lang === "ro" ? "Ora" : "Time"}</span>
+            <span className="text-muted-foreground">{t.confirmedTimeLabel}</span>
             <span className="font-medium text-right">{timeStr}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{lang === "ro" ? "Curs" : "Course"}</span>
+            <span className="text-muted-foreground">{t.confirmedCourseLabel}</span>
             <span className="font-medium text-right">{courseName}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{lang === "ro" ? "Format" : "Format"}</span>
+            <span className="text-muted-foreground">{t.confirmedFormatLabel}</span>
             <span className="font-medium text-right">{formatLabel}</span>
           </div>
           {format === "online" && (
@@ -314,7 +311,7 @@ const NativeScheduler = ({
           className="inline-flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <Home className="w-4 h-4" />
-          {lang === "ro" ? "Înapoi la pagina principală" : "Back to homepage"}
+          {t.confirmedBackHome}
         </Link>
       </div>
     );
@@ -327,9 +324,7 @@ const NativeScheduler = ({
     return (
       <div className="flex flex-col items-center text-center gap-3 py-8 px-4 rounded-lg border border-dashed border-border bg-muted/30">
         <p className="text-sm text-muted-foreground max-w-md">
-          {lang === "ro"
-            ? "Nu sunt sloturi disponibile în următoarele 30 de zile. Scrie-ne pe WhatsApp."
-            : "No available slots in the next 30 days. Message us on WhatsApp."}
+          {t.schedulerNoSlots30d}
         </p>
         <a
           href={WHATSAPP_FALLBACK}
@@ -352,7 +347,7 @@ const NativeScheduler = ({
           onClick={() => setSelectedSlot(null)}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="w-4 h-4" /> {lang === "ro" ? "Înapoi la sloturi" : "Back to slots"}
+          <ArrowLeft className="w-4 h-4" /> {t.schedulerBackToSlots}
         </button>
         <div className="rounded-md bg-primary/5 border border-primary/20 px-3 py-2 text-sm">
           <span className="font-semibold">{fmtFullLocal(selectedSlot, lang)}</span>
@@ -362,7 +357,7 @@ const NativeScheduler = ({
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder={lang === "ro" ? "Nume complet" : "Full name"}
+            placeholder={t.schedulerNamePlaceholder}
             className="w-full px-3 py-2 rounded-md border border-input text-sm"
           />
           <input
@@ -375,7 +370,7 @@ const NativeScheduler = ({
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder={lang === "ro" ? "Telefon (opțional)" : "Phone (optional)"}
+            placeholder={t.schedulerPhonePlaceholder}
             className="w-full px-3 py-2 rounded-md border border-input text-sm"
           />
           <select
@@ -390,7 +385,7 @@ const NativeScheduler = ({
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder={lang === "ro" ? "Note (opțional)" : "Notes (optional)"}
+          placeholder={t.schedulerNotesPlaceholder}
           rows={2}
           className="w-full px-3 py-2 rounded-md border border-input text-sm resize-none"
         />
@@ -401,7 +396,7 @@ const NativeScheduler = ({
           className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 disabled:opacity-60"
         >
           {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-          {lang === "ro" ? "Confirmă programarea" : "Confirm booking"}
+          {t.schedulerConfirmButton}
         </button>
       </div>
     );
@@ -412,7 +407,7 @@ const NativeScheduler = ({
     <div className="rounded-lg border border-border bg-card p-5 space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-sm">
-          {lang === "ro" ? "Alege o zi" : "Pick a day"}
+          {t.schedulerPickDay}
         </h3>
         <span className="text-xs text-muted-foreground">{TZ}</span>
       </div>
@@ -432,7 +427,7 @@ const NativeScheduler = ({
             >
               <div>{fmtDayHeader(k, lang)}</div>
               <div className={`mt-0.5 text-[10px] ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                {count} {lang === "ro" ? "sloturi" : "slots"}
+                {count} {t.schedulerSlotsLabel}
               </div>
             </button>
           );
@@ -457,7 +452,7 @@ const NativeScheduler = ({
       </div>
       {slotsForDate.length === 0 && (
         <p className="text-sm text-muted-foreground text-center py-4">
-          {lang === "ro" ? "Nicio oră disponibilă în această zi." : "No times available this day."}
+          {t.schedulerNoTimesToday}
         </p>
       )}
     </div>
