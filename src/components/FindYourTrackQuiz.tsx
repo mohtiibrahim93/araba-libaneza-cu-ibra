@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, User, Baby, GraduationCap, ChevronRight } from "lucide-react";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import ComparisonPanel from "@/components/ComparisonPanel";
 
 type Audience = "self" | "kids";
 type Format = "group" | "private";
@@ -50,6 +51,7 @@ const FindYourTrackQuiz = () => {
   const [format, setFormat] = useState<Format | null>(null);
   const [level, setLevel] = useState<Level | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   // Compute total/current steps for the dots
   const isKidsPath = audience === "kids";
@@ -62,9 +64,14 @@ const FindYourTrackQuiz = () => {
     setFormat(null);
     setLevel(null);
     setShowForm(false);
+    setShowComparison(false);
   };
 
   const back = () => {
+    if (showComparison) {
+      setShowComparison(false);
+      return;
+    }
     if (step === 4) {
       // back from result
       if (isKidsPath) setStep(1);
@@ -87,6 +94,11 @@ const FindYourTrackQuiz = () => {
         : format === "group" && level
           ? "group"
           : null;
+
+  // ----- Comparison panel -----
+  if (showComparison) {
+    return <ComparisonPanel onBack={() => setShowComparison(false)} />;
+  }
 
   // ----- Inline registration form (after CTA) -----
   if (showForm && track) {
@@ -228,12 +240,13 @@ const FindYourTrackQuiz = () => {
               {t.quizContinueCta}
             </Button>
             <div className="mt-4">
-              <a
-                href="#pricing"
+              <button
+                type="button"
+                onClick={() => setShowComparison(true)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {t.quizCompareAll}
-              </a>
+              </button>
             </div>
           </CardContent>
         </Card>
