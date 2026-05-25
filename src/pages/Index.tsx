@@ -86,15 +86,17 @@ const PageContent = () => {
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
       <Navbar />
-      <HeroSection />
-      <WhySection />
-      <InstructorSection />
-      <FindYourTrackQuiz />
-      <CulturalValueSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CTASection />
+      <main>
+        <HeroSection />
+        <WhySection />
+        <InstructorSection />
+        <FindYourTrackQuiz />
+        <CulturalValueSection />
+        <PricingSection />
+        <TestimonialsSection />
+        <FAQSection />
+        <CTASection />
+      </main>
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
