@@ -103,7 +103,7 @@ const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
-          {links.map((l) => (
+          {links.slice(0, 1).map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -121,6 +121,16 @@ const Navbar = () => {
             <Calendar className="w-4 h-4" aria-hidden="true" />
             {t.navBooking}
           </Link>
+          {links.slice(1).map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={goToAnchor(l.href)}
+              className="hover:text-foreground transition-colors"
+            >
+              {l.label}
+            </a>
+          ))}
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
