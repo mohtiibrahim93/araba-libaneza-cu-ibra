@@ -50,16 +50,6 @@ const ThankYou = () => {
     let cancelled = false;
     (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke(
-          "get-checkout-session",
-          { method: "GET" as never, body: undefined as never } as never,
-        );
-        // supabase.functions.invoke doesn't pass query string for GET easily; use fetch directly
-        if (!cancelled && (error || !data)) throw error || new Error("no data");
-      } catch {
-        /* fallthrough to direct fetch */
-      }
-      try {
         const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-checkout-session?session_id=${encodeURIComponent(sessionId)}`;
         const res = await fetch(url, {
           headers: {
