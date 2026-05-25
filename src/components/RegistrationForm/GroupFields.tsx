@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Label } from "@/components/ui/label";
 import {
@@ -7,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import LevelAssessmentModal from "@/components/LevelAssessmentModal";
 import type { LevelType } from "./types";
 
 interface Props {
