@@ -197,16 +197,8 @@ const NativeScheduler = ({
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
           toast.error(t.schedulerSlotTaken);
-          // refresh
           setSelectedSlot(null);
-          setLoading(true);
-          const url =
-            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-availability` +
-            `?event_type=${eventType}&date_from=${dateRange.from}&date_to=${dateRange.to}`;
-          const r = await fetch(url, { headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY } });
-          const j = await r.json();
-          setData(j);
-          setLoading(false);
+          await loadAvailability();
           return;
         }
         throw new Error(payload?.error ?? t.schedulerBookingFailed);
