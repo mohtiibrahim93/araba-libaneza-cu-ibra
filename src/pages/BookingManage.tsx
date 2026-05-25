@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Calendar, CheckCircle2, Download, Loader2, X } from "lucide-react";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
 import { buildIcs, downloadIcs } from "@/lib/ics";
@@ -259,10 +259,6 @@ const BookingManageInner = () => {
   );
 };
 
-const BookingManage = () => (
-  <I18nProvider>
-    <BookingManageInner />
-  </I18nProvider>
-);
+const BookingManage = () => <BookingManageInner />;
 
 export default BookingManage;

@@ -1,4 +1,4 @@
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -74,10 +74,6 @@ const TermsContent = () => {
   );
 };
 
-const Terms = () => (
-  <I18nProvider>
-    <TermsContent />
-  </I18nProvider>
-);
+const Terms = () => <TermsContent />;
 
 export default Terms;

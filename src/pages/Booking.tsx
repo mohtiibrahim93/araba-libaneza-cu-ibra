@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 
 const BookingInner = () => {
   const { t, lang } = useI18n();
@@ -38,10 +38,6 @@ const BookingInner = () => {
   );
 };
 
-const BookingPage = () => (
-  <I18nProvider>
-    <BookingInner />
-  </I18nProvider>
-);
+const BookingPage = () => <BookingInner />;
 
 export default BookingPage;
