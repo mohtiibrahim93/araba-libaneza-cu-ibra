@@ -472,6 +472,7 @@ const NativeScheduler = ({
         </h3>
         <span className="text-xs text-muted-foreground">{TZ}</span>
       </div>
+      <LocalTimezoneToggle />
       <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-5">
         <div className="flex justify-center md:justify-start">
           <CalendarPicker
@@ -511,9 +512,14 @@ const NativeScheduler = ({
                     setSelectedSlot(iso);
                   }
                 }}
-                className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
+                className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center leading-tight"
               >
-                {fmtSlotTime(iso)}
+                <span>{fmtSlotTime(iso)}</span>
+                {showLocalTz && localTz !== TZ && (
+                  <span className="text-[10px] font-normal text-muted-foreground mt-0.5">
+                    {fmtTimeInTz(iso, localTz)}
+                  </span>
+                )}
               </button>
             ))}
           </div>
