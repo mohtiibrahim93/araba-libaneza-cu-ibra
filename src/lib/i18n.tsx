@@ -281,6 +281,20 @@ const translations = {
     mainLeadDetailKidsLabel: "Curs copii",
     mainLeadDetailKidsValue: "Doar fizic · activități prin joc · locuri limitate",
 
+    // Level assessment quiz
+    levelQuizDontKnow: "Nu știu ce nivel am",
+    levelQuizTitle: "Descoperă nivelul tău",
+    levelQuizDesc: "Răspunde la câteva întrebări scurte pentru a afla ce nivel CEFR ți se potrivește.",
+    levelQuizQ1: "Poți citi literele arabe?",
+    levelQuizQ2: "Poți să te prezinți în arabă?",
+    levelQuizQ3: "Poți comanda mâncare la restaurant în arabă?",
+    levelQuizQ4: "Poți povesti ce ai făcut ieri?",
+    levelQuizYes: "Da",
+    levelQuizNo: "Nu",
+    levelQuizResultPrefix: "Nivelul tău estimat: {level}",
+    levelQuizApply: "Folosește acest nivel",
+    levelQuizRestart: "Reîncepe",
+
     // Private Form
     privateTitle: "Lecții Private de Arabă",
     privateDesc: "Vrei atenție personalizată? Lasă-ne datele tale.",
@@ -875,6 +889,20 @@ const translations = {
     mainLeadDetailPrivateValue: "Online or in person · 90-minute sessions · flexible schedule",
     mainLeadDetailKidsLabel: "Kids course",
     mainLeadDetailKidsValue: "In person only · play-based activities · limited spots",
+
+    // Level assessment quiz
+    levelQuizDontKnow: "I don't know my level",
+    levelQuizTitle: "Discover your level",
+    levelQuizDesc: "Answer a few short questions to find out which CEFR level fits you.",
+    levelQuizQ1: "Can you read Arabic letters?",
+    levelQuizQ2: "Can you introduce yourself in Arabic?",
+    levelQuizQ3: "Can you order food at a restaurant in Arabic?",
+    levelQuizQ4: "Can you tell what you did yesterday?",
+    levelQuizYes: "Yes",
+    levelQuizNo: "No",
+    levelQuizResultPrefix: "Your estimated level: {level}",
+    levelQuizApply: "Use this level",
+    levelQuizRestart: "Start over",
 
     privateTitle: "Private Arabic Lessons",
     privateDesc: "Want personalized attention? Leave your details.",
