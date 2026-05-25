@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, User, Baby, GraduationCap, ChevronRight } from "lucide-react";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import ComparisonPanel from "@/components/ComparisonPanel";
 
 type Audience = "self" | "kids";
 type Format = "group" | "private";
