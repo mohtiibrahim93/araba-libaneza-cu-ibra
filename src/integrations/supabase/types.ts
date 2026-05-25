@@ -116,6 +116,7 @@ export type Database = {
           meet_link: string | null
           notes: string | null
           original_booking_id: string | null
+          registration_id: string
           reminder_1h_sent_at: string | null
           reminder_24h_sent_at: string | null
           start_at: string
@@ -139,6 +140,7 @@ export type Database = {
           meet_link?: string | null
           notes?: string | null
           original_booking_id?: string | null
+          registration_id: string
           reminder_1h_sent_at?: string | null
           reminder_24h_sent_at?: string | null
           start_at: string
@@ -162,6 +164,7 @@ export type Database = {
           meet_link?: string | null
           notes?: string | null
           original_booking_id?: string | null
+          registration_id?: string
           reminder_1h_sent_at?: string | null
           reminder_24h_sent_at?: string | null
           start_at?: string
@@ -184,6 +187,13 @@ export type Database = {
             columns: ["original_booking_id"]
             isOneToOne: false
             referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
             referencedColumns: ["id"]
           },
         ]
