@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar } from "lucide-react";
+import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +16,22 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
   const [open, setOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Sync dark-mode state with <html> class on mount
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
 
   // Navigate to an in-page anchor; if currently on a different route,
   // route to "/" first then scroll once the target mounts.
@@ -120,6 +134,15 @@ const Navbar = () => {
             <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
             <span className="hidden sm:inline">{t.navCourses}</span>
           </a>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="rounded-full"
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
