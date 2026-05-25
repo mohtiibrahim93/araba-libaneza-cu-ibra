@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -57,6 +58,7 @@ const RegistrationFormSection = ({
   const [childAge, setChildAge] = useState("");
   const [message, setMessage] = useState("");
   const [gdpr, setGdpr] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
@@ -82,6 +84,7 @@ const RegistrationFormSection = ({
       if (draft.childAge !== undefined) setChildAge(draft.childAge);
       if (draft.message !== undefined) setMessage(draft.message);
       if (draft.gdpr !== undefined) setGdpr(draft.gdpr);
+      if (draft.referralCode !== undefined) setReferralCode(draft.referralCode);
       if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
       if (draft.groupMonths !== undefined) setGroupMonths(draft.groupMonths);
       if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
@@ -105,6 +108,7 @@ const RegistrationFormSection = ({
       childAge,
       message,
       gdpr,
+      referralCode,
       privateQuantity,
       groupMonths,
       payDeposit,
@@ -113,7 +117,7 @@ const RegistrationFormSection = ({
   }, [
     courseType, format, level, center, name, phone, email,
     childName, childAge, message, gdpr,
-    privateQuantity, groupMonths, payDeposit, submitted,
+    referralCode, privateQuantity, groupMonths, payDeposit, submitted,
   ]);
 
   const onCourseChange = (value: CourseType) => {
@@ -247,6 +251,7 @@ const RegistrationFormSection = ({
         child_age: courseType === "kids" ? childAge || null : null,
         level: courseType === "group" ? level || null : null,
         is_waitlist_deposit: courseType === "kids" && payDeposit,
+        referral_code: referralCode.trim() || null,
       });
 
       if (error) throw error;
@@ -466,6 +471,21 @@ const RegistrationFormSection = ({
           <p className="text-xs text-muted-foreground">{t.mainLeadCallbackNote}</p>
 
           <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+
+          <div className="space-y-1.5">
+            <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">
+              {t.referralCodeLabel}
+            </Label>
+            <Input
+              id="referralCode"
+              type="text"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
+              placeholder={t.referralCodePlaceholder}
+              maxLength={64}
+              autoComplete="off"
+            />
+          </div>
 
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting ? (
