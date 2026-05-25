@@ -34,15 +34,11 @@ const content = {
 } as const;
 
 const PrivacyContent = () => {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const page = content[lang];
 
-  const title = lang === "ro"
-    ? "Politica de Confidențialitate — centrul de araba libaneza"
-    : "Privacy Policy — lebanese arabic center";
-  const description = lang === "ro"
-    ? "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la centrul de araba libaneza."
-    : "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.";
+  const title = t.privacySeoTitle;
+  const description = t.privacySeoDescription;
 
   const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
 
