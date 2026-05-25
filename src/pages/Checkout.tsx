@@ -41,7 +41,7 @@ const PaymentForm = ({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/?payment=success&type=${courseType}`,
+        return_url: `${window.location.origin}/thank-you?type=${courseType}&amount=${amount}&currency=${currency}`,
       },
     });
     if (error) {
