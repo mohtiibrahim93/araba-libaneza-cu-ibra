@@ -472,6 +472,21 @@ const RegistrationFormSection = ({
 
           <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
 
+          <div className="space-y-1.5">
+            <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">
+              {t.referralCodeLabel}
+            </Label>
+            <Input
+              id="referralCode"
+              type="text"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
+              placeholder={t.referralCodePlaceholder}
+              maxLength={64}
+              autoComplete="off"
+            />
+          </div>
+
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting ? (
               <>
