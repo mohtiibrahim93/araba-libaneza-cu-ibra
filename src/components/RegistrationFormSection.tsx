@@ -186,21 +186,22 @@ const RegistrationFormSection = ({
 
     setSubmitting(true);
     try {
-      // reCAPTCHA v3 verification
+      // reCAPTCHA v3 verification (soft — skip if unavailable on this domain).
       const recaptchaToken = await getRecaptchaToken("registration");
-      if (!recaptchaToken) {
-        toast.error(t.recaptchaFailed);
-        setSubmitting(false);
-        return;
-      }
-      const { data: verify, error: verifyErr } = await supabase.functions.invoke(
-        "verify-recaptcha",
-        { body: { token: recaptchaToken } },
-      );
-      if (verifyErr || !verify?.success) {
-        toast.error(t.recaptchaFailed);
-        setSubmitting(false);
-        return;
+      if (recaptchaToken) {
+        const { data: verify, error: verifyErr } = await supabase.functions.invoke(
+          "verify-recaptcha",
+          { body: { token: recaptchaToken } },
+        );
+        if (verifyErr) {
+          console.warn("[registration] recaptcha verify error, proceeding", verifyErr);
+        } else if (verify && verify.success === false) {
+          toast.error(t.recaptchaFailed);
+          setSubmitting(false);
+          return;
+        }
+      } else {
+        console.warn("[registration] no recaptcha token — proceeding without verification");
       }
 
       const id = crypto.randomUUID();
