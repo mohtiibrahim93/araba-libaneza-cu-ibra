@@ -317,6 +317,8 @@ const translations = {
     gdprConsent: "Sunt de acord cu prelucrarea datelor personale conform",
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
+    recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
+    recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
     smsConfirmationOptIn: "Doresc să primesc confirmarea cererii prin SMS când opțiunea devine disponibilă.",
 
     // Payment instructions
@@ -771,6 +773,8 @@ const translations = {
     gdprConsent: "I agree to the processing of my personal data according to the",
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
+    recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    recaptchaFailed: "Security check failed. Please try again.",
     smsConfirmationOptIn: "I want to receive the request confirmation by SMS when this option becomes available.",
 
     // Payment instructions

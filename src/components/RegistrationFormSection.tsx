@@ -15,6 +15,7 @@ import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
+import { getRecaptchaToken } from "@/lib/recaptcha";
 
 import GroupFields from "./RegistrationForm/GroupFields";
 import PrivateFields from "./RegistrationForm/PrivateFields";
@@ -61,6 +62,7 @@ const RegistrationFormSection = ({
   const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
+  const [honeypot, setHoneypot] = useState("");
 
   /* Restore draft from sessionStorage on mount */
   useEffect(() => {
@@ -155,6 +157,12 @@ const RegistrationFormSection = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Honeypot: silently drop bot submissions
+    if (honeypot) {
+      setSubmitted(true);
+      return;
+    }
+
     if (!courseType) {
       toast.error(t.mainLeadErrorCourseType);
       return;
@@ -178,6 +186,23 @@ const RegistrationFormSection = ({
 
     setSubmitting(true);
     try {
+      // reCAPTCHA v3 verification
+      const recaptchaToken = await getRecaptchaToken("registration");
+      if (!recaptchaToken) {
+        toast.error(t.recaptchaFailed);
+        setSubmitting(false);
+        return;
+      }
+      const { data: verify, error: verifyErr } = await supabase.functions.invoke(
+        "verify-recaptcha",
+        { body: { token: recaptchaToken } },
+      );
+      if (verifyErr || !verify?.success) {
+        toast.error(t.recaptchaFailed);
+        setSubmitting(false);
+        return;
+      }
+
       const id = crypto.randomUUID();
       const formType = courseType;
       const formTypeLabel =
@@ -305,6 +330,18 @@ const RegistrationFormSection = ({
               : "bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm space-y-5"
           }
         >
+          {/* Honeypot — hidden from real users, attractive to bots */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            aria-hidden="true"
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            style={{ display: "none" }}
+          />
+
           {/* Course type */}
           <div className="space-y-2">
             <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
