@@ -39,30 +39,27 @@ const PageContent = () => {
       if (type === "private") {
         // Private lessons are paid → next step is to pick a slot in the
         // native scheduler. Send them to the booking page (paid event).
-        toast.success("Plata reușită! 🎉 Programează-ți lecția acum.", {
+        toast.success(t.paymentSuccessPrivate, {
           duration: 15000,
           action: {
-            label: "Programează",
+            label: t.paymentSuccessPrivateCta,
             onClick: () => { window.location.href = "/booking?type=paid"; },
           },
         });
       } else {
-        toast.success("Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.");
+        toast.success(t.paymentSuccessGeneric);
       }
       trackEvent("Purchase", { content_name: type || "course" });
       window.history.replaceState({}, "", "/");
     } else if (payment === "canceled") {
-      toast.info("Plata a fost anulată. Poți încerca din nou oricând.");
+      toast.info(t.paymentCanceled);
       window.history.replaceState({}, "", "/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const homeTitle = lang === "ro"
-    ? "Cursuri de Arabă Libaneză în București și Online — cu Ibra"
-    : "Lebanese Arabic Courses in Bucharest & Online — with Ibra";
-  const homeDescription = lang === "ro"
-    ? "Învață arabă libaneză cu profesor nativ. Cursuri de grup, private și pentru copii — fizic în București sau online. Toate nivelurile CEFR (A1–C2)."
-    : "Learn Lebanese Arabic with a native instructor. Group, private, and kids courses — in person in Bucharest or online. All CEFR levels (A1–C2).";
+  const homeTitle = t.homeSeoTitle;
+  const homeDescription = t.homeSeoDescription;
 
   const faqEntries = [
     { q: t.faq1Q, a: t.faq1A }, { q: t.faq2Q, a: t.faq2A }, { q: t.faq3Q, a: t.faq3A },
