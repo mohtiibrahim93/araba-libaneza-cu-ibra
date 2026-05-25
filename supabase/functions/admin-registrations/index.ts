@@ -278,7 +278,7 @@ Deno.serve(async (req) => {
       let q = supabase
         .from("bookings")
         .select(
-          "id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at",
+          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at",
         )
         .order("start_at", { ascending: false })
         .limit(500);
@@ -288,6 +288,56 @@ Deno.serve(async (req) => {
       const { data, error } = await q;
       if (error) throw error;
       return jsonResponse({ data });
+    }
+
+    // ============ Unified Student Journey ============
+    // Returns each registration enriched with its bookings + payment + class info,
+    // so the admin sees the full lifecycle in one place.
+    if (action === "list_student_journey") {
+      const { data: regs, error: regsError } = await supabase
+        .from("registrations")
+        .select(
+          "id, created_at, form_type, name, email, phone, level, format, payment_status, paid_at, lead_status",
+        )
+        .order("created_at", { ascending: false })
+        .limit(500);
+      if (regsError) throw regsError;
+
+      const ids = (regs || []).map((r) => r.id);
+      let bookingsByReg = new Map<string, Array<Record<string, unknown>>>();
+      if (ids.length > 0) {
+        const { data: bookings, error: bErr } = await supabase
+          .from("bookings")
+          .select("id, registration_id, event_type_slug, start_at, end_at, status, format, meet_link, manage_token")
+          .in("registration_id", ids)
+          .order("start_at", { ascending: true });
+        if (bErr) throw bErr;
+        for (const b of bookings || []) {
+          const key = b.registration_id as string;
+          const arr = bookingsByReg.get(key) ?? [];
+          arr.push(b);
+          bookingsByReg.set(key, arr);
+        }
+      }
+
+      const now = Date.now();
+      const enriched = (regs || []).map((r) => {
+        const bookings = bookingsByReg.get(r.id) ?? [];
+        const active = bookings.filter((b) => b.status === "confirmed");
+        const nextBooking = active.find((b) => Date.parse(b.start_at as string) >= now) ?? null;
+        const lastBooking = active.length ? active[active.length - 1] : null;
+        const completed = active.some((b) => Date.parse((b.end_at as string) ?? (b.start_at as string)) < now);
+        return {
+          ...r,
+          bookings_count: bookings.length,
+          confirmed_count: active.length,
+          next_booking: nextBooking,
+          last_booking: lastBooking,
+          class_completed: completed,
+        };
+      });
+
+      return jsonResponse({ data: enriched });
     }
 
     if (action === "cancel_booking") {
