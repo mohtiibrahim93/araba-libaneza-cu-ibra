@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar } from "lucide-react";
+import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
