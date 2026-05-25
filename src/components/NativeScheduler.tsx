@@ -383,8 +383,8 @@ const NativeScheduler = ({
             onChange={(e) => setFormat(e.target.value as Format)}
             className="w-full px-3 py-2 rounded-md border border-input text-sm bg-background"
           >
-            <option value="online">{lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"}</option>
-            <option value="physical">{lang === "ro" ? "Fizic (la centru)" : "In person (at the center)"}</option>
+            <option value="online">{t.bookingFormatOnline}</option>
+            <option value="physical">{t.bookingFormatPhysical}</option>
           </select>
         </div>
         <textarea
