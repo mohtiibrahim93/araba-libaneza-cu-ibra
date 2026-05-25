@@ -317,6 +317,8 @@ const translations = {
     gdprConsent: "Sunt de acord cu prelucrarea datelor personale conform",
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
+    recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
+    recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
     smsConfirmationOptIn: "Doresc să primesc confirmarea cererii prin SMS când opțiunea devine disponibilă.",
 
     // Payment instructions
