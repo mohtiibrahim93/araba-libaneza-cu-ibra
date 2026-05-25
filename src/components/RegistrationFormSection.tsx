@@ -32,6 +32,8 @@ interface RegistrationFormSectionProps {
   onBack?: () => void;
 }
 
+const STORAGE_KEY = "registration_form_draft";
+
 const RegistrationFormSection = ({
   defaultCourseType,
   embedded = false,
