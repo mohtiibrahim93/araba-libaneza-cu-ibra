@@ -20,7 +20,7 @@ interface ComparisonPanelProps {
 }
 
 const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
 
   const rows: ComparisonRow[] = [
@@ -190,7 +190,7 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
 
         {/* Mobile scroll hint */}
         <p className="md:hidden text-center text-xs text-muted-foreground mt-2">
-          ← {t.lang === "ro" ? "Glisează pentru a vedea toate opțiunile" : "Swipe to see all options"} →
+          ← {lang === "ro" ? "Glisează pentru a vedea toate opțiunile" : "Swipe to see all options"} →
         </p>
 
         {/* Back link */}
