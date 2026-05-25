@@ -9,4 +9,6 @@ export interface SubmittedData {
   registrationId: string;
   quantity?: number;
   waitlistDeposit?: boolean;
+  cohortId?: string | null;
+  kidsSlotId?: string | null;
 }

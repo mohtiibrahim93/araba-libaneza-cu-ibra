@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
@@ -108,10 +108,14 @@ const NativeScheduler = ({
     return { from, to };
   }, []);
 
+  const selectedSlotRef = useRef<string | null>(null);
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
+    selectedSlotRef.current = selectedSlot;
+  }, [selectedSlot]);
+
+  const loadAvailability = useCallback(
+    async (opts?: { silent?: boolean }) => {
+      if (!opts?.silent) setLoading(true);
       setError(null);
       try {
         const url =
@@ -122,20 +126,46 @@ const NativeScheduler = ({
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json?.error ?? "load failed");
-        if (cancelled) return;
-        setData(json);
-        const firstDate = Object.keys(json.slots_by_date ?? {}).sort()[0] ?? null;
-        setSelectedDate(firstDate);
+        setData((prev) => {
+          // Detect a selected slot that just got taken
+          const stillAvailable: boolean =
+            !selectedSlotRef.current || (json.slots ?? []).includes(selectedSlotRef.current);
+          if (prev && !stillAvailable && selectedSlotRef.current) {
+            toast.info(t.schedulerSlotTaken);
+            setSelectedSlot(null);
+          }
+          return json;
+        });
+        setSelectedDate((prev) => {
+          if (prev && (json.slots_by_date?.[prev]?.length ?? 0) > 0) return prev;
+          return Object.keys(json.slots_by_date ?? {}).sort()[0] ?? null;
+        });
       } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "load failed");
+        setError(e instanceof Error ? e.message : "load failed");
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!opts?.silent) setLoading(false);
       }
-    })();
+    },
+    [eventType, dateRange.from, dateRange.to, t.schedulerSlotTaken],
+  );
+
+  useEffect(() => {
+    loadAvailability();
+  }, [loadAvailability]);
+
+  // Real-time: refresh slots when any booking changes (new bookings, cancellations).
+  useEffect(() => {
+    if (mode !== "create") return;
+    const channel = supabase
+      .channel(`booking-availability-${Math.random().toString(36).slice(2)}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
+        void loadAvailability({ silent: true });
+      })
+      .subscribe();
     return () => {
-      cancelled = true;
+      supabase.removeChannel(channel);
     };
-  }, [eventType, dateRange.from, dateRange.to]);
+  }, [mode, loadAvailability]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
@@ -167,16 +197,8 @@ const NativeScheduler = ({
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
           toast.error(t.schedulerSlotTaken);
-          // refresh
           setSelectedSlot(null);
-          setLoading(true);
-          const url =
-            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-availability` +
-            `?event_type=${eventType}&date_from=${dateRange.from}&date_to=${dateRange.to}`;
-          const r = await fetch(url, { headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY } });
-          const j = await r.json();
-          setData(j);
-          setLoading(false);
+          await loadAvailability();
           return;
         }
         throw new Error(payload?.error ?? t.schedulerBookingFailed);

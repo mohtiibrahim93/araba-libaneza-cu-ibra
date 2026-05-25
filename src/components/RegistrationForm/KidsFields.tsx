@@ -4,12 +4,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { CapacityInfo } from "@/hooks/useGroupCapacity";
+import KidsSlotPicker from "./KidsSlotPicker";
+import type { KidsSlot } from "@/hooks/useKidsSlots";
 
 interface Props {
   childName: string;
   childAge: string;
   payDeposit: boolean;
   capacity: CapacityInfo | null;
+  kidsSlotId: string | null;
+  onKidsSlotChange: (slot: KidsSlot | null) => void;
   onChildNameChange: (v: string) => void;
   onChildAgeChange: (v: string) => void;
   onPayDepositChange: (v: boolean) => void;
@@ -20,6 +24,8 @@ const KidsFields = ({
   childAge,
   payDeposit,
   capacity,
+  kidsSlotId,
+  onKidsSlotChange,
   onChildNameChange,
   onChildAgeChange,
   onPayDepositChange,
@@ -28,6 +34,8 @@ const KidsFields = ({
 
   return (
     <>
+      <KidsSlotPicker selectedSlotId={kidsSlotId} onSelect={onKidsSlotChange} />
+
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="childName">{t.kidsChildName} *</Label>

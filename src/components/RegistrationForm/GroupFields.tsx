@@ -10,12 +10,16 @@ import {
 } from "@/components/ui/select";
 import LevelAssessmentModal from "@/components/LevelAssessmentModal";
 import type { LevelType } from "./types";
+import CohortPicker from "./CohortPicker";
+import type { Cohort } from "@/hooks/useGroupCohorts";
 
 interface Props {
   level: LevelType | "";
   onLevelChange: (level: LevelType) => void;
   groupMonths: 1 | 3;
   onGroupMonthsChange: (months: 1 | 3) => void;
+  cohortId: string | null;
+  onCohortChange: (cohort: Cohort | null) => void;
 }
 
 const MONTHLY_PRICE_BY_LEVEL: Record<LevelType, number> = {
@@ -27,7 +31,14 @@ const MONTHLY_PRICE_BY_LEVEL: Record<LevelType, number> = {
   C2: 1000,
 };
 
-const GroupFields = ({ level, onLevelChange, groupMonths, onGroupMonthsChange }: Props) => {
+const GroupFields = ({
+  level,
+  onLevelChange,
+  groupMonths,
+  onGroupMonthsChange,
+  cohortId,
+  onCohortChange,
+}: Props) => {
   const { t } = useI18n();
   const [showModal, setShowModal] = useState(false);
 
@@ -65,6 +76,15 @@ const GroupFields = ({ level, onLevelChange, groupMonths, onGroupMonthsChange }:
         onOpenChange={setShowModal}
         onSelectLevel={onLevelChange}
       />
+
+      {level && (
+        <CohortPicker
+          formType="group"
+          level={level}
+          selectedCohortId={cohortId}
+          onSelect={onCohortChange}
+        />
+      )}
 
       {level && (
         <div className="space-y-2">

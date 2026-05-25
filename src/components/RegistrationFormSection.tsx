@@ -26,6 +26,8 @@ import LeadFields from "./RegistrationForm/LeadFields";
 import CapacityBanner from "./RegistrationForm/CapacityBanner";
 import PostSubmitView from "./RegistrationForm/PostSubmitView";
 import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
+import type { Cohort } from "@/hooks/useGroupCohorts";
+import type { KidsSlot } from "@/hooks/useKidsSlots";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -66,6 +68,8 @@ const RegistrationFormSection = ({
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
   const [honeypot, setHoneypot] = useState("");
+  const [cohortId, setCohortId] = useState<string | null>(null);
+  const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
 
   /* Restore draft from sessionStorage on mount */
   useEffect(() => {
@@ -131,6 +135,8 @@ const RegistrationFormSection = ({
     setPayDeposit(false);
     if (value !== "private") setPrivateQuantity(1);
     if (value !== "group") setGroupMonths(1);
+    if (value !== "group") setCohortId(null);
+    if (value !== "kids") setKidsSlotId(null);
   };
 
   const reset = () => {
@@ -150,6 +156,8 @@ const RegistrationFormSection = ({
     setPrivateQuantity(1);
     setGroupMonths(1);
     setPayDeposit(false);
+    setCohortId(null);
+    setKidsSlotId(null);
   };
 
   const capacity =
@@ -252,6 +260,8 @@ const RegistrationFormSection = ({
         level: courseType === "group" ? level || null : null,
         is_waitlist_deposit: courseType === "kids" && payDeposit,
         referral_code: referralCode.trim() || null,
+        cohort_id: courseType === "group" ? cohortId : null,
+        kids_slot_id: courseType === "kids" ? kidsSlotId : null,
       });
 
       if (error) throw error;
@@ -274,6 +284,8 @@ const RegistrationFormSection = ({
               ? groupMonths
               : undefined,
         waitlistDeposit: courseType === "kids" && payDeposit,
+        cohortId: courseType === "group" ? cohortId : null,
+        kidsSlotId: courseType === "kids" ? kidsSlotId : null,
       });
       setSubmitted(true);
       sessionStorage.removeItem(STORAGE_KEY);
@@ -393,6 +405,8 @@ const RegistrationFormSection = ({
               onLevelChange={setLevel}
               groupMonths={groupMonths}
               onGroupMonthsChange={setGroupMonths}
+              cohortId={cohortId}
+              onCohortChange={(c) => setCohortId(c?.id ?? null)}
             />
           )}
 
@@ -445,6 +459,8 @@ const RegistrationFormSection = ({
               childAge={childAge}
               payDeposit={payDeposit}
               capacity={capacity}
+              kidsSlotId={kidsSlotId}
+              onKidsSlotChange={(s) => setKidsSlotId(s?.id ?? null)}
               onChildNameChange={setChildName}
               onChildAgeChange={setChildAge}
               onPayDepositChange={setPayDeposit}

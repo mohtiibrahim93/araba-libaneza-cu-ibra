@@ -323,6 +323,90 @@ export type Database = {
         }
         Relationships: []
       }
+      group_cohorts: {
+        Row: {
+          created_at: string
+          form_type: string
+          id: string
+          is_active: boolean
+          level: string | null
+          max_seats: number
+          schedule_label_en: string
+          schedule_label_ro: string
+          sort_order: number
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          form_type: string
+          id?: string
+          is_active?: boolean
+          level?: string | null
+          max_seats?: number
+          schedule_label_en?: string
+          schedule_label_ro?: string
+          sort_order?: number
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          form_type?: string
+          id?: string
+          is_active?: boolean
+          level?: string | null
+          max_seats?: number
+          schedule_label_en?: string
+          schedule_label_ro?: string
+          sort_order?: number
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      kids_class_slots: {
+        Row: {
+          created_at: string
+          duration_min: number
+          format: string
+          id: string
+          is_active: boolean
+          location: string | null
+          max_seats: number
+          sort_order: number
+          start_time: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          duration_min?: number
+          format: string
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          max_seats?: number
+          sort_order?: number
+          start_time: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          duration_min?: number
+          format?: string
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          max_seats?: number
+          sort_order?: number
+          start_time?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
       lead_status_history: {
         Row: {
           changed_by: string
@@ -362,12 +446,14 @@ export type Database = {
         Row: {
           center: string | null
           child_age: string | null
+          cohort_id: string | null
           created_at: string
           email: string | null
           form_type: string
           format: string | null
           id: string
           is_waitlist_deposit: boolean
+          kids_slot_id: string | null
           lead_status: string
           level: string | null
           name: string
@@ -383,12 +469,14 @@ export type Database = {
         Insert: {
           center?: string | null
           child_age?: string | null
+          cohort_id?: string | null
           created_at?: string
           email?: string | null
           form_type: string
           format?: string | null
           id?: string
           is_waitlist_deposit?: boolean
+          kids_slot_id?: string | null
           lead_status?: string
           level?: string | null
           name: string
@@ -404,12 +492,14 @@ export type Database = {
         Update: {
           center?: string | null
           child_age?: string | null
+          cohort_id?: string | null
           created_at?: string
           email?: string | null
           form_type?: string
           format?: string | null
           id?: string
           is_waitlist_deposit?: boolean
+          kids_slot_id?: string | null
           lead_status?: string
           level?: string | null
           name?: string
@@ -460,6 +550,20 @@ export type Database = {
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      get_cohort_signup_counts: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          taken: number
+        }[]
+      }
+      get_kids_slot_signup_counts: {
+        Args: never
+        Returns: {
+          kids_slot_id: string
+          taken: number
+        }[]
       }
       move_to_dlq: {
         Args: {
