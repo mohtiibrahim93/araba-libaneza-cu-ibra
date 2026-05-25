@@ -44,6 +44,8 @@ const PrivacyContent = () => {
     ? "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la centrul de araba libaneza."
     : "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.";
 
+  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -53,6 +55,8 @@ const PrivacyContent = () => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/privacy" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImage} />
       </Helmet>
       <Navbar />
       <main className="max-w-3xl mx-auto px-6 py-28">

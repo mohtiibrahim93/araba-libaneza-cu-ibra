@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
@@ -9,12 +10,42 @@ const BookingInner = () => {
   const [params] = useSearchParams();
   const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
 
+  const title =
+    type === "paid"
+      ? lang === "ro"
+        ? `Programează-ți lecția — ${t.siteTitle}`
+        : `Book Your Lesson — ${t.siteTitle}`
+      : lang === "ro"
+        ? `Lecție gratuită de probă — ${t.siteTitle}`
+        : `Free Trial Lesson — ${t.siteTitle}`;
+
+  const description =
+    type === "paid"
+      ? lang === "ro"
+        ? "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email și link Zoom."
+        : "Pick an available slot for your private Lebanese Arabic lesson. Email confirmation and Zoom link included."
+      : lang === "ro"
+        ? "Programează o lecție gratuită de 30 de minute de arabă libaneză. Fără obligații, confirmare pe email."
+        : "Schedule a free 30-minute Lebanese Arabic lesson. No obligations, email confirmation provided.";
+
+  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+
   useEffect(() => {
-    document.title = lang === "ro" ? "Programare — " + t.siteTitle : "Booking — " + t.siteTitle;
-  }, [lang, t.siteTitle]);
+    document.title = title;
+  }, [title]);
 
   return (
     <main className="min-h-screen bg-background py-12 px-6">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com/booking`} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={`https://centruldearabalibaneza.com/booking`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImage} />
+      </Helmet>
       <div className="max-w-2xl mx-auto">
         <Link
           to="/"

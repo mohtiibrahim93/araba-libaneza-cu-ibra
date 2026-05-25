@@ -46,6 +46,8 @@ const TermsContent = () => {
     ? "Termenii și condițiile de utilizare a serviciilor educaționale oferite de centrul de araba libaneza."
     : "Terms and conditions for using the educational services provided by the lebanese arabic center.";
 
+  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -55,6 +57,8 @@ const TermsContent = () => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/terms" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImage} />
       </Helmet>
       <Navbar />
       <main className="max-w-3xl mx-auto px-6 py-28">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import {
@@ -90,6 +91,10 @@ const Checkout = () => {
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
 
+  const title = "Finalizează plata — centrul de araba libaneza";
+  const description = `Plată securizată prin Stripe pentru ${COURSE_LABEL[courseType]}. Datele cardului nu sunt stocate pe acest site.`;
+  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -132,6 +137,16 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-4">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href="https://centruldearabalibaneza.com/checkout" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content="https://centruldearabalibaneza.com/checkout" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImage} />
+      </Helmet>
       <div className="max-w-xl mx-auto">
         <button
           onClick={() => navigate(-1)}
