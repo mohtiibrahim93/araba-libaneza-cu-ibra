@@ -29,3 +29,5 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.booking-reminders]
     verify_jwt = false
+  [functions.get-checkout-session]
+    verify_jwt = false

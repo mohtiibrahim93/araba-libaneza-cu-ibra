@@ -56,7 +56,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : email || undefined,
       line_items: lineItems,
       mode: "payment",
-      success_url: `${req.headers.get("origin")}/?payment=success`,
+      success_url: `${req.headers.get("origin")}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/?payment=canceled`,
       metadata: {
         course_type: courseType,

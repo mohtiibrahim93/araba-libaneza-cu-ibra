@@ -19,6 +19,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const PrivateLead = lazy(() => import("./pages/PrivateLead"));
 const Checkout = lazy(() => import("./pages/Checkout"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/booking/manage/:token" element={<BookingManage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
