@@ -620,6 +620,13 @@ const translations = {
     compareSelectPrivate: "Alege Privat",
     compareSelectKids: "Alege Copii",
     compareBackToQuiz: "← Înapoi la quiz",
+    // Spots availability badge (group cohort)
+    spotsBadgeMany: "{n} locuri rămase pentru {level} — {cohort}",
+    spotsBadgeOne: "1 loc rămas pentru {level} — {cohort}",
+    spotsBadgeCompactMany: "{n} locuri rămase",
+    spotsBadgeCompactOne: "1 loc rămas",
+    spotsWaitlist: "Lista de așteptare",
+    spotsCohort: "Martie 2026",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -1221,6 +1228,13 @@ const translations = {
     compareSelectPrivate: "Choose Private",
     compareSelectKids: "Choose Kids",
     compareBackToQuiz: "← Back to quiz",
+    // Spots availability badge (group cohort)
+    spotsBadgeMany: "{n} spots left for {level} — {cohort}",
+    spotsBadgeOne: "1 spot left for {level} — {cohort}",
+    spotsBadgeCompactMany: "{n} spots left",
+    spotsBadgeCompactOne: "1 spot left",
+    spotsWaitlist: "Waitlist",
+    spotsCohort: "March 2026",
   },
 } as const;
 
