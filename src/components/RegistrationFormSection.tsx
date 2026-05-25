@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 import { getRecaptchaToken } from "@/lib/recaptcha";
+import TrustBand from "@/components/TrustBand";
 
 import GroupFields from "./RegistrationForm/GroupFields";
 import PrivateFields from "./RegistrationForm/PrivateFields";
