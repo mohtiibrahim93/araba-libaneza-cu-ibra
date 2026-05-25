@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download } from "lucide-react";
+import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { buildIcs, downloadIcs } from "@/lib/ics";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -248,49 +250,82 @@ const NativeScheduler = ({
       });
       downloadIcs(`lectie-${confirmed.booking_id ?? "araba"}.ics`, ics);
     };
+    const courseName = lang === "ro" ? data.event_type.name_ro : data.event_type.name_en;
+    const formatLabel =
+      format === "online"
+        ? lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"
+        : lang === "ro" ? "Fizic (București)" : "In person (Bucharest)";
+    const startDate = new Date(confirmed.start_at);
+    const dateStr = new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
+      timeZone: TZ, weekday: "long", day: "numeric", month: "long", year: "numeric",
+    }).format(startDate);
+    const timeStr = new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
+      timeZone: TZ, hour: "2-digit", minute: "2-digit",
+    }).format(startDate);
     return (
-      <div className="rounded-lg border border-border bg-card p-6 space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5 text-green-600" />
-          </div>
-          <div>
-            <h3 className="font-semibold">
-              {lang === "ro" ? "Programarea a fost confirmată" : "Booking confirmed"}
-            </h3>
-            <p className="text-sm text-muted-foreground">{fmtFullLocal(confirmed.start_at, lang)}</p>
+      <div className="rounded-xl border border-border bg-card p-8 text-center space-y-6 shadow-sm">
+        <div className="flex justify-center">
+          <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center">
+            <CheckCircle2 className="w-9 h-9 text-green-600" strokeWidth={2.5} />
           </div>
         </div>
-        {confirmed.meet_link && (
-          <a
-            href={confirmed.meet_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-sm text-primary underline break-all"
-          >
-            {confirmed.meet_link}
-          </a>
-        )}
-        <p className="text-xs text-muted-foreground">
-          {lang === "ro"
-            ? "Vei primi un email cu detaliile."
-            : "You'll get an email with the details."}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2 pt-1">
-          <button
-            onClick={handleIcs}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-semibold hover:bg-muted"
-          >
-            <Download className="w-4 h-4" />
+        <div className="space-y-2">
+          <h3 className="text-2xl font-bold">
+            {lang === "ro" ? "Programarea ta a fost confirmată!" : "Your booking is confirmed!"}
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            {lang === "ro" ? "Vei primi un email cu detaliile." : "You'll get an email with the details."}
+          </p>
+        </div>
+
+        <div className="rounded-lg bg-muted/40 border border-border p-4 text-left space-y-2 text-sm">
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-foreground">{lang === "ro" ? "Data" : "Date"}</span>
+            <span className="font-medium text-right">{dateStr}</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-foreground">{lang === "ro" ? "Ora" : "Time"}</span>
+            <span className="font-medium text-right">{timeStr}</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-foreground">{lang === "ro" ? "Curs" : "Course"}</span>
+            <span className="font-medium text-right">{courseName}</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-foreground">{lang === "ro" ? "Format" : "Format"}</span>
+            <span className="font-medium text-right">{formatLabel}</span>
+          </div>
+          {confirmed.meet_link && (
+            <div className="pt-2 border-t border-border">
+              <a
+                href={confirmed.meet_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline break-all text-xs"
+              >
+                {confirmed.meet_link}
+              </a>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button variant="outline" onClick={handleIcs} className="flex-1">
+            <Download className="w-4 h-4 mr-2" />
             {t.bookingAddToCalendar}
-          </button>
-          <a
-            href={manageUrl}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90"
-          >
-            {t.bookingManageButton}
-          </a>
+          </Button>
+          <Button asChild className="flex-1">
+            <a href={manageUrl}>{t.bookingManageButton}</a>
+          </Button>
         </div>
+
+        <Link
+          to="/"
+          className="inline-flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Home className="w-4 h-4" />
+          {lang === "ro" ? "Înapoi la pagina principală" : "Back to homepage"}
+        </Link>
       </div>
     );
   }
