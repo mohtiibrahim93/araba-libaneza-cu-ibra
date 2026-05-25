@@ -35,21 +35,23 @@ const App = () => (
       <Sonner />
       <I18nProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/notifications" element={<AdminNotifications />} />
-          <Route path="/admin/private-leads/:id" element={<PrivateLead />} />
-          <Route path="/private-status/:id" element={<PrivateStatus />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/unsubscribe" element={<Unsubscribe />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/booking" element={<Booking />} />
-          <Route path="/booking/manage/:token" element={<BookingManage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/notifications" element={<AdminNotifications />} />
+            <Route path="/admin/private-leads/:id" element={<PrivateLead />} />
+            <Route path="/private-status/:id" element={<PrivateStatus />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/booking/manage/:token" element={<BookingManage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
       </I18nProvider>
     </TooltipProvider>
