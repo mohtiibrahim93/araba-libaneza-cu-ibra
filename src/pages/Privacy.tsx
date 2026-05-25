@@ -1,4 +1,4 @@
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -72,10 +72,6 @@ const PrivacyContent = () => {
   );
 };
 
-const Privacy = () => (
-  <I18nProvider>
-    <PrivacyContent />
-  </I18nProvider>
-);
+const Privacy = () => <PrivacyContent />;
 
 export default Privacy;
