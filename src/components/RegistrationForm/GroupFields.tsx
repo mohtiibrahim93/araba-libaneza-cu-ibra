@@ -29,11 +29,21 @@ const MONTHLY_PRICE_BY_LEVEL: Record<LevelType, number> = {
 
 const GroupFields = ({ level, onLevelChange, groupMonths, onGroupMonthsChange }: Props) => {
   const { t } = useI18n();
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
       <div className="space-y-2">
-        <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="text-xs text-primary hover:underline underline-offset-2"
+          >
+            {t.levelQuizDontKnow}
+          </button>
+        </div>
         <Select value={level} onValueChange={(v) => onLevelChange(v as LevelType)}>
           <SelectTrigger id="level">
             <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
@@ -49,6 +59,12 @@ const GroupFields = ({ level, onLevelChange, groupMonths, onGroupMonthsChange }:
         </Select>
         <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
       </div>
+
+      <LevelAssessmentModal
+        open={showModal}
+        onOpenChange={setShowModal}
+        onSelectLevel={onLevelChange}
+      />
 
       {level && (
         <div className="space-y-2">
