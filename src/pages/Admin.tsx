@@ -21,6 +21,7 @@ import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
+import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import EmailSettingsForm from "@/components/admin/EmailSettingsForm";
 import TestEmailForm from "@/components/admin/TestEmailForm";
@@ -450,6 +451,7 @@ const Admin = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <StudentJourneyAdmin password={storedPassword} />
+        <TrialFunnelAdmin password={storedPassword} />
 
         <CapacitiesAdmin password={storedPassword} />
         <CohortsAdmin password={storedPassword} />

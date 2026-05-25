@@ -252,7 +252,13 @@ const FindYourTrackQuiz = () => {
             <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowForm(true)}>
               {t.quizContinueCta}
             </Button>
-            <div className="mt-4">
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <a
+                href="/trial"
+                className="text-sm font-medium text-primary hover:underline underline-offset-4"
+              >
+                {t.trialQuizCta}
+              </a>
               <button
                 type="button"
                 onClick={() => setShowComparison(true)}
