@@ -375,6 +375,7 @@ export type Database = {
           paid_at: string | null
           payment_status: string
           phone: string
+          referral_code: string | null
           sms_confirmation_opt_in: boolean
           stripe_session_id: string | null
           whatsapp_sent_at: string | null
@@ -395,6 +396,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone: string
+          referral_code?: string | null
           sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
           whatsapp_sent_at?: string | null
@@ -415,6 +417,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone?: string
+          referral_code?: string | null
           sms_confirmation_opt_in?: boolean
           stripe_session_id?: string | null
           whatsapp_sent_at?: string | null
