@@ -58,6 +58,7 @@ const RegistrationFormSection = ({
   const [childAge, setChildAge] = useState("");
   const [message, setMessage] = useState("");
   const [gdpr, setGdpr] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
@@ -83,6 +84,7 @@ const RegistrationFormSection = ({
       if (draft.childAge !== undefined) setChildAge(draft.childAge);
       if (draft.message !== undefined) setMessage(draft.message);
       if (draft.gdpr !== undefined) setGdpr(draft.gdpr);
+      if (draft.referralCode !== undefined) setReferralCode(draft.referralCode);
       if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
       if (draft.groupMonths !== undefined) setGroupMonths(draft.groupMonths);
       if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
@@ -106,6 +108,7 @@ const RegistrationFormSection = ({
       childAge,
       message,
       gdpr,
+      referralCode,
       privateQuantity,
       groupMonths,
       payDeposit,
@@ -114,7 +117,7 @@ const RegistrationFormSection = ({
   }, [
     courseType, format, level, center, name, phone, email,
     childName, childAge, message, gdpr,
-    privateQuantity, groupMonths, payDeposit, submitted,
+    referralCode, privateQuantity, groupMonths, payDeposit, submitted,
   ]);
 
   const onCourseChange = (value: CourseType) => {
