@@ -62,6 +62,57 @@ const RegistrationFormSection = ({
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
 
+  /* Restore draft from sessionStorage on mount */
+  useEffect(() => {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const draft = JSON.parse(raw);
+      if (draft.courseType) setCourseType(draft.courseType);
+      if (draft.format !== undefined) setFormat(draft.format);
+      if (draft.level) setLevel(draft.level);
+      if (draft.center !== undefined) setCenter(draft.center);
+      if (draft.name !== undefined) setName(draft.name);
+      if (draft.phone !== undefined) setPhone(draft.phone);
+      if (draft.email !== undefined) setEmail(draft.email);
+      if (draft.childName !== undefined) setChildName(draft.childName);
+      if (draft.childAge !== undefined) setChildAge(draft.childAge);
+      if (draft.message !== undefined) setMessage(draft.message);
+      if (draft.gdpr !== undefined) setGdpr(draft.gdpr);
+      if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
+      if (draft.groupMonths !== undefined) setGroupMonths(draft.groupMonths);
+      if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
+    } catch {
+      // ignore corrupted drafts
+    }
+  }, []);
+
+  /* Save draft to sessionStorage on every field change */
+  useEffect(() => {
+    if (submitted) return;
+    const draft = {
+      courseType,
+      format,
+      level,
+      center,
+      name,
+      phone,
+      email,
+      childName,
+      childAge,
+      message,
+      gdpr,
+      privateQuantity,
+      groupMonths,
+      payDeposit,
+    };
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+  }, [
+    courseType, format, level, center, name, phone, email,
+    childName, childAge, message, gdpr,
+    privateQuantity, groupMonths, payDeposit, submitted,
+  ]);
+
   const onCourseChange = (value: CourseType) => {
     setCourseType(value);
     if (value === "kids") {
