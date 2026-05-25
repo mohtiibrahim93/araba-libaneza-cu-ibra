@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
+import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -46,9 +48,22 @@ function localDateKey(d: Date) {
 function fmtSlotTime(iso: string) {
   return new Intl.DateTimeFormat("ro-RO", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 }
+function fmtTimeInTz(iso: string, tz: string) {
+  return new Intl.DateTimeFormat("ro-RO", { timeZone: tz, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+}
 function fmtFullLocal(iso: string, lang: "ro" | "en") {
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
     timeZone: TZ,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
+function fmtFullInTz(iso: string, lang: "ro" | "en", tz: string) {
+  return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
+    timeZone: tz,
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -77,6 +92,9 @@ const NativeScheduler = ({
   onPick,
 }: Props) => {
   const { t, lang } = useI18n();
+  const showLocalTz = useShowLocalTz();
+  const localTz = useMemo(() => getLocalTz(), []);
+  const localTzLabel = useMemo(() => shortTzLabel(localTz), [localTz]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -390,6 +408,11 @@ const NativeScheduler = ({
         <div className="rounded-md bg-primary/5 border border-primary/20 px-3 py-2 text-sm">
           <span className="font-semibold">{fmtFullLocal(selectedSlot, lang)}</span>
           <span className="text-muted-foreground"> · {data.event_type.duration_min} min</span>
+          {showLocalTz && localTz !== TZ && (
+            <div className="mt-1 text-xs text-muted-foreground">
+              {t.tzYourTime} ({localTzLabel}): <span className="font-medium text-foreground">{fmtFullInTz(selectedSlot, lang, localTz)}</span>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <input
