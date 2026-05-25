@@ -14,8 +14,8 @@ interface Props {
 }
 
 const T = {
-  ro: { preview: 'Programarea ta a fost reprogramată.', hi: (n?: string) => n ? `Salut, ${n}!` : 'Salut!', body: 'Programarea ta a fost actualizată cu succes.', oldWhen: 'Înainte', newWhen: 'Acum', meet: 'Link Zoom', manageCta: 'Gestionează programarea', footer: 'Pe curând,' },
-  en: { preview: 'Your booking was rescheduled.', hi: (n?: string) => n ? `Hi, ${n}!` : 'Hi!', body: 'Your booking has been successfully rescheduled.', oldWhen: 'Was', newWhen: 'Now', meet: 'Zoom link', manageCta: 'Manage booking', footer: 'See you soon,' },
+  ro: { preview: 'Programarea ta a fost reprogramată.', hi: (n?: string) => n ? `Salut, ${n}!` : 'Salut!', body: 'Programarea ta a fost actualizată cu succes.', oldWhen: 'Înainte', newWhen: 'Acum', meet: 'Link-ul Zoom pentru lecție', manageCta: 'Gestionează programarea', footer: 'Pe curând,' },
+  en: { preview: 'Your booking was rescheduled.', hi: (n?: string) => n ? `Hi, ${n}!` : 'Hi!', body: 'Your booking has been successfully rescheduled.', oldWhen: 'Was', newWhen: 'Now', meet: 'Zoom link for your lesson', manageCta: 'Manage booking', footer: 'See you soon,' },
 } as const
 
 const Email = ({ name, oldWhenLabel, newWhenLabel, meetLink, manageUrl, lang = 'ro' }: Props) => {

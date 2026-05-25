@@ -251,10 +251,7 @@ const NativeScheduler = ({
       downloadIcs(`lectie-${confirmed.booking_id ?? "araba"}.ics`, ics);
     };
     const courseName = lang === "ro" ? data.event_type.name_ro : data.event_type.name_en;
-    const formatLabel =
-      format === "online"
-        ? lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"
-        : lang === "ro" ? "Fizic (București)" : "In person (Bucharest)";
+    const formatLabel = format === "online" ? t.bookingFormatOnline : t.bookingFormatPhysical;
     const startDate = new Date(confirmed.start_at);
     const dateStr = new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
       timeZone: TZ, weekday: "long", day: "numeric", month: "long", year: "numeric",
@@ -295,16 +292,9 @@ const NativeScheduler = ({
             <span className="text-muted-foreground">{lang === "ro" ? "Format" : "Format"}</span>
             <span className="font-medium text-right">{formatLabel}</span>
           </div>
-          {confirmed.meet_link && (
+          {format === "online" && (
             <div className="pt-2 border-t border-border">
-              <a
-                href={confirmed.meet_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline break-all text-xs"
-              >
-                {confirmed.meet_link}
-              </a>
+              <p className="text-xs text-muted-foreground">{t.bookingZoomNotice}</p>
             </div>
           )}
         </div>
@@ -393,8 +383,8 @@ const NativeScheduler = ({
             onChange={(e) => setFormat(e.target.value as Format)}
             className="w-full px-3 py-2 rounded-md border border-input text-sm bg-background"
           >
-            <option value="online">{lang === "ro" ? "Online (Zoom)" : "Online (Zoom)"}</option>
-            <option value="physical">{lang === "ro" ? "Fizic (la centru)" : "In person (at the center)"}</option>
+            <option value="online">{t.bookingFormatOnline}</option>
+            <option value="physical">{t.bookingFormatPhysical}</option>
           </select>
         </div>
         <textarea

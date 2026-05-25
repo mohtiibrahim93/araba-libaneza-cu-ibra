@@ -440,7 +440,7 @@ const translations = {
     curriculumViewLevel: "Vezi curriculum-ul acestui nivel",
     bookingBadge: "Programare",
     bookingTitle: "Rezervă o întâlnire pe Zoom",
-    bookingDesc: "Alege un slot disponibil în calendar. Vei primi automat un link Zoom pentru lecție.",
+    bookingDesc: "Alege un slot disponibil în calendar. Link-ul Zoom pentru lecție va fi trimis pe email.",
     bookingPlaceholder: "Calendarul de programări va fi disponibil în curând. Pentru a rezerva o sesiune, contactează-ne pe WhatsApp.",
     // Capacity / waitlist / calendly
     capSeatsLabel: "locuri ocupate",
@@ -470,6 +470,11 @@ const translations = {
     bookingRescheduleHelp: "Selectează ziua și ora dorită. Programarea va fi mutată automat.",
     bookingRescheduleNoSlots: "Nu sunt sloturi disponibile. Încearcă mai târziu sau scrie-ne pe WhatsApp.",
     bookingGdprRequired: "Trebuie să accepți politica de confidențialitate pentru a putea rezerva.",
+    bookingFormatOnline: "Online (Zoom)",
+    bookingFormatPhysical: "Fizic (București)",
+    bookingZoomLinkLabel: "Link-ul Zoom pentru lecție",
+    bookingZoomNotice: "Te vei conecta prin Zoom. Link-ul va fi trimis pe email.",
+    bookingPaidDesc: "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email. Te vei conecta prin Zoom — link-ul va fi trimis pe email.",
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -891,7 +896,7 @@ const translations = {
     curriculumViewLevel: "View this level's curriculum",
     bookingBadge: "Booking",
     bookingTitle: "Book a Zoom session",
-    bookingDesc: "Pick an available time slot. You'll automatically receive a Zoom link for the lesson.",
+    bookingDesc: "Pick an available time slot. The Zoom link for your lesson will be sent to your email.",
     bookingPlaceholder: "Booking calendar coming soon. To schedule a session, message us on WhatsApp.",
     // Capacity / waitlist / calendly
     capSeatsLabel: "seats taken",
@@ -921,6 +926,11 @@ const translations = {
     bookingRescheduleHelp: "Choose a day and time. Your booking will be moved automatically.",
     bookingRescheduleNoSlots: "No slots available. Try later or message us on WhatsApp.",
     bookingGdprRequired: "You must accept the privacy policy to book.",
+    bookingFormatOnline: "Online (Zoom)",
+    bookingFormatPhysical: "In person (Bucharest)",
+    bookingZoomLinkLabel: "Zoom link for your lesson",
+    bookingZoomNotice: "You'll connect via Zoom. The link will be sent to your email.",
+    bookingPaidDesc: "Pick an available slot for your private Lebanese Arabic lesson. Email confirmation. You'll connect via Zoom — the link will be sent to your email.",
   },
 } as const;
 
