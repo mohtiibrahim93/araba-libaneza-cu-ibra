@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 
 type Lang = "ro" | "en";
 
@@ -932,21 +932,42 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | null>(null);
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>(() => {
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window === "undefined") return "ro";
     const savedLang = window.localStorage.getItem("site-language");
     return savedLang === "en" || savedLang === "ro" ? savedLang : "ro";
   });
-  const toggle = () => setLang((l) => (l === "ro" ? "en" : "ro"));
+
+  const setLang = useCallback((next: Lang) => {
+    setLangState(next);
+  }, []);
+
+  const toggle = useCallback(() => {
+    setLangState((l) => (l === "ro" ? "en" : "ro"));
+  }, []);
 
   useEffect(() => {
     window.localStorage.setItem("site-language", lang);
+    document.documentElement.lang = lang;
   }, [lang]);
 
-  return (
-    <I18nContext.Provider value={{ lang, t: translations[lang], toggle, setLang }}>
-      {children}
-    </I18nContext.Provider>
+  // Sync across tabs / external writes to localStorage.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== "site-language") return;
+      const next = e.newValue;
+      if (next === "ro" || next === "en") setLangState(next);
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  const value = useMemo<I18nContextType>(
+    () => ({ lang, t: translations[lang], toggle, setLang }),
+    [lang, toggle, setLang],
   );
+
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
 
 export const useI18n = () => {
