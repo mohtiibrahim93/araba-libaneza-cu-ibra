@@ -51,9 +51,9 @@ const CohortsAdmin = ({ password }: Props) => {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Cohort>(blank());
 
-  const call = async (action: string, extra: Record<string, unknown> = {}) => {
+  const call = async (action: string, extra: Record<string, unknown> | Cohort = {}) => {
     const { data, error } = await supabase.functions.invoke("admin-registrations", {
-      body: { password, action, ...extra },
+      body: { password, action, ...(extra as Record<string, unknown>) },
     });
     if (error) throw error;
     if (data?.error) throw new Error(data.error);
