@@ -7,6 +7,9 @@ import GdprCheckbox from "@/components/GdprCheckbox";
 import { buildIcs, downloadIcs } from "@/lib/ics";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Calendar as CalendarPicker } from "@/components/ui/calendar";
+import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -319,6 +322,19 @@ const NativeScheduler = ({
 
   const dateKeys = Object.keys(data.slots_by_date).sort();
   const slotsForDate = selectedDate ? data.slots_by_date[selectedDate] ?? [] : [];
+  const availableDateSet = new Set(dateKeys);
+  const availableDates = dateKeys.map((k) => {
+    const [y, m, d] = k.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  });
+  const selectedDateObj = selectedDate
+    ? (() => {
+        const [y, m, d] = selectedDate.split("-").map(Number);
+        return new Date(y, m - 1, d);
+      })()
+    : undefined;
+  const minDate = availableDates[0];
+  const maxDate = availableDates[availableDates.length - 1];
 
   if (dateKeys.length === 0) {
     return (
@@ -411,50 +427,58 @@ const NativeScheduler = ({
         </h3>
         <span className="text-xs text-muted-foreground">{TZ}</span>
       </div>
-      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
-        {dateKeys.map((k) => {
-          const active = k === selectedDate;
-          const count = data.slots_by_date[k]?.length ?? 0;
-          return (
-            <button
-              key={k}
-              onClick={() => setSelectedDate(k)}
-              className={`shrink-0 px-3 py-2 rounded-md border text-xs font-medium transition-colors ${
-                active
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border hover:border-primary/50"
-              }`}
-            >
-              <div>{fmtDayHeader(k, lang)}</div>
-              <div className={`mt-0.5 text-[10px] ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                {count} {t.schedulerSlotsLabel}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-        {slotsForDate.map((iso) => (
-          <button
-            key={iso}
-            onClick={() => {
-              if (mode === "pick") {
-                onPick?.(iso);
-              } else {
-                setSelectedSlot(iso);
-              }
+      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-5">
+        <div className="flex justify-center md:justify-start">
+          <CalendarPicker
+            mode="single"
+            selected={selectedDateObj}
+            onSelect={(d) => {
+              if (d) setSelectedDate(localDateKey(d));
             }}
-            className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
-          >
-            {fmtSlotTime(iso)}
-          </button>
-        ))}
+            defaultMonth={selectedDateObj ?? minDate}
+            fromDate={minDate}
+            toDate={maxDate}
+            disabled={(date) => !availableDateSet.has(localDateKey(date))}
+            modifiers={{ available: availableDates }}
+            modifiersClassNames={{
+              available:
+                "font-semibold text-primary after:content-[''] after:block after:w-1 after:h-1 after:rounded-full after:bg-primary after:mx-auto after:mt-0.5",
+            }}
+            locale={lang === "ro" ? roLocale : enLocale}
+            weekStartsOn={1}
+            className={cn("p-3 pointer-events-auto rounded-md border border-border")}
+          />
+        </div>
+        <div className="space-y-3">
+          {selectedDate && (
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              {fmtDayHeader(selectedDate, lang)}
+            </div>
+          )}
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            {slotsForDate.map((iso) => (
+              <button
+                key={iso}
+                onClick={() => {
+                  if (mode === "pick") {
+                    onPick?.(iso);
+                  } else {
+                    setSelectedSlot(iso);
+                  }
+                }}
+                className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors"
+              >
+                {fmtSlotTime(iso)}
+              </button>
+            ))}
+          </div>
+          {slotsForDate.length === 0 && (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              {t.schedulerNoTimesToday}
+            </p>
+          )}
+        </div>
       </div>
-      {slotsForDate.length === 0 && (
-        <p className="text-sm text-muted-foreground text-center py-4">
-          {t.schedulerNoTimesToday}
-        </p>
-      )}
     </div>
   );
 };
