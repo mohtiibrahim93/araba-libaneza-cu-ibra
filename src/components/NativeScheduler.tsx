@@ -398,7 +398,7 @@ const NativeScheduler = ({
   const mergedDateKeys = Object.keys(slotsByDate).sort();
   const slotsForDate = selectedDate ? slotsByDate[selectedDate] ?? [] : [];
   const availableDateSet = new Set(mergedDateKeys);
-  const availableDates = dateKeys.map((k) => {
+  const availableDates = mergedDateKeys.map((k) => {
     const [y, m, d] = k.split("-").map(Number);
     return new Date(y, m - 1, d);
   });
