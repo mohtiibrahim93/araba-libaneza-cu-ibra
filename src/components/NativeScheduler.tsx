@@ -34,6 +34,12 @@ interface Props {
   mode?: "create" | "pick";
   onPick?: (iso: string) => void;
   /**
+   * In "pick" mode, the ISO of the currently booked slot. It is highlighted in
+   * the grid and always selectable even if it's outside the returned
+   * availability (since the slot is "taken" by the user themselves).
+   */
+  currentSlotIso?: string;
+  /**
    * Required in "create" mode. Every booking must reference the registration
    * that produced it; bookings without one are rejected by the backend.
    */
@@ -95,6 +101,7 @@ const NativeScheduler = ({
   onBooked,
   mode = "create",
   onPick,
+  currentSlotIso,
   registrationId,
 }: Props) => {
   const { t, lang } = useI18n();
@@ -378,8 +385,19 @@ const NativeScheduler = ({
   }
 
   const dateKeys = Object.keys(data.slots_by_date).sort();
-  const slotsForDate = selectedDate ? data.slots_by_date[selectedDate] ?? [] : [];
-  const availableDateSet = new Set(dateKeys);
+  // Merge the current (own) slot into availability so the user can see it
+  // highlighted even if it's outside the standard availability window.
+  const slotsByDate: Record<string, string[]> = { ...data.slots_by_date };
+  if (currentSlotIso) {
+    const key = localDateKey(new Date(currentSlotIso));
+    const list = slotsByDate[key] ? [...slotsByDate[key]] : [];
+    if (!list.includes(currentSlotIso)) list.push(currentSlotIso);
+    list.sort();
+    slotsByDate[key] = list;
+  }
+  const mergedDateKeys = Object.keys(slotsByDate).sort();
+  const slotsForDate = selectedDate ? slotsByDate[selectedDate] ?? [] : [];
+  const availableDateSet = new Set(mergedDateKeys);
   const availableDates = dateKeys.map((k) => {
     const [y, m, d] = k.split("-").map(Number);
     return new Date(y, m - 1, d);
@@ -393,7 +411,7 @@ const NativeScheduler = ({
   const minDate = availableDates[0];
   const maxDate = availableDates[availableDates.length - 1];
 
-  if (dateKeys.length === 0) {
+  if (mergedDateKeys.length === 0) {
     return (
       <div className="flex flex-col items-center text-center gap-3 py-8 px-4 rounded-lg border border-dashed border-border bg-muted/30">
         <p className="text-sm text-muted-foreground max-w-md">
