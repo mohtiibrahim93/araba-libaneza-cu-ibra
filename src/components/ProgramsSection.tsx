@@ -107,6 +107,7 @@ const ProgramsSection = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Group Course Card with Level Tabs */}
+          {(inlineForm === null || inlineForm === "group") && (
           <div
             id="group-levels"
             className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
@@ -267,10 +268,12 @@ const ProgramsSection = () => {
             </>
             )}
           </div>
+          )}
 
           {/* Private & Kids Cards */}
           {otherPrograms.map((p) => {
             const key = p.badge === t.kidsBadgeCard ? "kids" : "private";
+            if (inlineForm !== null && inlineForm !== key) return null;
             if (inlineForm === key) {
               return (
                 <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-3">
