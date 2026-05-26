@@ -186,7 +186,6 @@ const NativeScheduler = ({
 
   // Real-time: refresh slots when any booking changes (new bookings, cancellations).
   useEffect(() => {
-    if (mode !== "create") return;
     const channel = supabase
       .channel(`booking-availability-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
@@ -196,7 +195,7 @@ const NativeScheduler = ({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [mode, loadAvailability]);
+  }, [loadAvailability]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
