@@ -7,6 +7,7 @@ import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
 import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
 import CulturalValueSection from "@/components/CulturalValueSection";
+import ProgramsSection from "@/components/ProgramsSection";
 import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
@@ -92,6 +93,7 @@ const PageContent = () => {
         <InstructorSection />
         <FindYourTrackQuiz />
         <CulturalValueSection />
+        <ProgramsSection />
         <PricingSection />
         <TestimonialsSection />
         <FAQSection />
