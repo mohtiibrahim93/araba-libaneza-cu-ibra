@@ -34,6 +34,12 @@ interface Props {
   mode?: "create" | "pick";
   onPick?: (iso: string) => void;
   /**
+   * In "pick" mode, the ISO of the currently booked slot. It is highlighted in
+   * the grid and always selectable even if it's outside the returned
+   * availability (since the slot is "taken" by the user themselves).
+   */
+  currentSlotIso?: string;
+  /**
    * Required in "create" mode. Every booking must reference the registration
    * that produced it; bookings without one are rejected by the backend.
    */
@@ -95,6 +101,7 @@ const NativeScheduler = ({
   onBooked,
   mode = "create",
   onPick,
+  currentSlotIso,
   registrationId,
 }: Props) => {
   const { t, lang } = useI18n();
@@ -179,7 +186,6 @@ const NativeScheduler = ({
 
   // Real-time: refresh slots when any booking changes (new bookings, cancellations).
   useEffect(() => {
-    if (mode !== "create") return;
     const channel = supabase
       .channel(`booking-availability-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
@@ -189,7 +195,7 @@ const NativeScheduler = ({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [mode, loadAvailability]);
+  }, [loadAvailability]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
@@ -378,9 +384,20 @@ const NativeScheduler = ({
   }
 
   const dateKeys = Object.keys(data.slots_by_date).sort();
-  const slotsForDate = selectedDate ? data.slots_by_date[selectedDate] ?? [] : [];
-  const availableDateSet = new Set(dateKeys);
-  const availableDates = dateKeys.map((k) => {
+  // Merge the current (own) slot into availability so the user can see it
+  // highlighted even if it's outside the standard availability window.
+  const slotsByDate: Record<string, string[]> = { ...data.slots_by_date };
+  if (currentSlotIso) {
+    const key = localDateKey(new Date(currentSlotIso));
+    const list = slotsByDate[key] ? [...slotsByDate[key]] : [];
+    if (!list.includes(currentSlotIso)) list.push(currentSlotIso);
+    list.sort();
+    slotsByDate[key] = list;
+  }
+  const mergedDateKeys = Object.keys(slotsByDate).sort();
+  const slotsForDate = selectedDate ? slotsByDate[selectedDate] ?? [] : [];
+  const availableDateSet = new Set(mergedDateKeys);
+  const availableDates = mergedDateKeys.map((k) => {
     const [y, m, d] = k.split("-").map(Number);
     return new Date(y, m - 1, d);
   });
@@ -393,7 +410,7 @@ const NativeScheduler = ({
   const minDate = availableDates[0];
   const maxDate = availableDates[availableDates.length - 1];
 
-  if (dateKeys.length === 0) {
+  if (mergedDateKeys.length === 0) {
     return (
       <div className="flex flex-col items-center text-center gap-3 py-8 px-4 rounded-lg border border-dashed border-border bg-muted/30">
         <p className="text-sm text-muted-foreground max-w-md">
@@ -519,26 +536,42 @@ const NativeScheduler = ({
             </div>
           )}
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            {slotsForDate.map((iso) => (
-              <button
-                key={iso}
-                onClick={() => {
-                  if (mode === "pick") {
-                    onPick?.(iso);
-                  } else {
-                    setSelectedSlot(iso);
-                  }
-                }}
-                className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center leading-tight"
-              >
-                <span>{fmtSlotTime(iso)}</span>
-                {showLocalTz && localTz !== TZ && (
-                  <span className="text-[10px] font-normal text-muted-foreground mt-0.5">
-                    {fmtTimeInTz(iso, localTz)}
-                  </span>
-                )}
-              </button>
-            ))}
+            {slotsForDate.map((iso) => {
+              const isCurrent = currentSlotIso === iso;
+              return (
+                <button
+                  key={iso}
+                  onClick={() => {
+                    if (isCurrent) return;
+                    if (mode === "pick") {
+                      onPick?.(iso);
+                    } else {
+                      setSelectedSlot(iso);
+                    }
+                  }}
+                  disabled={isCurrent}
+                  title={isCurrent ? t.manageCurrentSlotBadge : undefined}
+                  className={cn(
+                    "px-2 py-2 rounded-md border text-sm font-medium transition-colors flex flex-col items-center leading-tight",
+                    isCurrent
+                      ? "border-amber-500 bg-amber-50 text-amber-900 cursor-not-allowed"
+                      : "border-border hover:border-primary hover:bg-primary/5",
+                  )}
+                >
+                  <span>{fmtSlotTime(iso)}</span>
+                  {showLocalTz && localTz !== TZ && (
+                    <span className="text-[10px] font-normal text-muted-foreground mt-0.5">
+                      {fmtTimeInTz(iso, localTz)}
+                    </span>
+                  )}
+                  {isCurrent && (
+                    <span className="text-[9px] uppercase tracking-wide mt-0.5 text-amber-700">
+                      {t.manageCurrentSlotBadge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
           {slotsForDate.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4">

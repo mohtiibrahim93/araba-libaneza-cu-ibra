@@ -5,6 +5,17 @@ import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
 import { buildIcs, downloadIcs } from "@/lib/ics";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const TZ = "Europe/Bucharest";
 function fmt(iso: string, lang: "ro" | "en") {
@@ -40,8 +51,9 @@ const BookingManageInner = () => {
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState<BookingInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<"view" | "reschedule">("view");
   const [busy, setBusy] = useState(false);
+  const [rescheduleOpen, setRescheduleOpen] = useState(false);
+  const [pendingSlot, setPendingSlot] = useState<string | null>(null);
 
   const baseUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-manage/${token}`;
 
@@ -85,7 +97,6 @@ const BookingManageInner = () => {
   };
 
   const handleReschedule = async (startAt: string) => {
-    if (!confirm(t.manageConfirmReschedule)) return;
     setBusy(true);
     try {
       const res = await fetch(baseUrl, {
@@ -100,11 +111,14 @@ const BookingManageInner = () => {
       if (!res.ok) {
         if (json?.code === "conflict") {
           toast.error(t.manageSlotTaken);
+          setPendingSlot(null);
           return;
         }
         throw new Error(json?.error ?? t.manageGenericError);
       }
       toast.success(t.manageRescheduledToast);
+      setPendingSlot(null);
+      setRescheduleOpen(false);
       navigate(`/booking/manage/${json.manage_token}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t.manageGenericError);
@@ -157,7 +171,7 @@ const BookingManageInner = () => {
           </div>
         )}
 
-        {booking && mode === "view" && (
+        {booking && (
           <div className="rounded-lg border border-border bg-card p-6 space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -211,7 +225,7 @@ const BookingManageInner = () => {
                   {t.bookingAddToCalendar}
                 </button>
                 <button
-                  onClick={() => setMode("reschedule")}
+                  onClick={() => setRescheduleOpen(true)}
                   disabled={busy}
                   className="flex-1 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
                 >
@@ -237,24 +251,59 @@ const BookingManageInner = () => {
           </div>
         )}
 
-        {booking && mode === "reschedule" && (
-          <div className="space-y-4">
-            <button
-              onClick={() => setMode("view")}
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="w-4 h-4" /> {t.navBack}
-            </button>
-            <div>
-              <h2 className="font-semibold mb-1">{t.bookingReschedulePickTitle}</h2>
-              <p className="text-sm text-muted-foreground mb-4">{t.bookingRescheduleHelp}</p>
-            </div>
-            <NativeScheduler
-              eventType={booking.event_type_slug}
-              mode="pick"
-              onPick={handleReschedule}
-            />
-          </div>
+        {booking && (
+          <Dialog open={rescheduleOpen} onOpenChange={(o) => { if (!busy) setRescheduleOpen(o); }}>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{t.manageRescheduleDialogTitle}</DialogTitle>
+                <DialogDescription>{t.bookingRescheduleHelp}</DialogDescription>
+              </DialogHeader>
+              <NativeScheduler
+                eventType={booking.event_type_slug}
+                mode="pick"
+                currentSlotIso={booking.start_at}
+                onPick={(iso) => setPendingSlot(iso)}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {booking && (
+          <AlertDialog open={!!pendingSlot} onOpenChange={(o) => { if (!o && !busy) setPendingSlot(null); }}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t.manageRescheduleConfirmTitle}</AlertDialogTitle>
+                <AlertDialogDescription asChild>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">{t.manageRescheduleFromLabel}:</span>{" "}
+                      <span className="font-medium text-foreground line-through">{fmt(booking.start_at, lang)}</span>
+                    </div>
+                    {pendingSlot && (
+                      <div>
+                        <span className="text-muted-foreground">{t.manageRescheduleToLabel}:</span>{" "}
+                        <span className="font-semibold text-foreground">{fmt(pendingSlot, lang)}</span>
+                      </div>
+                    )}
+                    <p className="pt-2">{t.manageRescheduleConfirmQuestion}</p>
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={busy}>{t.manageCancelButton}</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={busy}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (pendingSlot) handleReschedule(pendingSlot);
+                  }}
+                >
+                  {busy && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {t.manageConfirmCta}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
     </main>
