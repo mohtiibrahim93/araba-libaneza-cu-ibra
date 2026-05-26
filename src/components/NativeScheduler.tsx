@@ -537,26 +537,42 @@ const NativeScheduler = ({
             </div>
           )}
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            {slotsForDate.map((iso) => (
-              <button
-                key={iso}
-                onClick={() => {
-                  if (mode === "pick") {
-                    onPick?.(iso);
-                  } else {
-                    setSelectedSlot(iso);
-                  }
-                }}
-                className="px-2 py-2 rounded-md border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center leading-tight"
-              >
-                <span>{fmtSlotTime(iso)}</span>
-                {showLocalTz && localTz !== TZ && (
-                  <span className="text-[10px] font-normal text-muted-foreground mt-0.5">
-                    {fmtTimeInTz(iso, localTz)}
-                  </span>
-                )}
-              </button>
-            ))}
+            {slotsForDate.map((iso) => {
+              const isCurrent = currentSlotIso === iso;
+              return (
+                <button
+                  key={iso}
+                  onClick={() => {
+                    if (isCurrent) return;
+                    if (mode === "pick") {
+                      onPick?.(iso);
+                    } else {
+                      setSelectedSlot(iso);
+                    }
+                  }}
+                  disabled={isCurrent}
+                  title={isCurrent ? t.manageCurrentSlotBadge : undefined}
+                  className={cn(
+                    "px-2 py-2 rounded-md border text-sm font-medium transition-colors flex flex-col items-center leading-tight",
+                    isCurrent
+                      ? "border-amber-500 bg-amber-50 text-amber-900 cursor-not-allowed"
+                      : "border-border hover:border-primary hover:bg-primary/5",
+                  )}
+                >
+                  <span>{fmtSlotTime(iso)}</span>
+                  {showLocalTz && localTz !== TZ && (
+                    <span className="text-[10px] font-normal text-muted-foreground mt-0.5">
+                      {fmtTimeInTz(iso, localTz)}
+                    </span>
+                  )}
+                  {isCurrent && (
+                    <span className="text-[9px] uppercase tracking-wide mt-0.5 text-amber-700">
+                      {t.manageCurrentSlotBadge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
           {slotsForDate.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4">
