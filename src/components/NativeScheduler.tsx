@@ -184,17 +184,15 @@ const NativeScheduler = ({
     loadAvailability();
   }, [loadAvailability]);
 
-  // Real-time: refresh slots when any booking changes (new bookings, cancellations).
+  // Periodic refresh of slot availability (every 30s). We intentionally do NOT
+  // subscribe to the `bookings` table via Realtime because rows contain PII
+  // (student email/phone, manage_token, meet_link) that must not be broadcast
+  // to anon/authenticated subscribers.
   useEffect(() => {
-    const channel = supabase
-      .channel(`booking-availability-${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
-        void loadAvailability({ silent: true });
-      })
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    const interval = window.setInterval(() => {
+      void loadAvailability({ silent: true });
+    }, 30_000);
+    return () => window.clearInterval(interval);
   }, [loadAvailability]);
 
   const handleConfirm = async () => {
