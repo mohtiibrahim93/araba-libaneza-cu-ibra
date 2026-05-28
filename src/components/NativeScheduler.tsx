@@ -294,7 +294,7 @@ const NativeScheduler = ({
         description: confirmed.meet_link
           ? `${t.icsZoomLabel}: ${confirmed.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
           : `${t.icsManageLabel}: ${manageUrl}`,
-        location: confirmed.meet_link ?? "Raduga Creative Center, București",
+        location: confirmed.meet_link ?? "Raduga Creative Center, Strada Icoanei 80, București",
         startISO: confirmed.start_at,
         endISO: endIso,
         url: manageUrl,

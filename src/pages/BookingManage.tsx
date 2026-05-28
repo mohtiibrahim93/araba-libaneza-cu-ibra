@@ -136,7 +136,7 @@ const BookingManageInner = () => {
       description: booking.meet_link
         ? `${t.icsZoomLabel}: ${booking.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
         : `${t.icsManageLabel}: ${manageUrl}`,
-      location: booking.meet_link ?? "Raduga Creative Center, București",
+      location: booking.meet_link ?? "Raduga Creative Center, Strada Icoanei 80, București",
       startISO: booking.start_at,
       endISO: booking.end_at,
       url: manageUrl,

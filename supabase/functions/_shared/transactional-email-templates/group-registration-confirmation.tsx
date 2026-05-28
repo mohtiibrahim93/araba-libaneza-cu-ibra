@@ -20,7 +20,7 @@ interface GroupRegistrationConfirmationProps {
 }
 
 const formatLabels: Record<string, string> = { fizic: 'fizic, în București', online: 'online' }
-const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Center, București', online: 'Online' }
+const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, București', online: 'Online' }
 
 const GroupRegistrationConfirmationEmail = ({ name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">

@@ -38,6 +38,10 @@ function generateToken(): string {
 function isServiceRole(authHeader: string | null): boolean {
   if (!authHeader?.startsWith('Bearer ')) return false
   const token = authHeader.slice(7)
+  // New Supabase signing-keys system: service role key is a non-JWT secret
+  // (e.g. "sb_secret_..."). Accept exact match against env value.
+  const envServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (envServiceKey && token === envServiceKey) return true
   try {
     const [, payload] = token.split('.')
     if (!payload) return false
