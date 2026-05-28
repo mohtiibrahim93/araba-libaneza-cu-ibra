@@ -18,6 +18,7 @@ import { template as bookingReminder } from './booking-reminder.tsx'
 import { template as bookingCancelled } from './booking-cancelled.tsx'
 import { template as bookingRescheduled } from './booking-rescheduled.tsx'
 import { template as trialFollowup } from './trial-followup.tsx'
+import { template as adminNewRegistration } from './admin-new-registration.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
@@ -29,4 +30,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'booking-cancelled': bookingCancelled,
   'booking-rescheduled': bookingRescheduled,
   'trial-followup': trialFollowup,
+  'admin-new-registration': adminNewRegistration,
 }
