@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
     if (!reg) return new Response("not found", { status: 404, headers: corsHeaders });
 
     const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? "";
-    const physicalLoc = "Raduga Creative Center, București";
+    const physicalLoc = "Raduga Creative Center, Strada Icoanei 80, București";
     const location = reg.format === "online" ? (zoomUrl || "Online (Zoom)") : physicalLoc;
 
     let start: Date | null = null;
