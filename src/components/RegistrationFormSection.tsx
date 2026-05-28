@@ -430,8 +430,6 @@ const RegistrationFormSection = ({
                   <SelectItem value="Bucuresti - Centru (Raduga)">
                     {t.mainLeadLocationBucharestCentru}
                   </SelectItem>
-                  <SelectItem value="Bucuresti - Nord">{t.mainLeadLocationBucharestNord}</SelectItem>
-                  <SelectItem value="Bucuresti - Sud">{t.mainLeadLocationBucharestSud}</SelectItem>
                   <SelectItem value="Alt oras">{t.mainLeadLocationOtherCity}</SelectItem>
                 </SelectContent>
               </Select>
