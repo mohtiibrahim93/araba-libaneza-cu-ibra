@@ -93,11 +93,15 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
             // Service-role auth required by send-transactional-email.
             Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
           },
           body: JSON.stringify(body),
         });
         if (!r.ok) {
-          console.error("send-transactional-email failed", r.status, await r.text());
+          const text = await r.text();
+          console.error("send-transactional-email failed", r.status, text);
+        } else {
+          console.log("send-transactional-email ok", body.templateName, body.recipientEmail);
         }
       } catch (e) {
         console.error("send-transactional-email invocation error", e);
