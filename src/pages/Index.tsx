@@ -8,6 +8,7 @@ import InstructorSection from "@/components/InstructorSection";
 import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
 import CulturalValueSection from "@/components/CulturalValueSection";
 import ProgramsSection from "@/components/ProgramsSection";
+import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
@@ -93,6 +94,7 @@ const PageContent = () => {
         <FindYourTrackQuiz />
         <CulturalValueSection />
         <ProgramsSection />
+        <PricingSection />
         <TestimonialsSection />
         <FAQSection />
         <CTASection />
