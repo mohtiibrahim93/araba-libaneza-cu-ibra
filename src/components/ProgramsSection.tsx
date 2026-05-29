@@ -105,9 +105,15 @@ const ProgramsSection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Group Course Card with Level Tabs */}
-          {(inlineForm === null || inlineForm === "group") && (
+        <Tabs defaultValue="adults" className="w-full">
+          <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="adults">{t.tabAdults}</TabsTrigger>
+            <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="adults">
+            <div className="grid md:grid-cols-2 gap-8">
+              {(inlineForm === null || inlineForm === "group") && (
           <div
             id="group-levels"
             className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
