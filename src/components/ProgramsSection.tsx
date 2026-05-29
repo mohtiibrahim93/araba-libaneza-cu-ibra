@@ -4,6 +4,7 @@ import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
