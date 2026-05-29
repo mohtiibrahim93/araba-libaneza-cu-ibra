@@ -4,6 +4,7 @@ import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -57,8 +58,7 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const otherPrograms = [
-    {
+  const privateProgram = {
       badge: t.privateBadge,
       title: t.privateCardTitle,
       desc: t.privateCardDesc,
@@ -75,8 +75,8 @@ const ProgramsSection = () => {
       per: t.pricingPerSessionSuffix,
       perNote: t.pricingPrivateRateNote,
       discount: t.pricingPrivateDiscount,
-    },
-    {
+  };
+  const kidsProgram = {
       badge: t.kidsBadgeCard,
       title: t.kidsCardTitle,
       desc: t.kidsCardDesc,
@@ -93,8 +93,7 @@ const ProgramsSection = () => {
       per: undefined as string | undefined,
       perNote: undefined as string | undefined,
       discount: undefined as string | undefined,
-    },
-  ];
+  };
 
   return (
     <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
@@ -105,9 +104,15 @@ const ProgramsSection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Group Course Card with Level Tabs */}
-          {(inlineForm === null || inlineForm === "group") && (
+        <Tabs defaultValue="adults" className="w-full">
+          <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="adults">{t.tabAdults}</TabsTrigger>
+            <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="adults">
+            <div className="grid md:grid-cols-2 gap-8">
+              {(inlineForm === null || inlineForm === "group") && (
           <div
             id="group-levels"
             className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
@@ -270,16 +275,16 @@ const ProgramsSection = () => {
           </div>
           )}
 
-          {/* Private & Kids Cards */}
-          {otherPrograms.map((p) => {
-            const key = p.badge === t.kidsBadgeCard ? "kids" : "private";
+          {/* Private Card (adults tab) */}
+          {[privateProgram].map((p) => {
+            const key = "private" as const;
             if (inlineForm !== null && inlineForm !== key) return null;
             if (inlineForm === key) {
               return (
                 <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-3">
                   <div className="p-6">
                     <RegistrationFormSection
-                      defaultCourseType={key as "private" | "kids"}
+                      defaultCourseType={key}
                       embedded
                       onBack={() => setInlineForm(null)}
                     />
@@ -296,21 +301,6 @@ const ProgramsSection = () => {
                 </span>
                 <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
-                {key === "kids" && kidsCap && (
-                  <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
-                    <span className="font-semibold text-foreground">
-                      {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
-                    </span>
-                    <span className="text-muted-foreground">·</span>
-                    <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                      {kidsCap.full
-                        ? t.capFull
-                        : kidsCap.belowMin
-                          ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
-                          : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
-                    </span>
-                  </div>
-                )}
                 {p.price && (
                   <div className="mb-3">
                     <div className="flex items-baseline flex-wrap gap-x-2">
@@ -346,7 +336,7 @@ const ProgramsSection = () => {
                 <div className="mt-auto">
                   <button
                     type="button"
-                    onClick={() => setInlineForm(key as "private" | "kids")}
+                    onClick={() => setInlineForm(key)}
                     className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     {p.cta}
@@ -365,7 +355,92 @@ const ProgramsSection = () => {
             </div>
             );
           })}
-        </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="kids">
+            <div className="grid md:grid-cols-2 gap-8">
+              {[kidsProgram].map((p) => {
+                const key = "kids" as const;
+                if (inlineForm !== null && inlineForm !== key) return null;
+                if (inlineForm === key) {
+                  return (
+                    <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-2">
+                      <div className="p-6">
+                        <RegistrationFormSection
+                          defaultCourseType={key}
+                          embedded
+                          onBack={() => setInlineForm(null)}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
+                    <div className="p-6 flex flex-col flex-1">
+                      <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                        {p.badge}
+                      </span>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
+                      {kidsCap && (
+                        <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
+                          <span className="font-semibold text-foreground">
+                            {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
+                          </span>
+                          <span className="text-muted-foreground">·</span>
+                          <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                            {kidsCap.full
+                              ? t.capFull
+                              : kidsCap.belowMin
+                                ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
+                                : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
+                          </span>
+                        </div>
+                      )}
+                      <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                        {p.meta.map((item) => (
+                          <div key={item.label}>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
+                            <dd className="text-sm font-medium text-foreground">{item.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                      <ul className="space-y-2 mb-6">
+                        {p.feats.map((f, i) => (
+                          <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                            <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-auto">
+                        <button
+                          type="button"
+                          onClick={() => setInlineForm(key)}
+                          className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                        >
+                          {p.cta}
+                        </button>
+                        <a
+                          href={p.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          WhatsApp
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </section>
   );
