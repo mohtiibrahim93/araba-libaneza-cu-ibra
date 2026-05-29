@@ -58,8 +58,7 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const otherPrograms = [
-    {
+  const privateProgram = {
       badge: t.privateBadge,
       title: t.privateCardTitle,
       desc: t.privateCardDesc,
@@ -76,8 +75,8 @@ const ProgramsSection = () => {
       per: t.pricingPerSessionSuffix,
       perNote: t.pricingPrivateRateNote,
       discount: t.pricingPrivateDiscount,
-    },
-    {
+  };
+  const kidsProgram = {
       badge: t.kidsBadgeCard,
       title: t.kidsCardTitle,
       desc: t.kidsCardDesc,
@@ -94,8 +93,8 @@ const ProgramsSection = () => {
       per: undefined as string | undefined,
       perNote: undefined as string | undefined,
       discount: undefined as string | undefined,
-    },
-  ];
+  };
+  const otherPrograms = [privateProgram, kidsProgram];
 
   return (
     <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
