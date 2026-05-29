@@ -94,7 +94,6 @@ const ProgramsSection = () => {
       perNote: undefined as string | undefined,
       discount: undefined as string | undefined,
   };
-  const otherPrograms = [privateProgram, kidsProgram];
 
   return (
     <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
