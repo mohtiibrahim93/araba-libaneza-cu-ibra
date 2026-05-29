@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
-import AnchorLink from "@/components/AnchorLink";
+import { Check, MessageCircle, CheckCircle2 } from "lucide-react";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
