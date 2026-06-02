@@ -5,6 +5,7 @@ import AnchorLink from "@/components/AnchorLink";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -236,32 +237,50 @@ const ProgramsSection = () => {
                   </ul>
 
                   {/* Price table */}
-                  <div className="overflow-x-auto mb-3 rounded-lg border border-border">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="bg-muted/40 border-b border-border">
-                          <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableLevel}</th>
-                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableMonth}</th>
-                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableTotal}</th>
-                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableDiscount}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {LEVELS.map((level) => {
-                          const monthly = Number(levelPrices[level]);
-                          const total = monthly * 3;
-                          const discounted = total * 0.9;
-                          return (
-                            <tr key={level} className="border-b border-border last:border-b-0">
-                              <td className="px-3 py-2 font-medium text-foreground whitespace-nowrap">{level}</td>
-                              <td className="px-3 py-2 text-right text-muted-foreground whitespace-nowrap">{formatLei(monthly)} LEI</td>
-                              <td className="px-3 py-2 text-right text-muted-foreground line-through whitespace-nowrap">{formatLei(total)} LEI</td>
-                              <td className="px-3 py-2 text-right font-bold text-primary whitespace-nowrap">{formatLei(discounted)} LEI</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                  <div className="mb-3 rounded-lg border border-border overflow-hidden">
+                    {/* Header row */}
+                    <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 bg-muted/40 border-b border-border px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
+                      <span className="text-left">{t.groupPriceTableLevel}</span>
+                      <span className="text-right">{t.groupPriceTableMonth}</span>
+                      <span className="text-right hidden sm:block">{t.groupPriceTableTotal}</span>
+                      <span className="text-right">{t.groupPriceTableDiscount}</span>
+                    </div>
+                    <Accordion type="single" collapsible className="w-full">
+                      {LEVELS.map((level) => {
+                        const monthly = Number(levelPrices[level]);
+                        const total = monthly * 3;
+                        const discounted = total * 0.9;
+                        return (
+                          <AccordionItem key={level} value={level} className="border-b border-border last:border-b-0">
+                            <AccordionTrigger className="px-3 py-2 text-sm hover:no-underline hover:bg-muted/30 [&[data-state=open]]:bg-muted/30">
+                              <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 w-full items-center pr-2">
+                                <span className="text-left font-medium text-foreground">{level}</span>
+                                <span className="text-right text-muted-foreground whitespace-nowrap">{formatLei(monthly)} LEI</span>
+                                <span className="text-right text-muted-foreground line-through whitespace-nowrap hidden sm:block">{formatLei(total)} LEI</span>
+                                <span className="text-right font-bold text-primary whitespace-nowrap">{formatLei(discounted)} LEI</span>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-3 pb-4 pt-1">
+                              <div className="rounded-lg border border-border bg-muted/30 p-4">
+                                <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[level]}</p>
+                                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
+                                  {t.curriculumObjective}
+                                </p>
+                                <p className="text-sm text-foreground mb-3">{levelCurriculum[level].obj}</p>
+                                <ul className="space-y-2">
+                                  {levelCurriculum[level].mods.map((m, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm">
+                                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                      <span className="text-muted-foreground">{m}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
                   </div>
                   <p className="text-xs font-medium text-primary mb-5">{t.groupPriceTableNote}</p>
 
