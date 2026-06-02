@@ -234,6 +234,37 @@ const ProgramsSection = () => {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Price table */}
+                  <div className="overflow-x-auto mb-3 rounded-lg border border-border">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-muted/40 border-b border-border">
+                          <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableLevel}</th>
+                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableMonth}</th>
+                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableTotal}</th>
+                          <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-muted-foreground whitespace-nowrap">{t.groupPriceTableDiscount}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {LEVELS.map((level) => {
+                          const monthly = Number(levelPrices[level]);
+                          const total = monthly * 3;
+                          const discounted = total * 0.9;
+                          return (
+                            <tr key={level} className="border-b border-border last:border-b-0">
+                              <td className="px-3 py-2 font-medium text-foreground whitespace-nowrap">{level}</td>
+                              <td className="px-3 py-2 text-right text-muted-foreground whitespace-nowrap">{formatLei(monthly)} LEI</td>
+                              <td className="px-3 py-2 text-right text-muted-foreground line-through whitespace-nowrap">{formatLei(total)} LEI</td>
+                              <td className="px-3 py-2 text-right font-bold text-primary whitespace-nowrap">{formatLei(discounted)} LEI</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-xs font-medium text-primary mb-5">{t.groupPriceTableNote}</p>
+
                   <button
                     type="button"
                     onClick={() => setInlineForm("group")}
