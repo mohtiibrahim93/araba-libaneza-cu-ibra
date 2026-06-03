@@ -59,24 +59,6 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const privateProgram = {
-      badge: t.privateBadge,
-      title: t.privateCardTitle,
-      desc: t.privateCardDesc,
-      meta: [
-        { label: t.programFormatLabel, value: t.privateFormat },
-        { label: t.programDurationLabel, value: t.privateDuration },
-        { label: t.programConditionsLabel, value: t.privateConditions },
-      ],
-      feats: [t.privateFeat1, t.privateFeat2, t.privateFeat3, t.privateFeat4],
-      cta: t.privateRegister,
-      href: WA_PRIVATE,
-      img: privateImg,
-      price: t.pricingPrivatePrice,
-      per: t.pricingPerSessionSuffix,
-      perNote: t.pricingPrivateRateNote,
-      discount: t.pricingPrivateDiscount,
-  };
   const kidsProgram = {
       badge: t.kidsBadgeCard,
       title: t.kidsCardTitle,
