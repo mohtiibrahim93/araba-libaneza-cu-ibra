@@ -59,24 +59,6 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const privateProgram = {
-      badge: t.privateBadge,
-      title: t.privateCardTitle,
-      desc: t.privateCardDesc,
-      meta: [
-        { label: t.programFormatLabel, value: t.privateFormat },
-        { label: t.programDurationLabel, value: t.privateDuration },
-        { label: t.programConditionsLabel, value: t.privateConditions },
-      ],
-      feats: [t.privateFeat1, t.privateFeat2, t.privateFeat3, t.privateFeat4],
-      cta: t.privateRegister,
-      href: WA_PRIVATE,
-      img: privateImg,
-      price: t.pricingPrivatePrice,
-      per: t.pricingPerSessionSuffix,
-      perNote: t.pricingPrivateRateNote,
-      discount: t.pricingPrivateDiscount,
-  };
   const kidsProgram = {
       badge: t.kidsBadgeCard,
       title: t.kidsCardTitle,
@@ -326,85 +308,95 @@ const ProgramsSection = () => {
           )}
 
           {/* Private Card (adults tab) */}
-          {[privateProgram].map((p) => {
-            const key = "private" as const;
-            if (inlineForm !== null && inlineForm !== key) return null;
-            if (inlineForm === key) {
-              return (
-                <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-3">
+          {(inlineForm === null || inlineForm === "private") && (
+            <>
+              {inlineForm === "private" ? (
+                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-2">
                   <div className="p-6">
                     <RegistrationFormSection
-                      defaultCourseType={key}
+                      defaultCourseType="private"
                       embedded
                       onBack={() => setInlineForm(null)}
                     />
                   </div>
                 </div>
-              );
-            }
-            return (
-            <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
-              <div className="p-6 flex flex-col flex-1">
-                <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-                  {p.badge}
-                </span>
-                <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
-                {p.price && (
-                  <div className="mb-3">
-                    <div className="flex items-baseline flex-wrap gap-x-2">
-                      <span className="text-2xl font-extrabold text-foreground leading-none">{p.price}</span>
-                      {p.per && (
-                        <span className="text-sm font-semibold text-muted-foreground">{p.per}</span>
-                      )}
+              ) : (
+                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                  <img src={privateImg} alt={t.privateCardTitle} className="w-full h-52 object-cover" />
+                  <div className="p-6 flex flex-col flex-1">
+                    <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                      {t.privateBadge}
+                    </span>
+                    <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
+
+                    {/* Price */}
+                    <div className="mb-3">
+                      <div className="flex items-baseline flex-wrap gap-x-2">
+                        <span className="text-2xl font-extrabold text-foreground leading-none">150</span>
+                        <span className="text-sm font-semibold text-muted-foreground">{t.privatePricePerLesson}</span>
+                      </div>
                     </div>
-                    {p.perNote && (
-                      <p className="text-xs text-muted-foreground mt-1">{p.perNote}</p>
-                    )}
+                    <p className="text-xs font-medium text-primary mb-3">{t.privatePriceDiscountNote}</p>
+                    <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-muted-foreground">{t.privatePrice20Label}</span>
+                        <span>
+                          <span className="line-through text-muted-foreground">3.000 LEI</span>
+                          <span className="ml-2 font-bold text-primary">2.550 LEI</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Details */}
+                    <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                      {[
+                        { label: t.programFormatLabel, value: t.privateFormat },
+                        { label: t.programDurationLabel, value: t.privateDurationV2 },
+                        { label: t.programScheduleLabel, value: t.privateSchedule },
+                        { label: t.programConditionsLabel, value: t.privateConditionsV2 },
+                      ].map((item) => (
+                        <div key={item.label}>
+                          <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
+                          <dd className="text-sm font-medium text-foreground">{item.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    {/* Features */}
+                    <ul className="space-y-2 mb-6">
+                      {[t.privateFeat1v2, t.privateFeat2v2, t.privateFeat3v2, t.privateFeat4v2, t.privateFeat5v2].map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                          <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA */}
+                    <div className="mt-auto">
+                      <button
+                        type="button"
+                        onClick={() => setInlineForm("private")}
+                        className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                      >
+                        {t.privateRegisterV2}
+                      </button>
+                      <a
+                        href={WA_PRIVATE}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        WhatsApp
+                      </a>
+                    </div>
                   </div>
-                )}
-                {p.discount && (
-                  <p className="text-xs font-medium text-primary mb-4">{p.discount}</p>
-                )}
-                <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
-                  {p.meta.map((item) => (
-                    <div key={item.label}>
-                      <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
-                      <dd className="text-sm font-medium text-foreground">{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <ul className="space-y-2 mb-6">
-                  {p.feats.map((f, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                      <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto">
-                  <button
-                    type="button"
-                    onClick={() => setInlineForm(key)}
-                    className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    {p.cta}
-                  </button>
-                  <a
-                    href={p.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    WhatsApp
-                  </a>
                 </div>
-              </div>
-            </div>
-            );
-          })}
+              )}
+            </>
+          )}
             </div>
           </TabsContent>
 
