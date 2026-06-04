@@ -42,6 +42,7 @@ const STORAGE_KEY = "registration_form_draft";
 
 const RegistrationFormSection = ({
   defaultCourseType,
+  defaultFormat,
   embedded = false,
   onBack,
 }: RegistrationFormSectionProps = {}) => {
