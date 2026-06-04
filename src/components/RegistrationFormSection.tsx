@@ -51,7 +51,7 @@ const RegistrationFormSection = ({
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
   const [format, setFormat] = useState<FormatType | "">(
-    defaultCourseType === "kids" ? "online" : "",
+    defaultFormat ?? (defaultCourseType === "kids" ? "online" : ""),
   );
   const [level, setLevel] = useState<LevelType | "">("A1");
   const [center, setCenter] = useState<string>("");
