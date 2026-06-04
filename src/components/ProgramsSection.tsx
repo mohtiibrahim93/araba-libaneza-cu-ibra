@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
-import AnchorLink from "@/components/AnchorLink";
+
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -59,24 +59,6 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const kidsProgram = {
-      badge: t.kidsBadgeCard,
-      title: t.kidsCardTitle,
-      desc: t.kidsCardDesc,
-      meta: [
-        { label: t.programFormatLabel, value: t.kidsFormat },
-        { label: t.programDurationLabel, value: t.kidsDuration },
-        { label: t.programConditionsLabel, value: t.kidsConditions },
-      ],
-      feats: [t.kidsFeat1, t.kidsFeat2, t.kidsFeat3, t.kidsFeat4],
-      cta: t.kidsRegister,
-      href: WA_KIDS,
-      img: kidsImg,
-      price: undefined as string | undefined,
-      per: undefined as string | undefined,
-      perNote: undefined as string | undefined,
-      discount: undefined as string | undefined,
-  };
 
   return (
     <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
@@ -402,84 +384,121 @@ const ProgramsSection = () => {
 
           <TabsContent value="kids">
             <div className="grid md:grid-cols-2 gap-8">
-              {[kidsProgram].map((p) => {
-                const key = "kids" as const;
-                if (inlineForm !== null && inlineForm !== key) return null;
-                if (inlineForm === key) {
-                  return (
-                    <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-2">
-                      <div className="p-6">
-                        <RegistrationFormSection
-                          defaultCourseType={key}
-                          embedded
-                          onBack={() => setInlineForm(null)}
-                        />
-                      </div>
+              {(inlineForm === null || inlineForm === "kids") && (
+                <div
+                  id="kids-group"
+                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
+                    inlineForm === "kids" ? "md:col-span-2" : ""
+                  }`}
+                >
+                  {inlineForm === "kids" ? (
+                    <div className="p-6">
+                      <RegistrationFormSection
+                        defaultCourseType="kids"
+                        defaultFormat="fizic"
+                        embedded
+                        onBack={() => setInlineForm(null)}
+                      />
                     </div>
-                  );
-                }
-                return (
-                  <div key={p.title} className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                    <img src={p.img} alt={p.title} className="w-full h-52 object-cover" />
-                    <div className="p-6 flex flex-col flex-1">
-                      <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-                        {p.badge}
-                      </span>
-                      <h3 className="text-xl font-bold text-foreground mb-2">{p.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.desc}</p>
-                      {kidsCap && (
-                        <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
-                          <span className="font-semibold text-foreground">
-                            {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
-                          </span>
-                          <span className="text-muted-foreground">·</span>
-                          <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                            {kidsCap.full
-                              ? t.capFull
-                              : kidsCap.belowMin
-                                ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
-                                : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
-                          </span>
-                        </div>
-                      )}
-                      <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
-                        {p.meta.map((item) => (
-                          <div key={item.label}>
-                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
-                            <dd className="text-sm font-medium text-foreground">{item.value}</dd>
+                  ) : (
+                    <>
+                      <img src={kidsImg} alt={t.kidsGroupCardTitle} className="w-full h-52 object-cover" />
+                      <div className="p-6 flex flex-col flex-1">
+                        <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                          {t.kidsGroupBadge}
+                        </span>
+                        <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
+
+                        {kidsCap && (
+                          <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
+                            <span className="font-semibold text-foreground">
+                              {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
+                            </span>
+                            <span className="text-muted-foreground">·</span>
+                            <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                              {kidsCap.full
+                                ? t.capFull
+                                : kidsCap.belowMin
+                                  ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
+                                  : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
+                            </span>
                           </div>
-                        ))}
-                      </dl>
-                      <ul className="space-y-2 mb-6">
-                        {p.feats.map((f, i) => (
-                          <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                            <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="mt-auto">
-                        <button
-                          type="button"
-                          onClick={() => setInlineForm(key)}
-                          className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                        >
-                          {p.cta}
-                        </button>
-                        <a
-                          href={p.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          WhatsApp
-                        </a>
+                        )}
+
+                        {/* Price */}
+                        <div className="mb-3">
+                          <div className="flex items-baseline flex-wrap gap-x-2">
+                            <span className="text-2xl font-extrabold text-foreground leading-none">500</span>
+                            <span className="text-sm font-semibold text-muted-foreground">{t.kidsGroupPricePerMonth}</span>
+                          </div>
+                        </div>
+                        <p className="text-xs font-medium text-primary mb-3">{t.kidsGroupPriceNote}</p>
+                        <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="text-muted-foreground">{t.kidsGroupPriceTotalLabel}</span>
+                            <span>
+                              <span className="line-through text-muted-foreground">1.500 LEI</span>
+                              <span className="ml-2 font-bold text-primary">1.350 LEI</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Details */}
+                        <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programFormatLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupFormat}</dd>
+                            <dd className="text-xs text-muted-foreground mt-0.5">{t.kidsGroupFormatNote}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programDurationLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupDuration}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programConditionsLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupConditions}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.kidsGroupAgeGroupsLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupAgeGroupsValue}</dd>
+                          </div>
+                        </dl>
+
+                        {/* Features */}
+                        <ul className="space-y-2 mb-6">
+                          {[t.kidsGroupFeat1, t.kidsGroupFeat2, t.kidsGroupFeat3, t.kidsGroupFeat4].map((f, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                              {f}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* CTA */}
+                        <div className="mt-auto">
+                          <button
+                            type="button"
+                            onClick={() => setInlineForm("kids")}
+                            className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                          >
+                            {t.kidsGroupRegister}
+                          </button>
+                          <a
+                            href={WA_KIDS}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            WhatsApp
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>

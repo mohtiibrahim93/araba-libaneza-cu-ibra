@@ -33,6 +33,7 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 
 interface RegistrationFormSectionProps {
   defaultCourseType?: CourseType;
+  defaultFormat?: FormatType;
   embedded?: boolean;
   onBack?: () => void;
 }
@@ -41,6 +42,7 @@ const STORAGE_KEY = "registration_form_draft";
 
 const RegistrationFormSection = ({
   defaultCourseType,
+  defaultFormat,
   embedded = false,
   onBack,
 }: RegistrationFormSectionProps = {}) => {
@@ -49,7 +51,7 @@ const RegistrationFormSection = ({
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
   const [format, setFormat] = useState<FormatType | "">(
-    defaultCourseType === "kids" ? "online" : "",
+    defaultFormat ?? (defaultCourseType === "kids" ? "online" : ""),
   );
   const [level, setLevel] = useState<LevelType | "">("A1");
   const [center, setCenter] = useState<string>("");
