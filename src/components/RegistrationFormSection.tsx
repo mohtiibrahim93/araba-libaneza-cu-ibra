@@ -33,6 +33,7 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 
 interface RegistrationFormSectionProps {
   defaultCourseType?: CourseType;
+  defaultFormat?: FormatType;
   embedded?: boolean;
   onBack?: () => void;
 }
