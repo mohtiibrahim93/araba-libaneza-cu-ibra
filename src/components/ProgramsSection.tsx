@@ -59,24 +59,6 @@ const ProgramsSection = () => {
   const formatLei = (n: number) =>
     n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
 
-  const kidsProgram = {
-      badge: t.kidsBadgeCard,
-      title: t.kidsCardTitle,
-      desc: t.kidsCardDesc,
-      meta: [
-        { label: t.programFormatLabel, value: t.kidsFormat },
-        { label: t.programDurationLabel, value: t.kidsDuration },
-        { label: t.programConditionsLabel, value: t.kidsConditions },
-      ],
-      feats: [t.kidsFeat1, t.kidsFeat2, t.kidsFeat3, t.kidsFeat4],
-      cta: t.kidsRegister,
-      href: WA_KIDS,
-      img: kidsImg,
-      price: undefined as string | undefined,
-      per: undefined as string | undefined,
-      perNote: undefined as string | undefined,
-      discount: undefined as string | undefined,
-  };
 
   return (
     <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
