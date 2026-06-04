@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
-import AnchorLink from "@/components/AnchorLink";
+
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
