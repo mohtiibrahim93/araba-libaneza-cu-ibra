@@ -22,7 +22,9 @@ type Level = (typeof LEVELS)[number];
 const ProgramsSection = () => {
   const { t } = useI18n();
   const [activeLevel, setActiveLevel] = useState<Level>("A1");
-  const [inlineForm, setInlineForm] = useState<null | "group" | "private" | "kids">(null);
+  const [inlineForm, setInlineForm] = useState<
+    null | "group" | "private" | "kids" | "kids-private"
+  >(null);
   const { get: getCapacity } = useGroupCapacities();
   const activeCap = getCapacity("group", activeLevel);
   const kidsCap = getCapacity("kids", null);
@@ -483,6 +485,104 @@ const ProgramsSection = () => {
                             className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                           >
                             {t.kidsGroupRegister}
+                          </button>
+                          <a
+                            href={WA_KIDS}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            WhatsApp
+                          </a>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Kids Private Card */}
+              {(inlineForm === null || inlineForm === "kids-private") && (
+                <div
+                  id="kids-private"
+                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
+                    inlineForm === "kids-private" ? "md:col-span-2" : ""
+                  }`}
+                >
+                  {inlineForm === "kids-private" ? (
+                    <div className="p-6">
+                      <RegistrationFormSection
+                        defaultCourseType="kids"
+                        defaultFormat="online"
+                        lessonType="private"
+                        embedded
+                        onBack={() => setInlineForm(null)}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <img src={privateImg} alt={t.kidsPrivateCardTitle} className="w-full h-52 object-cover" />
+                      <div className="p-6 flex flex-col flex-1">
+                        <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                          {t.kidsPrivateBadge}
+                        </span>
+                        <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
+
+                        {/* Price */}
+                        <div className="mb-3">
+                          <div className="flex items-baseline flex-wrap gap-x-2">
+                            <span className="text-2xl font-extrabold text-foreground leading-none">150</span>
+                            <span className="text-sm font-semibold text-muted-foreground">{t.kidsPrivatePricePerLesson}</span>
+                          </div>
+                        </div>
+                        <p className="text-xs font-medium text-primary mb-3">{t.kidsPrivatePriceDiscountNote}</p>
+                        <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
+                            <span>
+                              <span className="line-through text-muted-foreground">3.000 LEI</span>
+                              <span className="ml-2 font-bold text-primary">2.550 LEI</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Details */}
+                        <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programFormatLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsPrivateFormat}</dd>
+                            <dd className="text-xs text-muted-foreground mt-0.5">{t.kidsPrivateFormatNote}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programDurationLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsPrivateDuration}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programConditionsLabel}</dt>
+                            <dd className="text-sm font-medium text-foreground">{t.kidsPrivateConditions}</dd>
+                          </div>
+                        </dl>
+
+                        {/* Features */}
+                        <ul className="space-y-2 mb-6">
+                          {[t.kidsPrivateFeat1, t.kidsPrivateFeat2, t.kidsPrivateFeat3, t.kidsPrivateFeat4].map((f, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                              {f}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* CTA */}
+                        <div className="mt-auto">
+                          <button
+                            type="button"
+                            onClick={() => setInlineForm("kids-private")}
+                            className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                          >
+                            {t.kidsPrivateRegister}
                           </button>
                           <a
                             href={WA_KIDS}
