@@ -34,6 +34,7 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 interface RegistrationFormSectionProps {
   defaultCourseType?: CourseType;
   defaultFormat?: FormatType;
+  lessonType?: "group" | "private";
   embedded?: boolean;
   onBack?: () => void;
 }
@@ -43,6 +44,7 @@ const STORAGE_KEY = "registration_form_draft";
 const RegistrationFormSection = ({
   defaultCourseType,
   defaultFormat,
+  lessonType = "group",
   embedded = false,
   onBack,
 }: RegistrationFormSectionProps = {}) => {
@@ -243,6 +245,12 @@ const RegistrationFormSection = ({
       if (courseType === "kids") {
         if (childName) notesParts.push(`Copil: ${childName}`);
         if (childAge) notesParts.push(`Vârstă: ${childAge}`);
+        if (lessonType === "private") {
+          notesParts.push(`Tip lecții: Private 1-la-1`);
+          notesParts.push(
+            `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`,
+          );
+        }
       }
       if (message) notesParts.push(`Message: ${message}`);
       const notes = notesParts.join(" | ") || null;
@@ -454,17 +462,25 @@ const RegistrationFormSection = ({
 
           {/* Kids: child fields + (conditional) waitlist deposit */}
           {courseType === "kids" && (
-            <KidsFields
-              childName={childName}
-              childAge={childAge}
-              payDeposit={payDeposit}
-              capacity={capacity}
-              kidsSlotId={kidsSlotId}
-              onKidsSlotChange={(s) => setKidsSlotId(s?.id ?? null)}
-              onChildNameChange={setChildName}
-              onChildAgeChange={setChildAge}
-              onPayDepositChange={setPayDeposit}
-            />
+            <>
+              <KidsFields
+                childName={childName}
+                childAge={childAge}
+                payDeposit={lessonType === "private" ? false : payDeposit}
+                capacity={lessonType === "private" ? null : capacity}
+                kidsSlotId={kidsSlotId}
+                onKidsSlotChange={(s) => setKidsSlotId(s?.id ?? null)}
+                onChildNameChange={setChildName}
+                onChildAgeChange={setChildAge}
+                onPayDepositChange={setPayDeposit}
+              />
+              {lessonType === "private" && (
+                <PrivateFields
+                  privateQuantity={privateQuantity}
+                  onPrivateQuantityChange={setPrivateQuantity}
+                />
+              )}
+            </>
           )}
 
           {/* Contact + message */}
