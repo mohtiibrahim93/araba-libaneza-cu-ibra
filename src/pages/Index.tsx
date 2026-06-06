@@ -94,7 +94,6 @@ const PageContent = () => {
         <FindYourTrackQuiz />
         <CulturalValueSection />
         <ProgramsSection />
-        <PricingSection />
         <TestimonialsSection />
         <FAQSection />
         <CTASection />
