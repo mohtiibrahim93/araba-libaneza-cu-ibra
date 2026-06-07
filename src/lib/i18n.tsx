@@ -667,6 +667,7 @@ const translations = {
     privacySeoDescription: "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la centrul de araba libaneza.",
     // Find your track quiz
     quizBadge: "Găsește cursul potrivit",
+    programsQuizLink: "Nu ești sigur? Fă quiz-ul →",
     quizTitle: "În 30 de secunde îți recomandăm cursul potrivit pentru tine",
     quizDesc: "Răspunde la câteva întrebări scurte și îți arătăm exact ce ți se potrivește.",
     quizStepLabel: "Pasul {n} din {total}",
@@ -1418,6 +1419,7 @@ const translations = {
     privacySeoDescription: "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.",
     // Find your track quiz
     quizBadge: "Find your track",
+    programsQuizLink: "Not sure? Take the quiz →",
     quizTitle: "We'll recommend the right course for you in 30 seconds",
     quizDesc: "Answer a few short questions and we'll show you exactly what fits.",
     quizStepLabel: "Step {n} of {total}",

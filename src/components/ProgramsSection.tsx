@@ -69,6 +69,16 @@ const ProgramsSection = () => {
           <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
+          <a
+            href="#courses"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="inline-block mt-3 text-sm font-medium text-primary hover:underline underline-offset-4"
+          >
+            {t.programsQuizLink}
+          </a>
         </div>
 
         <Tabs defaultValue="adults" className="w-full">
