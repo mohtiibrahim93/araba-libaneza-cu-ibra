@@ -1419,6 +1419,7 @@ const translations = {
     privacySeoDescription: "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.",
     // Find your track quiz
     quizBadge: "Find your track",
+    programsQuizLink: "Not sure? Take the quiz →",
     quizTitle: "We'll recommend the right course for you in 30 seconds",
     quizDesc: "Answer a few short questions and we'll show you exactly what fits.",
     quizStepLabel: "Step {n} of {total}",
