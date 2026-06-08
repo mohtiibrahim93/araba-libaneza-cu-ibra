@@ -67,7 +67,7 @@ const Navbar = () => {
   }, []);
 
   const links = [
-    { href: "#courses", label: t.navCourses },
+    { href: "#programs", label: t.navCourses },
     { href: "#pricing", label: t.navPricing },
     { href: "#testimonials", label: t.navTestimonials },
     { href: "#faq", label: t.navFaq },
@@ -136,13 +136,13 @@ const Navbar = () => {
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {/* Quick access: jump to Programs from any page */}
           <a
-            href="/#courses"
-            onClick={goToAnchor("#courses")}
-            aria-label={t.navCourses}
+            href="/#programs"
+            onClick={goToAnchor("#programs")}
+            aria-label={t.navEnroll}
             className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:hidden lg:inline-flex"
           >
             <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
-            <span className="hidden sm:inline">{t.navCourses}</span>
+            <span className="hidden sm:inline">{t.navEnroll}</span>
           </a>
           <Button
             variant="ghost"

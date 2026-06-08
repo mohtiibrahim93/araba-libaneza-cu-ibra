@@ -31,34 +31,28 @@ const CookieConsent = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-20 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-sm z-50 animate-in slide-in-from-bottom-4 duration-300">
-      <div className="bg-card border border-border rounded-xl shadow-lg p-4">
-        <div className="flex items-start gap-3">
-          <div className="flex-1">
-            <p className="text-sm text-foreground font-medium mb-1">{t.cookieTitle}</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {t.cookieDesc}{" "}
-              <a href="/privacy" className="text-primary underline">{t.cookieLink}</a>
-            </p>
-          </div>
-          <button onClick={dismiss} className="text-muted-foreground hover:text-foreground p-1">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="flex gap-2 mt-3">
-          <button
-            onClick={accept}
-            className="flex-1 py-2 text-xs font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            {t.cookieAccept}
-          </button>
-          <button
-            onClick={dismiss}
-            className="flex-1 py-2 text-xs font-semibold border border-border text-muted-foreground rounded-lg hover:text-foreground transition-colors"
-          >
-            {t.cookieDecline}
-          </button>
-        </div>
+    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-background/95 backdrop-blur-md shadow-lg animate-in slide-in-from-bottom-2 duration-300 md:bottom-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:inset-x-auto md:rounded-full md:border md:max-w-2xl md:w-[calc(100%-2rem)]">
+      <div className="mx-auto max-w-6xl px-4 py-2.5 md:px-5 flex items-center gap-3">
+        <p className="flex-1 text-xs text-muted-foreground leading-snug truncate sm:whitespace-normal">
+          <span className="font-medium text-foreground">{t.cookieTitle}</span>{" "}
+          <span className="hidden sm:inline">{t.cookieDesc}{" "}</span>
+          <a href="/privacy" className="text-primary underline">{t.cookieLink}</a>
+        </p>
+        <button
+          onClick={accept}
+          className="shrink-0 px-3 py-1.5 text-xs font-semibold bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+        >
+          {t.cookieAccept}
+        </button>
+        <button
+          onClick={dismiss}
+          className="shrink-0 px-2 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {t.cookieDecline}
+        </button>
+        <button onClick={dismiss} aria-label="Close" className="shrink-0 text-muted-foreground hover:text-foreground p-1 hidden sm:block">
+          <X className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

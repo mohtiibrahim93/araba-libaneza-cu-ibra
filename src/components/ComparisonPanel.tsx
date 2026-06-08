@@ -77,7 +77,7 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
 
   if (selectedTrack) {
     return (
-      <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
+      <section id="quiz" className="py-20 px-6 bg-muted/50 scroll-mt-20">
         <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-sm">
           <RegistrationFormSection
             defaultCourseType={selectedTrack}
@@ -90,7 +90,7 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
   }
 
   return (
-    <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
+    <section id="quiz" className="py-20 px-6 bg-muted/50 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
