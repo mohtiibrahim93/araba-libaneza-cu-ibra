@@ -63,17 +63,17 @@ const ProgramsSection = () => {
 
 
   return (
-    <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
+    <section id="programs" className="py-20 px-6 bg-muted/50 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
           <a
-            href="#courses"
+            href="#quiz"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+              document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" });
             }}
             className="inline-block mt-3 text-sm font-medium text-primary hover:underline underline-offset-4"
           >
@@ -132,17 +132,25 @@ const ProgramsSection = () => {
 
               {activeCap && (
                 <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-                  <span className="font-semibold text-foreground">
-                    {activeCap.taken}/{activeCap.max} {t.capSeatsLabel}
-                  </span>
-                  <span className="text-muted-foreground">·</span>
-                  <span className={activeCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                    {activeCap.full
-                      ? t.capFull
-                      : activeCap.belowMin
-                        ? t.capNeedToStart.replace("{n}", String(activeCap.needToStart))
-                        : t.capSpotsLeft.replace("{n}", String(activeCap.seatsLeft))}
-                  </span>
+                  {activeCap.taken === 0 ? (
+                    <span className="text-primary font-medium">
+                      {t.capForming.replace("{n}", String(activeCap.needToStart || 4))}
+                    </span>
+                  ) : (
+                    <>
+                      <span className="font-semibold text-foreground">
+                        {activeCap.taken}/{activeCap.max} {t.capSeatsLabel}
+                      </span>
+                      <span className="text-muted-foreground">·</span>
+                      <span className={activeCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                        {activeCap.full
+                          ? t.capFull
+                          : activeCap.belowMin
+                            ? t.capNeedToStart.replace("{n}", String(activeCap.needToStart))
+                            : t.capSpotsLeft.replace("{n}", String(activeCap.seatsLeft))}
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
 
