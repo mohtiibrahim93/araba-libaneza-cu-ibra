@@ -14,7 +14,7 @@ const BookingInner = () => {
   // Bookings must be tied to a registration. If no id is present, send users
   // back to the registration form (Step 1 of the journey).
   if (!registrationId || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
-    return <Navigate to="/#inscriere" replace />;
+    return <Navigate to="/#programs" replace />;
   }
 
   const title = `${type === "paid" ? t.bookingPageSeoTitlePaid : t.bookingPageSeoTitleTrial} — ${t.siteTitle}`;

@@ -89,7 +89,7 @@ const CurriculumSection = () => {
 
         <div className="text-center mt-10">
           <AnchorLink
-            to="#inscriere"
+            to="#programs"
             className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
           >
             {t.curriculumCta} →

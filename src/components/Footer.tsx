@@ -34,7 +34,7 @@ const Footer = () => {
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
             <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
-            <li><AnchorLink to="#inscriere" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
+            <li><AnchorLink to="#programs" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
           </ul>
         </div>
 

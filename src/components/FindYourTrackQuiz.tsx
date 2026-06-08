@@ -104,7 +104,7 @@ const FindYourTrackQuiz = () => {
   // ----- Inline registration form (after CTA) -----
   if (showForm && track) {
     return (
-      <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
+      <section id="quiz" className="py-20 px-6 bg-muted/50 scroll-mt-20">
         <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-sm">
           <RegistrationFormSection
             defaultCourseType={track}
@@ -274,7 +274,7 @@ const FindYourTrackQuiz = () => {
   };
 
   return (
-    <section id="courses" className="py-20 px-6 bg-muted/50 scroll-mt-20">
+    <section id="quiz" className="py-20 px-6 bg-muted/50 scroll-mt-20">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <span className="text-sm font-medium text-primary mb-2 block">{t.quizBadge}</span>

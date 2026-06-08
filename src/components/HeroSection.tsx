@@ -38,7 +38,7 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 mb-10">
             <AnchorLink
-              to="#courses"
+              to="#programs"
               className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
@@ -78,7 +78,7 @@ const HeroSection = () => {
           <div className="w-full rounded-2xl bg-gradient-to-br from-primary/5 via-background to-primary/10 border border-border/60 shadow-lg overflow-hidden aspect-[4/3] flex items-center justify-center">
             <img
               src={heroImg}
-              alt="Cedrul libanez — simbolul Libanului"
+              alt="Ibra — instructor de arabă libaneză"
               width={1024}
               height={1024}
               fetchPriority="high"
