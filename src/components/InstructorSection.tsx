@@ -1,4 +1,5 @@
 import { useI18n } from "@/lib/i18n";
+import { Star, ExternalLink } from "lucide-react";
 import instructorPhotoPng from "@/assets/instructor-photo.png";
 import instructorPhotoWebp from "@/assets/instructor-photo.webp";
 
@@ -15,7 +16,7 @@ const InstructorSection = () => {
     <section className="py-20 px-6 bg-muted/30">
       <div className="max-w-5xl mx-auto grid md:grid-cols-[280px_1fr] gap-12 items-center">
         {/* Photo */}
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-3">
           <picture>
             <source srcSet={instructorPhotoWebp} type="image/webp" />
             <img
@@ -24,6 +25,16 @@ const InstructorSection = () => {
               className="w-full h-full object-cover"
             />
           </picture>
+          <a
+            href="https://preply.com/en/tutor/471612"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold hover:bg-primary/10 transition-colors"
+          >
+            <Star className="w-3.5 h-3.5 fill-primary" />
+            {t.instructorPreplyBadge}
+            <ExternalLink className="w-3 h-3" />
+          </a>
         </div>
 
         {/* Bio */}
