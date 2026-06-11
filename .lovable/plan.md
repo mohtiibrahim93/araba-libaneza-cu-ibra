@@ -16,13 +16,13 @@ Work is grouped into 4 batches by priority. I'll start Batch 1 immediately after
 9. **Capacity copy** when empty — soften to "Grup în formare — primii 4 cursanți confirmă startul" (hide raw 0/10 until taken ≥ 1).
 10. **Cookie banner** — convert from card to slim bottom bar so it doesn't cover the floating CTA.
 
-## Batch 2 — UX friction
-11. Collapse the full FindYourTrackQuiz section into the inline link above Programs tabs (keep quiz on `/quiz` route or as a modal).
-12. Add "de la 500 LEI/lună" to hero trust badges.
-13. C1/C2 levels — add "în pregătire" badge and disable their CTA path.
-14. Promote "Lecție gratuită de probă" to a secondary outlined button in hero.
-15. Add "Profil Preply 5.0★" badge next to Ibra's photo in InstructorSection.
-16. Add a social-proof logo strip (Preply + any partners).
+## Batch 2 — UX friction ✅
+11. ✅ Quiz section removed from home; lives at `/quiz` route. Inline link in Programs points there.
+12. ✅ "de la 500 LEI/lună" added to hero trust badges (replaced redundant reviews badge).
+13. ✅ C1/C2 rows in price-table accordion show "în pregătire" tag; per-level view already gates CTA.
+14. ✅ Trial CTA promoted to outlined secondary button in hero.
+15. ✅ Preply 5.0★ badge added under Ibra's photo.
+16. ✅ Slim Preply social-proof strip added below hero.
 
 ## Batch 3 — SEO & structured data
 17. Title-case + diacritics meta title: "Centrul de Arabă Libaneză cu Ibra — Cursuri Online & București".
