@@ -70,11 +70,7 @@ const ProgramsSection = () => {
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
           <a
-            href="#quiz"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" });
-            }}
+            href="/quiz"
             className="inline-block mt-3 text-sm font-medium text-primary hover:underline underline-offset-4"
           >
             {t.programsQuizLink}

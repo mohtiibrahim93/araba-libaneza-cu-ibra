@@ -3,9 +3,9 @@ import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import SocialProofStrip from "@/components/SocialProofStrip";
 import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
-import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
 import CulturalValueSection from "@/components/CulturalValueSection";
 import ProgramsSection from "@/components/ProgramsSection";
 
@@ -89,9 +89,9 @@ const PageContent = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <SocialProofStrip />
         <WhySection />
         <InstructorSection />
-        <FindYourTrackQuiz />
         <CulturalValueSection />
         <ProgramsSection />
         <TestimonialsSection />

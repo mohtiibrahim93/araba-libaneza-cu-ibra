@@ -438,6 +438,8 @@ const translations = {
 
     instructorBadge: "Profesorul tău",
     instructorPreplyBadge: "Profil Preply 5.0★",
+    socialProofPreply: "Recenzat pe Preply",
+    socialProofPreplyMeta: "5.0★ · 21 recenzii verificate",
     instructorTitle: "Salut, sunt Ibra!",
     instructorBio1: "Sunt vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani. Cu 5+ ani de experiență în predare pe platforme precum Preply.com și altele, am ajutat zeci de cursanți să descopere frumusețea limbii și culturii libaneze.",
     instructorBio2: "Cursurile mele combină conversația practică cu perspective culturale autentice — de la expresii de zi cu zi până la tradițiile culinare libaneze. Abordarea mea se bazează pe comunicare reală, nu doar gramatică.",
@@ -1197,6 +1199,8 @@ const translations = {
 
     instructorBadge: "Your Teacher",
     instructorPreplyBadge: "Preply Profile 5.0★",
+    socialProofPreply: "Reviewed on Preply",
+    socialProofPreplyMeta: "5.0★ · 21 verified reviews",
     instructorTitle: "Hi, I'm Ibra!",
     instructorBio1: "I'm a native Lebanese Arabic speaker living in Bucharest for over 10 years. With 5+ years of teaching experience on platforms like Preply.com and others, I've helped dozens of students discover the beauty of the Lebanese language and culture.",
     instructorBio2: "My courses combine practical conversation with authentic cultural insights — from everyday expressions to Lebanese culinary traditions. My approach is based on real communication, not just grammar.",
