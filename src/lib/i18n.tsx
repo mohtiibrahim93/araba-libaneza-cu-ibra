@@ -454,7 +454,7 @@ const translations = {
     // Hero extras
     heroPill: "Lecții 1:1 · Online & Fizic",
     heroTrustRating: "5.0★ pe Preply",
-    heroTrustStudents: "21 recenzii Preply",
+    heroTrustStudents: "de la 500 LEI/lună",
     heroTrustVerified: "Instructor verificat",
     heroTrustSecure: "Plată securizată",
 
@@ -1209,7 +1209,7 @@ const translations = {
 
     heroPill: "1:1 Lessons · Online & In-person",
     heroTrustRating: "5.0★ on Preply",
-    heroTrustStudents: "21 Preply reviews",
+    heroTrustStudents: "from 500 LEI/month",
     heroTrustVerified: "Verified instructor",
     heroTrustSecure: "Secure payment",
 
