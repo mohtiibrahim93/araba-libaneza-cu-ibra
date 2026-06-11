@@ -75,6 +75,51 @@ const PageContent = () => {
     })),
   };
 
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Centrul de Arabă Libaneză cu Ibra",
+    description: homeDescription,
+    url: "https://centruldearabalibaneza.com/",
+    telephone: "+40763124514",
+    email: "mohtiibrahim@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Raduga Creative Center, Strada Icoanei 80",
+      addressLocality: "București",
+      addressCountry: "RO",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: "21",
+    },
+  };
+
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 24+ lecții pe nivel, fizic în București sau online." },
+      { name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
+      { name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
+    ].map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Course",
+        name: c.name,
+        description: c.desc,
+        inLanguage: "ar",
+        provider: {
+          "@type": "Organization",
+          name: "Centrul de Arabă Libaneză cu Ibra",
+          sameAs: "https://centruldearabalibaneza.com/",
+        },
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -85,6 +130,8 @@ const PageContent = () => {
         <meta property="og:description" content={homeDescription} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/" />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
       </Helmet>
       <Navbar />
       <main>

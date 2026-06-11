@@ -24,10 +24,10 @@ Work is grouped into 4 batches by priority. I'll start Batch 1 immediately after
 15. ✅ Preply 5.0★ badge added under Ibra's photo.
 16. ✅ Slim Preply social-proof strip added below hero.
 
-## Batch 3 — SEO & structured data
-17. Title-case + diacritics meta title: "Centrul de Arabă Libaneză cu Ibra — Cursuri Online & București".
-18. Add Course + LocalBusiness JSON-LD in Index.tsx Helmet.
-19. Add Google Maps embed/link for "Strada Icoanei 80" in contact/footer.
+## Batch 3 — SEO & structured data ✅
+17. ✅ Meta title updated to "Centrul de Arabă Libaneză cu Ibra — Cursuri Online & București".
+18. ✅ LocalBusiness + Course (ItemList) JSON-LD added to Index.tsx Helmet.
+19. ✅ Footer address now links to Google Maps.
 
 ## Batch 4 — Polish
 20. Instructor photo: serve 2x WebP at rendered dimensions.
