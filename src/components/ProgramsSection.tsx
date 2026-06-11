@@ -234,11 +234,19 @@ const ProgramsSection = () => {
                         const monthly = Number(levelPrices[level]);
                         const total = monthly * 3;
                         const discounted = total * 0.9;
+                        const available = isAvailable(level);
                         return (
                           <AccordionItem key={level} value={level} className="border-b border-border last:border-b-0">
                             <AccordionTrigger className="px-3 py-2 text-sm hover:no-underline hover:bg-muted/30 [&[data-state=open]]:bg-muted/30">
                               <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 w-full items-center pr-2">
-                                <span className="text-left font-medium text-foreground">{level}</span>
+                                <span className="text-left font-medium text-foreground inline-flex items-center gap-1.5">
+                                  {level}
+                                  {!available && (
+                                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                                      {t.levelInPrep}
+                                    </span>
+                                  )}
+                                </span>
                                 <span className="text-right text-muted-foreground whitespace-nowrap">{formatLei(monthly)} LEI</span>
                                 <span className="text-right text-muted-foreground line-through whitespace-nowrap hidden sm:block">{formatLei(total)} LEI</span>
                                 <span className="text-right font-bold text-primary whitespace-nowrap">{formatLei(discounted)} LEI</span>
