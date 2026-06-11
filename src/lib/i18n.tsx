@@ -603,7 +603,7 @@ const translations = {
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
-    homeSeoTitle: "Cursuri de Arabă Libaneză în București și Online — cu Ibra",
+   homeSeoTitle: "Centrul de Arabă Libaneză cu Ibra — Cursuri Online & București",
     homeSeoDescription: "Învață arabă libaneză cu profesor nativ. Cursuri de grup, private și pentru copii — fizic în București sau online. Toate nivelurile CEFR (A1–C2).",
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
@@ -1360,7 +1360,7 @@ const translations = {
     thankYouBackHome: "Back to homepage",
     thankYouLoading: "Loading details...",
     thankYouError: "We couldn't load payment details, but your registration was received.",
-    homeSeoTitle: "Lebanese Arabic Courses in Bucharest & Online — with Ibra",
+   homeSeoTitle: "Lebanese Arabic Center with Ibra — Courses Online & Bucharest",
     homeSeoDescription: "Learn Lebanese Arabic with a native instructor. Group, private, and kids courses — in person in Bucharest or online. All CEFR levels (A1–C2).",
     // Booking page (per-type)
     bookingPageTitlePaid: "Book your lesson",

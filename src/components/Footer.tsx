@@ -56,7 +56,14 @@ const Footer = () => {
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-primary mt-0.5" />
-              <span>Raduga Creative Center, Strada Icoanei 80, București</span>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Raduga+Creative+Center+Strada+Icoanei+80+Bucuresti"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                Raduga Creative Center, Strada Icoanei 80, București
+              </a>
             </li>
           </ul>
         </div>
