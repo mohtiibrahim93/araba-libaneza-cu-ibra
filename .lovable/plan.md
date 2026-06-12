@@ -29,11 +29,11 @@ Work is grouped into 4 batches by priority. I'll start Batch 1 immediately after
 18. ✅ LocalBusiness + Course (ItemList) JSON-LD added to Index.tsx Helmet.
 19. ✅ Footer address now links to Google Maps.
 
-## Batch 4 — Polish
-20. Instructor photo: serve 2x WebP at rendered dimensions.
-21. Hero trust badges row — better mobile wrap (2x2 grid <sm).
-22. Footer — dedupe phone number.
-23. Dark-mode AA contrast audit for primary red on dark bg; bump lightness if <4.5:1.
+## Batch 4 — Polish ✅
+20. ✅ Instructor photo: WebP via `<picture>` + explicit width/height + lazy.
+21. ✅ Hero trust badges already 2x2 on <sm (`grid-cols-2 sm:grid-cols-4`).
+22. ✅ Footer phone number not duplicated (verified).
+23. ✅ Dark-mode `--primary` bumped to `0 80% 62%` for AA contrast on dark surfaces.
 
 ## Technical notes
 - Anchor rename is the riskiest step: must grep ALL `#courses` and `#inscriere` usages (Hero, Navbar, Footer, MobileEnrollmentCTA, CulturalValueSection, CTASection, scrollToAnchor calls, sitemap).
