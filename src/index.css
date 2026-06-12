@@ -75,7 +75,13 @@
 
     --border: 220 14% 20%;
     --input: 220 14% 20%;
-    --ring: 0 72% 51%;
+    --ring: 0 80% 62%;
+  }
+  .dark {
+    /* Brighter red for AA contrast (≥4.5:1) on dark surfaces */
+    --primary: 0 80% 62%;
+    --primary-foreground: 0 0% 100%;
+  }
 
     --sidebar-background: 220 14% 10%;
     --sidebar-foreground: 0 0% 98%;
