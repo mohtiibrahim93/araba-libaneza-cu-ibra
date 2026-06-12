@@ -22,7 +22,11 @@ const InstructorSection = () => {
             <img
               src={instructorPhotoPng}
               alt="Ibra — instructor"
-              className="w-full h-full object-cover"
+              width={280}
+              height={280}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto object-cover rounded-2xl"
             />
           </picture>
           <a
