@@ -48,8 +48,11 @@ const extractMessage = (notes: string | null) => {
   return index >= 0 ? notes.slice(index + marker.length).trim() || "—" : notes;
 };
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const PrivateLead = () => {
   const { id } = useParams();
+  const isValidId = !!id && UUID_RE.test(id);
   const [password, setPassword] = useState("");
   const [storedPassword, setStoredPassword] = useState("");
   const [lead, setLead] = useState<Registration | null>(null);
@@ -58,7 +61,10 @@ const PrivateLead = () => {
   const [error, setError] = useState("");
 
   const loadLead = async (adminPassword: string) => {
-    if (!id) return;
+    if (!isValidId) {
+      setError("ID lead invalid.");
+      return;
+    }
     setLoading(true);
     setError("");
 
@@ -103,6 +109,21 @@ const PrivateLead = () => {
   };
 
   if (!lead) {
+    if (!isValidId) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <div className="w-full max-w-sm space-y-4 rounded-xl border border-border bg-card p-8 text-center shadow-lg">
+            <h1 className="text-xl font-bold text-foreground">Link invalid</h1>
+            <p className="text-sm text-muted-foreground">
+              Acest URL nu conține un ID de lead valid. Deschide un lead din lista de admin.
+            </p>
+            <Button asChild className="w-full">
+              <Link to="/admin"><ArrowLeft className="h-4 w-4" /> Înapoi la admin</Link>
+            </Button>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <form
