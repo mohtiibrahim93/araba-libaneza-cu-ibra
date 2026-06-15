@@ -16,6 +16,7 @@ import Booking from "./pages/Booking";
 import BookingManage from "./pages/BookingManage";
 import Trial from "./pages/Trial";
 import Quiz from "./pages/Quiz";
+import Auth from "./pages/Auth";
 
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/booking/manage/:token" element={<BookingManage />} />
             <Route path="/trial" element={<Trial />} />
             <Route path="/quiz" element={<Quiz />} />
+            <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
