@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formTypeLabels, leadStatusLabels } from "./types";
+import { formTypeLabels, leadStatusLabels, LEAD_STATUSES } from "./types";
 import type { CourseTypeFilter, LeadStatusFilter } from "./types";
 
 interface Props {
@@ -55,9 +55,11 @@ const RegistrationFilters = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Toate statusurile</SelectItem>
-            <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
-            <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
-            <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+            {LEAD_STATUSES.map((status) => (
+              <SelectItem key={status} value={status}>
+                {leadStatusLabels[status]}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
