@@ -30,8 +30,9 @@ const CookieConsent = () => {
 
   if (!visible) return null;
 
+  // On mobile, sit ABOVE the fixed MobileEnrollmentCTA (~72px tall) so the floating Enroll CTA stays tappable.
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-background/95 backdrop-blur-md shadow-lg animate-in slide-in-from-bottom-2 duration-300 md:bottom-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:inset-x-auto md:rounded-full md:border md:max-w-2xl md:w-[calc(100%-2rem)]">
+    <div className="fixed inset-x-0 bottom-[76px] z-[60] border-t border-border bg-background/95 backdrop-blur-md shadow-lg animate-in slide-in-from-bottom-2 duration-300 md:bottom-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:inset-x-auto md:rounded-full md:border md:max-w-2xl md:w-[calc(100%-2rem)]">
       <div className="mx-auto max-w-6xl px-4 py-2.5 md:px-5 flex items-center gap-3">
         <p className="flex-1 text-xs text-muted-foreground leading-snug truncate sm:whitespace-normal">
           <span className="font-medium text-foreground">{t.cookieTitle}</span>{" "}
