@@ -17,7 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formTypeLabels, leadStatusLabels, LEAD_STATUSES } from "./types";
+import {
+  formTypeLabels,
+  leadStatusLabels,
+  leadSourceLabels,
+  trackPreferenceLabels,
+  LEAD_STATUSES,
+} from "./types";
 import type { LeadStatus, Registration } from "./types";
 
 interface Props {
@@ -54,6 +60,8 @@ const RegistrationsTable = ({
           <TableHead>Email</TableHead>
           <TableHead>Centru</TableHead>
           <TableHead>Format</TableHead>
+          <TableHead>Sursă</TableHead>
+          <TableHead>Track</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Vârstă copil</TableHead>
           <TableHead>Note</TableHead>
@@ -88,6 +96,12 @@ const RegistrationsTable = ({
             <TableCell className="text-muted-foreground">{r.email || "—"}</TableCell>
             <TableCell>{r.center || "—"}</TableCell>
             <TableCell>{r.format || "—"}</TableCell>
+            <TableCell className="text-xs">
+              {r.source ? leadSourceLabels[r.source] : "—"}
+            </TableCell>
+            <TableCell className="text-xs">
+              {r.track_preference ? trackPreferenceLabels[r.track_preference] : "—"}
+            </TableCell>
             <TableCell>
               <Select
                 value={r.lead_status || "new"}
