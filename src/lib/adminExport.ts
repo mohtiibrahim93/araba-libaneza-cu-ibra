@@ -3,6 +3,8 @@ import autoTable from "jspdf-autotable";
 import {
   formTypeLabels,
   leadStatusLabels,
+  leadSourceLabels,
+  trackPreferenceLabels,
   type CourseTypeFilter,
   type LeadStatusFilter,
   type Registration,
@@ -34,6 +36,8 @@ export function exportAllRegistrationsCsv(
     "Email",
     "Centru",
     "Format",
+    "Sursă",
+    "Track",
     "Status lead",
     "Vârsta copil",
     "Note",
@@ -46,6 +50,8 @@ export function exportAllRegistrationsCsv(
     r.email || "",
     r.center || "",
     r.format || "",
+    r.source ? leadSourceLabels[r.source] : "",
+    r.track_preference ? trackPreferenceLabels[r.track_preference] : "",
     leadStatusLabels[r.lead_status || "new"],
     r.child_age || "",
     r.notes || "",
@@ -81,13 +87,15 @@ export function exportPrivateLeadsCsv(
   statusFilter: LeadStatusFilter,
   search: string,
 ) {
-  const headers = ["Data", "Nume", "Telefon", "Email", "Format", "Status lead", "Mesaj"];
+  const headers = ["Data", "Nume", "Telefon", "Email", "Format", "Sursă", "Track", "Status lead", "Mesaj"];
   const data = rows.map((r) => [
     new Date(r.created_at).toLocaleString("ro-RO"),
     r.name,
     r.phone,
     r.email || "",
     r.format || "",
+    r.source ? leadSourceLabels[r.source] : "",
+    r.track_preference ? trackPreferenceLabels[r.track_preference] : "",
     leadStatusLabels[r.lead_status || "new"],
     r.notes || "",
   ]);
@@ -112,19 +120,21 @@ export function exportPrivateLeadsPdf(
 
   autoTable(doc, {
     startY: 32,
-    head: [["Data", "Nume", "Telefon", "Email", "Format", "Status", "Mesaj"]],
+    head: [["Data", "Nume", "Telefon", "Email", "Format", "Sursă", "Track", "Status", "Mesaj"]],
     body: rows.map((r) => [
       new Date(r.created_at).toLocaleString("ro-RO"),
       r.name,
       r.phone,
       r.email || "—",
       r.format || "—",
+      r.source ? leadSourceLabels[r.source] : "—",
+      r.track_preference ? trackPreferenceLabels[r.track_preference] : "—",
       leadStatusLabels[r.lead_status || "new"],
       r.notes || "—",
     ]),
     styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: "linebreak" },
     headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255] },
-    columnStyles: { 6: { cellWidth: 78 } },
+    columnStyles: { 8: { cellWidth: 78 } },
     margin: { left: 14, right: 14 },
   });
 

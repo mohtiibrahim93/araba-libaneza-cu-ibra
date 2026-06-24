@@ -1,4 +1,4 @@
-import { leadStatusLabels } from "./types";
+import { leadStatusLabels, LEAD_STATUSES } from "./types";
 import type { LeadStatus } from "./types";
 
 interface Props {
@@ -16,7 +16,7 @@ const PrivateLeadStats = ({ counts, onSelect }: Props) => (
       <p className="text-xs font-medium text-muted-foreground">Lead-uri private</p>
       <p className="mt-1 text-2xl font-bold text-foreground">{counts.total}</p>
     </button>
-    {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => (
+    {LEAD_STATUSES.map((status) => (
       <button
         key={status}
         type="button"

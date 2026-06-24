@@ -30,6 +30,7 @@ import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable from "@/components/admin/RegistrationsTable";
 import {
   leadStatusLabels,
+  LEAD_STATUSES,
   type CourseTypeFilter,
   type EmailSettings,
   type LeadStatus,
@@ -116,20 +117,22 @@ const Admin = () => {
     });
   }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch]);
 
-  const privateLeadCounts = useMemo(
-    () =>
-      registrations.reduce(
-        (counts, r) => {
-          if (r.form_type !== "private") return counts;
-          const status = r.lead_status || "new";
-          counts.total += 1;
-          counts[status] += 1;
-          return counts;
-        },
-        { total: 0, new: 0, contacted: 0, confirmed: 0 } as Record<LeadStatus | "total", number>,
-      ),
-    [registrations],
-  );
+  const privateLeadCounts = useMemo(() => {
+    const initial = LEAD_STATUSES.reduce(
+      (acc, status) => {
+        acc[status] = 0;
+        return acc;
+      },
+      { total: 0 } as Record<LeadStatus | "total", number>,
+    );
+    return registrations.reduce((counts, r) => {
+      if (r.form_type !== "private") return counts;
+      const status = (r.lead_status || "new") as LeadStatus;
+      counts.total += 1;
+      if (status in counts) counts[status] += 1;
+      return counts;
+    }, initial);
+  }, [registrations]);
 
   const privateFilteredRegistrations = useMemo(
     () => filteredRegistrations.filter((r) => r.form_type === "private"),

@@ -7,8 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Loader2, Mail, Phone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-
-type LeadStatus = "new" | "contacted" | "confirmed";
+import {
+  LEAD_STATUSES,
+  leadStatusLabels,
+  type LeadStatus,
+} from "@/components/admin/types";
 
 interface Registration {
   id: string;
@@ -29,12 +32,6 @@ interface StatusHistoryItem {
   new_status: LeadStatus;
   changed_by: string;
 }
-
-const leadStatusLabels: Record<LeadStatus, string> = {
-  new: "Nou",
-  contacted: "Contactat",
-  confirmed: "Confirmat",
-};
 
 const formatLabels: Record<string, string> = {
   fizic: "Față în față",
@@ -173,9 +170,11 @@ const PrivateLead = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
-                <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
-                <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
+                {LEAD_STATUSES.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {leadStatusLabels[status]}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

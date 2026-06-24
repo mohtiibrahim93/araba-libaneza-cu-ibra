@@ -201,6 +201,74 @@ export type Database = {
           },
         ]
       }
+      course_requests: {
+        Row: {
+          created_at: string
+          email: string | null
+          format: string | null
+          id: string
+          lesson_type: string | null
+          level: string | null
+          location_preference: string | null
+          matched_cohort_id: string | null
+          name: string
+          notes: string | null
+          phone: string
+          preferred_days: number[] | null
+          preferred_language: string | null
+          preferred_time_block: string | null
+          status: string
+          track: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          format?: string | null
+          id?: string
+          lesson_type?: string | null
+          level?: string | null
+          location_preference?: string | null
+          matched_cohort_id?: string | null
+          name: string
+          notes?: string | null
+          phone: string
+          preferred_days?: number[] | null
+          preferred_language?: string | null
+          preferred_time_block?: string | null
+          status?: string
+          track?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          format?: string | null
+          id?: string
+          lesson_type?: string | null
+          level?: string | null
+          location_preference?: string | null
+          matched_cohort_id?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string
+          preferred_days?: number[] | null
+          preferred_language?: string | null
+          preferred_time_block?: string | null
+          status?: string
+          track?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_requests_matched_cohort_id_fkey"
+            columns: ["matched_cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_confirmation_settings: {
         Row: {
           id: number
@@ -339,44 +407,86 @@ export type Database = {
       group_cohorts: {
         Row: {
           created_at: string
+          days_of_week: number[] | null
+          duration_minutes: number | null
+          end_time: string | null
           form_type: string
           id: string
           is_active: boolean
           level: string | null
+          location_id: string | null
           max_seats: number
           schedule_label_en: string
           schedule_label_ro: string
           sort_order: number
           start_date: string
+          start_time: string | null
+          status: string
+          timezone: string
+          track: string
+          tutor_id: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
+          days_of_week?: number[] | null
+          duration_minutes?: number | null
+          end_time?: string | null
           form_type: string
           id?: string
           is_active?: boolean
           level?: string | null
+          location_id?: string | null
           max_seats?: number
           schedule_label_en?: string
           schedule_label_ro?: string
           sort_order?: number
           start_date: string
+          start_time?: string | null
+          status?: string
+          timezone?: string
+          track?: string
+          tutor_id?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
+          days_of_week?: number[] | null
+          duration_minutes?: number | null
+          end_time?: string | null
           form_type?: string
           id?: string
           is_active?: boolean
           level?: string | null
+          location_id?: string | null
           max_seats?: number
           schedule_label_en?: string
           schedule_label_ro?: string
           sort_order?: number
           start_date?: string
+          start_time?: string | null
+          status?: string
+          timezone?: string
+          track?: string
+          tutor_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "group_cohorts_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_cohorts_tutor_id_fkey"
+            columns: ["tutor_id"]
+            isOneToOne: false
+            referencedRelation: "tutors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       kids_class_slots: {
         Row: {
@@ -455,6 +565,45 @@ export type Database = {
           },
         ]
       }
+      locations: {
+        Row: {
+          active: boolean
+          address_en: string
+          address_ro: string
+          city: string
+          created_at: string
+          id: string
+          map_url: string | null
+          name: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          address_en: string
+          address_ro: string
+          city: string
+          created_at?: string
+          id?: string
+          map_url?: string | null
+          name: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          address_en?: string
+          address_ro?: string
+          city?: string
+          created_at?: string
+          id?: string
+          map_url?: string | null
+          name?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       registrations: {
         Row: {
           center: string | null
@@ -476,7 +625,9 @@ export type Database = {
           phone: string
           referral_code: string | null
           sms_confirmation_opt_in: boolean
+          source: string
           stripe_session_id: string | null
+          track_preference: string | null
           whatsapp_sent_at: string | null
         }
         Insert: {
@@ -499,7 +650,9 @@ export type Database = {
           phone: string
           referral_code?: string | null
           sms_confirmation_opt_in?: boolean
+          source?: string
           stripe_session_id?: string | null
+          track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
         Update: {
@@ -522,7 +675,9 @@ export type Database = {
           phone?: string
           referral_code?: string | null
           sms_confirmation_opt_in?: boolean
+          source?: string
           stripe_session_id?: string | null
+          track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
         Relationships: []
@@ -548,6 +703,45 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reason?: string
+        }
+        Relationships: []
+      }
+      tutors: {
+        Row: {
+          active: boolean
+          available_formats: string[]
+          bio_en: string | null
+          bio_ro: string | null
+          created_at: string
+          id: string
+          languages: string[]
+          name: string
+          photo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          available_formats?: string[]
+          bio_en?: string | null
+          bio_ro?: string | null
+          created_at?: string
+          id?: string
+          languages?: string[]
+          name: string
+          photo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          available_formats?: string[]
+          bio_en?: string | null
+          bio_ro?: string | null
+          created_at?: string
+          id?: string
+          languages?: string[]
+          name?: string
+          photo_url?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

@@ -603,7 +603,16 @@ Deno.serve(async (req) => {
     }
 
     if (action === "update_status") {
-      if (typeof id !== "string" || !["new", "contacted", "confirmed"].includes(lead_status)) {
+      const ALLOWED_LEAD_STATUSES = [
+        "new",
+        "contacted",
+        "qualified",
+        "no_response",
+        "not_suitable",
+        "spam",
+        "converted",
+      ];
+      if (typeof id !== "string" || !ALLOWED_LEAD_STATUSES.includes(lead_status)) {
         return jsonResponse({ error: "Status invalid" });
       }
 
