@@ -363,8 +363,6 @@ const translations = {
     // Kids Form
     kidsBadge: "Cursuri pentru copii",
     kidsTitle: "Curs de Arabă pentru Copii",
-    kidsDesc: "Avem deja 3 copii înscriși! Doar prezență fizică.",
-    kidsAlready: "3 copii deja înscriși — locuri limitate!",
     kidsParentName: "Numele părintelui",
     kidsChildName: "Numele copilului",
     kidsChildNamePlaceholder: "ex: Maria",
@@ -1126,8 +1124,6 @@ const translations = {
 
     kidsBadge: "Kids Courses",
     kidsTitle: "Arabic Course for Kids",
-    kidsDesc: "We already have 3 kids enrolled! Physical presence only.",
-    kidsAlready: "3 kids already enrolled — limited spots!",
     kidsParentName: "Parent's Name",
     kidsChildName: "Child's Name",
     kidsChildNamePlaceholder: "e.g.: Maya",
