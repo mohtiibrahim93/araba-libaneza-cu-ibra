@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formTypeLabels, leadStatusLabels } from "./types";
+import { formTypeLabels, leadStatusLabels, LEAD_STATUSES } from "./types";
 import type { LeadStatus, Registration } from "./types";
 
 interface Props {
@@ -89,46 +89,29 @@ const RegistrationsTable = ({
             <TableCell>{r.center || "—"}</TableCell>
             <TableCell>{r.format || "—"}</TableCell>
             <TableCell>
-              {r.form_type === "private" ? (
-                <div className="flex min-w-[252px] gap-1">
-                  {(["new", "contacted", "confirmed"] as LeadStatus[]).map((status) => {
-                    const isLoading =
-                      updatingStatus?.id === r.id && updatingStatus.status === status;
-                    return (
-                      <Button
-                        key={status}
-                        type="button"
-                        size="sm"
-                        variant={(r.lead_status || "new") === status ? "default" : "outline"}
-                        className="h-8 min-w-[78px] px-2 text-xs"
-                        onClick={() => onStatusChange(r.id, status)}
-                        disabled={updatingStatus?.id === r.id}
-                        aria-busy={isLoading}
-                      >
-                        {isLoading ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          leadStatusLabels[status]
-                        )}
-                      </Button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <Select
-                  value={r.lead_status || "new"}
-                  onValueChange={(value) => onStatusChange(r.id, value as LeadStatus)}
+              <Select
+                value={r.lead_status || "new"}
+                onValueChange={(value) => onStatusChange(r.id, value as LeadStatus)}
+                disabled={updatingStatus?.id === r.id}
+              >
+                <SelectTrigger
+                  className="h-8 w-[160px]"
+                  aria-busy={updatingStatus?.id === r.id}
                 >
-                  <SelectTrigger className="h-8 w-[130px]">
+                  {updatingStatus?.id === r.id ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="new">{leadStatusLabels.new}</SelectItem>
-                    <SelectItem value="contacted">{leadStatusLabels.contacted}</SelectItem>
-                    <SelectItem value="confirmed">{leadStatusLabels.confirmed}</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
+                  )}
+                </SelectTrigger>
+                <SelectContent>
+                  {LEAD_STATUSES.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {leadStatusLabels[status]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </TableCell>
             <TableCell>{r.child_age || "—"}</TableCell>
             <TableCell className="max-w-[200px] truncate">{r.notes || "—"}</TableCell>
