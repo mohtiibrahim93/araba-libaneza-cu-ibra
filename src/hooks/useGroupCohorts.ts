@@ -10,18 +10,39 @@ export interface Cohort {
   schedule_label_en: string;
   max_seats: number;
   sort_order: number;
+  status: CohortStatus;
   taken: number;
   seatsLeft: number;
   full: boolean;
 }
 
+export type CohortStatus =
+  | "draft"
+  | "forming"
+  | "minimum_reached"
+  | "confirmed"
+  | "full"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
+
+// Statuses that should appear on the public site / registration form.
+// `draft` is admin-only; `completed`/`cancelled` are historical; `in_progress`
+// is mid-cohort and not joinable; `full` is shown but as waitlist.
+const PUBLIC_COHORT_STATUSES: CohortStatus[] = [
+  "forming",
+  "minimum_reached",
+  "confirmed",
+  "full",
+];
+
 async function fetchCohorts(formType: "group" | "kids", level?: string | null): Promise<Cohort[]> {
   const today = new Date().toISOString().slice(0, 10);
   let q = supabase
     .from("group_cohorts")
-    .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order")
+    .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status")
     .eq("form_type", formType)
-    .eq("is_active", true)
+    .in("status", PUBLIC_COHORT_STATUSES)
     .gte("start_date", today)
     .order("sort_order", { ascending: true })
     .order("start_date", { ascending: true });
@@ -48,6 +69,7 @@ async function fetchCohorts(formType: "group" | "kids", level?: string | null): 
     return {
       ...c,
       form_type: c.form_type as "group" | "kids",
+      status: (c.status as CohortStatus) ?? "forming",
       taken,
       seatsLeft: Math.max(0, c.max_seats - taken),
       full: taken >= c.max_seats,
