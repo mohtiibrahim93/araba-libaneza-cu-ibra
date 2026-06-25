@@ -765,6 +765,14 @@ export type Database = {
           taken: number
         }[]
       }
+      get_group_capacity_counts: {
+        Args: never
+        Returns: {
+          form_type: string
+          level: string
+          taken: number
+        }[]
+      }
       get_kids_slot_signup_counts: {
         Args: never
         Returns: {

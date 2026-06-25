@@ -10,9 +10,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2 } from "lucide-react";
+
+type CohortStatus =
+  | "draft"
+  | "forming"
+  | "minimum_reached"
+  | "confirmed"
+  | "full"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
+
+const STATUSES: { value: CohortStatus; label: string }[] = [
+  { value: "draft", label: "Draft (ascuns)" },
+  { value: "forming", label: "În formare" },
+  { value: "minimum_reached", label: "Minim atins" },
+  { value: "confirmed", label: "Confirmată" },
+  { value: "full", label: "Plină (waitlist)" },
+  { value: "in_progress", label: "În desfășurare" },
+  { value: "completed", label: "Încheiată" },
+  { value: "cancelled", label: "Anulată" },
+];
 
 interface Cohort {
   id: string;
@@ -23,6 +43,7 @@ interface Cohort {
   schedule_label_en: string;
   max_seats: number;
   is_active: boolean;
+  status: CohortStatus;
   sort_order: number;
 }
 
@@ -38,6 +59,7 @@ const blank = (): Cohort => ({
   schedule_label_en: "",
   max_seats: 10,
   is_active: true,
+  status: "forming",
   sort_order: 0,
 });
 
@@ -238,9 +260,22 @@ const CohortsAdmin = ({ password }: Props) => {
                 value={r.schedule_label_en}
                 onChange={(e) => update(r.id, { schedule_label_en: e.target.value })}
               />
-              <div className="flex items-center gap-2">
-                <Switch checked={r.is_active} onCheckedChange={(v) => update(r.id, { is_active: v })} />
-                <span className="text-xs text-muted-foreground">Activ</span>
+              <div className="min-w-[150px]">
+                <Select
+                  value={r.status ?? (r.is_active ? "forming" : "cancelled")}
+                  onValueChange={(v) => update(r.id, { status: v as CohortStatus })}
+                >
+                  <SelectTrigger className="h-9 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {STATUSES.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex gap-1">
                 <Button size="sm" onClick={() => save(r)} disabled={savingId === r.id}>

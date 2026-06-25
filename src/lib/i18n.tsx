@@ -758,6 +758,11 @@ const translations = {
     cohortSeatsLeft: "locuri rămase",
     cohortFull: "Lista de așteptare",
     cohortSelected: "Selectat",
+    // Status badges (§32, §46) — surfaced on cohort cards
+    cohortStatusForming: "În formare",
+    cohortStatusMinReached: "Minim atins",
+    cohortStatusConfirmed: "Confirmată",
+    cohortStatusInProgress: "În desfășurare",
     // Kids weekly slots
     kidsSlotPickerLabel: "Alege ora săptămânală",
     kidsSlotPickerHelp: "Cursurile sunt recurente săptămânal. Alege ziua și formatul preferat.",
@@ -1512,6 +1517,10 @@ const translations = {
     cohortSeatsLeft: "spots left",
     cohortFull: "Waitlist",
     cohortSelected: "Selected",
+    cohortStatusForming: "Forming",
+    cohortStatusMinReached: "Minimum reached",
+    cohortStatusConfirmed: "Confirmed",
+    cohortStatusInProgress: "In progress",
     kidsSlotPickerLabel: "Pick a weekly time",
     kidsSlotPickerHelp: "Classes recur every week. Pick the day and format that fits.",
     kidsSlotPickerLoading: "Loading times…",
