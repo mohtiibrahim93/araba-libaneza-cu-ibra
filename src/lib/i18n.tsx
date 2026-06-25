@@ -758,6 +758,11 @@ const translations = {
     cohortSeatsLeft: "locuri rămase",
     cohortFull: "Lista de așteptare",
     cohortSelected: "Selectat",
+    // Status badges (§32, §46) — surfaced on cohort cards
+    cohortStatusForming: "În formare",
+    cohortStatusMinReached: "Minim atins",
+    cohortStatusConfirmed: "Confirmată",
+    cohortStatusInProgress: "În desfășurare",
     // Kids weekly slots
     kidsSlotPickerLabel: "Alege ora săptămânală",
     kidsSlotPickerHelp: "Cursurile sunt recurente săptămânal. Alege ziua și formatul preferat.",
