@@ -26,24 +26,23 @@ function buildKey(formType: string, level: string | null | undefined) {
 }
 
 async function fetchAll(): Promise<Record<string, CapacityRow>> {
-  const [{ data: caps }, { data: regs }] = await Promise.all([
+  // Counts come from a SECURITY DEFINER RPC that already gates on
+  // qualified+converted lead statuses (§15). Anon clients have no
+  // direct SELECT on registrations, so we must NOT query it here.
+  const [{ data: caps }, { data: counts }] = await Promise.all([
     supabase.from("group_capacities").select("form_type, level, max_seats, min_seats"),
-    supabase
-      .from("registrations")
-      .select("form_type, level")
-      .in("form_type", ["group", "kids"]),
+    supabase.rpc("get_group_capacity_counts"),
   ]);
 
-  const counts = new Map<string, number>();
-  (regs || []).forEach((r) => {
-    const key = buildKey(r.form_type, (r as { level?: string | null }).level ?? null);
-    counts.set(key, (counts.get(key) || 0) + 1);
+  const countMap = new Map<string, number>();
+  (counts || []).forEach((c: { form_type: string; level: string | null; taken: number }) => {
+    countMap.set(buildKey(c.form_type, c.level ?? null), Number(c.taken) || 0);
   });
 
   const out: Record<string, CapacityRow> = {};
   (caps || []).forEach((c) => {
     const key = buildKey(c.form_type, c.level);
-    out[key] = { ...c, taken: counts.get(key) || 0 };
+    out[key] = { ...c, taken: countMap.get(key) || 0 };
   });
   return out;
 }
