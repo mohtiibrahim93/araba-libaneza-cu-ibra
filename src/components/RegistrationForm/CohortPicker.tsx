@@ -4,6 +4,20 @@ import { Label } from "@/components/ui/label";
 import { Calendar, Users, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+function statusBadge(status: Cohort["status"], t: ReturnType<typeof useI18n>["t"]) {
+  switch (status) {
+    case "minimum_reached":
+      return { label: t.cohortStatusMinReached, tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30" };
+    case "confirmed":
+      return { label: t.cohortStatusConfirmed, tone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30" };
+    case "in_progress":
+      return { label: t.cohortStatusInProgress, tone: "bg-muted text-muted-foreground border-border" };
+    case "forming":
+    default:
+      return { label: t.cohortStatusForming, tone: "bg-primary/10 text-primary border-primary/30" };
+  }
+}
+
 interface Props {
   formType: "group" | "kids";
   level?: string | null;
@@ -50,6 +64,7 @@ const CohortPicker = ({ formType, level, selectedCohortId, onSelect }: Props) =>
           const active = c.id === selectedCohortId;
           const label = lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;
           const lowSeats = c.seatsLeft > 0 && c.seatsLeft < 5;
+          const badge = statusBadge(c.status, t);
           return (
             <button
               key={c.id}
@@ -62,9 +77,14 @@ const CohortPicker = ({ formType, level, selectedCohortId, onSelect }: Props) =>
                   : "border-border bg-background hover:border-primary/50",
               )}
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
-                <Calendar className="w-3.5 h-3.5" />
-                {t.cohortStartsOn}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {t.cohortStartsOn}
+                </div>
+                <span className={cn("inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium", badge.tone)}>
+                  {badge.label}
+                </span>
               </div>
               <p className="mt-0.5 text-sm font-semibold text-foreground">
                 {formatStart(c.start_date, lang)}
