@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, sort_order")
+        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -110,6 +110,7 @@ Deno.serve(async (req) => {
         schedule_label_en,
         max_seats,
         is_active,
+        status,
         sort_order,
       } = body;
       if (!["group", "kids"].includes(form_type)) {
@@ -122,7 +123,10 @@ Deno.serve(async (req) => {
       if (!Number.isInteger(max) || max < 1) {
         return jsonResponse({ error: "Locuri invalide" });
       }
-      const payload = {
+      const ALLOWED_COHORT_STATUSES = [
+        "draft","forming","minimum_reached","confirmed","full","in_progress","completed","cancelled",
+      ];
+      const payload: Record<string, unknown> = {
         form_type,
         level: form_type === "kids" ? null : (cLevel || null),
         start_date,
@@ -132,6 +136,9 @@ Deno.serve(async (req) => {
         is_active: is_active !== false,
         sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
       };
+      if (typeof status === "string" && ALLOWED_COHORT_STATUSES.includes(status)) {
+        payload.status = status;
+      }
       if (typeof cId === "string" && cId) {
         const { data, error } = await supabase
           .from("group_cohorts").update(payload).eq("id", cId).select().single();
