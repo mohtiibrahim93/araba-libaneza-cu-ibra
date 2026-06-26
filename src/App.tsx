@@ -25,6 +25,7 @@ const PrivateLead = lazy(() => import("./pages/PrivateLead"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const CursGrup = lazy(() => import("./pages/courses/CursGrup"));
+const CursGrupLevel = lazy(() => import("./pages/courses/CursGrupLevel"));
 const CursPrivate = lazy(() => import("./pages/courses/CursPrivate"));
 const CursCopii = lazy(() => import("./pages/courses/CursCopii"));
 const CursOnline = lazy(() => import("./pages/courses/CursOnline"));
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/cursuri/grup" element={<CursGrup />} />
+            <Route path="/cursuri/grup/:level" element={<CursGrupLevel />} />
             <Route path="/cursuri/private" element={<CursPrivate />} />
             <Route path="/cursuri/copii" element={<CursCopii />} />
             <Route path="/cursuri/online" element={<CursOnline />} />

@@ -821,6 +821,60 @@ const translations = {
     // Navbar — courses dropdown
     navCoursesDropdownLabel: "Deschide meniul cursurilor",
 
+    // Course landing — shared
+    formatOnlineLabel: "Online",
+    formatFizicLabel: "Fizic (la centru)",
+    priceOnlineShort: "Online",
+    priceFizicShort: "Fizic",
+    priceSurchargeNote: "Cursurile fizice sunt cu 40% mai scumpe decât online (acoperă chiria sălii și deplasarea).",
+    priceLeiPerMonth: "LEI / lună",
+    priceLeiPerLesson: "LEI / lecție",
+
+    // /cursuri/grup — level grid
+    grupChooseLevelTitle: "Alege-ți nivelul",
+    grupChooseLevelDesc: "Curriculum complet pe lecții, ore și obiective pentru fiecare nivel CEFR. Apasă pe nivel pentru detalii și înscriere.",
+    grupLevelCardLessons: "lecții",
+    grupLevelCardHours: "ore",
+    grupLevelCardViewFull: "Vezi curriculum + înscriere →",
+    grupLevelInPrepBadge: "În pregătire",
+
+    // Don't know your level block (shared on /cursuri/grup)
+    dontKnowLevelTitle: "Nu știi ce nivel ți se potrivește?",
+    dontKnowLevelDesc: "Sunt 3 moduri rapide de a afla — alege ce ți se potrivește:",
+    dontKnowOptQuizTitle: "Fă quiz-ul (2 min)",
+    dontKnowOptQuizDesc: "Răspunde la câteva întrebări și îți recomandăm nivelul potrivit.",
+    dontKnowOptTestTitle: "Test la centru (gratuit)",
+    dontKnowOptTestDesc: "Programează un test rapid 1:1 cu profesorul, fizic sau online.",
+    dontKnowOptWhatsAppTitle: "Vorbim pe WhatsApp",
+    dontKnowOptWhatsAppDesc: "Îți răspundem direct și te ajutăm să alegi.",
+
+    // /cursuri/grup/:level — per-level page
+    levelPageBackToGrup: "← Înapoi la toate nivelurile",
+    levelPageStatLessons: "Lecții",
+    levelPageStatHours: "Ore totale",
+    levelPageStatTrack: "Track",
+    levelPageCurriculumTitle: "Curriculum complet",
+    levelPageRegisterTitle: "Înscrie-te la acest nivel",
+    levelPageRegisterDesc: "Completează formularul — te contactăm să confirmăm grupa și să stabilim startul.",
+    levelPageInPrepTitle: "Grupa este încă în pregătire",
+    levelPageInPrepDesc: "Înscrie-te acum și te anunțăm imediat ce avem suficienți cursanți pentru a porni grupa.",
+
+    // /cursuri/private — MSA partners note
+    privatePersonalizedTitle: "Personalizat pentru tine",
+    privatePersonalizedDesc: "În prima lecție îți testăm nivelul și construim un parcurs adaptat scopului tău: călătorii, familie, muncă, media. Dacă ai nevoie de arabă standard (fuṣḥā / MSA) în loc de libaneză, îți recomandăm parteneri de încredere — la același tarif.",
+
+    // /cursuri/copii — format cards
+    copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
+    copiiFormatPrivateTitle: "Privat 1:1 (orice vârstă)",
+    copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic la centru sau online.",
+    copiiFormatGroupTitle: "Grup (minim 4 copii)",
+    copiiFormatGroupDesc: "Activități prin joc într-o grupă mică. Fizic la centru (orice vârstă) sau online (de la 10 ani).",
+
+    // /cursuri/online — thin landing
+    onlineLandingTitle: "Toate cursurile sunt disponibile online",
+    onlineLandingDesc: "Orice curs — grup, privat sau copii — poate fi urmat online prin Zoom. Nu există o pagină separată „online”: alege tipul de curs și selectezi formatul online la înscriere.",
+    onlineLandingPickCourse: "Alege tipul de curs:",
+
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -1620,6 +1674,53 @@ const translations = {
     // Navbar — courses dropdown
     navCoursesDropdownLabel: "Open courses menu",
 
+    // Course landing — shared
+    formatOnlineLabel: "Online",
+    formatFizicLabel: "In person (at the center)",
+    priceOnlineShort: "Online",
+    priceFizicShort: "In person",
+    priceSurchargeNote: "In-person classes are 40% more expensive than online (covers room rent and travel).",
+    priceLeiPerMonth: "LEI / month",
+    priceLeiPerLesson: "LEI / lesson",
+
+    grupChooseLevelTitle: "Pick your level",
+    grupChooseLevelDesc: "Full curriculum, lessons, hours and objectives for each CEFR level. Click a level for details and registration.",
+    grupLevelCardLessons: "lessons",
+    grupLevelCardHours: "hours",
+    grupLevelCardViewFull: "View curriculum + register →",
+    grupLevelInPrepBadge: "In preparation",
+
+    dontKnowLevelTitle: "Not sure which level fits you?",
+    dontKnowLevelDesc: "Three quick ways to find out — pick whichever works for you:",
+    dontKnowOptQuizTitle: "Take the quiz (2 min)",
+    dontKnowOptQuizDesc: "Answer a few questions and we'll recommend the right level.",
+    dontKnowOptTestTitle: "Test at the center (free)",
+    dontKnowOptTestDesc: "Book a quick 1:1 test with the instructor, in person or online.",
+    dontKnowOptWhatsAppTitle: "Chat on WhatsApp",
+    dontKnowOptWhatsAppDesc: "We'll reply directly and help you choose.",
+
+    levelPageBackToGrup: "← Back to all levels",
+    levelPageStatLessons: "Lessons",
+    levelPageStatHours: "Total hours",
+    levelPageStatTrack: "Track",
+    levelPageCurriculumTitle: "Full curriculum",
+    levelPageRegisterTitle: "Register for this level",
+    levelPageRegisterDesc: "Fill out the form — we'll confirm the group and the start date with you.",
+    levelPageInPrepTitle: "This group is still forming",
+    levelPageInPrepDesc: "Register now and we'll notify you as soon as we have enough students to start the group.",
+
+    privatePersonalizedTitle: "Personalized for you",
+    privatePersonalizedDesc: "In the first lesson we assess your level and build a path around your goals: travel, family, work, media. If you need Modern Standard Arabic (fuṣḥā / MSA) instead of Lebanese, we'll recommend trusted partners — at the same rate.",
+
+    copiiFormatChoiceTitle: "Two formats, depending on age",
+    copiiFormatPrivateTitle: "Private 1:1 (any age)",
+    copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person at the center or online.",
+    copiiFormatGroupTitle: "Group (minimum 4 kids)",
+    copiiFormatGroupDesc: "Play-based activities in a small group. In person at the center (any age) or online (from age 10).",
+
+    onlineLandingTitle: "Every course is available online",
+    onlineLandingDesc: "Any course — group, private or kids — can be taken online via Zoom. There's no separate \"online\" page: pick the course type and select the online format at registration.",
+    onlineLandingPickCourse: "Pick a course type:",
   },
 } as const;
 

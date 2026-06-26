@@ -20,6 +20,8 @@ interface Props {
   onGroupMonthsChange: (months: 1 | 3) => void;
   cohortId: string | null;
   onCohortChange: (cohort: Cohort | null) => void;
+  /** When true, hide the level selector and show the locked level as read-only. */
+  locked?: boolean;
 }
 
 const MONTHLY_PRICE_BY_LEVEL: Record<LevelType, number> = {
@@ -38,12 +40,28 @@ const GroupFields = ({
   onGroupMonthsChange,
   cohortId,
   onCohortChange,
+  locked = false,
 }: Props) => {
   const { t } = useI18n();
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
+      {locked && level ? (
+        <div className="space-y-2">
+          <Label>{t.mainLeadLevelLabel}</Label>
+          <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+            <span className="font-semibold text-foreground">{level}</span>
+            <span className="text-muted-foreground"> — {
+              level === "A1" ? t.levelA1Subtitle :
+              level === "A2" ? t.levelA2Subtitle :
+              level === "B1" ? t.levelB1Subtitle :
+              level === "B2" ? t.levelB2Subtitle :
+              level === "C1" ? t.levelC1Subtitle : t.levelC2Subtitle
+            }</span>
+          </div>
+        </div>
+      ) : (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
@@ -70,12 +88,13 @@ const GroupFields = ({
         </Select>
         <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
       </div>
+      )}
 
-      <LevelAssessmentModal
+      {!locked && <LevelAssessmentModal
         open={showModal}
         onOpenChange={setShowModal}
         onSelectLevel={onLevelChange}
-      />
+      />}
 
       {level && (
         <CohortPicker
