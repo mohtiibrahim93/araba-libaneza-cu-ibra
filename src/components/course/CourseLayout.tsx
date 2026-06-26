@@ -1,0 +1,228 @@
+import { ReactNode } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import { ChevronRight, MessageCircle } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import ScrollToTop from "@/components/ScrollToTop";
+import CookieConsent from "@/components/CookieConsent";
+import { useI18n } from "@/lib/i18n";
+
+const BASE_URL = "https://centruldearabalibaneza.com";
+const WHATSAPP_URL = "https://wa.me/40763124514";
+
+export interface OtherCourse {
+  to: string;
+  label: string;
+}
+
+interface CourseLayoutProps {
+  /** Path of the page, e.g. "/cursuri/grup" — used for canonical & og:url. */
+  path: string;
+  metaTitle: string;
+  metaDescription: string;
+  /** Schema.org Course payload (without @context/@type — provided here). */
+  courseSchema: Record<string, unknown>;
+  /** Hero image (already imported by the page). */
+  heroImage: string;
+  heroImageAlt: string;
+  badge: string;
+  /** Visible H1 of the page. */
+  h1: string;
+  intro: string;
+  /** Short price tagline shown under the H1, e.g. "de la 500 LEI / lună". */
+  priceLine?: string;
+  features: string[];
+  /** Primary CTA — usually scrolls to the embedded form. */
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  /** Cross-links to the other course pages. */
+  otherCourses: OtherCourse[];
+  children: ReactNode;
+}
+
+const CourseLayout = ({
+  path,
+  metaTitle,
+  metaDescription,
+  courseSchema,
+  heroImage,
+  heroImageAlt,
+  badge,
+  h1,
+  intro,
+  priceLine,
+  features,
+  primaryCtaLabel,
+  primaryCtaHref,
+  otherCourses,
+  children,
+}: CourseLayoutProps) => {
+  const { t } = useI18n();
+  const canonical = `${BASE_URL}${path}`;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: t.courseBreadcrumbHome, item: `${BASE_URL}/` },
+      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/#programs` },
+      { "@type": "ListItem", position: 3, name: h1, item: canonical },
+    ],
+  };
+
+  const fullCourseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    url: canonical,
+    inLanguage: "ar",
+    provider: {
+      "@type": "Organization",
+      name: "Centrul de Arabă Libaneză cu Ibra",
+      sameAs: `${BASE_URL}/`,
+    },
+    ...courseSchema,
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonical} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:type" content="website" />
+        <link rel="alternate" hrefLang="ro" href={canonical} />
+        <link rel="alternate" hrefLang="en" href={canonical} />
+        <link rel="alternate" hrefLang="x-default" href={canonical} />
+        <script type="application/ld+json">{JSON.stringify(fullCourseSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      </Helmet>
+      <Navbar />
+
+      <main className="pt-16">
+        {/* Breadcrumb */}
+        <nav
+          aria-label={t.courseBreadcrumbCourses}
+          className="max-w-6xl mx-auto px-6 pt-6 pb-2 text-xs text-muted-foreground"
+        >
+          <ol className="flex flex-wrap items-center gap-1">
+            <li>
+              <Link to="/" className="hover:text-foreground transition-colors">
+                {t.courseBreadcrumbHome}
+              </Link>
+            </li>
+            <li aria-hidden="true">
+              <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
+            </li>
+            <li>
+              <a href="/#programs" className="hover:text-foreground transition-colors">
+                {t.courseBreadcrumbCourses}
+              </a>
+            </li>
+            <li aria-hidden="true">
+              <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
+            </li>
+            <li className="text-foreground font-medium" aria-current="page">
+              {h1}
+            </li>
+          </ol>
+        </nav>
+
+        {/* Hero */}
+        <section className="max-w-6xl mx-auto px-6 pt-4 pb-12">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-4">
+                {badge}
+              </span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4">
+                {h1}
+              </h1>
+              {priceLine && (
+                <p className="text-lg font-semibold text-foreground mb-4">{priceLine}</p>
+              )}
+              <p className="text-base text-muted-foreground leading-relaxed mb-6">{intro}</p>
+              <ul className="space-y-2 mb-8">
+                {features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+                    <span
+                      aria-hidden="true"
+                      className="mt-1 inline-block w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"
+                    />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={primaryCtaHref}
+                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  {primaryCtaLabel}
+                </a>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+            <div className="order-first lg:order-last">
+              <img
+                src={heroImage}
+                alt={heroImageAlt}
+                width={1200}
+                height={800}
+                loading="eager"
+                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-sm"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Page body */}
+        <div className="max-w-6xl mx-auto px-6 pb-16">{children}</div>
+
+        {/* Other courses */}
+        <section className="bg-muted/50 border-t border-border">
+          <div className="max-w-6xl mx-auto px-6 py-12">
+            <h2 className="text-xl font-bold text-foreground mb-4">{t.courseOtherCoursesTitle}</h2>
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {otherCourses.map((c) => (
+                <li key={c.to}>
+                  <Link
+                    to={c.to}
+                    className="block rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground hover:border-primary/50 hover:bg-muted transition-colors"
+                  >
+                    {c.label}
+                    <ChevronRight className="w-4 h-4 inline ml-1 -mt-0.5 text-muted-foreground" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm">
+              <a href="/#programs" className="text-primary font-medium hover:underline underline-offset-4">
+                {t.courseSeeAllPrograms}
+              </a>
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+      <WhatsAppButton />
+      <ScrollToTop />
+      <CookieConsent />
+    </div>
+  );
+};
+
+export default CourseLayout;
