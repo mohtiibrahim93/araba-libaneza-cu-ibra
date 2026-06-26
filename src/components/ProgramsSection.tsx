@@ -339,9 +339,6 @@ const ProgramsSection = () => {
                       {t.privateBadge}
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
-                    <Link to="/cursuri/private" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
-                      {t.programsSeeFullPage}
-                    </Link>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
 
                     {/* Price */}
