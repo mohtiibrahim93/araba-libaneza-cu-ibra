@@ -26,17 +26,17 @@ const CTASection = () => {
           <a href={PHONE_URL} className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <Phone className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaPhone}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{t.ctaPhoneVal}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t.ctaPhoneVal}</p>
           </a>
           <a href={`mailto:${EMAIL}`} className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <Mail className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaEmail}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{t.ctaEmailVal}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t.ctaEmailVal}</p>
           </a>
           <div className="bg-background rounded-2xl border border-border p-6 text-center">
             <MapPin className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaLocation}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{t.ctaLocationVal}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t.ctaLocationVal}</p>
           </div>
         </div>
 
