@@ -1,54 +1,69 @@
-# Estimare efort & credite — Faze 0–8
+# Launch-Ready Checklist — Arabă Libaneză cu Ibra
 
-Baseline empiric din acest proiect: editare i18n / componentă mică ≈ 0.5–1.5 credite; componentă nouă medie ≈ 2–4; migrație SQL aprobată ≈ 1–2; refactor Edge Function ≈ 2–4; flux nou end-to-end (UI + DB + EF + types) ≈ 6–12. Buffer 15–20% pentru bug-fix după typegen.
+Consolidated todo derived from `.lovable/plan.md` (Phases 0–8) + the most recent gap audit. Phases 0, 1, 2 are already shipped — listed here only as "done" reference.
 
-## Tabel sintetic
+---
 
-| Fază | Scop | Migrații | Edge Func | Comp. noi | Editări | Cost estimat | Bandă | Risc |
-|---|---|---|---|---|---|---|---|---|
-| 0 | Hygiene (counters hardcoded, env) | 0 | 0 | 0 | 2 | **~1** ✅ DONE | ieftin | — |
-| 1 | Status vocab + tabele (locations/tutors/course_requests) | 1 mare | 1 (allow-list) | 0 | ~8 | **~10** ✅ DONE | mediu | — |
-| 2 | Counter accuracy + cohort.status reader + CTA copy | 0–1 | 1 (RPC gate qualified) | 0 | 4–6 (`useGroupCapacity`, `useGroupCohorts`, `CohortsAdmin`, cohort cards) | **6–9** | mediu | mediu — atinge UI public |
-| 3 | WhatsApp workflow + "Add WhatsApp Lead" admin | 1 (whatsapp_status, follow_up_due_at, notes) | 1 mare (add_whatsapp_lead, mark_replied/no_reply) | 1 (AddLeadDialog) | 3 (AdminNotifications, RegistrationsTable, filters) | **8–11** | mediu-scump | mic |
-| 4 | `course_requests` public form + admin clustering | 0 | 1 (list/cluster/convert-to-cohort) | 2 (public RequestForm, admin ClusterView) | 2 (Index link, i18n) | **9–13** | scump | mediu |
-| 5 | Structured schedule + locations reader + public "Current Groups" + /schedule page | 0–1 (back-fill) | 1 (cohort upsert cu câmpuri noi) | 3 (CurrentGroupsSection, SchedulePage, LocationBadge) | 4 (`useGroupCohorts`, `CohortsAdmin`, ProgramsSection, i18n) | **12–16** | **cel mai scump** | mare — UI public + admin + migrare schedule_label |
-| 6 | Track (Arabizi vs script) pe form, admin, quiz, cards | 0 | 1 mic | 1 (TrackSelector) | 4 (RegistrationForm, CohortsAdmin, FindYourTrackQuiz, cards) | **6–9** | mediu | mic |
-| 7 | Pass nativ RO/EN copy + CTA legate de cohort.status | 0 | 0 | 0 | 1 mare (`i18n.tsx`) + ~3 componente | **3–5** | ieftin | mic |
-| 8 | Admin dashboard cards (§28), lead detail unificat (§39), archive-vs-delete (§29/§44), PrivateStatus refactor | 1 (`archived_at`) | 1 (archive action, dezactivat delete) | 2 (DashboardCards, UnifiedLeadDetail) | 3 (PrivateStatus rewrite, CohortsAdmin, RegistrationsTable) | **10–14** | scump | mediu |
+## Already shipped ✅
+- **Phase 0** — Hygiene: removed hardcoded counters, mobile cookie banner above CTA, env audit clean.
+- **Phase 1** — Status vocabulary (`lead_status` ×7), `group_cohorts.status`, `track_preference`, `source`, new tables `locations` / `tutors` / `course_requests`, admin status select.
+- **Phase 2** — Counters gated to `qualified + converted`, public `get_group_capacity_counts` RPC, cohort `status` drives UI with dual-write to `is_active`, color-coded cohort badges.
 
-**Total rămas (2–8): ~54–77 credite**, median ~65. Cu buffer 15% → **~62–88**.
+---
 
-## Unde se duc creditele
+## Still to do — ordered by value/credit
 
-- **Cel mai scump = Faza 5** (3 componente publice noi + migrare dual-write schedule_label → structured + admin UI nou + reader joins). Singura fază cu impact vizibil pe homepage și SEO.
-- **Următoarele scumpe = Fazele 3, 4, 8** — toate adaugă fluxuri admin end-to-end (UI + EF action + types). Costul vine din Edge Function refactor + dialog UI nou, nu din SQL.
-- **Ieftine = 0, 2, 6, 7.** Faza 2 e ieftină ca scop dar **valoare/credit foarte mare** (rezolvă 2 bug-uri de bază: spam inflate + duality counter).
-- **Migrații SQL = cel mai bun raport.** O migrație ≈ 1–2 credite deblochează muncă pe 3–4 faze (vezi Faza 1).
-- **Edge Function changes = cel mai prost raport** când trebuie redeployate des — fiecare touch ≈ 2–4 credite.
+### 1. Phase 7 — Native RO/EN copy pass *(quick win, 3–5 cr)*
+- Sweep `src/lib/i18n.tsx` for awkward phrasing, mixed register, leftover hardcoded strings.
+- Wire dynamic CTA labels to `cohort.status` (e.g. "Înscrie-te" vs "Listă de așteptare" vs "Grup în formare").
+- Verify Hero, Programs tabs, CohortPicker, Footer, Cookie banner, Quiz, Auth page.
 
-## Recomandare în ~88 credite
+### 2. Phase 6 — Track selector (Arabizi vs Script) *(6–9 cr)*
+- New `<TrackSelector>` in `RegistrationForm`.
+- Persist to `registrations.track_preference` + show on admin table.
+- Surface result of `/quiz` so it pre-selects the track on the form.
+- Display track badge on cohort cards.
 
-Ordine optimă valoare/credit:
+### 3. Phase 3 — WhatsApp lead workflow *(8–11 cr)*
+- Migration: `whatsapp_status`, `follow_up_due_at`, `notes` on registrations.
+- Edge function actions: `add_whatsapp_lead`, `mark_replied`, `mark_no_reply`.
+- Admin `<AddLeadDialog>` + filters + due-date column in `RegistrationsTable`.
+- Admin notification when a WhatsApp lead is overdue.
 
-1. **Faza 2** (6–9) → fix counters, deblochează CTA dinamic. **Must-do.**
-2. **Faza 7** (3–5) → ieftin, finisează ce e deja shipped. **Quick win.**
-3. **Faza 6** (6–9) → track-ul completează promisiunea quiz-ului existent.
-4. **Faza 3** (8–11) → WhatsApp e canalul tău real de leaduri.
-5. **Faza 8** (10–14) → fix regresia `PrivateStatus` + archive (datorie tehnică).
-6. **Faza 4** (9–13) → course_requests; valoare doar dacă vine volum din /quiz.
-7. **Faza 5** (12–16) → ultima, pentru că e cea mai scumpă și depinde de 2+3+6.
+### 4. Phase 8 — Admin polish & tech-debt *(10–14 cr)*
+- Fix `PrivateStatus.tsx` regression (terminal statuses render empty progress).
+- Archive-vs-delete: `archived_at` column, edge function archive action, disable destructive delete (§29/§44).
+- Unified lead detail view (§39) shared by Group + Private.
+- Admin dashboard summary cards (§28): leads by status, cohort fill %, this-week funnel.
 
-Cumulat: 2+7+6+3+8 = **~33–48 credite** (foarte confortabil sub 88, lasă spațiu pentru bug-fix).
-Adaugă 4: **~42–61**. Încă safe.
-Adaugă 5: **~54–77**. La limită, dar încape.
+### 5. Phase 4 — Public course-request form + admin clustering *(9–13 cr)* — optional, only if demand signals
+- Public `<RequestForm>` writing to `course_requests`.
+- Admin cluster view (group requests by level/track/city) + "convert cluster to cohort" action.
 
-**Unde să te oprești dacă vrei marjă:** după Faza 8 (cumulat ~43–61). Faza 4 și 5 numai dacă ai semnale de cerere (forms abandonate, întrebări repetate pe WhatsApp despre orar/locație).
+### 6. Phase 5 — Structured schedule + locations + `/schedule` page *(12–16 cr, most expensive)* — last
+- Back-fill `schedule_label` into structured day/time/location fields.
+- Public `<CurrentGroupsSection>` on homepage + dedicated `/schedule` route.
+- `<LocationBadge>` reading from `locations` table.
+- Admin cohort editor uses structured fields, drops free-text `schedule_label`.
 
-**Unde să NU te oprești:** după Faza 2. Costul 6–9 elimină inflația counter-elor cu spam — fără ea, restul muncii e construită pe numere greșite.
+---
 
-## Ce urmează
+## Cross-cutting pre-launch QA (run after Phase 7)
+- Re-run `docs/PRODUCT_QA_STANDARD.md` §51 scenarios end-to-end.
+- Lighthouse pass (mobile): LCP < 2.5 s, no CLS on Hero, image dimensions present.
+- Verify SEO: title casing, JSON-LD LocalBusiness + Course, sitemap submitted in GSC ✅, no duplicate `#programs` / `#quiz` IDs.
+- Verify analytics opt-in: GA4 + Pixel only after cookie consent; `<noscript>` Pixel at start of `<body>`.
+- Test all 4 Program CTAs → form opens with correct `courseType` / `format` / `lessonType`.
+- Test `/auth` Google sign-in + `/admin` gating.
+- Mobile: cards stack, price table scrolls, cookie bar doesn't cover sticky CTA.
+- Dark mode contrast check on red accent.
 
-Recomand să kick-off **Faza 2** acum (cel mai bun raport valoare/credit, ~6–9 credite, deblochează CTA dinamic și fix-ul counter spam). Înainte de start am nevoie de 2 decizii rapide:
+---
 
-1. **Gating counter §15**: număr doar `qualified + converted`, sau și `contacted`? (standardul zice "qualified only"; recomand qualified+converted).
-2. **`is_active` deprecation**: îl păstrăm scris dublu (dual-write) pentru un release, sau migrăm direct la `status` și ștergem `is_active` într-o singură migrație? (recomand dual-write 1 fază, apoi drop în Faza 5).
+## Budget snapshot
+- Path A (must-ship): Phases 7 + 6 + 3 + 8 = **~27–39 credits**
+- Path B (full plan): + 4 + 5 = **~48–68 credits**
+- Recommendation: ship Path A, then decide on 4/5 based on real demand.
+
+## Suggested next action
+Start with **Phase 7** (cheapest, finishes what's already shipped) so the public surface reads natively before adding more features.
