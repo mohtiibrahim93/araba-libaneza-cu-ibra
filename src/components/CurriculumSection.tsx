@@ -92,7 +92,7 @@ const CurriculumSection = () => {
                 <StatsRow lvl={lvl} />
                 <p className="text-sm text-foreground mb-3">
                   <span className="font-semibold">{t.curriculumObjective}</span>{" "}
-                  <span className="text-muted-foreground">{lvl.obj}</span>
+                  <span className="text-muted-foreground">{lvl.objective}</span>
                 </p>
                 {lvl.items && <ItemList items={lvl.items} />}
                 {lvl.spokenCore && (
