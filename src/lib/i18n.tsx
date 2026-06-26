@@ -828,6 +828,7 @@ const translations = {
     priceFizicShort: "Fizic",
     priceSurchargeNote: "Cursurile fizice sunt cu 40% mai scumpe decât online (acoperă chiria sălii și deplasarea).",
     priceLeiPerMonth: "LEI / lună",
+   priceFromLabel: "De la",
     priceLeiPerLesson: "LEI / lecție",
 
     // /cursuri/grup — level grid
@@ -1681,6 +1682,7 @@ const translations = {
     priceFizicShort: "In person",
     priceSurchargeNote: "In-person classes are 40% more expensive than online (covers room rent and travel).",
     priceLeiPerMonth: "LEI / month",
+   priceFromLabel: "From",
     priceLeiPerLesson: "LEI / lesson",
 
     grupChooseLevelTitle: "Pick your level",
