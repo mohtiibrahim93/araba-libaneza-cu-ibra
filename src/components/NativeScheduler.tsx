@@ -298,7 +298,7 @@ const NativeScheduler = ({
         startISO: confirmed.start_at,
         endISO: endIso,
         url: manageUrl,
-        organizerEmail: "mohtiibrahim@gmail.com",
+        organizerEmail: "marhaba@centruldearabalibaneza.com",
         organizerName: "Ibra — Centrul de Arabă Libaneză",
         attendeeEmail: email || undefined,
         attendeeName: name || undefined,

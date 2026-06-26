@@ -140,7 +140,7 @@ const BookingManageInner = () => {
       startISO: booking.start_at,
       endISO: booking.end_at,
       url: manageUrl,
-      organizerEmail: "mohtiibrahim@gmail.com",
+      organizerEmail: "marhaba@centruldearabalibaneza.com",
       organizerName: "Ibra — Centrul de Arabă Libaneză",
       attendeeEmail: booking.student_email,
       attendeeName: booking.student_name,
