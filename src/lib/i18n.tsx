@@ -416,6 +416,13 @@ const translations = {
     cookieLink: "Politica de confidențialitate",
     cookieAccept: "Accept",
     cookieDecline: "Refuz",
+    cookieClose: "Închide",
+
+    // Auth page
+    authTitle: "Autentificare",
+    authDesc: "Continuă cu contul tău Google pentru a-ți accesa panoul.",
+    authGoogle: "Continuă cu Google",
+    authError: "Autentificarea a eșuat. Te rugăm să încerci din nou.",
 
     // Common
     labelName: "Nume complet",
@@ -426,8 +433,8 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
-    footer: "© 2026 centrul de araba libaneza. Toate drepturile rezervate.",
-    footerTagline: "Învață arabă libaneză autentică cu profesori nativi în București sau online.",
+    footer: "© 2026 Arabă Libaneză cu Ibra. Toate drepturile rezervate.",
+    footerTagline: "Învață arabă libaneză autentică cu un profesor nativ, în București sau online.",
     footerQuickLinks: "Navigare",
     footerContact: "Contact",
     footerLegal: "Legal",
