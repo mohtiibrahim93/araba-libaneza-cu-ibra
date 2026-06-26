@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { ChevronDown, MessageCircle, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
+import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const WHATSAPP_URL = "https://wa.me/40763124514";
 
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
@@ -198,16 +197,6 @@ const Navbar = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t.navWhatsappLabel}
-            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90"
-          >
-            <MessageCircle className="w-4 h-4" aria-hidden="true" />
-            <span className="hidden sm:inline">{t.navCta}</span>
-          </a>
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden p-2 text-foreground"
