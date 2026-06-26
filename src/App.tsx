@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
+import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import Index from "./pages/Index";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -36,6 +37,11 @@ const PageLoader = () => (
   </div>
 );
 
+const RouteAnalytics = () => {
+  useRouteAnalytics();
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -43,6 +49,7 @@ const App = () => (
       <Sonner />
       <I18nProvider>
       <BrowserRouter>
+        <RouteAnalytics />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
