@@ -1,77 +1,98 @@
-# Curriculum restructure — align site with uploaded CEFR document
+## Restructure: course pages, level pages, pricing
 
-## Recommendation
+### 1. Centralize pricing — `src/lib/pricing.ts` (new)
 
-**Option chosen: expand the existing accordion in place (no new pages).** Rationale:
-- The doc is hierarchical (level → lessons/blocks) which maps perfectly to a single accordion with richer content. No new routes/SEO surface needed — `#curriculum-a1` deep links already work.
-- Dedicated per-level pages would duplicate content (already linked from Programs cards) and burn credits on routing/SEO scaffolding without adding much. Can be added later if analytics show demand.
-- Keeps the change frontend-only: data + i18n + one component. Low risk to other sections.
-
-## What changes
-
-### 1. Restructured curriculum data (`src/components/CurriculumSection.tsx`)
-
-Replace the 3-module-per-level shape with per-level objects:
+Single source of truth. Online prices stored; physical auto-derived = `round(online × 1.4)` to nearest 10.
 
 ```ts
-{ id, title, objective, lessons, hours, track, items: string[] }
+export const ONLINE_PRICES = {
+  groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 },
+  privateLesson: 150,                  // → fizic 210
+  kidsPrivateLesson: 150,              // → fizic 210
+  kidsGroupMonthly: 500,               // → fizic 700 (min 4 kids)
+};
+export const physical = (online: number) => Math.round(online * 1.4 / 10) * 10;
+export const formatPrice = (online: number, format: "online"|"fizic") =>
+  format === "fizic" ? physical(online) : online;
 ```
 
-- **A1 / A2**: `items` = full numbered lesson list (30 / 38 entries).
-- **B1 / B2**: `items` = thematic blocks (e.g. "Lessons 2–6 — Verb system consolidation").
-- **C1**: two sub-sections — *Spoken core* (38 lessons) + *Writing strand* (20 units, simultaneous), with a short intro paragraph about the two-track choice.
-- **C2**: 8 modular blocks + design note; mark as "modular — pick your specialization".
+Replace every hardcoded `150 / 210 / 500 / 700 / 800` literal in `ProgramsSection.tsx`, `i18n.tsx` price strings, `quiz`, `compare*`, `PrivateFields`, `GroupFields`, `KidsFields`, `coursePrivatePriceLine`, `courseGrupPriceLine`, etc. with `formatPrice()` + i18n templates `{onlinePrice}/{physicalPrice}`.
 
-### 2. Header stats row inside each accordion item
+Show both prices everywhere a course is shown:
+> Online: 150 LEI · Fizic: 210 LEI (+40%)
 
-Right under the level title (still inside `AccordionContent`, above objective):
+### 2. Course landing pages — simplify (remove embedded form)
 
+These become **descriptions only**, not registration screens.
+
+**`/cursuri/grup`** — description + “Choose your level” grid (A1…C2 cards linking to `/cursuri/grup/[level]`) + “Don't know your level?” block with 3 actions: take quiz (`/quiz`), book test at center (`/trial`), WhatsApp.
+
+**`/cursuri/private`** — description, pricing (online 150 / fizic 210), copy: *“We test your level and personalize for your goals (travel, family, work). If you need Modern Standard Arabic instead of Lebanese, we recommend trusted partners — same pricing.”* + single inline registration form (no level chooser — handled in intake).
+
+**`/cursuri/copii`** — description + two format cards:
+- *Private 1:1* — 150 online / 210 fizic, any age
+- *Group (min 4)* — 500/mo online (from age 10) / 700/mo fizic at center, any age
++ single registration form.
+
+**`/cursuri/online`** — keep as thin landing: short intro (“Every course is available online”) + links to grup / private / copii. No form.
+
+### 3. New per-level pages — `/cursuri/grup/:level` (a1…c2)
+
+New file `src/pages/courses/CursGrupLevel.tsx` (one component, reads `:level` param). Layout:
+
+```text
+┌─────────── Hero: "Nivel A1 — Începător" ──┐
+│ Objective · Lessons · Hours · Track       │
+├──────────────────┬────────────────────────┤
+│ FULL curriculum  │  Registration form     │
+│ (all items from  │  (defaultCourseType=   │
+│  curriculum.ts:  │   group, defaultLevel= │
+│  items / spoken+ │   A1, defaultFormat    │
+│  writing / blocks│   chooser online|fizic │
+│  for C1/C2)      │   with live price)     │
+└──────────────────┴────────────────────────┘
 ```
-[30 lecții] · [45 ore] · [Track: Vorbit]
-```
 
-Small pill badges using existing `bg-primary/10 text-primary` style. No new components.
+- Pulls level data straight from `src/data/curriculum.ts` (already complete) — renders `items`, `spokenCore + writingStrand` for C1, `blocks` for C2. No truncation.
+- Price block reacts to format toggle.
+- Pre-fills `RegistrationFormSection` with `defaultCourseType="group"` + new `defaultLevel` prop.
+- Routes added in `App.tsx`. Sitemap entries added.
+- `CurriculumSection` on the homepage keeps its accordion preview (unchanged) but each level’s “Vezi tot →” deep-links to `/cursuri/grup/[level]#register`.
 
-### 3. Intro paragraph above the accordion
+### 4. Navbar / dropdown / homepage links
 
-Add one short paragraph (existing `curriculumDesc` slot or new key) summarizing: 90-min lessons, 2×/week, writing track optional from C1, C2 = academic/specialized Lebanese (not full fuṣḥā). Pulled verbatim from doc's intro.
+- “Cursuri” dropdown gets a nested “Grup” submenu listing A1–C2 (or a single “Curs de grup” item + the level grid lives on the page).
+- Homepage Programs tabs “Vezi pagina completă →” links unchanged.
+- Footer “Cursuri” unchanged.
 
-### 4. i18n — RO + EN
+### 5. i18n additions
 
-In `src/lib/i18n.tsx`, replace the current `curriculumA1M1/M2/M3` (and same for A2–C2) with:
-- `curriculumA1Lessons` (number), `curriculumA1Hours`, `curriculumA1Track`
-- `curriculumA1Items` (string[] — lesson list)
-- For C1: `curriculumC1SpokenItems[]`, `curriculumC1WritingItems[]`, `curriculumC1TracksIntro`
-- For C2: `curriculumC2Blocks` (array of `{ title, items[] }`), `curriculumC2Note`
+New keys (RO/EN): `chooseYourLevel`, `dontKnowYourLevel`, `takeQuiz`, `bookTestAtCenter`, `partnersMsaNote`, `formatOnline`, `formatFizic`, `priceOnlineLabel`, `priceFizicLabel`, `physicalSurcharge`, per-level meta titles/descriptions, level-page register heading.
 
-Both RO (verbatim from doc) and EN (translated). Delete the old `*M1/M2/M3` keys to keep i18n clean.
+Delete now-unused: `kidsPhysicalOnly` (replaced by new copy), `pricingGroupLevelPrices` literal, etc. — only after grep confirms no other usage.
 
-### 5. Accordion UX tweaks
+### 6. Files
 
-- Lesson lists are long (30–80 items). Render as a 2-column grid on `sm+` (`grid sm:grid-cols-2 gap-x-6 gap-y-1.5`) to avoid a 30-row scroll wall.
-- Keep existing `CheckCircle2` bullet style; reuse current padding/border tokens — no visual redesign.
-- C2: render blocks as nested sub-headings (h4) with their item lists underneath.
+**New**
+- `src/lib/pricing.ts`
+- `src/pages/courses/CursGrupLevel.tsx`
+- (route added to `App.tsx`, 6 paths)
 
-### 6. Anchors & deep links
+**Modified**
+- `src/pages/courses/CursGrup.tsx` — remove `<RegistrationFormSection>`, add level grid + “don’t know” block
+- `src/pages/courses/CursPrivate.tsx` — add partners/MSA copy, dual pricing
+- `src/pages/courses/CursCopii.tsx` — add format cards (private 1:1 vs group min 4), dual pricing
+- `src/pages/courses/CursOnline.tsx` — strip down to thin landing
+- `src/components/RegistrationFormSection.tsx` + `RegistrationForm/GroupFields.tsx` — accept `defaultLevel`, hide level chooser when fixed
+- `src/components/ProgramsSection.tsx` — use `formatPrice()`, dual-price display, level CTAs link to `/cursuri/grup/[level]`
+- `src/lib/i18n.tsx` — new/updated keys (RO + EN)
+- `src/components/Navbar.tsx` + `Footer.tsx` — links
+- `public/sitemap.xml` — add 6 level URLs
 
-Keep existing `#curriculum-a1 … #curriculum-c2` IDs and the hash-open behavior — no changes to `ProgramsSection` / `CursGrup` links.
+**Untouched**
+- `src/data/curriculum.ts` (already complete from your DOCX)
+- Admin, booking, payments, edge functions, DB schema
 
-## Out of scope (not changing)
-
-- No new routes, no per-level pages.
-- No changes to `ProgramsSection`, registration form, pricing, or any other section.
-- No design token / color / typography changes.
-- Curriculum data stays the source of truth for the Group card accordion (preserved).
-
-## Technical notes
-
-- Pure presentation change: one component (`CurriculumSection.tsx`) + i18n strings. No DB, no edge functions, no schema.
-- Estimated ~250–400 new i18n strings total across RO+EN (mostly short lesson titles). Single migration-free edit.
-- No new dependencies.
-
-## Verification
-
-- Build passes (tsgo).
-- Open `/#curriculum-c1` → C1 expands, both tracks visible.
-- Language toggle swaps all lesson titles RO ↔ EN.
-- Mobile: lesson list stacks single column, readable.
+### Out of scope (call out, do not change)
+- Stripe price objects — still amount-from-frontend; if you want server-trusted pricing later, that’s a separate pass.
+- Kids age gating in form logic (online ≥10) — only copy change in this pass unless you ask for hard validation.
