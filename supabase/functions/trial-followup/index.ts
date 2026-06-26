@@ -7,8 +7,11 @@ const corsHeaders = {
 };
 
 /**
- * Cron-driven. Finds confirmed trial bookings whose lesson ended between
- * 1h and 48h ago and have not yet received the enrollment follow-up email.
+ * Cron-driven (twice daily). Sends exactly two follow-up emails per trial:
+ *   - Stage 1: shortly after the lesson (ended 1h–18h ago)
+ *   - Stage 2: a couple of days later (ended 48h–72h ago)
+ * Each stage is deduped by its own *_sent_at flag so each booking receives
+ * each stage at most once.
  */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -19,64 +22,90 @@ Deno.serve(async (req) => {
   );
 
   const now = Date.now();
-  const hi = new Date(now - 60 * 60_000).toISOString();      // ended >= 1h ago
-  const lo = new Date(now - 48 * 3_600_000).toISOString();   // ended <= 48h ago
 
-  const { data: rows, error } = await supabase
-    .from("bookings")
-    .select("id, student_name, student_email, language")
-    .eq("status", "confirmed")
-    .eq("event_type_slug", "trial")
-    .gte("end_at", lo)
-    .lte("end_at", hi)
-    .is("trial_followup_sent_at", null);
+  type Stage = {
+    key: "1" | "2";
+    flag: "trial_followup_sent_at" | "trial_followup_2_sent_at";
+    lo: string;
+    hi: string;
+    idemPrefix: string;
+  };
 
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  const stages: Stage[] = [
+    {
+      key: "1",
+      flag: "trial_followup_sent_at",
+      lo: new Date(now - 18 * 3_600_000).toISOString(),
+      hi: new Date(now - 1 * 3_600_000).toISOString(),
+      idemPrefix: "trial-followup",
+    },
+    {
+      key: "2",
+      flag: "trial_followup_2_sent_at",
+      lo: new Date(now - 72 * 3_600_000).toISOString(),
+      hi: new Date(now - 48 * 3_600_000).toISOString(),
+      idemPrefix: "trial-followup-2",
+    },
+  ];
 
-  let sent = 0;
-  for (const r of rows ?? []) {
-    const lang = (r.language as "ro" | "en") ?? "ro";
-    try {
-      const resp = await fetch(
-        `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-          },
-          body: JSON.stringify({
-            templateName: "trial-followup",
-            recipientEmail: r.student_email,
-            idempotencyKey: `trial-followup-${r.id}`,
-            templateData: {
-              name: r.student_name,
-              lang,
-              enrollUrl: "https://centruldearabalibaneza.com/#courses",
-            },
-          }),
-        },
-      );
-      if (!resp.ok) {
-        console.error("[trial-followup] send failed", r.id, await resp.text());
-        continue;
-      }
-      await supabase
-        .from("bookings")
-        .update({ trial_followup_sent_at: new Date().toISOString() })
-        .eq("id", r.id);
-      sent++;
-    } catch (e) {
-      console.error("[trial-followup] error", r.id, e);
+  async function runStage(stage: Stage) {
+    const { data: rows, error } = await supabase
+      .from("bookings")
+      .select("id, student_name, student_email, language, " + stage.flag)
+      .eq("status", "confirmed")
+      .eq("event_type_slug", "trial")
+      .gte("end_at", stage.lo)
+      .lte("end_at", stage.hi)
+      .is(stage.flag, null);
+
+    if (error) {
+      console.error("[trial-followup] query failed", stage.key, error);
+      return { stage: stage.key, sent: 0, error: error.message };
     }
+
+    let sent = 0;
+    for (const r of rows ?? []) {
+      const lang = (r.language as "ro" | "en") ?? "ro";
+      try {
+        const resp = await fetch(
+          `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            },
+            body: JSON.stringify({
+              templateName: "trial-followup",
+              recipientEmail: r.student_email,
+              idempotencyKey: `${stage.idemPrefix}-${r.id}`,
+              templateData: {
+                name: r.student_name,
+                lang,
+                stage: stage.key,
+                enrollUrl: "https://centruldearabalibaneza.com/#programs",
+              },
+            }),
+          },
+        );
+        if (!resp.ok) {
+          console.error("[trial-followup] send failed", stage.key, r.id, await resp.text());
+          continue;
+        }
+        await supabase
+          .from("bookings")
+          .update({ [stage.flag]: new Date().toISOString() })
+          .eq("id", r.id);
+        sent++;
+      } catch (e) {
+        console.error("[trial-followup] error", stage.key, r.id, e);
+      }
+    }
+    return { stage: stage.key, sent, considered: rows?.length ?? 0 };
   }
 
-  return new Response(JSON.stringify({ ok: true, sent, considered: rows?.length ?? 0 }), {
+  const results = await Promise.all(stages.map(runStage));
+  return new Response(JSON.stringify({ ok: true, results }), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
