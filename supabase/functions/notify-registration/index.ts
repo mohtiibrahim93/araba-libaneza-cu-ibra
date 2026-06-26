@@ -54,6 +54,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Abuse guard: an unauthenticated caller with a known registrationId could
+    // call this in a loop to spam the student. Reject if we have already
+    // attempted (or completed) a send for this registration's idempotency keys.
+    const idemKeys = [`reg-${reg.id}`, `admin-reg-${reg.id}`];
+    const { data: prior } = await supabase
+      .from("email_send_log")
+      .select("idempotency_key")
+      .in("idempotency_key", idemKeys)
+      .limit(1);
+    if (prior && prior.length > 0) {
+      return new Response(JSON.stringify({ success: true, deduped: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const formTypeLabel = FORM_TYPE_LABEL[reg.form_type] ?? reg.form_type;
     const zoomLink = Deno.env.get("ZOOM_MEETING_URL") || "";
     const icsUrl = `${supabaseUrl}/functions/v1/registration-ics?id=${reg.id}`;
@@ -159,7 +174,7 @@ Deno.serve(async (req) => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     console.error("notify-registration error:", msg);
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
