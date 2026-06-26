@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import AnchorLink from "@/components/AnchorLink";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -9,7 +10,7 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-border bg-card">
-      <div className="max-w-6xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-5 gap-10">
         {/* Brand */}
         <div>
           <p className="inline-flex items-center gap-2 text-lg font-bold text-foreground mb-2">
@@ -25,6 +26,17 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
           </p>
+        </div>
+
+        {/* Courses */}
+        <div>
+          <p className="text-sm font-semibold text-foreground mb-3">{t.navCourses}</p>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
+            <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
+            <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
+            <li><Link to="/cursuri/online" className="hover:text-foreground transition-colors">{t.courseOnlineH1}</Link></li>
+          </ul>
         </div>
 
         {/* Quick links */}
