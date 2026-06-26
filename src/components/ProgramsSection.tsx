@@ -340,6 +340,9 @@ const ProgramsSection = () => {
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
+                    <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                      {t.programsSeeFullPage}
+                    </Link>
 
                     {/* Price */}
                     <div className="mb-3">
