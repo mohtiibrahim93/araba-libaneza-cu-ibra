@@ -9,16 +9,17 @@ export function hasConsent(): boolean {
 export function initTracking() {
   if (!hasConsent()) return;
 
-  // GA4
-  const gaId = document.querySelector<HTMLScriptElement>('script[src*="googletagmanager"]')?.src;
-  if (!gaId && typeof window !== "undefined") {
-    // Scripts are already in index.html but we can ensure gtag is active
-    if (typeof (window as any).gtag === "function") {
-      (window as any).gtag("consent", "update", {
-        analytics_storage: "granted",
-        ad_storage: "granted",
-      });
-    }
+  // GA4 — grant consent and force a page_view for the first hit
+  if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+    (window as any).gtag("consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "granted",
+    });
+    (window as any).gtag("event", "page_view", {
+      page_path: window.location.pathname + window.location.search,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
   }
 
   // Meta Pixel

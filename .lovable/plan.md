@@ -1,13 +1,19 @@
-## Goal
-Update the hero badge/pill text to communicate that the school offers all combinations: 1:1 / group and online / in-person.
+## Problem
+Google Analytics reports "No data received" because:
+1. `index.html` sets `gtag('consent', 'default', { analytics_storage: 'denied' })` on load.
+2. `src/lib/tracking.ts` `initTracking()` has an inverted `!gaId` guard, so the `gtag('consent', 'update', { analytics_storage: 'granted' })` call is unreachable.
+3. `CookieConsent.tsx` only calls `initTracking()` on the Accept button click, but never on mount for returning visitors who already have `cookie_consent=accepted` in localStorage.
 
-## Changes
-1. **i18n string update** — Edit `src/lib/i18n.tsx`:
-   - `heroPill` (RO): `"Toate formatele: 1:1, grup, online, fizic"`
-   - `heroPill` (EN): `"All formats: 1:1, group, online, in-person"`
+## Fix
+1. Remove the incorrect `!gaId &&` condition in `initTracking()` so the consent update always fires when `window.gtag` exists.
+2. In `CookieConsent.tsx`, add a `useEffect` that calls `initTracking()` on mount if `localStorage.getItem(COOKIE_KEY) === "accepted"`.
+3. Add `gtag('event', 'page_view')` inside `initTracking()` after consent is granted, to force-send the first hit for SPA navigations.
 
-No component or layout changes needed. The existing badge styling stays the same.
+## Technical details
+- File: `src/lib/tracking.ts` — change `if (!gaId && typeof window !== "undefined")` to `if (typeof window !== "undefined")`.
+- File: `src/components/CookieConsent.tsx` — add mount-time `initTracking()` call when consent already exists.
+- No new dependencies or UI changes.
 
-## Verification
-- Reload homepage and confirm the pill text renders correctly in both Romanian and English.
-- Ensure the badge does not wrap awkwardly on mobile (it’s a short phrase, should fit).
+## Validation
+- Publish the site.
+- Use GA4 DebugView or the browser Network tab (filter "collect") to confirm a `page_view` event fires immediately after the page loads.
