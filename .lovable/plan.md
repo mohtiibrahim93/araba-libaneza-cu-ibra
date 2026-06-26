@@ -1,80 +1,77 @@
-## Goal
+# Curriculum restructure — align site with uploaded CEFR document
 
-Reschedule three `pg_cron` jobs and extend two edge functions so their staged-reminder logic matches the new cadences.
+## Recommendation
 
----
+**Option chosen: expand the existing accordion in place (no new pages).** Rationale:
+- The doc is hierarchical (level → lessons/blocks) which maps perfectly to a single accordion with richer content. No new routes/SEO surface needed — `#curriculum-a1` deep links already work.
+- Dedicated per-level pages would duplicate content (already linked from Programs cards) and burn credits on routing/SEO scaffolding without adding much. Can be added later if analytics show demand.
+- Keeps the change frontend-only: data + i18n + one component. Low risk to other sections.
 
-## 1. `process-email-queue` — cadence only
+## What changes
 
-- Unschedule existing job (jobid 2, schedule `5 seconds`, currently inactive).
-- Reschedule as `*/2 * * * *` (every 2 minutes), calling the same `process-email-queue` function with the existing headers/body pattern used in other cron jobs.
-- No function code changes.
+### 1. Restructured curriculum data (`src/components/CurriculumSection.tsx`)
 
-## 2. `booking-reminders-every-15-min` — keep `*/15 * * * *`, extend stages
+Replace the 3-module-per-level shape with per-level objects:
 
-Currently the function sends only two reminders: **24h before** and **1h before**, tracked via `bookings.reminder_24h_sent_at` and `bookings.reminder_1h_sent_at`.
+```ts
+{ id, title, objective, lessons, hours, track, items: string[] }
+```
 
-The requested stages are: **~2 days before**, **day-of (morning)**, **3h before**, **1h before**, **30 min before**.
+- **A1 / A2**: `items` = full numbered lesson list (30 / 38 entries).
+- **B1 / B2**: `items` = thematic blocks (e.g. "Lessons 2–6 — Verb system consolidation").
+- **C1**: two sub-sections — *Spoken core* (38 lessons) + *Writing strand* (20 units, simultaneous), with a short intro paragraph about the two-track choice.
+- **C2**: 8 modular blocks + design note; mark as "modular — pick your specialization".
 
-### Schema changes (migration)
+### 2. Header stats row inside each accordion item
 
-Add nullable timestamp columns to `public.bookings` to dedupe each new stage:
+Right under the level title (still inside `AccordionContent`, above objective):
 
-- `reminder_2d_sent_at`
-- `reminder_day_of_sent_at`
-- `reminder_3h_sent_at`
-- `reminder_30m_sent_at`
+```
+[30 lecții] · [45 ore] · [Track: Vorbit]
+```
 
-(`reminder_24h_sent_at` is left in place for historical data; the new code will not write or read it. `reminder_1h_sent_at` is reused as-is.)
+Small pill badges using existing `bg-primary/10 text-primary` style. No new components.
 
-### Function changes (`supabase/functions/booking-reminders/index.ts`)
+### 3. Intro paragraph above the accordion
 
-Replace the two-window loop with five windows, each ±7.5 minutes around the target offset (so a 15-min cron tick catches every booking exactly once):
+Add one short paragraph (existing `curriculumDesc` slot or new key) summarizing: 90-min lessons, 2×/week, writing track optional from C1, C2 = academic/specialized Lebanese (not full fuṣḥā). Pulled verbatim from doc's intro.
 
-| Stage     | Target offset before `start_at` | Window                         | Flag column                |
-| --------- | ------------------------------- | ------------------------------ | -------------------------- |
-| 2 days    | 48h                             | now + [47h52m30s, 48h07m30s]   | `reminder_2d_sent_at`      |
-| Day-of    | sent on the calendar day of the booking, at the first cron tick on/after 08:00 local | `start_at::date = today_local AND now_local >= 08:00` | `reminder_day_of_sent_at`  |
-| 3 hours   | 3h                              | now + [2h52m30s, 3h07m30s]     | `reminder_3h_sent_at`      |
-| 1 hour    | 1h                              | now + [52m30s, 1h07m30s]       | `reminder_1h_sent_at` (reused) |
-| 30 min    | 30m                             | now + [22m30s, 37m30s]         | `reminder_30m_sent_at`     |
+### 4. i18n — RO + EN
 
-Each stage:
-1. Selects `status='confirmed'` bookings inside its window where the corresponding flag is `NULL`.
-2. Sends a `booking-reminder` email via `sendBookingEmail` with a stage-specific `inLabel` (RO/EN) and idempotency key `booking-reminder-<stage>-<booking_id>`.
-3. Updates the stage's flag to `now()` so future runs skip it.
+In `src/lib/i18n.tsx`, replace the current `curriculumA1M1/M2/M3` (and same for A2–C2) with:
+- `curriculumA1Lessons` (number), `curriculumA1Hours`, `curriculumA1Track`
+- `curriculumA1Items` (string[] — lesson list)
+- For C1: `curriculumC1SpokenItems[]`, `curriculumC1WritingItems[]`, `curriculumC1TracksIntro`
+- For C2: `curriculumC2Blocks` (array of `{ title, items[] }`), `curriculumC2Note`
 
-This guarantees each stage fires **at most once per booking** even if the cron runs late or a booking is rescheduled.
+Both RO (verbatim from doc) and EN (translated). Delete the old `*M1/M2/M3` keys to keep i18n clean.
 
-## 3. `trial-followup-hourly` → twice daily, two-stage
+### 5. Accordion UX tweaks
 
-- Unschedule existing job (jobid 4, `0 * * * *`, inactive).
-- Reschedule as `0 9,18 * * *` with name `trial-followup-twice-daily`.
+- Lesson lists are long (30–80 items). Render as a 2-column grid on `sm+` (`grid sm:grid-cols-2 gap-x-6 gap-y-1.5`) to avoid a 30-row scroll wall.
+- Keep existing `CheckCircle2` bullet style; reuse current padding/border tokens — no visual redesign.
+- C2: render blocks as nested sub-headings (h4) with their item lists underneath.
 
-### Schema change (migration)
+### 6. Anchors & deep links
 
-Add `reminder_trial_followup_2_sent_at TIMESTAMPTZ` to `public.bookings` for the second-stage dedupe (the existing `trial_followup_sent_at` continues to dedupe stage 1).
+Keep existing `#curriculum-a1 … #curriculum-c2` IDs and the hash-open behavior — no changes to `ProgramsSection` / `CursGrup` links.
 
-### Function changes (`supabase/functions/trial-followup/index.ts`)
+## Out of scope (not changing)
 
-Process exactly two stages per run:
+- No new routes, no per-level pages.
+- No changes to `ProgramsSection`, registration form, pricing, or any other section.
+- No design token / color / typography changes.
+- Curriculum data stays the source of truth for the Group card accordion (preserved).
 
-| Stage                | Window (relative to `end_at`) | Flag column                            |
-| -------------------- | ----------------------------- | -------------------------------------- |
-| 1 — after the lesson | ended between 1h and 18h ago  | `trial_followup_sent_at` (existing)    |
-| 2 — couple days later | ended between 48h and 72h ago | `reminder_trial_followup_2_sent_at`    |
+## Technical notes
 
-Both stages filter `status='confirmed' AND event_type_slug='trial'` and the corresponding `*_sent_at IS NULL`, send via `send-transactional-email` with idempotency keys `trial-followup-<id>` and `trial-followup-2-<id>`, then stamp the flag. The 18h upper bound on stage 1 and 24h gap on stage 2 fit comfortably inside the 9-hour cron interval, so each booking receives **exactly one** stage-1 and **exactly one** stage-2 email.
+- Pure presentation change: one component (`CurriculumSection.tsx`) + i18n strings. No DB, no edge functions, no schema.
+- Estimated ~250–400 new i18n strings total across RO+EN (mostly short lesson titles). Single migration-free edit.
+- No new dependencies.
 
----
+## Verification
 
-## Execution order
-
-1. Migration: add new `bookings.*_sent_at` columns.
-2. Update `booking-reminders/index.ts` and `trial-followup/index.ts`.
-3. Data migration via `supabase--insert`: `cron.unschedule(...)` the three existing jobs by name, then `cron.schedule(...)` the new ones using the project's stored cron secret pattern (`SUPABASE_URL` + anon key in headers, matching the existing job 3 definition).
-4. Query `cron.job` and report the final `jobname / schedule / active` for the three jobs.
-
-## Open question
-
-For the **day-of** reminder I'm assuming "morning of the lesson, at/after 08:00 in the booking's local timezone". If you'd prefer a fixed offset instead (e.g. exactly 12h before `start_at`), say so and I'll swap that stage's window — everything else stays the same.
+- Build passes (tsgo).
+- Open `/#curriculum-c1` → C1 expands, both tracks visible.
+- Language toggle swaps all lesson titles RO ↔ EN.
+- Mobile: lesson list stacks single column, readable.
