@@ -786,6 +786,67 @@ const translations = {
     weekdayFri: "Vineri",
     weekdaySat: "Sâmbătă",
     weekdaySun: "Duminică",
+    // Course detail pages (dedicated routes)
+    courseBreadcrumbHome: "Acasă",
+    courseBreadcrumbCourses: "Cursuri",
+    courseOtherCoursesTitle: "Vezi și celelalte cursuri",
+    courseSeeAllPrograms: "Vezi toate programele →",
+    courseCtaSeeForm: "Înscrie-te acum",
+    courseCtaSeeOptions: "Vezi opțiunile",
+
+    // /cursuri/grup
+    courseGrupMetaTitle: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
+    courseGrupMetaDesc: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună.",
+    courseGrupH1: "Curs de Grup de Arabă Libaneză",
+    courseGrupIntro: "Învață araba libaneză într-un grup mic (4–10 cursanți), cu profesor nativ și un curriculum CEFR clar de la A1 la C2. Cursurile au loc fizic în București sau online, cu lecții de două ori pe săptămână.",
+    courseGrupPriceLine: "De la 500 LEI / lună · ~3 luni per nivel",
+    courseGrupFeat1: "Grupuri mici, 4–10 cursanți",
+    courseGrupFeat2: "Curriculum CEFR (A1–C2)",
+    courseGrupFeat3: "Două ședințe pe săptămână (90 min)",
+    courseGrupFeat4: "Fizic în București sau online via Zoom",
+
+    // /cursuri/private
+    coursePrivateMetaTitle: "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    coursePrivateMetaDesc: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.",
+    coursePrivateH1: "Lecții Private de Arabă Libaneză",
+    coursePrivateIntro: "Lecții 1:1 cu profesor nativ, adaptate ritmului și obiectivelor tale. Alege orarul care ți se potrivește, fizic în București sau online prin Zoom. Pachetele cu mai multe lecții vin cu reducere.",
+    coursePrivatePriceLine: "150 LEI / lecție · pachete cu reducere",
+    coursePrivateFeat1: "Curriculum 100% personalizat",
+    coursePrivateFeat2: "Program flexibil, tu alegi orele",
+    coursePrivateFeat3: "Fizic în București sau online",
+    coursePrivateFeat4: "Reducere la pachete de 5 / 10 / 20 lecții",
+
+    // /cursuri/copii
+    courseCopiiMetaTitle: "Cursuri de Arabă Libaneză pentru Copii — București",
+    courseCopiiMetaDesc: "Cursuri interactive de arabă libaneză pentru copii (4–14 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani.",
+    courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
+    courseCopiiIntro: "Cursuri concepute special pentru copii (4–14 ani), cu activități, jocuri și povești în arabă libaneză. Format fizic în București — online disponibil pentru copii peste 10 ani.",
+    courseCopiiPriceLine: "Grupuri mici · Înscrieri deschise",
+    courseCopiiFeat1: "Vârste 4–14 ani, grupe pe categorii de vârstă",
+    courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
+    courseCopiiFeat3: "Fizic în București (online de la 10 ani)",
+    courseCopiiFeat4: "Profesor nativ, atmosferă caldă",
+
+    // /cursuri/online
+    courseOnlineMetaTitle: "Curs de Arabă Libaneză Online — Grup sau 1:1, oriunde",
+    courseOnlineMetaDesc: "Învață arabă libaneză online cu profesor nativ, în grup sau 1:1, prin Zoom. Toate nivelurile (A1–C2). Cursuri din orice oraș sau țară.",
+    courseOnlineH1: "Curs de Arabă Libaneză Online",
+    courseOnlineIntro: "Participă de oriunde la cursurile noastre prin Zoom. Alege între grup (4–10 cursanți) sau 1:1, cu același profesor nativ și același curriculum CEFR ca la cursurile fizice.",
+    courseOnlinePriceLine: "De la 500 LEI / lună (grup) · 150 LEI / lecție (1:1)",
+    courseOnlineFeat1: "Lecții live prin Zoom, nu înregistrate",
+    courseOnlineFeat2: "Grup (A1–C2) sau 1:1, alegi tu",
+    courseOnlineFeat3: "Materiale digitale incluse",
+    courseOnlineFeat4: "Acces din orice oraș sau țară",
+
+    // Course pages — section labels
+    coursePageWhatYouLearn: "Ce vei învăța",
+    coursePageHowItWorks: "Cum funcționează",
+    coursePageRegisterTitle: "Înscrie-te acum",
+    coursePageRegisterDesc: "Completează formularul mai jos. Te contactăm în câteva ore pentru detalii.",
+
+    // Navbar — courses dropdown
+    navCoursesDropdownLabel: "Deschide meniul cursurilor",
+
   },
   en: {
     siteTitle: "lebanese arabic center",
@@ -1550,6 +1611,67 @@ const translations = {
     weekdayFri: "Friday",
     weekdaySat: "Saturday",
     weekdaySun: "Sunday",
+    // Course detail pages (dedicated routes)
+    courseBreadcrumbHome: "Home",
+    courseBreadcrumbCourses: "Courses",
+    courseOtherCoursesTitle: "Explore other courses",
+    courseSeeAllPrograms: "See all programs →",
+    courseCtaSeeForm: "Register now",
+    courseCtaSeeOptions: "See options",
+
+    // /cursuri/grup
+    courseGrupMetaTitle: "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
+    courseGrupMetaDesc: "Lebanese Arabic group course with a native instructor. CEFR levels A1–C2, groups of 4–10 students, in person in Bucharest or online. From 500 LEI / month.",
+    courseGrupH1: "Lebanese Arabic Group Course",
+    courseGrupIntro: "Learn Lebanese Arabic in a small group (4–10 students), with a native instructor and a clear CEFR curriculum from A1 to C2. Classes run in person in Bucharest or online, twice a week.",
+    courseGrupPriceLine: "From 500 LEI / month · ~3 months per level",
+    courseGrupFeat1: "Small groups, 4–10 students",
+    courseGrupFeat2: "CEFR curriculum (A1–C2)",
+    courseGrupFeat3: "Two sessions per week (90 min)",
+    courseGrupFeat4: "In person in Bucharest or online via Zoom",
+
+    // /cursuri/private
+    coursePrivateMetaTitle: "Private 1-on-1 Lebanese Arabic Lessons — Bucharest & online",
+    coursePrivateMetaDesc: "One-on-one Lebanese Arabic lessons with a native instructor. Flexible schedule, curriculum tailored to you, in person in Bucharest or online. 150 LEI / lesson.",
+    coursePrivateH1: "Private Lebanese Arabic Lessons",
+    coursePrivateIntro: "One-on-one lessons with a native instructor, paced to your goals. Pick a schedule that works for you, in person in Bucharest or online via Zoom. Multi-lesson packs come with a discount.",
+    coursePrivatePriceLine: "150 LEI / lesson · pack discounts",
+    coursePrivateFeat1: "Curriculum 100% tailored to you",
+    coursePrivateFeat2: "Flexible schedule, you pick the times",
+    coursePrivateFeat3: "In person in Bucharest or online",
+    coursePrivateFeat4: "Discounts on packs of 5 / 10 / 20 lessons",
+
+    // /cursuri/copii
+    courseCopiiMetaTitle: "Lebanese Arabic Courses for Kids — Bucharest",
+    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 4–14), in person in Bucharest. Activities, games and stories in Lebanese Arabic. Online available from age 10.",
+    courseCopiiH1: "Lebanese Arabic Courses for Kids",
+    courseCopiiIntro: "Courses designed specifically for kids (ages 4–14), with activities, games and stories in Lebanese Arabic. In-person format in Bucharest — online available for kids over 10.",
+    courseCopiiPriceLine: "Small groups · Enrollment open",
+    courseCopiiFeat1: "Ages 4–14, grouped by age",
+    courseCopiiFeat2: "Play-based, interactive lessons",
+    courseCopiiFeat3: "In person in Bucharest (online from age 10)",
+    courseCopiiFeat4: "Native instructor, warm atmosphere",
+
+    // /cursuri/online
+    courseOnlineMetaTitle: "Lebanese Arabic Online Course — Group or 1:1, anywhere",
+    courseOnlineMetaDesc: "Learn Lebanese Arabic online with a native instructor, in a group or 1:1, over Zoom. All levels (A1–C2). Join from any city or country.",
+    courseOnlineH1: "Lebanese Arabic Online Course",
+    courseOnlineIntro: "Join our courses from anywhere via Zoom. Choose group (4–10 students) or 1:1, with the same native instructor and the same CEFR curriculum as our in-person classes.",
+    courseOnlinePriceLine: "From 500 LEI / month (group) · 150 LEI / lesson (1:1)",
+    courseOnlineFeat1: "Live Zoom lessons, not recordings",
+    courseOnlineFeat2: "Group (A1–C2) or 1:1 — your call",
+    courseOnlineFeat3: "Digital materials included",
+    courseOnlineFeat4: "Join from any city or country",
+
+    // Course pages — section labels
+    coursePageWhatYouLearn: "What you'll learn",
+    coursePageHowItWorks: "How it works",
+    coursePageRegisterTitle: "Register now",
+    coursePageRegisterDesc: "Fill out the form below. We'll get back to you within a few hours.",
+
+    // Navbar — courses dropdown
+    navCoursesDropdownLabel: "Open courses menu",
+
   },
 } as const;
 
