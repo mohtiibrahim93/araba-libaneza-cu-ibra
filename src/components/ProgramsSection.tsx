@@ -110,9 +110,6 @@ const ProgramsSection = () => {
                 {t.groupBadge}
               </span>
               <h3 className="text-xl font-bold text-foreground mb-1">{t.groupCardTitle}</h3>
-              <Link to="/cursuri/grup" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
-                {t.programsSeeFullPage}
-              </Link>
 
               {/* Level Pills */}
               <div className="flex flex-wrap gap-2 mb-5">
@@ -197,6 +194,9 @@ const ProgramsSection = () => {
                   ))}
                 </ul>
               </div>
+              <Link to="/cursuri/grup" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
+                {t.programsSeeFullPage}
+              </Link>
               {isAvailable(activeLevel) ? (
                 <>
                   <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
@@ -339,10 +339,10 @@ const ProgramsSection = () => {
                       {t.privateBadge}
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
-                    <Link to="/cursuri/private" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
+                    <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                       {t.programsSeeFullPage}
                     </Link>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
 
                     {/* Price */}
                     <div className="mb-3">
@@ -440,10 +440,10 @@ const ProgramsSection = () => {
                           {t.kidsGroupBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
-                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
+                        <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
                         </Link>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
 
                         {kidsCap && (
                           <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
@@ -569,10 +569,10 @@ const ProgramsSection = () => {
                           {t.kidsPrivateBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
-                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
+                        <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
                         </Link>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
 
                         {/* Price */}
                         <div className="mb-3">
