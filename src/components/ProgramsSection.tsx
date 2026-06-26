@@ -5,6 +5,7 @@ import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
+import { getCurriculumPreview } from "@/data/curriculum";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import groupImg from "@/assets/group-course.jpg";
@@ -21,7 +22,7 @@ const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 type Level = (typeof LEVELS)[number];
 
 const ProgramsSection = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [activeLevel, setActiveLevel] = useState<Level>("A1");
   const [inlineForm, setInlineForm] = useState<
     null | "group" | "private" | "kids" | "kids-private"
@@ -40,12 +41,12 @@ const ProgramsSection = () => {
   };
 
   const levelCurriculum: Record<Level, { obj: string; mods: string[] }> = {
-    A1: { obj: t.curriculumA1Obj, mods: [t.curriculumA1M1, t.curriculumA1M2, t.curriculumA1M3] },
-    A2: { obj: t.curriculumA2Obj, mods: [t.curriculumA2M1, t.curriculumA2M2, t.curriculumA2M3] },
-    B1: { obj: t.curriculumB1Obj, mods: [t.curriculumB1M1, t.curriculumB1M2, t.curriculumB1M3] },
-    B2: { obj: t.curriculumB2Obj, mods: [t.curriculumB2M1, t.curriculumB2M2, t.curriculumB2M3] },
-    C1: { obj: t.curriculumC1Obj, mods: [t.curriculumC1M1, t.curriculumC1M2, t.curriculumC1M3] },
-    C2: { obj: t.curriculumC2Obj, mods: [t.curriculumC2M1, t.curriculumC2M2, t.curriculumC2M3] },
+    A1: getCurriculumPreview(lang, "a1"),
+    A2: getCurriculumPreview(lang, "a2"),
+    B1: getCurriculumPreview(lang, "b1"),
+    B2: getCurriculumPreview(lang, "b2"),
+    C1: getCurriculumPreview(lang, "c1"),
+    C2: getCurriculumPreview(lang, "c2"),
   };
 
   const isAvailable = (level: Level) => level === "A1";
