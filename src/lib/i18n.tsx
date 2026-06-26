@@ -461,7 +461,7 @@ const translations = {
     navEnroll: "Înscrie-te",
 
     // Hero extras
-    heroPill: "Lecții 1:1 · Online & Fizic",
+    heroPill: "Toate formatele: 1:1, grup, online, fizic",
     heroTrustRating: "5.0★ pe Preply",
     heroTrustStudents: "de la 500 LEI/lună",
     heroTrustVerified: "Instructor verificat",
@@ -1320,7 +1320,7 @@ const translations = {
     navCurriculum: "Curriculum",
     navEnroll: "Enroll",
 
-    heroPill: "1:1 Lessons · Online & In-person",
+    heroPill: "All formats: 1:1, group, online, in-person",
     heroTrustRating: "5.0★ on Preply",
     heroTrustStudents: "from 500 LEI/month",
     heroTrustVerified: "Verified instructor",
