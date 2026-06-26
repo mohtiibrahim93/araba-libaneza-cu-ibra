@@ -194,6 +194,9 @@ const ProgramsSection = () => {
                   ))}
                 </ul>
               </div>
+              <Link to="/cursuri/grup" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
+                {t.programsSeeFullPage}
+              </Link>
               {isAvailable(activeLevel) ? (
                 <>
                   <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
