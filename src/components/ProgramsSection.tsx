@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
-import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
+import { Check, Clock, MessageCircle } from "lucide-react";
 
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
-import { getCurriculumPreview } from "@/data/curriculum";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -23,46 +22,16 @@ type Level = (typeof LEVELS)[number];
 
 const ProgramsSection = () => {
   const { t, lang } = useI18n();
-  const [activeLevel, setActiveLevel] = useState<Level>("A1");
   const [inlineForm, setInlineForm] = useState<
     null | "group" | "private" | "kids" | "kids-private"
   >(null);
   const { get: getCapacity } = useGroupCapacities();
-  const activeCap = getCapacity("group", activeLevel);
+  const a1Cap = getCapacity("group", "A1");
   const kidsCap = getCapacity("kids", null);
 
-  const levelSubtitles: Record<Level, string> = {
-    A1: t.levelA1Subtitle,
-    A2: t.levelA2Subtitle,
-    B1: t.levelB1Subtitle,
-    B2: t.levelB2Subtitle,
-    C1: t.levelC1Subtitle,
-    C2: t.levelC2Subtitle,
-  };
-
-  const levelCurriculum: Record<Level, { obj: string; mods: string[] }> = {
-    A1: getCurriculumPreview(lang, "a1"),
-    A2: getCurriculumPreview(lang, "a2"),
-    B1: getCurriculumPreview(lang, "b1"),
-    B2: getCurriculumPreview(lang, "b2"),
-    C1: getCurriculumPreview(lang, "c1"),
-    C2: getCurriculumPreview(lang, "c2"),
-  };
-
   const isAvailable = (level: Level) => level === "A1";
-
-  const levelPrices: Record<Level, string> = {
-    A1: "500",
-    A2: "600",
-    B1: "700",
-    B2: "800",
-    C1: "900",
-    C2: "1000",
-  };
-
-  const formatLei = (n: number) =>
-    n % 1 === 0 ? n.toLocaleString("ro-RO") : n.toFixed(1).replace(".", ",");
-
+  const a1Online = ONLINE_PRICES.groupMonthly.A1;
+  const a1Fizic = physicalPrice(a1Online);
 
   return (
     <section id="programs" className="py-20 px-6 bg-muted/50 scroll-mt-20">
