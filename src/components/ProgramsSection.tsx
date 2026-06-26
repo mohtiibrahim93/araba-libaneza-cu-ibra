@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
-import { Check, Clock, MessageCircle } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
 
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
