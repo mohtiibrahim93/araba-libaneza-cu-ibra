@@ -416,6 +416,13 @@ const translations = {
     cookieLink: "Politica de confidențialitate",
     cookieAccept: "Accept",
     cookieDecline: "Refuz",
+    cookieClose: "Închide",
+
+    // Auth page
+    authTitle: "Autentificare",
+    authDesc: "Continuă cu contul tău Google pentru a-ți accesa panoul.",
+    authGoogle: "Continuă cu Google",
+    authError: "Autentificarea a eșuat. Te rugăm să încerci din nou.",
 
     // Common
     labelName: "Nume complet",
@@ -426,8 +433,8 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
-    footer: "© 2026 centrul de araba libaneza. Toate drepturile rezervate.",
-    footerTagline: "Învață arabă libaneză autentică cu profesori nativi în București sau online.",
+    footer: "© 2026 Arabă Libaneză cu Ibra. Toate drepturile rezervate.",
+    footerTagline: "Învață arabă libaneză autentică cu un profesor nativ, în București sau online.",
     footerQuickLinks: "Navigare",
     footerContact: "Contact",
     footerLegal: "Legal",
@@ -1181,6 +1188,13 @@ const translations = {
     cookieLink: "Privacy Policy",
     cookieAccept: "Accept",
     cookieDecline: "Decline",
+    cookieClose: "Close",
+
+    // Auth page
+    authTitle: "Sign in",
+    authDesc: "Continue with your Google account to access your dashboard.",
+    authGoogle: "Continue with Google",
+    authError: "Sign-in failed. Please try again.",
 
     labelName: "Full Name",
     labelPhone: "Phone",
@@ -1190,8 +1204,8 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
 
-    footer: "© 2026 lebanese arabic center. All rights reserved.",
-    footerTagline: "Learn authentic Lebanese Arabic with native speakers in Bucharest or online.",
+    footer: "© 2026 Lebanese Arabic with Ibra. All rights reserved.",
+    footerTagline: "Learn authentic Lebanese Arabic with a native instructor in Bucharest or online.",
     footerQuickLinks: "Navigation",
     footerContact: "Contact",
     footerLegal: "Legal",

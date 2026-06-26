@@ -51,7 +51,7 @@ const CookieConsent = () => {
         >
           {t.cookieDecline}
         </button>
-        <button onClick={dismiss} aria-label="Close" className="shrink-0 text-muted-foreground hover:text-foreground p-1 hidden sm:block">
+        <button onClick={dismiss} aria-label={t.cookieClose} className="shrink-0 text-muted-foreground hover:text-foreground p-1 hidden sm:block">
           <X className="w-4 h-4" />
         </button>
       </div>
