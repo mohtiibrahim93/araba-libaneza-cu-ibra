@@ -110,9 +110,6 @@ const ProgramsSection = () => {
                 {t.groupBadge}
               </span>
               <h3 className="text-xl font-bold text-foreground mb-1">{t.groupCardTitle}</h3>
-              <Link to="/cursuri/grup" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
-                {t.programsSeeFullPage}
-              </Link>
 
               {/* Level Pills */}
               <div className="flex flex-wrap gap-2 mb-5">
