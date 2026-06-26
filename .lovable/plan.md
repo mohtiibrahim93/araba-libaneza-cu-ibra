@@ -1,87 +1,80 @@
-# From landing page to multi-page course site
+## Goal
 
-You currently have one indexable page (`/`). Splitting Group, Private, and Kids into their own URLs unlocks three things at once: each course can rank for its own keywords, Search Console can show per-page impressions/clicks, and your analytics can show which course pulls the most traffic.
+Reschedule three `pg_cron` jobs and extend two edge functions so their staged-reminder logic matches the new cadences.
 
-## What is Google Search Console?
+---
 
-Free Google tool (you already verified the site there earlier). It shows, per URL:
-- Which Google searches you appear for, how many impressions, how many clicks, average position.
-- Indexing status — is the page in Google or not, and why.
-- Mobile usability and Core Web Vitals.
-- Sitemap submission so Google discovers new pages fast.
+## 1. `process-email-queue` — cadence only
 
-Once we ship dedicated course pages, GSC will start reporting them within a few days. That's your "traffic per page" view for organic search.
+- Unschedule existing job (jobid 2, schedule `5 seconds`, currently inactive).
+- Reschedule as `*/2 * * * *` (every 2 minutes), calling the same `process-email-queue` function with the existing headers/body pattern used in other cron jobs.
+- No function code changes.
 
-## Scope
+## 2. `booking-reminders-every-15-min` — keep `*/15 * * * *`, extend stages
 
-### 1. New course routes (4 dedicated pages)
+Currently the function sends only two reminders: **24h before** and **1h before**, tracked via `bookings.reminder_24h_sent_at` and `bookings.reminder_1h_sent_at`.
 
-```text
-/cursuri/grup       → Group course (adults)
-/cursuri-private    → 1-on-1 course (adults, online/physical)
-/cursuri-copii      → Kids course
-/cursuri-online     → Online-only landing (cross-cuts the above)
-```
+The requested stages are: **~2 days before**, **day-of (morning)**, **3h before**, **1h before**, **30 min before**.
 
-Each page contains:
-- Hero with course-specific H1, price, format, start date.
-- Long-form content: curriculum (CEFR levels), schedule, who it's for, methodology, FAQ subset.
-- Cohort picker / inline registration form pre-filled for that course type (reuses existing `RegistrationForm`).
-- Per-page `<Helmet>` with unique title, description, canonical, `og:*`, and `Course` JSON-LD.
-- Breadcrumb (Home → Cursuri → [course]) with `BreadcrumbList` JSON-LD.
+### Schema changes (migration)
 
-### 2. Trim the homepage
+Add nullable timestamp columns to `public.bookings` to dedupe each new stage:
 
-`/` becomes a true overview:
-- Hero, social proof, instructor, trust band stay.
-- `ProgramsSection` tabs stay but each card becomes a teaser (3–4 bullets + "Vezi detalii →" linking to its dedicated page) instead of holding the full curriculum/price table.
-- FAQ trimmed to top 5; full FAQ moves to each course page.
+- `reminder_2d_sent_at`
+- `reminder_day_of_sent_at`
+- `reminder_3h_sent_at`
+- `reminder_30m_sent_at`
 
-Keeps the homepage scannable, pushes deep content where it can rank.
+(`reminder_24h_sent_at` is left in place for historical data; the new code will not write or read it. `reminder_1h_sent_at` is reused as-is.)
 
-### 3. Internal linking
+### Function changes (`supabase/functions/booking-reminders/index.ts`)
 
-- Navbar: replace single "Cursuri" anchor with a dropdown (Grup / Private / Copii / Online).
-- Footer: add the 4 course links under a "Cursuri" column.
-- Each course page links to the other three at the bottom ("Vezi și…").
+Replace the two-window loop with five windows, each ±7.5 minutes around the target offset (so a 15-min cron tick catches every booking exactly once):
 
-### 4. SEO infrastructure
+| Stage     | Target offset before `start_at` | Window                         | Flag column                |
+| --------- | ------------------------------- | ------------------------------ | -------------------------- |
+| 2 days    | 48h                             | now + [47h52m30s, 48h07m30s]   | `reminder_2d_sent_at`      |
+| Day-of    | sent on the calendar day of the booking, at the first cron tick on/after 08:00 local | `start_at::date = today_local AND now_local >= 08:00` | `reminder_day_of_sent_at`  |
+| 3 hours   | 3h                              | now + [2h52m30s, 3h07m30s]     | `reminder_3h_sent_at`      |
+| 1 hour    | 1h                              | now + [52m30s, 1h07m30s]       | `reminder_1h_sent_at` (reused) |
+| 30 min    | 30m                             | now + [22m30s, 37m30s]         | `reminder_30m_sent_at`     |
 
-- **sitemap.xml**: add the 4 new routes with weekly changefreq, priority 0.9.
-- **robots.txt**: confirm `Sitemap:` directive points at the new sitemap (it does).
-- **JSON-LD per course**: `Course` schema with `name`, `description`, `provider`, `offers.price`, `courseMode` (onsite/online), `educationalLevel` (CEFR).
-- **Hreflang**: each course page gets `<link rel="alternate" hreflang="ro">` and `hreflang="en">` so Google serves the right language. (Single-URL i18n — we already toggle in-page.)
-- **Resubmit sitemap** to Search Console after deploy.
+Each stage:
+1. Selects `status='confirmed'` bookings inside its window where the corresponding flag is `NULL`.
+2. Sends a `booking-reminder` email via `sendBookingEmail` with a stage-specific `inLabel` (RO/EN) and idempotency key `booking-reminder-<stage>-<booking_id>`.
+3. Updates the stage's flag to `now()` so future runs skip it.
 
-### 5. Per-page analytics
+This guarantees each stage fires **at most once per booking** even if the cron runs late or a booking is rescheduled.
 
-You already have GA4 + Meta Pixel via `tracking.ts` (opt-in). What's missing is **per-route pageview firing** on SPA navigation — currently it only fires on hard load.
+## 3. `trial-followup-hourly` → twice daily, two-stage
 
-- Add a `useRouteAnalytics()` hook in `App.tsx` that calls `gtag('event','page_view', { page_path, page_title })` and `fbq('track','PageView')` on every `useLocation()` change.
-- Then in GA4: Reports → Engagement → Pages and screens shows per-page traffic.
-- In Search Console: Performance → Pages shows per-URL impressions/clicks/CTR/position.
+- Unschedule existing job (jobid 4, `0 * * * *`, inactive).
+- Reschedule as `0 9,18 * * *` with name `trial-followup-twice-daily`.
 
-## File-level breakdown (technical)
+### Schema change (migration)
 
-| Area | Files | Change |
-|---|---|---|
-| New pages | `src/pages/CursGrup.tsx`, `CursPrivate.tsx`, `CursCopii.tsx`, `CursOnline.tsx` | New, one per course |
-| Shared layout | `src/components/course/CourseLayout.tsx`, `CourseHero.tsx`, `CourseDetails.tsx`, `CourseBreadcrumb.tsx` | New shared building blocks so the 4 pages stay consistent |
-| Routing | `src/App.tsx` | Add 4 lazy routes |
-| i18n | `src/lib/i18n.tsx` | ~40 new keys (hero titles, meta descriptions, CTAs, breadcrumb labels) per language |
-| Homepage trim | `src/components/ProgramsSection.tsx`, `src/pages/Index.tsx` | Cards become teasers with "Vezi detalii →" links; full FAQ moved |
-| Nav | `src/components/Navbar.tsx`, `Footer.tsx` | Dropdown / footer column |
-| Analytics | `src/lib/tracking.ts`, `src/App.tsx` (new `useRouteAnalytics` hook) | SPA pageview firing |
-| SEO | `public/sitemap.xml` | Add 4 entries |
-| Helmet | `src/main.tsx` already has `HelmetProvider` — verify | Each new page ships `<Helmet>` |
+Add `reminder_trial_followup_2_sent_at TIMESTAMPTZ` to `public.bookings` for the second-stage dedupe (the existing `trial_followup_sent_at` continues to dedupe stage 1).
 
-No DB schema changes. No edge-function changes. `RegistrationForm` is reused as-is with a `defaultCourseType` prop on each page.
+### Function changes (`supabase/functions/trial-followup/index.ts`)
 
-## Open questions before I build
+Process exactly two stages per run:
 
-1. **URL slugs** — happy with the Romanian slugs above (`/cursuri/grup`, `/cursuri-copii`, etc.) or prefer something different (`/grup-arabic`, `/kids`, English slugs)?
-2. **Online page** — is `/cursuri-online` worth a dedicated page (cross-cuts group + private, good for the "arabic online" keyword), or skip it and link to the format toggles on the other pages?
-3. **Homepage trimming aggression** — keep the current tabs intact and just add "Vezi detalii →" links, or fully replace with 4 teaser cards (one per course, no tabs)?
-4. **Scope of this batch** — do all four items in one go (new pages + SEO + analytics + nav rework), or ship in two passes (pass 1: pages + sitemap + nav; pass 2: analytics + homepage trim)?
+| Stage                | Window (relative to `end_at`) | Flag column                            |
+| -------------------- | ----------------------------- | -------------------------------------- |
+| 1 — after the lesson | ended between 1h and 18h ago  | `trial_followup_sent_at` (existing)    |
+| 2 — couple days later | ended between 48h and 72h ago | `reminder_trial_followup_2_sent_at`    |
 
-Answer these and I'll execute.
+Both stages filter `status='confirmed' AND event_type_slug='trial'` and the corresponding `*_sent_at IS NULL`, send via `send-transactional-email` with idempotency keys `trial-followup-<id>` and `trial-followup-2-<id>`, then stamp the flag. The 18h upper bound on stage 1 and 24h gap on stage 2 fit comfortably inside the 9-hour cron interval, so each booking receives **exactly one** stage-1 and **exactly one** stage-2 email.
+
+---
+
+## Execution order
+
+1. Migration: add new `bookings.*_sent_at` columns.
+2. Update `booking-reminders/index.ts` and `trial-followup/index.ts`.
+3. Data migration via `supabase--insert`: `cron.unschedule(...)` the three existing jobs by name, then `cron.schedule(...)` the new ones using the project's stored cron secret pattern (`SUPABASE_URL` + anon key in headers, matching the existing job 3 definition).
+4. Query `cron.job` and report the final `jobname / schedule / active` for the three jobs.
+
+## Open question
+
+For the **day-of** reminder I'm assuming "morning of the lesson, at/after 08:00 in the booking's local timezone". If you'd prefer a fixed offset instead (e.g. exactly 12h before `start_at`), say so and I'll swap that stage's window — everything else stays the same.

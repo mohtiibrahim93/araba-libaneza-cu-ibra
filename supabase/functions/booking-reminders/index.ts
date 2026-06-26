@@ -3,10 +3,14 @@ import { corsHeaders, json } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
 
 /**
- * Cron-driven (every ~15 min). For each confirmed booking starting in:
- *   - [now+23h30m, now+24h30m]  → send 24h reminder if not sent
- *   - [now+30m,    now+90m]     → send 1h reminder if not sent
- * Marks reminder_*_sent_at to dedupe.
+ * Cron-driven (every 15 min). Sends multi-stage reminders for each confirmed booking:
+ *   - 2 days before        → reminder_2d_sent_at
+ *   - Day-of (>= 08:00)    → reminder_day_of_sent_at
+ *   - 3 hours before       → reminder_3h_sent_at
+ *   - 1 hour before        → reminder_1h_sent_at
+ *   - 30 minutes before    → reminder_30m_sent_at
+ * Each stage uses a ±7.5 min window around its target so a 15-min cron tick
+ * catches each booking exactly once. The dedupe flag is stamped on send.
  */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -17,27 +21,82 @@ Deno.serve(async (req) => {
   );
 
   const now = Date.now();
-  const win24Lo = new Date(now + 23.5 * 3_600_000).toISOString();
-  const win24Hi = new Date(now + 24.5 * 3_600_000).toISOString();
-  const win1Lo = new Date(now + 30 * 60_000).toISOString();
-  const win1Hi = new Date(now + 90 * 60_000).toISOString();
+  const HALF_WINDOW_MS = 7.5 * 60_000; // ±7.5 min around each target offset
 
-  async function process(window: "24h" | "1h", lo: string, hi: string) {
-    const flag = window === "24h" ? "reminder_24h_sent_at" : "reminder_1h_sent_at";
-    const inLabelRo = window === "24h" ? "în 24 de ore" : "în 1 oră";
-    const inLabelEn = window === "24h" ? "in 24 hours" : "in 1 hour";
+  type Stage = {
+    key: "2d" | "day_of" | "3h" | "1h" | "30m";
+    flag:
+      | "reminder_2d_sent_at"
+      | "reminder_day_of_sent_at"
+      | "reminder_3h_sent_at"
+      | "reminder_1h_sent_at"
+      | "reminder_30m_sent_at";
+    lo: string;
+    hi: string;
+    inLabelRo: string;
+    inLabelEn: string;
+  };
 
+  function offsetStage(
+    key: Stage["key"],
+    flag: Stage["flag"],
+    targetMsAhead: number,
+    inLabelRo: string,
+    inLabelEn: string,
+  ): Stage {
+    return {
+      key,
+      flag,
+      lo: new Date(now + targetMsAhead - HALF_WINDOW_MS).toISOString(),
+      hi: new Date(now + targetMsAhead + HALF_WINDOW_MS).toISOString(),
+      inLabelRo,
+      inLabelEn,
+    };
+  }
+
+  // Day-of stage: any confirmed booking whose start_at is later today (>= now)
+  // and within the next 24h. Gated by server local time >= 08:00 so we don't
+  // wake people up. The dedupe flag ensures only one tick wins per booking.
+  const dayOfWindow = (): Stage => {
+    const todayStart = new Date(now);
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date(todayStart.getTime() + 24 * 3_600_000);
+    return {
+      key: "day_of",
+      flag: "reminder_day_of_sent_at",
+      lo: new Date(now).toISOString(),
+      hi: todayEnd.toISOString(),
+      inLabelRo: "astăzi",
+      inLabelEn: "today",
+    };
+  };
+
+  const stages: Stage[] = [
+    offsetStage("2d", "reminder_2d_sent_at", 48 * 3_600_000, "în 2 zile", "in 2 days"),
+    offsetStage("3h", "reminder_3h_sent_at", 3 * 3_600_000, "în 3 ore", "in 3 hours"),
+    offsetStage("1h", "reminder_1h_sent_at", 1 * 3_600_000, "în 1 oră", "in 1 hour"),
+    offsetStage("30m", "reminder_30m_sent_at", 30 * 60_000, "în 30 de minute", "in 30 minutes"),
+  ];
+
+  // Only run the day-of stage after 08:00 server-local time.
+  if (new Date(now).getHours() >= 8) {
+    stages.push(dayOfWindow());
+  }
+
+  async function runStage(stage: Stage) {
     const { data: rows, error } = await supabase
       .from("bookings")
-      .select("id,start_at,student_name,student_email,format,meet_link,manage_token,language," + flag)
+      .select(
+        "id,start_at,student_name,student_email,format,meet_link,manage_token,language," + stage.flag,
+      )
       .eq("status", "confirmed")
-      .gte("start_at", lo)
-      .lte("start_at", hi)
-      .is(flag, null);
+      .gte("start_at", stage.lo)
+      .lte("start_at", stage.hi)
+      .is(stage.flag, null);
 
     if (error) {
-      console.error("[reminders] query failed", window, error);
-      return { window, sent: 0, error: error.message };
+      console.error("[reminders] query failed", stage.key, error);
+      return { stage: stage.key, sent: 0, error: error.message };
     }
 
     let sent = 0;
@@ -49,23 +108,23 @@ Deno.serve(async (req) => {
         {
           name: r.student_name,
           whenLabel: fmtBookingLocal(r.start_at, lang),
-          inLabel: lang === "en" ? inLabelEn : inLabelRo,
+          inLabel: lang === "en" ? stage.inLabelEn : stage.inLabelRo,
           format: r.format,
           meetLink: r.meet_link,
           manageUrl: manageUrl(r.manage_token),
           lang,
         },
-        `booking-reminder-${window}-${r.id}`,
+        `booking-reminder-${stage.key}-${r.id}`,
       );
-      await supabase.from("bookings").update({ [flag]: new Date().toISOString() }).eq("id", r.id);
+      await supabase
+        .from("bookings")
+        .update({ [stage.flag]: new Date().toISOString() })
+        .eq("id", r.id);
       sent++;
     }
-    return { window, sent };
+    return { stage: stage.key, sent };
   }
 
-  const results = await Promise.all([
-    process("24h", win24Lo, win24Hi),
-    process("1h", win1Lo, win1Hi),
-  ]);
+  const results = await Promise.all(stages.map(runStage));
   return json({ ok: true, results });
 });
