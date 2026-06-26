@@ -1,19 +1,15 @@
-## Problem
-Google Analytics reports "No data received" because:
-1. `index.html` sets `gtag('consent', 'default', { analytics_storage: 'denied' })` on load.
-2. `src/lib/tracking.ts` `initTracking()` has an inverted `!gaId` guard, so the `gtag('consent', 'update', { analytics_storage: 'granted' })` call is unreachable.
-3. `CookieConsent.tsx` only calls `initTracking()` on the Accept button click, but never on mount for returning visitors who already have `cookie_consent=accepted` in localStorage.
+## Finding
+The live site is still serving an older build:
+- Published HTML contains `G-XXXXXXXXXX`, not `G-F167Y815JL`.
+- The ConsentManager script is also missing from the published HTML.
+- The source code shown in this project already contains the correct GA4 ID, so this is most likely a publish/deploy mismatch, not a code bug.
 
-## Fix
-1. Remove the incorrect `!gaId &&` condition in `initTracking()` so the consent update always fires when `window.gtag` exists.
-2. In `CookieConsent.tsx`, add a `useEffect` that calls `initTracking()` on mount if `localStorage.getItem(COOKIE_KEY) === "accepted"`.
-3. Add `gtag('event', 'page_view')` inside `initTracking()` after consent is granted, to force-send the first hit for SPA navigations.
-
-## Technical details
-- File: `src/lib/tracking.ts` — change `if (!gaId && typeof window !== "undefined")` to `if (typeof window !== "undefined")`.
-- File: `src/components/CookieConsent.tsx` — add mount-time `initTracking()` call when consent already exists.
-- No new dependencies or UI changes.
-
-## Validation
-- Publish the site.
-- Use GA4 DebugView or the browser Network tab (filter "collect") to confirm a `page_view` event fires immediately after the page loads.
+## Plan
+1. **Do not change unrelated website code.**
+2. **Confirm the current `index.html` has exactly one Google tag** using `G-F167Y815JL` and the ConsentManager script in `<head>`.
+3. **Publish the latest project version** so the custom domain serves the updated `index.html` instead of the old placeholder build.
+4. **Re-test the live domain** after publish:
+   - `G-F167Y815JL` appears in page source.
+   - `https://www.googletagmanager.com/gtag/js?id=G-F167Y815JL` loads.
+   - Google’s “Test your website” detects the tag.
+5. **If still not detected after publish**, adjust consent behavior so the Google tag loader is not blocked from being detected while still respecting consent for analytics storage/events.
