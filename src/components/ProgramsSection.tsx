@@ -440,10 +440,10 @@ const ProgramsSection = () => {
                           {t.kidsGroupBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
-                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
+                        <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
                         </Link>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
 
                         {kidsCap && (
                           <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
