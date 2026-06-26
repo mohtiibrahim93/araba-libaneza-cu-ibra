@@ -273,7 +273,7 @@ const translations = {
     ctaScheduleTitle: "Programul cursurilor",
     ctaScheduleDesc: "Alege varianta potrivită și contactează-ne pentru disponibilitate rapidă.",
     ctaScheduleGroupLabel: "Curs de grup",
-    ctaScheduleGroupValue: "Marți și joi, 19:00–20:30 · online sau fizic",
+    ctaScheduleGroupValue: "luni–marți, joi, vineri 19:00–20:30\nsâmbătă–duminică 9:00–18:00\ncursurile se pot desfasora functiona in aceste intervaluri",
     ctaSchedulePrivateLabel: "Private individuale",
     ctaSchedulePrivateValue: "Program flexibil · sesiuni de 90 minute · online sau fizic",
     ctaScheduleKidsLabel: "Curs copii",
