@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { Check, Clock, MessageCircle, CheckCircle2 } from "lucide-react";
 
@@ -107,7 +108,10 @@ const ProgramsSection = () => {
               <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
                 {t.groupBadge}
               </span>
-              <h3 className="text-xl font-bold text-foreground mb-4">{t.groupCardTitle}</h3>
+              <h3 className="text-xl font-bold text-foreground mb-1">{t.groupCardTitle}</h3>
+              <Link to="/cursuri/grup" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
+                {t.programsSeeFullPage}
+              </Link>
 
               {/* Level Pills */}
               <div className="flex flex-wrap gap-2 mb-5">
@@ -334,6 +338,9 @@ const ProgramsSection = () => {
                       {t.privateBadge}
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
+                    <Link to="/cursuri/private" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                      {t.programsSeeFullPage}
+                    </Link>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
 
                     {/* Price */}
@@ -432,6 +439,9 @@ const ProgramsSection = () => {
                           {t.kidsGroupBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
+                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                          {t.programsSeeFullPage}
+                        </Link>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
 
                         {kidsCap && (
@@ -558,6 +568,9 @@ const ProgramsSection = () => {
                           {t.kidsPrivateBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
+                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                          {t.programsSeeFullPage}
+                        </Link>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
 
                         {/* Price */}
