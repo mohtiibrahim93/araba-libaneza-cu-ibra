@@ -1619,6 +1619,7 @@ const translations = {
     courseSeeAllPrograms: "See all programs →",
     courseCtaSeeForm: "Register now",
     courseCtaSeeOptions: "See options",
+    programsSeeFullPage: "See full page →",
 
     // /cursuri/grup
     courseGrupMetaTitle: "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
