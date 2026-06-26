@@ -793,6 +793,7 @@ const translations = {
     courseSeeAllPrograms: "Vezi toate programele →",
     courseCtaSeeForm: "Înscrie-te acum",
     courseCtaSeeOptions: "Vezi opțiunile",
+    programsSeeFullPage: "Vezi pagina completă →",
 
     // /cursuri/grup
     courseGrupMetaTitle: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
