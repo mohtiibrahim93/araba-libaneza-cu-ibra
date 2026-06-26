@@ -625,3 +625,18 @@ const EN: CurriculumLevel[] = [
 
 export const getCurriculum = (lang: Lang): CurriculumLevel[] =>
   lang === "ro" ? RO : EN;
+
+/** Compact preview for cards (objective + a few highlight bullets). */
+export const getCurriculumPreview = (
+  lang: Lang,
+  id: CurriculumLevel["id"],
+  limit = 4,
+): { obj: string; mods: string[] } => {
+  const lvl = getCurriculum(lang).find((l) => l.id === id);
+  if (!lvl) return { obj: "", mods: [] };
+  let mods: string[] = [];
+  if (lvl.items) mods = lvl.items.slice(0, limit);
+  else if (lvl.spokenCore) mods = lvl.spokenCore.items.slice(0, limit);
+  else if (lvl.blocks) mods = lvl.blocks.slice(0, limit).map((b) => b.title);
+  return { obj: lvl.objective, mods };
+};
