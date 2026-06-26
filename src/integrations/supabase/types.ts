@@ -119,11 +119,16 @@ export type Database = {
           registration_id: string
           reminder_1h_sent_at: string | null
           reminder_24h_sent_at: string | null
+          reminder_2d_sent_at: string | null
+          reminder_30m_sent_at: string | null
+          reminder_3h_sent_at: string | null
+          reminder_day_of_sent_at: string | null
           start_at: string
           status: string
           student_email: string
           student_name: string
           student_phone: string | null
+          trial_followup_2_sent_at: string | null
           trial_followup_sent_at: string | null
           updated_at: string
         }
@@ -144,11 +149,16 @@ export type Database = {
           registration_id: string
           reminder_1h_sent_at?: string | null
           reminder_24h_sent_at?: string | null
+          reminder_2d_sent_at?: string | null
+          reminder_30m_sent_at?: string | null
+          reminder_3h_sent_at?: string | null
+          reminder_day_of_sent_at?: string | null
           start_at: string
           status?: string
           student_email: string
           student_name: string
           student_phone?: string | null
+          trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
           updated_at?: string
         }
@@ -169,11 +179,16 @@ export type Database = {
           registration_id?: string
           reminder_1h_sent_at?: string | null
           reminder_24h_sent_at?: string | null
+          reminder_2d_sent_at?: string | null
+          reminder_30m_sent_at?: string | null
+          reminder_3h_sent_at?: string | null
+          reminder_day_of_sent_at?: string | null
           start_at?: string
           status?: string
           student_email?: string
           student_name?: string
           student_phone?: string | null
+          trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
           updated_at?: string
         }

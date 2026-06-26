@@ -1,0 +1,6 @@
+ALTER TABLE public.bookings
+  ADD COLUMN IF NOT EXISTS reminder_2d_sent_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS reminder_day_of_sent_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS reminder_3h_sent_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS reminder_30m_sent_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS trial_followup_2_sent_at TIMESTAMPTZ;
