@@ -67,11 +67,17 @@ const Navbar = () => {
   }, []);
 
   const links = [
-    { href: "#programs", label: t.navCourses },
     { href: "#pricing", label: t.navPricing },
     { href: "#testimonials", label: t.navTestimonials },
     { href: "#faq", label: t.navFaq },
     { href: "#contact", label: t.navContact },
+  ];
+
+  const courseLinks = [
+    { to: "/cursuri/grup", label: t.courseGrupH1 },
+    { to: "/cursuri/private", label: t.coursePrivateH1 },
+    { to: "/cursuri/copii", label: t.courseCopiiH1 },
+    { to: "/cursuri/online", label: t.courseOnlineH1 },
   ];
 
   return (
@@ -103,16 +109,32 @@ const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
-          {links.slice(0, 1).map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={goToAnchor(l.href)}
-              className="hover:text-foreground transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label={t.navCoursesDropdownLabel}
+                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+              >
+                {t.navCourses}
+                <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              {courseLinks.map((c) => (
+                <DropdownMenuItem key={c.to} asChild>
+                  <Link to={c.to} onClick={() => setOpen(false)}>
+                    {c.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuItem asChild>
+                <a href="#programs" onClick={goToAnchor("#programs")} className="text-primary font-medium">
+                  {t.courseSeeAllPrograms}
+                </a>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link
             to="/booking"
             onClick={() => setOpen(false)}
@@ -121,7 +143,7 @@ const Navbar = () => {
             <Calendar className="w-4 h-4" aria-hidden="true" />
             {t.navBooking}
           </Link>
-          {links.slice(1).map((l) => (
+          {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -202,16 +224,28 @@ const Navbar = () => {
       {open && (
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-2 gap-1">
-            {links.slice(0, 1).map((l) => (
+            <div className="py-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-1 mb-1">
+                {t.navCourses}
+              </p>
+              {courseLinks.map((c) => (
+                <Link
+                  key={c.to}
+                  to={c.to}
+                  onClick={() => setOpen(false)}
+                  className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-2.5 min-h-11 flex items-center"
+                >
+                  {c.label}
+                </Link>
+              ))}
               <a
-                key={l.href}
-                href={l.href}
-                onClick={goToAnchor(l.href)}
-                className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center"
+                href="#programs"
+                onClick={goToAnchor("#programs")}
+                className="text-sm font-medium text-primary py-2.5 min-h-10 flex items-center"
               >
-                {l.label}
+                {t.courseSeeAllPrograms}
               </a>
-            ))}
+            </div>
             <Link
               to="/booking"
               onClick={() => setOpen(false)}
@@ -220,7 +254,7 @@ const Navbar = () => {
               <Calendar className="w-4 h-4" aria-hidden="true" />
               {t.navBooking}
             </Link>
-            {links.slice(1).map((l) => (
+            {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
