@@ -569,10 +569,10 @@ const ProgramsSection = () => {
                           {t.kidsPrivateBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
-                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
+                        <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
                         </Link>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
 
                         {/* Price */}
                         <div className="mb-3">
