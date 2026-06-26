@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
-import { Check, MessageCircle } from "lucide-react";
+import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
+import { getCurriculum } from "@/data/curriculum";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
@@ -25,6 +26,7 @@ const ProgramsSection = () => {
   const [inlineForm, setInlineForm] = useState<
     null | "group" | "private" | "kids" | "kids-private"
   >(null);
+  const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const { get: getCapacity } = useGroupCapacities();
   const a1Cap = getCapacity("group", "A1");
   const kidsCap = getCapacity("kids", null);
@@ -32,6 +34,12 @@ const ProgramsSection = () => {
   const isAvailable = (level: Level) => level === "A1";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
   const a1Fizic = physicalPrice(a1Online);
+  const curriculum = getCurriculum(lang);
+  const activeLevelData = activeLevel
+    ? curriculum.find((c) => c.id === activeLevel.toLowerCase())
+    : null;
+  const activeOnline = activeLevel ? ONLINE_PRICES.groupMonthly[activeLevel] : 0;
+  const activeFizic = activeLevel ? physicalPrice(activeOnline) : 0;
 
   return (
     <section id="programs" className="py-20 px-6 bg-muted/50 scroll-mt-20">
@@ -133,20 +141,27 @@ const ProgramsSection = () => {
               <div className="flex flex-wrap gap-2 mb-5">
                 {LEVELS.map((level) => {
                   const available = isAvailable(level);
+                  const isActive = activeLevel === level;
                   return (
-                    <Link
+                    <button
                       key={level}
-                      to={`/cursuri/grup/${level.toLowerCase()}`}
+                      type="button"
+                      onClick={() =>
+                        setActiveLevel(isActive ? null : level)
+                      }
+                      aria-pressed={isActive}
                       className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
-                        available
-                          ? "bg-background text-foreground border-border hover:border-primary hover:text-primary"
-                          : "bg-muted/60 text-muted-foreground border-border hover:border-primary/50"
+                        isActive
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : available
+                            ? "bg-background text-foreground border-border hover:border-primary hover:text-primary"
+                            : "bg-muted/60 text-muted-foreground border-border hover:border-primary/50"
                       }`}
                       title={available ? level : t.levelInPrep}
                     >
                       {level}
                       {!available && <span className="ml-1 opacity-60">·</span>}
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
@@ -154,6 +169,50 @@ const ProgramsSection = () => {
               <Link to="/cursuri/grup" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-5 inline-block">
                 {t.programsSeeFullPage}
               </Link>
+
+              {/* Inline level summary */}
+              {activeLevelData && activeLevel && (
+                <div className="mb-5 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h4 className="text-sm font-bold text-foreground">
+                      {activeLevelData.title}
+                    </h4>
+                    {!isAvailable(activeLevel) && (
+                      <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded flex-shrink-0">
+                        {t.grupLevelInPrepBadge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                    {activeLevelData.objective}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground mb-3">
+                    <span>
+                      <strong className="text-foreground">{activeLevelData.lessons}</strong>{" "}
+                      {t.grupLevelCardLessons}
+                    </span>
+                    <span>·</span>
+                    <span>
+                      <strong className="text-foreground">{activeLevelData.hours}</strong>{" "}
+                      {t.grupLevelCardHours}
+                    </span>
+                    <span>·</span>
+                    <span>
+                      <strong className="text-foreground">{formatLei(activeOnline)}</strong>{" "}
+                      {t.priceOnlineShort} ·{" "}
+                      <strong className="text-foreground">{formatLei(activeFizic)}</strong>{" "}
+                      {t.priceFizicShort} {t.priceLeiPerMonth}
+                    </span>
+                  </div>
+                  <Link
+                    to={`/cursuri/grup/${activeLevel.toLowerCase()}`}
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4"
+                  >
+                    {t.grupLevelCardViewFull}
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              )}
 
               {/* CTA */}
               <div className="mt-auto">
