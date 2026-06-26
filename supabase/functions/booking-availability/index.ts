@@ -127,6 +127,6 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("[booking-availability] error", err);
-    return json({ error: String(err) }, 500);
+    return json({ error: "Internal server error" }, 500);
   }
 });
