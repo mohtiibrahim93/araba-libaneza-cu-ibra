@@ -78,209 +78,102 @@ const ProgramsSection = () => {
               <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
                 {t.groupBadge}
               </span>
-              <h3 className="text-xl font-bold text-foreground mb-1">{t.groupCardTitle}</h3>
+              <h3 className="text-xl font-bold text-foreground mb-2">{t.groupCardTitle}</h3>
+              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
 
-              {/* Level Pills */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                {LEVELS.map((level) => (
-                  <button
-                    key={level}
-                    onClick={() => setActiveLevel(level)}
-                    className={`px-3.5 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
-                      activeLevel === level
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-muted-foreground border-border hover:border-primary/50"
-                    }`}
-                  >
-                    {level}
-                  </button>
-                ))}
+              {/* Dual price line */}
+              <div className="mb-4">
+                <div className="flex items-baseline flex-wrap gap-x-2">
+                  <span className="text-xs uppercase font-semibold text-muted-foreground">{t.priceFromLabel}</span>
+                  <span className="text-2xl font-extrabold text-foreground leading-none">{formatLei(a1Online)}</span>
+                  <span className="text-sm text-muted-foreground">{t.priceOnlineShort}</span>
+                  <span className="text-muted-foreground">·</span>
+                  <span className="text-2xl font-extrabold text-foreground leading-none">{formatLei(a1Fizic)}</span>
+                  <span className="text-sm text-muted-foreground">{t.priceFizicShort}</span>
+                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+                </div>
               </div>
 
-              {activeCap && (
-                <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-                  {activeCap.taken === 0 ? (
+              {/* A1 capacity */}
+              {a1Cap && (
+                <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
+                  {a1Cap.taken === 0 ? (
                     <span className="text-primary font-medium">
-                      {t.capForming.replace("{n}", String(activeCap.needToStart || 4))}
+                      {t.capForming.replace("{n}", String(a1Cap.needToStart || 4))}
                     </span>
                   ) : (
                     <>
                       <span className="font-semibold text-foreground">
-                        {activeCap.taken}/{activeCap.max} {t.capSeatsLabel}
+                        A1 · {a1Cap.taken}/{a1Cap.max} {t.capSeatsLabel}
                       </span>
                       <span className="text-muted-foreground">·</span>
-                      <span className={activeCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                        {activeCap.full
+                      <span className={a1Cap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
+                        {a1Cap.full
                           ? t.capFull
-                          : activeCap.belowMin
-                            ? t.capNeedToStart.replace("{n}", String(activeCap.needToStart))
-                            : t.capSpotsLeft.replace("{n}", String(activeCap.seatsLeft))}
+                          : a1Cap.belowMin
+                            ? t.capNeedToStart.replace("{n}", String(a1Cap.needToStart))
+                            : t.capSpotsLeft.replace("{n}", String(a1Cap.seatsLeft))}
                       </span>
                     </>
                   )}
                 </div>
               )}
 
-              {/* Level subtitle */}
-              <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[activeLevel]}</p>
+              {/* 3 bullets */}
+              <ul className="space-y-2 mb-5">
+                {[t.groupFeat1, t.groupFeat2, t.groupFeat3].map((f, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
 
-              {levelPrices[activeLevel] && (
-                <p className="text-sm text-muted-foreground mb-2">
-                  <span className="text-base font-bold text-foreground">{levelPrices[activeLevel]} LEI</span>
-                  <span className="ml-1">/ {t.pricingGroupPerMonth}</span>
-                </p>
-              )}
-
-              {levelPrices[activeLevel] && (() => {
-                const monthly = Number(levelPrices[activeLevel]);
-                const total = monthly * 3;
-                const discounted = total * 0.9;
-                return (
-                  <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <span className="text-muted-foreground">{t.pricingGroup3MonthsLabel}</span>
-                      <span className="font-semibold text-foreground">{formatLei(total)} LEI</span>
-                    </div>
-                    <div className="mt-1 flex items-baseline justify-between gap-2 text-primary">
-                      <span className="font-medium">{t.pricingGroupDiscount}</span>
-                      <span className="font-bold whitespace-nowrap">{formatLei(discounted)} LEI</span>
-                    </div>
-                  </div>
-                );
-              })()}
-
-              <div className="mb-4 rounded-lg border border-border bg-muted/30 p-4">
-                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
-                  {t.curriculumObjective}
-                </p>
-                <p className="text-sm text-foreground mb-3">{levelCurriculum[activeLevel].obj}</p>
-                <ul className="space-y-2">
-                  {levelCurriculum[activeLevel].mods.map((m, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{m}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Level pills → link to each level page */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                {LEVELS.map((level) => {
+                  const available = isAvailable(level);
+                  return (
+                    <Link
+                      key={level}
+                      to={`/cursuri/grup/${level.toLowerCase()}`}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
+                        available
+                          ? "bg-background text-foreground border-border hover:border-primary hover:text-primary"
+                          : "bg-muted/60 text-muted-foreground border-border hover:border-primary/50"
+                      }`}
+                      title={available ? level : t.levelInPrep}
+                    >
+                      {level}
+                      {!available && <span className="ml-1 opacity-60">·</span>}
+                    </Link>
+                  );
+                })}
               </div>
-              <Link to="/cursuri/grup" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-4 inline-block">
+
+              <Link to="/cursuri/grup" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-5 inline-block">
                 {t.programsSeeFullPage}
               </Link>
-              {isAvailable(activeLevel) ? (
-                <>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
-                  <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
-                    {[
-                      { label: t.programFormatLabel, value: t.groupFormat },
-                      { label: t.programDurationLabel, value: t.programGroupDuration },
-                      { label: t.programConditionsLabel, value: t.groupConditions },
-                    ].map((item) => (
-                      <div key={item.label}>
-                        <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
-                        <dd className="text-sm font-medium text-foreground">{item.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                  <ul className="space-y-2 mb-6">
-                    {[t.groupFeat1, t.groupFeat2, t.groupFeat3, t.groupFeat4].map((f, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
 
-                  {/* Price table */}
-                  <div className="mb-3 rounded-lg border border-border overflow-hidden">
-                    {/* Header row */}
-                    <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 bg-muted/40 border-b border-border px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
-                      <span className="text-left">{t.groupPriceTableLevel}</span>
-                      <span className="text-right">{t.groupPriceTableMonth}</span>
-                      <span className="text-right hidden sm:block">{t.groupPriceTableTotal}</span>
-                      <span className="text-right">{t.groupPriceTableDiscount}</span>
-                    </div>
-                    <Accordion type="single" collapsible className="w-full">
-                      {LEVELS.map((level) => {
-                        const monthly = Number(levelPrices[level]);
-                        const total = monthly * 3;
-                        const discounted = total * 0.9;
-                        const available = isAvailable(level);
-                        return (
-                          <AccordionItem key={level} value={level} className="border-b border-border last:border-b-0">
-                            <AccordionTrigger className="px-3 py-2 text-sm hover:no-underline hover:bg-muted/30 [&[data-state=open]]:bg-muted/30">
-                              <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 w-full items-center pr-2">
-                                <span className="text-left font-medium text-foreground inline-flex items-center gap-1.5">
-                                  {level}
-                                  {!available && (
-                                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                                      {t.levelInPrep}
-                                    </span>
-                                  )}
-                                </span>
-                                <span className="text-right text-muted-foreground whitespace-nowrap">{formatLei(monthly)} LEI</span>
-                                <span className="text-right text-muted-foreground line-through whitespace-nowrap hidden sm:block">{formatLei(total)} LEI</span>
-                                <span className="text-right font-bold text-primary whitespace-nowrap">{formatLei(discounted)} LEI</span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-3 pb-4 pt-1">
-                              <div className="rounded-lg border border-border bg-muted/30 p-4">
-                                <p className="text-sm font-medium text-foreground mb-2">{levelSubtitles[level]}</p>
-                                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
-                                  {t.curriculumObjective}
-                                </p>
-                                <p className="text-sm text-foreground mb-3">{levelCurriculum[level].obj}</p>
-                                <ul className="space-y-2">
-                                  {levelCurriculum[level].mods.map((m, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-sm">
-                                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                                      <span className="text-muted-foreground">{m}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        );
-                      })}
-                    </Accordion>
-                  </div>
-                  <p className="text-xs font-medium text-primary mb-5">{t.groupPriceTableNote}</p>
-
-                  <button
-                    type="button"
-                    onClick={() => setInlineForm("group")}
-                    className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    {t.groupRegister}
-                  </button>
-                  <a
-                    href={WA_GROUP}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-center text-xs text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    WhatsApp
-                  </a>
-                </>
-              ) : (
-                <div className="mt-2">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-3">
-                    <Clock className="w-4 h-4" />
-                    <span className="text-sm font-medium">{t.levelComingSoon}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{t.levelComingSoonDesc}</p>
-                  <a
-                    href="https://wa.me/40763124514"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg bg-[#25D366] text-white hover:bg-[#1fb855] transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    {t.levelContactUs}
-                  </a>
-                </div>
-              )}
+              {/* CTA */}
+              <div className="mt-auto">
+                <button
+                  type="button"
+                  onClick={() => setInlineForm("group")}
+                  className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  {t.groupRegister}
+                </button>
+                <a
+                  href={WA_GROUP}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  WhatsApp
+                </a>
+              </div>
             </div>
             </>
             )}
