@@ -17,11 +17,11 @@ const CTASection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.ctaDesc}</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div className="grid sm:grid-cols-2 gap-6 mb-10">
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <MessageCircle className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaWhatsapp}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{t.ctaPhoneVal}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t.ctaWhatsappDesc}</p>
           </a>
           <a href={PHONE_URL} className="bg-background rounded-2xl border border-border p-6 text-center hover:border-primary/40 transition-colors">
             <Phone className="w-6 h-6 text-primary mx-auto mb-3" />
