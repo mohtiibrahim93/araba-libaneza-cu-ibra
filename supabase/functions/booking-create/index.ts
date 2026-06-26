@@ -42,6 +42,18 @@ Deno.serve(async (req) => {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.student_email)) {
       return json({ error: "invalid email" }, 400);
     }
+    if (body.student_email.length > 254) {
+      return json({ error: "invalid email" }, 400);
+    }
+    if (typeof body.student_name !== "string" || body.student_name.trim().length === 0 || body.student_name.length > 200) {
+      return json({ error: "invalid student_name" }, 400);
+    }
+    if (body.student_phone != null && (typeof body.student_phone !== "string" || body.student_phone.length > 40)) {
+      return json({ error: "invalid student_phone" }, 400);
+    }
+    if (body.notes != null && (typeof body.notes !== "string" || body.notes.length > 2000)) {
+      return json({ error: "invalid notes" }, 400);
+    }
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -202,6 +214,6 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("[booking-create] error", err);
-    return json({ error: String(err) }, 500);
+    return json({ error: "Internal server error" }, 500);
   }
 });

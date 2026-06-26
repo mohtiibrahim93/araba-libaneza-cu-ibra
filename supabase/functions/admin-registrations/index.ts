@@ -699,6 +699,7 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@centruldearabalibaneza.com" } });
   } catch (err) {
-    return jsonResponse({ error: err.message }, 500);
+    console.error("[admin-registrations] error", err);
+    return jsonResponse({ error: "Internal server error" }, 500);
   }
 });

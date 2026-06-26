@@ -171,6 +171,6 @@ Deno.serve(async (req) => {
     return json({ error: "method not allowed" }, 405);
   } catch (err) {
     console.error("[booking-manage] error", err);
-    return json({ error: String(err) }, 500);
+    return json({ error: "Internal server error" }, 500);
   }
 });
