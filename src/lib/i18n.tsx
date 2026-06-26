@@ -1188,6 +1188,13 @@ const translations = {
     cookieLink: "Privacy Policy",
     cookieAccept: "Accept",
     cookieDecline: "Decline",
+    cookieClose: "Close",
+
+    // Auth page
+    authTitle: "Sign in",
+    authDesc: "Continue with your Google account to access your dashboard.",
+    authGoogle: "Continue with Google",
+    authError: "Sign-in failed. Please try again.",
 
     labelName: "Full Name",
     labelPhone: "Phone",
@@ -1197,8 +1204,8 @@ const translations = {
     placeholderPhone: "+40 7XX XXX XXX",
     placeholderEmail: "john@email.com",
 
-    footer: "© 2026 lebanese arabic center. All rights reserved.",
-    footerTagline: "Learn authentic Lebanese Arabic with native speakers in Bucharest or online.",
+    footer: "© 2026 Lebanese Arabic with Ibra. All rights reserved.",
+    footerTagline: "Learn authentic Lebanese Arabic with a native instructor in Bucharest or online.",
     footerQuickLinks: "Navigation",
     footerContact: "Contact",
     footerLegal: "Legal",
