@@ -15,7 +15,7 @@ const content = {
       ["5. Obligațiile cursantului", "Cursanții se obligă să participe activ la lecții, să respecte programul stabilit și să mențină un comportament adecvat în cadrul grupului. În cazul lecțiilor online, este necesară o conexiune stabilă la internet."],
       ["6. Proprietate intelectuală", "Toate materialele de curs, inclusiv prezentări, exerciții și înregistrări, sunt proprietatea „centrul de araba libaneza” și nu pot fi distribuite fără acord scris."],
       ["7. Limitarea responsabilității", "Ne rezervăm dreptul de a modifica programul cursurilor sau de a anula un curs în cazul în care numărul minim de participanți nu este atins, cu notificarea prealabilă a cursanților înscriși."],
-      ["8. Contact", "Pentru orice întrebare, contactați-ne la contact@centruldearabalibaneza.com sau pe WhatsApp la +40 763 124 514."],
+      ["8. Contact", "Pentru orice întrebare, contactați-ne la marhaba@centruldearabalibaneza.com sau pe WhatsApp la +40 763 124 514."],
     ],
   },
   en: {
@@ -30,7 +30,7 @@ const content = {
       ["5. Student responsibilities", "Students agree to participate actively, respect the agreed schedule, and maintain appropriate conduct in the group. For online lessons, a stable internet connection is required."],
       ["6. Intellectual property", "All course materials, including presentations, exercises, and recordings, are the property of “lebanese arabic center” and may not be distributed without written permission."],
       ["7. Limitation of liability", "We reserve the right to modify course schedules or cancel a course if the minimum number of participants is not reached, with prior notice to registered students."],
-      ["8. Contact", "For any questions, contact us at contact@centruldearabalibaneza.com or on WhatsApp at +40 763 124 514."],
+      ["8. Contact", "For any questions, contact us at marhaba@centruldearabalibaneza.com or on WhatsApp at +40 763 124 514."],
     ],
   },
 } as const;
