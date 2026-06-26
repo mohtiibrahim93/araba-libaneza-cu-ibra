@@ -278,9 +278,9 @@ const FindYourTrackQuiz = () => {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <span className="text-sm font-medium text-primary mb-2 block">{t.quizBadge}</span>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
             {t.quizTitle}
-          </h2>
+          </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.quizDesc}</p>
         </div>
 
