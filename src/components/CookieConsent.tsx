@@ -15,6 +15,9 @@ const CookieConsent = () => {
       const timer = setTimeout(() => setVisible(true), 1500);
       return () => clearTimeout(timer);
     }
+    if (consent === "accepted") {
+      initTracking();
+    }
   }, []);
 
   const accept = () => {
