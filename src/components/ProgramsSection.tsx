@@ -338,6 +338,9 @@ const ProgramsSection = () => {
                       {t.privateBadge}
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
+                    <Link to="/cursuri/private" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                      {t.programsSeeFullPage}
+                    </Link>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
 
                     {/* Price */}
@@ -436,6 +439,9 @@ const ProgramsSection = () => {
                           {t.kidsGroupBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
+                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                          {t.programsSeeFullPage}
+                        </Link>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
 
                         {kidsCap && (
@@ -562,6 +568,9 @@ const ProgramsSection = () => {
                           {t.kidsPrivateBadge}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
+                        <Link to="/cursuri/copii" className="text-xs font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                          {t.programsSeeFullPage}
+                        </Link>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
 
                         {/* Price */}
