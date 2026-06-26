@@ -53,7 +53,7 @@ const CTASection = () => {
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-lg border border-border p-4">
               <p className="text-sm font-semibold text-foreground">{t.ctaScheduleGroupLabel}</p>
-              <p className="text-sm text-muted-foreground mt-1">{t.ctaScheduleGroupValue}</p>
+              <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{t.ctaScheduleGroupValue}</p>
             </div>
             <div className="rounded-lg border border-border p-4">
               <p className="text-sm font-semibold text-foreground">{t.ctaSchedulePrivateLabel}</p>

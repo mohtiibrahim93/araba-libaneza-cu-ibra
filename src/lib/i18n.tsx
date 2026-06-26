@@ -1139,7 +1139,7 @@ const translations = {
     ctaScheduleTitle: "Course schedule",
     ctaScheduleDesc: "Choose the right option and contact us for quick availability details.",
     ctaScheduleGroupLabel: "Group course",
-    ctaScheduleGroupValue: "Tuesday and Thursday, 19:00–20:30 · online or in person",
+    ctaScheduleGroupValue: "Mon–Tue, Thu, Fri 19:00–20:30\nSat–Sun 9:00–18:00\nCourses can take place within these time slots",
     ctaSchedulePrivateLabel: "Individual private lessons",
     ctaSchedulePrivateValue: "Flexible schedule · 90-minute sessions · online or in person",
     ctaScheduleKidsLabel: "Kids course",
