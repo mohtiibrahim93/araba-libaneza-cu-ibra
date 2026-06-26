@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { lovable } from "@/integrations/lovable";
+import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -18,6 +19,7 @@ const GoogleIcon = () => (
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,11 +39,11 @@ const Auth = () => {
         redirect_uri: window.location.origin,
       });
       if (result.error) {
-        toast.error("Sign-in failed. Please try again.");
+        toast.error(t.authError);
         setLoading(false);
       }
     } catch {
-      toast.error("Sign-in failed. Please try again.");
+      toast.error(t.authError);
       setLoading(false);
     }
   };
@@ -50,10 +52,8 @@ const Auth = () => {
     <main className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-8 space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold">Sign in</h1>
-          <p className="text-sm text-muted-foreground">
-            Continue with your Google account to access your dashboard.
-          </p>
+          <h1 className="text-2xl font-semibold">{t.authTitle}</h1>
+          <p className="text-sm text-muted-foreground">{t.authDesc}</p>
         </div>
         <Button
           onClick={handleGoogle}
@@ -62,7 +62,7 @@ const Auth = () => {
           className="w-full h-11 gap-3"
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <GoogleIcon />}
-          <span>Continue with Google</span>
+          <span>{t.authGoogle}</span>
         </Button>
       </Card>
     </main>
