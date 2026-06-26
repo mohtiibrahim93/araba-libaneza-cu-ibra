@@ -1682,6 +1682,7 @@ const translations = {
     priceFizicShort: "In person",
     priceSurchargeNote: "In-person classes are 40% more expensive than online (covers room rent and travel).",
     priceLeiPerMonth: "LEI / month",
+   priceFromLabel: "From",
     priceLeiPerLesson: "LEI / lesson",
 
     grupChooseLevelTitle: "Pick your level",
