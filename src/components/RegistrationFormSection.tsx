@@ -34,6 +34,9 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 interface RegistrationFormSectionProps {
   defaultCourseType?: CourseType;
   defaultFormat?: FormatType;
+  defaultLevel?: LevelType;
+  /** When true, lock the course type + level to defaults (used on dedicated course pages). */
+  lockSelection?: boolean;
   lessonType?: "group" | "private";
   embedded?: boolean;
   onBack?: () => void;
@@ -44,6 +47,8 @@ const STORAGE_KEY = "registration_form_draft";
 const RegistrationFormSection = ({
   defaultCourseType,
   defaultFormat,
+  defaultLevel,
+  lockSelection = false,
   lessonType = "group",
   embedded = false,
   onBack,
@@ -55,7 +60,7 @@ const RegistrationFormSection = ({
   const [format, setFormat] = useState<FormatType | "">(
     defaultFormat ?? (defaultCourseType === "kids" ? "online" : ""),
   );
-  const [level, setLevel] = useState<LevelType | "">("A1");
+  const [level, setLevel] = useState<LevelType | "">(defaultLevel ?? "A1");
   const [center, setCenter] = useState<string>("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -372,6 +377,7 @@ const RegistrationFormSection = ({
           />
 
           {/* Course type */}
+          {lockSelection && courseType ? null : (
           <div className="space-y-2">
             <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
             <Select value={courseType} onValueChange={(v) => onCourseChange(v as CourseType)}>
@@ -385,6 +391,7 @@ const RegistrationFormSection = ({
               </SelectContent>
             </Select>
           </div>
+          )}
 
           {/* Format */}
           {courseType && (
@@ -417,6 +424,7 @@ const RegistrationFormSection = ({
               onGroupMonthsChange={setGroupMonths}
               cohortId={cohortId}
               onCohortChange={(c) => setCohortId(c?.id ?? null)}
+              locked={lockSelection && !!defaultLevel}
             />
           )}
 
