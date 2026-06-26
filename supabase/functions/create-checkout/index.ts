@@ -24,6 +24,53 @@ serve(async (req) => {
       throw new Error("Invalid course type");
     }
 
+    // Validate registrationId format & state BEFORE talking to Stripe so an
+    // unauthenticated caller can't disrupt an existing paid registration.
+    let existingReg: { payment_status: string | null; stripe_session_id: string | null; form_type: string | null } | null = null;
+    if (registrationId) {
+      if (typeof registrationId !== "string" || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
+        return new Response(JSON.stringify({ error: "Invalid registrationId" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        });
+      }
+      const adminClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      );
+      const { data: regRow } = await adminClient
+        .from("registrations")
+        .select("payment_status, stripe_session_id, form_type")
+        .eq("id", registrationId)
+        .maybeSingle();
+      if (!regRow) {
+        return new Response(JSON.stringify({ error: "Registration not found" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      if (regRow.payment_status === "paid") {
+        return new Response(JSON.stringify({ error: "Already paid" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        });
+      }
+      if (regRow.stripe_session_id) {
+        return new Response(JSON.stringify({ error: "Checkout already initiated" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        });
+      }
+      const expectedFormType = courseType === "kids_deposit" ? "kids" : courseType;
+      if (regRow.form_type && regRow.form_type !== expectedFormType) {
+        return new Response(JSON.stringify({ error: "Course type mismatch" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        });
+      }
+      existingReg = regRow;
+    }
+
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
     });
@@ -66,7 +113,7 @@ serve(async (req) => {
     });
 
     // Persist Stripe session id on the registration so the webhook can match it
-    if (registrationId) {
+    if (registrationId && existingReg) {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -77,7 +124,9 @@ serve(async (req) => {
           stripe_session_id: session.id,
           payment_status: "pending",
         })
-        .eq("id", registrationId);
+        .eq("id", registrationId)
+        .is("stripe_session_id", null)
+        .neq("payment_status", "paid");
       if (updateError) {
         console.error("Failed to attach stripe_session_id to registration:", updateError);
       }
@@ -90,7 +139,7 @@ serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Checkout error:", message);
-    return new Response(JSON.stringify({ error: message }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
