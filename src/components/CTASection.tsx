@@ -3,7 +3,7 @@ import { CalendarDays, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const PHONE_URL = "tel:+40763124514";
-const EMAIL = "mohtiibrahim@gmail.com";
+const EMAIL = "contact@centruldearabalibaneza.com";
 
 const CTASection = () => {
   const { t } = useI18n();

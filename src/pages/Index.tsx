@@ -82,7 +82,7 @@ const PageContent = () => {
     description: homeDescription,
     url: "https://centruldearabalibaneza.com/",
     telephone: "+40763124514",
-    email: "mohtiibrahim@gmail.com",
+    email: "contact@centruldearabalibaneza.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Raduga Creative Center, Strada Icoanei 80",
