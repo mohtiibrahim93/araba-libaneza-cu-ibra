@@ -1,31 +1,29 @@
-## Two fixes
+## Șterg pagina `/cursuri/online` și redirec­ționez la `/cursuri`
 
-### 1. Make the "Două formate" cards clickable (CursCopii)
+Pagina e redundantă — chiar ea spune "nu există o pagină separată online", iar selecția online/fizic se face deja în formularul de înscriere și în tabs-urile de pe `/cursuri`.
 
-File: `src/pages/courses/CursCopii.tsx` (lines 47–64).
+### Modificări
 
-Currently the two cards ("Privat 1:1" and "Grup (minim 4 copii)") are plain `<div>`s. Convert them to `<Link>`s matching the same hover style already used on `/cursuri/adulti` and `/cursuri/tineri` (border-primary/50 + shadow-md on hover, "Vezi pagina completă →" affordance):
+1. **`src/App.tsx`** — înlocuiesc ruta `/cursuri/online` cu un redirect 301-style (client-side):
+   ```tsx
+   <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
+   ```
+   Scot lazy import-ul `CursOnline`.
 
-- Privat 1:1 card → `<Link to="/cursuri/private">`
-- Grup card → `<Link to="/cursuri/grup">`
+2. **Șterg fișierul** `src/pages/courses/CursOnline.tsx`.
 
-Add a small primary-colored "Vezi pagina completă →" line at the bottom of each card for visual consistency with the Adulti/Tineri cards. No content/copy changes, no style overhaul.
+3. **Scot link-urile către `/cursuri/online`** din:
+   - `src/components/Footer.tsx` (linia 38)
+   - `src/pages/courses/CursCopii.tsx` (other courses, linia 42)
+   - `src/pages/courses/CursGrup.tsx` (linia 48)
+   - `src/pages/courses/CursPrivate.tsx` (linia 43)
 
-I'll also grep the rest of the site for similar info cards that look clickable but aren't (e.g. any `rounded-2xl border bg-card` block whose title references another existing route) and convert those too. Known candidates to verify: kids program card on the homepage, audience cards on `/cursuri`, format blocks on `CursPrivate`/`CursOnline`. Only ones with an obvious target route get linked.
+4. **`public/sitemap.xml`** — elimin entry-ul `/cursuri/online`.
 
-### 2. Remove the duplicate "back" navigation
+5. **Cleanup i18n** — marchez ca nefolosite (sau le șterg) cheile `courseOnline*` din `src/lib/i18n.tsx` (RO și EN). Le șterg complet ca să nu rămână cod mort.
 
-Right now most course sub-pages show two back-affordances stacked on top of each other:
+### Ce NU schimb
 
-- A `← Înapoi la cursuri` arrow link (rendered by `CourseLayout`, lines 107–118).
-- A `Acasă > Cursuri > …` breadcrumb directly below it (same file, lines 119–146), where "Cursuri" is also a back link.
-
-Same issue on `/cursuri/grup/:level` (`CursGrupLevel.tsx` lines 68–86): breadcrumb + a separate "Înapoi la cursuri" link above the H1.
-
-Fix: keep the breadcrumb (it carries SEO value via the JSON-LD `BreadcrumbList`) and remove the standalone `← Înapoi` arrow link in both places. The breadcrumb's "Cursuri" link already provides one-click back navigation, and on `CursGrupLevel` the breadcrumb already includes "Cursuri de grup" as a back step.
-
-No other changes to navbar, layout, or styling.
-
-### Out of scope
-
-You mentioned "you still have missing things" without naming them — I'll ask in chat once these two land so I don't guess wrong.
+- Tab-urile de pe home + `/cursuri` rămân exact așa.
+- Nicio modificare la stiluri, formulare, sau alte pagini de curs.
+- Pe `/cursuri/grup`, `/cursuri/private`, `/cursuri/copii` rămâne mențiunea "disponibil și online" (vine din feature-bullets existente, nu e legată de pagina ștearsă).

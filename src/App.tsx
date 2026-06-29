@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
 import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import Index from "./pages/Index";
@@ -28,7 +28,6 @@ const CursGrup = lazy(() => import("./pages/courses/CursGrup"));
 const CursGrupLevel = lazy(() => import("./pages/courses/CursGrupLevel"));
 const CursPrivate = lazy(() => import("./pages/courses/CursPrivate"));
 const CursCopii = lazy(() => import("./pages/courses/CursCopii"));
-const CursOnline = lazy(() => import("./pages/courses/CursOnline"));
 const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
 const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
 const CursTineri = lazy(() => import("./pages/courses/CursTineri"));
@@ -78,7 +77,7 @@ const App = () => (
             <Route path="/cursuri/grup/:level" element={<CursGrupLevel />} />
             <Route path="/cursuri/private" element={<CursPrivate />} />
             <Route path="/cursuri/copii" element={<CursCopii />} />
-            <Route path="/cursuri/online" element={<CursOnline />} />
+            <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

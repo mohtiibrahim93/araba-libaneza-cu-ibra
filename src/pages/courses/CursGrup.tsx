@@ -45,7 +45,6 @@ const CursGrup = () => {
       otherCourses={[
         { to: "/cursuri/private", label: t.coursePrivateH1 },
         { to: "/cursuri/copii", label: t.courseCopiiH1 },
-        { to: "/cursuri/online", label: t.courseOnlineH1 },
       ]}
     >
       {/* Level grid */}

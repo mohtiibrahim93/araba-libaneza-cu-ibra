@@ -801,17 +801,6 @@ const translations = {
     courseCopiiFeat3: "Fizic în București (online de la 10 ani)",
     courseCopiiFeat4: "Profesor nativ, atmosferă caldă",
 
-    // /cursuri/online
-    courseOnlineMetaTitle: "Curs de Arabă Libaneză Online — Grup sau 1:1, oriunde",
-    courseOnlineMetaDesc: "Învață arabă libaneză online cu profesor nativ, în grup sau 1:1, prin Zoom. Toate nivelurile (A1–C2). Cursuri din orice oraș sau țară.",
-    courseOnlineH1: "Curs de Arabă Libaneză Online",
-    courseOnlineIntro: "Participă de oriunde la cursurile noastre prin Zoom. Alege între grup (4–10 cursanți) sau 1:1, cu același profesor nativ și același curriculum CEFR ca la cursurile fizice.",
-    courseOnlinePriceLine: "De la 500 LEI / lună (grup) · 150 LEI / lecție (1:1)",
-    courseOnlineFeat1: "Lecții live prin Zoom, nu înregistrate",
-    courseOnlineFeat2: "Grup (A1–C2) sau 1:1, alegi tu",
-    courseOnlineFeat3: "Materiale digitale incluse",
-    courseOnlineFeat4: "Acces din orice oraș sau țară",
-
     // Course pages — section labels
     coursePageWhatYouLearn: "Ce vei învăța",
     coursePageHowItWorks: "Cum funcționează",
@@ -870,11 +859,6 @@ const translations = {
     copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic la centru sau online.",
     copiiFormatGroupTitle: "Grup (minim 4 copii)",
     copiiFormatGroupDesc: "Activități prin joc într-o grupă mică. Fizic la centru (orice vârstă) sau online (de la 10 ani).",
-
-    // /cursuri/online — thin landing
-    onlineLandingTitle: "Toate cursurile sunt disponibile online",
-    onlineLandingDesc: "Orice curs — grup, privat sau copii — poate fi urmat online prin Zoom. Nu există o pagină separată „online”: alege tipul de curs și selectezi formatul online la înscriere.",
-    onlineLandingPickCourse: "Alege tipul de curs:",
 
     // /cursuri overview
     cursuriMetaTitle: "Cursuri de Arabă Libaneză — Adulți, Tineri, Copii",
@@ -1685,17 +1669,6 @@ const translations = {
     courseCopiiFeat3: "In person in Bucharest (online from age 10)",
     courseCopiiFeat4: "Native instructor, warm atmosphere",
 
-    // /cursuri/online
-    courseOnlineMetaTitle: "Lebanese Arabic Online Course — Group or 1:1, anywhere",
-    courseOnlineMetaDesc: "Learn Lebanese Arabic online with a native instructor, in a group or 1:1, over Zoom. All levels (A1–C2). Join from any city or country.",
-    courseOnlineH1: "Lebanese Arabic Online Course",
-    courseOnlineIntro: "Join our courses from anywhere via Zoom. Choose group (4–10 students) or 1:1, with the same native instructor and the same CEFR curriculum as our in-person classes.",
-    courseOnlinePriceLine: "From 500 LEI / month (group) · 150 LEI / lesson (1:1)",
-    courseOnlineFeat1: "Live Zoom lessons, not recordings",
-    courseOnlineFeat2: "Group (A1–C2) or 1:1 — your call",
-    courseOnlineFeat3: "Digital materials included",
-    courseOnlineFeat4: "Join from any city or country",
-
     // Course pages — section labels
     coursePageWhatYouLearn: "What you'll learn",
     coursePageHowItWorks: "How it works",
@@ -1749,10 +1722,6 @@ const translations = {
     copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person at the center or online.",
     copiiFormatGroupTitle: "Group (minimum 4 kids)",
     copiiFormatGroupDesc: "Play-based activities in a small group. In person at the center (any age) or online (from age 10).",
-
-    onlineLandingTitle: "Every course is available online",
-    onlineLandingDesc: "Any course — group, private or kids — can be taken online via Zoom. There's no separate \"online\" page: pick the course type and select the online format at registration.",
-    onlineLandingPickCourse: "Pick a course type:",
 
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
     cursuriMetaDesc: "Lebanese Arabic courses for every age: adults (18+), teens (11–17) and kids (6–10). Group or 1:1, online or in person in Bucharest.",
