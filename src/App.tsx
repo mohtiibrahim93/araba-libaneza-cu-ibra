@@ -29,6 +29,9 @@ const CursGrupLevel = lazy(() => import("./pages/courses/CursGrupLevel"));
 const CursPrivate = lazy(() => import("./pages/courses/CursPrivate"));
 const CursCopii = lazy(() => import("./pages/courses/CursCopii"));
 const CursOnline = lazy(() => import("./pages/courses/CursOnline"));
+const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
+const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
+const CursTineri = lazy(() => import("./pages/courses/CursTineri"));
 
 const queryClient = new QueryClient();
 
@@ -68,6 +71,9 @@ const App = () => (
             <Route path="/trial" element={<Trial />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/cursuri" element={<Cursuri />} />
+            <Route path="/cursuri/adulti" element={<CursAdulti />} />
+            <Route path="/cursuri/tineri" element={<CursTineri />} />
             <Route path="/cursuri/grup" element={<CursGrup />} />
             <Route path="/cursuri/grup/:level" element={<CursGrupLevel />} />
             <Route path="/cursuri/private" element={<CursPrivate />} />

@@ -79,7 +79,7 @@ const CursGrupLevel = () => {
         {/* Hero */}
         <section className="max-w-6xl mx-auto px-6 pt-4 pb-8">
           <Link
-            to="/cursuri/grup"
+            to="/cursuri"
             className="inline-block text-sm text-muted-foreground hover:text-foreground mb-4"
           >
             {t.levelPageBackToGrup}

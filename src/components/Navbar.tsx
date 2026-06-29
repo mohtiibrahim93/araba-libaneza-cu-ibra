@@ -73,10 +73,12 @@ const Navbar = () => {
   ];
 
   const courseLinks = [
+    { to: "/cursuri", label: t.cursuriH1 },
+    { to: "/cursuri/adulti", label: t.trackAdultiTitle },
+    { to: "/cursuri/tineri", label: t.trackTineriTitle },
+    { to: "/cursuri/copii", label: t.trackCopiiTitle },
     { to: "/cursuri/grup", label: t.courseGrupH1 },
     { to: "/cursuri/private", label: t.coursePrivateH1 },
-    { to: "/cursuri/copii", label: t.courseCopiiH1 },
-    { to: "/cursuri/online", label: t.courseOnlineH1 },
   ];
 
   return (
