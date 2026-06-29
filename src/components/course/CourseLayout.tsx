@@ -104,18 +104,6 @@ const CourseLayout = ({
       <Navbar />
 
       <main className="pt-16">
-        {/* Back to /cursuri */}
-        {path !== "/cursuri" && (
-          <div className="max-w-6xl mx-auto px-6 pt-6">
-            <Link
-              to="/cursuri"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-              {t.levelPageBackToGrup}
-            </Link>
-          </div>
-        )}
         {/* Breadcrumb */}
         <nav
           aria-label={t.courseBreadcrumbCourses}
