@@ -1723,10 +1723,6 @@ const translations = {
     copiiFormatGroupTitle: "Group (minimum 4 kids)",
     copiiFormatGroupDesc: "Play-based activities in a small group. In person at the center (any age) or online (from age 10).",
 
-    onlineLandingTitle: "Every course is available online",
-    onlineLandingDesc: "Any course — group, private or kids — can be taken online via Zoom. There's no separate \"online\" page: pick the course type and select the online format at registration.",
-    onlineLandingPickCourse: "Pick a course type:",
-
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
     cursuriMetaDesc: "Lebanese Arabic courses for every age: adults (18+), teens (11–17) and kids (6–10). Group or 1:1, online or in person in Bucharest.",
     cursuriH1: "Our Lebanese Arabic Courses",
