@@ -39,7 +39,6 @@ const CursCopii = () => {
       otherCourses={[
         { to: "/cursuri/grup", label: t.courseGrupH1 },
         { to: "/cursuri/private", label: t.coursePrivateH1 },
-        { to: "/cursuri/online", label: t.courseOnlineH1 },
       ]}
     >
       {/* Format choice */}

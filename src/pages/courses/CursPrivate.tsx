@@ -40,7 +40,6 @@ const CursPrivate = () => {
       otherCourses={[
         { to: "/cursuri/grup", label: t.courseGrupH1 },
         { to: "/cursuri/copii", label: t.courseCopiiH1 },
-        { to: "/cursuri/online", label: t.courseOnlineH1 },
       ]}
     >
       {/* Personalized + MSA partners */}
