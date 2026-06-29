@@ -78,12 +78,6 @@ const CursGrupLevel = () => {
 
         {/* Hero */}
         <section className="max-w-6xl mx-auto px-6 pt-4 pb-8">
-          <Link
-            to="/cursuri"
-            className="inline-block text-sm text-muted-foreground hover:text-foreground mb-4"
-          >
-            {t.levelPageBackToGrup}
-          </Link>
           <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
             CEFR {upperLevel}
           </span>
