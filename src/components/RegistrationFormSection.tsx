@@ -22,7 +22,7 @@ import TrustBand from "@/components/TrustBand";
 import GroupFields from "./RegistrationForm/GroupFields";
 import PrivateFields from "./RegistrationForm/PrivateFields";
 import KidsFields from "./RegistrationForm/KidsFields";
-import LeadFields from "./RegistrationForm/LeadFields";
+import LeadFields, { isValidPhone, isValidEmail } from "./RegistrationForm/LeadFields";
 import CapacityBanner from "./RegistrationForm/CapacityBanner";
 import PostSubmitView from "./RegistrationForm/PostSubmitView";
 import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
@@ -203,6 +203,14 @@ const RegistrationFormSection = ({
     }
     if (!gdpr) {
       toast.error(t.gdprRequired);
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      toast.error(t.validPhoneError);
+      return;
+    }
+    if (email && !isValidEmail(email)) {
+      toast.error(t.validEmailError);
       return;
     }
 

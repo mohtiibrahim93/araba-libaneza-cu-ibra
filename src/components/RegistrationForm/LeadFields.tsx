@@ -3,6 +3,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { CourseType } from "./types";
+import { useState } from "react";
+
+// Romanian mobile or international E.164. Strip spaces / dashes / parens before testing.
+const PHONE_RE = /^(?:\+[1-9]\d{6,14}|0[27]\d{8})$/;
+const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+const EMAIL_BLOCKLIST = /^(no-?reply|noreply|test|admin|postmaster|mailer-daemon)@/i;
+
+const normalizePhone = (raw: string) => raw.replace(/[\s\-().]/g, "");
+
+export const isValidPhone = (raw: string) => PHONE_RE.test(normalizePhone(raw));
+export const isValidEmail = (raw: string) => {
+  if (!raw) return true; // optional
+  const v = raw.trim();
+  if (v.length > 255) return false;
+  if (EMAIL_BLOCKLIST.test(v)) return false;
+  if (!EMAIL_RE.test(v)) return false;
+  const tld = v.split(".").pop() || "";
+  return tld.length >= 2;
+};
 
 interface Props {
   courseType: CourseType | "";
@@ -28,6 +47,10 @@ const LeadFields = ({
   onMessageChange,
 }: Props) => {
   const { t } = useI18n();
+  const [phoneTouched, setPhoneTouched] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+  const phoneError = phoneTouched && phone && !isValidPhone(phone);
+  const emailError = emailTouched && email && !isValidEmail(email);
 
   return (
     <>
@@ -52,10 +75,16 @@ const LeadFields = ({
             type="tel"
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
+            onBlur={() => setPhoneTouched(true)}
             placeholder={t.placeholderPhone}
             required
             maxLength={30}
+            aria-invalid={phoneError || undefined}
+            className={phoneError ? "border-destructive focus-visible:ring-destructive" : ""}
           />
+          {phoneError && (
+            <p className="text-xs text-destructive">{t.validPhoneError}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">{t.labelEmail}</Label>
@@ -64,9 +93,15 @@ const LeadFields = ({
             type="email"
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
+            onBlur={() => setEmailTouched(true)}
             placeholder={t.placeholderEmail}
             maxLength={255}
+            aria-invalid={emailError || undefined}
+            className={emailError ? "border-destructive focus-visible:ring-destructive" : ""}
           />
+          {emailError && (
+            <p className="text-xs text-destructive">{t.validEmailError}</p>
+          )}
         </div>
       </div>
 

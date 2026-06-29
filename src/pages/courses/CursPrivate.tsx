@@ -33,7 +33,7 @@ const CursPrivate = () => {
       badge={t.privateBadge}
       h1={t.coursePrivateH1}
       intro={t.coursePrivateIntro}
-      priceLine={`${t.priceOnlineShort} ${formatLei(online)} · ${t.priceFizicShort} ${formatLei(fizic)} ${t.priceLeiPerLesson}`}
+      priceLine={`${t.priceOnlineShort} ${formatLei(online)} · ${t.priceFizicShort} ${formatLei(fizic)} ${t.priceLeiPer90Min}`}
       features={[t.coursePrivateFeat1, t.coursePrivateFeat2, t.coursePrivateFeat3, t.coursePrivateFeat4]}
       primaryCtaLabel={t.courseCtaSeeForm}
       primaryCtaHref="#register"
@@ -54,7 +54,7 @@ const CursPrivate = () => {
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
-          <RegistrationFormSection defaultCourseType="private" embedded />
+          <RegistrationFormSection defaultCourseType="private" lockSelection embedded />
         </div>
       </section>
     </CourseLayout>

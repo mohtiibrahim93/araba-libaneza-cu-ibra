@@ -69,7 +69,7 @@ const CursCopii = () => {
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
-          <RegistrationFormSection defaultCourseType="kids" embedded />
+          <RegistrationFormSection defaultCourseType="kids" lockSelection embedded />
         </div>
       </section>
     </CourseLayout>
