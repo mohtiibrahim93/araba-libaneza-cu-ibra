@@ -1,17 +1,50 @@
 import { useI18n } from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ONLINE_PRICES, priceFor, formatLei, type CourseFormat } from "@/lib/pricing";
 
 interface Props {
   privateQuantity: number;
   onPrivateQuantityChange: (n: number) => void;
+  /** Selected lesson format — drives unit price (online vs in-center). */
+  format?: CourseFormat | "";
+  /** Per-lesson base price (online). Defaults to standard private lesson. */
+  basePriceOnline?: number;
 }
 
 const clamp = (n: number) => Math.min(100, Math.max(1, n));
 
-const PrivateFields = ({ privateQuantity, onPrivateQuantityChange }: Props) => {
+/** Returns the discount fraction (0, .05, .10, .15) for a given quantity. */
+const discountFor = (q: number): number => {
+  if (q >= 20) return 0.15;
+  if (q >= 10) return 0.10;
+  if (q >= 5) return 0.05;
+  return 0;
+};
+
+/** Next tier breakpoint info for "X more to unlock −Y%". */
+const nextTier = (q: number): { needed: number; pct: number } | null => {
+  if (q < 5) return { needed: 5 - q, pct: 5 };
+  if (q < 10) return { needed: 10 - q, pct: 10 };
+  if (q < 20) return { needed: 20 - q, pct: 15 };
+  return null;
+};
+
+const QUICK_PICKS = [1, 5, 10, 20];
+
+const PrivateFields = ({
+  privateQuantity,
+  onPrivateQuantityChange,
+  format,
+  basePriceOnline = ONLINE_PRICES.privateLesson,
+}: Props) => {
   const { t } = useI18n();
-  const total = privateQuantity * 150 * (privateQuantity >= 20 ? 0.85 : 1);
+  const unit = priceFor(basePriceOnline, format === "fizic" ? "fizic" : "online");
+  const discount = discountFor(privateQuantity);
+  const subtotal = privateQuantity * unit;
+  const total = subtotal * (1 - discount);
+  const saved = subtotal - total;
+  const next = nextTier(privateQuantity);
 
   return (
     <div className="space-y-2">
@@ -46,18 +79,62 @@ const PrivateFields = ({ privateQuantity, onPrivateQuantityChange }: Props) => {
           +
         </button>
         <div className="ml-auto text-right">
-          <p className="text-sm font-semibold text-foreground">
-            {total.toLocaleString("ro-RO")} LEI
-          </p>
-          {privateQuantity >= 20 ? (
-            <p className="text-xs font-medium text-primary">{t.privateQuantityDiscountApplied}</p>
+          {discount > 0 ? (
+            <p className="text-sm font-semibold text-foreground">
+              <span className="text-muted-foreground line-through font-normal mr-1.5">
+                {formatLei(Math.round(subtotal))}
+              </span>
+              {formatLei(Math.round(total))} LEI
+            </p>
           ) : (
-            <p className="text-xs text-muted-foreground">
-              {t.privateQuantityDiscountHint.replace("{n}", String(20 - privateQuantity))}
+            <p className="text-sm font-semibold text-foreground">
+              {formatLei(Math.round(total))} LEI
             </p>
           )}
+          {discount > 0 ? (
+            <p className="text-xs font-medium text-primary">
+              {t.privateQuantityDiscountApplied.replace("{p}", String(Math.round(discount * 100)))}
+              {" · "}
+              {t.privateQuantitySaved.replace("{amount}", formatLei(Math.round(saved)))}
+            </p>
+          ) : next ? (
+            <p className="text-xs text-muted-foreground">
+              {t.privateQuantityDiscountHint
+                .replace("{n}", String(next.needed))
+                .replace("{p}", String(next.pct))}
+            </p>
+          ) : null}
+          <p className="text-[11px] text-muted-foreground mt-0.5">
+            {t.privateQuantityPerLesson.replace("{price}", formatLei(unit))}
+          </p>
         </div>
       </div>
+
+      {/* Quick-pick chips for popular packs */}
+      <div className="flex flex-wrap items-center gap-2 pt-1">
+        <span className="text-xs text-muted-foreground">{t.privateQuantityQuickPick}</span>
+        {QUICK_PICKS.map((n) => {
+          const active = privateQuantity === n;
+          const d = discountFor(n);
+          return (
+            <button
+              key={n}
+              type="button"
+              onClick={() => onPrivateQuantityChange(n)}
+              className={
+                "px-3 py-1 rounded-full text-xs font-medium border transition-colors " +
+                (active
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background text-foreground border-border hover:border-primary/50")
+              }
+            >
+              {n}
+              {d > 0 ? ` · −${Math.round(d * 100)}%` : ""}
+            </button>
+          );
+        })}
+      </div>
+
       <p className="text-xs text-muted-foreground">{t.privateQuantityHelp}</p>
     </div>
   );
