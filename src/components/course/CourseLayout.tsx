@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { ChevronRight, MessageCircle } from "lucide-react";
+import { ChevronRight, MessageCircle, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -67,7 +67,7 @@ const CourseLayout = ({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: t.courseBreadcrumbHome, item: `${BASE_URL}/` },
-      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/#programs` },
+      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/cursuri` },
       { "@type": "ListItem", position: 3, name: h1, item: canonical },
     ],
   };
@@ -104,10 +104,22 @@ const CourseLayout = ({
       <Navbar />
 
       <main className="pt-16">
+        {/* Back to /cursuri */}
+        {path !== "/cursuri" && (
+          <div className="max-w-6xl mx-auto px-6 pt-6">
+            <Link
+              to="/cursuri"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+              {t.levelPageBackToGrup}
+            </Link>
+          </div>
+        )}
         {/* Breadcrumb */}
         <nav
           aria-label={t.courseBreadcrumbCourses}
-          className="max-w-6xl mx-auto px-6 pt-6 pb-2 text-xs text-muted-foreground"
+          className="max-w-6xl mx-auto px-6 pt-3 pb-2 text-xs text-muted-foreground"
         >
           <ol className="flex flex-wrap items-center gap-1">
             <li>
@@ -119,9 +131,9 @@ const CourseLayout = ({
               <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
             </li>
             <li>
-              <a href="/#programs" className="hover:text-foreground transition-colors">
+              <Link to="/cursuri" className="hover:text-foreground transition-colors">
                 {t.courseBreadcrumbCourses}
-              </a>
+              </Link>
             </li>
             <li aria-hidden="true">
               <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
@@ -209,9 +221,9 @@ const CourseLayout = ({
               ))}
             </ul>
             <p className="mt-4 text-sm">
-              <a href="/#programs" className="text-primary font-medium hover:underline underline-offset-4">
+              <Link to="/cursuri" className="text-primary font-medium hover:underline underline-offset-4">
                 {t.courseSeeAllPrograms}
-              </a>
+              </Link>
             </p>
           </div>
         </section>

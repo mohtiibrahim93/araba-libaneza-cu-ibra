@@ -72,15 +72,6 @@ const Navbar = () => {
     { href: "#contact", label: t.navContact },
   ];
 
-  const courseLinks = [
-    { to: "/cursuri", label: t.cursuriH1 },
-    { to: "/cursuri/adulti", label: t.trackAdultiTitle },
-    { to: "/cursuri/tineri", label: t.trackTineriTitle },
-    { to: "/cursuri/copii", label: t.trackCopiiTitle },
-    { to: "/cursuri/grup", label: t.courseGrupH1 },
-    { to: "/cursuri/private", label: t.coursePrivateH1 },
-  ];
-
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
@@ -110,32 +101,13 @@ const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                aria-label={t.navCoursesDropdownLabel}
-                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-              >
-                {t.navCourses}
-                <ChevronDown className="h-3.5 w-3.5" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="min-w-56">
-              {courseLinks.map((c) => (
-                <DropdownMenuItem key={c.to} asChild>
-                  <Link to={c.to} onClick={() => setOpen(false)}>
-                    {c.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuItem asChild>
-                <a href="#programs" onClick={goToAnchor("#programs")} className="text-primary font-medium">
-                  {t.courseSeeAllPrograms}
-                </a>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Link
+            to="/cursuri"
+            onClick={() => setOpen(false)}
+            className="hover:text-foreground transition-colors"
+          >
+            {t.navCourses}
+          </Link>
           <Link
             to="/booking"
             onClick={() => setOpen(false)}
@@ -215,28 +187,14 @@ const Navbar = () => {
       {open && (
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-2 gap-1">
-            <div className="py-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-1 mb-1">
-                {t.navCourses}
-              </p>
-              {courseLinks.map((c) => (
-                <Link
-                  key={c.to}
-                  to={c.to}
-                  onClick={() => setOpen(false)}
-                  className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-2.5 min-h-11 flex items-center"
-                >
-                  {c.label}
-                </Link>
-              ))}
-              <a
-                href="#programs"
-                onClick={goToAnchor("#programs")}
-                className="text-sm font-medium text-primary py-2.5 min-h-10 flex items-center"
-              >
-                {t.courseSeeAllPrograms}
-              </a>
-            </div>
+            <Link
+              to="/cursuri"
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
+            >
+              <GraduationCap className="w-4 h-4" aria-hidden="true" />
+              {t.navCourses}
+            </Link>
             <Link
               to="/booking"
               onClick={() => setOpen(false)}
