@@ -86,9 +86,14 @@ const RegistrationFormSection = ({
     if (!raw) return;
     try {
       const draft = JSON.parse(raw);
-      if (draft.courseType) setCourseType(draft.courseType);
-      if (draft.format !== undefined) setFormat(draft.format);
-      if (draft.level) setLevel(draft.level);
+      // When the page locks the selection (dedicated course routes), do not
+      // let a previously-saved draft override the course/level/format that
+      // this page is meant to represent.
+      if (!lockSelection) {
+        if (draft.courseType) setCourseType(draft.courseType);
+        if (draft.format !== undefined) setFormat(draft.format);
+        if (draft.level) setLevel(draft.level);
+      }
       if (draft.center !== undefined) setCenter(draft.center);
       if (draft.name !== undefined) setName(draft.name);
       if (draft.phone !== undefined) setPhone(draft.phone);
@@ -104,6 +109,7 @@ const RegistrationFormSection = ({
     } catch {
       // ignore corrupted drafts
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* Save draft to sessionStorage on every field change */
@@ -441,6 +447,7 @@ const RegistrationFormSection = ({
             <PrivateFields
               privateQuantity={privateQuantity}
               onPrivateQuantityChange={setPrivateQuantity}
+              format={format || "online"}
             />
           )}
 
@@ -494,6 +501,8 @@ const RegistrationFormSection = ({
                 <PrivateFields
                   privateQuantity={privateQuantity}
                   onPrivateQuantityChange={setPrivateQuantity}
+                  format="online"
+                  basePriceOnline={150}
                 />
               )}
             </>
