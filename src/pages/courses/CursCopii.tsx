@@ -2,7 +2,7 @@ import CourseLayout from "@/components/course/CourseLayout";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
-import { Users, User } from "lucide-react";
+import { Users, User, CheckCircle2, Music, BookOpen, Palette, Pencil, Globe } from "lucide-react";
 import { useState } from "react";
 import kidsImg from "@/assets/kids-course.jpg";
 
@@ -90,6 +90,41 @@ const CursCopii = () => {
           </button>
         </div>
         <p className="text-xs text-muted-foreground mt-4">{t.priceSurchargeNote}</p>
+      </section>
+
+      {/* Curriculum — adapts to selected track */}
+      <section className="mb-10">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5">
+          {t.copiiCurriculumTitle}
+        </h2>
+        <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 mb-5">
+          <h3 className="text-base font-semibold text-foreground mb-2">
+            {track === "group" ? t.copiiCurriculumGroupTitle : t.copiiCurriculumPrivateTitle}
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {track === "group" ? t.copiiCurriculumGroupDesc : t.copiiCurriculumPrivateDesc}
+          </p>
+        </div>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {[
+            { label: t.copiiCurriculumItemGames, icon: <Palette className="w-4 h-4" /> },
+            { label: t.copiiCurriculumItemMusic, icon: <Music className="w-4 h-4" /> },
+            { label: t.copiiCurriculumItemVocab, icon: <BookOpen className="w-4 h-4" /> },
+            { label: t.copiiCurriculumItemStories, icon: <BookOpen className="w-4 h-4" /> },
+            { label: t.copiiCurriculumItemWriting, icon: <Pencil className="w-4 h-4" /> },
+            { label: t.copiiCurriculumItemCulture, icon: <Globe className="w-4 h-4" /> },
+          ].map((item, i) => (
+            <li
+              key={i}
+              className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3"
+            >
+              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 text-primary">
+                {item.icon}
+              </span>
+              <span className="text-sm text-foreground pt-1">{item.label}</span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section id="register" className="scroll-mt-24 mt-4">

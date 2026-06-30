@@ -863,6 +863,19 @@ const translations = {
     copiiFormatGroupTitle: "Grup (minim 4 copii)",
     copiiFormatGroupDesc: "Activități prin joc într-o grupă mică. Fizic la centru (orice vârstă) sau online (de la 10 ani).",
 
+    // /cursuri/copii — curriculum
+    copiiCurriculumTitle: "Ce învață copilul tău",
+    copiiCurriculumGroupTitle: "În grup — învățare prin joc și interacțiune",
+    copiiCurriculumGroupDesc: "Copiii învață arabă libaneză într-o atmosferă relaxată, alături de alți copii de aceeași vârstă. Fiecare ședință combină jocuri, cântece și activități creative care îi ajută să acumuleze vocabular natural, fără presiune.",
+    copiiCurriculumPrivateTitle: "Privat 1:1 — ritm personalizat",
+    copiiCurriculumPrivateDesc: "Lecțiile individuale sunt construite în jurul intereselor și ritmului copilului tău. Profesorul adaptează fiecare activitate — mai mult joc, mai multă muzică sau mai mult vocabular — în funcție de ce îl motivează.",
+    copiiCurriculumItemGames: "Jocuri interactive și competiții vesele",
+    copiiCurriculumItemMusic: "Cântece și ritmuri în arabă libaneză",
+    copiiCurriculumItemVocab: "Vocabular tematic (animale, culori, familie, zi de zi)",
+    copiiCurriculumItemStories: "Povești și scenete simple",
+    copiiCurriculumItemWriting: "Introducere în scris (litere, cuvinte simple)",
+    copiiCurriculumItemCulture: "Elemente de cultură libaneză adaptate vârstei",
+
     // /cursuri overview
     cursuriMetaTitle: "Cursuri de Arabă Libaneză — Adulți, Tineri, Copii",
     cursuriMetaDesc: "Cursuri de arabă libaneză pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București.",
@@ -1728,6 +1741,19 @@ const translations = {
     copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person at the center or online.",
     copiiFormatGroupTitle: "Group (minimum 4 kids)",
     copiiFormatGroupDesc: "Play-based activities in a small group. In person at the center (any age) or online (from age 10).",
+
+    // /cursuri/copii — curriculum
+    copiiCurriculumTitle: "What your child will learn",
+    copiiCurriculumGroupTitle: "In a group — learning through play and interaction",
+    copiiCurriculumGroupDesc: "Children learn Lebanese Arabic in a relaxed atmosphere with other kids their age. Each session combines games, songs, and creative activities that help them build vocabulary naturally, without pressure.",
+    copiiCurriculumPrivateTitle: "Private 1:1 — personalized pace",
+    copiiCurriculumPrivateDesc: "Individual lessons are built around your child's interests and pace. The instructor adapts every activity — more games, more music, or more vocabulary — depending on what motivates them.",
+    copiiCurriculumItemGames: "Interactive games and fun competitions",
+    copiiCurriculumItemMusic: "Songs and rhythms in Lebanese Arabic",
+    copiiCurriculumItemVocab: "Thematic vocabulary (animals, colors, family, daily life)",
+    copiiCurriculumItemStories: "Simple stories and role-play skits",
+    copiiCurriculumItemWriting: "Introduction to writing (letters, simple words)",
+    copiiCurriculumItemCulture: "Age-appropriate Lebanese culture elements",
 
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
     cursuriMetaDesc: "Lebanese Arabic courses for every age: adults (18+), teens (11–17) and kids (6–10). Group or 1:1, online or in person in Bucharest.",
