@@ -57,9 +57,7 @@ const RegistrationFormSection = ({
   const { get: getCapacity } = useGroupCapacities();
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
-  const [format, setFormat] = useState<FormatType | "">(
-    defaultFormat ?? (defaultCourseType === "kids" ? "online" : ""),
-  );
+  const [format, setFormat] = useState<FormatType | "">(defaultFormat ?? "");
   const [level, setLevel] = useState<LevelType | "">(defaultLevel ?? "A1");
   const [center, setCenter] = useState<string>("");
   const [name, setName] = useState("");
@@ -141,11 +139,7 @@ const RegistrationFormSection = ({
 
   const onCourseChange = (value: CourseType) => {
     setCourseType(value);
-    if (value === "kids") {
-      setFormat("online");
-    } else {
-      setFormat("");
-    }
+    setFormat("");
     setCenter("");
     setPayDeposit(false);
     if (value !== "private") setPrivateQuantity(1);
@@ -411,20 +405,17 @@ const RegistrationFormSection = ({
           {courseType && (
             <div className="space-y-2">
               <Label htmlFor="format">{t.labelFormat} *</Label>
-              {courseType === "kids" ? (
-                <p className="text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-3 border border-border">
-                  {t.kidsPhysicalOnly}
-                </p>
-              ) : (
-                <Select value={format} onValueChange={(v) => setFormat(v as FormatType)}>
-                  <SelectTrigger id="format">
-                    <SelectValue placeholder={t.labelFormat} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="fizic">{t.privateFormatPhysical}</SelectItem>
-                    <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Select value={format} onValueChange={(v) => setFormat(v as FormatType)}>
+                <SelectTrigger id="format">
+                  <SelectValue placeholder={t.labelFormat} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fizic">{t.privateFormatPhysical}</SelectItem>
+                  <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
+                </SelectContent>
+              </Select>
+              {courseType === "kids" && (
+                <p className="text-xs text-muted-foreground">{t.kidsFormatNote}</p>
               )}
             </div>
           )}
