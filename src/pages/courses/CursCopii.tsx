@@ -2,7 +2,7 @@ import CourseLayout from "@/components/course/CourseLayout";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
-import { Users, User } from "lucide-react";
+import { Users, User, CheckCircle2, Music, BookOpen, Palette, Pencil, Globe } from "lucide-react";
 import { useState } from "react";
 import kidsImg from "@/assets/kids-course.jpg";
 
