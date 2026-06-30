@@ -1742,6 +1742,19 @@ const translations = {
     copiiFormatGroupTitle: "Group (minimum 4 kids)",
     copiiFormatGroupDesc: "Play-based activities in a small group. In person at the center (any age) or online (from age 10).",
 
+    // /cursuri/copii — curriculum
+    copiiCurriculumTitle: "What your child will learn",
+    copiiCurriculumGroupTitle: "In a group — learning through play and interaction",
+    copiiCurriculumGroupDesc: "Children learn Lebanese Arabic in a relaxed atmosphere with other kids their age. Each session combines games, songs, and creative activities that help them build vocabulary naturally, without pressure.",
+    copiiCurriculumPrivateTitle: "Private 1:1 — personalized pace",
+    copiiCurriculumPrivateDesc: "Individual lessons are built around your child's interests and pace. The instructor adapts every activity — more games, more music, or more vocabulary — depending on what motivates them.",
+    copiiCurriculumItemGames: "Interactive games and fun competitions",
+    copiiCurriculumItemMusic: "Songs and rhythms in Lebanese Arabic",
+    copiiCurriculumItemVocab: "Thematic vocabulary (animals, colors, family, daily life)",
+    copiiCurriculumItemStories: "Simple stories and role-play skits",
+    copiiCurriculumItemWriting: "Introduction to writing (letters, simple words)",
+    copiiCurriculumItemCulture: "Age-appropriate Lebanese culture elements",
+
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
     cursuriMetaDesc: "Lebanese Arabic courses for every age: adults (18+), teens (11–17) and kids (6–10). Group or 1:1, online or in person in Bucharest.",
     cursuriH1: "Our Lebanese Arabic Courses",
