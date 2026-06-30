@@ -2,12 +2,13 @@ import CourseLayout from "@/components/course/CourseLayout";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
-import { Users, User, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, User } from "lucide-react";
+import { useState } from "react";
 import kidsImg from "@/assets/kids-course.jpg";
 
 const CursCopii = () => {
   const { t } = useI18n();
+  const [track, setTrack] = useState<"private" | "group">("group");
   const privOnline = ONLINE_PRICES.kidsPrivateLesson;
   const privFizic = physicalPrice(privOnline);
   const grpOnline = ONLINE_PRICES.kidsGroupMonthly;
@@ -45,28 +46,48 @@ const CursCopii = () => {
       <section className="mt-4 mb-10">
         <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">{t.copiiFormatChoiceTitle}</h2>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Link to="/cursuri/private" className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all">
+          <button
+            type="button"
+            onClick={() => {
+              setTrack("private");
+              document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            aria-pressed={track === "private"}
+            className={
+              "text-left rounded-2xl border bg-card p-5 transition-all " +
+              (track === "private"
+                ? "border-primary shadow-md ring-2 ring-primary/20"
+                : "border-border hover:border-primary/50 hover:shadow-md")
+            }
+          >
             <User className="w-5 h-5 text-primary mb-2" />
             <h3 className="text-base font-bold text-foreground mb-1">{t.copiiFormatPrivateTitle}</h3>
             <p className="text-sm text-muted-foreground mb-3">{t.copiiFormatPrivateDesc}</p>
-            <p className="text-sm mb-3">
+            <p className="text-sm">
               <span className="font-semibold text-foreground">{formatLei(privOnline)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(privFizic)}</span> {t.priceFizicShort} <span className="text-muted-foreground">{t.priceLeiPerLesson}</span>
             </p>
-            <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline">
-              {t.programsSeeFullPage} <ChevronRight className="w-3.5 h-3.5" />
-            </span>
-          </Link>
-          <Link to="/cursuri/grup" className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all">
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setTrack("group");
+              document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            aria-pressed={track === "group"}
+            className={
+              "text-left rounded-2xl border bg-card p-5 transition-all " +
+              (track === "group"
+                ? "border-primary shadow-md ring-2 ring-primary/20"
+                : "border-border hover:border-primary/50 hover:shadow-md")
+            }
+          >
             <Users className="w-5 h-5 text-primary mb-2" />
             <h3 className="text-base font-bold text-foreground mb-1">{t.copiiFormatGroupTitle}</h3>
             <p className="text-sm text-muted-foreground mb-3">{t.copiiFormatGroupDesc}</p>
-            <p className="text-sm mb-3">
+            <p className="text-sm">
               <span className="font-semibold text-foreground">{formatLei(grpOnline)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(grpFizic)}</span> {t.priceFizicShort} <span className="text-muted-foreground">{t.priceLeiPerMonth}</span>
             </p>
-            <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline">
-              {t.programsSeeFullPage} <ChevronRight className="w-3.5 h-3.5" />
-            </span>
-          </Link>
+          </button>
         </div>
         <p className="text-xs text-muted-foreground mt-4">{t.priceSurchargeNote}</p>
       </section>
@@ -75,7 +96,13 @@ const CursCopii = () => {
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
-          <RegistrationFormSection defaultCourseType="kids" lockSelection embedded />
+          <RegistrationFormSection
+            key={track}
+            defaultCourseType="kids"
+            lessonType={track}
+            lockSelection
+            embedded
+          />
         </div>
       </section>
     </CourseLayout>
