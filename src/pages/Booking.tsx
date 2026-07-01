@@ -10,21 +10,26 @@ const BookingInner = () => {
   const [params] = useSearchParams();
   const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
   const registrationId = params.get("registration_id");
-
-  // Bookings must be tied to a registration. If no id is present, send users
-  // back to the registration form (Step 1 of the journey).
-  if (!registrationId || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
-    return <Navigate to="/#programs" replace />;
-  }
+  const hasValidRegistration =
+    !!registrationId && /^[0-9a-f-]{36}$/i.test(registrationId);
 
   const title = `${type === "paid" ? t.bookingPageSeoTitlePaid : t.bookingPageSeoTitleTrial} — ${t.siteTitle}`;
   const description = type === "paid" ? t.bookingPaidDesc : t.bookingTrialSeoDesc;
 
   const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
 
+  // Keep this hook before the early return so hook order stays stable across
+  // renders — otherwise a re-render without a valid registration id throws
+  // "rendered fewer hooks than expected" and blanks the whole app.
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    if (hasValidRegistration) document.title = title;
+  }, [title, hasValidRegistration]);
+
+  // Bookings must be tied to a registration. If no id is present, send users
+  // back to the registration form (Step 1 of the journey).
+  if (!hasValidRegistration) {
+    return <Navigate to="/#programs" replace />;
+  }
 
   return (
     <main className="min-h-screen bg-background py-12 px-6">
