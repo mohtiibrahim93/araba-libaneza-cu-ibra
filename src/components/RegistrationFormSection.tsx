@@ -269,6 +269,10 @@ const RegistrationFormSection = ({
       const notes = notesParts.join(" | ") || null;
 
       const recipientName = courseType === "kids" && childName ? childName : name;
+      // Persisted so create-payment-intent can charge the agreed amount
+      // server-side instead of trusting a client-supplied quantity.
+      const quantity =
+        courseType === "private" ? privateQuantity : courseType === "group" ? groupMonths : 1;
 
       const { error } = await supabase.from("registrations").insert({
         id,
@@ -285,6 +289,7 @@ const RegistrationFormSection = ({
         referral_code: referralCode.trim() || null,
         cohort_id: courseType === "group" ? cohortId : null,
         kids_slot_id: courseType === "kids" ? kidsSlotId : null,
+        quantity,
       });
 
       if (error) throw error;
@@ -300,12 +305,7 @@ const RegistrationFormSection = ({
         email: email || "",
         name: recipientName,
         registrationId: id,
-        quantity:
-          courseType === "private"
-            ? privateQuantity
-            : courseType === "group"
-              ? groupMonths
-              : undefined,
+        quantity: courseType === "kids" ? undefined : quantity,
         waitlistDeposit: courseType === "kids" && payDeposit,
         cohortId: courseType === "group" ? cohortId : null,
         kidsSlotId: courseType === "kids" ? kidsSlotId : null,

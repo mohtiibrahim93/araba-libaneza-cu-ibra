@@ -11,6 +11,7 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
+import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 
 const TrialPage = () => {
   const { t } = useI18n();
@@ -29,6 +30,14 @@ const TrialPage = () => {
     }
     if (!name.trim() || !email.trim() || !phone.trim()) {
       toast.error(t.schedulerNameRequired);
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      toast.error(t.validPhoneError);
+      return;
+    }
+    if (!isValidEmail(email)) {
+      toast.error(t.validEmailError);
       return;
     }
     setSubmitting(true);

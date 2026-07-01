@@ -1,16 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
+function jsonResponseWith(cors: Record<string, string>) {
+  return (body: unknown, status = 200) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
 }
 
 const allowedSenderDomains = ["centruldearabalibaneza.com", "notify.centruldearabalibaneza.com"];
@@ -22,14 +18,15 @@ function isAllowedSenderEmail(email: string) {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
+  const jsonResponse = jsonResponseWith(corsHeaders);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const body = await req.json();
-    const { password, action, ids, id, lead_status, sender_name, sender_email } = body;
-    const adminPassword = Deno.env.get("ADMIN_PASSWORD");
+    const { action, ids, id, lead_status, sender_name, sender_email } = body;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -55,8 +52,21 @@ Deno.serve(async (req) => {
       return jsonResponse({ data: registration });
     }
 
-    if (!adminPassword || password !== adminPassword) {
-      return jsonResponse({ error: "Parolă incorectă" });
+    // Everything below is admin-only: require a real Supabase Auth session
+    // (Google sign-in) whose email is in the ADMIN_EMAILS allowlist secret,
+    // instead of a single shared password with no rate limiting or identity.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+    const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
+    const callerEmail = userData?.user?.email?.toLowerCase();
+    const adminEmails = (Deno.env.get("ADMIN_EMAILS") || "")
+      .split(",")
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean);
+    const isAdmin = !!callerEmail && adminEmails.includes(callerEmail);
+
+    if (!isAdmin) {
+      return jsonResponse({ error: "Neautorizat" });
     }
 
     if (action === "list_capacities") {

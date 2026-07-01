@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, X, ExternalLink } from "lucide-react";
@@ -29,7 +29,7 @@ const fmt = (iso: string) =>
     timeStyle: "short",
   });
 
-const BookingsAdmin = ({ password }: { password: string }) => {
+const BookingsAdmin = () => {
   const [rows, setRows] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("confirmed");
@@ -38,9 +38,7 @@ const BookingsAdmin = ({ password }: { password: string }) => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "list_bookings", status_filter: filter },
-      });
+      const { data, error } = await invokeAdmin({ action: "list_bookings", status_filter: filter });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data.data);
@@ -49,7 +47,7 @@ const BookingsAdmin = ({ password }: { password: string }) => {
     } finally {
       setLoading(false);
     }
-  }, [password, filter]);
+  }, [filter]);
 
   useEffect(() => {
     load();
@@ -59,9 +57,7 @@ const BookingsAdmin = ({ password }: { password: string }) => {
     if (!confirm(`Anulezi programarea cu ${b.student_name} (${fmt(b.start_at)})?`)) return;
     setCancellingId(b.id);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "cancel_booking", id: b.id },
-      });
+      const { data, error } = await invokeAdmin({ action: "cancel_booking", id: b.id });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       toast({ title: "Programare anulată" });

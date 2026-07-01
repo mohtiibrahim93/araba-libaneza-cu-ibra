@@ -1,16 +1,22 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   TZ,
-  corsHeaders,
-  json,
+  json as _json,
   gcalFreebusy,
   generateSlotsForDate,
   overlaps,
   utcToZonedParts,
   weekdayInTz,
 } from "../_shared/booking.ts";
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
+  const json = (body: unknown, status = 200) => {
+    const res = _json(body, status);
+    for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
+    return res;
+  };
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {

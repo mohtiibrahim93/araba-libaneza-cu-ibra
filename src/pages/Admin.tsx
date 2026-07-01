@@ -42,16 +42,12 @@ import {
   exportPrivateLeadsCsv,
   exportPrivateLeadsPdf,
 } from "@/lib/adminExport";
-import {
-  getStoredAdminPassword,
-  setStoredAdminPassword,
-  clearStoredAdminPassword,
-} from "@/lib/adminAuth";
+import { invokeAdmin } from "@/lib/adminAuth";
+import { lovable } from "@/integrations/lovable";
 
 const Admin = () => {
-  const [password, setPassword] = useState("");
-  const [storedPassword, setStoredPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [registrations, setRegistrations] = useState<Registration[]>([]);
@@ -72,10 +68,8 @@ const Admin = () => {
   );
   const undoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const loadData = useCallback(async (pwd: string) => {
-    const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-      body: { password: pwd },
-    });
+  const loadData = useCallback(async () => {
+    const { data, error: fnError } = await invokeAdmin({});
     if (fnError) throw fnError;
     if (data?.error) throw new Error(data.error);
     setRegistrations(data.data);
@@ -83,17 +77,33 @@ const Admin = () => {
   }, []);
 
   useEffect(() => {
-    const stored = getStoredAdminPassword();
-    if (!stored) return;
-    (async () => {
-      try {
-        await loadData(stored);
-        setStoredPassword(stored);
-        setAuthenticated(true);
-      } catch {
-        clearStoredAdminPassword();
+    let cancelled = false;
+    const checkSession = async (hasSession: boolean) => {
+      if (!hasSession) {
+        if (!cancelled) {
+          setAuthenticated(false);
+          setCheckingSession(false);
+        }
+        return;
       }
-    })();
+      try {
+        await loadData();
+        if (!cancelled) setAuthenticated(true);
+      } catch {
+        if (!cancelled) setAuthenticated(false);
+      } finally {
+        if (!cancelled) setCheckingSession(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data }) => checkSession(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      checkSession(!!session);
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
   }, [loadData]);
 
   const filteredRegistrations = useMemo(() => {
@@ -139,31 +149,29 @@ const Admin = () => {
     [filteredRegistrations],
   );
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGoogleSignIn = async () => {
     setLoading(true);
     setError("");
     try {
-      await loadData(password);
-      setStoredPassword(password);
-      setStoredAdminPassword(password);
-      setAuthenticated(true);
-    } catch (err: any) {
-      setError(
-        err?.message === "Parolă incorectă"
-          ? "Parolă incorectă"
-          : "Eroare la autentificare. Încearcă din nou.",
-      );
-    } finally {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin + "/admin",
+      });
+      if (result.error) {
+        setError("Eroare la autentificare. Încearcă din nou.");
+        setLoading(false);
+      }
+      // On success, onAuthStateChange (registered above) picks up the new
+      // session and calls loadData(); if the account isn't in the
+      // ADMIN_EMAILS allowlist, loadData() will fail and authenticated stays false.
+    } catch {
+      setError("Eroare la autentificare. Încearcă din nou.");
       setLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    clearStoredAdminPassword();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setAuthenticated(false);
-    setPassword("");
-    setStoredPassword("");
     setRegistrations([]);
     setSelected(new Set());
   };
@@ -188,8 +196,9 @@ const Admin = () => {
     if (selected.size === 0) return;
     setDeleting(true);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "delete", ids: Array.from(selected) },
+      const { data, error: fnError } = await invokeAdmin({
+        action: "delete",
+        ids: Array.from(selected),
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
@@ -224,8 +233,10 @@ const Admin = () => {
     );
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "update_status", id, lead_status: leadStatus },
+      const { data, error: fnError } = await invokeAdmin({
+        action: "update_status",
+        id,
+        lead_status: leadStatus,
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
@@ -246,17 +257,11 @@ const Admin = () => {
                 current.map((r) => (r.id === id ? { ...r, lead_status: previousStatus } : r)),
               );
               try {
-                const { data: undoData, error: undoFnError } = await supabase.functions.invoke(
-                  "admin-registrations",
-                  {
-                    body: {
-                      password: storedPassword,
-                      action: "update_status",
-                      id,
-                      lead_status: previousStatus,
-                    },
-                  },
-                );
+                const { data: undoData, error: undoFnError } = await invokeAdmin({
+                  action: "update_status",
+                  id,
+                  lead_status: previousStatus,
+                });
                 if (undoFnError) throw undoFnError;
                 if (undoData?.error) throw new Error(undoData.error);
                 undoToast.dismiss();
@@ -293,13 +298,10 @@ const Admin = () => {
     e.preventDefault();
     setSavingEmailSettings(true);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: {
-          password: storedPassword,
-          action: "update_email_settings",
-          sender_name: emailSettings.sender_name,
-          sender_email: emailSettings.sender_email,
-        },
+      const { data, error: fnError } = await invokeAdmin({
+        action: "update_email_settings",
+        sender_name: emailSettings.sender_name,
+        sender_email: emailSettings.sender_email,
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
@@ -361,16 +363,16 @@ const Admin = () => {
     [privateFilteredRegistrations, leadStatusFilter, privateMessageSearch],
   );
 
-  if (!authenticated) {
+  if (checkingSession) {
     return (
-      <AdminLogin
-        password={password}
-        loading={loading}
-        error={error}
-        onPasswordChange={setPassword}
-        onSubmit={handleLogin}
-      />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
     );
+  }
+
+  if (!authenticated) {
+    return <AdminLogin loading={loading} error={error} onGoogleSignIn={handleGoogleSignIn} />;
   }
 
   return (
@@ -453,14 +455,14 @@ const Admin = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <StudentJourneyAdmin password={storedPassword} />
-        <TrialFunnelAdmin password={storedPassword} />
+        <StudentJourneyAdmin />
+        <TrialFunnelAdmin />
 
-        <CapacitiesAdmin password={storedPassword} />
-        <CohortsAdmin password={storedPassword} />
+        <CapacitiesAdmin />
+        <CohortsAdmin />
 
-        <AvailabilityAdmin password={storedPassword} />
-        <BookingsAdmin password={storedPassword} />
+        <AvailabilityAdmin />
+        <BookingsAdmin />
 
         <EmailSettingsForm
           settings={emailSettings}

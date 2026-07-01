@@ -23,14 +23,18 @@ const CursGrupLevel = () => {
   const { level } = useParams<{ level: string }>();
   const slug = (level || "").toLowerCase();
 
-  if (!VALID.includes(slug as (typeof VALID)[number])) {
-    return <Navigate to="/cursuri/grup" replace />;
-  }
-
+  // Hooks must run on every render (before any early return) so the hook
+  // order stays stable. Otherwise navigating from a valid level to an invalid
+  // one while this route stays mounted throws "rendered fewer hooks than
+  // expected" and blanks the whole app.
   const curriculum = useMemo(
-    () => getCurriculum(lang).find((l) => l.id === slug)!,
+    () => getCurriculum(lang).find((l) => l.id === slug),
     [lang, slug],
   );
+
+  if (!VALID.includes(slug as (typeof VALID)[number]) || !curriculum) {
+    return <Navigate to="/cursuri/grup" replace />;
+  }
   const upperLevel = slug.toUpperCase() as LevelType;
   const online = ONLINE_PRICES.groupMonthly[upperLevel];
   const fizic = physicalPrice(online);

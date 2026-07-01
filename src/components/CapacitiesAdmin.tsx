@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,11 +14,7 @@ interface CapacityRow {
   min_seats: number;
 }
 
-interface Props {
-  password: string;
-}
-
-const CapacitiesAdmin = ({ password }: Props) => {
+const CapacitiesAdmin = () => {
   const [rows, setRows] = useState<CapacityRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -26,9 +22,7 @@ const CapacitiesAdmin = ({ password }: Props) => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "list_capacities" },
-      });
+      const { data, error } = await invokeAdmin({ action: "list_capacities" });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data.data);
@@ -37,7 +31,7 @@ const CapacitiesAdmin = ({ password }: Props) => {
     } finally {
       setLoading(false);
     }
-  }, [password]);
+  }, []);
 
   useEffect(() => {
     load();
@@ -50,14 +44,11 @@ const CapacitiesAdmin = ({ password }: Props) => {
   const save = async (row: CapacityRow) => {
     setSavingId(row.id);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: {
-          password,
-          action: "update_capacity",
-          id: row.id,
-          max_seats: row.max_seats,
-          min_seats: row.min_seats,
-        },
+      const { data, error } = await invokeAdmin({
+        action: "update_capacity",
+        id: row.id,
+        max_seats: row.max_seats,
+        min_seats: row.min_seats,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);

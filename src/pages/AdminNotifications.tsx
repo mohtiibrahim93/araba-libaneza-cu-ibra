@@ -42,11 +42,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import AdminNav from "@/components/AdminNav";
-import {
-  getStoredAdminPassword,
-  setStoredAdminPassword,
-  clearStoredAdminPassword,
-} from "@/lib/adminAuth";
+import { invokeAdmin } from "@/lib/adminAuth";
+import { lovable } from "@/integrations/lovable";
 
 type EmailStatus = "sent" | "pending" | "failed" | "dlq" | "suppressed" | "not_sent" | "no_email";
 
@@ -112,9 +109,8 @@ const WhatsAppBadge = ({ sentAt }: { sentAt: string | null }) =>
   );
 
 const AdminNotifications = () => {
-  const [password, setPassword] = useState("");
-  const [storedPassword, setStoredPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rows, setRows] = useState<NotificationRow[]>([]);
@@ -127,51 +123,63 @@ const AdminNotifications = () => {
   const [deleteTarget, setDeleteTarget] = useState<NotificationRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const refresh = useCallback(async (pwd: string) => {
-    const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-      body: { password: pwd, action: "list_notifications" },
-    });
+  const refresh = useCallback(async () => {
+    const { data, error: fnError } = await invokeAdmin({ action: "list_notifications" });
     if (fnError) throw fnError;
     if (data?.error) throw new Error(data.error);
     setRows(data.data || []);
   }, []);
 
-  // Persisted login: try stored password on mount
   useEffect(() => {
-    const stored = getStoredAdminPassword();
-    if (!stored) return;
-    (async () => {
-      try {
-        await refresh(stored);
-        setStoredPassword(stored);
-        setAuthenticated(true);
-      } catch {
-        clearStoredAdminPassword();
+    let cancelled = false;
+    const checkSession = async (hasSession: boolean) => {
+      if (!hasSession) {
+        if (!cancelled) {
+          setAuthenticated(false);
+          setCheckingSession(false);
+        }
+        return;
       }
-    })();
+      try {
+        await refresh();
+        if (!cancelled) setAuthenticated(true);
+      } catch {
+        if (!cancelled) setAuthenticated(false);
+      } finally {
+        if (!cancelled) setCheckingSession(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data }) => checkSession(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      checkSession(!!session);
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
   }, [refresh]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGoogleSignIn = async () => {
     setLoading(true);
     setError("");
     try {
-      await refresh(password);
-      setStoredPassword(password);
-      setStoredAdminPassword(password);
-      setAuthenticated(true);
-    } catch (err: any) {
-      setError(err?.message === "Parolă incorectă" ? "Parolă incorectă" : "Eroare la autentificare");
-    } finally {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin + "/admin/notifications",
+      });
+      if (result.error) {
+        setError("Eroare la autentificare");
+        setLoading(false);
+      }
+    } catch {
+      setError("Eroare la autentificare");
       setLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    clearStoredAdminPassword();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setAuthenticated(false);
-    setPassword("");
-    setStoredPassword("");
     setRows([]);
     setSelected(new Set());
   };
@@ -179,13 +187,11 @@ const AdminNotifications = () => {
   const handleResendEmail = async (id: string) => {
     setBusyId(id);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "resend_confirmation", id },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "resend_confirmation", id });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       toast({ title: "Email retrimis", description: "Va apărea ca trimis după procesare." });
-      await refresh(storedPassword);
+      await refresh();
     } catch (err: any) {
       toast({ title: "Retrimitere eșuată", description: err?.message, variant: "destructive" });
     } finally {
@@ -208,9 +214,7 @@ const AdminNotifications = () => {
       prev.map((x) => (x.id === r.id ? { ...x, whatsapp_sent_at: new Date().toISOString() } : x))
     );
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "mark_whatsapp_sent", id: r.id },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "mark_whatsapp_sent", id: r.id });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
     } catch (err: any) {
@@ -228,9 +232,7 @@ const AdminNotifications = () => {
     const prev = rows.find((x) => x.id === id)?.whatsapp_sent_at || null;
     setRows((p) => p.map((x) => (x.id === id ? { ...x, whatsapp_sent_at: null } : x)));
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "mark_whatsapp_sent", id, clear: true },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "mark_whatsapp_sent", id, clear: true });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
     } catch {
@@ -245,9 +247,7 @@ const AdminNotifications = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "delete", ids: [deleteTarget.id] },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "delete", ids: [deleteTarget.id] });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((x) => x.id !== deleteTarget.id));
@@ -270,9 +270,7 @@ const AdminNotifications = () => {
     setBulkDeleting(true);
     const ids = Array.from(selected);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "delete", ids },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "delete", ids });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((x) => !selected.has(x.id)));
@@ -341,13 +339,18 @@ const AdminNotifications = () => {
       return next;
     });
 
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <form
-          onSubmit={handleLogin}
-          className="w-full max-w-sm space-y-6 bg-card border border-border rounded-xl p-8 shadow-lg"
-        >
+        <div className="w-full max-w-sm space-y-6 bg-card border border-border rounded-xl p-8 shadow-lg">
           <div className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Lock className="w-6 h-6 text-primary" />
@@ -357,22 +360,12 @@ const AdminNotifications = () => {
               Status email & WhatsApp pentru fiecare lead
             </p>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Parolă</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button onClick={handleGoogleSignIn} disabled={loading} className="w-full">
             {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-            Intră
+            Continuă cu Google
           </Button>
-        </form>
+        </div>
       </div>
     );
   }
@@ -385,7 +378,7 @@ const AdminNotifications = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => refresh(storedPassword)}
+            onClick={() => refresh()}
             disabled={loading}
             className="h-8"
           >

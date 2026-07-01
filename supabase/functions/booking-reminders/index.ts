@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { corsHeaders, json } from "../_shared/booking.ts";
+import { json as _json } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 /**
  * Cron-driven (every 15 min). Sends multi-stage reminders for each confirmed booking:
@@ -13,6 +14,12 @@ import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking
  * catches each booking exactly once. The dedupe flag is stamped on send.
  */
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
+  const json = (body: unknown, status = 200) => {
+    const res = _json(body, status);
+    for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
+    return res;
+  };
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   const supabase = createClient(

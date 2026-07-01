@@ -9,7 +9,11 @@ import { MagicLinkEmail } from '../_shared/email-templates/magic-link.tsx'
 import { RecoveryEmail } from '../_shared/email-templates/recovery.tsx'
 import { EmailChangeEmail } from '../_shared/email-templates/email-change.tsx'
 import { ReauthenticationEmail } from '../_shared/email-templates/reauthentication.tsx'
+import { buildCorsHeaders } from '../_shared/cors.ts'
 
+// Module-scope default used by handlePreview/handleWebkook internals below;
+// Deno.serve() overwrites the actual response headers per-request via
+// withCors() so real callers never see this wildcard.
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
@@ -294,26 +298,31 @@ async function handleWebhook(req: Request): Promise<Response> {
 
 Deno.serve(async (req) => {
   const url = new URL(req.url)
+  const realCorsHeaders = buildCorsHeaders(req)
+  const withCors = (res: Response) => {
+    for (const [k, v] of Object.entries(realCorsHeaders)) res.headers.set(k, v)
+    return res
+  }
 
   // Handle CORS preflight for main endpoint
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: realCorsHeaders })
   }
 
   // Route to preview handler for /preview path
   if (url.pathname.endsWith('/preview')) {
-    return handlePreview(req)
+    return withCors(await handlePreview(req))
   }
 
   // Main webhook handler
   try {
-    return await handleWebhook(req)
+    return withCors(await handleWebhook(req))
   } catch (error) {
     console.error('Webhook handler error:', error)
     const message = error instanceof Error ? error.message : 'Unknown error'
-    return new Response(JSON.stringify({ error: message }), {
+    return withCors(new Response(JSON.stringify({ error: message }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+      headers: { 'Content-Type': 'application/json' },
+    }))
   }
 })
