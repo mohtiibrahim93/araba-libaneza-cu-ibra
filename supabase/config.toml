@@ -2,7 +2,7 @@ project_id = "pzouzxgswccyhxhpgfwb"
 
 [functions]
   [functions.admin-registrations]
-    verify_jwt = false
+    verify_jwt = true
   [functions.auth-email-hook]
     verify_jwt = false
   [functions.create-payment-intent]

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle2, Circle, Calendar, CreditCard, UserPlus, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ const fmtDate = (iso: string) =>
 
 type FilterKey = "all" | "incomplete" | "completed";
 
-const StudentJourneyAdmin = ({ password }: { password: string }) => {
+const StudentJourneyAdmin = () => {
   const [rows, setRows] = useState<JourneyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
@@ -50,9 +50,7 @@ const StudentJourneyAdmin = ({ password }: { password: string }) => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "list_student_journey" },
-      });
+      const { data, error } = await invokeAdmin({ action: "list_student_journey" });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data.data ?? []);
@@ -61,7 +59,7 @@ const StudentJourneyAdmin = ({ password }: { password: string }) => {
     } finally {
       setLoading(false);
     }
-  }, [password]);
+  }, []);
 
   useEffect(() => {
     load();

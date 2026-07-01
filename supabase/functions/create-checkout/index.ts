@@ -1,11 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 const PRICES: Record<string, string> = {
   group: "price_1TFLYjInUEhMEuJrameFTK8V",
@@ -13,6 +9,7 @@ const PRICES: Record<string, string> = {
 };
 
 serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -98,19 +95,24 @@ serve(async (req) => {
         }]
       : [{ price: PRICES[courseType], quantity: 1 }];
 
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : email || undefined,
-      line_items: lineItems,
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/?payment=canceled`,
-      metadata: {
-        course_type: courseType,
-        student_name: name || "",
-        registration_id: registrationId || "",
+    const session = await stripe.checkout.sessions.create(
+      {
+        customer: customerId,
+        customer_email: customerId ? undefined : email || undefined,
+        line_items: lineItems,
+        mode: "payment",
+        success_url: `${req.headers.get("origin")}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.get("origin")}/?payment=canceled`,
+        metadata: {
+          course_type: courseType,
+          student_name: name || "",
+          registration_id: registrationId || "",
+        },
       },
-    });
+      // Ties repeated calls for the same registration to the same session
+      // instead of creating orphaned duplicate checkout sessions.
+      registrationId ? { idempotencyKey: `cs_${registrationId}_${courseType}` } : undefined,
+    );
 
     // Persist Stripe session id on the registration so the webhook can match it
     if (registrationId && existingReg) {

@@ -1,12 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 const PRICES: Record<string, string> = {
   group: "price_1TFLYjInUEhMEuJrameFTK8V",
@@ -14,12 +9,13 @@ const PRICES: Record<string, string> = {
 };
 
 serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { courseType, email, name, registrationId, quantity: rawQuantity } = await req.json();
+    const { courseType, email, name, registrationId } = await req.json();
 
     if (!courseType || !PRICES[courseType]) {
       throw new Error("Invalid course type");
@@ -37,7 +33,7 @@ serve(async (req) => {
     );
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
-      .select("id, form_type, payment_status, stripe_session_id, email")
+      .select("id, form_type, payment_status, stripe_session_id, email, quantity")
       .eq("id", registrationId)
       .maybeSingle();
 
@@ -60,7 +56,10 @@ serve(async (req) => {
       });
     }
 
-    const quantity = Math.max(1, Math.min(100, Number.parseInt(String(rawQuantity ?? 1), 10) || 1));
+    // Trust only the quantity persisted on the registration at submission
+    // time (server-side, immutable post-insert) — never a client-supplied
+    // value, which would let the amount charged be manipulated directly.
+    const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
     const discountApplied =
       (courseType === "private" && quantity >= 20) ||
       (courseType === "group" && quantity >= 3);
@@ -101,24 +100,30 @@ serve(async (req) => {
           : 1;
     const finalAmount = Math.round(baseAmount * discountRate);
 
-    const intent = await stripe.paymentIntents.create({
-      amount: finalAmount,
-      currency: price.currency,
-      customer: customerId,
-      receipt_email: email || undefined,
-      automatic_payment_methods: { enabled: true },
-      metadata: {
-        course_type: courseType,
-        student_name: name || "",
-        registration_id: registrationId || "",
-        quantity: String(quantity),
-        discount_applied: discountApplied
-          ? courseType === "private"
-            ? "15"
-            : "10"
-          : "0",
+    // Idempotency key ties repeated calls (double-click, retry after a
+    // network blip) for the same registration to the same Stripe intent
+    // instead of creating orphaned duplicates.
+    const intent = await stripe.paymentIntents.create(
+      {
+        amount: finalAmount,
+        currency: price.currency,
+        customer: customerId,
+        receipt_email: email || undefined,
+        automatic_payment_methods: { enabled: true },
+        metadata: {
+          course_type: courseType,
+          student_name: name || "",
+          registration_id: registrationId || "",
+          quantity: String(quantity),
+          discount_applied: discountApplied
+            ? courseType === "private"
+              ? "15"
+              : "10"
+            : "0",
+        },
       },
-    });
+      { idempotencyKey: `pi_${registrationId}` },
+    );
 
     // Only set the session id if there isn't already one — never overwrite.
     if (!regRow.stripe_session_id) {

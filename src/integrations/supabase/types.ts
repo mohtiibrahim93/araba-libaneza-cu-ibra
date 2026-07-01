@@ -638,6 +638,7 @@ export type Database = {
           paid_at: string | null
           payment_status: string
           phone: string
+          quantity: number
           referral_code: string | null
           sms_confirmation_opt_in: boolean
           source: string
@@ -663,6 +664,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone: string
+          quantity?: number
           referral_code?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
@@ -688,6 +690,7 @@ export type Database = {
           paid_at?: string | null
           payment_status?: string
           phone?: string
+          quantity?: number
           referral_code?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string

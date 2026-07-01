@@ -1,13 +1,13 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   TZ,
-  corsHeaders,
-  json,
+  json as _json,
   gcalCreateEvent,
   gcalFreebusy,
   overlaps,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 interface CreateBody {
   event_type: string;
@@ -25,6 +25,12 @@ interface CreateBody {
 const fmtLocal = fmtBookingLocal;
 
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
+  const json = (body: unknown, status = 200) => {
+    const res = _json(body, status);
+    for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
+    return res;
+  };
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "POST required" }, 405);
 

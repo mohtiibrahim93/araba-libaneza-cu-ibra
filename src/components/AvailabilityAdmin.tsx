@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,7 @@ interface Rule {
 
 const WD = ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"];
 
-const AvailabilityAdmin = ({ password }: { password: string }) => {
+const AvailabilityAdmin = () => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -25,9 +25,7 @@ const AvailabilityAdmin = ({ password }: { password: string }) => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "list_availability_rules" },
-      });
+      const { data, error } = await invokeAdmin({ action: "list_availability_rules" });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRules(data.data);
@@ -36,7 +34,7 @@ const AvailabilityAdmin = ({ password }: { password: string }) => {
     } finally {
       setLoading(false);
     }
-  }, [password]);
+  }, []);
 
   useEffect(() => {
     load();
@@ -48,16 +46,13 @@ const AvailabilityAdmin = ({ password }: { password: string }) => {
   const save = async (r: Rule) => {
     setSavingId(r.id);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: {
-          password,
-          action: "upsert_availability_rule",
-          id: r.id,
-          weekday: r.weekday,
-          start_time: r.start_time,
-          end_time: r.end_time,
-          is_active: r.is_active,
-        },
+      const { data, error } = await invokeAdmin({
+        action: "upsert_availability_rule",
+        id: r.id,
+        weekday: r.weekday,
+        start_time: r.start_time,
+        end_time: r.end_time,
+        is_active: r.is_active,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -75,9 +70,7 @@ const AvailabilityAdmin = ({ password }: { password: string }) => {
   const remove = async (id: string) => {
     if (!confirm("Ștergi această regulă?")) return;
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "delete_availability_rule", id },
-      });
+      const { data, error } = await invokeAdmin({ action: "delete_availability_rule", id });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRules((prev) => prev.filter((r) => r.id !== id));
@@ -88,15 +81,12 @@ const AvailabilityAdmin = ({ password }: { password: string }) => {
 
   const add = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: {
-          password,
-          action: "upsert_availability_rule",
-          weekday: newRule.weekday,
-          start_time: newRule.start_time,
-          end_time: newRule.end_time,
-          is_active: true,
-        },
+      const { data, error } = await invokeAdmin({
+        action: "upsert_availability_rule",
+        weekday: newRule.weekday,
+        start_time: newRule.start_time,
+        end_time: newRule.end_time,
+        is_active: true,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);

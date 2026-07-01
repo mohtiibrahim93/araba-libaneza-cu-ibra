@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
+import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Loader2, Mail, Phone } from "lucide-react";
@@ -50,14 +51,14 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const PrivateLead = () => {
   const { id } = useParams();
   const isValidId = !!id && UUID_RE.test(id);
-  const [password, setPassword] = useState("");
-  const [storedPassword, setStoredPassword] = useState("");
   const [lead, setLead] = useState<Registration | null>(null);
   const [history, setHistory] = useState<StatusHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState("");
 
-  const loadLead = async (adminPassword: string) => {
+  const loadLead = async () => {
     if (!isValidId) {
       setError("ID lead invalid.");
       return;
@@ -66,22 +67,60 @@ const PrivateLead = () => {
     setError("");
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: adminPassword, action: "get_private_lead", id },
-      });
+      const { data, error: fnError } = await invokeAdmin({ action: "get_private_lead", id });
 
       if (fnError) throw fnError;
       if (data?.error) {
         setError(data.error);
+        setAuthenticated(false);
         return;
       }
 
       setLead(data.data.registration);
       setHistory(data.data.history || []);
-      setStoredPassword(adminPassword);
+      setAuthenticated(true);
     } catch {
       setError("Lead-ul nu a putut fi încărcat.");
+      setAuthenticated(false);
     } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const checkSession = async (hasSession: boolean) => {
+      if (!hasSession) {
+        if (!cancelled) setCheckingSession(false);
+        return;
+      }
+      await loadLead();
+      if (!cancelled) setCheckingSession(false);
+    };
+    supabase.auth.getSession().then(({ data }) => checkSession(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      checkSession(!!session);
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin + `/admin/private-leads/${id}`,
+      });
+      if (result.error) {
+        setError("Eroare la autentificare.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Eroare la autentificare.");
       setLoading(false);
     }
   };
@@ -92,13 +131,15 @@ const PrivateLead = () => {
     setLead({ ...lead, lead_status: leadStatus });
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { password: storedPassword, action: "update_status", id: lead.id, lead_status: leadStatus },
+      const { data, error: fnError } = await invokeAdmin({
+        action: "update_status",
+        id: lead.id,
+        lead_status: leadStatus,
       });
 
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      await loadLead(storedPassword);
+      await loadLead();
     } catch {
       setLead(previous);
       toast({ title: "Statusul nu a putut fi actualizat", variant: "destructive" });
@@ -121,29 +162,33 @@ const PrivateLead = () => {
         </div>
       );
     }
+    if (checkingSession) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
+    if (!authenticated) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <div className="w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-8 shadow-lg">
+            <div className="space-y-2 text-center">
+              <h1 className="text-xl font-bold text-foreground">Lead lecții private</h1>
+              <p className="text-sm text-muted-foreground">Autentifică-te cu contul Google de admin.</p>
+            </div>
+            {error && <p className="text-center text-sm text-destructive">{error}</p>}
+            <Button onClick={handleGoogleSignIn} className="w-full" disabled={loading}>
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              Continuă cu Google
+            </Button>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            loadLead(password);
-          }}
-          className="w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-8 shadow-lg"
-        >
-          <div className="space-y-2 text-center">
-            <h1 className="text-xl font-bold text-foreground">Lead lecții private</h1>
-            <p className="text-sm text-muted-foreground">Introdu parola de admin pentru detalii.</p>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Parolă</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
-          {error && <p className="text-center text-sm text-destructive">{error}</p>}
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Deschide lead
-          </Button>
-        </form>
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     );
   }

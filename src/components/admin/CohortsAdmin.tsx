@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,20 +63,14 @@ const blank = (): Cohort => ({
   sort_order: 0,
 });
 
-interface Props {
-  password: string;
-}
-
-const CohortsAdmin = ({ password }: Props) => {
+const CohortsAdmin = () => {
   const [rows, setRows] = useState<Cohort[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Cohort>(blank());
 
   const call = async (action: string, extra: Record<string, unknown> | Cohort = {}) => {
-    const { data, error } = await supabase.functions.invoke("admin-registrations", {
-      body: { password, action, ...(extra as Record<string, unknown>) },
-    });
+    const { data, error } = await invokeAdmin({ action, ...(extra as Record<string, unknown>) });
     if (error) throw error;
     if (data?.error) throw new Error(data.error);
     return data;
@@ -93,7 +87,7 @@ const CohortsAdmin = ({ password }: Props) => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [password]);
+  }, []);
 
   useEffect(() => {
     load();

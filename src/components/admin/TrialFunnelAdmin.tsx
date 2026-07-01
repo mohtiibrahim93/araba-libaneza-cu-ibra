@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { useI18n } from "@/lib/i18n";
 import { Loader2, GraduationCap, CalendarCheck, CheckCircle2, Trophy } from "lucide-react";
 
@@ -34,7 +34,7 @@ const fmt = (iso: string | null) =>
       }).format(new Date(iso))
     : "—";
 
-const TrialFunnelAdmin = ({ password }: { password: string }) => {
+const TrialFunnelAdmin = () => {
   const { t } = useI18n();
   const [rows, setRows] = useState<TrialRow[]>([]);
   const [counts, setCounts] = useState<Counts | null>(null);
@@ -43,9 +43,7 @@ const TrialFunnelAdmin = ({ password }: { password: string }) => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-registrations", {
-        body: { password, action: "list_trial_funnel" },
-      });
+      const { data, error } = await invokeAdmin({ action: "list_trial_funnel" });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data?.data ?? []);
@@ -55,7 +53,7 @@ const TrialFunnelAdmin = ({ password }: { password: string }) => {
     } finally {
       setLoading(false);
     }
-  }, [password]);
+  }, []);
 
   useEffect(() => {
     void load();
