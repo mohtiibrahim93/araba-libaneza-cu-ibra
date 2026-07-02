@@ -216,7 +216,13 @@ const RegistrationFormSection = ({
 
     setSubmitting(true);
     try {
-      // reCAPTCHA v3 verification (soft — skip if unavailable on this domain).
+      // reCAPTCHA v3 verification is intentionally soft: a missing token or
+      // a verify-call failure lets the submission through rather than
+      // blocking a real user over a script-load hiccup. This is a deliberate
+      // choice, not a gap — the actual abuse gate for this endpoint is the
+      // per-IP rate limit enforced server-side (see the
+      // trg_registration_rate_limit trigger on the registrations table),
+      // which can't be bypassed by simply omitting a reCAPTCHA token.
       const recaptchaToken = await getRecaptchaToken("registration");
       if (recaptchaToken) {
         const { data: verify, error: verifyErr } = await supabase.functions.invoke(

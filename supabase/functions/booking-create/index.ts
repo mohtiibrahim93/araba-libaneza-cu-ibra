@@ -8,6 +8,7 @@ import {
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
 interface CreateBody {
   event_type: string;
@@ -65,6 +66,17 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // This endpoint is unauthenticated and sends a real transactional email
+    // to a client-supplied address — without a throttle it can be scripted
+    // into a spam/phishing relay. Cap per-IP before doing any real work.
+    const clientIp = getClientIp(req);
+    if (clientIp) {
+      const allowed = await checkRateLimit(supabase, `booking_create:${clientIp}`, 5, 3600);
+      if (!allowed) {
+        return json({ error: "Too many booking attempts. Please try again later." }, 429);
+      }
+    }
 
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
