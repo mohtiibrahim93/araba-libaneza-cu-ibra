@@ -658,6 +658,8 @@ export type Database = {
           phone: string
           quantity: number
           referral_code: string | null
+          refund_reason: string | null
+          refunded_at: string | null
           sms_confirmation_opt_in: boolean
           source: string
           stripe_session_id: string | null
@@ -684,6 +686,8 @@ export type Database = {
           phone: string
           quantity?: number
           referral_code?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
@@ -710,6 +714,8 @@ export type Database = {
           phone?: string
           quantity?: number
           referral_code?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
