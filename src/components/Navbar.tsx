@@ -173,7 +173,7 @@ const Navbar = () => {
           </DropdownMenu>
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden flex items-center justify-center min-w-11 min-h-11 -mr-1 text-foreground"
             aria-label={open ? t.navCloseMenuLabel : t.navOpenMenuLabel}
             aria-expanded={open}
             aria-controls="mobile-navigation"

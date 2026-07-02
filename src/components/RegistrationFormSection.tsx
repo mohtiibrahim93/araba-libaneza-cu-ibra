@@ -42,7 +42,7 @@ interface RegistrationFormSectionProps {
   onBack?: () => void;
 }
 
-const STORAGE_KEY = "registration_form_draft";
+export const STORAGE_KEY = "registration_form_draft";
 
 const RegistrationFormSection = ({
   defaultCourseType,
@@ -67,6 +67,8 @@ const RegistrationFormSection = ({
   const [childAge, setChildAge] = useState("");
   const [message, setMessage] = useState("");
   const [gdpr, setGdpr] = useState(false);
+  const [formatError, setFormatError] = useState(false);
+  const [centerError, setCenterError] = useState(false);
   const [referralCode, setReferralCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -185,11 +187,15 @@ const RegistrationFormSection = ({
       return;
     }
 
+    setFormatError(false);
+    setCenterError(false);
+
     if (!courseType) {
       toast.error(t.mainLeadErrorCourseType);
       return;
     }
     if (!format) {
+      setFormatError(true);
       toast.error(courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat);
       return;
     }
@@ -198,6 +204,7 @@ const RegistrationFormSection = ({
       return;
     }
     if (format === "fizic" && !center) {
+      setCenterError(true);
       toast.error(t.mainLeadErrorLocation);
       return;
     }
@@ -411,8 +418,18 @@ const RegistrationFormSection = ({
           {courseType && (
             <div className="space-y-2">
               <Label htmlFor="format">{t.labelFormat} *</Label>
-              <Select value={format} onValueChange={(v) => setFormat(v as FormatType)}>
-                <SelectTrigger id="format">
+              <Select
+                value={format}
+                onValueChange={(v) => {
+                  setFormat(v as FormatType);
+                  setFormatError(false);
+                }}
+              >
+                <SelectTrigger
+                  id="format"
+                  aria-invalid={formatError || undefined}
+                  className={formatError ? "border-destructive focus:ring-destructive" : ""}
+                >
                   <SelectValue placeholder={t.labelFormat} />
                 </SelectTrigger>
                 <SelectContent>
@@ -420,6 +437,11 @@ const RegistrationFormSection = ({
                   <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
                 </SelectContent>
               </Select>
+              {formatError && (
+                <p className="text-xs text-destructive">
+                  {courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat}
+                </p>
+              )}
               {courseType === "kids" && (
                 <p className="text-xs text-muted-foreground">{t.kidsFormatNote}</p>
               )}
@@ -452,8 +474,18 @@ const RegistrationFormSection = ({
           {format === "fizic" && (
             <div className="space-y-2">
               <Label htmlFor="center">{t.mainLeadLocationLabel} *</Label>
-              <Select value={center} onValueChange={setCenter}>
-                <SelectTrigger id="center">
+              <Select
+                value={center}
+                onValueChange={(v) => {
+                  setCenter(v);
+                  setCenterError(false);
+                }}
+              >
+                <SelectTrigger
+                  id="center"
+                  aria-invalid={centerError || undefined}
+                  className={centerError ? "border-destructive focus:ring-destructive" : ""}
+                >
                   <SelectValue placeholder={t.mainLeadLocationPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -463,6 +495,9 @@ const RegistrationFormSection = ({
                   <SelectItem value="Alt oras">{t.mainLeadLocationOtherCity}</SelectItem>
                 </SelectContent>
               </Select>
+              {centerError && (
+                <p className="text-xs text-destructive">{t.mainLeadErrorLocation}</p>
+              )}
               <p className="text-xs text-muted-foreground">{t.mainLeadLocationHelp}</p>
             </div>
           )}
