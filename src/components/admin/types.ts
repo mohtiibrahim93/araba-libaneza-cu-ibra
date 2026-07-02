@@ -37,6 +37,11 @@ export interface Registration {
   lead_status: LeadStatus;
   source?: LeadSource | null;
   track_preference?: TrackPreference | null;
+  payment_status?: string;
+  stripe_session_id?: string | null;
+  paid_at?: string | null;
+  refunded_at?: string | null;
+  refund_reason?: string | null;
 }
 
 export interface EmailSettings {
