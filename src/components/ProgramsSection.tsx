@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
-import RegistrationFormSection from "@/components/RegistrationFormSection";
+import RegistrationFormSection, { STORAGE_KEY } from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -27,6 +27,26 @@ const ProgramsSection = () => {
     null | "group" | "private" | "kids" | "kids-private"
   >(null);
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
+
+  // RegistrationFormSection persists its field data (name/phone/etc) to
+  // sessionStorage regardless of whether it's mounted, but that data is only
+  // visible while a matching card is open. Without this, a reload while
+  // mid-form makes the whole form appear to vanish — the data is still
+  // there, but the user has no way to know to re-click the same card.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (!draft?.name && !draft?.phone && !draft?.email) return; // nothing worth restoring
+      if (draft.courseType === "group") setInlineForm("group");
+      else if (draft.courseType === "private") setInlineForm("private");
+      else if (draft.courseType === "kids") setInlineForm("kids");
+    } catch {
+      // ignore corrupted drafts
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { get: getCapacity } = useGroupCapacities();
   const a1Cap = getCapacity("group", "A1");
   const kidsCap = getCapacity("kids", null);

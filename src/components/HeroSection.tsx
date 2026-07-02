@@ -7,6 +7,13 @@ const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
   encodeURIComponent("Salut! Sunt interesat(ă) de cursurile de arabă libaneză.");
 
+// React's DOM typings still only recognize the camelCase `fetchPriority`,
+// but at runtime it needs to be spelled lowercase on the actual <img>
+// element or React logs an "unrecognized DOM prop" warning. Spreading a
+// separately-typed object sidesteps the excess-property check that a
+// literal `fetchpriority="high"` prop would otherwise fail.
+const imgPriorityProps: Record<string, string> = { fetchpriority: "high" };
+
 const HeroSection = () => {
   const { t } = useI18n();
 
@@ -81,7 +88,7 @@ const HeroSection = () => {
               alt="Ibra — instructor de arabă libaneză"
               width={1024}
               height={1024}
-              fetchPriority="high"
+              {...imgPriorityProps}
               decoding="async"
               className="w-full h-full object-contain p-4"
             />
