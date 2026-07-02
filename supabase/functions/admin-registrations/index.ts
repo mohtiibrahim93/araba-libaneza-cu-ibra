@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
 function jsonResponseWith(cors: Record<string, string>) {
@@ -26,7 +27,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { action, ids, id, lead_status, sender_name, sender_email } = body;
+    const { action, ids, id, lead_status, sender_name, sender_email, refund_reason } = body;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -664,6 +665,79 @@ Deno.serve(async (req) => {
       }
 
       return jsonResponse({ success: true, data });
+    }
+
+    if (action === "refund") {
+      if (typeof id !== "string") {
+        return jsonResponse({ error: "ID invalid" });
+      }
+      if (refund_reason != null && (typeof refund_reason !== "string" || refund_reason.length > 500)) {
+        return jsonResponse({ error: "Motiv invalid" });
+      }
+
+      const { data: reg, error: regError } = await supabase
+        .from("registrations")
+        .select("id, payment_status, stripe_session_id, refunded_at")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (regError) throw regError;
+      if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+      if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
+      if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
+        return jsonResponse({ error: "Doar înscrierile plătite pot fi rambursate" });
+      }
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+        apiVersion: "2025-08-27.basil",
+      });
+
+      // stripe_session_id holds either a PaymentIntent id (cs create-payment-intent
+      // flow, "pi_...") or a Checkout Session id (create-checkout flow, "cs_...").
+      // Stripe's refund API needs a payment_intent id either way.
+      let paymentIntentId = reg.stripe_session_id;
+      if (paymentIntentId.startsWith("cs_")) {
+        const session = await stripe.checkout.sessions.retrieve(paymentIntentId);
+        const pi = session.payment_intent;
+        paymentIntentId = typeof pi === "string" ? pi : pi?.id ?? "";
+        if (!paymentIntentId) {
+          return jsonResponse({ error: "Nu s-a găsit plata Stripe asociată" });
+        }
+      }
+
+      let refund;
+      try {
+        refund = await stripe.refunds.create({ payment_intent: paymentIntentId });
+      } catch (stripeErr) {
+        console.error("[admin-registrations] stripe refund failed", stripeErr);
+        const msg = stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
+        return jsonResponse({ error: `Rambursare eșuată: ${msg}` });
+      }
+
+      const { data: updated, error: updateError } = await supabase
+        .from("registrations")
+        .update({
+          payment_status: "refunded",
+          refunded_at: new Date().toISOString(),
+          refund_reason: refund_reason || null,
+        })
+        .eq("id", id)
+        .select("*")
+        .single();
+
+      if (updateError) {
+        // Stripe refund already succeeded at this point — log loudly so it
+        // can be reconciled by hand rather than silently losing the record.
+        console.error(
+          "[admin-registrations] Stripe refund succeeded but DB update failed",
+          { registrationId: id, stripeRefundId: refund.id, updateError },
+        );
+        return jsonResponse({
+          error: "Rambursarea a fost procesată în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+        });
+      }
+
+      return jsonResponse({ success: true, data: updated, refund_id: refund.id });
     }
 
     if (action === "get_private_lead") {

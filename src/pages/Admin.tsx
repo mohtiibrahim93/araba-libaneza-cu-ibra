@@ -53,6 +53,7 @@ const Admin = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
+  const [refundingId, setRefundingId] = useState<string | null>(null);
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
@@ -213,6 +214,29 @@ const Admin = () => {
       toast({ title: "Eroare la ștergere", variant: "destructive" });
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleRefund = async (id: string, reason: string) => {
+    setRefundingId(id);
+    try {
+      const { data, error: fnError } = await invokeAdmin({
+        action: "refund",
+        id,
+        refund_reason: reason || null,
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      setRegistrations((prev) => prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)));
+      toast({ title: "Rambursare procesată cu succes" });
+    } catch (err) {
+      toast({
+        title: "Rambursare eșuată",
+        description: err instanceof Error ? err.message : undefined,
+        variant: "destructive",
+      });
+    } finally {
+      setRefundingId(null);
     }
   };
 
@@ -513,9 +537,11 @@ const Admin = () => {
             rows={filteredRegistrations}
             selected={selected}
             updatingStatus={updatingStatus}
+            refundingId={refundingId}
             onToggleSelect={toggleSelect}
             onToggleAll={toggleAll}
             onStatusChange={handleStatusChange}
+            onRefund={handleRefund}
           />
         )}
       </main>
