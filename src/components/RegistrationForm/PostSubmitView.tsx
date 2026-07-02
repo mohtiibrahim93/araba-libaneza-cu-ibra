@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw } from "lucide-react";
+import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
@@ -11,6 +11,10 @@ interface Props {
   data: SubmittedData;
   embedded?: boolean;
   onReset: () => void;
+  /** Kids deposit only: true if the Stripe checkout redirect failed after submit. */
+  depositCheckoutFailed?: boolean;
+  retryingDeposit?: boolean;
+  onRetryDepositCheckout?: () => void;
 }
 
 /**
@@ -23,7 +27,14 @@ interface Props {
  *   - Group    → payment instructions (no trial).
  *   - Kids     → contact-only confirmation (paid manually or via deposit redirect).
  */
-const PostSubmitView = ({ data, embedded, onReset }: Props) => {
+const PostSubmitView = ({
+  data,
+  embedded,
+  onReset,
+  depositCheckoutFailed,
+  retryingDeposit,
+  onRetryDepositCheckout,
+}: Props) => {
   const { t } = useI18n();
   // Private only: students can switch from "free trial" → "pay directly".
   const [privatePayDirectly, setPrivatePayDirectly] = useState(false);
@@ -90,6 +101,31 @@ const PostSubmitView = ({ data, embedded, onReset }: Props) => {
             registrationId={data.registrationId}
             quantity={data.quantity}
           />
+        )}
+
+        {/* Kids deposit: checkout redirect failed after submit — offer a retry instead of a dead end. */}
+        {isKidsDeposit && depositCheckoutFailed && (
+          <div className="bg-background rounded-2xl border border-destructive/30 p-6 sm:p-8 shadow-sm space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-destructive" />
+              </div>
+              <p className="text-sm text-foreground">{t.kidsDepositFailedDesc}</p>
+            </div>
+            <button
+              type="button"
+              onClick={onRetryDepositCheckout}
+              disabled={retryingDeposit}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-60"
+            >
+              {retryingDeposit ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <CreditCard className="w-4 h-4" />
+              )}
+              {t.kidsDepositRetryCta}
+            </button>
+          </div>
         )}
 
         {/* Free trial booking — Calendly. Default for Private. */}
