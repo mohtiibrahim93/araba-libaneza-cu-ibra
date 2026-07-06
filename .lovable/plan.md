@@ -1,29 +1,24 @@
-## Șterg pagina `/cursuri/online` și redirec­ționez la `/cursuri`
+## Change
 
-Pagina e redundantă — chiar ea spune "nu există o pagină separată online", iar selecția online/fizic se face deja în formularul de înscriere și în tabs-urile de pe `/cursuri`.
+Update all user-facing copy that mentions private-lesson duration from **90 minutes** to **60 minutes**, in both Romanian and English. Group course duration (also 90 min) stays unchanged.
 
-### Modificări
+## Files touched
 
-1. **`src/App.tsx`** — înlocuiesc ruta `/cursuri/online` cu un redirect 301-style (client-side):
-   ```tsx
-   <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
-   ```
-   Scot lazy import-ul `CursOnline`.
+- `src/lib/i18n.tsx` — update the private-lesson strings in both the RO and EN dictionaries:
+  - `privateDuration`, `privateFeat3`, `privateDurationV2`, `privatePricePerLesson`
+  - `kidsPrivateDuration`, `kidsPrivatePricePerLesson`
+  - `pricingPrivatePer`, `pricingPerSessionSuffix`, `pricingPrivateFeat1`
+  - `faq5A` (private-lesson FAQ answer)
+  - `ctaSchedulePrivateValue`, `mainLeadDetailPrivateValue`
+  - `priceLeiPer90Min` → keep the key but change text to "LEI / lecție 60 min" / "LEI / 60-min lesson"
+- `src/pages/courses/CursPrivate.tsx` — no code change (it consumes the renamed-in-place `priceLeiPer90Min` string).
 
-2. **Șterg fișierul** `src/pages/courses/CursOnline.tsx`.
+## Left unchanged (still 90 min — group format)
 
-3. **Scot link-urile către `/cursuri/online`** din:
-   - `src/components/Footer.tsx` (linia 38)
-   - `src/pages/courses/CursCopii.tsx` (other courses, linia 42)
-   - `src/pages/courses/CursGrup.tsx` (linia 48)
-   - `src/pages/courses/CursPrivate.tsx` (linia 43)
+- `courseGrupFeat3` ("Two sessions per week (90 min)")
+- `curriculumDesc` ("90-min lessons, 2/week…")
+- `kidsGroupDuration` ("90 minutes / lesson" — kids group)
 
-4. **`public/sitemap.xml`** — elimin entry-ul `/cursuri/online`.
+## Out of scope
 
-5. **Cleanup i18n** — marchez ca nefolosite (sau le șterg) cheile `courseOnline*` din `src/lib/i18n.tsx` (RO și EN). Le șterg complet ca să nu rămână cod mort.
-
-### Ce NU schimb
-
-- Tab-urile de pe home + `/cursuri` rămân exact așa.
-- Nicio modificare la stiluri, formulare, sau alte pagini de curs.
-- Pe `/cursuri/grup`, `/cursuri/private`, `/cursuri/copii` rămâne mențiunea "disponibil și online" (vine din feature-bullets existente, nu e legată de pagina ștearsă).
+No pricing changes and no database changes — only display copy.
