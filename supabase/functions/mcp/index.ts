@@ -7,30 +7,14 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/lib/mcp/tools/get-pricing.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
-
-// src/lib/pricing.ts
-var PHYSICAL_MULTIPLIER = 1.4;
-var round10 = (n) => Math.round(n / 10) * 10;
-var physicalPrice = (online) => round10(online * PHYSICAL_MULTIPLIER);
 var ONLINE_PRICES = {
-  /** Group course — monthly fee per CEFR level (online). */
-  groupMonthly: {
-    A1: 500,
-    A2: 600,
-    B1: 700,
-    B2: 800,
-    C1: 900,
-    C2: 1e3
-  },
-  /** Private 1:1 lesson (single session, online). */
+  groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1e3 },
   privateLesson: 150,
-  /** Kids private 1:1 lesson (online). */
   kidsPrivateLesson: 150,
-  /** Kids group — monthly fee per child, minimum 4 (online). */
   kidsGroupMonthly: 500
 };
-
-// src/lib/mcp/tools/get-pricing.ts
+var round10 = (n) => Math.round(n / 10) * 10;
+var physicalPrice = (online) => round10(online * 1.4);
 var get_pricing_default = defineTool({
   name: "get_pricing",
   title: "Get course pricing",

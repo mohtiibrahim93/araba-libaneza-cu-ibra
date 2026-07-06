@@ -1,6 +1,15 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { z } from "zod";
-import { ONLINE_PRICES, physicalPrice } from "../../pricing";
+
+// Inlined from src/lib/pricing.ts to keep this tool import-safe in the
+// Deno-bundled MCP function (which does not resolve the Vite "@/..." alias).
+const ONLINE_PRICES = {
+  groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 } as Record<string, number>,
+  privateLesson: 150,
+  kidsPrivateLesson: 150,
+  kidsGroupMonthly: 500,
+};
+const round10 = (n: number) => Math.round(n / 10) * 10;
+const physicalPrice = (online: number) => round10(online * 1.4);
 
 export default defineTool({
   name: "get_pricing",
