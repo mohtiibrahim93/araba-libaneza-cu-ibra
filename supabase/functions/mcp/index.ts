@@ -57,12 +57,12 @@ var get_pricing_default = defineTool({
 // src/lib/mcp/tools/list-curriculum-levels.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
 var LEVELS = [
-  { id: "a1", title: "A1 \u2014 Beginner (Survival)", lessons: 30, hours: 45, track: "Spoken" },
-  { id: "a2", title: "A2 \u2014 Elementary", lessons: 30, hours: 45, track: "Spoken" },
-  { id: "b1", title: "B1 \u2014 Intermediate", lessons: 30, hours: 45, track: "Spoken" },
-  { id: "b2", title: "B2 \u2014 Upper-Intermediate", lessons: 30, hours: 45, track: "Spoken" },
-  { id: "c1", title: "C1 \u2014 Advanced", lessons: 30, hours: 45, track: "Spoken + Written" },
-  { id: "c2", title: "C2 \u2014 Mastery", lessons: 30, hours: 45, track: "Thematic modules" }
+  { id: "a1", title: "A1 \u2014 Beginner (Survival)", lessons: 26, hours: 39, track: "Spoken", schedule: "Mondays & Wednesdays \xB7 10 Aug \u2013 4 Nov 2026 (~3 months) \xB7 enrollment open, limited spots" },
+  { id: "a2", title: "A2 \u2014 Elementary", lessons: 54, hours: 81, track: "Spoken", schedule: "Tuesdays & Thursdays \xB7 11 Aug 2026 \u2013 11 Feb 2027 (~6 months) \xB7 runs in parallel with A1 \xB7 enrollment open, limited spots" },
+  { id: "b1", title: "B1 \u2014 Intermediate", lessons: 70, hours: 105, track: "Spoken", schedule: "~8 months \xB7 opens after A2 \u2014 future enrollment" },
+  { id: "b2", title: "B2 \u2014 Upper-Intermediate", lessons: 70, hours: 105, track: "Spoken", schedule: "~8\u20139 months \xB7 opens after B1 \u2014 future enrollment" },
+  { id: "c1", title: "C1 \u2014 Advanced", lessons: 70, hours: 105, track: "Spoken + Written", schedule: "~10 months \xB7 opens after B2 \u2014 future enrollment" },
+  { id: "c2", title: "C2 \u2014 Mastery", lessons: 80, hours: 120, track: "Thematic modules", schedule: "~10 months \xB7 opens after C1 \u2014 future enrollment" }
 ];
 var list_curriculum_levels_default = defineTool2({
   name: "list_curriculum_levels",

@@ -51,7 +51,7 @@ const ProgramsSection = () => {
   const a1Cap = getCapacity("group", "A1");
   const kidsCap = getCapacity("kids", null);
 
-  const isAvailable = (level: Level) => level === "A1";
+  const isAvailable = (level: Level) => level === "A1" || level === "A2";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
   const a1Fizic = physicalPrice(a1Online);
   const curriculum = getCurriculum(lang);
@@ -121,6 +121,7 @@ const ProgramsSection = () => {
                   <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
                 </div>
               </div>
+              <p className="text-xs font-medium text-primary mb-4">{t.groupEnrollmentOpenNote}</p>
 
               {/* A1 capacity */}
               {a1Cap && (
@@ -224,6 +225,9 @@ const ProgramsSection = () => {
                       {t.priceFizicShort} {t.priceLeiPerMonth}
                     </span>
                   </div>
+                  {activeLevelData.schedule && (
+                    <p className="text-xs text-muted-foreground mb-3">{activeLevelData.schedule}</p>
+                  )}
                   <Link
                     to={`/cursuri/grup/${activeLevel.toLowerCase()}`}
                     className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4"

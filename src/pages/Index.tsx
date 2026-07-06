@@ -100,7 +100,7 @@ const PageContent = () => {
     "@context": "https://schema.org",
     "@type": "ItemList",
     itemListElement: [
-      { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 24+ lecții pe nivel, fizic în București sau online." },
+      { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
       { name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
       { name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
     ].map((c, i) => ({

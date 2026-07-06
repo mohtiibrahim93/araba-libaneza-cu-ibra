@@ -16,7 +16,7 @@ import type { LevelType } from "@/components/RegistrationForm/types";
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const VALID = ["a1", "a2", "b1", "b2", "c1", "c2"] as const;
-const isAvailable = (level: LevelType) => level === "A1";
+const isAvailable = (level: LevelType) => level === "A1" || level === "A2";
 
 const CursGrupLevel = () => {
   const { t, lang } = useI18n();
@@ -113,6 +113,13 @@ const CursGrupLevel = () => {
               <p className="text-sm font-semibold text-foreground leading-tight">{curriculum.trackLabel}</p>
             </div>
           </div>
+
+          {curriculum.schedule && (
+            <p className="text-sm text-foreground font-medium mb-6 max-w-2xl">
+              <span className="text-xs uppercase font-semibold text-muted-foreground mr-2">{t.levelPageScheduleLabel}</span>
+              {curriculum.schedule}
+            </p>
+          )}
 
           {/* Dual price */}
           <div className="inline-flex flex-wrap items-baseline gap-4 rounded-xl border border-border bg-muted/40 px-4 py-3 mb-2">
