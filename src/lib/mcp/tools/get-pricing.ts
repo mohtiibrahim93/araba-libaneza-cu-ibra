@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { ONLINE_PRICES, physicalPrice } from "@/lib/pricing";
+import { ONLINE_PRICES, physicalPrice } from "../../pricing";
 
 export default defineTool({
   name: "get_pricing",
