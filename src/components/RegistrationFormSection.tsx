@@ -79,6 +79,8 @@ const RegistrationFormSection = ({
   const [honeypot, setHoneypot] = useState("");
   const [cohortId, setCohortId] = useState<string | null>(null);
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
+  const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
+  const [retryingDeposit, setRetryingDeposit] = useState(false);
 
   /* Restore draft from sessionStorage on mount */
   useEffect(() => {
@@ -169,6 +171,39 @@ const RegistrationFormSection = ({
     setPayDeposit(false);
     setCohortId(null);
     setKidsSlotId(null);
+    setDepositCheckoutFailed(false);
+  };
+
+  const attemptKidsDepositCheckout = async (
+    regId: string,
+    emailAddr: string,
+    recipientName: string,
+  ) => {
+    try {
+      const { data: ck, error: ckErr } = await supabase.functions.invoke("create-checkout", {
+        body: { courseType: "kids_deposit", email: emailAddr, name: recipientName, registrationId: regId },
+      });
+      if (ckErr) throw ckErr;
+      if (!ck?.url) throw new Error("create-checkout returned no redirect URL");
+      setDepositCheckoutFailed(false);
+      toast.info(t.kidsWaitlistRedirect);
+      window.location.href = ck.url;
+    } catch (err) {
+      console.error("Kids deposit checkout failed", err);
+      setDepositCheckoutFailed(true);
+      toast.error(t.mainLeadError);
+    }
+  };
+
+  const handleRetryDepositCheckout = async () => {
+    if (!submittedData) return;
+    setRetryingDeposit(true);
+    await attemptKidsDepositCheckout(
+      submittedData.registrationId,
+      submittedData.email,
+      submittedData.name,
+    );
+    setRetryingDeposit(false);
   };
 
   const capacity =
@@ -327,19 +362,7 @@ const RegistrationFormSection = ({
       sessionStorage.removeItem(STORAGE_KEY);
 
       if (courseType === "kids" && payDeposit) {
-        try {
-          const { data: ck, error: ckErr } = await supabase.functions.invoke("create-checkout", {
-            body: { courseType: "kids_deposit", email, name: recipientName, registrationId: id },
-          });
-          if (ckErr) throw ckErr;
-          if (ck?.url) {
-            toast.info(t.kidsWaitlistRedirect);
-            window.location.href = ck.url;
-          }
-        } catch (err) {
-          console.error("Kids deposit checkout failed", err);
-          toast.error(t.mainLeadError);
-        }
+        await attemptKidsDepositCheckout(id, email, recipientName);
       }
     } catch (err) {
       console.error("Registration error", err);
@@ -350,7 +373,16 @@ const RegistrationFormSection = ({
   };
 
   if (submitted && submittedData) {
-    return <PostSubmitView data={submittedData} embedded={embedded} onReset={reset} />;
+    return (
+      <PostSubmitView
+        data={submittedData}
+        embedded={embedded}
+        onReset={reset}
+        depositCheckoutFailed={depositCheckoutFailed}
+        retryingDeposit={retryingDeposit}
+        onRetryDepositCheckout={handleRetryDepositCheckout}
+      />
+    );
   }
 
   return (
