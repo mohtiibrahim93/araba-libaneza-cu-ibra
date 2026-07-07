@@ -71,41 +71,6 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    // If a PaymentIntent already exists for this registration, reuse it —
-    // creating a new one with the `pi_${registrationId}` idempotency key but
-    // different parameters (e.g. new customer id after list-then-create,
-    // updated quantity) is rejected by Stripe with an idempotency-mismatch
-    // error, which is what surfaced as "paying not working".
-    if (regRow.stripe_session_id && regRow.stripe_session_id.startsWith("pi_")) {
-      try {
-        const existing = await stripe.paymentIntents.retrieve(regRow.stripe_session_id);
-        if (
-          existing &&
-          existing.client_secret &&
-          !["succeeded", "canceled"].includes(existing.status)
-        ) {
-          return new Response(
-            JSON.stringify({
-              clientSecret: existing.client_secret,
-              paymentIntentId: existing.id,
-              amount: existing.amount,
-              unitAmount: Math.round(existing.amount / quantity),
-              quantity,
-              discountApplied,
-              currency: existing.currency,
-              publishableKey: stripePublishableKey,
-            }),
-            {
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-              status: 200,
-            },
-          );
-        }
-      } catch (retrieveErr) {
-        console.warn("existing intent retrieve failed, will create new:", retrieveErr);
-      }
-    }
-
     // Unit amount comes from the server-side price table, keyed by the
     // level + format persisted on the registration row — the old fixed
     // Stripe price ID charged every group level the A1 rate.
@@ -136,6 +101,88 @@ serve(async (req) => {
           : 1;
     const finalAmount = Math.round(baseAmount * discountRate);
 
+    // If a PaymentIntent already exists for this registration, reuse it when
+    // the amount still matches. Otherwise (e.g. price was updated after the
+    // stale intent was created, or the customer changed quantity) cancel it
+    // and create a fresh one with a distinct idempotency key so Stripe
+    // doesn't reject the create with an idempotency-mismatch error.
+    let idempotencySuffix = "";
+    if (regRow.stripe_session_id && regRow.stripe_session_id.startsWith("pi_")) {
+      try {
+        const existing = await stripe.paymentIntents.retrieve(regRow.stripe_session_id);
+        if (
+          existing &&
+          existing.client_secret &&
+          !["succeeded", "canceled"].includes(existing.status)
+        ) {
+          if (existing.amount === finalAmount && existing.currency === currency) {
+            return new Response(
+              JSON.stringify({
+                clientSecret: existing.client_secret,
+                paymentIntentId: existing.id,
+                amount: existing.amount,
+                unitAmount,
+                quantity,
+                discountApplied,
+                currency: existing.currency,
+                publishableKey: stripePublishableKey,
+              }),
+              {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 200,
+              },
+            );
+          }
+          // Amount drifted — try to update in place (cheapest option, keeps
+          // the same client_secret); if the intent is past the updatable
+          // state, cancel it and fall through to create a fresh one.
+          try {
+            const updated = await stripe.paymentIntents.update(existing.id, {
+              amount: finalAmount,
+              currency,
+              metadata: {
+                course_type: courseType,
+                student_name: name || "",
+                registration_id: registrationId,
+                quantity: String(quantity),
+                level: regRow.level || "",
+                format: regRow.format || "",
+                discount_applied: discountApplied ? (courseType === "private" ? "15" : "10") : "0",
+              },
+            });
+            return new Response(
+              JSON.stringify({
+                clientSecret: updated.client_secret,
+                paymentIntentId: updated.id,
+                amount: updated.amount,
+                unitAmount,
+                quantity,
+                discountApplied,
+                currency: updated.currency,
+                publishableKey: stripePublishableKey,
+              }),
+              {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 200,
+              },
+            );
+          } catch (updateErr) {
+            console.warn("intent update failed, will cancel and recreate:", updateErr);
+            try {
+              await stripe.paymentIntents.cancel(existing.id);
+            } catch (cancelErr) {
+              console.warn("intent cancel failed, proceeding anyway:", cancelErr);
+            }
+            // Salt the idempotency key so the new create doesn't collide
+            // with the previous one.
+            idempotencySuffix = `_${Date.now()}`;
+          }
+        }
+      } catch (retrieveErr) {
+        console.warn("existing intent retrieve failed, will create new:", retrieveErr);
+      }
+    }
+
     // Idempotency key ties repeated calls (double-click, retry after a
     // network blip) for the same registration to the same Stripe intent
     // instead of creating orphaned duplicates.
@@ -160,20 +207,18 @@ serve(async (req) => {
             : "0",
         },
       },
-      { idempotencyKey: `pi_${registrationId}` },
+      { idempotencyKey: `pi_${registrationId}${idempotencySuffix}` },
     );
 
-    // Only set the session id if there isn't already one — never overwrite.
-    if (!regRow.stripe_session_id) {
-      await supabaseAdmin
-        .from("registrations")
-        .update({
-          stripe_session_id: intent.id,
-          payment_status: "pending",
-        })
-        .eq("id", registrationId)
-        .is("stripe_session_id", null);
-    }
+    // Persist the new intent id — this covers first-time create AND the
+    // recreate-after-cancel path above, so a stale id doesn't linger.
+    await supabaseAdmin
+      .from("registrations")
+      .update({
+        stripe_session_id: intent.id,
+        payment_status: "pending",
+      })
+      .eq("id", registrationId);
 
     return new Response(
       JSON.stringify({
