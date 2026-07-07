@@ -71,6 +71,41 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
+    // If a PaymentIntent already exists for this registration, reuse it —
+    // creating a new one with the `pi_${registrationId}` idempotency key but
+    // different parameters (e.g. new customer id after list-then-create,
+    // updated quantity) is rejected by Stripe with an idempotency-mismatch
+    // error, which is what surfaced as "paying not working".
+    if (regRow.stripe_session_id && regRow.stripe_session_id.startsWith("pi_")) {
+      try {
+        const existing = await stripe.paymentIntents.retrieve(regRow.stripe_session_id);
+        if (
+          existing &&
+          existing.client_secret &&
+          !["succeeded", "canceled"].includes(existing.status)
+        ) {
+          return new Response(
+            JSON.stringify({
+              clientSecret: existing.client_secret,
+              paymentIntentId: existing.id,
+              amount: existing.amount,
+              unitAmount: Math.round(existing.amount / quantity),
+              quantity,
+              discountApplied,
+              currency: existing.currency,
+              publishableKey: stripePublishableKey,
+            }),
+            {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+              status: 200,
+            },
+          );
+        }
+      } catch (retrieveErr) {
+        console.warn("existing intent retrieve failed, will create new:", retrieveErr);
+      }
+    }
+
     // Unit amount comes from the server-side price table, keyed by the
     // level + format persisted on the registration row — the old fixed
     // Stripe price ID charged every group level the A1 rate.
