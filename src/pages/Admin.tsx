@@ -90,8 +90,20 @@ const Admin = () => {
       try {
         await loadData();
         if (!cancelled) setAuthenticated(true);
-      } catch {
-        if (!cancelled) setAuthenticated(false);
+      } catch (err) {
+        if (!cancelled) {
+          setAuthenticated(false);
+          const msg = err instanceof Error ? err.message : String(err);
+          // Surface allowlist failures so the user knows why they're stuck on the login screen.
+          if (/neautorizat|unauthori[sz]ed/i.test(msg)) {
+            setError(
+              "Contul Google folosit nu are drepturi de admin. Cere să fie adăugat în lista de administratori.",
+            );
+            await supabase.auth.signOut();
+          } else {
+            setError("Nu am putut încărca panoul de admin. Reîncearcă.");
+          }
+        }
       } finally {
         if (!cancelled) setCheckingSession(false);
       }

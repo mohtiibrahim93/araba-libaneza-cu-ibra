@@ -35,8 +35,8 @@ const RO: CurriculumLevel[] = [
     title: "Nivel A1 — Începător (Supraviețuire)",
     objective:
       "Cursantul se poate prezenta, poate purta conversații simple zilnice și poate gestiona tranzacții de bază. Fundație orală + Arabizi, fără alfabet arab.",
-    lessons: 26,
-    hours: 39,
+    lessons: 32,
+    hours: 48,
     trackLabel: "Vorbit",
     schedule: [
       "Fizic: luni și miercuri 19:00–20:30 · 10 august – 4 noiembrie 2026 (~3 luni) · Strada Icoanei 80",
@@ -346,8 +346,8 @@ const EN: CurriculumLevel[] = [
     title: "Level A1 — Beginner (Survival)",
     objective:
       "Learner can introduce themselves, hold simple daily conversations and handle basic transactions. Oral foundation + Arabizi, no Arabic alphabet.",
-    lessons: 26,
-    hours: 39,
+    lessons: 32,
+    hours: 48,
     trackLabel: "Spoken",
     schedule: [
       "In person: Mondays & Wednesdays 19:00–20:30 · 10 August – 4 November 2026 (~3 months) · Strada Icoanei 80",
