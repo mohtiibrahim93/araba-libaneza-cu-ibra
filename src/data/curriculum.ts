@@ -15,8 +15,8 @@ export interface CurriculumLevel {
   lessons: number;
   hours: number;
   trackLabel: string;
-  /** Schedule / calendar line: fixed days & dates for A1/A2, opening info for B1–C2. */
-  schedule?: string;
+  /** Schedule / calendar lines: fixed days, times & dates for A1/A2, opening info for B1–C2. */
+  schedule?: string[];
   /** Flat lesson/block list (A1, A2, B1, B2). */
   items?: string[];
   /** C1 has two parallel strands. */
@@ -38,7 +38,11 @@ const RO: CurriculumLevel[] = [
     lessons: 26,
     hours: 39,
     trackLabel: "Vorbit",
-    schedule: "Luni și miercuri · 10 august – 4 noiembrie 2026 (~3 luni) · Examen final inclus",
+    schedule: [
+      "Fizic: luni și miercuri 19:00–20:30 · 10 august – 4 noiembrie 2026 (~3 luni) · Strada Icoanei 80",
+      "Online: sâmbătă și duminică 12:00–13:30 · start 15 august 2026",
+      "Examen final inclus",
+    ],
     items: [
       "Sunete I: ح ع + sistemul Arabizi",
       "Sunete II: ط غ ق + salutări",
@@ -80,7 +84,10 @@ const RO: CurriculumLevel[] = [
     lessons: 54,
     hours: 81,
     trackLabel: "Vorbit",
-    schedule: "Marți și joi · 11 august 2026 – 11 februarie 2027 (~6 luni) · rulează în paralel cu A1 · Examen final inclus",
+    schedule: [
+      "Marți și joi 19:00–20:30 · 11 august 2026 – 11 februarie 2027 (~6 luni) · Strada Icoanei 80 (fizic)",
+      "Rulează în paralel cu A1 · Examen final inclus",
+    ],
     items: [
       "Recapitulare A1 & diagnostic",
       "Trecutul verbelor regulate (complet)",
@@ -130,7 +137,7 @@ const RO: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit",
-    schedule: "~8 luni · se deschide după finalizarea A2 (dată în curând)",
+    schedule: ["~8 luni · se deschide după finalizarea A2 (dată în curând)"],
     items: [
       "Recapitulare A2 & diagnostic",
       "Consolidarea sistemului verbal (toate timpurile, verbe slabe, verbe dublate)",
@@ -157,7 +164,7 @@ const RO: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit",
-    schedule: "~8–9 luni · se deschide după B1 — înscrieri viitoare",
+    schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
     items: [
       "Recapitulare B1 & diagnostic",
       "Registrul stilistic (formal vs. de stradă, code-switching)",
@@ -179,7 +186,7 @@ const RO: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit / Vorbit + Scris (simultan)",
-    schedule: "~10 luni · se deschide după B2 — înscrieri viitoare",
+    schedule: ["~10 luni · se deschide după B2 — înscrieri viitoare"],
     spokenCore: {
       intro: "Nucleul vorbit (toți cursanții)",
       items: [
@@ -258,7 +265,7 @@ const RO: CurriculumLevel[] = [
     lessons: 80,
     hours: 120,
     trackLabel: "Vorbit / Scris integrat",
-    schedule: "~10 luni · se deschide după C1 — înscrieri viitoare",
+    schedule: ["~10 luni · se deschide după C1 — înscrieri viitoare"],
     blocks: [
       {
         title: "Bloc 1 — Registru & rafinament (Lecțiile 1–10)",
@@ -342,7 +349,11 @@ const EN: CurriculumLevel[] = [
     lessons: 26,
     hours: 39,
     trackLabel: "Spoken",
-    schedule: "Mondays & Wednesdays · 10 August – 4 November 2026 (~3 months) · Final exam included",
+    schedule: [
+      "In person: Mondays & Wednesdays 19:00–20:30 · 10 August – 4 November 2026 (~3 months) · Strada Icoanei 80",
+      "Online: Saturdays & Sundays 12:00–13:30 · starts 15 August 2026",
+      "Final exam included",
+    ],
     items: [
       "Sounds I: ح ع + the Arabizi system",
       "Sounds II: ط غ ق + greetings",
@@ -384,7 +395,10 @@ const EN: CurriculumLevel[] = [
     lessons: 54,
     hours: 81,
     trackLabel: "Spoken",
-    schedule: "Tuesdays & Thursdays · 11 August 2026 – 11 February 2027 (~6 months) · runs in parallel with A1 · Final exam included",
+    schedule: [
+      "Tuesdays & Thursdays 19:00–20:30 · 11 August 2026 – 11 February 2027 (~6 months) · Strada Icoanei 80 (in person)",
+      "Runs in parallel with A1 · Final exam included",
+    ],
     items: [
       "A1 review & diagnostic",
       "Past tense of regular verbs (full)",
@@ -434,7 +448,7 @@ const EN: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken",
-    schedule: "~8 months · opens after A2 finishes (date coming soon)",
+    schedule: ["~8 months · opens after A2 finishes (date coming soon)"],
     items: [
       "A2 review & diagnostic",
       "Consolidating the verb system (all tenses, weak & doubled verbs)",
@@ -461,7 +475,7 @@ const EN: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken",
-    schedule: "~8–9 months · opens after B1 — future enrollment",
+    schedule: ["~8–9 months · opens after B1 — future enrollment"],
     items: [
       "B1 review & diagnostic",
       "Stylistic register (formal vs. street, code-switching)",
@@ -483,7 +497,7 @@ const EN: CurriculumLevel[] = [
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken / Spoken + Written (simultaneous)",
-    schedule: "~10 months · opens after B2 — future enrollment",
+    schedule: ["~10 months · opens after B2 — future enrollment"],
     spokenCore: {
       intro: "Spoken core (all learners)",
       items: [
@@ -562,7 +576,7 @@ const EN: CurriculumLevel[] = [
     lessons: 80,
     hours: 120,
     trackLabel: "Spoken / Written integrated",
-    schedule: "~10 months · opens after C1 — future enrollment",
+    schedule: ["~10 months · opens after C1 — future enrollment"],
     blocks: [
       {
         title: "Block 1 — Register & refinement (Lessons 1–10)",

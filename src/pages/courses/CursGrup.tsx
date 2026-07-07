@@ -81,7 +81,11 @@ const CursGrup = () => {
                   <span><strong className="text-foreground">{data.hours}</strong> {t.grupLevelCardHours}</span>
                 </div>
                 {data.schedule && (
-                  <p className="text-xs text-muted-foreground mb-3">{data.schedule}</p>
+                  <div className="mb-3 space-y-0.5">
+                    {data.schedule.map((line, i) => (
+                      <p key={i} className="text-xs text-muted-foreground">{line}</p>
+                    ))}
+                  </div>
                 )}
                 <div className="text-xs text-muted-foreground mb-3">
                   <span className="font-semibold text-foreground">{formatLei(online)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(fizic)}</span> {t.priceFizicShort} {t.priceLeiPerMonth}

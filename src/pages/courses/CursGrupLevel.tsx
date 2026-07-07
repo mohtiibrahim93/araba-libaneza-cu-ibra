@@ -12,6 +12,20 @@ import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp";
+import posterA1Online from "@/assets/poster-a1-online.webp";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
+
+// Cohort posters per level — only A1/A2 have announced cohorts.
+const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
+  a1: [
+    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
+  ],
+  a2: [
+    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
+  ],
+};
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -115,10 +129,12 @@ const CursGrupLevel = () => {
           </div>
 
           {curriculum.schedule && (
-            <p className="text-sm text-foreground font-medium mb-6 max-w-2xl">
-              <span className="text-xs uppercase font-semibold text-muted-foreground mr-2">{t.levelPageScheduleLabel}</span>
-              {curriculum.schedule}
-            </p>
+            <div className="mb-6 max-w-2xl">
+              <span className="text-xs uppercase font-semibold text-muted-foreground">{t.levelPageScheduleLabel}</span>
+              {curriculum.schedule.map((line, i) => (
+                <p key={i} className="text-sm text-foreground font-medium mt-1">{line}</p>
+              ))}
+            </div>
           )}
 
           {/* Dual price */}
@@ -208,6 +224,23 @@ const CursGrupLevel = () => {
 
               {curriculum.note && (
                 <p className="mt-4 text-xs text-muted-foreground italic">{curriculum.note}</p>
+              )}
+
+              {LEVEL_POSTERS[slug] && (
+                <div className="mt-6 grid sm:grid-cols-2 gap-4">
+                  {LEVEL_POSTERS[slug]!.map((p) => (
+                    <img
+                      key={p.src}
+                      src={p.src}
+                      alt={p.alt}
+                      width={800}
+                      height={800}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full rounded-2xl border border-border shadow-sm"
+                    />
+                  ))}
+                </div>
               )}
             </div>
 
