@@ -2,11 +2,9 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { groupMonthlyUnitAmount, privateLessonUnitAmount } from "../_shared/prices.ts";
 
-const PRICES: Record<string, string> = {
-  group: "price_1TFLYjInUEhMEuJrameFTK8V",
-  private: "price_1TFLZ6InUEhMEuJrX5wg1e7q",
-};
+const COURSE_TYPES = ["group", "private"];
 
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -17,13 +15,26 @@ serve(async (req) => {
   try {
     const { courseType, email, name, registrationId } = await req.json();
 
-    if (!courseType || (!PRICES[courseType] && courseType !== "kids_deposit")) {
+    if (!courseType || (!COURSE_TYPES.includes(courseType) && courseType !== "kids_deposit")) {
       throw new Error("Invalid course type");
+    }
+    // Group/private amounts are derived from the registration row (level,
+    // format, quantity persisted at submission time), so a registration is
+    // mandatory for those flows.
+    if (courseType !== "kids_deposit" && !registrationId) {
+      throw new Error("registrationId is required");
     }
 
     // Validate registrationId format & state BEFORE talking to Stripe so an
     // unauthenticated caller can't disrupt an existing paid registration.
-    let existingReg: { payment_status: string | null; stripe_session_id: string | null; form_type: string | null } | null = null;
+    let existingReg: {
+      payment_status: string | null;
+      stripe_session_id: string | null;
+      form_type: string | null;
+      level: string | null;
+      format: string | null;
+      quantity: number | null;
+    } | null = null;
     if (registrationId) {
       if (typeof registrationId !== "string" || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
         return new Response(JSON.stringify({ error: "Invalid registrationId" }), {
@@ -37,7 +48,7 @@ serve(async (req) => {
       );
       const { data: regRow } = await adminClient
         .from("registrations")
-        .select("payment_status, stripe_session_id, form_type")
+        .select("payment_status, stripe_session_id, form_type, level, format, quantity")
         .eq("id", registrationId)
         .maybeSingle();
       if (!regRow) {
@@ -81,19 +92,46 @@ serve(async (req) => {
       }
     }
 
-    const lineItems = courseType === "kids_deposit"
-      ? [{
-          price_data: {
-            currency: "ron",
-            product_data: {
-              name: "Avans loc grupa Copii — Arabă Libaneză",
-              description: "Avans rambursabil 25% (125 LEI) pentru rezervarea locului în grupa de copii.",
-            },
-            unit_amount: 12500,
+    // Group/private amounts come from the server-side price table keyed by
+    // the level + format on the registration row — the old fixed Stripe
+    // price ID charged every group level the A1 rate. Same discount rules
+    // as create-payment-intent (-10% at 3+ months, -15% at 20+ lessons).
+    let lineItems;
+    if (courseType === "kids_deposit") {
+      lineItems = [{
+        price_data: {
+          currency: "ron",
+          product_data: {
+            name: "Avans loc grupa Copii — Arabă Libaneză",
+            description: "Avans rambursabil 25% (125 LEI) pentru rezervarea locului în grupa de copii.",
           },
-          quantity: 1,
-        }]
-      : [{ price: PRICES[courseType], quantity: 1 }];
+          unit_amount: 12500,
+        },
+        quantity: 1,
+      }];
+    } else {
+      const quantity = Math.max(1, Math.min(100, Number.parseInt(String(existingReg?.quantity ?? 1), 10) || 1));
+      const unitAmount = courseType === "group"
+        ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
+        : privateLessonUnitAmount();
+      const discountRate =
+        courseType === "private" && quantity >= 20
+          ? 0.85
+          : courseType === "group" && quantity >= 3
+            ? 0.9
+            : 1;
+      const productName = courseType === "group"
+        ? `Curs de grup Arabă Libaneză${existingReg?.level ? ` — nivel ${existingReg.level}` : ""}`
+        : "Lecții private Arabă Libaneză";
+      lineItems = [{
+        price_data: {
+          currency: "ron",
+          product_data: { name: productName },
+          unit_amount: Math.round(unitAmount * discountRate),
+        },
+        quantity,
+      }];
+    }
 
     const session = await stripe.checkout.sessions.create(
       {
