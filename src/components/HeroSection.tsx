@@ -1,6 +1,7 @@
 import { useI18n } from "@/lib/i18n";
 import { Users, GraduationCap, Clock, BookOpen, Star, ShieldCheck, BadgeCheck, Tag } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
+import heroImgWebp from "@/assets/hero-lebanon-cedar.webp";
 import AnchorLink from "@/components/AnchorLink";
 
 const WHATSAPP_URL =
@@ -83,15 +84,18 @@ const HeroSection = () => {
         {/* Right: Lebanese cedar illustration with floating cards */}
         <div className="relative">
           <div className="w-full rounded-2xl bg-gradient-to-br from-primary/5 via-background to-primary/10 border border-border/60 shadow-lg overflow-hidden aspect-[4/3] flex items-center justify-center">
-            <img
-              src={heroImg}
-              alt="Ibra — instructor de arabă libaneză"
-              width={1024}
-              height={1024}
-              {...imgPriorityProps}
-              decoding="async"
-              className="w-full h-full object-contain p-4"
-            />
+            <picture>
+              <source srcSet={heroImgWebp} type="image/webp" />
+              <img
+                src={heroImg}
+                alt="Ibra — instructor de arabă libaneză"
+                width={1024}
+                height={1024}
+                {...imgPriorityProps}
+                decoding="async"
+                className="w-full h-full object-contain p-4"
+              />
+            </picture>
           </div>
 
           {/* Floating card: Lessons */}

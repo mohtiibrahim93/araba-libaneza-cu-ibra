@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { Star, ExternalLink } from "lucide-react";
-import instructorPhotoPng from "@/assets/instructor-photo.png";
+import instructorPhotoJpg from "@/assets/instructor-photo.jpg";
 import instructorPhotoWebp from "@/assets/instructor-photo.webp";
 
 const InstructorSection = () => {
@@ -20,7 +20,7 @@ const InstructorSection = () => {
           <picture>
             <source srcSet={instructorPhotoWebp} type="image/webp" />
             <img
-              src={instructorPhotoPng}
+              src={instructorPhotoJpg}
               alt="Ibra — instructor"
               width={280}
               height={280}

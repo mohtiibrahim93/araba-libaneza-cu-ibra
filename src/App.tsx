@@ -7,18 +7,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
 import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
+// Homepage + the tiny catch-all stay eager (critical path); everything else is
+// code-split so it doesn't weigh down the initial homepage bundle.
 import Index from "./pages/Index";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
-import Unsubscribe from "./pages/Unsubscribe";
-import PrivateStatus from "./pages/PrivateStatus";
-import Booking from "./pages/Booking";
-import BookingManage from "./pages/BookingManage";
-import Trial from "./pages/Trial";
-import Quiz from "./pages/Quiz";
-import Auth from "./pages/Auth";
 
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const PrivateStatus = lazy(() => import("./pages/PrivateStatus"));
+const Booking = lazy(() => import("./pages/Booking"));
+const BookingManage = lazy(() => import("./pages/BookingManage"));
+const Trial = lazy(() => import("./pages/Trial"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const Auth = lazy(() => import("./pages/Auth"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const PrivateLead = lazy(() => import("./pages/PrivateLead"));
