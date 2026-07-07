@@ -11,6 +11,20 @@ import { getCurriculum } from "@/data/curriculum";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp";
+import posterA1Online from "@/assets/poster-a1-online.webp";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
+
+// Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
+const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
+  A1: [
+    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
+  ],
+  A2: [
+    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
+  ],
+};
 
 const wa = (msg: string) =>
   "https://wa.me/40763124514?text=" + encodeURIComponent(msg);
@@ -51,7 +65,7 @@ const ProgramsSection = () => {
   const a1Cap = getCapacity("group", "A1");
   const kidsCap = getCapacity("kids", null);
 
-  const isAvailable = (level: Level) => level === "A1";
+  const isAvailable = (level: Level) => level === "A1" || level === "A2";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
   const a1Fizic = physicalPrice(a1Online);
   const curriculum = getCurriculum(lang);
@@ -121,6 +135,7 @@ const ProgramsSection = () => {
                   <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
                 </div>
               </div>
+              <p className="text-xs font-medium text-primary mb-4">{t.groupEnrollmentOpenNote}</p>
 
               {/* A1 capacity */}
               {a1Cap && (
@@ -224,6 +239,29 @@ const ProgramsSection = () => {
                       {t.priceFizicShort} {t.priceLeiPerMonth}
                     </span>
                   </div>
+                  {activeLevelData.schedule && (
+                    <div className="mb-3 space-y-0.5">
+                      {activeLevelData.schedule.map((line, i) => (
+                        <p key={i} className="text-xs text-muted-foreground">{line}</p>
+                      ))}
+                    </div>
+                  )}
+                  {LEVEL_POSTERS[activeLevel] && (
+                    <div className="mb-3 grid grid-cols-2 gap-2 max-w-sm">
+                      {LEVEL_POSTERS[activeLevel]!.map((p) => (
+                        <img
+                          key={p.src}
+                          src={p.src}
+                          alt={p.alt}
+                          width={800}
+                          height={800}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full rounded-lg border border-border"
+                        />
+                      ))}
+                    </div>
+                  )}
                   <Link
                     to={`/cursuri/grup/${activeLevel.toLowerCase()}`}
                     className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4"

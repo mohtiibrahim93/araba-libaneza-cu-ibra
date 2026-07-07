@@ -8,7 +8,7 @@ import groupImg from "@/assets/group-course.jpg";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-const isAvailable = (l: string) => l === "A1";
+const isAvailable = (l: string) => l === "A1" || l === "A2";
 
 const CursGrup = () => {
   const { t, lang } = useI18n();
@@ -50,7 +50,8 @@ const CursGrup = () => {
       {/* Level grid */}
       <section id="choose-level" className="scroll-mt-24 mt-4">
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
-        <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.grupChooseLevelDesc}</p>
+        <p className="text-sm text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
+        <p className="text-sm font-medium text-primary mb-6 max-w-2xl">{t.groupEnrollmentOpenNote}</p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {LEVELS.map((lvl) => {
@@ -79,6 +80,13 @@ const CursGrup = () => {
                   <span>·</span>
                   <span><strong className="text-foreground">{data.hours}</strong> {t.grupLevelCardHours}</span>
                 </div>
+                {data.schedule && (
+                  <div className="mb-3 space-y-0.5">
+                    {data.schedule.map((line, i) => (
+                      <p key={i} className="text-xs text-muted-foreground">{line}</p>
+                    ))}
+                  </div>
+                )}
                 <div className="text-xs text-muted-foreground mb-3">
                   <span className="font-semibold text-foreground">{formatLei(online)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(fizic)}</span> {t.priceFizicShort} {t.priceLeiPerMonth}
                 </div>
