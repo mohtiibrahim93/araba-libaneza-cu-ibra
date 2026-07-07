@@ -65,6 +65,7 @@ Living backlog, updated across the audit passes below. Product scope: lead-gen +
 | Item | Evidence of fix |
 |---|---|
 | Payment amount was fully client-controlled | `create-payment-intent/index.ts` now reads `quantity` from the DB row (`regRow.quantity`), not the request body |
+| Group checkout charged every level the same fixed Stripe price (A2 at 600 lei/lună would have been charged the A1 rate) | Both `create-payment-intent` and `create-checkout` now compute the amount from a server-side table (`_shared/prices.ts`) keyed by the `level` + `format` persisted on the registration row, including the +40% in-center surcharge. Table is unit-tested to stay in sync with the displayed prices (`src/test/server-prices.test.ts`). Live Stripe call not testable from this sandbox — same caveat as the refund action. |
 | Admin panel used a single shared password, no rate limiting | `Admin.tsx`/`AdminLogin.tsx` — zero `password` references; Google sign-in + `ADMIN_EMAILS` allowlist confirmed in `admin-registrations/index.ts:56-66` |
 | CORS wildcard (`*`) on all 26 edge functions | `_shared/cors.ts` origin allowlist confirmed applied across all functions; only two dead-internal-default wildcards remain in `auth-email-hook`, both overwritten before the response leaves the server |
 | No Stripe idempotency key | Present in both `create-payment-intent:125` and `create-checkout:114` |

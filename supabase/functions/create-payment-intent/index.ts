@@ -2,11 +2,9 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { groupMonthlyUnitAmount, privateLessonUnitAmount } from "../_shared/prices.ts";
 
-const PRICES: Record<string, string> = {
-  group: "price_1TFLYjInUEhMEuJrameFTK8V",
-  private: "price_1TFLZ6InUEhMEuJrX5wg1e7q",
-};
+const COURSE_TYPES = ["group", "private"] as const;
 
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -17,7 +15,7 @@ serve(async (req) => {
   try {
     const { courseType, email, name, registrationId } = await req.json();
 
-    if (!courseType || !PRICES[courseType]) {
+    if (!courseType || !COURSE_TYPES.includes(courseType)) {
       throw new Error("Invalid course type");
     }
     if (!registrationId || typeof registrationId !== "string") {
@@ -33,7 +31,7 @@ serve(async (req) => {
     );
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
-      .select("id, form_type, payment_status, stripe_session_id, email, quantity")
+      .select("id, form_type, payment_status, stripe_session_id, email, quantity, level, format")
       .eq("id", registrationId)
       .maybeSingle();
 
@@ -73,11 +71,14 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    // Look up the price to get amount + currency
-    const price = await stripe.prices.retrieve(PRICES[courseType]);
-    if (!price.unit_amount || !price.currency) {
-      throw new Error("Price misconfigured");
-    }
+    // Unit amount comes from the server-side price table, keyed by the
+    // level + format persisted on the registration row — the old fixed
+    // Stripe price ID charged every group level the A1 rate.
+    const unitAmount =
+      courseType === "group"
+        ? groupMonthlyUnitAmount(regRow.level, regRow.format)
+        : privateLessonUnitAmount();
+    const currency = "ron";
 
     // Find or create customer (best-effort)
     let customerId: string | undefined;
@@ -91,7 +92,7 @@ serve(async (req) => {
       }
     }
 
-    const baseAmount = price.unit_amount * quantity;
+    const baseAmount = unitAmount * quantity;
     const discountRate =
       courseType === "private" && quantity >= 20
         ? 0.85
@@ -106,7 +107,7 @@ serve(async (req) => {
     const intent = await stripe.paymentIntents.create(
       {
         amount: finalAmount,
-        currency: price.currency,
+        currency,
         customer: customerId,
         receipt_email: email || undefined,
         automatic_payment_methods: { enabled: true },
@@ -115,6 +116,8 @@ serve(async (req) => {
           student_name: name || "",
           registration_id: registrationId || "",
           quantity: String(quantity),
+          level: regRow.level || "",
+          format: regRow.format || "",
           discount_applied: discountApplied
             ? courseType === "private"
               ? "15"
@@ -142,10 +145,10 @@ serve(async (req) => {
         clientSecret: intent.client_secret,
         paymentIntentId: intent.id,
         amount: finalAmount,
-        unitAmount: price.unit_amount,
+        unitAmount,
         quantity,
         discountApplied,
-        currency: price.currency,
+        currency,
         publishableKey: stripePublishableKey,
       }),
       {
