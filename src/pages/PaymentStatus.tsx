@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trackEvent } from "@/lib/tracking";
@@ -44,23 +43,6 @@ const PaymentStatus = () => {
     const check = async (): Promise<Status> => {
       // 1) DB is source of truth (webhook writes here)
       if (registrationId) {
-        try {
-          const { data } = await supabase.functions.invoke("get-payment-status", {
-            method: "GET",
-            headers: {},
-            body: undefined,
-            // supabase-js doesn't pass query for invoke — fall back to fetch:
-          });
-          if (data?.payment_status) {
-            const mapped = mapRegistrationPaymentStatus(data.payment_status);
-            if (mapped) return mapped;
-          }
-        } catch (e) {
-          // fall through
-          console.warn("[payment-status] invoke failed", e);
-        }
-
-        // Direct fetch with query param (invoke() cannot send query strings).
         try {
           const base = import.meta.env.VITE_SUPABASE_URL as string;
           const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
