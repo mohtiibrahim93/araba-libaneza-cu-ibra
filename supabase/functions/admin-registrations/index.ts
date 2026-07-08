@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     if (action === "list_capacities") {
       const { data, error } = await supabase
         .from("group_capacities")
-        .select("id, form_type, level, max_seats, min_seats")
+        .select("id, form_type, level, max_seats, min_seats, manual_offset")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false });
       if (error) throw error;
@@ -81,18 +81,30 @@ Deno.serve(async (req) => {
     }
 
     if (action === "update_capacity") {
-      const { id: capId, max_seats, min_seats } = body;
+      const { id: capId, max_seats, min_seats, manual_offset } = body;
       if (typeof capId !== "string") return jsonResponse({ error: "ID invalid" });
       const max = Number(max_seats);
       const min = Number(min_seats);
       if (!Number.isInteger(max) || !Number.isInteger(min) || max < 1 || min < 1 || min > max) {
         return jsonResponse({ error: "Valori invalide (min ≤ max, ambele ≥ 1)" });
       }
+      const update: Record<string, unknown> = {
+        max_seats: max,
+        min_seats: min,
+        updated_at: new Date().toISOString(),
+      };
+      if (manual_offset !== undefined) {
+        const off = Number(manual_offset);
+        if (!Number.isInteger(off) || off < 0) {
+          return jsonResponse({ error: "Manual offset invalid (≥ 0)" });
+        }
+        update.manual_offset = off;
+      }
       const { data, error } = await supabase
         .from("group_capacities")
-        .update({ max_seats: max, min_seats: min, updated_at: new Date().toISOString() })
+        .update(update)
         .eq("id", capId)
-        .select("id, form_type, level, max_seats, min_seats")
+        .select("id, form_type, level, max_seats, min_seats, manual_offset")
         .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
@@ -102,7 +114,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order")
+        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -123,6 +135,7 @@ Deno.serve(async (req) => {
         is_active,
         status,
         sort_order,
+        manual_offset,
       } = body;
       if (!["group", "kids"].includes(form_type)) {
         return jsonResponse({ error: "Tip invalid (group/kids)" });
@@ -149,6 +162,13 @@ Deno.serve(async (req) => {
       };
       if (typeof status === "string" && ALLOWED_COHORT_STATUSES.includes(status)) {
         payload.status = status;
+      }
+      if (manual_offset !== undefined) {
+        const off = Number(manual_offset);
+        if (!Number.isInteger(off) || off < 0) {
+          return jsonResponse({ error: "Manual offset invalid (≥ 0)" });
+        }
+        payload.manual_offset = off;
       }
       if (typeof cId === "string" && cId) {
         const { data, error } = await supabase
