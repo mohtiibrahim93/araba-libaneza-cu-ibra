@@ -45,6 +45,7 @@ interface Cohort {
   is_active: boolean;
   status: CohortStatus;
   sort_order: number;
+  manual_offset?: number;
 }
 
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -61,6 +62,7 @@ const blank = (): Cohort => ({
   is_active: true,
   status: "forming",
   sort_order: 0,
+  manual_offset: 0,
 });
 
 const CohortsAdmin = () => {
@@ -231,7 +233,7 @@ const CohortsAdmin = () => {
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
-            <div key={r.id} className="grid gap-2 md:grid-cols-[80px_60px_140px_80px_1fr_1fr_auto_auto] items-end rounded-md border border-border bg-background p-2">
+            <div key={r.id} className="grid gap-2 md:grid-cols-[80px_60px_140px_70px_90px_1fr_1fr_auto_auto] items-end rounded-md border border-border bg-background p-2">
               <div className="text-xs font-semibold">{r.form_type === "kids" ? "Copii" : "Grup"}</div>
               <div className="text-xs font-semibold">{r.level ?? "—"}</div>
               <Input
@@ -244,6 +246,15 @@ const CohortsAdmin = () => {
                 value={r.max_seats}
                 onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
               />
+              <div>
+                <Label className="text-[10px] uppercase text-muted-foreground">Manual</Label>
+                <Input
+                  type="number" min={0}
+                  title="Înscrieri manuale (WhatsApp/TikTok/direct)"
+                  value={r.manual_offset ?? 0}
+                  onChange={(e) => update(r.id, { manual_offset: Math.max(0, Number(e.target.value)) })}
+                />
+              </div>
               <Input
                 placeholder="Program RO"
                 value={r.schedule_label_ro}

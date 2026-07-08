@@ -109,6 +109,7 @@ const ProgramsSection = () => {
               <div className="p-6">
                 <RegistrationFormSection
                   defaultCourseType="group"
+                  lockSelection
                   embedded
                   onBack={() => setInlineForm(null)}
                 />
@@ -305,6 +306,7 @@ const ProgramsSection = () => {
                   <div className="p-6">
                     <RegistrationFormSection
                       defaultCourseType="private"
+                      lockSelection
                       embedded
                       onBack={() => setInlineForm(null)}
                     />
