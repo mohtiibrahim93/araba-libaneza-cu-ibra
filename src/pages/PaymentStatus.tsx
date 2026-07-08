@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,22 +11,6 @@ type Status = "pending" | "succeeded" | "failed" | "canceled";
 
 const MAX_POLLS = 12;
 const POLL_INTERVAL_MS = 1500;
-
-function mapPaymentIntentStatus(s: string | undefined | null): Status {
-  switch (s) {
-    case "succeeded":
-      return "succeeded";
-    case "processing":
-    case "requires_action":
-    case "requires_confirmation":
-    case "requires_payment_method":
-      return "pending";
-    case "canceled":
-      return "canceled";
-    default:
-      return "pending";
-  }
-}
 
 function mapRegistrationPaymentStatus(s: string | null | undefined): Status | null {
   if (!s) return null;
@@ -61,30 +44,39 @@ const PaymentStatus = () => {
     const check = async (): Promise<Status> => {
       // 1) DB is source of truth (webhook writes here)
       if (registrationId) {
-        const { data } = await supabase
-          .from("registrations")
-          .select("payment_status")
-          .eq("id", registrationId)
-          .maybeSingle();
-        const mapped = mapRegistrationPaymentStatus(data?.payment_status);
-        if (mapped) return mapped;
-      }
-
-      // 2) Fallback: Stripe-side status via clientSecret
-      if (piClientSecret) {
         try {
-          const pk = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
-          // If no VITE key is configured, we still fetch it from the intent flow;
-          // fall through to redirect_status when unavailable.
-          if (pk) {
-            const stripe = await loadStripe(pk);
-            const res = await stripe?.retrievePaymentIntent(piClientSecret);
-            const pi = res?.paymentIntent;
-            if (pi?.amount) setAmount(pi.amount);
-            return mapPaymentIntentStatus(pi?.status);
+          const { data } = await supabase.functions.invoke("get-payment-status", {
+            method: "GET",
+            headers: {},
+            body: undefined,
+            // supabase-js doesn't pass query for invoke — fall back to fetch:
+          });
+          if (data?.payment_status) {
+            const mapped = mapRegistrationPaymentStatus(data.payment_status);
+            if (mapped) return mapped;
           }
         } catch (e) {
-          console.warn("[payment-status] retrievePaymentIntent failed", e);
+          // fall through
+          console.warn("[payment-status] invoke failed", e);
+        }
+
+        // Direct fetch with query param (invoke() cannot send query strings).
+        try {
+          const base = import.meta.env.VITE_SUPABASE_URL as string;
+          const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+          const res = await fetch(
+            `${base}/functions/v1/get-payment-status?registration_id=${encodeURIComponent(registrationId)}`,
+            {
+              headers: { apikey: anon, Authorization: `Bearer ${anon}` },
+            },
+          );
+          if (res.ok) {
+            const json = await res.json();
+            const mapped = mapRegistrationPaymentStatus(json?.payment_status);
+            if (mapped) return mapped;
+          }
+        } catch (e) {
+          console.warn("[payment-status] fetch failed", e);
         }
       }
 
