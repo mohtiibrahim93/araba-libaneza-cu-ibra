@@ -397,6 +397,7 @@ export type Database = {
           form_type: string
           id: string
           level: string | null
+          manual_offset: number
           max_seats: number
           min_seats: number
           updated_at: string
@@ -405,6 +406,7 @@ export type Database = {
           form_type: string
           id?: string
           level?: string | null
+          manual_offset?: number
           max_seats?: number
           min_seats?: number
           updated_at?: string
@@ -413,6 +415,7 @@ export type Database = {
           form_type?: string
           id?: string
           level?: string | null
+          manual_offset?: number
           max_seats?: number
           min_seats?: number
           updated_at?: string
@@ -430,6 +433,7 @@ export type Database = {
           is_active: boolean
           level: string | null
           location_id: string | null
+          manual_offset: number
           max_seats: number
           schedule_label_en: string
           schedule_label_ro: string
@@ -452,6 +456,7 @@ export type Database = {
           is_active?: boolean
           level?: string | null
           location_id?: string | null
+          manual_offset?: number
           max_seats?: number
           schedule_label_en?: string
           schedule_label_ro?: string
@@ -474,6 +479,7 @@ export type Database = {
           is_active?: boolean
           level?: string | null
           location_id?: string | null
+          manual_offset?: number
           max_seats?: number
           schedule_label_en?: string
           schedule_label_ro?: string
