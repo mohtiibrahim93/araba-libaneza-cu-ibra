@@ -24,6 +24,7 @@ const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const PrivateLead = lazy(() => import("./pages/PrivateLead"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
+const PaymentStatus = lazy(() => import("./pages/PaymentStatus"));
 const CursGrup = lazy(() => import("./pages/courses/CursGrup"));
 const CursGrupLevel = lazy(() => import("./pages/courses/CursGrupLevel"));
 const CursPrivate = lazy(() => import("./pages/courses/CursPrivate"));
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/payment-status" element={<PaymentStatus />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/booking/manage/:token" element={<BookingManage />} />
             <Route path="/trial" element={<Trial />} />
