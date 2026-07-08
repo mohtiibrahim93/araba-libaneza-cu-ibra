@@ -10,7 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { trackCheckoutStart } from "@/lib/tracking";
 
@@ -25,10 +25,12 @@ const PaymentForm = ({
   amount,
   currency,
   courseType,
+  registrationId,
 }: {
   amount: number;
   currency: string;
   courseType: CourseType;
+  registrationId: string;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -38,10 +40,15 @@ const PaymentForm = ({
     e.preventDefault();
     if (!stripe || !elements) return;
     setSubmitting(true);
+    const returnUrl = new URL(`${window.location.origin}/payment-status`);
+    returnUrl.searchParams.set("courseType", courseType);
+    returnUrl.searchParams.set("amount", String(amount));
+    returnUrl.searchParams.set("currency", currency);
+    if (registrationId) returnUrl.searchParams.set("registration_id", registrationId);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/thank-you?type=${courseType}&amount=${amount}&currency=${currency}`,
+        return_url: returnUrl.toString(),
       },
     });
     if (error) {
@@ -90,6 +97,7 @@ const Checkout = () => {
   const [amount, setAmount] = useState(0);
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
+  const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
 
   const title = "Finalizează plata — centrul de araba libaneza";
   const description = `Plată securizată prin Stripe pentru ${COURSE_LABEL[courseType]}. Datele cardului nu sunt stocate pe acest site.`;
@@ -108,18 +116,32 @@ const Checkout = () => {
           { body: { courseType, email, name, registrationId, quantity } },
         );
         if (invokeError) throw invokeError;
+        // Safe diagnostic log: never print full clientSecret or full key.
+        console.info("[checkout] payment-intent response", {
+          amount: data?.amount,
+          currency: data?.currency,
+          hasClientSecret: Boolean(data?.clientSecret),
+          publishableKeyPrefix: typeof data?.publishableKey === "string"
+            ? data.publishableKey.slice(0, 8) + "…"
+            : null,
+        });
         if (!data?.clientSecret || !data?.publishableKey) {
-          throw new Error("Răspuns invalid de la server");
+          throw new Error("Răspuns invalid de la server (lipsă clientSecret / publishableKey)");
+        }
+        if (typeof data.amount !== "number" || data.amount <= 0) {
+          throw new Error("Sumă invalidă returnată de server");
         }
         if (cancelled) return;
         setClientSecret(data.clientSecret);
         setStripePromise(loadStripe(data.publishableKey));
         setAmount(data.amount);
         setCurrency(data.currency);
+        setPhase("ready");
       } catch (err) {
         console.error(err);
         const msg = err instanceof Error ? err.message : "Eroare la inițializarea plății";
         setError(msg);
+        setPhase("error");
       }
     })();
     return () => {
@@ -134,6 +156,9 @@ const Checkout = () => {
         : undefined,
     [clientSecret],
   );
+
+  const canRenderElements =
+    phase === "ready" && !!clientSecret && !!stripePromise && !!options && amount > 0;
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-4">
@@ -165,21 +190,32 @@ const Checkout = () => {
             </p>
           </div>
 
-          {error ? (
-            <div className="text-center py-12">
-              <p className="text-destructive font-medium mb-4">{error}</p>
+          {phase === "error" ? (
+            <div className="text-center py-8 space-y-4">
+              <AlertTriangle className="w-10 h-10 text-destructive mx-auto" />
+              <p className="text-destructive font-medium">{error || "Nu am putut pregăti plata"}</p>
+              <p className="text-xs text-muted-foreground">
+                Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514.
+              </p>
               <Button variant="outline" onClick={() => window.location.reload()}>
-                Încearcă din nou
+                Reîncearcă
               </Button>
             </div>
-          ) : !clientSecret || !stripePromise || !options ? (
-            <div className="text-center py-12">
+          ) : !canRenderElements ? (
+            <div className="text-center py-12" role="status" aria-live="polite">
               <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-3">Se pregătește plata...</p>
+              <p className="text-sm text-muted-foreground mt-3">
+                Se pregătește plata securizată...
+              </p>
             </div>
           ) : (
-            <Elements stripe={stripePromise} options={options}>
-              <PaymentForm amount={amount} currency={currency} courseType={courseType as CourseType} />
+            <Elements stripe={stripePromise!} options={options!}>
+              <PaymentForm
+                amount={amount}
+                currency={currency}
+                courseType={courseType as CourseType}
+                registrationId={registrationId}
+              />
             </Elements>
           )}
         </div>
