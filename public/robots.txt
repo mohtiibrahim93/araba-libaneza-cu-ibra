@@ -12,5 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /private-status/
+Disallow: /checkout
 
 Sitemap: https://centruldearabalibaneza.com/sitemap.xml
