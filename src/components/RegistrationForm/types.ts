@@ -8,6 +8,7 @@ export interface SubmittedData {
   name: string;
   registrationId: string;
   quantity?: number;
+  groupPlan?: "monthly" | "full";
   waitlistDeposit?: boolean;
   cohortId?: string | null;
   kidsSlotId?: string | null;

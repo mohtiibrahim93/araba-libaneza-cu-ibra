@@ -20,9 +20,11 @@ interface PaymentInstructionsProps {
   name?: string;
   registrationId?: string;
   quantity?: number;
+  /** Group only: monthly subscription vs. pay the whole course upfront. */
+  plan?: "monthly" | "full";
 }
 
-const PaymentInstructions = ({ courseType, email, name, registrationId, quantity }: PaymentInstructionsProps) => {
+const PaymentInstructions = ({ courseType, email, name, registrationId, quantity, plan }: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [showAlternatives, setShowAlternatives] = useState(false);
@@ -35,6 +37,7 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
     if (name) params.set("name", name);
     if (registrationId) params.set("registrationId", registrationId);
     if (quantity && quantity > 1) params.set("quantity", String(quantity));
+    if (courseType === "group" && plan) params.set("plan", plan);
     navigate(`/checkout?${params.toString()}`);
   };
 

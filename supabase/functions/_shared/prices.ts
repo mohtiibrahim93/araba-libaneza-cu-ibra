@@ -65,6 +65,19 @@ export function privateLessonUnitAmount(): number {
 }
 
 /**
+ * Full-course amount in bani for a group registration that pays upfront in one
+ * charge instead of the monthly subscription: the whole course (monthly ×
+ * course-months) with a 10% upfront discount. Level+format come from the row.
+ */
+export function groupFullCourseUnitAmount(
+  level: string | null | undefined,
+  format: string | null | undefined,
+): number {
+  const monthly = groupMonthlyUnitAmount(level, format);
+  return Math.round(monthly * groupMonthsFor(level) * 0.9);
+}
+
+/**
  * How many monthly charges a group subscription bills before it auto-stops.
  *
  * Keyed by the level persisted on the registration row. Unknown/missing level

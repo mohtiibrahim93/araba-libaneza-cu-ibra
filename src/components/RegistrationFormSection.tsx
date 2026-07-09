@@ -81,7 +81,7 @@ const RegistrationFormSection = ({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
-  const [groupMonths, setGroupMonths] = useState<1 | 3>(1);
+  const [groupPlan, setGroupPlan] = useState<"monthly" | "full">("monthly");
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
   const [honeypot, setHoneypot] = useState("");
@@ -114,7 +114,7 @@ const RegistrationFormSection = ({
       if (draft.gdpr !== undefined) setGdpr(draft.gdpr);
       if (draft.referralCode !== undefined) setReferralCode(draft.referralCode);
       if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
-      if (draft.groupMonths !== undefined) setGroupMonths(draft.groupMonths);
+      if (draft.groupPlan !== undefined) setGroupPlan(draft.groupPlan);
       if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
     } catch {
       // ignore corrupted drafts
@@ -139,14 +139,14 @@ const RegistrationFormSection = ({
       gdpr,
       referralCode,
       privateQuantity,
-      groupMonths,
+      groupPlan,
       payDeposit,
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
   }, [
     courseType, format, level, center, name, phone, email,
     childName, childAge, message, gdpr,
-    referralCode, privateQuantity, groupMonths, payDeposit, submitted,
+    referralCode, privateQuantity, groupPlan, payDeposit, submitted,
   ]);
 
   const onCourseChange = (value: CourseType) => {
@@ -155,7 +155,7 @@ const RegistrationFormSection = ({
     setCenter("");
     setPayDeposit(false);
     if (value !== "private") setPrivateQuantity(1);
-    if (value !== "group") setGroupMonths(1);
+    if (value !== "group") setGroupPlan("monthly");
     if (value !== "group") setCohortId(null);
     if (value !== "kids") setKidsSlotId(null);
   };
@@ -175,7 +175,7 @@ const RegistrationFormSection = ({
     setGdpr(false);
     setSubmitted(false);
     setPrivateQuantity(1);
-    setGroupMonths(1);
+    setGroupPlan("monthly");
     setPayDeposit(false);
     setCohortId(null);
     setKidsSlotId(null);
@@ -306,9 +306,9 @@ const RegistrationFormSection = ({
       }
       if (courseType === "group") {
         notesParts.push(
-          `Plată: ${groupMonths} lun${groupMonths === 1 ? "ă" : "i"}${
-            groupMonths >= 3 ? " (−10% auto)" : ""
-          }`,
+          groupPlan === "full"
+            ? "Plată: integrală în avans (−10%)"
+            : "Plată: abonament lunar",
         );
       }
       if (courseType === "kids") {
@@ -327,8 +327,9 @@ const RegistrationFormSection = ({
       const recipientName = courseType === "kids" && childName ? childName : name;
       // Persisted so create-payment-intent can charge the agreed amount
       // server-side instead of trusting a client-supplied quantity.
-      const quantity =
-        courseType === "private" ? privateQuantity : courseType === "group" ? groupMonths : 1;
+      // Group amounts are derived server-side from level+format (+ months for
+      // the pay-in-full path), so group no longer carries a months "quantity".
+      const quantity = courseType === "private" ? privateQuantity : 1;
 
       const { error } = await supabase.from("registrations").insert({
         id,
@@ -362,6 +363,7 @@ const RegistrationFormSection = ({
         name: recipientName,
         registrationId: id,
         quantity: courseType === "kids" ? undefined : quantity,
+        groupPlan: courseType === "group" ? groupPlan : undefined,
         waitlistDeposit: courseType === "kids" && payDeposit,
         cohortId: courseType === "group" ? cohortId : null,
         kidsSlotId: courseType === "kids" ? kidsSlotId : null,
@@ -493,8 +495,9 @@ const RegistrationFormSection = ({
             <GroupFields
               level={level}
               onLevelChange={setLevel}
-              groupMonths={groupMonths}
-              onGroupMonthsChange={setGroupMonths}
+              format={format}
+              groupPlan={groupPlan}
+              onGroupPlanChange={setGroupPlan}
               cohortId={cohortId}
               onCohortChange={(c) => setCohortId(c?.id ?? null)}
               locked={lockSelection && !!defaultLevel}

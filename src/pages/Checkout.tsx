@@ -108,6 +108,9 @@ const Checkout = () => {
   const name = params.get("name") || "";
   const registrationId = params.get("registrationId") || "";
   const quantity = Math.max(1, Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1));
+  // Group only: "monthly" (subscription, default) vs "full" (pay the whole
+  // course upfront as one charge). Private ignores this.
+  const groupPlan = params.get("plan") === "full" ? "full" : "monthly";
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
@@ -129,16 +132,16 @@ const Checkout = () => {
           throw new Error("Tip de curs invalid");
         }
         trackCheckoutStart(courseType);
-        // Group courses are billed as a monthly subscription; private lessons
-        // stay a one-time PaymentIntent.
-        const { data, error: invokeError } =
-          courseType === "group"
-            ? await supabase.functions.invoke("create-subscription", {
-                body: { email, name, registrationId },
-              })
-            : await supabase.functions.invoke("create-payment-intent", {
-                body: { courseType, email, name, registrationId, quantity },
-              });
+        // Group monthly → subscription. Group pay-in-full and private → a
+        // one-time PaymentIntent (the edge function derives the amount).
+        const useSubscription = courseType === "group" && groupPlan === "monthly";
+        const { data, error: invokeError } = useSubscription
+          ? await supabase.functions.invoke("create-subscription", {
+              body: { email, name, registrationId },
+            })
+          : await supabase.functions.invoke("create-payment-intent", {
+              body: { courseType, email, name, registrationId, quantity },
+            });
         if (invokeError) throw invokeError;
         // Safe diagnostic log: never print full clientSecret or full key.
         console.info("[checkout] payment-intent response", {
@@ -172,7 +175,7 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseType, email, name, registrationId, quantity]);
+  }, [courseType, email, name, registrationId, quantity, groupPlan]);
 
   const options = useMemo(
     () =>
