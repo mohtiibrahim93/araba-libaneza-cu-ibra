@@ -9,35 +9,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LevelAssessmentModal from "@/components/LevelAssessmentModal";
-import type { LevelType } from "./types";
+import type { LevelType, FormatType } from "./types";
 import CohortPicker from "./CohortPicker";
 import type { Cohort } from "@/hooks/useGroupCohorts";
+import { ONLINE_PRICES, GROUP_COURSE_MONTHS, priceFor, formatLei } from "@/lib/pricing";
+
+export type GroupPlan = "monthly" | "full";
 
 interface Props {
   level: LevelType | "";
   onLevelChange: (level: LevelType) => void;
-  groupMonths: 1 | 3;
-  onGroupMonthsChange: (months: 1 | 3) => void;
+  format: FormatType | "";
+  groupPlan: GroupPlan;
+  onGroupPlanChange: (plan: GroupPlan) => void;
   cohortId: string | null;
   onCohortChange: (cohort: Cohort | null) => void;
   /** When true, hide the level selector and show the locked level as read-only. */
   locked?: boolean;
 }
 
-const MONTHLY_PRICE_BY_LEVEL: Record<LevelType, number> = {
-  A1: 500,
-  A2: 600,
-  B1: 700,
-  B2: 800,
-  C1: 900,
-  C2: 1000,
-};
-
 const GroupFields = ({
   level,
   onLevelChange,
-  groupMonths,
-  onGroupMonthsChange,
+  format,
+  groupPlan,
+  onGroupPlanChange,
   cohortId,
   onCohortChange,
   locked = false,
@@ -105,51 +101,69 @@ const GroupFields = ({
         />
       )}
 
-      {level && (
-        <div className="space-y-2">
-          <Label>{t.groupMonthsLabel} *</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {([1, 3] as const).map((m) => {
-              const monthly = MONTHLY_PRICE_BY_LEVEL[level as LevelType] || 500;
-              const base = monthly * m;
-              const total = m === 3 ? Math.round(base * 0.9) : base;
-              const active = groupMonths === m;
-              return (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => onGroupMonthsChange(m)}
-                  className={`text-left rounded-lg border p-3 transition-colors ${
-                    active
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-background hover:bg-muted"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">
-                      {m === 1 ? t.groupMonthsOption1 : t.groupMonthsOption3}
-                    </span>
-                    {m === 3 && (
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                        −10%
-                      </span>
+      {level && (() => {
+        const months = GROUP_COURSE_MONTHS[level as LevelType] ?? 4;
+        const monthly = priceFor(
+          ONLINE_PRICES.groupMonthly[level as LevelType] ?? 500,
+          format || "online",
+        );
+        const fullBase = monthly * months;
+        const fullDiscounted = Math.round(fullBase * 0.9);
+        const options: { plan: GroupPlan; title: string; big: string; sub?: string; badge?: string }[] = [
+          {
+            plan: "monthly",
+            title: t.groupPlanMonthly,
+            big: `${formatLei(monthly)} LEI / lună`,
+            sub: `× ${months} luni`,
+          },
+          {
+            plan: "full",
+            title: t.groupPlanFull,
+            big: `${formatLei(fullDiscounted)} LEI`,
+            sub: `${formatLei(fullBase)} LEI`,
+            badge: "−10%",
+          },
+        ];
+        return (
+          <div className="space-y-2">
+            <Label>{t.groupMonthsLabel} *</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {options.map((o) => {
+                const active = groupPlan === o.plan;
+                return (
+                  <button
+                    key={o.plan}
+                    type="button"
+                    onClick={() => onGroupPlanChange(o.plan)}
+                    className={`text-left rounded-lg border p-3 transition-colors ${
+                      active
+                        ? "border-primary bg-primary/5"
+                        : "border-border bg-background hover:bg-muted"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-foreground">{o.title}</span>
+                      {o.badge && (
+                        <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                          {o.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-base font-bold text-foreground">{o.big}</p>
+                    {o.plan === "full" && (
+                      <p className="text-[11px] text-muted-foreground line-through">{o.sub} LEI</p>
                     )}
-                  </div>
-                  <p className="mt-1 text-base font-bold text-foreground">
-                    {total.toLocaleString("ro-RO")} LEI
-                  </p>
-                  {m === 3 && (
-                    <p className="text-[11px] text-muted-foreground line-through">
-                      {base.toLocaleString("ro-RO")} LEI
-                    </p>
-                  )}
-                </button>
-              );
-            })}
+                    {o.plan === "monthly" && (
+                      <p className="text-[11px] text-muted-foreground">{o.sub}</p>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground">{t.groupMonthsHelp}</p>
           </div>
-          <p className="text-xs text-muted-foreground">{t.groupMonthsHelp}</p>
-        </div>
-      )}
+        );
+      })()}
     </>
   );
 };

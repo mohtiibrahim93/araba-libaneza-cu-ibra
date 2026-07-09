@@ -100,6 +100,7 @@ const PostSubmitView = ({
             name={data.name}
             registrationId={data.registrationId}
             quantity={data.quantity}
+            plan={data.groupPlan}
           />
         )}
 

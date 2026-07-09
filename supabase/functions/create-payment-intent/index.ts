@@ -2,7 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { groupMonthlyUnitAmount, privateLessonUnitAmount } from "../_shared/prices.ts";
+import {
+  groupFullCourseUnitAmount,
+  groupMonthlyUnitAmount,
+  groupMonthsFor,
+  privateLessonUnitAmount,
+} from "../_shared/prices.ts";
 
 const COURSE_TYPES = ["group", "private"] as const;
 
@@ -58,9 +63,12 @@ serve(async (req) => {
     // time (server-side, immutable post-insert) — never a client-supplied
     // value, which would let the amount charged be manipulated directly.
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
+    // Group reaching this function is always the PAY-IN-FULL path (monthly is a
+    // subscription handled by create-subscription): the whole course billed at
+    // once with a 10% upfront discount. Private: 15% off at 20+ lessons.
+    const groupMonths = courseType === "group" ? groupMonthsFor(regRow.level) : 1;
     const discountApplied =
-      (courseType === "private" && quantity >= 20) ||
-      (courseType === "group" && quantity >= 3);
+      (courseType === "private" && quantity >= 20) || courseType === "group";
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
@@ -92,14 +100,12 @@ serve(async (req) => {
       }
     }
 
-    const baseAmount = unitAmount * quantity;
-    const discountRate =
-      courseType === "private" && quantity >= 20
-        ? 0.85
-        : courseType === "group" && quantity >= 3
-          ? 0.9
-          : 1;
-    const finalAmount = Math.round(baseAmount * discountRate);
+    // Group pay-in-full: whole course (monthly × months) −10%. Private: unit ×
+    // lesson quantity, −15% at 20+. All from the server price table.
+    const finalAmount =
+      courseType === "group"
+        ? groupFullCourseUnitAmount(regRow.level, regRow.format)
+        : Math.round(unitAmount * quantity * (quantity >= 20 ? 0.85 : 1));
 
     // If a PaymentIntent already exists for this registration, reuse it when
     // the amount still matches. Otherwise (e.g. price was updated after the
@@ -144,7 +150,7 @@ serve(async (req) => {
                 course_type: courseType,
                 student_name: name || "",
                 registration_id: registrationId,
-                quantity: String(quantity),
+                quantity: String(courseType === "group" ? groupMonths : quantity),
                 level: regRow.level || "",
                 format: regRow.format || "",
                 discount_applied: discountApplied ? (courseType === "private" ? "15" : "10") : "0",
@@ -197,7 +203,7 @@ serve(async (req) => {
           course_type: courseType,
           student_name: name || "",
           registration_id: registrationId || "",
-          quantity: String(quantity),
+          quantity: String(courseType === "group" ? groupMonths : quantity),
           level: regRow.level || "",
           format: regRow.format || "",
           discount_applied: discountApplied
