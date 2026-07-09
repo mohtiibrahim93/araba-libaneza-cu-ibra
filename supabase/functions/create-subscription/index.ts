@@ -15,6 +15,24 @@ function addMonthsUnix(fromSeconds: number, months: number): number {
   return Math.floor(d.getTime() / 1000);
 }
 
+// The client secret needed to confirm a subscription's first invoice moved
+// across Stripe API versions: on 2025-08-27.basil `invoice.payment_intent` is
+// gone and it lives on `invoice.confirmation_secret`. Read the new shape first,
+// fall back to the legacy PaymentIntent so this keeps working either way.
+type InvoiceLike = {
+  confirmation_secret?: { client_secret?: string | null } | null;
+  payment_intent?: string | { client_secret?: string | null } | null;
+} | null | undefined;
+
+function firstInvoiceClientSecret(invoice: InvoiceLike): string | undefined {
+  if (!invoice || typeof invoice !== "object") return undefined;
+  const cs = invoice.confirmation_secret?.client_secret;
+  if (cs) return cs;
+  const pi = invoice.payment_intent;
+  if (pi && typeof pi === "object" && pi.client_secret) return pi.client_secret ?? undefined;
+  return undefined;
+}
+
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
@@ -95,17 +113,14 @@ serve(async (req) => {
     if (regRow.stripe_subscription_id && regRow.stripe_subscription_id.startsWith("sub_")) {
       try {
         const existing = await stripe.subscriptions.retrieve(regRow.stripe_subscription_id, {
-          expand: ["latest_invoice.payment_intent"],
+          expand: ["latest_invoice.confirmation_secret"],
         });
-        const pi = (existing.latest_invoice as Stripe.Invoice | null)
-          ?.payment_intent as Stripe.PaymentIntent | null;
-        if (
-          existing.status === "incomplete" &&
-          pi?.client_secret &&
-          !["succeeded", "canceled"].includes(pi.status)
-        ) {
+        const clientSecret = firstInvoiceClientSecret(
+          existing.latest_invoice as unknown as InvoiceLike,
+        );
+        if (existing.status === "incomplete" && clientSecret) {
           return jsonOk({
-            clientSecret: pi.client_secret,
+            clientSecret,
             subscriptionId: existing.id,
             amount: monthlyUnit * quantity,
             monthlyAmount: monthlyUnit,
@@ -152,7 +167,7 @@ serve(async (req) => {
         description: "Curs de grup Araba Libaneză — abonament lunar",
         payment_behavior: "default_incomplete",
         payment_settings: { save_default_payment_method: "on_subscription" },
-        expand: ["latest_invoice.payment_intent"],
+        expand: ["latest_invoice.confirmation_secret"],
         metadata: {
           registration_id: registrationId,
           course_type: "group",
@@ -166,26 +181,27 @@ serve(async (req) => {
       { idempotencyKey: `sub_${registrationId}` },
     );
 
-    const invoice = subscription.latest_invoice as Stripe.Invoice | null;
-    const intent = invoice?.payment_intent as Stripe.PaymentIntent | null;
-    if (!intent?.client_secret) {
+    const clientSecret = firstInvoiceClientSecret(
+      subscription.latest_invoice as unknown as InvoiceLike,
+    );
+    if (!clientSecret) {
       throw new Error("Subscription created without a confirmable first invoice");
     }
 
-    // Persist the subscription id and mirror the first-invoice PI into
-    // stripe_session_id so the existing /payment-status polling still resolves.
+    // Persist the subscription id + length. /payment-status polls the DB (set by
+    // the invoice.paid webhook, matched on stripe_subscription_id), so no PI
+    // mirror on stripe_session_id is needed for the subscription flow.
     await supabaseAdmin
       .from("registrations")
       .update({
         stripe_subscription_id: subscription.id,
-        stripe_session_id: intent.id,
         months_total: monthsTotal,
         payment_status: "pending",
       })
       .eq("id", registrationId);
 
     return jsonOk({
-      clientSecret: intent.client_secret,
+      clientSecret,
       subscriptionId: subscription.id,
       amount: monthlyUnit * quantity,
       monthlyAmount: monthlyUnit,
