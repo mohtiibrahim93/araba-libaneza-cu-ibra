@@ -88,3 +88,31 @@ export function groupMonthsFor(level: string | null | undefined): number {
   const lvl = (level ?? "").toUpperCase() as GroupLevel;
   return GROUP_MONTHS[lvl] ?? GROUP_MONTHS.A1;
 }
+
+// ---------------------------------------------------------------------------
+// Kids group course pricing
+//
+// Kids in this app = group course, physical only, 3 months, 500 LEI / month.
+// No CEFR level, no online/fizic split, no volume discount. Mirrors the price
+// card displayed on the site (ProgramsSection: 500 / month, 1.500 total,
+// 1.350 LEI with the −10% upfront discount).
+// ---------------------------------------------------------------------------
+
+/** Kids group course — monthly fee per child, whole RON. */
+export const KIDS_GROUP_MONTHLY = 500;
+
+/** Total number of monthly charges for the kids group course. */
+export const KIDS_GROUP_MONTHS = 3;
+
+/** Kids group monthly unit amount, in bani. */
+export function kidsGroupMonthlyUnitAmount(): number {
+  return KIDS_GROUP_MONTHLY * 100;
+}
+
+/**
+ * Kids group full-course amount in bani for the pay-in-full path: the whole
+ * course (monthly × months) with a 10% upfront discount.
+ */
+export function kidsGroupFullCourseUnitAmount(): number {
+  return Math.round(kidsGroupMonthlyUnitAmount() * KIDS_GROUP_MONTHS * 0.9);
+}
