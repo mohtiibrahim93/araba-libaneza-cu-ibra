@@ -1,4 +1,5 @@
 import { useI18n } from "@/lib/i18n";
+import { Helmet } from "react-helmet-async";
 import {
   Accordion,
   AccordionContent,
@@ -6,39 +7,333 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const FAQSection = () => {
-  const { t } = useI18n();
+type QA = { q: string; a: string };
+type FAQGroup = { title: string; items: QA[] };
 
-  const faqs = [
-    { q: t.faq1Q, a: t.faq1A },
-    { q: t.faq2Q, a: t.faq2A },
-    { q: t.faq3Q, a: t.faq3A },
-    { q: t.faq4Q, a: t.faq4A },
-    { q: t.faq5Q, a: t.faq5A },
-    { q: t.faq6Q, a: t.faq6A },
-  ];
+const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
+  ro: {
+    groups: [
+      {
+        title: "Alegerea dialectului",
+        items: [
+          {
+            q: "Ar trebui să învăț mai întâi Araba Standard Modernă (Fusha) sau direct libaneza?",
+            a: "Dacă scopul tău este să vorbești cu familia, să călătorești în Liban sau să înțelegi filme și muzică, poți începe direct cu araba libaneză — este dialectul vorbit zilnic. Fusha este utilă mai ales pentru citit știri, texte religioase sau contexte formale. La cursurile noastre plecăm de la libaneză și introducem elemente de Fusha doar cât e nevoie.",
+          },
+          {
+            q: "Care este diferența dintre araba libaneză și cea levantină, egipteană sau din Golf?",
+            a: "Libaneza face parte din familia levantină (împreună cu siriana, palestiniana și iordaniana) — foarte apropiate între ele. Egipteana și dialectele din Golf au vocabular și pronunție diferite. Cu libaneză înțelegi ușor toată zona levantină și, cu puțin exercițiu, urmărești și celelalte dialecte.",
+          },
+          {
+            q: "Este libaneza înțeleasă în alte țări arabe?",
+            a: "Da. Datorită muzicii, filmelor și serialelor libaneze răspândite în toată lumea arabă, dialectul libanez este unul dintre cele mai bine înțelese peste tot — din Maroc până în Golf.",
+          },
+          {
+            q: "Dacă vreau doar să vorbesc cu familia / să călătoresc / pentru muncă, am nevoie de Fusha?",
+            a: "Nu neapărat. Pentru comunicare orală zilnică, libaneza este suficientă. Fusha devine utilă doar dacă vrei să citești presă, cărți sau documente formale, sau să lucrezi în medii oficiale.",
+          },
+        ],
+      },
+      {
+        title: "Dificultate și timp",
+        items: [
+          {
+            q: "Este araba libaneză grea de învățat?",
+            a: "Are câteva sunete noi pentru vorbitorii de română (ex. ع, ح, ق), dar gramatica dialectului este mai simplă decât la Fusha — fără cazuri complicate. Cu 2–3 ore pe săptămână și exercițiu constant, progresezi vizibil în câteva luni.",
+          },
+          {
+            q: "Cât durează până devin conversațional?",
+            a: "În general, 3–6 luni de studiu constant (echivalent A1–A2) sunt suficiente pentru conversații simple: prezentări, cumpărături, întâlniri cu familia. Cursul nostru A1 durează ~3 luni, cu 2 lecții de 90 de minute pe săptămână.",
+          },
+          {
+            q: "Cât durează până ajung la fluență?",
+            a: "Fluența reală (B2–C1) cere de obicei 1,5–3 ani de practică susținută, în funcție de cât de des vorbești în afara clasei. Un ritm realist: A1 în 3 luni, A2 în încă 6, B1–B2 în 1–2 ani.",
+          },
+          {
+            q: "Libaneza este mai ușoară decât Fusha?",
+            a: "Da, pentru majoritatea cursanților. Gramatica dialectului este simplificată (fără sufixe de caz, verbe mai regulate în vorbire), iar pronunția este mai apropiată de vorbirea firească.",
+          },
+        ],
+      },
+      {
+        title: "Drumul de învățare și resurse",
+        items: [
+          {
+            q: "Care este cea mai bună metodă de a învăța araba libaneză?",
+            a: "Combinația care funcționează cel mai bine: un curs structurat cu profesor nativ + practică zilnică scurtă (10–20 min) + expunere la conținut real (muzică, seriale, conversații). Aplicațiile singure sunt insuficiente pentru un dialect.",
+          },
+          {
+            q: "Există cărți, aplicații sau site-uri bune pentru libaneză?",
+            a: "Resursele dedicate libanezei sunt limitate față de Fusha. Recomandăm materialele dezvoltate de instructor la cursul nostru, plus consum de conținut nativ (Fairuz, seriale MTV Lebanon, podcasturi libaneze) pentru ureche.",
+          },
+          {
+            q: "Pot învăța online eficient sau am nevoie de lecții fizice?",
+            a: "Da, se poate învăța foarte bine online cu profesor nativ pe Zoom — mulți cursanți fac exact așa. Lecțiile fizice la Raduga Creative Center în București sunt o alternativă pentru cei care preferă interacțiunea directă.",
+          },
+          {
+            q: "Trebuie să învăț alfabetul arab de la început?",
+            a: "Nu obligatoriu. Începem cu transliterare latină pentru a te concentra pe vorbire, iar alfabetul îl introducem treptat — pentru cei care vor să citească și să scrie. Poți vorbi libaneză fluent fără să citești în arabă.",
+          },
+        ],
+      },
+      {
+        title: "Aspecte practice",
+        items: [
+          {
+            q: "Mă descurc în Liban cu engleza / franceza sau am nevoie de arabă?",
+            a: "În Beirut și zonele turistice te descurci cu engleza și franceza. Dar orice frază în libaneză schimbă complet primirea — este apreciată enorm și îți deschide uși pe care limbile străine nu le deschid.",
+          },
+          {
+            q: "Este utilă pentru afaceri, călătorii sau familie?",
+            a: "Da, pentru toate trei. Afaceri: comunicare directă cu parteneri din Liban, Siria, Iordania. Călătorii: acces autentic la cultură. Familie: reconectare cu rude și moștenire culturală — motivul cel mai frecvent al cursanților noștri.",
+          },
+          {
+            q: "Mă va ajuta să înțeleg cântecele, filmele și rețelele sociale?",
+            a: "Da. Muzica libaneză (Fairuz, Wael Kfoury), serialele și influencerii libanezi folosesc dialectul libanez. După A2 începi să prinzi fraze întregi, iar la B1 înțelegi majoritatea conținutului cotidian.",
+          },
+          {
+            q: "Cum exersez vorbirea dacă nu trăiesc în Liban?",
+            a: "La curs practici cu profesorul nativ și cu ceilalți cursanți. În plus recomandăm: parteneri de conversație (tandem), consum zilnic de conținut libanez, exerciții de shadowing (repetare după audio nativ) și un jurnal vorbit de 5 minute pe zi.",
+          },
+        ],
+      },
+      {
+        title: "Despre cursurile noastre",
+        items: [
+          {
+            q: "Predați adulților, copiilor sau ambilor?",
+            a: "Ambilor. Avem cursuri de grup și private pentru adulți (toate nivelurile CEFR) și un program dedicat copiilor de 5–14 ani, cu activități potrivite vârstei.",
+          },
+          {
+            q: "Cursurile sunt online sau fizice în București?",
+            a: "Ambele. Cursurile de grup pentru adulți sunt fizice la Raduga Creative Center și online pe Zoom. Cursurile pentru copii sunt doar fizice (până la 10 ani) sau fizic/online (de la 10 ani). Lecțiile private sunt flexibile: fizice sau online.",
+          },
+          {
+            q: "Ce opțiuni de orar sunt pentru oameni care lucrează?",
+            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână, seara. Lecțiile private se programează flexibil, inclusiv weekend, în funcție de disponibilitatea ta.",
+          },
+          {
+            q: "Cât costă și există planuri de plată?",
+            a: "Poți alege plata integrală (cu reducere de 10%) sau plata lunară. Acceptăm card, transfer bancar, cash și PayPal, în LEI, EUR sau USD. Prețurile exacte le vezi în secțiunea Prețuri.",
+          },
+          {
+            q: "Există lecție de probă?",
+            a: "Da — oferim o lecție de probă gratuită de 30 de minute, ca să cunoști instructorul, să testezi metoda și să vezi dacă formatul ți se potrivește înainte de înscriere.",
+          },
+          {
+            q: "Ce nivel CEFR voi atinge după curs?",
+            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~3 luni), A2 la A2 (~6 luni), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
+          },
+        ],
+      },
+      {
+        title: "Specific limbii",
+        items: [
+          {
+            q: "Ce greșeli fac cel mai des începătorii?",
+            a: "Cele mai comune: pronunțarea sunetelor guturale (ع, ح) ca vocale obișnuite, folosirea structurii din Fusha în conversație (sună forțat), și traducerea cuvânt cu cuvânt din română. Le corectăm din primele lecții.",
+          },
+          {
+            q: "Cu ce diferă pronunția libaneză de Fusha?",
+            a: "Libaneza scurtează vocale lungi, transformă ق într-un stop glotal (hamza) în majoritatea cuvintelor și înmoaie unele consoane. Rezultatul: vorbire mai rapidă și mai muzicală decât Fusha.",
+          },
+          {
+            q: "Care sunt cele mai utile cuvinte de întrebare și fraze pentru început?",
+            a: "Câteva de care ai nevoie din prima zi: shu? (ce?), wein? (unde?), meen? (cine?), kif? (cum?), addesh? (cât?), aymta? (când?), plus marhaba (salut), kifak/kifik (ce mai faci — m/f), shukran (mulțumesc), yalla (haide).",
+          },
+        ],
+      },
+    ],
+  },
+  en: {
+    groups: [
+      {
+        title: "Choosing the dialect",
+        items: [
+          {
+            q: "Should I learn Modern Standard Arabic (Fusha) first, or go straight to Lebanese Arabic?",
+            a: "If your goal is to talk to family, travel in Lebanon, or understand movies and music, start directly with Lebanese Arabic — it's the everyday spoken dialect. Fusha is mainly useful for reading news, religious texts, or formal contexts. Our courses lead with Lebanese and introduce Fusha only where it helps.",
+          },
+          {
+            q: "What's the difference between Lebanese and Levantine / Egyptian / Gulf Arabic?",
+            a: "Lebanese belongs to the Levantine family (with Syrian, Palestinian and Jordanian) — they're very close. Egyptian and Gulf dialects have different vocabulary and pronunciation. Lebanese gives you easy access to the whole Levant, and with a bit of exposure you also follow other dialects.",
+          },
+          {
+            q: "Is Lebanese Arabic understood in other Arab countries?",
+            a: "Yes. Thanks to Lebanese music, films and TV series being popular across the Arab world, Lebanese is one of the most widely understood dialects — from Morocco to the Gulf.",
+          },
+          {
+            q: "If I only want to speak with family, travel, or work, do I still need MSA?",
+            a: "Not really. For daily spoken communication, Lebanese is enough. MSA only becomes useful if you also want to read news, books, official documents, or work in formal environments.",
+          },
+        ],
+      },
+      {
+        title: "Difficulty & time",
+        items: [
+          {
+            q: "Is Lebanese Arabic hard to learn?",
+            a: "It has a few sounds new to English speakers (like ع, ح, ق), but dialect grammar is simpler than Fusha — no complex case system. With 2–3 hours a week and consistent practice, you'll see clear progress within a few months.",
+          },
+          {
+            q: "How long does it take to become conversational?",
+            a: "Typically 3–6 months of consistent study (A1–A2) are enough for simple conversations: introductions, shopping, family chats. Our A1 course runs ~3 months, with two 90-minute lessons per week.",
+          },
+          {
+            q: "How long until I'm fluent?",
+            a: "Real fluency (B2–C1) usually takes 1.5–3 years of sustained practice, depending on how much you speak outside class. A realistic pace: A1 in 3 months, A2 in another 6, B1–B2 within 1–2 years.",
+          },
+          {
+            q: "Is Lebanese easier than Fusha?",
+            a: "Yes, for most learners. Dialect grammar is simplified (no case endings, more regular verb usage in speech) and pronunciation is closer to how people actually talk.",
+          },
+        ],
+      },
+      {
+        title: "Learning path & resources",
+        items: [
+          {
+            q: "What's the best way to learn Lebanese Arabic?",
+            a: "The combination that works best: a structured course with a native teacher + short daily practice (10–20 min) + exposure to real content (music, series, conversations). Apps alone aren't enough for a dialect.",
+          },
+          {
+            q: "Are there good books, apps, or websites for Lebanese?",
+            a: "Dedicated Lebanese resources are limited compared to Fusha. We recommend the materials we've built in-house for the course, plus consuming native content (Fairuz, MTV Lebanon series, Lebanese podcasts) to train your ear.",
+          },
+          {
+            q: "Can I learn online effectively, or do I need in-person classes?",
+            a: "Yes, online learning with a native teacher over Zoom works very well — many of our students learn that way. In-person classes at Raduga Creative Center in Bucharest are an option if you prefer face-to-face interaction.",
+          },
+          {
+            q: "Do I need to learn the Arabic alphabet first?",
+            a: "No. We start with Latin transliteration so you can focus on speaking, and introduce the alphabet gradually for students who also want to read and write. You can speak Lebanese fluently without reading Arabic script.",
+          },
+        ],
+      },
+      {
+        title: "Practical concerns",
+        items: [
+          {
+            q: "Can I get by in Lebanon with English or French, or do I need Arabic?",
+            a: "In Beirut and touristy areas you'll manage with English and French. But any Lebanese phrase changes the reception completely — it's deeply appreciated and opens doors that foreign languages don't.",
+          },
+          {
+            q: "Is Lebanese useful for business, travel, or heritage/family reasons?",
+            a: "Yes, for all three. Business: direct communication with partners in Lebanon, Syria, Jordan. Travel: authentic cultural access. Family: reconnecting with relatives and heritage — the most common reason our students enrol.",
+          },
+          {
+            q: "Will it help me understand songs, movies, and social media?",
+            a: "Yes. Lebanese music (Fairuz, Wael Kfoury), TV series and Lebanese influencers all use the dialect. From A2 you start catching full phrases; by B1 you understand most everyday content.",
+          },
+          {
+            q: "How do I practise speaking if I don't live in Lebanon?",
+            a: "In class you practise with the native teacher and other students. On top of that: language partners (tandem), daily Lebanese content, shadowing (repeating after native audio), and a 5-minute spoken diary each day.",
+          },
+        ],
+      },
+      {
+        title: "About our courses",
+        items: [
+          {
+            q: "Do you teach adults, kids, or both?",
+            a: "Both. We offer group and private courses for adults (all CEFR levels) and a dedicated program for children aged 5–14, with age-appropriate activities.",
+          },
+          {
+            q: "Are classes online or in-person in Bucharest?",
+            a: "Both. Adult group classes run in person at Raduga Creative Center and online via Zoom. Kids classes are in-person only up to age 10, and either format from age 10. Private lessons are fully flexible — in person or online.",
+          },
+          {
+            q: "What schedule options exist for working people?",
+            a: "Group classes are two 90-minute lessons per week, in the evening. Private lessons are scheduled flexibly, including weekends, based on your availability.",
+          },
+          {
+            q: "How much does it cost, and are there payment plans?",
+            a: "You can pay in full (with a 10% discount) or monthly. We accept card, bank transfer, cash, and PayPal, in LEI, EUR, or USD. Exact prices are on the Pricing section.",
+          },
+          {
+            q: "Is there a trial lesson?",
+            a: "Yes — we offer a free 30-minute trial lesson so you can meet the instructor, test the method, and see whether the format suits you before enrolling.",
+          },
+          {
+            q: "What CEFR level will I reach after the course?",
+            a: "It depends on your starting point. The A1 course takes you to full A1 (~3 months), A2 to A2 (~6 months), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
+          },
+        ],
+      },
+      {
+        title: "Language specifics",
+        items: [
+          {
+            q: "What are common mistakes beginners make?",
+            a: "The most common: pronouncing guttural sounds (ع, ح) as regular vowels, importing Fusha grammar into conversation (it sounds stiff), and translating word-for-word from English. We correct these from the very first lessons.",
+          },
+          {
+            q: "How is Lebanese pronunciation different from Fusha?",
+            a: "Lebanese shortens long vowels, turns ق into a glottal stop (hamza) in most words, and softens some consonants. The result: faster and more musical speech than Fusha.",
+          },
+          {
+            q: "What are the most useful question words and everyday phrases to start with?",
+            a: "Ones you'll need from day one: shu? (what?), wein? (where?), meen? (who?), kif? (how?), addesh? (how much?), aymta? (when?), plus marhaba (hi), kifak/kifik (how are you — m/f), shukran (thanks), yalla (let's go).",
+          },
+        ],
+      },
+    ],
+  },
+};
+
+const FAQSection = () => {
+  const { t, lang } = useI18n();
+  const { groups } = FAQ_CONTENT[lang];
+  const allItems = groups.flatMap((g) => g.items);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: allItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
 
   return (
     <section id="faq" className="py-20 px-6 scroll-mt-20">
-      <div className="max-w-2xl mx-auto">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+      <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.faqBadge}</span>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.faqTitle}</h2>
           <p className="text-muted-foreground">{t.faqDesc}</p>
         </div>
 
-        <Accordion type="single" collapsible className="space-y-3">
-          {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="bg-background border border-border rounded-xl px-5">
-              <AccordionTrigger className="text-sm font-semibold text-foreground hover:no-underline py-4">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground pb-4 leading-relaxed">
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
+        <div className="space-y-10">
+          {groups.map((group, gi) => (
+            <div key={gi}>
+              <h3 className="text-lg font-semibold text-foreground mb-4">{group.title}</h3>
+              <Accordion type="single" collapsible className="space-y-3">
+                {group.items.map((faq, i) => (
+                  <AccordionItem
+                    key={i}
+                    value={`faq-${gi}-${i}`}
+                    className="bg-background border border-border rounded-xl px-5"
+                  >
+                    <AccordionTrigger className="text-sm font-semibold text-foreground hover:no-underline py-4 text-left">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground pb-4 leading-relaxed">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           ))}
-        </Accordion>
+        </div>
       </div>
     </section>
   );
