@@ -55,6 +55,7 @@ const Admin = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
   const [refundingId, setRefundingId] = useState<string | null>(null);
+  const [cancelingId, setCancelingId] = useState<string | null>(null);
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
@@ -250,6 +251,50 @@ const Admin = () => {
       });
     } finally {
       setRefundingId(null);
+    }
+  };
+
+  const previewCancelSubscription = async (id: string) => {
+    const { data, error: fnError } = await invokeAdmin({
+      action: "preview_cancel_subscription",
+      id,
+    });
+    if (fnError) throw fnError;
+    if (data?.error) throw new Error(data.error);
+    return data.data as {
+      within_grace: boolean;
+      grace_days: number;
+      refund_amount: number;
+      currency: string;
+    };
+  };
+
+  const handleCancelSubscription = async (id: string) => {
+    setCancelingId(id);
+    try {
+      const { data, error: fnError } = await invokeAdmin({
+        action: "cancel_subscription",
+        id,
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      setRegistrations((prev) => prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)));
+      const refunded = typeof data.refund_amount === "number" ? data.refund_amount : 0;
+      toast({
+        title: "Abonament anulat",
+        description:
+          refunded > 0
+            ? `Rambursat ${(refunded / 100).toLocaleString("ro-RO")} din luna curentă.`
+            : "Fără rambursare (în afara ferestrei de 5 zile).",
+      });
+    } catch (err) {
+      toast({
+        title: "Anulare eșuată",
+        description: err instanceof Error ? err.message : undefined,
+        variant: "destructive",
+      });
+    } finally {
+      setCancelingId(null);
     }
   };
 
@@ -552,10 +597,13 @@ const Admin = () => {
             selected={selected}
             updatingStatus={updatingStatus}
             refundingId={refundingId}
+            cancelingId={cancelingId}
             onToggleSelect={toggleSelect}
             onToggleAll={toggleAll}
             onStatusChange={handleStatusChange}
             onRefund={handleRefund}
+            onPreviewCancel={previewCancelSubscription}
+            onCancelSubscription={handleCancelSubscription}
           />
         )}
       </main>

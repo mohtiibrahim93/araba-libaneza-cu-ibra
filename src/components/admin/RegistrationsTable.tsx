@@ -39,15 +39,25 @@ import {
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
 
+interface CancelPreview {
+  within_grace: boolean;
+  grace_days: number;
+  refund_amount: number;
+  currency: string;
+}
+
 interface Props {
   rows: Registration[];
   selected: Set<string>;
   updatingStatus: { id: string; status: LeadStatus } | null;
   refundingId: string | null;
+  cancelingId: string | null;
   onToggleSelect: (id: string) => void;
   onToggleAll: () => void;
   onStatusChange: (id: string, status: LeadStatus) => void;
   onRefund: (id: string, reason: string) => void;
+  onPreviewCancel: (id: string) => Promise<CancelPreview>;
+  onCancelSubscription: (id: string) => void;
 }
 
 const paymentBadge = (r: Registration) => {
@@ -124,15 +134,118 @@ const RefundControl = ({
   );
 };
 
+const CancelSubscriptionControl = ({
+  registration,
+  canceling,
+  onPreviewCancel,
+  onCancelSubscription,
+}: {
+  registration: Registration;
+  canceling: boolean;
+  onPreviewCancel: (id: string) => Promise<CancelPreview>;
+  onCancelSubscription: (id: string) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState<CancelPreview | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
+
+  // Only group registrations with a live subscription can be cancelled.
+  if (!registration.stripe_subscription_id) return null;
+  if (registration.subscription_status === "canceled" || registration.canceled_at) {
+    return (
+      <p className="text-xs text-muted-foreground">
+        Abonament anulat
+        {typeof registration.refunded_amount === "number" && registration.refunded_amount > 0
+          ? ` · rambursat ${(registration.refunded_amount / 100).toLocaleString("ro-RO")}`
+          : ""}
+      </p>
+    );
+  }
+
+  const onOpenChange = async (next: boolean) => {
+    setOpen(next);
+    if (next) {
+      setLoadingPreview(true);
+      setPreview(null);
+      try {
+        setPreview(await onPreviewCancel(registration.id));
+      } catch {
+        setPreview(null);
+      } finally {
+        setLoadingPreview(false);
+      }
+    }
+  };
+
+  const refundLabel =
+    preview && preview.refund_amount > 0
+      ? `${(preview.refund_amount / 100).toLocaleString("ro-RO")} ${preview.currency}`
+      : null;
+
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={canceling}
+          className="h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+        >
+          {canceling ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Undo2 className="h-3.5 w-3.5" />}
+          Anulează abonament
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Anulezi abonamentul pentru {registration.name}?</AlertDialogTitle>
+          <AlertDialogDescription asChild>
+            <div className="space-y-1">
+              <p>Se opresc toate lunile viitoare. Acțiunea nu poate fi anulată.</p>
+              {loadingPreview ? (
+                <p className="text-muted-foreground">Se calculează rambursarea…</p>
+              ) : refundLabel ? (
+                <p className="text-foreground font-medium">
+                  Se rambursează {refundLabel} din luna curentă (în fereastra de{" "}
+                  {preview?.grace_days} zile).
+                </p>
+              ) : (
+                <p className="text-muted-foreground">
+                  Fără rambursare pentru luna curentă (în afara ferestrei de 5 zile).
+                </p>
+              )}
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Înapoi</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault();
+              onCancelSubscription(registration.id);
+              setOpen(false);
+            }}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            Anulează abonamentul
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
 const RegistrationsTable = ({
   rows,
   selected,
   updatingStatus,
   refundingId,
+  cancelingId,
   onToggleSelect,
   onToggleAll,
   onStatusChange,
   onRefund,
+  onPreviewCancel,
+  onCancelSubscription,
 }: Props) => (
   <div className="border border-border rounded-lg overflow-hidden">
     <Table>
@@ -221,7 +334,21 @@ const RegistrationsTable = ({
             </TableCell>
             <TableCell className="space-y-1">
               {paymentBadge(r)}
-              <RefundControl registration={r} refunding={refundingId === r.id} onRefund={onRefund} />
+              {r.stripe_subscription_id && typeof r.months_total === "number" && (
+                <p className="text-xs text-muted-foreground">
+                  Abonament: {r.months_paid ?? 0}/{r.months_total} luni
+                </p>
+              )}
+              {r.stripe_subscription_id ? (
+                <CancelSubscriptionControl
+                  registration={r}
+                  canceling={cancelingId === r.id}
+                  onPreviewCancel={onPreviewCancel}
+                  onCancelSubscription={onCancelSubscription}
+                />
+              ) : (
+                <RefundControl registration={r} refunding={refundingId === r.id} onRefund={onRefund} />
+              )}
             </TableCell>
             <TableCell>{r.child_age || "—"}</TableCell>
             <TableCell className="max-w-[200px] truncate">{r.notes || "—"}</TableCell>
