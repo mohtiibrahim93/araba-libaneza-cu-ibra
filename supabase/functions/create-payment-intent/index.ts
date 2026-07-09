@@ -6,10 +6,13 @@ import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
   groupMonthsFor,
+  kidsGroupFullCourseUnitAmount,
+  kidsGroupMonthlyUnitAmount,
+  KIDS_GROUP_MONTHS,
   privateLessonUnitAmount,
 } from "../_shared/prices.ts";
 
-const COURSE_TYPES = ["group", "private"] as const;
+const COURSE_TYPES = ["group", "private", "kids"] as const;
 
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -63,12 +66,18 @@ serve(async (req) => {
     // time (server-side, immutable post-insert) — never a client-supplied
     // value, which would let the amount charged be manipulated directly.
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
-    // Group reaching this function is always the PAY-IN-FULL path (monthly is a
-    // subscription handled by create-subscription): the whole course billed at
+    // Group + kids reaching this function are the PAY-IN-FULL path (monthly
+    // subscriptions live in create-subscription): the whole course billed at
     // once with a 10% upfront discount. Private: 15% off at 20+ lessons.
-    const groupMonths = courseType === "group" ? groupMonthsFor(regRow.level) : 1;
+    const groupMonths = courseType === "group"
+      ? groupMonthsFor(regRow.level)
+      : courseType === "kids"
+        ? KIDS_GROUP_MONTHS
+        : 1;
     const discountApplied =
-      (courseType === "private" && quantity >= 20) || courseType === "group";
+      (courseType === "private" && quantity >= 20) ||
+      courseType === "group" ||
+      courseType === "kids";
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
@@ -81,11 +90,14 @@ serve(async (req) => {
 
     // Unit amount comes from the server-side price table, keyed by the
     // level + format persisted on the registration row — the old fixed
-    // Stripe price ID charged every group level the A1 rate.
+    // Stripe price ID charged every group level the A1 rate. Kids is a
+    // flat monthly (no level, physical-only).
     const unitAmount =
       courseType === "group"
         ? groupMonthlyUnitAmount(regRow.level, regRow.format)
-        : privateLessonUnitAmount();
+        : courseType === "kids"
+          ? kidsGroupMonthlyUnitAmount()
+          : privateLessonUnitAmount();
     const currency = "ron";
 
     // Find or create customer (best-effort)
@@ -100,12 +112,14 @@ serve(async (req) => {
       }
     }
 
-    // Group pay-in-full: whole course (monthly × months) −10%. Private: unit ×
-    // lesson quantity, −15% at 20+. All from the server price table.
+    // Group / kids pay-in-full: whole course (monthly × months) −10%.
+    // Private: unit × lesson quantity, −15% at 20+. All from the server price table.
     const finalAmount =
       courseType === "group"
         ? groupFullCourseUnitAmount(regRow.level, regRow.format)
-        : Math.round(unitAmount * quantity * (quantity >= 20 ? 0.85 : 1));
+        : courseType === "kids"
+          ? kidsGroupFullCourseUnitAmount()
+          : Math.round(unitAmount * quantity * (quantity >= 20 ? 0.85 : 1));
 
     // If a PaymentIntent already exists for this registration, reuse it when
     // the amount still matches. Otherwise (e.g. price was updated after the
