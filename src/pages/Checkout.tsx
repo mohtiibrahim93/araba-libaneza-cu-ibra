@@ -26,11 +26,13 @@ const PaymentForm = ({
   currency,
   courseType,
   registrationId,
+  monthsTotal,
 }: {
   amount: number;
   currency: string;
   courseType: CourseType;
   registrationId: string;
+  monthsTotal: number;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -57,14 +59,29 @@ const PaymentForm = ({
     }
   };
 
-  const formatted = new Intl.NumberFormat("ro-RO", {
-    style: "currency",
-    currency: currency.toUpperCase(),
-    minimumFractionDigits: 0,
-  }).format(amount / 100);
+  const fmt = (bani: number) =>
+    new Intl.NumberFormat("ro-RO", {
+      style: "currency",
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: 0,
+    }).format(bani / 100);
+  const formatted = fmt(amount);
+  const isSubscription = courseType === "group" && monthsTotal > 1;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {isSubscription && (
+        <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
+          <p className="font-medium text-foreground">
+            Abonament lunar · {monthsTotal} luni
+          </p>
+          <p className="text-muted-foreground mt-1">
+            {fmt(amount)} / lună, facturat lunar timp de {monthsTotal} luni (total{" "}
+            {fmt(amount * monthsTotal)}). Se oprește automat după ultima lună. Achiți prima
+            lună acum.
+          </p>
+        </div>
+      )}
       <PaymentElement />
       <Button type="submit" className="w-full" disabled={!stripe || submitting} size="lg">
         {submitting ? (
@@ -73,7 +90,7 @@ const PaymentForm = ({
             Se procesează...
           </>
         ) : (
-          <>Plătește {formatted}</>
+          <>Plătește {formatted}{isSubscription ? " / lună" : ""}</>
         )}
       </Button>
       <p className="text-xs text-muted-foreground text-center">
@@ -95,6 +112,7 @@ const Checkout = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [amount, setAmount] = useState(0);
+  const [monthsTotal, setMonthsTotal] = useState(0);
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
@@ -111,10 +129,16 @@ const Checkout = () => {
           throw new Error("Tip de curs invalid");
         }
         trackCheckoutStart(courseType);
-        const { data, error: invokeError } = await supabase.functions.invoke(
-          "create-payment-intent",
-          { body: { courseType, email, name, registrationId, quantity } },
-        );
+        // Group courses are billed as a monthly subscription; private lessons
+        // stay a one-time PaymentIntent.
+        const { data, error: invokeError } =
+          courseType === "group"
+            ? await supabase.functions.invoke("create-subscription", {
+                body: { email, name, registrationId },
+              })
+            : await supabase.functions.invoke("create-payment-intent", {
+                body: { courseType, email, name, registrationId, quantity },
+              });
         if (invokeError) throw invokeError;
         // Safe diagnostic log: never print full clientSecret or full key.
         console.info("[checkout] payment-intent response", {
@@ -135,6 +159,7 @@ const Checkout = () => {
         setClientSecret(data.clientSecret);
         setStripePromise(loadStripe(data.publishableKey));
         setAmount(data.amount);
+        setMonthsTotal(typeof data.monthsTotal === "number" ? data.monthsTotal : 0);
         setCurrency(data.currency);
         setPhase("ready");
       } catch (err) {
@@ -215,6 +240,7 @@ const Checkout = () => {
                 currency={currency}
                 courseType={courseType as CourseType}
                 registrationId={registrationId}
+                monthsTotal={monthsTotal}
               />
             </Elements>
           )}

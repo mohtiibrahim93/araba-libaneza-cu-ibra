@@ -42,6 +42,12 @@ export interface Registration {
   paid_at?: string | null;
   refunded_at?: string | null;
   refund_reason?: string | null;
+  stripe_subscription_id?: string | null;
+  subscription_status?: string | null;
+  months_total?: number | null;
+  months_paid?: number | null;
+  canceled_at?: string | null;
+  refunded_amount?: number | null;
 }
 
 export interface EmailSettings {

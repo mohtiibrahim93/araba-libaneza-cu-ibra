@@ -825,6 +825,122 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, data: updated, refund_id: refund.id });
     }
 
+    // ============ Group subscription cancel + grace refund ============
+    // Cancelling stops all not-yet-billed months automatically. The current
+    // already-paid month is refunded (prorated by unused days) ONLY if the
+    // cancellation lands within the first GRACE_DAYS of the current billing
+    // period; otherwise it is kept. All amounts computed server-side.
+    if (action === "cancel_subscription" || action === "preview_cancel_subscription") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+
+      const { data: reg, error: regError } = await supabase
+        .from("registrations")
+        .select("id, form_type, stripe_subscription_id, subscription_status, canceled_at")
+        .eq("id", id)
+        .maybeSingle();
+      if (regError) throw regError;
+      if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+      if (!reg.stripe_subscription_id || !String(reg.stripe_subscription_id).startsWith("sub_")) {
+        return jsonResponse({ error: "Nu există un abonament activ pentru această înscriere" });
+      }
+      if (reg.subscription_status === "canceled" || reg.canceled_at) {
+        return jsonResponse({ error: "Abonamentul este deja anulat" });
+      }
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+        apiVersion: "2025-08-27.basil",
+      });
+
+      const GRACE_DAYS = 5;
+      const DAY = 86400;
+
+      const sub = await stripe.subscriptions.retrieve(reg.stripe_subscription_id);
+      const now = Math.floor(Date.now() / 1000);
+      const periodStart = sub.current_period_start ?? now;
+      const periodEnd = sub.current_period_end ?? now + 30 * DAY;
+      const daysInPeriod = Math.max(1, Math.round((periodEnd - periodStart) / DAY));
+      const daysElapsed = Math.max(0, Math.floor((now - periodStart) / DAY));
+
+      // Latest paid invoice = the charge for the period they're currently in.
+      const paidInvoices = await stripe.invoices.list({
+        subscription: reg.stripe_subscription_id,
+        status: "paid",
+        limit: 1,
+      });
+      const latest = paidInvoices.data[0];
+      const amountPaid = latest?.amount_paid ?? 0;
+      const chargeId = typeof latest?.charge === "string" ? latest.charge : latest?.charge?.id ?? "";
+
+      const withinGrace = daysElapsed < GRACE_DAYS;
+      const remainingDays = daysInPeriod - daysElapsed;
+      const refundAmount =
+        withinGrace && chargeId ? Math.round((amountPaid * remainingDays) / daysInPeriod) : 0;
+
+      // Read-only preview for the admin confirm dialog — no side effects.
+      if (action === "preview_cancel_subscription") {
+        return jsonResponse({
+          data: {
+            within_grace: withinGrace,
+            grace_days: GRACE_DAYS,
+            days_elapsed: daysElapsed,
+            days_in_period: daysInPeriod,
+            refund_amount: refundAmount,
+            currency: (latest?.currency || "ron").toUpperCase(),
+          },
+        });
+      }
+
+      // Cancel first (stops future invoices), then refund the current month if
+      // within the grace window.
+      try {
+        await stripe.subscriptions.cancel(reg.stripe_subscription_id);
+      } catch (cancelErr) {
+        console.error("[admin-registrations] subscription cancel failed", cancelErr);
+        const msg = cancelErr instanceof Error ? cancelErr.message : "Eroare Stripe";
+        return jsonResponse({ error: `Anulare eșuată: ${msg}` });
+      }
+
+      let refundId: string | null = null;
+      if (refundAmount > 0 && chargeId) {
+        try {
+          const refund = await stripe.refunds.create({ charge: chargeId, amount: refundAmount });
+          refundId = refund.id;
+        } catch (refundErr) {
+          // Subscription is already cancelled; log so the refund can be issued
+          // by hand rather than silently dropped.
+          console.error("[admin-registrations] grace refund failed after cancel", refundErr);
+        }
+      }
+
+      const { data: updated, error: updateError } = await supabase
+        .from("registrations")
+        .update({
+          subscription_status: "canceled",
+          canceled_at: new Date().toISOString(),
+          refunded_amount: refundId ? refundAmount : 0,
+        })
+        .eq("id", id)
+        .select("*")
+        .single();
+      if (updateError) {
+        console.error("[admin-registrations] cancel saved in Stripe but DB update failed", {
+          registrationId: id,
+          refundId,
+          updateError,
+        });
+        return jsonResponse({
+          error: "Abonamentul a fost anulat în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+        });
+      }
+
+      return jsonResponse({
+        success: true,
+        data: updated,
+        refund_id: refundId,
+        refund_amount: refundId ? refundAmount : 0,
+      });
+    }
+
     if (action === "get_private_lead") {
       if (typeof id !== "string") {
         return jsonResponse({ error: "Lead invalid" });

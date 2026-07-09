@@ -109,6 +109,12 @@ serve(async (req) => {
 
       case "payment_intent.succeeded": {
         const intent = event.data.object as Stripe.PaymentIntent;
+        // Subscription-invoice PaymentIntents are handled by invoice.paid (which
+        // also advances months_paid); skip them here to avoid double-processing.
+        if (intent.invoice) {
+          console.log(`PI ${intent.id} belongs to invoice ${intent.invoice}, handled via invoice.paid`);
+          break;
+        }
         const registrationId = intent.metadata?.registration_id;
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || intent.id;
@@ -143,6 +149,64 @@ serve(async (req) => {
           .from("registrations")
           .update({ payment_status: "failed" })
           .eq(matchColumn, matchValue);
+        break;
+      }
+
+      case "invoice.paid": {
+        // Each paid monthly invoice for a group subscription: mark the
+        // registration paid and set months_paid to the count of paid invoices
+        // (set, not increment, so redelivery of this event stays idempotent).
+        const invoice = event.data.object as Stripe.Invoice;
+        const subId = invoice.subscription as string | null;
+        if (!subId) break;
+
+        let monthsPaid = 1;
+        try {
+          const paidInvoices = await stripe.invoices.list({
+            subscription: subId,
+            status: "paid",
+            limit: 100,
+          });
+          monthsPaid = Math.max(1, paidInvoices.data.length);
+        } catch (listErr) {
+          console.warn("could not count paid invoices, defaulting months_paid:", listErr);
+        }
+
+        const { error: updateError } = await supabase
+          .from("registrations")
+          .update({
+            payment_status: "paid",
+            paid_at: new Date().toISOString(),
+            months_paid: monthsPaid,
+            subscription_status: "active",
+          })
+          .eq("stripe_subscription_id", subId);
+        if (updateError) {
+          console.error("Failed to record invoice.paid:", updateError);
+          throw updateError;
+        }
+        break;
+      }
+
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const subId = invoice.subscription as string | null;
+        if (!subId) break;
+        await supabase
+          .from("registrations")
+          .update({ payment_status: "past_due" })
+          .eq("stripe_subscription_id", subId);
+        break;
+      }
+
+      case "customer.subscription.deleted": {
+        // Fires when the subscription ends — either naturally at cancel_at after
+        // the final month, or from an admin cancellation.
+        const subscription = event.data.object as Stripe.Subscription;
+        await supabase
+          .from("registrations")
+          .update({ subscription_status: "canceled" })
+          .eq("stripe_subscription_id", subscription.id);
         break;
       }
 
