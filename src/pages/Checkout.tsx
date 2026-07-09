@@ -227,12 +227,18 @@ const Checkout = () => {
             </p>
           </div>
 
-          {phase === "error" ? (
+          {phase === "error" || stripeLoadFailed ? (
             <div className="text-center py-8 space-y-4">
               <AlertTriangle className="w-10 h-10 text-destructive mx-auto" />
-              <p className="text-destructive font-medium">{error || "Nu am putut pregăti plata"}</p>
+              <p className="text-destructive font-medium">
+                {stripeLoadFailed
+                  ? "Nu am putut încărca modulul de plată securizat."
+                  : error || "Nu am putut pregăti plata"}
+              </p>
               <p className="text-xs text-muted-foreground">
-                Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514.
+                {stripeLoadFailed
+                  ? "Se pare că un ad blocker, VPN sau setare de confidențialitate (ex. Brave Shields, AdGuard, mod privat cu blocare trackere) blochează js.stripe.com. Dezactivează-l pentru acest site și reîncarcă pagina, sau deschide într-un browser fără blocare. Alternativ scrie-ne pe WhatsApp la 0763 124 514."
+                  : "Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514."}
               </p>
               <Button variant="outline" onClick={() => window.location.reload()}>
                 Reîncearcă
