@@ -375,7 +375,7 @@ const translations = {
     kidsChildAgePlaceholder: "ex: 8 ani",
     kidsNotes: "Observații",
     kidsNotesPlaceholder: "Orice informații adiționale...",
-    kidsFormatNote: "Disponibil online și fizic la centru. Orar: luni–marți, joi, vineri 19:00–20:30 sau sâmbătă–duminică 9:00–18:00.",
+    kidsFormatNote: "Fizic la centru (orice vârstă) sau online (de la 10 ani). Orar: luni–marți, joi, vineri 19:00–20:30 sau sâmbătă–duminică 9:00–18:00.",
     kidsSubmit: "Înscrie copilul",
     kidsSubmitting: "Se trimite...",
     kidsSuccess: "Cererea a fost înregistrată!",
