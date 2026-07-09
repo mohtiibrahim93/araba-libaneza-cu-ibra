@@ -36,6 +36,23 @@ export const ONLINE_PRICES = {
   kidsGroupMonthly: 500,
 };
 
+/**
+ * Number of monthly charges for a group course, per CEFR level (display side).
+ *
+ * A group "month" = 8 lessons (2×/week × ~4 weeks), so months = ceil(lessons/8)
+ * from the curriculum lesson totals (src/data/curriculum.ts). Mirrors GROUP_MONTHS
+ * in supabase/functions/_shared/prices.ts (the value Stripe actually bills against)
+ * — change both together; server-prices.test.ts asserts they stay equal.
+ */
+export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
+  A1: 4,
+  A2: 7,
+  B1: 9,
+  B2: 9,
+  C1: 9,
+  C2: 10,
+};
+
 export const formatLei = (n: number): string => n.toLocaleString("ro-RO");
 
 /** Compact dual-price string, e.g. "Online 500 · Fizic 700 LEI / lună". */

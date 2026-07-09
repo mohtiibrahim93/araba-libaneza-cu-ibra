@@ -15,6 +15,24 @@ export const GROUP_MONTHLY_ONLINE: Record<GroupLevel, number> = {
   C2: 1000,
 };
 
+/**
+ * Number of monthly charges for a group course, per CEFR level.
+ *
+ * A group "month" is 8 lessons (classes run 2×/week × ~4 weeks), so the number
+ * of monthly subscription charges is ceil(total_lessons / 8). Lesson totals come
+ * from the curriculum (src/data/curriculum.ts): A1 32, A2 54, B1/B2/C1 70, C2 80.
+ * The final month may hold fewer than 8 lessons but is billed as a normal month.
+ * Mirrors GROUP_COURSE_MONTHS in src/lib/pricing.ts — change both together.
+ */
+export const GROUP_MONTHS: Record<GroupLevel, number> = {
+  A1: 4,
+  A2: 7,
+  B1: 9,
+  B2: 9,
+  C1: 9,
+  C2: 10,
+};
+
 /** Private 1:1 lesson, flat for all levels and formats, in whole RON. */
 export const PRIVATE_LESSON = 150;
 
@@ -44,4 +62,16 @@ export function groupMonthlyUnitAmount(
 /** Private lesson unit amount in bani (flat across levels and formats). */
 export function privateLessonUnitAmount(): number {
   return PRIVATE_LESSON * 100;
+}
+
+/**
+ * How many monthly charges a group subscription bills before it auto-stops.
+ *
+ * Keyed by the level persisted on the registration row. Unknown/missing level
+ * falls back to the shortest course (A1) so a data gap can never bill a student
+ * for more months than the cheapest course would.
+ */
+export function groupMonthsFor(level: string | null | undefined): number {
+  const lvl = (level ?? "").toUpperCase() as GroupLevel;
+  return GROUP_MONTHS[lvl] ?? GROUP_MONTHS.A1;
 }
