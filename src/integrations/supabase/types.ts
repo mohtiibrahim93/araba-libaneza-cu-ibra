@@ -684,6 +684,7 @@ export type Database = {
       }
       registrations: {
         Row: {
+          canceled_at: string | null
           center: string | null
           child_age: string | null
           cohort_id: string | null
@@ -696,6 +697,8 @@ export type Database = {
           kids_slot_id: string | null
           lead_status: string
           level: string | null
+          months_paid: number
+          months_total: number | null
           name: string
           notes: string | null
           paid_at: string | null
@@ -704,14 +707,18 @@ export type Database = {
           quantity: number
           referral_code: string | null
           refund_reason: string | null
+          refunded_amount: number | null
           refunded_at: string | null
           sms_confirmation_opt_in: boolean
           source: string
           stripe_session_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
           track_preference: string | null
           whatsapp_sent_at: string | null
         }
         Insert: {
+          canceled_at?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -724,6 +731,8 @@ export type Database = {
           kids_slot_id?: string | null
           lead_status?: string
           level?: string | null
+          months_paid?: number
+          months_total?: number | null
           name: string
           notes?: string | null
           paid_at?: string | null
@@ -732,14 +741,18 @@ export type Database = {
           quantity?: number
           referral_code?: string | null
           refund_reason?: string | null
+          refunded_amount?: number | null
           refunded_at?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
         Update: {
+          canceled_at?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -752,6 +765,8 @@ export type Database = {
           kids_slot_id?: string | null
           lead_status?: string
           level?: string | null
+          months_paid?: number
+          months_total?: number | null
           name?: string
           notes?: string | null
           paid_at?: string | null
@@ -760,10 +775,13 @@ export type Database = {
           quantity?: number
           referral_code?: string | null
           refund_reason?: string | null
+          refunded_amount?: number | null
           refunded_at?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
