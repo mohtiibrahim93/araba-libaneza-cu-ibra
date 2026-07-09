@@ -395,6 +395,7 @@ export type Database = {
       group_capacities: {
         Row: {
           form_type: string
+          format: string | null
           id: string
           level: string | null
           manual_offset: number
@@ -404,6 +405,7 @@ export type Database = {
         }
         Insert: {
           form_type: string
+          format?: string | null
           id?: string
           level?: string | null
           manual_offset?: number
@@ -413,6 +415,7 @@ export type Database = {
         }
         Update: {
           form_type?: string
+          format?: string | null
           id?: string
           level?: string | null
           manual_offset?: number
@@ -625,6 +628,42 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_signups: {
+        Row: {
+          count: number
+          created_at: string
+          form_type: string
+          format: string | null
+          id: string
+          level: string | null
+          note: string | null
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          form_type: string
+          format?: string | null
+          id?: string
+          level?: string | null
+          note?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          form_type?: string
+          format?: string | null
+          id?: string
+          level?: string | null
+          note?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rate_limit_events: {
         Row: {
           bucket: string
@@ -822,6 +861,7 @@ export type Database = {
         Args: never
         Returns: {
           form_type: string
+          format: string
           level: string
           taken: number
         }[]
