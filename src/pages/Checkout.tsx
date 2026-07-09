@@ -119,6 +119,7 @@ const Checkout = () => {
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
+  const [stripeLoadFailed, setStripeLoadFailed] = useState(false);
 
   const title = "Finalizează plata — centrul de araba libaneza";
   const description = `Plată securizată prin Stripe pentru ${COURSE_LABEL[courseType]}. Datele cardului nu sunt stocate pe acest site.`;
@@ -160,7 +161,15 @@ const Checkout = () => {
         }
         if (cancelled) return;
         setClientSecret(data.clientSecret);
-        setStripePromise(loadStripe(data.publishableKey));
+        const promise = loadStripe(data.publishableKey);
+        setStripePromise(promise);
+        promise
+          .then((s) => {
+            if (!cancelled && !s) setStripeLoadFailed(true);
+          })
+          .catch(() => {
+            if (!cancelled) setStripeLoadFailed(true);
+          });
         setAmount(data.amount);
         setMonthsTotal(typeof data.monthsTotal === "number" ? data.monthsTotal : 0);
         setCurrency(data.currency);
