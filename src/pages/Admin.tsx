@@ -17,6 +17,7 @@ import { Loader2, Trash2, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import AdminNav from "@/components/AdminNav";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
+import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
@@ -495,6 +496,7 @@ const Admin = () => {
         <TrialFunnelAdmin />
 
         <CapacitiesAdmin />
+        <ManualSignupsAdmin />
         <CohortsAdmin />
 
         <AvailabilityAdmin />

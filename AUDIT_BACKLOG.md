@@ -39,8 +39,8 @@ Living backlog, updated across the audit passes below. Product scope: lead-gen +
 
 | Title | Evidence | Impact | Category | Effort |
 |---|---|---|---|---|
-| Main JS bundle 978KB (287KB gzip), no code-splitting *(confirmed still open)* | Clean production build output, no `manualChunks` in `vite.config.ts` | Medium — homepage pays for admin/checkout-only code | Performance | M |
-| Oversized hero PNG shipped alongside an already-optimized webp *(confirmed still open)* | Build output: 530.92KB PNG + 138.83KB webp both present | Medium | Performance | S |
+| ~~Main JS bundle 978KB (287KB gzip), no code-splitting~~ **FIXED** | `vite.config.ts` `manualChunks` peels React/Radix/Supabase into cacheable vendor chunks (React kept whole to avoid dual-React); admin/PDF libs stay async; App.tsx lazy-loads all non-homepage pages. Main entry chunk 983KB→402KB (289→116 gzip). | Medium | Performance | M |
+| ~~Oversized hero PNG shipped alongside an already-optimized webp~~ **FIXED** | Hero → 82KB WebP via `<picture>` (was 530KB, the LCP image); instructor 530KB PNG fallback replaced with a 35KB JPEG (WebP stays primary), PNG deleted. | Medium | Performance | S |
 | GDPR: no self-service data deletion *(confirmed still open)* | `Privacy.tsx` promises right-to-erasure; only path is emailing the business inbox | Medium (higher given kids'-course child-age data collected) | Compliance | M |
 | Homepage missing hreflang tags *(confirmed still open)* | Course subpages reportedly have them; homepage `Index.tsx` Helmet block does not | Low-Medium (SEO, bilingual RO/EN site) | SEO | S |
 | Booking cancel/reschedule relies on unguessable email-link token only | `booking-manage/index.ts` — token-based access, no identity binding | Low today; revisit if booking sensitivity increases | Security | — (accepted risk) |

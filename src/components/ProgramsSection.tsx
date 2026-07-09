@@ -109,7 +109,7 @@ const ProgramsSection = () => {
               <div className="p-6">
                 <RegistrationFormSection
                   defaultCourseType="group"
-                  lockSelection
+                  lockCourseType
                   embedded
                   onBack={() => setInlineForm(null)}
                 />
@@ -306,7 +306,7 @@ const ProgramsSection = () => {
                   <div className="p-6">
                     <RegistrationFormSection
                       defaultCourseType="private"
-                      lockSelection
+                      lockCourseType
                       embedded
                       onBack={() => setInlineForm(null)}
                     />
@@ -409,6 +409,7 @@ const ProgramsSection = () => {
                       <RegistrationFormSection
                         defaultCourseType="kids"
                         defaultFormat="fizic"
+                        lockCourseType
                         embedded
                         onBack={() => setInlineForm(null)}
                       />
@@ -538,6 +539,7 @@ const ProgramsSection = () => {
                         defaultCourseType="kids"
                         defaultFormat="online"
                         lessonType="private"
+                        lockCourseType
                         embedded
                         onBack={() => setInlineForm(null)}
                       />
