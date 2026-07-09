@@ -493,7 +493,9 @@ const RegistrationFormSection = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="fizic">{t.privateFormatPhysical}</SelectItem>
-                  <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
+                  {kidsOnlineAllowed && (
+                    <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
               {formatError && (
