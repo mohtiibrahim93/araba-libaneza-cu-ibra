@@ -146,6 +146,10 @@ serve(async (req) => {
           },
         ],
         cancel_at: cancelAt,
+        // Shows on the invoice + Stripe receipt email so the customer sees the
+        // school, not a bare card charge. Account-level branding (business name,
+        // statement descriptor, logo) is configured in the Stripe Dashboard.
+        description: "Curs de grup Araba Libaneză — abonament lunar",
         payment_behavior: "default_incomplete",
         payment_settings: { save_default_payment_method: "on_subscription" },
         expand: ["latest_invoice.payment_intent"],
