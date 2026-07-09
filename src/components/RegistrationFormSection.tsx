@@ -37,6 +37,13 @@ interface RegistrationFormSectionProps {
   defaultLevel?: LevelType;
   /** When true, lock the course type + level to defaults (used on dedicated course pages). */
   lockSelection?: boolean;
+  /**
+   * When true, hide the course-type selector (the type is fixed to
+   * defaultCourseType) but keep everything else — level, format, draft
+   * restore — editable. Used by the homepage "Curs de grup" / "Lecții
+   * private" cards so each opens a form scoped to that one course type.
+   */
+  lockCourseType?: boolean;
   lessonType?: "group" | "private";
   embedded?: boolean;
   onBack?: () => void;
@@ -49,6 +56,7 @@ const RegistrationFormSection = ({
   defaultFormat,
   defaultLevel,
   lockSelection = false,
+  lockCourseType = false,
   lessonType = "group",
   embedded = false,
   onBack,
@@ -208,7 +216,7 @@ const RegistrationFormSection = ({
 
   const capacity =
     courseType === "group"
-      ? getCapacity("group", level || null)
+      ? getCapacity("group", level || null, (format as "fizic" | "online") || null)
       : courseType === "kids"
         ? getCapacity("kids", null)
         : null;
@@ -430,7 +438,7 @@ const RegistrationFormSection = ({
           />
 
           {/* Course type */}
-          {lockSelection && courseType ? null : (
+          {(lockSelection || lockCourseType) && courseType ? null : (
           <div className="space-y-2">
             <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
             <Select value={courseType} onValueChange={(v) => onCourseChange(v as CourseType)}>
@@ -542,10 +550,11 @@ const RegistrationFormSection = ({
             </div>
           )}
 
-          {/* Capacity banner: group + kids */}
-          {capacity && (courseType === "group" || courseType === "kids") && (
-            <CapacityBanner capacity={capacity} />
-          )}
+          {/* Capacity banner: kids (single) + group (per selected format) */}
+          {capacity &&
+            (courseType === "kids" || (courseType === "group" && !!format)) && (
+              <CapacityBanner capacity={capacity} />
+            )}
 
           {/* Kids: child fields + (conditional) waitlist deposit */}
           {courseType === "kids" && (

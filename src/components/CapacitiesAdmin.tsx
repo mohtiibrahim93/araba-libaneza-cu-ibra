@@ -10,9 +10,9 @@ interface CapacityRow {
   id: string;
   form_type: string;
   level: string | null;
+  format: string | null;
   max_seats: number;
   min_seats: number;
-  manual_offset: number;
 }
 
 const CapacitiesAdmin = () => {
@@ -50,7 +50,6 @@ const CapacitiesAdmin = () => {
         id: row.id,
         max_seats: row.max_seats,
         min_seats: row.min_seats,
-        manual_offset: row.manual_offset ?? 0,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -65,8 +64,13 @@ const CapacitiesAdmin = () => {
     }
   };
 
-  const labelFor = (r: CapacityRow) =>
-    r.form_type === "kids" ? "Curs Copii" : `Curs Grup · ${r.level ?? "—"}`;
+  const formatLabel = (f: string | null) =>
+    f === "fizic" ? "Fizic" : f === "online" ? "Online" : null;
+  const labelFor = (r: CapacityRow) => {
+    if (r.form_type === "kids") return "Curs Copii";
+    const fmt = formatLabel(r.format);
+    return `Curs Grup · ${r.level ?? "—"}${fmt ? ` · ${fmt}` : ""}`;
+  };
 
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
@@ -74,6 +78,8 @@ const CapacitiesAdmin = () => {
         <h2 className="text-base font-semibold text-foreground">Capacități grupe</h2>
         <p className="text-sm text-muted-foreground">
           Setează numărul maxim de locuri și minimul necesar pentru ca grupa să pornească.
+          Grupele au capacități separate pentru fizic și online. Înscrierile din alte surse
+          (WhatsApp, TikTok, direct etc.) se adaugă din panoul „Înscrieri manuale" de mai jos.
         </p>
       </div>
       {loading ? (
@@ -85,61 +91,45 @@ const CapacitiesAdmin = () => {
           {rows.map((r) => (
             <div
               key={r.id}
-              className="rounded-md border border-border bg-background p-3 space-y-3"
+              className="flex flex-wrap items-end gap-3 rounded-md border border-border bg-background p-3"
             >
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex-1 min-w-[140px]">
                 <p className="text-sm font-semibold text-foreground">{labelFor(r)}</p>
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => save(r)}
-                  disabled={savingId === r.id}
-                >
-                  {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
-                </Button>
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label htmlFor={`min-${r.id}`} className="text-xs">
-                    Min necesar
-                  </Label>
-                  <Input
-                    id={`min-${r.id}`}
-                    type="number"
-                    min={1}
-                    value={r.min_seats}
-                    onChange={(e) => update(r.id, { min_seats: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor={`max-${r.id}`} className="text-xs">
-                    Max locuri
-                  </Label>
-                  <Input
-                    id={`max-${r.id}`}
-                    type="number"
-                    min={1}
-                    value={r.max_seats}
-                    onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor={`offset-${r.id}`} className="text-xs">
-                    Înscrieri manuale
-                  </Label>
-                  <Input
-                    id={`offset-${r.id}`}
-                    type="number"
-                    min={0}
-                    value={r.manual_offset ?? 0}
-                    onChange={(e) => update(r.id, { manual_offset: Math.max(0, Number(e.target.value)) })}
-                  />
-                </div>
+              <div className="space-y-1">
+                <Label htmlFor={`min-${r.id}`} className="text-xs">
+                  Min
+                </Label>
+                <Input
+                  id={`min-${r.id}`}
+                  type="number"
+                  min={1}
+                  className="w-20"
+                  value={r.min_seats}
+                  onChange={(e) => update(r.id, { min_seats: Number(e.target.value) })}
+                />
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                <span className="font-medium text-foreground">Înscrieri manuale</span> = studenți veniți din alte surse
-                (WhatsApp, TikTok, direct etc.). Se adaugă la contorul public „X / {r.max_seats} locuri ocupate".
-              </p>
+              <div className="space-y-1">
+                <Label htmlFor={`max-${r.id}`} className="text-xs">
+                  Max
+                </Label>
+                <Input
+                  id={`max-${r.id}`}
+                  type="number"
+                  min={1}
+                  className="w-20"
+                  value={r.max_seats}
+                  onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
+                />
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => save(r)}
+                disabled={savingId === r.id}
+              >
+                {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
+              </Button>
             </div>
           ))}
         </div>

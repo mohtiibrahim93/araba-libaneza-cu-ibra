@@ -73,9 +73,10 @@ Deno.serve(async (req) => {
     if (action === "list_capacities") {
       const { data, error } = await supabase
         .from("group_capacities")
-        .select("id, form_type, level, max_seats, min_seats, manual_offset")
+        .select("id, form_type, level, format, max_seats, min_seats, manual_offset")
         .order("form_type", { ascending: true })
-        .order("level", { ascending: true, nullsFirst: false });
+        .order("level", { ascending: true, nullsFirst: false })
+        .order("format", { ascending: true, nullsFirst: true });
       if (error) throw error;
       return jsonResponse({ data });
     }
@@ -104,10 +105,74 @@ Deno.serve(async (req) => {
         .from("group_capacities")
         .update(update)
         .eq("id", capId)
-        .select("id, form_type, level, max_seats, min_seats, manual_offset")
+        .select("id, form_type, level, format, max_seats, min_seats, manual_offset")
         .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
+    }
+
+    // ============ Manual (external-source) signup counts ============
+    if (action === "list_manual_signups") {
+      const { data, error } = await supabase
+        .from("manual_signups")
+        .select("id, form_type, level, format, source, count, note, updated_at")
+        .order("form_type", { ascending: true })
+        .order("level", { ascending: true, nullsFirst: false })
+        .order("format", { ascending: true, nullsFirst: true })
+        .order("source", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_manual_signup") {
+      const { id: msId, form_type, level, format, source, count, note } = body;
+      if (form_type !== "group" && form_type !== "kids") {
+        return jsonResponse({ error: "Tip curs invalid" });
+      }
+      if (format != null && format !== "fizic" && format !== "online") {
+        return jsonResponse({ error: "Format invalid" });
+      }
+      const n = Number(count);
+      if (!Number.isInteger(n) || n < 0 || n > 1000) {
+        return jsonResponse({ error: "Număr invalid (0–1000)" });
+      }
+      if (typeof source !== "string" || source.trim().length === 0 || source.length > 40) {
+        return jsonResponse({ error: "Sursă invalidă" });
+      }
+      const row = {
+        form_type,
+        level: form_type === "kids" ? null : (level || null),
+        format: form_type === "kids" ? null : (format || null),
+        source: source.trim(),
+        count: n,
+        note: note != null && typeof note === "string" ? note.slice(0, 500) : null,
+        updated_at: new Date().toISOString(),
+      };
+      let result;
+      if (typeof msId === "string" && msId) {
+        result = await supabase
+          .from("manual_signups")
+          .update(row)
+          .eq("id", msId)
+          .select("id, form_type, level, format, source, count, note, updated_at")
+          .single();
+      } else {
+        result = await supabase
+          .from("manual_signups")
+          .insert(row)
+          .select("id, form_type, level, format, source, count, note, updated_at")
+          .single();
+      }
+      if (result.error) throw result.error;
+      return jsonResponse({ success: true, data: result.data });
+    }
+
+    if (action === "delete_manual_signup") {
+      const { id: msId } = body;
+      if (typeof msId !== "string" || !msId) return jsonResponse({ error: "ID invalid" });
+      const { error } = await supabase.from("manual_signups").delete().eq("id", msId);
+      if (error) throw error;
+      return jsonResponse({ success: true });
     }
 
     // ============ Group cohorts ============
