@@ -1274,7 +1274,7 @@ const translations = {
     kidsChildAgePlaceholder: "e.g.: 8 years",
     kidsNotes: "Notes",
     kidsNotesPlaceholder: "Any additional information...",
-    kidsFormatNote: "Available online and in person at the center. Schedule: Mon–Tue, Thu, Fri 19:00–20:30 or Sat–Sun 9:00–18:00.",
+    kidsFormatNote: "In person at the center (any age) or online (from age 10). Schedule: Mon–Tue, Thu, Fri 19:00–20:30 or Sat–Sun 9:00–18:00.",
     kidsSubmit: "Register Child",
     kidsSubmitting: "Submitting...",
     kidsSuccess: "Request registered!",
