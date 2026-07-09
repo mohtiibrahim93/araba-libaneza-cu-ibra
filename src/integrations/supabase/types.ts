@@ -425,42 +425,6 @@ export type Database = {
         }
         Relationships: []
       }
-      manual_signups: {
-        Row: {
-          count: number
-          created_at: string
-          form_type: string
-          format: string | null
-          id: string
-          level: string | null
-          note: string | null
-          source: string
-          updated_at: string
-        }
-        Insert: {
-          count?: number
-          created_at?: string
-          form_type: string
-          format?: string | null
-          id?: string
-          level?: string | null
-          note?: string | null
-          source?: string
-          updated_at?: string
-        }
-        Update: {
-          count?: number
-          created_at?: string
-          form_type?: string
-          format?: string | null
-          id?: string
-          level?: string | null
-          note?: string | null
-          source?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       group_cohorts: {
         Row: {
           created_at: string
@@ -664,6 +628,42 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_signups: {
+        Row: {
+          count: number
+          created_at: string
+          form_type: string
+          format: string | null
+          id: string
+          level: string | null
+          note: string | null
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          form_type: string
+          format?: string | null
+          id?: string
+          level?: string | null
+          note?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          form_type?: string
+          format?: string | null
+          id?: string
+          level?: string | null
+          note?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rate_limit_events: {
         Row: {
           bucket: string
@@ -861,8 +861,8 @@ export type Database = {
         Args: never
         Returns: {
           form_type: string
-          level: string
           format: string
+          level: string
           taken: number
         }[]
       }
