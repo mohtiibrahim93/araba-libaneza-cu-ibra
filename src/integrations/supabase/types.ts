@@ -395,7 +395,6 @@ export type Database = {
       group_capacities: {
         Row: {
           form_type: string
-          format: string | null
           id: string
           level: string | null
           manual_offset: number
@@ -405,7 +404,6 @@ export type Database = {
         }
         Insert: {
           form_type: string
-          format?: string | null
           id?: string
           level?: string | null
           manual_offset?: number
@@ -415,48 +413,11 @@ export type Database = {
         }
         Update: {
           form_type?: string
-          format?: string | null
           id?: string
           level?: string | null
           manual_offset?: number
           max_seats?: number
           min_seats?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      manual_signups: {
-        Row: {
-          count: number
-          created_at: string
-          form_type: string
-          format: string | null
-          id: string
-          level: string | null
-          note: string | null
-          source: string
-          updated_at: string
-        }
-        Insert: {
-          count?: number
-          created_at?: string
-          form_type: string
-          format?: string | null
-          id?: string
-          level?: string | null
-          note?: string | null
-          source?: string
-          updated_at?: string
-        }
-        Update: {
-          count?: number
-          created_at?: string
-          form_type?: string
-          format?: string | null
-          id?: string
-          level?: string | null
-          note?: string | null
-          source?: string
           updated_at?: string
         }
         Relationships: []
@@ -862,7 +823,6 @@ export type Database = {
         Returns: {
           form_type: string
           level: string
-          format: string
           taken: number
         }[]
       }
