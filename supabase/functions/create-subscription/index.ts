@@ -2,7 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { groupMonthlyUnitAmount, groupMonthsFor } from "../_shared/prices.ts";
+import {
+  groupMonthlyUnitAmount,
+  groupMonthsFor,
+  kidsGroupMonthlyUnitAmount,
+  KIDS_GROUP_MONTHS,
+} from "../_shared/prices.ts";
 
 // Group courses are billed as a fixed-length monthly subscription: one charge
 // per "month" (8 lessons), repeated groupMonthsFor(level) times, then Stripe
@@ -64,8 +69,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (regRow.form_type !== "group") {
-      return new Response(JSON.stringify({ error: "Subscriptions are for group courses only" }), {
+    if (regRow.form_type !== "group" && regRow.form_type !== "kids") {
+      return new Response(JSON.stringify({ error: "Subscriptions are for group or kids courses only" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -88,12 +93,17 @@ serve(async (req) => {
 
     // Amount + length come from the server price table keyed by the level+format
     // persisted on the row — never a client value, which could be manipulated.
-    const monthlyUnitAmount = groupMonthlyUnitAmount(regRow.level, regRow.format);
-    const monthsTotal = groupMonthsFor(regRow.level);
+    // Kids is flat (no level, physical-only, 3-month course).
+    const isKids = regRow.form_type === "kids";
+    const monthlyUnitAmount = isKids
+      ? kidsGroupMonthlyUnitAmount()
+      : groupMonthlyUnitAmount(regRow.level, regRow.format);
+    const monthsTotal = isKids ? KIDS_GROUP_MONTHS : groupMonthsFor(regRow.level);
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
     // Same 3+ volume discount the one-time flow applied, folded into the monthly
-    // unit amount so it repeats every cycle.
-    const discountApplied = quantity >= 3;
+    // unit amount so it repeats every cycle. Kids uses per-child fee (no volume
+    // discount — quantity here is always 1 child per registration).
+    const discountApplied = !isKids && quantity >= 3;
     const monthlyUnit = discountApplied ? Math.round(monthlyUnitAmount * 0.9) : monthlyUnitAmount;
     const currency = "ron";
 
@@ -164,13 +174,15 @@ serve(async (req) => {
         // Shows on the invoice + Stripe receipt email so the customer sees the
         // school, not a bare card charge. Account-level branding (business name,
         // statement descriptor, logo) is configured in the Stripe Dashboard.
-        description: "Curs de grup Araba Libaneză — abonament lunar",
+        description: isKids
+          ? "Grupa de copii Araba Libaneză — abonament lunar"
+          : "Curs de grup Araba Libaneză — abonament lunar",
         payment_behavior: "default_incomplete",
         payment_settings: { save_default_payment_method: "on_subscription" },
         expand: ["latest_invoice.confirmation_secret"],
         metadata: {
           registration_id: registrationId,
-          course_type: "group",
+          course_type: isKids ? "kids" : "group",
           student_name: name || "",
           level: regRow.level || "",
           format: regRow.format || "",

@@ -15,12 +15,12 @@ import { trackCheckoutStart } from "@/lib/tracking";
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
 interface PaymentInstructionsProps {
-  courseType?: "group" | "private";
+  courseType?: "group" | "private" | "kids";
   email?: string;
   name?: string;
   registrationId?: string;
   quantity?: number;
-  /** Group only: monthly subscription vs. pay the whole course upfront. */
+  /** Group / kids only: monthly subscription vs. pay the whole course upfront. */
   plan?: "monthly" | "full";
 }
 
@@ -37,7 +37,7 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
     if (name) params.set("name", name);
     if (registrationId) params.set("registrationId", registrationId);
     if (quantity && quantity > 1) params.set("quantity", String(quantity));
-    if (courseType === "group" && plan) params.set("plan", plan);
+    if ((courseType === "group" || courseType === "kids") && plan) params.set("plan", plan);
     navigate(`/checkout?${params.toString()}`);
   };
 

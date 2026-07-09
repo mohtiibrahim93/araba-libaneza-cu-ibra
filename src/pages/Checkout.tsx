@@ -14,11 +14,12 @@ import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { trackCheckoutStart } from "@/lib/tracking";
 
-type CourseType = "group" | "private";
+type CourseType = "group" | "private" | "kids";
 
 const COURSE_LABEL: Record<CourseType, string> = {
   group: "Curs de Grup",
   private: "Lecție Privată",
+  kids: "Grupa de Copii",
 };
 
 const PaymentForm = ({
@@ -66,7 +67,7 @@ const PaymentForm = ({
       minimumFractionDigits: 0,
     }).format(bani / 100);
   const formatted = fmt(amount);
-  const isSubscription = courseType === "group" && monthsTotal > 1;
+  const isSubscription = (courseType === "group" || courseType === "kids") && monthsTotal > 1;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -129,13 +130,14 @@ const Checkout = () => {
     let cancelled = false;
     (async () => {
       try {
-        if (!courseType || !["group", "private"].includes(courseType)) {
+        if (!courseType || !["group", "private", "kids"].includes(courseType)) {
           throw new Error("Tip de curs invalid");
         }
         trackCheckoutStart(courseType);
-        // Group monthly → subscription. Group pay-in-full and private → a
+        // Group / kids monthly → subscription. Pay-in-full and private → a
         // one-time PaymentIntent (the edge function derives the amount).
-        const useSubscription = courseType === "group" && groupPlan === "monthly";
+        const useSubscription =
+          (courseType === "group" || courseType === "kids") && groupPlan === "monthly";
         const { data, error: invokeError } = useSubscription
           ? await supabase.functions.invoke("create-subscription", {
               body: { email, name, registrationId },

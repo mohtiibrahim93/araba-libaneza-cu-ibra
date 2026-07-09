@@ -49,7 +49,7 @@ export function trackFormSubmit(formType: "group" | "private" | "kids") {
 }
 
 // Convenience: track Stripe checkout initiation
-export function trackCheckoutStart(courseType: "group" | "private") {
+export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
   trackEvent("InitiateCheckout", { content_name: courseType });
   trackEvent("begin_checkout", { course_type: courseType });
 }

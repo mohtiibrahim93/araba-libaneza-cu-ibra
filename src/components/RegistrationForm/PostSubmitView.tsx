@@ -41,11 +41,14 @@ const PostSubmitView = ({
 
   const isPrivate = data.courseType === "private";
   const isGroup = data.courseType === "group";
+  // Kids "pay to enroll" path: full group (not the deposit-only fallback).
+  // We show payment when they were NOT redirected to the deposit checkout.
+  const isKidsPay = data.courseType === "kids" && data.waitlistDeposit !== true;
   const isKidsDeposit = data.courseType === "kids" && data.waitlistDeposit === true;
 
   const showPrivateTrial = isPrivate && !privatePayDirectly;
   const showPayment =
-    isGroup || (isPrivate && privatePayDirectly);
+    isGroup || isKidsPay || (isPrivate && privatePayDirectly);
 
   return (
     <section
@@ -95,7 +98,7 @@ const PostSubmitView = ({
         {/* Payment card (group, or private when user opted to pay directly) */}
         {showPayment && !isKidsDeposit && (
           <PaymentInstructions
-            courseType={data.courseType as "group" | "private"}
+            courseType={data.courseType as "group" | "private" | "kids"}
             email={data.email}
             name={data.name}
             registrationId={data.registrationId}
