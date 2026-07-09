@@ -1,0 +1,1 @@
+DELETE FROM public.registrations WHERE id IN ('d813de19-d434-48ee-8fa0-7d063bff4d09','ca9399e3-13b5-45a9-8097-d45bdb9dd2fc');
