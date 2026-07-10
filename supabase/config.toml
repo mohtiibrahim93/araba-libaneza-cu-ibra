@@ -9,6 +9,8 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.create-subscription]
     verify_jwt = false
+  [functions.gdpr-request]
+    verify_jwt = false
   [functions.handle-email-suppression]
     verify_jwt = false
   [functions.handle-email-unsubscribe]

@@ -19,6 +19,7 @@ import { template as bookingCancelled } from './booking-cancelled.tsx'
 import { template as bookingRescheduled } from './booking-rescheduled.tsx'
 import { template as trialFollowup } from './trial-followup.tsx'
 import { template as adminNewRegistration } from './admin-new-registration.tsx'
+import { template as gdprErasureRequest } from './gdpr-erasure-request.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
@@ -31,4 +32,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'booking-rescheduled': bookingRescheduled,
   'trial-followup': trialFollowup,
   'admin-new-registration': adminNewRegistration,
+  'gdpr-erasure-request': gdprErasureRequest,
 }
