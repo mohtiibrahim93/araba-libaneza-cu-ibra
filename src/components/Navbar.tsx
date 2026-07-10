@@ -116,6 +116,13 @@ const Navbar = () => {
             <Calendar className="w-4 h-4" aria-hidden="true" />
             {t.navBooking}
           </Link>
+          <Link
+            to="/blog/cum-inveti-araba-libaneza"
+            onClick={() => setOpen(false)}
+            className="hover:text-foreground transition-colors"
+          >
+            {t.navBlog}
+          </Link>
           {links.map((l) => (
             <a
               key={l.href}
@@ -202,6 +209,13 @@ const Navbar = () => {
             >
               <Calendar className="w-4 h-4" aria-hidden="true" />
               {t.navBooking}
+            </Link>
+            <Link
+              to="/blog/cum-inveti-araba-libaneza"
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
+            >
+              {t.navBlog}
             </Link>
             {links.map((l) => (
               <a
