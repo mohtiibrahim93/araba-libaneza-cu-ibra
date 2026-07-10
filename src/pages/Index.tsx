@@ -129,6 +129,11 @@ const PageContent = () => {
         <meta property="og:title" content={homeTitle} />
         <meta property="og:description" content={homeDescription} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/" />
+        {/* One-URL bilingual site (client-side toggle): hreflang needs
+            per-language URLs, so it doesn't apply here. og:locale plus the
+            dynamic <html lang> (set in i18n.tsx) are the correct signals. */}
+        <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
+        <meta property="og:locale:alternate" content={lang === "en" ? "ro_RO" : "en_US"} />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>

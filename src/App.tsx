@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const DataDeletion = lazy(() => import("./pages/DataDeletion"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const PrivateStatus = lazy(() => import("./pages/PrivateStatus"));
 const Booking = lazy(() => import("./pages/Booking"));
@@ -66,6 +67,7 @@ const App = () => (
             <Route path="/private-status/:id" element={<PrivateStatus />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/stergere-date" element={<DataDeletion />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/thank-you" element={<ThankYou />} />

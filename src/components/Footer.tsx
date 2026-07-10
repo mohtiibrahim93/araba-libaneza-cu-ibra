@@ -6,7 +6,7 @@ import AnchorLink from "@/components/AnchorLink";
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
 const Footer = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
   return (
     <footer className="border-t border-border bg-card">
@@ -85,6 +85,7 @@ const Footer = () => {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="/privacy" className="hover:text-foreground transition-colors">{t.footerPrivacy}</a></li>
             <li><a href="/terms" className="hover:text-foreground transition-colors">{t.footerTerms}</a></li>
+            <li><a href="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</a></li>
           </ul>
         </div>
       </div>
