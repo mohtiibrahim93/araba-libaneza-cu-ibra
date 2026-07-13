@@ -112,6 +112,10 @@ const Checkout = () => {
   // Group only: "monthly" (subscription, default) vs "full" (pay the whole
   // course upfront as one charge). Private ignores this.
   const groupPlan = params.get("plan") === "full" ? "full" : "monthly";
+  // Force the hosted-Stripe-Checkout fallback: set via `?fallback=1` when the
+  // user returns from cancel_url, or auto-flipped below if js.stripe.com fails
+  // to load / times out in this browser.
+  const forceFallback = params.get("fallback") === "1";
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
@@ -121,12 +125,21 @@ const Checkout = () => {
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
   const [stripeLoadFailed, setStripeLoadFailed] = useState(false);
+  const [hostedLoading, setHostedLoading] = useState(false);
+
+  const showFallback = stripeLoadFailed || forceFallback;
 
   const title = "Finalizează plata — centrul de araba libaneza";
   const description = `Plată securizată prin Stripe pentru ${COURSE_LABEL[courseType]}. Datele cardului nu sunt stocate pe acest site.`;
   const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
 
   useEffect(() => {
+    // If we're already in fallback mode there's no point trying to load
+    // Stripe.js at all — the visitor's browser blocks it.
+    if (forceFallback) {
+      setPhase("ready");
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {
@@ -186,7 +199,60 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseType, email, name, registrationId, quantity, groupPlan]);
+  }, [courseType, email, name, registrationId, quantity, groupPlan, forceFallback]);
+
+  // Watchdog: some blockers never reject the js.stripe.com fetch, they just
+  // hang. If Stripe.js hasn't resolved after 6 s while we're supposedly
+  // "ready", flip to the hosted-checkout fallback so the visitor is never
+  // stuck on a spinner.
+  useEffect(() => {
+    if (phase !== "ready" || !stripePromise || stripeLoadFailed) return;
+    let resolved = false;
+    stripePromise.then(() => {
+      resolved = true;
+    }).catch(() => {
+      resolved = true;
+    });
+    const t = window.setTimeout(() => {
+      if (!resolved) {
+        console.warn("[checkout] Stripe.js load watchdog fired", {
+          ua: navigator.userAgent,
+          online: navigator.onLine,
+          cookieEnabled: navigator.cookieEnabled,
+        });
+        setStripeLoadFailed(true);
+      }
+    }, 6000);
+    return () => window.clearTimeout(t);
+  }, [phase, stripePromise, stripeLoadFailed]);
+
+  const startHostedCheckout = async () => {
+    if (!registrationId) {
+      toast.error("Lipsă identificator înregistrare — reia formularul.");
+      return;
+    }
+    setHostedLoading(true);
+    try {
+      const { data, error: invokeError } = await supabase.functions.invoke(
+        "create-checkout-session",
+        {
+          body: {
+            registrationId,
+            plan: (courseType === "group" || courseType === "kids") && groupPlan === "full" ? "full" : "monthly",
+          },
+        },
+      );
+      if (invokeError) throw invokeError;
+      if (!data?.url) throw new Error("Server nu a returnat URL-ul de plată.");
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err instanceof Error ? err.message : "Nu am putut deschide pagina Stripe.",
+      );
+      setHostedLoading(false);
+    }
+  };
 
   const options = useMemo(
     () =>
@@ -197,7 +263,7 @@ const Checkout = () => {
   );
 
   const canRenderElements =
-    phase === "ready" && !!clientSecret && !!stripePromise && !!options && amount > 0;
+    !showFallback && phase === "ready" && !!clientSecret && !!stripePromise && !!options && amount > 0;
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-4">
@@ -229,18 +295,47 @@ const Checkout = () => {
             </p>
           </div>
 
-          {phase === "error" || stripeLoadFailed ? (
+          {showFallback ? (
+            <div className="text-center py-6 space-y-5">
+              <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
+              <div className="space-y-2">
+                <p className="text-foreground font-medium">
+                  Formularul de card nu s-a putut încărca pe acest browser.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Continuă pe pagina securizată Stripe — se deschide direct pe checkout.stripe.com,
+                  fără scripturi pe acest site.
+                </p>
+              </div>
+              <Button
+                onClick={startHostedCheckout}
+                disabled={hostedLoading || !registrationId}
+                size="lg"
+                className="w-full"
+              >
+                {hostedLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Se pregătește...
+                  </>
+                ) : (
+                  "Continuă pe pagina securizată Stripe"
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Dacă nici asta nu funcționează, scrie-ne pe WhatsApp la{" "}
+                <a href="https://wa.me/40763124514" className="underline">0763 124 514</a>{" "}
+                și trimitem un link de plată direct.
+              </p>
+            </div>
+          ) : phase === "error" ? (
             <div className="text-center py-8 space-y-4">
               <AlertTriangle className="w-10 h-10 text-destructive mx-auto" />
               <p className="text-destructive font-medium">
-                {stripeLoadFailed
-                  ? "Nu am putut încărca modulul de plată securizat."
-                  : error || "Nu am putut pregăti plata"}
+                {error || "Nu am putut pregăti plata"}
               </p>
               <p className="text-xs text-muted-foreground">
-                {stripeLoadFailed
-                  ? "Se pare că un ad blocker, VPN sau setare de confidențialitate (ex. Brave Shields, AdGuard, mod privat cu blocare trackere) blochează js.stripe.com. Dezactivează-l pentru acest site și reîncarcă pagina, sau deschide într-un browser fără blocare. Alternativ scrie-ne pe WhatsApp la 0763 124 514."
-                  : "Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514."}
+                Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514.
               </p>
               <Button variant="outline" onClick={() => window.location.reload()}>
                 Reîncearcă
