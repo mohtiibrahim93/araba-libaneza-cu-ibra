@@ -48,7 +48,7 @@ serve(async (req) => {
     const { data: reg } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, form_type, payment_status, email, name, quantity, level, format, stripe_checkout_session_id",
+        "id, form_type, payment_status, email, name, quantity, level, format, stripe_session_id",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -77,10 +77,10 @@ serve(async (req) => {
 
     // Best-effort reuse: if we already created a session and it's still open,
     // return its URL instead of stacking duplicates.
-    if (reg.stripe_checkout_session_id) {
+    if (reg.stripe_session_id && reg.stripe_session_id.startsWith("cs_")) {
       try {
         const prior = await stripe.checkout.sessions.retrieve(
-          reg.stripe_checkout_session_id,
+          reg.stripe_session_id,
         );
         if (prior.status === "open" && prior.url) {
           return new Response(JSON.stringify({ url: prior.url, sessionId: prior.id }), {
@@ -231,7 +231,7 @@ serve(async (req) => {
     await supabaseAdmin
       .from("registrations")
       .update({
-        stripe_checkout_session_id: session.id,
+        stripe_session_id: session.id,
         payment_status: "pending",
       })
       .eq("id", registrationId);
