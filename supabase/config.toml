@@ -39,3 +39,5 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.registration-ics]
     verify_jwt = false
+  [functions.create-checkout-session]
+    verify_jwt = false
