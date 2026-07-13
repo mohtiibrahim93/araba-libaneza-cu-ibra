@@ -1,86 +1,63 @@
-## Scope
+# Why the error appears even without a VPN
 
-Four separate changes, planned together, implemented in one pass.
+The message you're seeing ("Nu am putut încărca modulul de plată securizat…") is **our own fallback text** on `/checkout`. It fires whenever `loadStripe()` — the call that fetches `https://js.stripe.com/v3/` into the browser — resolves to `null` or throws.
 
----
+There is no VPN check anywhere in Stripe or in our code. That copy just lists the *usual* culprits. In practice, `loadStripe()` also fails for other reasons that have nothing to do with a VPN:
 
-### 1. End-to-end payment status page + webhook confirmation
+- **Brave Shields** (default-on, blocks js.stripe.com as a tracker)
+- **Firefox strict tracking protection / private mode**
+- **Safari with "Prevent cross-site tracking"** on some networks
+- **DNS-level ad blocking** on the router or ISP (NextDNS, Pi-hole, AdGuard DNS, some mobile carriers in RO)
+- **Corporate / school Wi-Fi** with TLS inspection or category filtering
+- **Browser extensions** (uBlock, Ghostery, Privacy Badger, Kaspersky, ESET, Malwarebytes Browser Guard, some antivirus web-shields)
+- **A stale service worker** from an older deploy caching a failed js.stripe.com fetch
 
-**Route:** `/payment-status?payment_intent=...&registration_id=...` (also reachable via existing `/thank-you` when Stripe redirects back with `payment_intent` + `payment_intent_client_secret`).
+We already confirmed the backend side is healthy in the pre-launch check: `create-payment-intent` and `create-subscription` return valid `clientSecret` + `publishableKey`, and `STRIPE_PUBLISHABLE_KEY` starts with `pk_`. So this is purely a **browser-side load of `js.stripe.com`** failing on the user's device/network.
 
-**Flow:**
-- `Checkout.tsx` `return_url` becomes `/payment-status?registration_id=...&courseType=...` (Stripe appends `payment_intent`, `payment_intent_client_secret`, `redirect_status`).
-- New page polls `registrations` row (by `registration_id`) for `payment_status in ('paid','failed','refunded')` with a bounded retry (e.g. 10× / 1s) so the webhook has time to land, while also reading `stripe.retrievePaymentIntent(clientSecret)` for the Stripe-side status as a fallback.
-- Shows one of three states: **Loading** ("Confirmăm plata..."), **Success** (green check + amount + link to `/thank-you`), **Failed/Canceled** (red + retry button back to `/checkout`).
-- Fires `Purchase` tracking only on confirmed success.
+# Fix: add a hosted-Stripe-Checkout fallback
 
-**Webhook side:** `stripe-webhook` already updates `registrations.payment_status` on `payment_intent.succeeded` / `.payment_failed` — no change needed there.
+Right now `/checkout` only supports **embedded Stripe Elements**, which requires `js.stripe.com` to load in the visitor's browser. If that script is blocked, there is no way to pay. We'll add a second path that redirects to **Stripe's own hosted Checkout page** (`checkout.stripe.com`), which most blockers don't touch and which renders the card form on Stripe's domain instead of ours.
 
----
+## Changes
 
-### 2. Robust `/checkout` loading state + logging + guard
+1. **New edge function `create-checkout-session`** (Stripe Checkout Sessions API)
+   - Accepts `{ registrationId }`.
+   - Reads the registration row (same server-side price logic as `create-payment-intent` / `create-subscription`, no client-supplied amounts).
+   - For `group` / `kids` monthly → `mode: "subscription"` with `cancel_at` after `groupMonthsFor(level)` months, same 3+ volume discount.
+   - For `private` and pay-in-full → `mode: "payment"`.
+   - `success_url` = `/payment-status?registrationId=…`, `cancel_url` = `/checkout?...&fallback=1`.
+   - Reuses in-flight session via idempotency key `checkout_<registrationId>`.
+   - Registered in `supabase/config.toml` with `verify_jwt = false`.
 
-In `src/pages/Checkout.tsx`:
-- Add explicit `phase` state: `initializing → ready → error`. Show a full-card skeleton with spinner + "Se pregătește plata securizată..." while `phase !== "ready"`.
-- Guard render: the `PaymentElement` + submit button only mount when `clientSecret`, `stripePromise`, and `amount > 0` are all valid. Otherwise show an inline error card with a "Reîncearcă" button.
-- Add `console.info("[checkout] payment-intent response", { amount, currency, hasClientSecret, publishableKeyPrefix })` (never log full clientSecret / full key — only prefix like `pk_live_…`) so the deployed contract is verifiable in the browser console.
-- Submit button label always includes the formatted amount; button is disabled only while Stripe is confirming, not while amount is unknown (because we don't render it in that state).
+2. **`stripe-webhook`**: already handles `checkout.session.completed` and `checkout.session.async_payment_succeeded` — no change needed.
 
----
+3. **`src/pages/Checkout.tsx`**
+   - When `stripeLoadFailed === true` **or** when the URL has `?fallback=1`, show a big primary button: **"Continuă pe pagina securizată Stripe"** that calls `create-checkout-session` and does `window.location.href = data.url`.
+   - Keep the current copy as a smaller secondary hint ("Dacă folosești Brave/adblock…").
+   - Add a 6-second watchdog: if `stripePromise` hasn't resolved after 6 s, also flip to the fallback UI (covers slow-timeout blockers that never reject).
+   - Log a single `console.warn` with `{ userAgent, cookieEnabled, online: navigator.onLine }` so future reports are diagnosable without exposing keys.
 
-### 3. Admin: manual signup offsets ("bookings from WhatsApp/TikTok/etc.")
+4. **`RegistrationForm/PostSubmitView.tsx`** (only if it currently deep-links straight into `/checkout` — I'll confirm during exploration): no behavior change, still lands on `/checkout`; the fallback is picked up there.
 
-Goal: let admin bump the "X / Y locuri ocupate" counter without inserting fake registrations.
+## What this does NOT change
 
-**Schema (migration):**
-- Add `manual_offset INT NOT NULL DEFAULT 0` to `public.group_capacities`.
-- Add `manual_offset INT NOT NULL DEFAULT 0` to `public.group_cohorts`.
-- Update `get_group_capacity_counts()` RPC to `SELECT form_type, level, count(*) + coalesce(manual_offset,0)` by joining `group_capacities` (LEFT JOIN so counts still appear when no manual row).
-- Update `get_cohort_signup_counts()` RPC similarly (add offset from `group_cohorts`).
-- Manual offsets are also folded into the value returned so the `/` denominator stays untouched — only `taken` grows.
+- No pricing logic changes.
+- No change to `create-payment-intent`, `create-subscription`, or webhook.
+- Embedded Elements stays the default; hosted Checkout is only offered when the embedded path can't load.
+- Frontend not published — you keep testing on preview first.
 
-**Admin UI (`CapacitiesAdmin.tsx`):**
-- Reorganize each capacity card into three grouped controls:
-  - **Min seats** / **Max seats** (as today).
-  - **Manual signups** — number input with `+ / −` buttons and a small label "Din alte surse (WhatsApp, TikTok, direct)". Includes helper text explaining it adds to the online form count and updates `0/10 locuri ocupate` accordingly.
-- New admin action in `admin-registrations`: `update_capacity` accepts an optional `manual_offset` field alongside `min_seats` / `max_seats`.
-- A parallel small section on the Cohorts admin card (already exists in `CohortsAdmin.tsx`) to set `manual_offset` per cohort (WhatsApp signups tied to a specific start date).
+## Technical notes
 
-**Result:** setting A1 `manual_offset = 3` on 10 August changes the public banner from `0/10` to `3/10` without lowering max.
+- Hosted Checkout renders on `checkout.stripe.com`, which is a **first-party navigation**, so Brave Shields / tracker blockers that target third-party scripts don't block it. Users whose browser blocks *all* Stripe domains will still fail — for those we keep the WhatsApp fallback link, which stays visible on the error card.
+- Subscription hosted-checkout uses `subscription_data.metadata.registration_id` so `invoice.paid` still matches by `stripe_subscription_id` in the webhook. One-time uses `payment_intent_data.metadata.registration_id` (already handled by the `payment_intent.succeeded` branch that matches on `registration_id`).
+- Idempotency key on session create prevents duplicate sessions on double-click; if a prior session is still `open`, we return its `url` instead of creating a new one.
+- No new secrets required; uses the existing `STRIPE_SECRET_KEY`, `STRIPE_GROUP_PRODUCT_ID`, and `STRIPE_WEBHOOK_SECRET`.
 
----
+## Verification after implementation
 
-### 4. Personalized inline forms from the "Alege calea de învățare" section
+1. Deploy `create-checkout-session`, redeploy `stripe-webhook` (no code change but re-verify).
+2. On preview `/checkout?...&fallback=1`, click the fallback button → confirm redirect to `checkout.stripe.com`.
+3. Complete a real-card test end-to-end; confirm `/payment-status` marks the row `paid`.
+4. Delete the throwaway registration + cancel/refund the test payment in Stripe.
 
-Currently `ProgramsSection.tsx` mounts `<RegistrationFormSection defaultCourseType="group" embedded />` and `<RegistrationFormSection defaultCourseType="private" embedded />` — the "Tip curs" dropdown still shows all three options.
-
-**Change:**
-- Pass `lockSelection` to both embedded mounts so the Tip curs dropdown is hidden (that prop already exists and hides the dropdown when `courseType` is preset).
-- `RegistrationFormSection`: when `lockSelection && defaultCourseType === "group"` — course type row is hidden, format (fizic / online) remains with its per-cohort capacity counter (already wired via `useGroupCapacities` and `CohortPicker`).
-- When `lockSelection && defaultCourseType === "private"` — course type row hidden; nothing else changes (fizic/online + lesson quantity fields stay as today).
-- Adjust `onBack` label / helper text so it reads "Curs de grup" or "Lecții private" instead of the generic "Cursuri".
-- Verify draft-restore logic doesn't reopen the wrong card (already guarded by `lockSelection`).
-
----
-
-## Technical details
-
-**Files touched:**
-- `src/pages/Checkout.tsx` — phase state, guard, safe logging.
-- `src/pages/PaymentStatus.tsx` (new) + route in `src/App.tsx`.
-- `src/lib/i18n.tsx` — copy for payment-status states, manual-offset admin labels.
-- `src/components/CapacitiesAdmin.tsx` — manual_offset input.
-- `src/components/admin/CohortsAdmin.tsx` — manual_offset input per cohort.
-- `src/hooks/useGroupCapacity.ts` — read updated RPC (no shape change; counts already opaque).
-- `supabase/functions/admin-registrations/index.ts` — accept `manual_offset` in `update_capacity` + new `update_cohort_offset`.
-- One migration:
-  1. `ALTER TABLE public.group_capacities ADD COLUMN manual_offset INT NOT NULL DEFAULT 0 CHECK (manual_offset >= 0);`
-  2. `ALTER TABLE public.group_cohorts ADD COLUMN manual_offset INT NOT NULL DEFAULT 0 CHECK (manual_offset >= 0);`
-  3. Recreate `get_group_capacity_counts()` and `get_cohort_signup_counts()` to fold in the offset. Both remain `SECURITY DEFINER` with `search_path=public`.
-
-**No backend logic change to registration insertion, pricing, or Stripe amount computation.**
-
-**Verification:**
-- Insert a test row → toggle A1 `manual_offset` to 3 in `/admin` → confirm `/` banner shows `3/10`, then reset to 0.
-- Real registration → `/checkout` renders card fields + amount → complete Stripe test flow → `/payment-status` shows success and `registrations.payment_status = 'paid'`.
-- Verify `console.info` log line appears exactly once on `/checkout` load.
+Then you can publish.
