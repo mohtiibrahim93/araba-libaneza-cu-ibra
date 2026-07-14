@@ -49,7 +49,13 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (regRow.form_type !== courseType) {
+    // A "trial" registration paying for a private lesson is the natural
+    // conversion path (the free trial is once per person; after that the
+    // same lead pays) — allow it instead of hard-matching form_type.
+    const compatibleType =
+      regRow.form_type === courseType ||
+      (regRow.form_type === "trial" && courseType === "private");
+    if (!compatibleType) {
       return new Response(JSON.stringify({ error: "Course type mismatch" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

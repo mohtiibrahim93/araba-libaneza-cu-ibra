@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
@@ -21,6 +21,22 @@ const COURSE_LABEL: Record<CourseType, string> = {
   private: "Lecție Privată",
   kids: "Grupa de Copii",
 };
+
+// supabase.functions.invoke wraps non-2xx responses in a FunctionsHttpError
+// whose .context holds the original Response — without this, every server
+// error degrades to the cryptic "Edge Function returned a non-2xx status code".
+async function readInvokeError(err: unknown): Promise<string | null> {
+  const ctx = (err as { context?: Response })?.context;
+  if (ctx && typeof ctx.json === "function") {
+    try {
+      const body = await ctx.json();
+      if (body && typeof body.error === "string" && body.error) return body.error;
+    } catch {
+      /* not json */
+    }
+  }
+  return null;
+}
 
 const PaymentForm = ({
   amount,
@@ -126,6 +142,9 @@ const Checkout = () => {
   const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
   const [stripeLoadFailed, setStripeLoadFailed] = useState(false);
   const [hostedLoading, setHostedLoading] = useState(false);
+  // Set when the automatic redirect to Stripe's hosted page failed too —
+  // only then do we show the manual button + WhatsApp escape hatch.
+  const [hostedAutoFailed, setHostedAutoFailed] = useState(false);
 
   const showFallback = stripeLoadFailed || forceFallback;
 
@@ -158,7 +177,10 @@ const Checkout = () => {
           : await supabase.functions.invoke("create-payment-intent", {
               body: { courseType, email, name, registrationId, quantity },
             });
-        if (invokeError) throw invokeError;
+        if (invokeError) {
+          const serverMsg = await readInvokeError(invokeError);
+          throw new Error(serverMsg ?? invokeError.message ?? "Eroare la inițializarea plății");
+        }
         // Safe diagnostic log: never print full clientSecret or full key.
         console.info("[checkout] payment-intent response", {
           amount: data?.amount,
@@ -242,7 +264,10 @@ const Checkout = () => {
           },
         },
       );
-      if (invokeError) throw invokeError;
+      if (invokeError) {
+        const serverMsg = await readInvokeError(invokeError);
+        throw new Error(serverMsg ?? "Nu am putut deschide pagina Stripe.");
+      }
       if (!data?.url) throw new Error("Server nu a returnat URL-ul de plată.");
       window.location.href = data.url;
     } catch (err) {
@@ -251,8 +276,20 @@ const Checkout = () => {
         err instanceof Error ? err.message : "Nu am putut deschide pagina Stripe.",
       );
       setHostedLoading(false);
+      setHostedAutoFailed(true);
     }
   };
+
+  // When the embedded card form can't load, don't stop at an error screen —
+  // go straight to Stripe's hosted page. The manual button below stays as a
+  // backup if the automatic redirect itself fails.
+  const autoRedirectRef = useRef(false);
+  useEffect(() => {
+    if (!showFallback || autoRedirectRef.current || !registrationId) return;
+    autoRedirectRef.current = true;
+    void startHostedCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFallback, registrationId]);
 
   const options = useMemo(
     () =>
@@ -295,18 +332,23 @@ const Checkout = () => {
             </p>
           </div>
 
-          {showFallback ? (
+          {showFallback && !hostedAutoFailed ? (
+            /* Seamless path: the embedded form can't load here, so we're
+               already redirecting to Stripe's hosted page — no error screen,
+               no extra click. */
+            <div className="text-center py-12" role="status" aria-live="polite">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mt-3">
+                Te redirecționăm către pagina securizată Stripe...
+              </p>
+            </div>
+          ) : showFallback ? (
+            /* The automatic redirect itself failed — manual button + escape hatch. */
             <div className="text-center py-6 space-y-5">
               <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
-              <div className="space-y-2">
-                <p className="text-foreground font-medium">
-                  Formularul de card nu s-a putut încărca pe acest browser.
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Continuă pe pagina securizată Stripe — se deschide direct pe checkout.stripe.com,
-                  fără scripturi pe acest site.
-                </p>
-              </div>
+              <p className="text-foreground font-medium">
+                Nu am putut deschide automat pagina de plată Stripe.
+              </p>
               <Button
                 onClick={startHostedCheckout}
                 disabled={hostedLoading || !registrationId}
@@ -319,7 +361,7 @@ const Checkout = () => {
                     Se pregătește...
                   </>
                 ) : (
-                  "Continuă pe pagina securizată Stripe"
+                  "Încearcă din nou pagina Stripe"
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">
