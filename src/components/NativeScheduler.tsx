@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home } from "lucide-react";
+import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home, CreditCard, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
@@ -122,6 +122,10 @@ const NativeScheduler = ({
     end_at?: string;
     booking_id?: string;
   } | null>(null);
+  // Trial-only: the server rejects a second free trial for the same email.
+  const [trialUsed, setTrialUsed] = useState(false);
+  // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
+  const [savingCard, setSavingCard] = useState(false);
 
   // Form fields
   const [name, setName] = useState(prefill?.name ?? "");
@@ -225,13 +229,42 @@ const NativeScheduler = ({
           gdpr_consent: true,
         },
       });
-      if (res.error) throw res.error;
+      if (res.error) {
+        // Non-2xx responses arrive as a FunctionsHttpError with the original
+        // Response on .context — pull the JSON body out so the structured
+        // codes (conflict / trial_used) survive instead of degrading to a
+        // generic failure toast.
+        const ctx = (res.error as { context?: Response }).context;
+        let errPayload: { code?: string; error?: string } | null = null;
+        if (ctx && typeof ctx.json === "function") {
+          try {
+            errPayload = await ctx.json();
+          } catch {
+            errPayload = null;
+          }
+        }
+        if (errPayload?.code === "conflict") {
+          toast.error(t.schedulerSlotTaken);
+          setSelectedSlot(null);
+          await loadAvailability();
+          return;
+        }
+        if (errPayload?.code === "trial_used") {
+          setTrialUsed(true);
+          return;
+        }
+        throw new Error(errPayload?.error ?? t.schedulerBookingFailed);
+      }
       const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; end_at?: string; code?: string; error?: string };
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
           toast.error(t.schedulerSlotTaken);
           setSelectedSlot(null);
           await loadAvailability();
+          return;
+        }
+        if (payload?.code === "trial_used") {
+          setTrialUsed(true);
           return;
         }
         throw new Error(payload?.error ?? t.schedulerBookingFailed);
@@ -250,6 +283,62 @@ const NativeScheduler = ({
       setSubmitting(false);
     }
   };
+
+  // Trial-only 0-lei card confirmation: opens a Stripe setup-mode page that
+  // saves the card without charging (commitment step against no-shows).
+  const startCardConfirmation = async () => {
+    if (!registrationId) return;
+    setSavingCard(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
+        body: { registrationId, setup: true },
+      });
+      if (fnError) throw fnError;
+      if (!data?.url) throw new Error("missing url");
+      window.location.href = data.url;
+    } catch (e) {
+      console.error("[scheduler] card confirmation failed", e);
+      toast.error(
+        lang === "ro"
+          ? "Nu am putut deschide pagina Stripe. Locul tău rămâne rezervat."
+          : "Could not open the Stripe page. Your spot is still reserved.",
+      );
+      setSavingCard(false);
+    }
+  };
+
+  if (trialUsed) {
+    return (
+      <div className="rounded-xl border border-amber-300 bg-amber-50 p-6 space-y-4">
+        <h3 className="font-bold text-foreground">
+          {lang === "ro" ? "Proba gratuită a fost deja folosită" : "The free trial was already used"}
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          {lang === "ro"
+            ? "Emailul tău are deja o probă gratuită programată sau ținută — proba e doar pentru prima lecție. Poți continua direct cu lecții plătite (150 lei/lecție) sau scrie-ne pe WhatsApp dacă crezi că e o greșeală."
+            : "Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (150 lei/lesson), or message us on WhatsApp if you think this is a mistake."}
+        </p>
+        <div className="flex flex-col sm:flex-row gap-2">
+          {registrationId && (
+            <Button asChild className="flex-1">
+              <Link
+                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+              >
+                <CreditCard className="w-4 h-4 mr-2" />
+                {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
+              </Link>
+            </Button>
+          )}
+          <Button asChild variant="outline" className="flex-1">
+            <a href={WHATSAPP_FALLBACK} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="w-4 h-4 mr-2" />
+              WhatsApp
+            </a>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -359,6 +448,36 @@ const NativeScheduler = ({
             </div>
           )}
         </div>
+
+        {/* Free trial: 0-lei card-on-file confirmation. Saves the card via a
+            Stripe setup session — nothing is charged — to firm up the spot. */}
+        {eventType === "trial" && registrationId && (
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
+            <div className="flex items-start gap-2">
+              <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {lang === "ro"
+                    ? "Ultimul pas: confirmă-ți locul cu cardul — 0 lei"
+                    : "Last step: confirm your spot with your card — 0 lei"}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {lang === "ro"
+                    ? "Nu încasăm absolut nimic — cardul se salvează în siguranță la Stripe doar ca să confirmi serios locul. Nicio plată nu se face vreodată fără acordul tău."
+                    : "We charge absolutely nothing — the card is stored securely with Stripe only to firmly confirm your spot. No payment is ever made without your approval."}
+                </p>
+              </div>
+            </div>
+            <Button onClick={startCardConfirmation} disabled={savingCard} className="w-full">
+              {savingCard ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <CreditCard className="w-4 h-4 mr-2" />
+              )}
+              {lang === "ro" ? "Confirmă locul (0 lei)" : "Confirm my spot (0 lei)"}
+            </Button>
+          </div>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={handleIcs} className="flex-1">

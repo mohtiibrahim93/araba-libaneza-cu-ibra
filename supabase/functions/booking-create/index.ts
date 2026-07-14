@@ -94,6 +94,27 @@ Deno.serve(async (req) => {
       .maybeSingle();
     if (!et) return json({ error: "event type not found" }, 404);
 
+    // The free trial is for first contact only: one per person. A cancelled
+    // trial can be rebooked, but a kept (confirmed/completed) one blocks a
+    // second freebie — the paid flow is the path for returning students.
+    if (et.slug === "trial") {
+      // ilike with the wildcards escaped = case-insensitive equality.
+      const emailPattern = body.student_email.trim().replace(/([%_\\])/g, "\\$1");
+      const { data: priorTrials } = await supabase
+        .from("bookings")
+        .select("id")
+        .eq("event_type_slug", "trial")
+        .in("status", ["confirmed", "completed"])
+        .ilike("student_email", emailPattern)
+        .limit(1);
+      if ((priorTrials ?? []).length > 0) {
+        return json(
+          { error: "Proba gratuită a fost deja folosită pentru acest email.", code: "trial_used" },
+          409,
+        );
+      }
+    }
+
     const startMs = Date.parse(body.start_at);
     if (!Number.isFinite(startMs)) return json({ error: "invalid start_at" }, 400);
     const endMs = startMs + et.duration_min * 60_000;

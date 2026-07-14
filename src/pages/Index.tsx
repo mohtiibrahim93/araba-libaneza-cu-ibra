@@ -55,6 +55,26 @@ const PageContent = () => {
       toast.info(t.paymentCanceled);
       window.history.replaceState({}, "", "/");
     }
+
+    // Return from the 0-lei trial card-on-file Stripe setup page.
+    const trialCard = params.get("trial_card");
+    if (trialCard === "saved") {
+      toast.success(
+        lang === "en"
+          ? "Card saved — your free trial spot is confirmed. Nothing was charged."
+          : "Cardul a fost salvat — locul tău la proba gratuită e confirmat. Nu s-a încasat nimic.",
+        { duration: 10000 },
+      );
+      trackEvent("TrialCardSaved");
+      window.history.replaceState({}, "", "/");
+    } else if (trialCard === "canceled") {
+      toast.info(
+        lang === "en"
+          ? "Card step skipped — your trial booking still stands."
+          : "Ai sărit peste pasul cu cardul — programarea ta la probă rămâne valabilă.",
+      );
+      window.history.replaceState({}, "", "/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

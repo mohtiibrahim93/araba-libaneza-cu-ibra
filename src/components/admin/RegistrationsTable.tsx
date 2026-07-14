@@ -60,17 +60,28 @@ interface Props {
   onCancelSubscription: (id: string) => void;
 }
 
+const badge = (cls: string, label: string) => (
+  <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>{label}</span>
+);
+
 const paymentBadge = (r: Registration) => {
-  if (r.refunded_at) {
-    return <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-700">Rambursat</span>;
+  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-gray-200 text-gray-700", "Rambursat");
+  switch (r.payment_status) {
+    case "paid":
+      return badge("bg-green-100 text-green-800", "Plătit");
+    case "pending":
+      return badge("bg-yellow-100 text-yellow-800", "În așteptare");
+    case "past_due":
+      return badge("bg-red-100 text-red-800", "Restanță");
+    case "failed":
+      return badge("bg-red-100 text-red-800", "Plată eșuată");
+    case "expired":
+      return badge("bg-gray-100 text-gray-600", "Expirat");
+    case "card_saved":
+      return badge("bg-blue-100 text-blue-800", "Card salvat · trial");
+    default:
+      return badge("bg-gray-100 text-gray-600", "Neplătit");
   }
-  if (r.payment_status === "paid") {
-    return <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Plătit</span>;
-  }
-  if (r.payment_status === "pending") {
-    return <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">În așteptare</span>;
-  }
-  return <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Neplătit</span>;
 };
 
 const RefundControl = ({

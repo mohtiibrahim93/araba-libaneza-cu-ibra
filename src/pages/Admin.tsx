@@ -13,7 +13,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Loader2, Trash2, Download } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Download,
+  Users,
+  CreditCard,
+  Repeat,
+  Gift,
+  LayoutDashboard,
+  ClipboardList,
+  CalendarDays,
+  GraduationCap,
+  Mail,
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import AdminNav from "@/components/AdminNav";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
@@ -163,6 +177,21 @@ const Admin = () => {
     () => filteredRegistrations.filter((r) => r.form_type === "private"),
     [filteredRegistrations],
   );
+
+  // Which admin tab is open; PrivateLeadStats / stat cards can jump to "leads".
+  const [activeTab, setActiveTab] = useState("overview");
+
+  const stats = useMemo(() => {
+    const total = registrations.length;
+    const paid = registrations.filter((r) => r.payment_status === "paid").length;
+    const activeSubs = registrations.filter(
+      (r) => r.subscription_status === "active",
+    ).length;
+    const newLeads = registrations.filter(
+      (r) => (r.lead_status || "new") === "new",
+    ).length;
+    return { total, paid, activeSubs, newLeads };
+  }, [registrations]);
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
@@ -457,155 +486,215 @@ const Admin = () => {
     return <AdminLogin loading={loading} error={error} onGoogleSignIn={handleGoogleSignIn} />;
   }
 
+  const statCards = [
+    { label: "Înscrieri totale", value: stats.total, icon: Users },
+    { label: "Lead-uri noi", value: stats.newLeads, icon: Gift },
+    { label: "Plătite", value: stats.paid, icon: CreditCard },
+    { label: "Abonamente active", value: stats.activeSubs, icon: Repeat },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
-      <AdminNav
-        onLogout={handleLogout}
-        rightSlot={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            disabled={filteredRegistrations.length === 0}
-            className="h-8 hidden sm:inline-flex"
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden md:inline ml-1">CSV</span>
-          </Button>
-        }
-      />
+    <div className="min-h-screen bg-muted/30">
+      <AdminNav onLogout={handleLogout} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-between gap-2">
-        <h1 className="text-lg font-bold text-foreground">
-          Înscrieri{" "}
-          <span className="text-muted-foreground font-normal">
-            ({filteredRegistrations.length}/{registrations.length})
-          </span>
-        </h1>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePrivateCsvExport}
-            disabled={privateFilteredRegistrations.length === 0}
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Private CSV</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePrivatePdfExport}
-            disabled={privateFilteredRegistrations.length === 0}
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Private PDF</span>
-          </Button>
-        </div>
-      </div>
-
-      {selected.size > 0 && (
-        <div className="border-b border-border bg-muted">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">
-              {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
-            </span>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={deleting}>
-                  {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  <Trash2 className="w-4 h-4" />
-                  Șterge
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Ești sigur că vrei să ștergi {selected.size} înscrier
-                    {selected.size === 1 ? "e" : "i"}? Acțiunea nu poate fi anulată.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Anulează</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>Șterge definitiv</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+            <TabsList className="h-11 bg-background border border-border shadow-sm">
+              <TabsTrigger value="overview" className="gap-1.5 px-3 sm:px-4">
+                <LayoutDashboard className="w-4 h-4" />
+                <span className="hidden sm:inline">Panou general</span>
+                <span className="sm:hidden">Panou</span>
+              </TabsTrigger>
+              <TabsTrigger value="leads" className="gap-1.5 px-3 sm:px-4">
+                <ClipboardList className="w-4 h-4" />
+                Înscrieri
+                <span className="text-xs text-muted-foreground">({registrations.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="bookings" className="gap-1.5 px-3 sm:px-4">
+                <CalendarDays className="w-4 h-4" />
+                Programări
+              </TabsTrigger>
+              <TabsTrigger value="groups" className="gap-1.5 px-3 sm:px-4">
+                <GraduationCap className="w-4 h-4" />
+                Grupe
+              </TabsTrigger>
+              <TabsTrigger value="email" className="gap-1.5 px-3 sm:px-4">
+                <Mail className="w-4 h-4" />
+                Email
+              </TabsTrigger>
+            </TabsList>
           </div>
-        </div>
-      )}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <StudentJourneyAdmin />
-        <TrialFunnelAdmin />
+          {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
+          <TabsContent value="overview" className="mt-5 space-y-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {statCards.map(({ label, value, icon: Icon }) => (
+                <div
+                  key={label}
+                  className="bg-background rounded-xl border border-border p-4 sm:p-5 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs sm:text-sm text-muted-foreground">{label}</p>
+                    <Icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-2">{value}</p>
+                </div>
+              ))}
+            </div>
 
-        <CapacitiesAdmin />
-        <ManualSignupsAdmin />
-        <CohortsAdmin />
+            <PrivateLeadStats
+              counts={privateLeadCounts}
+              onSelect={(status) => {
+                setCourseTypeFilter("private");
+                setLeadStatusFilter(status === "all" ? "all" : status);
+                setActiveTab("leads");
+              }}
+            />
+            <StudentJourneyAdmin />
+            <TrialFunnelAdmin />
+          </TabsContent>
 
-        <AvailabilityAdmin />
-        <BookingsAdmin />
+          {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
+          <TabsContent value="leads" className="mt-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-lg font-bold text-foreground">
+                Înscrieri{" "}
+                <span className="text-muted-foreground font-normal">
+                  ({filteredRegistrations.length}/{registrations.length})
+                </span>
+              </h2>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExport}
+                  disabled={filteredRegistrations.length === 0}
+                >
+                  <Download className="w-4 h-4" />
+                  CSV
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrivateCsvExport}
+                  disabled={privateFilteredRegistrations.length === 0}
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="hidden sm:inline">Private CSV</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrivatePdfExport}
+                  disabled={privateFilteredRegistrations.length === 0}
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="hidden sm:inline">Private PDF</span>
+                </Button>
+              </div>
+            </div>
 
-        <EmailSettingsForm
-          settings={emailSettings}
-          saving={savingEmailSettings}
-          onChange={setEmailSettings}
-          onSubmit={handleEmailSettingsSubmit}
-        />
+            <RegistrationFilters
+              courseType={courseTypeFilter}
+              leadStatus={leadStatusFilter}
+              privateMessageSearch={privateMessageSearch}
+              onCourseTypeChange={setCourseTypeFilter}
+              onLeadStatusChange={setLeadStatusFilter}
+              onPrivateMessageSearchChange={setPrivateMessageSearch}
+              onReset={() => {
+                setCourseTypeFilter("all");
+                setLeadStatusFilter("all");
+                setPrivateMessageSearch("");
+              }}
+            />
 
-        <TestEmailForm
-          email={testEmail}
-          sending={sendingTestEmail}
-          onChange={setTestEmail}
-          onSubmit={handleTestEmailSubmit}
-        />
+            {selected.size > 0 && (
+              <div className="rounded-lg border border-border bg-background px-4 h-12 flex items-center justify-between shadow-sm">
+                <span className="text-sm text-muted-foreground">
+                  {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
+                </span>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm" disabled={deleting}>
+                      {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
+                      <Trash2 className="w-4 h-4" />
+                      Șterge
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Ești sigur că vrei să ștergi {selected.size} înscrier
+                        {selected.size === 1 ? "e" : "i"}? Acțiunea nu poate fi anulată.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Anulează</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>Șterge definitiv</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
 
-        <RegistrationFilters
-          courseType={courseTypeFilter}
-          leadStatus={leadStatusFilter}
-          privateMessageSearch={privateMessageSearch}
-          onCourseTypeChange={setCourseTypeFilter}
-          onLeadStatusChange={setLeadStatusFilter}
-          onPrivateMessageSearchChange={setPrivateMessageSearch}
-          onReset={() => {
-            setCourseTypeFilter("all");
-            setLeadStatusFilter("all");
-            setPrivateMessageSearch("");
-          }}
-        />
+            {registrations.length === 0 ? (
+              <p className="text-center text-muted-foreground py-12">
+                Nu există înscrieri momentan.
+              </p>
+            ) : filteredRegistrations.length === 0 ? (
+              <p className="text-center text-muted-foreground py-12">
+                Nu există lead-uri pentru filtrele selectate.
+              </p>
+            ) : (
+              <div className="bg-background rounded-xl shadow-sm">
+                <RegistrationsTable
+                  rows={filteredRegistrations}
+                  selected={selected}
+                  updatingStatus={updatingStatus}
+                  refundingId={refundingId}
+                  cancelingId={cancelingId}
+                  onToggleSelect={toggleSelect}
+                  onToggleAll={toggleAll}
+                  onStatusChange={handleStatusChange}
+                  onRefund={handleRefund}
+                  onPreviewCancel={previewCancelSubscription}
+                  onCancelSubscription={handleCancelSubscription}
+                />
+              </div>
+            )}
+          </TabsContent>
 
-        <PrivateLeadStats
-          counts={privateLeadCounts}
-          onSelect={(status) => {
-            setCourseTypeFilter("private");
-            setLeadStatusFilter(status === "all" ? "all" : status);
-          }}
-        />
+          {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
+          <TabsContent value="bookings" className="mt-5 space-y-6">
+            <AvailabilityAdmin />
+            <BookingsAdmin />
+          </TabsContent>
 
-        {registrations.length === 0 ? (
-          <p className="text-center text-muted-foreground py-12">
-            Nu există înscrieri momentan.
-          </p>
-        ) : filteredRegistrations.length === 0 ? (
-          <p className="text-center text-muted-foreground py-12">
-            Nu există lead-uri pentru filtrele selectate.
-          </p>
-        ) : (
-          <RegistrationsTable
-            rows={filteredRegistrations}
-            selected={selected}
-            updatingStatus={updatingStatus}
-            refundingId={refundingId}
-            cancelingId={cancelingId}
-            onToggleSelect={toggleSelect}
-            onToggleAll={toggleAll}
-            onStatusChange={handleStatusChange}
-            onRefund={handleRefund}
-            onPreviewCancel={previewCancelSubscription}
-            onCancelSubscription={handleCancelSubscription}
-          />
-        )}
+          {/* ── Grupe: capacitate, contoare manuale, cohorte ─────────────── */}
+          <TabsContent value="groups" className="mt-5 space-y-6">
+            <CapacitiesAdmin />
+            <ManualSignupsAdmin />
+            <CohortsAdmin />
+          </TabsContent>
+
+          {/* ── Email: expeditor + test ──────────────────────────────────── */}
+          <TabsContent value="email" className="mt-5 space-y-6">
+            <EmailSettingsForm
+              settings={emailSettings}
+              saving={savingEmailSettings}
+              onChange={setEmailSettings}
+              onSubmit={handleEmailSettingsSubmit}
+            />
+            <TestEmailForm
+              email={testEmail}
+              sending={sendingTestEmail}
+              onChange={setTestEmail}
+              onSubmit={handleTestEmailSubmit}
+            />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
