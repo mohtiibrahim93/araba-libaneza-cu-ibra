@@ -4,6 +4,7 @@ import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import { Button } from "@/components/ui/button";
+import BrandLogo from "@/components/BrandLogo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -85,19 +86,10 @@ const Navbar = () => {
               navigate("/");
             }
           }}
-          aria-label={`${t.siteTitle} — ${t.lebanonFlagLabel}`}
-          className="flex h-10 min-w-0 flex-1 items-center gap-2.5 pr-2 text-base font-bold text-foreground tracking-tight sm:text-xl md:max-w-none md:flex-none md:pr-0"
+          aria-label="7ki Lebnene — Arabă libaneză cu Ibra"
+          className="flex h-12 min-w-0 flex-1 items-center pr-2 md:max-w-none md:flex-none md:pr-0"
         >
-          <span
-            role="img"
-            aria-label={t.lebanonFlagLabel}
-            className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-[24px] leading-none"
-          >
-            🇱🇧
-          </span>
-          <span className="line-clamp-2 min-w-0 max-w-[9.5rem] leading-tight sm:max-w-[16rem] sm:line-clamp-1 md:max-w-none">
-            {t.siteTitle}
-          </span>
+          <BrandLogo />
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">

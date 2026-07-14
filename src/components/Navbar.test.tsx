@@ -21,11 +21,10 @@ describe("Navbar accessibility", () => {
     window.localStorage.setItem("site-language", "ro");
   });
 
-  it("renders aria-labels for the brand link, flag, language switcher, and menu button", () => {
+  it("renders aria-labels for the brand link, language switcher, and menu button", () => {
     renderNavbar();
 
-    expect(screen.getByLabelText("centrul de araba libaneza — Steagul Libanului")).toBeInTheDocument();
-    expect(screen.getByLabelText("Steagul Libanului")).toBeInTheDocument();
+    expect(screen.getByLabelText("7ki Lebnene — Arabă libaneză cu Ibra")).toBeInTheDocument();
     expect(screen.getByLabelText("Alege limba site-ului")).toBeInTheDocument();
     expect(screen.getByLabelText("Deschide meniul de navigare")).toBeInTheDocument();
   });

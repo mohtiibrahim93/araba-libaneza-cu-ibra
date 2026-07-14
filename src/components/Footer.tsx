@@ -2,6 +2,8 @@ import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import AnchorLink from "@/components/AnchorLink";
+import BrandLogo from "@/components/BrandLogo";
+import SocialLinks from "@/components/SocialLinks";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -13,19 +15,14 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-5 gap-10">
         {/* Brand */}
         <div>
-          <p className="inline-flex items-center gap-2 text-lg font-bold text-foreground mb-2">
-            <span
-              role="img"
-              aria-label={t.lebanonFlagLabel}
-              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-[22px] leading-none"
-            >
-              🇱🇧
-            </span>
-            <span>{t.siteTitle}</span>
-          </p>
+          <BrandLogo full className="mb-3" />
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
           </p>
+          <p className="mt-2 text-xs italic text-muted-foreground/80">
+            {lang === "en" ? "Lebanese Arabic, explained simply." : "Arabă libaneză, explicată simplu."}
+          </p>
+          <SocialLinks className="mt-4" />
         </div>
 
         {/* Courses */}

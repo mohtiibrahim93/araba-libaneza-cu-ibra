@@ -13,15 +13,15 @@ const InstructorSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
-      <div className="max-w-5xl mx-auto grid md:grid-cols-[280px_1fr] gap-12 items-center">
+    <section className="py-20 px-6 bg-cream">
+      <div className="max-w-5xl mx-auto grid md:grid-cols-[300px_1fr] gap-10 md:gap-14 items-center rounded-[2rem] border border-border/60 bg-background p-6 sm:p-10 shadow-sm">
         {/* Photo */}
         <div className="flex flex-col items-center gap-3">
           <picture>
             <source srcSet={instructorPhotoWebp} type="image/webp" />
             <img
               src={instructorPhotoJpg}
-              alt="Ibra — instructor"
+              alt="Ibra — profesor nativ de arabă libaneză"
               width={280}
               height={280}
               loading="lazy"
@@ -46,7 +46,7 @@ const InstructorSection = () => {
           <span className="text-sm font-medium text-primary mb-2 block">
             {t.instructorBadge}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-4">
             {t.instructorTitle}
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-3">
