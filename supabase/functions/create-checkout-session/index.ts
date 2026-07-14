@@ -12,7 +12,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { buildCorsHeaders } from "../_shared/cors.ts";
+import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -70,9 +70,12 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    const origin =
-      req.headers.get("origin") || "https://centruldearabalibaneza.com";
-    const successUrl = `${origin}/payment-status?registrationId=${encodeURIComponent(registrationId)}&session_id={CHECKOUT_SESSION_ID}`;
+    // Allowlisted origins only — a forged Origin header must not be able to
+    // bounce the customer to an arbitrary site after paying.
+    const origin = resolveReturnOrigin(req);
+    // NB: /payment-status reads `registration_id` (snake_case) — it polls the
+    // DB with it; the camelCase param would leave the page "pending" forever.
+    const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}&fallback=1`;
 
     // Best-effort reuse: if we already created a session and it's still open,
@@ -168,7 +171,10 @@ serve(async (req) => {
             months_total: String(monthsTotal),
           },
         },
-        { idempotencyKey: `cos_sub_${registrationId}` },
+        // Hour-bucketed: a double-click reuses one session, but a retry after
+        // the previous session expired (24 h) isn't pinned by Stripe's
+        // idempotency layer to the dead session forever.
+        { idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
       );
     } else {
       const isPrivate = courseType === "private";
@@ -221,7 +227,8 @@ serve(async (req) => {
             course_type: courseType,
           },
         },
-        { idempotencyKey: `cos_pay_${registrationId}` },
+        // Hour-bucketed for the same reason as the subscription branch above.
+        { idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
       );
     }
 

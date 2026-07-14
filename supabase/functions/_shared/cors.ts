@@ -32,3 +32,15 @@ export function buildCorsHeaders(req: Request, extraHeaders?: Record<string, str
     "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
   };
 }
+
+/**
+ * Origin to send the customer back to after a Stripe-hosted checkout
+ * (success_url / cancel_url). Only ever an allowlisted origin — a forged
+ * Origin header must not be able to bounce customers to an arbitrary site.
+ */
+export function resolveReturnOrigin(req: Request): string {
+  const origin = req.headers.get("origin") || "";
+  const allowed =
+    ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+  return allowed ? origin : ALLOWED_ORIGINS[0];
+}

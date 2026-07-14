@@ -6,6 +6,20 @@ Student Experience + Admin Experience + Website Management + Technical Architect
 
 Version 1.1
 
+> **STATUS NOTE (July 2026) — read before implementing anything from this
+> document.** This spec is the product *north star*, and parts of it are
+> deliberately aspirational: the cohort entity model, request-clustering, and
+> multi-tutor sections (§§33–37, §53) describe a future system that is **not**
+> the implemented schema. When this document and the code disagree, the code
+> wins: the implemented schema authority is `supabase/migrations/`, the money
+> authority is `supabase/functions/_shared/prices.ts` (unit-tested), and the
+> current billing/webhook/refund reality is documented in
+> `docs/GO_LIVE_subscriptions.md`. §47 (Payment QA) predates the shipped
+> payment system — group courses are now billed as fixed-length monthly Stripe
+> subscriptions or a pay-in-full charge with 10% off; do not implement payment
+> features from §47 alone. Extend the real schema; never re-create the entity
+> model in §53 from scratch.
+
 1. Purpose of This Document
 
 This document defines the QA standard for the website and management system of Centrul de Arabă Libaneză. It should be used as the central reference for all future frontend, Supabase, admin, content, and product tasks. The recommended file name in the project would be: MASTER_SPEC.md or: PRODUCT_QA_STANDARD.md Every future feature should be checked against this document before implementation. The website should not be treated as a collection of random pages. It should be treated as a cohort-based enrollment platform. The system must support:
