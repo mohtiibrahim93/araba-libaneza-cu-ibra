@@ -261,71 +261,76 @@ const RegistrationsTable = ({
   <div className="border border-border rounded-lg overflow-hidden">
     <Table>
       <TableHeader>
-        <TableRow>
+        <TableRow className="bg-muted/50">
           <TableHead className="w-10">
             <Checkbox
               checked={rows.length > 0 && rows.every((r) => selected.has(r.id))}
               onCheckedChange={onToggleAll}
             />
           </TableHead>
-          <TableHead>Data</TableHead>
-          <TableHead>Tip</TableHead>
-          <TableHead>Nume</TableHead>
-          <TableHead>Telefon</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Centru</TableHead>
-          <TableHead>Format</TableHead>
-          <TableHead>Sursă</TableHead>
-          <TableHead>Track</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Plată</TableHead>
-          <TableHead>Vârstă copil</TableHead>
-          <TableHead>Note</TableHead>
-          <TableHead>Detalii</TableHead>
+          <TableHead className="min-w-[200px]">Înscris</TableHead>
+          <TableHead className="min-w-[150px]">Curs</TableHead>
+          <TableHead className="w-[170px]">Status lead</TableHead>
+          <TableHead className="min-w-[170px]">Plată</TableHead>
+          <TableHead className="min-w-[160px]">Note</TableHead>
+          <TableHead className="w-[90px]">Detalii</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {rows.map((r) => (
           <TableRow key={r.id} data-state={selected.has(r.id) ? "selected" : undefined}>
-            <TableCell>
+            <TableCell className="align-top pt-4">
               <Checkbox
                 checked={selected.has(r.id)}
                 onCheckedChange={() => onToggleSelect(r.id)}
               />
             </TableCell>
-            <TableCell className="whitespace-nowrap text-muted-foreground text-xs">
-              {new Date(r.created_at).toLocaleDateString("ro-RO", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+            {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
+            <TableCell className="align-top">
+              <p className="font-semibold text-foreground leading-tight">{r.name}</p>
+              {r.email && (
+                <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary truncate max-w-[220px]">
+                  {r.email}
+                </a>
+              )}
+              {r.phone && (
+                <a href={`tel:${r.phone}`} className="block text-xs text-muted-foreground hover:text-primary">
+                  {r.phone}
+                </a>
+              )}
+              <p className="text-[11px] text-muted-foreground/70 mt-1">
+                {new Date(r.created_at).toLocaleDateString("ro-RO", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
             </TableCell>
-            <TableCell>
+            {/* Ce: tip curs + format/centru/vârstă */}
+            <TableCell className="align-top">
               <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 {formTypeLabels[r.form_type] || r.form_type}
               </span>
+              <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
+                {[
+                  r.format,
+                  r.center,
+                  r.child_age ? `copil ${r.child_age} ani` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ") || "—"}
+              </p>
             </TableCell>
-            <TableCell className="font-medium">{r.name}</TableCell>
-            <TableCell>{r.phone}</TableCell>
-            <TableCell className="text-muted-foreground">{r.email || "—"}</TableCell>
-            <TableCell>{r.center || "—"}</TableCell>
-            <TableCell>{r.format || "—"}</TableCell>
-            <TableCell className="text-xs">
-              {r.source ? leadSourceLabels[r.source] : "—"}
-            </TableCell>
-            <TableCell className="text-xs">
-              {r.track_preference ? trackPreferenceLabels[r.track_preference] : "—"}
-            </TableCell>
-            <TableCell>
+            <TableCell className="align-top">
               <Select
                 value={r.lead_status || "new"}
                 onValueChange={(value) => onStatusChange(r.id, value as LeadStatus)}
                 disabled={updatingStatus?.id === r.id}
               >
                 <SelectTrigger
-                  className="h-8 w-[160px]"
+                  className="h-8 w-[150px]"
                   aria-busy={updatingStatus?.id === r.id}
                 >
                   {updatingStatus?.id === r.id ? (
@@ -343,7 +348,7 @@ const RegistrationsTable = ({
                 </SelectContent>
               </Select>
             </TableCell>
-            <TableCell className="space-y-1">
+            <TableCell className="align-top space-y-1">
               {paymentBadge(r)}
               {r.stripe_subscription_id && typeof r.months_total === "number" && (
                 <p className="text-xs text-muted-foreground">
@@ -361,9 +366,22 @@ const RegistrationsTable = ({
                 <RefundControl registration={r} refunding={refundingId === r.id} onRefund={onRefund} />
               )}
             </TableCell>
-            <TableCell>{r.child_age || "—"}</TableCell>
-            <TableCell className="max-w-[200px] truncate">{r.notes || "—"}</TableCell>
-            <TableCell>
+            <TableCell className="align-top">
+              {(r.source || r.track_preference) && (
+                <p className="text-[11px] text-muted-foreground/70">
+                  {[
+                    r.source ? leadSourceLabels[r.source] : null,
+                    r.track_preference ? trackPreferenceLabels[r.track_preference] : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground max-w-[220px] line-clamp-3" title={r.notes || undefined}>
+                {r.notes || "—"}
+              </p>
+            </TableCell>
+            <TableCell className="align-top">
               {r.form_type === "private" ? (
                 <Button asChild variant="outline" size="sm">
                   <Link to={`/admin/private-leads/${r.id}`}>
@@ -372,7 +390,7 @@ const RegistrationsTable = ({
                   </Link>
                 </Button>
               ) : (
-                "—"
+                <span className="text-muted-foreground text-xs">—</span>
               )}
             </TableCell>
           </TableRow>

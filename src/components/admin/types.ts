@@ -17,7 +17,7 @@ export const LEAD_STATUSES: readonly LeadStatus[] = [
   "converted",
 ] as const;
 
-export type CourseTypeFilter = "all" | "group" | "private" | "kids";
+export type CourseTypeFilter = "all" | "group" | "private" | "kids" | "trial";
 export type LeadStatusFilter = "all" | LeadStatus;
 
 export type LeadSource = "form" | "whatsapp" | "admin";
@@ -59,6 +59,7 @@ export const formTypeLabels: Record<string, string> = {
   group: "Curs Grup",
   private: "Lecții Private",
   kids: "Curs Copii",
+  trial: "Probă gratuită",
 };
 
 export const leadStatusLabels: Record<LeadStatus, string> = {

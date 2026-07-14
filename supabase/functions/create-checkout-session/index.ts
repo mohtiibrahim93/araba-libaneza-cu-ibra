@@ -96,7 +96,12 @@ serve(async (req) => {
       }
     }
 
-    const courseType = reg.form_type as "group" | "private" | "kids";
+    // A trial lead paying here converts to a private lesson (their freebie
+    // is spent) — price it as private instead of failing on the raw type.
+    const courseType = (reg.form_type === "trial" ? "private" : reg.form_type) as
+      | "group"
+      | "private"
+      | "kids";
     const isSubscription =
       (courseType === "group" || courseType === "kids") && plan !== "full";
     const quantity = Math.max(
@@ -121,9 +126,10 @@ serve(async (req) => {
     // charging anything. The visitor "checks out" (commitment against
     // no-shows) and the card sits on the Stripe customer for the first real
     // payment later. Nothing is ever charged without a new authorization.
-    // Applies to /trial registrations and, via setup:true, to private
-    // registrations that booked their free first lesson.
-    if (reg.form_type === "trial" || setup === true) {
+    // Only on explicit setup:true — a trial lead can also come here to PAY
+    // (converting to a private lesson after their freebie), which must not
+    // be silently downgraded to a 0-lei setup.
+    if (setup === true) {
       const session = await stripe.checkout.sessions.create(
         {
           mode: "setup",
