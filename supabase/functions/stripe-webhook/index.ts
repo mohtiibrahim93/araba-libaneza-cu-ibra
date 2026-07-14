@@ -69,25 +69,46 @@ serve(async (req) => {
 
         // Subscription-mode hosted-checkout fallback: persist the subscription
         // id (so invoice.paid can match it), set months_total from metadata,
-        // and cap the sub at cancel_at = now + months_total months. This
+        // and cap the sub at cancel_at = start + months_total months. This
         // mirrors what create-subscription does for the embedded flow.
         const subId = typeof session.subscription === "string"
           ? session.subscription
           : session.subscription?.id;
         let monthsTotal: number | null = null;
+        let monthsPaid: number | null = null;
         if (session.mode === "subscription" && subId) {
           const rawMonths = Number.parseInt(String(session.metadata?.months_total ?? ""), 10);
           monthsTotal = Number.isFinite(rawMonths) && rawMonths > 0 ? rawMonths : null;
           if (monthsTotal) {
             try {
-              const nowSeconds = Math.floor(Date.now() / 1000);
-              const d = new Date(nowSeconds * 1000);
-              d.setMonth(d.getMonth() + monthsTotal);
-              const cancelAt = Math.floor(d.getTime() / 1000);
-              await stripe.subscriptions.update(subId, { cancel_at: cancelAt });
+              // Anchor to the subscription's real start and skip if already
+              // set, so webhook redelivery can't drift the end date.
+              const sub = await stripe.subscriptions.retrieve(subId);
+              if (!sub.cancel_at) {
+                const start = sub.start_date ?? Math.floor(Date.now() / 1000);
+                const d = new Date(start * 1000);
+                d.setMonth(d.getMonth() + monthsTotal);
+                await stripe.subscriptions.update(subId, {
+                  cancel_at: Math.floor(d.getTime() / 1000),
+                });
+              }
             } catch (subErr) {
               console.warn("Failed to set cancel_at on subscription:", subErr);
             }
+          }
+          // Set months_paid here too: invoice.paid for the first invoice can
+          // arrive before this event, when the row didn't yet carry the
+          // subscription id, so its months_paid update matched nothing.
+          monthsPaid = 1;
+          try {
+            const paidInvoices = await stripe.invoices.list({
+              subscription: subId,
+              status: "paid",
+              limit: 100,
+            });
+            monthsPaid = Math.max(1, paidInvoices.data.length);
+          } catch (listErr) {
+            console.warn("could not count paid invoices, defaulting months_paid:", listErr);
           }
         }
 
@@ -97,8 +118,9 @@ serve(async (req) => {
             payment_status: "paid",
             paid_at: new Date().toISOString(),
             stripe_session_id: sessionId,
-            ...(subId ? { stripe_subscription_id: subId } : {}),
+            ...(subId ? { stripe_subscription_id: subId, subscription_status: "active" } : {}),
             ...(monthsTotal ? { months_total: monthsTotal } : {}),
+            ...(monthsPaid ? { months_paid: monthsPaid } : {}),
           })
           .eq(matchColumn, matchValue)
           .select("id, email, name, form_type")
