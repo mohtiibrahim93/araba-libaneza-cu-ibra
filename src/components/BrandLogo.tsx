@@ -33,10 +33,17 @@ interface BrandLogoProps {
  * image — legible at header sizes, translates to dark mode for free.
  */
 const BrandLogo = ({ full, className }: BrandLogoProps) => (
-  <span className={cn("flex min-w-0 items-center gap-2.5", className)}>
+  <span className={cn("flex min-w-0 items-center gap-3", className)}>
     <CedarMark className="h-8 w-8 shrink-0 text-brand-green" />
-    <span className="flex min-w-0 flex-col leading-tight">
-      <span className="flex items-baseline gap-2 whitespace-nowrap">
+    <span className="flex min-w-0 flex-col gap-0.5 leading-tight">
+      <span
+        className={cn(
+          "flex items-baseline gap-x-2",
+          // In the header the pair stays on one line (Arabic hides on
+          // phones); in the footer it may wrap freely instead of cramming.
+          full ? "flex-wrap" : "whitespace-nowrap",
+        )}
+      >
         <span className="font-display text-lg font-bold tracking-tight sm:text-xl">
           <span className="text-brand-green">7ki</span>{" "}
           <span className="text-primary">Lebnene</span>
@@ -54,11 +61,11 @@ const BrandLogo = ({ full, className }: BrandLogoProps) => (
       </span>
       <span
         className={cn(
-          "text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground",
+          "text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground",
           full ? "block" : "hidden sm:block",
         )}
       >
-        Arabă libaneză cu Ibra
+        Centrul de Arabă Libaneză · cu Ibra
       </span>
     </span>
   </span>

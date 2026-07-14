@@ -10,7 +10,7 @@ const SocialProofStrip = () => {
 
   return (
     <div className="border-y border-border/60 bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-6 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
+      <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
         <a
           href="https://preply.com/en/tutor/471612"
           target="_blank"

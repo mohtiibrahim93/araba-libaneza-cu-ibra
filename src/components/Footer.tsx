@@ -12,10 +12,12 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-border bg-card">
-      <div className="max-w-6xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-5 gap-10">
+      {/* 12-col grid with content-sized spans + generous gaps so long strings
+          (email, legal labels) never collide with neighbouring columns. */}
+      <div className="max-w-6xl mx-auto px-6 py-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
         {/* Brand */}
-        <div>
-          <BrandLogo full className="mb-3" />
+        <div className="sm:col-span-2 lg:col-span-3">
+          <BrandLogo full className="mb-4" />
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
           </p>
@@ -26,8 +28,8 @@ const Footer = () => {
         </div>
 
         {/* Courses */}
-        <div>
-          <p className="text-sm font-semibold text-foreground mb-3">{t.navCourses}</p>
+        <div className="lg:col-span-2">
+          <p className="text-sm font-semibold text-foreground mb-4">{t.navCourses}</p>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
             <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
@@ -36,8 +38,8 @@ const Footer = () => {
         </div>
 
         {/* Quick links */}
-        <div>
-          <p className="text-sm font-semibold text-foreground mb-3">{t.footerQuickLinks}</p>
+        <div className="lg:col-span-2">
+          <p className="text-sm font-semibold text-foreground mb-4">{t.footerQuickLinks}</p>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
             <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
@@ -47,9 +49,9 @@ const Footer = () => {
         </div>
 
         {/* Contact */}
-        <div>
-          <p className="text-sm font-semibold text-foreground mb-3">{t.footerContact}</p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+        <div className="lg:col-span-3">
+          <p className="text-sm font-semibold text-foreground mb-4">{t.footerContact}</p>
+          <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-primary" />
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
@@ -58,7 +60,7 @@ const Footer = () => {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-primary" />
-              <a href="mailto:marhaba@centruldearabalibaneza.com" className="hover:text-foreground transition-colors">
+              <a href="mailto:marhaba@centruldearabalibaneza.com" className="hover:text-foreground transition-colors break-all">
                 marhaba@centruldearabalibaneza.com
               </a>
             </li>
@@ -77,9 +79,9 @@ const Footer = () => {
         </div>
 
         {/* Legal */}
-        <div>
-          <p className="text-sm font-semibold text-foreground mb-3">{t.footerLegal}</p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+        <div className="lg:col-span-2">
+          <p className="text-sm font-semibold text-foreground mb-4">{t.footerLegal}</p>
+          <ul className="space-y-3 text-sm text-muted-foreground">
             <li><a href="/privacy" className="hover:text-foreground transition-colors">{t.footerPrivacy}</a></li>
             <li><a href="/terms" className="hover:text-foreground transition-colors">{t.footerTerms}</a></li>
             <li><a href="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</a></li>

@@ -10,11 +10,11 @@ const CulturalValueSection = () => {
     { Icon: Sparkles, title: t.culture3Title, desc: t.culture3Desc },
   ];
   return (
-    <section id="culture" className="py-20 px-6 bg-muted/30 scroll-mt-20">
+    <section id="culture" className="py-20 px-6 bg-background scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.cultureBadge}</span>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
             {t.cultureTitle}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">{t.cultureDesc}</p>

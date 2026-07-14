@@ -6,6 +6,7 @@ import HeroSection from "@/components/HeroSection";
 import SocialProofStrip from "@/components/SocialProofStrip";
 import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
+import CulturalValueSection from "@/components/CulturalValueSection";
 import InstructorSection from "@/components/InstructorSection";
 import ProgramsSection from "@/components/ProgramsSection";
 
@@ -165,6 +166,7 @@ const PageContent = () => {
         <StepsSection />
         <ProgramsSection />
         <WhySection />
+        <CulturalValueSection />
         <TestimonialsSection />
         <InstructorSection />
         <FAQSection />
