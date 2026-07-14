@@ -58,6 +58,27 @@ serve(async (req) => {
         const sessionId = session.id;
         const paid = session.payment_status === "paid";
 
+        // Setup-mode sessions (free-trial card-on-file) carry no payment —
+        // payment_status is "no_payment_required". Record the saved card and
+        // stop; nothing here is "paid".
+        if (session.mode === "setup") {
+          if (registrationId) {
+            const { data: trialRow } = await supabase
+              .from("registrations")
+              .select("id, payment_status")
+              .eq("id", registrationId)
+              .maybeSingle();
+            if (trialRow && trialRow.payment_status !== "paid") {
+              await supabase
+                .from("registrations")
+                .update({ payment_status: "card_saved", stripe_session_id: sessionId })
+                .eq("id", registrationId);
+              console.log(`Registration ${registrationId}: trial card saved (setup session ${sessionId})`);
+            }
+          }
+          break;
+        }
+
         if (!paid) {
           console.log(`Session ${sessionId} not paid yet (status=${session.payment_status}), skipping`);
           break;

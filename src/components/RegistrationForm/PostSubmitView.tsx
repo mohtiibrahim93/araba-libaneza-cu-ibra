@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle } from "lucide-react";
+import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
@@ -20,10 +20,11 @@ interface Props {
 /**
  * Post-submit confirmation view.
  *
- * UX (Option A — default to free trial for private):
- *   - Private  → free trial Calendly is the primary action.
- *                A subtle "Plătește direct" link below the embed lets
- *                returning students opt into the paid flow.
+ * UX:
+ *   - Private  → an explicit two-card choice: free trial (first lesson only,
+ *                enforced server-side per email) vs. pay for lessons. Both
+ *                paths are equally visible — the paid option used to be a
+ *                near-invisible text link that owners/students kept missing.
  *   - Group    → payment instructions (no trial).
  *   - Kids     → contact-only confirmation (paid manually or via deposit redirect).
  */
@@ -35,9 +36,10 @@ const PostSubmitView = ({
   retryingDeposit,
   onRetryDepositCheckout,
 }: Props) => {
-  const { t } = useI18n();
-  // Private only: students can switch from "free trial" → "pay directly".
-  const [privatePayDirectly, setPrivatePayDirectly] = useState(false);
+  const { t, lang } = useI18n();
+  // Private only: explicit choice between the free first-lesson trial and
+  // paying directly. Starts unchosen so both options are equally visible.
+  const [privateChoice, setPrivateChoice] = useState<"trial" | "pay" | null>(null);
 
   const isPrivate = data.courseType === "private";
   const isGroup = data.courseType === "group";
@@ -46,9 +48,10 @@ const PostSubmitView = ({
   const isKidsPay = data.courseType === "kids" && data.waitlistDeposit !== true;
   const isKidsDeposit = data.courseType === "kids" && data.waitlistDeposit === true;
 
-  const showPrivateTrial = isPrivate && !privatePayDirectly;
+  const showPrivateChoice = isPrivate && privateChoice === null;
+  const showPrivateTrial = isPrivate && privateChoice === "trial";
   const showPayment =
-    isGroup || isKidsPay || (isPrivate && privatePayDirectly);
+    isGroup || isKidsPay || (isPrivate && privateChoice === "pay");
 
   return (
     <section
@@ -96,6 +99,16 @@ const PostSubmitView = ({
         </div>
 
         {/* Payment card (group, or private when user opted to pay directly) */}
+        {isPrivate && privateChoice === "pay" && (
+          <button
+            type="button"
+            onClick={() => setPrivateChoice(null)}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            {lang === "ro" ? "Înapoi la opțiuni" : "Back to options"}
+          </button>
+        )}
         {showPayment && !isKidsDeposit && (
           <PaymentInstructions
             courseType={data.courseType as "group" | "private" | "kids"}
@@ -132,9 +145,57 @@ const PostSubmitView = ({
           </div>
         )}
 
-        {/* Free trial booking — Calendly. Default for Private. */}
+        {/* Private: explicit choice — free first-lesson trial vs. paying. */}
+        {showPrivateChoice && (
+          <div className="grid sm:grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setPrivateChoice("trial")}
+              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-sm transition-colors group"
+            >
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                <Gift className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
+                {lang === "ro" ? "E prima ta lecție la noi?" : "Is this your first lesson with us?"}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {lang === "ro"
+                  ? "Programează o probă gratuită — o singură dată de persoană, îți confirmi locul cu cardul (0 lei)."
+                  : "Book a free trial — once per person, confirm your spot with your card (0 lei charged)."}
+              </p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPrivateChoice("pay")}
+              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-sm transition-colors group"
+            >
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                <CreditCard className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
+                {lang === "ro" ? "Ai mai învățat cu noi?" : "Have you studied with us before?"}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {lang === "ro"
+                  ? "Plătește lecțiile direct — 150 lei/lecție, −15% la pachete de 20+."
+                  : "Pay for your lessons directly — 150 lei/lesson, −15% for packs of 20+."}
+              </p>
+            </button>
+          </div>
+        )}
+
+        {/* Free trial booking — native scheduler. */}
         {showPrivateTrial && (
           <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+            <button
+              type="button"
+              onClick={() => setPrivateChoice(null)}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              {lang === "ro" ? "Înapoi la opțiuni" : "Back to options"}
+            </button>
             <div className="flex items-start gap-3 mb-4">
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <CheckCircle2 className="w-5 h-5 text-primary" />
@@ -149,17 +210,6 @@ const PostSubmitView = ({
               prefill={{ name: data.name, email: data.email }}
               registrationId={data.registrationId}
             />
-            {/* Subtle secondary action — keeps the paid path accessible
-                without competing with the primary trial CTA. */}
-            <div className="mt-3 text-center">
-              <button
-                type="button"
-                onClick={() => setPrivatePayDirectly(true)}
-                className="text-xs text-muted-foreground hover:text-primary underline-offset-4 hover:underline transition-colors"
-              >
-                {t.trialSkipCta}
-              </button>
-            </div>
           </div>
         )}
 

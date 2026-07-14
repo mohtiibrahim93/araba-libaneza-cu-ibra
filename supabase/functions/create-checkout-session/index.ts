@@ -30,7 +30,7 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan } = await req.json();
+    const { registrationId, plan, setup } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       throw new Error("registrationId is required");
     }
@@ -115,6 +115,39 @@ serve(async (req) => {
           email: reg.email,
           name: reg.name || undefined,
         })).id;
+    }
+
+    // Free trial: a 0-lei SETUP-mode session that saves the card without
+    // charging anything. The visitor "checks out" (commitment against
+    // no-shows) and the card sits on the Stripe customer for the first real
+    // payment later. Nothing is ever charged without a new authorization.
+    // Applies to /trial registrations and, via setup:true, to private
+    // registrations that booked their free first lesson.
+    if (reg.form_type === "trial" || setup === true) {
+      const session = await stripe.checkout.sessions.create(
+        {
+          mode: "setup",
+          customer: customerId,
+          currency: "ron",
+          success_url: `${origin}/?trial_card=saved`,
+          cancel_url: `${origin}/?trial_card=canceled`,
+          metadata: {
+            registration_id: registrationId,
+            course_type: "trial",
+          },
+        },
+        { idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
+      );
+      // Trace only — a setup session is not a payment, so payment_status is
+      // left alone here (the webhook marks card_saved on completion).
+      await supabaseAdmin
+        .from("registrations")
+        .update({ stripe_session_id: session.id })
+        .eq("id", registrationId);
+      return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     }
 
     let session: Stripe.Checkout.Session;
