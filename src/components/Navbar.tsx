@@ -5,6 +5,26 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import { Button } from "@/components/ui/button";
 import BrandLogo from "@/components/BrandLogo";
+
+/* Real SVG flags: emoji flags render as bare letters ("RO") on Windows, so
+   the language toggle needs proper vectors. Simplified but accurate. */
+const FlagRO = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false" className={className}>
+    <rect width="8" height="16" fill="#002B7F" />
+    <rect x="8" width="8" height="16" fill="#FCD116" />
+    <rect x="16" width="8" height="16" fill="#CE1126" />
+  </svg>
+);
+
+const FlagGB = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false" className={className}>
+    <rect width="24" height="16" fill="#012169" />
+    <path d="M0 0l24 16M24 0L0 16" stroke="#fff" strokeWidth="3.2" />
+    <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" strokeWidth="1.6" />
+    <path d="M12 0v16M0 8h24" stroke="#fff" strokeWidth="5.2" />
+    <path d="M12 0v16M0 8h24" stroke="#C8102E" strokeWidth="3.2" />
+  </svg>
+);
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,7 +95,7 @@ const Navbar = () => {
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[4.25rem] md:h-20 flex items-center justify-between gap-4 lg:gap-6">
         <a
           href="/"
           onClick={(e) => {
@@ -87,7 +107,7 @@ const Navbar = () => {
             }
           }}
           aria-label="Centrul de Arabă Libaneză — arabă libaneză cu Ibra"
-          className="flex h-12 min-w-0 flex-1 items-center pr-2 md:max-w-none md:flex-none md:pr-0"
+          className="flex h-14 min-w-0 flex-1 items-center pr-3 md:max-w-none md:flex-none md:pr-4"
         >
           <BrandLogo />
         </a>
@@ -156,18 +176,22 @@ const Navbar = () => {
                 aria-label={t.languageLabel}
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground min-h-9"
               >
-                <span aria-hidden="true">{lang === "ro" ? "🇷🇴" : "🇬🇧"}</span>
+                {lang === "ro" ? (
+                  <FlagRO className="h-3.5 w-5 rounded-[2px] shadow-sm" />
+                ) : (
+                  <FlagGB className="h-3.5 w-5 rounded-[2px] shadow-sm" />
+                )}
                 <span className="hidden sm:inline uppercase">{lang}</span>
                 <ChevronDown className="h-3.5 w-3.5" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-36">
               <DropdownMenuItem onClick={() => setLang("ro")} className="gap-2">
-                <span aria-hidden="true">🇷🇴</span>
+                <FlagRO className="h-3.5 w-5 rounded-[2px]" />
                 <span>{t.languageRomanian}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLang("en")} className="gap-2">
-                <span aria-hidden="true">🇬🇧</span>
+                <FlagGB className="h-3.5 w-5 rounded-[2px]" />
                 <span>{t.languageEnglish}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>

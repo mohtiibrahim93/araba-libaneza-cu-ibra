@@ -14,7 +14,7 @@ const Footer = () => {
     <footer className="border-t border-border bg-card">
       {/* 12-col grid with content-sized spans + generous gaps so long strings
           (email, legal labels) never collide with neighbouring columns. */}
-      <div className="max-w-6xl mx-auto px-6 py-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="max-w-6xl mx-auto px-6 py-20 grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:grid-cols-12">
         {/* Brand */}
         <div className="sm:col-span-2 lg:col-span-3">
           <BrandLogo full className="mb-4" />
@@ -30,7 +30,7 @@ const Footer = () => {
         {/* Courses */}
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.navCourses}</p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
             <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
             <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
@@ -40,7 +40,7 @@ const Footer = () => {
         {/* Quick links */}
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.footerQuickLinks}</p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
             <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
@@ -58,10 +58,12 @@ const Footer = () => {
                 +40 763 124 514
               </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-primary" />
-              <a href="mailto:marhaba@centruldearabalibaneza.com" className="hover:text-foreground transition-colors break-all">
-                marhaba@centruldearabalibaneza.com
+            <li className="flex items-start gap-2">
+              <Mail className="w-4 h-4 text-primary mt-0.5" />
+              {/* <wbr/> after the @ so the address breaks cleanly in two
+                  (marhaba@ / domain) instead of mid-word when space is tight. */}
+              <a href="mailto:marhaba@centruldearabalibaneza.com" className="hover:text-foreground transition-colors leading-snug">
+                marhaba@<wbr />centruldearabalibaneza.com
               </a>
             </li>
             <li className="flex items-start gap-2">
@@ -89,7 +91,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t border-border py-6 text-center">
+      <div className="border-t border-border py-8 text-center">
         <p className="text-xs text-muted-foreground">{t.footer}</p>
       </div>
     </footer>
