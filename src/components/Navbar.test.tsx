@@ -24,7 +24,7 @@ describe("Navbar accessibility", () => {
   it("renders aria-labels for the brand link, language switcher, and menu button", () => {
     renderNavbar();
 
-    expect(screen.getByLabelText("7ki Lebnene — Arabă libaneză cu Ibra")).toBeInTheDocument();
+    expect(screen.getByLabelText("Centrul de Arabă Libaneză — arabă libaneză cu Ibra")).toBeInTheDocument();
     expect(screen.getByLabelText("Alege limba site-ului")).toBeInTheDocument();
     expect(screen.getByLabelText("Deschide meniul de navigare")).toBeInTheDocument();
   });
