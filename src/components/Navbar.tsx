@@ -86,7 +86,7 @@ const Navbar = () => {
               navigate("/");
             }
           }}
-          aria-label="7ki Lebnene — Arabă libaneză cu Ibra"
+          aria-label="Centrul de Arabă Libaneză — arabă libaneză cu Ibra"
           className="flex h-12 min-w-0 flex-1 items-center pr-2 md:max-w-none md:flex-none md:pr-0"
         >
           <BrandLogo />
@@ -128,12 +128,14 @@ const Navbar = () => {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          {/* Quick access: jump to Programs from any page */}
+          {/* Quick access: jump to Programs from any page. Hidden on phones —
+              the sticky MobileEnrollmentCTA bar already covers enrolment there,
+              and the navbar space is needed for the full brand name. */}
           <a
             href="/#programs"
             onClick={goToAnchor("#programs")}
             aria-label={t.navEnroll}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:hidden lg:inline-flex"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:hidden lg:inline-flex"
           >
             <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
             <span className="hidden sm:inline">{t.navEnroll}</span>

@@ -25,7 +25,7 @@ import {
   ClipboardList,
   CalendarDays,
   GraduationCap,
-  Mail,
+  Settings,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
@@ -38,8 +38,7 @@ import BookingsAdmin from "@/components/BookingsAdmin";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
-import EmailSettingsForm from "@/components/admin/EmailSettingsForm";
-import TestEmailForm from "@/components/admin/TestEmailForm";
+import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable from "@/components/admin/RegistrationsTable";
@@ -62,6 +61,7 @@ import { lovable } from "@/integrations/lovable";
 
 const Admin = () => {
   const [authenticated, setAuthenticated] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
   const [checkingSession, setCheckingSession] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -125,8 +125,12 @@ const Admin = () => {
       }
     };
 
-    supabase.auth.getSession().then(({ data }) => checkSession(!!data.session));
+    supabase.auth.getSession().then(({ data }) => {
+      setAdminEmail(data.session?.user?.email ?? "");
+      checkSession(!!data.session);
+    });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAdminEmail(session?.user?.email ?? "");
       checkSession(!!session);
     });
     return () => {
@@ -519,9 +523,9 @@ const Admin = () => {
                 <GraduationCap className="w-4 h-4" />
                 Grupe
               </TabsTrigger>
-              <TabsTrigger value="email" className="gap-1.5 px-3 sm:px-4">
-                <Mail className="w-4 h-4" />
-                Email
+              <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-4">
+                <Settings className="w-4 h-4" />
+                Setări
               </TabsTrigger>
             </TabsList>
           </div>
@@ -679,19 +683,19 @@ const Admin = () => {
             <CohortsAdmin />
           </TabsContent>
 
-          {/* ── Email: expeditor + test ──────────────────────────────────── */}
-          <TabsContent value="email" className="mt-5 space-y-6">
-            <EmailSettingsForm
-              settings={emailSettings}
-              saving={savingEmailSettings}
-              onChange={setEmailSettings}
-              onSubmit={handleEmailSettingsSubmit}
-            />
-            <TestEmailForm
-              email={testEmail}
-              sending={sendingTestEmail}
-              onChange={setTestEmail}
-              onSubmit={handleTestEmailSubmit}
+          {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
+          <TabsContent value="settings" className="mt-5">
+            <SettingsTab
+              emailSettings={emailSettings}
+              savingEmailSettings={savingEmailSettings}
+              onEmailSettingsChange={setEmailSettings}
+              onEmailSettingsSubmit={handleEmailSettingsSubmit}
+              testEmail={testEmail}
+              sendingTestEmail={sendingTestEmail}
+              onTestEmailChange={setTestEmail}
+              onTestEmailSubmit={handleTestEmailSubmit}
+              adminEmail={adminEmail}
+              onLogout={handleLogout}
             />
           </TabsContent>
         </Tabs>
