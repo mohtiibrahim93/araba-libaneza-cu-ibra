@@ -13,7 +13,16 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        // Serif display for headlines (Ref A mockup look); body stays system sans.
+        display: ["Lora", "Georgia", "serif"],
+        // Arabic script for the brand lockup line (حكي لبناني).
+        arabic: ["'Noto Naskh Arabic'", "serif"],
+      },
       colors: {
+        // Deep cedar green + warm cream — brand tokens next to the existing red primary.
+        "brand-green": "hsl(var(--brand-green))",
+        cream: "hsl(var(--cream))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -4,9 +4,9 @@ import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofStrip from "@/components/SocialProofStrip";
+import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
 import InstructorSection from "@/components/InstructorSection";
-import CulturalValueSection from "@/components/CulturalValueSection";
 import ProgramsSection from "@/components/ProgramsSection";
 
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -162,11 +162,11 @@ const PageContent = () => {
       <main>
         <HeroSection />
         <SocialProofStrip />
-        <WhySection />
-        <InstructorSection />
-        <CulturalValueSection />
+        <StepsSection />
         <ProgramsSection />
+        <WhySection />
         <TestimonialsSection />
+        <InstructorSection />
         <FAQSection />
         <CTASection />
       </main>

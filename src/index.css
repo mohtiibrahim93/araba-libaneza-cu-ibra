@@ -18,6 +18,10 @@
     --primary: 0 72% 51%;
     --primary-foreground: 0 0% 100%;
 
+    /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
+    --brand-green: 152 42% 22%;
+    --cream: 40 33% 96%;
+
     --secondary: 220 14% 96%;
     --secondary-foreground: 220 14% 10%;
 
@@ -60,6 +64,10 @@
 
     --primary: 0 80% 62%;
     --primary-foreground: 0 0% 100%;
+
+    /* Brand tokens lighten in dark mode so they stay legible on dark surfaces. */
+    --brand-green: 152 35% 58%;
+    --cream: 220 14% 13%;
 
     --secondary: 220 14% 16%;
     --secondary-foreground: 0 0% 98%;

@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { CalendarDays, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import SocialLinks from "@/components/SocialLinks";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const PHONE_URL = "tel:+40763124514";
@@ -13,7 +14,7 @@ const CTASection = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.ctaBadge}</span>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.ctaTitle}</h2>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.ctaTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.ctaDesc}</p>
         </div>
 
@@ -65,6 +66,9 @@ const CTASection = () => {
             </div>
           </div>
         </div>
+
+        {/* Official social channels — renders only the configured ones. */}
+        <SocialLinks variant="cards" className="mb-10" />
 
         <div className="text-center">
           <a
