@@ -36,6 +36,7 @@ const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
 const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
 const CursTineri = lazy(() => import("./pages/courses/CursTineri"));
 const BlogCumInvetiArabaLibaneza = lazy(() => import("./pages/blog/CumInvetiArabaLibaneza"));
+const BlogArabaLibanezaVsArabaStandard = lazy(() => import("./pages/blog/ArabaLibanezaVsArabaStandard"));
 
 const queryClient = new QueryClient();
 
@@ -86,6 +87,7 @@ const App = () => (
             <Route path="/cursuri/copii" element={<CursCopii />} />
             <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
             <Route path="/blog/cum-inveti-araba-libaneza" element={<BlogCumInvetiArabaLibaneza />} />
+            <Route path="/blog/araba-libaneza-vs-araba-standard" element={<BlogArabaLibanezaVsArabaStandard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
