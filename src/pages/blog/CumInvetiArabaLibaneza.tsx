@@ -6,7 +6,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const URL = "https://centruldearabalibaneza.com/blog/cum-inveti-araba-libaneza";
-const TITLE = "Cum înveți araba libaneză în 2026: ghid complet pentru începători";
+const TITLE = "Cum înveți araba libaneză în 2026: Ghid pentru începători";
 const DESCRIPTION =
   "Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.";
 const PUBLISHED = "2026-07-10";
