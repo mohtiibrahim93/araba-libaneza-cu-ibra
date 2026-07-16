@@ -13,6 +13,51 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "cat-costa-cursurile-de-araba-libaneza",
+    title: "Cât costă cursurile de arabă libaneză în 2026?",
+    description:
+      "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
+    published: "2026-07-16",
+    readingMinutes: 5,
+    tag: "Prețuri",
+  },
+  {
+    slug: "alfabetul-arab-pentru-incepatori",
+    title: "Alfabetul arab pentru începători: cele 28 de litere",
+    description:
+      "Ghid pentru alfabetul arab: cele 28 de litere, cum se pronunță, scrierea dreapta-la-stânga și de ce nu ai nevoie de alfabet ca să începi să vorbești.",
+    published: "2026-07-16",
+    readingMinutes: 7,
+    tag: "Începători",
+  },
+  {
+    slug: "ce-este-arabizi",
+    title: "Ce este arabizi și cum îl folosești (cu tabel)",
+    description:
+      "Arabizi este araba scrisă cu litere latine și cifre. Ce înseamnă cifrele 2, 3, 5, 7, cum citești și de ce e cea mai rapidă cale să începi să vorbești libaneză.",
+    published: "2026-07-16",
+    readingMinutes: 5,
+    tag: "Începători",
+  },
+  {
+    slug: "cultura-libaneza-obiceiuri-mancare-traditii",
+    title: "Cultura libaneză: obiceiuri, mâncare și tradiții",
+    description:
+      "Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica și tradițiile — contextul viu din spatele limbii.",
+    published: "2026-07-16",
+    readingMinutes: 6,
+    tag: "Cultură",
+  },
+  {
+    slug: "cum-saluti-in-libaneza",
+    title: "Cum saluți în libaneză: ghid complet de politețe",
+    description:
+      "Toate formulele de salut în araba libaneză: bună dimineața, ce faci, bine ai venit, pa — cu pronunție în arabizi, scriere arabă și când folosești fiecare.",
+    published: "2026-07-16",
+    readingMinutes: 4,
+    tag: "Începători",
+  },
+  {
     slug: "primele-20-de-expresii-libaneze",
     title: "Primele 20 de expresii în araba libaneză (cu pronunție)",
     description:
