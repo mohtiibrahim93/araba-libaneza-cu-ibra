@@ -70,7 +70,7 @@ const CumInvetiArabaLibaneza = () => {
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
             <Link to="/" className="hover:text-primary">Acasă</Link>
             <span className="mx-2">/</span>
-            <span>Blog</span>
+            <Link to="/blog" className="hover:text-primary">Blog</Link>
             <span className="mx-2">/</span>
             <span className="text-foreground">Cum înveți araba libaneză</span>
           </nav>

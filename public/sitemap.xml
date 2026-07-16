@@ -37,12 +37,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://centruldearabalibaneza.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://centruldearabalibaneza.com/blog/cum-inveti-araba-libaneza</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://centruldearabalibaneza.com/blog/araba-libaneza-vs-araba-standard</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/primele-20-de-expresii-libaneze</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

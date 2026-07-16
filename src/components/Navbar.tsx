@@ -129,7 +129,7 @@ const Navbar = () => {
             {t.navBooking}
           </Link>
           <Link
-            to="/blog/cum-inveti-araba-libaneza"
+            to="/blog"
             onClick={() => setOpen(false)}
             className="hover:text-foreground transition-colors"
           >
@@ -229,7 +229,7 @@ const Navbar = () => {
               {t.navBooking}
             </Link>
             <Link
-              to="/blog/cum-inveti-araba-libaneza"
+              to="/blog"
               onClick={() => setOpen(false)}
               className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
             >
