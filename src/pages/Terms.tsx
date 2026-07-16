@@ -42,7 +42,7 @@ const TermsContent = () => {
   const title = t.termsSeoTitle;
   const description = t.termsSeoDescription;
 
-  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 
   return (
     <div className="min-h-screen bg-background">

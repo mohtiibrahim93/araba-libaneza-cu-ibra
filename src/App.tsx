@@ -39,6 +39,11 @@ const BlogIndex = lazy(() => import("./pages/blog/BlogIndex"));
 const BlogCumInvetiArabaLibaneza = lazy(() => import("./pages/blog/CumInvetiArabaLibaneza"));
 const BlogArabaLibanezaVsArabaStandard = lazy(() => import("./pages/blog/ArabaLibanezaVsArabaStandard"));
 const BlogPrimele20Expresii = lazy(() => import("./pages/blog/Primele20Expresii"));
+const BlogCatCostaCursurile = lazy(() => import("./pages/blog/CatCostaCursurile"));
+const BlogAlfabetulArab = lazy(() => import("./pages/blog/AlfabetulArab"));
+const BlogCeEsteArabizi = lazy(() => import("./pages/blog/CeEsteArabizi"));
+const BlogCulturaLibaneza = lazy(() => import("./pages/blog/CulturaLibaneza"));
+const BlogCumSalutiInLibaneza = lazy(() => import("./pages/blog/CumSalutiInLibaneza"));
 
 const queryClient = new QueryClient();
 
@@ -92,6 +97,11 @@ const App = () => (
             <Route path="/blog/cum-inveti-araba-libaneza" element={<BlogCumInvetiArabaLibaneza />} />
             <Route path="/blog/araba-libaneza-vs-araba-standard" element={<BlogArabaLibanezaVsArabaStandard />} />
             <Route path="/blog/primele-20-de-expresii-libaneze" element={<BlogPrimele20Expresii />} />
+            <Route path="/blog/cat-costa-cursurile-de-araba-libaneza" element={<BlogCatCostaCursurile />} />
+            <Route path="/blog/alfabetul-arab-pentru-incepatori" element={<BlogAlfabetulArab />} />
+            <Route path="/blog/ce-este-arabizi" element={<BlogCeEsteArabizi />} />
+            <Route path="/blog/cultura-libaneza-obiceiuri-mancare-traditii" element={<BlogCulturaLibaneza />} />
+            <Route path="/blog/cum-saluti-in-libaneza" element={<BlogCumSalutiInLibaneza />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
