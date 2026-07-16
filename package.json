@@ -104,9 +104,13 @@
     "not op_mini all"
   ],
   "overrides": {
-    "dompurify": "^3.4.12"
+    "dompurify": "^3.4.12",
+    "esbuild": "^0.25.9",
+    "ajv": "^8.17.1"
   },
   "resolutions": {
-    "dompurify": "^3.4.12"
+    "dompurify": "^3.4.12",
+    "esbuild": "^0.25.9",
+    "ajv": "^8.17.1"
   }
 }
