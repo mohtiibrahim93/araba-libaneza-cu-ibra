@@ -393,6 +393,17 @@ Deno.serve(async (req) => {
       return jsonResponse({ data });
     }
 
+    // ============ Course requests ("notify me when the group starts") ============
+    if (action === "list_course_requests") {
+      const { data, error } = await supabase
+        .from("course_requests")
+        .select("id, created_at, name, phone, email, level, format, preferred_language, lesson_type, status, notes")
+        .order("created_at", { ascending: false })
+        .limit(500);
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
     // ============ Unified Student Journey ============
     // Returns each registration enriched with its bookings + payment + class info,
     // so the admin sees the full lifecycle in one place.
