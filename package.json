@@ -102,5 +102,11 @@
     "last 2 versions",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "overrides": {
+    "dompurify": "^3.4.12"
+  },
+  "resolutions": {
+    "dompurify": "^3.4.12"
+  }
 }
