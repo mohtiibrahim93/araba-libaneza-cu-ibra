@@ -150,7 +150,7 @@ const Checkout = () => {
 
   const title = "Finalizează plata — centrul de araba libaneza";
   const description = `Plată securizată prin Stripe pentru ${COURSE_LABEL[courseType]}. Datele cardului nu sunt stocate pe acest site.`;
-  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 
   useEffect(() => {
     // If we're already in fallback mode there's no point trying to load

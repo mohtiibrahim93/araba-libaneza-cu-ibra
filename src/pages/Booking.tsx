@@ -16,7 +16,7 @@ const BookingInner = () => {
   const title = `${type === "paid" ? t.bookingPageSeoTitlePaid : t.bookingPageSeoTitleTrial} — ${t.siteTitle}`;
   const description = type === "paid" ? t.bookingPaidDesc : t.bookingTrialSeoDesc;
 
-  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 
   // Keep this hook before the early return so hook order stays stable across
   // renders — otherwise a re-render without a valid registration id throws

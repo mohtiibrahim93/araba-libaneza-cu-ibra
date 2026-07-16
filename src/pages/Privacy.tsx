@@ -40,7 +40,7 @@ const PrivacyContent = () => {
   const title = t.privacySeoTitle;
   const description = t.privacySeoDescription;
 
-  const ogImage = "https://centruldearabalibaneza.com/og-image.jpg";
+  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 
   return (
     <div className="min-h-screen bg-background">
