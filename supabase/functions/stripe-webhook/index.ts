@@ -49,6 +49,35 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
 
+  // Event log + idempotency: record every verified event once; a redelivery
+  // (same evt_ id) short-circuits so double-processing can't corrupt counters.
+  // Best-effort — if the log write itself fails we still process the event.
+  try {
+    const { data: logged, error: logErr } = await supabase
+      .from("stripe_events")
+      .upsert(
+        {
+          id: event.id,
+          type: event.type,
+          summary: {
+            object: (event.data.object as { object?: string })?.object ?? null,
+            object_id: (event.data.object as { id?: string })?.id ?? null,
+          },
+        },
+        { onConflict: "id", ignoreDuplicates: true },
+      )
+      .select("id");
+    if (!logErr && (logged ?? []).length === 0) {
+      console.log(`Event ${event.id} already processed, skipping (idempotent)`);
+      return new Response(JSON.stringify({ received: true, duplicate: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  } catch (logCatch) {
+    console.warn("stripe_events log failed, processing anyway:", logCatch);
+  }
+
   try {
     switch (event.type) {
       case "checkout.session.completed":
@@ -138,6 +167,7 @@ serve(async (req) => {
           .update({
             payment_status: "paid",
             paid_at: new Date().toISOString(),
+            lead_status: "converted",
             stripe_session_id: sessionId,
             ...(subId ? { stripe_subscription_id: subId, subscription_status: "active" } : {}),
             ...(monthsTotal ? { months_total: monthsTotal } : {}),
@@ -193,6 +223,7 @@ serve(async (req) => {
           .update({
             payment_status: "paid",
             paid_at: new Date().toISOString(),
+            lead_status: "converted",
             stripe_session_id: intent.id,
           })
           .eq(matchColumn, matchValue)
@@ -246,6 +277,7 @@ serve(async (req) => {
           .update({
             payment_status: "paid",
             paid_at: new Date().toISOString(),
+            lead_status: "converted",
             months_paid: monthsPaid,
             subscription_status: "active",
           })

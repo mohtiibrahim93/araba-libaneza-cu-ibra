@@ -694,15 +694,88 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, settings: data });
     }
 
-    // Delete action
+    // Delete action. Rows that carry money (paid, refunded, subscription…)
+    // are financial records and must never be deleted — only anonymized —
+    // so the local payment trail survives (Stripe alone is not enough for
+    // the admin's own history/exports).
     if (action === "delete" && Array.isArray(ids) && ids.length > 0) {
-      const { error } = await supabase
+      const { data: rows, error: rowsErr } = await supabase
         .from("registrations")
-        .delete()
+        .select("id, payment_status, paid_at, refunded_at, refunded_amount, stripe_subscription_id")
         .in("id", ids);
+      if (rowsErr) throw rowsErr;
 
+      const hasMoney = (r: {
+        payment_status?: string | null;
+        paid_at?: string | null;
+        refunded_at?: string | null;
+        refunded_amount?: number | null;
+        stripe_subscription_id?: string | null;
+      }) =>
+        ["paid", "refunded", "past_due"].includes(r.payment_status ?? "") ||
+        !!r.paid_at ||
+        !!r.refunded_at ||
+        (r.refunded_amount ?? 0) > 0 ||
+        !!r.stripe_subscription_id;
+
+      const blocked = (rows ?? []).filter(hasMoney).map((r) => r.id);
+      const deletable = (rows ?? []).filter((r) => !hasMoney(r)).map((r) => r.id);
+
+      if (deletable.length > 0) {
+        const { error } = await supabase.from("registrations").delete().in("id", deletable);
+        if (error) throw error;
+        await supabase.from("audit_logs").insert(
+          deletable.map((rid) => ({
+            actor: callerEmail!,
+            action: "delete",
+            registration_id: rid,
+          })),
+        );
+      }
+
+      return jsonResponse({ success: true, deleted: deletable.length, blocked: blocked.length });
+    }
+
+    // Anonymize action (GDPR / rows with payments): strips personal data,
+    // keeps the financial and status history intact. Irreversible.
+    if (action === "anonymize" && Array.isArray(ids) && ids.length > 0) {
+      const { data: updated, error } = await supabase
+        .from("registrations")
+        .update({
+          name: "Anonimizat (GDPR)",
+          email: null,
+          phone: "anonimizat",
+          notes: null,
+          child_age: null,
+          anonymized_at: new Date().toISOString(),
+        })
+        .in("id", ids)
+        .is("anonymized_at", null)
+        .select("id");
       if (error) throw error;
-      return jsonResponse({ success: true });
+
+      const done = (updated ?? []).map((r) => r.id);
+      if (done.length > 0) {
+        await supabase.from("audit_logs").insert(
+          done.map((rid) => ({
+            actor: callerEmail!,
+            action: "anonymize",
+            registration_id: rid,
+          })),
+        );
+      }
+      return jsonResponse({ success: true, anonymized: done.length });
+    }
+
+    // Recent admin activity (audit trail).
+    if (action === "list_audit_logs") {
+      const { data, error } = await supabase
+        .from("audit_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return jsonResponse({ data });
     }
 
     if (action === "update_status") {
@@ -747,6 +820,12 @@ Deno.serve(async (req) => {
           });
 
         if (historyError) throw historyError;
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "update_status",
+          registration_id: id,
+          details: { from: existing?.lead_status || "new", to: lead_status },
+        });
       }
 
       return jsonResponse({ success: true, data });
@@ -822,6 +901,12 @@ Deno.serve(async (req) => {
         });
       }
 
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "refund",
+        registration_id: id,
+        details: { refund_id: refund.id, reason: refund_reason || null },
+      });
       return jsonResponse({ success: true, data: updated, refund_id: refund.id });
     }
 
@@ -933,6 +1018,12 @@ Deno.serve(async (req) => {
         });
       }
 
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "cancel_subscription",
+        registration_id: id,
+        details: { refund_id: refundId, refund_amount: refundId ? refundAmount : 0 },
+      });
       return jsonResponse({
         success: true,
         data: updated,
@@ -973,6 +1064,20 @@ Deno.serve(async (req) => {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
+
+    // Duplicate indicator: how many registrations share each email (spec
+    // §3.3 — surfaced to the admin, never auto-merged).
+    if (data) {
+      const emailCounts = new Map<string, number>();
+      for (const r of data) {
+        const e = (r.email || "").trim().toLowerCase();
+        if (e) emailCounts.set(e, (emailCounts.get(e) ?? 0) + 1);
+      }
+      for (const r of data) {
+        const e = (r.email || "").trim().toLowerCase();
+        (r as Record<string, unknown>).email_dup_count = e ? emailCounts.get(e) ?? 1 : 1;
+      }
+    }
 
     const { data: settings, error: settingsError } = await supabase
       .from("email_confirmation_settings")
