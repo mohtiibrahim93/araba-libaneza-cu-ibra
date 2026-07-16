@@ -250,17 +250,46 @@ const Admin = () => {
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      setRegistrations((prev) => prev.filter((r) => !selected.has(r.id)));
+      await loadData();
+      const deleted = typeof data?.deleted === "number" ? data.deleted : selected.size;
+      const blocked = typeof data?.blocked === "number" ? data.blocked : 0;
       toast({
-        title: `${selected.size} înscrier${selected.size === 1 ? "e" : "i"} ștears${
-          selected.size === 1 ? "ă" : "e"
-        }`,
+        title: `${deleted} șters${deleted === 1 ? "ă" : "e"}`,
+        description:
+          blocked > 0
+            ? `${blocked} au plăți și nu pot fi șterse — folosește „Anonimizează" (păstrează banii, șterge datele personale).`
+            : undefined,
+        variant: blocked > 0 ? "destructive" : undefined,
       });
       setSelected(new Set());
     } catch {
       toast({ title: "Eroare la ștergere", variant: "destructive" });
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const [anonymizing, setAnonymizing] = useState(false);
+  const handleAnonymize = async () => {
+    if (selected.size === 0) return;
+    setAnonymizing(true);
+    try {
+      const { data, error: fnError } = await invokeAdmin({
+        action: "anonymize",
+        ids: Array.from(selected),
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      await loadData();
+      toast({
+        title: `${data?.anonymized ?? 0} înscrieri anonimizate`,
+        description: "Datele personale au fost șterse; plățile și istoricul rămân.",
+      });
+      setSelected(new Set());
+    } catch {
+      toast({ title: "Eroare la anonimizare", variant: "destructive" });
+    } finally {
+      setAnonymizing(false);
     }
   };
 
@@ -618,6 +647,28 @@ const Admin = () => {
                 <span className="text-sm text-muted-foreground">
                   {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
                 </span>
+                <div className="flex items-center gap-2">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm" disabled={anonymizing}>
+                      {anonymizing && <Loader2 className="w-4 h-4 animate-spin" />}
+                      Anonimizează
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Anonimizezi {selected.size} înscrier{selected.size === 1 ? "e" : "i"}?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Numele, emailul, telefonul și notele se șterg definitiv (GDPR). Plățile,
+                        statusul și istoricul rămân intacte. Acțiunea nu poate fi anulată.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Anulează</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleAnonymize}>Anonimizează definitiv</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm" disabled={deleting}>
@@ -640,6 +691,7 @@ const Admin = () => {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+                </div>
               </div>
             )}
 

@@ -289,9 +289,24 @@ const RegistrationsTable = ({
             <TableCell className="align-top">
               <p className="font-semibold text-foreground leading-tight">{r.name}</p>
               {r.email && (
-                <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary truncate max-w-[220px]">
-                  {r.email}
-                </a>
+                <span className="flex items-center gap-1.5 max-w-[220px]">
+                  <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary truncate min-w-0">
+                    {r.email}
+                  </a>
+                  {(r.email_dup_count ?? 1) > 1 && (
+                    <span
+                      title={`Acest email apare în ${r.email_dup_count} înscrieri`}
+                      className="inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800"
+                    >
+                      ×{r.email_dup_count}
+                    </span>
+                  )}
+                </span>
+              )}
+              {r.anonymized_at && (
+                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+                  Anonimizat
+                </span>
               )}
               {r.phone && (
                 <a href={`tel:${r.phone}`} className="block text-xs text-muted-foreground hover:text-primary">

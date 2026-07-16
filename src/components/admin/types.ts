@@ -48,6 +48,9 @@ export interface Registration {
   months_paid?: number | null;
   canceled_at?: string | null;
   refunded_amount?: number | null;
+  anonymized_at?: string | null;
+  /** Computed server-side: how many registrations share this email. */
+  email_dup_count?: number;
 }
 
 export interface EmailSettings {
