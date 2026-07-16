@@ -35,8 +35,10 @@ const CursCopii = lazy(() => import("./pages/courses/CursCopii"));
 const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
 const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
 const CursTineri = lazy(() => import("./pages/courses/CursTineri"));
+const BlogIndex = lazy(() => import("./pages/blog/BlogIndex"));
 const BlogCumInvetiArabaLibaneza = lazy(() => import("./pages/blog/CumInvetiArabaLibaneza"));
 const BlogArabaLibanezaVsArabaStandard = lazy(() => import("./pages/blog/ArabaLibanezaVsArabaStandard"));
+const BlogPrimele20Expresii = lazy(() => import("./pages/blog/Primele20Expresii"));
 
 const queryClient = new QueryClient();
 
@@ -86,8 +88,10 @@ const App = () => (
             <Route path="/cursuri/private" element={<CursPrivate />} />
             <Route path="/cursuri/copii" element={<CursCopii />} />
             <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
+            <Route path="/blog" element={<BlogIndex />} />
             <Route path="/blog/cum-inveti-araba-libaneza" element={<BlogCumInvetiArabaLibaneza />} />
             <Route path="/blog/araba-libaneza-vs-araba-standard" element={<BlogArabaLibanezaVsArabaStandard />} />
+            <Route path="/blog/primele-20-de-expresii-libaneze" element={<BlogPrimele20Expresii />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
