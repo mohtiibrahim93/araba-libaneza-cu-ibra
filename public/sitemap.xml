@@ -82,6 +82,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://centruldearabalibaneza.com/blog/cat-dureaza-sa-inveti-araba-libaneza</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/araba-pentru-copii-ghidul-parintilor</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://centruldearabalibaneza.com/booking</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
