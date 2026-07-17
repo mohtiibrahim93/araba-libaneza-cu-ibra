@@ -1,196 +1,136 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import ScrollToTop from "@/components/ScrollToTop";
-import RelatedPosts from "@/components/blog/RelatedPosts";
+import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { useI18n } from "@/lib/i18n";
 
-const URL = "https://centruldearabalibaneza.com/blog/primele-20-de-expresii-libaneze";
-const TITLE = "Primele 20 de expresii în araba libaneză (cu pronunție)";
-const DESCRIPTION =
-  "Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.";
-const PUBLISHED = "2026-07-16";
-
-const articleJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: TITLE,
-  description: DESCRIPTION,
-  datePublished: PUBLISHED,
-  dateModified: PUBLISHED,
-  inLanguage: "ro",
-  mainEntityOfPage: URL,
-  author: { "@type": "Person", name: "Ibra — Centrul de Arabă Libaneză" },
-  publisher: {
-    "@type": "Organization",
-    name: "Centrul de Arabă Libaneză cu Ibra",
-    url: "https://centruldearabalibaneza.com/",
-  },
-};
-
-// group → [ arabizi, arabic, romanian ]
-const GROUPS: { title: string; rows: [string, string, string][] }[] = [
+// group → { title-ro, title-en, rows: [ arabizi, arabic, ro, en ] }
+const GROUPS: { titleRo: string; titleEn: string; rows: [string, string, string, string][] }[] = [
   {
-    title: "Salut și politețe",
+    titleRo: "Salut și politețe",
+    titleEn: "Greetings and politeness",
     rows: [
-      ["Mar7aba", "مرحبا", "Salut / Bună"],
-      ["Kifak? (m) · Kifik? (f)", "كيفك؟", "Ce faci?"],
-      ["Mnee7, shukran", "منيح، شكراً", "Bine, mulțumesc"],
-      ["Shu akhbarak?", "شو أخبارك؟", "Ce mai e nou?"],
-      ["Yalla, baaden", "يلا، بعدين", "Hai, pe curând"],
-      ["Tsharrafna", "تشرفنا", "Îmi pare bine (de cunoștință)"],
+      ["Mar7aba", "مرحبا", "Salut / Bună", "Hi / Hello"],
+      ["Kifak? (m) · Kifik? (f)", "كيفك؟", "Ce faci?", "How are you?"],
+      ["Mnee7, shukran", "منيح، شكراً", "Bine, mulțumesc", "Good, thanks"],
+      ["Shu akhbarak?", "شو أخبارك؟", "Ce mai e nou?", "What's new?"],
+      ["Yalla, baaden", "يلا، بعدين", "Hai, pe curând", "Alright, see you later"],
+      ["Tsharrafna", "تشرفنا", "Îmi pare bine (de cunoștință)", "Nice to meet you"],
     ],
   },
   {
-    title: "Cuvinte de bază",
+    titleRo: "Cuvinte de bază",
+    titleEn: "Basic words",
     rows: [
-      ["Eh / La'", "إيه / لأ", "Da / Nu"],
-      ["Min fadlak (m)", "من فضلك", "Te rog"],
-      ["Shukran ktir", "شكراً كتير", "Mulțumesc mult"],
-      ["3afwan", "عفواً", "Cu plăcere / Scuze"],
-      ["Aasef (m) · Aasfeh (f)", "آسف", "Îmi pare rău"],
-      ["Ma fhemet", "ما فهمت", "Nu am înțeles"],
+      ["Eh / La'", "إيه / لأ", "Da / Nu", "Yes / No"],
+      ["Min fadlak (m)", "من فضلك", "Te rog", "Please"],
+      ["Shukran ktir", "شكراً كتير", "Mulțumesc mult", "Thank you very much"],
+      ["3afwan", "عفواً", "Cu plăcere / Scuze", "You're welcome / Excuse me"],
+      ["Aasef (m) · Aasfeh (f)", "آسف", "Îmi pare rău", "I'm sorry"],
+      ["Ma fhemet", "ما فهمت", "Nu am înțeles", "I didn't understand"],
     ],
   },
   {
-    title: "La cafenea și pe stradă",
+    titleRo: "La cafenea și pe stradă",
+    titleEn: "At the café and on the street",
     rows: [
-      ["Baddi ahwe", "بدي قهوة", "Vreau o cafea"],
-      ["Addesh el 7saab?", "قديش الحساب؟", "Cât costă / Cât e nota?"],
-      ["Wein el 7ammem?", "وين الحمام؟", "Unde e toaleta?"],
-      ["3al yamin / 3ash-shmel", "عاليمين / عالشمال", "La dreapta / La stânga"],
-      ["Wa''ifni hon", "وقفني هون", "Oprește-mă aici (în taxi)"],
-      ["Ktir tayyeb!", "كتير طيّب!", "Foarte gustos!"],
+      ["Baddi ahwe", "بدي قهوة", "Vreau o cafea", "I'd like a coffee"],
+      ["Addesh el 7saab?", "قديش الحساب؟", "Cât costă / Cât e nota?", "How much is it / the bill?"],
+      ["Wein el 7ammem?", "وين الحمام؟", "Unde e toaleta?", "Where's the toilet?"],
+      ["3al yamin / 3ash-shmel", "عاليمين / عالشمال", "La dreapta / La stânga", "To the right / To the left"],
+      ["Wa''ifni hon", "وقفني هون", "Oprește-mă aici (în taxi)", "Stop here (in a taxi)"],
+      ["Ktir tayyeb!", "كتير طيّب!", "Foarte gustos!", "Very tasty!"],
     ],
   },
   {
-    title: "Expresii libaneze de suflet",
+    titleRo: "Expresii libaneze de suflet",
+    titleEn: "Heartfelt Lebanese expressions",
     rows: [
-      ["Ya3ni", "يعني", "Adică / Cam așa (umplutură universală)"],
-      ["Ta2burni", "تقبرني", "„Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză"],
+      ["Ya3ni", "يعني", "Adică / Cam așa (umplutură universală)", "I mean / sort of (universal filler)"],
+      ["Ta2burni", "تقبرني", "„Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză", "'I love you dearly' (literally: may you bury me) — typically Lebanese affection"],
     ],
   },
 ];
 
 const Primele20Expresii = () => {
+  const { lang } = useI18n();
+  const en = lang === "en";
   return (
-    <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{TITLE}</title>
-        <meta name="description" content={DESCRIPTION} />
-        <link rel="canonical" href={URL} />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESCRIPTION} />
-        <meta property="og:url" content={URL} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
-      </Helmet>
+    <BlogArticleLayout
+      slug="primele-20-de-expresii-libaneze"
+      title={{ ro: "Primele 20 de expresii în araba libaneză (cu pronunție)", en: "The first 20 phrases in Lebanese Arabic (with pronunciation)" }}
+      description={{
+        ro: "Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.",
+        en: "The 20 most useful Lebanese phrases for beginners — greetings, politeness, café, taxi — written in Arabizi with pronunciation and translation.",
+      }}
+      published="2026-07-16"
+      readingMinutes={6}
+      crumb={{ ro: "Primele 20 de expresii", en: "The first 20 phrases" }}
+      lead={{
+        ro: "Scrise în arabizi (litere latine), cu grafia arabă și traducere. Exact expresiile pe care le folosești din prima zi în Liban — sau cu prietenii libanezi.",
+        en: "Written in Arabizi (Latin letters), with Arabic script and translation. Exactly the phrases you use from day one in Lebanon — or with Lebanese friends.",
+      }}
+      cta={{
+        title: { ro: "Vrei să le și pronunți corect?", en: "Want to pronounce them correctly too?" },
+        text: {
+          ro: "La o lecție de probă gratuită le auzi de la un vorbitor nativ și le repeți pe loc.",
+          en: "In a free trial lesson you hear them from a native speaker and repeat them on the spot.",
+        },
+        href: "/trial",
+        label: { ro: "Rezervă o lecție de probă gratuită", en: "Book a free trial lesson" },
+      }}
+    >
+      <div className="rounded-xl border border-border bg-muted/40 p-5 text-sm text-foreground/80 leading-relaxed [&_a]:no-underline">
+        <p>
+          <strong>{en ? "How to read the table:" : "Cum citești tabelul:"}</strong>{" "}
+          {en
+            ? "'3' is pronounced like a guttural 'a' (the letter ع), '7' like a harsh 'h' from the throat (ح), and '2' marks a short catch in the voice (ء). Don't worry — in class you hear and repeat them naturally, our method is "
+            : "„3” se pronunță ca un „a” gutural (litera ع), „7” ca un „h” aspru din gât (ح), iar „2” marchează o oprire scurtă a vocii (ء). Nu-ți face griji — la curs le auzi și le repeți natural, metoda noastră e "}
+          <em>Oral First</em>.
+        </p>
+      </div>
 
-      <Navbar />
-
-      <main className="pt-24 pb-16">
-        <article className="max-w-3xl mx-auto px-4 md:px-6">
-          <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-primary">Acasă</Link>
-            <span className="mx-2" aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></span>
-            <Link to="/blog" className="hover:text-primary">Blog</Link>
-            <span className="mx-2" aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></span>
-            <span className="text-foreground">Primele 20 de expresii</span>
-          </nav>
-
-          <header className="mb-10 space-y-4">
-            <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">
-              Primele 20 de expresii în araba libaneză
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Scrise în <strong>arabizi</strong> (litere latine), cu grafia arabă și traducere.
-              Exact expresiile pe care le folosești din prima zi în Liban — sau cu prietenii libanezi.
-            </p>
-            <p className="text-sm text-muted-foreground">Publicat pe 16 iulie 2026 · Aprox. 6 minute de citire</p>
-          </header>
-
-          <div className="rounded-xl border border-border bg-muted/40 p-5 mb-10 text-sm text-foreground/80 leading-relaxed">
-            <p>
-              <strong>Cum citești tabelul:</strong> „3” se pronunță ca un „a” gutural (litera ع), „7” ca
-              un „h” aspru din gât (ح), iar „2” marchează o oprire scurtă a vocii (ء). Nu-ți face griji —
-              la curs le auzi și le repeți natural, metoda noastră e <em>Oral First</em>.
-            </p>
+      {GROUPS.map((group) => (
+        <section key={group.titleEn} className="space-y-4">
+          <h2>{en ? group.titleEn : group.titleRo}</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-border text-left text-muted-foreground">
+                  <th className="py-2 pr-3 font-semibold">Arabizi</th>
+                  <th className="py-2 px-3 font-semibold">{en ? "Arabic" : "Arabă"}</th>
+                  <th className="py-2 pl-3 font-semibold">{en ? "Meaning" : "Română"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {group.rows.map(([arabizi, arabic, ro, enM]) => (
+                  <tr key={arabizi} className="border-b border-border/60 align-top">
+                    <td className="py-2.5 pr-3 font-semibold text-foreground whitespace-nowrap">{arabizi}</td>
+                    <td className="py-2.5 px-3 font-arabic text-lg text-brand-green" dir="rtl" lang="ar">{arabic}</td>
+                    <td className="py-2.5 pl-3 text-foreground/80">{en ? enM : ro}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        </section>
+      ))}
 
-          <div className="space-y-10">
-            {GROUPS.map((group) => (
-              <section key={group.title} className="space-y-4">
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{group.title}</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
-                    <thead>
-                      <tr className="border-b border-border text-left text-muted-foreground">
-                        <th className="py-2 pr-3 font-semibold">Arabizi</th>
-                        <th className="py-2 px-3 font-semibold">Arabă</th>
-                        <th className="py-2 pl-3 font-semibold">Română</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {group.rows.map(([arabizi, arabic, ro]) => (
-                        <tr key={arabizi} className="border-b border-border/60 align-top">
-                          <td className="py-2.5 pr-3 font-semibold text-foreground whitespace-nowrap">{arabizi}</td>
-                          <td className="py-2.5 px-3 font-arabic text-lg text-brand-green" dir="rtl" lang="ar">{arabic}</td>
-                          <td className="py-2.5 pl-3 text-foreground/80">{ro}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            ))}
-          </div>
-
-          <div className="mt-12 space-y-4 text-foreground/80 leading-relaxed">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">De unde continui</h2>
-            <p>
-              Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui în context — cum
-              se leagă, cum răspunzi, cum porți o conversație scurtă. Asta facem la curs din prima lecție.
-            </p>
-            <ul className="list-disc list-inside space-y-2">
-              <li>
-                Vezi diferența dintre dialect și araba clasică în{" "}
-                <Link to="/blog/araba-libaneza-vs-araba-standard" className="text-primary underline">
-                  araba libaneză vs araba standard
-                </Link>.
-              </li>
-              <li>
-                Nu știi de unde pornești? Fă{" "}
-                <Link to="/quiz" className="text-primary underline">testul de nivel gratuit</Link>.
-              </li>
-            </ul>
-          </div>
-
-          <RelatedPosts currentSlug="primele-20-de-expresii-libaneze" />
-
-          <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-foreground">
-              Vrei să le și pronunți corect?
-            </h2>
-            <p className="text-muted-foreground">
-              La o lecție de probă gratuită le auzi de la un vorbitor nativ și le repeți pe loc.
-            </p>
-            <Link
-              to="/trial"
-              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
-            >
-              Rezervă o lecție de probă gratuită
-            </Link>
-          </div>
-        </article>
-      </main>
-
-      <Footer />
-      <WhatsAppButton />
-      <ScrollToTop />
-    </div>
+      <h2>{en ? "Where to go next" : "De unde continui"}</h2>
+      <p>
+        {en
+          ? "If you liked the phrases above, the natural next step is to put them in context — how they connect, how you reply, how you hold a short conversation. That's what we do in class from the first lesson."
+          : "Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui în context — cum se leagă, cum răspunzi, cum porți o conversație scurtă. Asta facem la curs din prima lecție."}
+      </p>
+      <ul>
+        <li>
+          {en ? "See the difference between dialect and Classical Arabic in " : "Vezi diferența dintre dialect și araba clasică în "}
+          <Link to="/blog/araba-libaneza-vs-araba-standard">{en ? "Lebanese Arabic vs Standard Arabic" : "araba libaneză vs araba standard"}</Link>.
+        </li>
+        <li>
+          {en ? "Not sure where to start? Take the " : "Nu știi de unde pornești? Fă "}
+          <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>.
+        </li>
+      </ul>
+    </BlogArticleLayout>
   );
 };
 
