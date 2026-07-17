@@ -11,6 +11,10 @@ import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 // code-split so it doesn't weigh down the initial homepage bundle.
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+// Global so the consent banner (which unlocks GA4 analytics) appears on EVERY
+// page — otherwise visitors landing directly on a blog article / trial / quiz
+// never see it, can't consent, and are never tracked.
+import CookieConsent from "./components/CookieConsent";
 
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -69,6 +73,7 @@ const App = () => (
       <I18nProvider>
       <BrowserRouter>
         <RouteAnalytics />
+        <CookieConsent />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />

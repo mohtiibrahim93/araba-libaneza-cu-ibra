@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import CookieConsent from "@/components/CookieConsent";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
@@ -278,7 +277,6 @@ const CursGrupLevel = () => {
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
-      <CookieConsent />
     </div>
   );
 };
