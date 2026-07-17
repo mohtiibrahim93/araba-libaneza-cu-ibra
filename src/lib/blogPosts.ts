@@ -13,6 +13,15 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "cum-alegi-profesor-de-araba",
+    title: "Cum alegi un profesor de arabă: întrebările esențiale",
+    description:
+      "Ghid pentru a alege profesorul de arabă potrivit: ce să întrebi despre experiență, metodă, preț, format și rezultate — plus semnalele de alarmă de evitat.",
+    published: "2026-07-17",
+    readingMinutes: 6,
+    tag: "Ghid",
+  },
+  {
     slug: "cat-dureaza-sa-inveti-araba-libaneza",
     title: "Cât durează să înveți arabă libaneză?",
     description:

@@ -46,6 +46,7 @@ const BlogCulturaLibaneza = lazy(() => import("./pages/blog/CulturaLibaneza"));
 const BlogCumSalutiInLibaneza = lazy(() => import("./pages/blog/CumSalutiInLibaneza"));
 const BlogCatDureaza = lazy(() => import("./pages/blog/CatDureaza"));
 const BlogArabaPentruCopii = lazy(() => import("./pages/blog/ArabaPentruCopii"));
+const BlogCumAlegiProfesor = lazy(() => import("./pages/blog/CumAlegiProfesor"));
 
 const queryClient = new QueryClient();
 
@@ -106,6 +107,7 @@ const App = () => (
             <Route path="/blog/cum-saluti-in-libaneza" element={<BlogCumSalutiInLibaneza />} />
             <Route path="/blog/cat-dureaza-sa-inveti-araba-libaneza" element={<BlogCatDureaza />} />
             <Route path="/blog/araba-pentru-copii-ghidul-parintilor" element={<BlogArabaPentruCopii />} />
+            <Route path="/blog/cum-alegi-profesor-de-araba" element={<BlogCumAlegiProfesor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
