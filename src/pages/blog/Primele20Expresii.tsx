@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const URL = "https://centruldearabalibaneza.com/blog/primele-20-de-expresii-libaneze";
 const TITLE = "Primele 20 de expresii în araba libaneză (cu pronunție)";
@@ -166,6 +167,8 @@ const Primele20Expresii = () => {
               </li>
             </ul>
           </div>
+
+          <RelatedPosts currentSlug="primele-20-de-expresii-libaneze" />
 
           <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
             <h2 className="font-display text-2xl font-bold text-foreground">
