@@ -757,6 +757,11 @@ const translations = {
     spotsBadgeCompactOne: "1 loc rămas",
     spotsWaitlist: "Lista de așteptare",
     spotsCohort: "August 2026",
+    spotsFizic: "fizic",
+    spotsOnline: "online",
+    spotsFormatFull: "listă",
+    spotsSeatsShort: "{n} locuri",
+    spotsSeatShortOne: "1 loc",
     // Trust band
     trustStudents: "21 recenzii Preply · 5.0★",
     trustNative: "Profesor nativ",
@@ -1682,6 +1687,11 @@ const translations = {
     spotsBadgeCompactOne: "1 spot left",
     spotsWaitlist: "Waitlist",
     spotsCohort: "August 2026",
+    spotsFizic: "in person",
+    spotsOnline: "online",
+    spotsFormatFull: "waitlist",
+    spotsSeatsShort: "{n} seats",
+    spotsSeatShortOne: "1 seat",
     // Trust band
     trustStudents: "21 Preply reviews · 5.0★",
     trustNative: "Native teacher",

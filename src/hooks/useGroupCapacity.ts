@@ -134,5 +134,17 @@ export function useGroupCapacities() {
     return toInfo(max, min, taken);
   };
 
-  return { get, loading, raw: data };
+  /**
+   * Both formats' seat info for a group level, kept apart — never summed.
+   * Public displays use this so "5 fizic + 7 online" reads as two counters,
+   * not a misleading combined "12".
+   */
+  const getFormats = (
+    level?: string | null,
+  ): { fizic: CapacityInfo | null; online: CapacityInfo | null } => ({
+    fizic: get("group", level, "fizic"),
+    online: get("group", level, "online"),
+  });
+
+  return { get, getFormats, loading, raw: data };
 }
