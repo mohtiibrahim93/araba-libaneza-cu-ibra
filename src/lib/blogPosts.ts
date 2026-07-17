@@ -1,115 +1,177 @@
 // Single source of truth for the blog index and routing. Each article page
 // still owns its full body + JSON-LD; this registry is the card metadata the
 // /blog index and any "related posts" lists read, so they never drift.
+// Bilingual: title/description/tag carry both RO and EN, picked by the site
+// language toggle (single URL per article, like the rest of the site).
+
+export type Localized = { ro: string; en: string };
 
 export interface BlogPostMeta {
   slug: string;
-  title: string;
-  description: string;
+  title: Localized;
+  description: Localized;
   published: string; // ISO date
   readingMinutes: number;
-  tag: string;
+  tag: Localized;
 }
+
+/** Pick a localized string for the current language. */
+export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "cum-alegi-profesor-de-araba",
-    title: "Cum alegi un profesor de arabă: întrebările esențiale",
-    description:
-      "Ghid pentru a alege profesorul de arabă potrivit: ce să întrebi despre experiență, metodă, preț, format și rezultate — plus semnalele de alarmă de evitat.",
+    title: {
+      ro: "Cum alegi un profesor de arabă: întrebările esențiale",
+      en: "How to choose an Arabic tutor: the essential questions",
+    },
+    description: {
+      ro: "Ghid pentru a alege profesorul de arabă potrivit: ce să întrebi despre experiență, metodă, preț, format și rezultate — plus semnalele de alarmă de evitat.",
+      en: "A guide to choosing the right Arabic tutor: what to ask about experience, method, price, format and results — plus the red flags to avoid.",
+    },
     published: "2026-07-17",
     readingMinutes: 6,
-    tag: "Ghid",
+    tag: { ro: "Ghid", en: "Guide" },
   },
   {
     slug: "cat-dureaza-sa-inveti-araba-libaneza",
-    title: "Cât durează să înveți arabă libaneză?",
-    description:
-      "De cât timp ai nevoie ca să vorbești arabă libaneză: durata pe fiecare nivel (A1–C2), câte ore pe săptămână și ce influențează ritmul. Estimări realiste.",
+    title: {
+      ro: "Cât durează să înveți arabă libaneză?",
+      en: "How long does it take to learn Lebanese Arabic?",
+    },
+    description: {
+      ro: "De cât timp ai nevoie ca să vorbești arabă libaneză: durata pe fiecare nivel (A1–C2), câte ore pe săptămână și ce influențează ritmul. Estimări realiste.",
+      en: "How much time you need to speak Lebanese Arabic: duration per level (A1–C2), hours per week and what affects your pace. Realistic estimates.",
+    },
     published: "2026-07-16",
     readingMinutes: 5,
-    tag: "Ghid",
+    tag: { ro: "Ghid", en: "Guide" },
   },
   {
     slug: "araba-pentru-copii-ghidul-parintilor",
-    title: "Cursuri de arabă pentru copii: ghidul părinților",
-    description:
-      "De la ce vârstă pot învăța copiii arabă libaneză, cum arată o lecție, ce metode funcționează și cum îi ajuți acasă. Ghid practic pentru părinți.",
+    title: {
+      ro: "Cursuri de arabă pentru copii: ghidul părinților",
+      en: "Arabic courses for kids: a parent's guide",
+    },
+    description: {
+      ro: "De la ce vârstă pot învăța copiii arabă libaneză, cum arată o lecție, ce metode funcționează și cum îi ajuți acasă. Ghid practic pentru părinți.",
+      en: "From what age kids can learn Lebanese Arabic, what a lesson looks like, which methods work and how to help at home. A practical parent's guide.",
+    },
     published: "2026-07-16",
     readingMinutes: 5,
-    tag: "Copii",
+    tag: { ro: "Copii", en: "Kids" },
   },
   {
     slug: "cat-costa-cursurile-de-araba-libaneza",
-    title: "Cât costă cursurile de arabă libaneză în 2026?",
-    description:
-      "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
+    title: {
+      ro: "Cât costă cursurile de arabă libaneză în 2026?",
+      en: "How much do Lebanese Arabic courses cost in 2026?",
+    },
+    description: {
+      ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
+      en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial. No hidden fees.",
+    },
     published: "2026-07-16",
     readingMinutes: 5,
-    tag: "Prețuri",
+    tag: { ro: "Prețuri", en: "Pricing" },
   },
   {
     slug: "alfabetul-arab-pentru-incepatori",
-    title: "Alfabetul arab pentru începători: cele 28 de litere",
-    description:
-      "Ghid pentru alfabetul arab: cele 28 de litere, cum se pronunță, scrierea dreapta-la-stânga și de ce nu ai nevoie de alfabet ca să începi să vorbești.",
+    title: {
+      ro: "Alfabetul arab pentru începători: cele 28 de litere",
+      en: "The Arabic alphabet for beginners: all 28 letters",
+    },
+    description: {
+      ro: "Ghid pentru alfabetul arab: cele 28 de litere, cum se pronunță, scrierea dreapta-la-stânga și de ce nu ai nevoie de alfabet ca să începi să vorbești.",
+      en: "A guide to the Arabic alphabet: all 28 letters, how they're pronounced, right-to-left writing and why you don't need the alphabet to start speaking.",
+    },
     published: "2026-07-16",
     readingMinutes: 7,
-    tag: "Începători",
+    tag: { ro: "Începători", en: "Beginners" },
   },
   {
     slug: "ce-este-arabizi",
-    title: "Ce este arabizi și cum îl folosești (cu tabel)",
-    description:
-      "Arabizi este araba scrisă cu litere latine și cifre. Ce înseamnă cifrele 2, 3, 5, 7, cum citești și de ce e cea mai rapidă cale să începi să vorbești libaneză.",
+    title: {
+      ro: "Ce este arabizi și cum îl folosești (cu tabel)",
+      en: "What is Arabizi and how to use it (with a table)",
+    },
+    description: {
+      ro: "Arabizi este araba scrisă cu litere latine și cifre. Ce înseamnă cifrele 2, 3, 5, 7, cum citești și de ce e cea mai rapidă cale să începi să vorbești libaneză.",
+      en: "Arabizi is Arabic written with Latin letters and numbers. What 2, 3, 5, 7 mean, how to read it and why it's the fastest way to start speaking Lebanese.",
+    },
     published: "2026-07-16",
     readingMinutes: 5,
-    tag: "Începători",
+    tag: { ro: "Începători", en: "Beginners" },
   },
   {
     slug: "cultura-libaneza-obiceiuri-mancare-traditii",
-    title: "Cultura libaneză: obiceiuri, mâncare și tradiții",
-    description:
-      "Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica și tradițiile — contextul viu din spatele limbii.",
+    title: {
+      ro: "Cultura libaneză: obiceiuri, mâncare și tradiții",
+      en: "Lebanese culture: customs, food and traditions",
+    },
+    description: {
+      ro: "Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica și tradițiile — contextul viu din spatele limbii.",
+      en: "A warm guide to Lebanese culture: hospitality, food (mezze, tabbouleh, kibbeh), music and traditions — the living context behind the language.",
+    },
     published: "2026-07-16",
     readingMinutes: 6,
-    tag: "Cultură",
+    tag: { ro: "Cultură", en: "Culture" },
   },
   {
     slug: "cum-saluti-in-libaneza",
-    title: "Cum saluți în libaneză: ghid complet de politețe",
-    description:
-      "Toate formulele de salut în araba libaneză: bună dimineața, ce faci, bine ai venit, pa — cu pronunție în arabizi, scriere arabă și când folosești fiecare.",
+    title: {
+      ro: "Cum saluți în libaneză: ghid complet de politețe",
+      en: "How to greet in Lebanese: a complete politeness guide",
+    },
+    description: {
+      ro: "Toate formulele de salut în araba libaneză: bună dimineața, ce faci, bine ai venit, pa — cu pronunție în arabizi, scriere arabă și când folosești fiecare.",
+      en: "All the greetings in Lebanese Arabic: good morning, how are you, welcome, bye — with Arabizi pronunciation, Arabic script and when to use each.",
+    },
     published: "2026-07-16",
     readingMinutes: 4,
-    tag: "Începători",
+    tag: { ro: "Începători", en: "Beginners" },
   },
   {
     slug: "primele-20-de-expresii-libaneze",
-    title: "Primele 20 de expresii în araba libaneză (cu pronunție)",
-    description:
-      "Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.",
+    title: {
+      ro: "Primele 20 de expresii în araba libaneză (cu pronunție)",
+      en: "The first 20 Lebanese Arabic phrases (with pronunciation)",
+    },
+    description: {
+      ro: "Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.",
+      en: "The 20 most useful Lebanese phrases for beginners — greetings, politeness, café, taxi — written in Arabizi with pronunciation and translation.",
+    },
     published: "2026-07-16",
     readingMinutes: 6,
-    tag: "Începători",
+    tag: { ro: "Începători", en: "Beginners" },
   },
   {
     slug: "araba-libaneza-vs-araba-standard",
-    title: "Araba libaneză vs araba standard (MSA): ce înveți?",
-    description:
-      "Comparație clară între araba libaneză (dialect) și araba standard (Fusha/MSA): utilizări practice, dificultate, context cultural și ce curs să alegi.",
+    title: {
+      ro: "Araba libaneză vs araba standard (MSA): ce înveți?",
+      en: "Lebanese Arabic vs Standard Arabic (MSA): what do you learn?",
+    },
+    description: {
+      ro: "Comparație clară între araba libaneză (dialect) și araba standard (Fusha/MSA): utilizări practice, dificultate, context cultural și ce curs să alegi.",
+      en: "A clear comparison between Lebanese Arabic (dialect) and Standard Arabic (Fusha/MSA): practical uses, difficulty, cultural context and which course to choose.",
+    },
     published: "2026-07-15",
     readingMinutes: 7,
-    tag: "Ghid",
+    tag: { ro: "Ghid", en: "Guide" },
   },
   {
     slug: "cum-inveti-araba-libaneza",
-    title: "Cum înveți araba libaneză în 2026: ghid pentru începători",
-    description:
-      "Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.",
+    title: {
+      ro: "Cum înveți araba libaneză în 2026: ghid pentru începători",
+      en: "How to learn Lebanese Arabic in 2026: a beginner's guide",
+    },
+    description: {
+      ro: "Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.",
+      en: "A step-by-step guide to learning Lebanese Arabic: the difference from Standard Arabic (Fusha), how long it takes, the best methods, common mistakes and useful phrases.",
+    },
     published: "2026-07-10",
     readingMinutes: 8,
-    tag: "Ghid",
+    tag: { ro: "Ghid", en: "Guide" },
   },
 ];
 
