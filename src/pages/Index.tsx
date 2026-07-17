@@ -16,10 +16,9 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import CookieConsent from "@/components/CookieConsent";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
-import { initTracking, trackEvent } from "@/lib/tracking";
+import { trackEvent } from "@/lib/tracking";
 
 const PageContent = () => {
   const { lang, t } = useI18n();
@@ -30,9 +29,8 @@ const PageContent = () => {
   }, [lang, t.siteTitle]);
 
   useEffect(() => {
-    // Init tracking if consent was previously given
-    initTracking();
-
+    // Tracking is initialized globally (CookieConsent in App.tsx), so we only
+    // handle post-payment redirect toasts here.
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");
     const type = params.get("type");
@@ -176,7 +174,6 @@ const PageContent = () => {
       <WhatsAppButton />
       <ScrollToTop />
       <MobileEnrollmentCTA />
-      <CookieConsent />
     </div>
   );
 };

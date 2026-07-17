@@ -14,6 +14,35 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
   ro: {
     groups: [
       {
+        title: "Cum alegi un profesor de arabă",
+        items: [
+          {
+            q: "Ce experiență de predare are profesorul și este vorbitor nativ?",
+            a: "Ibra este vorbitor nativ de arabă libaneză, cu ani de experiență în predare — atât în grup, cât și 1:1, pentru cursanți de toate nivelurile. Predă dialectul libanez (levantin), limba vie vorbită zilnic, nu doar araba clasică din manuale.",
+          },
+          {
+            q: "Ce metodă de predare folosiți și cum adaptați lecțiile la nivelul meu?",
+            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi la început și trecere treptată la alfabetul arab. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
+          },
+          {
+            q: "Cât durează lecțiile, cât de des sunt și în ce format (online sau fizic)?",
+            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână, seara. Poți alege fizic (Raduga Creative Center, București) sau online pe Zoom. Lecțiile private se programează flexibil, inclusiv în weekend.",
+          },
+          {
+            q: "Cât costă, ce politică de anulare aveți și există o lecție de probă?",
+            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 10% reducere). Abonamentele se pot anula oricând, cu rambursare proporțională în primele 5 zile. Prima lecție este o probă gratuită de 30 de minute.",
+          },
+          {
+            q: "Aveți recenzii de la cursanți și cât de repede se văd rezultatele?",
+            a: "Da — recenzii reale verificate (5.0★ pe Preply). Vorbești de la prima lecție, iar pentru conversații simple majoritatea cursanților ajung acolo în 3–6 luni (nivel A1–A2), în funcție de ritm.",
+          },
+          {
+            q: "La ce semnale de alarmă să fiu atent când aleg un profesor de arabă?",
+            a: "Evită: un vorbitor nativ fără experiență de predare (a ști o limbă nu înseamnă a o preda), lecții generice fără adaptare la nivelul tău, și costuri ascunse sau program rigid fără lecție de probă. Cel mai sigur test rămâne o lecție de probă gratuită.",
+          },
+        ],
+      },
+      {
         title: "Alegerea dialectului",
         items: [
           {
@@ -147,6 +176,35 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
   },
   en: {
     groups: [
+      {
+        title: "Choosing an Arabic tutor",
+        items: [
+          {
+            q: "How much teaching experience does the tutor have, and are they a native speaker?",
+            a: "Ibra is a native Lebanese Arabic speaker with years of teaching experience — both in groups and 1:1, for students at all levels. He teaches the Lebanese (Levantine) dialect, the living everyday language, not just textbook Classical Arabic.",
+          },
+          {
+            q: "What teaching method do you use, and how do you adapt lessons to my level?",
+            a: "We use the Oral First method: you speak from the very first lessons, starting with Arabizi and moving gradually to the Arabic alphabet. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
+          },
+          {
+            q: "How long and how often are lessons, and in what format (online or in person)?",
+            a: "Group courses are two 90-minute lessons per week, in the evening. You can choose in person (Raduga Creative Center, Bucharest) or online via Zoom. Private lessons are scheduled flexibly, including weekends.",
+          },
+          {
+            q: "How much does it cost, what's the cancellation policy, and is there a trial lesson?",
+            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 10% discount). Subscriptions can be cancelled anytime, with a prorated refund in the first 5 days. The first lesson is a free 30-minute trial.",
+          },
+          {
+            q: "Do you have student reviews, and how quickly will I see results?",
+            a: "Yes — real verified reviews (5.0★ on Preply). You speak from the first lesson, and most students reach simple conversations within 3–6 months (A1–A2), depending on pace.",
+          },
+          {
+            q: "What red flags should I watch for when choosing an Arabic tutor?",
+            a: "Avoid: a native speaker with no teaching experience (knowing a language isn't the same as teaching it), generic one-size-fits-all lessons, and hidden fees or rigid scheduling with no trial. The safest test is always a free trial lesson.",
+          },
+        ],
+      },
       {
         title: "Choosing the dialect",
         items: [

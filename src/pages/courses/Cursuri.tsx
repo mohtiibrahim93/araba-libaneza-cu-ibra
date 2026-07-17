@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import CookieConsent from "@/components/CookieConsent";
 import { useI18n } from "@/lib/i18n";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -131,7 +130,6 @@ const Cursuri = () => {
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
-      <CookieConsent />
     </div>
   );
 };

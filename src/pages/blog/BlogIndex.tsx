@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import CookieConsent from "@/components/CookieConsent";
 import { blogPostsNewestFirst } from "@/lib/blogPosts";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -101,7 +100,6 @@ const BlogIndex = () => {
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
-      <CookieConsent />
     </div>
   );
 };
