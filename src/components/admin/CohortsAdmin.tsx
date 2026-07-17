@@ -38,6 +38,7 @@ interface Cohort {
   id: string;
   form_type: "group" | "kids";
   level: string | null;
+  format: string | null;
   start_date: string;
   schedule_label_ro: string;
   schedule_label_en: string;
@@ -55,6 +56,7 @@ const blank = (): Cohort => ({
   id: "",
   form_type: "group",
   level: "A1",
+  format: "online",
   start_date: todayIso(),
   schedule_label_ro: "",
   schedule_label_en: "",
@@ -163,7 +165,12 @@ const CohortsAdmin = () => {
             <Select
               value={draft.form_type}
               onValueChange={(v) =>
-                setDraft({ ...draft, form_type: v as "group" | "kids", level: v === "kids" ? null : "A1" })
+                setDraft({
+                  ...draft,
+                  form_type: v as "group" | "kids",
+                  level: v === "kids" ? null : "A1",
+                  format: v === "kids" ? null : (draft.format ?? "online"),
+                })
               }
             >
               <SelectTrigger><SelectValue /></SelectTrigger>
@@ -180,6 +187,18 @@ const CohortsAdmin = () => {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {LEVELS.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          {draft.form_type === "group" && (
+            <div>
+              <Label className="text-xs">Format</Label>
+              <Select value={draft.format ?? "online"} onValueChange={(v) => setDraft({ ...draft, format: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="online">Online</SelectItem>
+                  <SelectItem value="fizic">Fizic</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -233,9 +252,23 @@ const CohortsAdmin = () => {
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
-            <div key={r.id} className="grid gap-2 md:grid-cols-[80px_60px_140px_70px_90px_1fr_1fr_auto_auto] items-end rounded-md border border-border bg-background p-2">
+            <div key={r.id} className="grid gap-2 md:grid-cols-[70px_50px_96px_130px_64px_84px_1fr_1fr_150px_auto] items-end rounded-md border border-border bg-background p-2">
               <div className="text-xs font-semibold">{r.form_type === "kids" ? "Copii" : "Grup"}</div>
               <div className="text-xs font-semibold">{r.level ?? "—"}</div>
+              {r.form_type === "kids" ? (
+                <div className="text-xs text-muted-foreground self-center">—</div>
+              ) : (
+                <Select
+                  value={r.format ?? "online"}
+                  onValueChange={(v) => update(r.id, { format: v })}
+                >
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="online">Online</SelectItem>
+                    <SelectItem value="fizic">Fizic</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
               <Input
                 type="date"
                 value={r.start_date}

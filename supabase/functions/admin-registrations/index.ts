@@ -179,7 +179,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset")
+        .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -193,6 +193,7 @@ Deno.serve(async (req) => {
         id: cId,
         form_type,
         level: cLevel,
+        format: cFormat,
         start_date,
         schedule_label_ro,
         schedule_label_en,
@@ -204,6 +205,9 @@ Deno.serve(async (req) => {
       } = body;
       if (!["group", "kids"].includes(form_type)) {
         return jsonResponse({ error: "Tip invalid (group/kids)" });
+      }
+      if (form_type === "group" && cFormat != null && cFormat !== "fizic" && cFormat !== "online") {
+        return jsonResponse({ error: "Format invalid (fizic/online)" });
       }
       if (typeof start_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(start_date)) {
         return jsonResponse({ error: "Data invalidă (YYYY-MM-DD)" });
@@ -218,6 +222,7 @@ Deno.serve(async (req) => {
       const payload: Record<string, unknown> = {
         form_type,
         level: form_type === "kids" ? null : (cLevel || null),
+        format: form_type === "kids" ? null : (cFormat || null),
         start_date,
         schedule_label_ro: typeof schedule_label_ro === "string" ? schedule_label_ro : "",
         schedule_label_en: typeof schedule_label_en === "string" ? schedule_label_en : "",

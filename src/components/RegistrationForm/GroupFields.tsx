@@ -96,6 +96,7 @@ const GroupFields = ({
         <CohortPicker
           formType="group"
           level={level}
+          format={format || null}
           selectedCohortId={cohortId}
           onSelect={onCohortChange}
         />

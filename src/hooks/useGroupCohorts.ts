@@ -5,6 +5,7 @@ export interface Cohort {
   id: string;
   form_type: "group" | "kids";
   level: string | null;
+  format: string | null; // 'fizic' | 'online' | null (null = either)
   start_date: string; // YYYY-MM-DD
   schedule_label_ro: string;
   schedule_label_en: string;
@@ -36,11 +37,15 @@ const PUBLIC_COHORT_STATUSES: CohortStatus[] = [
   "full",
 ];
 
-async function fetchCohorts(formType: "group" | "kids", level?: string | null): Promise<Cohort[]> {
+async function fetchCohorts(
+  formType: "group" | "kids",
+  level?: string | null,
+  format?: string | null,
+): Promise<Cohort[]> {
   const today = new Date().toISOString().slice(0, 10);
   let q = supabase
     .from("group_cohorts")
-    .select("id, form_type, level, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status")
+    .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status")
     .eq("form_type", formType)
     .in("status", PUBLIC_COHORT_STATUSES)
     .gte("start_date", today)
@@ -49,6 +54,10 @@ async function fetchCohorts(formType: "group" | "kids", level?: string | null): 
 
   if (level) q = q.eq("level", level);
   else if (formType === "kids") q = q.is("level", null);
+
+  // A chosen format shows that format's cohorts plus any format-agnostic ones
+  // (format IS NULL) — so cohorts created before formats existed still appear.
+  if (format) q = q.or(`format.eq.${format},format.is.null`);
 
   const [{ data: cohorts, error }, { data: counts }] = await Promise.all([
     q,
@@ -77,14 +86,18 @@ async function fetchCohorts(formType: "group" | "kids", level?: string | null): 
   });
 }
 
-export function useGroupCohorts(formType: "group" | "kids", level?: string | null) {
+export function useGroupCohorts(
+  formType: "group" | "kids",
+  level?: string | null,
+  format?: string | null,
+) {
   const [cohorts, setCohorts] = useState<Cohort[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
     const load = async () => {
-      const data = await fetchCohorts(formType, level ?? null);
+      const data = await fetchCohorts(formType, level ?? null, format ?? null);
       if (active) {
         setCohorts(data);
         setLoading(false);
@@ -102,7 +115,7 @@ export function useGroupCohorts(formType: "group" | "kids", level?: string | nul
       active = false;
       supabase.removeChannel(channel);
     };
-  }, [formType, level]);
+  }, [formType, level, format]);
 
   return { cohorts, loading };
 }
