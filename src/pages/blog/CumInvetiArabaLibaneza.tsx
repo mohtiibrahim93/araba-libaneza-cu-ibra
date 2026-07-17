@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const URL = "https://centruldearabalibaneza.com/blog/cum-inveti-araba-libaneza";
 const TITLE = "Cum înveți araba libaneză în 2026: Ghid pentru începători";
@@ -248,6 +249,8 @@ const CumInvetiArabaLibaneza = () => {
               </ul>
             </Section>
           </div>
+
+          <RelatedPosts currentSlug="cum-inveti-araba-libaneza" />
 
           <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
             <h2 className="text-2xl font-bold text-foreground">

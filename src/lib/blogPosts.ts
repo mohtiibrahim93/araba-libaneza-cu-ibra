@@ -13,6 +13,24 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "cat-dureaza-sa-inveti-araba-libaneza",
+    title: "Cât durează să înveți arabă libaneză?",
+    description:
+      "De cât timp ai nevoie ca să vorbești arabă libaneză: durata pe fiecare nivel (A1–C2), câte ore pe săptămână și ce influențează ritmul. Estimări realiste.",
+    published: "2026-07-16",
+    readingMinutes: 5,
+    tag: "Ghid",
+  },
+  {
+    slug: "araba-pentru-copii-ghidul-parintilor",
+    title: "Cursuri de arabă pentru copii: ghidul părinților",
+    description:
+      "De la ce vârstă pot învăța copiii arabă libaneză, cum arată o lecție, ce metode funcționează și cum îi ajuți acasă. Ghid practic pentru părinți.",
+    published: "2026-07-16",
+    readingMinutes: 5,
+    tag: "Copii",
+  },
+  {
     slug: "cat-costa-cursurile-de-araba-libaneza",
     title: "Cât costă cursurile de arabă libaneză în 2026?",
     description:

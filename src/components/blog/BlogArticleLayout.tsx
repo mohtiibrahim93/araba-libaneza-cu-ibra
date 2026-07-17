@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -63,6 +64,15 @@ const BlogArticleLayout = ({
       logo: { "@type": "ImageObject", url: `${BASE}/favicon.png` },
     },
   };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Acasă", item: `${BASE}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE}/blog` },
+      { "@type": "ListItem", position: 3, name: crumb ?? title, item: url },
+    ],
+  };
   const dateLabel = new Date(published).toLocaleDateString("ro-RO", {
     day: "numeric", month: "long", year: "numeric",
   });
@@ -78,8 +88,12 @@ const BlogArticleLayout = ({
         <meta property="og:description" content={description} />
         <meta property="og:url" content={url} />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:locale" content="ro_RO" />
+        <meta property="article:published_time" content={published} />
+        <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <Navbar />
@@ -107,6 +121,8 @@ const BlogArticleLayout = ({
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a]:text-primary [&_a]:underline">
             {children}
           </div>
+
+          <RelatedPosts currentSlug={slug} />
 
           <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
             <h2 className="font-display text-2xl font-bold text-foreground">{ctaTitle}</h2>
