@@ -20,6 +20,34 @@ export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "invata-araba-libaneza-online",
+    title: {
+      ro: "Cum înveți araba libaneză online (de oriunde)",
+      en: "How to learn Lebanese Arabic online (from anywhere)",
+    },
+    description: {
+      ro: "Cum funcționează cursurile de arabă libaneză online: de ce ai nevoie, cum arată o lecție pe Zoom, dacă online e la fel de bun ca fizic și pentru cine e potrivit.",
+      en: "How online Lebanese Arabic courses work: what you need, what a Zoom lesson looks like, whether online is as good as in person and who it's for.",
+    },
+    published: "2026-07-17",
+    readingMinutes: 6,
+    tag: { ro: "Online", en: "Online" },
+  },
+  {
+    slug: "numere-in-araba-libaneza",
+    title: {
+      ro: "Numerele în araba libaneză: de la 0 la 1000 (cu tabel)",
+      en: "Numbers in Lebanese Arabic: from 0 to 1000 (with a table)",
+    },
+    description: {
+      ro: "Cum numeri în araba libaneză: cifrele 0–10, zecile, sutele și miile, în arabizi și scriere arabă — plus cum ceri prețul și dai un număr de telefon.",
+      en: "How to count in Lebanese Arabic: digits 0–10, tens, hundreds and thousands, in Arabizi and Arabic script — plus how to ask a price and give a phone number.",
+    },
+    published: "2026-07-17",
+    readingMinutes: 4,
+    tag: { ro: "Începători", en: "Beginners" },
+  },
+  {
     slug: "cum-alegi-profesor-de-araba",
     title: {
       ro: "Cum alegi un profesor de arabă: întrebările esențiale",
