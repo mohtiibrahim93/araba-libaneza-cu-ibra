@@ -33,6 +33,7 @@ import AdminNav from "@/components/AdminNav";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
+import GroupOverview from "@/components/admin/GroupOverview";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
@@ -731,6 +732,7 @@ const Admin = () => {
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
           <TabsContent value="groups" className="mt-5 space-y-6">
+            <GroupOverview />
             <CapacitiesAdmin />
             <CourseRequestsAdmin />
             <ManualSignupsAdmin />

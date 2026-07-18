@@ -432,6 +432,7 @@ export type Database = {
           duration_minutes: number | null
           end_time: string | null
           form_type: string
+          format: string | null
           id: string
           is_active: boolean
           level: string | null
@@ -455,6 +456,7 @@ export type Database = {
           duration_minutes?: number | null
           end_time?: string | null
           form_type: string
+          format?: string | null
           id?: string
           is_active?: boolean
           level?: string | null
@@ -478,6 +480,7 @@ export type Database = {
           duration_minutes?: number | null
           end_time?: string | null
           form_type?: string
+          format?: string | null
           id?: string
           is_active?: boolean
           level?: string | null

@@ -61,9 +61,30 @@ const ProgramsSection = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { get: getCapacity } = useGroupCapacities();
-  const a1Cap = getCapacity("group", "A1");
+  const { get: getCapacity, getFormats } = useGroupCapacities();
+  const a1Formats = getFormats("A1");
   const kidsCap = getCapacity("kids", null);
+
+  // Per-format status text + tone for the A1 card — fizic and online shown
+  // apart, never summed into a single "12 locuri".
+  const capStatus = (cap: NonNullable<ReturnType<typeof getCapacity>>) => {
+    const text = cap.full
+      ? t.capFull
+      : cap.taken === 0
+        ? t.capForming.replace("{n}", String(cap.needToStart || 4))
+        : cap.belowMin
+          ? t.capNeedToStart.replace("{n}", String(cap.needToStart))
+          : t.capSpotsLeft.replace("{n}", String(cap.seatsLeft));
+    const tone =
+      cap.full || cap.belowMin
+        ? "text-amber-600 dark:text-amber-500 font-medium"
+        : "text-muted-foreground";
+    return { text, tone };
+  };
+  const a1Segments = [
+    { key: "fizic", label: t.spotsFizic, cap: a1Formats.fizic },
+    { key: "online", label: t.spotsOnline, cap: a1Formats.online },
+  ].filter((s) => s.cap);
 
   const isAvailable = (level: Level) => level === "A1" || level === "A2";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
@@ -138,28 +159,20 @@ const ProgramsSection = () => {
               </div>
               <p className="text-xs font-medium text-primary mb-4">{t.groupEnrollmentOpenNote}</p>
 
-              {/* A1 capacity */}
-              {a1Cap && (
+              {/* A1 capacity — fizic and online counted separately */}
+              {a1Segments.length > 0 && (
                 <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
-                  {a1Cap.taken === 0 ? (
-                    <span className="text-primary font-medium">
-                      {t.capForming.replace("{n}", String(a1Cap.needToStart || 4))}
-                    </span>
-                  ) : (
-                    <>
-                      <span className="font-semibold text-foreground">
-                        A1 · {a1Cap.taken}/{a1Cap.max} {t.capSeatsLabel}
+                  <span className="font-semibold text-foreground">A1</span>
+                  {a1Segments.map((seg) => {
+                    const { text, tone } = capStatus(seg.cap!);
+                    return (
+                      <span key={seg.key} className="flex items-center gap-1.5">
+                        <span className="text-muted-foreground">·</span>
+                        <span className="font-medium text-foreground">{seg.label}:</span>
+                        <span className={tone}>{text}</span>
                       </span>
-                      <span className="text-muted-foreground">·</span>
-                      <span className={a1Cap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                        {a1Cap.full
-                          ? t.capFull
-                          : a1Cap.belowMin
-                            ? t.capNeedToStart.replace("{n}", String(a1Cap.needToStart))
-                            : t.capSpotsLeft.replace("{n}", String(a1Cap.seatsLeft))}
-                      </span>
-                    </>
-                  )}
+                    );
+                  })}
                 </div>
               )}
 

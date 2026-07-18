@@ -21,6 +21,7 @@ function statusBadge(status: Cohort["status"], t: ReturnType<typeof useI18n>["t"
 interface Props {
   formType: "group" | "kids";
   level?: string | null;
+  format?: string | null;
   selectedCohortId: string | null;
   onSelect: (cohort: Cohort | null) => void;
 }
@@ -35,9 +36,9 @@ function formatStart(iso: string, lang: "ro" | "en") {
   }).format(new Date(y, m - 1, d));
 }
 
-const CohortPicker = ({ formType, level, selectedCohortId, onSelect }: Props) => {
+const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: Props) => {
   const { t, lang } = useI18n();
-  const { cohorts, loading } = useGroupCohorts(formType, level ?? null);
+  const { cohorts, loading } = useGroupCohorts(formType, level ?? null, format ?? null);
 
   if (loading) {
     return (
