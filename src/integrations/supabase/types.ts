@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          actor: string
+          created_at: string
+          details: Json | null
+          id: string
+          registration_id: string | null
+        }
+        Insert: {
+          action: string
+          actor: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          registration_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          registration_id?: string | null
+        }
+        Relationships: []
+      }
       availability_rules: {
         Row: {
           created_at: string
@@ -687,6 +714,7 @@ export type Database = {
       }
       registrations: {
         Row: {
+          anonymized_at: string | null
           canceled_at: string | null
           center: string | null
           child_age: string | null
@@ -721,6 +749,7 @@ export type Database = {
           whatsapp_sent_at: string | null
         }
         Insert: {
+          anonymized_at?: string | null
           canceled_at?: string | null
           center?: string | null
           child_age?: string | null
@@ -755,6 +784,7 @@ export type Database = {
           whatsapp_sent_at?: string | null
         }
         Update: {
+          anonymized_at?: string | null
           canceled_at?: string | null
           center?: string | null
           child_age?: string | null
@@ -787,6 +817,30 @@ export type Database = {
           subscription_status?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
+        }
+        Relationships: []
+      }
+      stripe_events: {
+        Row: {
+          id: string
+          received_at: string
+          registration_id: string | null
+          summary: Json | null
+          type: string
+        }
+        Insert: {
+          id: string
+          received_at?: string
+          registration_id?: string | null
+          summary?: Json | null
+          type: string
+        }
+        Update: {
+          id?: string
+          received_at?: string
+          registration_id?: string | null
+          summary?: Json | null
+          type?: string
         }
         Relationships: []
       }
