@@ -85,7 +85,8 @@ const RO: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Vorbit",
     schedule: [
-      "Marți și joi 19:00–20:30 · 11 august 2026 – 11 februarie 2027 (~6 luni) · Strada Icoanei 80 (fizic)",
+      "Fizic: marți și joi 19:00–20:30 · 11 august 2026 – 11 februarie 2027 (~6 luni) · Strada Icoanei 80",
+      "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
     items: [
@@ -396,7 +397,8 @@ const EN: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Spoken",
     schedule: [
-      "Tuesdays & Thursdays 19:00–20:30 · 11 August 2026 – 11 February 2027 (~6 months) · Strada Icoanei 80 (in person)",
+      "In person: Tuesdays & Thursdays 19:00–20:30 · 11 August 2026 – 11 February 2027 (~6 months) · Strada Icoanei 80",
+      "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
     ],
     items: [
