@@ -80,20 +80,9 @@ const PageContent = () => {
   const homeTitle = t.homeSeoTitle;
   const homeDescription = t.homeSeoDescription;
 
-  const faqEntries = [
-    { q: t.faq1Q, a: t.faq1A }, { q: t.faq2Q, a: t.faq2A }, { q: t.faq3Q, a: t.faq3A },
-    { q: t.faq4Q, a: t.faq4A }, { q: t.faq5Q, a: t.faq5A }, { q: t.faq6Q, a: t.faq6A },
-  ];
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqEntries.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
+  // FAQPage JSON-LD comes from FAQSection (generated from the rendered FAQ
+  // content) — emitting a second one here made the page invalid for FAQ rich
+  // results, so this page only owns LocalBusiness + the course list.
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -155,7 +144,6 @@ const PageContent = () => {
             dynamic <html lang> (set in i18n.tsx) are the correct signals. */}
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
         <meta property="og:locale:alternate" content={lang === "en" ? "ro_RO" : "en_US"} />
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
       </Helmet>
