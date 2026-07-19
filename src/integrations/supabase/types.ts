@@ -660,6 +660,7 @@ export type Database = {
       }
       manual_signups: {
         Row: {
+          cohort_id: string | null
           count: number
           created_at: string
           form_type: string
@@ -671,6 +672,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          cohort_id?: string | null
           count?: number
           created_at?: string
           form_type: string
@@ -682,6 +684,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          cohort_id?: string | null
           count?: number
           created_at?: string
           form_type?: string
@@ -692,7 +695,15 @@ export type Database = {
           source?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "manual_signups_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rate_limit_events: {
         Row: {
