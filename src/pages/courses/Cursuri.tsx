@@ -72,6 +72,7 @@ const Cursuri = () => {
               <Link
                 key={to}
                 to={to}
+                aria-label={`${t.trackViewLink}: ${title}`}
                 className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-3">
