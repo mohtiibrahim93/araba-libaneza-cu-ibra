@@ -97,9 +97,11 @@ const PageContent = () => {
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": "https://centruldearabalibaneza.com/#localbusiness",
     name: "Centrul de Arabă Libaneză cu Ibra",
     description: homeDescription,
     url: "https://centruldearabalibaneza.com/",
+    image: "https://centruldearabalibaneza.com/og-image.png",
     telephone: "+40763124514",
     email: "marhaba@centruldearabalibaneza.com",
     address: {
