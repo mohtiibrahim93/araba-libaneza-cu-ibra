@@ -139,10 +139,27 @@ Deno.serve(async (req) => {
       if (typeof source !== "string" || source.trim().length === 0 || source.length > 40) {
         return jsonResponse({ error: "Sursă invalidă" });
       }
+      // Auto-attach group manual signups to the level+format's single active
+      // cohort so they count on the cohort card too, not just the level badge.
+      // Ambiguous (0 or 2+ matching cohorts) → left unattached; counts at level.
+      let cohortId: string | null = null;
+      const rowLevel = form_type === "kids" ? null : (level || null);
+      const rowFormat = form_type === "kids" ? null : (format || null);
+      if (form_type === "group" && rowLevel && rowFormat) {
+        const { data: matching } = await supabase
+          .from("group_cohorts")
+          .select("id")
+          .eq("form_type", "group")
+          .eq("level", rowLevel)
+          .eq("format", rowFormat)
+          .eq("is_active", true);
+        if (matching && matching.length === 1) cohortId = matching[0].id;
+      }
       const row = {
         form_type,
-        level: form_type === "kids" ? null : (level || null),
-        format: form_type === "kids" ? null : (format || null),
+        level: rowLevel,
+        format: rowFormat,
+        cohort_id: cohortId,
         source: source.trim(),
         count: n,
         note: note != null && typeof note === "string" ? note.slice(0, 500) : null,

@@ -109,6 +109,7 @@ export function useGroupCohorts(
       .channel(`cohort-updates-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "registrations" }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "group_cohorts" }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "manual_signups" }, load)
       .subscribe();
 
     return () => {
