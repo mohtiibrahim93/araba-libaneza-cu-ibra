@@ -1,63 +1,50 @@
-# Why the error appears even without a VPN
+## What I'm solving
 
-The message you're seeing ("Nu am putut încărca modulul de plată securizat…") is **our own fallback text** on `/checkout`. It fires whenever `loadStripe()` — the call that fetches `https://js.stripe.com/v3/` into the browser — resolves to `null` or throws.
+Only the SEO items surfaced in your pasted text:
 
-There is no VPN check anywhere in Stripe or in our code. That copy just lists the *usual* culprits. In practice, `loadStripe()` also fails for other reasons that have nothing to do with a VPN:
+1. Homepage is the only page Google sees (pos. 32 for "cursuri araba"); inner pages need on-page SEO to start ranking.
+2. English-market opportunity: "Lebanese Arabic" (~880/mo, KD 30) and "learn Lebanese Arabic" (~210/mo, KD 17) are viable, low-competition targets with no dedicated landing page today.
+3. Romanian targeting should stay on "cursuri araba" and related broad terms — not "arabă libaneză".
+4. Common tutor-vetting questions should be answered on-site to capture question-style queries and build topical authority.
+5. Spammy PBN backlinks — action is off-site (disavow file), not code.
 
-- **Brave Shields** (default-on, blocks js.stripe.com as a tracker)
-- **Firefox strict tracking protection / private mode**
-- **Safari with "Prevent cross-site tracking"** on some networks
-- **DNS-level ad blocking** on the router or ISP (NextDNS, Pi-hole, AdGuard DNS, some mobile carriers in RO)
-- **Corporate / school Wi-Fi** with TLS inspection or category filtering
-- **Browser extensions** (uBlock, Ghostery, Privacy Badger, Kaspersky, ESET, Malwarebytes Browser Guard, some antivirus web-shields)
-- **A stale service worker** from an older deploy caching a failed js.stripe.com fetch
+## Plan
 
-We already confirmed the backend side is healthy in the pre-launch check: `create-payment-intent` and `create-subscription` return valid `clientSecret` + `publishableKey`, and `STRIPE_PUBLISHABLE_KEY` starts with `pk_`. So this is purely a **browser-side load of `js.stripe.com`** failing on the user's device/network.
+### 1. Per-route head tags for the top inner pages (react-helmet-async)
+Audit which route components already use `<Helmet>`; for those missing it, add a self-referencing `<title>`, `<meta name="description">`, `<link rel="canonical">`, and matching `og:title` / `og:description` / `og:url` for:
+- `/cursuri` and each level page (A1, A2, …) — target "curs arabă [level]", "cursuri araba online/fizic"
+- `/inscriere` variants — target "înscriere curs arabă"
+- Existing blog posts — self-referencing canonical + Article JSON-LD with author = Ibra
+- `/copii` (kids) — target "curs arabă copii București"
 
-# Fix: add a hosted-Stripe-Checkout fallback
+Anchor Romanian titles/descriptions on "cursuri araba" phrasing (per your Semrush note), not on "arabă libaneză".
 
-Right now `/checkout` only supports **embedded Stripe Elements**, which requires `js.stripe.com` to load in the visitor's browser. If that script is blocked, there is no way to pay. We'll add a second path that redirects to **Stripe's own hosted Checkout page** (`checkout.stripe.com`), which most blockers don't touch and which renders the card form on Stripe's domain instead of ours.
+### 2. New English landing page: `/en/learn-lebanese-arabic`
+Single English route targeting "learn Lebanese Arabic" / "Lebanese Arabic":
+- H1 + copy explaining Ibra's method, Lebanese vs MSA, online availability worldwide
+- Course/Service JSON-LD, FAQPage schema for the 3–4 top English questions
+- `hreflang` pair (`ro` ↔ `en`) on both this page and `/` so Google serves the right locale
+- Add to sitemap + internal link from homepage footer
 
-## Changes
+### 3. Expand FAQ with tutor-vetting questions
+Add 6–8 Q&As to `FAQSection.tsx` (Romanian) covering the categories from your text — background, methodology, logistics, results, trial lesson — and include them in the existing FAQPage JSON-LD. Mirror the key ones in English on the new landing page.
 
-1. **New edge function `create-checkout-session`** (Stripe Checkout Sessions API)
-   - Accepts `{ registrationId }`.
-   - Reads the registration row (same server-side price logic as `create-payment-intent` / `create-subscription`, no client-supplied amounts).
-   - For `group` / `kids` monthly → `mode: "subscription"` with `cancel_at` after `groupMonthsFor(level)` months, same 3+ volume discount.
-   - For `private` and pay-in-full → `mode: "payment"`.
-   - `success_url` = `/payment-status?registrationId=…`, `cancel_url` = `/checkout?...&fallback=1`.
-   - Reuses in-flight session via idempotency key `checkout_<registrationId>`.
-   - Registered in `supabase/config.toml` with `verify_jwt = false`.
+### 4. Internal linking pass
+From the homepage and blog posts, add contextual links to the level pages and the new English page so crawl equity flows inward. Update the navbar/footer to expose the English page.
 
-2. **`stripe-webhook`**: already handles `checkout.session.completed` and `checkout.session.async_payment_succeeded` — no change needed.
+### 5. Sitemap + robots
+Regenerate `public/sitemap.xml` to include the new English route and any level pages missing today. No robots changes.
 
-3. **`src/pages/Checkout.tsx`**
-   - When `stripeLoadFailed === true` **or** when the URL has `?fallback=1`, show a big primary button: **"Continuă pe pagina securizată Stripe"** that calls `create-checkout-session` and does `window.location.href = data.url`.
-   - Keep the current copy as a smaller secondary hint ("Dacă folosești Brave/adblock…").
-   - Add a 6-second watchdog: if `stripePromise` hasn't resolved after 6 s, also flip to the fallback UI (covers slow-timeout blockers that never reject).
-   - Log a single `console.warn` with `{ userAgent, cookieEnabled, online: navigator.onLine }` so future reports are diagnosable without exposing keys.
+### 6. Disavow guidance (no code)
+I'll prepare a `disavow.txt` you can upload in Google Search Console listing the PBN referring domains (8coint.com, cindylaup.com, toplikevideo.com and the .top/.xyz/.icu set from Semrush). Uploading it is a one-click action you do in GSC — I can't do it for you.
 
-4. **`RegistrationForm/PostSubmitView.tsx`** (only if it currently deep-links straight into `/checkout` — I'll confirm during exploration): no behavior change, still lands on `/checkout`; the fallback is picked up there.
-
-## What this does NOT change
-
-- No pricing logic changes.
-- No change to `create-payment-intent`, `create-subscription`, or webhook.
-- Embedded Elements stays the default; hosted Checkout is only offered when the embedded path can't load.
-- Frontend not published — you keep testing on preview first.
+## Out of scope (from your text but not SEO code)
+- Earning real editorial links, guest posts, directory submissions — outreach work, not something I implement.
+- GA4 analytics reading — that's your dashboard, not the site code.
 
 ## Technical notes
 
-- Hosted Checkout renders on `checkout.stripe.com`, which is a **first-party navigation**, so Brave Shields / tracker blockers that target third-party scripts don't block it. Users whose browser blocks *all* Stripe domains will still fail — for those we keep the WhatsApp fallback link, which stays visible on the error card.
-- Subscription hosted-checkout uses `subscription_data.metadata.registration_id` so `invoice.paid` still matches by `stripe_subscription_id` in the webhook. One-time uses `payment_intent_data.metadata.registration_id` (already handled by the `payment_intent.succeeded` branch that matches on `registration_id`).
-- Idempotency key on session create prevents duplicate sessions on double-click; if a prior session is still `open`, we return its `url` instead of creating a new one.
-- No new secrets required; uses the existing `STRIPE_SECRET_KEY`, `STRIPE_GROUP_PRODUCT_ID`, and `STRIPE_WEBHOOK_SECRET`.
-
-## Verification after implementation
-
-1. Deploy `create-checkout-session`, redeploy `stripe-webhook` (no code change but re-verify).
-2. On preview `/checkout?...&fallback=1`, click the fallback button → confirm redirect to `checkout.stripe.com`.
-3. Complete a real-card test end-to-end; confirm `/payment-status` marks the row `paid`.
-4. Delete the throwaway registration + cancel/refund the test payment in Stripe.
-
-Then you can publish.
+- Per-route head requires `react-helmet-async` — already installed per project memory pattern; I'll verify before assuming.
+- New `/en/*` route lives client-side; social crawlers see only `index.html` head, so the English landing's `og:*` fallback will still be the Romanian sitewide tags for LinkedIn/Slack previews. Google (JS-executing) reads the per-route tags fine.
+- All canonicals self-reference `https://centruldearabalibaneza.com/<path>`.
+- No backend changes; no migrations; no edge function redeploys.
