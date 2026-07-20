@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft } from "lucide-react";
+import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft, ArrowRight } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
@@ -94,6 +94,19 @@ const PostSubmitView = ({
                   </span>
                 </li>
               )}
+              {showPrivateChoice && (
+                <li className="flex items-start gap-3 text-sm text-foreground">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-xs font-semibold flex items-center justify-center text-primary">
+                    2
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                    {lang === "ro"
+                      ? "Alege mai jos: probă gratuită sau plătește lecțiile direct."
+                      : "Choose below: free trial or pay for lessons directly."}
+                  </span>
+                </li>
+              )}
             </ol>
           </div>
         </div>
@@ -164,6 +177,10 @@ const PostSubmitView = ({
                   ? "Programează o probă gratuită — o singură dată de persoană, îți confirmi locul cu cardul (0 lei)."
                   : "Book a free trial — once per person, confirm your spot with your card (0 lei charged)."}
               </p>
+              <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
+                {lang === "ro" ? "Programează proba gratuită" : "Book the free trial"}
+                <ArrowRight className="w-4 h-4" />
+              </span>
             </button>
             <button
               type="button"
@@ -181,6 +198,10 @@ const PostSubmitView = ({
                   ? "Plătește lecțiile direct — 150 lei/lecție, −15% la pachete de 20+."
                   : "Pay for your lessons directly — 150 lei/lesson, −15% for packs of 20+."}
               </p>
+              <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
+                {lang === "ro" ? "Plătește lecțiile" : "Pay for lessons"}
+                <ArrowRight className="w-4 h-4" />
+              </span>
             </button>
           </div>
         )}
