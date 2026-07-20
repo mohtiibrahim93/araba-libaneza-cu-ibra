@@ -914,8 +914,8 @@ const translations = {
     copiiCurriculumItemCulture: "Elemente de cultură libaneză adaptate vârstei",
 
     // /cursuri overview
-    cursuriMetaTitle: "Cursuri de Arabă Libaneză — Adulți, Tineri, Copii",
-    cursuriMetaDesc: "Cursuri de arabă libaneză pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București.",
+    cursuriMetaTitle: "Cursuri Arabă (Libaneză) — Adulți, Tineri, Copii | București & Online",
+    cursuriMetaDesc: "Cursuri de arabă (dialect libanez) pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ.",
     cursuriH1: "Cursurile noastre de Arabă Libaneză",
     cursuriIntro: "Alege publicul potrivit și apoi formatul: grup sau 1:1, online sau fizic în București. Toate cursurile sunt ținute de profesor nativ, după curriculum CEFR (A1–C2).",
     cursuriPickAudience: "Pe cine învățăm",
@@ -1835,8 +1835,8 @@ const translations = {
     copiiCurriculumItemWriting: "Introduction to writing (letters, simple words)",
     copiiCurriculumItemCulture: "Age-appropriate Lebanese culture elements",
 
-    cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
-    cursuriMetaDesc: "Lebanese Arabic courses for every age: adults (18+), teens (11–17) and kids (6–10). Group or 1:1, online or in person in Bucharest.",
+    cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids | Bucharest & Online",
+    cursuriMetaDesc: "Learn Lebanese Arabic online or in Bucharest. Courses for every age — adults (18+), teens (11–17) and kids (6–10). Group or 1-on-1 with a native teacher.",
     cursuriH1: "Our Lebanese Arabic Courses",
     cursuriIntro: "Pick the right audience, then the format: group or 1:1, online or in person in Bucharest. Every course is taught by a native instructor following the CEFR curriculum (A1–C2).",
     cursuriPickAudience: "Who's learning",
