@@ -136,6 +136,9 @@ const PageContent = () => {
         <title>{homeTitle}</title>
         <meta name="description" content={homeDescription} />
         <link rel="canonical" href="https://centruldearabalibaneza.com/" />
+        <link rel="alternate" hrefLang="ro" href="https://centruldearabalibaneza.com/" />
+        <link rel="alternate" hrefLang="en" href="https://centruldearabalibaneza.com/en/learn-lebanese-arabic" />
+        <link rel="alternate" hrefLang="x-default" href="https://centruldearabalibaneza.com/" />
         <meta property="og:title" content={homeTitle} />
         <meta property="og:description" content={homeDescription} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/" />
