@@ -23,6 +23,7 @@ const FAQ = [
 const CursuriArabaBucuresti = () => (
   <LandingLayout
     slug="cursuri-araba-bucuresti"
+    enHref={null}
     title="Cursuri de arabă în București — profesor nativ, grupe mici"
     metaTitle="Cursuri de Arabă București — Adulți, Copii, 1:1 | Sector 2"
     description="Cursuri de arabă în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."

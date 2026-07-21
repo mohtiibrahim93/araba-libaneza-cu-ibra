@@ -23,6 +23,7 @@ const FAQ = [
 const MeditatiiAraba = () => (
   <LandingLayout
     slug="meditatii-araba"
+    enHref="/en/arabic-tutor"
     title="Meditații de arabă 1:1 — profesor nativ, program flexibil"
     metaTitle="Meditații Arabă 1:1 cu Profesor Nativ | București & Online"
     description="Meditații de limba arabă cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. 150 lei/lecție, primă lecție gratuită."

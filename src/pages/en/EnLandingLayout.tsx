@@ -22,7 +22,12 @@ interface Props {
   lead: string;
   faq?: Faq[];
   courseSchema?: boolean;
-  hreflangRo?: string; // absolute or root-relative RO alternate, defaults to /
+  /**
+   * Root-relative RO counterpart this page links back to (visible
+   * "Versiune română" link + hreflang alternate). Defaults to home when the
+   * page has no true Romanian twin.
+   */
+  roHref?: string;
   children: React.ReactNode;
 }
 
@@ -40,15 +45,11 @@ const EnLandingLayout = ({
   lead,
   faq,
   courseSchema = true,
-  hreflangRo,
+  roHref = "/",
   children,
 }: Props) => {
   const url = `${BASE}/en/${slug}`;
-  const roAlt = hreflangRo
-    ? hreflangRo.startsWith("http")
-      ? hreflangRo
-      : `${BASE}${hreflangRo}`
-    : `${BASE}/`;
+  const roAlt = `${BASE}${roHref}`;
 
   const courseJsonLd = courseSchema
     ? {
@@ -119,7 +120,7 @@ const EnLandingLayout = ({
               <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
               <span className="text-foreground">{crumb}</span>
             </span>
-            <Link to="/" className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
+            <Link to={roHref} className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
               <Globe className="w-3.5 h-3.5" aria-hidden />
               Versiune română
             </Link>

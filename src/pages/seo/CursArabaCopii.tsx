@@ -23,6 +23,7 @@ const FAQ = [
 const CursArabaCopii = () => (
   <LandingLayout
     slug="curs-araba-copii"
+    enHref={null}
     title="Curs de arabă pentru copii — București, 6–10 ani, învățare prin joc"
     metaTitle="Curs Arabă pentru Copii (6–10 ani) | București, prin Joc"
     description="Curs de arabă pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața."

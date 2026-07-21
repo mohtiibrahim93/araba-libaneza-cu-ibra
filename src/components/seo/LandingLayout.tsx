@@ -7,7 +7,6 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const BASE = "https://centruldearabalibaneza.com";
-const EN_PAGE = "/en/learn-lebanese-arabic";
 
 interface Faq {
   q: string;
@@ -22,6 +21,13 @@ interface Props {
   crumb: string;
   lead: string;
   faq?: Faq[];
+  /**
+   * The English counterpart this page links to via "English version".
+   * Defaults to the general Lebanese course. Pass `null` when there is no
+   * real English equivalent (e.g. the Bucharest / kids pages) so we don't
+   * send visitors to an unrelated page.
+   */
+  enHref?: string | null;
   children: React.ReactNode;
 }
 
@@ -31,7 +37,7 @@ interface Props {
  * vizibil, link către varianta EN și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, children }: Props) => {
+const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, enHref = "/en/learn-lebanese-arabic", children }: Props) => {
   const url = `${BASE}/${slug}`;
 
   const courseJsonLd = {
@@ -95,10 +101,12 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
               <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
               <span className="text-foreground">{crumb}</span>
             </span>
-            <Link to={EN_PAGE} className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
-              <Globe className="w-3.5 h-3.5" aria-hidden />
-              English version
-            </Link>
+            {enHref ? (
+              <Link to={enHref} className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
+                <Globe className="w-3.5 h-3.5" aria-hidden />
+                English version
+              </Link>
+            ) : null}
           </nav>
 
           <header className="mb-10 space-y-4">

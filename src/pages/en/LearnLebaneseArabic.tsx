@@ -98,6 +98,12 @@ const LearnLebaneseArabic = () => {
 
       <main className="pt-16">
         <section className="max-w-4xl mx-auto px-6 pt-10 pb-8">
+          <div className="flex justify-end mb-4">
+            <Link to="/cursuri-araba" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary whitespace-nowrap">
+              <Globe className="w-3.5 h-3.5" aria-hidden />
+              Versiune română
+            </Link>
+          </div>
           <p className="text-xs uppercase tracking-wide text-primary font-semibold mb-3">
             Live online lessons · Native teacher
           </p>

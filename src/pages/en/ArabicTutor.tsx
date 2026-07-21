@@ -31,6 +31,7 @@ const FAQ = [
 const ArabicTutor = () => (
   <EnLandingLayout
     slug="arabic-tutor"
+    roHref="/meditatii-araba"
     title="Arabic tutor online — private 1-on-1 lessons with a native teacher"
     metaTitle="Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher"
     description="Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min."
