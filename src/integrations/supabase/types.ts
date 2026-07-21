@@ -71,6 +71,54 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_articles: {
+        Row: {
+          body_en: string
+          body_ro: string
+          created_at: string
+          description_en: string
+          description_ro: string
+          is_published: boolean
+          lead_en: string
+          lead_ro: string
+          reading_minutes: number
+          slug: string
+          title_en: string
+          title_ro: string
+          updated_at: string
+        }
+        Insert: {
+          body_en?: string
+          body_ro?: string
+          created_at?: string
+          description_en?: string
+          description_ro?: string
+          is_published?: boolean
+          lead_en?: string
+          lead_ro?: string
+          reading_minutes?: number
+          slug: string
+          title_en?: string
+          title_ro?: string
+          updated_at?: string
+        }
+        Update: {
+          body_en?: string
+          body_ro?: string
+          created_at?: string
+          description_en?: string
+          description_ro?: string
+          is_published?: boolean
+          lead_en?: string
+          lead_ro?: string
+          reading_minutes?: number
+          slug?: string
+          title_en?: string
+          title_ro?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       booking_event_types: {
         Row: {
           buffer_after_min: number

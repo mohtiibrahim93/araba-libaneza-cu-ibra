@@ -192,6 +192,91 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    // ============ Blog CMS (override model) ============
+    // A published row replaces the code-shipped article on the public site;
+    // deleting the row reverts the article to its code version.
+    if (action === "list_blog_articles") {
+      const { data, error } = await supabase
+        .from("blog_articles")
+        .select("slug, title_ro, is_published, updated_at")
+        .order("updated_at", { ascending: false });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "get_blog_article") {
+      const { slug } = body;
+      if (typeof slug !== "string" || !/^[a-z0-9-]{3,120}$/.test(slug)) {
+        return jsonResponse({ error: "Slug invalid" });
+      }
+      const { data, error } = await supabase
+        .from("blog_articles")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_blog_article") {
+      const { slug, title_ro, title_en, description_ro, description_en, lead_ro, lead_en, body_ro, body_en, reading_minutes, is_published } = body;
+      if (typeof slug !== "string" || !/^[a-z0-9-]{3,120}$/.test(slug)) {
+        return jsonResponse({ error: "Slug invalid (litere mici, cifre, cratime)" });
+      }
+      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const mins = Number(reading_minutes);
+      const row = {
+        slug,
+        title_ro: str(title_ro, 200),
+        title_en: str(title_en, 200),
+        description_ro: str(description_ro, 300),
+        description_en: str(description_en, 300),
+        lead_ro: str(lead_ro, 500),
+        lead_en: str(lead_en, 500),
+        body_ro: str(body_ro, 100_000),
+        body_en: str(body_en, 100_000),
+        reading_minutes: Number.isInteger(mins) && mins >= 1 && mins <= 60 ? mins : 5,
+        is_published: is_published === true,
+        updated_at: new Date().toISOString(),
+      };
+      const { data, error } = await supabase
+        .from("blog_articles")
+        .upsert(row, { onConflict: "slug" })
+        .select()
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_blog_article") {
+      const { slug } = body;
+      if (typeof slug !== "string" || !slug) return jsonResponse({ error: "Slug invalid" });
+      const { error } = await supabase.from("blog_articles").delete().eq("slug", slug);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "upload_blog_media") {
+      const { file_name, content_type, data_base64 } = body;
+      if (typeof file_name !== "string" || typeof content_type !== "string" || typeof data_base64 !== "string") {
+        return jsonResponse({ error: "Fișier invalid" });
+      }
+      const okType = /^(image\/(png|jpe?g|webp|gif|avif)|audio\/(mpeg|mp4|ogg|wav|webm))$/.test(content_type);
+      if (!okType) return jsonResponse({ error: "Doar imagini (png/jpg/webp/gif/avif) sau audio (mp3/m4a/ogg/wav)" });
+      // ~8 MB decoded cap keeps uploads reasonable for web use.
+      if (data_base64.length > 11_000_000) return jsonResponse({ error: "Fișier prea mare (max ~8 MB)" });
+      const bytes = Uint8Array.from(atob(data_base64), (c) => c.charCodeAt(0));
+      const safeName = file_name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").slice(-80);
+      const path = `${Date.now()}-${safeName}`;
+      const { error } = await supabase.storage.from("blog-media").upload(path, bytes, {
+        contentType: content_type,
+        upsert: false,
+      });
+      if (error) throw error;
+      const { data: pub } = supabase.storage.from("blog-media").getPublicUrl(path);
+      return jsonResponse({ success: true, url: pub.publicUrl });
+    }
+
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
       const { data, error } = await supabase
