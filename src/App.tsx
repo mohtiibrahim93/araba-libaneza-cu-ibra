@@ -54,9 +54,17 @@ const BlogCumAlegiProfesor = lazy(() => import("./pages/blog/CumAlegiProfesor"))
 const BlogInvataArabaOnline = lazy(() => import("./pages/blog/InvataArabaOnline"));
 const BlogNumereInLibaneza = lazy(() => import("./pages/blog/NumereInLibaneza"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
+const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
+const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
+const ArabicDialectsGuide = lazy(() => import("./pages/en/ArabicDialectsGuide"));
 const SeoCursuriAraba = lazy(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazy(() => import("./pages/seo/ArabaPentruIncepatori"));
 const SeoArabaOnline = lazy(() => import("./pages/seo/ArabaOnline"));
+const SeoCursuriLimbaAraba = lazy(() => import("./pages/seo/CursuriLimbaAraba"));
+const SeoMeditatiiAraba = lazy(() => import("./pages/seo/MeditatiiAraba"));
+const SeoInvataAraba = lazy(() => import("./pages/seo/InvataAraba"));
+const SeoCursuriArabaBucuresti = lazy(() => import("./pages/seo/CursuriArabaBucuresti"));
+const SeoCursArabaCopii = lazy(() => import("./pages/seo/CursArabaCopii"));
 
 const queryClient = new QueryClient();
 
@@ -122,9 +130,17 @@ const App = () => (
             <Route path="/blog/invata-araba-libaneza-online" element={<BlogInvataArabaOnline />} />
             <Route path="/blog/numere-in-araba-libaneza" element={<BlogNumereInLibaneza />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
+            <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
+            <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
+            <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />
+            <Route path="/cursuri-limba-araba" element={<SeoCursuriLimbaAraba />} />
+            <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
+            <Route path="/invata-araba" element={<SeoInvataAraba />} />
+            <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
+            <Route path="/curs-araba-copii" element={<SeoCursArabaCopii />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
