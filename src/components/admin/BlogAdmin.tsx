@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_SEED } from "@/lib/blogSeedBodies";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,19 +32,21 @@ interface Draft {
 }
 
 const emptyDraft = (slug: string): Draft => {
-  // Prefill metadata from the code registry so the owner never starts from a
-  // blank page for existing articles.
+  // Prefill everything from the code registry + the Markdown seed (faithful
+  // conversions of the current article bodies), so the owner edits the
+  // existing text instead of rewriting it.
   const reg = BLOG_POSTS.find((p) => p.slug === slug);
+  const seed = BLOG_SEED[slug];
   return {
     slug,
     title_ro: reg?.title.ro ?? "",
     title_en: reg?.title.en ?? "",
     description_ro: reg?.description.ro ?? "",
     description_en: reg?.description.en ?? "",
-    lead_ro: "",
-    lead_en: "",
-    body_ro: "",
-    body_en: "",
+    lead_ro: seed?.lead_ro ?? "",
+    lead_en: seed?.lead_en ?? "",
+    body_ro: seed?.ro ?? "",
+    body_en: seed?.en ?? "",
     reading_minutes: reg?.readingMinutes ?? 5,
     is_published: false,
   };
@@ -95,7 +98,22 @@ const BlogAdmin = () => {
     setLoadingDraft(true);
     try {
       const data = await call({ action: "get_blog_article", slug });
-      setDraft(data.data ? { ...emptyDraft(slug), ...data.data } : emptyDraft(slug));
+      if (data.data) {
+        // Existing row: keep it, but fill any still-empty bodies/leads from
+        // the seed so the original text is always there to edit.
+        const base = emptyDraft(slug);
+        const row = data.data as Partial<Draft>;
+        setDraft({
+          ...base,
+          ...row,
+          lead_ro: row.lead_ro || base.lead_ro,
+          lead_en: row.lead_en || base.lead_en,
+          body_ro: row.body_ro || base.body_ro,
+          body_en: row.body_en || base.body_en,
+        });
+      } else {
+        setDraft(emptyDraft(slug));
+      }
     } catch {
       setDraft(emptyDraft(slug));
     } finally {
@@ -272,7 +290,23 @@ const BlogAdmin = () => {
         <div className="rounded-md border border-primary/30 bg-background p-4 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-foreground">Editezi: /blog/{draft.slug}</p>
-            <Button type="button" size="sm" variant="ghost" onClick={() => setDraft(null)}>Închide</Button>
+            <div className="flex items-center gap-2">
+              {BLOG_SEED[draft.slug] && (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (!confirm("Înlocuiești textul din editor cu textul original al articolului?")) return;
+                    const seed = BLOG_SEED[draft.slug];
+                    setDraft({ ...draft, body_ro: seed.ro, body_en: seed.en, lead_ro: seed.lead_ro, lead_en: seed.lead_en });
+                  }}
+                >
+                  Reîncarcă textul original
+                </Button>
+              )}
+              <Button type="button" size="sm" variant="ghost" onClick={() => setDraft(null)}>Închide</Button>
+            </div>
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
