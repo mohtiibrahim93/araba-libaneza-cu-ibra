@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
+import { languageCounterpart } from "@/lib/languageRoutes";
 import { Button } from "@/components/ui/button";
 import BrandLogo from "@/components/BrandLogo";
 
@@ -45,6 +46,15 @@ const Navbar = () => {
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
   }, []);
+
+  // Switch language. On the dedicated EN pages / their RO-only twins the body
+  // is written in one language, so we navigate to the counterpart route;
+  // everywhere else the toggle just swaps strings in place.
+  const changeLang = (next: "ro" | "en") => {
+    setLang(next);
+    const dest = languageCounterpart(location.pathname, next);
+    if (dest) navigate(dest);
+  };
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -186,11 +196,11 @@ const Navbar = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-36">
-              <DropdownMenuItem onClick={() => setLang("ro")} className="gap-2">
+              <DropdownMenuItem onClick={() => changeLang("ro")} className="gap-2">
                 <FlagRO className="h-3.5 w-5 rounded-[2px]" />
                 <span>{t.languageRomanian}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLang("en")} className="gap-2">
+              <DropdownMenuItem onClick={() => changeLang("en")} className="gap-2">
                 <FlagGB className="h-3.5 w-5 rounded-[2px]" />
                 <span>{t.languageEnglish}</span>
               </DropdownMenuItem>
