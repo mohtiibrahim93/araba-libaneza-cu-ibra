@@ -34,7 +34,9 @@ const Footer = () => {
             <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
             <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
             <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
-            <li><Link to="/en/learn-lebanese-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Lebanese Arabic (English)</Link></li>
+            <li><Link to="/meditatii-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "1-on-1 tutoring" : "Meditații arabă 1:1"}</Link></li>
+            <li><Link to="/cursuri-araba-bucuresti" className="hover:text-foreground transition-colors">{lang === "en" ? "Courses in Bucharest" : "Cursuri arabă București"}</Link></li>
+            <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
           </ul>
         </div>
 
@@ -46,6 +48,10 @@ const Footer = () => {
             <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
             <li><AnchorLink to="#programs" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
+            <li><Link to="/en/learn-lebanese-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Lebanese Arabic</Link></li>
+            <li><Link to="/en/learn-levantine-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Levantine Arabic</Link></li>
+            <li><Link to="/en/arabic-tutor" className="hover:text-foreground transition-colors" hrefLang="en">Arabic tutor</Link></li>
+            <li><Link to="/en/arabic-dialects-guide" className="hover:text-foreground transition-colors" hrefLang="en">Arabic dialects guide</Link></li>
           </ul>
         </div>
 
