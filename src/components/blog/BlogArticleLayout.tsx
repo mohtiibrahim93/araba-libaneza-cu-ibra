@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import RelatedPosts from "@/components/blog/RelatedPosts";
+import MarkdownBody from "@/components/blog/MarkdownBody";
+import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";
 
@@ -66,8 +68,18 @@ const BlogArticleLayout = ({
 }: Props) => {
   const { lang } = useI18n();
   const url = `${BASE}/blog/${slug}`;
-  const tTitle = pick(title, lang);
-  const tDesc = pick(description, lang);
+
+  // Blog CMS override: a published, owner-edited DB version replaces the
+  // code-shipped one. Empty DB fields fall back to the code values, and the
+  // EN body falls back to RO, so partial edits never blank anything out.
+  const override = useBlogOverride(slug);
+  const ov = (en: string, ro: string) => (lang === "en" ? en || ro : ro) || "";
+
+  const tTitle = (override && ov(override.title_en, override.title_ro)) || pick(title, lang);
+  const tDesc = (override && ov(override.description_en, override.description_ro)) || pick(description, lang);
+  const tLead = (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
+  const overrideBody = override ? ov(override.body_en, override.body_ro) : "";
+  const tReadingMinutes = override?.reading_minutes || readingMinutes;
   const tCrumb = crumb ? pick(crumb, lang) : tTitle;
 
   const articleJsonLd = {
@@ -103,8 +115,8 @@ const BlogArticleLayout = ({
   });
   const metaLine =
     lang === "en"
-      ? `Published on ${dateLabel} · About ${readingMinutes} min read`
-      : `Publicat pe ${dateLabel} · Aprox. ${readingMinutes} minute de citire`;
+      ? `Published on ${dateLabel} · About ${tReadingMinutes} min read`
+      : `Publicat pe ${dateLabel} · Aprox. ${tReadingMinutes} minute de citire`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -141,12 +153,12 @@ const BlogArticleLayout = ({
             <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">
               {tTitle}
             </h1>
-            <p className="text-lg text-muted-foreground">{pick(lead, lang)}</p>
+            <p className="text-lg text-muted-foreground">{tLead}</p>
             <p className="text-sm text-muted-foreground">{metaLine}</p>
           </header>
 
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a]:text-primary [&_a]:underline">
-            {children}
+            {overrideBody ? <MarkdownBody markdown={overrideBody} /> : children}
           </div>
 
           <RelatedPosts currentSlug={slug} />

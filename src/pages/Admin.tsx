@@ -25,6 +25,7 @@ import {
   ClipboardList,
   CalendarDays,
   GraduationCap,
+  Newspaper,
   Settings,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,6 +35,7 @@ import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
+import BlogAdmin from "@/components/admin/BlogAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
@@ -554,6 +556,10 @@ const Admin = () => {
                 <GraduationCap className="w-4 h-4" />
                 Grupe
               </TabsTrigger>
+              <TabsTrigger value="blog" className="gap-1.5 px-3 sm:px-4">
+                <Newspaper className="w-4 h-4" />
+                Blog
+              </TabsTrigger>
               <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-4">
                 <Settings className="w-4 h-4" />
                 Setări
@@ -737,6 +743,11 @@ const Admin = () => {
             <CourseRequestsAdmin />
             <ManualSignupsAdmin />
             <CohortsAdmin />
+          </TabsContent>
+
+          {/* ── Blog: editare articole (CMS override) ────────────────────── */}
+          <TabsContent value="blog" className="mt-5">
+            <BlogAdmin />
           </TabsContent>
 
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
