@@ -75,7 +75,7 @@ const CourseLayout = ({
     "@context": "https://schema.org",
     "@type": "Course",
     url: canonical,
-    inLanguage: "ar",
+    inLanguage: "ro",
     provider: {
       "@type": "Organization",
       name: "Centrul de Arabă Libaneză cu Ibra",
@@ -102,7 +102,7 @@ const CourseLayout = ({
       </Helmet>
       <Navbar />
 
-      <main className="pt-16">
+      <main id="main-content" className="pt-16">
         {/* Breadcrumb */}
         <nav
           aria-label={t.courseBreadcrumbCourses}

@@ -105,6 +105,12 @@ const Navbar = () => {
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+      >
+        {lang === "en" ? "Skip to content" : "Sari la conținut"}
+      </a>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[4.25rem] md:h-20 flex items-center justify-between gap-4 lg:gap-6">
         <a
           href="/"

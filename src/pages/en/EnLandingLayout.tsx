@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { ChevronRight, Globe } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -112,7 +112,7 @@ const EnLandingLayout = ({
 
       <Navbar />
 
-      <main className="pt-24 pb-16">
+      <main id="main-content" className="pt-24 pb-16">
         <article className="max-w-3xl mx-auto px-4 md:px-6">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
@@ -120,10 +120,6 @@ const EnLandingLayout = ({
               <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
               <span className="text-foreground">{crumb}</span>
             </span>
-            <Link to={roHref} className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
-              <Globe className="w-3.5 h-3.5" aria-hidden />
-              Versiune română
-            </Link>
           </nav>
 
           <header className="mb-10 space-y-4">

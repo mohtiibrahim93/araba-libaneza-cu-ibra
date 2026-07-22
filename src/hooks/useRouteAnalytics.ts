@@ -36,8 +36,5 @@ export function useRouteAnalytics() {
       page_title: title,
       page_location: url,
     });
-
-    // Meta Pixel — PageView (trackEvent uses fbq("track", ...))
-    trackEvent("PageView");
   }, [location.pathname, location.search]);
 }

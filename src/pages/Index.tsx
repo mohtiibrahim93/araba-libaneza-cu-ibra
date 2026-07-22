@@ -120,7 +120,7 @@ const PageContent = () => {
         "@type": "Course",
         name: c.name,
         description: c.desc,
-        inLanguage: "ar",
+        inLanguage: "ro",
         provider: {
           "@type": "Organization",
           name: "Centrul de Arabă Libaneză cu Ibra",
@@ -151,7 +151,7 @@ const PageContent = () => {
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
       </Helmet>
       <Navbar />
-      <main>
+      <main id="main-content">
         <HeroSection />
         <SocialProofStrip />
         <StepsSection />

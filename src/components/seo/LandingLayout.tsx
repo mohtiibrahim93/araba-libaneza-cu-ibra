@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { ChevronRight, Globe } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -45,7 +45,7 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
     "@type": "Course",
     name: title,
     description,
-    inLanguage: "ar",
+    inLanguage: "ro",
     url,
     provider: {
       "@type": "Organization",
@@ -79,6 +79,8 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
         <title>{metaTitle}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={url} />
+        {enHref ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
+        {enHref ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={description} />
@@ -93,7 +95,7 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
 
       <Navbar />
 
-      <main className="pt-24 pb-16">
+      <main id="main-content" className="pt-24 pb-16">
         <article className="max-w-3xl mx-auto px-4 md:px-6">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
@@ -101,12 +103,6 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
               <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
               <span className="text-foreground">{crumb}</span>
             </span>
-            {enHref ? (
-              <Link to={enHref} className="inline-flex items-center gap-1 hover:text-primary whitespace-nowrap">
-                <Globe className="w-3.5 h-3.5" aria-hidden />
-                English version
-              </Link>
-            ) : null}
           </nav>
 
           <header className="mb-10 space-y-4">

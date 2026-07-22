@@ -139,7 +139,7 @@ const BlogArticleLayout = ({
 
       <Navbar />
 
-      <main className="pt-24 pb-16">
+      <main id="main-content" className="pt-24 pb-16">
         <article className="max-w-3xl mx-auto px-4 md:px-6">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
             <Link to="/" className="hover:text-primary">{homeLabel}</Link>

@@ -1,4 +1,5 @@
-// Tracking utility — fires GA4 + Meta Pixel events only if cookie consent was accepted
+// Tracking utility — fires GA4 events only if cookie consent was accepted.
+// (Meta Pixel is not set up yet; add its loader + calls here when it is.)
 
 const COOKIE_KEY = "cookie_consent";
 
@@ -21,11 +22,6 @@ export function initTracking() {
       page_title: document.title,
     });
   }
-
-  // Meta Pixel
-  if (typeof (window as any).fbq === "function") {
-    (window as any).fbq("consent", "grant");
-  }
 }
 
 export function trackEvent(eventName: string, params?: Record<string, any>) {
@@ -34,11 +30,6 @@ export function trackEvent(eventName: string, params?: Record<string, any>) {
   // GA4 event
   if (typeof (window as any).gtag === "function") {
     (window as any).gtag("event", eventName, params);
-  }
-
-  // Meta Pixel event
-  if (typeof (window as any).fbq === "function") {
-    (window as any).fbq("track", eventName, params);
   }
 }
 

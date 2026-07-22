@@ -94,9 +94,9 @@ const Footer = () => {
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.footerLegal}</p>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li><a href="/privacy" className="hover:text-foreground transition-colors">{t.footerPrivacy}</a></li>
-            <li><a href="/terms" className="hover:text-foreground transition-colors">{t.footerTerms}</a></li>
-            <li><a href="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</a></li>
+            <li><Link to="/privacy" className="hover:text-foreground transition-colors">{t.footerPrivacy}</Link></li>
+            <li><Link to="/terms" className="hover:text-foreground transition-colors">{t.footerTerms}</Link></li>
+            <li><Link to="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</Link></li>
           </ul>
         </div>
       </div>
