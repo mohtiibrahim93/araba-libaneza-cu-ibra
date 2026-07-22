@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import CourseCard from "@/components/courses/CourseCard";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import { useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
 import { AGE_LABELS, MODALITY_LABELS, type AgeCategory, type Modality } from "@/lib/courses";
@@ -96,7 +97,8 @@ const Cursuri = () => {
           {step === 2 && <StepGrid title={lang === "en" ? "How would you like to attend?" : "Cum vrei să participi?"} choices={MODES} onPick={(v) => set({ mod: v })} L={L} />}
           {step === 3 && <StepGrid title={lang === "en" ? "What type of course?" : "Ce tip de curs cauți?"} choices={TYPES} onPick={(v) => set({ tip: v })} L={L} />}
           {step === 4 && type === "privat" && <PrivateCta age={age!} mode={mode!} lang={lang} />}
-          {step === 4 && type === "grup" && <GroupResults age={age!} mode={mode!} lang={lang} />}
+          {step === 4 && type === "grup" && age === "copii" && <KidsGroupNotice mode={mode!} lang={lang} />}
+          {step === 4 && type === "grup" && age !== "copii" && <GroupResults age={age!} mode={mode!} lang={lang} />}
         </section>
 
         {/* Preserved helper: don't know your level */}
@@ -195,6 +197,31 @@ const PrivateCta = ({ age, mode, lang }: { age: string; mode: string; lang: "ro"
     <Link to={`/cursuri/privat?varsta=${age}&mod=${mode}`} className="inline-flex items-center gap-1 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
       {lang === "en" ? "See private lessons" : "Vezi cursurile private"} <ChevronRight className="h-4 w-4" />
     </Link>
+  </div>
+);
+
+const KidsGroupNotice = ({ mode, lang }: { mode: string; lang: "ro" | "en" }) => (
+  <div className="mx-auto max-w-xl rounded-2xl border border-dashed border-border bg-muted/20 p-8 text-center">
+    <Baby className="mx-auto mb-3 h-10 w-10 text-primary" />
+    <h2 className="mb-2 text-xl font-bold text-foreground">
+      {lang === "en" ? "Kids' group courses aren't open yet" : "Cursurile de grup pentru copii nu sunt încă disponibile"}
+    </h2>
+    <p className="mb-4 text-sm text-muted-foreground">
+      {lang === "en"
+        ? "We open kids' groups when there's enough interest. Private lessons for children are available now — or leave your details and we'll tell you when a group opens."
+        : "Deschidem grupe pentru copii când sunt suficienți cursanți. Lecțiile private pentru copii sunt disponibile acum — sau lasă-ne datele și îți spunem când se deschide o grupă."}
+    </p>
+    <div className="mb-6">
+      <Link to={`/cursuri/privat?varsta=copii&mod=${mode}`} className="inline-flex items-center gap-1 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+        {lang === "en" ? "See private lessons for kids" : "Vezi lecțiile private pentru copii"} <ChevronRight className="h-4 w-4" />
+      </Link>
+    </div>
+    <div className="border-t border-border pt-5 text-left">
+      <p className="mb-3 text-center text-sm font-semibold text-foreground">
+        {lang === "en" ? "Notify me when a kids' group opens" : "Anunță-mă când se deschide o grupă pentru copii"}
+      </p>
+      <NotifyMeForm context="kids_group" />
+    </div>
   </div>
 );
 

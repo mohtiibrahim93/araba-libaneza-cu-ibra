@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { invokeAdmin } from "@/lib/adminAuth";
 import { ExternalLink, Loader2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -257,7 +258,32 @@ const RegistrationsTable = ({
   onRefund,
   onPreviewCancel,
   onCancelSubscription,
-}: Props) => (
+}: Props) => {
+  // Registration ids that already have a (non-cancelled) booking, so trial
+  // leads who never picked a slot can be flagged for follow-up.
+  const [bookedRegIds, setBookedRegIds] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const { data } = await invokeAdmin<{ data?: { registration_id: string | null; status: string }[] }>({
+          action: "list_bookings",
+        });
+        const ids = new Set<string>();
+        (data?.data || []).forEach((b) => {
+          if (b.registration_id && b.status !== "cancelled") ids.add(b.registration_id);
+        });
+        if (active) setBookedRegIds(ids);
+      } catch {
+        /* non-blocking: the flag just won't show if bookings can't load */
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return (
   <div className="border border-border rounded-lg overflow-hidden">
     <Table>
       <TableHeader>
@@ -328,6 +354,11 @@ const RegistrationsTable = ({
               <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 {formTypeLabels[r.form_type] || r.form_type}
               </span>
+              {r.form_type === "trial" && !bookedRegIds.has(r.id) && (
+                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
+                  Fără interval
+                </span>
+              )}
               <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
                 {[
                   r.format,
@@ -413,6 +444,7 @@ const RegistrationsTable = ({
       </TableBody>
     </Table>
   </div>
-);
+  );
+};
 
 export default RegistrationsTable;

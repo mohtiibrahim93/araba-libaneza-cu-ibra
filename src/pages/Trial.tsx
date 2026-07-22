@@ -14,7 +14,7 @@ import { trackEvent } from "@/lib/tracking";
 import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 
 const TrialPage = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -133,6 +133,13 @@ const TrialPage = () => {
           </form>
         ) : (
           <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
+            <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+              {lang === "en" ? (
+                <><strong>Almost done!</strong> Pick a time slot below to confirm your free trial — it isn't booked until you choose one.</>
+              ) : (
+                <><strong>Aproape gata!</strong> Alege un interval mai jos pentru a confirma proba gratuită — nu e rezervată până nu alegi unul.</>
+              )}
+            </div>
             <NativeScheduler
               eventType="trial"
               registrationId={registrationId}
