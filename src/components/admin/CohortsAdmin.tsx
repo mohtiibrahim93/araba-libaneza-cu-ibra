@@ -11,7 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import CourseDetailsEditor from "@/components/admin/CourseDetailsEditor";
+import type { CourseContent } from "@/lib/courses";
 
 type CohortStatus =
   | "draft"
@@ -47,6 +49,18 @@ interface Cohort {
   status: CohortStatus;
   sort_order: number;
   manual_offset?: number;
+  // Course model (Phase 1)
+  age_category?: string | null;
+  course_type?: string | null;
+  slug?: string | null;
+  title_ro?: string | null;
+  title_en?: string | null;
+  price_lei?: number | null;
+  end_date?: string | null;
+  session_count?: number | null;
+  total_hours?: number | null;
+  image_url?: string | null;
+  content?: CourseContent | null;
 }
 
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -65,6 +79,17 @@ const blank = (): Cohort => ({
   status: "forming",
   sort_order: 0,
   manual_offset: 0,
+  age_category: "adulti",
+  course_type: "grup",
+  slug: "",
+  title_ro: "",
+  title_en: "",
+  price_lei: null,
+  end_date: null,
+  session_count: null,
+  total_hours: null,
+  image_url: "",
+  content: {},
 });
 
 const CohortsAdmin = () => {
@@ -72,6 +97,7 @@ const CohortsAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Cohort>(blank());
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const call = async (action: string, extra: Record<string, unknown> | Cohort = {}) => {
     const { data, error } = await invokeAdmin({ action, ...(extra as Record<string, unknown>) });
@@ -252,7 +278,8 @@ const CohortsAdmin = () => {
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
-            <div key={r.id} className="grid gap-2 md:grid-cols-[70px_50px_96px_130px_64px_84px_1fr_1fr_150px_auto] items-end rounded-md border border-border bg-background p-2">
+            <div key={r.id} className="rounded-md border border-border bg-background p-2">
+             <div className="grid gap-2 md:grid-cols-[70px_50px_96px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
               <div className="text-xs font-semibold">{r.form_type === "kids" ? "Copii" : "Grup"}</div>
               <div className="text-xs font-semibold">{r.level ?? "—"}</div>
               {r.form_type === "kids" ? (
@@ -316,6 +343,10 @@ const CohortsAdmin = () => {
                 </Select>
               </div>
               <div className="flex gap-1">
+                <Button size="sm" variant="outline" title="Detalii curs"
+                  onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}>
+                  {expandedId === r.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </Button>
                 <Button size="sm" onClick={() => save(r)} disabled={savingId === r.id}>
                   {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
                 </Button>
@@ -323,6 +354,10 @@ const CohortsAdmin = () => {
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
+             </div>
+              {expandedId === r.id && (
+                <CourseDetailsEditor value={r} onChange={(patch) => update(r.id, patch)} />
+              )}
             </div>
           ))}
         </div>

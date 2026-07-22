@@ -281,7 +281,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset")
+        .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -304,6 +304,18 @@ Deno.serve(async (req) => {
         status,
         sort_order,
         manual_offset,
+        // Course model (Phase 1 extension)
+        age_category,
+        course_type,
+        slug,
+        title_ro,
+        title_en,
+        price_lei,
+        end_date,
+        session_count,
+        total_hours,
+        image_url,
+        content,
       } = body;
       if (!["group", "kids"].includes(form_type)) {
         return jsonResponse({ error: "Tip invalid (group/kids)" });
@@ -321,6 +333,12 @@ Deno.serve(async (req) => {
       const ALLOWED_COHORT_STATUSES = [
         "draft","forming","minimum_reached","confirmed","full","in_progress","completed","cancelled",
       ];
+      const intOrNull = (v: unknown) =>
+        v === "" || v === null || v === undefined || !Number.isInteger(Number(v)) || Number(v) < 0
+          ? null
+          : Number(v);
+      const trimOrNull = (v: unknown) =>
+        typeof v === "string" && v.trim() ? v.trim() : null;
       const payload: Record<string, unknown> = {
         form_type,
         level: form_type === "kids" ? null : (cLevel || null),
@@ -331,6 +349,20 @@ Deno.serve(async (req) => {
         max_seats: max,
         is_active: is_active !== false,
         sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
+        // Course model (Phase 1 extension)
+        age_category: ["adulti", "adolescenti", "copii"].includes(age_category)
+          ? age_category
+          : (form_type === "kids" ? "copii" : "adulti"),
+        course_type: course_type === "privat" ? "privat" : "grup",
+        slug: trimOrNull(slug),
+        title_ro: trimOrNull(title_ro),
+        title_en: trimOrNull(title_en),
+        price_lei: intOrNull(price_lei),
+        end_date: typeof end_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(end_date) ? end_date : null,
+        session_count: intOrNull(session_count),
+        total_hours: intOrNull(total_hours),
+        image_url: trimOrNull(image_url),
+        content: content && typeof content === "object" && !Array.isArray(content) ? content : {},
       };
       if (typeof status === "string" && ALLOWED_COHORT_STATUSES.includes(status)) {
         payload.status = status;
