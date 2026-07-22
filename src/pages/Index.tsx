@@ -29,8 +29,8 @@ const PageContent = () => {
   }, [lang, t.siteTitle]);
 
   useEffect(() => {
-    // Tracking is initialized globally (CookieConsent in App.tsx), so we only
-    // handle post-payment redirect toasts here.
+    // Analytics consent is handled by the consentmanager.net CMP (Google
+    // Consent Mode); here we only handle post-payment redirect toasts.
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");
     const type = params.get("type");

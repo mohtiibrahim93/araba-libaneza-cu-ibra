@@ -34,6 +34,8 @@ interface Route {
   path: string;
   title: string;
   description: string;
+  /** Canonical override (root-relative) when this page consolidates into another. */
+  canonical?: string;
 }
 
 // Non-blog marketing routes. Values copied from the pages' existing SEO props
@@ -46,7 +48,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri interactive de arabă libaneză pentru copii (4–14 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
   { path: "/cursuri/tineri", title: "Cursuri Arabă Libaneză — Tineri 11–17", description: "Cursuri de arabă libaneză pentru adolescenți 11–17 ani, în grup sau 1:1, online sau fizic." },
-  { path: "/cursuri-araba", title: "Cursuri de Arabă 2026 — Grup, Private & Copii | București și Online", description: "Cursuri de arabă libaneză cu profesor nativ: grup (A1–C2), lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima lecție de probă e gratuită." },
+  { path: "/cursuri-araba", title: "Cursuri de Arabă 2026 — Grup, Private & Copii | București și Online", description: "Cursuri de arabă libaneză cu profesor nativ: grup (A1–C2), lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima lecție de probă e gratuită.", canonical: "/cursuri-limba-araba" },
   { path: "/araba-pentru-incepatori", title: "Arabă pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție", description: "Învață arabă de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită." },
   { path: "/araba-online", title: "Arabă Online — Cursuri Live pe Zoom cu Profesor Nativ | De Oriunde", description: "Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online începe pe 15 august — probă gratuită." },
   { path: "/cursuri-limba-araba", title: "Cursuri de Limba Arabă — Grup, Private, Online | București 2026", description: "Cursuri de limba arabă cu profesor nativ, structurate pe niveluri CEFR (A1–C2). Grup, private și pentru copii, fizic în București sau online. Lecție de probă gratuită." },
@@ -85,13 +87,14 @@ function renderRoute(template: string, route: Route): string {
   const isEn = route.path.startsWith("/en/");
   const title = escAttr(route.title);
   const desc = escAttr(route.description);
-  const href = escAttr(url);
+  // Canonical (and og:url) point at the consolidation target when set.
+  const canonicalHref = escAttr(route.canonical ? BASE + route.canonical : url);
 
   let html = template;
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
   html = setMeta(html, "property", "og:title", title);
   html = setMeta(html, "property", "og:description", desc);
-  html = setMeta(html, "property", "og:url", href);
+  html = setMeta(html, "property", "og:url", canonicalHref);
   html = setMeta(html, "name", "twitter:title", title);
   html = setMeta(html, "name", "twitter:description", desc);
 
@@ -99,7 +102,7 @@ function renderRoute(template: string, route: Route): string {
   // plus a per-route og:locale, right before </head>.
   const inject =
     `    <meta name="description" content="${desc}" />\n` +
-    `    <link rel="canonical" href="${href}" />\n` +
+    `    <link rel="canonical" href="${canonicalHref}" />\n` +
     `    <meta property="og:locale" content="${isEn ? "en_US" : "ro_RO"}" />\n`;
   html = html.replace(/<\/head>/, `${inject}  </head>`);
   return html;

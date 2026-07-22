@@ -23,6 +23,7 @@ const FAQ = [
 const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-araba"
+    canonicalHref="/cursuri-limba-araba"
     title="Cursuri de arabă cu profesor nativ — grup, private și pentru copii"
     metaTitle="Cursuri de Arabă 2026 — Grup, Private & Copii | București și Online"
     description="Cursuri de arabă libaneză cu profesor nativ: grup (A1–C2), lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima lecție de probă e gratuită."

@@ -1,32 +1,9 @@
-// Tracking utility — fires GA4 events only if cookie consent was accepted.
-// (Meta Pixel is not set up yet; add its loader + calls here when it is.)
-
-const COOKIE_KEY = "cookie_consent";
-
-export function hasConsent(): boolean {
-  return localStorage.getItem(COOKIE_KEY) === "accepted";
-}
-
-export function initTracking() {
-  if (!hasConsent()) return;
-
-  // GA4 — grant consent and force a page_view for the first hit
-  if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
-    (window as any).gtag("consent", "update", {
-      analytics_storage: "granted",
-      ad_storage: "granted",
-    });
-    (window as any).gtag("event", "page_view", {
-      page_path: window.location.pathname + window.location.search,
-      page_location: window.location.href,
-      page_title: document.title,
-    });
-  }
-}
+// GA4 event helpers. Consent is handled by the consentmanager.net CMP via
+// Google Consent Mode: index.html sets consent "default: denied" and the CMP
+// flips it to "granted" when the visitor accepts, so we send events
+// unconditionally and let Consent Mode gate them. Meta Pixel isn't set up yet.
 
 export function trackEvent(eventName: string, params?: Record<string, any>) {
-  if (!hasConsent()) return;
-
   // GA4 event
   if (typeof (window as any).gtag === "function") {
     (window as any).gtag("event", eventName, params);

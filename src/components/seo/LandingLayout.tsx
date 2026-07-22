@@ -28,6 +28,12 @@ interface Props {
    * send visitors to an unrelated page.
    */
   enHref?: string | null;
+  /**
+   * Canonical override (root-relative). Use when this page is a near-duplicate
+   * that should consolidate into another URL — e.g. /cursuri-araba points its
+   * canonical at /cursuri-limba-araba. Defaults to self.
+   */
+  canonicalHref?: string;
   children: React.ReactNode;
 }
 
@@ -37,8 +43,9 @@ interface Props {
  * vizibil, link către varianta EN și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, enHref = "/en/learn-lebanese-arabic", children }: Props) => {
+const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
+  const canonical = canonicalHref ? `${BASE}${canonicalHref}` : url;
 
   const courseJsonLd = {
     "@context": "https://schema.org",
@@ -78,13 +85,13 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
       <Helmet>
         <title>{metaTitle}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={url} />
-        {enHref ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
-        {enHref ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        <link rel="canonical" href={canonical} />
+        {enHref && !canonicalHref ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
+        {enHref && !canonicalHref ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={url} />
+        <meta property="og:url" content={canonical} />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:locale" content="ro_RO" />
         <meta name="twitter:card" content="summary_large_image" />
