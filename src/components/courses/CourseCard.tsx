@@ -37,6 +37,9 @@ const CourseCard = ({ course }: { course: Course }) => {
   const badge = courseStatusBadge(course.status, course.seatsLeft);
   const schedule = lang === "en" ? course.schedule_label_en : course.schedule_label_ro;
   const price = course.price_lei;
+  // Prefer an owner-set slug; otherwise a synthetic "<level>-<format>" one so
+  // existing courses are still reachable (the detail page resolves both).
+  const slug = course.slug || (course.level && course.format ? `${course.level.toLowerCase()}-${course.format}` : null);
 
   return (
     <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
@@ -85,9 +88,9 @@ const CourseCard = ({ course }: { course: Course }) => {
         <span className="text-sm font-semibold text-foreground">
           {price != null ? `${price} LEI` : ""}
         </span>
-        {course.slug ? (
+        {slug ? (
           <Link
-            to={`/cursuri/curs/${course.slug}`}
+            to={`/cursuri/curs/${slug}`}
             className="inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
           >
             {lang === "en" ? "See details" : "Vezi detalii"}

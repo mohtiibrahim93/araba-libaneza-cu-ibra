@@ -9,6 +9,7 @@ import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useCourseBySlug } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
 import { courseStatusBadge, courseTitle, MODALITY_LABELS, type CourseContent } from "@/lib/courses";
+import { courseFallback } from "@/lib/courseFallback";
 import type { FormatType, LevelType } from "@/components/RegistrationForm/types";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -56,13 +57,22 @@ const CourseDetail = () => {
 
   const c = course;
   const content: CourseContent = c.content ?? {};
-  const title = courseTitle(c, lang);
+  // Fall back to the per-level curriculum (src/data/curriculum.ts) when the
+  // course row hasn't been filled in yet, so nothing renders empty.
+  const fb = courseFallback(c.level, lang);
+  const title = (lang === "en" ? c.title_en : c.title_ro) || fb.title || courseTitle(c, lang);
   const badge = courseStatusBadge(c.status, c.seatsLeft);
   const url = `${BASE_URL}/cursuri/curs/${c.slug}`;
+  const sessionN = c.session_count ?? fb.sessionCount;
+  const hoursN = c.total_hours ?? fb.totalHours;
   const cf = (base: string): string | undefined => {
     const en = (content as Record<string, unknown>)[`${base}_en`] as string | undefined;
     const ro = (content as Record<string, unknown>)[`${base}_ro`] as string | undefined;
-    return lang === "en" ? en || ro : ro;
+    const db = lang === "en" ? en || ro : ro;
+    if (db) return db;
+    if (base === "objectives") return fb.objective;
+    if (base === "curriculum") return fb.curriculum;
+    return undefined;
   };
   const desc = cf("short") || cf("long") || `${title} — ${lang === "en" ? "Lebanese Arabic course" : "curs de arabă libaneză"}.`;
 
@@ -72,7 +82,7 @@ const CourseDetail = () => {
     { icon: CalendarDays, label: lang === "en" ? "Starts" : "Începe", value: fmtDate(c.start_date, lang) },
     { icon: CalendarDays, label: lang === "en" ? "Ends" : "Se termină", value: fmtDate(c.end_date, lang) },
     { icon: Clock, label: lang === "en" ? "Schedule" : "Program", value: lang === "en" ? c.schedule_label_en : c.schedule_label_ro },
-    { icon: Clock, label: lang === "en" ? "Sessions" : "Ședințe", value: c.session_count ? `${c.session_count}${c.total_hours ? ` · ${c.total_hours}h` : ""}` : null },
+    { icon: Clock, label: lang === "en" ? "Sessions" : "Ședințe", value: sessionN ? `${sessionN}${hoursN ? ` · ${hoursN}h` : ""}` : null },
     { icon: Users, label: lang === "en" ? "Seats" : "Locuri", value: c.full ? (lang === "en" ? "Waitlist" : "Listă de așteptare") : `${c.seatsLeft ?? c.max_seats} ${lang === "en" ? "left" : "libere"}` },
   ];
 

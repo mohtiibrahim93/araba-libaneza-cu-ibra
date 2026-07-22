@@ -94,18 +94,23 @@ export function useCourseBySlug(slug: string | undefined) {
     let active = true;
     setLoading(true);
     (async () => {
-      const [{ data }, { data: counts }] = await Promise.all([
-        (supabase.from("group_cohorts") as unknown as { select: (c: string) => any })
-          .select(COLS).eq("slug", slug).eq("is_active", true).maybeSingle(),
-        supabase.rpc("get_cohort_signup_counts"),
-      ]);
-      if (!active) return;
-      if (!data) {
-        setCourse(null);
-        setLoading(false);
-        return;
+      const table = () => supabase.from("group_cohorts") as unknown as { select: (c: string) => any };
+      const counts = (await supabase.rpc("get_cohort_signup_counts")).data as { cohort_id: string; taken: number }[];
+      // 1) owner-set slug
+      let { data: rows } = await table().select(COLS).eq("slug", slug).eq("is_active", true).limit(1);
+      // 2) synthetic "<level>-<format>" slug for courses without a manual one
+      if (!rows || rows.length === 0) {
+        const m = (slug as string).match(/^([a-cA-C][12])-(online|fizic)$/);
+        if (m) {
+          ({ data: rows } = await table().select(COLS)
+            .eq("level", m[1].toUpperCase()).eq("format", m[2].toLowerCase())
+            .eq("course_type", "grup").eq("is_active", true)
+            .order("start_date", { ascending: true }).limit(1));
+        }
       }
-      setCourse(withSeats([data as Row], counts as { cohort_id: string; taken: number }[])[0]);
+      if (!active) return;
+      const row = rows && rows[0];
+      setCourse(row ? withSeats([row as Row], counts)[0] : null);
       setLoading(false);
     })();
     return () => {
