@@ -15,7 +15,7 @@ const CursTineri = () => {
     description: t.cursTineriMetaDesc,
     courseMode: ["onsite", "online"],
     educationalLevel: "A1, A2, B1, B2",
-    audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Teens 11-17" },
+    audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Teens 11-18" },
   };
 
   return (

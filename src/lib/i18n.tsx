@@ -830,11 +830,11 @@ const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Cursuri de Arabă Libaneză pentru Copii — București",
-    courseCopiiMetaDesc: "Cursuri interactive de arabă libaneză pentru copii (4–14 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani.",
+    courseCopiiMetaDesc: "Cursuri interactive de arabă libaneză pentru copii (6–10 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani.",
     courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
-    courseCopiiIntro: "Cursuri concepute special pentru copii (4–14 ani), cu activități, jocuri și povești în arabă libaneză. Format fizic în București — online disponibil pentru copii peste 10 ani.",
+    courseCopiiIntro: "Cursuri concepute special pentru copii (6–10 ani), cu activități, jocuri și povești în arabă libaneză. Format fizic în București — online disponibil pentru copii peste 10 ani.",
     courseCopiiPriceLine: "Grupuri mici · Înscrieri deschise",
-    courseCopiiFeat1: "Vârste 4–14 ani, grupe pe categorii de vârstă",
+    courseCopiiFeat1: "Vârste 6–10 ani, grupe pe categorii de vârstă",
     courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
     courseCopiiFeat3: "Fizic în București (online de la 10 ani)",
     courseCopiiFeat4: "Profesor nativ, atmosferă caldă",
@@ -1757,9 +1757,9 @@ const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Lebanese Arabic Courses for Kids — Bucharest",
-    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 4–14), in person in Bucharest. Activities, games and stories in Lebanese Arabic. Online available from age 10.",
+    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 6–10), in person in Bucharest. Activities, games and stories in Lebanese Arabic. Online available from age 10.",
     courseCopiiH1: "Lebanese Arabic Courses for Kids",
-    courseCopiiIntro: "Courses designed specifically for kids (ages 4–14), with activities, games and stories in Lebanese Arabic. In-person format in Bucharest — online available for kids over 10.",
+    courseCopiiIntro: "Courses designed specifically for kids (ages 6–10), with activities, games and stories in Lebanese Arabic. In-person format in Bucharest — online available for kids over 10.",
     courseCopiiPriceLine: "Small groups · Enrollment open",
     courseCopiiFeat1: "Ages 4–14, grouped by age",
     courseCopiiFeat2: "Play-based, interactive lessons",

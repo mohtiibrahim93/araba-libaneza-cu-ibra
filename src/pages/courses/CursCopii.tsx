@@ -18,7 +18,7 @@ const CursCopii = () => {
     name: t.courseCopiiH1,
     description: t.courseCopiiMetaDesc,
     courseMode: ["onsite", "online"],
-    educationalLevel: "Beginner — Kids ages 4–14",
+    educationalLevel: "Beginner — Kids ages 6–10",
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Children" },
   };
 
