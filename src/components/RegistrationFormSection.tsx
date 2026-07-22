@@ -113,26 +113,31 @@ const RegistrationFormSection = ({
     if (!raw) return;
     try {
       const draft = JSON.parse(raw);
-      // When the page locks the selection (dedicated course routes), do not
-      // let a previously-saved draft override the course/level/format that
-      // this page is meant to represent.
-      if (!lockSelection) {
+      // Course-specific fields (type/level/format/plan) must only be restored
+      // when the draft belongs to the SAME context this form was opened for.
+      // Otherwise a leftover draft — e.g. an A2→B1 group form — repaints a form
+      // opened for a different audience (the kids CTA showed the B1 group form).
+      // Skip when the selection is locked (dedicated routes) or when a specific
+      // course type was requested and the draft is for a different one.
+      const typeMatches = !defaultCourseType || !draft.courseType || draft.courseType === defaultCourseType;
+      if (!lockSelection && typeMatches) {
         if (draft.courseType) setCourseType(draft.courseType);
         if (draft.format !== undefined) setFormat(draft.format);
         if (draft.level) setLevel(draft.level);
+        if (draft.center !== undefined) setCenter(draft.center);
+        if (draft.childName !== undefined) setChildName(draft.childName);
+        if (draft.childAge !== undefined) setChildAge(draft.childAge);
+        if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
+        if (draft.groupPlan !== undefined) setGroupPlan(draft.groupPlan);
+        if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
       }
-      if (draft.center !== undefined) setCenter(draft.center);
+      // Identity fields are context-independent — safe to carry across.
       if (draft.name !== undefined) setName(draft.name);
       if (draft.phone !== undefined) setPhone(draft.phone);
       if (draft.email !== undefined) setEmail(draft.email);
-      if (draft.childName !== undefined) setChildName(draft.childName);
-      if (draft.childAge !== undefined) setChildAge(draft.childAge);
       if (draft.message !== undefined) setMessage(draft.message);
       if (draft.gdpr !== undefined) setGdpr(draft.gdpr);
       if (draft.referralCode !== undefined) setReferralCode(draft.referralCode);
-      if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
-      if (draft.groupPlan !== undefined) setGroupPlan(draft.groupPlan);
-      if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
     } catch {
       // ignore corrupted drafts
     }

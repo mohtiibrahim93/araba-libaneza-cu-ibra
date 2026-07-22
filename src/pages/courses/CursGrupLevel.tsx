@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -253,12 +254,18 @@ const CursGrupLevel = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {available ? t.levelPageRegisterDesc : t.levelPageInPrepDesc}
                   </p>
-                  <RegistrationFormSection
-                    defaultCourseType="group"
-                    defaultLevel={upperLevel}
-                    lockSelection
-                    embedded
-                  />
+                  {available ? (
+                    <RegistrationFormSection
+                      defaultCourseType="group"
+                      defaultLevel={upperLevel}
+                      lockSelection
+                      embedded
+                    />
+                  ) : (
+                    // No open cohort yet: collect interest instead of showing a
+                    // payment plan for a group that isn't running.
+                    <NotifyMeForm context={`Grupă ${upperLevel}`} level={upperLevel} />
+                  )}
                 </div>
                 <a
                   href={WHATSAPP_URL}
