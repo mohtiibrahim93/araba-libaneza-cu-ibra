@@ -502,73 +502,106 @@ export type Database = {
       }
       group_cohorts: {
         Row: {
+          age_category: string | null
+          content: Json
+          course_type: string
           created_at: string
           days_of_week: number[] | null
           duration_minutes: number | null
+          end_date: string | null
           end_time: string | null
           form_type: string
           format: string | null
           id: string
+          image_url: string | null
           is_active: boolean
           level: string | null
           location_id: string | null
           manual_offset: number
           max_seats: number
+          price_lei: number | null
           schedule_label_en: string
           schedule_label_ro: string
+          session_count: number | null
+          slug: string | null
           sort_order: number
           start_date: string
           start_time: string | null
           status: string
           timezone: string
+          title_en: string | null
+          title_ro: string | null
+          total_hours: number | null
           track: string
           tutor_id: string | null
           updated_at: string
         }
         Insert: {
+          age_category?: string | null
+          content?: Json
+          course_type?: string
           created_at?: string
           days_of_week?: number[] | null
           duration_minutes?: number | null
+          end_date?: string | null
           end_time?: string | null
           form_type: string
           format?: string | null
           id?: string
+          image_url?: string | null
           is_active?: boolean
           level?: string | null
           location_id?: string | null
           manual_offset?: number
           max_seats?: number
+          price_lei?: number | null
           schedule_label_en?: string
           schedule_label_ro?: string
+          session_count?: number | null
+          slug?: string | null
           sort_order?: number
           start_date: string
           start_time?: string | null
           status?: string
           timezone?: string
+          title_en?: string | null
+          title_ro?: string | null
+          total_hours?: number | null
           track?: string
           tutor_id?: string | null
           updated_at?: string
         }
         Update: {
+          age_category?: string | null
+          content?: Json
+          course_type?: string
           created_at?: string
           days_of_week?: number[] | null
           duration_minutes?: number | null
+          end_date?: string | null
           end_time?: string | null
           form_type?: string
           format?: string | null
           id?: string
+          image_url?: string | null
           is_active?: boolean
           level?: string | null
           location_id?: string | null
           manual_offset?: number
           max_seats?: number
+          price_lei?: number | null
           schedule_label_en?: string
           schedule_label_ro?: string
+          session_count?: number | null
+          slug?: string | null
           sort_order?: number
           start_date?: string
           start_time?: string | null
           status?: string
           timezone?: string
+          title_en?: string | null
+          title_ro?: string | null
+          total_hours?: number | null
           track?: string
           tutor_id?: string | null
           updated_at?: string
