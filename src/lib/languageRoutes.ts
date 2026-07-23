@@ -16,6 +16,7 @@ const EN_FOR_RO: Record<string, string> = {
   "/cursuri-limba-araba": "/en/learn-lebanese-arabic",
   "/araba-pentru-incepatori": "/en/learn-lebanese-arabic",
   "/invata-araba": "/en/learn-lebanese-arabic",
+  "/cursuri-araba-bucuresti": "/en/arabic-classes-near-me",
 };
 
 const RO_FOR_EN: Record<string, string> = {
@@ -23,6 +24,7 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/learn-lebanese-arabic": "/cursuri-araba",
   "/en/learn-levantine-arabic": "/cursuri-araba",
   "/en/arabic-dialects-guide": "/cursuri-araba",
+  "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
 };
 
 /**

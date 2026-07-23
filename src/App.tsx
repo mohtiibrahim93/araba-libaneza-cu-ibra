@@ -55,6 +55,7 @@ const BlogLearnLebaneseArabic = lazy(() => import("./pages/blog/LearnLebaneseAra
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
 const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
+const ArabicClassesNearMe = lazy(() => import("./pages/en/ArabicClassesNearMe"));
 const ArabicDialectsGuide = lazy(() => import("./pages/en/ArabicDialectsGuide"));
 const SeoCursuriAraba = lazy(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazy(() => import("./pages/seo/ArabaPentruIncepatori"));
@@ -133,6 +134,7 @@ const App = () => (
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
+            <Route path="/en/arabic-classes-near-me" element={<ArabicClassesNearMe />} />
             <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
