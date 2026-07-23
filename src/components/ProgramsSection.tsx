@@ -55,7 +55,7 @@ const ProgramsSection = () => {
       if (!draft?.name && !draft?.phone && !draft?.email) return; // nothing worth restoring
       if (draft.courseType === "group") setInlineForm("group");
       else if (draft.courseType === "private") setInlineForm("private");
-      else if (draft.courseType === "kids") setInlineForm("kids");
+      // Kids group enrollment is closed (notify-only); don't auto-open it.
     } catch {
       // ignore corrupted drafts
     }
@@ -112,8 +112,9 @@ const ProgramsSection = () => {
         </div>
 
         <Tabs defaultValue="adults" className="w-full">
-          <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-2">
+          <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="adults">{t.tabAdults}</TabsTrigger>
+            <TabsTrigger value="tineri">{lang === "en" ? "Teens" : "Tineri"}</TabsTrigger>
             <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
           </TabsList>
 
@@ -432,7 +433,7 @@ const ProgramsSection = () => {
                       <img src={kidsImg} alt={t.kidsGroupCardTitle} className="w-full h-52 object-cover" />
                       <div className="p-6 flex flex-col flex-1">
                         <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-                          {t.kidsGroupBadge}
+                          {lang === "en" ? "Coming soon" : "În curând"}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
@@ -464,22 +465,11 @@ const ProgramsSection = () => {
                           </div>
                         )}
 
-                        {/* Price */}
-                        <div className="mb-3">
-                          <div className="flex items-baseline flex-wrap gap-x-2">
-                            <span className="text-2xl font-extrabold text-foreground leading-none">500</span>
-                            <span className="text-sm font-semibold text-muted-foreground">{t.kidsGroupPricePerMonth}</span>
-                          </div>
-                        </div>
-                        <p className="text-xs font-medium text-primary mb-3">{t.kidsGroupPriceNote}</p>
-                        <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-                          <div className="flex items-baseline justify-between gap-2">
-                            <span className="text-muted-foreground">{t.kidsGroupPriceTotalLabel}</span>
-                            <span>
-                              <span className="line-through text-muted-foreground">1.500 LEI</span>
-                              <span className="ml-2 font-bold text-primary">1.350 LEI</span>
-                            </span>
-                          </div>
+                        {/* Kids group isn't open yet — notify instead of enroll */}
+                        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+                          {lang === "en"
+                            ? "Kids' group courses aren't open yet — leave your details on the kids page and we'll tell you when one starts. Private lessons for kids are available now."
+                            : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele pe pagina pentru copii și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum."}
                         </div>
 
                         {/* Details */}
@@ -513,15 +503,14 @@ const ProgramsSection = () => {
                           ))}
                         </ul>
 
-                        {/* CTA */}
+                        {/* CTA — no inline group enrollment; route to the kids page */}
                         <div className="mt-auto">
-                          <button
-                            type="button"
-                            onClick={() => setInlineForm("kids")}
+                          <Link
+                            to="/cursuri/copii"
                             className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                           >
-                            {t.kidsGroupRegister}
-                          </button>
+                            {lang === "en" ? "Details · notify me" : "Detalii · anunță-mă"}
+                          </Link>
                           <a
                             href={WA_KIDS}
                             target="_blank"
@@ -639,6 +628,30 @@ const ProgramsSection = () => {
                   )}
                 </div>
               )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="tineri">
+            <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-sm">
+              <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                {lang === "en" ? "Teens · 11–18" : "Adolescenți · 11–18 ani"}
+              </span>
+              <h3 className="mb-2 text-xl font-bold text-foreground">
+                {lang === "en" ? "Lebanese Arabic for teens (11–18)" : "Arabă libaneză pentru adolescenți (11–18 ani)"}
+              </h3>
+              <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
+                {lang === "en"
+                  ? "Group and private lessons adapted for teenagers — same CEFR curriculum, a pace and topics that fit their age. See options or ask us."
+                  : "Cursuri de grup și private adaptate pentru adolescenți — același curriculum CEFR, într-un ritm și cu teme potrivite vârstei. Vezi opțiunile sau întreabă-ne."}
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link to="/cursuri/tineri" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                  {lang === "en" ? "See teen courses" : "Vezi cursurile pentru adolescenți"}
+                </Link>
+                <a href={wa("Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru adolescenți.")} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted">
+                  WhatsApp
+                </a>
+              </div>
             </div>
           </TabsContent>
         </Tabs>
