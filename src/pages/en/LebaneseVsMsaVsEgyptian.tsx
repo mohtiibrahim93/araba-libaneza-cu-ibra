@@ -58,6 +58,7 @@ const LebaneseVsMsaVsEgyptian = () => (
     crumb="Lebanese vs MSA vs Egyptian"
     lead="A practical side-by-side comparison of Lebanese Arabic, Modern Standard Arabic (MSA / Fusha) and Egyptian Arabic — how they sound, how they differ, and which one to learn depending on your goal."
     courseSchema={false}
+    roHref="/blog/araba-libaneza-vs-araba-standard"
     faq={FAQ}
   >
     <p>
