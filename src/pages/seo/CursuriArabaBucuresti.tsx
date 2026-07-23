@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import LandingLayout from "@/components/seo/LandingLayout";
 
 const FAQ = [
@@ -21,6 +22,56 @@ const FAQ = [
 ];
 
 const CursuriArabaBucuresti = () => (
+  <>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "@id": "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness",
+          name: "Centrul de Arabă Libaneză cu Ibra — București",
+          description:
+            "Cursuri de arabă libaneză în București: grupe mici A1–C2, meditații 1:1 și curs pentru copii. Profesor nativ. Str. Icoanei 80, sector 2.",
+          url: "https://centruldearabalibaneza.com/cursuri-araba-bucuresti",
+          image: "https://centruldearabalibaneza.com/og-image.png",
+          telephone: "+40763124514",
+          email: "marhaba@centruldearabalibaneza.com",
+          priceRange: "500–700 RON/lună",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Raduga Creative Center, Strada Icoanei 80",
+            addressLocality: "București",
+            addressRegion: "Sector 2",
+            postalCode: "020451",
+            addressCountry: "RO",
+          },
+          geo: { "@type": "GeoCoordinates", latitude: 44.446, longitude: 26.1053 },
+          areaServed: [
+            { "@type": "City", name: "București" },
+            { "@type": "AdministrativeArea", name: "Ilfov" },
+          ],
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Monday", "Wednesday"],
+              opens: "19:00",
+              closes: "20:30",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: "Saturday",
+              opens: "10:00",
+              closes: "12:00",
+            },
+          ],
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: "5.0",
+            reviewCount: "21",
+          },
+        })}
+      </script>
+    </Helmet>
   <LandingLayout
     slug="cursuri-araba-bucuresti"
     enHref={null}
@@ -37,6 +88,34 @@ const CursuriArabaBucuresti = () => (
       <strong>Raduga Creative Center, Strada Icoanei 80</strong> — zona Piața Rosetti, la 5 min de
       metroul Piața Romană.
     </p>
+
+    <h2>Zone din București din care ne vin studenți</h2>
+    <p>
+      Sala e în <strong>sectorul 2</strong>, la mijloc între Piața Romană și Piața Universității,
+      așa că e ușor accesibilă din aproape orice zonă a orașului:
+    </p>
+    <ul>
+      <li>
+        <strong>Centru & sector 1</strong> (Dorobanți, Aviatorilor, Victoriei, Cotroceni) — 10–15
+        min cu metroul M2.
+      </li>
+      <li>
+        <strong>Sector 2 & 3</strong> (Moșilor, Obor, Colentina, Iancului, Titan) — 15–20 min cu
+        tramvaiul 21 sau metroul M1.
+      </li>
+      <li>
+        <strong>Sector 4 & 5</strong> (Tineretului, Unirii, Rahova) — 15–20 min cu M2 până la Piața
+        Romană.
+      </li>
+      <li>
+        <strong>Sector 6 & Militari</strong> — 25 min cu M3 → M2, sau alegi{" "}
+        <Link to="/araba-online">varianta online</Link>.
+      </li>
+      <li>
+        <strong>Pipera, Băneasa, Ilfov (Voluntari, Otopeni)</strong> — cel mai simplu pe M2 până la
+        Piața Romană; parcarea în zonă e ok seara.
+      </li>
+    </ul>
 
     <h2>Ce cursuri de arabă găsești în București</h2>
     <ul>
@@ -80,6 +159,7 @@ const CursuriArabaBucuresti = () => (
       online.
     </p>
   </LandingLayout>
+  </>
 );
 
 export default CursuriArabaBucuresti;
