@@ -215,6 +215,20 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     readingMinutes: 8,
     tag: { ro: "Ghid", en: "Guide" },
   },
+  {
+    slug: "gramatica-arabei-libaneze",
+    title: {
+      ro: "Gramatica arabei libaneze: top 5 întrebări (b-, pronume, ordinea cuvintelor)",
+      en: "Lebanese Arabic grammar: top 5 questions (b-, pronouns, word order)",
+    },
+    description: {
+      ro: "Ghid clar pentru cele mai frecvente 5 întrebări de gramatică în araba libaneză: prefixul بـ, verbele la trecut cu pronume atașate, pronumele personale/posesive, ordinea cuvintelor și diferențele față de MSA.",
+      en: "A clear guide to the top 5 grammar questions in Lebanese Arabic: the بـ prefix, past-tense verbs with attached pronouns, personal and possessive pronouns, word order, and the key differences from MSA.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 9,
+    tag: { ro: "Gramatică", en: "Grammar" },
+  },
 ];
 
 /** Newest first — the order the index renders. */
