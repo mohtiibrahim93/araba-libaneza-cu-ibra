@@ -31,6 +31,10 @@ const FAQ = [
     q: "How much do Lebanese Arabic courses cost?",
     a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (10% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson (≈ €30). A 30-minute trial lesson is free.",
   },
+  {
+    q: "What language are lessons taught in?",
+    a: "You pick. Ibra teaches fluently in English, French, Arabic and Romanian — pick whichever you're most comfortable with. Lessons are not taught in German or other languages.",
+  },
 ];
 
 const LearnLebaneseArabic = () => (
@@ -131,6 +135,7 @@ const LearnLebaneseArabic = () => (
       <li><strong>CEFR structure:</strong> six levels A1 → C2, from survival to full fluency.</li>
       <li><strong>Real conversations:</strong> every lesson builds toward something you can actually say in daily life.</li>
       <li><strong>Online worldwide:</strong> live Zoom lessons in any time zone that overlaps with Bucharest (EET). In-person option in Bucharest.</li>
+      <li><strong>Teaching language:</strong> English, French, Arabic or Romanian — you choose the one you're most comfortable in.</li>
     </ul>
 
     <h2>What you will be able to say</h2>

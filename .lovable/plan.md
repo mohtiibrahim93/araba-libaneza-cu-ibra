@@ -1,22 +1,25 @@
-## Backlog status
+## Two changes
 
-All eight items from the last batch (Option 1 + Option 2) shipped and typechecked cleanly. Nothing else from the accumulated SEO/Semrush discussion is outstanding — the only items I've explicitly deferred and NOT queued are:
+### 1. `/de/arabisch-lernen` — remove any "we teach in German" wording
+Ibra doesn't teach in German. Every mention of "einfache Erklärungen auf Deutsch möglich" gets removed. Teaching languages listed as **Englisch, Französisch, Arabisch, Rumänisch** only.
 
-- Semrush multi-year trend pull (blocked on you approving the connect modal)
-- GSC disavow file upload (`public/disavow.txt` exists; upload is a manual GSC step you own)
+Edits in `src/pages/de/ArabischLernen.tsx`:
+- Top FAQ item "In welcher Sprache findet der Unterricht statt?" — drop the "einfache Erklärungen auf Deutsch" sentence; keep the four-language list only.
+- FAQ item "Wer ist der Lehrer?" — same removal.
+- "Warum uns wählen" / "Wie wir unterrichten" bullet on Unterrichtssprache — drop the "plus einfache Erklärungen auf Deutsch" clause.
 
-Those are waiting on you, not on me.
+The rest of the page (marketing copy, headers, CTAs) stays in German — that's the visitor's language, not the teaching language.
 
-## This turn: update the German page's teaching-language claim
+### 2. English + Romanian twin pages with the same layout as `/de`
 
-Currently `src/pages/de/ArabischLernen.tsx` says twice that lessons run in "Englisch oder Rumänisch" (FAQ answer + "Warum uns wählen" list). That undersells your language range for German visitors.
+Today the DE page is a rich standalone (hero cards, formats grid, teaching-approach list, 7-item FAQ). The nearest counterparts are structurally lighter:
+- **EN**: `/en/learn-lebanese-arabic` is already rich but uses `EnLandingLayout` (prose + FAQ). No parity mismatch worth fixing — I'll only add the same "teaching languages" line and one FAQ item so the multilingual angle is on-page in EN too.
+- **RO**: `/cursuri-araba` (via `LandingLayout`) is much thinner than DE. I'll add the same "teaching languages" note + FAQ item so RO visitors get the same info, but I won't rebuild the full DE-style layout unless you want it.
 
-Change to: **Englisch, Französisch, Arabisch oder Rumänisch** (plus simple explanations possible in German).
+Edits:
+- `src/pages/en/LearnLebaneseArabic.tsx`: add FAQ item "What language are lessons taught in?" (English, French, Arabic, Romanian — student picks). Add matching line to the "How we teach" bullets.
+- `src/pages/seo/CursuriAraba.tsx`: add FAQ item "În ce limbă se predau lecțiile?" (engleză, franceză, arabă, română). Add a short paragraph mentioning it in the body.
+- Same small addition to `src/pages/seo/CursuriLimbaAraba.tsx` (the canonical target) so the info lives on the canonical URL too.
 
-### Edits (single file: `src/pages/de/ArabischLernen.tsx`)
-
-1. FAQ item about the teacher (~line 31): replace "Unterricht auf Englisch oder Rumänisch; einfache Erklärungen auf Deutsch sind möglich." with "Unterricht auf Englisch, Französisch, Arabisch oder Rumänisch — such dir die Sprache aus, in der du dich am wohlsten fühlst. Einfache Erklärungen auf Deutsch sind ebenfalls möglich."
-2. "Warum uns wählen" bullet (~line 189): replace "Unterrichtssprache: Englisch oder Rumänisch. Einfache Erklärungen auf Deutsch möglich." with "Unterrichtssprache: Englisch, Französisch, Arabisch oder Rumänisch — plus einfache Erklärungen auf Deutsch."
-3. Add one new short FAQ item near the top of the `FAQ` array: **Q:** "In welcher Sprache findet der Unterricht statt?" **A:** explains the four fluent languages + basic German support, and that the student picks. This also feeds the existing `FAQPage` JSON-LD so it earns a rich-result slot for the multilingual angle.
-
-No routes, sitemap, or other files change. Build should stay clean.
+### Not in scope
+Rebuilding EN/RO pages to visually mirror the DE layout (cards + formats grid + teaching-approach block). Say the word if you want that too and I'll port the DE structure over — it's a bigger job because EN/RO use shared layout components (`EnLandingLayout`, `LandingLayout`) while DE is a bespoke page.

@@ -18,6 +18,10 @@ const FAQ = [
     q: "Cursurile sunt în București sau online?",
     a: "Ambele. Fizic la Raduga Creative Center (Strada Icoanei 80, București) sau online pe Zoom, de oriunde. Toate nivelurile au variantă online.",
   },
+  {
+    q: "În ce limbă se predau lecțiile?",
+    a: "Tu alegi. Ibra predă fluent în engleză, franceză, arabă și română — alegi limba în care te simți cel mai confortabil. Lecțiile nu se țin în germană sau alte limbi.",
+  },
 ];
 
 const CursuriAraba = () => (
@@ -79,6 +83,13 @@ const CursuriAraba = () => (
     <p>
       Detalii despre durată pe fiecare nivel găsești în{" "}
       <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">cât durează să înveți araba libaneză</Link>.
+    </p>
+
+    <h2>În ce limbă se predau lecțiile</h2>
+    <p>
+      Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> — alegi limba în care
+      te simți cel mai confortabil, iar explicațiile se ajustează după tine. Lecțiile nu se țin în
+      germană sau alte limbi.
     </p>
   </LandingLayout>
 );
