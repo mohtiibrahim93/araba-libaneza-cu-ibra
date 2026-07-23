@@ -64,7 +64,7 @@ const PrivateStatus = () => {
             </div>
           ) : error || !lead ? (
             <div className="space-y-3 text-center">
-              <h1 className="text-2xl font-bold text-foreground">Status indisponibil</h1>
+              <h2 className="text-2xl font-bold text-foreground">Status indisponibil</h2>
               <p className="text-sm text-muted-foreground">{error}</p>
             </div>
           ) : (

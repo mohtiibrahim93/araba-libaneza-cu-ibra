@@ -158,7 +158,7 @@ const Navbar = () => {
               hrefLang="en"
               className="hover:text-foreground transition-colors"
             >
-              English
+              English version
             </Link>
           )}
           {links.map((l) => (
@@ -268,7 +268,7 @@ const Navbar = () => {
                 hrefLang="en"
                 className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
               >
-                English
+                English version
               </Link>
             )}
             {links.map((l) => (

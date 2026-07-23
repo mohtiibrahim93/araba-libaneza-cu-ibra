@@ -129,7 +129,7 @@ const PaymentStatus = () => {
             {status === "pending" && (
               <>
                 <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto" />
-                <h1 className="text-xl font-semibold">Confirmăm plata</h1>
+                <h2 className="text-xl font-semibold">Confirmăm plata</h2>
                 <p className="text-sm text-muted-foreground">{message}</p>
               </>
             )}
@@ -165,9 +165,9 @@ const PaymentStatus = () => {
             {(status === "failed" || status === "canceled") && (
               <>
                 <XCircle className="w-12 h-12 text-destructive mx-auto" strokeWidth={2.5} />
-                <h1 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold">
                   {status === "canceled" ? "Plata a fost anulată" : "Plata a eșuat"}
-                </h1>
+                </h2>
                 <p className="text-sm text-muted-foreground">
                   Nu am reușit să procesăm plata. Poți să încerci din nou sau să ne scrii pe
                   WhatsApp la 0763 124 514.

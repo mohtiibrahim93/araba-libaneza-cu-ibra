@@ -46,7 +46,7 @@ const CourseDetail = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main id="main-content" className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 text-center">
-          <h1 className="mb-2 text-2xl font-bold text-foreground">{lang === "en" ? "Course not found" : "Cursul nu a fost găsit"}</h1>
+          <h2 className="mb-2 text-2xl font-bold text-foreground">{lang === "en" ? "Course not found" : "Cursul nu a fost găsit"}</h2>
           <p className="mb-6 text-muted-foreground">{lang === "en" ? "This course may have ended or moved." : "Cursul poate fi încheiat sau mutat."}</p>
           <Link to="/cursuri" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{lang === "en" ? "Browse all courses" : "Vezi toate cursurile"}</Link>
         </main>
