@@ -129,6 +129,7 @@ const App = () => (
             <Route path="/blog/cum-alegi-profesor-de-araba" element={<BlogCumAlegiProfesor />} />
             <Route path="/blog/invata-araba-libaneza-online" element={<BlogInvataArabaOnline />} />
             <Route path="/blog/numere-in-araba-libaneza" element={<BlogNumereInLibaneza />} />
+            <Route path="/blog/learn-lebanese-arabic" element={<BlogLearnLebaneseArabic />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
