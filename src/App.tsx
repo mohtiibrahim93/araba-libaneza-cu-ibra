@@ -52,6 +52,7 @@ const BlogCumAlegiProfesor = lazy(() => import("./pages/blog/CumAlegiProfesor"))
 const BlogInvataArabaOnline = lazy(() => import("./pages/blog/InvataArabaOnline"));
 const BlogNumereInLibaneza = lazy(() => import("./pages/blog/NumereInLibaneza"));
 const BlogLearnLebaneseArabic = lazy(() => import("./pages/blog/LearnLebaneseArabic"));
+const BlogGramaticaArabaLibaneza = lazy(() => import("./pages/blog/GramaticaArabaLibaneza"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
 const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
@@ -133,6 +134,7 @@ const App = () => (
             <Route path="/blog/invata-araba-libaneza-online" element={<BlogInvataArabaOnline />} />
             <Route path="/blog/numere-in-araba-libaneza" element={<BlogNumereInLibaneza />} />
             <Route path="/blog/learn-lebanese-arabic" element={<BlogLearnLebaneseArabic />} />
+            <Route path="/blog/gramatica-arabei-libaneze" element={<BlogGramaticaArabaLibaneza />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
