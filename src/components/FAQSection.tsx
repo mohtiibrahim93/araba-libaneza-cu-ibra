@@ -14,6 +14,27 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
   ro: {
     groups: [
       {
+        title: "Libanezii și limba arabă — întrebări frecvente",
+        items: [
+          {
+            q: "Libanezii sunt arabi?",
+            a: "Da — Libanul este parte din Liga Arabă, iar araba este limba oficială a țării. În același timp, mulți libanezi au și o identitate culturală proprie (feniciană, levantină, creștină sau druză), motiv pentru care unii preferă să se identifice ca „libanezi” înainte de „arabi”. Pe scurt: din punct de vedere lingvistic și politic da, cultural este mai nuanțat.",
+          },
+          {
+            q: "Libanezii vorbesc arabă?",
+            a: "Da. Limba maternă a majorității libanezilor este araba libaneză (un dialect levantin), pe care o vorbesc zilnic acasă, la muncă și în media. Mulți vorbesc și franceză sau engleză, dar araba libaneză rămâne limba principală de comunicare.",
+          },
+          {
+            q: "Libaneza este arabă sau o limbă separată?",
+            a: "Libaneza este un dialect al arabei — parte din familia levantină (împreună cu siriana, palestiniana și iordaniana). Se scrie cu alfabetul arab și împarte majoritatea vocabularului cu Araba Standard Modernă (Fusha), dar pronunția, gramatica simplificată și influențele din franceză, turcă și aramaică o fac să sune distinct.",
+          },
+          {
+            q: "Care este diferența dintre araba libaneză și araba „standard” (Fusha)?",
+            a: "Fusha este araba formală folosită în știri, cărți și contexte oficiale — nimeni nu o vorbește acasă. Libaneza este limba vie a străzii: propoziții mai scurte, vocale mai relaxate, ق devine adesea stop glotal, și cuvinte împrumutate din franceză. Dacă vrei să vorbești cu oameni, alegi libaneza; dacă vrei să citești ziare, alegi Fusha.",
+          },
+        ],
+      },
+      {
         title: "Cum alegi un profesor de arabă",
         items: [
           {
@@ -176,6 +197,35 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
   },
   en: {
     groups: [
+      {
+        title: "Lebanese people & the Arabic language — quick answers",
+        items: [
+          {
+            q: "Are Lebanese people Arabs?",
+            a: "Yes — Lebanon is a member of the Arab League, and Arabic is the country's official language. That said, many Lebanese also identify with a distinct cultural heritage (Phoenician, Levantine, Christian, or Druze), so some prefer to describe themselves as \"Lebanese\" first and \"Arab\" second. In short: linguistically and politically yes, culturally it's more nuanced.",
+          },
+          {
+            q: "Do Lebanese people speak Arabic?",
+            a: "Yes. The mother tongue of most Lebanese is Lebanese Arabic (a Levantine dialect), which they use every day at home, at work, and in the media. Many also speak French or English, but Lebanese Arabic remains the primary language of daily life.",
+          },
+          {
+            q: "Is Lebanese Arabic the same as Arabic?",
+            a: "Lebanese Arabic is a dialect of Arabic — part of the Levantine family, alongside Syrian, Palestinian and Jordanian. It uses the Arabic script and shares most of its vocabulary with Modern Standard Arabic (Fusha), but simplified grammar, distinct pronunciation, and loanwords from French, Turkish and Aramaic give it its own flavour.",
+          },
+          {
+            q: "What's the difference between Lebanese Arabic and Modern Standard Arabic?",
+            a: "MSA (Fusha) is the formal Arabic used in news, books, and official settings — nobody actually speaks it at home. Lebanese is the living street language: shorter sentences, relaxed vowels, ق often becoming a glottal stop, and French loanwords. If you want to talk to people, learn Lebanese; if you want to read newspapers, learn Fusha.",
+          },
+          {
+            q: "Is Levantine Arabic similar to MSA?",
+            a: "They share roots and most vocabulary, but they sound and feel different. Levantine (including Lebanese) uses simpler grammar — no case endings, more predictable verb forms — and everyday pronunciation. Knowing Levantine makes MSA easier to pick up later, and vice versa.",
+          },
+          {
+            q: "Should I learn Egyptian or Levantine Arabic?",
+            a: "It depends on where your people are. Egyptian Arabic has the biggest media footprint (films, music) and is widely understood. Levantine — especially Lebanese — dominates modern pop music, satellite TV, and business across Lebanon, Syria, Jordan, and Palestine, and is also very widely understood. If your ties are to the Levant, learn Lebanese.",
+          },
+        ],
+      },
       {
         title: "Choosing an Arabic tutor",
         items: [
