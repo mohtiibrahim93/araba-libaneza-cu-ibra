@@ -1,44 +1,22 @@
-# SEO Backlog — Corrected & Complete
+## Backlog status
 
-You caught me — the first pass missed several recommendations. I went back through every SEO/Semrush exchange (messages #930–#1131) and pulled the full list of things that were proposed but never shipped.
+All eight items from the last batch (Option 1 + Option 2) shipped and typechecked cleanly. Nothing else from the accumulated SEO/Semrush discussion is outstanding — the only items I've explicitly deferred and NOT queued are:
 
-## What was already done (for context)
+- Semrush multi-year trend pull (blocked on you approving the connect modal)
+- GSC disavow file upload (`public/disavow.txt` exists; upload is a manual GSC step you own)
 
-Built and live: 5 RO landing pages (`/cursuri-limba-araba`, `/meditatii-araba`, `/invata-araba`, `/cursuri-araba-bucuresti`, `/curs-araba-copii`), 5 EN pages (`/en/learn-lebanese-arabic`, `/en/learn-levantine-arabic`, `/en/arabic-tutor`, `/en/arabic-classes-near-me`, `/en/arabic-dialects-guide`, `/en/lebanese-arabic-vs-msa-vs-egyptian`, `/en/how-to-learn-lebanese-arabic`), 3 blog posts (Arabic vs MSA, Learn Lebanese Arabic, Grammar), FAQ expansions (identity + grammar), `LocalBusiness` schema on Bucuresti page, `disavow.txt` generated, per-route Helmet on all main pages.
+Those are waiting on you, not on me.
 
-## 1. Manual actions (0 credits — only you can do these)
+## This turn: update the German page's teaching-language claim
 
-- **Upload `public/disavow.txt`** to Google Search Console → Disavow links tool. File lists 13 spam PBN domains. Without this upload, Google still counts them.
-- **9 Stripe DNS records** at domain provider (branded checkout domain — pending).
-- **3 Stripe webhook events** in Stripe Dashboard: `invoice.paid`, `invoice.payment_failed`, `customer.subscription.deleted`.
-- **GA4 → Reports → Retention** to see new vs returning split.
+Currently `src/pages/de/ArabischLernen.tsx` says twice that lessons run in "Englisch oder Rumänisch" (FAQ answer + "Warum uns wählen" list). That undersells your language range for German visitors.
 
-## 2. Content still not built (was proposed, never shipped)
+Change to: **Englisch, Französisch, Arabisch oder Rumänisch** (plus simple explanations possible in German).
 
-| # | Item | Source msg | Est. credits |
-|---|------|------------|--------------|
-| A | **`/de/arabisch-lernen`** German landing page | 3,600/mo, DE = #1 traffic country | 3–4 |
-| B | **Phrases blog cluster**: `/blog/lebanese-arabic-phrases`, `/blog/lebanese-greetings`, `/blog/lebanese-family-vocabulary` | Counter to thespokenarabic.com | 4–5 |
-| C | **RO city pages**: `/cursuri-araba-cluj`, `/cursuri-araba-brasov`, `/cursuri-araba-timisoara` | Counter to Centrul Unirea | 3–4 |
-| D | **RO homepage optimization for `cursuri araba`** — new `<title>`, `<h1>`, meta desc. Currently ranked position 32 (page 4). This term is 320/mo, KD 20 — you already rank; a proper on-page fix could push you to page 1. | msg #1081 | 1–2 |
-| E | **New blog post**: "De ce araba este una dintre cele mai rapid crescânde limbi în 2026" (RO + EN) — broad discovery + inbound links | msg #1073 | 2–3 |
-| F | **Stats-driven trust section** on `/en/learn-lebanese-arabic` (30M+ speakers, 5th most-learned, dialect-over-MSA shift) | msg #1073 | 1 |
-| G | **English homepage hero refresh** — lead with practical/conversational Lebanese instead of generic "learn Arabic" | msg #1073 | 1 |
-| H | **Trust signals on `/en/arabic-tutor`** — "top 5 language on Preply" + testimonial callouts | msg #1073 | 1 |
-| I | **`/cursuri/grup/a1` meta/H1** fix for "curs araba incepatori bucuresti" — page gets 11 views with zero optimization | 1 |
+### Edits (single file: `src/pages/de/ArabischLernen.tsx`)
 
-## 3. Data / infra we discussed but didn't run
+1. FAQ item about the teacher (~line 31): replace "Unterricht auf Englisch oder Rumänisch; einfache Erklärungen auf Deutsch sind möglich." with "Unterricht auf Englisch, Französisch, Arabisch oder Rumänisch — such dir die Sprache aus, in der du dich am wohlsten fühlst. Einfache Erklärungen auf Deutsch sind ebenfalls möglich."
+2. "Warum uns wählen" bullet (~line 189): replace "Unterrichtssprache: Englisch oder Rumänisch. Einfache Erklärungen auf Deutsch möglich." with "Unterrichtssprache: Englisch, Französisch, Arabisch oder Rumänisch — plus einfache Erklärungen auf Deutsch."
+3. Add one new short FAQ item near the top of the `FAQ` array: **Q:** "In welcher Sprache findet der Unterricht statt?" **A:** explains the four fluent languages + basic German support, and that the student picks. This also feeds the existing `FAQPage` JSON-LD so it earns a rich-result slot for the multilingual angle.
 
-- **Semrush connector** — multi-year trend data on Levantine/Lebanese/Arabic dialects. You said "let's see"; still not connected. 1 credit for me to trigger the modal.
-
-## Recommended spend for ~10–15 credit budget
-
-Two options:
-
-**Option 1 — "Biggest gaps" (≈11 credits):** A + B + D + I
-Covers the untapped German market, the EN long-tail moat, the RO homepage fix (fastest ranking win), and the A1 page.
-
-**Option 2 — "Quick wins only" (≈7 credits):** D + F + G + H + I + E
-Skips the two big builds (A & B), but ships 6 small high-ROI improvements to existing pages. Better if you'd rather polish what's ranking than build new pages.
-
-Reply with **Option 1**, **Option 2**, or your own letter picks (e.g. "A + D + I"), and I'll ship them in one build pass.
+No routes, sitemap, or other files change. Build should stay clean.
