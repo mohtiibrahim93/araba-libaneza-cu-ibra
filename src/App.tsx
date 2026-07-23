@@ -51,6 +51,7 @@ const BlogArabaPentruCopii = lazy(() => import("./pages/blog/ArabaPentruCopii"))
 const BlogCumAlegiProfesor = lazy(() => import("./pages/blog/CumAlegiProfesor"));
 const BlogInvataArabaOnline = lazy(() => import("./pages/blog/InvataArabaOnline"));
 const BlogNumereInLibaneza = lazy(() => import("./pages/blog/NumereInLibaneza"));
+const BlogLearnLebaneseArabic = lazy(() => import("./pages/blog/LearnLebaneseArabic"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
 const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
