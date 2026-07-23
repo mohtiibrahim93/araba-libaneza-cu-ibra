@@ -56,6 +56,7 @@ const BlogGramaticaArabaLibaneza = lazy(() => import("./pages/blog/GramaticaArab
 const BlogLebaneseArabicPhrases = lazy(() => import("./pages/blog/LebaneseArabicPhrases"));
 const BlogLebaneseFamilyVocabulary = lazy(() => import("./pages/blog/LebaneseFamilyVocabulary"));
 const BlogDeCeInvatamAraba2026 = lazy(() => import("./pages/blog/DeCeInvatamAraba2026"));
+const BlogLimbileVorbiteInLiban = lazy(() => import("./pages/blog/LimbileVorbiteInLiban"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
 const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
@@ -142,6 +143,7 @@ const App = () => (
             <Route path="/blog/lebanese-arabic-phrases" element={<BlogLebaneseArabicPhrases />} />
             <Route path="/blog/lebanese-family-vocabulary" element={<BlogLebaneseFamilyVocabulary />} />
             <Route path="/blog/de-ce-invatam-araba-in-2026" element={<BlogDeCeInvatamAraba2026 />} />
+            <Route path="/blog/limbile-vorbite-in-liban" element={<BlogLimbileVorbiteInLiban />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
