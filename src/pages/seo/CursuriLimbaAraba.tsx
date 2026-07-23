@@ -18,6 +18,10 @@ const FAQ = [
     q: "Pot lua cursuri de limba arabă online?",
     a: "Da. Toate nivelurile au variantă online pe Zoom, cu profesor nativ live. Grupurile online rulează la ore accesibile din România și diaspora (weekend sau seara). Vezi și pagina dedicată de cursuri online.",
   },
+  {
+    q: "În ce limbă se predau lecțiile?",
+    a: "Tu alegi. Ibra predă fluent în engleză, franceză, arabă și română — alegi limba în care te simți cel mai confortabil. Lecțiile nu se țin în germană sau alte limbi.",
+  },
 ];
 
 const CursuriLimbaAraba = () => (
@@ -76,6 +80,12 @@ const CursuriLimbaAraba = () => (
       vorbitor nativ. Ibra e libanez, cu peste 5 ani de experiență în predare (Preply și studenți
       independenți), iar metoda <strong>Oral First</strong> te pune să vorbești din prima lecție,
       folosind arabizi (scriere cu litere latine) până când alfabetul arab vine natural.
+    </p>
+
+    <h2>În ce limbă se predau lecțiile</h2>
+    <p>
+      Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> — alegi limba în care
+      te simți cel mai confortabil. Lecțiile nu se țin în germană sau alte limbi.
     </p>
   </LandingLayout>
 );
