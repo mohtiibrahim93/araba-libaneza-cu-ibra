@@ -53,6 +53,9 @@ const BlogInvataArabaOnline = lazy(() => import("./pages/blog/InvataArabaOnline"
 const BlogNumereInLibaneza = lazy(() => import("./pages/blog/NumereInLibaneza"));
 const BlogLearnLebaneseArabic = lazy(() => import("./pages/blog/LearnLebaneseArabic"));
 const BlogGramaticaArabaLibaneza = lazy(() => import("./pages/blog/GramaticaArabaLibaneza"));
+const BlogLebaneseArabicPhrases = lazy(() => import("./pages/blog/LebaneseArabicPhrases"));
+const BlogLebaneseFamilyVocabulary = lazy(() => import("./pages/blog/LebaneseFamilyVocabulary"));
+const BlogDeCeInvatamAraba2026 = lazy(() => import("./pages/blog/DeCeInvatamAraba2026"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
 const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
@@ -60,6 +63,7 @@ const ArabicClassesNearMe = lazy(() => import("./pages/en/ArabicClassesNearMe"))
 const ArabicDialectsGuide = lazy(() => import("./pages/en/ArabicDialectsGuide"));
 const LebaneseVsMsaVsEgyptian = lazy(() => import("./pages/en/LebaneseVsMsaVsEgyptian"));
 const HowToLearnLebaneseArabic = lazy(() => import("./pages/en/HowToLearnLebaneseArabic"));
+const DeArabischLernen = lazy(() => import("./pages/de/ArabischLernen"));
 const SeoCursuriAraba = lazy(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazy(() => import("./pages/seo/ArabaPentruIncepatori"));
 const SeoArabaOnline = lazy(() => import("./pages/seo/ArabaOnline"));
@@ -135,6 +139,9 @@ const App = () => (
             <Route path="/blog/numere-in-araba-libaneza" element={<BlogNumereInLibaneza />} />
             <Route path="/blog/learn-lebanese-arabic" element={<BlogLearnLebaneseArabic />} />
             <Route path="/blog/gramatica-arabei-libaneze" element={<BlogGramaticaArabaLibaneza />} />
+            <Route path="/blog/lebanese-arabic-phrases" element={<BlogLebaneseArabicPhrases />} />
+            <Route path="/blog/lebanese-family-vocabulary" element={<BlogLebaneseFamilyVocabulary />} />
+            <Route path="/blog/de-ce-invatam-araba-in-2026" element={<BlogDeCeInvatamAraba2026 />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
@@ -142,6 +149,7 @@ const App = () => (
             <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
             <Route path="/en/lebanese-arabic-vs-msa-vs-egyptian" element={<LebaneseVsMsaVsEgyptian />} />
             <Route path="/en/how-to-learn-lebanese-arabic" element={<HowToLearnLebaneseArabic />} />
+            <Route path="/de/arabisch-lernen" element={<DeArabischLernen />} />
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />

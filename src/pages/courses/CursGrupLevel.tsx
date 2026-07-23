@@ -55,8 +55,20 @@ const CursGrupLevel = () => {
   const available = isAvailable(upperLevel);
 
   const canonical = `${BASE_URL}/cursuri/grup/${slug}`;
-  const metaTitle = `${curriculum.title} — ${t.courseGrupH1}`;
-  const metaDesc = curriculum.objective.slice(0, 155);
+  // A1 is the highest-intent SERP entry point ("curs araba incepatori
+  // bucuresti"). Give it a keyword-optimised meta title/description; other
+  // levels keep the generic pattern.
+  const isA1 = slug === "a1";
+  const metaTitle = isA1
+    ? (lang === "en"
+        ? "Beginner Arabic Course Bucharest & Online — A1 (Lebanese Arabic)"
+        : "Curs de Arabă pentru Începători București & Online — A1 (Libaneză)")
+    : `${curriculum.title} — ${t.courseGrupH1}`;
+  const metaDesc = isA1
+    ? (lang === "en"
+        ? "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial."
+        : "Curs de arabă pentru începători (A1) în araba libaneză — fizic în București (Strada Icoanei 80) sau online. Vorbești de la prima lecție. Două sesiuni de 90 min/săpt. Probă gratuită.")
+    : curriculum.objective.slice(0, 155);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

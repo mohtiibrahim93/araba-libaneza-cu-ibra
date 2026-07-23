@@ -187,6 +187,18 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url><loc>https://centruldearabalibaneza.com/blog/lebanese-arabic-phrases</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://centruldearabalibaneza.com/blog/lebanese-family-vocabulary</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://centruldearabalibaneza.com/blog/de-ce-invatam-araba-in-2026</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/de/arabisch-lernen</loc><lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="de" href="https://centruldearabalibaneza.com/de/arabisch-lernen" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en" href="https://centruldearabalibaneza.com/en/learn-lebanese-arabic" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="ro" href="https://centruldearabalibaneza.com/" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="x-default" href="https://centruldearabalibaneza.com/" />
+  </url>
   <url>
     <loc>https://centruldearabalibaneza.com/booking</loc><lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>

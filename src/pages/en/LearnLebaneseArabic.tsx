@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen } from "lucide-react";
+import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen, Star, ShieldCheck } from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
 
 const FAQ = [
@@ -45,6 +45,27 @@ const LearnLebaneseArabic = () => (
     courseSchema
     roHref="/cursuri-araba"
   >
+    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">
+      <div className="flex flex-wrap items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-2">
+          <div className="flex" aria-label="Rated 5 out of 5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+            ))}
+          </div>
+          <span className="text-sm font-semibold text-foreground">5.0 · 21+ reviews</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-foreground/80">
+          <GraduationCap className="w-4 h-4 text-primary" />
+          <span><strong className="text-foreground">Native Lebanese teacher</strong> — 5+ years experience</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-foreground/80">
+          <ShieldCheck className="w-4 h-4 text-primary" />
+          <span><strong className="text-foreground">Free trial, no card</strong> — 30 minutes</span>
+        </div>
+      </div>
+    </div>
+
     <div className="grid sm:grid-cols-3 gap-4 not-prose my-8">
       {[
         { icon: Globe, title: "Online worldwide", desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET)." },
