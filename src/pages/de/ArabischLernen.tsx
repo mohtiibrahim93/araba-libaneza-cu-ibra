@@ -12,7 +12,7 @@ const URL = `${BASE}/de/arabisch-lernen`;
 const FAQ = [
   {
     q: "In welcher Sprache findet der Unterricht statt?",
-    a: "Du wählst die Sprache, in der du dich am wohlsten fühlst. Ibra unterrichtet fließend auf Englisch, Französisch, Arabisch und Rumänisch — einfache Erklärungen auf Deutsch sind ebenfalls möglich. So bleibt nichts unklar, egal welche Sprache dir gerade leichter fällt.",
+    a: "Du wählst die Sprache, in der du dich am wohlsten fühlst. Ibra unterrichtet fließend auf Englisch, Französisch, Arabisch und Rumänisch — such dir aus, welche dir am leichtesten fällt. Der Unterricht selbst findet nicht auf Deutsch statt.",
   },
   {
     q: "Welches Arabisch lernt man hier — Hocharabisch oder Dialekt?",
@@ -32,7 +32,7 @@ const FAQ = [
   },
   {
     q: "Wer ist der Lehrer?",
-    a: "Ibra — Muttersprachler des libanesischen Arabisch mit 5+ Jahren Unterrichtserfahrung (Preply und eigene Schüler weltweit), lebt in Bukarest. Unterricht auf Englisch, Französisch, Arabisch oder Rumänisch — such dir die Sprache aus, in der du dich am wohlsten fühlst. Einfache Erklärungen auf Deutsch sind ebenfalls möglich.",
+    a: "Ibra — Muttersprachler des libanesischen Arabisch mit 5+ Jahren Unterrichtserfahrung (Preply und eigene Schüler weltweit), lebt in Bukarest. Unterricht auf Englisch, Französisch, Arabisch oder Rumänisch — such dir die Sprache aus, in der du dich am wohlsten fühlst.",
   },
   {
     q: "Was kosten die Kurse?",
@@ -190,7 +190,7 @@ const ArabischLernen = () => (
             <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
             <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
             <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>
-            <li><strong>Unterrichtssprache:</strong> Englisch, Französisch, Arabisch oder Rumänisch — plus einfache Erklärungen auf Deutsch.</li>
+            <li><strong>Unterrichtssprache:</strong> Englisch, Französisch, Arabisch oder Rumänisch — du wählst.</li>
           </ul>
 
           <h2>Häufig gestellte Fragen</h2>
