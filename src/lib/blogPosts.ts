@@ -20,6 +20,20 @@ export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "limbile-vorbite-in-liban",
+    title: {
+      ro: "Limbile vorbite în Liban: arabă libaneză, MSA, franceză și engleză",
+      en: "Languages of Lebanon: Lebanese Arabic, MSA, French and English",
+    },
+    description: {
+      ro: "Ghid complet despre limbile din Liban — araba libaneză (dialectul zilnic), araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.",
+      en: "A complete guide to the languages of Lebanon — Lebanese Arabic, Modern Standard Arabic, French and English. Who speaks what, and why Lebanese Arabic is the key.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 7,
+    tag: { ro: "Ghid", en: "Guide" },
+  },
+  {
     slug: "de-ce-invatam-araba-in-2026",
     title: {
       ro: "De ce merită să înveți arabă în 2026 (și de ce dialectul, nu MSA)",
