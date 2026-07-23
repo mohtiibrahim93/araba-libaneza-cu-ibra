@@ -58,6 +58,7 @@ const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
 const ArabicClassesNearMe = lazy(() => import("./pages/en/ArabicClassesNearMe"));
 const ArabicDialectsGuide = lazy(() => import("./pages/en/ArabicDialectsGuide"));
 const LebaneseVsMsaVsEgyptian = lazy(() => import("./pages/en/LebaneseVsMsaVsEgyptian"));
+const HowToLearnLebaneseArabic = lazy(() => import("./pages/en/HowToLearnLebaneseArabic"));
 const SeoCursuriAraba = lazy(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazy(() => import("./pages/seo/ArabaPentruIncepatori"));
 const SeoArabaOnline = lazy(() => import("./pages/seo/ArabaOnline"));
