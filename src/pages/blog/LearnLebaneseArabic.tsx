@@ -184,7 +184,7 @@ const LearnLebaneseArabicBlog = () => {
         <p>
           {en
             ? "The most important step is to start speaking with someone this week — not in a month when you feel 'ready'. Here are concrete ways to begin:"
-            : "Cel mai important pas este să începi să vorbești cu cineva săptămâna aceasta — nu peste o lună când te simți „gata". Iată modalități concrete de a începe:"}
+            : "Cel mai important pas este să începi să vorbești cu cineva săptămâna aceasta — nu peste o lună când te simți gata. Iată modalități concrete de a începe:"}
         </p>
         <ul>
           <li>
