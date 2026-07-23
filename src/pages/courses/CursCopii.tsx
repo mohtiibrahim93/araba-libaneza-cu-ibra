@@ -1,5 +1,6 @@
 import CourseLayout from "@/components/course/CourseLayout";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import { Users, User, CheckCircle2, Music, BookOpen, Palette, Pencil, Globe } from "lucide-react";
@@ -7,8 +8,10 @@ import { useState } from "react";
 import kidsImg from "@/assets/kids-course.jpg";
 
 const CursCopii = () => {
-  const { t } = useI18n();
-  const [track, setTrack] = useState<"private" | "group">("group");
+  const { t, lang } = useI18n();
+  // Kids private lessons are available; kids GROUP courses are not open yet
+  // (notify-only), so default to the available option.
+  const [track, setTrack] = useState<"private" | "group">("private");
   const privOnline = ONLINE_PRICES.kidsPrivateLesson;
   const privFizic = physicalPrice(privOnline);
   const grpOnline = ONLINE_PRICES.kidsGroupMonthly;
@@ -33,7 +36,7 @@ const CursCopii = () => {
       badge={t.tabKids}
       h1={t.courseCopiiH1}
       intro={t.courseCopiiIntro}
-      priceLine={`${t.copiiFormatPrivateTitle}: ${formatLei(privOnline)}/${formatLei(privFizic)} ${t.priceLeiPerLesson} · ${t.copiiFormatGroupTitle}: ${formatLei(grpOnline)}/${formatLei(grpFizic)} ${t.priceLeiPerMonth}`}
+      priceLine={`${t.copiiFormatPrivateTitle}: ${formatLei(privOnline)}/${formatLei(privFizic)} ${t.priceLeiPerLesson}`}
       features={[t.courseCopiiFeat1, t.courseCopiiFeat2, t.courseCopiiFeat3, t.courseCopiiFeat4]}
       primaryCtaLabel={t.courseCtaSeeForm}
       primaryCtaHref="#register"
@@ -128,16 +131,30 @@ const CursCopii = () => {
       </section>
 
       <section id="register" className="scroll-mt-24 mt-4">
-        <h2 className="text-2xl font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
-        <p className="text-sm text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">
+          {track === "group"
+            ? (lang === "en" ? "Kids' group — not open yet" : "Grupă copii — încă indisponibilă")
+            : t.coursePageRegisterTitle}
+        </h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          {track === "group"
+            ? (lang === "en"
+                ? "Kids' group courses aren't open yet — leave your details and we'll tell you when one starts. Private lessons for kids are available now (switch above)."
+                : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum (schimbă mai sus).")
+            : t.coursePageRegisterDesc}
+        </p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
-          <RegistrationFormSection
-            key={track}
-            defaultCourseType="kids"
-            lessonType={track}
-            lockSelection
-            embedded
-          />
+          {track === "group" ? (
+            <NotifyMeForm context="Grupă copii (6–10 ani)" />
+          ) : (
+            <RegistrationFormSection
+              key={track}
+              defaultCourseType="kids"
+              lessonType={track}
+              lockSelection
+              embedded
+            />
+          )}
         </div>
       </section>
     </CourseLayout>
