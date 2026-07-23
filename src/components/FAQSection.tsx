@@ -14,6 +14,27 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
   ro: {
     groups: [
       {
+        title: "Libanezii și limba arabă — întrebări frecvente",
+        items: [
+          {
+            q: "Libanezii sunt arabi?",
+            a: "Da — Libanul este parte din Liga Arabă, iar araba este limba oficială a țării. În același timp, mulți libanezi au și o identitate culturală proprie (feniciană, levantină, creștină sau druză), motiv pentru care unii preferă să se identifice ca „libanezi” înainte de „arabi”. Pe scurt: din punct de vedere lingvistic și politic da, cultural este mai nuanțat.",
+          },
+          {
+            q: "Libanezii vorbesc arabă?",
+            a: "Da. Limba maternă a majorității libanezilor este araba libaneză (un dialect levantin), pe care o vorbesc zilnic acasă, la muncă și în media. Mulți vorbesc și franceză sau engleză, dar araba libaneză rămâne limba principală de comunicare.",
+          },
+          {
+            q: "Libaneza este arabă sau o limbă separată?",
+            a: "Libaneza este un dialect al arabei — parte din familia levantină (împreună cu siriana, palestiniana și iordaniana). Se scrie cu alfabetul arab și împarte majoritatea vocabularului cu Araba Standard Modernă (Fusha), dar pronunția, gramatica simplificată și influențele din franceză, turcă și aramaică o fac să sune distinct.",
+          },
+          {
+            q: "Care este diferența dintre araba libaneză și araba „standard” (Fusha)?",
+            a: "Fusha este araba formală folosită în știri, cărți și contexte oficiale — nimeni nu o vorbește acasă. Libaneza este limba vie a străzii: propoziții mai scurte, vocale mai relaxate, ق devine adesea stop glotal, și cuvinte împrumutate din franceză. Dacă vrei să vorbești cu oameni, alegi libaneza; dacă vrei să citești ziare, alegi Fusha.",
+          },
+        ],
+      },
+      {
         title: "Cum alegi un profesor de arabă",
         items: [
           {
