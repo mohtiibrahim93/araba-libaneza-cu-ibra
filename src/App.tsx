@@ -139,6 +139,7 @@ const App = () => (
             <Route path="/en/arabic-classes-near-me" element={<ArabicClassesNearMe />} />
             <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
             <Route path="/en/lebanese-arabic-vs-msa-vs-egyptian" element={<LebaneseVsMsaVsEgyptian />} />
+            <Route path="/en/how-to-learn-lebanese-arabic" element={<HowToLearnLebaneseArabic />} />
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />
