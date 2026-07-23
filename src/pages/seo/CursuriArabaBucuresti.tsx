@@ -89,6 +89,34 @@ const CursuriArabaBucuresti = () => (
       metroul Piața Romană.
     </p>
 
+    <h2>Zone din București din care ne vin studenți</h2>
+    <p>
+      Sala e în <strong>sectorul 2</strong>, la mijloc între Piața Romană și Piața Universității,
+      așa că e ușor accesibilă din aproape orice zonă a orașului:
+    </p>
+    <ul>
+      <li>
+        <strong>Centru & sector 1</strong> (Dorobanți, Aviatorilor, Victoriei, Cotroceni) — 10–15
+        min cu metroul M2.
+      </li>
+      <li>
+        <strong>Sector 2 & 3</strong> (Moșilor, Obor, Colentina, Iancului, Titan) — 15–20 min cu
+        tramvaiul 21 sau metroul M1.
+      </li>
+      <li>
+        <strong>Sector 4 & 5</strong> (Tineretului, Unirii, Rahova) — 15–20 min cu M2 până la Piața
+        Romană.
+      </li>
+      <li>
+        <strong>Sector 6 & Militari</strong> — 25 min cu M3 → M2, sau alegi{" "}
+        <Link to="/araba-online">varianta online</Link>.
+      </li>
+      <li>
+        <strong>Pipera, Băneasa, Ilfov (Voluntari, Otopeni)</strong> — cel mai simplu pe M2 până la
+        Piața Romană; parcarea în zonă e ok seara.
+      </li>
+    </ul>
+
     <h2>Ce cursuri de arabă găsești în București</h2>
     <ul>
       <li>
