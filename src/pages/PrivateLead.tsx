@@ -151,7 +151,7 @@ const PrivateLead = () => {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <div className="w-full max-w-sm space-y-4 rounded-xl border border-border bg-card p-8 text-center shadow-lg">
-            <h1 className="text-xl font-bold text-foreground">Link invalid</h1>
+            <h2 className="text-xl font-bold text-foreground">Link invalid</h2>
             <p className="text-sm text-muted-foreground">
               Acest URL nu conține un ID de lead valid. Deschide un lead din lista de admin.
             </p>
@@ -174,7 +174,7 @@ const PrivateLead = () => {
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <div className="w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-8 shadow-lg">
             <div className="space-y-2 text-center">
-              <h1 className="text-xl font-bold text-foreground">Lead lecții private</h1>
+              <h2 className="text-xl font-bold text-foreground">Lead lecții private</h2>
               <p className="text-sm text-muted-foreground">Autentifică-te cu contul Google de admin.</p>
             </div>
             {error && <p className="text-center text-sm text-destructive">{error}</p>}
