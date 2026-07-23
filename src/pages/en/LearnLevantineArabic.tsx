@@ -7,6 +7,18 @@ const FAQ = [
     a: "Levantine Arabic (also called Shami / Eastern Mediterranean Arabic) is the spoken dialect family of the Eastern Mediterranean: Lebanon, Syria, Jordan and Palestine. It's spoken natively by roughly 30–35 million people and is one of the most widely understood dialects across the Arab world thanks to Lebanese and Syrian media.",
   },
   {
+    q: "How do I learn Levantine Arabic?",
+    a: "The fastest path is oral-first: start speaking with a native teacher from lesson one, using arabizi (Latin transliteration) for the first 2–3 months, then layer the Arabic script on top once your ear is tuned. Two 90-minute lessons per week plus modest listening practice (Lebanese songs, series) gets most learners to basic conversation (A2) in 3–6 months.",
+  },
+  {
+    q: "Is Levantine Arabic similar to MSA (Modern Standard Arabic)?",
+    a: "They share most of the vocabulary root system and script, but the grammar is simpler in Levantine, the pronunciation is different (softer, faster, more vowels dropped), and many everyday words are unique to the dialect. MSA is written and formal; Levantine is what people actually speak. Learning one helps with the other, but they are not interchangeable in conversation.",
+  },
+  {
+    q: "Is Levantine Arabic easy to learn?",
+    a: "Compared to MSA, yes — noticeably. Levantine has simpler grammar (no case endings, simpler verb conjugation), and the oral-first method skips the alphabet hurdle for the first months. It's still a Semitic language with new sounds, so it needs consistent practice, but learners who avoid MSA-first curricula are usually speaking basic Levantine within weeks.",
+  },
+  {
     q: "Is Levantine Arabic the same as Lebanese Arabic?",
     a: "Lebanese is a variety of Levantine — specifically North Levantine, shared with Syrian. South Levantine covers Jordanian and Palestinian. The core grammar, most vocabulary, and pronunciation patterns overlap heavily, so learning Lebanese gives you roughly 90% comprehension across the whole Levantine region.",
   },
@@ -27,11 +39,11 @@ const FAQ = [
 const LearnLevantineArabic = () => (
   <EnLandingLayout
     slug="learn-levantine-arabic"
-    title="Learn Levantine Arabic online — Lebanese, Syrian, Jordanian & Palestinian"
+    title="Learn Levantine Arabic online — through Lebanese, the most beautiful Levantine dialect"
     metaTitle="Learn Levantine Arabic Online — Native Teacher | A1–C2"
-    description="Learn Levantine Arabic (Lebanese, Syrian, Jordanian, Palestinian) with a native teacher. Live 1-on-1 and small-group courses online, A1–C2. Oral-first method — speak from lesson one."
+    description="Learn Levantine Arabic with a native Lebanese teacher — Lebanese is widely considered the most beautiful, melodic Levantine dialect and unlocks Syrian, Jordanian and Palestinian too. Live 1-on-1 and small-group courses online, A1–C2."
     crumb="Learn Levantine Arabic"
-    lead="Live online courses in Levantine Arabic — the spoken dialect of Lebanon, Syria, Jordan and Palestine — with a native Lebanese teacher. Speak from lesson one, without starting from the alphabet."
+    lead="Live online courses in Levantine Arabic — taught through Lebanese, widely considered the most beautiful and melodic Levantine dialect and the media prestige variety of the region. One dialect, ~90% comprehension across Lebanon, Syria, Jordan and Palestine."
     faq={FAQ}
   >
     <p>
