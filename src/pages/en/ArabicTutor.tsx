@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Star, GraduationCap, Globe2, ShieldCheck } from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
 
 const FAQ = [
@@ -59,6 +60,21 @@ const ArabicTutor = () => (
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}
   >
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 not-prose my-6">
+      {[
+        { icon: Star, title: "5.0 rating", desc: "21+ verified reviews across Preply and independent students." },
+        { icon: GraduationCap, title: "5+ years teaching", desc: "Adult learners across Europe, N. America and the Gulf." },
+        { icon: Globe2, title: "Native Lebanese", desc: "Born and raised speaker — real Levantine, not textbook Arabic." },
+        { icon: ShieldCheck, title: "Free trial, no card", desc: "30 min, no obligation. Book a paid lesson only if it fits." },
+      ].map(({ icon: Icon, title, desc }) => (
+        <div key={title} className="rounded-xl border border-border bg-card p-4">
+          <Icon className="w-4 h-4 text-primary mb-2" />
+          <p className="text-sm font-semibold text-foreground">{title}</p>
+          <p className="text-xs text-muted-foreground mt-1">{desc}</p>
+        </div>
+      ))}
+    </div>
+
     <p>
       Looking for an <strong>Arabic tutor</strong> who actually speaks the dialect you'll use in
       real life, and who has more than just native fluency? Ibra is a native Lebanese speaker with

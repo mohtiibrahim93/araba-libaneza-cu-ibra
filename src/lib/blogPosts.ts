@@ -20,6 +20,48 @@ export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "de-ce-invatam-araba-in-2026",
+    title: {
+      ro: "De ce merită să înveți arabă în 2026 (și de ce dialectul, nu MSA)",
+      en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
+    },
+    description: {
+      ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.",
+      en: "Arabic is one of the world's most spoken languages, demand is rising, and in 2026 dialects have overtaken MSA in online searches.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 6,
+    tag: { ro: "Ghid", en: "Guide" },
+  },
+  {
+    slug: "lebanese-arabic-phrases",
+    title: {
+      ro: "35+ expresii esențiale în araba libaneză (pentru viața de zi cu zi)",
+      en: "35+ essential Lebanese Arabic phrases for daily life",
+    },
+    description: {
+      ro: "Cele mai utile 35+ de expresii libaneze, organizate pe context: salut, prezentare, cafenea, taxi, sentimente, timp. Cu arabizi și scriere arabă.",
+      en: "The most useful 35+ Lebanese Arabic phrases, grouped by context: greetings, intros, café & taxi, feelings, time. Arabizi + Arabic script.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 7,
+    tag: { ro: "Începători", en: "Beginners" },
+  },
+  {
+    slug: "lebanese-family-vocabulary",
+    title: {
+      ro: "Familia în araba libaneză: vocabular complet (nucleu, extinsă, socri)",
+      en: "Family vocabulary in Lebanese Arabic (core, extended, in-laws)",
+    },
+    description: {
+      ro: "Vocabularul complet al familiei în araba libaneză: părinți, frați, bunici, unchi/mătuși (mamă vs tată), veri, socri, plus pronumele posesive.",
+      en: "The complete family vocabulary in Lebanese Arabic: parents, siblings, grandparents, uncles/aunts (maternal vs paternal), cousins, in-laws.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 6,
+    tag: { ro: "Vocabular", en: "Vocabulary" },
+  },
+  {
     slug: "learn-lebanese-arabic",
     title: {
       ro: "Cum înveți araba libaneză: ghid practic pentru începători",
