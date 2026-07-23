@@ -193,6 +193,31 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
         ],
       },
+      {
+        title: "Gramatica arabei libaneze",
+        items: [
+          {
+            q: "Ce face prefixul بـ (b-) la verbe în araba libaneză?",
+            a: "Prefixul بـ (b-) marchează prezentul obișnuit sau general — echivalentul lui „fac / mănânc / merg” în română. Exemplu: bektob = scriu (în general), bshoof = văd. Fără بـ, verbul devine subjonctiv / după alt verb: baddi ektob = vreau să scriu (fără b-). Regulă rapidă: acțiune reală, care se petrece / se petrece de obicei → cu بـ; după verbe modale (vreau, pot, trebuie) → fără بـ.",
+          },
+          {
+            q: "Cum se conjugă verbele la trecut cu pronume atașate (katabt-ha, katab-lak)?",
+            a: "În libaneză conjugi verbul la trecut apoi lipești pronumele obiect la sfârșit. Exemplu de la katab (a scris): katabt = am scris, katabt-a = am scris-o (fem.), katabt-o = am scris-l (masc.), katab-lak = ți-a scris (ție, m.), katab-lek = ți-a scris (ție, f.), katabna-hon = le-am scris (lor). Pronumele -lak, -lek, -lo, -la, -lna, -lkon, -lhon indică beneficiarul („pentru / către cineva”), iar -a, -o, -hon indică obiectul direct.",
+          },
+          {
+            q: "Care sunt pronumele personale și posesive în araba libaneză?",
+            a: "Personale: ana (eu), inta / inti (tu m/f), huwwe / hiyye (el/ea), nihna (noi), intu (voi), hinne (ei/ele). Posesive (atașate la substantiv): -i (al meu), -ak / -ek (al tău m/f), -o (al lui), -(h)a (al ei), -na (al nostru), -kon (al vostru), -hon (al lor). Exemplu: bayt = casă → bayti (casa mea), baytak (casa ta), bayto (casa lui), bayta (casa ei).",
+          },
+          {
+            q: "Ordinea cuvintelor în araba libaneză este VSO sau SVO?",
+            a: "În vorbire, libaneza folosește de obicei SVO (subiect-verb-obiect) — ca româna și engleza: „Ahmad byekol tuffaha” (Ahmad mănâncă un măr). MSA / araba clasică preferă VSO („Mănâncă Ahmad un măr”), dar în conversație zilnică libanezii aleg aproape mereu SVO. Asta face libaneza mai naturală pentru un vorbitor de română.",
+          },
+          {
+            q: "Prin ce diferă gramatica arabei libaneze de MSA?",
+            a: "Libaneza simplifică mult MSA: fără terminații de caz (dammah, kasrah, fathah), fără dual complet (folosim pluralul), fără femininul de plural separat la verbe (hinne acoperă tot), timpul viitor cu رح / ح- (rah rooh = voi merge) în loc de سـ, negație cu ما (ma) simplu în loc de لا/لم/لن, și ordine SVO în loc de VSO. Rezultat: aceleași rădăcini, mult mai puține reguli — de aceea libaneza e mai ușor de vorbit decât MSA.",
+          },
+        ],
+      },
     ],
   },
   en: {
