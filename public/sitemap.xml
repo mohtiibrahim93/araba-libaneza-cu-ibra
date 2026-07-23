@@ -47,9 +47,9 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://centruldearabalibaneza.com/en/learn-lebanese-arabic</loc><lastmod>2026-07-19</lastmod>
+    <loc>https://centruldearabalibaneza.com/en/learn-lebanese-arabic</loc><lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en" href="https://centruldearabalibaneza.com/en/learn-lebanese-arabic" />
     <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="ro" href="https://centruldearabalibaneza.com/" />
     <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="x-default" href="https://centruldearabalibaneza.com/" />
@@ -150,6 +150,11 @@
   </url>
   <url>
     <loc>https://centruldearabalibaneza.com/blog/numere-in-araba-libaneza</loc><lastmod>2026-07-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/learn-lebanese-arabic</loc><lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

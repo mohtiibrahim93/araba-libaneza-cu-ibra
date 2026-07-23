@@ -1,215 +1,193 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import ScrollToTop from "@/components/ScrollToTop";
+import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen } from "lucide-react";
+import EnLandingLayout from "./EnLandingLayout";
 
-const BASE = "https://centruldearabalibaneza.com";
-const URL = `${BASE}/en/learn-lebanese-arabic`;
-const TITLE = "Learn Lebanese Arabic Online — 1-on-1 & Group Courses with a Native Teacher";
-const DESC =
-  "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial.";
-
-const FAQ: { q: string; a: string }[] = [
+const FAQ = [
   {
-    q: "Should I learn Lebanese Arabic or Modern Standard Arabic (MSA / Fusha)?",
-    a: "If your goal is to actually speak with people — family, friends, travel, media — start with Lebanese. MSA is the written, formal register used in news and religious texts; almost no one speaks it at home. Lebanese is part of the Levantine family, so what you learn also works in Syria, Jordan and Palestine.",
+    q: "What is Lebanese Arabic exactly?",
+    a: "Lebanese Arabic is the spoken dialect of Lebanon. It belongs to the Levantine Arabic family (together with Syrian, Jordanian and Palestinian), so what you learn is understood across the whole Levant. It is not the same as Modern Standard Arabic (MSA / Fusha), the formal written language used in news and official documents.",
   },
   {
-    q: "How long does it take to hold a real conversation in Lebanese Arabic?",
-    a: "Most learners reach basic everyday conversations (A1–A2) in 3–6 months of consistent study — roughly 2 sessions of 90 minutes per week plus a little practice between lessons. Reading the Arabic alphabet fluently comes later; we start with 'arabizi' (Latin transliteration) so you speak from lesson one.",
+    q: "Should I learn Lebanese Arabic or Modern Standard Arabic first?",
+    a: "If your goal is to speak with people — family, friends, travel, media — start with Lebanese Arabic. MSA is the written, formal register; almost no one speaks it at home. Lebanese gets you to real conversations faster, and you can add MSA later if you need reading or formal skills.",
+  },
+  {
+    q: "How long does it take to learn Lebanese Arabic?",
+    a: "With 2 sessions of 90 minutes per week plus a little daily practice, most learners reach basic everyday conversation (A1–A2) in 3–6 months. Comfortable fluency (B1/B2) typically takes 1.5–2 years of consistent study.",
   },
   {
     q: "Do I need to learn the Arabic alphabet first?",
-    a: "No. We use an oral-first method: you speak from lesson one using arabizi, then transition to the Arabic script once your ear and mouth are already tuned. This is faster and less frustrating than starting from letters.",
+    a: "No. We use an oral-first method: you speak from lesson one using arabizi (Latin transliteration), then transition to the Arabic script once your ear and mouth are already tuned. This removes the alphabet barrier and gets you speaking sooner.",
   },
   {
-    q: "Are the lessons online?",
-    a: "Yes — online lessons over Zoom are available worldwide (any time zone that overlaps with Bucharest / EET). In-person lessons are offered in Bucharest, Romania. Group courses run twice a week; private 1-on-1 lessons are scheduled flexibly.",
+    q: "Are the courses online or in person?",
+    a: "Both. Online lessons over Zoom are available worldwide (any time zone overlapping with Bucharest / EET). In-person lessons and group courses take place in Bucharest, Romania. Group courses run twice a week; private 1-on-1 lessons are scheduled flexibly.",
   },
   {
-    q: "Is the teacher a native speaker with real teaching experience?",
-    a: "Yes. Ibra is a native Lebanese Arabic speaker with 5+ years of teaching experience (Preply and independent students), based in Bucharest. Being native isn't enough on its own — the method, the pacing and the correction habits are what make progress stick.",
+    q: "Who is the teacher?",
+    a: "Ibra — a native Lebanese Arabic speaker with 5+ years of teaching experience (Preply and independent students), based in Bucharest. Lessons combine native pronunciation, cultural context and a structured CEFR method.",
   },
   {
-    q: "How much do the courses cost?",
+    q: "How much do Lebanese Arabic courses cost?",
     a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (10% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson (≈ €30). A 30-minute trial lesson is free.",
   },
 ];
 
-const LearnLebaneseArabic = () => {
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ.map(({ q, a }) => ({
-      "@type": "Question",
-      name: q,
-      acceptedAnswer: { "@type": "Answer", text: a },
-    })),
-  };
-
-  const courseJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: "Lebanese Arabic — Online Courses (A1–C2)",
-    description: DESC,
-    inLanguage: "en",
-    url: URL,
-    provider: {
-      "@type": "Organization",
-      name: "Centrul de Arabă Libaneză cu Ibra",
-      url: `${BASE}/`,
-    },
-    hasCourseInstance: [
-      {
-        "@type": "CourseInstance",
-        courseMode: "online",
-        inLanguage: "en",
-      },
-    ],
-  };
-
-  return (
-    <div className="min-h-screen bg-background" lang="en">
-      <Helmet>
-        <html lang="en" />
-        <title>{TITLE}</title>
-        <meta name="description" content={DESC} />
-        <link rel="canonical" href={URL} />
-        <link rel="alternate" hrefLang="en" href={URL} />
-        <link rel="alternate" hrefLang="ro" href={`${BASE}/`} />
-        <link rel="alternate" hrefLang="x-default" href={`${BASE}/`} />
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESC} />
-        <meta property="og:url" content={URL} />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="en_US" />
-        <meta property="og:locale:alternate" content="ro_RO" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={TITLE} />
-        <meta name="twitter:description" content={DESC} />
-        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-      </Helmet>
-
-      <Navbar />
-
-      <main id="main-content" className="pt-16">
-        <section className="max-w-4xl mx-auto px-6 pt-10 pb-8">
-          <p className="text-xs uppercase tracking-wide text-primary font-semibold mb-3">
-            Live online lessons · Native teacher
-          </p>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
-            Learn Lebanese Arabic online with a native teacher
-          </h1>
-          <p className="text-lg text-muted-foreground mb-6 max-w-2xl">
-            Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday
-            Levantine Arabic spoken by ~30 million people. Speak from lesson one, without
-            starting from the alphabet. From beginner (A1) to advanced (C2).
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              to="/trial"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
-            >
-              Book a free trial lesson
-            </Link>
-            <a
-              href="https://wa.me/40763124514"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-5 py-3 text-sm font-semibold hover:border-primary/50 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" /> Ask on WhatsApp
-            </a>
-          </div>
-        </section>
-
-        <section className="max-w-4xl mx-auto px-6 py-8 grid sm:grid-cols-3 gap-4">
-          {[
-            { icon: Globe, title: "Online worldwide", desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET)." },
-            { icon: Users, title: "1-on-1 or small group", desc: "Private lessons tailored to your goals, or groups of 4–10 learners." },
-            { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Six levels, from survival Lebanese to full fluency." },
-          ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="rounded-xl border border-border bg-card p-5">
-              <Icon className="w-5 h-5 text-primary mb-2" />
-              <h2 className="text-sm font-bold text-foreground mb-1">{title}</h2>
-              <p className="text-xs text-muted-foreground">{desc}</p>
-            </div>
-          ))}
-        </section>
-
-        <section className="max-w-4xl mx-auto px-6 py-8">
-          <h2 className="text-2xl font-bold text-foreground mb-3">Why Lebanese, not Modern Standard Arabic?</h2>
-          <p className="text-sm text-muted-foreground mb-3 max-w-3xl">
-            Modern Standard Arabic (MSA / Fusha) is the written, formal register used in news, official
-            documents and religious texts — nobody speaks it natively at home. Lebanese Arabic is the
-            <em> living </em> language: what people actually use with family, on TikTok, in songs and series,
-            and in daily life across Lebanon and the broader Levant (Syria, Jordan, Palestine).
-          </p>
-          <p className="text-sm text-muted-foreground mb-4 max-w-3xl">
-            If your goal is to <strong>talk with people</strong>, Lebanese gets you there in months, not
-            years. Read our full{" "}
-            <Link to="/blog/araba-libaneza-vs-araba-standard" className="text-primary hover:underline">
-              Lebanese vs Standard Arabic comparison
-            </Link>{" "}
-            (bilingual RO/EN).
-          </p>
-          <ul className="grid sm:grid-cols-2 gap-2 text-sm text-foreground/80">
-            {[
-              "Speak from lesson one — no alphabet gatekeeping",
-              "Real conversations at A2 in 3–6 months",
-              "Native pronunciation and cultural context",
-              "Understand Lebanese music, cinema and series",
-              "Works across Lebanon, Syria, Jordan and Palestine",
-              "Optional transition to the Arabic script when you're ready",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="faq" className="max-w-4xl mx-auto px-6 py-10 scroll-mt-20">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Frequently asked questions</h2>
-          <div className="space-y-4">
-            {FAQ.map(({ q, a }) => (
-              <details key={q} className="rounded-xl border border-border bg-card p-4">
-                <summary className="cursor-pointer text-sm font-semibold text-foreground">{q}</summary>
-                <p className="mt-2 text-sm text-muted-foreground">{a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section className="max-w-4xl mx-auto px-6 py-10">
-          <div className="rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
-              Ready to start speaking Lebanese Arabic?
-            </h2>
-            <p className="text-sm text-muted-foreground mb-5 max-w-2xl">
-              Book a free 30-minute trial lesson online. No card required — just show up, chat, and see if
-              the method fits you.
-            </p>
-            <Link
-              to="/trial"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
-            >
-              Book a free trial lesson
-            </Link>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
-      <WhatsAppButton />
-      <ScrollToTop />
+const LearnLebaneseArabic = () => (
+  <EnLandingLayout
+    slug="learn-lebanese-arabic"
+    title="Learn Lebanese Arabic online with a native teacher"
+    metaTitle="Learn Lebanese Arabic Online | Native Teacher, Free Trial"
+    description="Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial."
+    crumb="Learn Lebanese Arabic"
+    lead="Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by ~30 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
+    faq={FAQ}
+    courseSchema
+    roHref="/cursuri-araba"
+  >
+    <div className="grid sm:grid-cols-3 gap-4 not-prose my-8">
+      {[
+        { icon: Globe, title: "Online worldwide", desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET)." },
+        { icon: Users, title: "1-on-1 or small group", desc: "Private lessons tailored to your goals, or groups of 4–10 learners." },
+        { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Six levels, from survival Lebanese to full fluency." },
+      ].map(({ icon: Icon, title, desc }) => (
+        <div key={title} className="rounded-xl border border-border bg-card p-5">
+          <Icon className="w-5 h-5 text-primary mb-2" />
+          <h3 className="text-sm font-bold text-foreground mb-1">{title}</h3>
+          <p className="text-xs text-muted-foreground">{desc}</p>
+        </div>
+      ))}
     </div>
-  );
-};
+
+    <h2>Why learn Lebanese Arabic?</h2>
+    <p>
+      Lebanese Arabic is the living language of Lebanon — what people use with family, on TikTok, in songs and series, and in daily life. It is also one of the most widely understood Arabic dialects across the Middle East thanks to decades of Lebanese music, cinema and media.
+    </p>
+    <ul>
+      <li><strong>Speak from lesson one:</strong> no alphabet gatekeeping; you start with arabizi transliteration.</li>
+      <li><strong>Real conversations at A2:</strong> handle introductions, shopping, directions and small talk in 3–6 months.</li>
+      <li><strong>Understand Lebanese media:</strong> songs, series, YouTube and social content in the original dialect.</li>
+      <li><strong>Travel and family:</strong> connect with Lebanese speakers in Lebanon and the diaspora.</li>
+      <li><strong>Gateway to the Levant:</strong> Lebanese is mutually intelligible with Syrian and widely understood in Jordan and Palestine.</li>
+    </ul>
+
+    <h2>Lebanese Arabic vs Modern Standard Arabic</h2>
+    <p>
+      Modern Standard Arabic (MSA / Fusha) is the written, formal register used in news, laws and religious texts. Nobody speaks it at home, and native speakers switch to their dialect the moment the camera turns off. If your goal is real conversation, spoken Lebanese Arabic is the shortest path. You can layer MSA on top later for reading and formal writing.
+    </p>
+    <p>
+      Read the full{" "}
+      <Link to="/blog/araba-libaneza-vs-araba-standard">Lebanese Arabic vs Standard Arabic comparison</Link>{" "}
+      for a side-by-side breakdown.
+    </p>
+
+    <h2>Course formats</h2>
+    <div className="grid sm:grid-cols-2 gap-4 not-prose my-6">
+      <div className="rounded-xl border border-border bg-muted/30 p-5">
+        <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
+          <Users className="w-4 h-4 text-primary" /> Group courses
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Small groups (4–10 learners), twice a week, 90 minutes per session. Online or in Bucharest. Fixed schedule with a clear CEFR syllabus.
+        </p>
+        <p className="text-sm font-medium text-foreground mt-3">From 500 LEI / month online</p>
+      </div>
+      <div className="rounded-xl border border-border bg-muted/30 p-5">
+        <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 text-primary" /> Private lessons
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          1-on-1 lessons tailored to your goals and pace. Flexible scheduling. Online worldwide or in person in Bucharest.
+        </p>
+        <p className="text-sm font-medium text-foreground mt-3">150 LEI / lesson</p>
+      </div>
+    </div>
+
+    <h2>How we teach</h2>
+    <ul>
+      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). The Arabic script is introduced after 2–3 months, once your ear is tuned.</li>
+      <li><strong>Native teacher:</strong> Ibra is a native Lebanese speaker with 5+ years of teaching experience.</li>
+      <li><strong>CEFR structure:</strong> six levels A1 → C2, from survival to full fluency.</li>
+      <li><strong>Real conversations:</strong> every lesson builds toward something you can actually say in daily life.</li>
+      <li><strong>Online worldwide:</strong> live Zoom lessons in any time zone that overlaps with Bucharest (EET). In-person option in Bucharest.</li>
+    </ul>
+
+    <h2>What you will be able to say</h2>
+    <p>
+      Even after a few lessons you can handle practical situations: introduce yourself, order food, ask for directions, shop, make plans and greet people naturally. By A2 you can hold short conversations about everyday topics; by B1 you can discuss past experiences, give opinions and understand the gist of Lebanese media.
+    </p>
+
+    <h2>Free resources to start learning Lebanese Arabic</h2>
+    <p>
+      While you decide on a course, you can already build exposure with free material:
+    </p>
+    <ul>
+      <li>
+        <Link to="/blog/primele-20-de-expresii-libaneze">The first 20 Lebanese Arabic phrases</Link> — greetings, politeness, café and taxi situations.
+      </li>
+      <li>
+        <Link to="/blog/cum-saluti-in-libaneza">How to greet in Lebanese Arabic</Link> — complete politeness guide with pronunciation.
+      </li>
+      <li>
+        <Link to="/blog/ce-este-arabizi">What is Arabizi</Link> — how to read Arabic written with Latin letters and numbers.
+      </li>
+      <li>
+        <Link to="/blog/cum-inveti-araba-libaneza">How to learn Lebanese Arabic: a beginner's guide</Link> — methods, mistakes and timeline.
+      </li>
+    </ul>
+
+    <div className="rounded-xl border border-border bg-primary/5 p-6 not-prose my-10">
+      <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
+        <BookOpen className="w-5 h-5 text-primary" /> Want a step-by-step beginner guide?
+      </h3>
+      <p className="text-sm text-muted-foreground mb-4">
+        Read our dedicated guide on <Link to="/blog/learn-lebanese-arabic">how to learn Lebanese Arabic</Link> — it covers dialect differences, study methods, common mistakes and your first useful phrases.
+      </p>
+      <Link
+        to="/blog/learn-lebanese-arabic"
+        className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:bg-primary/90 transition-colors"
+      >
+        Read the beginner guide
+      </Link>
+    </div>
+
+    <h2>Start learning Lebanese Arabic today</h2>
+    <p>
+      Book a free 30-minute trial lesson. No card required — just show up, chat, and see if the method fits you. Online worldwide or in person in Bucharest.
+    </p>
+    <div className="flex flex-wrap gap-3 not-prose">
+      <Link
+        to="/trial"
+        className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
+      >
+        Book a free trial lesson
+      </Link>
+      <a
+        href="https://wa.me/40763124514"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-5 py-3 text-sm font-semibold hover:border-primary/50 transition-colors"
+      >
+        <MessageCircle className="w-4 h-4" /> Ask on WhatsApp
+      </a>
+    </div>
+
+    <ul className="grid sm:grid-cols-2 gap-2 text-sm text-foreground/80 not-prose mt-8">
+      {[
+        "Speak from lesson one — no alphabet gatekeeping",
+        "Real conversations at A2 in 3–6 months",
+        "Native pronunciation and cultural context",
+        "Understand Lebanese music, cinema and series",
+        "Works across Lebanon, Syria, Jordan and Palestine",
+        "Optional transition to the Arabic script when you're ready",
+      ].map((item) => (
+        <li key={item} className="flex items-start gap-2">
+          <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </EnLandingLayout>
+);
 
 export default LearnLebaneseArabic;
