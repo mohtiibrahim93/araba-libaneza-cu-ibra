@@ -1,31 +1,40 @@
-## Where the English landing page lives
+# SEO Backlog — What's Still Open
 
-The page **is already built and wired up** — you just haven't seen it because (a) it's not linked from any prominent spot on the homepage, and (b) it may not be published yet.
+Recap of every recommendation raised in our recent SEO/Semrush conversations that has **not** been actioned yet, grouped by priority and rough credit cost so you can pick what to spend on.
 
-### How to find it right now
+## 1. Manual actions (0 credits — you do these, not me)
 
-- **URL (once published):** `https://centruldearabalibaneza.com/en/learn-lebanese-arabic`
-- **In-app link today:** Footer → "English" column → "Learn Lebanese Arabic"
-- **In the sitemap:** yes, listed with hreflang alternates
+These need your login to third-party dashboards; I can't do them for you.
 
-### Why you don't "see" it
-1. Frontend changes only go live after you click **Publish → Update**. If you haven't republished since I added this page, the live domain still 404s on that URL.
-2. It's only linked from the footer, so nothing on the homepage points a visitor (or you) at it.
+- **Upload the disavow file to Google Search Console.**
+  File is already generated at `public/disavow.txt` (13 spam domains: 8coint.com, cindylaup.com, toplikevideo.com, analyticshaven.top, atomizelink.icu, etc.).
+  → Search Console → https://search.google.com/search-console/disavow-links → pick the property → upload the file.
+- **Add the 9 Stripe DNS records** at your domain provider (from earlier message) — still pending, blocks branded Stripe checkout domain.
+- **Add Stripe webhook events** `invoice.paid`, `invoice.payment_failed`, `customer.subscription.deleted` in Stripe Dashboard — still pending, blocks subscription lifecycle updates.
+- **Check GA4 New vs Returning** in analytics.google.com (Reports → Retention) — informational only.
 
-### Proposed fix (small, UI-only)
+## 2. High-ROI content still not built
 
-1. **Add a subtle language switcher / EN entry point in the Navbar** — a small "EN" link next to the existing nav items that goes to `/en/learn-lebanese-arabic`. Mirrors what most bilingual sites do and makes the English page discoverable to real visitors, not just crawlers.
-2. **Verify the page renders as described** by opening `/en/learn-lebanese-arabic` in the preview after publish — confirm:
-   - `<html lang="en">`, self-canonical
-   - H1 "Learn Lebanese Arabic online with a native teacher"
-   - 6 FAQ items (dialect vs MSA, timeline, alphabet, online, teacher, pricing)
-   - Course + FAQPage JSON-LD in the head
-3. **Publish** so the URL becomes reachable on `centruldearabalibaneza.com`.
+Ranked by search volume vs effort.
 
-### Technical notes
-- File: `src/pages/en/LearnLebaneseArabic.tsx` (already exists, 215 lines, all the schema + Q&As described).
-- Route: `src/App.tsx` line 131 (already registered).
-- Sitemap entry: `public/sitemap.xml` line 50 (already present).
-- Only new edit needed: add one nav link in `src/components/Navbar.tsx`.
+| # | Item | Volume / Reason | Est. credits |
+|---|------|-----------------|--------------|
+| A | `/de/arabisch-lernen` German landing page | 3,600/mo, DE is your #1 traffic country (88 visitors) with zero targeted page | 3–4 |
+| B | Phrases blog cluster: `/blog/lebanese-arabic-phrases`, `/blog/lebanese-greetings`, `/blog/lebanese-family-vocabulary` | Direct counter to thespokenarabic.com (EN leader) | 4–5 (all three in one pass) |
+| C | RO city pages: `/cursuri-araba-cluj`, `/cursuri-araba-brasov`, `/cursuri-araba-timisoara` | Counter to Centrul Unirea's local moat; you already teach online | 3–4 (all three) |
+| D | Optimize `/cursuri/grup/a1` meta/H1 for "curs araba incepatori bucuresti" | Already getting 11 views with zero optimization — quick win | 1 |
 
-No backend, no data, no SEO regressions — just discoverability + publish.
+## 3. Data pulls we discussed but didn't run
+
+- **Semrush connector** for multi-year trend data on "Levantine Arabic", "Lebanese Arabic", "Arabic dialects", identity terms. You said "let's see" — still not connected. Requires you to authorize; ~1 credit for me to trigger the modal.
+
+## Recommended spend for your ~10–15 credit budget
+
+Best value stack (≈11 credits, covers the biggest gaps):
+
+1. **A — German page** (3–4 cr) — biggest untapped market
+2. **B — Phrases blog cluster** (4–5 cr) — long-tail EN moat
+3. **D — A1 page meta fix** (1 cr) — cheap win on a page already getting traffic
+4. Leave city pages (C) and Semrush connector for later
+
+Reply with the letters you want (e.g. "do A + B + D") and I'll ship them in one pass. Manual actions in section 1 are on you regardless — none of them cost credits but all are blocking.
