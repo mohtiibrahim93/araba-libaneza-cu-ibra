@@ -11,6 +11,10 @@ const URL = `${BASE}/de/arabisch-lernen`;
 
 const FAQ = [
   {
+    q: "In welcher Sprache findet der Unterricht statt?",
+    a: "Du wählst die Sprache, in der du dich am wohlsten fühlst. Ibra unterrichtet fließend auf Englisch, Französisch, Arabisch und Rumänisch — einfache Erklärungen auf Deutsch sind ebenfalls möglich. So bleibt nichts unklar, egal welche Sprache dir gerade leichter fällt.",
+  },
+  {
     q: "Welches Arabisch lernt man hier — Hocharabisch oder Dialekt?",
     a: "Wir unterrichten libanesisches Arabisch (levantinischer Dialekt), also die gesprochene Sprache aus dem Libanon, Syrien, Jordanien und Palästina. Hocharabisch (MSA / Fusha) ist die formelle Schriftsprache — kaum jemand spricht sie zu Hause. Wenn du wirklich reden willst, ist der Dialekt der schnellste Weg. MSA können wir später ergänzen, wenn du lesen oder formell schreiben möchtest.",
   },
@@ -28,7 +32,7 @@ const FAQ = [
   },
   {
     q: "Wer ist der Lehrer?",
-    a: "Ibra — Muttersprachler des libanesischen Arabisch mit 5+ Jahren Unterrichtserfahrung (Preply und eigene Schüler weltweit), lebt in Bukarest. Unterricht auf Englisch oder Rumänisch; einfache Erklärungen auf Deutsch sind möglich.",
+    a: "Ibra — Muttersprachler des libanesischen Arabisch mit 5+ Jahren Unterrichtserfahrung (Preply und eigene Schüler weltweit), lebt in Bukarest. Unterricht auf Englisch, Französisch, Arabisch oder Rumänisch — such dir die Sprache aus, in der du dich am wohlsten fühlst. Einfache Erklärungen auf Deutsch sind ebenfalls möglich.",
   },
   {
     q: "Was kosten die Kurse?",
@@ -186,7 +190,7 @@ const ArabischLernen = () => (
             <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
             <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
             <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>
-            <li><strong>Unterrichtssprache:</strong> Englisch oder Rumänisch. Einfache Erklärungen auf Deutsch möglich.</li>
+            <li><strong>Unterrichtssprache:</strong> Englisch, Französisch, Arabisch oder Rumänisch — plus einfache Erklärungen auf Deutsch.</li>
           </ul>
 
           <h2>Häufig gestellte Fragen</h2>
