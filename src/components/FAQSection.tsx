@@ -410,6 +410,31 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
         ],
       },
+      {
+        title: "Lebanese Arabic grammar",
+        items: [
+          {
+            q: "What does the بـ (b-) prefix do on Lebanese Arabic verbs?",
+            a: "The بـ (b-) prefix marks the habitual or ongoing present tense — the equivalent of English \"I do / I eat / I go.\" Example: bektob = I write (in general), bshoof = I see. Without بـ, the verb becomes subjunctive or dependent on another verb: baddi ektob = I want to write (no b-). Quick rule: real, habitual, or ongoing action → use بـ; after modal verbs (want, can, must) → drop the بـ.",
+          },
+          {
+            q: "How are past-tense verbs conjugated with attached pronouns (katabt-ha, katab-lak)?",
+            a: "In Lebanese you conjugate the verb in the past, then stick object pronouns onto the end. Example from katab (he wrote): katabt = I wrote, katabt-a = I wrote it (fem.), katabt-o = I wrote it (masc.), katab-lak = he wrote to you (m.), katab-lek = he wrote to you (f.), katabna-hon = we wrote to them. The suffixes -lak, -lek, -lo, -la, -lna, -lkon, -lhon mark the beneficiary (\"for/to someone\"), while -a, -o, -hon mark the direct object.",
+          },
+          {
+            q: "What are the personal and possessive pronouns in Lebanese Arabic?",
+            a: "Personal: ana (I), inta / inti (you m/f), huwwe / hiyye (he/she), nihna (we), intu (you pl.), hinne (they). Possessive (attached to the noun): -i (my), -ak / -ek (your m/f), -o (his), -(h)a (her), -na (our), -kon (your pl.), -hon (their). Example: bayt = house → bayti (my house), baytak (your house), bayto (his house), bayta (her house).",
+          },
+          {
+            q: "Is Lebanese Arabic word order VSO or SVO?",
+            a: "In speech, Lebanese Arabic normally uses SVO (subject-verb-object) — just like English: \"Ahmad byekol tuffaha\" (Ahmad eats an apple). MSA / Classical Arabic prefers VSO (\"Eats Ahmad an apple\"), but in everyday conversation Lebanese speakers almost always pick SVO. That makes Lebanese feel much more natural to English speakers.",
+          },
+          {
+            q: "How is Lebanese Arabic grammar different from Modern Standard Arabic (MSA)?",
+            a: "Lebanese drops most of MSA's complexity: no case endings (dammah, kasrah, fathah), no full dual (we use the plural), no separate feminine plural in verbs (hinne covers everyone), future tense with رح / ح- (rah rooh = I will go) instead of سـ, negation with a simple ما (ma) instead of لا/لم/لن, and SVO word order instead of VSO. The result: same roots, far fewer rules — which is why Lebanese is faster to speak than MSA.",
+          },
+        ],
+      },
     ],
   },
 };
