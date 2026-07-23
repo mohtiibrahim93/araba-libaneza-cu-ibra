@@ -7,12 +7,28 @@ const FAQ = [
     a: "Yes. Ibra is a native Lebanese Arabic speaker, based in Bucharest, with 5+ years of teaching experience (Preply and independent students worldwide). Native fluency plus real teaching training — not just a native speaker without a method.",
   },
   {
+    q: "What teaching experience and qualifications do you have?",
+    a: "5+ years teaching Arabic to adult learners across Europe, North America and the Gulf — on Preply, independently online, and in person in Bucharest. Ongoing training in CEFR-based language pedagogy and the communicative method. Native fluency alone isn't enough — the method is what makes lessons work.",
+  },
+  {
     q: "Which variety of Arabic do you teach?",
     a: "Primarily Lebanese Arabic (Levantine), the spoken dialect used across Lebanon, Syria, Jordan and Palestine. For students who need Modern Standard Arabic (MSA / Fusha) for reading, exams or professional writing, we layer that on top after the oral foundation.",
   },
   {
+    q: "What is your teaching methodology?",
+    a: "Oral-first, communicative, CEFR-aligned. You speak from lesson one using arabizi (Latin transliteration), the Arabic script is introduced after 2–3 months, and every lesson is 70% real conversation / role-play, 30% new material. Grammar is taught through examples in context, not drilled from tables.",
+  },
+  {
+    q: "How do you personalise lessons to my level and goals?",
+    a: "The free trial doubles as a level check and goal-setting session — travel, family, work, exam prep, kids, religious reading — and every lesson from there uses vocabulary and scenarios tailored to what you actually need. The material bends to fit you, not the other way around.",
+  },
+  {
     q: "How much does 1-on-1 tutoring cost?",
     a: "150 LEI per 90-minute lesson (~€30), with a 15% discount on packages of 20+ lessons. The first 30-minute trial lesson is free. No subscription, no lock-in.",
+  },
+  {
+    q: "What is your cancellation and rescheduling policy?",
+    a: "Reschedule any lesson up to 24 hours before the start time at no cost. Cancellations under 24 hours count as a used lesson. No long-term contract, no hidden fees — packages are pay-once and used at your pace.",
   },
   {
     q: "How are lessons delivered?",
@@ -25,6 +41,10 @@ const FAQ = [
   {
     q: "How do you track progress?",
     a: "CEFR-aligned checkpoints (A1 → C2), weekly informal reviews, and a formal progress assessment every 8–10 lessons. You'll know exactly what you can do, what's next, and where the gaps are.",
+  },
+  {
+    q: "Do you have reviews or testimonials from past students?",
+    a: "Yes — 5-star reviews on Preply from students across Europe, North America and the Gulf, plus written testimonials from long-term in-person students in Bucharest. Happy to share specific ones on request during the trial lesson.",
   },
 ];
 
