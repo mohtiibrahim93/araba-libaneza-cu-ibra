@@ -20,6 +20,20 @@ export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "lebanese-arabic-learning-resources",
+    title: {
+      ro: "Cele mai bune resurse pentru a învăța araba libaneză (aplicații, podcasturi, seriale)",
+      en: "The best Lebanese Arabic learning resources (apps, podcasts, media)",
+    },
+    description: {
+      ro: "Ghid curat al aplicațiilor, podcasturilor, cărților și serialelor pentru a învăța araba libaneză — dialect libanez, nu MSA. Recomandate de un profesor nativ.",
+      en: "A curated guide to the apps, podcasts, books and TV series worth using to learn Lebanese Arabic — Lebanese dialect, not MSA. Recommended by a native teacher.",
+    },
+    published: "2026-07-24",
+    readingMinutes: 7,
+    tag: { ro: "Resurse", en: "Resources" },
+  },
+  {
     slug: "limbile-vorbite-in-liban",
     title: {
       ro: "Limbile vorbite în Liban: arabă libaneză, MSA, franceză și engleză",
