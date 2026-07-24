@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
 
 const BookingInner = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [params] = useSearchParams();
   const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
   const registrationId = params.get("registration_id");
@@ -25,10 +25,37 @@ const BookingInner = () => {
     if (hasValidRegistration) document.title = title;
   }, [title, hasValidRegistration]);
 
-  // Bookings must be tied to a registration. If no id is present, send users
-  // back to the registration form (Step 1 of the journey).
+  // Bookings must be tied to a registration. Reaching /booking without one
+  // (e.g. from the navbar) is a valid entry point, so show a small landing
+  // that routes to the right starting step instead of bouncing to the homepage.
   if (!hasValidRegistration) {
-    return <Navigate to="/#programs" replace />;
+    const en = lang === "en";
+    return (
+      <main className="min-h-screen bg-background py-12 px-6">
+        <Helmet>
+          <title>{(en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
+          <meta name="description" content={en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București."} />
+          <link rel="canonical" href="https://centruldearabalibaneza.com/booking" />
+        </Helmet>
+        <div className="max-w-2xl mx-auto">
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
+            <ArrowLeft className="w-4 h-4" /> {t.navHome}
+          </Link>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">{en ? "Book a lesson" : "Rezervă o lecție"}</h1>
+          <p className="text-muted-foreground mb-8">{en ? "Choose how you'd like to start:" : "Alege cum vrei să începi:"}</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link to="/trial" className="rounded-2xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition">
+              <h2 className="text-lg font-bold text-foreground mb-1">{en ? "Free trial lesson" : "Lecție de probă gratuită"}</h2>
+              <p className="text-sm text-muted-foreground">{en ? "With a native teacher, online or in person. No obligation." : "Cu profesor nativ, online sau fizic. Fără nicio obligație."}</p>
+            </Link>
+            <Link to="/cursuri" className="rounded-2xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition">
+              <h2 className="text-lg font-bold text-foreground mb-1">{en ? "Enroll in a course" : "Înscrie-te la un curs"}</h2>
+              <p className="text-sm text-muted-foreground">{en ? "Group or private — for adults, teens or kids, online or in Bucharest." : "Grup sau privat — pentru adulți, tineri sau copii, online sau în București."}</p>
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
