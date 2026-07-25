@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams, Navigate, useSearchParams } from "react-router-dom";
 import { ChevronRight, MessageCircle, CheckCircle2, BookOpen, Clock, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,13 +17,14 @@ import posterA1Online from "@/assets/poster-a1-online.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
-const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
+type PosterFormat = "online" | "fizic";
+const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string; format: PosterFormat }[]>> = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
-    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
+    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
   ],
   a2: [
-    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
   ],
 };
 
@@ -36,6 +37,10 @@ const CursGrupLevel = () => {
   const { t, lang } = useI18n();
   const { level } = useParams<{ level: string }>();
   const slug = (level || "").toLowerCase();
+  const [searchParams] = useSearchParams();
+  const modeParam = searchParams.get("mod");
+  const posterFilter: PosterFormat | null =
+    modeParam === "online" || modeParam === "fizic" ? modeParam : null;
 
   // Hooks must run on every render (before any early return) so the hook
   // order stays stable. Otherwise navigating from a valid level to an invalid
@@ -238,22 +243,28 @@ const CursGrupLevel = () => {
                 <p className="mt-4 text-xs text-muted-foreground italic">{curriculum.note}</p>
               )}
 
-              {LEVEL_POSTERS[slug] && (
-                <div className="mt-6 grid sm:grid-cols-2 gap-4">
-                  {LEVEL_POSTERS[slug]!.map((p) => (
-                    <img
-                      key={p.src}
-                      src={p.src}
-                      alt={p.alt}
-                      width={800}
-                      height={800}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full rounded-2xl border border-border shadow-sm"
-                    />
-                  ))}
-                </div>
-              )}
+              {LEVEL_POSTERS[slug] && (() => {
+                const posters = LEVEL_POSTERS[slug]!.filter(
+                  (p) => !posterFilter || p.format === posterFilter,
+                );
+                if (posters.length === 0) return null;
+                return (
+                  <div className="mt-6 grid sm:grid-cols-2 gap-4">
+                    {posters.map((p) => (
+                      <img
+                        key={p.src}
+                        src={p.src}
+                        alt={p.alt}
+                        width={800}
+                        height={800}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full rounded-2xl border border-border shadow-sm"
+                      />
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Sticky form */}

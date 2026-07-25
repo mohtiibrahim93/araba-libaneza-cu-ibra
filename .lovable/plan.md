@@ -1,25 +1,30 @@
-## Two changes
+## Obiectiv
 
-### 1. `/de/arabisch-lernen` — remove any "we teach in German" wording
-Ibra doesn't teach in German. Every mention of "einfache Erklärungen auf Deutsch möglich" gets removed. Teaching languages listed as **Englisch, Französisch, Arabisch, Rumänisch** only.
+1. Când utilizatorul ajunge din butonul **Cursuri** → alege vârsta + mod (online/fizic) + tip (grup) și dă click pe o grupă (ex. A1), să aterizeze pe **aceeași pagină** ca atunci când intră din homepage la A1 — adică `/cursuri/grup/a1` (`CursGrupLevel`), nu pe pagina generică `/cursuri/curs/<slug>` (`CourseDetail`).
+2. Pe `/cursuri/grup/a1` și `/cursuri/grup/a2`, dacă utilizatorul a ales deja "online" sau "fizic" în fluxul Cursuri, să se afișeze **doar posterul corespunzător** modului ales, nu ambele.
 
-Edits in `src/pages/de/ArabischLernen.tsx`:
-- Top FAQ item "In welcher Sprache findet der Unterricht statt?" — drop the "einfache Erklärungen auf Deutsch" sentence; keep the four-language list only.
-- FAQ item "Wer ist der Lehrer?" — same removal.
-- "Warum uns wählen" / "Wie wir unterrichten" bullet on Unterrichtssprache — drop the "plus einfache Erklärungen auf Deutsch" clause.
+## Ce se schimbă
 
-The rest of the page (marketing copy, headers, CTAs) stays in German — that's the visitor's language, not the teaching language.
+### 1. `src/components/courses/CourseCard.tsx`
+- Când cursul este de tip grup și are `level`, linkul cardului devine `/cursuri/grup/<level>?mod=<format>` (în loc de `/cursuri/curs/<slug>`), transmițând `mod=online` sau `mod=fizic` din `course.format` când există.
+- Pentru celelalte cursuri (fără level/format grup) se păstrează comportamentul actual (link către `/cursuri/curs/<slug>`).
 
-### 2. English + Romanian twin pages with the same layout as `/de`
+### 2. `src/pages/courses/CursGrupLevel.tsx`
+- Se citește `?mod=online|fizic` din URL (`useSearchParams`).
+- `LEVEL_POSTERS[slug]` capătă o cheie de format per poster (`online` / `fizic`), iar la randare se filtrează după `mod` dacă e prezent:
+  - `?mod=online` → doar posterul online
+  - `?mod=fizic` → doar posterul fizic
+  - fără parametru → ambele (comportament actual)
+- Nu se schimbă nimic la curriculum, prețuri, formular sau SEO.
 
-Today the DE page is a rich standalone (hero cards, formats grid, teaching-approach list, 7-item FAQ). The nearest counterparts are structurally lighter:
-- **EN**: `/en/learn-lebanese-arabic` is already rich but uses `EnLandingLayout` (prose + FAQ). No parity mismatch worth fixing — I'll only add the same "teaching languages" line and one FAQ item so the multilingual angle is on-page in EN too.
-- **RO**: `/cursuri-araba` (via `LandingLayout`) is much thinner than DE. I'll add the same "teaching languages" note + FAQ item so RO visitors get the same info, but I won't rebuild the full DE-style layout unless you want it.
+## Ce NU se atinge
 
-Edits:
-- `src/pages/en/LearnLebaneseArabic.tsx`: add FAQ item "What language are lessons taught in?" (English, French, Arabic, Romanian — student picks). Add matching line to the "How we teach" bullets.
-- `src/pages/seo/CursuriAraba.tsx`: add FAQ item "În ce limbă se predau lecțiile?" (engleză, franceză, arabă, română). Add a short paragraph mentioning it in the body.
-- Same small addition to `src/pages/seo/CursuriLimbaAraba.tsx` (the canonical target) so the info lives on the canonical URL too.
+- Pagina `CourseDetail` (`/cursuri/curs/<slug>`) rămâne funcțională pentru cursurile fără nivel A1–C2 (kids, cohorte speciale).
+- Fluxul de înregistrare, prețurile, formularul, breadcrumb-urile și metadatele SEO ale `/cursuri/grup/<level>` rămân neschimbate.
+- Nicio schimbare de backend, migrare sau edge function.
 
-### Not in scope
-Rebuilding EN/RO pages to visually mirror the DE layout (cards + formats grid + teaching-approach block). Say the word if you want that too and I'll port the DE structure over — it's a bigger job because EN/RO use shared layout components (`EnLandingLayout`, `LandingLayout`) while DE is a bespoke page.
+## Verificare
+
+- `bun run build` trece curat.
+- Manual: `/cursuri?varsta=adulti&mod=online&tip=grup` → click pe cardul A1 → aterizează pe `/cursuri/grup/a1?mod=online` și se vede doar posterul online.
+- `/cursuri/grup/a1` (fără query) → ambele postere, ca acum.
