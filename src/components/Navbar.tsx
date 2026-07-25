@@ -151,16 +151,6 @@ const Navbar = () => {
           >
             {t.navBlog}
           </Link>
-          {lang === "ro" && (
-            <Link
-              to="/en/learn-lebanese-arabic"
-              onClick={() => setOpen(false)}
-              hrefLang="en"
-              className="hover:text-foreground transition-colors"
-            >
-              English version
-            </Link>
-          )}
           {links.map((l) => (
             <a
               key={l.href}
