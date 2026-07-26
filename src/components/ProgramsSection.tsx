@@ -12,8 +12,8 @@ import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
-import posterA1Online from "@/assets/poster-a1-online.webp";
-import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
+import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {

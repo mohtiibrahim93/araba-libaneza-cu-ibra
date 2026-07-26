@@ -13,8 +13,8 @@ import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
-import posterA1Online from "@/assets/poster-a1-online.webp";
-import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
+import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
 type PosterFormat = "online" | "fizic";
