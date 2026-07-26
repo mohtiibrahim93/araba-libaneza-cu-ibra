@@ -20,7 +20,7 @@ import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
 type PosterFormat = "online" | "fizic";
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string; format: PosterFormat }[]>> = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
     { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
   ],
   a2: [
