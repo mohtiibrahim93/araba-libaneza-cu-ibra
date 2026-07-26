@@ -19,10 +19,10 @@ import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
   A1: [
     { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
-    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
+    { src: posterA1Online.url, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
   ],
   A2: [
-    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA2Fizic.url, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
   ],
 };
 
