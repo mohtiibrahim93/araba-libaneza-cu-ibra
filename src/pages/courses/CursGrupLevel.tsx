@@ -13,18 +13,18 @@ import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
-import posterA1Online from "@/assets/poster-a1-online.webp";
-import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
+import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
 type PosterFormat = "online" | "fizic";
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string; format: PosterFormat }[]>> = {
   a1: [
     { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
-    { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
+    { src: posterA1Online.url, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
   ],
   a2: [
-    { src: posterA2Fizic, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA2Fizic.url, alt: "Poster A2 fizic — start 11 august 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
   ],
 };
 
