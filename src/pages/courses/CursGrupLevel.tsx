@@ -12,7 +12,7 @@ import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
-import posterA1Fizic from "@/assets/poster-a1-fizic.webp";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
 import posterA1Online from "@/assets/poster-a1-online.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
 
@@ -20,7 +20,7 @@ import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
 type PosterFormat = "online" | "fizic";
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string; format: PosterFormat }[]>> = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
     { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
   ],
   a2: [

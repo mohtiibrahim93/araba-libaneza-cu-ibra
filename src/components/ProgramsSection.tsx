@@ -11,14 +11,14 @@ import { getCurriculum } from "@/data/curriculum";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
-import posterA1Fizic from "@/assets/poster-a1-fizic.webp";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
 import posterA1Online from "@/assets/poster-a1-online.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic.webp";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
   A1: [
-    { src: posterA1Fizic, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 10 august 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
     { src: posterA1Online, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
   ],
   A2: [
