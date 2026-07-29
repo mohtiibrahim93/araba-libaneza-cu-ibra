@@ -29,8 +29,8 @@ const CursuriAraba = () => (
     slug="cursuri-araba"
     canonicalHref="/cursuri-limba-araba"
     title="Cursuri de arabă cu profesor nativ — grup, private și pentru copii"
-    metaTitle="Cursuri de Arabă 2026 — Grup, Private & Copii | București și Online"
-    description="Cursuri de arabă libaneză cu profesor nativ: grup (A1–C2), lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima lecție de probă e gratuită."
+    metaTitle="Cursuri de Arabă 2026 — Grup, Private & Copii | București"
+    description="Cursuri de arabă libaneză cu profesor nativ: grup A1–C2, lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima probă gratuită."
     crumb="Cursuri de arabă"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}
