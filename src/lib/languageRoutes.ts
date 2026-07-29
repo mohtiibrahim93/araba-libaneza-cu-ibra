@@ -26,6 +26,7 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/learn-lebanese-arabic": "/cursuri-araba",
   "/en/learn-levantine-arabic": "/cursuri-araba",
   "/en/arabic-dialects-guide": "/cursuri-araba",
+  "/en/levantine-arabic-dialects-map": "/cursuri-araba",
   "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/blog/araba-libaneza-vs-araba-standard",
   "/en/how-to-learn-lebanese-arabic": "/blog/cum-inveti-araba-libaneza",
