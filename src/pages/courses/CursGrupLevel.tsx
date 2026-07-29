@@ -37,9 +37,9 @@ const CursGrupLevel = () => {
   const { t, lang } = useI18n();
   const { level } = useParams<{ level: string }>();
   const slug = (level || "").toLowerCase();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const modeParam = searchParams.get("mod");
-  const posterFilter: PosterFormat | null =
+  const paramFormat: PosterFormat | null =
     modeParam === "online" || modeParam === "fizic" ? modeParam : null;
 
   // Hooks must run on every render (before any early return) so the hook
@@ -58,6 +58,19 @@ const CursGrupLevel = () => {
   const online = ONLINE_PRICES.groupMonthly[upperLevel];
   const fizic = physicalPrice(online);
   const available = isAvailable(upperLevel);
+
+  // Format toggle: exactly one cohort/poster is shown at a time. Defaults to
+  // ?mod= when present, otherwise "fizic" (both A1 and A2 have a fizic cohort).
+  const availableFormats: PosterFormat[] = (LEVEL_POSTERS[slug] || []).map((p) => p.format);
+  const selectedFormat: PosterFormat =
+    paramFormat && availableFormats.includes(paramFormat)
+      ? paramFormat
+      : availableFormats[0] ?? "fizic";
+  const pickFormat = (fmt: PosterFormat) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("mod", fmt);
+    setSearchParams(next, { replace: true });
+  };
 
   const canonical = `${BASE_URL}/cursuri/grup/${slug}`;
   // A1 is the highest-intent SERP entry point ("curs araba incepatori
@@ -243,28 +256,57 @@ const CursGrupLevel = () => {
                 <p className="mt-4 text-xs text-muted-foreground italic">{curriculum.note}</p>
               )}
 
-              {LEVEL_POSTERS[slug] && (() => {
-                const posters = LEVEL_POSTERS[slug]!.filter(
-                  (p) => !posterFilter || p.format === posterFilter,
-                );
-                if (posters.length === 0) return null;
-                return (
-                  <div className="mt-6 grid sm:grid-cols-2 gap-4">
-                    {posters.map((p) => (
+              {LEVEL_POSTERS[slug] && availableFormats.length > 0 && (
+                <div className="mt-6">
+                  <div className="mb-3 inline-flex rounded-full border border-border bg-muted/40 p-1 text-sm">
+                    {(["fizic", "online"] as PosterFormat[]).map((fmt) => {
+                      const enabled = availableFormats.includes(fmt);
+                      const active = selectedFormat === fmt;
+                      const label = fmt === "fizic"
+                        ? (lang === "en" ? "In person" : "Fizic")
+                        : "Online";
+                      return (
+                        <button
+                          key={fmt}
+                          type="button"
+                          disabled={!enabled}
+                          onClick={() => enabled && pickFormat(fmt)}
+                          className={`rounded-full px-4 py-1.5 font-semibold transition ${
+                            active
+                              ? "bg-primary text-primary-foreground"
+                              : enabled
+                              ? "text-foreground hover:bg-background"
+                              : "text-muted-foreground/60 cursor-not-allowed"
+                          }`}
+                          aria-pressed={active}
+                        >
+                          {label}
+                          {!enabled && (
+                            <span className="ml-1 text-xs font-normal">
+                              ({lang === "en" ? "soon" : "în curând"})
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {(() => {
+                    const poster = LEVEL_POSTERS[slug]!.find((p) => p.format === selectedFormat);
+                    if (!poster) return null;
+                    return (
                       <img
-                        key={p.src}
-                        src={p.src}
-                        alt={p.alt}
+                        src={poster.src}
+                        alt={poster.alt}
                         width={800}
                         height={800}
                         loading="lazy"
                         decoding="async"
-                        className="w-full rounded-2xl border border-border shadow-sm"
+                        className="w-full max-w-md rounded-2xl border border-border shadow-sm"
                       />
-                    ))}
-                  </div>
-                );
-              })()}
+                    );
+                  })()}
+                </div>
+              )}
             </div>
 
             {/* Sticky form */}
@@ -281,6 +323,7 @@ const CursGrupLevel = () => {
                     <RegistrationFormSection
                       defaultCourseType="group"
                       defaultLevel={upperLevel}
+                      defaultFormat={selectedFormat}
                       lockSelection
                       embedded
                     />
