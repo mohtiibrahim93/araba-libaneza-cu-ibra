@@ -97,7 +97,8 @@ const Navbar = () => {
   }, []);
 
   const links = [
-    { href: "#pricing", label: t.navPricing },
+    // Prices are shown in the Programs section — there is no #pricing block.
+    { href: "#programs", label: t.navPricing },
     { href: "#testimonials", label: t.navTestimonials },
     { href: "#faq", label: t.navFaq },
     { href: "#contact", label: t.navContact },

@@ -49,7 +49,9 @@ const Footer = () => {
           <p className="text-sm font-semibold text-foreground mb-4">{t.footerQuickLinks}</p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
-            <li><AnchorLink to="#curriculum" className="hover:text-foreground transition-colors">{t.navCurriculum}</AnchorLink></li>
+            {/* The homepage has no #curriculum block; the group-course page
+                lists every CEFR level with its full curriculum. */}
+            <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.navCurriculum}</Link></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
             <li><AnchorLink to="#programs" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
             <li><Link to="/en/learn-lebanese-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Lebanese Arabic</Link></li>
