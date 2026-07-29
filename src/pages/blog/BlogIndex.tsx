@@ -11,7 +11,7 @@ import { useI18n } from "@/lib/i18n";
 const BASE_URL = "https://centruldearabalibaneza.com";
 const COPY = {
   ro: {
-    title: "Blog — Arabă libaneză explicată simplu | Centrul de Arabă Libaneză",
+    title: "Blog — Arabă libaneză explicată simplu | Ibra",
     description:
       "Ghiduri și articole despre araba libaneză: cum înveți, diferența față de araba standard, expresii utile și cultură libaneză — de la Ibra, profesor nativ.",
     badge: "Blog",
@@ -22,7 +22,7 @@ const COPY = {
     min: "min",
   },
   en: {
-    title: "Blog — Lebanese Arabic explained simply | Lebanese Arabic Center",
+    title: "Blog — Lebanese Arabic explained simply | Ibra",
     description:
       "Guides and articles about Lebanese Arabic: how to learn, the difference from Standard Arabic, useful phrases and Lebanese culture — by Ibra, a native teacher.",
     badge: "Blog",
