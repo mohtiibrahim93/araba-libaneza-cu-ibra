@@ -104,10 +104,16 @@ const CourseDetail = () => {
     a: lang === "en" ? f.a_en || f.a_ro : f.a_ro,
   })).filter((f) => f.q && f.a);
 
+  // Keep the rendered <title> under the ~60-char SERP limit: add the brand
+  // suffix only when it still fits, otherwise ship the bare course title.
+  const SUFFIX = " | Ibra";
+  const metaTitle =
+    title.length + SUFFIX.length <= 60 ? `${title}${SUFFIX}` : title.slice(0, 60);
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{title} | Arabă Libaneză cu Ibra</title>
+        <title>{metaTitle}</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={url} />
         <meta property="og:title" content={title} />
