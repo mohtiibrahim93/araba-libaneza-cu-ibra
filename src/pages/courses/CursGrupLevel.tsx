@@ -276,7 +276,7 @@ const CursGrupLevel = () => {
                               ? "bg-primary text-primary-foreground"
                               : enabled
                               ? "text-foreground hover:bg-background"
-                              : "text-muted-foreground/60 cursor-not-allowed"
+                              : "text-muted-foreground cursor-not-allowed"
                           }`}
                           aria-pressed={active}
                         >
