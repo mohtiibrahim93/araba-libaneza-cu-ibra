@@ -339,7 +339,7 @@ const RegistrationsTable = ({
                   {r.phone}
                 </a>
               )}
-              <p className="text-[11px] text-muted-foreground/70 mt-1">
+              <p className="text-[11px] text-muted-foreground mt-1">
                 {new Date(r.created_at).toLocaleDateString("ro-RO", {
                   day: "2-digit",
                   month: "short",
@@ -414,7 +414,7 @@ const RegistrationsTable = ({
             </TableCell>
             <TableCell className="align-top">
               {(r.source || r.track_preference) && (
-                <p className="text-[11px] text-muted-foreground/70">
+                <p className="text-[11px] text-muted-foreground">
                   {[
                     r.source ? leadSourceLabels[r.source] : null,
                     r.track_preference ? trackPreferenceLabels[r.track_preference] : null,
