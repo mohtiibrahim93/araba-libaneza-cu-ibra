@@ -562,6 +562,10 @@ const Admin = () => {
                 <Newspaper className="w-4 h-4" />
                 Blog
               </TabsTrigger>
+              <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
+                <LineChart className="w-4 h-4" />
+                SEO
+              </TabsTrigger>
               <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-4">
                 <Settings className="w-4 h-4" />
                 Setări
