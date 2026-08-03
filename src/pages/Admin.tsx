@@ -756,6 +756,11 @@ const Admin = () => {
             <BlogAdmin />
           </TabsContent>
 
+          {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
+          <TabsContent value="seo" className="mt-5">
+            <BacklinksAdmin />
+          </TabsContent>
+
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
           <TabsContent value="settings" className="mt-5">
             <SettingsTab
