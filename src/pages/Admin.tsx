@@ -37,6 +37,7 @@ import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
+import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
