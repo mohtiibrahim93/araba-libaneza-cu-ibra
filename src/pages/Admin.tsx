@@ -27,6 +27,7 @@ import {
   GraduationCap,
   Newspaper,
   Settings,
+  LineChart,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
@@ -36,6 +37,7 @@ import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
+import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
@@ -560,6 +562,10 @@ const Admin = () => {
                 <Newspaper className="w-4 h-4" />
                 Blog
               </TabsTrigger>
+              <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
+                <LineChart className="w-4 h-4" />
+                SEO
+              </TabsTrigger>
               <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-4">
                 <Settings className="w-4 h-4" />
                 Setări
@@ -748,6 +754,11 @@ const Admin = () => {
           {/* ── Blog: editare articole (CMS override) ────────────────────── */}
           <TabsContent value="blog" className="mt-5">
             <BlogAdmin />
+          </TabsContent>
+
+          {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
+          <TabsContent value="seo" className="mt-5">
+            <BacklinksAdmin />
           </TabsContent>
 
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}

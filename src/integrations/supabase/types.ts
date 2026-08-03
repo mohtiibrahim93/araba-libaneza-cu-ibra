@@ -71,6 +71,51 @@ export type Database = {
         }
         Relationships: []
       }
+      backlink_snapshots: {
+        Row: {
+          anchor_distribution: Json | null
+          authority_score: number | null
+          backlinks_total: number | null
+          created_at: string
+          domain: string
+          follow_links: number | null
+          id: string
+          nofollow_links: number | null
+          referring_domains: number | null
+          snapshot_date: string
+          top_referring_domains: Json | null
+          trust_score: number | null
+        }
+        Insert: {
+          anchor_distribution?: Json | null
+          authority_score?: number | null
+          backlinks_total?: number | null
+          created_at?: string
+          domain: string
+          follow_links?: number | null
+          id?: string
+          nofollow_links?: number | null
+          referring_domains?: number | null
+          snapshot_date: string
+          top_referring_domains?: Json | null
+          trust_score?: number | null
+        }
+        Update: {
+          anchor_distribution?: Json | null
+          authority_score?: number | null
+          backlinks_total?: number | null
+          created_at?: string
+          domain?: string
+          follow_links?: number | null
+          id?: string
+          nofollow_links?: number | null
+          referring_domains?: number | null
+          snapshot_date?: string
+          top_referring_domains?: Json | null
+          trust_score?: number | null
+        }
+        Relationships: []
+      }
       blog_articles: {
         Row: {
           body_en: string
