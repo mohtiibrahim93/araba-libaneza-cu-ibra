@@ -91,6 +91,11 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Neautorizat" }, 403);
     }
 
+    // Cron callers may only trigger the live refresh.
+    if (isCron && !isAdminEmail(callerEmail, adminEmails) && action !== "fetch_live") {
+      return jsonResponse({ error: "Acțiune nepermisă pentru job programat" }, 403);
+    }
+
     if (action === "list") {
       const { data, error } = await supabase
         .from("backlink_snapshots")
