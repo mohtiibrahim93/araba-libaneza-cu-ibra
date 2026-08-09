@@ -71,7 +71,11 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Admin-only
+    // Auth: admin user OR scheduled cron job (shared secret header)
+    const cronSecret = Deno.env.get("BACKLINK_CRON_SECRET");
+    const providedCronSecret = req.headers.get("x-cron-secret");
+    const isCron = Boolean(cronSecret && providedCronSecret === cronSecret);
+
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
     const { data: userData } = token
@@ -83,7 +87,7 @@ Deno.serve(async (req) => {
       .map((e) => e.trim().toLowerCase())
       .filter(Boolean);
 
-    if (!isAdminEmail(callerEmail, adminEmails)) {
+    if (!isCron && !isAdminEmail(callerEmail, adminEmails)) {
       return jsonResponse({ error: "Neautorizat" }, 403);
     }
 
