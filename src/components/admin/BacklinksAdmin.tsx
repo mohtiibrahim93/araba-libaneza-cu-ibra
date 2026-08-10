@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Loader2, RefreshCw, Upload, Trash2, Link2, TrendingUp, ShieldAlert, Globe } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface SnapshotForm {
   snapshot_date: string;
@@ -22,6 +23,28 @@ interface SnapshotForm {
   referring_domains: string;
   follow_links: string;
   nofollow_links: string;
+}
+
+interface TopDomain {
+  domain: string;
+  links: number;
+}
+
+const SOURCE_LABELS: Record<string, string> = {
+  open_pagerank: "auto",
+  semrush: "Semrush",
+  gsc_csv: "GSC CSV",
+  manual: "manual",
+  unknown: "—",
+};
+
+function SourceBadge({ source }: { source?: string | null }) {
+  if (!source) return null;
+  return (
+    <Badge variant="secondary" className="text-[10px] font-normal">
+      {SOURCE_LABELS[source] ?? source}
+    </Badge>
+  );
 }
 
 const emptyForm = (): SnapshotForm => ({
@@ -38,6 +61,79 @@ function parseNumber(value: string): number | null {
   const cleaned = value.replace(/\s/g, "").replace(/,/g, "");
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
+}
+
+function splitCsvLine(line: string): string[] {
+  const out: string[] = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if ((ch === "," || ch === ";" || ch === "\t") && !inQuotes) {
+      out.push(cur);
+      cur = "";
+    } else {
+      cur += ch;
+    }
+  }
+  out.push(cur);
+  return out.map((v) => v.trim().replace(/^"|"$/g, ""));
+}
+
+/**
+ * Export "Linkuri → Site-uri care fac linkuri" din Google Search Console:
+ * o linie per domeniu referitor, cu numărul de pagini care fac linkuri.
+ */
+function parseGscLinksCsv(
+  lines: string[],
+): { form: Partial<SnapshotForm>; topDomains: TopDomain[] } | null {
+  const headers = splitCsvLine(lines[0]).map((h) => h.toLowerCase());
+  const looksLikeGsc =
+    headers.some((h) => h.includes("site") || h.includes("domeniu")) &&
+    headers.some(
+      (h) =>
+        h.includes("linking pages") ||
+        h.includes("pagini care fac") ||
+        h.includes("incoming links") ||
+        h.includes("linkuri"),
+    );
+  if (!looksLikeGsc) return null;
+
+  const siteIdx = headers.findIndex((h) => h.includes("site") || h.includes("domeniu"));
+  const linksIdx = headers.findIndex(
+    (h) =>
+      h.includes("linking pages") ||
+      h.includes("pagini care fac") ||
+      h.includes("incoming links") ||
+      h.includes("linkuri"),
+  );
+
+  const rows: TopDomain[] = [];
+  for (const line of lines.slice(1)) {
+    const cells = splitCsvLine(line);
+    const domain = cells[siteIdx];
+    if (!domain) continue;
+    const links = parseNumber(cells[linksIdx] ?? "") ?? 0;
+    rows.push({ domain, links });
+  }
+  if (rows.length === 0) return null;
+
+  const total = rows.reduce((sum, r) => sum + r.links, 0);
+  return {
+    form: {
+      snapshot_date: new Date().toISOString().slice(0, 10),
+      referring_domains: String(rows.length),
+      backlinks_total: String(total),
+    },
+    topDomains: rows.sort((a, b) => b.links - a.links).slice(0, 20),
+  };
 }
 
 function parseCsvOverview(text: string): Partial<SnapshotForm> {
@@ -64,6 +160,18 @@ function parseCsvOverview(text: string): Partial<SnapshotForm> {
     follow_links: get(["follow", "follows", "follows_num"]),
     nofollow_links: get(["nofollow", "nofollows", "nofollows_num"]),
   };
+}
+
+function parseCsv(
+  text: string,
+): { form: Partial<SnapshotForm>; topDomains: TopDomain[]; source: "gsc_csv" | "manual" } {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return { form: {}, topDomains: [], source: "manual" };
+
+  const gsc = parseGscLinksCsv(lines);
+  if (gsc) return { ...gsc, source: "gsc_csv" };
+
+  return { form: parseCsvOverview(text), topDomains: [], source: "manual" };
 }
 
 function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: string }) {
@@ -99,7 +207,10 @@ export default function BacklinksAdmin() {
   const [snapshots, setSnapshots] = useState<BacklinkSnapshot[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshingFree, setRefreshingFree] = useState(false);
   const [form, setForm] = useState<SnapshotForm>(emptyForm());
+  const [csvTopDomains, setCsvTopDomains] = useState<TopDomain[]>([]);
+  const [csvSource, setCsvSource] = useState<"gsc_csv" | "manual">("manual");
   const [savingManual, setSavingManual] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -159,15 +270,46 @@ export default function BacklinksAdmin() {
     }
   };
 
+  const handleFreeRefresh = async () => {
+    setRefreshingFree(true);
+    try {
+      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot }>({
+        action: "fetch_free",
+      });
+      if (error) throw error;
+      if (data && typeof data === "object" && "error" in data) {
+        throw new Error((data as { error: string }).error);
+      }
+      toast({ title: "Snapshot actualizat automat" });
+      await load();
+    } catch (err) {
+      toast({
+        title: "Actualizare automată eșuată",
+        description: err instanceof Error ? err.message : undefined,
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshingFree(false);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       const text = String(reader.result);
-      const parsed = parseCsvOverview(text);
+      const { form: parsed, topDomains, source } = parseCsv(text);
       setForm((prev) => ({ ...prev, ...parsed }));
-      toast({ title: "Date CSV extrase", description: "Verifică valorile înainte de salvare." });
+      setCsvTopDomains(topDomains);
+      setCsvSource(source);
+      toast({
+        title: source === "gsc_csv" ? "CSV Google Search Console detectat" : "Date CSV extrase",
+        description:
+          source === "gsc_csv"
+            ? `${topDomains.length > 0 ? parsed.referring_domains : 0} domenii referitoare detectate. Verifică valorile înainte de salvare.`
+            : "Verifică valorile înainte de salvare.",
+      });
     };
     reader.readAsText(file);
   };
@@ -184,11 +326,23 @@ export default function BacklinksAdmin() {
         referring_domains: parseNumber(form.referring_domains),
         follow_links: parseNumber(form.follow_links),
         nofollow_links: parseNumber(form.nofollow_links),
+        top_referring_domains: csvTopDomains,
+        source: csvSource,
+        metric_sources: {
+          authority_score: "manual",
+          trust_score: "manual",
+          backlinks_total: csvSource,
+          referring_domains: csvSource,
+          follow_links: "manual",
+          nofollow_links: "manual",
+        },
       };
       const { error } = await invokeBacklinks(payload);
       if (error) throw error;
       toast({ title: "Snapshot salvat" });
       setForm(emptyForm());
+      setCsvTopDomains([]);
+      setCsvSource("manual");
       await load();
     } catch (err) {
       toast({
@@ -234,19 +388,26 @@ export default function BacklinksAdmin() {
             Urmărește evoluția profilului de link-uri pentru {latest?.domain ?? "centruldearabalibaneza.com"}.
           </p>
         </div>
-        <Button onClick={handleRefresh} disabled={refreshing || loading}>
-          {refreshing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          {!refreshing && <RefreshCw className="w-4 h-4 mr-2" />}
-          Actualizează din Semrush
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={handleFreeRefresh} disabled={refreshingFree || loading}>
+            {refreshingFree && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+            {!refreshingFree && <RefreshCw className="w-4 h-4 mr-2" />}
+            Actualizează automat (gratuit)
+          </Button>
+          <Button variant="outline" onClick={handleRefresh} disabled={refreshing || loading}>
+            {refreshing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+            Actualizează din Semrush
+          </Button>
+        </div>
       </div>
 
       {latest && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <TrendingUp className="w-3.5 h-3.5" /> Authority Score
+                <SourceBadge source={latest.metric_sources?.authority_score} />
               </CardDescription>
               <CardTitle>{latest.authority_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -256,8 +417,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <ShieldAlert className="w-3.5 h-3.5" /> Trust Score
+                <SourceBadge source={latest.metric_sources?.trust_score} />
               </CardDescription>
               <CardTitle>{latest.trust_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -267,8 +429,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Link2 className="w-3.5 h-3.5" /> Backlink-uri totale
+                <SourceBadge source={latest.metric_sources?.backlinks_total} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.backlinks_total)}</CardTitle>
             </CardHeader>
@@ -278,8 +441,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Globe className="w-3.5 h-3.5" /> Domenii referitoare
+                <SourceBadge source={latest.metric_sources?.referring_domains} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.referring_domains)}</CardTitle>
             </CardHeader>
@@ -391,7 +555,10 @@ export default function BacklinksAdmin() {
         <CardHeader>
           <CardTitle>Adaugă snapshot manual</CardTitle>
           <CardDescription>
-            Folosește acest formular când conexiunea Semrush nu este activă. Poți încărca un CSV exportat din Semrush Backlinks Analytics sau completa valorile direct.
+            Sursa gratuită automată (Open PageRank) actualizează doar Authority Score. Pentru
+            numărul de backlink-uri și domenii referitoare, exportă CSV-ul „Linkuri → Site-uri care
+            fac linkuri” din Google Search Console și încarcă-l aici. Se acceptă și export din
+            Semrush Backlinks Analytics sau completare directă.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -411,7 +578,26 @@ export default function BacklinksAdmin() {
               className="hidden"
               onChange={handleFileChange}
             />
+            {csvSource === "gsc_csv" && (
+              <Badge variant="secondary">Format Google Search Console detectat</Badge>
+            )}
           </div>
+
+          {csvTopDomains.length > 0 && (
+            <div className="rounded-md border p-3">
+              <p className="text-sm font-medium mb-2">
+                Top domenii referitoare detectate ({csvTopDomains.length} afișate)
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-muted-foreground">
+                {csvTopDomains.map((d) => (
+                  <li key={d.domain} className="flex justify-between gap-3">
+                    <span className="truncate">{d.domain}</span>
+                    <span className="tabular-nums">{formatNumber(d.links)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-1.5">
