@@ -555,7 +555,10 @@ export default function BacklinksAdmin() {
         <CardHeader>
           <CardTitle>Adaugă snapshot manual</CardTitle>
           <CardDescription>
-            Folosește acest formular când conexiunea Semrush nu este activă. Poți încărca un CSV exportat din Semrush Backlinks Analytics sau completa valorile direct.
+            Sursa gratuită automată (Open PageRank) actualizează doar Authority Score. Pentru
+            numărul de backlink-uri și domenii referitoare, exportă CSV-ul „Linkuri → Site-uri care
+            fac linkuri” din Google Search Console și încarcă-l aici. Se acceptă și export din
+            Semrush Backlinks Analytics sau completare directă.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -575,7 +578,26 @@ export default function BacklinksAdmin() {
               className="hidden"
               onChange={handleFileChange}
             />
+            {csvSource === "gsc_csv" && (
+              <Badge variant="secondary">Format Google Search Console detectat</Badge>
+            )}
           </div>
+
+          {csvTopDomains.length > 0 && (
+            <div className="rounded-md border p-3">
+              <p className="text-sm font-medium mb-2">
+                Top domenii referitoare detectate ({csvTopDomains.length} afișate)
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-muted-foreground">
+                {csvTopDomains.map((d) => (
+                  <li key={d.domain} className="flex justify-between gap-3">
+                    <span className="truncate">{d.domain}</span>
+                    <span className="tabular-nums">{formatNumber(d.links)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-1.5">
