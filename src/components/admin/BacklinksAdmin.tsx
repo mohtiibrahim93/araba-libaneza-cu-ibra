@@ -388,19 +388,26 @@ export default function BacklinksAdmin() {
             Urmărește evoluția profilului de link-uri pentru {latest?.domain ?? "centruldearabalibaneza.com"}.
           </p>
         </div>
-        <Button onClick={handleRefresh} disabled={refreshing || loading}>
-          {refreshing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          {!refreshing && <RefreshCw className="w-4 h-4 mr-2" />}
-          Actualizează din Semrush
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={handleFreeRefresh} disabled={refreshingFree || loading}>
+            {refreshingFree && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+            {!refreshingFree && <RefreshCw className="w-4 h-4 mr-2" />}
+            Actualizează automat (gratuit)
+          </Button>
+          <Button variant="outline" onClick={handleRefresh} disabled={refreshing || loading}>
+            {refreshing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+            Actualizează din Semrush
+          </Button>
+        </div>
       </div>
 
       {latest && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <TrendingUp className="w-3.5 h-3.5" /> Authority Score
+                <SourceBadge source={latest.metric_sources?.authority_score} />
               </CardDescription>
               <CardTitle>{latest.authority_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -410,8 +417,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <ShieldAlert className="w-3.5 h-3.5" /> Trust Score
+                <SourceBadge source={latest.metric_sources?.trust_score} />
               </CardDescription>
               <CardTitle>{latest.trust_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -421,8 +429,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Link2 className="w-3.5 h-3.5" /> Backlink-uri totale
+                <SourceBadge source={latest.metric_sources?.backlinks_total} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.backlinks_total)}</CardTitle>
             </CardHeader>
@@ -432,8 +441,9 @@ export default function BacklinksAdmin() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-1.5">
+              <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Globe className="w-3.5 h-3.5" /> Domenii referitoare
+                <SourceBadge source={latest.metric_sources?.referring_domains} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.referring_domains)}</CardTitle>
             </CardHeader>
