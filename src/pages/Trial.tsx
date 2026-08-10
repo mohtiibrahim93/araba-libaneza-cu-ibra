@@ -81,7 +81,41 @@ const TrialPage = () => {
           <ArrowLeft className="w-4 h-4" /> {t.navHome}
         </Link>
         <h1 className="text-3xl font-bold tracking-tight mb-2">{t.trialPageTitle}</h1>
-        <p className="text-muted-foreground mb-8">{t.trialPageSubtitle}</p>
+        <p className="text-muted-foreground mb-4">{t.trialPageSubtitle}</p>
+
+        {/* Two explicit steps. A trial is only booked once a time slot is
+            chosen in step 2, so the visitor must never think step 1 finished
+            the job. */}
+        <ol className="mb-8 flex flex-wrap items-center gap-2 text-sm" aria-label={lang === "en" ? "Booking steps" : "Pașii rezervării"}>
+          {[
+            { n: 1, ro: "Datele tale", en: "Your details" },
+            { n: 2, ro: "Alege intervalul", en: "Pick a time" },
+          ].map(({ n, ro, en }) => {
+            const current = registrationId ? 2 : 1;
+            const done = n < current;
+            const active = n === current;
+            return (
+              <li key={n} className="flex items-center gap-2">
+                <span
+                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
+                    done
+                      ? "bg-primary/15 text-primary"
+                      : active
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                  }`}
+                  aria-current={active ? "step" : undefined}
+                >
+                  {done ? "✓" : n}
+                </span>
+                <span className={active ? "font-semibold text-foreground" : "text-muted-foreground"}>
+                  {lang === "en" ? en : ro}
+                </span>
+                {n === 1 && <span aria-hidden className="text-muted-foreground">→</span>}
+              </li>
+            );
+          })}
+        </ol>
 
         {!registrationId ? (
           <form
