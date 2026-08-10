@@ -80,9 +80,11 @@ export type Database = {
           domain: string
           follow_links: number | null
           id: string
+          metric_sources: Json
           nofollow_links: number | null
           referring_domains: number | null
           snapshot_date: string
+          source: string
           top_referring_domains: Json | null
           trust_score: number | null
         }
@@ -94,9 +96,11 @@ export type Database = {
           domain: string
           follow_links?: number | null
           id?: string
+          metric_sources?: Json
           nofollow_links?: number | null
           referring_domains?: number | null
           snapshot_date: string
+          source?: string
           top_referring_domains?: Json | null
           trust_score?: number | null
         }
@@ -108,9 +112,11 @@ export type Database = {
           domain?: string
           follow_links?: number | null
           id?: string
+          metric_sources?: Json
           nofollow_links?: number | null
           referring_domains?: number | null
           snapshot_date?: string
+          source?: string
           top_referring_domains?: Json | null
           trust_score?: number | null
         }
