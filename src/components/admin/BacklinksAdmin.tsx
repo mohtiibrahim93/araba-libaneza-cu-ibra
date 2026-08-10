@@ -207,7 +207,10 @@ export default function BacklinksAdmin() {
   const [snapshots, setSnapshots] = useState<BacklinkSnapshot[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshingFree, setRefreshingFree] = useState(false);
   const [form, setForm] = useState<SnapshotForm>(emptyForm());
+  const [csvTopDomains, setCsvTopDomains] = useState<TopDomain[]>([]);
+  const [csvSource, setCsvSource] = useState<"gsc_csv" | "manual">("manual");
   const [savingManual, setSavingManual] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -267,15 +270,46 @@ export default function BacklinksAdmin() {
     }
   };
 
+  const handleFreeRefresh = async () => {
+    setRefreshingFree(true);
+    try {
+      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot }>({
+        action: "fetch_free",
+      });
+      if (error) throw error;
+      if (data && typeof data === "object" && "error" in data) {
+        throw new Error((data as { error: string }).error);
+      }
+      toast({ title: "Snapshot actualizat automat" });
+      await load();
+    } catch (err) {
+      toast({
+        title: "Actualizare automată eșuată",
+        description: err instanceof Error ? err.message : undefined,
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshingFree(false);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       const text = String(reader.result);
-      const parsed = parseCsvOverview(text);
+      const { form: parsed, topDomains, source } = parseCsv(text);
       setForm((prev) => ({ ...prev, ...parsed }));
-      toast({ title: "Date CSV extrase", description: "Verifică valorile înainte de salvare." });
+      setCsvTopDomains(topDomains);
+      setCsvSource(source);
+      toast({
+        title: source === "gsc_csv" ? "CSV Google Search Console detectat" : "Date CSV extrase",
+        description:
+          source === "gsc_csv"
+            ? `${topDomains.length > 0 ? parsed.referring_domains : 0} domenii referitoare detectate. Verifică valorile înainte de salvare.`
+            : "Verifică valorile înainte de salvare.",
+      });
     };
     reader.readAsText(file);
   };
@@ -292,11 +326,23 @@ export default function BacklinksAdmin() {
         referring_domains: parseNumber(form.referring_domains),
         follow_links: parseNumber(form.follow_links),
         nofollow_links: parseNumber(form.nofollow_links),
+        top_referring_domains: csvTopDomains,
+        source: csvSource,
+        metric_sources: {
+          authority_score: "manual",
+          trust_score: "manual",
+          backlinks_total: csvSource,
+          referring_domains: csvSource,
+          follow_links: "manual",
+          nofollow_links: "manual",
+        },
       };
       const { error } = await invokeBacklinks(payload);
       if (error) throw error;
       toast({ title: "Snapshot salvat" });
       setForm(emptyForm());
+      setCsvTopDomains([]);
+      setCsvSource("manual");
       await load();
     } catch (err) {
       toast({
