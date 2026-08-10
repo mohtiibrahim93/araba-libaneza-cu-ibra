@@ -13,6 +13,8 @@ export interface BacklinkSnapshot {
   top_referring_domains: unknown[];
   anchor_distribution: unknown[];
   created_at: string;
+  source?: string | null;
+  metric_sources?: Record<string, string> | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
