@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Loader2, RefreshCw, Upload, Trash2, Link2, TrendingUp, ShieldAlert, Globe } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface SnapshotForm {
   snapshot_date: string;
@@ -22,6 +23,28 @@ interface SnapshotForm {
   referring_domains: string;
   follow_links: string;
   nofollow_links: string;
+}
+
+interface TopDomain {
+  domain: string;
+  links: number;
+}
+
+const SOURCE_LABELS: Record<string, string> = {
+  open_pagerank: "auto",
+  semrush: "Semrush",
+  gsc_csv: "GSC CSV",
+  manual: "manual",
+  unknown: "—",
+};
+
+function SourceBadge({ source }: { source?: string | null }) {
+  if (!source) return null;
+  return (
+    <Badge variant="secondary" className="text-[10px] font-normal">
+      {SOURCE_LABELS[source] ?? source}
+    </Badge>
+  );
 }
 
 const emptyForm = (): SnapshotForm => ({
@@ -38,6 +61,79 @@ function parseNumber(value: string): number | null {
   const cleaned = value.replace(/\s/g, "").replace(/,/g, "");
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
+}
+
+function splitCsvLine(line: string): string[] {
+  const out: string[] = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if ((ch === "," || ch === ";" || ch === "\t") && !inQuotes) {
+      out.push(cur);
+      cur = "";
+    } else {
+      cur += ch;
+    }
+  }
+  out.push(cur);
+  return out.map((v) => v.trim().replace(/^"|"$/g, ""));
+}
+
+/**
+ * Export "Linkuri → Site-uri care fac linkuri" din Google Search Console:
+ * o linie per domeniu referitor, cu numărul de pagini care fac linkuri.
+ */
+function parseGscLinksCsv(
+  lines: string[],
+): { form: Partial<SnapshotForm>; topDomains: TopDomain[] } | null {
+  const headers = splitCsvLine(lines[0]).map((h) => h.toLowerCase());
+  const looksLikeGsc =
+    headers.some((h) => h.includes("site") || h.includes("domeniu")) &&
+    headers.some(
+      (h) =>
+        h.includes("linking pages") ||
+        h.includes("pagini care fac") ||
+        h.includes("incoming links") ||
+        h.includes("linkuri"),
+    );
+  if (!looksLikeGsc) return null;
+
+  const siteIdx = headers.findIndex((h) => h.includes("site") || h.includes("domeniu"));
+  const linksIdx = headers.findIndex(
+    (h) =>
+      h.includes("linking pages") ||
+      h.includes("pagini care fac") ||
+      h.includes("incoming links") ||
+      h.includes("linkuri"),
+  );
+
+  const rows: TopDomain[] = [];
+  for (const line of lines.slice(1)) {
+    const cells = splitCsvLine(line);
+    const domain = cells[siteIdx];
+    if (!domain) continue;
+    const links = parseNumber(cells[linksIdx] ?? "") ?? 0;
+    rows.push({ domain, links });
+  }
+  if (rows.length === 0) return null;
+
+  const total = rows.reduce((sum, r) => sum + r.links, 0);
+  return {
+    form: {
+      snapshot_date: new Date().toISOString().slice(0, 10),
+      referring_domains: String(rows.length),
+      backlinks_total: String(total),
+    },
+    topDomains: rows.sort((a, b) => b.links - a.links).slice(0, 20),
+  };
 }
 
 function parseCsvOverview(text: string): Partial<SnapshotForm> {
@@ -64,6 +160,18 @@ function parseCsvOverview(text: string): Partial<SnapshotForm> {
     follow_links: get(["follow", "follows", "follows_num"]),
     nofollow_links: get(["nofollow", "nofollows", "nofollows_num"]),
   };
+}
+
+function parseCsv(
+  text: string,
+): { form: Partial<SnapshotForm>; topDomains: TopDomain[]; source: "gsc_csv" | "manual" } {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return { form: {}, topDomains: [], source: "manual" };
+
+  const gsc = parseGscLinksCsv(lines);
+  if (gsc) return { ...gsc, source: "gsc_csv" };
+
+  return { form: parseCsvOverview(text), topDomains: [], source: "manual" };
 }
 
 function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: string }) {
