@@ -100,6 +100,38 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Acțiune nepermisă pentru job programat" }, 403);
     }
 
+    // Record every refresh attempt — including failures — so the dashboard can
+    // tell "the API isn't available on this plan" apart from "the weekly job
+    // stopped running". Logging must never break the request it describes.
+    const logAttempt = async (
+      outcome: "success" | "not_configured" | "api_unavailable" | "parse_error" | "error",
+      opts: { provider?: "semrush" | "open_pagerank"; httpStatus?: number; detail?: string } = {},
+    ) => {
+      try {
+        await supabase.from("backlink_fetch_attempts").insert({
+          domain: TARGET_DOMAIN,
+          trigger_source: isCron ? "cron" : "manual",
+          provider: opts.provider ?? "semrush",
+          outcome,
+          http_status: opts.httpStatus ?? null,
+          detail: opts.detail ? String(opts.detail).slice(0, 1000) : null,
+        });
+      } catch (e) {
+        console.error("backlink attempt log failed", e);
+      }
+    };
+
+    if (action === "attempts") {
+      const { data, error } = await supabase
+        .from("backlink_fetch_attempts")
+        .select("*")
+        .eq("domain", TARGET_DOMAIN)
+        .order("attempted_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
     if (action === "list") {
       const { data, error } = await supabase
         .from("backlink_snapshots")
@@ -131,6 +163,9 @@ Deno.serve(async (req) => {
       const semrushApiKey = Deno.env.get("SEMRUSH_API_KEY");
 
       if (!lovableApiKey || !semrushApiKey) {
+        await logAttempt("not_configured", {
+          detail: "Semrush connection keys are not configured",
+        });
         return jsonResponse(
           {
             error: "Conexiunea Semrush nu este configurată",
@@ -154,6 +189,9 @@ Deno.serve(async (req) => {
 
       if (!response.ok) {
         const text = await response.text();
+        // No snapshot is written here: the last successful snapshot stays
+        // untouched and is still what the dashboard shows.
+        await logAttempt("api_unavailable", { httpStatus: response.status, detail: text });
         return jsonResponse(
           {
             error: "Cererea Semrush a eșuat",
@@ -168,6 +206,10 @@ Deno.serve(async (req) => {
       const overview = parseSemrushBacklinksOverview(semrushData);
 
       if (!overview) {
+        await logAttempt("parse_error", {
+          httpStatus: response.status,
+          detail: JSON.stringify(semrushData),
+        });
         return jsonResponse(
           {
             error: "Nu am putut extrage datele din răspunsul Semrush",
@@ -201,6 +243,7 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
+      await logAttempt("success", { httpStatus: response.status });
       return jsonResponse({ data });
     }
 

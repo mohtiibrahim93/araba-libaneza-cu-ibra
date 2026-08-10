@@ -203,6 +203,85 @@ function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: st
   );
 }
 
+interface FetchAttempt {
+  id: string;
+  attempted_at: string;
+  trigger_source: "manual" | "cron";
+  provider: string;
+  outcome: "success" | "not_configured" | "api_unavailable" | "parse_error" | "error";
+  http_status: number | null;
+  detail: string | null;
+}
+
+const OUTCOME_LABELS: Record<FetchAttempt["outcome"], string> = {
+  success: "Reușit",
+  not_configured: "Neconfigurat",
+  api_unavailable: "API indisponibil (plan Semrush)",
+  parse_error: "Răspuns neinterpretabil",
+  error: "Eroare",
+};
+
+/**
+ * Refresh status. A failed automatic attempt never writes or overwrites a
+ * snapshot, so the "last successful snapshot" below stays authoritative even
+ * while the live API is unavailable on the current Semrush plan.
+ */
+function RefreshStatus({
+  attempts,
+  latest,
+}: {
+  attempts: FetchAttempt[];
+  latest?: BacklinkSnapshot;
+}) {
+  const lastAttempt = attempts[0];
+  const lastSuccess = attempts.find((a) => a.outcome === "success");
+  const fmt = (iso?: string | null) =>
+    iso ? new Date(iso).toLocaleString("ro-RO", { dateStyle: "medium", timeStyle: "short" }) : "—";
+
+  return (
+    <div className="mb-4 grid gap-3 rounded-lg border border-border bg-muted/30 p-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultimul snapshot valid</p>
+        <p className="text-sm font-semibold text-foreground">{latest?.snapshot_date ?? "—"}</p>
+        <p className="text-xs text-muted-foreground">
+          Sursă: {latest?.source ? SOURCE_LABELS[latest.source] ?? latest.source : "—"}
+        </p>
+      </div>
+      <div>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultima încercare automată</p>
+        <p className="text-sm font-semibold text-foreground">{fmt(lastAttempt?.attempted_at)}</p>
+        <p className="text-xs text-muted-foreground">
+          {lastAttempt ? `${lastAttempt.trigger_source === "cron" ? "Programat" : "Manual"}` : "Nicio încercare înregistrată"}
+        </p>
+      </div>
+      <div>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Status reîmprospătare</p>
+        <p
+          className={`text-sm font-semibold ${
+            !lastAttempt
+              ? "text-muted-foreground"
+              : lastAttempt.outcome === "success"
+                ? "text-emerald-600"
+                : "text-amber-600"
+          }`}
+        >
+          {lastAttempt ? OUTCOME_LABELS[lastAttempt.outcome] : "Necunoscut"}
+        </p>
+        {lastAttempt?.http_status ? (
+          <p className="text-xs text-muted-foreground">HTTP {lastAttempt.http_status}</p>
+        ) : null}
+      </div>
+      <div>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultima reușită prin API</p>
+        <p className="text-sm font-semibold text-foreground">{fmt(lastSuccess?.attempted_at)}</p>
+        <p className="text-xs text-muted-foreground">
+          {lastSuccess ? "API funcțional" : "Datele curente provin din import manual"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function BacklinksAdmin() {
   const [snapshots, setSnapshots] = useState<BacklinkSnapshot[]>([]);
   const [loading, setLoading] = useState(true);
@@ -211,6 +290,7 @@ export default function BacklinksAdmin() {
   const [form, setForm] = useState<SnapshotForm>(emptyForm());
   const [csvTopDomains, setCsvTopDomains] = useState<TopDomain[]>([]);
   const [csvSource, setCsvSource] = useState<"gsc_csv" | "manual">("manual");
+  const [attempts, setAttempts] = useState<FetchAttempt[]>([]);
   const [savingManual, setSavingManual] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -220,6 +300,13 @@ export default function BacklinksAdmin() {
       const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot[] }>({ action: "list" });
       if (error) throw error;
       setSnapshots(data?.data ?? []);
+      // Refresh history is informational: never let it fail the snapshot load.
+      try {
+        const { data: att } = await invokeBacklinks<{ data: FetchAttempt[] }>({ action: "attempts" });
+        setAttempts(att?.data ?? []);
+      } catch {
+        /* older deployed function without the "attempts" action */
+      }
     } catch (err) {
       toast({
         title: "Eroare la încărcarea snapshot-urilor",
@@ -401,6 +488,8 @@ export default function BacklinksAdmin() {
         </div>
       </div>
 
+      <RefreshStatus attempts={attempts} latest={latest} />
+
       {latest && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card>
@@ -489,7 +578,7 @@ export default function BacklinksAdmin() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                {snapshots.length} snapshot{snapshots.length === 1 ? "" : "-uri"} salvate în baza de date.
+                {snapshots.length} snapshot{snapshots.length === 1 ? "" : "-uri"} salvate în baza de date. O încercare eșuată nu suprascrie niciodată ultimul snapshot valid.
               </p>
             </CardContent>
           </Card>
