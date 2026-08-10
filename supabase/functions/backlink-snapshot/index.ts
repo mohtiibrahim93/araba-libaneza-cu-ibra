@@ -250,6 +250,10 @@ Deno.serve(async (req) => {
     if (action === "fetch_free") {
       const oprKey = Deno.env.get("OPEN_PAGERANK_API_KEY");
       if (!oprKey) {
+        await logAttempt("not_configured", {
+          provider: "open_pagerank",
+          detail: "OPEN_PAGERANK_API_KEY is not set",
+        });
         return jsonResponse(
           {
             error: "Sursa gratuită nu este configurată",
@@ -266,6 +270,11 @@ Deno.serve(async (req) => {
       if (!response.ok) {
         const text = await response.text();
         console.error(`Open PageRank request failed [${response.status}]: ${text}`);
+        await logAttempt("api_unavailable", {
+          provider: "open_pagerank",
+          httpStatus: response.status,
+          detail: text,
+        });
         return jsonResponse(
           { error: "Cererea Open PageRank a eșuat", status: response.status, details: text },
           response.status,
@@ -279,6 +288,10 @@ Deno.serve(async (req) => {
       const decimal = normalizeNumber(entry?.page_rank_decimal);
 
       if (!entry || entry.status_code !== 200 || decimal === null) {
+        await logAttempt("parse_error", {
+          provider: "open_pagerank",
+          detail: JSON.stringify(oprJson),
+        });
         return jsonResponse(
           { error: "Nu am putut extrage scorul Open PageRank", raw: oprJson },
           422,
@@ -330,6 +343,7 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
+      await logAttempt("success", { provider: "open_pagerank", httpStatus: response.status });
       return jsonResponse({ data });
     }
 
