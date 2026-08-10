@@ -3,6 +3,7 @@ import { buildCorsHeaders } from "../_shared/cors.ts";
 
 const TARGET_DOMAIN = "centruldearabalibaneza.com";
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev/semrush";
+const OPR_ENDPOINT = "https://openpagerank.com/api/v1.0/getPageRank";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -92,7 +93,10 @@ Deno.serve(async (req) => {
     }
 
     // Cron callers may only trigger the live refresh.
-    if (isCron && !isAdminEmail(callerEmail, adminEmails) && action !== "fetch_live") {
+    if (
+      isCron && !isAdminEmail(callerEmail, adminEmails) &&
+      action !== "fetch_live" && action !== "fetch_free"
+    ) {
       return jsonResponse({ error: "Acțiune nepermisă pentru job programat" }, 403);
     }
 
@@ -122,6 +126,7 @@ Deno.serve(async (req) => {
     }
 
     if (action === "fetch_live") {
+      // Semrush (necesită plan plătit cu Backlinks API)
       const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
       const semrushApiKey = Deno.env.get("SEMRUSH_API_KEY");
 
@@ -178,6 +183,101 @@ Deno.serve(async (req) => {
         ...overview,
         top_referring_domains: [],
         anchor_distribution: [],
+        source: "semrush",
+        metric_sources: {
+          authority_score: "semrush",
+          trust_score: "semrush",
+          backlinks_total: "semrush",
+          referring_domains: "semrush",
+          follow_links: "semrush",
+          nofollow_links: "semrush",
+        },
+      };
+
+      const { data, error } = await supabase
+        .from("backlink_snapshots")
+        .upsert(snapshot, { onConflict: "domain,snapshot_date" })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "fetch_free") {
+      const oprKey = Deno.env.get("OPEN_PAGERANK_API_KEY");
+      if (!oprKey) {
+        return jsonResponse(
+          {
+            error: "Sursa gratuită nu este configurată",
+            details:
+              "Adaugă cheia gratuită Open PageRank (OPEN_PAGERANK_API_KEY) pentru actualizarea automată.",
+          },
+          422,
+        );
+      }
+
+      const url = `${OPR_ENDPOINT}?domains%5B0%5D=${encodeURIComponent(TARGET_DOMAIN)}`;
+      const response = await fetch(url, { headers: { "API-OPR": oprKey } });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error(`Open PageRank request failed [${response.status}]: ${text}`);
+        return jsonResponse(
+          { error: "Cererea Open PageRank a eșuat", status: response.status, details: text },
+          response.status,
+        );
+      }
+
+      const oprJson = await response.json() as {
+        response?: Array<{ status_code?: number; page_rank_decimal?: number | string; rank?: string | null }>;
+      };
+      const entry = oprJson.response?.[0];
+      const decimal = normalizeNumber(entry?.page_rank_decimal);
+
+      if (!entry || entry.status_code !== 200 || decimal === null) {
+        return jsonResponse(
+          { error: "Nu am putut extrage scorul Open PageRank", raw: oprJson },
+          422,
+        );
+      }
+
+      // Open PageRank este 0–10; îl convertim la scala 0–100 folosită în dashboard.
+      const authority = Math.round(decimal * 10);
+      const snapshotDate = new Date().toISOString().slice(0, 10);
+
+      // Păstrăm ultimele valori cunoscute pentru metricile pe care sursa gratuită nu le oferă.
+      const { data: previous } = await supabase
+        .from("backlink_snapshots")
+        .select("*")
+        .eq("domain", TARGET_DOMAIN)
+        .order("snapshot_date", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const prevSources = (previous?.metric_sources ?? {}) as Record<string, string>;
+      const carried = (key: string) => prevSources[key] ?? (previous ? "manual" : "unknown");
+
+      const snapshot = {
+        snapshot_date: snapshotDate,
+        domain: TARGET_DOMAIN,
+        authority_score: authority,
+        trust_score: previous?.trust_score ?? null,
+        backlinks_total: previous?.backlinks_total ?? null,
+        referring_domains: previous?.referring_domains ?? null,
+        follow_links: previous?.follow_links ?? null,
+        nofollow_links: previous?.nofollow_links ?? null,
+        top_referring_domains: previous?.top_referring_domains ?? [],
+        anchor_distribution: previous?.anchor_distribution ?? [],
+        source: "open_pagerank",
+        metric_sources: {
+          authority_score: "open_pagerank",
+          trust_score: carried("trust_score"),
+          backlinks_total: carried("backlinks_total"),
+          referring_domains: carried("referring_domains"),
+          follow_links: carried("follow_links"),
+          nofollow_links: carried("nofollow_links"),
+        },
       };
 
       const { data, error } = await supabase
@@ -201,6 +301,8 @@ Deno.serve(async (req) => {
         nofollow_links,
         top_referring_domains,
         anchor_distribution,
+        source,
+        metric_sources,
       } = body;
 
       if (typeof snapshot_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(snapshot_date)) {
@@ -218,6 +320,8 @@ Deno.serve(async (req) => {
         nofollow_links: normalizeNumber(nofollow_links),
         top_referring_domains: Array.isArray(top_referring_domains) ? top_referring_domains : [],
         anchor_distribution: Array.isArray(anchor_distribution) ? anchor_distribution : [],
+        source: source === "gsc_csv" ? "gsc_csv" : "manual",
+        metric_sources: metric_sources && typeof metric_sources === "object" ? metric_sources : {},
       };
 
       const { data, error } = await supabase
