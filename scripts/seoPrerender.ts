@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
+import { getCurriculum } from "../src/data/curriculum";
 
 /**
  * Build-time SEO prerender.
@@ -36,6 +37,8 @@ interface Route {
   description: string;
   /** Canonical override (root-relative) when this page consolidates into another. */
   canonical?: string;
+  /** og:locale language. Defaults to ro, or en for /en/* paths. */
+  lang?: "ro" | "en" | "de";
 }
 
 // Non-blog marketing routes. Values copied from the pages' existing SEO props
@@ -61,7 +64,44 @@ const STATIC_ROUTES: Route[] = [
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online — Native Teacher | A1–C2", description: "Learn Levantine Arabic (Lebanese, Syrian, Jordanian, Palestinian) with a native teacher. Live 1-on-1 and small-group courses online, A1–C2. Oral-first method — speak from lesson one." },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher", description: "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min." },
   { path: "/en/arabic-dialects-guide", title: "Arabic Dialects Guide — Levantine, Egyptian, Gulf, Maghrebi | 2026", description: "Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher." },
+  { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month." },
+  { path: "/en/lebanese-arabic-vs-msa-vs-egyptian", title: "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)", description: "Lebanese Arabic vs Modern Standard Arabic (MSA/Fusha) vs Egyptian Arabic: differences in pronunciation, grammar, media reach, and which dialect to learn based on your goal. Written by a native Lebanese teacher." },
+  { path: "/en/how-to-learn-lebanese-arabic", title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)", description: "The complete step-by-step guide to learning Lebanese Arabic in 2026: recommended learning path, weekly lesson structure, level-by-level timeline (A1→C1), and the exact study routine that works. Written by a native Lebanese teacher." },
+  { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — libanesisch mit Muttersprachler | A1–C2", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins, ohne Alphabet-Hürde. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
+  { path: "/cursuri/privat", title: "Lecții private de arabă libaneză (1:1) | București & Online", description: "Lecții private 1:1 de arabă libaneză cu profesor nativ — online sau în București, ritm și program adaptate. Solicită o lecție privată." },
+  { path: "/trial", title: "Lecție de probă gratuită — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
+  { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București." },
+  { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
+  { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectăm, folosim și protejăm datele tale personale, conform GDPR." },
+  { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii și condițiile de utilizare a serviciilor Centrului de Arabă Libaneză cu Ibra." },
 ];
+
+/**
+ * The six CEFR level pages derive their head from the same curriculum data the
+ * page component uses, so they can't drift. A1 keeps its keyword-optimised
+ * title (highest-intent Romanian entry point).
+ */
+function levelRoutes(): Route[] {
+  const ro = getCurriculum("ro");
+  return (["a1", "a2", "b1", "b2", "c1", "c2"] as const)
+    .map((id) => {
+      const lvl = ro.find((l) => l.id === id);
+      if (!lvl) return null;
+      return id === "a1"
+        ? {
+            path: "/cursuri/grup/a1",
+            title: "Curs de Arabă pentru Începători București & Online — A1 (Libaneză)",
+            description:
+              "Curs de arabă pentru începători (A1) în araba libaneză — fizic în București (Strada Icoanei 80) sau online. Vorbești de la prima lecție. Două sesiuni de 90 min/săpt. Probă gratuită.",
+          }
+        : {
+            path: `/cursuri/grup/${id}`,
+            title: `${lvl.title} — Curs de Grup de Arabă Libaneză`,
+            description: lvl.objective.slice(0, 155),
+          };
+    })
+    .filter((r): r is Route => r !== null);
+}
 
 function allRoutes(): Route[] {
   // Blog articles: RO title/description straight from the shared registry.
@@ -70,7 +110,7 @@ function allRoutes(): Route[] {
     title: p.title.ro,
     description: p.description.ro,
   }));
-  return [...STATIC_ROUTES, ...blog];
+  return [...STATIC_ROUTES, ...levelRoutes(), ...blog];
 }
 
 const escAttr = (s: string): string =>
@@ -84,7 +124,8 @@ function setMeta(html: string, attr: "property" | "name", key: string, value: st
 
 function renderRoute(template: string, route: Route): string {
   const url = BASE + (route.path === "/" ? "/" : route.path);
-  const isEn = route.path.startsWith("/en/");
+  const lang = route.lang ?? (route.path.startsWith("/en/") ? "en" : "ro");
+  const ogLocale = lang === "en" ? "en_US" : lang === "de" ? "de_DE" : "ro_RO";
   const title = escAttr(route.title);
   const desc = escAttr(route.description);
   // Canonical (and og:url) point at the consolidation target when set.
@@ -103,7 +144,7 @@ function renderRoute(template: string, route: Route): string {
   const inject =
     `    <meta name="description" content="${desc}" />\n` +
     `    <link rel="canonical" href="${canonicalHref}" />\n` +
-    `    <meta property="og:locale" content="${isEn ? "en_US" : "ro_RO"}" />\n`;
+    `    <meta property="og:locale" content="${ogLocale}" />\n`;
   html = html.replace(/<\/head>/, `${inject}  </head>`);
   return html;
 }
@@ -138,6 +179,25 @@ export function seoPrerenderPlugin(): Plugin {
         }
         // eslint-disable-next-line no-console
         console.log(`[seo-prerender] wrote static <head> for ${count} routes.`);
+
+        // Drift guard: any URL in the sitemap that we don't prerender ships the
+        // bare SPA shell to crawlers. That silently happened when new pages were
+        // added to the sitemap but not here, so surface it loudly at build time.
+        try {
+          const sitemap = fs.readFileSync(path.resolve("public/sitemap.xml"), "utf8");
+          const known = new Set(allRoutes().map((r) => r.path));
+          const missing = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
+            .map((m) => m[1].replace(BASE, "").replace(/\/$/, "") || "/")
+            .filter((p) => !known.has(p));
+          if (missing.length) {
+            this.warn(
+              `[seo-prerender] ${missing.length} sitemap URL(s) are NOT prerendered and will ` +
+                `serve the empty SPA shell to crawlers — add them to STATIC_ROUTES: ${missing.join(", ")}`,
+            );
+          }
+        } catch {
+          /* sitemap missing is not fatal */
+        }
       } catch (err) {
         this.warn(`[seo-prerender] skipped (${(err as Error).message}). SPA shell left intact.`);
       }

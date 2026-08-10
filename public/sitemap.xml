@@ -36,6 +36,7 @@
   <url><loc>https://centruldearabalibaneza.com/cursuri/grup/b2</loc><lastmod>2026-07-17</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://centruldearabalibaneza.com/cursuri/grup/c1</loc><lastmod>2026-07-17</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://centruldearabalibaneza.com/cursuri/grup/c2</loc><lastmod>2026-07-17</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://centruldearabalibaneza.com/cursuri/privat</loc><lastmod>2026-07-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url>
     <loc>https://centruldearabalibaneza.com/cursuri/private</loc><lastmod>2026-07-17</lastmod>
     <changefreq>weekly</changefreq>
@@ -217,11 +218,6 @@
     <loc>https://centruldearabalibaneza.com/terms</loc><lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://centruldearabalibaneza.com/stergere-date</loc><lastmod>2026-07-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.1</priority>
   </url>
   <url>
     <loc>https://centruldearabalibaneza.com/blog/limbile-vorbite-in-liban</loc><lastmod>2026-07-24</lastmod>
