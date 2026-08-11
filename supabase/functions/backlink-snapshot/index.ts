@@ -253,7 +253,7 @@ Deno.serve(async (req) => {
     }
 
     if (action === "fetch_free") {
-      const oprKey = Deno.env.get("OPEN_PAGERANK_API_KEY");
+      const oprKey = Deno.env.get("OPEN_PAGERANK_API_KEY")?.trim();
       if (!oprKey) {
         await logAttempt("not_configured", {
           provider: "open_pagerank",
