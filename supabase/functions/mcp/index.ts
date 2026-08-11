@@ -3,10 +3,10 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
 
 // src/lib/mcp/tools/get-pricing.ts
-import { defineTool } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineTool } from "npm:@lovable.dev/mcp-js@0.24.0";
 var ONLINE_PRICES = {
   groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1e3 },
   privateLesson: 150,
@@ -55,7 +55,7 @@ var get_pricing_default = defineTool({
 });
 
 // src/lib/mcp/tools/list-curriculum-levels.ts
-import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.24.0";
 var LEVELS = [
   { id: "a1", title: "A1 \u2014 Beginner (Survival)", lessons: 32, hours: 48, track: "Spoken", schedule: "In person: Mon & Wed 19:00\u201320:30, 10 Aug \u2013 4 Nov 2026 (~3 months), Strada Icoanei 80 \xB7 Online: Sat & Sun 12:00\u201313:30, starts 15 Aug 2026 \xB7 enrollment open, limited spots" },
   { id: "a2", title: "A2 \u2014 Elementary", lessons: 54, hours: 81, track: "Spoken", schedule: "In person: Tue & Thu 19:00\u201320:30, 11 Aug 2026 \u2013 11 Feb 2027 (~6 months), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 enrollment open, limited spots" },
@@ -77,7 +77,7 @@ var list_curriculum_levels_default = defineTool2({
 });
 
 // src/lib/mcp/tools/get-contact-info.ts
-import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.24.0";
 var get_contact_info_default = defineTool3({
   name: "get_contact_info",
   title: "Get contact info",
@@ -109,5 +109,5 @@ var mcp_default = defineMcp({
 });
 
 // lovable-mcp-supabase-entry.ts
-import { createSupabaseHandler } from "npm:@lovable.dev/mcp-js@0.22.2/stacks/supabase";
+import { createSupabaseHandler } from "npm:@lovable.dev/mcp-js@0.24.0/stacks/supabase";
 Deno.serve(createSupabaseHandler(mcp_default, { functionName: "mcp" }));
