@@ -73,9 +73,14 @@ Deno.serve(async (req) => {
     );
 
     // Auth: admin user OR scheduled cron job (shared secret header)
-    const cronSecret = Deno.env.get("BACKLINK_CRON_SECRET");
     const providedCronSecret = req.headers.get("x-cron-secret");
-    const isCron = Boolean(cronSecret && providedCronSecret === cronSecret);
+    const cronSecrets = [
+      Deno.env.get("BACKLINK_CRON_SECRET"),
+      Deno.env.get("BACKLINK_CRON_SECRET_V2"),
+    ].filter((s): s is string => Boolean(s));
+    const isCron = Boolean(
+      providedCronSecret && cronSecrets.some((s) => s === providedCronSecret),
+    );
 
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
