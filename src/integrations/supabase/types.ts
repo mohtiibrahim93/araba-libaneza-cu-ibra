@@ -71,6 +71,42 @@ export type Database = {
         }
         Relationships: []
       }
+      backlink_fetch_attempts: {
+        Row: {
+          attempted_at: string
+          created_at: string
+          detail: string | null
+          domain: string
+          http_status: number | null
+          id: string
+          outcome: string
+          provider: string
+          trigger_source: string
+        }
+        Insert: {
+          attempted_at?: string
+          created_at?: string
+          detail?: string | null
+          domain: string
+          http_status?: number | null
+          id?: string
+          outcome: string
+          provider?: string
+          trigger_source?: string
+        }
+        Update: {
+          attempted_at?: string
+          created_at?: string
+          detail?: string | null
+          domain?: string
+          http_status?: number | null
+          id?: string
+          outcome?: string
+          provider?: string
+          trigger_source?: string
+        }
+        Relationships: []
+      }
       backlink_snapshots: {
         Row: {
           anchor_distribution: Json | null
@@ -252,6 +288,7 @@ export type Database = {
           start_at: string
           status: string
           student_email: string
+          student_id: string | null
           student_name: string
           student_phone: string | null
           trial_followup_2_sent_at: string | null
@@ -282,6 +319,7 @@ export type Database = {
           start_at: string
           status?: string
           student_email: string
+          student_id?: string | null
           student_name: string
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
@@ -312,6 +350,7 @@ export type Database = {
           start_at?: string
           status?: string
           student_email?: string
+          student_id?: string | null
           student_name?: string
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
@@ -338,6 +377,13 @@ export type Database = {
             columns: ["registration_id"]
             isOneToOne: false
             referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
             referencedColumns: ["id"]
           },
         ]
@@ -887,6 +933,7 @@ export type Database = {
           source: string
           stripe_session_id: string | null
           stripe_subscription_id: string | null
+          student_id: string | null
           subscription_status: string | null
           track_preference: string | null
           whatsapp_sent_at: string | null
@@ -922,6 +969,7 @@ export type Database = {
           source?: string
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
+          student_id?: string | null
           subscription_status?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
@@ -957,11 +1005,20 @@ export type Database = {
           source?: string
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
+          student_id?: string | null
           subscription_status?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "registrations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stripe_events: {
         Row: {
@@ -984,6 +1041,57 @@ export type Database = {
           registration_id?: string | null
           summary?: Json | null
           type?: string
+        }
+        Relationships: []
+      }
+      students: {
+        Row: {
+          anonymized_at: string | null
+          created_at: string
+          email: string | null
+          email_norm: string | null
+          full_name: string
+          id: string
+          marketing_consent: boolean
+          marketing_consent_at: string | null
+          notes: string | null
+          phone: string | null
+          phone_norm: string | null
+          preferred_language: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          anonymized_at?: string | null
+          created_at?: string
+          email?: string | null
+          email_norm?: string | null
+          full_name?: string
+          id?: string
+          marketing_consent?: boolean
+          marketing_consent_at?: string | null
+          notes?: string | null
+          phone?: string | null
+          phone_norm?: string | null
+          preferred_language?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          anonymized_at?: string | null
+          created_at?: string
+          email?: string | null
+          email_norm?: string | null
+          full_name?: string
+          id?: string
+          marketing_consent?: boolean
+          marketing_consent_at?: string | null
+          notes?: string | null
+          phone?: string | null
+          phone_norm?: string | null
+          preferred_language?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1067,6 +1175,10 @@ export type Database = {
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      find_or_create_student: {
+        Args: { p_email: string; p_name: string; p_phone: string }
+        Returns: string
       }
       get_cohort_signup_counts: {
         Args: never
