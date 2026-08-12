@@ -266,7 +266,9 @@ Deno.serve(async (req) => {
       console.log(
         `OPR key diagnostic: raw_len=${rawOprKey.length} clean_len=${oprKey.length} ` +
           `had_wrapping_quotes=${/^["'`]|["'`]$/.test(rawOprKey.trim())} ` +
-          `charset_ok=${/^[A-Za-z0-9_-]+$/.test(oprKey)}`,
+          `charset_ok=${/^[A-Za-z0-9_-]+$/.test(oprKey)} ` +
+          `has_live_prefix=${oprKey.startsWith("opr_live_")} ` +
+          `source=${Deno.env.get("OPENPAGERANK_API_KEY") ? "OPENPAGERANK_API_KEY" : "OPEN_PAGERANK_API_KEY"}`,
       );
       if (!oprKey) {
         await logAttempt("not_configured", {
