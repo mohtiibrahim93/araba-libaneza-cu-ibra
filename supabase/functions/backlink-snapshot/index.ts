@@ -3,7 +3,7 @@ import { buildCorsHeaders } from "../_shared/cors.ts";
 
 const TARGET_DOMAIN = "centruldearabalibaneza.com";
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev/semrush";
-const OPR_ENDPOINT = "https://openpagerank.com/api/v1.0/getPageRank";
+const OPR_ENDPOINT = "https://openpagerank.keywordseverywhere.com/v1/domains/bulk";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -253,7 +253,8 @@ Deno.serve(async (req) => {
     }
 
     if (action === "fetch_free") {
-      const rawOprKey = Deno.env.get("OPEN_PAGERANK_API_KEY") ?? "";
+      const rawOprKey = Deno.env.get("OPENPAGERANK_API_KEY") ??
+        Deno.env.get("OPEN_PAGERANK_API_KEY") ?? "";
       // Defensive cleanup: quotes, invisible characters and stray whitespace from
       // an imperfect copy/paste would otherwise be sent verbatim in the header.
       const oprKey = rawOprKey
@@ -265,7 +266,9 @@ Deno.serve(async (req) => {
       console.log(
         `OPR key diagnostic: raw_len=${rawOprKey.length} clean_len=${oprKey.length} ` +
           `had_wrapping_quotes=${/^["'`]|["'`]$/.test(rawOprKey.trim())} ` +
-          `charset_ok=${/^[A-Za-z0-9_-]+$/.test(oprKey)}`,
+          `charset_ok=${/^[A-Za-z0-9_-]+$/.test(oprKey)} ` +
+          `has_live_prefix=${oprKey.startsWith("opr_live_")} ` +
+          `source=${Deno.env.get("OPENPAGERANK_API_KEY") ? "OPENPAGERANK_API_KEY" : "OPEN_PAGERANK_API_KEY"}`,
       );
       if (!oprKey) {
         await logAttempt("not_configured", {
@@ -282,8 +285,14 @@ Deno.serve(async (req) => {
         );
       }
 
-      const url = `${OPR_ENDPOINT}?domains%5B0%5D=${encodeURIComponent(TARGET_DOMAIN)}`;
-      const response = await fetch(url, { headers: { "API-OPR": oprKey } });
+      const response = await fetch(OPR_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${oprKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ domains: [TARGET_DOMAIN], include_history: false }),
+      });
 
       if (!response.ok) {
         const text = await response.text();
@@ -299,13 +308,19 @@ Deno.serve(async (req) => {
         );
       }
 
-      const oprJson = await response.json() as {
-        response?: Array<{ status_code?: number; page_rank_decimal?: number | string; rank?: string | null }>;
-      };
-      const entry = oprJson.response?.[0];
-      const decimal = normalizeNumber(entry?.page_rank_decimal);
+      const oprJson = await response.json() as Record<string, unknown>;
+      // The bulk endpoint returns { data: [...] }; older shape used { response: [...] }.
+      const list = (Array.isArray(oprJson.data)
+        ? oprJson.data
+        : Array.isArray(oprJson.response)
+        ? oprJson.response
+        : []) as Array<Record<string, unknown>>;
+      const entry = list[0];
+      const decimal = normalizeNumber(
+        entry?.page_rank_decimal ?? entry?.pageRankDecimal ?? entry?.page_rank,
+      );
 
-      if (!entry || entry.status_code !== 200 || decimal === null) {
+      if (!entry || decimal === null) {
         await logAttempt("parse_error", {
           provider: "open_pagerank",
           detail: JSON.stringify(oprJson),
