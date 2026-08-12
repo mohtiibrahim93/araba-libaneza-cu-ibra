@@ -253,7 +253,20 @@ Deno.serve(async (req) => {
     }
 
     if (action === "fetch_free") {
-      const oprKey = Deno.env.get("OPEN_PAGERANK_API_KEY")?.trim();
+      const rawOprKey = Deno.env.get("OPEN_PAGERANK_API_KEY") ?? "";
+      // Defensive cleanup: quotes, invisible characters and stray whitespace from
+      // an imperfect copy/paste would otherwise be sent verbatim in the header.
+      const oprKey = rawOprKey
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")
+        .replace(/[\r\n\t]/g, "")
+        .trim()
+        .replace(/^["'`]+|["'`]+$/g, "")
+        .trim();
+      console.log(
+        `OPR key diagnostic: raw_len=${rawOprKey.length} clean_len=${oprKey.length} ` +
+          `had_wrapping_quotes=${/^["'`]|["'`]$/.test(rawOprKey.trim())} ` +
+          `charset_ok=${/^[A-Za-z0-9_-]+$/.test(oprKey)}`,
+      );
       if (!oprKey) {
         await logAttempt("not_configured", {
           provider: "open_pagerank",
