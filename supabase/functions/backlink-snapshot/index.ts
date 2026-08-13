@@ -317,7 +317,7 @@ Deno.serve(async (req) => {
         : []) as Array<Record<string, unknown>>;
       const entry = list[0];
       const decimal = normalizeNumber(
-        entry?.page_rank_decimal ?? entry?.pageRankDecimal ?? entry?.page_rank,
+        entry?.page_rank_decimal ?? entry?.pageRankDecimal ?? entry?.page_rank ?? entry?.open_page_rank,
       );
 
       if (!entry || decimal === null) {
