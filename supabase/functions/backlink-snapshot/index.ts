@@ -309,8 +309,10 @@ Deno.serve(async (req) => {
       }
 
       const oprJson = await response.json() as Record<string, unknown>;
-      // The bulk endpoint returns { data: [...] }; older shape used { response: [...] }.
-      const list = (Array.isArray(oprJson.data)
+      // Current bulk endpoint returns { results: [...] }; older shapes: data / response.
+      const list = (Array.isArray(oprJson.results)
+        ? oprJson.results
+        : Array.isArray(oprJson.data)
         ? oprJson.data
         : Array.isArray(oprJson.response)
         ? oprJson.response
@@ -319,6 +321,24 @@ Deno.serve(async (req) => {
       const decimal = normalizeNumber(
         entry?.page_rank_decimal ?? entry?.pageRankDecimal ?? entry?.page_rank ?? entry?.open_page_rank,
       );
+
+      // Domain simply not (yet) indexed by Open PageRank — not a parse failure.
+      if (entry && entry.found === false) {
+        await logAttempt("api_unavailable", {
+          provider: "open_pagerank",
+          httpStatus: response.status,
+          detail: "Domain not found in Open PageRank index",
+        });
+        return jsonResponse(
+          {
+            error: "Domeniul nu are încă scor în Open PageRank",
+            details:
+              "API-ul a răspuns corect, dar centruldearabalibaneza.com nu este încă indexat. Snapshot-ul existent rămâne neschimbat; job-ul programat va reîncerca automat.",
+            not_indexed: true,
+          },
+          200,
+        );
+      }
 
       if (!entry || decimal === null) {
         await logAttempt("parse_error", {
