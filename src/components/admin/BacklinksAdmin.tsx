@@ -32,7 +32,7 @@ interface TopDomain {
 
 const SOURCE_LABELS: Record<string, string> = {
   open_pagerank: "auto",
-  semrush: "Semrush",
+  semrush: "import",
   gsc_csv: "GSC CSV",
   manual: "manual",
   unknown: "—",
@@ -216,7 +216,7 @@ interface FetchAttempt {
 const OUTCOME_LABELS: Record<FetchAttempt["outcome"], string> = {
   success: "Reușit",
   not_configured: "Neconfigurat",
-  api_unavailable: "API indisponibil (plan Semrush)",
+  api_unavailable: "API indisponibil",
   parse_error: "Răspuns neinterpretabil",
   error: "Eroare",
 };
@@ -224,7 +224,7 @@ const OUTCOME_LABELS: Record<FetchAttempt["outcome"], string> = {
 /**
  * Refresh status. A failed automatic attempt never writes or overwrites a
  * snapshot, so the "last successful snapshot" below stays authoritative even
- * while the live API is unavailable on the current Semrush plan.
+ * while the live API is unavailable.
  */
 function RefreshStatus({
   attempts,
@@ -285,7 +285,6 @@ function RefreshStatus({
 export default function BacklinksAdmin() {
   const [snapshots, setSnapshots] = useState<BacklinkSnapshot[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [refreshingFree, setRefreshingFree] = useState(false);
   const [form, setForm] = useState<SnapshotForm>(emptyForm());
   const [csvTopDomains, setCsvTopDomains] = useState<TopDomain[]>([]);
@@ -335,27 +334,6 @@ export default function BacklinksAdmin() {
       domains: ordered.map((s) => s.referring_domains ?? 0).filter((v) => v > 0),
     };
   }, [snapshots]);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot }>({ action: "fetch_live" });
-      if (error) throw error;
-      if (data && typeof data === "object" && "error" in data) {
-        throw new Error((data as { error: string }).error);
-      }
-      toast({ title: "Snapshot actualizat" });
-      await load();
-    } catch (err) {
-      toast({
-        title: "Actualizare eșuată",
-        description: err instanceof Error ? err.message : undefined,
-        variant: "destructive",
-      });
-    } finally {
-      setRefreshing(false);
-    }
-  };
 
   const handleFreeRefresh = async () => {
     setRefreshingFree(true);
@@ -481,10 +459,6 @@ export default function BacklinksAdmin() {
             {!refreshingFree && <RefreshCw className="w-4 h-4 mr-2" />}
             Actualizează automat (gratuit)
           </Button>
-          <Button variant="outline" onClick={handleRefresh} disabled={refreshing || loading}>
-            {refreshing && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-            Actualizează din Semrush
-          </Button>
         </div>
       </div>
 
@@ -596,7 +570,7 @@ export default function BacklinksAdmin() {
             </div>
           ) : snapshots.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">
-              Nicio înregistrare. Apasă „Actualizează din Semrush” sau adaugă manual un snapshot.
+              Nicio înregistrare. Apasă „Actualizează automat (gratuit)” sau adaugă manual un snapshot.
             </p>
           ) : (
             <Table>
@@ -646,8 +620,7 @@ export default function BacklinksAdmin() {
           <CardDescription>
             Sursa gratuită automată (Open PageRank) actualizează doar Authority Score. Pentru
             numărul de backlink-uri și domenii referitoare, exportă CSV-ul „Linkuri → Site-uri care
-            fac linkuri” din Google Search Console și încarcă-l aici. Se acceptă și export din
-            Semrush Backlinks Analytics sau completare directă.
+            fac linkuri” din Google Search Console și încarcă-l aici sau completează direct câmpurile.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
