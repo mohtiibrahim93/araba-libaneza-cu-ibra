@@ -39,12 +39,16 @@ interface Route {
   canonical?: string;
   /** og:locale language. Defaults to ro, or en for /en/* paths. */
   lang?: "ro" | "en" | "de";
+  /** og:type — "article" for blog posts, "website" everywhere else. */
+  type?: "website" | "article";
+  /** ISO publish date; blog posts only (drives article:published_time + JSON-LD). */
+  published?: string;
 }
 
 // Non-blog marketing routes. Values copied from the pages' existing SEO props
 // (src/lib/i18n.tsx course/home keys, src/pages/seo/*, src/pages/en/*).
 const STATIC_ROUTES: Route[] = [
-  { path: "/", title: "Arabă Libaneză cu Ibra — Cursuri Online & București", description: "Învață arabă libaneză cu profesor nativ. Cursuri de grup, private și pentru copii — fizic în București sau online. Toate nivelurile CEFR (A1–C2)." },
+  { path: "/", title: "Cursuri de Arabă Libaneză cu Ibra — București și Online", description: "Învață arabă libaneză cu Ibra, profesor nativ, prin metoda Oral First. Cursuri de grup, private și copii — fizic în București sau online. A1–C2." },
   { path: "/cursuri", title: "Cursuri Arabă (Libaneză) — Adulți, Tineri, Copii | București & Online", description: "Cursuri de arabă (dialect libanez) pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
@@ -110,6 +114,8 @@ function allRoutes(): Route[] {
     path: `/blog/${p.slug}`,
     title: p.title.ro,
     description: p.description.ro,
+    type: "article" as const,
+    published: p.published,
   }));
   return [...STATIC_ROUTES, ...levelRoutes(), ...blog];
 }
@@ -134,18 +140,46 @@ function renderRoute(template: string, route: Route): string {
 
   let html = template;
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
+  html = setMeta(html, "name", "description", desc);
+  html = setMeta(html, "property", "og:type", route.type ?? "website");
   html = setMeta(html, "property", "og:title", title);
   html = setMeta(html, "property", "og:description", desc);
   html = setMeta(html, "property", "og:url", canonicalHref);
   html = setMeta(html, "name", "twitter:title", title);
   html = setMeta(html, "name", "twitter:description", desc);
 
-  // The shell ships no <meta name="description"> or canonical — inject them,
-  // plus a per-route og:locale, right before </head>.
-  const inject =
-    `    <meta name="description" content="${desc}" />\n` +
+  // The shell ships no canonical — inject it plus a per-route og:locale (and,
+  // for blog posts, the Article JSON-LD + article:* tags) before </head>, so
+  // non-JS crawlers see the same head React would render at runtime.
+  let inject =
     `    <link rel="canonical" href="${canonicalHref}" />\n` +
     `    <meta property="og:locale" content="${ogLocale}" />\n`;
+  if (route.type === "article") {
+    const articleJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: route.title,
+      description: route.description,
+      datePublished: route.published,
+      dateModified: route.published,
+      inLanguage: lang,
+      mainEntityOfPage: route.canonical ? BASE + route.canonical : url,
+      image: `${BASE}/og-image.png`,
+      author: { "@type": "Person", name: "Ibra — Centrul de Arabă Libaneză" },
+      publisher: {
+        "@type": "Organization",
+        name: "Centrul de Arabă Libaneză cu Ibra",
+        url: `${BASE}/`,
+        logo: { "@type": "ImageObject", url: `${BASE}/favicon.png` },
+      },
+    };
+    inject +=
+      (route.published
+        ? `    <meta property="article:published_time" content="${escAttr(route.published)}" />\n`
+        : "") +
+      `    <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />\n` +
+      `    <script type="application/ld+json">${JSON.stringify(articleJsonLd).replace(/</g, "\\u003c")}</script>\n`;
+  }
   html = html.replace(/<\/head>/, `${inject}  </head>`);
   return html;
 }
