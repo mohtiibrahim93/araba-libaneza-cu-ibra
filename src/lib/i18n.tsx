@@ -1544,8 +1544,8 @@ const translations = {
     thankYouBackHome: "Back to homepage",
     thankYouLoading: "Loading details...",
     thankYouError: "We couldn't load payment details, but your registration was received.",
-   homeSeoTitle: "Lebanese Arabic with Ibra — Online & Bucharest Courses",
-    homeSeoDescription: "Learn Lebanese Arabic with a native instructor. Group, private, and kids courses — in person in Bucharest or online. All CEFR levels (A1–C2).",
+   homeSeoTitle: "Lebanese Arabic Courses with Ibra — Online & Bucharest",
+    homeSeoDescription: "Learn Lebanese Arabic with Ibra, a native instructor. Group, private, and kids courses — in person in Bucharest or online. A1–C2.",
     // Booking page (per-type)
     bookingPageTitlePaid: "Book your lesson",
     bookingPageTitleTrial: "Free trial lesson",
