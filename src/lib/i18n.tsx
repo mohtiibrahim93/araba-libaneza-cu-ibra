@@ -4,7 +4,7 @@ type Lang = "ro" | "en";
 
 const translations = {
   ro: {
-    siteTitle: "centrul de araba libaneza",
+    siteTitle: "Arabă Libaneză cu Ibra",
     // Nav
     navHome: "Acasă",
     navCourses: "Cursuri",
@@ -614,8 +614,8 @@ const translations = {
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
-  homeSeoTitle: "Cursuri Arabă Libaneză — Prima Lecție Gratuită",
-    homeSeoDescription: "Învață arabă libaneză cu Ibra, profesor nativ, prin metoda Oral First: grupe, lecții private și copii, fizic în București sau online. Prima lecție gratuită.",
+  homeSeoTitle: "Cursuri de Arabă Libaneză cu Ibra — București și Online",
+    homeSeoDescription: "Învață arabă libaneză cu Ibra, profesor nativ, prin metoda Oral First. Cursuri de grup, private și copii — fizic în București sau online. A1–C2.",
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
     bookingPageTitleTrial: "Lecție gratuită de probă",
@@ -951,7 +951,7 @@ const translations = {
     priceLeiPer90Min: "LEI / lecție 60 min",
   },
   en: {
-    siteTitle: "lebanese arabic center",
+    siteTitle: "Lebanese Arabic with Ibra",
     navHome: "Home",
     navCourses: "Courses",
     navPricing: "Pricing",
