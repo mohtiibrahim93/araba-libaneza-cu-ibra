@@ -805,6 +805,13 @@ const translations = {
     courseCtaSeeForm: "Înscrie-te acum",
     courseCtaSeeOptions: "Vezi opțiunile",
     programsSeeFullPage: "Vezi pagina completă →",
+    activeNowTitle: "Cursuri care încep acum",
+    activeNowStartLabel: "Start",
+    activeNowRunning: "În desfășurare",
+    activeNowToday: "Începe azi",
+    activeNowStartsIn: "Începe în {n} zile",
+    activeNowFull: "Listă de așteptare",
+    activeNowCta: "Vezi cursul și înscrie-te",
 
     // /cursuri/grup
     courseGrupMetaTitle: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
@@ -1732,6 +1739,13 @@ const translations = {
     courseCtaSeeForm: "Register now",
     courseCtaSeeOptions: "See options",
     programsSeeFullPage: "See full page →",
+    activeNowTitle: "Courses starting now",
+    activeNowStartLabel: "Starts",
+    activeNowRunning: "In progress",
+    activeNowToday: "Starts today",
+    activeNowStartsIn: "Starts in {n} days",
+    activeNowFull: "Waiting list",
+    activeNowCta: "See the course and enroll",
 
     // /cursuri/grup
     courseGrupMetaTitle: "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
