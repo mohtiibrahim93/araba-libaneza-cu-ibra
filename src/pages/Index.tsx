@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import ActiveCoursesBanner from "@/components/ActiveCoursesBanner";
 import SocialProofStrip from "@/components/SocialProofStrip";
 import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
@@ -153,6 +154,7 @@ const PageContent = () => {
       <Navbar />
       <main id="main-content">
         <HeroSection />
+        <ActiveCoursesBanner />
         <SocialProofStrip />
         <StepsSection />
         <ProgramsSection />
