@@ -39,10 +39,10 @@ const ActiveCoursesBanner = () => {
 
             const urgency = c.full
               ? t.activeNowFull
-              : started
-                ? t.activeNowRunning
-                : days === 0
-                  ? t.activeNowToday
+              : days === 0
+                ? t.activeNowToday
+                : started
+                  ? t.activeNowRunning
                   : t.activeNowStartsIn.replace("{n}", String(days));
 
             const level = (c.level || "A1").toUpperCase();
