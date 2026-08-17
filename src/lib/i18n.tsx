@@ -614,8 +614,8 @@ const translations = {
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
-    homeSeoTitle: "Cursuri Arabă Libaneză cu Ibra — București | Lecție Gratuită",
-    homeSeoDescription: "Învață arabă libaneză cu Ibra, profesor nativ. Cursuri de grup, private și copii — fizic în București sau online. Prima lecție gratuită!",
+    homeSeoTitle: "Cursuri Arabă în București și Online — Libaneză cu Ibra",
+    homeSeoDescription: "Cursuri de arabă în București și online: arabă libaneză cu Ibra, profesor nativ. Grupe, lecții private și copii. Prima lecție de probă gratuită.",
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
     bookingPageTitleTrial: "Lecție gratuită de probă",
