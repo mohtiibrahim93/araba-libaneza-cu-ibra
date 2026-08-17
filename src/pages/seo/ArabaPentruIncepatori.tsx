@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "Când începe următoarea grupă de începători?",
-    a: "Cohortele A1 din august 2026: fizic în București din 10 august (luni și miercuri 19:00–20:30) și online din 15 august (sâmbătă și duminică 12:00–13:30). Locurile sunt limitate la 10 pe grupă.",
+    a: "Cohortele A1: online din 15 august 2026 (sâmbătă și duminică 12:00–13:30) și fizic în București din 1 septembrie 2026 (luni și miercuri 19:00–20:30). Locurile sunt limitate la 10 pe grupă.",
   },
 ];
 
@@ -59,12 +59,12 @@ const ArabaPentruIncepatori = () => (
       </li>
     </ul>
 
-    <h2>Grupa A1 — startul tău din august</h2>
+    <h2>Grupa A1 — startul tău din august sau septembrie</h2>
     <p>
       Nivelul <Link to="/cursuri/grup/a1">A1 — Începător</Link> durează ~4 luni (32 de lecții) și te
-      duce de la zero la conversații de supraviețuire. În august pornesc două cohorte: <strong>fizic
-      în București din 10 august</strong> (luni & miercuri seara) și <strong>online din 15
-      august</strong> (weekend la prânz). Preferi ritmul tău? Există și{" "}
+      duce de la zero la conversații de supraviețuire. Pornesc două cohorte: <strong>online din 15
+      august 2026</strong> (weekend la prânz) și <strong>fizic în București din 1 septembrie
+      2026</strong> (luni & miercuri seara). Preferi ritmul tău? Există și{" "}
       <Link to="/cursuri/private">lecții private 1:1</Link>.
     </p>
 
