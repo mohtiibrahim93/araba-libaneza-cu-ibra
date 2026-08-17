@@ -46,9 +46,9 @@ const CursuriAraba = () => (
     <ul>
       <li>
         <strong><Link to="/cursuri/grup">Curs de grup (A1–C2)</Link></strong> — cel mai accesibil și
-        mai motivant: grupe mici, 2 lecții de 90 min/săptămână, de la 500 lei/lună. Cohortele de
-        august: A1 fizic (luni & miercuri, start 10 august), A1 online (weekend, start 15 august) și
-        A2 (marți & joi, start 11 august).
+        mai motivant: grupe mici, 2 lecții de 90 min/săptămână, de la 500 lei/lună. Cohortele
+        deschise: A1 online (weekend, start 15 august 2026), A1 fizic (luni & miercuri, start 1
+        septembrie 2026) și A2 fizic (marți & joi, start 2 septembrie 2026).
       </li>
       <li>
         <strong><Link to="/cursuri/private">Lecții private 1:1</Link></strong> — ritm personalizat și
