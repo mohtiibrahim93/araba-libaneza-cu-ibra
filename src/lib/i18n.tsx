@@ -33,7 +33,7 @@ const translations = {
     heroTitle1: "Vorbește araba libaneză cu încredere.",
     heroTitle2: "Trăiește cultura.",
     heroTitle3: "",
-    heroDesc: "Cursuri practice și interactive pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
+    heroDesc: "Cursuri de arabă în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
     heroCta: "Începe călătoria ta",
     heroExplore: "Programează o discuție",
     heroTrialCta: "Lecție gratuită de probă",
