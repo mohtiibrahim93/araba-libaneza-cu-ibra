@@ -111,9 +111,15 @@ const PageContent = () => {
     "@context": "https://schema.org",
     "@type": "ItemList",
     itemListElement: [
-      { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
-      { name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
-      { name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
+      lang === "en"
+        ? { name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 26–80 lessons per level (90 min, twice a week), in person in Bucharest or online." }
+        : { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
+      lang === "en"
+        ? { name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
+        : { name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
+      lang === "en"
+        ? { name: "Kids courses — Lebanese Arabic", desc: "Interactive courses for children, in person in Bucharest (online from age 10)." }
+        : { name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
     ].map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -121,7 +127,7 @@ const PageContent = () => {
         "@type": "Course",
         name: c.name,
         description: c.desc,
-        inLanguage: "ro",
+        inLanguage: lang === "en" ? "en" : "ro",
         provider: {
           "@type": "Organization",
           name: "Centrul de Arabă Libaneză cu Ibra",
