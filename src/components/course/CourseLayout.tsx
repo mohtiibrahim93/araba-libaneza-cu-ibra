@@ -58,7 +58,7 @@ const CourseLayout = ({
   otherCourses,
   children,
 }: CourseLayoutProps) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const canonical = `${BASE_URL}${path}`;
 
   const breadcrumbJsonLd = {
@@ -75,7 +75,9 @@ const CourseLayout = ({
     "@context": "https://schema.org",
     "@type": "Course",
     url: canonical,
-    inLanguage: "ro",
+    inLanguage: lang === "en" ? "en" : "ro",
+    name: h1,
+    description: metaDescription,
     provider: {
       "@type": "Organization",
       name: "Centrul de Arabă Libaneză cu Ibra",
