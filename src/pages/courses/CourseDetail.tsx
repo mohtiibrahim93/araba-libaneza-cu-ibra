@@ -110,6 +110,59 @@ const CourseDetail = () => {
   const metaTitle =
     title.length + SUFFIX.length <= 60 ? `${title}${SUFFIX}` : title.slice(0, 60);
 
+  // Course + Breadcrumb structured data, built from the same facts the page
+  // renders (name, description, level, format, price, schedule).
+  const courseJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: title,
+    description: desc,
+    url,
+    inLanguage: lang === "en" ? "en" : "ro",
+    ...(c.level ? { educationalLevel: c.level.toUpperCase() } : {}),
+    provider: {
+      "@type": "Organization",
+      name: "Centrul de Arabă Libaneză cu Ibra",
+      sameAs: `${BASE_URL}/`,
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: c.format === "online" ? "online" : "onsite",
+      ...(c.start_date ? { startDate: c.start_date } : {}),
+      ...(c.end_date ? { endDate: c.end_date } : {}),
+      ...((lang === "en" ? c.schedule_label_en : c.schedule_label_ro)
+        ? { courseSchedule: { "@type": "Schedule", description: (lang === "en" ? c.schedule_label_en : c.schedule_label_ro) as string } }
+        : {}),
+      ...(c.format === "online"
+        ? {}
+        : {
+            location: {
+              "@type": "Place",
+              name: "Raduga Creative Center",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Strada Icoanei 80",
+                addressLocality: "București",
+                addressCountry: "RO",
+              },
+            },
+          }),
+      ...(c.price_lei != null
+        ? { offers: { "@type": "Offer", price: String(c.price_lei), priceCurrency: "RON", url, availability: c.full ? "https://schema.org/SoldOut" : "https://schema.org/InStock" } }
+        : {}),
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: lang === "en" ? "Home" : "Acasă", item: `${BASE_URL}/` },
+      { "@type": "ListItem", position: 2, name: lang === "en" ? "Courses" : "Cursuri", item: `${BASE_URL}/cursuri` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -119,6 +172,9 @@ const CourseDetail = () => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
         <meta property="og:url" content={url} />
+        <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
+        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
       <Navbar />
 
