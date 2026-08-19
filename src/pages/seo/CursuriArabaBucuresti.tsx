@@ -75,11 +75,11 @@ const CursuriArabaBucuresti = () => (
   <LandingLayout
     slug="cursuri-araba-bucuresti"
     enHref={null}
-    title="Cursuri de arabă în București — profesor nativ, grupe mici"
-    metaTitle="Cursuri de Arabă București — Adulți, Copii, 1:1 | Sector 2"
-    description="Cursuri de arabă în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."
-    crumb="Cursuri de arabă București"
-    lead="Cursuri de arabă în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
+    title="Cursuri de arabă libaneză în București — profesor nativ, grupe mici"
+    metaTitle="Cursuri de Arabă Libaneză București — Adulți, Copii, 1:1 | Sector 2"
+    description="Cursuri de arabă libaneză în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."
+    crumb="Cursuri de arabă libaneză București"
+    lead="Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
     faq={FAQ}
   >
     <p>
