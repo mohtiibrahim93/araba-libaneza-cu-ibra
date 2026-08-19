@@ -30,8 +30,8 @@ const translations = {
 
     // Hero
     heroBadge: "Cursuri de arabă libaneză · Toate nivelurile",
-    heroTitle1: "Vorbește araba libaneză cu încredere.",
-    heroTitle2: "Trăiește cultura.",
+    heroTitle1: "Cursuri de arabă în București și online.",
+    heroTitle2: "Vorbește libaneza cu încredere.",
     heroTitle3: "",
     heroDesc: "Cursuri de arabă în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
     heroCta: "Începe călătoria ta",
@@ -614,8 +614,8 @@ const translations = {
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
-    homeSeoTitle: "Cursuri de Arabă Libaneză în București și Online — Ibra",
-    homeSeoDescription: "Cursuri de arabă libaneză în București și online cu Ibra, profesor nativ. Grupe mici, lecții private și copii, program flexibil. Prima lecție gratuită.",
+    homeSeoTitle: "Cursuri Arabă București și Online — Libaneză cu Ibra",
+    homeSeoDescription: "Cursuri de arabă în București și online cu Ibra, profesor nativ libanez. Grupe mici A1–C2, lecții private și pentru copii. Prima lecție de probă e gratuită.",
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
     bookingPageTitleTrial: "Lecție gratuită de probă",
