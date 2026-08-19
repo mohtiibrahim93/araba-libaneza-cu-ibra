@@ -48,7 +48,7 @@ interface Route {
 // Non-blog marketing routes. Values copied from the pages' existing SEO props
 // (src/lib/i18n.tsx course/home keys, src/pages/seo/*, src/pages/en/*).
 const STATIC_ROUTES: Route[] = [
-  { path: "/", title: "Cursuri Arabă București și Online — Libaneză cu Ibra", description: "Cursuri de arabă în București și online cu Ibra, profesor nativ libanez. Grupe mici A1–C2, lecții private și pentru copii. Prima lecție de probă e gratuită." },
+  { path: "/", title: "Cursuri de Arabă Libaneză în București și Online — Ibra", description: "Cursuri de arabă libaneză în București și online cu Ibra, profesor nativ. Grupe mici, lecții private și copii, program flexibil. Prima lecție gratuită." },
   { path: "/cursuri", title: "Cursuri Arabă (Libaneză) — Adulți, Tineri, Copii | București & Online", description: "Cursuri de arabă (dialect libanez) pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
