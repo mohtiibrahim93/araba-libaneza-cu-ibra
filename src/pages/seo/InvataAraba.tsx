@@ -23,11 +23,11 @@ const FAQ = [
 const InvataAraba = () => (
   <LandingLayout
     slug="invata-araba"
-    title="Învață araba de la zero — ghid complet + cursuri cu profesor nativ"
-    metaTitle="Învață Araba de la Zero — Metodă, Timp & Cursuri | 2026"
-    description="Ghid pas cu pas pentru a învăța araba de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic."
-    crumb="Învață araba"
-    lead="Vrei să înveți araba, dar nu știi de unde să începi? Ghid clar despre alegerea dialectului, metoda potrivită și timpul necesar — plus cursuri cu profesor nativ."
+    title="Învață araba libaneză de la zero — ghid complet + cursuri cu profesor nativ"
+    metaTitle="Învață Araba Libaneză de la Zero — Metodă, Timp & Cursuri | 2026"
+    description="Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic."
+    crumb="Învață araba libaneză"
+    lead="Vrei să înveți araba libaneză, dar nu știi de unde să începi? Ghid clar despre alegerea dialectului, metoda potrivită și timpul necesar — plus cursuri cu profesor nativ."
     faq={FAQ}
   >
     <p>
