@@ -23,10 +23,10 @@ const FAQ = [
 const ArabaPentruIncepatori = () => (
   <LandingLayout
     slug="araba-pentru-incepatori"
-    title="Arabă pentru începători: vorbește din prima lecție"
-    metaTitle="Arabă pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție"
-    description="Învață arabă de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită."
-    crumb="Arabă pentru începători"
+    title="Arabă libaneză pentru începători: vorbește din prima lecție"
+    metaTitle="Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție"
+    description="Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită."
+    crumb="Arabă libaneză pentru începători"
     lead="Zero cunoștințe? Perfect. Grupele A1 sunt gândite exact pentru început de drum: vorbești din prima lecție, fără să te blochezi în alfabet."
     faq={FAQ}
   >
