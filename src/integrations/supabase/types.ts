@@ -1020,6 +1020,36 @@ export type Database = {
           },
         ]
       }
+      resource_leads: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          resource: string
+          source: string | null
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          resource?: string
+          source?: string | null
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          resource?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
       stripe_events: {
         Row: {
           id: string
