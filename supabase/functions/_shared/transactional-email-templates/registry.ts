@@ -34,4 +34,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'trial-followup': trialFollowup,
   'admin-new-registration': adminNewRegistration,
   'gdpr-erasure-request': gdprErasureRequest,
+  'arabizi-cheat-sheet': arabiziCheatSheet,
 }
