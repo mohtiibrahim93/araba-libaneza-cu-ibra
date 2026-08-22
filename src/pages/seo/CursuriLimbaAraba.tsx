@@ -82,6 +82,14 @@ const CursuriLimbaAraba = () => (
       folosind arabizi (scriere cu litere latine) până când alfabetul arab vine natural.
     </p>
 
+    <h2>Fără bariera alfabetului</h2>
+    <p>
+      Nu trebuie să știi alfabetul arab ca să începi: notăm totul în{" "}
+      <Link to="/arabizi">arabizi</Link> (litere latine și cifre), iar alfabetul vine la cerere.
+      Detalii despre metodă în{" "}
+      <Link to="/fara-alfabet-arab">nu ai nevoie de alfabetul arab ca să începi să vorbești</Link>.
+    </p>
+
     <h2>În ce limbă se predau lecțiile</h2>
     <p>
       Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> — alegi limba în care

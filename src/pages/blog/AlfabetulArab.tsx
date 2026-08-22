@@ -112,6 +112,18 @@ const AlfabetulArab = () => {
           : "(araba scrisă cu litere latine), și treci treptat la alfabetul arab, fără să te blochezi. Poți purta conversații întregi în libaneză înainte să scrii prima literă."}
       </p>
 
+      <h2>{en ? "When you actually need the alphabet" : "Când chiar ai nevoie de alfabet"}</h2>
+      <p>
+        {en
+          ? "You need the Arabic script if you want to read texts, study Modern Standard Arabic, work with documents, or read religious texts. Realistically: 2-4 weeks of 20-30 minutes a day to recognise the letters, a few months to read fluently. You do "
+          : "Ai nevoie de alfabet dacă vrei să citești texte, să studiezi araba standard, să lucrezi cu documente sau să citești texte religioase. Realist: 2-4 săptămâni de 20-30 de minute pe zi pentru recunoașterea literelor și câteva luni pentru citire fluentă. "}
+        <strong>{en ? "not" : "Nu"}</strong>{en ? " need it to hold a conversation — see " : " ai nevoie de el ca să porți o conversație — vezi "}
+        <Link to="/fara-alfabet-arab">{en ? "learning Arabic without the alphabet" : "cum înveți araba fără alfabet"}</Link>
+        {en ? ", and the full " : " și "}
+        <Link to="/arabizi">{en ? "Arabizi decoding guide" : "ghidul complet Arabizi"}</Link>
+        {en ? ". We teach the alphabet on request, alongside speaking." : ". Predăm alfabetul la cerere, în paralel cu vorbirea."}
+      </p>
+
       <h2>{en ? "How to learn the alphabet more easily" : "Cum înveți alfabetul mai ușor"}</h2>
       <ul>
         <li>{en ? "Group the letters by shape — many look alike and differ only by dots (ب ت ث)." : "Grupează literele după formă — multe se aseamănă și diferă doar prin puncte (ب ت ث)."}</li>

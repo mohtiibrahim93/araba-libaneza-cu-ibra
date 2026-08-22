@@ -1,0 +1,1 @@
+delete from public.resource_leads where email like 'test%+arabizi@centruldearabalibaneza.com';

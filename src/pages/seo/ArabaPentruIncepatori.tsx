@@ -73,6 +73,9 @@ const ArabaPentruIncepatori = () => (
       Prima lecție e o <Link to="/trial">probă gratuită de 30 de minute</Link> — cunoști profesorul,
       auzi limba, pronunți primele cuvinte și abia apoi decizi. Dacă ai mai avut contact cu araba și
       nu știi unde te încadrezi, <Link to="/quiz">testul de nivel</Link> îți spune în 2 minute.
+      Dacă te blochează scrierea, începe cu{" "}
+      <Link to="/arabizi">ghidul Arabizi</Link> și cu{" "}
+      <Link to="/fara-alfabet-arab">varianta fără alfabet arab</Link>.
       Ghidul complet pentru început de drum e în{" "}
       <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză în 2026</Link>.
     </p>
