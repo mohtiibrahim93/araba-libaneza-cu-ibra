@@ -126,6 +126,10 @@ const Primele20Expresii = () => {
           <Link to="/blog/araba-libaneza-vs-araba-standard">{en ? "Lebanese Arabic vs Standard Arabic" : "araba libaneză vs araba standard"}</Link>.
         </li>
         <li>
+          {en ? "Don't know what the numbers in 'mar7aba' mean? See the " : "Nu știi ce caută cifrele în „mar7aba”? Vezi "}
+          <Link to="/arabizi">{en ? "full Arabizi guide" : "ghidul complet Arabizi"}</Link>.
+        </li>
+        <li>
           {en ? "Not sure where to start? Take the " : "Nu știi de unde pornești? Fă "}
           <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>.
         </li>

@@ -157,6 +157,12 @@ const CumInvetiArabaLibaneza = () => {
             <Link to="/cursuri/private">{en ? "private lessons" : "lecții private"}</Link>{en ? " (personalised pace)." : " (ritm personalizat)."}
           </li>
           <li>
+            {en ? "Worried about the script? Read " : "Te sperie alfabetul? Citește "}
+            <Link to="/fara-alfabet-arab">{en ? "how to start without the Arabic alphabet" : "cum începi fără alfabetul arab"}</Link>
+            {en ? " and the " : " și "}
+            <Link to="/arabizi">{en ? "Arabizi guide" : "ghidul Arabizi"}</Link>.
+          </li>
+          <li>
             {en ? "For kids, we have a " : "Pentru copii, avem un "}
             <Link to="/cursuri/copii">{en ? "dedicated programme" : "program dedicat"}</Link>{en ? " in person in Bucharest." : " fizic în București."}
           </li>
