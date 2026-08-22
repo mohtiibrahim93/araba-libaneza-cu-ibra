@@ -166,6 +166,8 @@ const App = () => (
             <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
             <Route path="/curs-araba-copii" element={<SeoCursArabaCopii />} />
+            <Route path="/arabizi" element={<SeoArabizi />} />
+            <Route path="/fara-alfabet-arab" element={<SeoFaraAlfabetArab />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
