@@ -42,7 +42,9 @@ const InvataAraba = () => (
       în știri — și zeci de dialecte vorbite. Dacă vrei să vorbești cu oameni reali (familie,
       călătorii, muzică, seriale), începi cu un <strong>dialect vorbit</strong>. Noi predăm{" "}
       <Link to="/blog/araba-libaneza-vs-araba-standard">dialectul libanez</Link>, care acoperă
-      toată zona Levantului (Liban, Siria, Iordania, Palestina).
+      toată zona Levantului (Liban, Siria, Iordania, Palestina). Vezi harta completă în{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link> și decide rapid cu{" "}
+      <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
     </p>
 
     <h2>Pasul 2: metoda — vorbește înainte să scrii</h2>
