@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import MarkdownBody from "@/components/blog/MarkdownBody";
+import { usePageContent } from "@/hooks/usePageContent";
 
 const BASE = "https://centruldearabalibaneza.com";
 
