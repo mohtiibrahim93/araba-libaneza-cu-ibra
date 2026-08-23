@@ -29,7 +29,6 @@ import {
   Settings,
   LineChart,
   FileText,
-  Pencil,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
@@ -40,7 +39,6 @@ import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
 import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
-import SiteTextsAdmin from "@/components/admin/SiteTextsAdmin";
 import PagesAdmin from "@/components/admin/PagesAdmin";
 import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
