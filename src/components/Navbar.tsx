@@ -281,6 +281,34 @@ const Navbar = () => {
               <GraduationCap className="w-4 h-4" aria-hidden="true" />
               {t.navCourses}
             </Link>
+            <div className="flex flex-col pl-6">
+              {courseMenu.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+            <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {lang === "en" ? "Resources" : "Resurse"}
+            </p>
+            <div className="flex flex-col pl-6">
+              {resourceMenu.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
             <Link
               to="/booking"
               onClick={() => setOpen(false)}
