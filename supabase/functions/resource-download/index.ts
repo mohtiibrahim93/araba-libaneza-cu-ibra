@@ -45,8 +45,15 @@ Deno.serve(async (req) => {
     );
 
     const ip = getClientIp(req) || "unknown";
-    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 10, 3600);
-    const emailOk = await checkRateLimit(supabase, `resource:email:${cleanEmail}`, 3, 86400);
+    // Limits are per resource so that requesting several different PDFs
+    // (the normal flow on /invata-araba-gratis) never trips the limiter.
+    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 30, 3600);
+    const emailOk = await checkRateLimit(
+      supabase,
+      `resource:email:${cleanEmail}:${key}`,
+      5,
+      86400,
+    );
     if (!ipOk || !emailOk) {
       return json({ error: "Prea multe cereri. Încearcă mai târziu." }, 429);
     }
