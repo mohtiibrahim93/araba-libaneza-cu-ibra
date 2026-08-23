@@ -8,6 +8,8 @@ import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RESOURCES: Record<string, { template: string }> = {
   "arabizi-cheat-sheet": { template: "arabizi-cheat-sheet" },
+  "100-expresii-libaneze": { template: "expresii-libaneze" },
+  "plan-30-zile": { template: "plan-30-zile" },
 };
 
 Deno.serve(async (req) => {
