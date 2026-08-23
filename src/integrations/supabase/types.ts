@@ -883,6 +883,42 @@ export type Database = {
           },
         ]
       }
+      page_contents: {
+        Row: {
+          body_md: string
+          faq: Json
+          h1: string
+          is_published: boolean
+          lead: string
+          meta_description: string
+          meta_title: string
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          body_md?: string
+          faq?: Json
+          h1?: string
+          is_published?: boolean
+          lead?: string
+          meta_description?: string
+          meta_title?: string
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          body_md?: string
+          faq?: Json
+          h1?: string
+          is_published?: boolean
+          lead?: string
+          meta_description?: string
+          meta_title?: string
+          path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rate_limit_events: {
         Row: {
           bucket: string
@@ -1089,6 +1125,27 @@ export type Database = {
           title_en?: string
           title_ro?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      site_texts: {
+        Row: {
+          key: string
+          updated_at: string
+          value_en: string
+          value_ro: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value_en?: string
+          value_ro?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value_en?: string
+          value_ro?: string
         }
         Relationships: []
       }
