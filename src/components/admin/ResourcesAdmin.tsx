@@ -202,15 +202,20 @@ const ResourcesAdmin = () => {
             </div>
             {r.file_url && (
               <div className="flex items-center gap-1">
-                {/* Relative links opened from the preview iframe get blocked by
-                    Chrome, so always open an absolute URL from a click handler. */}
                 <Button
+                  asChild
                   variant="ghost"
                   size="sm"
                   className="gap-1 text-primary"
-                  onClick={() => window.open(absoluteFileUrl(r.file_url), "_blank", "noopener,noreferrer")}
                 >
-                  PDF <ExternalLink className="w-3.5 h-3.5" />
+                  <a
+                    href={absoluteFileUrl(r.file_url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Deschide PDF-ul ${r.title_ro || r.slug}`}
+                  >
+                    PDF <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </Button>
                 <Button
                   variant="ghost"
