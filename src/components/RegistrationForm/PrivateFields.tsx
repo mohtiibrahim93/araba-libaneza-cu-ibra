@@ -14,9 +14,9 @@ interface Props {
 
 const clamp = (n: number) => Math.min(100, Math.max(1, n));
 
-/** Returns the discount fraction (0, .05, .10, .15) for a given quantity. */
+/** Returns the discount fraction (0, .05, .10, .20) for a given quantity. */
 const discountFor = (q: number): number => {
-  if (q >= 20) return 0.15;
+  if (q >= 20) return 0.20;
   if (q >= 10) return 0.10;
   if (q >= 5) return 0.05;
   return 0;
@@ -26,7 +26,7 @@ const discountFor = (q: number): number => {
 const nextTier = (q: number): { needed: number; pct: number } | null => {
   if (q < 5) return { needed: 5 - q, pct: 5 };
   if (q < 10) return { needed: 10 - q, pct: 10 };
-  if (q < 20) return { needed: 20 - q, pct: 15 };
+  if (q < 20) return { needed: 20 - q, pct: 20 };
   return null;
 };
 
