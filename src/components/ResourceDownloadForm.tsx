@@ -36,12 +36,12 @@ const ResourceDownloadForm = ({
   idPrefix = resource,
 }: ResourceDownloadFormProps) => {
   const { toast } = useToast();
-  const { language } = useI18n();
+  const { lang } = useI18n();
   // Admin-editable overrides (title, description, PDF link, visibility).
   const { resource: row, loaded } = useResource(resource);
-  const displayTitle = row ? (language === "en" ? row.title_en : row.title_ro) || title : title;
+  const displayTitle = row ? (lang === "en" ? row.title_en : row.title_ro) || title : title;
   const displayDescription = row
-    ? (language === "en" ? row.description_en : row.description_ro) || description
+    ? (lang === "en" ? row.description_en : row.description_ro) || description
     : description;
   const displayFileHref = row?.file_url || fileHref;
   const [name, setName] = useState("");

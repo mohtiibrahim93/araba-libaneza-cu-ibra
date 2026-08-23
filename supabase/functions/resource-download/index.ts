@@ -89,9 +89,9 @@ Deno.serve(async (req) => {
     const { error } = await supabase.functions.invoke("send-transactional-email", {
       headers: { Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
       body: {
-        templateName: RESOURCES[key].template,
+        templateName: template,
         recipientEmail: cleanEmail,
-        idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 10)}`,
+        idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 16)}`,
         templateData: { name: cleanName || undefined },
       },
     });
