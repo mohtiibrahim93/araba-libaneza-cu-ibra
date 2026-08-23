@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useResource } from "@/hooks/useResources";
+import { useI18n } from "@/lib/i18n";
 
 export interface ResourceDownloadFormProps {
   /** Resource key known by the `resource-download` edge function. */
@@ -34,6 +36,14 @@ const ResourceDownloadForm = ({
   idPrefix = resource,
 }: ResourceDownloadFormProps) => {
   const { toast } = useToast();
+  const { language } = useI18n();
+  // Admin-editable overrides (title, description, PDF link, visibility).
+  const { resource: row, loaded } = useResource(resource);
+  const displayTitle = row ? (language === "en" ? row.title_en : row.title_ro) || title : title;
+  const displayDescription = row
+    ? (language === "en" ? row.description_en : row.description_ro) || description
+    : description;
+  const displayFileHref = row?.file_url || fileHref;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -68,6 +78,9 @@ const ResourceDownloadForm = ({
     }
   };
 
+  // Row deleted/deactivated in admin -> hide the form entirely.
+  if (loaded && !row) return null;
+
   if (done) {
     return (
       <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 space-y-3 not-prose">
@@ -86,7 +99,7 @@ const ResourceDownloadForm = ({
             Rezervă lecția de probă gratuită
           </Link>
           <a
-            href={fileHref}
+            href={displayFileHref}
             className="inline-block border border-border px-5 py-2.5 rounded-lg font-semibold text-sm text-foreground no-underline hover:bg-muted transition"
           >
             Descarcă acum PDF-ul
@@ -101,9 +114,9 @@ const ResourceDownloadForm = ({
       <div className="space-y-1">
         <h3 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
           <Download className="w-5 h-5 text-primary shrink-0" aria-hidden />
-          {title}
+          {displayTitle}
         </h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground">{displayDescription}</p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">

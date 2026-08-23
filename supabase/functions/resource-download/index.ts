@@ -47,11 +47,11 @@ Deno.serve(async (req) => {
     const ip = getClientIp(req) || "unknown";
     // Limits are per resource so that requesting several different PDFs
     // (the normal flow on /invata-araba-gratis) never trips the limiter.
-    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 30, 3600);
+    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 120, 3600);
     const emailOk = await checkRateLimit(
       supabase,
       `resource:email:${cleanEmail}:${key}`,
-      5,
+      20,
       86400,
     );
     if (!ipOk || !emailOk) {
