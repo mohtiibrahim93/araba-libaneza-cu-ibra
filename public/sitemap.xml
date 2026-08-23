@@ -326,9 +326,4 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-  <url>
-    <loc>https://centruldearabalibaneza.com/stergere-date</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
 </urlset>
