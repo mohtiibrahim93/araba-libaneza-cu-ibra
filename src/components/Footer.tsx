@@ -35,10 +35,12 @@ const Footer = () => {
             <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
             <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
             <li><Link to="/cursuri/tineri" className="hover:text-foreground transition-colors">{lang === "en" ? "Teens (11–18)" : "Adolescenți (11–18)"}</Link></li>
+            <li><Link to="/cursuri/adulti" className="hover:text-foreground transition-colors">{lang === "en" ? "Adults" : "Adulți"}</Link></li>
+
             <li><Link to="/meditatii-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "1-on-1 tutoring" : "Meditații arabă 1:1"}</Link></li>
             <li><Link to="/cursuri-araba-bucuresti" className="hover:text-foreground transition-colors">{lang === "en" ? "Courses in Bucharest" : "Cursuri arabă București"}</Link></li>
             <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
-            <li><Link to="/cursuri-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
+            <li><Link to="/cursuri-limba-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
             <li><Link to="/araba-pentru-incepatori" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for beginners" : "Arabă pentru începători"}</Link></li>
             <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
             <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
@@ -64,6 +66,9 @@ const Footer = () => {
             <li><Link to="/en/learn-levantine-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Levantine Arabic</Link></li>
             <li><Link to="/en/arabic-tutor" className="hover:text-foreground transition-colors" hrefLang="en">Arabic tutor</Link></li>
             <li><Link to="/en/arabic-dialects-guide" className="hover:text-foreground transition-colors" hrefLang="en">Arabic dialects guide</Link></li>
+            <li><Link to="/en/arabic-classes-near-me" className="hover:text-foreground transition-colors" hrefLang="en">Arabic classes near me</Link></li>
+            <li><Link to="/de/arabisch-lernen" className="hover:text-foreground transition-colors" hrefLang="de">Arabisch lernen</Link></li>
+
           </ul>
         </div>
 

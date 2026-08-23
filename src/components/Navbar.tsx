@@ -104,6 +104,27 @@ const Navbar = () => {
     { href: "#contact", label: t.navContact },
   ];
 
+  // Course + resource menus. These give every important landing page at least
+  // one prominent internal link (footer-only links crawl poorly).
+  const courseMenu = [
+    { to: "/cursuri/grup", label: lang === "en" ? "Group course (A1–C2)" : "Curs de grup (A1–C2)" },
+    { to: "/cursuri/private", label: lang === "en" ? "Private lessons" : "Lecții private" },
+    { to: "/cursuri/copii", label: lang === "en" ? "Kids (6–10)" : "Copii (6–10)" },
+    { to: "/cursuri/tineri", label: lang === "en" ? "Teens (11–18)" : "Adolescenți (11–18)" },
+    { to: "/cursuri/adulti", label: lang === "en" ? "Adults" : "Adulți" },
+    { to: "/cursuri-araba-bucuresti", label: lang === "en" ? "Courses in Bucharest" : "Cursuri în București" },
+  ];
+
+  const resourceMenu = [
+    { to: "/resurse", label: lang === "en" ? "Free resources" : "Resurse gratuite" },
+    { to: "/invata-araba-gratis", label: lang === "en" ? "Learn Arabic free" : "Învață araba gratis" },
+    { to: "/arabizi", label: "Arabizi" },
+    { to: "/dialecte-arabe", label: lang === "en" ? "Arabic dialects" : "Dialectele arabe" },
+    { to: "/ce-araba-sa-inveti", label: lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți" },
+    { to: "/meditatii-araba", label: lang === "en" ? "1-on-1 tutoring" : "Meditații 1:1" },
+  ];
+
+
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <a
@@ -129,14 +150,36 @@ const Navbar = () => {
           <BrandLogo />
         </a>
 
-        <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
-          <Link
-            to="/cursuri"
-            onClick={() => setOpen(false)}
-            className="hover:text-foreground transition-colors"
-          >
-            {t.navCourses}
-          </Link>
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground font-medium">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+              {t.navCourses}
+              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              <DropdownMenuItem asChild>
+                <Link to="/cursuri">{lang === "en" ? "All courses" : "Toate cursurile"}</Link>
+              </DropdownMenuItem>
+              {courseMenu.map((item) => (
+                <DropdownMenuItem key={item.to} asChild>
+                  <Link to={item.to}>{item.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+              {lang === "en" ? "Resources" : "Resurse"}
+              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              {resourceMenu.map((item) => (
+                <DropdownMenuItem key={item.to} asChild>
+                  <Link to={item.to}>{item.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link
             to="/booking"
             onClick={() => setOpen(false)}
@@ -152,6 +195,7 @@ const Navbar = () => {
           >
             {t.navBlog}
           </Link>
+
           {links.map((l) => (
             <a
               key={l.href}
@@ -237,6 +281,34 @@ const Navbar = () => {
               <GraduationCap className="w-4 h-4" aria-hidden="true" />
               {t.navCourses}
             </Link>
+            <div className="flex flex-col pl-6">
+              {courseMenu.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+            <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {lang === "en" ? "Resources" : "Resurse"}
+            </p>
+            <div className="flex flex-col pl-6">
+              {resourceMenu.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
             <Link
               to="/booking"
               onClick={() => setOpen(false)}

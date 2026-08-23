@@ -12,7 +12,10 @@ const BASE_URL = "https://centruldearabalibaneza.com";
 
 const PrivateCourse = () => {
   const { lang } = useI18n();
-  const canonical = `${BASE_URL}/cursuri/privat`;
+  // /cursuri/privat and /cursuri/private are near-duplicates; consolidate on
+  // /cursuri/private so Google indexes one page instead of splitting signals.
+  const canonical = `${BASE_URL}/cursuri/private`;
+
   const en = lang === "en";
 
   const blocks: { icon: typeof UserRound; title: { ro: string; en: string }; body: { ro: string; en: string } }[] = [
