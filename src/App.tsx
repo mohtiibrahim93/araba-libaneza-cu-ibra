@@ -79,6 +79,8 @@ const SeoArabizi = lazy(() => import("./pages/seo/Arabizi"));
 const SeoInvataArabaGratis = lazy(() => import("./pages/seo/InvataArabaGratis"));
 const SeoResurse = lazy(() => import("./pages/seo/Resurse"));
 const SeoFaraAlfabetArab = lazy(() => import("./pages/seo/FaraAlfabetArab"));
+const SeoDialecteArabe = lazy(() => import("./pages/seo/DialecteArabe"));
+const SeoCeArabaSaInveti = lazy(() => import("./pages/seo/CeArabaSaInveti"));
 
 const queryClient = new QueryClient();
 
@@ -172,6 +174,8 @@ const App = () => (
             <Route path="/invata-araba-gratis" element={<SeoInvataArabaGratis />} />
             <Route path="/resurse" element={<SeoResurse />} />
             <Route path="/fara-alfabet-arab" element={<SeoFaraAlfabetArab />} />
+            <Route path="/dialecte-arabe" element={<SeoDialecteArabe />} />
+            <Route path="/ce-araba-sa-inveti" element={<SeoCeArabaSaInveti />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
