@@ -192,6 +192,29 @@ function renderRoute(template: string, route: Route): string {
   return html;
 }
 
+/**
+ * Reads the published page overrides from the database at build time. Fails
+ * soft: on any error the code-shipped meta is used.
+ */
+async function fetchCmsMeta(): Promise<Record<string, { meta_title: string; meta_description: string }>> {
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return {};
+  try {
+    const res = await fetch(
+      `${url}/rest/v1/page_contents?select=path,meta_title,meta_description&is_published=eq.true`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    );
+    if (!res.ok) return {};
+    const rows = (await res.json()) as { path: string; meta_title: string; meta_description: string }[];
+    const map: Record<string, { meta_title: string; meta_description: string }> = {};
+    for (const r of rows) map[r.path] = r;
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 export function seoPrerenderPlugin(): Plugin {
   let outDir = "dist";
   return {
@@ -200,7 +223,10 @@ export function seoPrerenderPlugin(): Plugin {
     configResolved(config) {
       outDir = config.build.outDir || "dist";
     },
-    closeBundle() {
+    async closeBundle() {
+      // Owner-edited meta (admin -> "Pagini") wins over the values hardcoded
+      // here, so the static <head> crawlers see matches what visitors see.
+      const cmsMeta = await fetchCmsMeta();
       try {
         const root = path.resolve(outDir);
         const shellPath = path.join(root, "index.html");
@@ -211,7 +237,15 @@ export function seoPrerenderPlugin(): Plugin {
         const template = fs.readFileSync(shellPath, "utf8");
         let count = 0;
         for (const route of allRoutes()) {
-          const html = renderRoute(template, route);
+          const cms = cmsMeta[route.path];
+          const merged = cms
+            ? {
+                ...route,
+                title: cms.meta_title?.trim() || route.title,
+                description: cms.meta_description?.trim() || route.description,
+              }
+            : route;
+          const html = renderRoute(template, merged);
           const outFile =
             route.path === "/"
               ? shellPath

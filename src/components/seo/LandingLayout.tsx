@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import MarkdownBody from "@/components/blog/MarkdownBody";
+import { usePageContent } from "@/hooks/usePageContent";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -43,9 +45,19 @@ interface Props {
  * vizibil, link către varianta EN și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   const canonical = canonicalHref ? `${BASE}${canonicalHref}` : url;
+
+  // Owner-edited version of this page (admin → "Pagini"). Anything left empty
+  // falls back to the code-shipped content.
+  const override = usePageContent(`/${slug}`);
+  const title = override?.h1?.trim() || titleProp;
+  const metaTitle = override?.meta_title?.trim() || metaTitleProp;
+  const description = override?.meta_description?.trim() || descriptionProp;
+  const lead = override?.lead?.trim() || leadProp;
+  const faq = override?.faq?.length ? override.faq : faqProp;
+  const bodyMd = override?.body_md?.trim() || "";
 
   const courseJsonLd = {
     "@context": "https://schema.org",
@@ -118,7 +130,7 @@ const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, 
           </header>
 
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a]:text-primary [&_a]:underline">
-            {children}
+            {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
             {faq?.length ? (
               <section>

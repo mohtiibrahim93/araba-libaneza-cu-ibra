@@ -344,6 +344,91 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, url: pub.publicUrl });
     }
 
+    // ============ Site CMS: texts + page contents ============
+    if (action === "list_site_texts") {
+      const { data, error } = await supabase
+        .from("site_texts")
+        .select("*")
+        .order("key", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_site_text") {
+      const { key, value_ro, value_en } = body;
+      if (typeof key !== "string" || !/^[A-Za-z0-9_.-]{1,200}$/.test(key)) {
+        return jsonResponse({ error: "Cheie invalidă" });
+      }
+      const str = (v: unknown) => (typeof v === "string" ? v.slice(0, 8000) : "");
+      const { data, error } = await supabase
+        .from("site_texts")
+        .upsert({ key, value_ro: str(value_ro), value_en: str(value_en) }, { onConflict: "key" })
+        .select()
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_site_text") {
+      const { key } = body;
+      if (typeof key !== "string" || !key) return jsonResponse({ error: "Cheie invalidă" });
+      const { error } = await supabase.from("site_texts").delete().eq("key", key);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "list_page_contents") {
+      const { data, error } = await supabase
+        .from("page_contents")
+        .select("*")
+        .order("path", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_page_content") {
+      const { path, meta_title, meta_description, h1, lead, body_md, faq, is_published } = body;
+      if (typeof path !== "string" || !/^\/[A-Za-z0-9/_-]{0,200}$/.test(path)) {
+        return jsonResponse({ error: "Cale invalidă (ex: /arabizi)" });
+      }
+      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const faqClean = Array.isArray(faq)
+        ? faq
+            .filter((f) => f && typeof f === "object")
+            .slice(0, 30)
+            .map((f: Record<string, unknown>) => ({
+              q: str(f.q, 300),
+              a: str(f.a, 2000),
+            }))
+            .filter((f) => f.q && f.a)
+        : [];
+      const { data, error } = await supabase
+        .from("page_contents")
+        .upsert({
+          path,
+          meta_title: str(meta_title, 200),
+          meta_description: str(meta_description, 400),
+          h1: str(h1, 300),
+          lead: str(lead, 1000),
+          body_md: str(body_md, 200000),
+          faq: faqClean,
+          is_published: is_published !== false,
+        }, { onConflict: "path" })
+        .select()
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_page_content") {
+      const { path } = body;
+      if (typeof path !== "string" || !path) return jsonResponse({ error: "Cale invalidă" });
+      const { error } = await supabase.from("page_contents").delete().eq("path", path);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
       const { data, error } = await supabase
