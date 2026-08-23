@@ -194,14 +194,28 @@ const ResourcesAdmin = () => {
               </p>
             </div>
             {r.file_url && (
-              <a
-                href={r.file_url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-sm text-primary inline-flex items-center gap-1"
-              >
-                PDF <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              <div className="flex items-center gap-1">
+                {/* Relative links opened from the preview iframe get blocked by
+                    Chrome, so always open an absolute URL from a click handler. */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1 text-primary"
+                  onClick={() => window.open(absoluteFileUrl(r.file_url), "_blank", "noopener,noreferrer")}
+                >
+                  PDF <ExternalLink className="w-3.5 h-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(absoluteFileUrl(r.file_url));
+                    toast({ title: "Link copiat" });
+                  }}
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                </Button>
+              </div>
             )}
             <Button variant="outline" size="sm" onClick={() => setDraft(r)} className="gap-1.5">
               <Pencil className="w-3.5 h-3.5" /> Editează
