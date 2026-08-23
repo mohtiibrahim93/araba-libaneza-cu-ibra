@@ -3,7 +3,7 @@ import { useSiteTexts } from "@/hooks/useSiteTexts";
 
 type Lang = "ro" | "en";
 
-const translations = {
+export const translations = {
   ro: {
     siteTitle: "Arabă Libaneză cu Ibra",
     // Nav
