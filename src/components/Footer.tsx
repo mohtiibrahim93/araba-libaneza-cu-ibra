@@ -66,6 +66,9 @@ const Footer = () => {
             <li><Link to="/en/learn-levantine-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Levantine Arabic</Link></li>
             <li><Link to="/en/arabic-tutor" className="hover:text-foreground transition-colors" hrefLang="en">Arabic tutor</Link></li>
             <li><Link to="/en/arabic-dialects-guide" className="hover:text-foreground transition-colors" hrefLang="en">Arabic dialects guide</Link></li>
+            <li><Link to="/en/arabic-classes-near-me" className="hover:text-foreground transition-colors" hrefLang="en">Arabic classes near me</Link></li>
+            <li><Link to="/de/arabisch-lernen" className="hover:text-foreground transition-colors" hrefLang="de">Arabisch lernen</Link></li>
+
           </ul>
         </div>
 
