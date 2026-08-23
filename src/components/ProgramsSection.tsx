@@ -352,7 +352,7 @@ const ProgramsSection = () => {
                         <span className="text-muted-foreground">{t.privatePrice20Label}</span>
                         <span>
                           <span className="line-through text-muted-foreground">3.000 LEI</span>
-                          <span className="ml-2 font-bold text-primary">2.550 LEI</span>
+                          <span className="ml-2 font-bold text-primary">2.400 LEI</span>
                         </span>
                       </div>
                     </div>
@@ -572,7 +572,7 @@ const ProgramsSection = () => {
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
                             <span>
                               <span className="line-through text-muted-foreground">3.000 LEI</span>
-                              <span className="ml-2 font-bold text-primary">2.550 LEI</span>
+                              <span className="ml-2 font-bold text-primary">2.400 LEI</span>
                             </span>
                           </div>
                         </div>
