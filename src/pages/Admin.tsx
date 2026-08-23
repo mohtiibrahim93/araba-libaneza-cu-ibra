@@ -39,6 +39,8 @@ import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
 import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
+import SiteTextsAdmin from "@/components/admin/SiteTextsAdmin";
+import PagesAdmin from "@/components/admin/PagesAdmin";
 import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
@@ -568,6 +570,14 @@ const Admin = () => {
                 <FileText className="w-4 h-4" />
                 Resurse
               </TabsTrigger>
+              <TabsTrigger value="pages" className="gap-1.5 px-3 sm:px-4">
+                <FileText className="w-4 h-4" />
+                Pagini
+              </TabsTrigger>
+              <TabsTrigger value="texts" className="gap-1.5 px-3 sm:px-4">
+                <Pencil className="w-4 h-4" />
+                Texte site
+              </TabsTrigger>
               <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
                 <LineChart className="w-4 h-4" />
                 SEO
@@ -765,6 +775,14 @@ const Admin = () => {
           {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
           <TabsContent value="resources" className="mt-5">
             <ResourcesAdmin />
+          </TabsContent>
+
+          <TabsContent value="pages" className="mt-5">
+            <PagesAdmin />
+          </TabsContent>
+
+          <TabsContent value="texts" className="mt-5">
+            <SiteTextsAdmin />
           </TabsContent>
 
           <TabsContent value="seo" className="mt-5">
