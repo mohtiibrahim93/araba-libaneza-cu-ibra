@@ -43,9 +43,19 @@ interface Props {
  * vizibil, link către varianta EN și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title, metaTitle, description, crumb, lead, faq, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   const canonical = canonicalHref ? `${BASE}${canonicalHref}` : url;
+
+  // Owner-edited version of this page (admin → "Pagini"). Anything left empty
+  // falls back to the code-shipped content.
+  const override = usePageContent(`/${slug}`);
+  const title = override?.h1?.trim() || titleProp;
+  const metaTitle = override?.meta_title?.trim() || metaTitleProp;
+  const description = override?.meta_description?.trim() || descriptionProp;
+  const lead = override?.lead?.trim() || leadProp;
+  const faq = override?.faq?.length ? override.faq : faqProp;
+  const bodyMd = override?.body_md?.trim() || "";
 
   const courseJsonLd = {
     "@context": "https://schema.org",
