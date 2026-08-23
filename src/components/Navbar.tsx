@@ -104,6 +104,27 @@ const Navbar = () => {
     { href: "#contact", label: t.navContact },
   ];
 
+  // Course + resource menus. These give every important landing page at least
+  // one prominent internal link (footer-only links crawl poorly).
+  const courseMenu = [
+    { to: "/cursuri/grup", label: lang === "en" ? "Group course (A1–C2)" : "Curs de grup (A1–C2)" },
+    { to: "/cursuri/private", label: lang === "en" ? "Private lessons" : "Lecții private" },
+    { to: "/cursuri/copii", label: lang === "en" ? "Kids (6–10)" : "Copii (6–10)" },
+    { to: "/cursuri/tineri", label: lang === "en" ? "Teens (11–18)" : "Adolescenți (11–18)" },
+    { to: "/cursuri/adulti", label: lang === "en" ? "Adults" : "Adulți" },
+    { to: "/cursuri-araba-bucuresti", label: lang === "en" ? "Courses in Bucharest" : "Cursuri în București" },
+  ];
+
+  const resourceMenu = [
+    { to: "/resurse", label: lang === "en" ? "Free resources" : "Resurse gratuite" },
+    { to: "/invata-araba-gratis", label: lang === "en" ? "Learn Arabic free" : "Învață araba gratis" },
+    { to: "/arabizi", label: "Arabizi" },
+    { to: "/dialecte-arabe", label: lang === "en" ? "Arabic dialects" : "Dialectele arabe" },
+    { to: "/ce-araba-sa-inveti", label: lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți" },
+    { to: "/meditatii-araba", label: lang === "en" ? "1-on-1 tutoring" : "Meditații 1:1" },
+  ];
+
+
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <a
