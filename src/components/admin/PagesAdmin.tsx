@@ -123,7 +123,7 @@ const PagesAdmin = () => {
         reader.onerror = () => reject(new Error("Nu am putut citi fișierul"));
         reader.readAsDataURL(file);
       });
-      const data = await call({ action: "upload_blog_image", file_name: file.name, data_base64: base64 });
+      const data = await call({ action: "upload_blog_media", file_name: file.name, data_base64: base64 });
       const url = data?.url as string;
       setDraft((d) => (d ? { ...d, body_md: `${d.body_md}\n\n![${file.name}](${url})\n` } : d));
       toast({ title: "Imagine adăugată în corpul paginii" });
