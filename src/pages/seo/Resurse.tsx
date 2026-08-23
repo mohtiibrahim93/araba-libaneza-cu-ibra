@@ -86,7 +86,7 @@ const Resurse = () => (
       <li><Link to="/fara-alfabet-arab">Cum înveți fără alfabetul arab</Link>.</li>
       <li><Link to="/blog/primele-20-de-expresii-libaneze">Primele 20 de expresii libaneze</Link>.</li>
       <li><Link to="/blog/numere-in-araba-libaneza">Numerele în araba libaneză</Link>.</li>
-      <li><Link to="/blog/gramatica-araba-libaneza">Gramatica libaneză pe înțelesul tuturor</Link>.</li>
+      <li><Link to="/blog/gramatica-arabei-libaneze">Gramatica libaneză pe înțelesul tuturor</Link>.</li>
       <li><Link to="/trial">Lecția de probă gratuită</Link> — 30 min cu profesor nativ.</li>
     </ul>
   </LandingLayout>
