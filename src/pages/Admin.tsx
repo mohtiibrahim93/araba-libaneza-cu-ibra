@@ -28,6 +28,7 @@ import {
   Newspaper,
   Settings,
   LineChart,
+  FileText,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
