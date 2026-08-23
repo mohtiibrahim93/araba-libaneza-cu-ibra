@@ -106,23 +106,51 @@ const Navbar = () => {
 
   // Course + resource menus. These give every important landing page at least
   // one prominent internal link (footer-only links crawl poorly).
-  const courseMenu = [
-    { to: "/cursuri/grup", label: lang === "en" ? "Group course (A1–C2)" : "Curs de grup (A1–C2)" },
-    { to: "/cursuri/private", label: lang === "en" ? "Private lessons" : "Lecții private" },
-    { to: "/cursuri/copii", label: lang === "en" ? "Kids (6–10)" : "Copii (6–10)" },
-    { to: "/cursuri/tineri", label: lang === "en" ? "Teens (11–18)" : "Adolescenți (11–18)" },
-    { to: "/cursuri/adulti", label: lang === "en" ? "Adults" : "Adulți" },
-    { to: "/cursuri-araba-bucuresti", label: lang === "en" ? "Courses in Bucharest" : "Cursuri în București" },
-  ];
+  const courseMenu =
+    lang === "en"
+      ? [
+          { to: "/cursuri/grup", label: "Group course (A1–C2)" },
+          { to: "/cursuri/private", label: "Private lessons" },
+          { to: "/cursuri/copii", label: "Kids (6–10)" },
+          { to: "/cursuri/tineri", label: "Teens (11–18)" },
+          { to: "/cursuri/adulti", label: "Adults" },
+          { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
+          { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
+        ]
+      : [
+          { to: "/cursuri/grup", label: "Curs de grup (A1–C2)" },
+          { to: "/cursuri/private", label: "Lecții private" },
+          { to: "/cursuri/copii", label: "Copii (6–10)" },
+          { to: "/cursuri/tineri", label: "Adolescenți (11–18)" },
+          { to: "/cursuri/adulti", label: "Adulți" },
+          { to: "/cursuri-araba-bucuresti", label: "Cursuri în București" },
+          { to: "/meditatii-araba", label: "Meditații 1:1" },
+        ];
 
-  const resourceMenu = [
-    { to: "/resurse", label: lang === "en" ? "Free resources" : "Resurse gratuite" },
-    { to: "/invata-araba-gratis", label: lang === "en" ? "Learn Arabic free" : "Învață araba gratis" },
-    { to: "/arabizi", label: "Arabizi" },
-    { to: "/dialecte-arabe", label: lang === "en" ? "Arabic dialects" : "Dialectele arabe" },
-    { to: "/ce-araba-sa-inveti", label: lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți" },
-    { to: "/meditatii-araba", label: lang === "en" ? "1-on-1 tutoring" : "Meditații 1:1" },
-  ];
+  // In English the resource menu points at the English guides, so the /en/*
+  // pages get real internal links instead of living only in the sitemap.
+  const resourceMenu =
+    lang === "en"
+      ? [
+          { to: "/en/learn-lebanese-arabic", label: "Learn Lebanese Arabic" },
+          { to: "/en/how-to-learn-lebanese-arabic", label: "How to learn it" },
+          { to: "/blog/lebanese-arabic-learning-resources", label: "Free learning resources" },
+          { to: "/blog/lebanese-arabic-phrases", label: "Essential phrases" },
+          { to: "/en/arabic-dialects-guide", label: "Arabic dialects guide" },
+          { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
+          { to: "/en/levantine-arabic-dialects-map", label: "Levantine dialects map" },
+        ]
+      : [
+          { to: "/resurse", label: "Resurse gratuite" },
+          { to: "/invata-araba-gratis", label: "Învață araba gratis" },
+          { to: "/arabizi", label: "Arabizi" },
+          { to: "/fara-alfabet-arab", label: "Fără alfabet arab" },
+          { to: "/dialecte-arabe", label: "Dialectele arabe" },
+          { to: "/ce-araba-sa-inveti", label: "Ce arabă să înveți" },
+          { to: "/araba-pentru-partener", label: "Arabă pentru partener" },
+          { to: "/araba-in-familie", label: "Arabă în familie" },
+        ];
+
 
 
   return (
