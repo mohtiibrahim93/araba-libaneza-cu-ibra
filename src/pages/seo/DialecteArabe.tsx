@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "Araba libaneză e un dialect sau o limbă separată?",
-    a: "Lingvistic e un dialect levantin de nord, foarte apropiat de siriana din Damasc. Practic însă diferă suficient de araba standard încât cineva care a studiat doar fusha nu înțelege o conversație libanezăde zi cu zi.",
+    a: "Lingvistic e un dialect levantin de nord, foarte apropiat de siriana din Damasc. Practic însă diferă suficient de araba standard încât cineva care a studiat doar fusha nu înțelege o conversație libaneză de zi cu zi.",
   },
   {
     q: "Dacă învăț libaneza, mă descurc în Siria, Iordania sau Palestina?",
