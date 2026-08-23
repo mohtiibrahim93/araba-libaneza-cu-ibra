@@ -6,7 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Pencil, Plus, ExternalLink, Upload } from "lucide-react";
+import { Loader2, Trash2, Pencil, Plus, ExternalLink, Upload, Copy } from "lucide-react";
+
+const SITE_ORIGIN = "https://centruldearabalibaneza.com";
+
+/** Resource files may be stored as /file.pdf — make them absolute so the link
+ *  works when opened from the admin preview iframe. */
+const absoluteFileUrl = (url: string) =>
+  /^https?:\/\//i.test(url) ? url : `${SITE_ORIGIN}${url.startsWith("/") ? "" : "/"}${url}`;
 
 interface ResourceRow {
   slug: string;
