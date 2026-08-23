@@ -68,6 +68,13 @@ const InvataAraba = () => (
       dacă e pentru tine. <Link to="/trial">Rezervă lecția de probă</Link> sau fă{" "}
       <Link to="/quiz">testul de nivel</Link> dacă știi deja puțină arabă.
     </p>
+
+    <h2>Vrei să începi gratis?</h2>
+    <p>
+      Poți porni fără să plătești nimic: mini-lecția, PDF-urile și planul de 30 de zile sunt în{" "}
+      <Link to="/invata-araba-gratis">ghidul de învățare gratuită</Link>, iar toate materialele
+      descărcabile stau pe <Link to="/resurse">pagina de resurse</Link>.
+    </p>
   </LandingLayout>
 );
 

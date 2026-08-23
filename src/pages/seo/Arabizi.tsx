@@ -88,6 +88,12 @@ const Arabizi = () => (
 
     <ArabiziCheatSheetForm source="/arabizi" />
 
+    <p>
+      Mai vrei materiale gratuite? Ai încă două PDF-uri (100 de expresii libaneze și un plan de 30
+      de zile) pe <Link to="/resurse">pagina de resurse</Link> și un ghid complet în{" "}
+      <Link to="/invata-araba-gratis">învață araba libaneză gratis</Link>.
+    </p>
+
     <h2>Cum citești un mesaj real, cuvânt cu cuvânt</h2>
     <p className="font-semibold text-foreground">
       „mar7aba 7abibi, kifak? 3anjad ktir mnih, yalla ba3dein”
