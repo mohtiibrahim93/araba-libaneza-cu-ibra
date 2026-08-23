@@ -569,6 +569,10 @@ const Admin = () => {
                 <FileText className="w-4 h-4" />
                 Resurse
               </TabsTrigger>
+              <TabsTrigger value="pages" className="gap-1.5 px-3 sm:px-4">
+                <FileText className="w-4 h-4" />
+                Pagini
+              </TabsTrigger>
               <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
                 <LineChart className="w-4 h-4" />
                 SEO
