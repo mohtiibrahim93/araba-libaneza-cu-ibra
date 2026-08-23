@@ -277,6 +277,73 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, url: pub.publicUrl });
     }
 
+    // ============ Free resources (lead magnets) ============
+    if (action === "list_resources") {
+      const { data, error } = await supabase
+        .from("resources")
+        .select("*")
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
+    if (action === "upsert_resource") {
+      const {
+        slug: rSlug, title_ro, title_en, description_ro, description_en,
+        file_url, email_template, is_active, sort_order,
+      } = body;
+      if (typeof rSlug !== "string" || !/^[a-z0-9-]{3,120}$/.test(rSlug)) {
+        return jsonResponse({ error: "Slug invalid (litere mici, cifre, cratime)" });
+      }
+      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const order = Number(sort_order);
+      const { data, error } = await supabase
+        .from("resources")
+        .upsert({
+          slug: rSlug,
+          title_ro: str(title_ro, 200),
+          title_en: str(title_en, 200),
+          description_ro: str(description_ro, 500),
+          description_en: str(description_en, 500),
+          file_url: str(file_url, 500),
+          email_template: str(email_template, 120),
+          is_active: is_active !== false,
+          sort_order: Number.isFinite(order) ? Math.trunc(order) : 0,
+        }, { onConflict: "slug" })
+        .select()
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_resource") {
+      const { slug: rSlug } = body;
+      if (typeof rSlug !== "string" || !rSlug) return jsonResponse({ error: "Slug invalid" });
+      const { error } = await supabase.from("resources").delete().eq("slug", rSlug);
+      if (error) throw error;
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "upload_resource_file") {
+      const { file_name, data_base64 } = body;
+      if (typeof file_name !== "string" || typeof data_base64 !== "string") {
+        return jsonResponse({ error: "Fișier invalid" });
+      }
+      if (!/\.pdf$/i.test(file_name)) return jsonResponse({ error: "Doar fișiere PDF" });
+      // ~15 MB decoded cap.
+      if (data_base64.length > 21_000_000) return jsonResponse({ error: "Fișier prea mare (max ~15 MB)" });
+      const bytes = Uint8Array.from(atob(data_base64), (c) => c.charCodeAt(0));
+      const safeName = file_name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").slice(-80);
+      const path = `resurse/${Date.now()}-${safeName}`;
+      const { error } = await supabase.storage.from("blog-media").upload(path, bytes, {
+        contentType: "application/pdf",
+        upsert: false,
+      });
+      if (error) throw error;
+      const { data: pub } = supabase.storage.from("blog-media").getPublicUrl(path);
+      return jsonResponse({ success: true, url: pub.publicUrl });
+    }
+
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
       const { data, error } = await supabase
