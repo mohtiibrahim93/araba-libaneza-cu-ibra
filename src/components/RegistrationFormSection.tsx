@@ -321,7 +321,7 @@ const RegistrationFormSection = ({
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
       if (courseType === "private") {
         notesParts.push(
-          `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`,
+          `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−20% auto)" : ""}`,
         );
         // Default flow: first lesson is a free trial (handled post-submit).
         notesParts.push(`Probă gratuită: da (default)`);
@@ -339,7 +339,7 @@ const RegistrationFormSection = ({
         if (lessonType === "private") {
           notesParts.push(`Tip lecții: Private 1-la-1`);
           notesParts.push(
-            `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`,
+            `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−20% auto)" : ""}`,
           );
         }
       }

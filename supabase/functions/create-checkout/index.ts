@@ -95,7 +95,7 @@ serve(async (req) => {
     // Group/private amounts come from the server-side price table keyed by
     // the level + format on the registration row — the old fixed Stripe
     // price ID charged every group level the A1 rate. Same discount rules
-    // as create-payment-intent (-10% at 3+ months, -15% at 20+ lessons).
+    // as create-payment-intent (-10% at 3+ months, -20% at 20+ lessons).
     let lineItems;
     if (courseType === "kids_deposit") {
       lineItems = [{
@@ -116,7 +116,7 @@ serve(async (req) => {
         : privateLessonUnitAmount();
       const discountRate =
         courseType === "private" && quantity >= 20
-          ? 0.85
+          ? 0.8
           : courseType === "group" && quantity >= 3
             ? 0.9
             : 1;

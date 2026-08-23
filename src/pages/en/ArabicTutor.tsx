@@ -25,7 +25,7 @@ const FAQ = [
   },
   {
     q: "How much does 1-on-1 tutoring cost?",
-    a: "150 LEI per 90-minute lesson (~€30), with a 15% discount on packages of 20+ lessons. The first 30-minute trial lesson is free. No subscription, no lock-in.",
+    a: "150 LEI per 60-minute lesson (~€30), with automatic package discounts: 5% from 5 lessons, 10% from 10 and 20% from 20. The first 30-minute trial lesson is free. No subscription, no lock-in.",
   },
   {
     q: "What is your cancellation and rescheduling policy?",
@@ -109,9 +109,10 @@ const ArabicTutor = () => (
 
     <h2>Pricing</h2>
     <ul>
-      <li><strong>Single lesson:</strong> 150 LEI / 90 min (~€30)</li>
-      <li><strong>Package of 10:</strong> 1,425 LEI (5% off)</li>
-      <li><strong>Package of 20:</strong> 2,550 LEI (15% off)</li>
+      <li><strong>Single lesson:</strong> 150 LEI / 60 min (~€30)</li>
+      <li><strong>Package of 5:</strong> 712 LEI (5% off)</li>
+      <li><strong>Package of 10:</strong> 1,350 LEI (10% off)</li>
+      <li><strong>Package of 20:</strong> 2,400 LEI (20% off)</li>
       <li><strong>Trial lesson:</strong> free, 30 min</li>
     </ul>
 
