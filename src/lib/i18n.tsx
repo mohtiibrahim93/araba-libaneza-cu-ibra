@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { useSiteTexts } from "@/hooks/useSiteTexts";
 
 type Lang = "ro" | "en";
 
@@ -1926,10 +1927,24 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  const value = useMemo<I18nContextType>(
-    () => ({ lang, t: translations[lang], toggle, setLang }),
-    [lang, toggle, setLang],
-  );
+  // Owner-edited overrides from the admin CMS ("Texte site"). Only keys that
+  // exist in the code dictionary are applied, so a stale row can't add junk.
+  const overrides = useSiteTexts();
+
+  const value = useMemo<I18nContextType>(() => {
+    const base = translations[lang];
+    let t = base as Translations;
+    if (overrides.length) {
+      const merged: Record<string, string> = { ...base };
+      for (const row of overrides) {
+        if (!(row.key in base)) continue;
+        const v = lang === "ro" ? row.value_ro : row.value_en;
+        if (typeof v === "string" && v.trim()) merged[row.key] = v;
+      }
+      t = merged as Translations;
+    }
+    return { lang, t, toggle, setLang };
+  }, [lang, toggle, setLang, overrides]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
