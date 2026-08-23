@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
     // so the flow keeps working even if the table is empty/unreachable.
     const { data: row } = await supabase
       .from("resources")
-      .select("slug, email_template, is_active")
+      .select("slug, email_template, is_active, file_url")
       .eq("slug", requested)
       .maybeSingle();
 
@@ -92,7 +92,15 @@ Deno.serve(async (req) => {
         templateName: template,
         recipientEmail: cleanEmail,
         idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 16)}`,
-        templateData: { name: cleanName || undefined },
+        templateData: {
+          name: cleanName || undefined,
+          // Admin-editable file: prefer the current URL so replaced PDFs are
+          // reflected in the email. Falls back to the template default.
+          downloadUrl:
+            row?.is_active && typeof row.file_url === "string" && /^https?:\/\//.test(row.file_url)
+              ? row.file_url
+              : undefined,
+        },
       },
     });
     if (error) {
