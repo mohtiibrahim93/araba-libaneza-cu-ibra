@@ -150,14 +150,36 @@ const Navbar = () => {
           <BrandLogo />
         </a>
 
-        <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
-          <Link
-            to="/cursuri"
-            onClick={() => setOpen(false)}
-            className="hover:text-foreground transition-colors"
-          >
-            {t.navCourses}
-          </Link>
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground font-medium">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+              {t.navCourses}
+              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              <DropdownMenuItem asChild>
+                <Link to="/cursuri">{lang === "en" ? "All courses" : "Toate cursurile"}</Link>
+              </DropdownMenuItem>
+              {courseMenu.map((item) => (
+                <DropdownMenuItem key={item.to} asChild>
+                  <Link to={item.to}>{item.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+              {lang === "en" ? "Resources" : "Resurse"}
+              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              {resourceMenu.map((item) => (
+                <DropdownMenuItem key={item.to} asChild>
+                  <Link to={item.to}>{item.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link
             to="/booking"
             onClick={() => setOpen(false)}
@@ -173,6 +195,7 @@ const Navbar = () => {
           >
             {t.navBlog}
           </Link>
+
           {links.map((l) => (
             <a
               key={l.href}
