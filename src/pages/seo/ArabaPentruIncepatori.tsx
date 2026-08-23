@@ -77,7 +77,9 @@ const ArabaPentruIncepatori = () => (
       <Link to="/arabizi">ghidul Arabizi</Link> și cu{" "}
       <Link to="/fara-alfabet-arab">varianta fără alfabet arab</Link>.
       Ghidul complet pentru început de drum e în{" "}
-      <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză în 2026</Link>.
+      <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză în 2026</Link>, iar
+      materialele gratuite (100 de expresii, plan de 30 de zile) sunt pe{" "}
+      <Link to="/invata-araba-gratis">pagina de învățare gratuită</Link>.
     </p>
   </LandingLayout>
 );

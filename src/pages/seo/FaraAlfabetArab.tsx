@@ -62,6 +62,12 @@ const FaraAlfabetArab = () => (
 
     <ArabiziCheatSheetForm source="/fara-alfabet-arab" />
 
+    <p>
+      Restul materialelor gratuite — 100 de expresii esențiale și planul de 30 de zile — sunt pe{" "}
+      <Link to="/resurse">pagina de resurse</Link>, iar drumul complet fără costuri e în{" "}
+      <Link to="/invata-araba-gratis">învață araba libaneză gratis</Link>.
+    </p>
+
     <h2>Metoda Oral First, pe scurt</h2>
     <ul>
       <li><strong>Asculți întâi.</strong> Fiecare structură nouă intră prin ureche, în context, nu ca regulă scrisă pe tablă.</li>

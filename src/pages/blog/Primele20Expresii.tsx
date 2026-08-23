@@ -130,6 +130,10 @@ const Primele20Expresii = () => {
           <Link to="/arabizi">{en ? "full Arabizi guide" : "ghidul complet Arabizi"}</Link>.
         </li>
         <li>
+          {en ? "Want all 100 phrases as a free PDF? Get them from the " : "Vrei toate cele 100 de expresii în PDF gratuit? Le iei de pe "}
+          <Link to="/resurse">{en ? "free resources page" : "pagina de resurse gratuite"}</Link>.
+        </li>
+        <li>
           {en ? "Not sure where to start? Take the " : "Nu știi de unde pornești? Fă "}
           <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>.
         </li>

@@ -120,6 +120,10 @@ const NumereInLibaneza = () => {
         {en ? " you practise them with a native teacher, and you can continue with the " : " le exersezi cu un profesor nativ, iar apoi poți continua cu "}
         <Link to="/blog/primele-20-de-expresii-libaneze">{en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}</Link>.
       </p>
+      <p>
+        {en ? "All our free PDFs — phrasebook, arabizi cheat-sheet and a 30-day plan — are on the " : "Toate PDF-urile noastre gratuite — expresii, cheat-sheet arabizi și planul de 30 de zile — sunt pe "}
+        <Link to="/resurse">{en ? "resources page" : "pagina de resurse"}</Link>.
+      </p>
     </BlogArticleLayout>
   );
 };

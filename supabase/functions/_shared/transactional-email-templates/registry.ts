@@ -21,6 +21,8 @@ import { template as trialFollowup } from './trial-followup.tsx'
 import { template as adminNewRegistration } from './admin-new-registration.tsx'
 import { template as gdprErasureRequest } from './gdpr-erasure-request.tsx'
 import { template as arabiziCheatSheet } from './arabizi-cheat-sheet.tsx'
+import { template as expresiiLibaneze } from './expresii-libaneze.tsx'
+import { template as plan30Zile } from './plan-30-zile.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
@@ -35,4 +37,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'admin-new-registration': adminNewRegistration,
   'gdpr-erasure-request': gdprErasureRequest,
   'arabizi-cheat-sheet': arabiziCheatSheet,
+  'expresii-libaneze': expresiiLibaneze,
+  'plan-30-zile': plan30Zile,
 }
