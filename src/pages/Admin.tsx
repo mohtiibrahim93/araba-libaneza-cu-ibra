@@ -37,6 +37,7 @@ import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
+import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
 import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
@@ -562,6 +563,10 @@ const Admin = () => {
                 <Newspaper className="w-4 h-4" />
                 Blog
               </TabsTrigger>
+              <TabsTrigger value="resources" className="gap-1.5 px-3 sm:px-4">
+                <FileText className="w-4 h-4" />
+                Resurse
+              </TabsTrigger>
               <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
                 <LineChart className="w-4 h-4" />
                 SEO
@@ -757,6 +762,10 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
+          <TabsContent value="resources" className="mt-5">
+            <ResourcesAdmin />
+          </TabsContent>
+
           <TabsContent value="seo" className="mt-5">
             <BacklinksAdmin />
           </TabsContent>
