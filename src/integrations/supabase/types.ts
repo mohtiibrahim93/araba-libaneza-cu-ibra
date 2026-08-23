@@ -1050,6 +1050,48 @@ export type Database = {
         }
         Relationships: []
       }
+      resources: {
+        Row: {
+          created_at: string
+          description_en: string
+          description_ro: string
+          email_template: string
+          file_url: string
+          is_active: boolean
+          slug: string
+          sort_order: number
+          title_en: string
+          title_ro: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description_en?: string
+          description_ro?: string
+          email_template?: string
+          file_url?: string
+          is_active?: boolean
+          slug: string
+          sort_order?: number
+          title_en?: string
+          title_ro?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description_en?: string
+          description_ro?: string
+          email_template?: string
+          file_url?: string
+          is_active?: boolean
+          slug?: string
+          sort_order?: number
+          title_en?: string
+          title_ro?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       stripe_events: {
         Row: {
           id: string
