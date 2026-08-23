@@ -87,7 +87,7 @@ Fiecare nivel durează un număr fix de luni (A1 patru luni, A2 șapte luni etc.
 
 ## Lecții private (1:1)
 
-Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție** (90 de minute), în orice format — online sau fizic. La pachetele de **20 de lecții sau mai multe primești 15% reducere**. Detalii pe pagina de [lecții private](/cursuri/private).
+Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție** (60 de minute), în orice format — online sau fizic. Reduceri automate la pachet: **−5% de la 5 lecții, −10% de la 10 și −20% de la 20**. Detalii pe pagina de [lecții private](/cursuri/private).
 
 ## Curs pentru copii (6–10 ani)
 
@@ -113,7 +113,7 @@ Each level lasts a fixed number of months (A1 four months, A2 seven, etc.), so y
 
 ## Private lessons (1:1)
 
-If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson** (90 minutes), in any format — online or in person. Packs of **20 lessons or more get 15% off**. Details on the [private lessons](/cursuri/private) page.
+If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson** (60 minutes), in any format — online or in person. Automatic package discounts: **−5% from 5 lessons, −10% from 10 and −20% from 20**. Details on the [private lessons](/cursuri/private) page.
 
 ## Kids course (ages 6–10)
 

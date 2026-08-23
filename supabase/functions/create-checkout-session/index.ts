@@ -225,7 +225,7 @@ serve(async (req) => {
             : Math.round(
                 privateLessonUnitAmount() *
                   quantity *
-                  (quantity >= 20 ? 0.85 : 1),
+                  (quantity >= 20 ? 0.8 : 1),
               );
       const productName = isPrivate
         ? "Lecții private Arabă Libaneză"

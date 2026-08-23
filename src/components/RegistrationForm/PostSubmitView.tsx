@@ -195,8 +195,8 @@ const PostSubmitView = ({
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 {lang === "ro"
-                  ? "Plătește lecțiile direct — 150 lei/lecție, −15% la pachete de 20+."
-                  : "Pay for your lessons directly — 150 lei/lesson, −15% for packs of 20+."}
+                  ? "Plătește lecțiile direct — 150 lei/lecție, −20% la pachete de 20+."
+                  : "Pay for your lessons directly — 150 lei/lesson, −20% for packs of 20+."}
               </p>
               <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
                 {lang === "ro" ? "Plătește lecțiile" : "Pay for lessons"}

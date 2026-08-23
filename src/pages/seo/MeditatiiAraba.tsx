@@ -4,7 +4,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Cât costă o meditație de arabă?",
-    a: "150 lei/lecție (90 min) pentru meditații 1:1, cu 15% reducere la pachete de 20+ lecții. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
+    a: "150 lei/lecție (60 min) pentru meditații 1:1, cu reduceri automate la pachet: −5% de la 5 lecții, −10% de la 10 și −20% de la 20. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
   },
   {
     q: "Meditațiile sunt fizic sau online?",
@@ -47,17 +47,18 @@ const MeditatiiAraba = () => (
 
     <h2>Cum arată o meditație tipică</h2>
     <p>
-      90 de minute, structurat: 10 min recap, 30 min material nou (vocabular + gramatică prin
-      exemple), 30–40 min conversație aplicată, 10 min feedback + temă. Fără prelegeri lungi —
+      60 de minute, structurat: 5 min recap, 20 min material nou (vocabular + gramatică prin
+      exemple), 25–30 min conversație aplicată, 5 min feedback + temă. Fără prelegeri lungi —
       vorbești tu, în arabă libaneză, din prima lecție. Metoda o descriem pe larg în{" "}
       <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză</Link>.
     </p>
 
     <h2>Prețuri și pachete</h2>
     <ul>
-      <li><strong>Lecție individuală:</strong> 150 lei / 90 min</li>
-      <li><strong>Pachet 10 lecții:</strong> 1.425 lei (5% reducere)</li>
-      <li><strong>Pachet 20 lecții:</strong> 2.550 lei (15% reducere)</li>
+      <li><strong>Lecție individuală:</strong> 150 lei / 60 min</li>
+      <li><strong>Pachet 5 lecții:</strong> 712 lei (5% reducere)</li>
+      <li><strong>Pachet 10 lecții:</strong> 1.350 lei (10% reducere)</li>
+      <li><strong>Pachet 20 lecții:</strong> 2.400 lei (20% reducere)</li>
       <li><strong>Prima lecție de probă:</strong> gratuită, 30 min</li>
     </ul>
     <p>

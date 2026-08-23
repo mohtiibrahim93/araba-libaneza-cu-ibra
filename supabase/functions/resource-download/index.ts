@@ -35,23 +35,38 @@ Deno.serve(async (req) => {
     if (consent !== true) {
       return json({ error: "Este nevoie de acordul pentru prelucrarea datelor." }, 400);
     }
-    const key = typeof resource === "string" && resource in RESOURCES
-      ? resource
-      : "arabizi-cheat-sheet";
+    const requested = typeof resource === "string" ? resource.trim() : "";
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    // Resources are admin-editable rows; the hardcoded map stays as a fallback
+    // so the flow keeps working even if the table is empty/unreachable.
+    const { data: row } = await supabase
+      .from("resources")
+      .select("slug, email_template, is_active")
+      .eq("slug", requested)
+      .maybeSingle();
+
+    const key = row?.is_active
+      ? row.slug
+      : requested in RESOURCES
+        ? requested
+        : "arabizi-cheat-sheet";
+    const template = row?.is_active && row.email_template
+      ? row.email_template
+      : RESOURCES[key]?.template ?? RESOURCES["arabizi-cheat-sheet"].template;
+
     const ip = getClientIp(req) || "unknown";
     // Limits are per resource so that requesting several different PDFs
     // (the normal flow on /invata-araba-gratis) never trips the limiter.
-    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 30, 3600);
+    const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 120, 3600);
     const emailOk = await checkRateLimit(
       supabase,
       `resource:email:${cleanEmail}:${key}`,
-      5,
+      20,
       86400,
     );
     if (!ipOk || !emailOk) {
@@ -74,9 +89,9 @@ Deno.serve(async (req) => {
     const { error } = await supabase.functions.invoke("send-transactional-email", {
       headers: { Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
       body: {
-        templateName: RESOURCES[key].template,
+        templateName: template,
         recipientEmail: cleanEmail,
-        idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 10)}`,
+        idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 16)}`,
         templateData: { name: cleanName || undefined },
       },
     });

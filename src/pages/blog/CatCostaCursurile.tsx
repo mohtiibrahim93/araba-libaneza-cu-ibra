@@ -59,8 +59,8 @@ const CatCostaCursurile = () => {
           ? "If you want a personalized pace or a flexible schedule, private lessons cost "
           : "Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă "}
         <strong>{en ? "150 lei / lesson" : "150 lei / lecție"}</strong>
-        {en ? " (90 minutes), in any format — online or in person. Packs of " : " (90 de minute), în orice format — online sau fizic. La pachetele de "}
-        <strong>{en ? "20 lessons or more get 15% off" : "20 de lecții sau mai multe primești 15% reducere"}</strong>
+        {en ? " (60 minutes), in any format — online or in person. Packs of " : " (60 de minute), în orice format — online sau fizic. La pachetele de "}
+        <strong>{en ? "20 lessons or more get 20% off" : "20 de lecții sau mai multe primești 20% reducere"}</strong>
         {en ? ". Details on the " : ". Detalii pe pagina de "}
         <Link to="/cursuri/private">{en ? "private lessons" : "lecții private"}</Link>{en ? " page." : "."}
       </p>
