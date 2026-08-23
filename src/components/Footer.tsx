@@ -40,7 +40,7 @@ const Footer = () => {
             <li><Link to="/meditatii-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "1-on-1 tutoring" : "Meditații arabă 1:1"}</Link></li>
             <li><Link to="/cursuri-araba-bucuresti" className="hover:text-foreground transition-colors">{lang === "en" ? "Courses in Bucharest" : "Cursuri arabă București"}</Link></li>
             <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
-            <li><Link to="/cursuri-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
+            <li><Link to="/cursuri-limba-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
             <li><Link to="/araba-pentru-incepatori" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for beginners" : "Arabă pentru începători"}</Link></li>
             <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
             <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
