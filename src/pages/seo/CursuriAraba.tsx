@@ -27,10 +27,9 @@ const FAQ = [
 const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-araba"
-    canonicalHref="/cursuri-limba-araba"
-    title="Cursuri de arabă libaneză cu profesor nativ — grup, private și pentru copii"
-    metaTitle="Cursuri de Arabă Libaneză 2026 — Grup, Private & Copii | București"
-    description="Cursuri de arabă libaneză cu profesor nativ: grup A1–C2, lecții private 1:1 și curs pentru copii — fizic în București sau online. Prima probă gratuită."
+    title="Cursuri de arabă libaneză în București și online — toate nivelurile"
+    metaTitle="Cursuri de Arabă Libaneză în București și Online | Grup, Private, Copii"
+    description="Cursuri de arabă libaneză cu profesor nativ în București și online: grup A1–C2, lecții private 1:1 și curs pentru copii. De la 500 lei/lună, prima probă gratuită."
     crumb="Cursuri de arabă libaneză"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}
@@ -52,18 +51,13 @@ const CursuriAraba = () => (
       </li>
       <li>
         <strong><Link to="/cursuri/private">Lecții private 1:1</Link></strong> — ritm personalizat și
-        program flexibil, 150 lei/lecție (90 min), fizic sau online.
+        program flexibil, 150 lei/lecție (60 min), fizic sau online.
       </li>
       <li>
         <strong><Link to="/cursuri/copii">Curs pentru copii (6–10 ani)</Link></strong> — învățare
         prin joc, cântece și povești, fizic în București.
       </li>
     </ul>
-    <p>
-      Nu știi de unde să începi? <Link to="/quiz">Testul de nivel gratuit</Link> îți recomandă
-      cursul potrivit în 2 minute, iar <Link to="/blog/cat-costa-cursurile-de-araba-libaneza">aici
-      găsești toate prețurile explicate</Link>.
-    </p>
 
     <h2>De ce arabă libaneză, nu arabă standard?</h2>
     <p>
@@ -90,6 +84,13 @@ const CursuriAraba = () => (
       Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> — alegi limba în care
       te simți cel mai confortabil, iar explicațiile se ajustează după tine. Lecțiile nu se țin în
       germană sau alte limbi.
+    </p>
+
+    <h2>Cursuri de arabă în București vs online</h2>
+    <p>
+      Fizic, la Raduga Creative Center (Strada Icoanei 80, sector 2), ai energia grupei și feedbackul
+      direct. Online, pe Zoom, ai flexibilitate și acces de oriunde. Ambele formate folosesc același
+      profesor nativ și aceeași metodă. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau <Link to="/araba-online">cursurile de arabă online</Link> pentru detalii despre fiecare format.
     </p>
   </LandingLayout>
 );
