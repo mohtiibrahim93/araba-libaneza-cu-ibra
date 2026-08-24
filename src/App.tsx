@@ -83,6 +83,10 @@ const SeoDialecteArabe = lazy(() => import("./pages/seo/DialecteArabe"));
 const SeoCeArabaSaInveti = lazy(() => import("./pages/seo/CeArabaSaInveti"));
 const SeoArabaPentruPartener = lazy(() => import("./pages/seo/ArabaPentruPartener"));
 const SeoArabaInFamilie = lazy(() => import("./pages/seo/ArabaInFamilie"));
+const SeoCelMaiBunCursAraba = lazy(() => import("./pages/seo/CelMaiBunCursAraba"));
+const SeoCursuriArabaAdolescenti = lazy(() => import("./pages/seo/CursuriArabaAdolescenti"));
+const BestArabicCourse = lazy(() => import("./pages/en/BestArabicCourse"));
+const ArabicForTeenagers = lazy(() => import("./pages/en/ArabicForTeenagers"));
 
 const queryClient = new QueryClient();
 
@@ -180,6 +184,10 @@ const App = () => (
             <Route path="/ce-araba-sa-inveti" element={<SeoCeArabaSaInveti />} />
             <Route path="/araba-pentru-partener" element={<SeoArabaPentruPartener />} />
             <Route path="/araba-in-familie" element={<SeoArabaInFamilie />} />
+            <Route path="/cel-mai-bun-curs-de-araba" element={<SeoCelMaiBunCursAraba />} />
+            <Route path="/cursuri-araba-adolescenti" element={<SeoCursuriArabaAdolescenti />} />
+            <Route path="/en/best-arabic-course" element={<BestArabicCourse />} />
+            <Route path="/en/arabic-for-teenagers" element={<ArabicForTeenagers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
