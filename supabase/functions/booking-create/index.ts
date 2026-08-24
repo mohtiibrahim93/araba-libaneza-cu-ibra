@@ -6,7 +6,7 @@ import {
   gcalFreebusy,
   overlaps,
 } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
@@ -240,6 +240,23 @@ Deno.serve(async (req) => {
       },
       `booking-confirm-${inserted.id}`,
     );
+
+    // Admin notification (best-effort)
+    sendAdminBookingEmail(
+      "new",
+      {
+        eventName: et.name_ro,
+        studentName: body.student_name,
+        studentEmail: body.student_email,
+        studentPhone: body.student_phone ?? null,
+        format: format === "online" ? "online" : "fizic",
+        whenLabel: fmtLocal(startISO, language),
+        notes: body.notes ?? null,
+      },
+      `admin-booking-new-${inserted.id}`,
+    );
+
+
 
     return json({
       ok: true,
