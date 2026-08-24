@@ -10,12 +10,12 @@ const LimbileVorbiteInLiban = () => {
     <BlogArticleLayout
       slug="limbile-vorbite-in-liban"
       title={{
-        ro: "Limbile vorbite în Liban: arabă libaneză, MSA, franceză și engleză",
-        en: "Languages of Lebanon: Lebanese Arabic, MSA, French and English",
+        ro: "Limbile vorbite în Liban: ghid complet (arabă libaneză, MSA, franceză, engleză)",
+        en: "Languages of Lebanon: complete guide (Lebanese Arabic, MSA, French, English)",
       }}
       description={{
-        ro: "Ghid complet despre limbile din Liban — araba libaneză (dialectul zilnic), araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.",
-        en: "A complete guide to the languages of Lebanon — Lebanese Arabic (the everyday dialect), Modern Standard Arabic, French and English. Who speaks what, and why Lebanese Arabic is the key.",
+        ro: "Ce limbă se vorbește în Liban: arabă libaneză, araba standard (MSA), franceză și engleză. Cine le folosește, de ce libaneza e cheia și ce dialect merită să înveți.",
+        en: "What languages are spoken in Lebanon: Lebanese Arabic, MSA, French and English. Who uses each, why Lebanese Arabic is the key, and which dialect to learn.",
       }}
       published="2026-07-24"
       readingMinutes={7}
