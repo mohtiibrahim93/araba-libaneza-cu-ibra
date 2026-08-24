@@ -84,12 +84,6 @@ const CursuriLimbaAraba = () => (
       <Link to="/quiz">Testul de nivel gratuit</Link> îți recomandă cursul potrivit în 2 minute.
     </p>
 
-    <h2>De unde începi</h2>
-    <p>
-      Nu ești sigur ce nivel ai? <Link to="/quiz">Testul de nivel gratuit</Link> îți recomandă
-      cursul potrivit în 2 minute. Sau începi direct cu o{" "}
-      <Link to="/trial">lecție de probă gratuită de 30 min</Link>, fără nicio obligație.
-    </p>
 
     <h2>De ce cu profesor nativ</h2>
     <p>
