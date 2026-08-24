@@ -167,6 +167,7 @@ const PageContent = () => {
         <ProgramsSection />
         <WhySection />
         <CulturalValueSection />
+        <ResourcesTeaser />
         <TestimonialsSection />
         <InstructorSection />
         <FAQSection />
