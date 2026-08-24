@@ -25,8 +25,8 @@ const MeditatiiAraba = () => (
     slug="meditatii-araba"
     enHref="/en/arabic-tutor"
     title="Meditații de arabă libaneză 1:1 — București și online"
-    metaTitle="Meditații Arabă Libaneză în București și Online | 150 lei/lecție"
-    description="Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București (Strada Icoanei 80) sau online pe Zoom. 150 lei/lecție, pachete cu până la −20%, prima lecție gratuită."
+    metaTitle="Meditații Arabă Libaneză (Levantină) — București & Online | 150 lei"
+    description="Meditații de arabă libaneză (dialect levantin) 1:1 cu profesor nativ libanez, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită."
     crumb="Meditații arabă libaneză"
     lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil, preț transparent."
     faq={FAQ}
@@ -92,6 +92,69 @@ const MeditatiiAraba = () => (
       exemple), 25–30 min conversație aplicată, 5 min feedback + temă. Fără prelegeri lungi —
       vorbești tu, în arabă libaneză, din prima lecție. Metoda o descriem pe larg în{" "}
       <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză</Link>.
+    </p>
+
+    <h2>Meditații de arabă în București — unde și când</h2>
+    <p>
+      Dacă cauți <strong>meditații de arabă în București</strong>, lecțiile fizice au loc la Raduga
+      Creative Center, Strada Icoanei 80 (sector 2), la 5 minute de Piața Rosetti și aproape de
+      Universitate și Piața Romană. Orarul se stabilește împreună: dimineața (09:00–12:00), la prânz
+      sau seara (18:00–21:00), inclusiv sâmbătă. Dacă stai în alt sector sau în alt oraș, varianta
+      online pe Zoom are exact același conținut și preț.
+    </p>
+
+    <h2>Ce dialect înveți la meditații: libaneză (levantină), nu arabă standard</h2>
+    <p>
+      Meditațiile sunt de <strong>arabă libaneză</strong>, parte din familia dialectelor{" "}
+      <strong>levantine</strong> (Liban, Siria, Iordania, Palestina) — limba pe care oamenii o
+      vorbesc de fapt acasă, în vacanță, în muzică și pe rețelele sociale. Araba standard (MSA /
+      Fusha) o adăugăm doar dacă ai nevoie de citit, examene sau scriere formală. Diferența,
+      explicată cu exemple, e în{" "}
+      <Link to="/blog/araba-libaneza-vs-araba-standard">araba libaneză vs araba standard</Link> și în{" "}
+      <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
+    </p>
+
+    <h2>Cât de repede progresezi cu meditații 1:1</h2>
+    <div className="overflow-x-auto not-prose">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-border text-left text-muted-foreground">
+            <th className="py-2 pr-3 font-semibold">După</th>
+            <th className="py-2 px-3 font-semibold">Ce poți face</th>
+            <th className="py-2 pl-3 font-semibold">Ritm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">4 lecții</td>
+            <td className="py-2 px-3">Salut, prezentare, întrebări simple, numere</td>
+            <td className="py-2 pl-3">2 lecții/săpt.</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">10 lecții</td>
+            <td className="py-2 px-3">Conversație de bază: cafenea, taxi, cumpărături, familie</td>
+            <td className="py-2 pl-3">2 lecții/săpt.</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">20 lecții</td>
+            <td className="py-2 px-3">Conversații pe teme largi, înțelegi vorbirea naturală lentă</td>
+            <td className="py-2 pl-3">2 lecții/săpt.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Estimările sunt pentru cursanți care fac și 10–15 minute de recapitulare între lecții. Detalii
+      în <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">cât durează să înveți araba libaneză</Link>.
+    </p>
+
+    <h2>Meditații sau curs de grup?</h2>
+    <p>
+      Dacă vrei cost mai mic și conversație cu colegi, un{" "}
+      <Link to="/cursuri/grup">curs de grup A1–C2</Link> (de la 500 lei/lună) e mai potrivit.
+      Comparația completă a formatelor e în{" "}
+      <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>. Pentru
+      adolescenți 11–17 ani avem <Link to="/cursuri-araba-adolescenti">grupe dedicate</Link>.
     </p>
 
     <h2>Meditații fizic în București sau online pe Zoom</h2>

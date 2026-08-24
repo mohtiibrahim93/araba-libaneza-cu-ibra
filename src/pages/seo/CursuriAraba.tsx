@@ -28,8 +28,8 @@ const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-araba"
     title="Cursuri de arabă libaneză în București și online — toate nivelurile"
-    metaTitle="Cursuri de Arabă Libaneză în București și Online | Grup, Private, Copii"
-    description="Cursuri de arabă libaneză cu profesor nativ în București și online: grup A1–C2, lecții private 1:1 și curs pentru copii. De la 500 lei/lună, prima probă gratuită."
+    metaTitle="Cursuri de Arabă Libaneză (Levantină) — București & Online | A1–C2"
+    description="Cursuri de arabă libaneză (dialect levantin) cu profesor nativ, în București și online: grupe A1–C2, lecții private 1:1, copii și adolescenți. De la 500 lei/lună, probă gratuită."
     crumb="Cursuri de arabă libaneză"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}
@@ -92,7 +92,33 @@ const CursuriAraba = () => (
       direct. Online, pe Zoom, ai flexibilitate și acces de oriunde. Ambele formate folosesc același
       profesor nativ și aceeași metodă. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau <Link to="/araba-online">cursurile de arabă online</Link> pentru detalii despre fiecare format.
     </p>
+
+    <h2>Ce înseamnă „arabă levantină” și de ce contează</h2>
+    <p>
+      Araba libaneză face parte din grupul dialectelor <strong>levantine</strong> (numit și{" "}
+      <em>shami</em>), vorbite în Liban, Siria, Iordania și Palestina. Cine învață libaneză înțelege
+      și vorbește practic cu vorbitori din toate aceste țări — un avantaj real față de alte dialecte.
+      Harta și diferențele sunt explicate în{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link> și în{" "}
+      <Link to="/blog/limbile-vorbite-in-liban">limbile vorbite în Liban</Link>.
+    </p>
+
+    <h2>Cursuri de arabă pe vârste</h2>
+    <ul>
+      <li><strong><Link to="/curs-araba-copii">Copii 6–10 ani</Link></strong> — prin joc, cântece și povești, fizic în București.</li>
+      <li><strong><Link to="/cursuri-araba-adolescenti">Adolescenți 11–17 ani</Link></strong> — conversație, muzică și limbaj de social media, fizic sau online.</li>
+      <li><strong><Link to="/cursuri/grup">Adulți A1–C2</Link></strong> — grupe mici pe niveluri, fizic sau online.</li>
+    </ul>
+
+    <h2>Nu știi ce format ți se potrivește?</h2>
+    <p>
+      Am scris un ghid de comparație onest — dialect vs arabă standard, grup vs privat vs aplicații,
+      cu prețuri și criterii clare:{" "}
+      <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>. Sau începi
+      direct cu <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>.
+    </p>
   </LandingLayout>
+
 );
 
 export default CursuriAraba;

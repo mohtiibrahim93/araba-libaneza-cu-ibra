@@ -21,9 +21,9 @@ const CumSalutiInLibaneza = () => {
   return (
     <BlogArticleLayout
       slug="cum-saluti-in-libaneza"
-      title={{ ro: "Cum saluți în libaneză: ghid complet de politețe", en: "How to greet in Lebanese: a complete politeness guide" }}
+      title={{ ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye", en: "How to greet in Lebanese Arabic: mar7aba, kifak, yalla bye" }}
       description={{
-        ro: "Toate formulele de salut în araba libaneză: bună dimineața, ce faci, bine ai venit, pa — cu pronunție în arabizi, scriere arabă și când folosești fiecare.",
+        ro: "Toate formulele de salut în arabă libaneză (levantină): bună dimineața, ce faci, bine ai venit, pa — cu pronunție, grafie arabă și când se folosește fiecare.",
         en: "All the greetings in Lebanese Arabic: good morning, how are you, welcome, bye — with Arabizi pronunciation, Arabic script and when to use each.",
       }}
       published="2026-07-16"

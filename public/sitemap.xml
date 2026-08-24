@@ -136,6 +136,26 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/cel-mai-bun-curs-de-araba</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/cursuri-araba-adolescenti</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/best-arabic-course</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/arabic-for-teenagers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <!-- Free resources & method -->
   <url>
     <loc>https://centruldearabalibaneza.com/resurse</loc>
