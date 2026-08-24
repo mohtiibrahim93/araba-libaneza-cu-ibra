@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Grouped by section. Canonicalised duplicates (/cursuri-araba, /cursuri/privat)
-     are intentionally excluded. No <lastmod>: we have no per-page change timestamps. -->
+<!-- Grouped by section. Canonicalised duplicates (/cursuri/privat) and private/
+     transactional routes are intentionally excluded. No <lastmod>: we have no
+     per-page change timestamps. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage & conversion -->
   <url>
@@ -87,6 +88,11 @@
   <!-- Romanian SEO landings -->
   <url>
     <loc>https://centruldearabalibaneza.com/cursuri-limba-araba</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/cursuri-araba</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
