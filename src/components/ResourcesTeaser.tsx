@@ -8,7 +8,7 @@ const ResourcesTeaser = () => {
 
   const resources = [
     {
-      to: isEn ? "/en/blog/arabic-alphabet-for-beginners" : "/blog/alfabetul-arab-pentru-incepatori",
+      to: "/blog/alfabetul-arab-pentru-incepatori",
       icon: BookOpen,
       title: isEn ? "Arabic alphabet for beginners" : "Alfabetul arab pentru începători",
       desc: isEn
@@ -16,7 +16,7 @@ const ResourcesTeaser = () => {
         : "Cele 28 de litere, pronunție și sensul de scriere. Cu tabel complet.",
     },
     {
-      to: isEn ? "/en/blog/lebanese-arabic-phrases" : "/blog/lebanese-arabic-phrases",
+      to: "/blog/lebanese-arabic-phrases",
       icon: MessageCircle,
       title: isEn ? "35+ Lebanese Arabic phrases" : "35+ expresii în araba libaneză",
       desc: isEn
@@ -24,7 +24,7 @@ const ResourcesTeaser = () => {
         : "Expresii zilnice: salut, restaurant, taxi, familie — cu PDF gratuit.",
     },
     {
-      to: isEn ? "/en/blog/languages-of-lebanon" : "/blog/limbile-vorbite-in-liban",
+      to: "/blog/limbile-vorbite-in-liban",
       icon: Languages,
       title: isEn ? "Languages of Lebanon" : "Limbile vorbite în Liban",
       desc: isEn
@@ -71,7 +71,7 @@ const ResourcesTeaser = () => {
 
         <div className="mt-10 text-center">
           <Link
-            to={isEn ? "/en/blog" : "/blog"}
+            to="/blog"
             className="inline-flex items-center justify-center rounded-full border border-primary text-primary px-6 py-2.5 text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             {isEn ? "Browse all resources" : "Vezi toate resursele"}
