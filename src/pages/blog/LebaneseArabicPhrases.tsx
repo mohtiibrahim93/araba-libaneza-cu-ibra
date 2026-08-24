@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import ResourceDownloadForm from "@/components/ResourceDownloadForm";
 import { useI18n } from "@/lib/i18n";
 
 type Row = { arabizi: string; arabic: string; en: string; ro: string };
@@ -138,6 +139,21 @@ const LebaneseArabicPhrases = () => {
         <li>{en ? "Say each phrase out loud 10 times, then use it in a fake mini-dialogue." : "Spune fiecare expresie cu voce tare de 10 ori, apoi folosește-o într-un mini-dialog imaginar."}</li>
         <li>{en ? "Post one phrase in a Lebanese friend's DMs — real use beats flashcards." : "Trimite o expresie unui prieten libanez pe DM — folosirea reală bate flashcard-urile."}</li>
       </ul>
+
+      <ResourceDownloadForm
+        resource="100-expresii-libaneze"
+        source="/blog/lebanese-arabic-phrases"
+        idPrefix="blog-phrases"
+        fileHref="/100-expresii-libaneze.pdf"
+        title={en ? "Get the free PDF: 100 essential Lebanese phrases" : "Ia PDF-ul gratuit: 100 de expresii libaneze esențiale"}
+        description={
+          en
+            ? "Seven everyday situations, each phrase in arabizi with translation. Sent to your email in seconds."
+            : "Șapte situații de zi cu zi, fiecare expresie în arabizi cu traducere. Îl primești pe email în câteva secunde."
+        }
+      />
+
+
 
       <p>
         {en ? "Related:" : "Alte articole utile:"}{" "}
