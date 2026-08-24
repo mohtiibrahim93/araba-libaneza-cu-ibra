@@ -29,7 +29,7 @@ const CursuriLimbaAraba = () => (
     slug="cursuri-limba-araba"
     title="Cursuri de arabă libaneză — de la zero până la fluență, cu profesor nativ"
     metaTitle="Cursuri de Arabă Libaneză — Grup, Private, Online | București 2026"
-    description="Cursuri de arabă libaneză cu profesor nativ, structurate pe niveluri CEFR (A1–C2). Grup, private și pentru copii, fizic în București sau online. Lecție de probă gratuită."
+    description="Cursuri de arabă libaneză cu profesor nativ, structurate pe niveluri CEFR (A1–C2). Grup, private și pentru copii, fizic în București sau online. De la 500 lei/lună, lecție de probă gratuită."
     crumb="Cursuri de arabă libaneză"
     lead="Cursuri de arabă libaneză structurate pe niveluri CEFR, cu profesor nativ. Grup, private sau pentru copii — fizic în București sau online, oriunde ai fi."
     faq={FAQ}
@@ -50,36 +50,48 @@ const CursuriLimbaAraba = () => (
       <Link to="/blog/araba-libaneza-vs-araba-standard">arabă libaneză vs arabă standard</Link>.
     </p>
 
-    <h2>Formate disponibile</h2>
-    <ul>
-      <li>
-        <strong><Link to="/cursuri/grup">Curs de grup CEFR A1–C2</Link></strong> — 2 lecții/săpt.,
-        grupe mici, de la 500 lei/lună online. Certificat intern la final de nivel.
-      </li>
-      <li>
-        <strong><Link to="/cursuri/private">Meditații / lecții private 1:1</Link></strong> — ritm
-        personalizat, 150 lei/lecție (90 min). Ideal dacă ai obiective specifice (călătorie,
-        familie, examen).
-      </li>
-      <li>
-        <strong><Link to="/cursuri/copii">Curs de limba arabă pentru copii</Link></strong> — 6–10
-        ani, prin joc, cântece și povești, fizic în București.
-      </li>
-    </ul>
-
-    <h2>De unde începi</h2>
+    <h2>Formate și prețuri</h2>
+    <div className="overflow-x-auto not-prose">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-border text-left text-muted-foreground">
+            <th className="py-2 pr-3 font-semibold">Format</th>
+            <th className="py-2 px-3 font-semibold">Structură</th>
+            <th className="py-2 pl-3 font-semibold">Preț</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri/grup">Curs de grup</Link></td>
+            <td className="py-2 px-3">2 lecții de 90 min/săptămână, grupe mici</td>
+            <td className="py-2 pl-3">de la 500 lei/lună</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri/private">Meditații / lecții private</Link></td>
+            <td className="py-2 px-3">1:1, 60 min, program flexibil</td>
+            <td className="py-2 pl-3">150 lei/lecție</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri/copii">Curs pentru copii</Link></td>
+            <td className="py-2 px-3">6–10 ani, prin joc, fizic în București</td>
+            <td className="py-2 pl-3">de la 500 lei/lună</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p>
-      Nu ești sigur ce nivel ai? <Link to="/quiz">Testul de nivel gratuit</Link> îți recomandă
-      cursul potrivit în 2 minute. Sau începi direct cu o{" "}
-      <Link to="/trial">lecție de probă gratuită de 30 min</Link>, fără nicio obligație.
+      Lecția de probă gratuită de 30 min e fără obligație. Nu știi ce nivel ai?{" "}
+      <Link to="/quiz">Testul de nivel gratuit</Link> îți recomandă cursul potrivit în 2 minute.
     </p>
+
 
     <h2>De ce cu profesor nativ</h2>
     <p>
       Pronunția, intonația și expresiile idiomatice nu se învață din manual — se preiau de la un
       vorbitor nativ. Ibra e libanez, cu peste 5 ani de experiență în predare (Preply și studenți
       independenți), iar metoda <strong>Oral First</strong> te pune să vorbești din prima lecție,
-      folosind arabizi (scriere cu litere latine) până când alfabetul arab vine natural.
+      folosind <Link to="/arabizi">arabizi</Link> (scriere cu litere latine) până când alfabetul
+      arab vine natural.
     </p>
 
     <h2>Fără bariera alfabetului</h2>

@@ -79,12 +79,12 @@ const LebaneseArabicPhrases = () => {
     <BlogArticleLayout
       slug="lebanese-arabic-phrases"
       title={{
-        ro: "35+ expresii esențiale în araba libaneză (pentru viața de zi cu zi)",
-        en: "35+ essential Lebanese Arabic phrases for daily life",
+        ro: "35+ expresii în araba libaneză: tabel pentru viața de zi cu zi (PDF gratuit)",
+        en: "35+ Lebanese Arabic phrases: daily life table + free PDF download",
       }}
       description={{
-        ro: "Cele mai utile 35+ de expresii în araba libaneză, organizate pe context: salut, prezentare, cafenea, taxi, sentimente, timp. În arabizi, scriere arabă și traducere.",
-        en: "The most useful 35+ Lebanese Arabic phrases you'll actually need in daily life, grouped by context: greetings, intros, café & taxi, feelings, time. Arabizi + Arabic script + translation.",
+        ro: "Cele mai utile expresii în araba libaneză, organizate pe context: salut, restaurant, taxi, familie. Cu arabizi, scriere arabă și traducere. Descarcă PDF gratuit.",
+        en: "The most useful Lebanese Arabic phrases for daily life, grouped by context: greetings, café, taxi, family. Arabizi + Arabic script + translation. Free PDF download.",
       }}
       published="2026-07-24"
       readingMinutes={7}

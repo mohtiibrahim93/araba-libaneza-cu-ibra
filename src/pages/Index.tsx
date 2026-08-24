@@ -8,6 +8,7 @@ import SocialProofStrip from "@/components/SocialProofStrip";
 import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
 import CulturalValueSection from "@/components/CulturalValueSection";
+import ResourcesTeaser from "@/components/ResourcesTeaser";
 import InstructorSection from "@/components/InstructorSection";
 import ProgramsSection from "@/components/ProgramsSection";
 
@@ -166,6 +167,7 @@ const PageContent = () => {
         <ProgramsSection />
         <WhySection />
         <CulturalValueSection />
+        <ResourcesTeaser />
         <TestimonialsSection />
         <InstructorSection />
         <FAQSection />

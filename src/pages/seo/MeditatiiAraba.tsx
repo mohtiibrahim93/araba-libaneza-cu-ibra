@@ -24,17 +24,18 @@ const MeditatiiAraba = () => (
   <LandingLayout
     slug="meditatii-araba"
     enHref="/en/arabic-tutor"
-    title="Meditații de arabă libaneză 1:1 — profesor nativ, program flexibil"
-    metaTitle="Meditații Arabă Libaneză 1:1 cu Profesor Nativ | București & Online"
-    description="Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. 150 lei/lecție, primă lecție gratuită."
+    title="Meditații de arabă libaneză 1:1 — București și online"
+    metaTitle="Meditații Arabă Libaneză în București și Online | 150 lei/lecție"
+    description="Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București (Strada Icoanei 80) sau online pe Zoom. 150 lei/lecție, pachete cu până la −20%, prima lecție gratuită."
     crumb="Meditații arabă libaneză"
-    lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil."
+    lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil, preț transparent."
     faq={FAQ}
   >
     <p>
       Cauți <strong>meditații de arabă</strong> cu un profesor care să-ți adapteze lecțiile la
       nivelul și scopul tău? La <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> lucrăm 1:1,
       cu vorbitor nativ libanez, în ritmul tău — fără grupă care te ține pe loc sau te grăbește.
+      Fiecare lecție e de 60 de minute, live, cu feedback imediat pe pronunție.
     </p>
 
     <h2>Când merită meditații în locul unui curs de grup</h2>
@@ -43,7 +44,47 @@ const MeditatiiAraba = () => (
       <li><strong>Nu se potrivesc orele grupei:</strong> program de lucru variabil, fus orar diferit, copii mici acasă.</li>
       <li><strong>Vrei progres mai rapid:</strong> 100% atenție profesor, feedback pe fiecare cuvânt.</li>
       <li><strong>Ești la un nivel intermediar sau avansat</strong> și n-ai grupă potrivită.</li>
+      <li><strong>Vrei să înveți doar conversație</strong>, fără alfabetul arab — metoda noastră Oral First pornește cu <Link to="/arabizi">arabizi</Link>.</li>
     </ul>
+
+    <h2>Prețuri și pachete de meditații</h2>
+    <div className="overflow-x-auto not-prose">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-border text-left text-muted-foreground">
+            <th className="py-2 pr-3 font-semibold">Pachet</th>
+            <th className="py-2 px-3 font-semibold">Preț</th>
+            <th className="py-2 pl-3 font-semibold">Reducere</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">Lecție individuală (60 min)</td>
+            <td className="py-2 px-3">150 lei</td>
+            <td className="py-2 pl-3">—</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">5 lecții</td>
+            <td className="py-2 px-3">712 lei</td>
+            <td className="py-2 pl-3">−5%</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">10 lecții</td>
+            <td className="py-2 px-3">1.350 lei</td>
+            <td className="py-2 pl-3">−10%</td>
+          </tr>
+          <tr className="border-b border-border/60 align-top">
+            <td className="py-2 pr-3 font-semibold">20 lecții</td>
+            <td className="py-2 px-3">2.400 lei</td>
+            <td className="py-2 pl-3">−20%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Prima lecție de probă (30 min) este gratuită. Rezervi direct din <Link to="/cursuri/private">pagina de lecții private</Link> sau începi cu{" "}
+      <Link to="/trial">proba gratuită de 30 min</Link>.
+    </p>
 
     <h2>Cum arată o meditație tipică</h2>
     <p>
@@ -53,17 +94,11 @@ const MeditatiiAraba = () => (
       <Link to="/blog/cum-inveti-araba-libaneza">cum înveți araba libaneză</Link>.
     </p>
 
-    <h2>Prețuri și pachete</h2>
-    <ul>
-      <li><strong>Lecție individuală:</strong> 150 lei / 60 min</li>
-      <li><strong>Pachet 5 lecții:</strong> 712 lei (5% reducere)</li>
-      <li><strong>Pachet 10 lecții:</strong> 1.350 lei (10% reducere)</li>
-      <li><strong>Pachet 20 lecții:</strong> 2.400 lei (20% reducere)</li>
-      <li><strong>Prima lecție de probă:</strong> gratuită, 30 min</li>
-    </ul>
+    <h2>Meditații fizic în București sau online pe Zoom</h2>
     <p>
-      Rezervi direct din <Link to="/cursuri/private">pagina de lecții private</Link> sau începi cu{" "}
-      <Link to="/trial">proba gratuită de 30 min</Link>.
+      Poți alege lecții fizice la Raduga Creative Center (Strada Icoanei 80, sector 2) sau online, de
+      oriunde. Ambele formate au același profesor nativ, aceeași metodă și același preț. Dacă locuiești
+      în București și vrei flexibilitate maximă, <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> oferă și variante de grup.
     </p>
   </LandingLayout>
 );

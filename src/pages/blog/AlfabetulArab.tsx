@@ -40,10 +40,10 @@ const AlfabetulArab = () => {
   return (
     <BlogArticleLayout
       slug="alfabetul-arab-pentru-incepatori"
-      title={{ ro: "Alfabetul arab pentru începători: cele 28 de litere", en: "The Arabic alphabet for beginners: all 28 letters" }}
+      title={{ ro: "Alfabetul arab pentru începători: tabel cu cele 28 de litere + pronunție", en: "Arabic alphabet for beginners: full 28-letter table + pronunciation" }}
       description={{
-        ro: "Ghid pentru alfabetul arab: cele 28 de litere, cum se pronunță, sensul de scriere dreapta-la-stânga și de ce nu trebuie să-l știi ca să începi să vorbești libaneză.",
-        en: "A guide to the Arabic alphabet: the 28 letters, how they're pronounced, right-to-left writing and why you don't need it to start speaking Lebanese.",
+        ro: "Tabel complet cu cele 28 de litere ale alfabetului arab, pronunția în română și engleză, sensul de scriere dreapta-la-stânga. Plus metoda prin care vorbești fără să știi alfabetul.",
+        en: "Complete Arabic alphabet table: all 28 letters, pronunciation, right-to-left writing. Plus how to start speaking Lebanese without learning the alphabet first.",
       }}
       published="2026-07-16"
       readingMinutes={7}
