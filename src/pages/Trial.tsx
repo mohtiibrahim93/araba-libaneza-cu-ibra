@@ -50,10 +50,15 @@ const TrialPage = () => {
         email: email.trim(),
         phone: phone.trim(),
         lead_status: "new",
+        // Step 1 only captures the lead. Until a slot is picked in step 2 the
+        // trial is NOT booked — this marker makes abandoned step-1 leads
+        // obvious in the admin instead of looking like real bookings.
+        notes: "⚠️ Pas 1 completat — interval NEALES (proba nu e rezervată)",
       });
       if (error) throw error;
       trackEvent("Lead", { content_name: "trial" });
       setRegistrationId(id);
+
     } catch (err) {
       console.error("[trial] insert failed", err);
       toast.error(t.schedulerBookingFailed);
