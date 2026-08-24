@@ -93,7 +93,7 @@ const CursuriAraba = () => (
       profesor nativ și aceeași metodă. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau <Link to="/araba-online">cursurile de arabă online</Link> pentru detalii despre fiecare format.
     </p>
 
-    <h2>Ce înseamnă „arabă levantină” și de ce conteaz��</h2>
+    <h2>Ce înseamnă „arabă levantină” și de ce contează</h2>
     <p>
       Araba libaneză face parte din grupul dialectelor <strong>levantine</strong> (numit și{" "}
       <em>shami</em>), vorbite în Liban, Siria, Iordania și Palestina. Cine învață libaneză înțelege
