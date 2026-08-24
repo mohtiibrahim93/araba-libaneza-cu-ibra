@@ -55,7 +55,7 @@ const ArabicTutor = () => (
     roHref="/meditatii-araba"
     title="Arabic tutor online — private 1-on-1 lessons with a native teacher"
     metaTitle="Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher"
-    description="Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min."
+    description="Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min."
     crumb="Arabic tutor"
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}

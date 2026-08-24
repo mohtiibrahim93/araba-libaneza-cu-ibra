@@ -25,8 +25,8 @@ const CursArabaCopii = () => (
     slug="curs-araba-copii"
     enHref={null}
     title="Curs de arabă libaneză pentru copii — București, 6–10 ani, învățare prin joc"
-    metaTitle="Curs Arabă Libaneză pentru Copii (6–10 ani) | București, prin Joc"
-    description="Curs de arabă libaneză pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața."
+    metaTitle="Cursuri Limba Arabă pentru Copii 6–10 ani | București, prin Joc"
+    description="Cursuri de limba arabă (libaneză / levantină) pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața."
     crumb="Curs arabă libaneză copii"
     lead="Curs de arabă libaneză pentru copii 6–10 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
     faq={FAQ}
