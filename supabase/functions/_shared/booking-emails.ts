@@ -15,6 +15,16 @@ export function manageUrl(token: string) {
   return `${SITE_URL}/booking/manage/${token}`;
 }
 
+export const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
+
+export function sendAdminBookingEmail(
+  action: "new" | "cancelled" | "rescheduled",
+  data: Record<string, unknown>,
+  idempotencyKey: string,
+): void {
+  void sendBookingEmail("admin-booking", ADMIN_RECIPIENT, { action, ...data }, idempotencyKey);
+}
+
 export async function sendBookingEmail(
   templateName: string,
   recipientEmail: string,
