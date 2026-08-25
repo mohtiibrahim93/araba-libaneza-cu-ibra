@@ -22,6 +22,14 @@ interface GroupRegistrationConfirmationProps {
 const formatLabels: Record<string, string> = { fizic: 'fizic, în București', online: 'online' }
 const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, București', online: 'Online' }
 
+// Keep in sync with the site (i18n programGroupDuration / curriculum.ts).
+const durationByLevel: Record<string, string> = {
+  A1: 'aproximativ 3 luni · 32 de lecții',
+  A2: 'aproximativ 6 luni · 54 de lecții',
+}
+const durationLabel = (level?: string) =>
+  durationByLevel[(level || '').trim().toUpperCase()] || 'A1: ~3 luni (32 de lecții) · A2: ~6 luni (54 de lecții)'
+
 const GroupRegistrationConfirmationEmail = ({ name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
@@ -40,7 +48,7 @@ const GroupRegistrationConfirmationEmail = ({ name, format, center, level, messa
           {level && <Text style={infoText}>Nivel: {level}</Text>}
           {format && <Text style={infoText}>Format preferat: {formatLabels[format] || format}</Text>}
           {center && <Text style={infoText}>Locație: {centerLabels[center] || center}</Text>}
-          <Text style={infoText}><strong>Durată:</strong> aproximativ 3 luni · 24+ lecții</Text>
+          <Text style={infoText}><strong>Durată:</strong> {durationLabel(level)}</Text>
           <Text style={infoText}><strong>Program:</strong> {scheduleLabel || 'marți și joi, 19:00–20:30'}</Text>
           {startDateLabel && <Text style={infoText}><strong>Start:</strong> {startDateLabel}</Text>}
           {message && <Text style={infoText}>Mesaj: {message}</Text>}
