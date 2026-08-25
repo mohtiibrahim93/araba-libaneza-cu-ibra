@@ -22,6 +22,14 @@ interface GroupRegistrationConfirmationProps {
 const formatLabels: Record<string, string> = { fizic: 'fizic, în București', online: 'online' }
 const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, București', online: 'Online' }
 
+// Keep in sync with the site (i18n programGroupDuration / curriculum.ts).
+const durationByLevel: Record<string, string> = {
+  A1: 'aproximativ 3 luni · 32 de lecții',
+  A2: 'aproximativ 6 luni · 54 de lecții',
+}
+const durationLabel = (level?: string) =>
+  durationByLevel[(level || '').trim().toUpperCase()] || 'A1: ~3 luni (32 de lecții) · A2: ~6 luni (54 de lecții)'
+
 const GroupRegistrationConfirmationEmail = ({ name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
