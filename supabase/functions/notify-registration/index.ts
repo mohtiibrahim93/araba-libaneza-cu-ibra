@@ -98,9 +98,18 @@ Deno.serve(async (req) => {
 
     const invokeEmail = async (body: Record<string, unknown>) => {
       try {
-        const { error } = await supabase.functions.invoke("send-transactional-email", { body });
-        if (error) {
-          console.error("send-transactional-email failed", body.templateName, error);
+        const res = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
+          },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("send-transactional-email failed", body.templateName, res.status, text);
         } else {
           console.log("send-transactional-email ok", body.templateName, body.recipientEmail);
         }

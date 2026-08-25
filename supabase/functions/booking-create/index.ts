@@ -6,7 +6,7 @@ import {
   gcalFreebusy,
   overlaps,
 } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
@@ -189,6 +189,18 @@ Deno.serve(async (req) => {
       return json({ error: "insert failed" }, 500);
     }
 
+    // The trial step-1 lead carries a "slot not chosen" marker in notes. Now
+    // that a slot is booked, clear it here (service role) — the browser cannot
+    // update registrations under RLS.
+    {
+      const { error: clearErr } = await supabase
+        .from("registrations")
+        .update({ notes: null })
+        .eq("id", body.registration_id)
+        .like("notes", "%NEALES%");
+      if (clearErr) console.error("[booking-create] clear lead marker failed", clearErr);
+    }
+
     // Create GCal event (best-effort)
     const summary = `${et.name_ro} — ${body.student_name}`;
     const description = [
@@ -240,6 +252,23 @@ Deno.serve(async (req) => {
       },
       `booking-confirm-${inserted.id}`,
     );
+
+    // Admin notification (best-effort)
+    sendAdminBookingEmail(
+      "new",
+      {
+        eventName: et.name_ro,
+        studentName: body.student_name,
+        studentEmail: body.student_email,
+        studentPhone: body.student_phone ?? null,
+        format: format === "online" ? "online" : "fizic",
+        whenLabel: fmtLocal(startISO, language),
+        notes: body.notes ?? null,
+      },
+      `admin-booking-new-${inserted.id}`,
+    );
+
+
 
     return json({
       ok: true,

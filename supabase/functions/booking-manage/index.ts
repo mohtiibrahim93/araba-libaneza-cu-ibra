@@ -7,7 +7,7 @@ import {
   gcalFreebusy,
   overlaps,
 } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
 function client() {
@@ -84,6 +84,19 @@ Deno.serve(async (req) => {
         },
         `booking-cancel-${booking.id}`,
       );
+      sendAdminBookingEmail(
+        "cancelled",
+        {
+          eventName: booking.booking_event_types?.name_ro,
+          studentName: booking.student_name,
+          studentEmail: booking.student_email,
+          studentPhone: booking.student_phone,
+          format: booking.format === "online" ? "online" : "fizic",
+          whenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          notes: booking.notes,
+        },
+        `admin-booking-cancel-${booking.id}`,
+      );
       return json({ ok: true, status: "cancelled" });
     }
 
@@ -127,6 +140,7 @@ Deno.serve(async (req) => {
         .from("bookings")
         .insert({
           event_type_slug: booking.event_type_slug,
+          registration_id: booking.registration_id,
           start_at: startISO,
           end_at: endISO,
           student_name: booking.student_name,
@@ -169,6 +183,21 @@ Deno.serve(async (req) => {
           lang: booking.language ?? "ro",
         },
         `booking-resched-${created.id}`,
+      );
+
+      sendAdminBookingEmail(
+        "rescheduled",
+        {
+          eventName: booking.booking_event_types?.name_ro,
+          studentName: booking.student_name,
+          studentEmail: booking.student_email,
+          studentPhone: booking.student_phone,
+          format: booking.format === "online" ? "online" : "fizic",
+          oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
+          notes: booking.notes,
+        },
+        `admin-booking-resched-${created.id}`,
       );
 
       return json({ ok: true, manage_token: created.manage_token, start_at: startISO });
