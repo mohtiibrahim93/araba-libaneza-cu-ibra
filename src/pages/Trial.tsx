@@ -183,13 +183,8 @@ const TrialPage = () => {
               eventType="trial"
               registrationId={registrationId}
               prefill={{ name, email, phone }}
-              onBooked={() => {
-                // Slot picked -> the lead is a real booking, drop the marker.
-                void supabase
-                  .from("registrations")
-                  .update({ notes: null })
-                  .eq("id", registrationId);
-              }}
+              // The "slot not chosen" marker is cleared server-side by the
+              // booking-create function (RLS blocks browser updates).
             />
 
           </div>
