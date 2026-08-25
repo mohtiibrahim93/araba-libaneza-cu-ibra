@@ -140,6 +140,7 @@ Deno.serve(async (req) => {
         .from("bookings")
         .insert({
           event_type_slug: booking.event_type_slug,
+          registration_id: booking.registration_id,
           start_at: startISO,
           end_at: endISO,
           student_name: booking.student_name,
