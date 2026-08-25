@@ -39,7 +39,7 @@ const RO: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: luni și miercuri 19:00–20:30 · 1 septembrie – 24 noiembrie 2026 (~3 luni) · Strada Icoanei 80",
+      "Fizic: luni și miercuri 19:00–20:30 · 2 septembrie – 24 noiembrie 2026 (~3 luni) · Strada Icoanei 80",
       "Online: sâmbătă și duminică 12:00–13:30 · start 15 august 2026",
       "Examen final inclus",
     ],
@@ -85,7 +85,7 @@ const RO: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: marți și joi 19:00–20:30 · 2 septembrie 2026 – 2 martie 2027 (~6 luni) · Strada Icoanei 80",
+      "Fizic: marți și joi 19:00–20:30 · 1 septembrie 2026 – 2 martie 2027 (~6 luni) · Strada Icoanei 80",
       "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
@@ -351,7 +351,7 @@ const EN: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Spoken",
     schedule: [
-      "In person: Mondays & Wednesdays 19:00–20:30 · 1 September – 24 November 2026 (~3 months) · Strada Icoanei 80",
+      "In person: Mondays & Wednesdays 19:00–20:30 · 2 September – 24 November 2026 (~3 months) · Strada Icoanei 80",
       "Online: Saturdays & Sundays 12:00–13:30 · starts 15 August 2026",
       "Final exam included",
     ],
@@ -397,7 +397,7 @@ const EN: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Spoken",
     schedule: [
-      "In person: Tuesdays & Thursdays 19:00–20:30 · 2 September 2026 – 2 March 2027 (~6 months) · Strada Icoanei 80",
+      "In person: Tuesdays & Thursdays 19:00–20:30 · 1 September 2026 – 2 March 2027 (~6 months) · Strada Icoanei 80",
       "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
     ],

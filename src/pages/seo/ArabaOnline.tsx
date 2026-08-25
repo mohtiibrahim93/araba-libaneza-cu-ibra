@@ -46,7 +46,7 @@ const ArabaOnline = () => (
       </li>
       <li>
         <strong>A2 online — în curând</strong> — data se anunță; până atunci, A2 rulează{" "}
-        <Link to="/cursuri/grup/a2">fizic în București</Link> din 2 septembrie 2026.
+        <Link to="/cursuri/grup/a2">fizic în București</Link> din 1 septembrie 2026.
       </li>
       <li>
         <strong><Link to="/cursuri/private">Lecții private online 1:1</Link></strong> — complet
