@@ -95,11 +95,20 @@ Deno.serve(async (req) => {
 
     if (reg.form_type === "group" && reg.cohort_id) {
       const { data: c } = await supabase.from("group_cohorts")
-        .select("start_date, schedule_label_ro, level").eq("id", reg.cohort_id).maybeSingle();
+        .select("start_date, schedule_label_ro, level, start_time, end_time, duration_minutes").eq("id", reg.cohort_id).maybeSingle();
       if (c?.start_date) {
         const [y, m, d] = String(c.start_date).split("-").map(Number);
-        start = bucharestWallToUtc(y, m, d, 19, 0);
-        end = new Date(start.getTime() + 90 * 60_000);
+        const [sh, sm] = c.start_time
+          ? String(c.start_time).split(":").map(Number)
+          : [19, 0];
+        start = bucharestWallToUtc(y, m, d, sh, sm ?? 0);
+        let durationMin = c.duration_minutes ?? null;
+        if (!durationMin && c.end_time) {
+          const [eh, em] = String(c.end_time).split(":").map(Number);
+          durationMin = (eh * 60 + (em ?? 0)) - (sh * 60 + (sm ?? 0));
+          if (durationMin <= 0) durationMin = null;
+        }
+        end = new Date(start.getTime() + (durationMin ?? 90) * 60_000);
         title = `Curs grup arabă libaneză${c.level ? ` (${c.level})` : reg.level ? ` (${reg.level})` : ""}`;
         description = `${c.schedule_label_ro || "marți și joi, 19:00–20:30"}\n${zoomUrl ? `Zoom: ${zoomUrl}\n` : ""}Gestionează: ${SITE_URL}`;
       }
