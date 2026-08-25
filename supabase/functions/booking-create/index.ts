@@ -189,6 +189,18 @@ Deno.serve(async (req) => {
       return json({ error: "insert failed" }, 500);
     }
 
+    // The trial step-1 lead carries a "slot not chosen" marker in notes. Now
+    // that a slot is booked, clear it here (service role) — the browser cannot
+    // update registrations under RLS.
+    {
+      const { error: clearErr } = await supabase
+        .from("registrations")
+        .update({ notes: null })
+        .eq("id", body.registration_id)
+        .like("notes", "%NEALES%");
+      if (clearErr) console.error("[booking-create] clear lead marker failed", clearErr);
+    }
+
     // Create GCal event (best-effort)
     const summary = `${et.name_ro} — ${body.student_name}`;
     const description = [
