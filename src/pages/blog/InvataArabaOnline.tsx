@@ -68,11 +68,11 @@ const InvataArabaOnline = () => {
         {en ? " online for a fully personalised pace and schedule." : " online, pentru ritm și program complet personalizate."}
       </p>
 
-      <h2>{en ? "The next open online cohort" : "Următoarea cohortă online deschisă"}</h2>
+      <h2>{en ? "The online cohort — and the next one" : "Cohorta online — și următoarea"}</h2>
       <p>
         {en
-          ? "The next online group starting fresh is A1 (complete beginners) on 15 August — the perfect moment to start from zero with others at the same level. Not a total beginner? You can still join online at a higher level or through private lessons."
-          : "Următoarea grupă online care pornește de la zero este A1 (începători compleți) pe 15 august — momentul perfect ca să începi de la zero alături de alții de același nivel. Nu ești începător complet? Poți intra online la un nivel mai avansat sau prin lecții private."}
+          ? "The A1 online group (complete beginners) is already running and all 10 seats are taken. We open a new online cohort as soon as enough people are waiting, so leave your details and we'll email you first. In the meantime you can start straight away with online private lessons, or join a higher level online."
+          : "Grupa A1 online (începători compleți) este deja în desfășurare și toate cele 10 locuri sunt ocupate. Deschidem o grupă nouă imediat ce sunt suficienți înscriși, așa că lasă-ți datele și te anunțăm primul pe email. Între timp poți începe oricând cu lecții private online sau te poți alătura online la un nivel mai avansat."}
       </p>
       <p>
         {en ? "Not sure where you'd start? Take the " : "Nu știi de unde ai porni? Fă "}

@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "Când începe următoarea grupă online?",
-    a: "Cohorta A1 online (începători) pornește pe 15 august 2026, sâmbăta și duminica 12:00–13:30 — ideală dacă în timpul săptămânii nu ai timp. A2 online se deschide în curând.",
+    a: "Grupa A1 online (începători) este deja în desfășurare și are toate cele 10 locuri ocupate. Deschidem o grupă nouă când sunt suficienți înscriși — lasă-ți datele și te anunțăm prima dată pe email. Până atunci poți începe oricând prin lecții private online 1:1. A2 online se deschide în curând.",
   },
   {
     q: "Pot face lecții online din afara României?",
@@ -25,7 +25,7 @@ const ArabaOnline = () => (
     slug="araba-online"
     title="Cursuri de arabă libaneză online, live cu profesor nativ"
     metaTitle="Arabă Libaneză Online — Cursuri Live pe Zoom cu Profesor Nativ | De Oriunde"
-    description="Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online începe pe 15 august — probă gratuită."
+    description="Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online e completă — înscrie-te la lista pentru următoarea. Probă gratuită."
     crumb="Arabă libaneză online"
     lead="Lecții live pe Zoom cu profesor nativ — grupă de weekend sau private 1:1, de oriunde te afli. Fără înregistrări, fără aplicații care nu te corectează."
     faq={FAQ}
@@ -40,9 +40,9 @@ const ArabaOnline = () => (
     <h2>Formate online</h2>
     <ul>
       <li>
-        <strong><Link to="/cursuri/grup">Grupă online A1 — start 15 august</Link></strong> —
-        începători, sâmbăta și duminica 12:00–13:30, maximum 10 locuri, de la 500 lei/lună.
-        Perfectă dacă săptămâna e plină.
+        <strong><Link to="/cursuri/grup/a1?mod=online">Grupă online A1 — în desfășurare, completă</Link></strong> —
+        începători, sâmbăta și duminica 12:00–13:30, toate cele 10 locuri ocupate. Deschidem o
+        grupă nouă când sunt suficienți înscriși: lasă-ți datele și te anunțăm pe email.
       </li>
       <li>
         <strong>A2 online — în curând</strong> — data se anunță; până atunci, A2 rulează{" "}

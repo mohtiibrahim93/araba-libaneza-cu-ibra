@@ -17,11 +17,16 @@ import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
+// `started` marks a cohort that is already running: enrolment is closed, so the
+// page collects interest for the next one instead of taking sign-ups, and the
+// poster is hidden because it advertises a start date that has passed.
 type PosterFormat = "online" | "fizic";
-const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string; format: PosterFormat }[]>> = {
+const LEVEL_POSTERS: Partial<
+  Record<string, { src: string; alt: string; format: PosterFormat; started?: boolean }[]>
+> = {
   a1: [
-    { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
-    { src: posterA1Online.url, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30", format: "online" },
+    { src: posterA1Fizic.url, alt: "Poster A1 fizic — Grupa 2, start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Online.url, alt: "Poster A1 online — sâmbătă și duminică 12:00–13:30", format: "online", started: true },
   ],
   a2: [
     { src: posterA2Fizic.url, alt: "Poster A2 fizic — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
@@ -66,6 +71,13 @@ const CursGrupLevel = () => {
     paramFormat && availableFormats.includes(paramFormat)
       ? paramFormat
       : availableFormats[0] ?? "fizic";
+  // A cohort that has already started cannot be joined, even though the level
+  // itself is "available" (A1 still has an open in-person group).
+  const cohortStarted = Boolean(
+    LEVEL_POSTERS[slug]?.find((p) => p.format === selectedFormat)?.started,
+  );
+  const canEnrol = available && !cohortStarted;
+
   const pickFormat = (fmt: PosterFormat) => {
     const next = new URLSearchParams(searchParams);
     next.set("mod", fmt);
@@ -292,7 +304,9 @@ const CursGrupLevel = () => {
                   </div>
                   {(() => {
                     const poster = LEVEL_POSTERS[slug]!.find((p) => p.format === selectedFormat);
-                    if (!poster) return null;
+                    // A started cohort's poster still advertises its old start
+                    // date, so showing it would contradict the notice below.
+                    if (!poster || poster.started) return null;
                     return (
                       <img
                         src={poster.src}
@@ -314,12 +328,24 @@ const CursGrupLevel = () => {
               <div className="lg:sticky lg:top-24">
                 <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
                   <h2 className="text-xl font-bold text-foreground mb-1">
-                    {available ? t.levelPageRegisterTitle : t.levelPageInPrepTitle}
+                    {cohortStarted
+                      ? lang === "en"
+                        ? "This group has already started"
+                        : "Această grupă a început deja"
+                      : available
+                        ? t.levelPageRegisterTitle
+                        : t.levelPageInPrepTitle}
                   </h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    {available ? t.levelPageRegisterDesc : t.levelPageInPrepDesc}
+                    {cohortStarted
+                      ? lang === "en"
+                        ? "All 10 seats are taken and the lessons are under way, so it can no longer be joined. Leave your details and we'll email you first when the next online group opens — we start one as soon as enough people are waiting. You can also begin right away with private 1:1 lessons."
+                        : "Toate cele 10 locuri sunt ocupate, iar lecțiile sunt deja în desfășurare, așa că nu se mai poate intra în ea. Lasă-ți datele și te anunțăm primul pe email când deschidem următoarea grupă online — pornim una imediat ce sunt suficienți înscriși. Poți începe oricând și cu lecții private 1:1."
+                      : available
+                        ? t.levelPageRegisterDesc
+                        : t.levelPageInPrepDesc}
                   </p>
-                  {available ? (
+                  {canEnrol ? (
                     <RegistrationFormSection
                       defaultCourseType="group"
                       defaultLevel={upperLevel}
@@ -328,9 +354,17 @@ const CursGrupLevel = () => {
                       embedded
                     />
                   ) : (
-                    // No open cohort yet: collect interest instead of showing a
-                    // payment plan for a group that isn't running.
-                    <NotifyMeForm context={`Grupă ${upperLevel}`} level={upperLevel} />
+                    // No joinable cohort — either none is scheduled yet, or this
+                    // one has already started. Collect interest instead of
+                    // showing a payment plan for a group nobody can join.
+                    <NotifyMeForm
+                      context={
+                        cohortStarted
+                          ? `Grupă ${upperLevel} ${selectedFormat} — următoarea serie`
+                          : `Grupă ${upperLevel}`
+                      }
+                      level={upperLevel}
+                    />
                   )}
                 </div>
                 <a

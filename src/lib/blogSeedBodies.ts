@@ -951,9 +951,9 @@ Pentru un dialect vorbit, da. Ce contează cel mai mult este timpul de vorbire c
 
 Toate nivelurile noastre au o variantă online. Poți intra într-un [curs de grup](/cursuri/grup) online — mai accesibil și mai motivant, înveți alături de colegi de nivelul tău — sau poți alege [lecții private 1:1](/cursuri/private) online, pentru ritm și program complet personalizate.
 
-## Următoarea cohortă online deschisă
+## Cohorta online — și următoarea
 
-Următoarea grupă online care pornește de la zero este A1 (începători compleți) pe 15 august — momentul perfect ca să începi de la zero alături de alții de același nivel. Nu ești începător complet? Poți intra online la un nivel mai avansat sau prin lecții private.
+Grupa A1 online (începători compleți) este deja în desfășurare și toate cele 10 locuri sunt ocupate. Deschidem o grupă nouă imediat ce sunt suficienți înscriși, așa că lasă-ți datele și te anunțăm primul pe email. Între timp poți începe oricând cu lecții private online sau te poți alătura online la un nivel mai avansat.
 
 Nu știi de unde ai porni? Fă [testul de nivel gratuit](/quiz) (2 minute), sau vezi [cât durează fiecare nivel](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
     en: `You don't have to live in Bucharest — or even in Romania — to learn Lebanese Arabic with a native teacher. Our online courses run over Zoom, with the same method and the same teacher as the in-person ones. If you're part of the Lebanese diaspora, have Lebanese family, or simply want the living dialect from wherever you are, online is made for you.
@@ -977,9 +977,9 @@ For a spoken dialect, yes. What matters most is speaking time with a native teac
 
 All our levels have an online variant. You can join an online [group course](/cursuri/grup) — more affordable and more motivating, learning alongside peers at your level — or take [private 1:1 lessons](/cursuri/private) online for a fully personalised pace and schedule.
 
-## The next open online cohort
+## The online cohort — and the next one
 
-The next online group starting fresh is A1 (complete beginners) on 15 August — the perfect moment to start from zero with others at the same level. Not a total beginner? You can still join online at a higher level or through private lessons.
+The A1 online group (complete beginners) is already running and all 10 seats are taken. We open a new online cohort as soon as enough people are waiting, so leave your details and we'll email you first. In the meantime you can start straight away with online private lessons, or join a higher level online.
 
 Not sure where you'd start? Take the [free level test](/quiz) (2 minutes), or see [how long each level takes](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
   },

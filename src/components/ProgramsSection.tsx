@@ -12,14 +12,14 @@ import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
-import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
+  // The A1 online cohort has already started, so its poster (which advertises a
+  // start date that has passed) is no longer shown here.
   A1: [
-    { src: posterA1Fizic.url, alt: "Poster A1 fizic — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
-    { src: posterA1Online.url, alt: "Poster A1 online — start 15 august 2026, sâmbătă și duminică 12:00–13:30" },
+    { src: posterA1Fizic.url, alt: "Poster A1 fizic — Grupa 2, start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
   ],
   A2: [
     { src: posterA2Fizic.url, alt: "Poster A2 fizic — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
