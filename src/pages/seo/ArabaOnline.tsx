@@ -41,7 +41,7 @@ const ArabaOnline = () => (
     <ul>
       <li>
         <strong><Link to="/cursuri/grup/a1?mod=online">Grupă online A1 — în desfășurare, completă</Link></strong> —
-        începători, sâmbăta și duminica 12:00–13:30, toate cele 10 locuri ocupate. Deschidem o
+        începători, sâmbăta 12:00–13:30 și duminica 17:30–19:00, toate cele 10 locuri ocupate. Deschidem o
         grupă nouă când sunt suficienți înscriși: lasă-ți datele și te anunțăm pe email.
       </li>
       <li>

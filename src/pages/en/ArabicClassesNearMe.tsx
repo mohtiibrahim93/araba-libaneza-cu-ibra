@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "When do the classes run?",
-    a: "Group courses run on fixed weekly schedules — in-person Mondays and Wednesdays 19:00–20:30, online Saturdays and Sundays 12:00–13:30. Private lessons are scheduled around your calendar.",
+    a: "Group courses run on fixed weekly schedules — in-person Mondays and Wednesdays 19:00–20:30, online Saturdays 12:00–13:30 and Sundays 17:30–19:00. Private lessons are scheduled around your calendar.",
   },
   {
     q: "Which dialect do you teach?",
@@ -44,7 +44,7 @@ const ArabicClassesNearMe = () => (
     </p>
     <ul>
       <li><strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 — Mondays and Wednesdays 19:00–20:30.</li>
-      <li><strong>Live online, worldwide:</strong> Saturdays and Sundays 12:00–13:30 (EET) over Zoom — same small-group experience, no travel.</li>
+      <li><strong>Live online, worldwide:</strong> Saturdays 12:00–13:30 and Sundays 17:30–19:00 (EET) over Zoom — same small-group experience, no travel.</li>
     </ul>
 
     <h2>Why "near me" often means online</h2>

@@ -11,7 +11,7 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
-import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
+import { isBlockedEmail, isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 
 const TrialPage = () => {
   const { t, lang } = useI18n();
@@ -38,6 +38,11 @@ const TrialPage = () => {
     const next: typeof errors = {};
     if (!name.trim()) next.name = required;
     if (!email.trim()) next.email = required;
+    else if (isBlockedEmail(email))
+      next.email =
+        lang === "en"
+          ? "Please use a personal address you actually read — this one can't receive our confirmation."
+          : "Folosește o adresă personală pe care o citești — pe aceasta nu putem trimite confirmarea.";
     else if (!isValidEmail(email)) next.email = t.validEmailError;
     if (!phone.trim()) next.phone = required;
     else if (!isValidPhone(phone)) next.phone = t.validPhoneError;

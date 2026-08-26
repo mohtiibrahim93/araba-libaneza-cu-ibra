@@ -23,6 +23,18 @@ export const isValidEmail = (raw: string) => {
   return tld.length >= 2;
 };
 
+/**
+ * True when the address is well-formed but deliberately refused by the
+ * blocklist. These two cases need different messages: telling someone their
+ * address is "invalid" when it is a real, deliverable mailbox (admin@ is a
+ * normal business address) reads as a broken form, and they leave.
+ */
+export const isBlockedEmail = (raw: string) => {
+  const v = raw.trim();
+  if (!v) return false;
+  return EMAIL_BLOCKLIST.test(v) && EMAIL_RE.test(v);
+};
+
 interface Props {
   courseType: CourseType | "";
   name: string;
