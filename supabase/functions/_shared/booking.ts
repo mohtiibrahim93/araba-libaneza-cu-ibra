@@ -145,7 +145,17 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
 }> {
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
-  if (!lovableKey || !gcalKey) return { ok: false, error: "missing-keys" };
+  if (!lovableKey || !gcalKey) {
+    // Loud on purpose. This returned silently before, so every booking fell
+    // through to the "meet link only" branch and no calendar event was ever
+    // created — with nothing in the logs to say why.
+    console.error(
+      "[booking] GCal keys missing — no calendar event created. " +
+        `LOVABLE_API_KEY=${lovableKey ? "set" : "MISSING"} ` +
+        `GOOGLE_CALENDAR_API_KEY=${gcalKey ? "set" : "MISSING"}`,
+    );
+    return { ok: false, error: "missing-keys" };
+  }
 
   const body: Record<string, unknown> = {
     summary: input.summary,
@@ -197,7 +207,10 @@ export async function gcalPatchEvent(
 ): Promise<boolean> {
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
-  if (!lovableKey || !gcalKey) return false;
+  if (!lovableKey || !gcalKey) {
+    console.error("[booking] GCal keys missing — calendar not updated");
+    return false;
+  }
   try {
     const res = await fetch(
       `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
@@ -228,7 +241,10 @@ export async function gcalPatchEvent(
 export async function gcalDeleteEvent(eventId: string): Promise<boolean> {
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
-  if (!lovableKey || !gcalKey) return false;
+  if (!lovableKey || !gcalKey) {
+    console.error("[booking] GCal keys missing — calendar not updated");
+    return false;
+  }
   try {
     const res = await fetch(
       `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
