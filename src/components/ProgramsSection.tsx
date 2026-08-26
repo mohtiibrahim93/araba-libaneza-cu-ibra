@@ -335,8 +335,17 @@ const ProgramsSection = () => {
                     </span>
                     <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
-                    <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                    <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-1 inline-block">
                       {t.programsSeeFullPage}
+                    </Link>
+                    {/* Second, keyword-bearing link: the homepage is the site's
+                        strongest page and previously passed no authority at all
+                        to /meditatii-araba, the page that ranks for "meditatii
+                        araba" (the site's highest-volume commercial query). */}
+                    <Link to="/meditatii-araba" className="text-sm text-muted-foreground hover:text-primary hover:underline underline-offset-4 mb-3 inline-block">
+                      {lang === "en"
+                        ? "Arabic tutoring 1-on-1 — how it works"
+                        : "Meditații arabă 1:1 — cum funcționează"}
                     </Link>
 
                     {/* Price */}

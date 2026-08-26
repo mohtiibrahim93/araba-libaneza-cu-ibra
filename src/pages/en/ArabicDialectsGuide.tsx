@@ -118,6 +118,15 @@ const ArabicDialectsGuide = () => (
       you want private lessons tailored to your goal, see the{" "}
       <Link to="/en/arabic-tutor">Arabic tutor page</Link>.
     </p>
+    <p>
+      <strong>You don't need to be in Bucharest.</strong> Lessons run live on Zoom with a native
+      Lebanese teacher, so you can learn from anywhere —{" "}
+      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link> are available now and start whenever
+      suits your timezone. The online beginner group is currently full; leave your details on the{" "}
+      <Link to="/cursuri/grup/a1?mod=online">A1 online page</Link> and we'll email you first when the
+      next one opens. Either way, the{" "}
+      <Link to="/trial">trial lesson is free</Link> — 30 minutes, no card, no obligation.
+    </p>
   </EnLandingLayout>
 );
 

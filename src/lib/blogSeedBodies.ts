@@ -315,7 +315,7 @@ Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **
 - Grupează literele după formă — multe se aseamănă și diferă doar prin puncte (ب ت ث).
 - Învață mai întâi să le recunoști, apoi să le scrii.
 - Asociază fiecare literă cu un cuvânt pe care deja îl știi din vorbire.
-- Exersează cu un profesor care îți corectează pronunția sunetelor guturale (ع، ح، ق).
+- Exersează cu un profesor care îți corectează pronunția sunetelor guturale (ع، ح، ق) — exact asta faci la [meditații de arabă](/meditatii-araba) 1:1, unde fiecare sunet e corectat pe loc.
 
 Vrei să vezi de unde pornești? Fă [testul de nivel gratuit](/quiz) sau citește [ghidul complet pentru începători](/blog/cum-inveti-araba-libaneza).`,
     en: `The Arabic alphabet looks intimidating at first, but it has a simple logic. It has **28 letters**, is written **right to left**, and letters change shape slightly depending on their position in the word (start, middle, end). There are no upper- and lower-case letters.

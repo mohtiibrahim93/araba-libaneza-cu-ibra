@@ -64,12 +64,12 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "lebanese-arabic-phrases",
     title: {
-      ro: "35+ expresii esențiale în araba libaneză (pentru viața de zi cu zi)",
-      en: "35+ essential Lebanese Arabic phrases for daily life",
+      ro: "35+ Expresii în Araba Libaneză pe Care Le Auzi Zilnic în Liban",
+      en: "35+ Lebanese Arabic Phrases You'll Actually Hear Every Day",
     },
     description: {
-      ro: "Cele mai utile 35+ de expresii libaneze, organizate pe context: salut, prezentare, cafenea, taxi, sentimente, timp. Cu arabizi și scriere arabă.",
-      en: "The most useful 35+ Lebanese Arabic phrases, grouped by context: greetings, intros, café & taxi, feelings, time. Arabizi + Arabic script.",
+      ro: "Expresiile libaneze care chiar se folosesc, grupate pe situație: salut, prezentare, cafenea, taxi, sentimente, timp. Fiecare cu pronunție în arabizi și scriere arabă, de la un profesor nativ.",
+      en: "The Lebanese phrases people really use, grouped by situation: greetings, introductions, café, taxi, feelings, time. Each one with Arabizi pronunciation and Arabic script, from a native teacher.",
     },
     published: "2026-07-24",
     readingMinutes: 7,
@@ -190,12 +190,12 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "alfabetul-arab-pentru-incepatori",
     title: {
-      ro: "Alfabetul arab pentru începători: cele 28 de litere",
-      en: "The Arabic alphabet for beginners: all 28 letters",
+      ro: "Alfabetul Arab: Cele 28 de Litere, Pronunția și Cum Vorbești Fără El",
+      en: "The Arabic Alphabet: 28 Letters, Pronunciation & Why You Can Speak Without It",
     },
     description: {
-      ro: "Ghid pentru alfabetul arab: cele 28 de litere, cum se pronunță, scrierea dreapta-la-stânga și de ce nu ai nevoie de alfabet ca să începi să vorbești.",
-      en: "A guide to the Arabic alphabet: all 28 letters, how they're pronounced, right-to-left writing and why you don't need the alphabet to start speaking.",
+      ro: "Tabelul complet al celor 28 de litere arabe, cu numele și sunetul fiecăreia explicat în română. Scrierea dreapta-la-stânga, formele din cuvânt și sunetele care nu există în română (ح, ع, ق) — de la un profesor nativ libanez.",
+      en: "The full table of all 28 Arabic letters, each with its name and sound. Right-to-left writing, how letters change shape inside a word, and the sounds that don't exist in English (ح, ع, ق) — from a native Lebanese teacher.",
     },
     published: "2026-07-16",
     readingMinutes: 7,
@@ -232,12 +232,12 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "cum-saluti-in-libaneza",
     title: {
-      ro: "Cum saluți în libaneză: ghid complet de politețe",
-      en: "How to greet in Lebanese: a complete politeness guide",
+      ro: "Cum Saluți în Libaneză: Mar7aba, Kifak și Când Folosești Fiecare",
+      en: "How to Greet in Lebanese Arabic: Mar7aba, Kifak & When to Use Each",
     },
     description: {
-      ro: "Toate formulele de salut în araba libaneză: bună dimineața, ce faci, bine ai venit, pa — cu pronunție în arabizi, scriere arabă și când folosești fiecare.",
-      en: "All the greetings in Lebanese Arabic: good morning, how are you, welcome, bye — with Arabizi pronunciation, Arabic script and when to use each.",
+      ro: "De la „Mar7aba” la „yalla bye”: formulele de salut pe care le auzi zilnic în Liban, cu pronunție în arabizi, scriere arabă și momentul potrivit pentru fiecare — inclusiv formele pentru bărbat și femeie.",
+      en: "From 'Mar7aba' to 'yalla bye': the greetings you hear daily in Lebanon, with Arabizi pronunciation, Arabic script and the right moment for each — including the masculine and feminine forms.",
     },
     published: "2026-07-16",
     readingMinutes: 4,
