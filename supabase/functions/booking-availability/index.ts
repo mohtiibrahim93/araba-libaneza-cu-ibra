@@ -108,7 +108,7 @@ Deno.serve(async (req) => {
       // private lesson on top of a running cohort.
       supabase
         .from("group_cohorts")
-        .select("days_of_week,start_time,end_time,start_date,end_date")
+        .select("id,days_of_week,start_time,end_time,start_date,end_date,cohort_meetings(weekday,start_time,end_time)")
         .eq("is_active", true)
         .in("status", ["forming", "minimum_reached", "confirmed", "in_progress"]),
     ]);
@@ -124,19 +124,34 @@ Deno.serve(async (req) => {
     // for the hours it meets.
     const cohortBusy: Array<{ start: number; end: number }> = [];
     for (const c of cohorts ?? []) {
-      if (!c.days_of_week?.length || !c.start_time || !c.end_time) continue;
-      const [csh, csm] = parseHM(c.start_time);
-      const [ceh, cem] = parseHM(c.end_time);
-      for (const day of days) {
-        const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
-        if (!c.days_of_week.includes(weekdayInTz(probe))) continue;
-        const dayKey = `${day.y}-${String(day.m).padStart(2, "0")}-${String(day.d).padStart(2, "0")}`;
-        if (c.start_date && dayKey < c.start_date) continue;
-        if (c.end_date && dayKey > c.end_date) continue;
-        cohortBusy.push({
-          start: zonedToUtc(day.y, day.m, day.d, csh, csm).getTime(),
-          end: zonedToUtc(day.y, day.m, day.d, ceh, cem).getTime(),
-        });
+      // Per-weekday rows win: a cohort can meet at different hours on
+      // different days (A1 online is Sat 12:00-13:30 but Sun 17:30-19:00),
+      // which the single start_time/end_time pair cannot express. Cohorts
+      // without rows fall back to that pair.
+      const meetings: Array<{ weekday: number; start_time: string; end_time: string }> =
+        c.cohort_meetings?.length
+          ? c.cohort_meetings
+          : (c.days_of_week ?? []).map((wd: number) => ({
+              weekday: wd,
+              start_time: c.start_time,
+              end_time: c.end_time,
+            }));
+
+      for (const m of meetings) {
+        if (!m.start_time || !m.end_time) continue;
+        const [csh, csm] = parseHM(m.start_time);
+        const [ceh, cem] = parseHM(m.end_time);
+        for (const day of days) {
+          const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
+          if (weekdayInTz(probe) !== m.weekday) continue;
+          const dayKey = `${day.y}-${String(day.m).padStart(2, "0")}-${String(day.d).padStart(2, "0")}`;
+          if (c.start_date && dayKey < c.start_date) continue;
+          if (c.end_date && dayKey > c.end_date) continue;
+          cohortBusy.push({
+            start: zonedToUtc(day.y, day.m, day.d, csh, csm).getTime(),
+            end: zonedToUtc(day.y, day.m, day.d, ceh, cem).getTime(),
+          });
+        }
       }
     }
 
