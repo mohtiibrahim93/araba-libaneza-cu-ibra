@@ -1352,6 +1352,11 @@ export type Database = {
           read_ct: number
         }[]
       }
+      student_name_key: { Args: { p_name: string }; Returns: string }
+      student_names_match: {
+        Args: { p_a: string; p_b: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
