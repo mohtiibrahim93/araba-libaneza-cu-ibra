@@ -5,8 +5,10 @@ import {
   gcalFreebusy,
   generateSlotsForDate,
   overlaps,
+  parseHM,
   utcToZonedParts,
   weekdayInTz,
+  zonedToUtc,
 } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
@@ -91,7 +93,7 @@ Deno.serve(async (req) => {
     const lastStartMs = Math.max(...filtered.map((s) => Date.parse(s)));
     const windowEnd = new Date(lastStartMs + et.duration_min * 60_000 + et.buffer_after_min * 60_000).toISOString();
 
-    const [busy, { data: existing }] = await Promise.all([
+    const [busy, { data: existing }, { data: cohorts }] = await Promise.all([
       gcalFreebusy(windowStart, windowEnd),
       supabase
         .from("bookings")
@@ -99,6 +101,16 @@ Deno.serve(async (req) => {
         .eq("status", "confirmed")
         .gte("start_at", windowStart)
         .lte("start_at", windowEnd),
+      // Group classes are not bookings, so nothing here knew the teacher was
+      // already in a lesson. Google Calendar freebusy would have caught it,
+      // but it is only active once the calendar connector is configured —
+      // until then this is the sole protection against selling a trial or a
+      // private lesson on top of a running cohort.
+      supabase
+        .from("group_cohorts")
+        .select("days_of_week,start_time,end_time,start_date,end_date")
+        .eq("is_active", true)
+        .in("status", ["forming", "minimum_reached", "confirmed", "in_progress"]),
     ]);
 
     const bookingBusy = (existing ?? []).map((b) => ({
@@ -107,11 +119,33 @@ Deno.serve(async (req) => {
     }));
     const gcalBusy = busy.map((b) => ({ start: Date.parse(b.start), end: Date.parse(b.end) }));
 
+    // Expand each active cohort into the concrete lesson times it occupies
+    // within the requested days: its weekdays, between its start and end date,
+    // for the hours it meets.
+    const cohortBusy: Array<{ start: number; end: number }> = [];
+    for (const c of cohorts ?? []) {
+      if (!c.days_of_week?.length || !c.start_time || !c.end_time) continue;
+      const [csh, csm] = parseHM(c.start_time);
+      const [ceh, cem] = parseHM(c.end_time);
+      for (const day of days) {
+        const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
+        if (!c.days_of_week.includes(weekdayInTz(probe))) continue;
+        const dayKey = `${day.y}-${String(day.m).padStart(2, "0")}-${String(day.d).padStart(2, "0")}`;
+        if (c.start_date && dayKey < c.start_date) continue;
+        if (c.end_date && dayKey > c.end_date) continue;
+        cohortBusy.push({
+          start: zonedToUtc(day.y, day.m, day.d, csh, csm).getTime(),
+          end: zonedToUtc(day.y, day.m, day.d, ceh, cem).getTime(),
+        });
+      }
+    }
+
     filtered = filtered.filter((iso) => {
       const s = Date.parse(iso) - et.buffer_before_min * 60_000;
       const e = Date.parse(iso) + et.duration_min * 60_000 + et.buffer_after_min * 60_000;
       for (const b of bookingBusy) if (overlaps(s, e, b.start, b.end)) return false;
       for (const b of gcalBusy) if (overlaps(s, e, b.start, b.end)) return false;
+      for (const b of cohortBusy) if (overlaps(s, e, b.start, b.end)) return false;
       return true;
     });
 
