@@ -64,11 +64,10 @@ const CursuriArabaBucuresti = () => (
               closes: "12:00",
             },
           ],
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "5.0",
-            reviewCount: "21",
-          },
+          // No aggregateRating — see the note in Index.tsx. The Preply rating is
+          // real but off-site, and Google's guidelines forbid aggregating another
+          // site's ratings into your own markup. It stays visible on the page
+          // instead, attributed and linked.
         })}
       </script>
     </Helmet>

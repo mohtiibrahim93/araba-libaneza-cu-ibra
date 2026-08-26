@@ -101,11 +101,12 @@ const PageContent = () => {
       addressLocality: "București",
       addressCountry: "RO",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: "21",
-    },
+    // No aggregateRating here. The 5.0 / 21 reviews are real but they live on
+    // Preply, and Google's review-snippet guidelines say not to aggregate
+    // ratings from another site into your own — the markup must describe
+    // reviews shown on this page. Breaking that risks a manual action against
+    // the whole domain. The rating stays visible to visitors, attributed and
+    // linked to the Preply profile, in SocialProofStrip and TestimonialsSection.
   };
 
   const courseJsonLd = {
