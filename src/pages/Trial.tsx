@@ -21,23 +21,39 @@ const TrialPage = () => {
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
+  // Per-field messages. The form is noValidate so the browser never shows its
+  // own bubble, which renders in the browser's UI language (English on a
+  // Romanian page) and flags only one field at a time.
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    phone?: string;
+    gdpr?: string;
+  }>({});
+
+  const required = lang === "en" ? "This field is required." : "Acest câmp este obligatoriu.";
+
+  /** Validate every field at once so the visitor sees all problems together. */
+  const validate = () => {
+    const next: typeof errors = {};
+    if (!name.trim()) next.name = required;
+    if (!email.trim()) next.email = required;
+    else if (!isValidEmail(email)) next.email = t.validEmailError;
+    if (!phone.trim()) next.phone = required;
+    else if (!isValidPhone(phone)) next.phone = t.validPhoneError;
+    if (!gdpr) next.gdpr = t.bookingGdprRequired;
+    return next;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!gdpr) {
-      toast.error(t.bookingGdprRequired);
-      return;
-    }
-    if (!name.trim() || !email.trim() || !phone.trim()) {
-      toast.error(t.schedulerNameRequired);
-      return;
-    }
-    if (!isValidPhone(phone)) {
-      toast.error(t.validPhoneError);
-      return;
-    }
-    if (!isValidEmail(email)) {
-      toast.error(t.validEmailError);
+    const found = validate();
+    setErrors(found);
+    if (Object.keys(found).length > 0) {
+      // Move focus to the first problem so keyboard and screen-reader users
+      // are taken to it rather than left at the button.
+      const first = (["name", "email", "phone", "gdpr"] as const).find((k) => found[k]);
+      document.getElementById(first === "gdpr" ? "gdpr" : `trial-${first}`)?.focus();
       return;
     }
     setSubmitting(true);
@@ -125,6 +141,7 @@ const TrialPage = () => {
         {!registrationId ? (
           <form
             onSubmit={handleSubmit}
+            noValidate
             className="space-y-5 bg-background rounded-2xl border border-border p-6 shadow-sm"
           >
             <div className="space-y-2">
@@ -132,11 +149,21 @@ const TrialPage = () => {
               <Input
                 id="trial-name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (errors.name) setErrors((p) => ({ ...p, name: undefined }));
+                }}
                 placeholder={t.placeholderName}
-                required
                 maxLength={100}
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "trial-name-error" : undefined}
+                className={errors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
               />
+              {errors.name && (
+                <p id="trial-name-error" role="alert" className="text-xs font-medium text-destructive">
+                  {errors.name}
+                </p>
+              )}
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -145,11 +172,21 @@ const TrialPage = () => {
                   id="trial-email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (errors.email) setErrors((p) => ({ ...p, email: undefined }));
+                  }}
                   placeholder={t.placeholderEmail}
-                  required
                   maxLength={255}
+                  aria-invalid={errors.email ? true : undefined}
+                  aria-describedby={errors.email ? "trial-email-error" : undefined}
+                  className={errors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
                 />
+                {errors.email && (
+                  <p id="trial-email-error" role="alert" className="text-xs font-medium text-destructive">
+                    {errors.email}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="trial-phone">{t.labelPhone} *</Label>
@@ -157,14 +194,31 @@ const TrialPage = () => {
                   id="trial-phone"
                   type="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    if (errors.phone) setErrors((p) => ({ ...p, phone: undefined }));
+                  }}
                   placeholder={t.placeholderPhone}
-                  required
                   maxLength={30}
+                  aria-invalid={errors.phone ? true : undefined}
+                  aria-describedby={errors.phone ? "trial-phone-error" : undefined}
+                  className={errors.phone ? "border-destructive focus-visible:ring-destructive" : undefined}
                 />
+                {errors.phone && (
+                  <p id="trial-phone-error" role="alert" className="text-xs font-medium text-destructive">
+                    {errors.phone}
+                  </p>
+                )}
               </div>
             </div>
-            <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+            <GdprCheckbox
+              checked={gdpr}
+              onCheckedChange={(v) => {
+                setGdpr(v);
+                if (v && errors.gdpr) setErrors((p) => ({ ...p, gdpr: undefined }));
+              }}
+              error={errors.gdpr}
+            />
             <Button type="submit" size="lg" className="w-full" disabled={submitting}>
               {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {submitting ? t.trialFormSubmitting : t.trialFormCta}

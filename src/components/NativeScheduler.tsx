@@ -652,6 +652,39 @@ const NativeScheduler = ({
               {fmtDayHeader(selectedDate, lang)}
             </div>
           )}
+          {/* Weekday evenings offer only a handful of slots while weekend days
+              run all day. Someone who lands on a weekday sees three times,
+              decides nothing fits and leaves — without ever discovering the
+              open days. Point at the roomiest day in range instead of letting
+              them find it by chance. Derived from the fetched availability, so
+              it stays correct when the schedule changes. */}
+          {(() => {
+            if (!selectedDate || slotsForDate.length > 4) return null;
+            const best = mergedDateKeys
+              .filter((k) => k !== selectedDate)
+              .map((k) => ({ k, n: slotsByDate[k]?.length ?? 0 }))
+              .sort((a, b) => b.n - a.n)[0];
+            if (!best || best.n < 6 || best.n < slotsForDate.length * 2) return null;
+            return (
+              <button
+                type="button"
+                onClick={() => setSelectedDate(best.k)}
+                className="w-full text-left rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-foreground hover:bg-primary/10 transition-colors"
+              >
+                {lang === "en" ? (
+                  <>
+                    Not many times here. <strong>{fmtDayHeader(best.k, lang)}</strong> has{" "}
+                    <strong>{best.n} slots</strong> across the day — tap to see them.
+                  </>
+                ) : (
+                  <>
+                    Puține intervale aici. <strong>{fmtDayHeader(best.k, lang)}</strong> are{" "}
+                    <strong>{best.n} intervale</strong> pe parcursul zilei — apasă ca să le vezi.
+                  </>
+                )}
+              </button>
+            );
+          })()}
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {slotsForDate.map((iso) => {
               const isCurrent = currentSlotIso === iso;
@@ -669,7 +702,10 @@ const NativeScheduler = ({
                   disabled={isCurrent}
                   title={isCurrent ? t.manageCurrentSlotBadge : undefined}
                   className={cn(
-                    "px-2 py-2 rounded-md border text-sm font-medium transition-colors flex flex-col items-center leading-tight",
+                    // min-h-11 (44px) is the comfortable touch target on a
+                    // phone; the previous 36px height made mis-taps likely in
+                    // this dense grid. Desktop keeps the tighter look at sm:.
+                    "px-2 py-2 min-h-11 sm:min-h-0 justify-center rounded-md border text-sm font-medium transition-colors flex flex-col items-center leading-tight",
                     isCurrent
                       ? "border-amber-500 bg-amber-50 text-amber-900 cursor-not-allowed"
                       : "border-border hover:border-primary hover:bg-primary/5",
