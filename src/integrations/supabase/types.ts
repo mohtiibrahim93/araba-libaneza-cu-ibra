@@ -388,6 +388,41 @@ export type Database = {
           },
         ]
       }
+      cohort_meetings: {
+        Row: {
+          cohort_id: string
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          weekday: number
+        }
+        Insert: {
+          cohort_id: string
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          weekday: number
+        }
+        Update: {
+          cohort_id?: string
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_meetings_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_requests: {
         Row: {
           created_at: string
