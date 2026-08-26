@@ -8,7 +8,10 @@ import { useState } from "react";
 // Romanian mobile or international E.164. Strip spaces / dashes / parens before testing.
 const PHONE_RE = /^(?:\+[1-9]\d{6,14}|0[27]\d{8})$/;
 const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
-const EMAIL_BLOCKLIST = /^(no-?reply|noreply|test|admin|postmaster|mailer-daemon)@/i;
+// Mailboxes that cannot meaningfully receive a booking confirmation. admin@ is
+// deliberately NOT here: admin@firma.ro is a normal business address and a
+// plausible lead, so refusing it lost real people.
+const EMAIL_BLOCKLIST = /^(no-?reply|noreply|test|postmaster|mailer-daemon)@/i;
 
 const normalizePhone = (raw: string) => raw.replace(/[\s\-().]/g, "");
 
