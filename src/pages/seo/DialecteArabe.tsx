@@ -50,6 +50,14 @@ const DialecteArabe = () => (
     </p>
 
     {/* IMAGE SLOT 1 — arabic-dialects-map.
+        Verificat de pe pagina fișierului: „Arabic Dialects" de Rafy, 21 dec.
+        2011, CC BY 3.0 Neadaptată, derivat din File:Arab World-Large.PNG. Doar
+        atribuire — fără distribuire în condiții identice, deci nu impune nimic
+        restului paginii. Pagina listează și o variantă alternativă, „Arabic
+        Varieties Map 2023"; fișierul acesta NU e marcat ca înlocuit, deci
+        oricare merge. Verifică varianta 2023 doar dacă vrei limite mai noi în
+        Peninsula Arabică.
+
         FOLOSEȘTE SVG-UL, NU O CAPTURĂ DE ECRAN. Fișierul de pe Commons e un SVG
         vectorial cu textul legendei încorporat — deci coloana de culori fără
         text din copia trimisă e o problemă de randare a fontului, nu harta

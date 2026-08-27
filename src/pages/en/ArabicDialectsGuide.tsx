@@ -51,6 +51,13 @@ const ArabicDialectsGuide = () => (
     </p>
 
     {/* IMAGE SLOT 1 — arabic-dialects-map.
+        Verified from the file page: "Arabic Dialects" by Rafy, 21 Dec 2011,
+        CC BY 3.0 Unported, derived from File:Arab World-Large.PNG. Attribution
+        only — no share-alike, so it places no condition on the rest of the page.
+        The file page also lists an alternative, "Arabic Varieties Map 2023";
+        this file is NOT marked superseded, so either is fine. Check the 2023
+        one only if you want more current peninsular boundaries.
+
         USE THE SVG, NOT A SCREENSHOT. The Commons file is a vector SVG whose
         legend text is embedded in the file — so the blank swatch column in the
         copy you pasted is a font-rendering failure, not the real map. Download
