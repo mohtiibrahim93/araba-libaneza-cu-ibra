@@ -180,16 +180,27 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
                 Fă testul de nivel (2 min)
               </Link>
             </div>
+            {/* Cross-links to the two priority pages — skipped on those pages
+                themselves, where they would be links to the current URL. */}
             <p className="text-sm text-muted-foreground">
-              Preferi un program flexibil? Vezi{" "}
-              <Link to="/meditatii-araba" className="font-medium text-primary underline">
-                meditațiile de arabă 1:1
-              </Link>
-              . Cauți cursuri fizice? Descoperă{" "}
-              <Link to="/cursuri-araba-bucuresti" className="font-medium text-primary underline">
-                cursurile de arabă în București
-              </Link>
-              .
+              {slug !== "meditatii-araba" && (
+                <>
+                  Preferi un program flexibil? Vezi{" "}
+                  <Link to="/meditatii-araba" className="font-medium text-primary underline">
+                    meditațiile de arabă 1:1
+                  </Link>
+                  .{" "}
+                </>
+              )}
+              {slug !== "cursuri-araba-bucuresti" && (
+                <>
+                  Cauți cursuri fizice? Descoperă{" "}
+                  <Link to="/cursuri-araba-bucuresti" className="font-medium text-primary underline">
+                    cursurile de arabă în București
+                  </Link>
+                  .
+                </>
+              )}
             </p>
           </div>
         </article>
