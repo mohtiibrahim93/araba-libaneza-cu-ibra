@@ -5,6 +5,7 @@ import { ChevronRight, MessageCircle, Sparkles, Building2 } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
+import posterCursuriGrup from "@/assets/poster-cursuri-grup-sep2026.webp";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -52,6 +53,19 @@ const CursGrup = () => {
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
         <p className="text-sm text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
         <p className="text-sm font-medium text-primary mb-6 max-w-2xl">{t.groupEnrollmentOpenNote}</p>
+
+        {/* The two cohorts the note above refers to, shown together. Sits here
+            rather than at the top of the page so it illustrates the note
+            instead of competing with the hero. */}
+        <img
+          src={posterCursuriGrup}
+          alt="Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start marți, 1 septembrie 2026, marți și joi; A1 start miercuri, 2 septembrie 2026, luni și miercuri; 19:00–20:30, Strada Icoanei 80"
+          width={1024}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="w-full max-w-md rounded-2xl border border-border shadow-sm mb-8"
+        />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {LEVELS.map((lvl) => {
