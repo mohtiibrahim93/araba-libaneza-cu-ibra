@@ -152,7 +152,7 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Predați adulților, adolescenților și copiilor?",
-            a: "Tuturor. Avem cursuri de grup și private pentru adulți și adolescenți (11–18 ani), toate nivelurile CEFR, plus un program dedicat copiilor de 6–10 ani, cu activități potrivite vârstei.",
+            a: "Tuturor. Avem cursuri de grup și private pentru adulți și adolescenți (11–17 ani), toate nivelurile CEFR, plus un program dedicat copiilor de 6–10 ani, cu activități potrivite vârstei.",
           },
           {
             q: "Cursurile sunt online sau fizice în București?",
@@ -369,7 +369,7 @@ const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Do you teach adults, teens and kids?",
-            a: "All three. We offer group and private courses for adults and teens (11–18), all CEFR levels, plus a dedicated program for children aged 6–10 with age-appropriate activities.",
+            a: "All three. We offer group and private courses for adults and teens (11–17), all CEFR levels, plus a dedicated program for children aged 6–10 with age-appropriate activities.",
           },
           {
             q: "Are classes online or in-person in Bucharest?",

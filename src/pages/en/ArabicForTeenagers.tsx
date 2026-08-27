@@ -89,7 +89,7 @@ const ArabicForTeenagers = () => (
     </div>
     <p>
       Dedicated 11–15 groups open once 4–8 students have registered interest. You can reserve a place
-      from the <Link to="/cursuri/tineri">teens page</Link> — we'll notify you the moment a group
+      below — we'll notify you the moment a group
       starts, and in the meantime{" "}
       <Link to="/en/arabic-tutor">private lessons</Link> are available immediately.
     </p>

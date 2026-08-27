@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import LandingLayout from "@/components/seo/LandingLayout";
 
 const FAQ = [
@@ -91,7 +92,7 @@ const CursuriArabaAdolescenti = () => (
     </div>
     <p>
       Grupele dedicate 11–15 ani se formează pe măsură ce se strâng 4–8 înscrieri. Îți poți rezerva
-      locul din <Link to="/cursuri/tineri">pagina pentru tineri</Link> — te anunțăm imediat ce
+      locul mai jos — te anunțăm imediat ce
       pornește grupa, iar până atunci poți începe cu{" "}
       <Link to="/meditatii-araba">meditații 1:1</Link>.
     </p>
@@ -111,6 +112,13 @@ const CursuriArabaAdolescenti = () => (
       pe Zoom. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau{" "}
       <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>.
     </p>
+    <h2 id="lista-asteptare">Anunță-mă când pornește grupa</h2>
+    <p>
+      Grupele dedicate adolescenților (11–17 ani) sunt în formare: pornim o cohortă imediat ce avem
+      suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
+      poți începe oricând cu <Link to="/meditatii-araba">lecții private 1:1</Link>.
+    </p>
+    <NotifyMeForm context="Grupă adolescenți 11–17" className="not-prose my-6" />
   </LandingLayout>
 );
 

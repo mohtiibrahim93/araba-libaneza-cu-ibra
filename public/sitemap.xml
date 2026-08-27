@@ -76,11 +76,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://centruldearabalibaneza.com/cursuri/tineri</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://centruldearabalibaneza.com/cursuri/adulti</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

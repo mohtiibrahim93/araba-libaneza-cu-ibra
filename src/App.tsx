@@ -36,7 +36,6 @@ const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
 const CourseDetail = lazy(() => import("./pages/courses/CourseDetail"));
 const PrivateCourse = lazy(() => import("./pages/courses/PrivateCourse"));
 const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
-const CursTineri = lazy(() => import("./pages/courses/CursTineri"));
 const BlogIndex = lazy(() => import("./pages/blog/BlogIndex"));
 const BlogCumInvetiArabaLibaneza = lazy(() => import("./pages/blog/CumInvetiArabaLibaneza"));
 const BlogArabaLibanezaVsArabaStandard = lazy(() => import("./pages/blog/ArabaLibanezaVsArabaStandard"));
@@ -132,7 +131,9 @@ const App = () => (
             <Route path="/cursuri/privat" element={<PrivateCourse />} />
             <Route path="/cursuri/curs/:slug" element={<CourseDetail />} />
             <Route path="/cursuri/adulti" element={<CursAdulti />} />
-            <Route path="/cursuri/tineri" element={<CursTineri />} />
+            {/* Merged into the adolescenți page: one URL, one term, nothing
+                for search engines to split between. */}
+            <Route path="/cursuri/tineri" element={<Navigate to="/cursuri-araba-adolescenti" replace />} />
             <Route path="/cursuri/grup" element={<CursGrup />} />
             <Route path="/cursuri/grup/:level" element={<CursGrupLevel />} />
             <Route path="/cursuri/private" element={<CursPrivate />} />

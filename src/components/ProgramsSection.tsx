@@ -114,7 +114,7 @@ const ProgramsSection = () => {
         <Tabs defaultValue="adults" className="w-full">
           <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="adults">{t.tabAdults}</TabsTrigger>
-            <TabsTrigger value="tineri">{lang === "en" ? "Teens" : "Tineri"}</TabsTrigger>
+            <TabsTrigger value="tineri">{lang === "en" ? "Teens" : "Adolescenți"}</TabsTrigger>
             <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
           </TabsList>
 
@@ -643,10 +643,10 @@ const ProgramsSection = () => {
           <TabsContent value="tineri">
             <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-sm">
               <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {lang === "en" ? "Teens · 11–18" : "Adolescenți · 11–18 ani"}
+                {lang === "en" ? "Teens · 11–17" : "Adolescenți · 11–17 ani"}
               </span>
               <h3 className="mb-2 text-xl font-bold text-foreground">
-                {lang === "en" ? "Lebanese Arabic for teens (11–18)" : "Arabă libaneză pentru adolescenți (11–18 ani)"}
+                {lang === "en" ? "Lebanese Arabic for teens (11–17)" : "Arabă libaneză pentru adolescenți (11–17 ani)"}
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
                 {lang === "en"
@@ -654,7 +654,7 @@ const ProgramsSection = () => {
                   : "Cursuri de grup și private adaptate pentru adolescenți — același curriculum CEFR, într-un ritm și cu teme potrivite vârstei. Vezi opțiunile sau întreabă-ne."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Link to="/cursuri/tineri" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                <Link to="/cursuri-araba-adolescenti" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
                   {lang === "en" ? "See teen courses" : "Vezi cursurile pentru adolescenți"}
                 </Link>
                 <a href={wa("Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru adolescenți.")} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted">

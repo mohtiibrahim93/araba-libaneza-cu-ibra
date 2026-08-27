@@ -25,7 +25,6 @@ const EN_FOR_RO: Record<string, string> = {
   "/araba-in-familie": "/en/learn-lebanese-arabic",
   "/cel-mai-bun-curs-de-araba": "/en/best-arabic-course",
   "/cursuri-araba-adolescenti": "/en/arabic-for-teenagers",
-  "/cursuri/tineri": "/en/arabic-for-teenagers",
   // Dialect cluster
   "/dialecte-arabe": "/en/arabic-dialects-guide",
   "/ce-araba-sa-inveti": "/en/lebanese-arabic-vs-msa-vs-egyptian",

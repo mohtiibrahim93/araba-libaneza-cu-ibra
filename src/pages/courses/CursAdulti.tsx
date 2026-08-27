@@ -30,7 +30,7 @@ const CursAdulti = () => {
       primaryCtaLabel={t.courseCtaSeeOptions}
       primaryCtaHref="#options"
       otherCourses={[
-        { to: "/cursuri/tineri", label: t.trackTineriTitle },
+        { to: "/cursuri-araba-adolescenti", label: t.trackTineriTitle },
         { to: "/cursuri/copii", label: t.trackCopiiTitle },
         { to: "/cursuri", label: t.cursuriH1 },
       ]}
