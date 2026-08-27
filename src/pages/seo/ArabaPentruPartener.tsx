@@ -32,7 +32,7 @@ const ArabaPentruPartener = () => (
     description="Vrei să vorbești cu partenerul libanez și cu familia lui? Expresii esențiale pentru prima întâlnire cu socrii, alintări, urări la masă și un plan realist de învățare în 6 săptămâni."
     crumb="Arabă pentru partener"
     lead="Cel mai frecvent motiv pentru care oamenii ne scriu: o relație cu cineva din Liban. Iată ce înveți întâi și cum te pregătești pentru prima întâlnire cu familia."
-    enHref="/en/learn-lebanese-arabic"
+    enHref={null}
     faq={FAQ}
   >
     <p>

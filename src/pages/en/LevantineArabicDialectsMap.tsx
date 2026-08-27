@@ -31,6 +31,7 @@ const FAQ = [
 const LevantineArabicDialectsMap = () => (
   <EnLandingLayout
     slug="levantine-arabic-dialects-map"
+    roHref={null}
     title="Levantine Arabic dialects — a map of the Shami family"
     metaTitle="Levantine Arabic Dialects Map — North vs South Shami"
     description="Map of the Levantine Arabic dialects: North Levantine (Lebanese, Syrian) vs South Levantine (Palestinian, Jordanian) — sounds, differences, and where Lebanese fits in."

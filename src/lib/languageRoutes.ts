@@ -16,7 +16,6 @@ const EN_FOR_RO: Record<string, string> = {
   "/meditatii-araba": "/en/arabic-tutor",
   "/cursuri-araba": "/en/learn-lebanese-arabic",
   "/araba-online": "/en/learn-lebanese-arabic",
-  "/cursuri-araba": "/en/learn-lebanese-arabic",
   "/araba-pentru-incepatori": "/en/learn-lebanese-arabic",
   "/invata-araba": "/en/learn-lebanese-arabic",
   "/cursuri-araba-bucuresti": "/en/arabic-classes-near-me",

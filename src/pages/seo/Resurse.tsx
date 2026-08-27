@@ -29,7 +29,7 @@ const Resurse = () => (
     description="Descarcă gratuit materialele noastre pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale și planul de învățare de 30 de zile. PDF pe email, fără costuri."
     crumb="Resurse gratuite"
     lead="Toate materialele noastre gratuite într-un singur loc. Alegi resursa, lași emailul și primești PDF-ul în câteva secunde."
-    enHref="/blog/lebanese-arabic-learning-resources"
+    enHref={null}
     faq={FAQ}
   >
     <p>

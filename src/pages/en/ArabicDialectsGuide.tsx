@@ -27,6 +27,7 @@ const FAQ = [
 const ArabicDialectsGuide = () => (
   <EnLandingLayout
     slug="arabic-dialects-guide"
+    roHref="/dialecte-arabe"
     title="Arabic dialects — the complete guide (Levantine, Egyptian, Gulf, Maghrebi & more)"
     metaTitle="Arabic Dialects Guide — Levantine, Egyptian, Gulf, Maghrebi | 2026"
     description="Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher."

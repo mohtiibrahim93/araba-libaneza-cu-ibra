@@ -24,10 +24,16 @@ interface Props {
   lead: string;
   faq?: Faq[];
   /**
-   * The English counterpart this page links to via "English version".
-   * Defaults to the general Lebanese course. Pass `null` when there is no
-   * real English equivalent (e.g. the Bucharest / kids pages) so we don't
-   * send visitors to an unrelated page.
+   * Root-relative EN counterpart of this page. Drives the hreflang cluster, so
+   * it must name a *true* equivalent whose own `roHref` points back here —
+   * hreflang has to be 1:1 and reciprocal, and the build fails the check in
+   * scripts/seoPrerender.ts if it isn't. Defaults to null (no cluster).
+   *
+   * The previous default made every page that forgot to set it claim
+   * /en/learn-lebanese-arabic, which put six Romanian pages on the same
+   * alternate and invalidated the whole cluster. Pages with no English twin
+   * still get a nearest relative from the language toggle via
+   * src/lib/languageRoutes.ts, which is deliberately looser than this.
    */
   enHref?: string | null;
   /**
@@ -42,12 +48,17 @@ interface Props {
 /**
  * Chrome comun pentru landing-urile SEO românești: meta + canonical,
  * Course & BreadcrumbList (+ FAQPage când există) JSON-LD, breadcrumb
- * vizibil, link către varianta EN și CTA-ul de probă gratuită.
+ * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = "/en/learn-lebanese-arabic", canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   const canonical = canonicalHref ? `${BASE}${canonicalHref}` : url;
+
+  // hreflang is announced only for a real reciprocal twin, and never from a
+  // page that canonicalises elsewhere — a non-canonical URL must not head its
+  // own language cluster. RO is x-default: it is the site's primary language.
+  const hreflang = Boolean(enHref) && !canonicalHref;
 
   // Owner-edited version of this page (admin → "Pagini"). Anything left empty
   // falls back to the code-shipped content.
@@ -98,8 +109,9 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
         <title>{metaTitle}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={canonical} />
-        {enHref && !canonicalHref ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
-        {enHref && !canonicalHref ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        {hreflang ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
+        {hreflang ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        {hreflang ? <link rel="alternate" hrefLang="x-default" href={url} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={description} />

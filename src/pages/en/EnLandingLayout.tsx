@@ -25,11 +25,13 @@ interface Props {
   faq?: Faq[];
   courseSchema?: boolean;
   /**
-   * Root-relative RO counterpart this page links back to (visible
-   * "Versiune română" link + hreflang alternate). Defaults to home when the
-   * page has no true Romanian twin.
+   * Root-relative RO counterpart of this page. Drives the hreflang cluster, so
+   * it must name a *true* equivalent whose own `enHref` points back here —
+   * hreflang has to be 1:1 and reciprocal. Defaults to null (no cluster) when
+   * the page has no Romanian twin; the language toggle still finds a nearest
+   * relative through src/lib/languageRoutes.ts, which is deliberately looser.
    */
-  roHref?: string;
+  roHref?: string | null;
   children: React.ReactNode;
 }
 
@@ -47,11 +49,11 @@ const EnLandingLayout = ({
   lead: leadProp,
   faq: faqProp,
   courseSchema = true,
-  roHref = "/",
+  roHref = null,
   children,
 }: Props) => {
   const url = `${BASE}/en/${slug}`;
-  const roAlt = `${BASE}${roHref}`;
+  const roAlt = roHref ? `${BASE}${roHref}` : null;
 
   // Owner-edited version of this page (admin -> "Pagini"); empty fields fall
   // back to the code-shipped content.
@@ -106,9 +108,9 @@ const EnLandingLayout = ({
         <title>{metaTitle}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={url} />
-        <link rel="alternate" hrefLang="en" href={url} />
-        <link rel="alternate" hrefLang="ro" href={roAlt} />
-        <link rel="alternate" hrefLang="x-default" href={`${BASE}/`} />
+        {roAlt ? <link rel="alternate" hrefLang="ro" href={roAlt} /> : null}
+        {roAlt ? <link rel="alternate" hrefLang="en" href={url} /> : null}
+        {roAlt ? <link rel="alternate" hrefLang="x-default" href={roAlt} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={description} />

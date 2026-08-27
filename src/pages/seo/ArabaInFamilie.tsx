@@ -32,7 +32,7 @@ const ArabaInFamilie = () => (
     description="Cum crești un copil bilingv româno-libanez: rutine zilnice, regula „o persoană, o limbă”, expresii de acasă și cursuri pentru copii și părinți, în București sau online."
     crumb="Arabă în familie"
     lead="Pentru familiile mixte româno-libaneze: cum păstrezi limba în casă, ce faci concret în fiecare zi și de unde începe fiecare membru al familiei."
-    enHref="/en/learn-lebanese-arabic"
+    enHref={null}
     faq={FAQ}
   >
     <p>

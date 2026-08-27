@@ -61,7 +61,7 @@ const HowToLearnLebaneseArabic = () => (
     crumb="How to learn Lebanese Arabic"
     lead="A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught hundreds of students."
     courseSchema={false}
-    roHref="/blog/cum-inveti-araba-libaneza"
+    roHref="/invata-araba"
     faq={FAQ}
   >
     <p>

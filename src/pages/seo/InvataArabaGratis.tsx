@@ -33,7 +33,7 @@ const InvataArabaGratis = () => (
     description="Resurse gratuite pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale în PDF, plan de 30 de zile, canale YouTube și o mini-lecție cu pronunție. Fără costuri."
     crumb="Învață araba gratis"
     lead="Tot ce poți învăța fără să plătești nimic — și, sincer, unde se oprește gratuitul. Începe cu mini-lecția de mai jos și cu PDF-urile."
-    enHref="/blog/lebanese-arabic-learning-resources"
+    enHref={null}
     faq={FAQ}
   >
     <p>

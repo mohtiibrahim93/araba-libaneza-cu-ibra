@@ -39,6 +39,7 @@ const FAQ = [
 const LearnLevantineArabic = () => (
   <EnLandingLayout
     slug="learn-levantine-arabic"
+    roHref={null}
     title="Learn Levantine Arabic online — through Lebanese, the most beautiful Levantine dialect"
     metaTitle="Learn Levantine Arabic Online — Native Teacher | A1–C2"
     description="Learn Levantine Arabic with a native Lebanese teacher — Lebanese is widely considered the most beautiful, melodic Levantine dialect and unlocks Syrian, Jordanian and Palestinian too. Live 1-on-1 and small-group courses online, A1–C2."

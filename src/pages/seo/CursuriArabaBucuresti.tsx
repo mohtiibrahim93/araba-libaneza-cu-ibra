@@ -73,7 +73,7 @@ const CursuriArabaBucuresti = () => (
     </Helmet>
   <LandingLayout
     slug="cursuri-araba-bucuresti"
-    enHref={null}
+    enHref="/en/arabic-classes-near-me"
     title="Cursuri de arabă libaneză în București — profesor nativ, grupe mici"
     metaTitle="Cursuri de Arabă Libaneză București — Adulți, Copii, 1:1 | Sector 2"
     description="Cursuri de arabă libaneză în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."

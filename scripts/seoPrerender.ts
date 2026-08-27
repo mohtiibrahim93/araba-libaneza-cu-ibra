@@ -52,7 +52,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri", title: "Cursuri Arabă (Libaneză) — Adulți, Tineri, Copii | București & Online", description: "Cursuri de arabă (dialect libanez) pentru toate vârstele: adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
-  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri interactive de arabă libaneză pentru copii (4–14 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani." },
+  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri interactive de arabă libaneză pentru copii (6–10 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
   { path: "/cursuri-araba", title: "Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2", description: "Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită." },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție", description: "Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită." },
@@ -73,8 +73,8 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri-araba-adolescenti", title: "Cursuri Arabă pentru Adolescenți 11–17 ani | București & Online", description: "Cursuri de arabă libaneză (levantină) pentru adolescenți 11–17 ani, cu profesor nativ: fizic în București sau online. Conversație din prima lecție, fără tocit alfabet. Probă gratuită." },
   { path: "/blog", title: "Blog — articole despre araba libaneză | Arabă Libaneză cu Ibra", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher, Free Trial", description: "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial." },
-  { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online — Native Teacher | A1–C2", description: "Learn Levantine Arabic (Lebanese, Syrian, Jordanian, Palestinian) with a native teacher. Live 1-on-1 and small-group courses online, A1–C2. Oral-first method — speak from lesson one." },
-  { path: "/en/arabic-tutor", title: "Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher", description: "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min." },
+  { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online — Native Teacher | A1–C2", description: "Learn Levantine Arabic with a native Lebanese teacher — Lebanese is widely considered the most beautiful, melodic Levantine dialect and unlocks Syrian, Jordanian and Palestinian too. Live 1-on-1 and small-group courses online, A1–C2." },
+  { path: "/en/arabic-tutor", title: "Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
   { path: "/en/arabic-dialects-guide", title: "Arabic Dialects Guide — Levantine, Egyptian, Gulf, Maghrebi | 2026", description: "Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher." },
   { path: "/en/levantine-arabic-dialects-map", title: "Levantine Arabic Dialects Map — North vs South Shami", description: "Map of the Levantine Arabic dialects: North Levantine (Lebanese, Syrian) vs South Levantine (Palestinian, Jordanian) — sounds, differences, and where Lebanese fits in." },
   { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month." },
@@ -130,6 +130,75 @@ function allRoutes(): Route[] {
   return [...STATIC_ROUTES, ...levelRoutes(), ...blog];
 }
 
+/**
+ * SEO props read straight from the landing-page sources at build time.
+ *
+ * Parsing is deliberately literal — a plain `prop="..."` attribute — and any
+ * page it cannot parse is skipped rather than guessed at. This is what lets the
+ * guards below compare what a visitor renders against what we prerender without
+ * importing React components into a Node build script.
+ */
+interface Annotation {
+  file: string;
+  /** Root-relative route this page serves. */
+  routePath: string;
+  metaTitle?: string;
+  description?: string;
+  /** `enHref` on RO pages, `roHref` on EN ones: undefined if absent, null if `{null}`. */
+  twin?: string | null;
+  /** True when the page canonicalises elsewhere, so it must not head a language cluster. */
+  canonicalOverride: boolean;
+}
+
+const attr = (src: string, name: string): string | undefined =>
+  src.match(new RegExp(`${name}="((?:[^"\\\\]|\\\\.)*)"`))?.[1];
+
+function landingAnnotations(): Annotation[] {
+  const out: Annotation[] = [];
+  for (const [dir, prefix, twinProp] of [
+    ["src/pages/seo", "/", "enHref"],
+    ["src/pages/en", "/en/", "roHref"],
+  ] as const) {
+    const abs = path.resolve(dir);
+    if (!fs.existsSync(abs)) continue;
+    for (const file of fs.readdirSync(abs).filter((f) => f.endsWith(".tsx"))) {
+      const src = fs.readFileSync(path.join(abs, file), "utf8");
+      const slug = attr(src, "slug");
+      if (!slug) continue; // the shared layout itself has no slug
+      out.push({
+        file,
+        routePath: prefix + slug,
+        metaTitle: attr(src, "metaTitle"),
+        description: attr(src, "description"),
+        twin: attr(src, twinProp) ?? (src.includes(`${twinProp}={null}`) ? null : undefined),
+        canonicalOverride: /canonicalHref="/.test(src),
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * RO <-> EN pairs where *both* pages name each other. hreflang must be 1:1 and
+ * reciprocal: a one-way or many-to-one annotation is ignored by search engines
+ * and can invalidate the whole cluster, so only mutual pairs are emitted. The
+ * looser nearest-relative mapping used by the in-page language toggle lives in
+ * src/lib/languageRoutes.ts and deliberately does not feed this.
+ */
+function hreflangPairs(): Map<string, { ro: string; en: string }> {
+  const byPath = new Map(landingAnnotations().map((a) => [a.routePath, a]));
+  const pairs = new Map<string, { ro: string; en: string }>();
+  for (const a of byPath.values()) {
+    if (a.routePath.startsWith("/en/") || !a.twin || a.canonicalOverride) continue;
+    const twin = byPath.get(a.twin);
+    if (!twin || twin.twin !== a.routePath || twin.canonicalOverride) continue;
+    const pair = { ro: a.routePath, en: twin.routePath };
+    pairs.set(pair.ro, pair);
+    pairs.set(pair.en, pair);
+  }
+  return pairs;
+}
+
 const escAttr = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -139,7 +208,11 @@ function setMeta(html: string, attr: "property" | "name", key: string, value: st
   return html.replace(re, `$1${value}$2`);
 }
 
-function renderRoute(template: string, route: Route): string {
+function renderRoute(
+  template: string,
+  route: Route,
+  pairs: Map<string, { ro: string; en: string }>,
+): string {
   const url = BASE + (route.path === "/" ? "/" : route.path);
   const lang = route.lang ?? (route.path.startsWith("/en/") ? "en" : "ro");
   const ogLocale = lang === "en" ? "en_US" : lang === "de" ? "de_DE" : "ro_RO";
@@ -164,6 +237,16 @@ function renderRoute(template: string, route: Route): string {
   let inject =
     `    <link rel="canonical" href="${canonicalHref}" />\n` +
     `    <meta property="og:locale" content="${ogLocale}" />\n`;
+  // hreflang for reciprocal RO/EN twins only, matching what the layouts render
+  // at runtime tag for tag. Romanian is x-default: it is the site's primary
+  // language, and the RO page is the right landing spot for unmatched locales.
+  const pair = pairs.get(route.path);
+  if (pair && !route.canonical) {
+    inject +=
+      `    <link rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
+      `    <link rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n` +
+      `    <link rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
+  }
   if (route.type === "article") {
     const articleJsonLd = {
       "@context": "https://schema.org",
@@ -237,6 +320,7 @@ export function seoPrerenderPlugin(): Plugin {
           return;
         }
         const template = fs.readFileSync(shellPath, "utf8");
+        const pairs = hreflangPairs();
         let count = 0;
         for (const route of allRoutes()) {
           const cms = cmsMeta[route.path];
@@ -247,7 +331,7 @@ export function seoPrerenderPlugin(): Plugin {
                 description: cms.meta_description?.trim() || route.description,
               }
             : route;
-          const html = renderRoute(template, merged);
+          const html = renderRoute(template, merged, pairs);
           const outFile =
             route.path === "/"
               ? shellPath
@@ -257,7 +341,10 @@ export function seoPrerenderPlugin(): Plugin {
           count++;
         }
         // eslint-disable-next-line no-console
-        console.log(`[seo-prerender] wrote static <head> for ${count} routes.`);
+        console.log(
+          `[seo-prerender] wrote static <head> for ${count} routes ` +
+            `(${pairs.size / 2} reciprocal RO/EN hreflang pairs).`,
+        );
 
         // Drift guard: any URL in the sitemap that we don't prerender ships the
         // bare SPA shell to crawlers. That silently happened when new pages were
@@ -278,34 +365,77 @@ export function seoPrerenderPlugin(): Plugin {
           /* sitemap missing is not fatal */
         }
 
-        // Second drift guard: the strings below are hand-copied from each page's
-        // own SEO props, so editing a page without editing this file makes a
-        // crawler and a visitor see different titles for the same URL — exactly
-        // what this plugin exists to prevent. Re-read the landing pages and
-        // compare. Parsing is deliberately literal (a plain metaTitle="..."
-        // attribute); anything it cannot parse is skipped rather than guessed at.
+        // Second drift guard: the titles and descriptions in STATIC_ROUTES are
+        // hand-copied from each page's own SEO props, so editing a page without
+        // editing this file makes a crawler and a visitor see different things
+        // for the same URL — exactly what this plugin exists to prevent. Re-read
+        // the pages and compare, and check the hreflang annotations while we are
+        // in there, since a one-way annotation silently emits no hreflang at all.
         try {
-          const drift: string[] = [];
-          for (const dir of ["src/pages/seo", "src/pages/en"]) {
-            const abs = path.resolve(dir);
-            if (!fs.existsSync(abs)) continue;
-            for (const file of fs.readdirSync(abs).filter((f) => f.endsWith(".tsx"))) {
-              const src = fs.readFileSync(path.join(abs, file), "utf8");
-              const slug = src.match(/slug="([^"]+)"/)?.[1];
-              const metaTitle = src.match(/metaTitle="((?:[^"\\]|\\.)*)"/)?.[1];
-              if (!slug || !metaTitle) continue;
-              const routePath = (dir.endsWith("/en") ? "/en/" : "/") + slug;
-              const route = allRoutes().find((r) => r.path === routePath);
-              if (!route) continue;
-              if (route.title !== metaTitle) {
-                drift.push(`${routePath} (${file}): prerender "${route.title}" vs page "${metaTitle}"`);
-              }
+          const problems: string[] = [];
+          const routes = allRoutes();
+          const annotations = landingAnnotations();
+
+          const compare = (routePath: string, file: string, title?: string, desc?: string) => {
+            const route = routes.find((r) => r.path === routePath);
+            if (!route) {
+              problems.push(`${routePath} (${file}): page exists but is not prerendered — add it to STATIC_ROUTES`);
+              return;
+            }
+            if (title && route.title !== title) {
+              problems.push(`${routePath} (${file}): <title> — prerender "${route.title}" vs page "${title}"`);
+            }
+            if (desc && route.description !== desc) {
+              problems.push(`${routePath} (${file}): description — prerender "${route.description}" vs page "${desc}"`);
+            }
+          };
+
+          for (const a of annotations) compare(a.routePath, a.file, a.metaTitle, a.description);
+
+          // The /cursuri/* funnel pages build their head from i18n keys instead
+          // of literal props, so resolve the key against the Romanian dictionary
+          // (the first of the two in i18n.tsx) before comparing.
+          try {
+            const i18n = fs.readFileSync(path.resolve("src/lib/i18n.tsx"), "utf8");
+            const ro = (key: string): string | undefined =>
+              i18n.match(new RegExp(`\\b${key}: "((?:[^"\\\\]|\\\\.)*)"`))?.[1];
+            const dir = path.resolve("src/pages/courses");
+            for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+              const src = fs.readFileSync(path.join(dir, file), "utf8");
+              const routePath = src.match(/path="(\/cursuri[^"]*)"/)?.[1];
+              if (!routePath) continue;
+              const titleKey = src.match(/metaTitle=\{t\.(\w+)\}/)?.[1];
+              const descKey = src.match(/metaDescription=\{t\.(\w+)\}/)?.[1];
+              compare(routePath, file, titleKey && ro(titleKey), descKey && ro(descKey));
+            }
+          } catch {
+            /* i18n-backed pages are best-effort */
+          }
+
+          // hreflang reciprocity: every declared twin must name this page back,
+          // and no two pages may claim the same twin.
+          const byPath = new Map(annotations.map((a) => [a.routePath, a]));
+          const claimed = new Map<string, string>();
+          for (const a of annotations) {
+            if (!a.twin) continue;
+            const prev = claimed.get(a.twin);
+            if (prev) problems.push(`hreflang: ${a.twin} is claimed by both ${prev} and ${a.routePath} — it must be 1:1`);
+            else claimed.set(a.twin, a.routePath);
+
+            const twin = byPath.get(a.twin);
+            if (!twin) {
+              problems.push(`hreflang: ${a.routePath} points at ${a.twin}, which is not a landing page — no hreflang will be emitted`);
+            } else if (twin.twin !== a.routePath) {
+              problems.push(
+                `hreflang: ${a.routePath} -> ${a.twin}, but ${a.twin} -> ${twin.twin ?? "(none)"} — ` +
+                  `the pair is not reciprocal, so neither page gets hreflang`,
+              );
             }
           }
-          if (drift.length) {
+
+          if (problems.length) {
             this.warn(
-              `[seo-prerender] ${drift.length} page(s) render a different <title> than the ` +
-                `prerendered one — crawlers and visitors see different things:\n  ${drift.join("\n  ")}`,
+              `[seo-prerender] ${problems.length} SEO drift / hreflang problem(s):\n  ${problems.join("\n  ")}`,
             );
           }
         } catch {

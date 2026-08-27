@@ -23,6 +23,7 @@ const FAQ = [
 const ArabaPentruIncepatori = () => (
   <LandingLayout
     slug="araba-pentru-incepatori"
+    enHref={null}
     title="Arabă libaneză pentru începători: vorbește din prima lecție"
     metaTitle="Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție"
     description="Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită."
