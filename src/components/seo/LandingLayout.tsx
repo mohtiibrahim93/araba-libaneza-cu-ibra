@@ -180,6 +180,17 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
                 Fă testul de nivel (2 min)
               </Link>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Preferi un program flexibil? Vezi{" "}
+              <Link to="/meditatii-araba" className="font-medium text-primary underline">
+                meditațiile de arabă 1:1
+              </Link>
+              . Cauți cursuri fizice? Descoperă{" "}
+              <Link to="/cursuri-araba-bucuresti" className="font-medium text-primary underline">
+                cursurile de arabă în București
+              </Link>
+              .
+            </p>
           </div>
         </article>
       </main>
