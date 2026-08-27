@@ -96,47 +96,53 @@ const ArabicDialectsGuide = () => (
       everyday conversation across four countries at once.
     </p>
 
-    {/* IMAGE SLOT 2 — levantine-dialects-map.
-        PICK THE RIGHT FILE FIRST — three candidates, and they are not the same map:
+    {/* IMAGE SLOT 2 — Levantine dialect map.
 
-          1. LevantineArabic.svg — the six-category version (North-eastern,
-             Nusayrieh, Central / Palestinian, South-eastern, Outer southern).
-             This is the one you showed, and the best fit for this page: it is
-             the only one that puts Beirut and Damascus in the same Central
-             zone, which is exactly the point the text above makes. Its licence
-             is not in what we have; read it off its own file page. (It is the
-             parent of a CC BY-SA 4.0 derivative, so it is almost certainly
-             CC BY-SA, but confirm the version rather than assuming.)
+        RECOMMENDED FILE: Levantine Arabic 2023.svg
+        Commons marks BOTH older candidates superseded in its favour, and the
+        stated reason is substantive, not housekeeping: the six-category PNG
+        "contains unsourced and non-existing dialects, such as 'Central
+        Levantine'". That is precisely the zone that made the six-category map
+        look attractive here — so it is the reason to avoid it, not to use it.
+        Putting a map with invented dialect categories on a language school's
+        page undermines the credibility the page exists to build.
 
-          2. Levantine Arabic 2022.svg — two categories only (North / South).
-             Fully verified: Tom Fish + A455bcd9, CC BY-SA 4.0. Its own file
-             page marks it SUPERSEDED and recommends using the 2023 file.
+        The 2023 file is language-independent, current after the [apc]/[ajp]
+        ISO merge, and based on cited sources. It shows two categories, North
+        and South Levantine. Read its author and licence off its own file page
+        and fill them in below — it is the successor to Levantine Arabic
+        2022.svg (Tom Fish + A455bcd9, CC BY-SA 4.0), so probably the same, but
+        confirm rather than assume.
 
-          3. Levantine Arabic 2023.svg — the recommended replacement for #2,
-             updated after the [apc] and [ajp] ISO codes were merged. Also two
-             categories. Licence not in what we have.
+        The alt and caption below are written for that two-category map.
 
-        The credit below is pre-filled for #2 because that is the only one we
-        have a complete, verified record for. If you use #1 or #3, replace the
-        title, author, sourceHref and licence to match that file's page, and
-        for #3 also simplify the alt text below to two categories.
+        REJECTED — Levantine Arabic Map v4.png (the six-category one first
+        proposed). Fully verified: Hurayshi, 16 July 2012, dual-licensed
+        GFDL 1.2+ or CC BY-SA 3.0 Unported (either may be chosen), synthesised
+        from Behnstedt, Palva and Seeger. Superseded for the reason above. Do
+        not use it to illustrate a "Central" zone.
 
-        Add src/assets/levantine-dialects-map.png, then add these two imports at the top of this file:
+        Note the two-category map cannot show the Beirut/Damascus closeness.
+        That point is made in the prose above on phonetic grounds — the glottal
+        qaf and vowel colouring — which is well sourced and does not depend on
+        any disputed cartographic category. Leave it in the text, not the map.
+
+        Add src/assets/levantine-dialects-map.svg, then add these two imports at the top of this file:
           import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.png";
+          import map2 from "@/assets/levantine-dialects-map.svg";
         and replace this whole comment with:
 
         <CreditedFigure
           src={map2}
           className="w-full max-w-md"
-          alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
-          caption="The Levantine (Shami) dialect area. Beirut and Damascus fall in the same Central zone — which is why the two sound so close. Dialect boundaries after Brustad & Zuniga (2019) and Ethnologue (2022)."
+          alt="Map of the Levantine Arabic area, split into North Levantine and South Levantine"
+          caption="The Levantine (Shami) dialect area, split into North Levantine (Lebanon, Syria) and South Levantine (Palestine, Jordan). Boundaries follow the sources behind the ISO classification; see Brustad & Zuniga (2019)."
           credit={{
-            title: "Levantine Arabic 2022",
-            author: "Tom Fish (geo.fish), derivative work by A455bcd9",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2022.svg",
-            licence: "CC BY-SA 4.0",
-            licenceHref: "https://creativecommons.org/licenses/by-sa/4.0/",
+            title: "Levantine Arabic 2023",
+            author: "FILL IN from the file page",
+            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2023.svg",
+            licence: "FILL IN from the file page",
+            licenceHref: "FILL IN — link the licence deed",
           }}
         />
     */}

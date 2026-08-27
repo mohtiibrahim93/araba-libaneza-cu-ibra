@@ -114,47 +114,54 @@ const DialecteArabe = () => (
       Palestina. Se împarte în două grupuri apropiate:
     </p>
 
-    {/* IMAGE SLOT 2 — levantine-dialects-map.
-        ALEGE ÎNTÂI FIȘIERUL POTRIVIT — sunt trei variante și nu sunt aceeași hartă:
+    {/* SLOT IMAGINE 2 — harta dialectelor levantine.
 
-          1. LevantineArabic.svg — varianta cu șase categorii (nord-estică,
-             nusayrieh, centrală / palestiniană, sud-estică, sudică exterioară).
-             E cea pe care ai arătat-o și se potrivește cel mai bine acestei
-             pagini: e singura care pune Beirutul și Damascul în aceeași zonă
-             centrală, exact ideea din textul de mai sus. Licența ei nu apare
-             în ce avem; citește-o de pe pagina fișierului. (E părintele unei
-             lucrări derivate CC BY-SA 4.0, deci aproape sigur tot CC BY-SA,
-             dar confirmă versiunea.)
+        FIȘIERUL RECOMANDAT: Levantine Arabic 2023.svg
+        Commons marchează AMBELE variante mai vechi ca înlocuite de acesta, iar
+        motivul e de fond, nu de formă: varianta PNG cu șase categorii
+        „conține dialecte nesusținute de surse și inexistente, precum
+        «levantina centrală»". Exact zona care făcea harta cu șase categorii
+        atrăgătoare aici — deci e motivul să o evităm, nu să o folosim. O hartă
+        cu categorii dialectale inventate pe pagina unei școli de limbi
+        subminează tocmai credibilitatea pe care pagina o construiește.
 
-          2. Levantine Arabic 2022.svg — doar două categorii (nord / sud).
-             Verificată complet: Tom Fish + A455bcd9, CC BY-SA 4.0. Pagina ei
-             o marchează ÎNLOCUITĂ și recomandă fișierul din 2023.
+        Fișierul din 2023 e independent de limbă, actualizat după unirea
+        codurilor ISO [apc]/[ajp] și bazat pe surse citate. Are două categorii:
+        levantina de nord și de sud. Citește autorul și licența de pe pagina
+        lui și completează mai jos — e succesorul lui Levantine Arabic 2022.svg
+        (Tom Fish + A455bcd9, CC BY-SA 4.0), deci probabil aceeași licență, dar
+        confirmă, nu presupune.
 
-          3. Levantine Arabic 2023.svg — înlocuitorul recomandat pentru #2,
-             actualizat după unirea codurilor ISO [apc] și [ajp]. Tot două
-             categorii. Licența nu apare în ce avem.
+        Textul alt și descrierea de mai jos sunt scrise pentru harta cu două
+        categorii.
 
-        Creditul de mai jos e completat pentru #2, singurul pentru care avem o
-        fișă completă și verificată. Dacă folosești #1 sau #3, înlocuiește
-        title, author, sourceHref și licence cu cele de pe pagina acelui fișier,
-        iar pentru #3 simplifică și textul alt la două categorii.
+        RESPINS — Levantine Arabic Map v4.png (varianta cu șase categorii,
+        propusă inițial). Verificat complet: Hurayshi, 16 iulie 2012, licențiat
+        dublu GFDL 1.2+ sau CC BY-SA 3.0 Neadaptată (poți alege), sintetizat
+        după Behnstedt, Palva și Seeger. Înlocuit din motivul de mai sus. Nu-l
+        folosi ca să ilustrezi o zonă „centrală".
 
-        Pune src/assets/levantine-dialects-map.png, apoi adaugă aceste două importuri în capul fișierului:
+        Harta cu două categorii nu poate arăta apropierea Beirut–Damasc. Ideea
+        e susținută în textul de mai sus pe temei fonetic — ق ca oprire glotală
+        și culoarea vocalelor — bine documentat și independent de orice
+        categorie cartografică disputată. Rămâne în text, nu în hartă.
+
+        Pune src/assets/levantine-dialects-map.svg, apoi adaugă aceste două importuri în capul fișierului:
           import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.png";
+          import map2 from "@/assets/levantine-dialects-map.svg";
         și înlocuiește tot acest comentariu cu:
 
         <CreditedFigure
           src={map2}
           className="w-full max-w-md"
-          alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
-          caption="Zona dialectelor levantine (shami). Beirut și Damasc cad în aceeași zonă centrală — de aceea cele două sună atât de apropiat. Limitele dialectale după Brustad & Zuniga (2019) și Ethnologue (2022)."
+          alt="Harta zonei levantine, împărțită în levantina de nord și levantina de sud"
+          caption="Zona dialectelor levantine (shami), împărțită în levantina de nord (Liban, Siria) și levantina de sud (Palestina, Iordania). Limitele urmează sursele din spatele clasificării ISO; vezi Brustad & Zuniga (2019)."
           credit={{
-            title: "Levantine Arabic 2022",
-            author: "Tom Fish (geo.fish), derivative work by A455bcd9",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2022.svg",
-            licence: "CC BY-SA 4.0",
-            licenceHref: "https://creativecommons.org/licenses/by-sa/4.0/",
+            title: "Levantine Arabic 2023",
+            author: "COMPLETEAZĂ de pe pagina fișierului",
+            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2023.svg",
+            licence: "COMPLETEAZĂ de pe pagina fișierului",
+            licenceHref: "COMPLETEAZĂ — link către textul licenței",
           }}
         />
     */}
