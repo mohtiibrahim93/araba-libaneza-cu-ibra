@@ -35,15 +35,64 @@ export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
   trackEvent("begin_checkout", { course_type: courseType });
 }
 
-let contactTrackingInitialized = false;
+let trackingInitialized = false;
 
 /**
- * Track high-intent contact clicks across the entire site, including links
- * rendered inside landing pages, the footer and scheduler fallbacks.
+ * Track high-intent contact clicks across the entire site and confirmed
+ * bookings at the successful booking-create response boundary.
  */
 export function initContactClickTracking() {
-  if (contactTrackingInitialized || typeof document === "undefined") return;
-  contactTrackingInitialized = true;
+  if (trackingInitialized || typeof document === "undefined") return;
+  trackingInitialized = true;
+
+  // A booking event must only fire after the backend confirms the reservation.
+  // Intercepting this single endpoint avoids false positives from button clicks
+  // and covers every scheduler entry point without duplicating component logic.
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (...args: Parameters<typeof fetch>): Promise<Response> => {
+    const [input, init] = args;
+    const url =
+      typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.toString()
+          : input.url;
+    const isBookingCreate = url.includes("/functions/v1/booking-create");
+    let bookingType: string | undefined;
+
+    if (isBookingCreate) {
+      try {
+        const rawBody =
+          typeof init?.body === "string"
+            ? init.body
+            : input instanceof Request
+              ? await input.clone().text()
+              : "";
+        bookingType = rawBody ? JSON.parse(rawBody)?.event_type : undefined;
+      } catch {
+        bookingType = undefined;
+      }
+    }
+
+    const response = await originalFetch(...args);
+
+    if (isBookingCreate && response.ok) {
+      void response
+        .clone()
+        .json()
+        .then((payload) => {
+          if (!payload?.ok) return;
+          trackEvent(bookingType === "trial" ? "trial_booking_complete" : "paid_booking_complete", {
+            booking_type: bookingType || "unknown",
+            booking_format: payload?.format,
+            page_path: window.location.pathname,
+          });
+        })
+        .catch(() => undefined);
+    }
+
+    return response;
+  };
 
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) return;
