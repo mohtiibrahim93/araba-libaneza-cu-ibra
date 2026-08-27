@@ -8,7 +8,7 @@ import groupImg from "@/assets/group-course.jpg";
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
 const CursTineri = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
   const courseSchema = {
     name: t.cursTineriH1,
@@ -41,6 +41,13 @@ const CursTineri = () => {
       <section id="options" className="scroll-mt-24 mt-4">
         <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 mb-6">
           <p className="text-sm text-foreground">{t.cursTineriNote}</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {lang === "en" ? (
+              <>Full details on method, prices and schedule: <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">Arabic courses for teenagers (11–17)</Link>.</>
+            ) : (
+              <>Detalii complete despre metodă, prețuri și program: <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">cursuri de arabă pentru adolescenți (11–17 ani)</Link>.</>
+            )}
+          </p>
         </div>
         {/* Dedicated teen groups (11–17): forming — capture interest as a real
             course_request that lands in the admin, not a WhatsApp thread. */}
