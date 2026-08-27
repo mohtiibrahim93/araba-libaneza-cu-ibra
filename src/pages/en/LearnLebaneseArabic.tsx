@@ -24,6 +24,22 @@ const FAQ = [
     a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (10% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson (≈ €30). A 30-minute trial lesson is free.",
   },
   {
+    q: "Is Levantine Arabic the same as Lebanese Arabic?",
+    a: "Lebanese is a variety of Levantine — specifically North Levantine, which it shares with Syrian. South Levantine covers Jordanian and Palestinian. Core grammar, most vocabulary and the pronunciation patterns overlap heavily, so learning Lebanese gives you roughly 90% comprehension across the whole Levantine region.",
+  },
+  {
+    q: "Which Levantine variety do you teach — Lebanese, Syrian, Jordanian or Palestinian?",
+    a: "We teach the Lebanese variety (North Levantine), which is mutually intelligible with Syrian and highly understood in Jordan and Palestine. Lebanese also has the widest media reach — songs, series, TV — which gives you plenty of listening practice outside class.",
+  },
+  {
+    q: "Is Levantine Arabic easy to learn?",
+    a: "Compared to MSA, noticeably easier. Levantine has no case endings and simpler verb conjugation, and the oral-first method skips the alphabet hurdle for the first months. It is still a Semitic language with new sounds, so it needs consistent practice — but learners who avoid MSA-first curricula are usually speaking basic Levantine within weeks.",
+  },
+  {
+    q: "How long does it take to speak Levantine Arabic?",
+    a: "With 2 lessons of 90 minutes per week plus modest practice, learners typically reach basic everyday conversation (A2) in 3–6 months, and comfortable fluency (B1/B2) in 1.5–2 years. Starting with arabizi before the Arabic script accelerates the first months substantially.",
+  },
+  {
     q: "What language are lessons taught in?",
     a: "You pick. Ibra teaches fluently in English, French, Arabic and Romanian — pick whichever you're most comfortable with. Lessons are not taught in German or other languages.",
   },
@@ -32,11 +48,11 @@ const FAQ = [
 const LearnLebaneseArabic = () => (
   <EnLandingLayout
     slug="learn-lebanese-arabic"
-    title="Learn Lebanese Arabic online with a native teacher"
-    metaTitle="Learn Lebanese Arabic Online | Native Teacher, Free Trial"
-    description="Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial."
+    title="Learn Lebanese Arabic online — the Levantine dialect, with a native teacher"
+    metaTitle="Learn Lebanese & Levantine Arabic Online | Native Teacher, Free Trial"
+    description="Learn Lebanese Arabic — the Levantine dialect — with a native instructor. One dialect, ~90% comprehension across Lebanon, Syria, Jordan and Palestine. Live 1-on-1 and small-group courses online, A1–C2. Speak from lesson one, free trial."
     crumb="Learn Lebanese Arabic"
-    lead="Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by ~30 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
+    lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by 30–35 million people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
     faq={FAQ}
     courseSchema
     roHref="/cursuri-araba"
@@ -87,6 +103,26 @@ const LearnLebaneseArabic = () => (
       <li><strong>Travel and family:</strong> connect with Lebanese speakers in Lebanon and the diaspora.</li>
       <li><strong>Gateway to the Levant:</strong> Lebanese is mutually intelligible with Syrian and widely understood in Jordan and Palestine.</li>
     </ul>
+
+    <h2>Learning Levantine Arabic through Lebanese</h2>
+    <p>
+      Levantine Arabic (<em>Shami</em>) is the everyday spoken language of the Eastern
+      Mediterranean — 30–35 million native speakers across Lebanon, Syria, Jordan and Palestine.
+      It splits into North Levantine (Lebanese, Syrian) and South Levantine (Jordanian,
+      Palestinian), and the differences between them are accent and a slice of vocabulary, not
+      grammar. Learn one properly and you follow conversations in all four countries.
+    </p>
+    <p>We teach the Lebanese variety, for three practical reasons:</p>
+    <ul>
+      <li><strong>Media reach:</strong> Lebanese songs, series and TV travel across the whole Arab world — endless listening practice, far beyond the Levant.</li>
+      <li><strong>Diaspora density:</strong> the Lebanese diaspora is one of the largest globally (Brazil, France, the US, West Africa), so there are people to practise with almost anywhere.</li>
+      <li><strong>Clarity:</strong> Lebanese is considered an easy Levantine variety to be understood in, which matters when you are still slow.</li>
+    </ul>
+    <p>
+      For the full linguistic map — how North and South Levantine differ, and where Levantine sits
+      against Egyptian, Gulf and Maghrebi — see{" "}
+      <Link to="/en/arabic-dialects-guide">the Arabic dialects guide</Link>.
+    </p>
 
     <h2>Lebanese Arabic vs Modern Standard Arabic</h2>
     <p>

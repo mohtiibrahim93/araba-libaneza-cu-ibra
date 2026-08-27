@@ -32,10 +32,10 @@ const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-araba"
     enHref="/en/learn-lebanese-arabic"
-    title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
-    metaTitle="Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2"
+    title="Cursuri de arabă (libaneză) — București și online, toate nivelurile"
+    metaTitle="Cursuri de Arabă (Libaneză) — București & Online | A1–C2"
     description="Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită."
-    crumb="Cursuri de limbă arabă"
+    crumb="Cursuri de arabă (libaneză)"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}
   >

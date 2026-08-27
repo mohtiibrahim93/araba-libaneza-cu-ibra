@@ -33,7 +33,7 @@ const LimbileVorbiteInLiban = () => {
       </p>
       <p>
         {en ? (
-          <>See <Link to="/en/learn-levantine-arabic">the Levantine Arabic argument</Link> for how it fits in the wider region.</>
+          <>See <Link to="/en/arabic-dialects-guide">the Arabic dialects guide</Link> for how it fits in the wider region.</>
         ) : (
           <>Vezi <Link to="/blog/araba-libaneza-vs-araba-standard">comparația libaneză vs standard</Link> pentru contextul mai larg.</>
         )}

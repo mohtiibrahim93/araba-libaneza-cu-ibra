@@ -213,7 +213,7 @@ const LebaneseVsMsaVsEgyptian = () => (
 
     <h2>Where Lebanese fits</h2>
     <p>
-      Lebanese sits inside the broader <Link to="/en/learn-levantine-arabic">Levantine Arabic</Link>{" "}
+      Lebanese sits inside the broader Levantine Arabic{" "}
       family and, thanks to Lebanese music and satellite TV, is one of the most widely understood
       dialects across the Arab world. If you want the full map of the dialect landscape — Gulf,
       Maghrebi, Mesopotamian and more — see our{" "}

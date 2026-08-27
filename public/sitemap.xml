@@ -180,11 +180,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://centruldearabalibaneza.com/en/learn-levantine-arabic</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://centruldearabalibaneza.com/en/arabic-tutor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -198,11 +193,6 @@
     <loc>https://centruldearabalibaneza.com/en/arabic-dialects-guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://centruldearabalibaneza.com/en/levantine-arabic-dialects-map</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://centruldearabalibaneza.com/en/lebanese-arabic-vs-msa-vs-egyptian</loc>

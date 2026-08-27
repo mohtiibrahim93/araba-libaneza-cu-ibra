@@ -19,6 +19,14 @@ const FAQ = [
     a: "Levantine (especially Lebanese) and Egyptian are the two most commonly recommended for learners: both have huge media presence (music, cinema, TV), both are widely understood across the Arab world, and both have plenty of learning resources. Which one is 'best' depends on your target region and personal connections.",
   },
   {
+    q: "What is the difference between North and South Levantine Arabic?",
+    a: "North Levantine covers Lebanese and Syrian; South Levantine covers Palestinian and Jordanian. They share grammar and most vocabulary. The differences are mainly pronunciation (the qaf, vowel colouring, intonation) and a handful of everyday words — comparable to British vs American English.",
+  },
+  {
+    q: "Is Lebanese Arabic the same as Syrian Arabic?",
+    a: "Not identical, but very close. Lebanese and Damascene Syrian are mutually intelligible with almost no effort. Northern Lebanese (Tripoli) already sounds partly Syrian, and border areas blur in both directions.",
+  },
+  {
     q: "Can speakers from different Arab countries understand each other?",
     a: "It depends on the pair. Levantine, Egyptian and Gulf speakers usually understand each other with mild adjustment thanks to shared media exposure. Maghrebi dialects (especially Moroccan and Algerian) can be hard for eastern Arabs to follow unless the speaker slows down or switches toward MSA. Everyone can fall back on MSA when needed.",
   },
@@ -29,8 +37,8 @@ const ArabicDialectsGuide = () => (
     slug="arabic-dialects-guide"
     roHref="/dialecte-arabe"
     title="Arabic dialects — the complete guide (Levantine, Egyptian, Gulf, Maghrebi & more)"
-    metaTitle="Arabic Dialects: Levantine, Egyptian, Gulf & More"
-    description="Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher."
+    metaTitle="Arabic Dialects & Map: Levantine, Egyptian, Gulf & More"
+    description="Complete guide and map of the Arabic dialects: Levantine (North vs South Shami — Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher."
     crumb="Arabic dialects guide"
     lead="A practical, non-academic guide to the Arabic dialect landscape — written by a native Lebanese teacher. What each family sounds like, where it's spoken, and how they relate to each other."
     courseSchema={false}
@@ -44,17 +52,73 @@ const ArabicDialectsGuide = () => (
 
     <h2>1. Levantine Arabic (Shami)</h2>
     <p>
-      Spoken across the Eastern Mediterranean by ~30–35 million people. Two sub-groups, with heavy
-      border overlap:
+      Spoken across the Eastern Mediterranean by ~30–35 million people. <em>Shami</em> to its own
+      speakers, it is the branch most learners end up wanting, because it is the language of
+      everyday conversation across four countries at once.
     </p>
+
+    {/* Dialect map image goes here. Drop the file in src/assets/, import it at the
+        top of this file, and replace this comment with:
+
+        <figure className="not-prose my-6">
+          <img src={dialectMap} alt="Map of the Arabic dialects, with North and South Levantine marked"
+               className="w-full rounded-xl border border-border" loading="lazy" />
+          <figcaption className="mt-2 text-sm text-muted-foreground">
+            The Arabic dialect families, with the Levantine (Shami) area highlighted.
+          </figcaption>
+        </figure>
+
+        Left as a comment on purpose: pointing an <img> at a file that isn't there
+        yet would render a broken image on a live page. */}
+
+    <h3>The Levantine map at a glance</h3>
     <ul>
-      <li><strong>North Levantine:</strong> Lebanese and Syrian. Nearly identical grammar, high mutual intelligibility.</li>
-      <li><strong>South Levantine:</strong> Jordanian and Palestinian. Same family, small shifts in vocabulary and pronunciation.</li>
+      <li><strong>North Levantine</strong> — Lebanon and Syria (Beirut, Tripoli, Damascus, Aleppo, Homs, Latakia). Nearly identical grammar, ~95% mutual intelligibility.</li>
+      <li><strong>South Levantine</strong> — Palestine and Jordan (Jerusalem, Ramallah, Gaza, Amman, Irbid). Same family, small shifts in vocabulary and a few sounds.</li>
+      <li><strong>Edges</strong> — Hatay in southern Turkey, the Bekaa toward the Syrian desert, and large diaspora communities in Brazil, France, the US, Germany and the Gulf.</li>
+    </ul>
+
+    <h3>North Levantine: Lebanese and Syrian</h3>
+    <p>
+      Lebanese and Damascene Syrian are close enough that speakers rarely notice they are switching
+      varieties. The most audible marker is the <strong>qaf</strong>: in both Beirut and Damascus it
+      is usually pronounced as a glottal stop (<em>ʾ</em>), so <em>qalb</em> ("heart") becomes{" "}
+      <em>ʾalb</em>. Lebanese leans toward a lighter, more raised vowel colour (<em>imēle</em>) —
+      Beirut's <em>kēn</em> against Damascus's <em>kān</em>. Lebanese also carries the heaviest
+      French and English layer of any Arabic dialect: everyday speech mixes <em>bonjour</em>,{" "}
+      <em>merci</em> and <em>ok</em> without a second thought, which is part of why it feels
+      approachable to European learners.
+    </p>
+
+    <h3>South Levantine: Palestinian and Jordanian</h3>
+    <p>
+      Grammar is essentially the same as the north — same <em>b-</em> verb prefix, same pronouns,
+      same negation pattern. What shifts is pronunciation and a slice of vocabulary. Rural and
+      Bedouin Jordanian often keeps a hard <em>g</em> for the qaf (<em>galb</em>), while urban
+      Jerusalem and Amman speech uses the same glottal stop as Beirut. Verb forms like{" "}
+      <em>bidd-</em> ("want") and <em>hallaʾ</em> ("now") are shared across the whole family.
+    </p>
+
+    <h3>North vs South — the practical differences</h3>
+    <ul>
+      <li><strong>Qaf:</strong> glottal stop in cities everywhere; hard <em>g</em> in Bedouin and rural Jordanian.</li>
+      <li><strong>Vowels:</strong> raised, "lighter" vowels in Lebanese; flatter in Palestinian and Jordanian.</li>
+      <li><strong>Loanwords:</strong> French and English in Lebanon; more English in Jordan and Palestine.</li>
+      <li><strong>Intonation:</strong> Lebanese has a distinctive sing-song rise that people recognise instantly.</li>
+      <li><strong>Everything else:</strong> grammar, sentence structure and 90%+ of vocabulary are shared.</li>
     </ul>
     <p>
-      Border regions blur the boundaries: Tripoli (northern Lebanon) sounds partly Syrian; southern
-      Lebanon shares features with Palestine, and vice versa across every land border in the region.
-      Read more on <Link to="/en/learn-levantine-arabic">the Levantine Arabic page</Link>.
+      Border regions blur the boundaries further: Tripoli sounds partly Syrian, southern Lebanon
+      shares features with Palestine, and so on across every land border in the region. In practice
+      a learner of any one Levantine variety follows conversations in all four countries — the gap
+      is far smaller than the gap between Levantine and Egyptian or MSA.
+    </p>
+    <p>
+      Lebanese sits at the centre of the family: geographically between Syria and Palestine,
+      culturally the region's biggest media exporter. Fairuz, Nancy Ajram, Lebanese cinema and TV
+      drama travel across the whole Arabic-speaking world, so Lebanese speech is understood far
+      outside the Levant — the widest passive reach for the smallest amount of work. If you want to
+      learn it, see <Link to="/en/learn-lebanese-arabic">the Lebanese Arabic course page</Link>.
     </p>
 
     <h2>2. Egyptian–Sudanese</h2>
@@ -115,7 +179,9 @@ const ArabicDialectsGuide = () => (
     <p>
       For most learners with no specific regional tie, we recommend starting with{" "}
       <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link> — a North Levantine variety with
-      huge media reach, wide diaspora, and 90%+ comprehension across the whole Levantine region. If
+      huge media reach, wide diaspora, and 90%+ comprehension across the whole Levantine region.
+      For the step-by-step route from zero to conversation, read{" "}
+      <Link to="/en/how-to-learn-lebanese-arabic">how to learn Lebanese Arabic</Link>. If
       you want private lessons tailored to your goal, see the{" "}
       <Link to="/en/arabic-tutor">Arabic tutor page</Link>.
     </p>

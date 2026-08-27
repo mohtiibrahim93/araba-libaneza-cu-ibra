@@ -63,9 +63,9 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/cursuri-araba",
-    "meta_title": "Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2",
+    "meta_title": "Cursuri de Arabă (Libaneză) — București & Online | A1–C2",
     "meta_description": "Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită.",
-    "h1": "Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile",
+    "h1": "Cursuri de arabă (libaneză) — București și online, toate nivelurile",
     "lead": "Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
   },
   {
@@ -118,25 +118,11 @@ export const PAGE_SEEDS: PageSeed[] = [
     "lead": "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by ~30 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
   },
   {
-    "path": "/en/learn-levantine-arabic",
-    "meta_title": "Learn Levantine Arabic Online — Native Teacher | A1–C2",
-    "meta_description": "Learn Levantine Arabic with a native Lebanese teacher — Lebanese is widely considered the most beautiful, melodic Levantine dialect and unlocks Syrian, Jordanian and Palestinian too. Live 1-on-1 and small-group courses online, A1–C2.",
-    "h1": "Learn Levantine Arabic online — through Lebanese, the most beautiful Levantine dialect",
-    "lead": "Live online courses in Levantine Arabic — taught through Lebanese, widely considered the most beautiful and melodic Levantine dialect and the media prestige variety of the region. One dialect, ~90% comprehension across Lebanon, Syria, Jordan and Palestine."
-  },
-  {
     "path": "/en/lebanese-arabic-vs-msa-vs-egyptian",
     "meta_title": "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)",
     "meta_description": "Lebanese Arabic vs Modern Standard Arabic (MSA/Fusha) vs Egyptian Arabic: differences in pronunciation, grammar, media reach, and which dialect to learn based on your goal. Written by a native Lebanese teacher.",
     "h1": "Lebanese Arabic vs MSA vs Egyptian Arabic — which one should you learn?",
     "lead": "A practical side-by-side comparison of Lebanese Arabic, Modern Standard Arabic (MSA / Fusha) and Egyptian Arabic — how they sound, how they differ, and which one to learn depending on your goal."
-  },
-  {
-    "path": "/en/levantine-arabic-dialects-map",
-    "meta_title": "Levantine Arabic Dialects Map — North vs South Shami",
-    "meta_description": "Map of the Levantine Arabic dialects: North Levantine (Lebanese, Syrian) vs South Levantine (Palestinian, Jordanian) — sounds, differences, and where Lebanese fits in.",
-    "h1": "Levantine Arabic dialects — a map of the Shami family",
-    "lead": "Where each Levantine dialect is spoken, how North and South Shami differ, and why Lebanese is the most practical entry point into the family."
   },
   {
     "path": "/fara-alfabet-arab",

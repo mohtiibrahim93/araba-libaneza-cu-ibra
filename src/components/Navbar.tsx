@@ -138,7 +138,6 @@ const Navbar = () => {
           { to: "/blog/lebanese-arabic-phrases", label: "Essential phrases" },
           { to: "/en/arabic-dialects-guide", label: "Arabic dialects guide" },
           { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
-          { to: "/en/levantine-arabic-dialects-map", label: "Levantine dialects map" },
         ]
       : [
           { to: "/resurse", label: "Resurse gratuite" },
