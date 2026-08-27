@@ -31,10 +31,10 @@ const FAQ = [
 const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-araba"
-    title="Cursuri de arabă libaneză în București și online — toate nivelurile"
-    metaTitle="Cursuri de Arabă Libaneză (Levantină) — București & Online | A1–C2"
-    description="Cursuri de arabă libaneză (dialect levantin) cu profesor nativ, în București și online: grupe A1–C2, lecții private 1:1, copii și adolescenți. De la 500 lei/lună, probă gratuită."
-    crumb="Cursuri de arabă libaneză"
+    title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
+    metaTitle="Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2"
+    description="Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită."
+    crumb="Cursuri de limbă arabă"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}
   >
