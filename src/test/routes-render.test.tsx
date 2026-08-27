@@ -80,3 +80,33 @@ describe("retired URLs still redirect", () => {
     expect(window.location.pathname).not.toBe(from);
   });
 });
+
+/**
+ * The dialect maps are Creative Commons licensed, and both CC BY and CC BY-SA
+ * permit reuse only with attribution. The credit is a required prop on
+ * CreditedFigure, but a required prop still can't stop someone deleting the
+ * whole figure; this asserts the rendered page actually carries the image and
+ * its credit.
+ */
+describe("licensed images keep their attribution", () => {
+  it.each([
+    ["/en/arabic-dialects-guide", "en", "Rafy"],
+    ["/dialecte-arabe", "ro", "Rafy"],
+  ])("%s credits the dialect map", async (route, lang, author) => {
+    window.localStorage.setItem("site-language", lang);
+    window.history.pushState({}, "", route);
+    const { container } = render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>,
+    );
+    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    const img = container.querySelector('img[src*="arabic-dialects-map"]');
+    expect(img).toBeTruthy();
+    expect(img?.getAttribute("alt")?.length ?? 0).toBeGreaterThan(20);
+    const fig = img?.closest("figure");
+    expect(fig?.textContent).toContain(author);
+    expect(fig?.querySelector('a[href*="creativecommons.org"]')).toBeTruthy();
+    expect(fig?.querySelector('a[href*="commons.wikimedia.org"]')).toBeTruthy();
+  });
+});

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import LandingLayout from "@/components/seo/LandingLayout";
+import CreditedFigure from "@/components/content/CreditedFigure";
+import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";
 
 const FAQ = [
   {
@@ -49,27 +51,18 @@ const DialecteArabe = () => (
       știri. Acasă, la piață și pe WhatsApp, nimeni nu vorbește așa. Se vorbește dialectul.
     </p>
 
-    {/* Pune src/assets/arabic-dialects-map.svg (ia SVG-ul sau un PNG generat de
-        Commons — o captură de ecran pierde textul legendei), adaugă importurile
-        în capul fișierului și înlocuiește acest comentariu cu blocul de mai jos.
-
-          import CreditedFigure from "@/components/content/CreditedFigure";
-          import map1 from "@/assets/arabic-dialects-map.svg";
-
-        <CreditedFigure
-          src={map1}
-          className="w-full"
-          alt="Harta familiilor de dialecte arabe din Africa de Nord și Orientul Mijlociu"
-          caption="Familiile de dialecte arabe, de la maghrebină în vest la cele din Peninsula Arabică în est. Fâșia îngustă de pe coasta estică a Mediteranei e levantina."
-          credit={{
-            title: "Arabic Dialects",
-            author: "Rafy",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Arabic_Dialects.svg",
-            licence: "CC BY 3.0",
-            licenceHref: "https://creativecommons.org/licenses/by/3.0/",
-          }}
-        />
-    */}
+    <CreditedFigure
+      src={arabicDialectsMap}
+      alt="Harta dialectelor arabe pe regiuni, de la marocană și hassaniya în vest la cele din Golf și omaneză în est, cu levantina pe coasta estică a Mediteranei"
+      caption="Dialectele arabe pe regiuni — douăzeci și șase de varietăți indicate, toate înrudite, și niciuna dintre ele nu e araba standard. Levantina stă pe coasta estică a Mediteranei; secțiunea de mai jos o detaliază."
+      credit={{
+        title: "Arabic Dialects",
+        author: "Rafy",
+        sourceHref: "https://commons.wikimedia.org/wiki/File:Arabic_Dialects.svg",
+        licence: "CC BY 3.0",
+        licenceHref: "https://creativecommons.org/licenses/by/3.0/",
+      }}
+    />
 
     <h2>Familiile de dialecte, pe scurt</h2>
     <ul>

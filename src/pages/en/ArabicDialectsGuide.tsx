@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import EnLandingLayout from "./EnLandingLayout";
+import CreditedFigure from "@/components/content/CreditedFigure";
+import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";
 
 const FAQ = [
   {
@@ -50,27 +52,18 @@ const ArabicDialectsGuide = () => (
       a Roman and a Parisian don't chat in Latin. Same idea. Below is the map, region by region.
     </p>
 
-    {/* Add src/assets/arabic-dialects-map.svg (take the SVG or a Commons PNG
-        rendering — a screenshot loses the legend text), add these imports at
-        the top of this file, and replace this comment with the block below.
-
-          import CreditedFigure from "@/components/content/CreditedFigure";
-          import map1 from "@/assets/arabic-dialects-map.svg";
-
-        <CreditedFigure
-          src={map1}
-          className="w-full"
-          alt="Map of the Arabic dialect families across North Africa and the Middle East"
-          caption="The Arabic dialect families, from Maghrebi in the west to Peninsular in the east. The narrow strip on the eastern Mediterranean is Levantine."
-          credit={{
-            title: "Arabic Dialects",
-            author: "Rafy",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Arabic_Dialects.svg",
-            licence: "CC BY 3.0",
-            licenceHref: "https://creativecommons.org/licenses/by/3.0/",
-          }}
-        />
-    */}
+    <CreditedFigure
+      src={arabicDialectsMap}
+      alt="Map of the Arabic dialects by region, from Moroccan and Hassaniya in the west to Gulf and Omani in the east, with Levantine on the eastern Mediterranean"
+      caption="The Arabic dialects by region — twenty-six labelled varieties, all related, and not one of them Modern Standard Arabic. Levantine sits on the eastern Mediterranean; the section below breaks it down."
+      credit={{
+        title: "Arabic Dialects",
+        author: "Rafy",
+        sourceHref: "https://commons.wikimedia.org/wiki/File:Arabic_Dialects.svg",
+        licence: "CC BY 3.0",
+        licenceHref: "https://creativecommons.org/licenses/by/3.0/",
+      }}
+    />
 
     <h2>1. Levantine Arabic (Shami)</h2>
     <p>
