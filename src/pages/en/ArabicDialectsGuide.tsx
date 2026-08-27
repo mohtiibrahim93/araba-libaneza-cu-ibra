@@ -65,8 +65,10 @@ const ArabicDialectsGuide = () => (
           alt="Map of the Arabic dialect families across North Africa and the Middle East"
           caption="The Arabic dialect families. Blues in the west are Maghrebi; pale blue across Egypt is Egyptian; brown below it is Sudanese; olive in the north-east is Mesopotamian; the crimsons of the peninsula are Gulf, Najdi and Hijazi, with pink along the south coast for Yemeni and Omani. The narrow green strip on the eastern Mediterranean is Levantine."
           credit={{
-            // REPLACE with the real author and licence from the file's source page.
-            text: "Author, LICENCE, via Wikimedia Commons",
+            // LICENCE STILL NEEDED — the Commons file page states it next to
+            // "Licensing"; paste it in place of LICENCE below. Everything else
+            // here is from the file's own description page.
+            text: "Map of Varieties of Arabic, after Schmitt (2019), Handbook of the Changing World Language Map, Springer — LICENCE, via Wikimedia Commons",
             href: "https://commons.wikimedia.org/wiki/File:...",
           }}
         />
@@ -80,6 +82,14 @@ const ArabicDialectsGuide = () => (
     </p>
 
     {/* IMAGE SLOT 2 — levantine-dialects-map.
+        CHECK BEFORE USING: the description you supplied is for a map with two
+        categories (North Levantine / South Levantine), but the image shown had
+        six (North-eastern, Nusayrieh, Central / Palestinian, South-eastern,
+        Outer southern). The alt text below describes the six-category version.
+        If you upload the two-category file instead, simplify the alt to
+        "Map of the Levantine Arabic dialect area: North Levantine and South
+        Levantine" — alt text has to describe the image that actually ships.
+
         Add src/assets/levantine-dialects-map.png, then add these two imports at the top of this file:
           import CreditedFigure from "@/components/content/CreditedFigure";
           import map2 from "@/assets/levantine-dialects-map.png";
@@ -89,10 +99,11 @@ const ArabicDialectsGuide = () => (
           src={map2}
           className="w-full max-w-md"
           alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
-          caption="The Levantine (Shami) dialect area. Beirut and Damascus fall in the same Central zone — which is why the two sound so close."
+          caption="The Levantine (Shami) dialect area. Beirut and Damascus fall in the same Central zone — which is why the two sound so close. Dialect boundaries after Brustad & Zuniga (2019) and Ethnologue (2022)."
           credit={{
-            // REPLACE with the real author and licence from the file's source page.
-            text: "Author, LICENCE, via Wikimedia Commons",
+            // LICENCE STILL NEEDED — see the Commons file page's "Licensing"
+            // section and paste it in place of LICENCE below.
+            text: "Tom Fish (geo.fish), derivative work by A455bcd9 — LICENCE, via Wikimedia Commons",
             href: "https://commons.wikimedia.org/wiki/File:...",
           }}
         />
