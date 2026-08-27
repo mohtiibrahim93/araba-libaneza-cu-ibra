@@ -49,31 +49,26 @@ const DialecteArabe = () => (
       știri. Acasă, la piață și pe WhatsApp, nimeni nu vorbește așa. Se vorbește dialectul.
     </p>
 
-    {/* SLOT IMAGINE 1 — harta generală a familiilor de dialecte arabe.
+    {/* IMAGE SLOT 1 — arabic-dialects-map.
         ATENȚIE: legenda hărții sursă e o coloană de culori fără text, așa că
-        descrierea de mai jos trebuie să facă decodarea. Dacă găsești o variantă
-        cu legendă scrisă, folosește-o pe aceea și scurtează descrierea.
+        descrierea trebuie să facă decodarea.
 
-        Pune src/assets/arabic-dialects-map.png, apoi în capul fișierului adaugă
-          import arabicDialectsMap from "@/assets/arabic-dialects-map.png";
+        Pune src/assets/arabic-dialects-map.png, apoi adaugă aceste două importuri în capul fișierului:
+          import CreditedFigure from "@/components/content/CreditedFigure";
+          import map1 from "@/assets/arabic-dialects-map.png";
         și înlocuiește tot acest comentariu cu:
 
-        <figure className="not-prose my-6">
-          <img
-            src={arabicDialectsMap}
-            alt="Harta familiilor de dialecte arabe din Africa de Nord și Orientul Mijlociu"
-            className="w-full rounded-xl border border-border"
-            loading="lazy"
-          />
-          <figcaption className="mt-2 text-sm text-muted-foreground">
-            Familiile de dialecte arabe. Albastrurile din vest sunt maghrebine (marocană,
-            algeriană, tunisiană, libiană); albastrul deschis peste Egipt e egipteana; maroul de
-            sub el, sudaneza; verdele-oliv și galben-verzuiul din nord-est, mesopotamiana
-            (irakiana); nuanțele de zmeuriu din peninsulă sunt dialectele din Golf, najdi și
-            hijazi, iar rozul de pe coasta sudică — yemenita și omaneza. Fâșia verde îngustă de pe
-            coasta estică a Mediteranei e levantina, subiectul secțiunii de mai jos.
-          </figcaption>
-        </figure>
+        <CreditedFigure
+          src={map1}
+          className="w-full"
+          alt="Harta familiilor de dialecte arabe din Africa de Nord și Orientul Mijlociu"
+          caption="Familiile de dialecte arabe. Albastrurile din vest sunt maghrebine; albastrul deschis peste Egipt e egipteana; maroul de sub el, sudaneza; verdele-oliv din nord-est, mesopotamiana; nuanțele de zmeuriu din peninsulă sunt dialectele din Golf, najdi și hijazi, iar rozul de pe coasta sudică — yemenita și omaneza. Fâșia verde îngustă de pe coasta estică a Mediteranei e levantina."
+          credit={{
+            // ÎNLOCUIEȘTE cu autorul și licența reale de pe pagina sursă a fișierului.
+            text: "Author, LICENCE, via Wikimedia Commons",
+            href: "https://commons.wikimedia.org/wiki/File:...",
+          }}
+        />
     */}
 
     <h2>Familiile de dialecte, pe scurt</h2>
@@ -101,23 +96,23 @@ const DialecteArabe = () => (
       Palestina. Se împarte în două grupuri apropiate:
     </p>
 
-    {/* SLOT IMAGINE 2 — harta dialectelor levantine (shami).
-        Pune src/assets/levantine-dialects-map.png, apoi în capul fișierului adaugă
-          import levantineMap from "@/assets/levantine-dialects-map.png";
+    {/* IMAGE SLOT 2 — levantine-dialects-map.
+        Pune src/assets/levantine-dialects-map.png, apoi adaugă aceste două importuri în capul fișierului:
+          import CreditedFigure from "@/components/content/CreditedFigure";
+          import map2 from "@/assets/levantine-dialects-map.png";
         și înlocuiește tot acest comentariu cu:
 
-        <figure className="not-prose my-6">
-          <img
-            src={levantineMap}
-            alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
-            className="w-full max-w-md mx-auto rounded-xl border border-border"
-            loading="lazy"
-          />
-          <figcaption className="mt-2 text-sm text-muted-foreground">
-            Zona dialectelor levantine (shami). Observă că Beirut și Damasc cad în aceeași zonă
-            centrală — de aceea cele două sună atât de apropiat.
-          </figcaption>
-        </figure>
+        <CreditedFigure
+          src={map2}
+          className="w-full max-w-md"
+          alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
+          caption="Zona dialectelor levantine (shami). Beirut și Damasc cad în aceeași zonă centrală — de aceea cele două sună atât de apropiat."
+          credit={{
+            // ÎNLOCUIEȘTE cu autorul și licența reale de pe pagina sursă a fișierului.
+            text: "Author, LICENCE, via Wikimedia Commons",
+            href: "https://commons.wikimedia.org/wiki/File:...",
+          }}
+        />
     */}
 
     <ul>

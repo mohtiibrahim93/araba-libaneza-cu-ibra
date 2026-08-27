@@ -50,31 +50,26 @@ const ArabicDialectsGuide = () => (
       a Roman and a Parisian don't chat in Latin. Same idea. Below is the map, region by region.
     </p>
 
-    {/* IMAGE SLOT 1 — overall Arabic dialect families map.
-        NOTE: the source map's legend is a column of colour swatches with no text,
-        so the caption below has to do the decoding. If you find a labelled
-        version, use that instead and the caption can be shortened.
+    {/* IMAGE SLOT 1 — arabic-dialects-map.
+        NOTE: the source map's legend is a column of colour swatches with no
+        text, so the caption has to do the decoding.
 
-        Add src/assets/arabic-dialects-map.png, then at the top of this file add
-          import arabicDialectsMap from "@/assets/arabic-dialects-map.png";
+        Add src/assets/arabic-dialects-map.png, then add these two imports at the top of this file:
+          import CreditedFigure from "@/components/content/CreditedFigure";
+          import map1 from "@/assets/arabic-dialects-map.png";
         and replace this whole comment with:
 
-        <figure className="not-prose my-6">
-          <img
-            src={arabicDialectsMap}
-            alt="Map of the Arabic dialect families across North Africa and the Middle East"
-            className="w-full rounded-xl border border-border"
-            loading="lazy"
-          />
-          <figcaption className="mt-2 text-sm text-muted-foreground">
-            The Arabic dialect families. Blues in the west are Maghrebi (Moroccan, Algerian,
-            Tunisian, Libyan); pale blue across Egypt is Egyptian; brown south of it is Sudanese;
-            olive and yellow-green in the north-east are Mesopotamian (Iraqi); the crimsons of the
-            peninsula are Gulf, Najdi and Hijazi, with pink along the southern coast for Yemeni and
-            Omani. The narrow green strip on the eastern Mediterranean is Levantine — the subject of
-            the section below.
-          </figcaption>
-        </figure>
+        <CreditedFigure
+          src={map1}
+          className="w-full"
+          alt="Map of the Arabic dialect families across North Africa and the Middle East"
+          caption="The Arabic dialect families. Blues in the west are Maghrebi; pale blue across Egypt is Egyptian; brown below it is Sudanese; olive in the north-east is Mesopotamian; the crimsons of the peninsula are Gulf, Najdi and Hijazi, with pink along the south coast for Yemeni and Omani. The narrow green strip on the eastern Mediterranean is Levantine."
+          credit={{
+            // REPLACE with the real author and licence from the file's source page.
+            text: "Author, LICENCE, via Wikimedia Commons",
+            href: "https://commons.wikimedia.org/wiki/File:...",
+          }}
+        />
     */}
 
     <h2>1. Levantine Arabic (Shami)</h2>
@@ -84,23 +79,23 @@ const ArabicDialectsGuide = () => (
       everyday conversation across four countries at once.
     </p>
 
-    {/* IMAGE SLOT 2 — Levantine (Shami) dialect map.
-        Add src/assets/levantine-dialects-map.png, then at the top of this file add
-          import levantineMap from "@/assets/levantine-dialects-map.png";
+    {/* IMAGE SLOT 2 — levantine-dialects-map.
+        Add src/assets/levantine-dialects-map.png, then add these two imports at the top of this file:
+          import CreditedFigure from "@/components/content/CreditedFigure";
+          import map2 from "@/assets/levantine-dialects-map.png";
         and replace this whole comment with:
 
-        <figure className="not-prose my-6">
-          <img
-            src={levantineMap}
-            alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
-            className="w-full max-w-md mx-auto rounded-xl border border-border"
-            loading="lazy"
-          />
-          <figcaption className="mt-2 text-sm text-muted-foreground">
-            The Levantine (Shami) dialect area. Note that Beirut and Damascus fall in the same
-            Central zone — which is why the two sound so close.
-          </figcaption>
-        </figure>
+        <CreditedFigure
+          src={map2}
+          className="w-full max-w-md"
+          alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
+          caption="The Levantine (Shami) dialect area. Beirut and Damascus fall in the same Central zone — which is why the two sound so close."
+          credit={{
+            // REPLACE with the real author and licence from the file's source page.
+            text: "Author, LICENCE, via Wikimedia Commons",
+            href: "https://commons.wikimedia.org/wiki/File:...",
+          }}
+        />
     */}
 
     <h3>The Levantine map at a glance</h3>
