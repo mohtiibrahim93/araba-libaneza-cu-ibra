@@ -29,7 +29,7 @@ const ArabicDialectsGuide = () => (
     slug="arabic-dialects-guide"
     roHref="/dialecte-arabe"
     title="Arabic dialects — the complete guide (Levantine, Egyptian, Gulf, Maghrebi & more)"
-    metaTitle="Arabic Dialects Guide — Levantine, Egyptian, Gulf, Maghrebi | 2026"
+    metaTitle="Arabic Dialects: Levantine, Egyptian, Gulf & More"
     description="Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher."
     crumb="Arabic dialects guide"
     lead="A practical, non-academic guide to the Arabic dialect landscape — written by a native Lebanese teacher. What each family sounds like, where it's spoken, and how they relate to each other."
