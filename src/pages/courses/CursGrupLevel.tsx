@@ -12,9 +12,9 @@ import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
-import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.jpg";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
-import posterCursuriFizic from "@/assets/poster-cursuri-fizic-sep2026.jpg";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
 // `started` marks a cohort that is already running: enrolment is closed, so the
@@ -25,14 +25,11 @@ const LEVEL_POSTERS: Partial<
   Record<string, { src: string; alt: string; format: PosterFormat; started?: boolean }[]>
 > = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Fizic.url, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
     { src: posterA1Online.url, alt: "Poster A1 online — sâmbătă 12:00–13:30 și duminică 17:30–19:00", format: "online", started: true },
   ],
   a2: [
-    // Interim: the combined poster, which states both cohorts correctly. The
-    // dedicated A2 poster gives its start as 2 September, but A2 begins on the
-    // 1st — swap it in once that is corrected.
-    { src: posterCursuriFizic, alt: "Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start 1 septembrie 2026 marți și joi, A1 start 2 septembrie luni și miercuri, 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA2Fizic.url, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
   ],
 };
 

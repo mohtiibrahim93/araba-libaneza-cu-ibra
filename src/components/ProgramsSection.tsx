@@ -11,21 +11,18 @@ import { getCurriculum } from "@/data/curriculum";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
-import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.jpg";
-import posterCursuriFizic from "@/assets/poster-cursuri-fizic-sep2026.jpg";
+import posterA1Fizic from "@/assets/poster-a1-fizic.webp.asset.json";
+import posterA2Fizic from "@/assets/poster-a2-fizic.webp.asset.json";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
   // The A1 online cohort has already started, so its poster (which advertises a
   // start date that has passed) is no longer shown here.
   A1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA1Fizic.url, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
   ],
   A2: [
-    // The combined poster: it states both cohorts, and both dates on it are
-    // correct. The dedicated A2 poster gives its start as 2 September, but A2
-    // begins on the 1st — swap it in once that is corrected.
-    { src: posterCursuriFizic, alt: "Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start 1 septembrie 2026 marți și joi, A1 start 2 septembrie luni și miercuri, 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA2Fizic.url, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
   ],
 };
 
