@@ -109,7 +109,7 @@ function levelRoutes(): Route[] {
             path: "/cursuri/grup/a1",
             title: "Curs de Arabă pentru Începători București & Online — A1 (Libaneză)",
             description:
-              "Curs de arabă pentru începători (A1) în araba libaneză: Grupa 2 începe pe 2 septembrie 2026, fizic în București (Strada Icoanei 80), luni și miercuri 19:00–20:30. Vorbești de la prima lecție. Probă gratuită.",
+              "Curs de arabă pentru începători (A1) în araba libaneză: Grupa 2 începe miercuri, 2 septembrie 2026, fizic în București (Strada Icoanei 80), luni și miercuri 19:00–20:30. Vorbești de la prima lecție. Probă gratuită.",
           }
         : {
             path: `/cursuri/grup/${id}`,

@@ -19,10 +19,10 @@ const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
   // The A1 online cohort has already started, so its poster (which advertises a
   // start date that has passed) is no longer shown here.
   A1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80" },
   ],
   A2: [
-    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80" },
+    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80" },
   ],
 };
 

@@ -25,11 +25,11 @@ const LEVEL_POSTERS: Partial<
   Record<string, { src: string; alt: string; format: PosterFormat; started?: boolean }[]>
 > = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start 2 septembrie 2026, luni și miercuri 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80", format: "fizic" },
     { src: posterA1Online.url, alt: "Poster A1 online — sâmbătă 12:00–13:30 și duminică 17:30–19:00", format: "online", started: true },
   ],
   a2: [
-    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start 1 septembrie 2026, marți și joi 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80", format: "fizic" },
   ],
 };
 
