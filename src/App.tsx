@@ -34,7 +34,6 @@ const CursPrivate = lazy(() => import("./pages/courses/CursPrivate"));
 const CursCopii = lazy(() => import("./pages/courses/CursCopii"));
 const Cursuri = lazy(() => import("./pages/courses/Cursuri"));
 const CourseDetail = lazy(() => import("./pages/courses/CourseDetail"));
-const PrivateCourse = lazy(() => import("./pages/courses/PrivateCourse"));
 const CursAdulti = lazy(() => import("./pages/courses/CursAdulti"));
 const BlogIndex = lazy(() => import("./pages/blog/BlogIndex"));
 const BlogCumInvetiArabaLibaneza = lazy(() => import("./pages/blog/CumInvetiArabaLibaneza"));
@@ -58,11 +57,9 @@ const BlogDeCeInvatamAraba2026 = lazy(() => import("./pages/blog/DeCeInvatamArab
 const BlogLimbileVorbiteInLiban = lazy(() => import("./pages/blog/LimbileVorbiteInLiban"));
 const BlogLebaneseArabicLearningResources = lazy(() => import("./pages/blog/LebaneseArabicLearningResources"));
 const LearnLebaneseArabic = lazy(() => import("./pages/en/LearnLebaneseArabic"));
-const LearnLevantineArabic = lazy(() => import("./pages/en/LearnLevantineArabic"));
 const ArabicTutor = lazy(() => import("./pages/en/ArabicTutor"));
 const ArabicClassesNearMe = lazy(() => import("./pages/en/ArabicClassesNearMe"));
 const ArabicDialectsGuide = lazy(() => import("./pages/en/ArabicDialectsGuide"));
-const LevantineArabicDialectsMap = lazy(() => import("./pages/en/LevantineArabicDialectsMap"));
 const LebaneseVsMsaVsEgyptian = lazy(() => import("./pages/en/LebaneseVsMsaVsEgyptian"));
 const HowToLearnLebaneseArabic = lazy(() => import("./pages/en/HowToLearnLebaneseArabic"));
 const DeArabischLernen = lazy(() => import("./pages/de/ArabischLernen"));
@@ -127,7 +124,7 @@ const App = () => (
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/cursuri" element={<Cursuri />} />
-            <Route path="/cursuri/privat" element={<PrivateCourse />} />
+            <Route path="/cursuri/privat" element={<Navigate to="/cursuri/private" replace />} />
             <Route path="/cursuri/curs/:slug" element={<CourseDetail />} />
             <Route path="/cursuri/adulti" element={<CursAdulti />} />
             {/* Merged into the adolescenți page: one URL, one term, nothing
@@ -160,11 +157,11 @@ const App = () => (
             <Route path="/blog/limbile-vorbite-in-liban" element={<BlogLimbileVorbiteInLiban />} />
             <Route path="/blog/lebanese-arabic-learning-resources" element={<BlogLebaneseArabicLearningResources />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
-            <Route path="/en/learn-levantine-arabic" element={<LearnLevantineArabic />} />
+            <Route path="/en/learn-levantine-arabic" element={<Navigate to="/en/learn-lebanese-arabic" replace />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
             <Route path="/en/arabic-classes-near-me" element={<ArabicClassesNearMe />} />
             <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
-            <Route path="/en/levantine-arabic-dialects-map" element={<LevantineArabicDialectsMap />} />
+            <Route path="/en/levantine-arabic-dialects-map" element={<Navigate to="/en/arabic-dialects-guide" replace />} />
             <Route path="/en/lebanese-arabic-vs-msa-vs-egyptian" element={<LebaneseVsMsaVsEgyptian />} />
             <Route path="/en/how-to-learn-lebanese-arabic" element={<HowToLearnLebaneseArabic />} />
             <Route path="/de/arabisch-lernen" element={<DeArabischLernen />} />

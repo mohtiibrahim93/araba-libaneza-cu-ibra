@@ -49,6 +49,24 @@ const CursPrivate = () => {
         <p className="text-xs text-muted-foreground mt-4">{t.priceSurchargeNote}</p>
       </section>
 
+      {/* Absorbed from the retired /cursuri/privat duplicate: the private-vs-group
+          comparison and the three-step process, which that page had and this one
+          did not. */}
+      <section className="mb-10 grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="mb-2 text-base font-bold text-foreground">{t.privateVsGroupTitle}</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">{t.privateVsGroupDesc}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="mb-2 text-base font-bold text-foreground">{t.privateProcessTitle}</h2>
+          <ol className="list-decimal space-y-1 pl-5 text-sm text-muted-foreground leading-relaxed">
+            <li>{t.privateProcessStep1}</li>
+            <li>{t.privateProcessStep2}</li>
+            <li>{t.privateProcessStep3}</li>
+          </ol>
+        </div>
+      </section>
+
       <section id="register" className="scroll-mt-24 mt-4">
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>

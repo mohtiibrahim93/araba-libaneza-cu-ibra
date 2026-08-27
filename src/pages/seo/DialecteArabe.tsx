@@ -19,6 +19,14 @@ const FAQ = [
     a: "Da. Toate patru sunt dialecte levantine (shami) și diferă mai ales prin accent și câteva cuvinte. Un vorbitor de libaneză poartă conversații normale în Damasc, Amman sau Ramallah.",
   },
   {
+    q: "Care e diferența dintre levantina de nord și cea de sud?",
+    a: "Levantina de nord înseamnă libaneză și siriană; cea de sud, palestiniană și iordaniană. Gramatica și cea mai mare parte a vocabularului sunt comune. Diferă pronunția (litera ق, culoarea vocalelor, intonația) și câteva cuvinte de zi cu zi — cam cât diferă engleza britanică de cea americană.",
+  },
+  {
+    q: "Araba libaneză e la fel cu cea siriană?",
+    a: "Nu identică, dar foarte apropiată. Libaneza și siriana din Damasc se înțeleg reciproc fără efort. Nordul Libanului (Tripoli) sună deja parțial sirian, iar zonele de graniță se amestecă în ambele direcții.",
+  },
+  {
     q: "Ce dialect e cel mai util în România?",
     a: "Depinde de comunitate: în București majoritatea vorbitorilor arabi sunt din Liban, Siria, Palestina și Irak, deci levantina acoperă cel mai mare grup. Pentru familie, prieteni sau afaceri cu Libanul, libaneza e alegerea directă.",
   },
@@ -28,8 +36,8 @@ const DialecteArabe = () => (
   <LandingLayout
     slug="dialecte-arabe"
     title="Dialectele arabe: ghid pe înțelesul tuturor"
-    metaTitle="Dialectele Arabe — Levantin, Egiptean, Golf, Maghreb | Ghid 2026"
-    description="Ghid clar al dialectelor arabe: levantin (libanez, sirian, palestinian, iordanian), egiptean, maghrebin, din Golf și irakian, plus araba standard. Cine pe cine înțelege și ce dialect merită învățat."
+    metaTitle="Dialectele Arabe — Hartă & Ghid: Levantin, Egiptean, Golf, Maghreb | 2026"
+    description="Ghid și hartă a dialectelor arabe: levantin (nord vs. sud — libanez, sirian, palestinian, iordanian), egiptean, maghrebin, din Golf și irakian, plus araba standard. Cine pe cine înțelege și ce dialect merită învățat."
     crumb="Dialectele arabe"
     lead="Araba nu e o singură limbă vorbită, ci o familie de dialecte plus o limbă standard scrisă. Iată harta, fără jargon lingvistic."
     enHref="/en/arabic-dialects-guide"
@@ -56,16 +64,80 @@ const DialecteArabe = () => (
       Nu e reciproc. Un libanez înțelege aproape complet un egiptean, pentru că a crescut cu filme
       egiptene; un egiptean înțelege bine levantina din seriale; ambii se pierd rapid într-o
       conversație rapidă din Casablanca. Levantina e, de fapt, cel mai „neutru” dialect: e înțeles
-      larg și nu sună regional-închis. Detalii pe zone în{" "}
-      <Link to="/en/levantine-arabic-dialects-map">harta dialectelor levantine</Link>.
+      larg și nu sună regional-închis. Detalii pe zone în secțiunea de mai jos despre harta
+      dialectelor levantine.
+    </p>
+
+    <h2>Harta dialectelor levantine (shami)</h2>
+    <p>
+      Levantina e vorbită nativ de circa 30–35 de milioane de oameni în Liban, Siria, Iordania și
+      Palestina. Se împarte în două grupuri apropiate:
+    </p>
+
+    {/* Aici intră imaginea cu harta dialectelor. Pune fișierul în src/assets/,
+        importă-l în capul fișierului și înlocuiește acest comentariu cu:
+
+        <figure className="not-prose my-6">
+          <img src={hartaDialecte} alt="Harta dialectelor arabe, cu levantina de nord și de sud marcate"
+               className="w-full rounded-xl border border-border" loading="lazy" />
+          <figcaption className="mt-2 text-sm text-muted-foreground">
+            Familiile de dialecte arabe, cu zona levantină (shami) evidențiată.
+          </figcaption>
+        </figure>
+
+        Lăsat comentat intenționat: un <img> care arată spre un fișier inexistent
+        ar afișa o imagine ruptă pe pagina live. */}
+
+    <ul>
+      <li><strong>Levantina de nord</strong> — Liban și Siria (Beirut, Tripoli, Damasc, Alep, Homs, Latakia). Gramatică aproape identică, înțelegere reciprocă ~95%.</li>
+      <li><strong>Levantina de sud</strong> — Palestina și Iordania (Ierusalim, Ramallah, Gaza, Amman, Irbid). Aceeași familie, mici diferențe de vocabular și câteva sunete.</li>
+      <li><strong>Margini</strong> — Hatay în sudul Turciei, valea Bekaa spre deșertul sirian și comunitățile mari din diaspora: Brazilia, Franța, SUA, Germania și Golf.</li>
+    </ul>
+
+    <h3>Levantina de nord: libaneză și siriană</h3>
+    <p>
+      Libaneza și siriana din Damasc sunt atât de apropiate încât vorbitorii nici nu observă că
+      trec de la una la alta. Semnul cel mai audibil e <strong>ق</strong>: și la Beirut, și la
+      Damasc se pronunță ca oprire glotală, deci <em>qalb</em> („inimă”) devine <em>2alb</em>.
+      Libaneza înclină spre vocale mai deschise, mai „ridicate” (<em>imēle</em>) — <em>kēn</em> la
+      Beirut față de <em>kān</em> la Damasc. Tot libaneza are cel mai gros strat de franceză și
+      engleză dintre toate dialectele arabe: <em>bonjour</em>, <em>merci</em> și{" "}
+      <em>yalla bye</em> intră natural în vorbirea de zi cu zi — unul dintre motivele pentru care
+      li se pare accesibilă europenilor.
+    </p>
+
+    <h3>Levantina de sud: palestiniană și iordaniană</h3>
+    <p>
+      Gramatica e practic aceeași ca în nord — același prefix verbal <em>b-</em>, aceleași
+      pronume, același tipar de negație. Se schimbă pronunția și o felie de vocabular. Iordaniana
+      rurală și beduină păstrează adesea un <em>g</em> dur pentru ق (<em>galb</em>), în timp ce
+      vorbirea urbană din Ierusalim și Amman folosește aceeași oprire glotală ca Beirutul. Forme ca{" "}
+      <em>bidd-</em> („a vrea”) și <em>halla2</em> („acum”) sunt comune întregii familii.
+    </p>
+
+    <h3>Nord vs. sud — diferențele practice</h3>
+    <ul>
+      <li><strong>ق:</strong> oprire glotală în orașe peste tot; <em>g</em> dur în iordaniana beduină și rurală.</li>
+      <li><strong>Vocale:</strong> mai deschise, mai „ușoare” în libaneză; mai plate în palestiniană și iordaniană.</li>
+      <li><strong>Împrumuturi:</strong> franceză și engleză în Liban; mai multă engleză în Iordania și Palestina.</li>
+      <li><strong>Intonație:</strong> libaneza are o urcare cântată, recunoscută instantaneu.</li>
+      <li><strong>În rest:</strong> gramatica, structura frazei și peste 90% din vocabular sunt comune.</li>
+    </ul>
+    <p>
+      Zonele de graniță estompează și mai mult limitele: Tripoli sună parțial sirian, sudul
+      Libanului împarte trăsături cu Palestina, și tot așa de-a lungul fiecărei granițe din
+      regiune. Practic, cine învață bine o variantă levantină urmărește conversații în toate cele
+      patru țări — distanța e mult mai mică decât cea dintre levantină și egipteană sau fusha.
     </p>
 
     <h2>Unde stă araba libaneză</h2>
     <p>
-      Libaneza e levantină de nord, sora apropiată a dialectului din Damasc. Semne distinctive:
-      pronunția lui ق ca oprire glotală (<em>2albi</em>, nu <em>qalbi</em>), vocale scurtate și un
-      amestec natural cu franceza și engleza (<em>bonjour</em>, <em>merci</em>, <em>yalla bye</em>).
-      Detalii în <Link to="/blog/limbile-vorbite-in-liban">limbile vorbite în Liban</Link>.
+      Libaneza stă în centrul familiei: geografic între Siria și Palestina, cultural cel mai mare
+      exportator de media din regiune. Fairuz, Nancy Ajram, filmul și serialele libaneze circulă
+      în toată lumea arabă, așa că vorbirea libaneză e înțeleasă mult dincolo de Levant — cea mai
+      largă acoperire pasivă pentru cel mai mic efort. Detalii în{" "}
+      <Link to="/blog/limbile-vorbite-in-liban">limbile vorbite în Liban</Link>, iar dacă vrei să
+      o înveți, vezi <Link to="/cursuri-araba">cursurile de arabă (libaneză)</Link>.
     </p>
 
     <h2>Dialect sau arabă standard?</h2>

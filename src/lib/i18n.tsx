@@ -900,6 +900,12 @@ export const translations = {
     // /cursuri/private — MSA partners note
     privatePersonalizedTitle: "Personalizat pentru tine",
     privatePersonalizedDesc: "În prima lecție îți testăm nivelul și construim un parcurs adaptat scopului tău: călătorii, familie, muncă, media. Dacă ai nevoie de arabă standard (fuṣḥā / MSA) în loc de libaneză, îți recomandăm parteneri de încredere — la același tarif.",
+    privateVsGroupTitle: "Privat sau grup?",
+    privateVsGroupDesc: "La grup înveți alături de alți 4–10 cursanți, la un preț mai mic și pe un calendar fix. Privat înseamnă atenție 100%, ritm propriu și program flexibil, la un preț per lecție.",
+    privateProcessTitle: "Cum se întâmplă, pas cu pas",
+    privateProcessStep1: "Completezi formularul de mai jos, cu obiectivul și disponibilitatea ta.",
+    privateProcessStep2: "Te contactăm în cel mult o zi lucrătoare.",
+    privateProcessStep3: "Stabilim împreună programul și fixăm prima lecție.",
 
     // /cursuri/copii — format cards
     copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
@@ -1830,6 +1836,12 @@ export const translations = {
 
     privatePersonalizedTitle: "Personalized for you",
     privatePersonalizedDesc: "In the first lesson we assess your level and build a path around your goals: travel, family, work, media. If you need Modern Standard Arabic (fuṣḥā / MSA) instead of Lebanese, we'll recommend trusted partners — at the same rate.",
+    privateVsGroupTitle: "Private or group?",
+    privateVsGroupDesc: "In a group you learn alongside 4–10 others, at a lower price and on a fixed calendar. Private means 100% attention, your own pace and a flexible schedule, at a per-lesson price.",
+    privateProcessTitle: "How it works, step by step",
+    privateProcessStep1: "Fill in the form below with your goal and availability.",
+    privateProcessStep2: "We get back to you within one business day.",
+    privateProcessStep3: "We agree on the schedule together and book the first lesson.",
 
     copiiFormatChoiceTitle: "Two formats, depending on age",
     copiiFormatPrivateTitle: "Private 1:1 (any age)",

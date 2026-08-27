@@ -61,7 +61,7 @@ const DeCeInvatamAraba2026 = () => {
             Lebanese Arabic is the media prestige dialect of the Levant — the language of Fairuz,
             of Lebanese cinema, of the diaspora. It's mutually intelligible with Syrian and widely
             understood in Jordan and Palestine. See{" "}
-            <Link to="/en/learn-levantine-arabic">the full Levantine argument</Link> for details.
+            <Link to="/en/learn-lebanese-arabic">the full Lebanese argument</Link> for details.
           </>
         ) : (
           <>

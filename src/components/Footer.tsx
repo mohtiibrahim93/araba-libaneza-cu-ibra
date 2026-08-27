@@ -67,11 +67,9 @@ const Footer = () => {
             <li><Link to="/cursuri/grup/c1" className="hover:text-foreground transition-colors">{lang === "en" ? "Group C1" : "Grupă C1"}</Link></li>
             <li><Link to="/cursuri/grup/c2" className="hover:text-foreground transition-colors">{lang === "en" ? "Group C2" : "Grupă C2"}</Link></li>
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
-            <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.navCurriculum}</Link></li>
             <li><AnchorLink to="#testimonials" className="hover:text-foreground transition-colors">{t.navTestimonials}</AnchorLink></li>
             <li><AnchorLink to="#programs" className="hover:text-foreground transition-colors">{t.navEnroll}</AnchorLink></li>
             <li><Link to="/en/learn-lebanese-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Lebanese Arabic</Link></li>
-            <li><Link to="/en/learn-levantine-arabic" className="hover:text-foreground transition-colors" hrefLang="en">Learn Levantine Arabic</Link></li>
             <li><Link to="/en/arabic-tutor" className="hover:text-foreground transition-colors" hrefLang="en">Arabic tutor</Link></li>
             <li><Link to="/en/arabic-dialects-guide" className="hover:text-foreground transition-colors" hrefLang="en">Arabic dialects guide</Link></li>
             <li><Link to="/en/arabic-classes-near-me" className="hover:text-foreground transition-colors" hrefLang="en">Arabic classes near me</Link></li>
