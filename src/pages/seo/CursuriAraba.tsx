@@ -19,6 +19,10 @@ const FAQ = [
     a: "Ambele. Fizic la Raduga Creative Center (Strada Icoanei 80, București) sau online pe Zoom, de oriunde. Toate nivelurile au variantă online.",
   },
   {
+    q: "Cursurile de arabă sunt acreditate?",
+    a: "Cursurile respectă structura CEFR (A1–C2) — același cadru european folosit de școlile de limbi. La final primești certificat intern pe nivelul absolvit. Pentru certificări oficiale internaționale (ex. ALPT, examene universitare) te putem pregăti separat.",
+  },
+  {
     q: "În ce limbă se predau lecțiile?",
     a: "Tu alegi. Ibra predă fluent în engleză, franceză, arabă și română — alegi limba în care te simți cel mai confortabil. Lecțiile nu se țin în germană sau alte limbi.",
   },
@@ -77,6 +81,15 @@ const CursuriAraba = () => (
     <p>
       Detalii despre durată pe fiecare nivel găsești în{" "}
       <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">cât durează să înveți araba libaneză</Link>.
+    </p>
+
+    <h2>De ce cu profesor nativ</h2>
+    <p>
+      Pronunția, intonația și expresiile idiomatice nu se învață din manual — se preiau de la un
+      vorbitor nativ. Ibra e libanez, cu peste 5 ani de experiență în predare, iar metoda{" "}
+      <strong>Oral First</strong> te pune să vorbești din prima lecție, folosind{" "}
+      <Link to="/arabizi">arabizi</Link> (scriere cu litere latine) până când alfabetul arab vine
+      natural — nu ai nevoie de <Link to="/fara-alfabet-arab">alfabetul arab</Link> ca să începi.
     </p>
 
     <h2>În ce limbă se predau lecțiile</h2>

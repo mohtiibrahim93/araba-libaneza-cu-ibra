@@ -12,14 +12,6 @@ const FAQ = [
     a: "If your goal is to speak with people — family, friends, travel, media — start with Lebanese Arabic. MSA is the written, formal register; almost no one speaks it at home. Lebanese gets you to real conversations faster, and you can add MSA later if you need reading or formal skills.",
   },
   {
-    q: "How long does it take to learn Lebanese Arabic?",
-    a: "With 2 sessions of 90 minutes per week plus a little daily practice, most learners reach basic everyday conversation (A1–A2) in 3–6 months. Comfortable fluency (B1/B2) typically takes 1.5–2 years of consistent study.",
-  },
-  {
-    q: "Do I need to learn the Arabic alphabet first?",
-    a: "No. We use an oral-first method: you speak from lesson one using arabizi (Latin transliteration), then transition to the Arabic script once your ear and mouth are already tuned. This removes the alphabet barrier and gets you speaking sooner.",
-  },
-  {
     q: "Are the courses online or in person?",
     a: "Both. Online lessons over Zoom are available worldwide (any time zone overlapping with Bucharest / EET). In-person lessons and group courses take place in Bucharest, Romania. Group courses run twice a week; private 1-on-1 lessons are scheduled flexibly.",
   },

@@ -76,13 +76,6 @@ export const PAGE_SEEDS: PageSeed[] = [
     "lead": "Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
   },
   {
-    "path": "/cursuri-limba-araba",
-    "meta_title": "Cursuri de Arabă Libaneză — Grup, Private, Online | București 2026",
-    "meta_description": "Cursuri de arabă libaneză cu profesor nativ, structurate pe niveluri CEFR (A1–C2). Grup, private și pentru copii, fizic în București sau online. Lecție de probă gratuită.",
-    "h1": "Cursuri de arabă libaneză — de la zero până la fluență, cu profesor nativ",
-    "lead": "Cursuri de arabă libaneză structurate pe niveluri CEFR, cu profesor nativ. Grup, private sau pentru copii — fizic în București sau online, oriunde ai fi."
-  },
-  {
     "path": "/dialecte-arabe",
     "meta_title": "Dialectele Arabe — Levantin, Egiptean, Golf, Maghreb | Ghid 2026",
     "meta_description": "Ghid clar al dialectelor arabe: levantin (libanez, sirian, palestinian, iordanian), egiptean, maghrebin, din Golf și irakian, plus araba standard. Cine pe cine înțelege și ce dialect merită învățat.",

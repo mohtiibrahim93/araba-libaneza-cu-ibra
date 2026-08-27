@@ -69,7 +69,6 @@ const DeArabischLernen = lazy(() => import("./pages/de/ArabischLernen"));
 const SeoCursuriAraba = lazy(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazy(() => import("./pages/seo/ArabaPentruIncepatori"));
 const SeoArabaOnline = lazy(() => import("./pages/seo/ArabaOnline"));
-const SeoCursuriLimbaAraba = lazy(() => import("./pages/seo/CursuriLimbaAraba"));
 const SeoMeditatiiAraba = lazy(() => import("./pages/seo/MeditatiiAraba"));
 const SeoInvataAraba = lazy(() => import("./pages/seo/InvataAraba"));
 const SeoCursuriArabaBucuresti = lazy(() => import("./pages/seo/CursuriArabaBucuresti"));
@@ -172,7 +171,9 @@ const App = () => (
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />
-            <Route path="/cursuri-limba-araba" element={<SeoCursuriLimbaAraba />} />
+            {/* Merged into /cursuri-araba: same subject, and the surviving
+                slug matches the higher-volume query. */}
+            <Route path="/cursuri-limba-araba" element={<Navigate to="/cursuri-araba" replace />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
             <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
