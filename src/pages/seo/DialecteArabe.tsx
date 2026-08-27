@@ -49,6 +49,33 @@ const DialecteArabe = () => (
       știri. Acasă, la piață și pe WhatsApp, nimeni nu vorbește așa. Se vorbește dialectul.
     </p>
 
+    {/* SLOT IMAGINE 1 — harta generală a familiilor de dialecte arabe.
+        ATENȚIE: legenda hărții sursă e o coloană de culori fără text, așa că
+        descrierea de mai jos trebuie să facă decodarea. Dacă găsești o variantă
+        cu legendă scrisă, folosește-o pe aceea și scurtează descrierea.
+
+        Pune src/assets/arabic-dialects-map.png, apoi în capul fișierului adaugă
+          import arabicDialectsMap from "@/assets/arabic-dialects-map.png";
+        și înlocuiește tot acest comentariu cu:
+
+        <figure className="not-prose my-6">
+          <img
+            src={arabicDialectsMap}
+            alt="Harta familiilor de dialecte arabe din Africa de Nord și Orientul Mijlociu"
+            className="w-full rounded-xl border border-border"
+            loading="lazy"
+          />
+          <figcaption className="mt-2 text-sm text-muted-foreground">
+            Familiile de dialecte arabe. Albastrurile din vest sunt maghrebine (marocană,
+            algeriană, tunisiană, libiană); albastrul deschis peste Egipt e egipteana; maroul de
+            sub el, sudaneza; verdele-oliv și galben-verzuiul din nord-est, mesopotamiana
+            (irakiana); nuanțele de zmeuriu din peninsulă sunt dialectele din Golf, najdi și
+            hijazi, iar rozul de pe coasta sudică — yemenita și omaneza. Fâșia verde îngustă de pe
+            coasta estică a Mediteranei e levantina, subiectul secțiunii de mai jos.
+          </figcaption>
+        </figure>
+    */}
+
     <h2>Familiile de dialecte, pe scurt</h2>
     <ul>
       <li><strong>Levantin (shami)</strong> — Liban, Siria, Palestina, Iordania. Melodic, ușor de urmărit, foarte prezent în muzică. Aici intră <Link to="/invata-araba">araba libaneză</Link>.</li>
@@ -74,19 +101,24 @@ const DialecteArabe = () => (
       Palestina. Se împarte în două grupuri apropiate:
     </p>
 
-    {/* Aici intră imaginea cu harta dialectelor. Pune fișierul în src/assets/,
-        importă-l în capul fișierului și înlocuiește acest comentariu cu:
+    {/* SLOT IMAGINE 2 — harta dialectelor levantine (shami).
+        Pune src/assets/levantine-dialects-map.png, apoi în capul fișierului adaugă
+          import levantineMap from "@/assets/levantine-dialects-map.png";
+        și înlocuiește tot acest comentariu cu:
 
         <figure className="not-prose my-6">
-          <img src={hartaDialecte} alt="Harta dialectelor arabe, cu levantina de nord și de sud marcate"
-               className="w-full rounded-xl border border-border" loading="lazy" />
+          <img
+            src={levantineMap}
+            alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
+            className="w-full max-w-md mx-auto rounded-xl border border-border"
+            loading="lazy"
+          />
           <figcaption className="mt-2 text-sm text-muted-foreground">
-            Familiile de dialecte arabe, cu zona levantină (shami) evidențiată.
+            Zona dialectelor levantine (shami). Observă că Beirut și Damasc cad în aceeași zonă
+            centrală — de aceea cele două sună atât de apropiat.
           </figcaption>
         </figure>
-
-        Lăsat comentat intenționat: un <img> care arată spre un fișier inexistent
-        ar afișa o imagine ruptă pe pagina live. */}
+    */}
 
     <ul>
       <li><strong>Levantina de nord</strong> — Liban și Siria (Beirut, Tripoli, Damasc, Alep, Homs, Latakia). Gramatică aproape identică, înțelegere reciprocă ~95%.</li>

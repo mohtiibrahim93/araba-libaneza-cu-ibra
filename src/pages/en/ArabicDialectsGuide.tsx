@@ -50,6 +50,33 @@ const ArabicDialectsGuide = () => (
       a Roman and a Parisian don't chat in Latin. Same idea. Below is the map, region by region.
     </p>
 
+    {/* IMAGE SLOT 1 — overall Arabic dialect families map.
+        NOTE: the source map's legend is a column of colour swatches with no text,
+        so the caption below has to do the decoding. If you find a labelled
+        version, use that instead and the caption can be shortened.
+
+        Add src/assets/arabic-dialects-map.png, then at the top of this file add
+          import arabicDialectsMap from "@/assets/arabic-dialects-map.png";
+        and replace this whole comment with:
+
+        <figure className="not-prose my-6">
+          <img
+            src={arabicDialectsMap}
+            alt="Map of the Arabic dialect families across North Africa and the Middle East"
+            className="w-full rounded-xl border border-border"
+            loading="lazy"
+          />
+          <figcaption className="mt-2 text-sm text-muted-foreground">
+            The Arabic dialect families. Blues in the west are Maghrebi (Moroccan, Algerian,
+            Tunisian, Libyan); pale blue across Egypt is Egyptian; brown south of it is Sudanese;
+            olive and yellow-green in the north-east are Mesopotamian (Iraqi); the crimsons of the
+            peninsula are Gulf, Najdi and Hijazi, with pink along the southern coast for Yemeni and
+            Omani. The narrow green strip on the eastern Mediterranean is Levantine — the subject of
+            the section below.
+          </figcaption>
+        </figure>
+    */}
+
     <h2>1. Levantine Arabic (Shami)</h2>
     <p>
       Spoken across the Eastern Mediterranean by ~30–35 million people. <em>Shami</em> to its own
@@ -57,19 +84,24 @@ const ArabicDialectsGuide = () => (
       everyday conversation across four countries at once.
     </p>
 
-    {/* Dialect map image goes here. Drop the file in src/assets/, import it at the
-        top of this file, and replace this comment with:
+    {/* IMAGE SLOT 2 — Levantine (Shami) dialect map.
+        Add src/assets/levantine-dialects-map.png, then at the top of this file add
+          import levantineMap from "@/assets/levantine-dialects-map.png";
+        and replace this whole comment with:
 
         <figure className="not-prose my-6">
-          <img src={dialectMap} alt="Map of the Arabic dialects, with North and South Levantine marked"
-               className="w-full rounded-xl border border-border" loading="lazy" />
+          <img
+            src={levantineMap}
+            alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
+            className="w-full max-w-md mx-auto rounded-xl border border-border"
+            loading="lazy"
+          />
           <figcaption className="mt-2 text-sm text-muted-foreground">
-            The Arabic dialect families, with the Levantine (Shami) area highlighted.
+            The Levantine (Shami) dialect area. Note that Beirut and Damascus fall in the same
+            Central zone — which is why the two sound so close.
           </figcaption>
         </figure>
-
-        Left as a comment on purpose: pointing an <img> at a file that isn't there
-        yet would render a broken image on a live page. */}
+    */}
 
     <h3>The Levantine map at a glance</h3>
     <ul>
