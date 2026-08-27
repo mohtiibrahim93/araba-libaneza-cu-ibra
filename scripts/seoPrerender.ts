@@ -57,10 +57,10 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri-araba", title: "Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2", description: "Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită." },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție", description: "Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită." },
   { path: "/araba-online", title: "Arabă Libaneză Online — Cursuri Live pe Zoom cu Profesor Nativ | De Oriunde", description: "Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online e completă — înscrie-te la lista pentru următoarea. Probă gratuită." },
-  { path: "/meditatii-araba", title: "Meditații Arabă Libaneză 1:1 cu Profesor Nativ | București & Online", description: "Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. 150 lei/lecție, primă lecție gratuită." },
+  { path: "/meditatii-araba", title: "Meditații Arabă Libaneză (Levantină) — București & Online | 150 lei", description: "Meditații de arabă libaneză (dialect levantin) 1:1 cu profesor nativ libanez, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
   { path: "/invata-araba", title: "Învață Araba Libaneză de la Zero — Metodă, Timp & Cursuri | 2026", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic." },
   { path: "/cursuri-araba-bucuresti", title: "Cursuri de Arabă Libaneză București — Adulți, Copii, 1:1 | Sector 2", description: "Cursuri de arabă libaneză în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită." },
-  { path: "/curs-araba-copii", title: "Curs Arabă Libaneză pentru Copii (6–10 ani) | București, prin Joc", description: "Curs de arabă libaneză pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața." },
+  { path: "/curs-araba-copii", title: "Cursuri Limba Arabă pentru Copii 6–10 ani | București, prin Joc", description: "Cursuri de limba arabă (libaneză / levantină) pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața." },
   { path: "/arabizi", title: "Arabizi — Ce Înseamnă 2, 3, 5, 7 în Arabă | Ghid Complet cu Tabel", description: "Ghid complet Arabizi: tabelul cifrelor (2, 3, 5, 6, 7, 8, 9) și literele arabe pe care le înlocuiesc, exemple reale din WhatsApp și TikTok, plus cheat-sheet PDF gratuit." },
   { path: "/invata-araba-gratis", title: "Învață Arabă Libaneză Gratis — Resurse, PDF-uri și Lecții | 2026", description: "Resurse gratuite pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale în PDF, plan de 30 de zile, canale YouTube și o mini-lecție cu pronunție. Fără costuri." },
   { path: "/resurse", title: "Resurse Gratuite Arabă Libaneză — PDF-uri, Expresii, Plan 30 Zile", description: "Descarcă gratuit materialele noastre pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale și planul de învățare de 30 de zile. PDF pe email, fără costuri." },
@@ -72,7 +72,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cel-mai-bun-curs-de-araba", title: "Cel Mai Bun Curs de Arabă: Ghid de Comparație 2026 | Libaneză", description: "Cum alegi cel mai bun curs de limba arabă: dialect libanez (levantin) vs arabă standard, grup vs privat vs online vs aplicații. Comparație de prețuri, criterii și greșeli frecvente." },
   { path: "/cursuri-araba-adolescenti", title: "Cursuri Arabă pentru Adolescenți 11–17 ani | București & Online", description: "Cursuri de arabă libaneză (levantină) pentru adolescenți 11–17 ani, cu profesor nativ: fizic în București sau online. Conversație din prima lecție, fără tocit alfabet. Probă gratuită." },
   { path: "/blog", title: "Blog — articole despre araba libaneză | Arabă Libaneză cu Ibra", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
-  { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online — 1-on-1 & Group Courses with a Native Teacher", description: "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial." },
+  { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher, Free Trial", description: "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online — Native Teacher | A1–C2", description: "Learn Levantine Arabic (Lebanese, Syrian, Jordanian, Palestinian) with a native teacher. Live 1-on-1 and small-group courses online, A1–C2. Oral-first method — speak from lesson one." },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher", description: "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min." },
   { path: "/en/arabic-dialects-guide", title: "Arabic Dialects Guide — Levantine, Egyptian, Gulf, Maghrebi | 2026", description: "Complete guide to Arabic dialects: Levantine (Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher." },
@@ -276,6 +276,40 @@ export function seoPrerenderPlugin(): Plugin {
           }
         } catch {
           /* sitemap missing is not fatal */
+        }
+
+        // Second drift guard: the strings below are hand-copied from each page's
+        // own SEO props, so editing a page without editing this file makes a
+        // crawler and a visitor see different titles for the same URL — exactly
+        // what this plugin exists to prevent. Re-read the landing pages and
+        // compare. Parsing is deliberately literal (a plain metaTitle="..."
+        // attribute); anything it cannot parse is skipped rather than guessed at.
+        try {
+          const drift: string[] = [];
+          for (const dir of ["src/pages/seo", "src/pages/en"]) {
+            const abs = path.resolve(dir);
+            if (!fs.existsSync(abs)) continue;
+            for (const file of fs.readdirSync(abs).filter((f) => f.endsWith(".tsx"))) {
+              const src = fs.readFileSync(path.join(abs, file), "utf8");
+              const slug = src.match(/slug="([^"]+)"/)?.[1];
+              const metaTitle = src.match(/metaTitle="((?:[^"\\]|\\.)*)"/)?.[1];
+              if (!slug || !metaTitle) continue;
+              const routePath = (dir.endsWith("/en") ? "/en/" : "/") + slug;
+              const route = allRoutes().find((r) => r.path === routePath);
+              if (!route) continue;
+              if (route.title !== metaTitle) {
+                drift.push(`${routePath} (${file}): prerender "${route.title}" vs page "${metaTitle}"`);
+              }
+            }
+          }
+          if (drift.length) {
+            this.warn(
+              `[seo-prerender] ${drift.length} page(s) render a different <title> than the ` +
+                `prerendered one — crawlers and visitors see different things:\n  ${drift.join("\n  ")}`,
+            );
+          }
+        } catch {
+          /* guard must never fail the build */
         }
       } catch (err) {
         this.warn(`[seo-prerender] skipped (${(err as Error).message}). SPA shell left intact.`);
