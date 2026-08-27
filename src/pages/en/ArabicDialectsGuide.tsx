@@ -50,35 +50,18 @@ const ArabicDialectsGuide = () => (
       a Roman and a Parisian don't chat in Latin. Same idea. Below is the map, region by region.
     </p>
 
-    {/* IMAGE SLOT 1 — arabic-dialects-map.
-        Verified from the file page: "Arabic Dialects" by Rafy, 21 Dec 2011,
-        CC BY 3.0 Unported, derived from File:Arab World-Large.PNG. Attribution
-        only — no share-alike, so it places no condition on the rest of the page.
-        The file page also lists an alternative, "Arabic Varieties Map 2023";
-        this file is NOT marked superseded, so either is fine. Check the 2023
-        one only if you want more current peninsular boundaries.
+    {/* Add src/assets/arabic-dialects-map.svg (take the SVG or a Commons PNG
+        rendering — a screenshot loses the legend text), add these imports at
+        the top of this file, and replace this comment with the block below.
 
-        USE THE SVG, NOT A SCREENSHOT. The Commons file is a vector SVG whose
-        legend text is embedded in the file — so the blank swatch column in the
-        copy you pasted is a font-rendering failure, not the real map. Download
-        the SVG itself (or one of the PNG renderings Commons generates from it,
-        which bake the text in). A screenshot taken from a viewer missing the
-        font will ship a legend nobody can read.
-
-        The caption below decodes the colours by geography anyway, which is
-        worth keeping even with a readable legend — it is what search engines
-        and screen readers get.
-
-        Add src/assets/arabic-dialects-map.svg (or .png), then add these two imports at the top of this file:
           import CreditedFigure from "@/components/content/CreditedFigure";
           import map1 from "@/assets/arabic-dialects-map.svg";
-        and replace this whole comment with:
 
         <CreditedFigure
           src={map1}
           className="w-full"
           alt="Map of the Arabic dialect families across North Africa and the Middle East"
-          caption="The Arabic dialect families. Blues in the west are Maghrebi; pale blue across Egypt is Egyptian; brown below it is Sudanese; olive in the north-east is Mesopotamian; the crimsons of the peninsula are Gulf, Najdi and Hijazi, with pink along the south coast for Yemeni and Omani. The narrow green strip on the eastern Mediterranean is Levantine."
+          caption="The Arabic dialect families, from Maghrebi in the west to Peninsular in the east. The narrow strip on the eastern Mediterranean is Levantine."
           credit={{
             title: "Arabic Dialects",
             author: "Rafy",
@@ -96,53 +79,26 @@ const ArabicDialectsGuide = () => (
       everyday conversation across four countries at once.
     </p>
 
-    {/* IMAGE SLOT 2 — Levantine dialect map.
+    {/* Add src/assets/levantine-dialects-map.png, add these imports at the top
+        of this file, and replace this comment with the block below.
+        (Commons flags this file as superseded by an ISO-aligned two-category
+        SVG; we keep this one deliberately — it is sourced to Behnstedt, Palva
+        and Seeger, and the finer subdivision is the point here.)
 
-        RECOMMENDED FILE: Levantine Arabic 2023.svg
-        Commons marks BOTH older candidates superseded in its favour, and the
-        stated reason is substantive, not housekeeping: the six-category PNG
-        "contains unsourced and non-existing dialects, such as 'Central
-        Levantine'". That is precisely the zone that made the six-category map
-        look attractive here — so it is the reason to avoid it, not to use it.
-        Putting a map with invented dialect categories on a language school's
-        page undermines the credibility the page exists to build.
-
-        The 2023 file is language-independent, current after the [apc]/[ajp]
-        ISO merge, and based on cited sources. It shows two categories, North
-        and South Levantine. Read its author and licence off its own file page
-        and fill them in below — it is the successor to Levantine Arabic
-        2022.svg (Tom Fish + A455bcd9, CC BY-SA 4.0), so probably the same, but
-        confirm rather than assume.
-
-        The alt and caption below are written for that two-category map.
-
-        REJECTED — Levantine Arabic Map v4.png (the six-category one first
-        proposed). Fully verified: Hurayshi, 16 July 2012, dual-licensed
-        GFDL 1.2+ or CC BY-SA 3.0 Unported (either may be chosen), synthesised
-        from Behnstedt, Palva and Seeger. Superseded for the reason above. Do
-        not use it to illustrate a "Central" zone.
-
-        Note the two-category map cannot show the Beirut/Damascus closeness.
-        That point is made in the prose above on phonetic grounds — the glottal
-        qaf and vowel colouring — which is well sourced and does not depend on
-        any disputed cartographic category. Leave it in the text, not the map.
-
-        Add src/assets/levantine-dialects-map.svg, then add these two imports at the top of this file:
           import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.svg";
-        and replace this whole comment with:
+          import map2 from "@/assets/levantine-dialects-map.png";
 
         <CreditedFigure
           src={map2}
           className="w-full max-w-md"
-          alt="Map of the Levantine Arabic area, split into North Levantine and South Levantine"
-          caption="The Levantine (Shami) dialect area, split into North Levantine (Lebanon, Syria) and South Levantine (Palestine, Jordan). Boundaries follow the sources behind the ISO classification; see Brustad & Zuniga (2019)."
+          alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
+          caption="The Levantine (Shami) dialect area. Beirut and Damascus sit in the same Central zone of North Levantine — which is why the two sound so close. After Behnstedt, Palva and Seeger."
           credit={{
-            title: "Levantine Arabic 2023",
-            author: "FILL IN from the file page",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2023.svg",
-            licence: "FILL IN from the file page",
-            licenceHref: "FILL IN — link the licence deed",
+            title: "Levantine Arabic Map v4",
+            author: "Hurayshi",
+            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
+            licence: "CC BY-SA 3.0",
+            licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
           }}
         />
     */}

@@ -49,36 +49,18 @@ const DialecteArabe = () => (
       știri. Acasă, la piață și pe WhatsApp, nimeni nu vorbește așa. Se vorbește dialectul.
     </p>
 
-    {/* IMAGE SLOT 1 — arabic-dialects-map.
-        Verificat de pe pagina fișierului: „Arabic Dialects" de Rafy, 21 dec.
-        2011, CC BY 3.0 Neadaptată, derivat din File:Arab World-Large.PNG. Doar
-        atribuire — fără distribuire în condiții identice, deci nu impune nimic
-        restului paginii. Pagina listează și o variantă alternativă, „Arabic
-        Varieties Map 2023"; fișierul acesta NU e marcat ca înlocuit, deci
-        oricare merge. Verifică varianta 2023 doar dacă vrei limite mai noi în
-        Peninsula Arabică.
+    {/* Pune src/assets/arabic-dialects-map.svg (ia SVG-ul sau un PNG generat de
+        Commons — o captură de ecran pierde textul legendei), adaugă importurile
+        în capul fișierului și înlocuiește acest comentariu cu blocul de mai jos.
 
-        FOLOSEȘTE SVG-UL, NU O CAPTURĂ DE ECRAN. Fișierul de pe Commons e un SVG
-        vectorial cu textul legendei încorporat — deci coloana de culori fără
-        text din copia trimisă e o problemă de randare a fontului, nu harta
-        reală. Descarcă SVG-ul (sau una dintre variantele PNG generate de
-        Commons, care includ textul). O captură făcută într-un vizualizator
-        fără fontul potrivit ajunge pe site cu o legendă imposibil de citit.
-
-        Descrierea de mai jos decodează oricum culorile geografic, ceea ce
-        merită păstrat și cu o legendă lizibilă — e ce primesc motoarele de
-        căutare și cititoarele de ecran.
-
-        Pune src/assets/arabic-dialects-map.svg (sau .png), apoi adaugă aceste două importuri în capul fișierului:
           import CreditedFigure from "@/components/content/CreditedFigure";
           import map1 from "@/assets/arabic-dialects-map.svg";
-        și înlocuiește tot acest comentariu cu:
 
         <CreditedFigure
           src={map1}
           className="w-full"
           alt="Harta familiilor de dialecte arabe din Africa de Nord și Orientul Mijlociu"
-          caption="Familiile de dialecte arabe. Albastrurile din vest sunt maghrebine; albastrul deschis peste Egipt e egipteana; maroul de sub el, sudaneza; verdele-oliv din nord-est, mesopotamiana; nuanțele de zmeuriu din peninsulă sunt dialectele din Golf, najdi și hijazi, iar rozul de pe coasta sudică — yemenita și omaneza. Fâșia verde îngustă de pe coasta estică a Mediteranei e levantina."
+          caption="Familiile de dialecte arabe, de la maghrebină în vest la cele din Peninsula Arabică în est. Fâșia îngustă de pe coasta estică a Mediteranei e levantina."
           credit={{
             title: "Arabic Dialects",
             author: "Rafy",
@@ -114,54 +96,26 @@ const DialecteArabe = () => (
       Palestina. Se împarte în două grupuri apropiate:
     </p>
 
-    {/* SLOT IMAGINE 2 — harta dialectelor levantine.
+    {/* Pune src/assets/levantine-dialects-map.png, adaugă importurile în capul
+        fișierului și înlocuiește acest comentariu cu blocul de mai jos.
+        (Commons marchează fișierul ca înlocuit de un SVG cu două categorii
+        aliniat la ISO; îl păstrăm intenționat — e documentat după Behnstedt,
+        Palva și Seeger, iar subdiviziunea fină e exact ce ne trebuie aici.)
 
-        FIȘIERUL RECOMANDAT: Levantine Arabic 2023.svg
-        Commons marchează AMBELE variante mai vechi ca înlocuite de acesta, iar
-        motivul e de fond, nu de formă: varianta PNG cu șase categorii
-        „conține dialecte nesusținute de surse și inexistente, precum
-        «levantina centrală»". Exact zona care făcea harta cu șase categorii
-        atrăgătoare aici — deci e motivul să o evităm, nu să o folosim. O hartă
-        cu categorii dialectale inventate pe pagina unei școli de limbi
-        subminează tocmai credibilitatea pe care pagina o construiește.
-
-        Fișierul din 2023 e independent de limbă, actualizat după unirea
-        codurilor ISO [apc]/[ajp] și bazat pe surse citate. Are două categorii:
-        levantina de nord și de sud. Citește autorul și licența de pe pagina
-        lui și completează mai jos — e succesorul lui Levantine Arabic 2022.svg
-        (Tom Fish + A455bcd9, CC BY-SA 4.0), deci probabil aceeași licență, dar
-        confirmă, nu presupune.
-
-        Textul alt și descrierea de mai jos sunt scrise pentru harta cu două
-        categorii.
-
-        RESPINS — Levantine Arabic Map v4.png (varianta cu șase categorii,
-        propusă inițial). Verificat complet: Hurayshi, 16 iulie 2012, licențiat
-        dublu GFDL 1.2+ sau CC BY-SA 3.0 Neadaptată (poți alege), sintetizat
-        după Behnstedt, Palva și Seeger. Înlocuit din motivul de mai sus. Nu-l
-        folosi ca să ilustrezi o zonă „centrală".
-
-        Harta cu două categorii nu poate arăta apropierea Beirut–Damasc. Ideea
-        e susținută în textul de mai sus pe temei fonetic — ق ca oprire glotală
-        și culoarea vocalelor — bine documentat și independent de orice
-        categorie cartografică disputată. Rămâne în text, nu în hartă.
-
-        Pune src/assets/levantine-dialects-map.svg, apoi adaugă aceste două importuri în capul fișierului:
           import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.svg";
-        și înlocuiește tot acest comentariu cu:
+          import map2 from "@/assets/levantine-dialects-map.png";
 
         <CreditedFigure
           src={map2}
           className="w-full max-w-md"
-          alt="Harta zonei levantine, împărțită în levantina de nord și levantina de sud"
-          caption="Zona dialectelor levantine (shami), împărțită în levantina de nord (Liban, Siria) și levantina de sud (Palestina, Iordania). Limitele urmează sursele din spatele clasificării ISO; vezi Brustad & Zuniga (2019)."
+          alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
+          caption="Zona dialectelor levantine (shami). Beirutul și Damascul stau în aceeași zonă centrală a levantinei de nord — de aceea cele două sună atât de apropiat. După Behnstedt, Palva și Seeger."
           credit={{
-            title: "Levantine Arabic 2023",
-            author: "COMPLETEAZĂ de pe pagina fișierului",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_2023.svg",
-            licence: "COMPLETEAZĂ de pe pagina fișierului",
-            licenceHref: "COMPLETEAZĂ — link către textul licenței",
+            title: "Levantine Arabic Map v4",
+            author: "Hurayshi",
+            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
+            licence: "CC BY-SA 3.0",
+            licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
           }}
         />
     */}
