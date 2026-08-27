@@ -1,13 +1,24 @@
 import type { ReactNode } from "react";
 
+/**
+ * A Creative Commons attribution, in the four parts the licences ask for:
+ * title, author, source and licence ("TASL"). Both CC BY and CC BY-SA require
+ * the credit *and* a link to the licence deed, so `licenceHref` is not
+ * optional — a credit that names a licence without linking it is incomplete.
+ */
 interface Credit {
-  /**
-   * Author and licence exactly as the source states them, e.g.
-   * "Rafy, CC BY-SA 3.0, via Wikimedia Commons".
-   */
-  text: string;
-  /** Link to the source file page, so the attribution is verifiable. */
-  href?: string;
+  /** The work's title at the source, e.g. "Arabic Dialects". */
+  title: string;
+  /** Author exactly as the source names them. */
+  author: string;
+  /** Link to the file's description page, so the credit is verifiable. */
+  sourceHref: string;
+  /** Licence as stated at the source, e.g. "CC BY 3.0". */
+  licence: string;
+  /** Link to the licence deed — required by the licence itself. */
+  licenceHref: string;
+  /** Set when the image was cropped, recoloured or otherwise altered. */
+  changes?: string;
 }
 
 interface Props {
@@ -17,20 +28,20 @@ interface Props {
   /** Visible explanation of what the image shows. */
   caption: ReactNode;
   /**
-   * Required on purpose. Most usable maps and diagrams are licensed CC BY /
+   * Required on purpose. Usable maps and diagrams are nearly always CC BY or
    * CC BY-SA, which permit commercial reuse only *with* attribution. Making
-   * this a required prop means an image cannot be added to a page without
-   * someone stating where it came from — the compliance step is enforced by
-   * the type checker rather than by remembering.
+   * this a required prop means an image cannot reach a page without someone
+   * stating where it came from — the compliance step is enforced by the type
+   * checker rather than by remembering.
    */
   credit: Credit;
   /** Tailwind width override; wide maps want the full column, tall ones less. */
   className?: string;
 }
 
-/**
- * An image with a caption and a mandatory source credit.
- */
+const ext = "noopener noreferrer nofollow";
+
+/** An image with a caption and a complete, linked source credit. */
 const CreditedFigure = ({ src, alt, caption, credit, className = "w-full" }: Props) => (
   <figure className="not-prose my-6">
     <img
@@ -42,18 +53,16 @@ const CreditedFigure = ({ src, alt, caption, credit, className = "w-full" }: Pro
     <figcaption className="mt-2 space-y-1 text-sm text-muted-foreground">
       <span className="block">{caption}</span>
       <span className="block text-xs">
-        {credit.href ? (
-          <a
-            href={credit.href}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className="underline hover:text-foreground"
-          >
-            {credit.text}
-          </a>
-        ) : (
-          credit.text
-        )}
+        <a href={credit.sourceHref} target="_blank" rel={ext} className="underline hover:text-foreground">
+          {credit.title}
+        </a>
+        {" by "}
+        {credit.author}
+        {", licensed under "}
+        <a href={credit.licenceHref} target="_blank" rel={ext} className="underline hover:text-foreground">
+          {credit.licence}
+        </a>
+        {credit.changes ? `. ${credit.changes}` : ""}
       </span>
     </figcaption>
   </figure>
