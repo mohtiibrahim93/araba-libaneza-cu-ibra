@@ -75,7 +75,7 @@ const CursuriArabaBucuresti = () => (
     slug="cursuri-araba-bucuresti"
     enHref="/en/arabic-classes-near-me"
     title="Cursuri de arabă libaneză în București — profesor nativ, grupe mici"
-    metaTitle="Cursuri de Arabă Libaneză București — Adulți, Copii, 1:1 | Sector 2"
+    metaTitle="Cursuri de Arabă în București | Profesor Nativ"
     description="Cursuri de arabă libaneză în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."
     crumb="Cursuri de arabă libaneză București"
     lead="Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
@@ -123,7 +123,7 @@ const CursuriArabaBucuresti = () => (
         seara (19:00–20:30), grupe de max 10. De la 700 lei/lună fizic.
       </li>
       <li>
-        <strong><Link to="/cursuri/private">Meditații 1:1</Link></strong> — 150 lei/lecție, program
+        <strong><Link to="/meditatii-araba">Meditații de arabă 1:1</Link></strong> — 150 lei/lecție, program
         flexibil, la sală sau la tine acasă (în funcție de zonă).
       </li>
       <li>
