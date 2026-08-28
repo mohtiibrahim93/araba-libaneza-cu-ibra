@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import LandingLayout from "@/components/seo/LandingLayout";
 import CreditedFigure from "@/components/content/CreditedFigure";
 import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";
+import levantineDialectsMap from "@/assets/levantine-dialects-map.png.asset.json";
 
 const FAQ = [
   {
@@ -89,29 +90,19 @@ const DialecteArabe = () => (
       Palestina. Se împarte în două grupuri apropiate:
     </p>
 
-    {/* Pune src/assets/levantine-dialects-map.png, adaugă importurile în capul
-        fișierului și înlocuiește acest comentariu cu blocul de mai jos.
-        (Commons marchează fișierul ca înlocuit de un SVG cu două categorii
-        aliniat la ISO; îl păstrăm intenționat — e documentat după Behnstedt,
-        Palva și Seeger, iar subdiviziunea fină e exact ce ne trebuie aici.)
-
-          import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.png";
-
-        <CreditedFigure
-          src={map2}
-          className="w-full max-w-md"
-          alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
-          caption="Zona dialectelor levantine (shami). Beirutul și Damascul stau în aceeași zonă centrală a levantinei de nord — de aceea cele două sună atât de apropiat. După Behnstedt, Palva și Seeger."
-          credit={{
-            title: "Levantine Arabic Map v4",
-            author: "Hurayshi",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
-            licence: "CC BY-SA 3.0",
-            licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
-          }}
-        />
-    */}
+    <CreditedFigure
+      src={levantineDialectsMap.url}
+      className="w-full max-w-md"
+      alt="Harta dialectelor levantine: levantina de nord (nord-estică, nusayrieh, centrală) și levantina de sud (palestiniană, sud-estică, sudică exterioară)"
+      caption="Zona dialectelor levantine (shami). Beirutul și Damascul stau în aceeași zonă centrală a levantinei de nord — de aceea cele două sună atât de apropiat. După Behnstedt, Palva și Seeger."
+      credit={{
+        title: "Levantine Arabic Map v4",
+        author: "Hurayshi",
+        sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
+        licence: "CC BY-SA 3.0",
+        licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
+      }}
+    />
 
     <ul>
       <li><strong>Levantina de nord</strong> — Liban și Siria (Beirut, Tripoli, Damasc, Alep, Homs, Latakia). Gramatică aproape identică, înțelegere reciprocă ~95%.</li>
