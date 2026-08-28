@@ -34,7 +34,7 @@ const ArabicClassesNearMe = () => (
     roHref="/cursuri-araba-bucuresti"
     title="Arabic classes near me — Bucharest & online worldwide"
     metaTitle="Arabic Classes Near Me — Bucharest & Online | Native Teacher"
-    description="Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month."
+    description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month."
     crumb="Arabic classes near me"
     lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 8), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
