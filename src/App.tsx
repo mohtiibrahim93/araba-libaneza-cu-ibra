@@ -168,9 +168,9 @@ const App = () => (
             <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />
-            {/* Merged into /cursuri-araba: same subject, and the surviving
-                slug matches the higher-volume query. */}
-            <Route path="/cursuri-limba-araba" element={<Navigate to="/cursuri-araba" replace />} />
+            {/* Legacy alias: keep a distinct runtime title while canonicalising
+                to the higher-volume surviving URL. */}
+            <Route path="/cursuri-limba-araba" element={<SeoCursuriAraba legacy />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
             <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
