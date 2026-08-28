@@ -56,7 +56,7 @@ const Primele20Expresii = () => {
   return (
     <BlogArticleLayout
       slug="primele-20-de-expresii-libaneze"
-      title={{ ro: "20 de expresii în arabă libaneză pe care le folosești din prima zi", en: "20 Lebanese Arabic phrases you'll use from day one" }}
+      title={{ ro: "20 de expresii în arabă libaneză pentru începători", en: "20 Lebanese Arabic phrases you'll use from day one" }}
       description={{
         ro: "20 de expresii în arabă libaneză (levantină) pentru începători — salut, politețe, cafenea, taxi — cu pronunție în arabizi, grafie arabă și traducere. Le poți folosi azi.",
         en: "The 20 most useful Lebanese phrases for beginners — greetings, politeness, café, taxi — written in Arabizi with pronunciation and translation.",
