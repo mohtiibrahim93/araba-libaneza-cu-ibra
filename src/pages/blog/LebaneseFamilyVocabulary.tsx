@@ -83,7 +83,7 @@ const LebaneseFamilyVocabulary = () => {
     <BlogArticleLayout
       slug="lebanese-family-vocabulary"
       title={{
-        ro: "Familia în araba libaneză: vocabular complet (nucleu, extinsă, socri)",
+        ro: "Familia în araba libaneză: vocabular complet",
         en: "Family vocabulary in Lebanese Arabic (core, extended, in-laws)",
       }}
       description={{
