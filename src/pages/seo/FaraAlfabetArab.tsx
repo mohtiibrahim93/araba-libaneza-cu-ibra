@@ -29,8 +29,8 @@ const FaraAlfabetArab = () => (
   <LandingLayout
     slug="fara-alfabet-arab"
     title="Nu ai nevoie de alfabetul arab ca să începi să vorbești"
-    metaTitle="Pot Învăța Araba Fără Alfabet? Da — Iată Cum | Metoda Oral First"
-    description="Poți învăța araba libaneză fără alfabetul arab: vorbești din prima lecție folosind arabizi. Ce e greu de fapt la arabă, ce înveți în 4 săptămâni și când merită alfabetul."
+    metaTitle="Pot Învăța Araba Fără Alfabet? Ghid Practic"
+    description="Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul."
     crumb="Fără alfabetul arab"
     lead="Alfabetul este motivul numărul unu pentru care oamenii se apucă de arabă și renunță în prima lună. Nu e obligatoriu ca să vorbești — iată cum arată drumul fără el."
     enHref={null}
