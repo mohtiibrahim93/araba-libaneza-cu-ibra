@@ -143,7 +143,11 @@ function allRoutes(): Route[] {
     type: "article" as const,
     published: p.published,
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...blog];
+  return [...STATIC_ROUTES, ...levelRoutes(), ...blog].map((route) =>
+    route.path === "/cursuri/grup/b2"
+      ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
+      : route,
+  );
 }
 
 /**
