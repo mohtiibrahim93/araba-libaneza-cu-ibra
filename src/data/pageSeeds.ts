@@ -98,7 +98,7 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/en/arabic-tutor",
-    "meta_title": "Arabic Tutor Online — Private 1-on-1 Lessons | Native Teacher",
+    "meta_title": "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
     "meta_description": "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min.",
     "h1": "Arabic tutor online — private 1-on-1 lessons with a native teacher",
     "lead": "Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
