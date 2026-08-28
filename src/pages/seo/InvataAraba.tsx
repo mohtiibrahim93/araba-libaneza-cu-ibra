@@ -25,7 +25,7 @@ const InvataAraba = () => (
     slug="invata-araba"
     enHref="/en/how-to-learn-lebanese-arabic"
     title="Învață araba libaneză de la zero — ghid complet + cursuri cu profesor nativ"
-    metaTitle="Învață Araba Libaneză de la Zero — Metodă, Timp & Cursuri | 2026"
+    metaTitle="Învață Arabă Libaneză de la Zero | Ghid și Cursuri"
     description="Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic."
     crumb="Învață araba libaneză"
     lead="Vrei să înveți araba libaneză, dar nu știi de unde să începi? Ghid clar despre alegerea dialectului, metoda potrivită și timpul necesar — plus cursuri cu profesor nativ."
