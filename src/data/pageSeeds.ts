@@ -15,7 +15,7 @@ export const PAGE_SEEDS: PageSeed[] = [
   {
     "path": "/araba-in-familie",
     "meta_title": "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid",
-    "meta_description": "Cum crești un copil bilingv româno-libanez: rutine zilnice, regula „o persoană, o limbă”, expresii de acasă și cursuri pentru copii și părinți, în București sau online.",
+    "meta_description": "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online.",
     "h1": "Arabă libaneză în familie: copii bilingvi și părinți care învață",
     "lead": "Pentru familiile mixte româno-libaneze: cum păstrezi limba în casă, ce faci concret în fiecare zi și de unde începe fiecare membru al familiei."
   },
