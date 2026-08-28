@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
@@ -7,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import MarkdownBody from "@/components/blog/MarkdownBody";
 import { usePageContent } from "@/hooks/usePageContent";
+import ArticleOutline from "@/components/blog/ArticleOutline";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -53,6 +55,8 @@ interface Props {
  */
 const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
+  // Scoped so the outline lists this page\'s own sections.
+  const bodyRef = useRef<HTMLDivElement>(null);
   const canonical = canonicalHref ? `${BASE}${canonicalHref}` : url;
 
   // hreflang is announced only for a real reciprocal twin, and never from a
@@ -127,7 +131,11 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
       <Navbar />
 
       <main id="main-content" className="pt-24 pb-16">
-        <article className="max-w-3xl mx-auto px-gutter">
+        <div className="mx-auto flex w-full max-w-content justify-center gap-10 px-gutter">
+          <aside className="hidden lg:block lg:w-52 lg:shrink-0">
+            <ArticleOutline containerRef={bodyRef} />
+          </aside>
+          <article className="min-w-0 w-full max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
               <Link to="/" className="hover:text-primary">Acasă</Link>
@@ -141,6 +149,7 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
             <p className="text-lg text-muted-foreground">{lead}</p>
           </header>
 
+          <div ref={bodyRef}>
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a]:text-primary [&_a]:underline">
             {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
@@ -158,6 +167,9 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
               </section>
             ) : null}
           </div>
+
+          </div>
+
 
           <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
             <h2 className="font-display text-2xl font-bold text-foreground">
@@ -203,7 +215,8 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
               )}
             </p>
           </div>
-        </article>
+          </article>
+        </div>
       </main>
 
       <Footer />

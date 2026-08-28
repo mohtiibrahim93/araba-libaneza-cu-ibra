@@ -149,8 +149,8 @@ const BookingManageInner = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background py-12 px-6">
-      <div className="max-w-2xl mx-auto">
+    <main className="min-h-screen bg-background py-12 px-gutter">
+      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
           <ArrowLeft className="w-4 h-4" /> {t.navHome}
         </Link>
@@ -219,7 +219,7 @@ const BookingManageInner = () => {
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <button
                   onClick={handleIcs}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
                 >
                   <Download className="w-4 h-4" />
                   {t.bookingAddToCalendar}
@@ -227,14 +227,14 @@ const BookingManageInner = () => {
                 <button
                   onClick={() => setRescheduleOpen(true)}
                   disabled={busy}
-                  className="flex-1 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
+                  className="flex-1 px-gutter py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
                 >
                   {t.manageRescheduleButton}
                 </button>
                 <button
                   onClick={handleCancel}
                   disabled={busy}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5"
                 >
                   <X className="w-4 h-4" />
                   {t.manageCancelButton}

@@ -71,7 +71,7 @@ const BlogIndex = () => {
       <Navbar />
 
       <main className="pt-16">
-        <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
+        <nav aria-label="Breadcrumb" className="w-full max-w-content mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link to="/" className="hover:text-foreground transition-colors">{c.home}</Link></li>
             <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
@@ -79,7 +79,7 @@ const BlogIndex = () => {
           </ol>
         </nav>
 
-        <header className="max-w-4xl mx-auto px-6 pt-4 pb-8 text-center">
+        <header className="w-full max-w-content mx-auto px-gutter pt-4 pb-8 text-center">
           <span className="text-sm font-medium text-primary mb-2 block">{c.badge}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
@@ -89,7 +89,7 @@ const BlogIndex = () => {
           </p>
         </header>
 
-        <section className="max-w-4xl mx-auto px-6 pb-16">
+        <section className="w-full max-w-content mx-auto px-gutter pb-16">
           <ul className="grid sm:grid-cols-2 gap-5">
             {blogPostsNewestFirst.map((post) => (
               <li key={post.slug}>

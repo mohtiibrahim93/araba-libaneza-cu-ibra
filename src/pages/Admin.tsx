@@ -541,49 +541,49 @@ const Admin = () => {
     <div className="min-h-screen bg-muted/30">
       <AdminNav onLogout={handleLogout} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <main className="w-full max-w-content mx-auto px-gutter sm:px-gutter py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+          <div className="overflow-x-auto -mx-4 px-gutter sm:mx-0 sm:px-0 pb-1">
             <TabsList className="h-11 bg-background border border-border shadow-sm">
-              <TabsTrigger value="overview" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="overview" className="gap-1.5 px-3 sm:px-gutter">
                 <LayoutDashboard className="w-4 h-4" />
                 <span className="hidden sm:inline">Panou general</span>
                 <span className="sm:hidden">Panou</span>
               </TabsTrigger>
-              <TabsTrigger value="leads" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="leads" className="gap-1.5 px-3 sm:px-gutter">
                 <ClipboardList className="w-4 h-4" />
                 Înscrieri
                 <span className="text-xs text-muted-foreground">({registrations.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="bookings" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="bookings" className="gap-1.5 px-3 sm:px-gutter">
                 <CalendarDays className="w-4 h-4" />
                 Programări
               </TabsTrigger>
-              <TabsTrigger value="groups" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="groups" className="gap-1.5 px-3 sm:px-gutter">
                 <GraduationCap className="w-4 h-4" />
                 Grupe
               </TabsTrigger>
-              <TabsTrigger value="blog" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="blog" className="gap-1.5 px-3 sm:px-gutter">
                 <Newspaper className="w-4 h-4" />
                 Blog
               </TabsTrigger>
-              <TabsTrigger value="resources" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="resources" className="gap-1.5 px-3 sm:px-gutter">
                 <FileText className="w-4 h-4" />
                 Resurse
               </TabsTrigger>
-              <TabsTrigger value="pages" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="pages" className="gap-1.5 px-3 sm:px-gutter">
                 <FileText className="w-4 h-4" />
                 Pagini
               </TabsTrigger>
-              <TabsTrigger value="site-texts" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="site-texts" className="gap-1.5 px-3 sm:px-gutter">
                 <Languages className="w-4 h-4" />
                 Texte site
               </TabsTrigger>
-              <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-gutter">
                 <LineChart className="w-4 h-4" />
                 SEO
               </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-4">
+              <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-gutter">
                 <Settings className="w-4 h-4" />
                 Setări
               </TabsTrigger>
@@ -674,7 +674,7 @@ const Admin = () => {
             />
 
             {selected.size > 0 && (
-              <div className="rounded-lg border border-border bg-background px-4 h-12 flex items-center justify-between shadow-sm">
+              <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-sm">
                 <span className="text-sm text-muted-foreground">
                   {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
                 </span>

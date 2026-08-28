@@ -104,7 +104,7 @@ const ArabischLernen = () => (
     <Navbar />
 
     <main id="main-content" className="pt-24 pb-16">
-      <article className="max-w-3xl mx-auto px-4 md:px-6">
+      <article className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter">
         <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
           <Link to="/" className="hover:text-primary">Home</Link>
           <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
@@ -215,7 +215,7 @@ const ArabischLernen = () => (
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/trial"
-              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+              className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
             >
               Probestunde buchen
             </Link>
@@ -223,7 +223,7 @@ const ArabischLernen = () => (
               href="https://wa.me/40763124514"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
+              className="inline-flex items-center justify-center gap-2 border border-border px-gutter py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
             >
               <MessageCircle className="w-4 h-4" /> Auf WhatsApp fragen
             </a>

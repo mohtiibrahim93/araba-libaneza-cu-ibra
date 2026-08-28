@@ -388,7 +388,7 @@ const AdminNotifications = () => {
         }
       />
 
-      <div className="max-w-7xl mx-auto p-3 sm:p-6 space-y-4">
+      <div className="w-full max-w-content mx-auto p-3 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row gap-3 sm:items-end justify-between">
           <div className="space-y-1.5">
             <Label className="text-xs">Tip curs</Label>

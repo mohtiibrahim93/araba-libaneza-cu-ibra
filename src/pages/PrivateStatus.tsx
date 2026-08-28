@@ -51,7 +51,7 @@ const PrivateStatus = () => {
   const currentIndex = lead ? steps.indexOf(lead.lead_status || "new") : 0;
 
   return (
-    <main className="min-h-screen bg-background px-6 py-10">
+    <main className="min-h-screen bg-background px-gutter py-10">
       <div className="mx-auto max-w-2xl">
         <Button asChild variant="ghost" size="sm" className="mb-8">
           <Link to="/"><ArrowLeft className="h-4 w-4" /> Înapoi la site</Link>

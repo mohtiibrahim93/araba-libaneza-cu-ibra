@@ -31,13 +31,13 @@ const BookingInner = () => {
   if (!hasValidRegistration) {
     const en = lang === "en";
     return (
-      <main className="min-h-screen bg-background py-12 px-6">
+      <main className="min-h-screen bg-background py-12 px-gutter">
         <Helmet>
           <title>{(en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
           <meta name="description" content={en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București."} />
           <link rel="canonical" href="https://centruldearabalibaneza.com/booking" />
         </Helmet>
-        <div className="max-w-2xl mx-auto">
+        <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="w-4 h-4" /> {t.navHome}
           </Link>
@@ -59,7 +59,7 @@ const BookingInner = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background py-12 px-6">
+    <main className="min-h-screen bg-background py-12 px-gutter">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -70,7 +70,7 @@ const BookingInner = () => {
         <meta property="og:type" content="website" />
         <meta property="og:image" content={ogImage} />
       </Helmet>
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link
           to="/"
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"

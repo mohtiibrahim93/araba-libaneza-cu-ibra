@@ -303,7 +303,7 @@ const Checkout = () => {
     !showFallback && phase === "ready" && !!clientSecret && !!stripePromise && !!options && amount > 0;
 
   return (
-    <div className="min-h-screen bg-muted/30 py-12 px-4">
+    <div className="min-h-screen bg-muted/30 py-12 px-gutter">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />

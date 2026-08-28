@@ -138,7 +138,7 @@ const ThankYou = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 py-12 px-4">
+    <div className="min-h-screen bg-muted/30 py-12 px-gutter">
       <Helmet>
         <title>{t.thankYouSeoTitle}</title>
         <meta name="description" content={t.thankYouSeoDescription} />
@@ -146,7 +146,7 @@ const ThankYou = () => {
         <link rel="canonical" href="https://centruldearabalibaneza.com/thank-you" />
       </Helmet>
 
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <div className="flex flex-col items-center text-center mb-8">
           <div className="relative mb-6">
             <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />

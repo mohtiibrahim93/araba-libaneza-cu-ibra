@@ -91,7 +91,7 @@ const TrialPage = () => {
   const title = `${t.trialPageSeoTitle} — ${t.siteTitle}`;
 
   return (
-    <main className="min-h-screen bg-background py-12 px-6">
+    <main className="min-h-screen bg-background py-12 px-gutter">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={t.trialPageSeoDesc} />
@@ -99,7 +99,7 @@ const TrialPage = () => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={t.trialPageSeoDesc} />
       </Helmet>
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link
           to="/"
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
@@ -231,7 +231,7 @@ const TrialPage = () => {
           </form>
         ) : (
           <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
-            <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+            <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-gutter py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
               {lang === "en" ? (
                 <><strong>Almost done!</strong> Pick a time slot below to confirm your free trial — it isn't booked until you choose one.</>
               ) : (

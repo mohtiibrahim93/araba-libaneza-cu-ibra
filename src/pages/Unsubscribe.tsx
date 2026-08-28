@@ -40,7 +40,7 @@ const Unsubscribe = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6">
+    <div className="min-h-screen flex items-center justify-center bg-background px-gutter">
       <div className="max-w-md w-full text-center space-y-6">
         <h1 className="text-2xl font-bold text-foreground">Dezabonare</h1>
 
@@ -51,7 +51,7 @@ const Unsubscribe = () => {
             <p className="text-muted-foreground">Ești sigur că dorești să te dezabonezi de la emailurile noastre?</p>
             <button
               onClick={handleUnsubscribe}
-              className="px-6 py-3 bg-destructive text-destructive-foreground rounded-lg font-semibold hover:opacity-90 transition"
+              className="px-gutter py-3 bg-destructive text-destructive-foreground rounded-lg font-semibold hover:opacity-90 transition"
             >
               Confirmă dezabonarea
             </button>

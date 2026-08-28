@@ -195,7 +195,7 @@ const PrivateLead = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-content px-gutter py-8 sm:px-gutter">
         <Button asChild variant="ghost" size="sm" className="mb-6">
           <Link to="/admin"><ArrowLeft className="h-4 w-4" /> Înapoi la admin</Link>
         </Button>

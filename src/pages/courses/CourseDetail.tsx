@@ -45,7 +45,7 @@ const CourseDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main id="main-content" className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 text-center">
+        <main id="main-content" className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-gutter text-center">
           <h2 className="mb-2 text-2xl font-bold text-foreground">{lang === "en" ? "Course not found" : "Cursul nu a fost găsit"}</h2>
           <p className="mb-6 text-muted-foreground">{lang === "en" ? "This course may have ended or moved." : "Cursul poate fi încheiat sau mutat."}</p>
           <Link to="/cursuri" className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{lang === "en" ? "Browse all courses" : "Vezi toate cursurile"}</Link>
@@ -179,7 +179,7 @@ const CourseDetail = () => {
       <Navbar />
 
       <main id="main-content" className="pt-16">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto w-full max-w-content px-gutter">
           <nav aria-label="Breadcrumb" className="pt-6 pb-2 text-xs text-muted-foreground">
             <ol className="flex flex-wrap items-center gap-1">
               <li><Link to="/" className="hover:text-foreground">{lang === "en" ? "Home" : "Acasă"}</Link></li>
@@ -257,7 +257,7 @@ const CourseDetail = () => {
               lockSelection
               embedded
             />
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted">WhatsApp</a>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-gutter py-2.5 text-sm font-medium text-foreground hover:bg-muted">WhatsApp</a>
           </section>
         </div>
       </main>

@@ -126,7 +126,7 @@ const CursGrupLevel = () => {
 
       <main className="pt-16">
         {/* Breadcrumb */}
-        <nav className="max-w-6xl mx-auto px-6 pt-6 pb-2 text-xs text-muted-foreground">
+        <nav className="w-full max-w-content mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link to="/" className="hover:text-foreground">{t.courseBreadcrumbHome}</Link></li>
             <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
@@ -137,7 +137,7 @@ const CursGrupLevel = () => {
         </nav>
 
         {/* Hero */}
-        <section className="max-w-6xl mx-auto px-6 pt-4 pb-8">
+        <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-8">
           <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
             CEFR {upperLevel}
           </span>
@@ -180,7 +180,7 @@ const CursGrupLevel = () => {
           )}
 
           {/* Dual price */}
-          <div className="inline-flex flex-wrap items-baseline gap-4 rounded-xl border border-border bg-muted/40 px-4 py-3 mb-2">
+          <div className="inline-flex flex-wrap items-baseline gap-4 rounded-xl border border-border bg-muted/40 px-gutter py-3 mb-2">
             <span>
               <span className="text-xs uppercase font-semibold text-muted-foreground mr-2">{t.priceOnlineShort}</span>
               <span className="text-xl font-bold text-foreground">{formatLei(online)}</span>
@@ -197,19 +197,19 @@ const CursGrupLevel = () => {
         </section>
 
         {/* Body: curriculum + form */}
-        <section className="max-w-6xl mx-auto px-6 pb-16">
-          <div className="grid lg:grid-cols-5 gap-8">
+        <section className="w-full max-w-content mx-auto px-gutter pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Curriculum */}
-            <div className="lg:col-span-3">
+            <div className="min-w-0 lg:col-span-3">
               <h2 className="text-2xl font-bold text-foreground mb-4">{t.levelPageCurriculumTitle}</h2>
 
               {/* Flat list (A1, A2, B1, B2) */}
               {curriculum.items && (
-                <ol className="grid sm:grid-cols-2 gap-x-6 gap-y-2 rounded-2xl border border-border bg-card p-5">
+                <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 rounded-2xl border border-border bg-card p-5">
                   {curriculum.items.map((it, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
+                    <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-foreground">{it}</span>
+                      <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                     </li>
                   ))}
                 </ol>
@@ -220,11 +220,11 @@ const CursGrupLevel = () => {
                 <div className="space-y-4">
                   <div className="rounded-2xl border border-border bg-card p-5">
                     <h3 className="text-sm font-bold text-foreground mb-3">{curriculum.spokenCore.intro}</h3>
-                    <ol className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
+                    <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                       {curriculum.spokenCore.items.map((it, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
+                        <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
                           <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                          <span className="text-foreground">{it}</span>
+                          <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                         </li>
                       ))}
                     </ol>
@@ -232,11 +232,11 @@ const CursGrupLevel = () => {
                   {curriculum.writingStrand && (
                     <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
                       <h3 className="text-sm font-bold text-foreground mb-3">{curriculum.writingStrand.intro}</h3>
-                      <ol className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
+                      <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                         {curriculum.writingStrand.items.map((it, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
+                          <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
                             <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                            <span className="text-foreground">{it}</span>
+                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                           </li>
                         ))}
                       </ol>
@@ -255,7 +255,7 @@ const CursGrupLevel = () => {
                         {b.items.map((it, j) => (
                           <li key={j} className="flex items-start gap-2 text-sm">
                             <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                            <span className="text-foreground">{it}</span>
+                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                           </li>
                         ))}
                       </ul>
@@ -371,7 +371,7 @@ const CursGrupLevel = () => {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+                  className="mt-3 inline-flex items-center justify-center gap-2 w-full px-gutter py-2.5 text-sm font-medium rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
                 >
                   <MessageCircle className="w-4 h-4 text-primary" /> WhatsApp
                 </a>

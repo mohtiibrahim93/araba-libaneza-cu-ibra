@@ -64,7 +64,7 @@ const Cursuri = () => {
       <Navbar />
 
       <main id="main-content" className="pt-16">
-        <nav aria-label={t.courseBreadcrumbCourses} className="max-w-5xl mx-auto px-6 pt-6 pb-2 text-xs text-muted-foreground">
+        <nav aria-label={t.courseBreadcrumbCourses} className="w-full max-w-content mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link to="/" className="hover:text-foreground">{t.courseBreadcrumbHome}</Link></li>
             <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
@@ -72,7 +72,7 @@ const Cursuri = () => {
           </ol>
         </nav>
 
-        <section className="max-w-5xl mx-auto px-6 pt-4 pb-2 text-center">
+        <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-2 text-center">
           <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
           <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-3">
             {lang === "en" ? "Find the right course" : "Găsește cursul potrivit"}
@@ -85,14 +85,14 @@ const Cursuri = () => {
         </section>
 
         {step > 1 && (
-          <div className="max-w-5xl mx-auto px-6 mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <div className="w-full max-w-content mx-auto px-gutter mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
             {age && <button onClick={() => set({ varsta: null, mod: null, tip: null })} className="rounded-full border border-border bg-muted/40 px-3 py-1 hover:border-primary/40">{L(AGE_LABELS[age as AgeCategory])} ✕</button>}
             {mode && <button onClick={() => set({ mod: null, tip: null })} className="rounded-full border border-border bg-muted/40 px-3 py-1 hover:border-primary/40">{L(MODALITY_LABELS[mode as Modality])} ✕</button>}
             {type && <button onClick={() => set({ tip: null })} className="rounded-full border border-border bg-muted/40 px-3 py-1 hover:border-primary/40">{L(TYPES.find((x) => x.value === type)!)} ✕</button>}
           </div>
         )}
 
-        <section className="max-w-5xl mx-auto px-6 py-8">
+        <section className="w-full max-w-content mx-auto px-gutter py-8">
           {step === 1 && <StepGrid title={lang === "en" ? "Who is the course for?" : "Pentru cine este cursul?"} choices={AGES} onPick={(v) => set({ varsta: v })} L={L} />}
           {step === 2 && <StepGrid title={lang === "en" ? "How would you like to attend?" : "Cum vrei să participi?"} choices={MODES} onPick={(v) => set({ mod: v })} L={L} />}
           {step === 3 && <StepGrid title={lang === "en" ? "What type of course?" : "Ce tip de curs cauți?"} choices={TYPES} onPick={(v) => set({ tip: v })} L={L} />}
@@ -102,7 +102,7 @@ const Cursuri = () => {
         </section>
 
         {/* Preserved helper: don't know your level */}
-        <section className="max-w-5xl mx-auto px-6 pb-16">
+        <section className="w-full max-w-content mx-auto px-gutter pb-16">
           <div className="rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
             <h2 className="text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
             <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.dontKnowLevelDesc}</p>
@@ -194,7 +194,7 @@ const PrivateCta = ({ age, mode, lang }: { age: string; mode: string; lang: "ro"
         ? "1-on-1 with a native teacher, your own pace and schedule. Read how it works and request a slot."
         : "1:1 cu profesor nativ, în ritmul și programul tău. Vezi cum funcționează și cere o programare."}
     </p>
-    <Link to={`/cursuri/privat?varsta=${age}&mod=${mode}`} className="inline-flex items-center gap-1 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+    <Link to={`/cursuri/privat?varsta=${age}&mod=${mode}`} className="inline-flex items-center gap-1 rounded-lg bg-primary px-gutter py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
       {lang === "en" ? "See private lessons" : "Vezi cursurile private"} <ChevronRight className="h-4 w-4" />
     </Link>
   </div>

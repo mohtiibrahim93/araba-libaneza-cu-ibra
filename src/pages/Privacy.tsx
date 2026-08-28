@@ -55,7 +55,7 @@ const PrivacyContent = () => {
         <meta property="og:image" content={ogImage} />
       </Helmet>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-6 py-28">
+      <main className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
         <div className="prose prose-sm text-muted-foreground space-y-6">
           <p><strong>{page.updated}</strong> {"updatedValue" in page ? page.updatedValue : "Martie 2026"}</p>

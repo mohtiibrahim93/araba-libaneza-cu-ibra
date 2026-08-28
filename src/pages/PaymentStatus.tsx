@@ -118,7 +118,7 @@ const PaymentStatus = () => {
       : null;
 
   return (
-    <div className="min-h-screen bg-muted/30 py-12 px-4">
+    <div className="min-h-screen bg-muted/30 py-12 px-gutter">
       <Helmet>
         <title>Status plată — Centrul de Arabă Libaneză</title>
         <meta name="robots" content="noindex" />
