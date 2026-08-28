@@ -126,8 +126,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/fara-alfabet-arab",
-    "meta_title": "Pot Învăța Araba Fără Alfabet? Da — Iată Cum | Metoda Oral First",
-    "meta_description": "Poți învăța araba libaneză fără alfabetul arab: vorbești din prima lecție folosind arabizi. Ce e greu de fapt la arabă, ce înveți în 4 săptămâni și când merită alfabetul.",
+    "meta_title": "Pot Învăța Araba Fără Alfabet? Ghid Practic",
+    "meta_description": "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul.",
     "h1": "Nu ai nevoie de alfabetul arab ca să începi să vorbești",
     "lead": "Alfabetul este motivul numărul unu pentru care oamenii se apucă de arabă și renunță în prima lună. Nu e obligatoriu ca să vorbești — iată cum arată drumul fără el."
   },
