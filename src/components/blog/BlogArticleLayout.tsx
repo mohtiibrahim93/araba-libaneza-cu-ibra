@@ -189,11 +189,11 @@ const BlogArticleLayout = ({
       <Navbar />
 
       <main id="main-content" className="pt-24 pb-16">
-        <div className="mx-auto flex max-w-3xl gap-10 px-4 md:px-6 xl:max-w-6xl xl:px-8">
-          <aside className="hidden xl:block xl:w-56 xl:shrink-0">
+        <div className="mx-auto flex max-w-3xl gap-8 px-4 md:px-6 lg:max-w-6xl lg:gap-10 lg:px-8">
+          <aside className="hidden lg:block lg:w-52 lg:shrink-0">
             <ArticleOutline containerRef={bodyRef} />
           </aside>
-          <article className="min-w-0 flex-1 xl:max-w-3xl">
+          <article className="min-w-0 flex-1 lg:max-w-3xl">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
             <Link to="/" className="hover:text-primary">{homeLabel}</Link>
             <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />

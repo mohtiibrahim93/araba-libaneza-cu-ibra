@@ -2,7 +2,7 @@ import { useEffect, useState, type RefObject } from "react";
 import { useI18n } from "@/lib/i18n";
 
 /**
- * Sticky outline of an article's H2s, beside the body on wide screens.
+ * Sticky outline of an article's H2s, beside the body from 1024px up.
  *
  * Headings are read from the rendered DOM rather than passed in as a prop, for
  * two reasons: the twenty existing articles write their own markup and mostly
@@ -84,7 +84,7 @@ const ArticleOutline = ({ containerRef }: { containerRef: RefObject<HTMLElement>
   return (
     <nav
       aria-label={lang === "en" ? "On this page" : "Cuprins"}
-      className="hidden xl:block sticky top-28 self-start max-h-[calc(100vh-9rem)] overflow-y-auto pr-4"
+      className="hidden lg:block sticky top-28 self-start max-h-[calc(100vh-9rem)] overflow-y-auto pr-4"
     >
       <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
         {lang === "en" ? "On this page" : "Cuprins"}

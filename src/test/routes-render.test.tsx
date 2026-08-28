@@ -146,3 +146,39 @@ describe("blog articles get a working outline", () => {
     }
   });
 });
+
+/**
+ * The Organization and WebSite nodes ship in index.html, so they are in the
+ * static HTML. Every other entity — LocalBusiness, Course, BreadcrumbList,
+ * FAQPage — is emitted by Helmet at runtime, which means this relationship is
+ * only ever visible to a crawler that executes JavaScript. Asserting it here is
+ * the only place it can be checked.
+ */
+describe("structured data links the business to the organisation", () => {
+  it.each([
+    ["/", "https://centruldearabalibaneza.com/#localbusiness"],
+    ["/cursuri-araba-bucuresti", "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness"],
+  ])("%s declares a LocalBusiness owned by #organization", async (route, expectedId) => {
+    window.localStorage.setItem("site-language", "ro");
+    window.history.pushState({}, "", route);
+    render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>,
+    );
+    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+
+    const local = await waitFor(() => {
+      const found = [...document.querySelectorAll('script[type="application/ld+json"]')]
+        .map((s) => {
+          try { return JSON.parse(s.textContent || "{}"); } catch { return {}; }
+        })
+        .find((d) => d["@type"] === "LocalBusiness");
+      expect(found).toBeTruthy();
+      return found!;
+    });
+
+    expect(local["@id"]).toBe(expectedId);
+    expect(local.parentOrganization?.["@id"]).toBe("https://centruldearabalibaneza.com/#organization");
+  });
+});
