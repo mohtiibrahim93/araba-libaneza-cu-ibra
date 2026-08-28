@@ -125,7 +125,9 @@ function levelRoutes(): Route[] {
             title:
               id === "c1"
                 ? "Curs de Arabă Libaneză C1 — Nivel Avansat"
-                : `${lvl.title} — Curs de Grup de Arabă Libaneză`,
+                : id === "c2"
+                  ? "Curs C2 de Arabă Libaneză — Academic și Specializat"
+                  : `${lvl.title} — Curs de Grup de Arabă Libaneză`,
             description: lvl.objective.slice(0, 155),
           };
     })
