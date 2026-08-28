@@ -29,8 +29,8 @@ const ArabicForTeenagers = () => (
     slug="arabic-for-teenagers"
     roHref="/cursuri-araba-adolescenti"
     title="Lebanese Arabic for teenagers (11–17) — Bucharest and online"
-    metaTitle="Arabic Classes for Teenagers (11–17) | Lebanese, Online & Bucharest"
-    description="Lebanese Arabic (Levantine) classes for teenagers aged 11–17 with a native teacher — in person in Bucharest or online. Conversation from lesson one, no alphabet drills. Free trial."
+    metaTitle="Lebanese Arabic Classes for Teenagers | Bucharest & Online"
+    description="Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial."
     crumb="Arabic for teenagers"
     lead="Lebanese Arabic groups designed for 11–17 year olds: conversation, music and real social-media language instead of grammar drills. Native Lebanese teacher, in person in Bucharest or online."
     faq={FAQ}
