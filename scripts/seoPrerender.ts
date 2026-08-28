@@ -37,6 +37,8 @@ interface Route {
   description: string;
   /** Canonical override (root-relative) when this page consolidates into another. */
   canonical?: string;
+  /** Exclude a retired client-side redirect from indexing until hosting can return a real 301. */
+  noindex?: boolean;
   /** og:locale language. Defaults to ro, or en for /en/* paths. */
   lang?: "ro" | "en" | "de";
   /** og:type — "article" for blog posts, "website" everywhere else. */
@@ -55,6 +57,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri interactive de arabă libaneză pentru copii (6–10 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
   { path: "/cursuri-araba", title: "Cursuri de Limbă Arabă (Libaneză) — București & Online | A1–C2", description: "Cursuri de limbă arabă (dialect libanez, levantin) cu profesor nativ — București și online. Grupe A1–C2, lecții private 1:1, copii și adolescenți. Probă gratuită." },
+  { path: "/cursuri-limba-araba", title: "Cursuri de Arabă Libaneză | București și Online", description: "Alege cursul potrivit: grupă A1–C2, lecții private sau cursuri pentru copii, în București și online, cu profesor nativ libanez.", canonical: "/cursuri-araba", noindex: true },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție", description: "Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită." },
   { path: "/araba-online", title: "Arabă Libaneză Online — Cursuri Live pe Zoom cu Profesor Nativ | De Oriunde", description: "Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online e completă — înscrie-te la lista pentru următoarea. Probă gratuită." },
   { path: "/meditatii-araba", title: "Meditații Arabă în București și Online | Profesor Nativ", description: "Meditații de arabă libaneză (dialect levantin) 1:1 cu profesor nativ libanez, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
@@ -92,11 +95,12 @@ const STATIC_ROUTES: Route[] = [
 ];
 
 /**
- * Retired URLs (/cursuri/privat, /en/learn-levantine-arabic,
- * /en/levantine-arabic-dialects-map) stay listed with the *target* page's head
- * and a canonical pointing at it: the route redirects visitors client-side, and
- * the canonical gives crawlers the consolidation signal a client-side redirect
- * cannot. They are deliberately absent from the sitemap.
+ * Retired URLs (/cursuri/privat, /cursuri-limba-araba,
+ * /en/learn-levantine-arabic, /en/levantine-arabic-dialects-map) stay listed
+ * with a canonical pointing at the target: the route redirects visitors
+ * client-side, and the canonical gives crawlers the consolidation signal a
+ * client-side redirect cannot. They are deliberately absent from the sitemap;
+ * /cursuri-limba-araba is also noindex because the audit found it indexable.
  *
  * The six CEFR level pages derive their head from the same curriculum data the
  * page component uses, so they can't drift. A1 keeps its keyword-optimised
@@ -241,6 +245,7 @@ function renderRoute(
   // for blog posts, the Article JSON-LD + article:* tags) before </head>, so
   // non-JS crawlers see the same head React would render at runtime.
   let inject =
+    (route.noindex ? `    <meta name="robots" content="noindex,follow" />\n` : "") +
     `    <link rel="canonical" href="${canonicalHref}" />\n` +
     `    <meta property="og:locale" content="${ogLocale}" />\n`;
   // hreflang for reciprocal RO/EN twins only, matching what the layouts render
