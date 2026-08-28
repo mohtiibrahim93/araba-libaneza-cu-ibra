@@ -22,7 +22,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "lebanese-arabic-learning-resources",
     title: {
-      ro: "Cele mai bune resurse pentru a învăța araba libaneză (aplicații, podcasturi, seriale)",
+      ro: "Resurse pentru araba libaneză: aplicații și podcasturi",
       en: "The best Lebanese Arabic learning resources (apps, podcasts, media)",
     },
     description: {
