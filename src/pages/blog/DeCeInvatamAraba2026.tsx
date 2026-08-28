@@ -10,7 +10,7 @@ const DeCeInvatamAraba2026 = () => {
     <BlogArticleLayout
       slug="de-ce-invatam-araba-in-2026"
       title={{
-        ro: "De ce merită să înveți arabă în 2026 (și de ce dialectul, nu MSA)",
+        ro: "De ce merită să înveți arabă în 2026",
         en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
       }}
       description={{
