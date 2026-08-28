@@ -44,8 +44,8 @@ const Arabizi = () => (
   <LandingLayout
     slug="arabizi"
     title="Arabizi: ghid complet — ce înseamnă 2, 3, 5, 7 și 9 în arabă"
-    metaTitle="Arabizi — Ce Înseamnă 2, 3, 5, 7 în Arabă | Ghid Complet cu Tabel"
-    description="Ghid complet Arabizi: tabelul cifrelor (2, 3, 5, 6, 7, 8, 9) și literele arabe pe care le înlocuiesc, exemple reale din WhatsApp și TikTok, plus cheat-sheet PDF gratuit."
+    metaTitle="Arabizi: ce înseamnă 2, 3, 5, 7 și 9 în arabă"
+    description="Învață ce înseamnă cifrele 2, 3, 5, 6, 7, 8 și 9 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit."
     crumb="Arabizi"
     lead="Araba scrisă cu litere latine și cifre. Aici găsești tabelul complet de decodare, exemple reale de mesaje și cheat-sheet-ul PDF gratuit."
     enHref={null}
