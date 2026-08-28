@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import EnLandingLayout from "./EnLandingLayout";
 import CreditedFigure from "@/components/content/CreditedFigure";
+import levantineDialectsMap from "@/assets/levantine-dialects-map.png.asset.json";
 import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";
 
 const FAQ = [
@@ -72,29 +73,19 @@ const ArabicDialectsGuide = () => (
       everyday conversation across four countries at once.
     </p>
 
-    {/* Add src/assets/levantine-dialects-map.png, add these imports at the top
-        of this file, and replace this comment with the block below.
-        (Commons flags this file as superseded by an ISO-aligned two-category
-        SVG; we keep this one deliberately — it is sourced to Behnstedt, Palva
-        and Seeger, and the finer subdivision is the point here.)
-
-          import CreditedFigure from "@/components/content/CreditedFigure";
-          import map2 from "@/assets/levantine-dialects-map.png";
-
-        <CreditedFigure
-          src={map2}
-          className="w-full max-w-md"
-          alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
-          caption="The Levantine (Shami) dialect area. Beirut and Damascus sit in the same Central zone of North Levantine — which is why the two sound so close. After Behnstedt, Palva and Seeger."
-          credit={{
-            title: "Levantine Arabic Map v4",
-            author: "Hurayshi",
-            sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
-            licence: "CC BY-SA 3.0",
-            licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
-          }}
-        />
-    */}
+    <CreditedFigure
+      src={levantineDialectsMap.url}
+      className="w-full max-w-md"
+      alt="Map of the Levantine Arabic dialects: North Levantine (North-eastern, Nusayrieh, Central) and South Levantine (Palestinian, South-eastern, Outer southern)"
+      caption="The Levantine (Shami) dialect area. Beirut and Damascus sit in the same Central zone of North Levantine — which is why the two sound so close. After Behnstedt, Palva and Seeger."
+      credit={{
+        title: "Levantine Arabic Map v4",
+        author: "Hurayshi",
+        sourceHref: "https://commons.wikimedia.org/wiki/File:Levantine_Arabic_Map_v4.png",
+        licence: "CC BY-SA 3.0",
+        licenceHref: "https://creativecommons.org/licenses/by-sa/3.0/",
+      }}
+    />
 
     <h3>The Levantine map at a glance</h3>
     <ul>
