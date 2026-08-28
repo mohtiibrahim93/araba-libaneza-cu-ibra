@@ -49,8 +49,8 @@ const LearnLebaneseArabic = () => (
   <EnLandingLayout
     slug="learn-lebanese-arabic"
     title="Learn Lebanese Arabic online — the Levantine dialect, with a native teacher"
-    metaTitle="Learn Lebanese & Levantine Arabic Online | Native Teacher, Free Trial"
-    description="Learn Lebanese Arabic — the Levantine dialect — with a native instructor. One dialect, ~90% comprehension across Lebanon, Syria, Jordan and Palestine. Live 1-on-1 and small-group courses online, A1–C2. Speak from lesson one, free trial."
+    metaTitle="Learn Lebanese Arabic Online | Native Teacher & Free Trial"
+    description="Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial."
     crumb="Learn Lebanese Arabic"
     lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by 30–35 million people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
     faq={FAQ}
