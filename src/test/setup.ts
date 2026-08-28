@@ -20,3 +20,18 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+// jsdom ships neither of these; the article outline uses IntersectionObserver
+// for its scroll-spy. The component degrades gracefully without it, but the
+// stub lets tests exercise the real path.
+class IntersectionObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() { return []; }
+  root = null;
+  rootMargin = "";
+  thresholds = [];
+}
+window.IntersectionObserver =
+  window.IntersectionObserver || (IntersectionObserverStub as unknown as typeof IntersectionObserver);

@@ -89,6 +89,10 @@ const PageContent = () => {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": "https://centruldearabalibaneza.com/#localbusiness",
+    // Ties this location to the Organization node declared once in index.html.
+    // Without the link the two read as separate businesses that happen to share
+    // a name, address and phone number.
+    parentOrganization: { "@id": "https://centruldearabalibaneza.com/#organization" },
     name: "Centrul de Arabă Libaneză cu Ibra",
     description: homeDescription,
     url: "https://centruldearabalibaneza.com/",

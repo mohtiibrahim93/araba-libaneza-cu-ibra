@@ -29,6 +29,7 @@ const CursuriArabaBucuresti = () => (
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           "@id": "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness",
+          parentOrganization: { "@id": "https://centruldearabalibaneza.com/#organization" },
           name: "Centrul de Arabă Libaneză cu Ibra — București",
           description:
             "Cursuri de arabă libaneză în București: grupe mici A1–C2, meditații 1:1 și curs pentru copii. Profesor nativ. Str. Icoanei 80, sector 2.",

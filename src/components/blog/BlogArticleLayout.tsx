@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
@@ -7,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import MarkdownBody from "@/components/blog/MarkdownBody";
+import ArticleOutline from "@/components/blog/ArticleOutline";
 import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";
@@ -82,6 +84,9 @@ const BlogArticleLayout = ({
 }: Props) => {
   const { lang } = useI18n();
   const url = `${BASE}/blog/${slug}`;
+  // Scoped to the body + FAQ so the outline lists the article's own sections,
+  // not the "related posts" and CTA headings that follow every article.
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   // Blog CMS override: a published, owner-edited DB version replaces the
   // code-shipped one. Empty DB fields fall back to the code values, and the
@@ -184,7 +189,11 @@ const BlogArticleLayout = ({
       <Navbar />
 
       <main id="main-content" className="pt-24 pb-16">
-        <article className="max-w-3xl mx-auto px-4 md:px-6">
+        <div className="mx-auto flex max-w-3xl gap-10 px-4 md:px-6 xl:max-w-6xl xl:px-8">
+          <aside className="hidden xl:block xl:w-56 xl:shrink-0">
+            <ArticleOutline containerRef={bodyRef} />
+          </aside>
+          <article className="min-w-0 flex-1 xl:max-w-3xl">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
             <Link to="/" className="hover:text-primary">{homeLabel}</Link>
             <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
@@ -201,6 +210,7 @@ const BlogArticleLayout = ({
             <p className="text-sm text-muted-foreground">{metaLine}</p>
           </header>
 
+          <div ref={bodyRef}>
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a]:text-primary [&_a]:underline">
             {overrideBody ? <MarkdownBody markdown={overrideBody} /> : children}
           </div>
@@ -221,6 +231,8 @@ const BlogArticleLayout = ({
             </section>
           ) : null}
 
+          </div>
+
           <RelatedPosts currentSlug={slug} />
 
           <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
@@ -233,7 +245,8 @@ const BlogArticleLayout = ({
               {pick(cta.label, lang)}
             </Link>
           </div>
-        </article>
+          </article>
+        </div>
       </main>
 
       <Footer />

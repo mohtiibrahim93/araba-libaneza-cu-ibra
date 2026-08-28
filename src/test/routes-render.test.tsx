@@ -1,4 +1,4 @@
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, waitFor } from "@testing-library/react";
 import { describe, expect, it, afterEach, beforeAll, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -108,5 +108,41 @@ describe("licensed images keep their attribution", () => {
     expect(fig?.textContent).toContain(author);
     expect(fig?.querySelector('a[href*="creativecommons.org"]')).toBeTruthy();
     expect(fig?.querySelector('a[href*="commons.wikimedia.org"]')).toBeTruthy();
+  });
+});
+
+/**
+ * The outline reads headings from the rendered DOM and assigns ids to any that
+ * lack them, so it works across twenty articles that were written by hand and
+ * across CMS-published Markdown bodies. If the scan ever stops finding
+ * headings, articles quietly lose their navigation with nothing else failing.
+ */
+describe("blog articles get a working outline", () => {
+  it.each([
+    ["/blog/cum-inveti-araba-libaneza", "ro"],
+    ["/blog/learn-lebanese-arabic", "en"],
+  ])("%s builds an outline whose links resolve", async (route, lang) => {
+    window.localStorage.setItem("site-language", lang);
+    window.history.pushState({}, "", route);
+    const { container } = render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>,
+    );
+    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    // The outline is built in an effect after paint, so it lands a tick later
+    // than the h1 the wait above resolves on.
+    const nav = await waitFor(() => {
+      const n = container.querySelector('nav[aria-label="Cuprins"], nav[aria-label="On this page"]');
+      expect(n).toBeTruthy();
+      return n!;
+    });
+    const links = [...nav.querySelectorAll("a[href^='#']")];
+    expect(links.length).toBeGreaterThan(1);
+    // Every entry must point at a heading that actually exists on the page.
+    for (const a of links) {
+      const id = a.getAttribute("href")!.slice(1);
+      expect(container.querySelector(`[id="${id}"]`)).toBeTruthy();
+    }
   });
 });
