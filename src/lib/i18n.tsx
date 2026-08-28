@@ -631,7 +631,7 @@ export const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Cursuri de Arabă Libaneză pentru Copii — București",
-    courseCopiiMetaDesc: "Cursuri interactive de arabă libaneză pentru copii (6–10 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani.",
+    courseCopiiMetaDesc: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
     courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
     courseCopiiIntro: "Cursuri concepute special pentru copii (6–10 ani), cu activități, jocuri și povești în arabă libaneză. Format fizic în București — online disponibil pentru copii peste 10 ani.",
     courseCopiiFeat1: "Vârste 6–10 ani, grupe pe categorii de vârstă",
