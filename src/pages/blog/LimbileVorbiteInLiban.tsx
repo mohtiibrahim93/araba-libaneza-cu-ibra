@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
 import { useI18n } from "@/lib/i18n";
@@ -5,6 +6,12 @@ import { useI18n } from "@/lib/i18n";
 const LimbileVorbiteInLiban = () => {
   const { lang } = useI18n();
   const en = lang === "en";
+  const seoTitle = en
+    ? "Languages Spoken in Lebanon: Arabic, French and English"
+    : "Ce limbi se vorbesc în Liban? Arabă, franceză și engleză";
+  const seoDescription = en
+    ? "Discover the languages spoken in Lebanon, from Lebanese Arabic and MSA to French and English, and which ones people use in daily life."
+    : "Află ce limbi se vorbesc în Liban, de la araba libaneză și MSA la franceză și engleză, plus ce folosește populația în viața de zi cu zi.";
 
   return (
     <BlogArticleLayout
@@ -25,6 +32,14 @@ const LimbileVorbiteInLiban = () => {
         en: "Lebanon is one of the most multilingual countries in the world: almost every Lebanese person juggles Lebanese Arabic, French and English daily, while Modern Standard Arabic shows up in news and paperwork. Here's a clear map of Lebanon's languages — and why the Lebanese dialect stays the language of real connection.",
       }}
     >
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+      </Helmet>
       <h2>{en ? "1. Lebanese Arabic — the everyday language" : "1. Araba libaneză — limba de zi cu zi"}</h2>
       <p>
         {en
