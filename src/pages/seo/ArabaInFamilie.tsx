@@ -29,7 +29,7 @@ const ArabaInFamilie = () => (
     slug="araba-in-familie"
     title="Arabă libaneză în familie: copii bilingvi și părinți care învață"
     metaTitle="Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid"
-    description="Cum crești un copil bilingv româno-libanez: rutine zilnice, regula „o persoană, o limbă”, expresii de acasă și cursuri pentru copii și părinți, în București sau online."
+    description="Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online."
     crumb="Arabă în familie"
     lead="Pentru familiile mixte româno-libaneze: cum păstrezi limba în casă, ce faci concret în fiecare zi și de unde începe fiecare membru al familiei."
     enHref={null}
