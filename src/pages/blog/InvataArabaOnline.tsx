@@ -10,7 +10,7 @@ const InvataArabaOnline = () => {
       slug="invata-araba-libaneza-online"
       title={{ ro: "Cum înveți araba libaneză online (de oriunde)", en: "How to learn Lebanese Arabic online (from anywhere)" }}
       description={{
-        ro: "Cum funcționează cursurile de arabă libaneză online: de ce ai nevoie, cum arată o lecție pe Zoom, dacă online e la fel de bun ca fizic și pentru cine e potrivit.",
+        ro: "Află cum funcționează cursurile de arabă libaneză online, cum arată o lecție pe Zoom și dacă acest format ți se potrivește.",
         en: "How online Lebanese Arabic courses work: what you need, what a Zoom lesson looks like, whether online is as good as in person and who it's for.",
       }}
       published="2026-07-17"
