@@ -25,6 +25,9 @@ interface Props {
   slug: string;
   title: Loc;
   description: Loc;
+  /** Optional fixed metadata, independent of owner-edited article headings. */
+  metaTitle?: Loc;
+  metaDescription?: Loc;
   published: string; // ISO
   readingMinutes: number;
   /** Short crumb label (falls back to title). */
@@ -73,6 +76,8 @@ const BlogArticleLayout = ({
   slug,
   title,
   description,
+  metaTitle,
+  metaDescription,
   published,
   readingMinutes,
   crumb,
@@ -96,6 +101,8 @@ const BlogArticleLayout = ({
 
   const tTitle = (override && ov(override.title_en, override.title_ro)) || pick(title, lang);
   const tDesc = (override && ov(override.description_en, override.description_ro)) || pick(description, lang);
+  const resolvedMetaTitle = metaTitle ? pick(metaTitle, lang) : tTitle;
+  const resolvedMetaDescription = metaDescription ? pick(metaDescription, lang) : tDesc;
   const tLead = (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
   const overrideBody = override ? ov(override.body_en, override.body_ro) : "";
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
@@ -104,8 +111,8 @@ const BlogArticleLayout = ({
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: tTitle,
-    description: tDesc,
+    headline: resolvedMetaTitle,
+    description: resolvedMetaDescription,
     datePublished: published,
     dateModified: published,
     inLanguage: lang === "en" ? "en" : "ro",
@@ -152,8 +159,8 @@ const BlogArticleLayout = ({
     ? {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        name: tTitle,
-        description: tDesc,
+        name: resolvedMetaTitle,
+        description: resolvedMetaDescription,
         inLanguage: lang,
         step: steps.map((st, i) => ({
           "@type": "HowToStep",
@@ -168,12 +175,12 @@ const BlogArticleLayout = ({
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{tTitle}</title>
-        <meta name="description" content={tDesc} />
+        <title>{resolvedMetaTitle}</title>
+        <meta name="description" content={resolvedMetaDescription} />
         <link rel="canonical" href={url} />
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={tTitle} />
-        <meta property="og:description" content={tDesc} />
+        <meta property="og:title" content={resolvedMetaTitle} />
+        <meta property="og:description" content={resolvedMetaDescription} />
         <meta property="og:url" content={url} />
         <meta property="og:image" content={`${BASE}/og-image.png`} />
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
