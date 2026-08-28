@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [arabizi/phrase, ro-meaning, en-meaning]
@@ -14,6 +15,39 @@ const PHRASES: [string, string, string][] = [
   ["Addesh?", "Cât costă?", "How much is it?"],
   ["Wein el ḥammem?", "Unde este toaleta?", "Where is the toilet?"],
   ["Yalla, bye!", "Hai, pa!", "Alright, bye!"],
+];
+
+// Questions specific to this article. Anything already answered elsewhere on
+// the site stays there — the same question on two URLs splits the answer.
+const FAQ = [
+  {
+    q: { ro: "Pot învăța araba libaneză singur, fără profesor?", en: "Can I learn Lebanese Arabic on my own, without a teacher?" },
+    a: {
+      ro: "Poți construi vocabular și obișnuința cu sunetele singur, din muzică, seriale și liste de expresii. Ce nu poți face singur este să-ți corectezi pronunția: nu auzi propriile greșeli, iar ele se fixează. De aceea majoritatea combină studiul individual cu ședințe regulate cu un vorbitor nativ.",
+      en: "You can build vocabulary and get used to the sounds on your own, from music, series and phrase lists. What you cannot do alone is correct your own pronunciation: you do not hear your own errors, and they set. That is why most learners combine solo study with regular sessions with a native speaker.",
+    },
+  },
+  {
+    q: { ro: "De câte cuvinte am nevoie ca să mă descurc în conversații de zi cu zi?", en: "How many words do I need to handle everyday conversation?" },
+    a: {
+      ro: "Mai puține decât pare, pentru că libaneza se sprijină mult pe expresii fixe. Salutul, prezentarea, cifrele, mâncarea și câteva verbe de bază acoperă majoritatea schimburilor scurte. Important e să înveți fraze întregi, nu cuvinte izolate — multe expresii nu se traduc cuvânt cu cuvânt.",
+      en: "Fewer than it seems, because Lebanese leans heavily on set expressions. Greetings, introductions, numbers, food and a handful of basic verbs cover most short exchanges. What matters is learning whole phrases rather than isolated words — many expressions do not translate word for word.",
+    },
+  },
+  {
+    q: { ro: "Cât de des ar trebui să exersez?", en: "How often should I practise?" },
+    a: {
+      ro: "Regulat bate intens. Câteva minute în fiecare zi fac mai mult decât o sesiune lungă în weekend, pentru că sunetele și tiparele se fixează prin repetare deasă. Cursurile de grup merg pe 2 lecții de 90 de minute pe săptămână, exact ca să existe un ritm între ședințe.",
+      en: "Regular beats intense. A few minutes every day does more than one long weekend session, because sounds and patterns settle through frequent repetition. Group courses run two 90-minute lessons a week precisely so there is a rhythm between sessions.",
+    },
+  },
+  {
+    q: { ro: "Ce fac dacă simt că nu mai progresez?", en: "What do I do if I feel I have stopped progressing?" },
+    a: {
+      ro: "Platourile sunt normale și apar de obicei după primele săptămâni, când noutatea trece. Cel mai simplu remediu e să schimbi tipul de input: dacă ai tot citit liste, treci la ascultare; dacă ai tot ascultat, treci la vorbit cu cineva. Un obiectiv concret — o conversație de 5 minute, o comandă la restaurant — face progresul vizibil din nou.",
+      en: "Plateaus are normal and usually show up after the first few weeks, once the novelty wears off. The simplest fix is to change the kind of input: if you have been reading lists, switch to listening; if you have been listening, switch to speaking with someone. A concrete goal — a five-minute conversation, ordering a meal — makes progress visible again.",
+    },
+  },
 ];
 
 const CumInvetiArabaLibaneza = () => {
@@ -43,7 +77,28 @@ const CumInvetiArabaLibaneza = () => {
         href: "/#inscriere",
         label: { ro: "Înscrie-te la un curs", en: "Enrol in a course" },
       }}
+      faq={FAQ}
     >
+      <Tldr
+        points={[
+          {
+            ro: "Începe cu dialectul libanez, nu cu araba standard: Fusha se scrie, libaneza se vorbește.",
+            en: "Start with the Lebanese dialect, not Standard Arabic: Fusha is written, Lebanese is spoken.",
+          },
+          {
+            ro: "Vorbești din prima lecție folosind arabizi (litere latine) — alfabetul arab vine mai târziu, nu la start.",
+            en: "You speak from lesson one using arabizi (Latin letters) — the Arabic script comes later, not at the start.",
+          },
+          {
+            ro: "Nivelul A1 durează ~4 luni (32 de lecții), cu 2 lecții de 90 de minute pe săptămână.",
+            en: "A1 takes about 4 months (32 lessons), at two 90-minute lessons a week.",
+          },
+          {
+            ro: "Corectarea pronunției de către un vorbitor nativ e partea pe care nicio aplicație nu o acoperă.",
+            en: "Pronunciation correction by a native speaker is the part no app covers.",
+          },
+        ]}
+      />
       <aside className="rounded-lg border border-border bg-muted/40 p-5 [&_a]:no-underline">
         <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide mt-0">
           {en ? "What you'll learn" : "Ce vei afla"}
@@ -118,6 +173,16 @@ const CumInvetiArabaLibaneza = () => {
           {en ? " — both work, if you have a teacher who corrects pronunciation." : " — ambele funcționează, dacă ai un profesor care corectează pronunția."}
         </p>
       </section>
+
+      <InlineCta
+        title={{ ro: "Vrei corectare, nu doar teorie?", en: "Want correction, not just theory?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
 
       <section id="greseli" className="scroll-mt-24 space-y-4">
         <h2>{en ? "5. Common mistakes beginners make" : "5. Greșeli frecvente pe care le fac începătorii"}</h2>

@@ -32,6 +32,18 @@ interface Props {
   children: React.ReactNode;
   /** CTA at the bottom; defaults to the trial. */
   cta?: { title: Loc; text: Loc; href: string; label: Loc };
+  /**
+   * Per-article questions. Rendered at the end and emitted as FAQPage JSON-LD.
+   * Keep them unique to this article — a question that already exists elsewhere
+   * on the site splits the same answer across two URLs.
+   */
+  faq?: { q: Loc; a: Loc }[];
+  /**
+   * The same steps passed to <Steps>, emitted as HowTo JSON-LD. Pass them only
+   * when the article really is a how-to; HowTo on a non-procedural page is
+   * misrepresentation, not decoration.
+   */
+  steps?: { title: Loc; body: Loc }[];
 }
 
 const DEFAULT_CTA = {
@@ -65,6 +77,8 @@ const BlogArticleLayout = ({
   lead,
   children,
   cta = DEFAULT_CTA,
+  faq,
+  steps,
 }: Props) => {
   const { lang } = useI18n();
   const url = `${BASE}/blog/${slug}`;
@@ -118,6 +132,34 @@ const BlogArticleLayout = ({
       ? `Published on ${dateLabel} · About ${tReadingMinutes} min read`
       : `Publicat pe ${dateLabel} · Aprox. ${tReadingMinutes} minute de citire`;
 
+  const faqJsonLd = faq?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: pick(q, lang),
+          acceptedAnswer: { "@type": "Answer", text: pick(a, lang) },
+        })),
+      }
+    : null;
+  const howToJsonLd = steps?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: tTitle,
+        description: tDesc,
+        inLanguage: lang,
+        step: steps.map((st, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          name: pick(st.title, lang),
+          text: pick(st.body, lang),
+          url: `${url}#step-${i + 1}`,
+        })),
+      }
+    : null;
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -135,6 +177,8 @@ const BlogArticleLayout = ({
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
+        {howToJsonLd && <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>}
       </Helmet>
 
       <Navbar />
@@ -160,6 +204,22 @@ const BlogArticleLayout = ({
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a]:text-primary [&_a]:underline">
             {overrideBody ? <MarkdownBody markdown={overrideBody} /> : children}
           </div>
+
+          {faq?.length ? (
+            <section className="mt-12">
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {lang === "en" ? "Frequently asked questions" : "Întrebări frecvente"}
+              </h2>
+              <div className="mt-4 space-y-4">
+                {faq.map(({ q, a }) => (
+                  <div key={pick(q, lang)} className="rounded-lg border border-border bg-muted/30 p-4">
+                    <h3 className="font-semibold text-foreground">{pick(q, lang)}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{pick(a, lang)}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <RelatedPosts currentSlug={slug} />
 
