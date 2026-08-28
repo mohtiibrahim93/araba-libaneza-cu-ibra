@@ -14,7 +14,7 @@ const Footer = () => {
     <footer className="border-t border-border bg-card">
       {/* 12-col grid with content-sized spans + generous gaps so long strings
           (email, legal labels) never collide with neighbouring columns. */}
-      <div className="max-w-6xl mx-auto px-6 py-20 grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="w-full max-w-content mx-auto px-gutter py-20 grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:grid-cols-12">
         {/* Brand */}
         <div className="sm:col-span-2 lg:col-span-3">
           <BrandLogo full className="mb-4" />

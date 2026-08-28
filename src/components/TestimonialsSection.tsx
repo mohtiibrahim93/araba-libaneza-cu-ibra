@@ -14,11 +14,11 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-20 px-6 bg-background scroll-mt-20">
-      <div className="max-w-6xl mx-auto">
+    <section id="testimonials" className="py-section px-gutter bg-background scroll-mt-20">
+      <div className="w-full max-w-content mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.testimonialsBadge}</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.testimonialsTitle}</h2>
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.testimonialsTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.testimonialsDesc}</p>
         </div>
 

@@ -97,11 +97,11 @@ const ProgramsSection = () => {
   const activeFizic = activeLevel ? physicalPrice(activeOnline) : 0;
 
   return (
-    <section id="programs" className="py-20 px-6 bg-muted/50 scroll-mt-20">
-      <div className="max-w-6xl mx-auto">
+    <section id="programs" className="py-section px-gutter bg-muted/50 scroll-mt-20">
+      <div className="w-full max-w-content mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
           <a
             href="/quiz"

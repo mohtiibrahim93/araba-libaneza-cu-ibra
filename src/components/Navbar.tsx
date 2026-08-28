@@ -160,7 +160,7 @@ const Navbar = () => {
       >
         {lang === "en" ? "Skip to content" : "Sari la conținut"}
       </a>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[4.25rem] md:h-20 flex items-center justify-between gap-4 lg:gap-6">
+      <div className="w-full max-w-content mx-auto px-gutter h-[4.25rem] md:h-20 flex items-center justify-between gap-4 lg:gap-6">
         <a
           href="/"
           onClick={(e) => {

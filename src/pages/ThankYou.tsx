@@ -154,7 +154,7 @@ const ThankYou = () => {
               <CheckCircle2 className="w-12 h-12 text-primary-foreground" strokeWidth={2.5} />
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
+          <h1 className="text-display-lg font-bold text-foreground mb-3">
             {t.thankYouTitle}
           </h1>
           <p className="text-muted-foreground max-w-md">{t.thankYouSubtitle}</p>

@@ -13,6 +13,30 @@ export default {
       },
     },
     extend: {
+      // Fluid layout scale. These interpolate continuously with the viewport
+      // instead of jumping at breakpoints, so the page adapts to any screen
+      // rather than to five fixed sizes.
+      maxWidth: {
+        // Page container cap. Wide enough that a 1920px monitor is not mostly
+        // margin, narrow enough that card rows stay scannable.
+        content: "88rem",
+      },
+      spacing: {
+        // Horizontal gutter: 1rem on a phone, growing to 4rem on a large
+        // monitor, with every size in between.
+        gutter: "clamp(1rem, 5vw, 4rem)",
+        // Vertical rhythm between major sections.
+        section: "clamp(3rem, 7vw, 6rem)",
+        // Tighter rhythm for strips and banners.
+        "section-sm": "clamp(1.75rem, 3.5vw, 3rem)",
+      },
+      fontSize: {
+        // Fluid display sizes for headings, so type scales with the page
+        // rather than stepping at md/lg.
+        "display-xl": ["clamp(2.25rem, 1.4rem + 3.4vw, 4rem)", { lineHeight: "1.08" }],
+        "display-lg": ["clamp(1.875rem, 1.35rem + 2.2vw, 3rem)", { lineHeight: "1.15" }],
+        "display-md": ["clamp(1.5rem, 1.2rem + 1.3vw, 2.25rem)", { lineHeight: "1.22" }],
+      },
       fontFamily: {
         // Serif display for headlines (Ref A mockup look); body stays system sans.
         display: ["Lora", "Georgia", "serif"],

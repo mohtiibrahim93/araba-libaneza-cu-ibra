@@ -141,7 +141,7 @@ const CursGrupLevel = () => {
           <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
             CEFR {upperLevel}
           </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4">
+          <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-4">
             {curriculum.title}
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-3xl mb-6">

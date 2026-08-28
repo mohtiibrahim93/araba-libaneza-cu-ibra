@@ -425,7 +425,7 @@ const RegistrationFormSection = ({
       <div className={embedded ? "" : "max-w-2xl mx-auto"}>
         {!embedded && (
           <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+            <h2 className="text-display-lg font-bold tracking-tight text-foreground mb-3">
               {t.mainLeadTitle}
             </h2>
             <p className="text-muted-foreground">{t.mainLeadDesc}</p>

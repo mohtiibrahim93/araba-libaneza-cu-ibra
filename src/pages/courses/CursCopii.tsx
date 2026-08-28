@@ -47,7 +47,7 @@ const CursCopii = () => {
     >
       {/* Format choice */}
       <section className="mt-4 mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">{t.copiiFormatChoiceTitle}</h2>
+        <h2 className="text-display-md font-bold text-foreground mb-4">{t.copiiFormatChoiceTitle}</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <button
             type="button"
@@ -97,7 +97,7 @@ const CursCopii = () => {
 
       {/* Curriculum — adapts to selected track */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5">
+        <h2 className="text-display-md font-bold text-foreground mb-5">
           {t.copiiCurriculumTitle}
         </h2>
         <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 mb-5">

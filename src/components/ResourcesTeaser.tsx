@@ -34,10 +34,10 @@ const ResourcesTeaser = () => {
   ];
 
   return (
-    <section className="section-padding bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-section bg-secondary/30">
+      <div className="w-full max-w-content mx-auto px-gutter">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          <h2 className="text-display-lg font-bold tracking-tight mb-4">
             {isEn ? "Free resources" : "Resurse gratuite"}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -52,7 +52,7 @@ const ResourcesTeaser = () => {
             <Link
               key={r.to}
               to={r.to}
-              className="group flex flex-col h-full rounded-2xl border border-border bg-background p-6 shadow-sm hover:shadow-md transition-all"
+              className="group flex min-w-0 flex-col h-full rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-sm hover:shadow-md transition-all [overflow-wrap:anywhere]"
             >
               <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
                 <r.icon className="w-6 h-6" />

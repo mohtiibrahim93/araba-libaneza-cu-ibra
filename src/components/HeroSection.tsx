@@ -21,15 +21,15 @@ const HeroSection = () => {
   const checks = [t.heroCheck1, t.heroCheck2, t.heroCheck3, t.heroCheck4];
 
   return (
-    <section className="pt-28 pb-16 px-6 bg-cream">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+    <section className="pt-28 pb-16 px-gutter bg-cream">
+      <div className="w-full max-w-content mx-auto grid lg:grid-cols-2 gap-12 items-center">
         {/* Left: Text */}
         <div>
           <span className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
             ⭐ {t.heroBadge}
           </span>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
+          <h1 className="font-display text-display-xl lg:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
             {t.heroTitle1}
             <br />
             <span className="text-primary">{t.heroTitle2}</span>

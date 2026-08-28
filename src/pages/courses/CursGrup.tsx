@@ -126,7 +126,7 @@ const CursGrup = () => {
 
       {/* Don't know your level? */}
       <section className="mt-12 rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
+        <h2 className="text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.dontKnowLevelDesc}</p>
         <div className="grid sm:grid-cols-3 gap-4">
           <Link to="/quiz" className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors">

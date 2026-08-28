@@ -71,7 +71,7 @@ const BlogIndex = () => {
       <Navbar />
 
       <main className="pt-16">
-        <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-6 pt-6 pb-2 text-xs text-muted-foreground">
+        <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link to="/" className="hover:text-foreground transition-colors">{c.home}</Link></li>
             <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
@@ -81,7 +81,7 @@ const BlogIndex = () => {
 
         <header className="max-w-4xl mx-auto px-6 pt-4 pb-8 text-center">
           <span className="text-sm font-medium text-primary mb-2 block">{c.badge}</span>
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-3">
+          <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
           </h1>
           <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">

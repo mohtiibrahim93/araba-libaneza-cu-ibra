@@ -16,10 +16,10 @@ const StepsSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-section px-gutter">
+      <div className="w-full max-w-content mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {t.stepsTitle}
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">{t.stepsDesc}</p>

@@ -108,7 +108,7 @@ const CourseLayout = ({
         {/* Breadcrumb */}
         <nav
           aria-label={t.courseBreadcrumbCourses}
-          className="max-w-6xl mx-auto px-6 pt-3 pb-2 text-xs text-muted-foreground"
+          className="w-full max-w-content mx-auto px-gutter pt-3 pb-2 text-xs text-muted-foreground"
         >
           <ol className="flex flex-wrap items-center gap-1">
             <li>
@@ -134,13 +134,13 @@ const CourseLayout = ({
         </nav>
 
         {/* Hero */}
-        <section className="max-w-6xl mx-auto px-6 pt-4 pb-12">
+        <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-12">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
               <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-4">
                 {badge}
               </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4">
+              <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-4">
                 {h1}
               </h1>
               {priceLine && (
@@ -190,11 +190,11 @@ const CourseLayout = ({
         </section>
 
         {/* Page body */}
-        <div className="max-w-6xl mx-auto px-6 pb-16">{children}</div>
+        <div className="w-full max-w-content mx-auto px-gutter pb-16">{children}</div>
 
         {/* Other courses */}
         <section className="bg-muted/50 border-t border-border">
-          <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="w-full max-w-content mx-auto px-gutter py-12">
             <h2 className="text-xl font-bold text-foreground mb-4">{t.courseOtherCoursesTitle}</h2>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {otherCourses.map((c) => (

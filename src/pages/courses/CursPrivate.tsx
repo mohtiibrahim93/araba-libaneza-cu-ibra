@@ -44,7 +44,7 @@ const CursPrivate = () => {
     >
       {/* Personalized + MSA partners */}
       <section className="mt-4 mb-10 rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{t.privatePersonalizedTitle}</h2>
+        <h2 className="text-display-md font-bold text-foreground mb-2">{t.privatePersonalizedTitle}</h2>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">{t.privatePersonalizedDesc}</p>
         <p className="text-xs text-muted-foreground mt-4">{t.priceSurchargeNote}</p>
       </section>

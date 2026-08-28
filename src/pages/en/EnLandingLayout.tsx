@@ -127,7 +127,7 @@ const EnLandingLayout = ({
       <Navbar />
 
       <main id="main-content" className="pt-24 pb-16">
-        <article className="max-w-3xl mx-auto px-4 md:px-6">
+        <article className="max-w-3xl mx-auto px-gutter">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
               <Link to="/" className="hover:text-primary">Home</Link>
@@ -137,7 +137,7 @@ const EnLandingLayout = ({
           </nav>
 
           <header className="mb-10 space-y-4">
-            <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">{title}</h1>
+            <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">{title}</h1>
             <p className="text-lg text-muted-foreground">{lead}</p>
           </header>
 

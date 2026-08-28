@@ -112,7 +112,7 @@ const ArabischLernen = () => (
         </nav>
 
         <header className="mb-10 space-y-4">
-          <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+          <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
             Arabisch lernen online — libanesisch mit Muttersprachler
           </h1>
           <p className="text-lg text-muted-foreground">

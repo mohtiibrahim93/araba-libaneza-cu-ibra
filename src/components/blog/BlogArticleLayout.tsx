@@ -189,7 +189,7 @@ const BlogArticleLayout = ({
       <Navbar />
 
       <main id="main-content" className="pt-24 pb-16">
-        <div className="mx-auto flex max-w-3xl gap-8 px-4 md:px-6 lg:max-w-6xl lg:gap-10 lg:px-8">
+        <div className="mx-auto flex w-full max-w-3xl gap-8 px-gutter lg:max-w-content lg:gap-10">
           <aside className="hidden lg:block lg:w-52 lg:shrink-0">
             <ArticleOutline containerRef={bodyRef} />
           </aside>
@@ -203,7 +203,7 @@ const BlogArticleLayout = ({
           </nav>
 
           <header className="mb-10 space-y-4">
-            <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+            <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
               {tTitle}
             </h1>
             <p className="text-lg text-muted-foreground">{tLead}</p>

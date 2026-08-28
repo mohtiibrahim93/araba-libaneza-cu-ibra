@@ -442,14 +442,14 @@ const FAQSection = () => {
   };
 
   return (
-    <section id="faq" className="py-20 px-6 scroll-mt-20">
+    <section id="faq" className="py-section px-6 scroll-mt-20">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.faqBadge}</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">{t.faqTitle}</h2>
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.faqTitle}</h2>
           <p className="text-muted-foreground">{t.faqDesc}</p>
         </div>
 

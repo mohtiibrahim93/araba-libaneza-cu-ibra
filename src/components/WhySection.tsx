@@ -26,11 +26,11 @@ const WhySection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 px-6 bg-cream scroll-mt-20">
-      <div className="max-w-6xl mx-auto">
+    <section id="about" className="py-section px-gutter bg-cream scroll-mt-20">
+      <div className="w-full max-w-content mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.whyBadge}</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-3">
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {t.whyTitle}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">{t.whyDesc}</p>

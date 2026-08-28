@@ -74,7 +74,7 @@ const Cursuri = () => {
 
         <section className="max-w-5xl mx-auto px-6 pt-4 pb-2 text-center">
           <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-3">
+          <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-3">
             {lang === "en" ? "Find the right course" : "Găsește cursul potrivit"}
           </h1>
           <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -104,7 +104,7 @@ const Cursuri = () => {
         {/* Preserved helper: don't know your level */}
         <section className="max-w-5xl mx-auto px-6 pb-16">
           <div className="rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
+            <h2 className="text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
             <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.dontKnowLevelDesc}</p>
             <div className="grid sm:grid-cols-3 gap-4">
               <Link to="/quiz" className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors">
