@@ -21,8 +21,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/araba-online",
-    "meta_title": "Arabă Libaneză Online — Cursuri Live pe Zoom cu Profesor Nativ | De Oriunde",
-    "meta_description": "Cursuri de arabă libaneză online: lecții live pe Zoom cu profesor nativ, grupe A1–C2 și lecții private 1:1, de oriunde. Grupa A1 online e completă — înscrie-te la lista pentru următoarea. Probă gratuită.",
+    "meta_title": "Cursuri de Arabă Libaneză Online | Profesor Nativ",
+    "meta_description": "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.",
     "h1": "Cursuri de arabă libaneză online, live cu profesor nativ",
     "lead": "Lecții live pe Zoom cu profesor nativ — grupă de weekend sau private 1:1, de oriunde te afli. Fără înregistrări, fără aplicații care nu te corectează."
   },
