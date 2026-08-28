@@ -30,8 +30,8 @@ const CursuriArabaAdolescenti = () => (
     slug="cursuri-araba-adolescenti"
     enHref="/en/arabic-for-teenagers"
     title="Cursuri de arabă libaneză pentru adolescenți (11–17 ani) — București și online"
-    metaTitle="Cursuri Arabă pentru Adolescenți 11–17 ani | București & Online"
-    description="Cursuri de arabă libaneză (levantină) pentru adolescenți 11–17 ani, cu profesor nativ: fizic în București sau online. Conversație din prima lecție, fără tocit alfabet. Probă gratuită."
+    metaTitle="Curs Arabă Libaneză pentru Adolescenți | 11–17 ani"
+    description="Arabă libaneză pentru adolescenți 11–17 ani, cu profesor nativ, în București sau online. Conversație practică din prima lecție. Probă gratuită."
     crumb="Cursuri arabă adolescenți"
     lead="Grupe de arabă libaneză gândite pentru adolescenți 11–17 ani: conversație, muzică și limbaj real de social media — nu gramatică tocită. Profesor nativ libanez, fizic în București sau online."
     faq={FAQ}
