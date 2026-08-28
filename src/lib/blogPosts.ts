@@ -236,7 +236,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
       en: "How to Greet in Lebanese Arabic: Mar7aba, Kifak & When to Use Each",
     },
     description: {
-      ro: "De la „Mar7aba” la „yalla bye”: formulele de salut pe care le auzi zilnic în Liban, cu pronunție în arabizi, scriere arabă și momentul potrivit pentru fiecare — inclusiv formele pentru bărbat și femeie.",
+      ro: "Învață saluturile esențiale în araba libaneză: Mar7aba, Kifak și yalla bye, cu pronunție, scriere arabă și când se folosește fiecare.",
       en: "From 'Mar7aba' to 'yalla bye': the greetings you hear daily in Lebanon, with Arabizi pronunciation, Arabic script and the right moment for each — including the masculine and feminine forms.",
     },
     published: "2026-07-16",
