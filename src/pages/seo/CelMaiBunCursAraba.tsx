@@ -29,8 +29,8 @@ const CelMaiBunCursAraba = () => (
     slug="cel-mai-bun-curs-de-araba"
     enHref="/en/best-arabic-course"
     title="Cel mai bun curs de arabă: cum alegi în 2026 (grup, privat, online sau aplicație)"
-    metaTitle="Cel Mai Bun Curs de Arabă: Ghid de Comparație 2026 | Libaneză"
-    description="Cum alegi cel mai bun curs de limba arabă: dialect libanez (levantin) vs arabă standard, grup vs privat vs online vs aplicații. Comparație de prețuri, criterii și greșeli frecvente."
+    metaTitle="Cel mai bun curs de arabă în 2026 | Ghid de alegere"
+    description="Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi."
     crumb="Cel mai bun curs de arabă"
     lead="Nu există „cel mai bun curs de arabă” în general — există cel mai bun curs pentru scopul tău. Acest ghid compară onest dialectul libanez cu araba standard, grupul cu lecțiile private și cursurile cu aplicațiile, ca să nu pierzi un an pe varianta greșită."
     faq={FAQ}
