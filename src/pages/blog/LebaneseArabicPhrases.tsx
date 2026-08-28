@@ -80,11 +80,11 @@ const LebaneseArabicPhrases = () => {
     <BlogArticleLayout
       slug="lebanese-arabic-phrases"
       title={{
-        ro: "35+ expresii în araba libaneză: tabel pentru viața de zi cu zi (PDF gratuit)",
+        ro: "35+ Expresii în Arabă Libaneză pentru Viața de Zi cu Zi",
         en: "35+ Lebanese Arabic phrases: daily life table + free PDF download",
       }}
       description={{
-        ro: "Cele mai utile expresii în araba libaneză, organizate pe context: salut, restaurant, taxi, familie. Cu arabizi, scriere arabă și traducere. Descarcă PDF gratuit.",
+        ro: "Învață 35+ expresii în arabă libaneză pentru saluturi, cafenea, taxi și familie, cu pronunție arabizi, scriere arabă și traducere în română.",
         en: "The most useful Lebanese Arabic phrases for daily life, grouped by context: greetings, café, taxi, family. Arabizi + Arabic script + translation. Free PDF download.",
       }}
       published="2026-07-24"
