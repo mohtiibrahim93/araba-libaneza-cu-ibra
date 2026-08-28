@@ -140,8 +140,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/invata-araba-gratis",
-    "meta_title": "Învață Arabă Libaneză Gratis — Resurse, PDF-uri și Lecții | 2026",
-    "meta_description": "Resurse gratuite pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale în PDF, plan de 30 de zile, canale YouTube și o mini-lecție cu pronunție. Fără costuri.",
+    "meta_title": "Învață Arabă Libaneză Gratis: PDF-uri și Lecții",
+    "meta_description": "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători.",
     "h1": "Învață arabă libaneză gratis: resurse, lecții și PDF-uri",
     "lead": "Tot ce poți învăța fără să plătești nimic — și, sincer, unde se oprește gratuitul. Începe cu mini-lecția de mai jos și cu PDF-urile."
   },
