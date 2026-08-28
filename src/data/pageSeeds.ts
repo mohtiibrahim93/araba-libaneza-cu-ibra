@@ -154,8 +154,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/resurse",
-    "meta_title": "Resurse Gratuite Arabă Libaneză — PDF-uri, Expresii, Plan 30 Zile",
-    "meta_description": "Descarcă gratuit materialele noastre pentru arabă libaneză: cheat-sheet arabizi, 100 de expresii esențiale și planul de învățare de 30 de zile. PDF pe email, fără costuri.",
+    "meta_title": "Resurse gratuite pentru arabă libaneză",
+    "meta_description": "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse.",
     "h1": "Resurse gratuite pentru arabă libaneză",
     "lead": "Toate materialele noastre gratuite într-un singur loc. Alegi resursa, lași emailul și primești PDF-ul în câteva secunde."
   }
