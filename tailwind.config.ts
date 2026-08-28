@@ -17,9 +17,12 @@ export default {
       // instead of jumping at breakpoints, so the page adapts to any screen
       // rather than to five fixed sizes.
       maxWidth: {
-        // Page container cap. Wide enough that a 1920px monitor is not mostly
-        // margin, narrow enough that card rows stay scannable.
-        content: "88rem",
+        // Page container. Tracks the viewport at 90vw and stops at 120rem, so
+        // the side margin stays a roughly constant share of the screen instead
+        // of ballooning on large monitors: ~5% at 1440, ~5% at 1920, ~12% at
+        // 2560. The 90vw term is what makes it adapt; the 120rem ceiling keeps
+        // a 4K monitor from stretching card rows past the point of scanning.
+        content: "min(90vw, 120rem)",
       },
       spacing: {
         // Horizontal gutter: 1rem on a phone, growing to 4rem on a large

@@ -83,7 +83,7 @@ const HeroSection = () => {
 
         {/* Right: Ibra above Beirut — real Lebanese photography + the teacher */}
         <div className="relative">
-          <div className="w-full rounded-[2rem] overflow-hidden shadow-xl aspect-square lg:aspect-[4/4.4]">
+          <div className="w-full max-h-[34rem] xl:max-h-[38rem] mx-auto rounded-[2rem] overflow-hidden shadow-xl aspect-square lg:aspect-[4/4.4]">
             <picture>
               <source srcSet={heroImgWebp} type="image/webp" />
               <img

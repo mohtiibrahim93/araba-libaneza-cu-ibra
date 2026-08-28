@@ -18,7 +18,7 @@ const CTASection = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.ctaDesc}</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6 mb-10">
+        <div className="grid gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="min-w-0 [overflow-wrap:anywhere] bg-background rounded-2xl border border-border p-5 sm:p-6 text-center hover:border-primary/40 transition-colors">
             <MessageCircle className="w-6 h-6 text-primary mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaWhatsapp}</h3>
