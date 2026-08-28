@@ -49,8 +49,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/ce-araba-sa-inveti",
-    "meta_title": "Ce Arabă Să Înveți — Libaneză vs Standard vs Egipteană | Ghid",
-    "meta_description": "Compară araba libaneză, araba standard (fusha) și egipteana: ce vorbesc oamenii, ce e mai ușor, ce îți trebuie pentru familie, muncă sau călătorii. Alegi în 5 minute.",
+    "meta_title": "Ce Arabă Să Înveți: Libaneză, Standard sau Egipteană",
+    "meta_description": "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute.",
     "h1": "Ce arabă să înveți? Libaneză, standard sau egipteană",
     "lead": "Alegerea dialectului contează mai mult decât metoda. Iată cum decizi în funcție de motivul tău real."
   },
