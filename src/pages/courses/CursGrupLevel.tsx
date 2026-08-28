@@ -89,11 +89,14 @@ const CursGrupLevel = () => {
   // bucuresti"). Give it a keyword-optimised meta title/description; other
   // levels keep the generic pattern.
   const isA1 = slug === "a1";
+  const isB2 = slug === "b2";
   const metaTitle = isA1
     ? (lang === "en"
         ? "Beginner Arabic Course Bucharest & Online — A1 (Lebanese Arabic)"
         : "Curs de Arabă pentru Începători București & Online — A1 (Libaneză)")
-    : `${curriculum.title} — ${t.courseGrupH1}`;
+    : isB2 && lang !== "en"
+      ? "Curs B2 de Arabă Libaneză — Grup, București & Online"
+      : `${curriculum.title} — ${t.courseGrupH1}`;
   const metaDesc = isA1
     ? (lang === "en"
         ? "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial."
