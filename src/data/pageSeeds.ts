@@ -106,7 +106,7 @@ export const PAGE_SEEDS: PageSeed[] = [
   {
     "path": "/en/how-to-learn-lebanese-arabic",
     "meta_title": "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)",
-    "meta_description": "The complete step-by-step guide to learning Lebanese Arabic in 2026: recommended learning path, weekly lesson structure, level-by-level timeline (A1→C1), and the exact study routine that works. Written by a native Lebanese teacher.",
+    "meta_description": "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.",
     "h1": "How to learn Lebanese Arabic — recommended learning path & lesson structure",
     "lead": "A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught hundreds of students."
   },
