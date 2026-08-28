@@ -50,6 +50,44 @@
 
     <!-- Google reCAPTCHA v3 -->
     <script src="https://www.google.com/recaptcha/api.js?render=6Le9mPssAAAAAOEV4BSPnuBGmJDDQiPtQgOwkzjc" async defer></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://centruldearabalibaneza.com/#organization",
+            "name": "Centrul de Arabă Libaneză",
+            "alternateName": "Arabă Libaneză cu Ibra",
+            "url": "https://centruldearabalibaneza.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://centruldearabalibaneza.com/favicon.png"
+            },
+            "email": "marhaba@centruldearabalibaneza.com",
+            "telephone": "+40 763 124 514",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Strada Icoanei 80",
+              "addressLocality": "București",
+              "addressCountry": "RO"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://centruldearabalibaneza.com/#website",
+            "url": "https://centruldearabalibaneza.com/",
+            "name": "Centrul de Arabă Libaneză",
+            "alternateName": "Arabă Libaneză cu Ibra",
+            "inLanguage": "ro-RO",
+            "publisher": {
+              "@id": "https://centruldearabalibaneza.com/#organization"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body>
