@@ -77,7 +77,7 @@ const CursuriArabaBucuresti = () => (
     enHref="/en/arabic-classes-near-me"
     title="Cursuri de arabă libaneză în București — profesor nativ, grupe mici"
     metaTitle="Cursuri de Arabă în București | Profesor Nativ"
-    description="Cursuri de arabă libaneză în București cu profesor nativ libanez, la Raduga Creative Center (Str. Icoanei 80). Grupe mici, niveluri A1–C2, adulți și copii. Probă gratuită."
+    description="Cursuri de arabă libaneză în București cu profesor nativ. Grupe mici pentru adulți și copii, niveluri A1–C2. Lecție de probă gratuită."
     crumb="Cursuri de arabă libaneză București"
     lead="Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
     faq={FAQ}
