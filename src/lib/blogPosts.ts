@@ -246,7 +246,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "primele-20-de-expresii-libaneze",
     title: {
-      ro: "Primele 20 de expresii în araba libaneză (cu pronunție)",
+      ro: "20 de expresii în arabă libaneză pentru începători",
       en: "The first 20 Lebanese Arabic phrases (with pronunciation)",
     },
     description: {
