@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/main.tsx",
+    "src/**/*.test.{ts,tsx}",
+    "vite.config.ts",
+    "scripts/seoPrerender.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "scripts/**/*.ts"
+  ],
+  "ignore": [
+    "supabase/functions/**",
+    "src/lib/mcp/**"
+  ],
+  "ignoreDependencies": [
+    "knip"
+  ]
+}
