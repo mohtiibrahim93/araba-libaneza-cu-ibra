@@ -64,11 +64,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "lebanese-arabic-phrases",
     title: {
-      ro: "35+ Expresii în Araba Libaneză pe Care Le Auzi Zilnic în Liban",
+      ro: "35+ Expresii în Arabă Libaneză pentru Viața de Zi cu Zi",
       en: "35+ Lebanese Arabic Phrases You'll Actually Hear Every Day",
     },
     description: {
-      ro: "Expresiile libaneze care chiar se folosesc, grupate pe situație: salut, prezentare, cafenea, taxi, sentimente, timp. Fiecare cu pronunție în arabizi și scriere arabă, de la un profesor nativ.",
+      ro: "Învață 35+ expresii în arabă libaneză pentru saluturi, cafenea, taxi și familie, cu pronunție arabizi, scriere arabă și traducere în română.",
       en: "The Lebanese phrases people really use, grouped by situation: greetings, introductions, café, taxi, feelings, time. Each one with Arabizi pronunciation and Arabic script, from a native teacher.",
     },
     published: "2026-07-24",
