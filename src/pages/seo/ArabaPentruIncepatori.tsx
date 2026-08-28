@@ -25,8 +25,8 @@ const ArabaPentruIncepatori = () => (
     slug="araba-pentru-incepatori"
     enHref={null}
     title="Arabă libaneză pentru începători: vorbește din prima lecție"
-    metaTitle="Arabă Libaneză pentru Începători — Cursuri de la Zero | Vorbești din Prima Lecție"
-    description="Învață arabă libaneză de la zero cu profesor nativ: metoda Oral First, fără blocajul alfabetului, grupe A1 pentru începători — fizic în București sau online. Probă gratuită."
+    metaTitle="Arabă Libaneză pentru Începători | Curs de la Zero"
+    description="Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții."
     crumb="Arabă libaneză pentru începători"
     lead="Zero cunoștințe? Perfect. Grupele A1 sunt gândite exact pentru început de drum: vorbești din prima lecție, fără să te blochezi în alfabet."
     faq={FAQ}
