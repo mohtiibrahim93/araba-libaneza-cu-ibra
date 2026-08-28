@@ -23,7 +23,7 @@ const CumSalutiInLibaneza = () => {
       slug="cum-saluti-in-libaneza"
       title={{ ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye", en: "How to greet in Lebanese Arabic: mar7aba, kifak, yalla bye" }}
       description={{
-        ro: "Toate formulele de salut în arabă libaneză (levantină): bună dimineața, ce faci, bine ai venit, pa — cu pronunție, grafie arabă și când se folosește fiecare.",
+        ro: "Învață saluturile esențiale în araba libaneză: Mar7aba, Kifak și yalla bye, cu pronunție, scriere arabă și când se folosește fiecare.",
         en: "All the greetings in Lebanese Arabic: good morning, how are you, welcome, bye — with Arabizi pronunciation, Arabic script and when to use each.",
       }}
       published="2026-07-16"
