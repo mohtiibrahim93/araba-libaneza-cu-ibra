@@ -357,7 +357,7 @@ export const translations = {
     bookingIntroDesc: "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
     trialPageTitle: "Lecție gratuită de probă",
     trialPageSubtitle: "30 de minute online, fără obligații. Completează datele și alege un slot.",
-    trialPageSeoTitle: "Lecție gratuită de probă — arabă libaneză",
+    trialPageSeoTitle: "Lecție gratuită de arabă libaneză | Ibra",
     trialPageSeoDesc: "Rezervă o lecție gratuită de 30 de minute cu Ibra. Fără plată, fără obligații.",
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
