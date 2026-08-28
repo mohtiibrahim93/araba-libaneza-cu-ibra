@@ -28,7 +28,7 @@ const LearnLebaneseArabicBlog = () => {
         en: "Learn Lebanese Arabic: a practical beginner's guide",
       }}
       description={{
-        ro: "Ghid pas cu pas pentru a învăța araba libaneză: ce este dialectul libanez, cum diferă de MSA, cât durează, metode eficiente, greșeli comune și primele fraze utile.",
+        ro: "Învață araba libaneză pas cu pas: diferențe față de MSA, metode eficiente, greșeli frecvente și primele fraze utile pentru începători.",
         en: "A step-by-step guide to learning Lebanese Arabic: what the Lebanese dialect is, how it differs from MSA, how long it takes, effective methods, common mistakes and your first useful phrases.",
       }}
       published="2026-07-24"
