@@ -120,7 +120,7 @@ export const PAGE_SEEDS: PageSeed[] = [
   {
     "path": "/en/lebanese-arabic-vs-msa-vs-egyptian",
     "meta_title": "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)",
-    "meta_description": "Lebanese Arabic vs Modern Standard Arabic (MSA/Fusha) vs Egyptian Arabic: differences in pronunciation, grammar, media reach, and which dialect to learn based on your goal. Written by a native Lebanese teacher.",
+    "meta_description": "Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher.",
     "h1": "Lebanese Arabic vs MSA vs Egyptian Arabic — which one should you learn?",
     "lead": "A practical side-by-side comparison of Lebanese Arabic, Modern Standard Arabic (MSA / Fusha) and Egyptian Arabic — how they sound, how they differ, and which one to learn depending on your goal."
   },
