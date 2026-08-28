@@ -88,7 +88,7 @@ const TrialPage = () => {
     }
   };
 
-  const title = `${t.trialPageSeoTitle} — ${t.siteTitle}`;
+  const title = t.trialPageSeoTitle;
 
   return (
     <main className="min-h-screen bg-background py-12 px-gutter">
