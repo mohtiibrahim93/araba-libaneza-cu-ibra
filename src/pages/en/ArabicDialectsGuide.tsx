@@ -41,7 +41,7 @@ const ArabicDialectsGuide = () => (
     roHref="/dialecte-arabe"
     title="Arabic dialects — the complete guide (Levantine, Egyptian, Gulf, Maghrebi & more)"
     metaTitle="Arabic Dialects & Map: Levantine, Egyptian, Gulf & More"
-    description="Complete guide and map of the Arabic dialects: Levantine (North vs South Shami — Lebanese, Syrian, Jordanian, Palestinian), Egyptian–Sudanese, Maghrebi, Peninsular (Gulf, Saudi, Yemeni), Mesopotamian, plus MSA. Written by a native Lebanese teacher."
+    description="Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher."
     crumb="Arabic dialects guide"
     lead="A practical, non-academic guide to the Arabic dialect landscape — written by a native Lebanese teacher. What each family sounds like, where it's spoken, and how they relate to each other."
     courseSchema={false}
