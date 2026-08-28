@@ -39,8 +39,8 @@ const DialecteArabe = () => (
   <LandingLayout
     slug="dialecte-arabe"
     title="Dialectele arabe: ghid pe înțelesul tuturor"
-    metaTitle="Dialectele Arabe — Hartă & Ghid: Levantin, Egiptean, Golf, Maghreb | 2026"
-    description="Ghid și hartă a dialectelor arabe: levantin (nord vs. sud — libanez, sirian, palestinian, iordanian), egiptean, maghrebin, din Golf și irakian, plus araba standard. Cine pe cine înțelege și ce dialect merită învățat."
+    metaTitle="Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb"
+    description="Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat."
     crumb="Dialectele arabe"
     lead="Araba nu e o singură limbă vorbită, ci o familie de dialecte plus o limbă standard scrisă. Iată harta, fără jargon lingvistic."
     enHref="/en/arabic-dialects-guide"
