@@ -13,7 +13,7 @@ const content = {
       ["3. Scopul colectării", "Datele dumneavoastră sunt utilizate exclusiv pentru a vă contacta în legătură cu cursurile solicitate, a vă înscrie la cursuri și a vă transmite informații relevante despre programul educațional."],
       ["4. Stocarea datelor", "Datele sunt stocate în mod securizat pe servere protejate și sunt păstrate atât timp cât este necesar pentru scopurile menționate. Nu partajăm datele cu terți, cu excepția furnizorilor de servicii tehnice necesare funcționării platformei."],
       ["5. Drepturile dumneavoastră", "Conform GDPR, aveți dreptul de a accesa, rectifica, șterge sau restricționa prelucrarea datelor dumneavoastră personale. Pentru orice solicitare, contactați-ne la marhaba@centruldearabalibaneza.com."],
-      ["6. Cookie-uri", "Acest site nu utilizează cookie-uri de marketing sau tracking fără consimțământ. Se pot folosi cookie-uri tehnice esențiale pentru funcționarea normală a site-ului."],
+      ["6. Cookie-uri", "Acest site nu utilizează cookie-uri de marketing sau tracking fără consimțământ. Consimțământul este gestionat prin platforma Adopt, iar preferințele pot fi modificate oricând din linkul „Setări cookies” din subsolul site-ului. Se pot folosi cookie-uri tehnice esențiale pentru funcționarea normală a site-ului."],
       ["7. Contact", "Pentru întrebări legate de protecția datelor, ne puteți contacta la: marhaba@centruldearabalibaneza.com sau pe WhatsApp la +40 763 124 514."],
     ],
   },
