@@ -7,7 +7,38 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
-    <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/a062741c12dea.js" data-cmp-host="d.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
+    <!--
+      Consent platform: Adopt.
+      PASTE THE ADOPT INSTALL SNIPPET HERE (it must load before the Google tag
+      below so it can gate analytics via Consent Mode).
+    -->
+
+    <!-- One-time cleanup of the previous CMP (consentmanager.net) leftovers. -->
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("cmp_legacy_cleaned") === "1") return;
+          var host = location.hostname;
+          var domains = ["", host, "." + host, ".centruldearabalibaneza.com"];
+          var paths = ["/", location.pathname];
+          document.cookie.split(";").forEach(function (c) {
+            var name = c.split("=")[0].trim();
+            if (!/^cmp/i.test(name)) return;
+            domains.forEach(function (d) {
+              paths.forEach(function (p) {
+                document.cookie =
+                  name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=" + p + (d ? "; domain=" + d : "");
+              });
+            });
+          });
+          Object.keys(localStorage).forEach(function (k) {
+            if (/^cmp/i.test(k) || k.indexOf("consentmanager") !== -1) localStorage.removeItem(k);
+          });
+          localStorage.setItem("cmp_legacy_cleaned", "1");
+        } catch (e) {}
+      })();
+    </script>
+
     <script>
       (function () {
         const saved = localStorage.getItem("theme");

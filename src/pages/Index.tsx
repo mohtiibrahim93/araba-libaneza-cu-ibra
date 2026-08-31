@@ -31,7 +31,7 @@ const PageContent = () => {
   }, [lang, t.siteTitle]);
 
   useEffect(() => {
-    // Analytics consent is handled by the consentmanager.net CMP (Google
+    // Analytics consent is handled by the Adopt CMP (Google
     // Consent Mode); here we only handle post-payment redirect toasts.
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");

@@ -116,7 +116,27 @@ const Footer = () => {
             <li><Link to="/privacy" className="hover:text-foreground transition-colors">{t.footerPrivacy}</Link></li>
             <li><Link to="/terms" className="hover:text-foreground transition-colors">{t.footerTerms}</Link></li>
             <li><Link to="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</Link></li>
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  const w = window as any;
+                  // Adopt exposes a few reopen entry points depending on build.
+                  const open =
+                    w.adoptWidget?.show ||
+                    w.adopt?.showSettings ||
+                    w.Adopt?.open ||
+                    w.__adoptOpenSettings;
+                  if (typeof open === "function") open();
+                  else document.querySelector<HTMLElement>("[data-adopt-settings]")?.click();
+                }}
+                className="hover:text-foreground transition-colors"
+              >
+                {lang === "en" ? "Cookie settings" : "Setări cookies"}
+              </button>
+            </li>
           </ul>
+
         </div>
       </div>
 

@@ -1,7 +1,8 @@
-// GA4 event helpers. Consent is handled by the consentmanager.net CMP via
-// Google Consent Mode: index.html sets consent "default: denied" and the CMP
-// flips it to "granted" when the visitor accepts, so we send events
-// unconditionally and let Consent Mode gate them. Meta Pixel isn't set up yet.
+// GA4 event helpers. Consent is handled by the Adopt CMP via Google Consent
+// Mode: index.html sets consent "default: denied" and Adopt flips it to
+// "granted" when the visitor accepts, so we send events unconditionally and
+// let Consent Mode gate them. Meta Pixel isn't set up yet.
+
 
 export function trackEvent(eventName: string, params?: Record<string, unknown>) {
   if (typeof (window as any).gtag !== "function") return;
