@@ -6,7 +6,7 @@ import { trackEvent } from "@/lib/tracking";
  * Fires a GA4 `page_view` on every SPA route change. Skips the initial mount —
  * the static index.html already fires the first page_view via the inline GA
  * snippet, so the first emit happens on the *next* navigation. Consent is
- * enforced by the consentmanager.net CMP through Google Consent Mode.
+ * enforced by the Adopt CMP through Google Consent Mode.
  */
 export function useRouteAnalytics() {
   const location = useLocation();
