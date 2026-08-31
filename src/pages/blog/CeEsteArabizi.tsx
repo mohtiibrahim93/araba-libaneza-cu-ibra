@@ -18,9 +18,9 @@ const CeEsteArabizi = () => {
   return (
     <BlogArticleLayout
       slug="ce-este-arabizi"
-      title={{ ro: "Ce este arabizi: ce înseamnă 2, 3, 5 și 7 în arabă scrisă cu litere latine", en: "What is Arabizi: what 2, 3, 5 and 7 mean in Latin-letter Arabic" }}
+      title={{ ro: "Ce este arabizi și cum îl folosești (cu tabel)", en: "What is Arabizi: what 2, 3, 5 and 7 mean in Latin-letter Arabic" }}
       description={{
-        ro: "Arabizi = arabă scrisă cu litere latine și cifre. Tabel complet cu ce înseamnă 2, 3, 5, 7, cum se citește și de ce e cea mai rapidă cale spre arabă libaneză vorbită.",
+        ro: "Arabizi este araba scrisă cu litere latine și cifre. Ce înseamnă cifrele 2, 3, 5, 7, cum citești și de ce e cea mai rapidă cale să începi să vorbești libaneză.",
         en: "Arabizi is Arabic written in Latin letters and numbers. Learn what 2, 3, 5, 7 mean, how to read it and why it's the fastest way to start speaking Lebanese.",
       }}
       published="2026-07-16"

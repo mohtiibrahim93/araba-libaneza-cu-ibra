@@ -87,7 +87,7 @@ const LebaneseFamilyVocabulary = () => {
         en: "Family vocabulary in Lebanese Arabic (core, extended, in-laws)",
       }}
       description={{
-        ro: "Vocabularul complet al familiei în araba libaneză: părinți, frați, bunici, unchi/mătuși (partea mamei vs a tatălui), veri, socri, plus pronumele posesive. Cu arabizi și scriere arabă.",
+        ro: "Vocabularul complet al familiei în araba libaneză: părinți, frați, bunici, unchi/mătuși (mamă vs tată), veri, socri, plus pronumele posesive.",
         en: "The complete family vocabulary in Lebanese Arabic: parents, siblings, grandparents, uncles/aunts (paternal vs maternal), cousins, in-laws, plus possessive pronouns. Arabizi + Arabic script.",
       }}
       published="2026-07-24"

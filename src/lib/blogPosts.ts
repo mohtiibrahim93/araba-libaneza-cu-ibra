@@ -36,11 +36,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "limbile-vorbite-in-liban",
     title: {
-      ro: "Limbile vorbite în Liban: arabă libaneză, MSA, franceză și engleză",
+      ro: "Limbile vorbite în Liban: libaneză, MSA, franceză, engleză",
       en: "Languages of Lebanon: Lebanese Arabic, MSA, French and English",
     },
     description: {
-      ro: "Ghid complet despre limbile din Liban — araba libaneză (dialectul zilnic), araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.",
+      ro: "Ghid despre limbile din Liban — araba libaneză, araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.",
       en: "A complete guide to the languages of Lebanon — Lebanese Arabic, Modern Standard Arabic, French and English. Who speaks what, and why Lebanese Arabic is the key.",
     },
     published: "2026-07-24",
@@ -50,7 +50,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "de-ce-invatam-araba-in-2026",
     title: {
-      ro: "De ce merită să înveți arabă în 2026 (și de ce dialectul, nu MSA)",
+      ro: "De ce merită să înveți arabă în 2026",
       en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
     },
     description: {
@@ -110,7 +110,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
       en: "How to learn Lebanese Arabic online (from anywhere)",
     },
     description: {
-      ro: "Cum funcționează cursurile de arabă libaneză online: de ce ai nevoie, cum arată o lecție pe Zoom, dacă online e la fel de bun ca fizic și pentru cine e potrivit.",
+      ro: "Află cum funcționează cursurile de arabă libaneză online, cum arată o lecție pe Zoom și dacă acest format ți se potrivește.",
       en: "How online Lebanese Arabic courses work: what you need, what a Zoom lesson looks like, whether online is as good as in person and who it's for.",
     },
     published: "2026-07-17",
@@ -190,11 +190,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "alfabetul-arab-pentru-incepatori",
     title: {
-      ro: "Alfabetul Arab: Cele 28 de Litere, Pronunția și Cum Vorbești Fără El",
+      ro: "Alfabetul arab: cele 28 de litere, cu pronunție în română",
       en: "The Arabic Alphabet: 28 Letters, Pronunciation & Why You Can Speak Without It",
     },
     description: {
-      ro: "Tabelul complet al celor 28 de litere arabe, cu numele și sunetul fiecăreia explicat în română. Scrierea dreapta-la-stânga, formele din cuvânt și sunetele care nu există în română (ح, ع, ق) — de la un profesor nativ libanez.",
+      ro: "Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.",
       en: "The full table of all 28 Arabic letters, each with its name and sound. Right-to-left writing, how letters change shape inside a word, and the sounds that don't exist in English (ح, ع, ق) — from a native Lebanese teacher.",
     },
     published: "2026-07-16",
@@ -232,7 +232,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "cum-saluti-in-libaneza",
     title: {
-      ro: "Cum Saluți în Libaneză: Mar7aba, Kifak și Când Folosești Fiecare",
+      ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye",
       en: "How to Greet in Lebanese Arabic: Mar7aba, Kifak & When to Use Each",
     },
     description: {
@@ -288,11 +288,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "gramatica-arabei-libaneze",
     title: {
-      ro: "Gramatica arabei libaneze: top 5 întrebări (b-, pronume, ordinea cuvintelor)",
+      ro: "Gramatica arabă libaneză: 5 întrebări frecvente",
       en: "Lebanese Arabic grammar: top 5 questions (b-, pronouns, word order)",
     },
     description: {
-      ro: "Ghid clar pentru cele mai frecvente 5 întrebări de gramatică în araba libaneză: prefixul بـ, verbele la trecut cu pronume atașate, pronumele personale/posesive, ordinea cuvintelor și diferențele față de MSA.",
+      ro: "Învață simplu gramatica arabă libaneză: prefixul b-, pronumele, trecutul și ordinea cuvintelor, cu exemple clare și comparații cu MSA.",
       en: "A clear guide to the top 5 grammar questions in Lebanese Arabic: the بـ prefix, past-tense verbs with attached pronouns, personal and possessive pronouns, word order, and the key differences from MSA.",
     },
     published: "2026-07-24",

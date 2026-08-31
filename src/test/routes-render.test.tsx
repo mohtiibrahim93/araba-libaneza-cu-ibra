@@ -62,8 +62,17 @@ const REDIRECTS: [from: string, toHeadingContains: string][] = [
   ["/en/learn-levantine-arabic", "Lebanese Arabic"],
   ["/en/levantine-arabic-dialects-map", "Arabic dialects"],
   ["/cursuri/privat", "Private"],
-  ["/cursuri-limba-araba", "arabă"],
   ["/cursuri/tineri", "adolescen"],
+];
+
+/**
+ * Retired URLs that serve content instead of redirecting. Consolidation then
+ * rests entirely on the canonical, so that is what gets asserted — the earlier
+ * version of this test checked for a redirect, which pinned the mechanism
+ * rather than the outcome and broke the moment the mechanism changed.
+ */
+const CANONICALISED_ALIASES: [from: string, canonical: string][] = [
+  ["/cursuri-limba-araba", "https://centruldearabalibaneza.com/cursuri-araba"],
 ];
 
 describe("retired URLs still redirect", () => {
@@ -180,5 +189,26 @@ describe("structured data links the business to the organisation", () => {
 
     expect(local["@id"]).toBe(expectedId);
     expect(local.parentOrganization?.["@id"]).toBe("https://centruldearabalibaneza.com/#organization");
+  });
+});
+
+describe("retired URLs that render instead of redirecting", () => {
+  it.each(CANONICALISED_ALIASES)("%s serves content but canonicalises away", async (from, canonical) => {
+    window.localStorage.setItem("site-language", "ro");
+    window.history.pushState({}, "", from);
+    render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>,
+    );
+    const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+
+    const link = await waitFor(() => {
+      const el = document.querySelector('link[rel="canonical"]');
+      expect(el).toBeTruthy();
+      return el!;
+    });
+    expect(link.getAttribute("href")).toBe(canonical);
   });
 });

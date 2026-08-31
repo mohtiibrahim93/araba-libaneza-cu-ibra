@@ -56,7 +56,7 @@ const CumInvetiArabaLibaneza = () => {
   return (
     <BlogArticleLayout
       slug="cum-inveti-araba-libaneza"
-      title={{ ro: "Cum înveți araba libaneză în 2026: Ghid pentru începători", en: "How to learn Lebanese Arabic in 2026: A beginner's guide" }}
+      title={{ ro: "Cum înveți araba libaneză în 2026: ghid pentru începători", en: "How to learn Lebanese Arabic in 2026: A beginner's guide" }}
       description={{
         ro: "Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.",
         en: "A step-by-step guide to learning Lebanese Arabic: how it differs from Standard Arabic (Fusha), how long it takes, the best methods, common mistakes and useful phrases.",

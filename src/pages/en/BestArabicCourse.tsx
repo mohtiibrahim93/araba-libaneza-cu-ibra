@@ -30,7 +30,7 @@ const BestArabicCourse = () => (
     roHref="/cel-mai-bun-curs-de-araba"
     title="The best Arabic course: how to choose in 2026 (group, private, online or app)"
     metaTitle="Best Arabic Course 2026 — How to Choose | Lebanese vs MSA"
-    description="How to choose the best Arabic course: Lebanese (Levantine) dialect vs Modern Standard Arabic, group vs private vs online vs apps. Honest comparison, prices and common mistakes."
+    description="Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals."
     crumb="Best Arabic course"
     lead="There is no single best Arabic course — only the best course for your goal. This guide compares Lebanese Arabic against Modern Standard Arabic, groups against private lessons, and courses against apps, so you don't lose a year on the wrong choice."
     faq={FAQ}

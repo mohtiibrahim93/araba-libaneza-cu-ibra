@@ -10,7 +10,7 @@ const CulturaLibaneza = () => {
       slug="cultura-libaneza-obiceiuri-mancare-traditii"
       title={{ ro: "Cultura libaneză: obiceiuri, mâncare și tradiții", en: "Lebanese culture: customs, food and traditions" }}
       description={{
-        ro: "Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica, limba și tradițiile — contextul viu în spatele arabei libaneze.",
+        ro: "Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica și tradițiile — contextul viu din spatele limbii.",
         en: "A warm guide to Lebanese culture: hospitality, food (mezze, tabbouleh, kibbeh), music, language and traditions — the living context behind Lebanese Arabic.",
       }}
       published="2026-07-16"

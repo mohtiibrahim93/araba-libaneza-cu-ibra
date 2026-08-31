@@ -28,8 +28,8 @@ const ArabaPentruPartener = () => (
   <LandingLayout
     slug="araba-pentru-partener"
     title="Arabă libaneză pentru partener și familia lui"
-    metaTitle="Arabă Libaneză pentru Partener și Socri — Expresii și Curs 1:1"
-    description="Vrei să vorbești cu partenerul libanez și cu familia lui? Expresii esențiale pentru prima întâlnire cu socrii, alintări, urări la masă și un plan realist de învățare în 6 săptămâni."
+    metaTitle="Arabă Libaneză pentru Partener și Familie | Curs 1:1"
+    description="Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București."
     crumb="Arabă pentru partener"
     lead="Cel mai frecvent motiv pentru care oamenii ne scriu: o relație cu cineva din Liban. Iată ce înveți întâi și cum te pregătești pentru prima întâlnire cu familia."
     enHref={null}

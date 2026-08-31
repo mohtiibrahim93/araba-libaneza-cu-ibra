@@ -14,7 +14,7 @@ const DeCeInvatamAraba2026 = () => {
         en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
       }}
       description={{
-        ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online. Argumente clare pentru începători.",
+        ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.",
         en: "Arabic is one of the world's most spoken languages, demand for speakers is rising, and in 2026 dialects have overtaken MSA in online searches. Clear reasons for beginners.",
       }}
       published="2026-07-24"

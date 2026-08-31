@@ -76,10 +76,10 @@ const ArabischLernen = () => (
   <div className="min-h-screen bg-background" lang="de">
     <Helmet>
       <html lang="de" />
-      <title>Arabisch lernen online — libanesisch mit Muttersprachler | A1–C2</title>
+      <title>Arabisch lernen online — Libanesisch mit Muttersprachler</title>
       <meta
         name="description"
-        content="Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins, ohne Alphabet-Hürde. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde."
+        content="Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde."
       />
       <link rel="canonical" href={URL} />
       <link rel="alternate" hrefLang="de" href={URL} />
