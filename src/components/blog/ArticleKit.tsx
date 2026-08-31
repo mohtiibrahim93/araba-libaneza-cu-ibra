@@ -130,7 +130,9 @@ export const InlineCta = ({ title, text, href, label }: { title: Loc; text: Loc;
   const lang = useLang();
   return (
     <div className="not-prose my-10 rounded-2xl border border-border bg-primary/5 p-6 text-center">
-      <h2 className="font-display text-xl font-bold text-foreground">{pick(title, lang)}</h2>
+      {/* Deliberately not an <h2>: the article outline is built from h2s, and a
+          call to action is not a section of the article. */}
+      <p className="font-display text-xl font-bold text-foreground">{pick(title, lang)}</p>
       <p className="mt-2 text-sm text-muted-foreground">{pick(text, lang)}</p>
       <Link
         to={href}

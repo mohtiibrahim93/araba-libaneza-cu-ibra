@@ -175,7 +175,7 @@ const CumInvetiArabaLibaneza = () => {
       </section>
 
       <InlineCta
-        title={{ ro: "Vrei corectare, nu doar teorie?", en: "Want correction, not just theory?" }}
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
         text={{
           ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
           en: "30 minutes with a native teacher, free — online or in person in Bucharest.",

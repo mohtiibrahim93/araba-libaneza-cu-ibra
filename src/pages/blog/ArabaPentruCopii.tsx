@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce vârstă are grupa de copii și ce urmează după?", en: "What age is the kids group, and what comes after it?" },
+    a: { ro: "Cursul pentru copii este gândit pentru 6–10 ani, fizic în București. De la 11 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–10, in person in Bucharest. From 11 there is the teen group, with a different approach: conversation, music and social-media language." },
+  },
+  {
+    q: { ro: "Trebuie să știu și eu arabă ca să-mi ajut copilul?", en: "Do I need to know Arabic myself to support my child?" },
+    a: { ro: "Nu. Lecțiile sunt construite să funcționeze independent de ce știu părinții. Ajută însă enorm expunerea acasă — muzică, desene sau câteva cuvinte repetate în joacă.", en: "No. Lessons are built to work regardless of what the parents know. What helps enormously is exposure at home — music, cartoons, or a few words repeated in play." },
+  },
+  {
+    q: { ro: "Cum arată o lecție pentru copii?", en: "What does a lesson for children look like?" },
+    a: { ro: "Prin joc, cântece și povești, cu mult mai puțină scriere decât la adulți. Accentul cade pe ureche și pe pronunție, exact vârsta la care se prind cel mai ușor sunetele noi.", en: "Through play, songs and stories, with far less writing than for adults. The focus is on the ear and on pronunciation — exactly the age when new sounds are picked up most easily." },
+  },
+];
 
 const ArabaPentruCopii = () => {
   const { lang } = useI18n();
@@ -15,12 +33,21 @@ const ArabaPentruCopii = () => {
       }}
       published="2026-07-16"
       readingMinutes={5}
+      faq={FAQ}
       crumb={{ ro: "Arabă pentru copii", en: "Arabic for kids" }}
       lead={{
         ro: "De la ce vârstă, cum arată o lecție și cum îți susții copilul — tot ce vor să știe părinții înainte de primul curs.",
         en: "From what age, what a lesson looks like and how to support your child — everything parents want to know before the first course.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Cursul pentru copii acoperă 6–10 ani, fizic în București; de la 11 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–10 in Bucharest; from 11 the teen group follows." },
+          { ro: "Se învață prin joc, cântece și povești, nu prin gramatică și caiete.", en: "Learning happens through play, songs and stories, not grammar and workbooks." },
+          { ro: "Copiii prind sunetele noi mai ușor decât adulții — e vârsta potrivită pentru pronunție.", en: "Children pick up new sounds more easily than adults — it is the right age for pronunciation." },
+          { ro: "Nu trebuie să știi arabă ca părinte; expunerea acasă contează mai mult.", en: "You do not need to know Arabic as a parent; exposure at home matters more." },
+        ]}
+      />
       <p>
         {en
           ? "Children learn languages differently from adults: through play, repetition and context, not rules. That's why Lebanese Arabic courses for kids look nothing like a classic lesson — they're interactive, with games, songs and stories."
@@ -62,6 +89,17 @@ const ArabaPentruCopii = () => {
         <li>{en ? "No pressure — praise and play work far better than correction." : "Fără presiune — lauda și jocul funcționează mult mai bine decât corectarea."}</li>
         <li>{en ? "A short call with speaking relatives works wonders for motivation." : "Un apel scurt cu rude vorbitoare face minuni pentru motivație."}</li>
       </ul>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "How to start" : "Cum începeți"}</h2>
       <p>

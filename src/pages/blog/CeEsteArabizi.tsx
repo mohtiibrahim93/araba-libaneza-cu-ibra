@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [number, arabic-letter, sound-ro, sound-en]
@@ -10,6 +11,23 @@ const NUMBERS: [string, string, string, string][] = [
   ["7", "ح", "h puternic din gât, fără echivalent în română", "strong h from the throat, no English equivalent"],
   ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "gh, like a raspy French 'r'"],
   ["9", "ق", "q gutural (uneori)", "guttural q (sometimes)"],
+];
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce înseamnă cifrele din arabizi?", en: "What do the numbers in arabizi mean?" },
+    a: { ro: "Înlocuiesc sunete arabe care nu au literă latină: 2 pentru ء sau ق, 3 pentru ع, 5 pentru خ, 7 pentru ح, 8 pentru غ și 9 pentru ق. Forma cifrei seamănă cu litera arabă, de aceea se rețin repede.", en: "They stand in for Arabic sounds with no Latin letter: 2 for ء or ق, 3 for ع, 5 for خ, 7 for ح, 8 for غ and 9 for ق. The digit's shape resembles the Arabic letter, which is why they stick quickly." },
+  },
+  {
+    q: { ro: "Arabizi are reguli fixe de scriere?", en: "Does arabizi have fixed spelling rules?" },
+    a: { ro: "Nu. Este o convenție apărută din mesageria de zi cu zi, nu un standard oficial, așa că același cuvânt poate fi scris în două-trei feluri. Cifrele pentru sunetele grele sunt însă folosite aproape la fel de toată lumea.", en: "No. It grew out of everyday messaging rather than any official standard, so the same word can be spelled two or three ways. The digits for the hard sounds, though, are used almost identically by everyone." },
+  },
+  {
+    q: { ro: "Folosesc libanezii arabizi între ei?", en: "Do Lebanese people actually use arabizi with each other?" },
+    a: { ro: "Da, constant — pe WhatsApp, în comentarii și pe rețele. Pentru mulți e modul obișnuit de a scrie dialectul, pentru că alfabetul arab nu redă bine libaneza vorbită.", en: "Yes, constantly — on WhatsApp, in comments and on social media. For many it is the normal way to write the dialect, because the Arabic script does not capture spoken Lebanese well." },
+  },
 ];
 
 const CeEsteArabizi = () => {
@@ -25,12 +43,21 @@ const CeEsteArabizi = () => {
       }}
       published="2026-07-16"
       readingMinutes={5}
+      faq={FAQ}
       crumb={{ ro: "Ce este arabizi", en: "What is Arabizi" }}
       lead={{
         ro: "Araba scrisă cu litere latine și cifre — cum funcționează, ce înseamnă „3” și „7”, și de ce te ajută să vorbești din prima zi.",
         en: "Arabic written in Latin letters and numbers — how it works, what '3' and '7' mean, and why it helps you speak from day one.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Arabizi este araba scrisă cu litere latine și câteva cifre, folosită zilnic pe telefon.", en: "Arabizi is Arabic written in Latin letters and a few digits, used daily on phones." },
+          { ro: "Cifrele acoperă sunetele fără echivalent latin: 2, 3, 5, 7, 8 și 9.", en: "The digits cover sounds with no Latin equivalent: 2, 3, 5, 7, 8 and 9." },
+          { ro: "Nu e un standard oficial — variază de la om la om, dar cifrele sunt constante.", en: "It is not an official standard — it varies between people, but the digits are consistent." },
+          { ro: "Îți permite să scrii și să citești din prima zi, fără alfabetul arab.", en: "It lets you read and write from day one, without the Arabic script." },
+        ]}
+      />
       <p>
         <strong>Arabizi</strong> {en ? "(also called 'arabish' or 'franco-arab') is how millions of Arabs write their dialect on their phones and on social media: " : "(numit și „arabish” sau „franco-arab”) este modul în care milioane de arabi scriu dialectul lor pe telefon și pe rețelele sociale: "}
         <strong>{en ? "in Latin letters and a few numbers" : "cu litere latine și câteva cifre"}</strong>{en ? ". Instead of learning the " : ". În loc să înveți întâi "}
@@ -76,6 +103,17 @@ const CeEsteArabizi = () => {
         {en ? "See more in the article on the " : "Vezi mai multe în articolul cu "}
         <Link to="/blog/primele-20-de-expresii-libaneze">{en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}</Link>.
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Is it 'cheating' to learn with Arabizi?" : "E „barează” să înveți cu arabizi?"}</h2>
       <p>

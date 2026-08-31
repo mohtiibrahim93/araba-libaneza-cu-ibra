@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [letter, name, sound-ro, sound-en]
@@ -34,6 +35,27 @@ const LETTERS: [string, string, string, string][] = [
   ["ي", "ya", "y / i lung", "y / long i"],
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Cât durează până citești alfabetul arab?", en: "How long does it take to read the Arabic alphabet?" },
+    a: { ro: "Recunoașterea celor 28 de litere vine în câteva săptămâni de exersare scurtă și zilnică. Citirea fluentă durează mai mult, pentru că majoritatea textelor nu notează vocalele scurte și le deduci din context.", en: "Recognising the 28 letters comes within a few weeks of short daily practice. Fluent reading takes longer, because most texts leave the short vowels out and you infer them from context." },
+  },
+  {
+    q: { ro: "De ce nu se scriu vocalele scurte?", en: "Why aren't the short vowels written?" },
+    a: { ro: "Araba se scrie în mod normal doar cu consoane și vocale lungi. Vocalele scurte există ca semne diacritice, dar se folosesc aproape exclusiv în Coran, în poezie și în manualele pentru începători. Vorbitorii le completează din context.", en: "Arabic is normally written with consonants and long vowels only. The short vowels exist as diacritics, but they appear almost exclusively in the Quran, in poetry and in beginner textbooks. Speakers fill them in from context." },
+  },
+  {
+    q: { ro: "Literele arată la fel oriunde în cuvânt?", en: "Do the letters look the same everywhere in a word?" },
+    a: { ro: "Nu. Majoritatea literelor au forme diferite la început, la mijloc și la sfârșitul cuvântului, plus o formă izolată. Sunt variații ale aceleiași litere, nu litere noi — după câteva zile ochiul le leagă automat.", en: "No. Most letters take different shapes at the start, middle and end of a word, plus a standalone form. They are variations of the same letter, not new ones — after a few days the eye connects them automatically." },
+  },
+  {
+    q: { ro: "Am nevoie de alfabet ca să vorbesc libaneză?", en: "Do I need the alphabet to speak Lebanese?" },
+    a: { ro: "Nu pentru a vorbi. Dialectul libanez este în primul rând o limbă vorbită, iar la început se scrie cu arabizi (litere latine). Alfabetul devine util când vrei să citești meniuri, semne, mesaje sau texte în arabă standard.", en: "Not in order to speak. Lebanese is primarily a spoken language, and at the start it is written in arabizi (Latin letters). The alphabet becomes useful when you want to read menus, signs, messages or Modern Standard Arabic." },
+  },
+];
+
 const AlfabetulArab = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -55,12 +77,21 @@ const AlfabetulArab = () => {
       }}
       published="2026-07-16"
       readingMinutes={7}
+      faq={FAQ}
       crumb={{ ro: "Alfabetul arab", en: "The Arabic alphabet" }}
       lead={{
         ro: "Cele 28 de litere, pronunția lor și un adevăr liniștitor: nu ai nevoie de alfabet ca să începi să vorbești.",
         en: "The 28 letters, their pronunciation and a reassuring truth: you don't need the alphabet to start speaking.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Alfabetul arab are 28 de litere și se scrie de la dreapta la stânga.", en: "The Arabic alphabet has 28 letters and is written right to left." },
+          { ro: "Majoritatea literelor își schimbă forma după poziția din cuvânt — aceeași literă, nu una nouă.", en: "Most letters change shape depending on their position in the word — the same letter, not a new one." },
+          { ro: "Vocalele scurte nu se notează în textele obișnuite; le deduci din context.", en: "Short vowels are not written in ordinary text; you infer them from context." },
+          { ro: "Ca să vorbești libaneză nu ai nevoie de alfabet: începi cu arabizi și îl adaugi mai târziu.", en: "You do not need the alphabet to speak Lebanese: start with arabizi and add it later." },
+        ]}
+      />
       <p>
         {en
           ? "The Arabic alphabet looks intimidating at first, but it has a simple logic. It has "
@@ -131,6 +162,17 @@ const AlfabetulArab = () => {
         <Link to="/arabizi">{en ? "Arabizi decoding guide" : "ghidul complet Arabizi"}</Link>
         {en ? ". We teach the alphabet on request, alongside speaking." : ". Predăm alfabetul la cerere, în paralel cu vorbirea."}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "How to learn the alphabet more easily" : "Cum înveți alfabetul mai ușor"}</h2>
       <ul>

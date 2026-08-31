@@ -1,7 +1,25 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce limbă se vorbește de fapt în Liban?", en: "What language is actually spoken in Lebanon?" },
+    a: { ro: "Araba libaneză, în viața de zi cu zi. Araba standard este limba scrisă și oficială, franceza și engleza apar în școli, în afaceri și în conversație, adesea în aceeași frază.", en: "Lebanese Arabic, in everyday life. Modern Standard Arabic is the written and official language, while French and English appear in schools, business and conversation — often in the same sentence." },
+  },
+  {
+    q: { ro: "De ce amestecă libanezii trei limbi într-o propoziție?", en: "Why do Lebanese people mix three languages in one sentence?" },
+    a: { ro: "E rezultatul istoriei și al școlii: multe licee predau în franceză sau engleză, iar comutarea între limbi a devenit un obicei firesc, nu un semn de ezitare.", en: "It is the result of history and schooling: many secondary schools teach in French or English, and switching between languages has become an ordinary habit rather than a sign of hesitation." },
+  },
+  {
+    q: { ro: "Mă descurc în Liban cu engleza?", en: "Can I get by in Lebanon with English?" },
+    a: { ro: "În Beirut și în zonele turistice, în mare parte da. Dar conversațiile de familie, piața și viața reală se poartă în libaneză — acolo se schimbă felul în care ești primit.", en: "In Beirut and tourist areas, largely yes. But family conversation, the market and real life happen in Lebanese — and that is where the way you are received changes." },
+  },
+];
 
 const LimbileVorbiteInLiban = () => {
   const { lang } = useI18n();
@@ -26,12 +44,21 @@ const LimbileVorbiteInLiban = () => {
       }}
       published="2026-07-24"
       readingMinutes={7}
+      faq={FAQ}
       crumb={{ ro: "Limbile din Liban", en: "Languages of Lebanon" }}
       lead={{
         ro: "Liban e una dintre cele mai multilingve țări din lume: aproape orice libanez jonglează zilnic între arabă libaneză, franceză și engleză, iar araba standard (MSA) apare la știri și în documente. Iată harta clară a limbilor din Liban — și de ce dialectul libanez rămâne limba conexiunii reale.",
         en: "Lebanon is one of the most multilingual countries in the world: almost every Lebanese person juggles Lebanese Arabic, French and English daily, while Modern Standard Arabic shows up in news and paperwork. Here's a clear map of Lebanon's languages — and why the Lebanese dialect stays the language of real connection.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Libanul e printre cele mai multilingve țări din lume: libaneză, franceză, engleză, plus MSA în scris.", en: "Lebanon is among the world's most multilingual countries: Lebanese, French, English, plus MSA in writing." },
+          { ro: "Araba libaneză e limba vieții de zi cu zi; MSA aproape nu se vorbește.", en: "Lebanese Arabic is the language of daily life; MSA is barely spoken." },
+          { ro: "Comutarea între limbi în aceeași frază e normală, nu o excepție.", en: "Switching languages mid-sentence is normal, not an exception." },
+          { ro: "Engleza te duce departe în Beirut, dar nu în conversațiile de familie.", en: "English takes you far in Beirut, but not into family conversation." },
+        ]}
+      />
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />
@@ -81,6 +108,17 @@ const LimbileVorbiteInLiban = () => {
           ? "Lebanon hosts long-established Armenian (~4% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
           : "Libanul găzduiește comunități armene bine stabilite (~4% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "6. So which one should you learn?" : "6. Deci pe care ar trebui să o înveți?"}</h2>
       <ul>

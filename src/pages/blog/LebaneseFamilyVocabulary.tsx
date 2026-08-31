@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 type Row = { arabizi: string; arabic: string; en: string; ro: string };
@@ -49,6 +50,23 @@ const PHRASES = [
   { en: "Say hi to your family — sallem 3a eyltak.", ro: "Salută familia ta — sallem 3a eyltak.", ar: "سلّم ع عيلتك" },
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "De ce are libaneza cuvinte diferite pentru unchiul din partea mamei și a tatălui?", en: "Why does Lebanese have different words for a maternal and a paternal uncle?" },
+    a: { ro: "Pentru că cele două ramuri ale familiei au roluri sociale distincte, iar limba le marchează explicit. Nu e o subtilitate: sunt cuvinte complet diferite, pe care le folosește toată lumea.", en: "Because the two sides of the family have distinct social roles, and the language marks them explicitly. It is not a subtlety: they are entirely different words that everyone uses." },
+  },
+  {
+    q: { ro: "Cum mă adresez politicos părinților partenerului?", en: "How do I politely address my partner's parents?" },
+    a: { ro: "Există formule dedicate pentru socri, diferite de cele pentru propriii părinți. Folosirea lor corectă de la prima întâlnire e observată imediat și contează mult mai mult decât fluența.", en: "There are dedicated terms for parents-in-law, different from those for your own parents. Using them correctly at a first meeting is noticed immediately and counts for far more than fluency." },
+  },
+  {
+    q: { ro: "Se folosesc aceleași cuvinte pentru rude apropiate și îndepărtate?", en: "Are the same words used for close and distant relatives?" },
+    a: { ro: "Nu chiar. Termenii de familie se extind adesea și către prieteni apropiați sau vecini, ca semn de afecțiune — cineva poate fi numit „unchi” fără nicio legătură de sânge.", en: "Not quite. Family terms are often extended to close friends and neighbours as a mark of affection — someone can be called \"uncle\" with no blood relation at all." },
+  },
+];
+
 const LebaneseFamilyVocabulary = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -92,12 +110,21 @@ const LebaneseFamilyVocabulary = () => {
       }}
       published="2026-07-24"
       readingMinutes={6}
+      faq={FAQ}
       crumb={{ ro: "Familia în libaneză", en: "Lebanese family vocabulary" }}
       lead={{
         ro: "Familia e primul subiect real de conversație în orice limbă. În libaneză contează chiar mai mult — și distincția între rudele din partea mamei și din partea tatălui e centrală.",
         en: "Family is the first real conversation topic in any language. In Lebanese it matters even more — and the distinction between maternal and paternal relatives is central.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Libaneza distinge rudele din partea mamei de cele din partea tatălui cu cuvinte diferite.", en: "Lebanese distinguishes maternal from paternal relatives with entirely different words." },
+          { ro: "Există formule dedicate pentru socri, diferite de cele pentru proprii părinți.", en: "There are dedicated terms for parents-in-law, different from those for your own parents." },
+          { ro: "Termenii de familie se extind afectuos și către prieteni sau vecini.", en: "Family terms extend affectionately to friends and neighbours too." },
+          { ro: "Familia e primul subiect real de conversație — de aceea vocabularul ăsta se plătește repede.", en: "Family is the first real conversation topic — which is why this vocabulary pays off quickly." },
+        ]}
+      />
       <p>
         {en
           ? "One thing that surprises most learners: Lebanese Arabic distinguishes maternal from paternal uncles and aunts. 3ammi is your dad's brother; 5ali is your mum's brother. There's no single word for ‘uncle’ — you always specify the side."
@@ -117,6 +144,17 @@ const LebaneseFamilyVocabulary = () => {
           </li>
         ))}
       </ul>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Cultural notes" : "Note culturale"}</h2>
       <ul>

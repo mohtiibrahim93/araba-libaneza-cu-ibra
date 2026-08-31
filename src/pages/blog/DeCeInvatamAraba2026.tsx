@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "De ce să învăț dialect și nu arabă standard?", en: "Why learn a dialect rather than Modern Standard Arabic?" },
+    a: { ro: "Pentru că dialectul este ce se vorbește. Araba standard e limba scrisă a presei, a documentelor și a discursurilor; nimeni nu o folosește acasă. Dacă scopul e conversația, dialectul e drumul scurt.", en: "Because the dialect is what people speak. Modern Standard Arabic is the written language of the press, documents and speeches; nobody uses it at home. If the goal is conversation, the dialect is the short road." },
+  },
+  {
+    q: { ro: "Araba e utilă profesional în România?", en: "Is Arabic professionally useful in Romania?" },
+    a: { ro: "Depinde de domeniu. Comerțul, construcțiile, turismul medical și relațiile cu Orientul Mijlociu lucrează constant cu vorbitori de arabă, iar în București comunitatea levantină este numeroasă.", en: "It depends on the field. Trade, construction, medical tourism and Middle East relations work constantly with Arabic speakers, and Bucharest has a sizeable Levantine community." },
+  },
+  {
+    q: { ro: "E prea târziu să încep ca adult?", en: "Is it too late to start as an adult?" },
+    a: { ro: "Nu. Adulții învață mai încet sunetele noi, dar mult mai repede structurile, pentru că înțeleg cum funcționează o limbă. Dezavantajul e la pronunție, iar acolo corectura unui nativ compensează.", en: "No. Adults pick up new sounds more slowly but structures much faster, because they understand how a language works. The disadvantage is pronunciation, and that is exactly where a native speaker's correction compensates." },
+  },
+];
 
 const DeCeInvatamAraba2026 = () => {
   const { lang } = useI18n();
@@ -19,12 +37,21 @@ const DeCeInvatamAraba2026 = () => {
       }}
       published="2026-07-24"
       readingMinutes={6}
+      faq={FAQ}
       crumb={{ ro: "De ce înveți arabă în 2026", en: "Why learn Arabic in 2026" }}
       lead={{
         ro: "Arabă e a cincea limbă din lume după numărul de vorbitori — și totuși majoritatea manualelor te învață o formă pe care aproape nimeni nu o folosește în conversație. Iată de ce merită să înveți în 2026 și de ce dialectul e alegerea corectă.",
         en: "Arabic is the world's fifth most spoken language — yet most textbooks teach a form almost nobody uses in real conversation. Here's why 2026 is a strong year to start, and why the dialect is the right choice.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Araba e printre cele mai vorbite limbi din lume, dar „araba” din manuale nu se vorbește nicăieri acasă.", en: "Arabic is among the world's most spoken languages, yet the \"Arabic\" of textbooks is spoken in no home." },
+          { ro: "Dialectul îți dă conversație reală; standardul îți dă acces la text scris.", en: "The dialect gives you real conversation; the standard gives you access to written text." },
+          { ro: "Libaneza deschide Libanul, Siria, Iordania și Palestina cu un singur dialect.", en: "Lebanese opens Lebanon, Syria, Jordan and Palestine with a single dialect." },
+          { ro: "Ca adult înveți structurile repede; pronunția e partea care cere un vorbitor nativ.", en: "As an adult you learn structures fast; pronunciation is the part that needs a native speaker." },
+        ]}
+      />
       <h2>{en ? "1. The numbers behind Arabic" : "1. Cifrele din spatele limbii arabe"}</h2>
       <ul>
         <li>{en ? "~420 million native speakers across 22 Arab countries." : "~420 milioane de vorbitori nativi, în 22 de țări arabe."}</li>
@@ -72,6 +99,17 @@ const DeCeInvatamAraba2026 = () => {
           </>
         )}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "6. Realistic timelines for 2026" : "6. Estimări realiste pentru 2026"}</h2>
       <ul>

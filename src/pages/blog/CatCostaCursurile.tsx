@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "De ce costă mai mult cursul fizic decât cel online?", en: "Why does the in-person course cost more than the online one?" },
+    a: { ro: "Diferența acoperă închirierea sălii la Raduga Creative Center. Conținutul, profesorul și numărul de lecții sunt identice — plătești spațiul, nu un curs diferit.", en: "The difference covers renting the room at Raduga Creative Center. The content, the teacher and the number of lessons are identical — you are paying for the space, not for a different course." },
+  },
+  {
+    q: { ro: "Pot plăti lunar sau trebuie tot nivelul odată?", en: "Can I pay monthly, or must I pay for the whole level at once?" },
+    a: { ro: "Poți plăti lunar. Plata integrală a nivelului este opțională și vine cu 10% reducere — util dacă știi sigur că duci nivelul până la capăt.", en: "You can pay monthly. Paying for the full level up front is optional and comes with a 10% discount — useful if you are confident you will finish the level." },
+  },
+  {
+    q: { ro: "Lecțiile private se ieftinesc dacă iau mai multe?", en: "Do private lessons get cheaper if I book more?" },
+    a: { ro: "Da, reducerea se aplică automat după numărul de lecții: −5% de la 5 lecții, −10% de la 10 și −20% de la 20. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, the discount applies automatically by lesson count: −5% from 5 lessons, −10% from 10 and −20% from 20. The starting price is 150 lei for a 60-minute lesson." },
+  },
+];
 
 const CatCostaCursurile = () => {
   const { lang } = useI18n();
@@ -15,12 +33,21 @@ const CatCostaCursurile = () => {
       }}
       published="2026-07-16"
       readingMinutes={5}
+      faq={FAQ}
       crumb={{ ro: "Cât costă cursurile", en: "Course prices" }}
       lead={{
         ro: "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită.",
         en: "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.", en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room." },
+          { ro: "Lecțiile private sunt 150 lei/lecție de 60 de minute, cu reduceri de la 5, 10 și 20 de lecții.", en: "Private lessons are 150 lei per 60-minute lesson, with discounts from 5, 10 and 20 lessons." },
+          { ro: "Plata integrală a unui nivel aduce 10% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 10% discount, but monthly payment stays available." },
+          { ro: "Prima lecție de probă este gratuită și nu cere card.", en: "The first trial lesson is free and asks for no card." },
+        ]}
+      />
       <p>
         {en
           ? "One of the first natural questions when you want to learn a new language is 'how much?'. At the Lebanese Arabic Center prices are transparent and depend on one thing: the format you choose. Here are all the options."
@@ -81,6 +108,17 @@ const CatCostaCursurile = () => {
           ? " of 30 minutes, with no obligation — you book it online, pick a slot and talk to the teacher. Only after you see how it is do you decide whether to enrol."
           : " de 30 de minute, fără nicio obligație — o rezervi online, îți alegi un interval și vorbești cu profesorul. Abia după ce vezi cum e, decizi dacă te înscrii."}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Are there hidden costs?" : "Există costuri ascunse?"}</h2>
       <p>

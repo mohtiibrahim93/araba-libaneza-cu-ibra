@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import ResourceDownloadForm from "@/components/ResourceDownloadForm";
 import { useI18n } from "@/lib/i18n";
 
@@ -73,6 +74,23 @@ const GROUPS: { titleEn: string; titleRo: string; rows: Row[] }[] = [
   },
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Cum se pronunță „3” și „7” din expresii?", en: "How are the \"3\" and \"7\" in these phrases pronounced?" },
+    a: { ro: "Sunt sunete din gât fără echivalent în română: „3” este ع, un sunet apăsat din fundul gâtului, iar „7” este ح, o expirație puternică. Se prind prin imitație, nu prin descriere.", en: "They are throat sounds with no English equivalent: \"3\" is ع, a tightened sound from deep in the throat, and \"7\" is ح, a strong breathy h. They are learned by imitation, not description." },
+  },
+  {
+    q: { ro: "Sunt expresiile astea folosite și în Siria sau Iordania?", en: "Are these phrases used in Syria or Jordan too?" },
+    a: { ro: "Majoritatea, da. Toate patru țările vorbesc dialecte levantine, iar expresiile uzuale se suprapun în bună măsură; diferă mai ales accentul și câteva cuvinte.", en: "Most of them, yes. All four countries speak Levantine dialects and everyday expressions overlap considerably; what differs is mainly the accent and a handful of words." },
+  },
+  {
+    q: { ro: "Câte expresii îmi trebuie ca să încep o conversație?", en: "How many phrases do I need to start a conversation?" },
+    a: { ro: "Mai puține decât pare. Salutul, prezentarea, câteva întrebări simple și formulele de politețe acoperă majoritatea schimburilor scurte — restul se construiește peste ele.", en: "Fewer than it seems. Greetings, introducing yourself, a few simple questions and the politeness formulas cover most short exchanges — everything else builds on top." },
+  },
+];
+
 const LebaneseArabicPhrases = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -89,12 +107,21 @@ const LebaneseArabicPhrases = () => {
       }}
       published="2026-07-24"
       readingMinutes={7}
+      faq={FAQ}
       crumb={{ ro: "Expresii libaneze zilnice", en: "Lebanese Arabic phrases" }}
       lead={{
         ro: "O listă practică — nu vocabular pentru un manual, ci frazele pe care le folosesc libanezii în fiecare zi.",
         en: "A practical list — not textbook vocabulary, but the phrases Lebanese speakers actually use every day.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Expresiile fixe duc conversația libaneză mai mult decât gramatica.", en: "Set expressions carry Lebanese conversation more than grammar does." },
+          { ro: "Cifrele din scriere marchează sunete din gât: 3 pentru ع, 7 pentru ح.", en: "The digits in the spelling mark throat sounds: 3 for ع, 7 for ح." },
+          { ro: "Aceleași expresii funcționează în Siria, Iordania și Palestina.", en: "The same expressions work in Syria, Jordan and Palestine." },
+          { ro: "Învață fraze întregi, nu cuvinte izolate — multe nu se traduc cuvânt cu cuvânt.", en: "Learn whole phrases, not isolated words — many do not translate word for word." },
+        ]}
+      />
       <p>
         {en
           ? "If you already know a few greetings and want to move from ‘saying hi’ to ‘holding a real short conversation,’ this is the shortlist. All phrases are in the Lebanese dialect (Levantine), not Modern Standard Arabic — so what you learn here is what you'll hear on the street, in a café, or with your Lebanese friends and family."
@@ -132,6 +159,17 @@ const LebaneseArabicPhrases = () => {
           </div>
         </section>
       ))}
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "How to actually use these" : "Cum folosești lista"}</h2>
       <ul>

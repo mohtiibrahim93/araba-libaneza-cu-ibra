@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [number, arabizi, arabic]
@@ -28,6 +29,23 @@ const TENS: [string, string, string][] = [
   ["1000", "alf", "ألف"],
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Numerele libaneze sunt la fel ca în araba standard?", en: "Are Lebanese numbers the same as in Modern Standard Arabic?" },
+    a: { ro: "Foarte apropiate, dar pronunția e simplificată în vorbire și unele terminații cad. Cifrele de bază se recunosc ușor între dialecte — e una dintre zonele cu cea mai mică diferență.", en: "Very close, but the pronunciation is simplified in speech and some endings drop. The basic numbers are easily recognised across dialects — it is one of the areas that differs least." },
+  },
+  {
+    q: { ro: "Ce cifre folosesc libanezii când scriu?", en: "Which digits do Lebanese people use when writing?" },
+    a: { ro: "În Liban se folosesc cifrele occidentale (1, 2, 3), aceleași ca la noi. Cifrele arabe orientale (١، ٢، ٣) apar mai ales în Golf și în texte formale.", en: "In Lebanon the Western digits (1, 2, 3) are used, the same as in Europe. The Eastern Arabic numerals (١، ٢، ٣) appear mainly in the Gulf and in formal texts." },
+  },
+  {
+    q: { ro: "De ce am nevoie de numere atât de devreme?", en: "Why do I need numbers so early on?" },
+    a: { ro: "Pentru că apar în fiecare tranzacție reală: preț, oră, adresă, număr de telefon. Sunt printre puținele cuvinte de care ai nevoie literal din prima zi în Liban.", en: "Because they appear in every real transaction: price, time, address, phone number. They are among the few words you need literally on day one in Lebanon." },
+  },
+];
+
 const NumereInLibaneza = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -41,12 +59,21 @@ const NumereInLibaneza = () => {
       }}
       published="2026-07-17"
       readingMinutes={4}
+      faq={FAQ}
       crumb={{ ro: "Numerele în libaneză", en: "Numbers in Lebanese" }}
       lead={{
         ro: "Cifrele de care ai nevoie în piață, în taxi și la cafenea — cu pronunție în arabizi și scriere arabă.",
         en: "The numbers you need at the market, in a taxi and at the café — with Arabizi pronunciation and Arabic script.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Numerele apar în fiecare tranzacție reală: preț, oră, adresă, telefon.", en: "Numbers appear in every real transaction: price, time, address, phone." },
+          { ro: "În Liban se scriu cu cifre occidentale (1, 2, 3), nu cu cele orientale.", en: "In Lebanon they are written with Western digits (1, 2, 3), not the Eastern ones." },
+          { ro: "Pronunția e simplificată față de araba standard, dar rămâne recunoscută peste tot.", en: "Pronunciation is simplified compared with MSA, but stays recognisable everywhere." },
+          { ro: "Sunt printre primele cuvinte utile — merită învățate în prima săptămână.", en: "They are among the first genuinely useful words — worth learning in week one." },
+        ]}
+      />
       <p>
         {en
           ? "Numbers are among the first things you actually use in a new language — prices, time, phone numbers, your age. The good news: in Lebanese you only need a handful to get by. Here they are, with "
@@ -110,6 +137,17 @@ const NumereInLibaneza = () => {
         <li>{en ? "Phone numbers are read digit by digit — just string the 0–10 list together." : "Numerele de telefon se citesc cifră cu cifră — înșiri pur și simplu lista de la 0 la 10."}</li>
         <li>{en ? "Your age: 'age' is " : "Vârsta ta: „vârsta” e "}<em>3omr</em>{en ? " — 'omri tletin' means 'I'm thirty'." : " — „3omri tletin” înseamnă „am treizeci de ani”."}</li>
       </ul>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Practise them out loud" : "Exersează-le cu voce tare"}</h2>
       <p>
