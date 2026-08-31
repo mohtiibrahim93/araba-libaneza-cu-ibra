@@ -141,7 +141,15 @@ const ALIASES: Record<string, string> = {
  * Handles trailing slashes, mixed case and accidental `index.html` suffixes.
  */
 export function resolveRedirect(pathname: string): string | null {
-  const clean = decodeURIComponent(pathname).toLowerCase().replace(/\/+$/, "") || "/";
+  // Malformed percent-escapes (e.g. "/50%off") make decodeURIComponent throw;
+  // fall back to the raw path so a bad link still renders the 404 page.
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(pathname);
+  } catch {
+    decoded = pathname;
+  }
+  const clean = decoded.toLowerCase().replace(/\/+$/, "") || "/";
   if (ALIASES[clean]) return ALIASES[clean];
   // `/Blog/` style casing on an otherwise valid path: retry the lowercase form.
   if (clean !== pathname.replace(/\/+$/, "")) return clean;
