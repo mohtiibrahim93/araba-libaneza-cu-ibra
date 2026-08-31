@@ -27,7 +27,7 @@ const content = {
       ["3. Purpose of collection", "Your data is used exclusively to contact you about the requested courses, register you for courses, and send relevant information about the educational program."],
       ["4. Data storage", "Data is stored securely on protected servers and retained only as long as necessary for the purposes described. We do not share data with third parties, except technical service providers required for the platform to function."],
       ["5. Your rights", "Under GDPR, you have the right to access, correct, delete, or restrict the processing of your personal data. For any request, contact us at marhaba@centruldearabalibaneza.com."],
-      ["6. Cookies", "This site does not use marketing or tracking cookies without consent. Essential technical cookies may be used for normal site functionality."],
+      ["6. Cookies", "This site does not use marketing or tracking cookies without consent. Consent is managed through the Adopt consent platform, and you can change your preferences at any time via the “Cookie settings” link in the site footer. Essential technical cookies may be used for normal site functionality."],
       ["7. Contact", "For questions about data protection, you can contact us at marhaba@centruldearabalibaneza.com or on WhatsApp at +40 763 124 514."],
     ],
   },
