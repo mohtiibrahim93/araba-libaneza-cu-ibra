@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -21,6 +21,7 @@ const TrialPage = () => {
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [booked, setBooked] = useState(false);
   // Per-field messages. The form is noValidate so the browser never shows its
   // own bubble, which renders in the browser's UI language (English on a
   // Romanian page) and flags only one field at a time.
@@ -50,6 +51,20 @@ const TrialPage = () => {
     return next;
   };
 
+  // Once step 1 is submitted the visitor is on step 2 with nothing booked yet.
+  // Leaving here is what produces a contact with no lesson attached, so warn
+  // before the tab closes or navigates away. The browser shows its own generic
+  // wording; all we control is whether the prompt appears at all.
+  useEffect(() => {
+    if (!registrationId || booked) return;
+    const warn = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [registrationId, booked]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const found = validate();
@@ -70,11 +85,13 @@ const TrialPage = () => {
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim(),
-        lead_status: "new",
         // Step 1 only captures the lead. Until a slot is picked in step 2 the
-        // trial is NOT booked — this marker makes abandoned step-1 leads
-        // obvious in the admin instead of looking like real bookings.
-        notes: "⚠️ Pas 1 completat — interval NEALES (proba nu e rezervată)",
+        // trial is NOT booked, so it is recorded as "incomplete" rather than as
+        // a real lead. booking-create promotes it to "new" once a slot is
+        // actually chosen. This used to be a marker string in `notes`, which
+        // meant abandoned step-1 entries sat in the admin looking like genuine
+        // bookings and could not be filtered out.
+        lead_status: "incomplete",
       });
       if (error) throw error;
       trackEvent("Lead", { content_name: "trial" });
@@ -242,8 +259,9 @@ const TrialPage = () => {
               eventType="trial"
               registrationId={registrationId}
               prefill={{ name, email, phone }}
-              // The "slot not chosen" marker is cleared server-side by the
-              // booking-create function (RLS blocks browser updates).
+              // The lead is promoted from "incomplete" to a real lead
+              // server-side by booking-create; RLS blocks browser updates.
+              onBooked={() => setBooked(true)}
             />
 
           </div>

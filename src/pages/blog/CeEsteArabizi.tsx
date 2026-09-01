@@ -10,7 +10,6 @@ const NUMBERS: [string, string, string, string][] = [
   ["5", "خ", "h aspru, ca „ch” în germană „Bach”", "harsh h, like 'ch' in German 'Bach'"],
   ["7", "ح", "h puternic din gât, fără echivalent în română", "strong h from the throat, no English equivalent"],
   ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "gh, like a raspy French 'r'"],
-  ["9", "ق", "q gutural (uneori)", "guttural q (sometimes)"],
 ];
 
 // Questions specific to this article; anything answered elsewhere on the
@@ -18,7 +17,7 @@ const NUMBERS: [string, string, string, string][] = [
 const FAQ = [
   {
     q: { ro: "Ce înseamnă cifrele din arabizi?", en: "What do the numbers in arabizi mean?" },
-    a: { ro: "Înlocuiesc sunete arabe care nu au literă latină: 2 pentru ء sau ق, 3 pentru ع, 5 pentru خ, 7 pentru ح, 8 pentru غ și 9 pentru ق. Forma cifrei seamănă cu litera arabă, de aceea se rețin repede.", en: "They stand in for Arabic sounds with no Latin letter: 2 for ء or ق, 3 for ع, 5 for خ, 7 for ح, 8 for غ and 9 for ق. The digit's shape resembles the Arabic letter, which is why they stick quickly." },
+    a: { ro: "Înlocuiesc sunete arabe care nu au literă latină: 2 pentru ء și pentru ق (în libaneză ق se pronunță ca o oprire glotală), 3 pentru ع, 5 pentru خ, 7 pentru ح și 8 pentru غ. Forma cifrei seamănă cu litera arabă, de aceea se rețin repede.", en: "They stand in for Arabic sounds with no Latin letter: 2 for ء and for ق (in Lebanese, ق is pronounced as a glottal stop), 3 for ع, 5 for خ, 7 for ح and 8 for غ. The digit's shape resembles the Arabic letter, which is why they stick quickly." },
   },
   {
     q: { ro: "Arabizi are reguli fixe de scriere?", en: "Does arabizi have fixed spelling rules?" },
@@ -53,7 +52,7 @@ const CeEsteArabizi = () => {
       <Tldr
         points={[
           { ro: "Arabizi este araba scrisă cu litere latine și câteva cifre, folosită zilnic pe telefon.", en: "Arabizi is Arabic written in Latin letters and a few digits, used daily on phones." },
-          { ro: "Cifrele acoperă sunetele fără echivalent latin: 2, 3, 5, 7, 8 și 9.", en: "The digits cover sounds with no Latin equivalent: 2, 3, 5, 7, 8 and 9." },
+          { ro: "Cifrele acoperă sunetele fără echivalent latin: 2, 3, 5, 7 și 8.", en: "The digits cover sounds with no Latin equivalent: 2, 3, 5, 7 and 8." },
           { ro: "Nu e un standard oficial — variază de la om la om, dar cifrele sunt constante.", en: "It is not an official standard — it varies between people, but the digits are consistent." },
           { ro: "Îți permite să scrii și să citești din prima zi, fără alfabetul arab.", en: "It lets you read and write from day one, without the Arabic script." },
         ]}

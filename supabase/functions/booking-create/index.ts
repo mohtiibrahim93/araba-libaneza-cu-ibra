@@ -189,16 +189,25 @@ Deno.serve(async (req) => {
       return json({ error: "insert failed" }, 500);
     }
 
-    // The trial step-1 lead carries a "slot not chosen" marker in notes. Now
-    // that a slot is booked, clear it here (service role) — the browser cannot
-    // update registrations under RLS.
+    // The trial step-1 lead was stored as "incomplete" because no slot had been
+    // chosen yet. A slot is booked now, so promote it to a real lead here
+    // (service role) — the browser cannot update registrations under RLS.
+    // Older rows used a marker string in `notes`; clear that too so historic
+    // leads stop showing the warning once they convert.
     {
       const { error: clearErr } = await supabase
+        .from("registrations")
+        .update({ lead_status: "new", notes: null })
+        .eq("id", body.registration_id)
+        .eq("lead_status", "incomplete");
+      if (clearErr) console.error("[booking-create] promote lead failed", clearErr);
+
+      const { error: legacyErr } = await supabase
         .from("registrations")
         .update({ notes: null })
         .eq("id", body.registration_id)
         .like("notes", "%NEALES%");
-      if (clearErr) console.error("[booking-create] clear lead marker failed", clearErr);
+      if (legacyErr) console.error("[booking-create] clear legacy marker failed", legacyErr);
     }
 
     // Create GCal event (best-effort)

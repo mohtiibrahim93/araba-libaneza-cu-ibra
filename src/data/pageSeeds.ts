@@ -42,9 +42,9 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/arabizi",
-    "meta_title": "Arabizi: ce înseamnă 2, 3, 5, 7 și 9 în arabă",
-    "meta_description": "Învață ce înseamnă cifrele 2, 3, 5, 6, 7, 8 și 9 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.",
-    "h1": "Arabizi: ghid complet — ce înseamnă 2, 3, 5, 7 și 9 în arabă",
+    "meta_title": "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă",
+    "meta_description": "Învață ce înseamnă cifrele 2, 3, 5, 6, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.",
+    "h1": "Arabizi: ghid complet — ce înseamnă 2, 3, 5 și 7 în arabă",
     "lead": "Araba scrisă cu litere latine și cifre. Aici găsești tabelul complet de decodare, exemple reale de mesaje și cheat-sheet-ul PDF gratuit."
   },
   {

@@ -27,7 +27,9 @@ const Footer = () => {
           <SocialLinks className="mt-4" />
         </div>
 
-        {/* Courses */}
+        {/* Courses — the things you can actually enrol in, then the guides that
+            help you choose one. Previously a single flat list of eighteen links
+            that mixed the two and repeated the teenagers page twice. */}
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.navCourses}</p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
@@ -36,21 +38,32 @@ const Footer = () => {
             <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
             <li><Link to={lang === "en" ? "/en/arabic-for-teenagers" : "/cursuri-araba-adolescenti"} className="hover:text-foreground transition-colors">{lang === "en" ? "Teens (11–17)" : "Adolescenți (11–17)"}</Link></li>
             <li><Link to="/cursuri/adulti" className="hover:text-foreground transition-colors">{lang === "en" ? "Adults" : "Adulți"}</Link></li>
-
             <li><Link to="/meditatii-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "1-on-1 tutoring" : "Meditații arabă 1:1"}</Link></li>
             <li><Link to="/cursuri-araba-bucuresti" className="hover:text-foreground transition-colors">{lang === "en" ? "Courses in Bucharest" : "Cursuri arabă București"}</Link></li>
-            <li><Link to={lang === "en" ? "/en/best-arabic-course" : "/cel-mai-bun-curs-de-araba"} className="hover:text-foreground transition-colors">{lang === "en" ? "Best Arabic course guide" : "Cel mai bun curs de arabă"}</Link></li>
-            <li><Link to={lang === "en" ? "/en/arabic-for-teenagers" : "/cursuri-araba-adolescenti"} className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for teenagers" : "Arabă pentru adolescenți"}</Link></li>
-            <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
+          </ul>
+
+          <p className="text-sm font-semibold text-foreground mt-8 mb-4">
+            {lang === "en" ? "Guides" : "Ghiduri"}
+          </p>
+          <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to="/cursuri-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
+            <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
             <li><Link to="/araba-pentru-incepatori" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for beginners" : "Arabă pentru începători"}</Link></li>
-            <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
-            <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
+            <li><Link to="/curs-araba-copii" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic course for children" : "Curs de arabă pentru copii"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/best-arabic-course" : "/cel-mai-bun-curs-de-araba"} className="hover:text-foreground transition-colors">{lang === "en" ? "Best Arabic course guide" : "Cel mai bun curs de arabă"}</Link></li>
+            <li><Link to="/ce-araba-sa-inveti" className="hover:text-foreground transition-colors">{lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți"}</Link></li>
             <li><Link to="/dialecte-arabe" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic dialects guide" : "Dialectele arabe"}</Link></li>
+          </ul>
+
+          <p className="text-sm font-semibold text-foreground mt-8 mb-4">
+            {lang === "en" ? "Free & situations" : "Gratuit & situații"}
+          </p>
+          <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
+            <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
+            <li><Link to="/araba-online" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic online" : "Arabă online"}</Link></li>
             <li><Link to="/araba-pentru-partener" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for your partner" : "Arabă pentru partener"}</Link></li>
             <li><Link to="/araba-in-familie" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic in the family" : "Arabă în familie"}</Link></li>
-            <li><Link to="/ce-araba-sa-inveti" className="hover:text-foreground transition-colors">{lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți"}</Link></li>
-            <li><Link to="/araba-online" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic online" : "Arabă online"}</Link></li>
           </ul>
         </div>
 
