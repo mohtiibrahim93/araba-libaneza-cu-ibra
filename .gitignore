@@ -26,3 +26,7 @@ audit-screenshots/
 
 # Supabase CLI scratch state (regenerated on any CLI invocation)
 supabase/.temp
+
+# Local verification scratch (browser layout checks)
+checkfit.mjs
+fitresults.txt
