@@ -25,7 +25,7 @@ const Resurse = () => (
   <LandingLayout
     slug="resurse"
     title="Resurse gratuite pentru arabă libaneză"
-    metaTitle="Resurse gratuite pentru arabă libaneză"
+    metaTitle="Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat"
     description="Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse."
     crumb="Resurse gratuite"
     lead="Toate materialele noastre gratuite într-un singur loc. Alegi resursa, lași emailul și primești PDF-ul în câteva secunde."
