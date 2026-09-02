@@ -29,7 +29,7 @@ const DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist
 const ROOT_DIV = '<div id="root"></div>';
 
 /** Collects a React stream into a string, or gives up after `ms`. */
-function renderRoute(route: string, ms = 20_000): Promise<string> {
+function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<string> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     const sink = new Writable({
@@ -53,7 +53,7 @@ function renderRoute(route: string, ms = 20_000): Promise<string> {
 
     const stream = renderToPipeableStream(
       <HelmetProvider context={{}}>
-        <App Router={Router} />
+        <App Router={Router} lang={lang} />
       </HelmetProvider>,
       {
         // onAllReady, not onShellReady: it waits for every Suspense boundary,
@@ -94,7 +94,7 @@ async function main() {
   const failures: Array<{ route: string; reason: string }> = [];
   const thin: Array<{ route: string; chars: number }> = [];
 
-  for (const { path: route } of routes) {
+  for (const { path: route, lang } of routes) {
     const file = distFileFor(route);
     let html: string;
     try {
@@ -110,7 +110,7 @@ async function main() {
 
     let body: string;
     try {
-      body = await renderRoute(route);
+      body = await renderRoute(route, lang === "en" ? "en" : "ro");
     } catch (err) {
       failures.push({ route, reason: err instanceof Error ? err.message : String(err) });
       continue;

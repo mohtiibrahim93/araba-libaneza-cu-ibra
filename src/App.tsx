@@ -105,14 +105,16 @@ interface AppProps {
    * of shipping an empty <div id="root"> to crawlers.
    */
   Router?: ComponentType<{ children: ReactNode }>;
+  /** Seeds the UI language during prerender; the browser reads localStorage. */
+  lang?: "ro" | "en";
 }
 
-const App = ({ Router = BrowserRouter }: AppProps = {}) => (
+const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <I18nProvider>
+      <I18nProvider initialLang={lang}>
       <Router>
         <RouteAnalytics />
         <Suspense fallback={<PageLoader />}>

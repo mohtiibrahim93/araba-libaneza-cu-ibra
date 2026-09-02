@@ -145,11 +145,19 @@ export function allRoutes(): Route[] {
     type: "article" as const,
     published: p.published,
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...blog].map((route) =>
-    route.path === "/cursuri/grup/b2"
-      ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
-      : route,
-  );
+  return [...STATIC_ROUTES, ...levelRoutes(), ...blog]
+    .map((route) =>
+      route.path === "/cursuri/grup/b2"
+        ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
+        : route,
+    )
+    // Everything under /en/ is English whether or not the entry says so — only
+    // two of the ten did. Deriving it here means the body prerender picks the
+    // right UI language too, instead of wrapping English copy in Romanian
+    // navigation.
+    .map((route) =>
+      route.lang ? route : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
+    );
 }
 
 /**
