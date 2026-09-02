@@ -25,7 +25,7 @@ const MeditatiiAraba = () => (
     slug="meditatii-araba"
     enHref="/en/arabic-tutor"
     title="Meditații de arabă libaneză 1:1 — București și online"
-    metaTitle="Meditații Arabă București & Online | 150 lei/oră, Probă Gratuită"
+    metaTitle="Meditații Arabă 1:1 București & Online | 150 lei/oră"
     description="Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită."
     crumb="Meditații arabă libaneză"
     lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil, preț transparent."
