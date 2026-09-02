@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, type ComponentType, type ReactNode } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Loader2 } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
@@ -97,13 +97,23 @@ const RouteAnalytics = () => {
   return null;
 };
 
-const App = () => (
+interface AppProps {
+  /**
+   * The router to mount the routes under. Defaults to BrowserRouter for the
+   * app itself; the build-time prerender swaps in a StaticRouter bound to the
+   * route being rendered, so every page can be turned into real HTML instead
+   * of shipping an empty <div id="root"> to crawlers.
+   */
+  Router?: ComponentType<{ children: ReactNode }>;
+}
+
+const App = ({ Router = BrowserRouter }: AppProps = {}) => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <I18nProvider>
-      <BrowserRouter>
+      <Router>
         <RouteAnalytics />
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -192,7 +202,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
-      </BrowserRouter>
+      </Router>
       </I18nProvider>
     </TooltipProvider>
   </QueryClientProvider>

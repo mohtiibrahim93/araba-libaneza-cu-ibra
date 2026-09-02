@@ -136,7 +136,7 @@ function levelRoutes(): Route[] {
     .filter((r): r is Route => r !== null);
 }
 
-function allRoutes(): Route[] {
+export function allRoutes(): Route[] {
   // Blog articles: RO title/description straight from the shared registry.
   const blog: Route[] = BLOG_POSTS.map((p) => ({
     path: `/blog/${p.slug}`,
