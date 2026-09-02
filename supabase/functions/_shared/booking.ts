@@ -289,3 +289,92 @@ export function generateSlotsForDate(
   }
   return out;
 }
+export interface GCalDiagnostics {
+  /** Both connector secrets present in the function environment. */
+  keys: { lovable: boolean; googleCalendar: boolean };
+  /** Live read probe: a freeBusy call against the primary calendar. */
+  read: { ok: boolean; status: number | null; detail: string | null };
+  /** Live write probe: create then delete a throwaway event. Only when asked. */
+  write: { ok: boolean; status: number | null; detail: string | null } | null;
+}
+
+/**
+ * Answers "does Google Calendar sync actually work right now?" without making
+ * anyone book a lesson to find out. Everything the booking functions do
+ * silently and best-effort, this does loudly and reports back.
+ */
+export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+  const keys = { lovable: !!lovableKey, googleCalendar: !!gcalKey };
+
+  if (!lovableKey || !gcalKey) {
+    const detail =
+      "Secretele conectorului lipsesc: " +
+      [!lovableKey ? "LOVABLE_API_KEY" : null, !gcalKey ? "GOOGLE_CALENDAR_API_KEY" : null]
+        .filter(Boolean)
+        .join(" și ");
+    return { keys, read: { ok: false, status: null, detail }, write: null };
+  }
+
+  const headers = {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": gcalKey,
+    "Content-Type": "application/json",
+  };
+  const trim = (s: string) => (s.length > 400 ? `${s.slice(0, 400)}…` : s);
+
+  const now = Date.now();
+  let read: GCalDiagnostics["read"];
+  try {
+    const res = await fetch(`${GCAL_GATEWAY}/freeBusy`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        timeMin: new Date(now).toISOString(),
+        timeMax: new Date(now + 3_600_000).toISOString(),
+        timeZone: TZ,
+        items: [{ id: "primary" }],
+      }),
+    });
+    const text = await res.text();
+    read = res.ok
+      ? { ok: true, status: res.status, detail: null }
+      : { ok: false, status: res.status, detail: trim(text) };
+  } catch (err) {
+    read = { ok: false, status: null, detail: trim(String(err)) };
+  }
+
+  if (!probeWrite || !read.ok) return { keys, read, write: null };
+
+  // A read can succeed on a token that has no write scope, so prove the write
+  // path too: create an event far in the future, then delete it again.
+  let write: GCalDiagnostics["write"];
+  const startISO = new Date(now + 400 * 86_400_000).toISOString();
+  const endISO = new Date(now + 400 * 86_400_000 + 900_000).toISOString();
+  try {
+    const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=none`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        summary: "Test conexiune — se șterge automat",
+        description: "Verificare automată a sincronizării cu Google Calendar.",
+        start: { dateTime: startISO, timeZone: TZ },
+        end: { dateTime: endISO, timeZone: TZ },
+        reminders: { useDefault: false },
+      }),
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      write = { ok: false, status: res.status, detail: trim(text) };
+    } else {
+      const id = (JSON.parse(text) as { id?: string })?.id;
+      if (id) await gcalDeleteEvent(id);
+      write = { ok: true, status: res.status, detail: id ? null : "Evenimentul creat nu a returnat un id." };
+    }
+  } catch (err) {
+    write = { ok: false, status: null, detail: trim(String(err)) };
+  }
+
+  return { keys, read, write };
+}

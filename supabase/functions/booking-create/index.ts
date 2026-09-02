@@ -234,17 +234,18 @@ Deno.serve(async (req) => {
       withMeet: false,
     });
 
-    if (gcal.ok && gcal.id) {
-      await supabase
-        .from("bookings")
-        .update({ google_event_id: gcal.id, meet_link: onlineLink })
-        .eq("id", inserted.id);
-    } else if (onlineLink) {
-      await supabase
-        .from("bookings")
-        .update({ meet_link: onlineLink })
-        .eq("id", inserted.id);
-    }
+    // Record the sync outcome on the row. A booking that never reached the
+    // calendar used to be indistinguishable from one that did — both just had
+    // google_event_id = NULL — so the admin panel and the health check now read
+    // google_sync_error to tell them apart.
+    await supabase
+      .from("bookings")
+      .update({
+        google_event_id: gcal.ok && gcal.id ? gcal.id : null,
+        google_sync_error: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
+        meet_link: onlineLink,
+      })
+      .eq("id", inserted.id);
 
     // Send confirmation email (best-effort, async)
     sendBookingEmail(
@@ -273,6 +274,9 @@ Deno.serve(async (req) => {
         format: format === "online" ? "online" : "fizic",
         whenLabel: fmtLocal(startISO, language),
         notes: body.notes ?? null,
+        // The owner's own copy is the only place they would notice that the
+        // lesson is not in their Google Calendar, so say so explicitly.
+        calendarSyncError: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
       },
       `admin-booking-new-${inserted.id}`,
     );

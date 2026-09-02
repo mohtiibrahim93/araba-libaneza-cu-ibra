@@ -46,6 +46,7 @@ import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
+import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
@@ -763,6 +764,7 @@ const Admin = () => {
 
           {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
           <TabsContent value="bookings" className="mt-5 space-y-6">
+            <CalendarHealth />
             <AvailabilityAdmin />
             <BookingsAdmin />
           </TabsContent>
