@@ -1,0 +1,411 @@
+# Disavow file — centruldearabalibaneza.com
+#
+# Upload at https://search.google.com/search-console/disavow-links
+# Format: one "domain:" line per site. Lines starting with # are ignored by
+# Google and are notes for us.
+#
+# Source: Ahrefs referring-domains export (Registru1.xlsx, 361 distinct
+# referring domains, 712 rows labelled SPAM, 336 of them nofollow).
+#
+# What this is: an automated SEO-spam link flood, not links anyone earned or
+# bought. The giveaway is the TLD spread —
+# .store x188, .shop x128, .com x21, .site x8, .agency x5, .website x3, .org x2, .online x2 —
+# and domain names that are keyword salad ("powerful-link-building-hub-...",
+# "official-anchor-text-...-system"). The same pages link to thousands of
+# unrelated sites.
+#
+# READ BEFORE UPLOADING. Google's own guidance is to disavow only when you have
+# a manual action, or expect one. SpamBrain normally ignores this kind of link
+# without being told, and a disavow file cannot be "tested" — a mistake here
+# removes real links too. Upload this if a manual action appears in Search
+# Console, or if rankings drop in a way that tracks this flood. Otherwise keep
+# it on file and re-export monthly to see whether it is still growing.
+#
+# Not included: the 19 follow links from the separate review CSV. Those sit on
+# ordinary-looking domains rather than the .shop/.store flood, and that review
+# said monitor rather than disavow. They are listed at the bottom, commented
+# out, so they can be enabled deliberately rather than by accident.
+
+domain:123webshop.shop
+domain:activeshop.shop
+domain:advanced-keyword-group-seoexpress.store
+domain:advanced-link-building-group-seoexpress.store
+domain:advanced-ranking-seoexpress-specialists.store
+domain:advanced-saas-seo-directory-outrank-hq.store
+domain:advanced-search-seoexpress-pros.store
+domain:advanced-traffic-surge-and-keyword-rank-bureau.store
+domain:agile-footer-link-system-link-baron.store
+domain:anchor-text-link-juice-and-high-da-depot.store
+domain:apex-outrank-hq-organic-platform.store
+domain:araba-libaneza-cu-ibra.lovable.app
+domain:archive-hu.com
+domain:authentic-seoexpress-keyword-firm.store
+domain:authentic-tier-1-partners-seoexpress.store
+domain:authority-do-follow-and-do-follow-network.store
+domain:authority-services-for-link-juice-and-contextual-link.store
+domain:backlink-pro-anchor-text-and-click-through-hub.store
+domain:backlink-pro-and-backlink-pro-powerful-agency.store
+domain:backlink-pro-and-traffic-surge-prime-experts.store
+domain:backlink-pro-click-through-and-link-building-depot.store
+domain:backlinkbuilders.shop
+domain:backlinkengine.shop
+domain:backlinkinsights.shop
+domain:backlinkmasters.shop
+domain:backlinkorbit.shop
+domain:backlinkshop.site
+domain:backlinksplace.site
+domain:best-keyword-seoexpress-portal.store
+domain:best-seoexpress-off-page-network.store
+domain:bestnz-poker-casinoslot.com
+domain:betulcrime.com
+domain:bisprofit.com
+domain:blogerreviewers.com
+domain:bold-contextual-rank-forge-consultants.store
+domain:bold-outrank-hq-serp-workshop.store
+domain:boost-instant.website
+domain:bramo.shop
+domain:brilliant-edu-link-firm-outrank-hq.store
+domain:canadapsilocybin.com
+domain:cartermanageus.com
+domain:certified-link-building-seoexpress.store
+domain:certified-rank-forge-anchor-text-lab.store
+domain:certified-seoexpress-organic-services.store
+domain:cgpa2percentag.com
+domain:cinvo.shop
+domain:click-through-link-equity-and-authority-link-services.store
+domain:cluster-rank-forge-academy.store
+domain:content-marketing-index-rate-and-authority-link-solutions.store
+domain:content-marketing-search-rank-and-search-rank-syndicate.store
+domain:contextual-link-baron-services.store
+domain:coruzants.com
+domain:crawl-budget-and-page-rank-expert-partners.store
+domain:crawl-budget-organic-traffic-and-contextual-link-central.store
+domain:ctr-agency-rank-forge.store
+domain:digitalchatni.com
+domain:domainrankacademy.shop
+domain:domainrankexperts.shop
+domain:domainrankpartners.shop
+domain:domainrankprovider.shop
+domain:domainrankresults.shop
+domain:domainrankteam.shop
+domain:dr-90-rank-forge-department.store
+domain:dupurgeniefr.com
+domain:dynamic-cooperative-link-baron-saas-seo.store
+domain:dynamic-niche-edit-and-contextual-link-systems.store
+domain:dynamic-systems-for-serp-boost-and-contextual-link.store
+domain:editorial-link-outreach-pro-and-high-da-systems.store
+domain:ekenkoshop.shop
+domain:elite-domain-seoexpress-consultants.store
+domain:elite-editorial-outrank-hq.store
+domain:elite-high-da-center-seoexpress.store
+domain:elite-network-for-domain-rating-and-digital-pr.store
+domain:elite-seoexpress-link-building-team.store
+domain:epic-link-baron-hub.store
+domain:epic-webpage-rank-forge-academy.store
+domain:exclusive-keyword-team-seoexpress.store
+domain:exclusive-link-baron-search-syndicate.store
+domain:exclusive-traffic-experts-seoexpress.store
+domain:exclusive-webpage-center-seoexpress.store
+domain:expert-domain-seoexpress-specialists.store
+domain:expert-organic-seoexpress.store
+domain:expert-partners-for-niche-edit-and-authority-link.store
+domain:expert-search-seoexpress-team.store
+domain:expert-seoexpress-authority-directory.store
+domain:expert-systems-for-traffic-surge-and-digital-pr.store
+domain:fashionclothingnews.com
+domain:fastlifesite.com
+domain:first-class-seoexpress-keyword-exchange.store
+domain:fiverr-cost-effective-seo.site
+domain:flagship-digital-pr-and-editorial-link-central.store
+domain:flagship-hub-for-link-velocity-and-page-rank.store
+domain:flagship-niche-edit-and-link-building-services.store
+domain:forum-provider-link-baron.store
+domain:geko-backlinks.site
+domain:global-authority-seoexpress-group.store
+domain:global-backlink-pro-and-click-through-systems.store
+domain:global-digital-seoexpress-portal.store
+domain:golden-link-building-rank-forge.store
+domain:googleseoauthority.shop
+domain:googleseocompany.shop
+domain:googleseocraft.shop
+domain:googleseoexperts.shop
+domain:googleseopoint.shop
+domain:grand-link-baron-league.store
+domain:grand-rank-forge-topical-desk.store
+domain:guest-posting-and-link-equity-strategic-syndicate.store
+domain:guestpostlinks.shop
+domain:header-link-portal-link-baron.store
+domain:high-crew-link-baron-intent.store
+domain:high-da-and-crawl-budget-strategic-exchange.store
+domain:high-da-do-follow-and-niche-edit-syndicate.store
+domain:high-outrank-hq-dofollow-platform.store
+domain:high-quality-backlinks.site
+domain:high-seoexpress-organic-team.store
+domain:high-traffic-backlinks.site
+domain:highseo.shop
+domain:highseoranking.shop
+domain:homesforsaleoldgreenwichct.com
+domain:instant-webpage-seoexpress-consultants.store
+domain:kawaiishop.shop
+domain:keyword-rank-and-domain-rating-leading-hub.store
+domain:keyword-rank-backlink-pro-and-keyword-rank-depot.store
+domain:keyword-rank-keyword-rank-and-digital-pr-partners.store
+domain:kkinsider.com
+domain:kmoshops.shop
+domain:leading-click-through-and-serp-boost-consortium.store
+domain:leading-hub-for-outreach-pro-and-link-juice.store
+domain:lemvi.shop
+domain:leonlinks.org
+domain:link-baron-agile-on-page-directory.store
+domain:link-baron-center-backlink.store
+domain:link-baron-da-pa-luxury-directory.store
+domain:link-baron-grand-cluster-works.store
+domain:link-baron-innovative-press-release-house.store
+domain:link-baron-link-juice-optimal-marketplace.store
+domain:link-baron-luxury-anchor-text-partners.store
+domain:link-baron-optimal-organic-collective.store
+domain:link-baron-pro-off-page.store
+domain:link-baron-pro-press-release.store
+domain:link-baron-syndicate-equity.store
+domain:link-baron-wiki-leading-system.store
+domain:link-building-and-backlink-pro-leading-experts.store
+domain:link-building-and-digital-pr-trusted-partners.store
+domain:link-building-and-ranking-signal-master-partners.store
+domain:link-building-contextual-link-and-anchor-text-network.store
+domain:link-juice-traffic-surge-and-traffic-surge-collective.store
+domain:link-velocity-tier-one-and-editorial-link-consortium.store
+domain:linkbooster.website
+domain:linkcollective.shop
+domain:linkgrowthauthority.shop
+domain:linkgrowthinsights.shop
+domain:linkly.agency
+domain:linkseoauthority.shop
+domain:linkseocollective.shop
+domain:linkspro.agency
+domain:lixil-reformshop.shop
+domain:luxury-niche-edit-seoexpress-services.store
+domain:luxury-outrank-hq-crew.store
+domain:luxury-seoexpress-tier-1-house.store
+domain:master-digital-studio-seoexpress.store
+domain:master-off-page-seoexpress-directory.store
+domain:master-rank-forge-pbn-league.store
+domain:master-seoexpress-guest-post-partners.store
+domain:master-seoexpress-search-agency.store
+domain:master-white-hat-and-do-follow-solutions.store
+domain:modern-guest-post-consultants-seoexpress.store
+domain:modern-link-baron-marketing-portal.store
+domain:modern-organic-group-seoexpress.store
+domain:modern-studio-outrank-hq-blogger.store
+domain:mysky-shop.shop
+domain:netranko.shop
+domain:nexabacklinks.shop
+domain:official-anchor-text-seoexpress-system.store
+domain:official-center-outrank-hq-search.store
+domain:official-on-page-link-baron-division.store
+domain:official-saas-seo-outrank-hq-collective.store
+domain:official-seoexpress-white-hat-team.store
+domain:optimal-website-outrank-hq.store
+domain:organic-seo-authority-directory.review-link-system-link-baron.store
+domain:organic-traffic-and-outreach-pro-authority-services.store
+domain:organic-traffic-ranking-signal-and-outreach-pro-bureau.store
+domain:organicrankdirect.shop
+domain:organicrankexpress.shop
+domain:organicranknetwork.shop
+domain:organicrankservice.shop
+domain:outrank-hq-anchor-text-center.store
+domain:outrank-hq-dr-90-paramount-system.store
+domain:outrank-hq-engine-dofollow.store
+domain:outrank-hq-exclusive-crawl-engine.store
+domain:outrank-hq-legendary-white-hat.store
+domain:outrank-hq-master-anchor-text.store
+domain:outrank-hq-modern-wiki-branch.store
+domain:outrank-hq-platinum-high-da-exchange.store
+domain:outrank-hq-prime-blogger.store
+domain:outrank-hq-spam-score-dynamic-firm.store
+domain:outrank-hq-ultimate-ranking.store
+domain:outreach-pro-and-index-rate-expert-syndicate.store
+domain:pageseoexpress.shop
+domain:pageseomasters.shop
+domain:pageseopartners.shop
+domain:pageseoresults.shop
+domain:pageseoservice.shop
+domain:paramount-collective-outrank-hq-dr-90.store
+domain:plavo.shop
+domain:plrdownloadshub.com
+domain:powerful-link-building-hub-seoexpress.store
+domain:powerful-link-velocity-and-tier-one-exchange.store
+domain:premium-backlinks-usa.shop
+domain:premium-seoexpress-digital-solutions.store
+domain:premium-seoexpress-outreach-provider.store
+domain:premium-solutions-for-serp-boost-and-content-marketing.store
+domain:premium-studio-for-white-hat-and-index-rate.store
+domain:premium-tier-1-company-seoexpress.store
+domain:prime-depot-for-digital-pr-and-ranking-signal.store
+domain:prime-high-da-seoexpress.store
+domain:prime-white-hat-seoexpress-network.store
+domain:primenewsartical.com
+domain:primeseo.xyz
+domain:professional-seoexpress-high-da-partners.store
+domain:professional-seoexpress-marketing-studio.store
+domain:proven-backlink-pro-and-outreach-pro-partners.store
+domain:proven-consortium-for-ranking-signal-and-keyword-rank.store
+domain:proven-network-for-ranking-signal-and-keyword-rank.store
+domain:proven-serp-boost-and-outreach-pro-services.store
+domain:proven-services-for-serp-boost-and-link-velocity.store
+domain:proven-studio-for-traffic-surge-and-digital-pr.store
+domain:quotesblom.com
+domain:rankbundle.shop
+domain:rankchest.shop
+domain:rankcollective.shop
+domain:rankdeals.shop
+domain:rankfinds.shop
+domain:rankgoods.shop
+domain:rankgrowthboost.shop
+domain:rankgrowthgroup.shop
+domain:rankgrowthinsights.shop
+domain:rankgrowthmasters.shop
+domain:rankgrowthservice.shop
+domain:rankgrowthsolutions.shop
+domain:ranking-signal-and-authority-link-authority-alliance.store
+domain:ranking-signal-and-link-velocity-trusted-central.store
+domain:rankinghighseo.shop
+domain:rankingseohigh.shop
+domain:rankio.agency
+domain:rankoutlet.shop
+domain:rankpicks.shop
+domain:rankseoalliance.shop
+domain:rankseocollective.shop
+domain:rankseohub.shop
+domain:rankseojunction.shop
+domain:rankseomasters.shop
+domain:rankseoservice.shop
+domain:rankseotoolkit.shop
+domain:rankwagon.shop
+domain:rent-a-shop.shop
+domain:rglinks.org
+domain:sahammurah.com
+domain:searchrankbuilders.shop
+domain:searchrankcentral.shop
+domain:searchrankexperts.shop
+domain:searchrankinsights.shop
+domain:seo-growth-authority-boost-hub.shop
+domain:seo-growth-optimization-hub.shop
+domain:seo-high-authority-backlinks.epic-syndicate-link-baron-keyword.store
+domain:seo-high-ranking.shop
+domain:seobazaar.shop
+domain:seobits.shop
+domain:seoboostexchange.shop
+domain:seoboostresults.shop
+domain:seobox.shop
+domain:seodaro.com
+domain:seodepot.shop
+domain:seoexpress-anchor-text-experts.store
+domain:seoexpress-authority-portal.store
+domain:seoexpress-best-outreach-experts.store
+domain:seoexpress-best-seo-firm.store
+domain:seoexpress-content-experts.store
+domain:seoexpress-dr-90-group.store
+domain:seoexpress-keyword-network.store
+domain:seoexpress-marketing-exchange.store
+domain:seoexpress-master-digital-portal.store
+domain:seoexpress-niche-edit-group.store
+domain:seoexpress-off-page-solutions.store
+domain:seoexpress-organic-partners.store
+domain:seoexpress-pbn-experts.store
+domain:seoexpress-professional-white-hat-team.store
+domain:seoexpress-superior-on-page-house.store
+domain:seoexpress-verified-website-system.store
+domain:seoexpress-website-experts.store
+domain:seoexpress-white-hat-group.store
+domain:seoexpress.online
+domain:seoexpress.shop
+domain:seoexpress.site
+domain:seoexpress.space
+domain:seoexpress.website
+domain:seogeko.shop
+domain:seogo.shop
+domain:seogrow.agency
+domain:seogrow.pro
+domain:seogrowthalliance.shop
+domain:seogrowthengine.shop
+domain:seogrowthpipeline.shop
+domain:seogrowthprovider.shop
+domain:seogrowthstudio.shop
+domain:seokart.shop
+domain:seolinkcentral.shop
+domain:seolinkexpress.shop
+domain:seolinkkart.shop
+domain:seolinktoolkit.shop
+domain:seonix.agency
+domain:seooutlet.shop
+domain:seopxl-organic-boost-lab.shop
+domain:seopxl-performance-authority-engine.shop
+domain:seopxl-ranking-boost-lab.shop
+domain:seopxl-traffic-growth-lab.shop
+domain:seorankinghigh.shop
+domain:seorankoo.site
+domain:serpcollective.shop
+domain:sideenhancer.online
+domain:simplywebshop.shop
+domain:siterankbuilders.shop
+domain:siterankexpress.shop
+domain:siterankprovider.shop
+domain:siterankservice.shop
+domain:siteranktoolkit.shop
+domain:smart-indexer-seoexpress.store
+domain:smart-marketing-seoexpress.store
+domain:supreme-anchor-text-provider-seoexpress.store
+domain:supreme-dofollow-seoexpress-hub.store
+domain:supreme-solutions-for-link-building-and-search-rank.store
+domain:thebacklinks.shop
+domain:theguestpost.shop
+domain:theguestposts.shop
+domain:thehighrankseo.shop
+domain:thehighseo.shop
+domain:thehighseoranking.shop
+domain:therankboostseo.shop
+domain:therankinghighseo.shop
+domain:therankingseohigh.shop
+domain:theseohighranking.shop
+domain:theseorankinghigh.shop
+domain:tier-one-and-domain-rating-trusted-exchange.store
+domain:tier-one-and-link-velocity-global-solutions.store
+domain:toprankacademy.shop
+domain:toprankalliance.shop
+domain:toprankmasters.shop
+domain:toprankprovider.shop
+domain:toprankresults.shop
+domain:traffic-surge-and-keyword-rank-premium-alliance.store
+domain:traffic-surge-ranking-signal-and-crawl-budget-partners.store
+domain:trusted-agency-for-niche-edit-and-link-building.store
+domain:trusted-off-page-pros-seoexpress.store
+domain:trusted-organic-seoexpress-house.store
+domain:ultimate-depot-for-search-rank-and-content-marketing.store
+domain:ultimate-ranking-signal-and-link-velocity-bureau.store
+domain:verified-digital-firm-seoexpress.store
+domain:verified-seoexpress-search-directory.store
+domain:webrankinsights.shop
+domain:wecelebrities.com
+domain:white-hat-and-link-building-prime-marketplace.store
+
+# ---------------------------------------------------------------
+# Monitor only — NOT disavowed. Uncomment individually if one of these
+# starts showing up as a real problem.
+# domain:archive-hu.com
+# domain:bazerdaily.com
+# domain:bestnz-poker-casinoslot.com
+# domain:betulcrime.com
+# domain:betwinnermirror.com
+# domain:clifflisting.com
+# domain:cmocheatsheets.com
+# domain:fashionclothingnews.com
+# domain:fittyfoody.com
+# domain:forbesstories.com
+# domain:ggmap.us.com
+# domain:homesforsaleoldgreenwichct.com
+# domain:hostprinter.com
+# domain:quotesblom.com
+# domain:thedocmag.com
+# domain:theforbestimes.com
+# domain:ufabettererm4.com
+# domain:uncledspizza.com
