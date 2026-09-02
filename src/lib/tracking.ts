@@ -111,6 +111,19 @@ export function initContactClickTracking() {
       trackEvent("whatsapp_click", common);
     } else if (href.startsWith("tel:")) {
       trackEvent("phone_click", common);
+    } else if (href.startsWith("mailto:")) {
+      trackEvent("email_click", common);
+    } else {
+      // Internal CTAs toward the commercial funnel. Path-based so every
+      // entry point counts without touching each component.
+      const path = anchor.getAttribute("href") || "";
+      if (/^\/(trial|inscriere|checkout|booking)(\/|$|\?)/.test(path)) {
+        trackEvent("cta_click", {
+          ...common,
+          cta_target: path.split(/[?#]/)[0],
+        });
+      }
     }
   });
 }
+
