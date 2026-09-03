@@ -1,7 +1,7 @@
 """Full-site scan of the built output: duplicates, broken internal links,
 orphans, thin pages, head hygiene."""
 import re, os, itertools
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 DIST, BASE = "dist", "https://centruldearabalibaneza.com"
 
@@ -102,12 +102,23 @@ for v, rs in sorted(d.items()):
 if not found:
     print("  none")
 
-section("NEAR-DUPLICATE BODIES (Jaccard 5-shingle > 0.55)")
-# Only indexable pages matter here. Two short noindex pages look similar
-# simply because the shared nav and footer dominate their word count.
+section("NEAR-DUPLICATE BODIES (Jaccard 5-shingle > 0.55, chrome excluded)")
+# Only indexable pages matter here, and the comparison has to run on page
+# content rather than whole-page text. Navigation, footer and shared forms are
+# repeated on every page, so on short pages that boilerplate dominates the word
+# count and any two of them score as near-duplicates. Measured naively,
+# /cursuri/grup/b1 and /b2 came out at 0.56; with chrome removed they are 0.21,
+# which is simply two CEFR levels of the same course. Google discounts
+# boilerplate the same way, so counting it produced false positives.
 sh = {r: {" ".join(p["words"][i:i+5]) for i in range(max(0, p["nwords"]-4))}
       for r, p in pages.items()
       if p["nwords"] >= 120 and not p["noindex"] and not alias(r)}
+if len(sh) > 4:
+    seen = Counter(g for gs in sh.values() for g in gs)
+    # A fragment on a third or more of the pages is chrome, not content.
+    chrome = {g for g, n in seen.items() if n >= max(3, len(sh) // 3)}
+    sh = {r: gs - chrome for r, gs in sh.items()}
+    print(f"  (excluded {len(chrome)} boilerplate fragments shared across pages)")
 found = False
 for a, b in itertools.combinations(sorted(sh), 2):
     if not sh[a] or not sh[b]:
