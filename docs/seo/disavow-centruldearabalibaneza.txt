@@ -4,7 +4,13 @@
 # Format: one "domain:" line per site. Lines starting with # are ignored by
 # Google and are notes for us.
 #
-# Source: Ahrefs referring-domains export (Registru1.xlsx, 361 distinct
+# Sources: an Ahrefs referring-domains export, plus 5 PBN/paid-link
+# domains from the earlier Semrush audit (2026-07) that used to live in
+# public/disavow.txt. That copy was being served at /disavow.txt on the live
+# site, which published the list to anyone who asked; it has been removed and
+# folded in here.
+#
+# Ahrefs export (Registru1.xlsx, 361 distinct
 # referring domains, 712 rows labelled SPAM, 336 of them nofollow).
 #
 # What this is: an automated SEO-spam link flood, not links anyone earned or
@@ -27,6 +33,7 @@
 # out, so they can be enabled deliberately rather than by accident.
 
 domain:123webshop.shop
+domain:8coint.com
 domain:activeshop.shop
 domain:advanced-keyword-group-seoexpress.store
 domain:advanced-link-building-group-seoexpress.store
@@ -35,10 +42,12 @@ domain:advanced-saas-seo-directory-outrank-hq.store
 domain:advanced-search-seoexpress-pros.store
 domain:advanced-traffic-surge-and-keyword-rank-bureau.store
 domain:agile-footer-link-system-link-baron.store
+domain:analyticshaven.top
 domain:anchor-text-link-juice-and-high-da-depot.store
 domain:apex-outrank-hq-organic-platform.store
 domain:araba-libaneza-cu-ibra.lovable.app
 domain:archive-hu.com
+domain:atomizelink.icu
 domain:authentic-seoexpress-keyword-firm.store
 domain:authentic-tier-1-partners-seoexpress.store
 domain:authority-do-follow-and-do-follow-network.store
@@ -71,6 +80,7 @@ domain:certified-link-building-seoexpress.store
 domain:certified-rank-forge-anchor-text-lab.store
 domain:certified-seoexpress-organic-services.store
 domain:cgpa2percentag.com
+domain:cindylaup.com
 domain:cinvo.shop
 domain:click-through-link-equity-and-authority-link-services.store
 domain:cluster-rank-forge-academy.store
@@ -370,6 +380,7 @@ domain:theseohighranking.shop
 domain:theseorankinghigh.shop
 domain:tier-one-and-domain-rating-trusted-exchange.store
 domain:tier-one-and-link-velocity-global-solutions.store
+domain:toplikevideo.com
 domain:toprankacademy.shop
 domain:toprankalliance.shop
 domain:toprankmasters.shop
