@@ -98,7 +98,7 @@ const CursGrupLevel = () => {
   const metaDesc = isA1
     ? (lang === "en"
         ? "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial."
-        : "Curs de arabă pentru începători (A1) în araba libaneză — fizic în București (Strada Icoanei 80) sau online. Vorbești de la prima lecție. Două sesiuni de 90 min/săpt. Probă gratuită.")
+        : "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.")
     : curriculum.objective.slice(0, 155);
 
   const breadcrumbJsonLd = {
