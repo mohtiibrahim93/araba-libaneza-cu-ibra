@@ -63,8 +63,8 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/cursuri-araba",
-    "meta_title": "Cursuri Arabă Libaneză A1–C2 | București și Online",
-    "meta_description": "Cursuri de arabă libaneză A1–C2 în București și online: grupe, lecții private 1:1 și cursuri pentru copii, toate cu profesor nativ. Probă gratuită.",
+    "meta_title": "Cursuri de Arabă Libaneză cu Profesor Nativ | A1–C2",
+    "meta_description": "Alege cursul de arabă libaneză potrivit: grupe A1–C2, lecții 1:1 sau cursuri pentru copii, în București și online. Începi cu o probă gratuită.",
     "h1": "Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile",
     "lead": "Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
   },
