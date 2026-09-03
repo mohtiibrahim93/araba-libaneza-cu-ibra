@@ -89,7 +89,10 @@ const STATIC_ROUTES: Route[] = [
   { path: "/en/best-arabic-course", title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA", description: "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals." },
   { path: "/en/arabic-for-teenagers", title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online", description: "Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial." },
   { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — Libanesisch mit Muttersprachler", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
-  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private" },
+  // Retired alias, like the four below it. It was the only one without
+  // noindex, which also made it the only indexable page missing from the
+  // sitemap — an inconsistency, not a decision.
+  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private", noindex: true },
   { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
   { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București." },
   { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
@@ -477,6 +480,27 @@ export function seoPrerenderPlugin(): Plugin {
         // in there, since a one-way annotation silently emits no hreflang at all.
         try {
           const problems: string[] = [];
+
+          // Duplicate guard. Two indexable URLs sharing a title or a
+          // description are two crawl destinations competing for the same
+          // query. Retired aliases are exempt: they are noindex and carry a
+          // canonical to their replacement, so sharing its metadata is the
+          // point.
+          {
+            const live = allRoutes().filter((r) => !r.noindex && !r.canonical);
+            for (const field of ["title", "description"] as const) {
+              const seen = new Map<string, string>();
+              for (const r of live) {
+                const prev = seen.get(r[field]);
+                if (prev) {
+                  problems.push(
+                    `duplicate ${field}: ${prev} and ${r.path} both use "${r[field].slice(0, 60)}…"`,
+                  );
+                }
+                seen.set(r[field], r.path);
+              }
+            }
+          }
 
           // Length guard. Google truncates past roughly these limits, and the
           // registry being within them is not enough on its own — the head a

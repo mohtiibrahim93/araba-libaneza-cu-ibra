@@ -183,7 +183,11 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/araba-online" element={<SeoArabaOnline />} />
             {/* Legacy alias: keep a distinct runtime title while canonicalising
                 to the higher-volume surviving URL. */}
-            <Route path="/cursuri-limba-araba" element={<SeoCursuriAraba legacy />} />
+            {/* Legacy alias. It used to render a byte-identical copy of
+                /cursuri-araba — an audit put the two at Jaccard 1.00 — which is
+                a second crawlable destination for the same content. It now
+                redirects like every other retired URL on the site. */}
+            <Route path="/cursuri-limba-araba" element={<Navigate to="/cursuri-araba" replace />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
             <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
