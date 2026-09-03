@@ -53,6 +53,25 @@ const BookingInner = () => {
               <p className="text-sm text-muted-foreground">{en ? "Group or private — for adults, teens or kids, online or in Bucharest." : "Grup sau privat — pentru adulți, tineri sau copii, online sau în București."}</p>
             </Link>
           </div>
+
+          {/* Below the two choices: the page was 39 words of visible text,
+              which is thin enough that Google can decline to index it. Every
+              fact here already appears on /trial or comes from
+              booking_event_types. */}
+          <section className="mt-section space-y-8 text-left">
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingWhichH2}</h2>
+              <p className="text-muted-foreground leading-relaxed">{t.bookingLandingWhichP}</p>
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingWhereH2}</h2>
+              <p className="text-muted-foreground leading-relaxed">{t.bookingLandingWhereP}</p>
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingWhenH2}</h2>
+              <p className="text-muted-foreground leading-relaxed">{t.bookingLandingWhenP}</p>
+            </div>
+          </section>
         </div>
       </main>
     );

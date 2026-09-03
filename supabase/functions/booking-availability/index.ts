@@ -9,6 +9,7 @@ import {
   utcToZonedParts,
   weekdayInTz,
   zonedToUtc,
+  physicalTrialAllowed,
 } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
@@ -26,6 +27,9 @@ Deno.serve(async (req) => {
     const slug = url.searchParams.get("event_type") || "trial";
     const dateFrom = url.searchParams.get("date_from"); // YYYY-MM-DD (local tz)
     const dateTo = url.searchParams.get("date_to"); // YYYY-MM-DD inclusive
+    // The scheduler re-asks whenever the visitor switches format, because an
+    // in-person trial is only offered at weekends.
+    const format = url.searchParams.get("format") === "physical" ? "physical" : "online";
     if (!dateFrom || !dateTo) return json({ error: "date_from and date_to required" }, 400);
 
     const supabase = createClient(
@@ -81,7 +85,8 @@ Deno.serve(async (req) => {
     const maxAdvanceMs = (et.max_advance_days ?? 30) * 86_400_000;
     let filtered = candidates.filter((iso) => {
       const t = Date.parse(iso);
-      return t >= now + minNoticeMs && t <= now + maxAdvanceMs;
+      if (t < now + minNoticeMs || t > now + maxAdvanceMs) return false;
+      return physicalTrialAllowed(et.slug, format, iso);
     });
 
     if (filtered.length === 0) {

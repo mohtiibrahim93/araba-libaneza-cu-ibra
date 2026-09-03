@@ -155,7 +155,8 @@ const NativeScheduler = ({
       try {
         const url =
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-availability` +
-          `?event_type=${eventType}&date_from=${dateRange.from}&date_to=${dateRange.to}`;
+          `?event_type=${eventType}&date_from=${dateRange.from}&date_to=${dateRange.to}` +
+          `&format=${format}`;
         const res = await fetch(url, {
           headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
         });
@@ -181,7 +182,9 @@ const NativeScheduler = ({
         if (!opts?.silent) setLoading(false);
       }
     },
-    [eventType, dateRange.from, dateRange.to, t.schedulerSlotTaken],
+    // `format` is in here on purpose: an in-person trial is offered at
+    // weekends only, so switching format changes which slots exist.
+    [eventType, dateRange.from, dateRange.to, format, t.schedulerSlotTaken],
   );
 
   useEffect(() => {
@@ -593,6 +596,13 @@ const NativeScheduler = ({
             <option value="online">{t.bookingFormatOnline}</option>
             <option value="physical">{t.bookingFormatPhysical}</option>
           </select>
+          {eventType === "trial" && format === "physical" && (
+            // Without this the weekday slots simply disappear when you switch,
+            // which reads as a bug rather than a rule.
+            <p className="text-xs text-muted-foreground sm:col-span-2">
+              {t.schedulerPhysicalTrialWeekend}
+            </p>
+          )}
         </div>
         <textarea
           value={notes}

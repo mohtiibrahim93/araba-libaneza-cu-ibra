@@ -5,6 +5,7 @@ import {
   gcalCreateEvent,
   gcalFreebusy,
   overlaps,
+  physicalTrialAllowed,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
@@ -157,6 +158,17 @@ Deno.serve(async (req) => {
     }
 
     const format = body.format ?? "online";
+    // Enforced here too: booking-availability never offers these slots, but
+    // this endpoint is unauthenticated and a client can post any start_at.
+    if (!physicalTrialAllowed(et.slug, format, startISO)) {
+      return json(
+        {
+          error: "Proba fizică se poate programa doar sâmbăta sau duminica.",
+          code: "physical_trial_weekend_only",
+        },
+        409,
+      );
+    }
     const language = body.language ?? "ro";
     const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? null;
     const onlineLink = format === "online" ? zoomUrl : null;

@@ -1,7 +1,16 @@
 // Shared helpers for the native booking system.
 // Timezone is fixed to Europe/Bucharest for the instructor.
 
-export const TZ = "Europe/Bucharest";
+export {
+  TZ,
+  utcToZonedParts,
+  weekdayInTz,
+  PHYSICAL_TRIAL_WEEKDAYS,
+  physicalTrialAllowed,
+} from "./schedule-rules.ts";
+// TZ is also used internally below (slot generation, GCal payloads).
+import { TZ } from "./schedule-rules.ts";
+
 export const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 export const SITE_URL = "https://centruldearabalibaneza.com";
 
@@ -48,37 +57,6 @@ export function zonedToUtc(
   const asLocal = Date.UTC(get("year"), get("month") - 1, get("day"), h, get("minute"));
   const offset = guess - asLocal; // ms diff between intended local and what UTC produced
   return new Date(guess + offset);
-}
-
-/** Returns Y-M-D parts of a UTC Date as observed in tz. */
-export function utcToZonedParts(d: Date, tz = TZ) {
-  const fmt = new Intl.DateTimeFormat("en-US", {
-    timeZone: tz,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    weekday: "short",
-    hour12: false,
-  });
-  const parts = fmt.formatToParts(d);
-  const get = (t: string) => parts.find((p) => p.type === t)!.value;
-  return {
-    year: Number(get("year")),
-    month: Number(get("month")),
-    day: Number(get("day")),
-    hour: Number(get("hour") === "24" ? "0" : get("hour")),
-    minute: Number(get("minute")),
-    weekday: get("weekday"),
-  };
-}
-
-/** 0 = Sunday … 6 = Saturday for a UTC instant as observed in tz. */
-export function weekdayInTz(d: Date, tz = TZ): number {
-  const wd = utcToZonedParts(d, tz).weekday;
-  const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-  return map[wd] ?? 0;
 }
 
 /** Parse "HH:MM" or "HH:MM:SS" into [h, m]. */
@@ -378,3 +356,5 @@ export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics>
 
   return { keys, read, write };
 }
+
+

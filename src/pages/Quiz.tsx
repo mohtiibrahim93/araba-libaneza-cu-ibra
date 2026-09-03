@@ -31,6 +31,23 @@ const Quiz = () => {
       <Navbar />
       <main className="flex-1 pt-20">
         <FindYourTrackQuiz />
+
+        {/* Below the quiz: the page's only visible prose was the questions
+            themselves, which left it thin for a page we want indexed. */}
+        <section className="mx-auto mt-section w-full max-w-2xl space-y-8 px-gutter pb-section text-left">
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.quizWhatH2}</h2>
+            <p className="text-muted-foreground leading-relaxed">{t.quizWhatP}</p>
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.quizNotH2}</h2>
+            <p className="text-muted-foreground leading-relaxed">{t.quizNotP}</p>
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.quizAfterH2}</h2>
+            <p className="text-muted-foreground leading-relaxed">{t.quizAfterP}</p>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
