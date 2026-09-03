@@ -266,6 +266,42 @@ const TrialPage = () => {
 
           </div>
         )}
+
+        {/* Below the form on purpose: the booking flow stays the first thing a
+            visitor sees, and this explains the offer to anyone still deciding —
+            and to crawlers, for which 67 words of visible text was too thin to
+            be worth indexing. */}
+        <section className="mx-auto mt-section max-w-2xl space-y-8 text-left">
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.trialWhatH2}</h2>
+            <p className="text-muted-foreground leading-relaxed">{t.trialWhatP}</p>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.trialWhyH2}</h2>
+            <p className="text-muted-foreground leading-relaxed">{t.trialWhyP}</p>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.trialHowH2}</h2>
+            <ol className="list-decimal space-y-2 pl-5 text-muted-foreground">
+              <li>{t.trialHowLi1}</li>
+              <li>{t.trialHowLi2}</li>
+              <li>{t.trialHowLi3}</li>
+              <li>{t.trialHowLi4}</li>
+            </ol>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold text-foreground">{t.trialRulesH2}</h2>
+            <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+              <li>{t.trialRulesLi1}</li>
+              <li>{t.trialRulesLi2}</li>
+              <li>{t.trialRulesLi3}</li>
+              <li>{t.trialRulesLi4}</li>
+            </ul>
+          </div>
+        </section>
       </div>
     </main>
   );
