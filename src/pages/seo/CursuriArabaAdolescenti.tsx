@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import LandingLayout from "@/components/seo/LandingLayout";
+import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const FAQ = [
   {
@@ -23,12 +24,29 @@ const FAQ = [
     q: "Cât costă cursul de arabă pentru adolescenți?",
     a: "Aceleași prețuri ca la grupele de adulți: de la 500 lei/lună pentru grup (2 lecții de 90 min/săptămână), sau 150 lei/lecție de 60 min pentru meditații 1:1, cu reduceri la pachet. Prima lecție de probă de 30 de minute este gratuită.",
   },
+  {
+    q: "Cât de mare este grupa?",
+    a: "Între 4 și 10 cursanți. E limita peste care nu mai apucă fiecare să vorbească în fiecare lecție, iar la adolescenți asta contează mai mult decât la adulți: dacă stau o oră fără să deschidă gura, se pierd.",
+  },
+  {
+    q: "Ce vorbește copilul meu după prima lună?",
+    a: "O lună înseamnă opt lecții. Acoperă sunetele care nu există în română, sistemul arabizi, salutările și formulele de politețe, prezentarea personală, familia, naționalitățile, profesiile și posesivele. Concret: poate purta o conversație scurtă de prezentare cu o rudă din Liban, în dialect, fără să fi învățat alfabetul arab.",
+  },
+  {
+    q: "Are teme de făcut acasă?",
+    a: "Da, dar scurte și audio — ascultare și repetare, nu liste de memorat. Progresul se verifică în conversație la lecția următoare, nu prin dictare.",
+  },
+  {
+    q: "Cum știu dacă i se potrivește înainte să plătesc?",
+    a: "Prin lecția de probă gratuită de 30 de minute, online sau fizic. Nu se cere card și nu se face nicio plată la acea etapă; dacă după cele 30 de minute nu vrei să continui, nu urmează nimic.",
+  },
 ];
 
 const CursuriArabaAdolescenti = () => (
   <LandingLayout
     slug="cursuri-araba-adolescenti"
     enHref="/en/arabic-for-teenagers"
+    courseInstances={courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" })}
     title="Cursuri de arabă libaneză pentru adolescenți (11–17 ani) — București și online"
     metaTitle="Arabă Libaneză pentru Adolescenți | Curs 11–17 ani"
     description="Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită."
@@ -42,6 +60,28 @@ const CursuriArabaAdolescenti = () => (
       dialectul levantin vorbit în Liban, Siria, Iordania și Palestina — și nu de la araba standard
       din manuale, pe care nimeni nu o folosește în conversație.
     </p>
+
+    {/* Above the fold: the page ranks (466 impressions) but sat at position
+        33.5 with no clicks, and a visitor had to scroll past four sections
+        before finding the price or a way to start. Age, format, size, price and
+        the trial, answered immediately. */}
+    <div className="not-prose rounded-xl border border-border bg-muted/40 p-5 md:p-6">
+      <ul className="space-y-1.5 text-sm md:text-base">
+        <li><strong>Vârsta:</strong> 11–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
+        <li><strong>Format:</strong> fizic în București, Strada Icoanei 80, sau online pe Zoom</li>
+        <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici de 4–10 cursanți</li>
+        <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție de 60 min</li>
+        <li><strong>Nivel de start:</strong> de la zero, fără alfabet arab — se începe oral, cu arabizi</li>
+      </ul>
+      <div className="mt-5">
+        <Link
+          to="/trial"
+          className="inline-block rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
+        >
+          Rezervă lecția de probă gratuită (30 min)
+        </Link>
+      </div>
+    </div>
 
     <h2>Pentru cine este cursul</h2>
     <ul>
@@ -102,6 +142,37 @@ const CursuriArabaAdolescenti = () => (
       <li><strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90 min/săptămână), cu 10% reducere la plata integrală a nivelului.</li>
       <li><strong>Meditații 1:1:</strong> 150 lei/lecție de 60 min, cu −5% de la 5 lecții, −10% de la 10 și −20% de la 20.</li>
       <li><strong>Lecție de probă (30 min):</strong> gratuită, cu părintele prezent dacă dorește.</li>
+    </ul>
+
+    <h2>Ce vorbește adolescentul după primele 4 săptămâni</h2>
+    <p>
+      Patru săptămâni înseamnă opt lecții. Nu e o promisiune de fluență — e ce acoperă efectiv
+      primele opt lecții din programa A1, în ordinea în care le predăm:
+    </p>
+    <ul>
+      <li>Sunetele care nu există în română (ح، ع، ط، غ، ق) și sistemul <Link to="/arabizi">arabizi</Link>, ca să poată scrie de pe telefon din prima săptămână.</li>
+      <li><Link to="/blog/cum-saluti-in-libaneza">Salutări și formule de politețe</Link> — <em>mar7aba</em>, <em>kifak</em>, <em>yalla bye</em> — folosite corect, nu doar recunoscute.</li>
+      <li>Prezentarea personală: nume, vârstă, de unde e, ce face.</li>
+      <li>Familia, naționalitățile și țările, profesiile.</li>
+      <li>Posesivele (<em>-i</em>, <em>-ak</em>, <em>-ek</em>) — diferența dintre „casa mea” și „casa ta”.</li>
+    </ul>
+    <p>
+      Concret: după o lună poate purta o conversație scurtă de prezentare cu o rudă din Liban, în
+      dialect, fără să fi învățat alfabetul arab. Programa completă A1 are 32 de lecții — vezi{" "}
+      <Link to="/cursuri/grup/a1">tot ce acoperă nivelul A1</Link>.
+    </p>
+
+    <h2>Pentru părinți</h2>
+    <p>
+      Întrebările pe care le primim cel mai des, cu răspunsuri scurte:
+    </p>
+    <ul>
+      <li><strong>Cât durează și când?</strong> Două ședințe de 90 de minute pe săptămână. Zilele și orele exacte ale grupei active sunt pe <Link to="/cursuri/grup">pagina cursului de grup</Link> — le ținem acolo ca să fie mereu la zi.</li>
+      <li><strong>Cât de mare e grupa?</strong> Între 4 și 10 cursanți, ca fiecare să apuce să vorbească în fiecare lecție.</li>
+      <li><strong>Unde?</strong> Fizic la Raduga Creative Center, Strada Icoanei 80, sector 2, sau online pe Zoom. Formatul se alege la înscriere.</li>
+      <li><strong>Ce temă are acasă?</strong> Scurtă și audio — ascultare și repetare, nu liste de memorat. Progresul se vede în conversație, la lecția următoare.</li>
+      <li><strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral; alfabetul vine mai târziu, după ce există vocabular vorbit.</li>
+      <li><strong>Cum verific dacă i se potrivește?</strong> Cu <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>, înainte de orice plată. Dacă nu i se potrivește, nu urmează nimic.</li>
     </ul>
 
     <h2>Profesor nativ, în București sau online</h2>

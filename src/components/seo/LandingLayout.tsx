@@ -44,6 +44,12 @@ interface Props {
    */
   deHref?: string | null;
   /**
+   * Delivery modes and workload for the Course JSON-LD, when the page really is
+   * a course. Most LandingLayout pages are guides, so this is opt-in: claiming
+   * an in-person schedule for /dialecte-arabe would be false.
+   */
+  courseInstances?: Record<string, unknown>[];
+  /**
    * Canonical override (root-relative). Use when this page is a near-duplicate
    * that should consolidate into another URL — e.g. /cursuri-araba points its
    * canonical at /cursuri-limba-araba. Defaults to self.
@@ -58,7 +64,7 @@ interface Props {
  * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, deHref = null, canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -91,6 +97,9 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
       name: "Centrul de Arabă Libaneză cu Ibra",
       url: `${BASE}/`,
     },
+    // Google reads delivery mode and workload from hasCourseInstance, not from
+    // Course itself — see src/lib/courseSchema.ts.
+    ...(courseInstances?.length ? { hasCourseInstance: courseInstances } : {}),
   };
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
