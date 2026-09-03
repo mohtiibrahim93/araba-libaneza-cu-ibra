@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce face prefixul „b-” la verbe?", en: "What does the \"b-\" prefix do to verbs?" },
+    a: { ro: "Marchează prezentul obișnuit, acțiunea pe care o faci în mod normal. Fără el, verbul exprimă mai degrabă intenție sau subjonctiv — este una dintre cele mai vizibile diferențe față de araba standard.", en: "It marks the ordinary present — what you normally do. Without it the verb expresses intention or subjunctive instead, and it is one of the most visible differences from Modern Standard Arabic." },
+  },
+  {
+    q: { ro: "Araba libaneză are cazuri gramaticale?", en: "Does Lebanese Arabic have grammatical cases?" },
+    a: { ro: "Nu. Terminațiile de caz din araba standard au dispărut din vorbire, ceea ce face dialectul sensibil mai simplu de învățat decât forma scrisă pe care o predau manualele.", en: "No. The case endings of Modern Standard Arabic have disappeared from speech, which makes the dialect appreciably simpler to learn than the written form textbooks teach." },
+  },
+  {
+    q: { ro: "Cum se atașează pronumele la cuvinte?", en: "How do pronouns attach to words?" },
+    a: { ro: "Se lipesc la sfârșitul cuvântului ca sufixe — la substantive marchează posesia, la verbe marchează complementul. Sunt aceleași terminații în ambele cazuri, deci le înveți o singură dată.", en: "They stick to the end of the word as suffixes — on nouns they mark possession, on verbs they mark the object. The endings are the same in both cases, so you learn them once." },
+  },
+];
 
 const GramaticaArabaLibaneza = () => {
   const { lang } = useI18n();
@@ -19,6 +37,7 @@ const GramaticaArabaLibaneza = () => {
       }}
       published="2026-07-24"
       readingMinutes={9}
+      faq={FAQ}
       crumb={{
         ro: "Gramatica arabei libaneze",
         en: "Lebanese Arabic grammar",
@@ -43,6 +62,14 @@ const GramaticaArabaLibaneza = () => {
         },
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Prefixul „b-” marchează prezentul obișnuit — una dintre marile diferențe față de MSA.", en: "The \"b-\" prefix marks the ordinary present — one of the big differences from MSA." },
+          { ro: "Libaneza nu are cazuri gramaticale, deci e mai simplă decât araba standard.", en: "Lebanese has no grammatical cases, so it is simpler than Modern Standard Arabic." },
+          { ro: "Pronumele se atașează ca sufixe, cu aceleași terminații la posesie și la complement.", en: "Pronouns attach as suffixes, with the same endings for possession and for objects." },
+          { ro: "Ordinea cuvintelor e flexibilă, dar varianta neutră e subiect–verb–complement.", en: "Word order is flexible, but the neutral option is subject–verb–object." },
+        ]}
+      />
       <aside className="rounded-lg border border-border bg-muted/40 p-5 [&_a]:no-underline">
         <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide mt-0">
           {en ? "In this guide" : "În acest ghid"}
@@ -170,6 +197,16 @@ const GramaticaArabaLibaneza = () => {
       </section>
 
       <section id="vs-msa" className="scroll-mt-24 space-y-4">
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
         <h2>{en ? "5. How is Lebanese grammar different from MSA?" : "5. Prin ce diferă gramatica libaneză de MSA?"}</h2>
         <p>
           {en

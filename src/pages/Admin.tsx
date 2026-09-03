@@ -46,6 +46,7 @@ import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import AvailabilityAdmin from "@/components/AvailabilityAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
+import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
@@ -159,8 +160,13 @@ const Admin = () => {
 
     return registrations.filter((r) => {
       const matchesCourse = courseTypeFilter === "all" || r.form_type === courseTypeFilter;
+      const status = (r.lead_status || "new") as LeadStatus;
+      // "Toate" means every real lead. Trial forms abandoned before a slot was
+      // chosen are kept as a record but stay out of the default list — they are
+      // not bookings, and mixing them in is what made the admin unusable. They
+      // are still one click away by selecting the "Incomplet" status.
       const matchesStatus =
-        leadStatusFilter === "all" || (r.lead_status || "new") === leadStatusFilter;
+        leadStatusFilter === "all" ? status !== "incomplete" : status === leadStatusFilter;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
         (r.form_type === "private" &&
@@ -197,7 +203,10 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   const stats = useMemo(() => {
-    const total = registrations.length;
+    const incomplete = registrations.filter(
+      (r) => (r.lead_status || "new") === "incomplete",
+    ).length;
+    const total = registrations.length - incomplete;
     const paid = registrations.filter((r) => r.payment_status === "paid").length;
     const activeSubs = registrations.filter(
       (r) => r.subscription_status === "active",
@@ -205,7 +214,7 @@ const Admin = () => {
     const newLeads = registrations.filter(
       (r) => (r.lead_status || "new") === "new",
     ).length;
-    return { total, paid, activeSubs, newLeads };
+    return { total, paid, activeSubs, newLeads, incomplete };
   }, [registrations]);
 
   const handleGoogleSignIn = async () => {
@@ -755,6 +764,7 @@ const Admin = () => {
 
           {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
           <TabsContent value="bookings" className="mt-5 space-y-6">
+            <CalendarHealth />
             <AvailabilityAdmin />
             <BookingsAdmin />
           </TabsContent>

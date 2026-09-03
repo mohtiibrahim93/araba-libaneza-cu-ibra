@@ -62,8 +62,17 @@ const REDIRECTS: [from: string, toHeadingContains: string][] = [
   ["/en/learn-levantine-arabic", "Lebanese Arabic"],
   ["/en/levantine-arabic-dialects-map", "Arabic dialects"],
   ["/cursuri/privat", "Private"],
-  ["/cursuri-limba-araba", "arabă"],
   ["/cursuri/tineri", "adolescen"],
+];
+
+/**
+ * Retired URLs that serve content instead of redirecting. Consolidation then
+ * rests entirely on the canonical, so that is what gets asserted — the earlier
+ * version of this test checked for a redirect, which pinned the mechanism
+ * rather than the outcome and broke the moment the mechanism changed.
+ */
+const CANONICALISED_ALIASES: [from: string, canonical: string][] = [
+  ["/cursuri-limba-araba", "https://centruldearabalibaneza.com/cursuri-araba"],
 ];
 
 describe("retired URLs still redirect", () => {
@@ -180,5 +189,129 @@ describe("structured data links the business to the organisation", () => {
 
     expect(local["@id"]).toBe(expectedId);
     expect(local.parentOrganization?.["@id"]).toBe("https://centruldearabalibaneza.com/#organization");
+  });
+});
+
+describe("retired URLs that render instead of redirecting", () => {
+  it.each(CANONICALISED_ALIASES)("%s serves content but canonicalises away", async (from, canonical) => {
+    window.localStorage.setItem("site-language", "ro");
+    window.history.pushState({}, "", from);
+    render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>,
+    );
+    const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+
+    const link = await waitFor(() => {
+      const el = document.querySelector('link[rel="canonical"]');
+      expect(el).toBeTruthy();
+      return el!;
+    });
+    expect(link.getAttribute("href")).toBe(canonical);
+  });
+});
+
+/**
+ * A trial is only real once a slot is chosen. Step 1 records the person as
+ * "incomplete" so the record is kept without polluting the bookings list, and
+ * booking-create promotes them once they pick a time. Both halves of that
+ * contract are easy to break silently — the previous version used a marker
+ * string in a free-text notes field, which is exactly how abandoned step-1
+ * entries ended up looking like genuine bookings.
+ */
+describe("trial step 1 does not look like a booking", () => {
+  it("records the lead as incomplete, not as a new lead", () => {
+    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    expect(trial).toContain('lead_status: "incomplete"');
+    expect(trial).not.toContain("NEALES");
+  });
+
+  it("promotes the lead to a real one only when a slot is booked", () => {
+    const fn = readFileSync(
+      resolve(process.cwd(), "supabase/functions/booking-create/index.ts"),
+      "utf8",
+    );
+    expect(fn).toContain('.eq("lead_status", "incomplete")');
+    expect(fn).toMatch(/update\(\{\s*lead_status:\s*"new"/);
+  });
+
+  it("keeps incomplete leads out of the admin's default list", () => {
+    const admin = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    expect(admin).toContain('status !== "incomplete"');
+  });
+});
+
+/**
+ * Every public page must be reachable from the site chrome, not only from a
+ * link buried in some other page's body. A page that exists, is indexed and is
+ * linked from nowhere in the nav or footer is a page visitors cannot find.
+ *
+ * The exceptions are listed explicitly rather than pattern-matched, so adding
+ * one is a deliberate act that shows up in review.
+ */
+describe("site structure", () => {
+  it("links every public page from the nav or the footer", () => {
+    const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
+    const chrome = new Set(
+      [...read("src/components/Navbar.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
+       ...read("src/components/Footer.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]),
+    );
+    const app = read("src/App.tsx");
+    const redirects = new Set([...app.matchAll(/path="([^"]+)" element=\{<Navigate/g)].map((m) => m[1]));
+    const routes = [...app.matchAll(/path="([^"]+)"/g)]
+      .map((m) => m[1])
+      .filter((p) => !p.includes(":") && !p.includes("*"));
+
+    // Admin, auth and pages you only reach by completing an action.
+    const PRIVATE = new Set([
+      "/admin", "/admin/notifications", "/auth", "/checkout", "/thank-you",
+      "/payment-status", "/unsubscribe", "/stergere-date", "/private-status", "/booking/manage",
+    ]);
+    // Kept alive for old inbound links; canonicalises to /cursuri-araba, so
+    // linking it from the chrome would promote a URL that disclaims itself.
+    const ALIASES = new Set(["/cursuri-limba-araba"]);
+
+    const orphans = routes.filter(
+      (p) =>
+        p !== "/" &&
+        p.split("/").length === 2 &&
+        !redirects.has(p) &&
+        !PRIVATE.has(p) &&
+        !ALIASES.has(p) &&
+        !chrome.has(p),
+    );
+    expect(orphans).toEqual([]);
+  });
+
+  it("does not link the same destination twice in the footer", () => {
+    const foot = readFileSync(resolve(process.cwd(), "src/components/Footer.tsx"), "utf8");
+    const links = [...foot.matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]);
+    const dupes = links.filter((l, i) => links.indexOf(l) !== i);
+    expect([...new Set(dupes)]).toEqual([]);
+  });
+});
+
+describe("hreflang is only announced for a real reciprocal twin", () => {
+  // A page that names itself as its own English version tells Google the two
+  // languages are the same URL. CourseLayout used to do exactly that on the
+  // four /cursuri/* pages, and a crawl flagged it as "One page is linked for
+  // more than one language".
+  const emitters = [
+    "src/components/course/CourseLayout.tsx",
+    "src/components/seo/LandingLayout.tsx",
+  ];
+
+  it.each(emitters)("%s never points ro and en at the same href", (file) => {
+    const src = readFileSync(resolve(process.cwd(), file), "utf8");
+    const hrefFor = (lang: string) =>
+      src.match(new RegExp(`hrefLang="${lang}"\\s+href=\\{([^}]+)\\}`))?.[1]?.trim();
+    const ro = hrefFor("ro");
+    const en = hrefFor("en");
+    if (!ro && !en) return; // emits no hreflang at all — fine.
+    expect(ro).toBeDefined();
+    expect(en).toBeDefined();
+    expect(en).not.toBe(ro);
   });
 });

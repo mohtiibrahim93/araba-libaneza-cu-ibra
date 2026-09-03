@@ -42,15 +42,15 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/arabizi",
-    "meta_title": "Arabizi — Ce Înseamnă 2, 3, 5, 7 în Arabă | Ghid Complet cu Tabel",
-    "meta_description": "Ghid complet Arabizi: tabelul cifrelor (2, 3, 5, 6, 7, 8, 9) și literele arabe pe care le înlocuiesc, exemple reale din WhatsApp și TikTok, plus cheat-sheet PDF gratuit.",
-    "h1": "Arabizi: ghid complet — ce înseamnă 2, 3, 5, 7 și 9 în arabă",
+    "meta_title": "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă",
+    "meta_description": "Învață ce înseamnă cifrele 2, 3, 5, 6, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.",
+    "h1": "Arabizi: ghid complet — ce înseamnă 2, 3, 5 și 7 în arabă",
     "lead": "Araba scrisă cu litere latine și cifre. Aici găsești tabelul complet de decodare, exemple reale de mesaje și cheat-sheet-ul PDF gratuit."
   },
   {
     "path": "/ce-araba-sa-inveti",
-    "meta_title": "Ce Arabă Să Înveți — Libaneză vs Standard vs Egipteană | Ghid",
-    "meta_description": "Compară araba libaneză, araba standard (fusha) și egipteana: ce vorbesc oamenii, ce e mai ușor, ce îți trebuie pentru familie, muncă sau călătorii. Alegi în 5 minute.",
+    "meta_title": "Ce Arabă Să Înveți: Libaneză, Standard sau Egipteană",
+    "meta_description": "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute.",
     "h1": "Ce arabă să înveți? Libaneză, standard sau egipteană",
     "lead": "Alegerea dialectului contează mai mult decât metoda. Iată cum decizi în funcție de motivul tău real."
   },

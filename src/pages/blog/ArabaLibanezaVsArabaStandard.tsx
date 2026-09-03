@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // comparison rows: [criterion-ro, criterion-en, leb-ro, leb-en, msa-ro, msa-en]
@@ -10,6 +11,23 @@ const COMPARE: [string, string, string, string, string, string][] = [
   ["Timp până la conversație", "Time to conversation", "~4–6 luni", "~4–6 months", "~12–18 luni (și rar folosită în vorbire)", "~12–18 months (and rarely used in speech)"],
   ["Scriere", "Writing", "Rar; adesea în transliterație latină", "Rare; often in Latin transliteration", "Standard, în alfabet arab", "Standard, in the Arabic alphabet"],
   ["Ideală pentru", "Ideal for", "Comunicare, cultură, familie", "Communication, culture, family", "Studiu academic, citit, contexte formale", "Academic study, reading, formal contexts"],
+];
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Dacă învăț libaneză, înțeleg știrile în arabă?", en: "If I learn Lebanese, will I understand the news in Arabic?" },
+    a: { ro: "Parțial. Buletinele de știri sunt în arabă standard, care are alt vocabular formal și alte terminații. Libaneza îți dă conversația; pentru presă și documente ai nevoie de MSA, adăugată ulterior.", en: "Partly. News bulletins are in Modern Standard Arabic, which has different formal vocabulary and endings. Lebanese gives you conversation; for press and documents you need MSA, added later." },
+  },
+  {
+    q: { ro: "Un vorbitor de MSA se descurcă în Beirut?", en: "Can an MSA speaker get by in Beirut?" },
+    a: { ro: "Va fi înțeles, dar va suna formal, cam ca cineva care vorbește româna din documente oficiale. Iar în sens invers e mai greu: conversația de zi cu zi nu seamănă cu manualul.", en: "They will be understood, but they will sound formal — rather like someone speaking the Romanian of official documents. The other direction is harder: everyday conversation does not resemble the textbook." },
+  },
+  {
+    q: { ro: "Pot învăța ambele în paralel?", en: "Can I learn both in parallel?" },
+    a: { ro: "Se poate, dar la început încetinește progresul, pentru că cele două forme cer cuvinte diferite pentru aceleași lucruri. Cei mai mulți avansează mai repede dacă fixează întâi dialectul.", en: "You can, but early on it slows progress, because the two forms use different words for the same things. Most learners advance faster by settling the dialect first." },
+  },
 ];
 
 const ArabaLibanezaVsArabaStandard = () => {
@@ -25,6 +43,7 @@ const ArabaLibanezaVsArabaStandard = () => {
       }}
       published="2026-07-15"
       readingMinutes={7}
+      faq={FAQ}
       crumb={{ ro: "Libaneză vs standard", en: "Lebanese vs Standard" }}
       lead={{
         ro: "Nu există „o singură arabă”. Există o limbă scrisă (Fusha / MSA) și zeci de dialecte vorbite. Alegerea corectă depinde de ce vrei să faci cu limba — călătorii, familie, muncă, studiu academic sau muzică și seriale.",
@@ -40,6 +59,14 @@ const ArabaLibanezaVsArabaStandard = () => {
         label: { ro: "Fă testul de nivel", en: "Take the level test" },
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Nu există „o singură arabă”: MSA e limba scrisă, dialectele sunt limba vorbită.", en: "There is no single Arabic: MSA is the written language, the dialects are the spoken one." },
+          { ro: "Nimeni nu vorbește MSA acasă — se învață la școală și se folosește în scris.", en: "Nobody speaks MSA at home — it is learned at school and used in writing." },
+          { ro: "Pentru conversație, călătorii și familie, dialectul e alegerea corectă.", en: "For conversation, travel and family, the dialect is the right choice." },
+          { ro: "MSA merită adăugată după, dacă vrei să citești presă sau texte oficiale.", en: "MSA is worth adding afterwards, if you want to read the press or official texts." },
+        ]}
+      />
       <aside className="rounded-lg border border-border bg-muted/40 p-5 [&_a]:no-underline">
         <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide mt-0">
           {en ? "What you'll learn" : "Ce vei afla"}
@@ -149,6 +176,16 @@ const ArabaLibanezaVsArabaStandard = () => {
       </section>
 
       <section id="alegere" className="scroll-mt-24 space-y-4">
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
         <h2>{en ? "6. What should you choose?" : "6. Ce ar trebui să alegi?"}</h2>
         <p>{en ? "A practical rule for adults who want to learn Arabic:" : "Regula practică pentru adulții din România care vor să învețe arabă:"}</p>
         <ul>

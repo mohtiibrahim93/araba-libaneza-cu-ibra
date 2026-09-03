@@ -419,7 +419,9 @@ export const translations = {
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
-    homeSeoTitle: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra",
+    // 60 characters is where Google truncates; the old wording was 64 and
+    // also disagreed with the title the prerender writes into the static head.
+    homeSeoTitle: "Cursuri de Arabă Libaneză în București și Online — Ibra",
     homeSeoDescription: "Cursuri de arabă în București și online cu profesor nativ libanez. Grupe mici, lecții private, curs pentru copii. Lecție de probă gratuită. Începe să vorbești araba libaneză.",
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
@@ -1442,9 +1444,21 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | null>(null);
 
-export const I18nProvider = ({ children }: { children: ReactNode }) => {
+export const I18nProvider = ({
+  children,
+  initialLang,
+}: {
+  children: ReactNode;
+  /**
+   * Language to start in when there is no browser to ask. The build-time
+   * prerender passes the route's own language, so an /en/ page is rendered
+   * with English chrome instead of falling back to Romanian navigation around
+   * English body copy. Ignored in the browser, where localStorage decides.
+   */
+  initialLang?: Lang;
+}) => {
   const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === "undefined") return "ro";
+    if (typeof window === "undefined") return initialLang ?? "ro";
     const savedLang = window.localStorage.getItem("site-language");
     return savedLang === "en" || savedLang === "ro" ? savedLang : "ro";
   });

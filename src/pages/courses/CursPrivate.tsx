@@ -3,6 +3,7 @@ import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import privateImg from "@/assets/private-course.jpg";
+import { courseInstances, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
 
 const CursPrivate = () => {
   const { t } = useI18n();
@@ -12,7 +13,9 @@ const CursPrivate = () => {
   const courseSchema = {
     name: t.coursePrivateH1,
     description: t.coursePrivateMetaDesc,
-    courseMode: ["onsite", "online"],
+    // No repeatFrequency: 1:1 lessons are scheduled per student, so claiming
+    // a cadence here would be inventing one.
+    hasCourseInstance: courseInstances({ workload: PRIVATE_LESSON_WORKLOAD }),
     educationalLevel: "A1, A2, B1, B2, C1, C2",
     offers: {
       "@type": "Offer",

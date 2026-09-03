@@ -189,16 +189,25 @@ Deno.serve(async (req) => {
       return json({ error: "insert failed" }, 500);
     }
 
-    // The trial step-1 lead carries a "slot not chosen" marker in notes. Now
-    // that a slot is booked, clear it here (service role) — the browser cannot
-    // update registrations under RLS.
+    // The trial step-1 lead was stored as "incomplete" because no slot had been
+    // chosen yet. A slot is booked now, so promote it to a real lead here
+    // (service role) — the browser cannot update registrations under RLS.
+    // Older rows used a marker string in `notes`; clear that too so historic
+    // leads stop showing the warning once they convert.
     {
       const { error: clearErr } = await supabase
+        .from("registrations")
+        .update({ lead_status: "new", notes: null })
+        .eq("id", body.registration_id)
+        .eq("lead_status", "incomplete");
+      if (clearErr) console.error("[booking-create] promote lead failed", clearErr);
+
+      const { error: legacyErr } = await supabase
         .from("registrations")
         .update({ notes: null })
         .eq("id", body.registration_id)
         .like("notes", "%NEALES%");
-      if (clearErr) console.error("[booking-create] clear lead marker failed", clearErr);
+      if (legacyErr) console.error("[booking-create] clear legacy marker failed", legacyErr);
     }
 
     // Create GCal event (best-effort)
@@ -225,17 +234,18 @@ Deno.serve(async (req) => {
       withMeet: false,
     });
 
-    if (gcal.ok && gcal.id) {
-      await supabase
-        .from("bookings")
-        .update({ google_event_id: gcal.id, meet_link: onlineLink })
-        .eq("id", inserted.id);
-    } else if (onlineLink) {
-      await supabase
-        .from("bookings")
-        .update({ meet_link: onlineLink })
-        .eq("id", inserted.id);
-    }
+    // Record the sync outcome on the row. A booking that never reached the
+    // calendar used to be indistinguishable from one that did — both just had
+    // google_event_id = NULL — so the admin panel and the health check now read
+    // google_sync_error to tell them apart.
+    await supabase
+      .from("bookings")
+      .update({
+        google_event_id: gcal.ok && gcal.id ? gcal.id : null,
+        google_sync_error: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
+        meet_link: onlineLink,
+      })
+      .eq("id", inserted.id);
 
     // Send confirmation email (best-effort, async)
     sendBookingEmail(
@@ -264,6 +274,9 @@ Deno.serve(async (req) => {
         format: format === "online" ? "online" : "fizic",
         whenLabel: fmtLocal(startISO, language),
         notes: body.notes ?? null,
+        // The owner's own copy is the only place they would notice that the
+        // lesson is not in their Google Calendar, so say so explicitly.
+        calendarSyncError: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
       },
       `admin-booking-new-${inserted.id}`,
     );

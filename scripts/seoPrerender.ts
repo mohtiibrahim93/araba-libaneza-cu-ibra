@@ -3,6 +3,8 @@ import path from "node:path";
 import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
+import { LEVEL_TITLE_RO } from "../src/lib/levelMeta";
+import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
 
 /**
  * Build-time SEO prerender.
@@ -51,31 +53,31 @@ interface Route {
 // (src/lib/i18n.tsx course/home keys, src/pages/seo/*, src/pages/en/*).
 const STATIC_ROUTES: Route[] = [
   { path: "/", title: "Cursuri de Arabă Libaneză în București și Online — Ibra", description: "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții." },
-  { path: "/cursuri", title: "Cursuri Arabă (Libaneză) — Adulți, Tineri, Copii | București & Online", description: "Cursuri de arabă libaneză pentru adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
+  { path: "/cursuri", title: "Cursuri Arabă Libaneză — Adulți, Tineri, Copii | Online", description: "Cursuri de arabă libaneză pentru adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
-  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri interactive de arabă libaneză pentru copii (6–10 ani), fizic în București. Activități, jocuri și povești în arabă libaneză. Online disponibil de la 10 ani." },
+  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
   { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti", noindex: true },
   { path: "/cursuri-araba", title: "Cursuri Arabă Libaneză A1–C2 | București și Online", description: "Cursuri de arabă libaneză A1–C2 în București și online: grupe, lecții private 1:1 și cursuri pentru copii, toate cu profesor nativ. Probă gratuită." },
   { path: "/cursuri-limba-araba", title: "Cursuri de Arabă Libaneză | București și Online", description: "Alege cursul potrivit: grupă A1–C2, lecții private sau cursuri pentru copii, în București și online, cu profesor nativ libanez.", canonical: "/cursuri-araba", noindex: true },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții." },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită." },
-  { path: "/meditatii-araba", title: "Meditații Arabă în București și Online | Profesor Nativ", description: "Meditații de arabă libaneză (dialect levantin) 1:1 cu profesor nativ libanez, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
+  { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
   { path: "/invata-araba", title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic." },
-  { path: "/cursuri-araba-bucuresti", title: "Cursuri de Arabă în București | Profesor Nativ", description: "Cursuri de arabă libaneză în București cu profesor nativ. Grupe mici pentru adulți și copii, niveluri A1–C2. Lecție de probă gratuită." },
+  { path: "/cursuri-araba-bucuresti", title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită", description: "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită." },
   { path: "/curs-araba-copii", title: "Curs de Arabă pentru Copii în București | 6–10 ani", description: "Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez." },
-  { path: "/arabizi", title: "Arabizi — Ce Înseamnă 2, 3, 5, 7 în Arabă | Ghid Complet cu Tabel", description: "Ghid complet Arabizi: tabelul cifrelor (2, 3, 5, 6, 7, 8, 9) și literele arabe pe care le înlocuiesc, exemple reale din WhatsApp și TikTok, plus cheat-sheet PDF gratuit." },
+  { path: "/arabizi", title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă", description: "Învață ce înseamnă cifrele 2, 3, 5, 6, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit." },
   { path: "/invata-araba-gratis", title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții", description: "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători." },
-  { path: "/resurse", title: "Resurse gratuite pentru arabă libaneză", description: "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse." },
-  { path: "/fara-alfabet-arab", title: "Pot Învăța Araba Fără Alfabet? Da — Iată Cum | Metoda Oral First", description: "Poți învăța araba libaneză fără alfabetul arab: vorbești din prima lecție folosind arabizi. Ce e greu de fapt la arabă, ce înveți în 4 săptămâni și când merită alfabetul." },
-  { path: "/dialecte-arabe", title: "Dialectele Arabe — Hartă & Ghid: Levantin, Egiptean, Golf, Maghreb | 2026", description: "Ghid și hartă a dialectelor arabe: levantin (nord vs. sud — libanez, sirian, palestinian, iordanian), egiptean, maghrebin, din Golf și irakian, plus araba standard. Cine pe cine înțelege și ce dialect merită învățat." },
-  { path: "/ce-araba-sa-inveti", title: "Ce Arabă Să Înveți — Libaneză vs Standard vs Egipteană | Ghid", description: "Compară araba libaneză, araba standard (fusha) și egipteana: ce vorbesc oamenii, ce e mai ușor, ce îți trebuie pentru familie, muncă sau călătorii. Alegi în 5 minute." },
+  { path: "/resurse", title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat", description: "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse." },
+  { path: "/fara-alfabet-arab", title: "Pot Învăța Araba Fără Alfabet? Ghid Practic", description: "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul." },
+  { path: "/dialecte-arabe", title: "Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb", description: "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat." },
+  { path: "/ce-araba-sa-inveti", title: "Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană", description: "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute." },
   { path: "/araba-pentru-partener", title: "Arabă Libaneză pentru Partener și Familie | Curs 1:1", description: "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București." },
   { path: "/araba-in-familie", title: "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid", description: "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online." },
   { path: "/cel-mai-bun-curs-de-araba", title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere", description: "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi." },
-  { path: "/cursuri-araba-adolescenti", title: "Curs Arabă Libaneză pentru Adolescenți | 11–17 ani", description: "Arabă libaneză pentru adolescenți 11–17 ani, cu profesor nativ, în București sau online. Conversație practică din prima lecție. Probă gratuită." },
-  { path: "/blog", title: "Blog — articole despre araba libaneză | Arabă Libaneză cu Ibra", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
+  { path: "/cursuri-araba-adolescenti", title: "Cursuri Arabă Adolescenți 11–17 ani | București & Online", description: "Cursuri de arabă pentru adolescenți (11–17 ani) cu profesor nativ, în București sau online. Conversație din prima lecție, grupe mici, lecție de probă gratuită." },
+  { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic", noindex: true },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
@@ -86,8 +88,11 @@ const STATIC_ROUTES: Route[] = [
   { path: "/en/how-to-learn-lebanese-arabic", title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)", description: "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra." },
   { path: "/en/best-arabic-course", title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA", description: "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals." },
   { path: "/en/arabic-for-teenagers", title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online", description: "Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial." },
-  { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — libanesisch mit Muttersprachler | A1–C2", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins, ohne Alphabet-Hürde. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
-  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private" },
+  { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — Libanesisch mit Muttersprachler", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
+  // Retired alias, like the four below it. It was the only one without
+  // noindex, which also made it the only indexable page missing from the
+  // sitemap — an inconsistency, not a decision.
+  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private", noindex: true },
   { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
   { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București." },
   { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
@@ -116,25 +121,22 @@ function levelRoutes(): Route[] {
       return id === "a1"
         ? {
             path: "/cursuri/grup/a1",
-            title: "Curs Arabă A1 în București și Online | Arabă Libaneză",
+            title: LEVEL_TITLE_RO.a1,
             description:
               "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.",
           }
         : {
             path: `/cursuri/grup/${id}`,
-            title:
-              id === "c1"
-                ? "Curs de Arabă Libaneză C1 — Nivel Avansat"
-                : id === "c2"
-                  ? "Curs C2 de Arabă Libaneză — Academic și Specializat"
-                  : `${lvl.title} — Curs de Grup de Arabă Libaneză`,
+            // Shared with CursGrupLevel.tsx so the static head and the head
+            // React renders cannot disagree.
+            title: LEVEL_TITLE_RO[id],
             description: lvl.objective.slice(0, 155),
           };
     })
     .filter((r): r is Route => r !== null);
 }
 
-function allRoutes(): Route[] {
+export function allRoutes(): Route[] {
   // Blog articles: RO title/description straight from the shared registry.
   const blog: Route[] = BLOG_POSTS.map((p) => ({
     path: `/blog/${p.slug}`,
@@ -143,11 +145,19 @@ function allRoutes(): Route[] {
     type: "article" as const,
     published: p.published,
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...blog].map((route) =>
-    route.path === "/cursuri/grup/b2"
-      ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
-      : route,
-  );
+  return [...STATIC_ROUTES, ...levelRoutes(), ...blog]
+    .map((route) =>
+      route.path === "/cursuri/grup/b2"
+        ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
+        : route,
+    )
+    // Everything under /en/ is English whether or not the entry says so — only
+    // two of the ten did. Deriving it here means the body prerender picks the
+    // right UI language too, instead of wrapping English copy in Romanian
+    // navigation.
+    .map((route) =>
+      route.lang ? route : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
+    );
 }
 
 /**
@@ -170,8 +180,33 @@ interface Annotation {
   canonicalOverride: boolean;
 }
 
+const STR = `"((?:[^"\\\\]|\\\\.)*)"`;
+
+/**
+ * Values a prop can take, in branch order.
+ *
+ * A page may serve more than one route and pick its props with a ternary — the
+ * courses hub does this to give the legacy /cursuri-limba-araba URL its own
+ * metadata. Reading only the first literal would silently drop the second
+ * route, which is how a real hreflang pair went missing: the parser stopped
+ * recognising the page at all and reported it as "not a landing page".
+ *
+ * `null` is kept as a value rather than dropped, so `x ? null : "/en/..."`
+ * lines up branch-for-branch with the slugs.
+ */
+const attrAll = (src: string, name: string): (string | null)[] => {
+  const ternary = src.match(
+    new RegExp(`${name}=\\{[^?{}]*\\?\\s*(?:${STR}|null)\\s*:\\s*(?:${STR}|null)\\s*\\}`),
+  );
+  if (ternary) return [ternary[1] ?? null, ternary[2] ?? null];
+  const literal = src.match(new RegExp(`${name}=${STR}`));
+  if (literal) return [literal[1]];
+  if (src.includes(`${name}={null}`)) return [null];
+  return [];
+};
+
 const attr = (src: string, name: string): string | undefined =>
-  src.match(new RegExp(`${name}="((?:[^"\\\\]|\\\\.)*)"`))?.[1];
+  attrAll(src, name)[0] ?? undefined;
 
 function landingAnnotations(): Annotation[] {
   const out: Annotation[] = [];
@@ -183,15 +218,24 @@ function landingAnnotations(): Annotation[] {
     if (!fs.existsSync(abs)) continue;
     for (const file of fs.readdirSync(abs).filter((f) => f.endsWith(".tsx"))) {
       const src = fs.readFileSync(path.join(abs, file), "utf8");
-      const slug = attr(src, "slug");
-      if (!slug) continue; // the shared layout itself has no slug
-      out.push({
-        file,
-        routePath: prefix + slug,
-        metaTitle: attr(src, "metaTitle"),
-        description: attr(src, "description"),
-        twin: attr(src, twinProp) ?? (src.includes(`${twinProp}={null}`) ? null : undefined),
-        canonicalOverride: /canonicalHref="/.test(src),
+      const slugs = attrAll(src, "slug");
+      if (!slugs.length) continue; // the shared layout itself has no slug
+      const titles = attrAll(src, "metaTitle");
+      const descriptions = attrAll(src, "description");
+      const twins = attrAll(src, twinProp);
+      // One entry per route the file serves; a prop with a single value applies
+      // to every branch, which is the common case.
+      const at = (v: (string | null)[], i: number) => (v.length > 1 ? v[i] : v[0]);
+      slugs.forEach((slug, i) => {
+        if (!slug) return;
+        out.push({
+          file,
+          routePath: prefix + slug,
+          metaTitle: at(titles, i) ?? undefined,
+          description: at(descriptions, i) ?? undefined,
+          twin: twins.length ? at(twins, i) : undefined,
+          canonicalOverride: /canonicalHref="/.test(src),
+        });
       });
     }
   }
@@ -222,10 +266,31 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
 const escAttr = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Replace the content="" of a specific <meta> tag if present. */
+/**
+ * Replace the content="" of a specific <meta> tag if present, and hand the tag
+ * over to react-helmet-async by stamping it with the attribute Helmet uses to
+ * mark tags it owns.
+ *
+ * Without the stamp, Helmet does not know the prerendered tag exists and simply
+ * appends its own on mount — so the rendered page carried two <meta
+ * name="description"> with different text, two og:url, two canonicals. A crawl
+ * that executes JavaScript sees both and has to guess. With the stamp Helmet
+ * replaces the tag instead of duplicating it.
+ */
+const RH = 'data-rh="true"';
+
 function setMeta(html: string, attr: "property" | "name", key: string, value: string): string {
-  const re = new RegExp(`(<meta ${attr}="${key}" content=")[^"]*(")`);
-  return html.replace(re, `$1${value}$2`);
+  const re = new RegExp(`<meta ${attr}="${key}" content="[^"]*"`);
+  return html.replace(re, `<meta ${RH} ${attr}="${key}" content="${value}"`);
+}
+
+/** Same stamp, for tags the shell ships that Helmet also re-renders per route. */
+function ownByHelmet(html: string, selectors: string[]): string {
+  let out = html;
+  for (const sel of selectors) {
+    out = out.replace(new RegExp(`<meta ${sel}`), `<meta ${RH} ${sel}`);
+  }
+  return out;
 }
 
 function renderRoute(
@@ -250,23 +315,44 @@ function renderRoute(
   html = setMeta(html, "property", "og:url", canonicalHref);
   html = setMeta(html, "name", "twitter:title", title);
   html = setMeta(html, "name", "twitter:description", desc);
+  // These three keep the shell's values but must still be owned by Helmet, or
+  // they duplicate exactly like the ones above did.
+  html = ownByHelmet(html, [
+    'property="og:image"',
+    'name="twitter:card"',
+    'name="twitter:image"',
+  ]);
 
   // The shell ships no canonical — inject it plus a per-route og:locale (and,
   // for blog posts, the Article JSON-LD + article:* tags) before </head>, so
   // non-JS crawlers see the same head React would render at runtime.
   let inject =
-    (route.noindex ? `    <meta name="robots" content="noindex,follow" />\n` : "") +
-    `    <link rel="canonical" href="${canonicalHref}" />\n` +
-    `    <meta property="og:locale" content="${ogLocale}" />\n`;
+    (route.noindex ? `    <meta ${RH} name="robots" content="noindex,follow" />\n` : "") +
+    `    <link ${RH} rel="canonical" href="${canonicalHref}" />\n` +
+    `    <meta ${RH} property="og:locale" content="${ogLocale}" />\n`;
   // hreflang for reciprocal RO/EN twins only, matching what the layouts render
   // at runtime tag for tag. Romanian is x-default: it is the site's primary
   // language, and the RO page is the right landing spot for unmatched locales.
   const pair = pairs.get(route.path);
   if (pair && !route.canonical) {
     inject +=
-      `    <link rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
-      `    <link rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n` +
-      `    <link rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
+      `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n`;
+    // One group also has a German member. Emitting it here keeps the static
+    // head identical to what the layouts render, which is what the reciprocity
+    // guard below compares.
+    if (isLearnClusterPath(route.path)) {
+      inject += `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n`;
+    }
+    inject += `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
+  } else if (isLearnClusterPath(route.path) && !route.canonical) {
+    // The German page is not part of an RO/EN annotation pair, so it never
+    // reaches the branch above — but it is a full member of the cluster.
+    inject +=
+      `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + LEARN_CLUSTER.ro)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + LEARN_CLUSTER.en)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + LEARN_X_DEFAULT)}" />\n`;
   }
   if (route.type === "article") {
     const articleJsonLd = {
@@ -289,9 +375,9 @@ function renderRoute(
     };
     inject +=
       (route.published
-        ? `    <meta property="article:published_time" content="${escAttr(route.published)}" />\n`
+        ? `    <meta ${RH} property="article:published_time" content="${escAttr(route.published)}" />\n`
         : "") +
-      `    <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />\n` +
+      `    <meta ${RH} property="article:author" content="Ibra — Centrul de Arabă Libaneză" />\n` +
       `    <script type="application/ld+json">${JSON.stringify(articleJsonLd).replace(/</g, "\\u003c")}</script>\n`;
   }
   html = html.replace(/<\/head>/, `${inject}  </head>`);
@@ -394,6 +480,46 @@ export function seoPrerenderPlugin(): Plugin {
         // in there, since a one-way annotation silently emits no hreflang at all.
         try {
           const problems: string[] = [];
+
+          // Duplicate guard. Two indexable URLs sharing a title or a
+          // description are two crawl destinations competing for the same
+          // query. Retired aliases are exempt: they are noindex and carry a
+          // canonical to their replacement, so sharing its metadata is the
+          // point.
+          {
+            const live = allRoutes().filter((r) => !r.noindex && !r.canonical);
+            for (const field of ["title", "description"] as const) {
+              const seen = new Map<string, string>();
+              for (const r of live) {
+                const prev = seen.get(r[field]);
+                if (prev) {
+                  problems.push(
+                    `duplicate ${field}: ${prev} and ${r.path} both use "${r[field].slice(0, 60)}…"`,
+                  );
+                }
+                seen.set(r[field], r.path);
+              }
+            }
+          }
+
+          // Length guard. Google truncates past roughly these limits, and the
+          // registry being within them is not enough on its own — the head a
+          // crawler reads is whatever the page renders, and a 76-character C2
+          // title reached production that way.
+          const TITLE_MAX = 60;
+          const DESC_MAX = 160;
+          for (const route of allRoutes()) {
+            if (route.title.length > TITLE_MAX) {
+              problems.push(
+                `${route.path}: <title> is ${route.title.length} chars, over ${TITLE_MAX} — "${route.title}"`,
+              );
+            }
+            if (route.description.length > DESC_MAX) {
+              problems.push(
+                `${route.path}: description is ${route.description.length} chars, over ${DESC_MAX}`,
+              );
+            }
+          }
           const routes = allRoutes();
           const annotations = landingAnnotations();
 
@@ -431,6 +557,38 @@ export function seoPrerenderPlugin(): Plugin {
             }
           } catch {
             /* i18n-backed pages are best-effort */
+          }
+
+          // Blog posts carry their head twice: BLOG_POSTS feeds the index and
+          // the prerender, while the article component passes its own title and
+          // description to BlogArticleLayout. Nothing kept the two in step, and
+          // they had drifted on eight posts — the crawler read one title and the
+          // visitor another. Compare them here so it cannot happen quietly again.
+          try {
+            const dir = path.resolve("src/pages/blog");
+            const bySlug = new Map(BLOG_POSTS.map((b) => [b.slug, b]));
+            for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+              const src = fs.readFileSync(path.join(dir, file), "utf8");
+              const slug = attr(src, "slug");
+              const post = slug ? bySlug.get(slug) : undefined;
+              if (!post) continue;
+              const roOf = (prop: string) =>
+                src.match(new RegExp(`${prop}=\\{\\{\\s*ro:\\s*${STR}`))?.[1];
+              const title = roOf("title");
+              const description = roOf("description");
+              if (title && title !== post.title.ro) {
+                problems.push(
+                  `/blog/${slug} (${file}): <title> — registry "${post.title.ro}" vs page "${title}"`,
+                );
+              }
+              if (description && description !== post.description.ro) {
+                problems.push(
+                  `/blog/${slug} (${file}): description — registry "${post.description.ro}" vs page "${description}"`,
+                );
+              }
+            }
+          } catch {
+            /* blog comparison is best-effort */
           }
 
           // hreflang reciprocity: every declared twin must name this page back,

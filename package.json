@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "vite build && vite-node --mode production scripts/prerenderBody.tsx",
+    "build:dev": "vite build --mode development && vite-node --mode production scripts/prerenderBody.tsx",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
@@ -73,6 +73,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^6.4.3",
+    "vite-node": "^3.2.4",
     "vitest": "^3.2.4"
   },
   "browserslist": [

@@ -21,6 +21,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
+import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
 
 const PageContent = () => {
   const { lang, t } = useI18n();
@@ -31,7 +32,7 @@ const PageContent = () => {
   }, [lang, t.siteTitle]);
 
   useEffect(() => {
-    // Analytics consent is handled by the consentmanager.net CMP (Google
+    // Analytics consent is handled by the Adopt CMP (Google
     // Consent Mode); here we only handle post-payment redirect toasts.
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");
@@ -118,27 +119,33 @@ const PageContent = () => {
     "@type": "ItemList",
     itemListElement: [
       lang === "en"
-        ? { name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 26–80 lessons per level (90 min, twice a week), in person in Bucharest or online." }
-        : { name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
+        ? { url: "/cursuri/grup", name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 26–80 lessons per level (90 min, twice a week), in person in Bucharest or online." }
+        : { url: "/cursuri/grup", name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
       lang === "en"
-        ? { name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
-        : { name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
+        ? { url: "/cursuri/private", name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
+        : { url: "/cursuri/private", name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
       lang === "en"
-        ? { name: "Kids courses — Lebanese Arabic", desc: "Interactive courses for children, in person in Bucharest (online from age 10)." }
-        : { name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
+        ? { url: "/cursuri/copii", name: "Kids courses — Lebanese Arabic", desc: "Interactive courses for children, in person in Bucharest (online from age 10)." }
+        : { url: "/cursuri/copii", name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
     ].map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
+      // A Course in a carousel has to be reachable: Google rejects the list
+      // when the items carry no URL, which is what "Google rich results
+      // validation error" on the homepage was about. The delivery mode lives
+      // on hasCourseInstance, not on Course — see src/lib/courseSchema.ts.
       item: {
         "@type": "Course",
+        url: `https://centruldearabalibaneza.com${c.url}`,
         name: c.name,
         description: c.desc,
         inLanguage: lang === "en" ? "en" : "ro",
-        provider: {
-          "@type": "Organization",
-          name: "Centrul de Arabă Libaneză cu Ibra",
-          sameAs: "https://centruldearabalibaneza.com/",
-        },
+        provider: COURSE_PROVIDER,
+        hasCourseInstance: courseInstances(
+          c.url === "/cursuri/private"
+            ? { workload: PRIVATE_LESSON_WORKLOAD }
+            : { workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" },
+        ),
       },
     })),
   };
@@ -149,9 +156,11 @@ const PageContent = () => {
         <title>{homeTitle}</title>
         <meta name="description" content={homeDescription} />
         <link rel="canonical" href="https://centruldearabalibaneza.com/" />
-        <link rel="alternate" hrefLang="ro" href="https://centruldearabalibaneza.com/" />
-        <link rel="alternate" hrefLang="en" href="https://centruldearabalibaneza.com/en/learn-lebanese-arabic" />
-        <link rel="alternate" hrefLang="x-default" href="https://centruldearabalibaneza.com/" />
+        {/* No hreflang. The homepage has no translation: /en/learn-lebanese-arabic
+            is the English twin of /cursuri-araba, and names that page back. The
+            homepage used to claim it anyway, which made the annotation one-way
+            and left the whole group invalid. The three-language cluster lives on
+            /cursuri-araba — see src/lib/hreflangCluster.ts. */}
         <meta property="og:title" content={homeTitle} />
         <meta property="og:description" content={homeDescription} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/" />

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // group → { title-ro, title-en, rows: [ arabizi, arabic, ro, en ] }
@@ -50,6 +51,23 @@ const GROUPS: { titleRo: string; titleEn: string; rows: [string, string, string,
   },
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce expresie folosesc dacă știu una singură?", en: "Which phrase should I use if I only know one?" },
+    a: { ro: "„Mar7aba”. E salutul neutru, potrivit în orice context și cu oricine, iar reacția pe care o primești când un străin salută în libaneză schimbă tot restul conversației.", en: "\"Mar7aba\". It is the neutral greeting, right in any context and with anyone, and the reaction a foreigner gets for greeting in Lebanese changes the rest of the conversation." },
+  },
+  {
+    q: { ro: "Ce înseamnă „yalla”?", en: "What does \"yalla\" mean?" },
+    a: { ro: "Literal „hai”, dar se folosește pentru aproape orice îndemn: hai să mergem, hai odată, gata. E printre cele mai auzite cuvinte din Liban și apare în mijlocul frazelor în orice limbă.", en: "Literally \"come on\", but it is used for almost any prompt: let's go, hurry up, that's enough. It is among the most heard words in Lebanon and turns up mid-sentence in any language." },
+  },
+  {
+    q: { ro: "Risc să par nepoliticos dacă greșesc pronunția?", en: "Do I risk sounding rude if I get the pronunciation wrong?" },
+    a: { ro: "Practic niciodată. Efortul de a vorbi libaneză e primit cu căldură, iar greșelile sunt corectate prietenos. Riscul real e invers: să nu încerci deloc.", en: "Almost never. The effort of speaking Lebanese is met warmly, and mistakes are corrected in a friendly way. The real risk runs the other way: not trying at all." },
+  },
+];
+
 const Primele20Expresii = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -58,11 +76,12 @@ const Primele20Expresii = () => {
       slug="primele-20-de-expresii-libaneze"
       title={{ ro: "20 de expresii în arabă libaneză pentru începători", en: "20 Lebanese Arabic phrases you'll use from day one" }}
       description={{
-        ro: "20 de expresii în arabă libaneză (levantină) pentru începători — salut, politețe, cafenea, taxi — cu pronunție în arabizi, grafie arabă și traducere. Le poți folosi azi.",
+        ro: "Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.",
         en: "The 20 most useful Lebanese phrases for beginners — greetings, politeness, café, taxi — written in Arabizi with pronunciation and translation.",
       }}
       published="2026-07-16"
       readingMinutes={6}
+      faq={FAQ}
       crumb={{ ro: "Primele 20 de expresii", en: "The first 20 phrases" }}
       lead={{
         ro: "Scrise în arabizi (litere latine), cu grafia arabă și traducere. Exact expresiile pe care le folosești din prima zi în Liban — sau cu prietenii libanezi.",
@@ -78,6 +97,14 @@ const Primele20Expresii = () => {
         label: { ro: "Rezervă o lecție de probă gratuită", en: "Book a free trial lesson" },
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Douăzeci de expresii acoperă majoritatea schimburilor scurte din prima zi.", en: "Twenty phrases cover most short exchanges from day one." },
+          { ro: "„Mar7aba” și „yalla” sunt cele două cuvinte pe care le auzi cel mai des.", en: "\"Mar7aba\" and \"yalla\" are the two words you will hear most." },
+          { ro: "Sunt scrise în arabizi, cu grafia arabă alături, ca să le poți citi imediat.", en: "They are written in arabizi, with the Arabic script alongside, so you can read them immediately." },
+          { ro: "Efortul de a vorbi contează mai mult decât pronunția perfectă.", en: "The effort of speaking counts for more than perfect pronunciation." },
+        ]}
+      />
       <div className="rounded-xl border border-border bg-muted/40 p-5 text-sm text-foreground/80 leading-relaxed [&_a]:no-underline">
         <p>
           <strong>{en ? "How to read the table:" : "Cum citești tabelul:"}</strong>{" "}
@@ -113,6 +140,17 @@ const Primele20Expresii = () => {
           </div>
         </section>
       ))}
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Where to go next" : "De unde continui"}</h2>
       <p>

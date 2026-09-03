@@ -90,15 +90,15 @@ const BlogIndex = () => {
         </header>
 
         <section className="w-full max-w-content mx-auto px-gutter pb-16">
-          <ul className="grid sm:grid-cols-2 gap-5">
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {blogPostsNewestFirst.map((post) => (
               <li key={post.slug}>
                 <Link
                   to={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all"
+                  className="group flex h-full min-h-[16rem] flex-col rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all"
                 >
-                  <div className="mb-3 flex items-center gap-3">
-                    <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 text-primary">
                       {L(post.tag, lang)}
                     </span>
                     <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
@@ -106,11 +106,11 @@ const BlogIndex = () => {
                       {post.readingMinutes} {c.min}
                     </span>
                   </div>
-                  <h2 className="font-display text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  <h2 className="font-display text-base font-bold text-foreground mb-2 leading-snug group-hover:text-primary transition-colors">
                     {L(post.title, lang)}
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">{L(post.description, lang)}</p>
-                  <div className="mt-4 flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{L(post.description, lang)}</p>
+                  <div className="mt-auto pt-4 flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">{fmtDate(post.published)}</span>
                     <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline underline-offset-4">
                       {c.read} <ArrowRight className="w-4 h-4" />

@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Ce îmi trebuie tehnic pentru o lecție online?", en: "What do I need technically for an online lesson?" },
+    a: { ro: "Un laptop sau un telefon cu cameră, căști și o conexiune stabilă. Lecțiile se țin live pe Zoom, iar materialele se împart pe ecran în timpul ședinței — nu ai nevoie de niciun program suplimentar.", en: "A laptop or phone with a camera, headphones and a stable connection. Lessons run live on Zoom and materials are shared on screen during the session — no extra software is needed." },
+  },
+  {
+    q: { ro: "Pot participa din altă țară?", en: "Can I join from another country?" },
+    a: { ro: "Da, atâta timp cât programul se potrivește cu fusul orar al Bucureștiului. Există cursanți din diaspora care intră la aceleași ore ca grupele din România.", en: "Yes, as long as the schedule fits Bucharest's time zone. There are students in the diaspora who join at the same hours as the groups in Romania." },
+  },
+  {
+    q: { ro: "Ce se întâmplă dacă îmi pică internetul în timpul lecției?", en: "What happens if my internet drops during a lesson?" },
+    a: { ro: "Reintri în aceeași ședință Zoom cu linkul primit — sesiunea rămâne deschisă. Dacă pierzi o parte semnificativă, se recuperează la începutul lecției următoare.", en: "You rejoin the same Zoom session with the link you received — the session stays open. If you miss a significant part, it is picked up at the start of the next lesson." },
+  },
+];
 
 const InvataArabaOnline = () => {
   const { lang } = useI18n();
@@ -15,12 +33,21 @@ const InvataArabaOnline = () => {
       }}
       published="2026-07-17"
       readingMinutes={6}
+      faq={FAQ}
       crumb={{ ro: "Învață online", en: "Learn online" }}
       lead={{
         ro: "Cu profesor nativ, de oriunde din lume — cum arată o lecție online, ce îți trebuie și de ce funcționează la fel de bine ca la clasă.",
         en: "With a native teacher, from anywhere in the world — what an online lesson looks like, what you need and why it works just as well as the classroom.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Lecțiile online sunt live pe Zoom, nu înregistrări — vorbești și primești corectură pe loc.", en: "Online lessons are live on Zoom, not recordings — you speak and are corrected on the spot." },
+          { ro: "Pentru un dialect vorbit, online funcționează la fel de bine ca fizic.", en: "For a spoken dialect, online works as well as in person." },
+          { ro: "Ai nevoie doar de cameră, căști și o conexiune stabilă.", en: "All you need is a camera, headphones and a stable connection." },
+          { ro: "Poți participa din orice țară cu program compatibil cu ora Bucureștiului.", en: "You can join from any country on a schedule compatible with Bucharest time." },
+        ]}
+      />
       <p>
         {en
           ? "You don't have to live in Bucharest — or even in Romania — to learn Lebanese Arabic with a native teacher. Our online courses run over Zoom, with the same method and the same teacher as the in-person ones. If you're part of the Lebanese diaspora, have Lebanese family, or simply want the living dialect from wherever you are, online is made for you."
@@ -67,6 +94,17 @@ const InvataArabaOnline = () => {
         <Link to="/cursuri/private">{en ? "private 1:1 lessons" : "lecții private 1:1"}</Link>
         {en ? " online for a fully personalised pace and schedule." : " online, pentru ritm și program complet personalizate."}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "The online cohort — and the next one" : "Cohorta online — și următoarea"}</h2>
       <p>

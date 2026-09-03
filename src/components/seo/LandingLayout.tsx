@@ -39,6 +39,11 @@ interface Props {
    */
   enHref?: string | null;
   /**
+   * Root-relative German counterpart, for the one page that has one. Passing it
+   * closes the three-language cluster in src/lib/hreflangCluster.ts.
+   */
+  deHref?: string | null;
+  /**
    * Canonical override (root-relative). Use when this page is a near-duplicate
    * that should consolidate into another URL — e.g. /cursuri-araba points its
    * canonical at /cursuri-limba-araba. Defaults to self.
@@ -53,7 +58,7 @@ interface Props {
  * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, deHref = null, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -115,6 +120,9 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
         <link rel="canonical" href={canonical} />
         {hreflang ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
         {hreflang ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        {/* Only /cursuri-araba has a German sibling. A cluster is honoured only
+            when every member names every other, so this closes the group. */}
+        {hreflang && deHref ? <link rel="alternate" hrefLang="de" href={`${BASE}${deHref}`} /> : null}
         {hreflang ? <link rel="alternate" hrefLang="x-default" href={url} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />

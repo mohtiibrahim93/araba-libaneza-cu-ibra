@@ -12,7 +12,13 @@ const Quiz = () => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  const title = `${t.quizTitle} — ${t.siteTitle}`;
+  // t.quizTitle is the on-page headline ("În 30 de secunde îți recomandăm…").
+  // Concatenated with the site name it ran to 84 characters, well past what a
+  // SERP shows, and it overrode the shorter title the prerender writes.
+  const title =
+    lang === "en"
+      ? "Free Arabic Level Test — Lebanese Arabic with Ibra"
+      : "Test de nivel gratuit — Arabă Libaneză cu Ibra";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

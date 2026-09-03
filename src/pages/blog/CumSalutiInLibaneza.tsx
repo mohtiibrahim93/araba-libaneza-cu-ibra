@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [arabizi, arabic, ro-meaning, en-meaning]
@@ -15,6 +16,23 @@ const GREETINGS: [string, string, string, string][] = [
   ["Bshoufak (m) / Bshoufik (f)", "بشوفك", "Ne vedem / Pe curând", "See you / Soon"],
 ];
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Care e diferența dintre „kifak” și „kifik”?", en: "What is the difference between \"kifak\" and \"kifik\"?" },
+    a: { ro: "Terminația se schimbă după persoana căreia i te adresezi: „kifak” către un bărbat, „kifik” către o femeie. Aceeași logică apare la multe alte cuvinte, așa că merită reținută de la început.", en: "The ending changes according to who you are addressing: \"kifak\" to a man, \"kifik\" to a woman. The same logic shows up in many other words, so it is worth learning from the start." },
+  },
+  {
+    q: { ro: "Se folosesc formule religioase în salutul de zi cu zi?", en: "Are religious phrases used in everyday greetings?" },
+    a: { ro: "Unele expresii au origine religioasă, dar sunt folosite de toată lumea ca formule sociale obișnuite, indiferent de credință. „Mar7aba” rămâne varianta cea mai neutră și potrivită în orice context.", en: "Some expressions have religious origins but are used by everyone as ordinary social formulas, whatever their faith. \"Mar7aba\" remains the most neutral option and fits any context." },
+  },
+  {
+    q: { ro: "De ce spun libanezii „yalla bye”?", en: "Why do Lebanese people say \"yalla bye\"?" },
+    a: { ro: "Pentru că amestecul de limbi e normal în Liban: „yalla” e arabă, „bye” e engleză, iar împreună au devenit formula standard de încheiere a unei conversații, mai ales la telefon.", en: "Because mixing languages is normal in Lebanon: \"yalla\" is Arabic, \"bye\" is English, and together they have become the standard way to end a conversation, especially on the phone." },
+  },
+];
+
 const CumSalutiInLibaneza = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -28,12 +46,21 @@ const CumSalutiInLibaneza = () => {
       }}
       published="2026-07-16"
       readingMinutes={4}
+      faq={FAQ}
       crumb={{ ro: "Cum saluți în libaneză", en: "How to greet in Lebanese" }}
       lead={{
         ro: "De la „mar7aba” la „yalla bye” — formulele de salut pe care le auzi zilnic în Liban, cu pronunție și context.",
         en: "From 'mar7aba' to 'yalla bye' — the greetings you hear daily in Lebanon, with pronunciation and context.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "„Mar7aba” este salutul neutru care merge în orice situație.", en: "\"Mar7aba\" is the neutral greeting that works in any situation." },
+          { ro: "Terminația se schimbă după gen: „kifak” către un bărbat, „kifik” către o femeie.", en: "The ending changes by gender: \"kifak\" to a man, \"kifik\" to a woman." },
+          { ro: "„Yalla bye” e formula obișnuită de încheiere — arabă plus engleză, exact ca vorbirea reală.", en: "\"Yalla bye\" is the usual sign-off — Arabic plus English, exactly like real speech." },
+          { ro: "Salutul se întoarce aproape întotdeauna: se răspunde, nu doar se confirmă.", en: "A greeting is almost always returned: you answer it, you do not just acknowledge it." },
+        ]}
+      />
       <p>
         {en
           ? "Greetings are your first interaction in any language — and in Lebanese they're warm and expressive. The good news: a handful of phrases take you a long way. Here are the most common ones, with "
@@ -77,6 +104,17 @@ const CumSalutiInLibaneza = () => {
           ? "In 'saba7' and 'el kheir' there are guttural sounds specific to Arabic. The number 7 is a strong 'h' from the throat, and 'kh' is like the 'ch' in German 'Bach'. Don't worry if they don't come out at first — in a lesson you hear them from a native speaker and repeat them on the spot."
           : "În „saba7” și „el kheir” apar sunete guturale specifice arabei. Cifra 7 este un „h” puternic din gât, iar „kh” seamănă cu „ch” din germana „Bach”. Nu-ți face griji dacă nu-ți ies din prima — la o lecție le auzi de la un vorbitor nativ și le repeți pe loc."}
       </p>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Practise with a real person" : "Exersează cu cineva real"}</h2>
       <p>

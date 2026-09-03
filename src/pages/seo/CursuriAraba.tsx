@@ -28,18 +28,17 @@ const FAQ = [
   },
 ];
 
-interface CursuriArabaProps {
-  legacy?: boolean;
-}
-
-const CursuriAraba = ({ legacy = false }: CursuriArabaProps) => (
+// The `legacy` variant rendered this same page at /cursuri-limba-araba, which
+// meant two crawlable URLs with identical bodies held apart only by a
+// canonical. That alias now redirects (see App.tsx), so the branch is gone.
+const CursuriAraba = () => (
   <LandingLayout
-    slug={legacy ? "cursuri-limba-araba" : "cursuri-araba"}
-    enHref={legacy ? null : "/en/learn-lebanese-arabic"}
-    canonicalHref={legacy ? "/cursuri-araba" : undefined}
+    slug="cursuri-araba"
+    enHref="/en/learn-lebanese-arabic"
+    deHref="/de/arabisch-lernen"
     title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
-    metaTitle={legacy ? "Cursuri de Arabă Libaneză | București și Online" : "Cursuri Arabă Libaneză A1–C2 | București și Online"}
-    description={legacy ? "Alege cursul potrivit: grupă A1–C2, lecții private sau cursuri pentru copii, în București și online, cu profesor nativ libanez." : "Cursuri de arabă libaneză A1–C2 în București și online: grupe, lecții private 1:1 și cursuri pentru copii, toate cu profesor nativ. Probă gratuită."}
+    metaTitle="Cursuri Arabă Libaneză A1–C2 | București și Online"
+    description="Cursuri de arabă libaneză A1–C2 în București și online: grupe, lecții private 1:1 și cursuri pentru copii, toate cu profesor nativ. Probă gratuită."
     crumb="Cursuri de limbă arabă"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 // [arabizi/phrase, ro-meaning, en-meaning]
@@ -14,6 +15,23 @@ const PHRASES: [string, string, string][] = [
   ["Addesh?", "Cât costă?", "How much is it?"],
   ["Wein el ḥammem?", "Unde este toaleta?", "Where is the toilet?"],
   ["Yalla, bye!", "Hai, pa!", "Alright, bye!"],
+];
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Cu ce încep în prima săptămână?", en: "What do I start with in the first week?" },
+    a: { ro: "Cu sunetele și cu salutul. Ascultă și repetă înainte să înțelegi fiecare cuvânt — urechea se formează prima, iar pronunția prinsă corect de la început nu mai trebuie corectată luni mai târziu.", en: "With the sounds and the greetings. Listen and repeat before you understand every word — the ear forms first, and pronunciation learned correctly at the start does not need unpicking months later." },
+  },
+  {
+    q: { ro: "Cât de des trebuie să exersez ca să progresez?", en: "How often must I practise to make progress?" },
+    a: { ro: "Puțin și des bate mult și rar. Câteva minute zilnice fixează sunetele mai bine decât o sesiune lungă la final de săptămână, iar cursurile de grup merg pe două ședințe pe săptămână tocmai ca să existe ritm.", en: "A little and often beats a lot and rarely. A few minutes daily settles the sounds better than one long weekend session, and group courses run two sessions a week precisely to keep a rhythm." },
+  },
+  {
+    q: { ro: "Când trec de la arabizi la alfabetul arab?", en: "When do I move from arabizi to the Arabic script?" },
+    a: { ro: "După ce urechea și pronunția s-au format, de obicei la două-trei luni. Alfabetul învățat atunci se leagă de sunete pe care le știi deja, în loc să fie un obstacol la început.", en: "Once the ear and pronunciation have formed, usually after two or three months. Learned then, the script attaches to sounds you already know instead of standing in the way at the start." },
+  },
 ];
 
 const LearnLebaneseArabicBlog = () => {
@@ -33,6 +51,7 @@ const LearnLebaneseArabicBlog = () => {
       }}
       published="2026-07-24"
       readingMinutes={8}
+      faq={FAQ}
       crumb={{
         ro: "Cum înveți araba libaneză",
         en: "Learn Lebanese Arabic",
@@ -57,6 +76,14 @@ const LearnLebaneseArabicBlog = () => {
         },
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Începe cu dialectul libanez, nu cu araba standard: Fusha se scrie, libaneza se vorbește.", en: "Start with the Lebanese dialect, not Modern Standard Arabic: Fusha is written, Lebanese is spoken." },
+          { ro: "Vorbești din prima lecție folosind arabizi; alfabetul vine după două-trei luni.", en: "You speak from lesson one using arabizi; the script comes after two or three months." },
+          { ro: "Regularitatea contează mai mult decât durata: câteva minute zilnic bat o sesiune lungă.", en: "Regularity matters more than duration: a few minutes daily beat one long session." },
+          { ro: "Corectarea pronunției de către un nativ e partea pe care nicio aplicație nu o acoperă.", en: "Pronunciation correction by a native speaker is the part no app covers." },
+        ]}
+      />
       <aside className="rounded-lg border border-border bg-muted/40 p-5 [&_a]:no-underline">
         <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide mt-0">
           {en ? "What you'll learn" : "Ce vei afla"}
@@ -180,6 +207,16 @@ const LearnLebaneseArabicBlog = () => {
       </section>
 
       <section id="next" className="scroll-mt-24 space-y-4">
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
         <h2>{en ? "7. Next steps" : "7. Următorii pași"}</h2>
         <p>
           {en

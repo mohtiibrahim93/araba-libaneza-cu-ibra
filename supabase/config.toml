@@ -43,3 +43,5 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.resource-download]
     verify_jwt = false
+  [functions.calendar-feed]
+    verify_jwt = false

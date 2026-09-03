@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "Contează dacă profesorul e vorbitor nativ?", en: "Does it matter whether the teacher is a native speaker?" },
+    a: { ro: "Pentru un dialect, da. Pronunția, intonația și expresiile idiomatice se preiau de la cineva care le folosește zilnic. Un profesor non-nativ poate preda foarte bine gramatica standard, dar dialectul viu se transmite prin ureche.", en: "For a dialect, yes. Pronunciation, intonation and idiom come from someone who uses them daily. A non-native teacher can teach standard grammar very well, but a living dialect is passed on by ear." },
+  },
+  {
+    q: { ro: "Ce ar trebui să întreb înainte să mă înscriu?", en: "What should I ask before enrolling?" },
+    a: { ro: "Ce dialect se predă exact, cât vorbești tu într-o lecție, ce se întâmplă dacă lipsești, cum se măsoară progresul și dacă există o lecție de probă. Răspunsurile vagi la aceste întrebări spun mai mult decât orice descriere.", en: "Which dialect is taught exactly, how much you speak in a lesson, what happens if you miss one, how progress is measured and whether there is a trial lesson. Vague answers to these tell you more than any course description." },
+  },
+  {
+    q: { ro: "E mai bine un profesor sau o aplicație?", en: "Is a teacher better than an app?" },
+    a: { ro: "Aplicațiile sunt bune pentru vocabular și pentru rutina zilnică, dar nu îți aud greșelile. Un profesor corectează pronunția înainte să se fixeze — combinația dintre ele funcționează mai bine decât oricare separat.", en: "Apps are good for vocabulary and daily routine, but they cannot hear your mistakes. A teacher corrects pronunciation before it sets — the combination works better than either alone." },
+  },
+];
 
 const CumAlegiProfesor = () => {
   const { lang } = useI18n();
@@ -15,12 +33,21 @@ const CumAlegiProfesor = () => {
       }}
       published="2026-07-17"
       readingMinutes={6}
+      faq={FAQ}
       crumb={{ ro: "Cum alegi un profesor", en: "Choosing a tutor" }}
       lead={{
         ro: "Ce să întrebi înainte să te înscrii — despre experiență, metodă, preț și rezultate — ca să nu pierzi timp și bani.",
         en: "What to ask before you enrol — about experience, method, price and results — so you don't waste time or money.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Pentru un dialect, profesorul nativ contează mai mult decât orice manual.", en: "For a dialect, a native teacher matters more than any textbook." },
+          { ro: "Întreabă exact ce dialect se predă — mulți predau arabă standard sub numele de „arabă”.", en: "Ask exactly which dialect is taught — many teach Modern Standard Arabic under the name \"Arabic\"." },
+          { ro: "Cât vorbești tu într-o lecție contează mai mult decât cât explică profesorul.", en: "How much you speak in a lesson matters more than how much the teacher explains." },
+          { ro: "O lecție de probă îți spune în 30 de minute mai mult decât orice descriere.", en: "A trial lesson tells you more in 30 minutes than any course description." },
+        ]}
+      />
       <p>
         {en
           ? "A good teacher is the difference between quitting after three lessons and speaking with confidence. Before you choose, it's worth asking a few clear questions. Here they are, grouped, with our answers to each."
@@ -93,6 +120,17 @@ const CumAlegiProfesor = () => {
           <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">{en ? "how long each level takes" : "cât durează pe fiecare nivel"}</Link>.
         </li>
       </ul>
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "Red flags to avoid" : "Semnale de alarmă de evitat"}</h2>
       <ul>

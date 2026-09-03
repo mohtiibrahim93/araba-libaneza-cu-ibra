@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
 
 type Resource = { name: string; kind: string; en: string; ro: string; url?: string };
@@ -52,6 +53,23 @@ const Table = ({ rows, lang }: { rows: Resource[]; lang: "en" | "ro" }) => (
   </div>
 );
 
+// Questions specific to this article; anything answered elsewhere on the
+// site stays there, so the same answer never lives on two URLs.
+const FAQ = [
+  {
+    q: { ro: "De ce majoritatea aplicațiilor predau MSA?", en: "Why do most apps teach MSA?" },
+    a: { ro: "Pentru că e standardizată: are o gramatică fixă, manuale și un corpus scris uriaș. Dialectele variază de la țară la țară și n-au ortografie oficială, deci sunt mult mai scumpe de produs.", en: "Because it is standardised: fixed grammar, textbooks and a huge written corpus. Dialects vary from country to country and have no official spelling, so they are far more expensive to produce." },
+  },
+  {
+    q: { ro: "Pot învăța libaneză doar din seriale și muzică?", en: "Can I learn Lebanese from series and music alone?" },
+    a: { ro: "Îți antrenează urechea foarte bine și îți dă expresii reale, dar nu îți corectează pronunția și nu îți structurează progresul. Funcționează cel mai bine ca supliment, nu ca sursă unică.", en: "They train your ear very well and give you real expressions, but they cannot correct your pronunciation or structure your progress. They work best as a supplement, not as the only source." },
+  },
+  {
+    q: { ro: "Ce resursă merită prima?", en: "Which resource is worth starting with?" },
+    a: { ro: "O listă scurtă de expresii pe care le folosești imediat, plus o sursă audio cu vorbitori nativi. Vocabularul fără sunet te duce la o pronunție pe care nativii o înțeleg greu mai târziu.", en: "A short list of phrases you will use immediately, plus an audio source with native speakers. Vocabulary without sound leads to pronunciation natives struggle to follow later." },
+  },
+];
+
 const LebaneseArabicLearningResources = () => {
   const { lang } = useI18n();
   const en = lang === "en";
@@ -68,12 +86,21 @@ const LebaneseArabicLearningResources = () => {
       }}
       published="2026-07-24"
       readingMinutes={7}
+      faq={FAQ}
       crumb={{ ro: "Resurse arabă libaneză", en: "Lebanese Arabic resources" }}
       lead={{
         ro: "Aproape toate resursele populare de „arabă” predau MSA. Iată ce merită dacă vrei să vorbești libaneză reală.",
         en: "Almost every popular ‘learn Arabic’ resource teaches MSA. Here's what's actually worth your time if you want to speak real Lebanese.",
       }}
     >
+      <Tldr
+        points={[
+          { ro: "Aproape toate resursele populare de „arabă” predau MSA, nu dialect.", en: "Almost all popular \"Arabic\" resources teach MSA, not a dialect." },
+          { ro: "Muzica, serialele și podcasturile libaneze sunt cea mai bună sursă gratuită de expunere.", en: "Lebanese music, series and podcasts are the best free source of exposure." },
+          { ro: "Materialul audio contează mai mult decât listele de cuvinte.", en: "Audio material matters more than word lists." },
+          { ro: "Resursele gratuite construiesc vocabular; corectura pronunției cere un om.", en: "Free resources build vocabulary; correcting pronunciation needs a person." },
+        ]}
+      />
       <p>
         {en
           ? "The problem with searching ‘Arabic learning resources’ is that 95% of what comes back — Duolingo, most textbooks, most YouTube channels — teaches Modern Standard Arabic (MSA / Fusha). MSA is the language of news and books; nobody speaks it at home in Beirut. If your goal is to talk with Lebanese friends, family, or clients, you need dialect-specific resources."
@@ -104,6 +131,17 @@ const LebaneseArabicLearningResources = () => {
 
       <h2>{en ? "Books & reference" : "Cărți și referință"}</h2>
       <Table rows={BOOKS} lang={lang} />
+
+      <InlineCta
+        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        text={{
+          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
+          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+      />
+
 
       <h2>{en ? "A weekly routine that actually works" : "O rutină săptămânală care chiar funcționează"}</h2>
       <ul>

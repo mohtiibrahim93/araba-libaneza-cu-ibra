@@ -1,4 +1,8 @@
 export type LeadStatus =
+  // Step 1 of the trial form was submitted but no slot was ever chosen, so the
+  // trial is NOT booked. Kept as a record, but it is not a real lead and must
+  // not sit in the same list as people who actually booked.
+  | "incomplete"
   | "new"
   | "contacted"
   | "qualified"
@@ -8,6 +12,7 @@ export type LeadStatus =
   | "converted";
 
 export const LEAD_STATUSES: readonly LeadStatus[] = [
+  "incomplete",
   "new",
   "contacted",
   "qualified",
@@ -66,6 +71,7 @@ export const formTypeLabels: Record<string, string> = {
 };
 
 export const leadStatusLabels: Record<LeadStatus, string> = {
+  incomplete: "Incomplet — fără interval ales",
   new: "Nou",
   contacted: "Contactat",
   qualified: "Calificat",

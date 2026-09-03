@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, X, ExternalLink } from "lucide-react";
+import { Loader2, X, ExternalLink, CalendarX2 } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -18,6 +18,8 @@ interface Booking {
   meet_link: string | null;
   manage_token: string;
   created_at: string;
+  google_event_id: string | null;
+  google_sync_error: string | null;
 }
 
 const STATUSES = ["all", "confirmed", "cancelled", "rescheduled", "completed"];
@@ -137,7 +139,22 @@ const BookingsAdmin = () => {
                       </a>
                     )}
                   </td>
-                  <td className="py-2 pr-2">{b.status}</td>
+                  <td className="py-2 pr-2">
+                    {b.status}
+                    {b.status === "confirmed" && !b.google_event_id && (
+                      <span
+                        className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400"
+                        title={
+                          b.google_sync_error
+                            ? `Google Calendar: ${b.google_sync_error}`
+                            : "Rezervarea nu are un eveniment în Google Calendar."
+                        }
+                      >
+                        <CalendarX2 className="h-3 w-3 shrink-0" aria-hidden />
+                        fără Calendar
+                      </span>
+                    )}
+                  </td>
                   <td className="py-2 text-right">
                     {b.status === "confirmed" && (
                       <Button

@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { gcalDiagnose } from "../_shared/booking.ts";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -672,7 +673,7 @@ Deno.serve(async (req) => {
       let q = supabase
         .from("bookings")
         .select(
-          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at",
+          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error",
         )
         .order("start_at", { ascending: false })
         .limit(500);
@@ -682,6 +683,50 @@ Deno.serve(async (req) => {
       const { data, error } = await q;
       if (error) throw error;
       return jsonResponse({ data });
+    }
+
+    // ============ Google Calendar sync health ============
+    // "Does the calendar actually work?" used to be answerable only by making a
+    // real booking and looking at the calendar afterwards. This runs the same
+    // calls the booking functions run, and reports what came back.
+    if (action === "calendar_health") {
+      const diag = await gcalDiagnose(body?.probe_write === true);
+
+      const since = new Date(Date.now() - 180 * 86_400_000).toISOString();
+      const { data: recent } = await supabase
+        .from("bookings")
+        .select("id, start_at, student_name, status, google_event_id, google_sync_error")
+        .eq("status", "confirmed")
+        .gte("start_at", since)
+        .order("start_at", { ascending: false })
+        .limit(200);
+
+      const rows = recent ?? [];
+      const feedToken = Deno.env.get("OWNER_CALENDAR_TOKEN") || "";
+      const feedUrl = feedToken
+        ? `${Deno.env.get("SUPABASE_URL")}/functions/v1/calendar-feed?token=${encodeURIComponent(feedToken)}`
+        : null;
+
+      return jsonResponse({
+        data: {
+          ...diag,
+          bookings: {
+            total: rows.length,
+            synced: rows.filter((r) => r.google_event_id).length,
+            failed: rows.filter((r) => !r.google_event_id).length,
+            unsynced: rows
+              .filter((r) => !r.google_event_id)
+              .slice(0, 10)
+              .map((r) => ({
+                id: r.id,
+                start_at: r.start_at,
+                student_name: r.student_name,
+                error: r.google_sync_error,
+              })),
+          },
+          feed: { configured: !!feedToken, url: feedUrl },
+        },
+      });
     }
 
     // ============ Course requests ("notify me when the group starts") ============
