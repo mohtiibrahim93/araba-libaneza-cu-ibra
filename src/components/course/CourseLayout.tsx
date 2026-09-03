@@ -96,9 +96,14 @@ const CourseLayout = ({
         <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={canonical} />
         <meta property="og:type" content="website" />
-        <link rel="alternate" hrefLang="ro" href={canonical} />
-        <link rel="alternate" hrefLang="en" href={canonical} />
-        <link rel="alternate" hrefLang="x-default" href={canonical} />
+        {/* No hreflang here on purpose. These four course pages exist only in
+            Romanian — the /en/ pages are separate landing pages, not
+            translations of them. Announcing ro, en and x-default all pointing
+            at this same Romanian URL told Google the page was its own English
+            version, which the crawl flagged as "One page is linked for more
+            than one language" on /cursuri/grup, /cursuri/copii and
+            /cursuri/private. LandingLayout already follows the rule that
+            hreflang is announced only for a real reciprocal twin. */}
         <script type="application/ld+json">{JSON.stringify(fullCourseSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>

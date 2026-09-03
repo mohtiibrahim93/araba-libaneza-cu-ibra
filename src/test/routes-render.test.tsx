@@ -292,3 +292,26 @@ describe("site structure", () => {
     expect([...new Set(dupes)]).toEqual([]);
   });
 });
+
+describe("hreflang is only announced for a real reciprocal twin", () => {
+  // A page that names itself as its own English version tells Google the two
+  // languages are the same URL. CourseLayout used to do exactly that on the
+  // four /cursuri/* pages, and a crawl flagged it as "One page is linked for
+  // more than one language".
+  const emitters = [
+    "src/components/course/CourseLayout.tsx",
+    "src/components/seo/LandingLayout.tsx",
+  ];
+
+  it.each(emitters)("%s never points ro and en at the same href", (file) => {
+    const src = readFileSync(resolve(process.cwd(), file), "utf8");
+    const hrefFor = (lang: string) =>
+      src.match(new RegExp(`hrefLang="${lang}"\\s+href=\\{([^}]+)\\}`))?.[1]?.trim();
+    const ro = hrefFor("ro");
+    const en = hrefFor("en");
+    if (!ro && !en) return; // emits no hreflang at all — fine.
+    expect(ro).toBeDefined();
+    expect(en).toBeDefined();
+    expect(en).not.toBe(ro);
+  });
+});
