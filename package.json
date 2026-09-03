@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite-node scripts/prerenderBody.tsx",
-    "build:dev": "vite build --mode development && vite-node scripts/prerenderBody.tsx",
+    "build": "vite build && vite-node --mode production scripts/prerenderBody.tsx",
+    "build:dev": "vite build --mode development && vite-node --mode production scripts/prerenderBody.tsx",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
