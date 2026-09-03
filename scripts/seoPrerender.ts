@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
@@ -271,6 +272,102 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
   return pairs;
 }
 
+
+/**
+ * Last commit date for a file, as YYYY-MM-DD. Null when git is unavailable —
+ * a build from a tarball or a clone without history has to fall back.
+ */
+const gitDateCache = new Map<string, string | null>();
+
+function gitDate(file: string): string | null {
+  if (gitDateCache.has(file)) return gitDateCache.get(file)!;
+  let out: string | null = null;
+  try {
+    const r = execFileSync("git", ["log", "-1", "--format=%cs", "--", file], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(r)) out = r;
+  } catch {
+    out = null;
+  }
+  gitDateCache.set(file, out);
+  return out;
+}
+
+/**
+ * Files whose content ends up on every page: the prerender itself, the router,
+ * and the dictionary that holds most of the copy. When one of them changes,
+ * every page's served HTML really does change, so they set a floor under every
+ * lastmod rather than each page claiming an older date than is true.
+ */
+const SITE_WIDE_SOURCES = [
+  "scripts/prerenderBody.tsx",
+  "scripts/seoPrerender.ts",
+  "src/App.tsx",
+  "src/lib/i18n.tsx",
+];
+
+/** Maps each static route to the page component that renders it, via App.tsx. */
+function routeSourceFiles(): Map<string, string> {
+  const map = new Map<string, string>();
+  let src = "";
+  try {
+    src = fs.readFileSync(path.resolve("src/App.tsx"), "utf8");
+  } catch {
+    return map;
+  }
+  const byName = new Map<string, string>();
+  for (const m of src.matchAll(/(?:const\s+(\w+)\s*=\s*lazyWithRetry\(\(\)\s*=>\s*import|import\s+(\w+)\s+from)\s*\(?["']\.\/([^"']+)["']/g)) {
+    const name = m[1] ?? m[2];
+    if (name) byName.set(name, `src/${m[3]}.tsx`);
+  }
+  for (const m of src.matchAll(/<Route\s+path="([^"]+)"\s+element=\{<(\w+)/g)) {
+    const file = byName.get(m[2]);
+    if (file && fs.existsSync(path.resolve(file))) map.set(m[1], file);
+  }
+  return map;
+}
+
+/**
+ * Writes sitemap.xml into the build with a real <lastmod> per URL.
+ *
+ * The checked-in public/sitemap.xml carries only <changefreq> and <priority>,
+ * both of which Google ignores, which left the file with no freshness signal at
+ * all. lastmod is the one field Google does read, and it matters here: 17 URLs
+ * sat in "Discovered - currently not indexed" having never been fetched once.
+ *
+ * Dates are derived, not invented: an article uses its publication date, every
+ * other page the last commit that touched its component, and all of them are
+ * floored by the last change to the shared sources above.
+ */
+function writeSitemap(root: string, routes: Route[]): number {
+  const files = routeSourceFiles();
+  const floor = SITE_WIDE_SOURCES.map(gitDate).filter(Boolean).sort().pop() ?? null;
+  const today = new Date().toISOString().slice(0, 10);
+
+  const entries = routes
+    .filter((r) => !r.noindex && !r.canonical)
+    .map((r) => {
+      const own = r.published?.slice(0, 10) ?? (files.has(r.path) ? gitDate(files.get(r.path)!) : null);
+      const lastmod = [own, floor].filter(Boolean).sort().pop() ?? today;
+      return `  <url>\n    <loc>${BASE}${r.path === "/" ? "/" : r.path}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`;
+    });
+
+  const xml =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    "<!-- Generated at build time from the route registry in scripts/seoPrerender.ts.\n" +
+    "     Do not edit: public/sitemap.xml is the checked-in reference, this is what\n" +
+    "     ships. changefreq and priority are omitted on purpose - Google ignores\n" +
+    "     both. -->\n" +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    entries.join("\n") +
+    "\n</urlset>\n";
+
+  fs.writeFileSync(path.join(root, "sitemap.xml"), xml);
+  return entries.length;
+}
+
 const escAttr = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -455,10 +552,12 @@ export function seoPrerenderPlugin(): Plugin {
           fs.writeFileSync(outFile, html);
           count++;
         }
+        const sitemapCount = writeSitemap(root, allRoutes());
         // eslint-disable-next-line no-console
         console.log(
           `[seo-prerender] wrote static <head> for ${count} routes ` +
-            `(${pairs.size / 2} reciprocal RO/EN hreflang pairs).`,
+            `(${pairs.size / 2} reciprocal RO/EN hreflang pairs), ` +
+            `sitemap.xml with ${sitemapCount} URLs and real lastmod dates.`,
         );
 
         // Drift guard: any URL in the sitemap that we don't prerender ships the
