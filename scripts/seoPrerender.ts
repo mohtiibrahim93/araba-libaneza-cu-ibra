@@ -3,6 +3,8 @@ import path from "node:path";
 import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
+import { LEVEL_TITLE_RO } from "../src/lib/levelMeta";
+import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
 
 /**
  * Build-time SEO prerender.
@@ -116,20 +118,15 @@ function levelRoutes(): Route[] {
       return id === "a1"
         ? {
             path: "/cursuri/grup/a1",
-            title: "Curs Arabă A1 în București și Online | Arabă Libaneză",
+            title: LEVEL_TITLE_RO.a1,
             description:
               "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.",
           }
         : {
             path: `/cursuri/grup/${id}`,
-            title:
-              id === "b1"
-                ? "Curs de Arabă Libaneză B1 – Grup | Ibra"
-                : id === "c1"
-                  ? "Curs de Arabă Libaneză C1 — Nivel Avansat"
-                  : id === "c2"
-                    ? "Curs C2 de Arabă Libaneză — Academic și Specializat"
-                    : `${lvl.title} — Curs de Grup de Arabă Libaneză`,
+            // Shared with CursGrupLevel.tsx so the static head and the head
+            // React renders cannot disagree.
+            title: LEVEL_TITLE_RO[id],
             description: lvl.objective.slice(0, 155),
           };
     })
@@ -266,10 +263,31 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
 const escAttr = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Replace the content="" of a specific <meta> tag if present. */
+/**
+ * Replace the content="" of a specific <meta> tag if present, and hand the tag
+ * over to react-helmet-async by stamping it with the attribute Helmet uses to
+ * mark tags it owns.
+ *
+ * Without the stamp, Helmet does not know the prerendered tag exists and simply
+ * appends its own on mount — so the rendered page carried two <meta
+ * name="description"> with different text, two og:url, two canonicals. A crawl
+ * that executes JavaScript sees both and has to guess. With the stamp Helmet
+ * replaces the tag instead of duplicating it.
+ */
+const RH = 'data-rh="true"';
+
 function setMeta(html: string, attr: "property" | "name", key: string, value: string): string {
-  const re = new RegExp(`(<meta ${attr}="${key}" content=")[^"]*(")`);
-  return html.replace(re, `$1${value}$2`);
+  const re = new RegExp(`<meta ${attr}="${key}" content="[^"]*"`);
+  return html.replace(re, `<meta ${RH} ${attr}="${key}" content="${value}"`);
+}
+
+/** Same stamp, for tags the shell ships that Helmet also re-renders per route. */
+function ownByHelmet(html: string, selectors: string[]): string {
+  let out = html;
+  for (const sel of selectors) {
+    out = out.replace(new RegExp(`<meta ${sel}`), `<meta ${RH} ${sel}`);
+  }
+  return out;
 }
 
 function renderRoute(
@@ -294,23 +312,44 @@ function renderRoute(
   html = setMeta(html, "property", "og:url", canonicalHref);
   html = setMeta(html, "name", "twitter:title", title);
   html = setMeta(html, "name", "twitter:description", desc);
+  // These three keep the shell's values but must still be owned by Helmet, or
+  // they duplicate exactly like the ones above did.
+  html = ownByHelmet(html, [
+    'property="og:image"',
+    'name="twitter:card"',
+    'name="twitter:image"',
+  ]);
 
   // The shell ships no canonical — inject it plus a per-route og:locale (and,
   // for blog posts, the Article JSON-LD + article:* tags) before </head>, so
   // non-JS crawlers see the same head React would render at runtime.
   let inject =
-    (route.noindex ? `    <meta name="robots" content="noindex,follow" />\n` : "") +
-    `    <link rel="canonical" href="${canonicalHref}" />\n` +
-    `    <meta property="og:locale" content="${ogLocale}" />\n`;
+    (route.noindex ? `    <meta ${RH} name="robots" content="noindex,follow" />\n` : "") +
+    `    <link ${RH} rel="canonical" href="${canonicalHref}" />\n` +
+    `    <meta ${RH} property="og:locale" content="${ogLocale}" />\n`;
   // hreflang for reciprocal RO/EN twins only, matching what the layouts render
   // at runtime tag for tag. Romanian is x-default: it is the site's primary
   // language, and the RO page is the right landing spot for unmatched locales.
   const pair = pairs.get(route.path);
   if (pair && !route.canonical) {
     inject +=
-      `    <link rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
-      `    <link rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n` +
-      `    <link rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
+      `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n`;
+    // One group also has a German member. Emitting it here keeps the static
+    // head identical to what the layouts render, which is what the reciprocity
+    // guard below compares.
+    if (isLearnClusterPath(route.path)) {
+      inject += `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n`;
+    }
+    inject += `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
+  } else if (isLearnClusterPath(route.path) && !route.canonical) {
+    // The German page is not part of an RO/EN annotation pair, so it never
+    // reaches the branch above — but it is a full member of the cluster.
+    inject +=
+      `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + LEARN_CLUSTER.ro)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + LEARN_CLUSTER.en)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n` +
+      `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + LEARN_X_DEFAULT)}" />\n`;
   }
   if (route.type === "article") {
     const articleJsonLd = {
@@ -333,9 +372,9 @@ function renderRoute(
     };
     inject +=
       (route.published
-        ? `    <meta property="article:published_time" content="${escAttr(route.published)}" />\n`
+        ? `    <meta ${RH} property="article:published_time" content="${escAttr(route.published)}" />\n`
         : "") +
-      `    <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />\n` +
+      `    <meta ${RH} property="article:author" content="Ibra — Centrul de Arabă Libaneză" />\n` +
       `    <script type="application/ld+json">${JSON.stringify(articleJsonLd).replace(/</g, "\\u003c")}</script>\n`;
   }
   html = html.replace(/<\/head>/, `${inject}  </head>`);
@@ -438,6 +477,25 @@ export function seoPrerenderPlugin(): Plugin {
         // in there, since a one-way annotation silently emits no hreflang at all.
         try {
           const problems: string[] = [];
+
+          // Length guard. Google truncates past roughly these limits, and the
+          // registry being within them is not enough on its own — the head a
+          // crawler reads is whatever the page renders, and a 76-character C2
+          // title reached production that way.
+          const TITLE_MAX = 60;
+          const DESC_MAX = 160;
+          for (const route of allRoutes()) {
+            if (route.title.length > TITLE_MAX) {
+              problems.push(
+                `${route.path}: <title> is ${route.title.length} chars, over ${TITLE_MAX} — "${route.title}"`,
+              );
+            }
+            if (route.description.length > DESC_MAX) {
+              problems.push(
+                `${route.path}: description is ${route.description.length} chars, over ${DESC_MAX}`,
+              );
+            }
+          }
           const routes = allRoutes();
           const annotations = landingAnnotations();
 

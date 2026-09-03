@@ -15,6 +15,7 @@ import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
+import { levelTitle } from "@/lib/levelMeta";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
 // `started` marks a cohort that is already running: enrolment is closed, so the
@@ -89,17 +90,11 @@ const CursGrupLevel = () => {
   // bucuresti"). Give it a keyword-optimised meta title/description; other
   // levels keep the generic pattern.
   const isA1 = slug === "a1";
-  const isB1 = slug === "b1";
-  const isB2 = slug === "b2";
-  const metaTitle = isA1
-    ? (lang === "en"
-        ? "Beginner Arabic Course Bucharest & Online — A1 (Lebanese Arabic)"
-        : "Curs de Arabă pentru Începători București & Online — A1 (Libaneză)")
-    : isB1 && lang !== "en"
-      ? "Curs de Arabă Libaneză B1 – Grup | Ibra"
-      : isB2 && lang !== "en"
-        ? "Curs B2 de Arabă Libaneză — Grup, București & Online"
-        : `${curriculum.title} — ${t.courseGrupH1}`;
+  // One shared table with the prerender (src/lib/levelMeta.ts). The old inline
+  // ladder only special-cased A1, B1 and B2; A2, C1 and C2 fell through to
+  // `${curriculum.title} — ${t.courseGrupH1}`, which ran to 76 characters on
+  // C2 and disagreed with the title the static head already carried.
+  const metaTitle = levelTitle(slug, lang);
   const metaDesc = isA1
     ? (lang === "en"
         ? "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial."

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Users, User } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import groupImg from "@/assets/group-course.jpg";
+import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const CursAdulti = () => {
   const { t } = useI18n();
@@ -10,7 +11,10 @@ const CursAdulti = () => {
   const courseSchema = {
     name: t.cursAdultiH1,
     description: t.cursAdultiMetaDesc,
-    courseMode: ["onsite", "online"],
+    hasCourseInstance: courseInstances({
+      workload: GROUP_WEEKLY_WORKLOAD,
+      repeatFrequency: "Weekly",
+    }),
     educationalLevel: "A1, A2, B1, B2, C1, C2",
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Adults" },
   };

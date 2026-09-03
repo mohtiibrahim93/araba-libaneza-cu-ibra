@@ -34,6 +34,12 @@ interface Props {
    * relative through src/lib/languageRoutes.ts, which is deliberately looser.
    */
   roHref?: string | null;
+  /**
+   * Root-relative German counterpart, for the one page that has one. Passing it
+   * closes the three-language cluster — hreflang is only honoured when every
+   * member of a group names every other member.
+   */
+  deHref?: string | null;
   children: React.ReactNode;
 }
 
@@ -52,12 +58,14 @@ const EnLandingLayout = ({
   faq: faqProp,
   courseSchema = true,
   roHref = null,
+  deHref = null,
   children,
 }: Props) => {
   const url = `${BASE}/en/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
   const roAlt = roHref ? `${BASE}${roHref}` : null;
+  const deAlt = deHref ? `${BASE}${deHref}` : null;
 
   // Owner-edited version of this page (admin -> "Pagini"); empty fields fall
   // back to the code-shipped content.
@@ -114,6 +122,9 @@ const EnLandingLayout = ({
         <link rel="canonical" href={url} />
         {roAlt ? <link rel="alternate" hrefLang="ro" href={roAlt} /> : null}
         {roAlt ? <link rel="alternate" hrefLang="en" href={url} /> : null}
+        {/* Only the /en/learn-lebanese-arabic page has a German sibling, and
+            the cluster is only honoured if every member names every other. */}
+        {roAlt && deAlt ? <link rel="alternate" hrefLang="de" href={deAlt} /> : null}
         {roAlt ? <link rel="alternate" hrefLang="x-default" href={roAlt} /> : null}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaTitle} />

@@ -6,6 +6,7 @@ import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import { Users, User, CheckCircle2, Music, BookOpen, Palette, Pencil, Globe } from "lucide-react";
 import { useState } from "react";
 import kidsImg from "@/assets/kids-course.jpg";
+import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const CursCopii = () => {
   const { t, lang } = useI18n();
@@ -20,7 +21,7 @@ const CursCopii = () => {
   const courseSchema = {
     name: t.courseCopiiH1,
     description: t.courseCopiiMetaDesc,
-    courseMode: ["onsite", "online"],
+    hasCourseInstance: courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" }),
     educationalLevel: "Beginner — Kids ages 6–10",
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Children" },
   };

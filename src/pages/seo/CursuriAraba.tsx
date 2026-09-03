@@ -36,6 +36,7 @@ const CursuriAraba = ({ legacy = false }: CursuriArabaProps) => (
   <LandingLayout
     slug={legacy ? "cursuri-limba-araba" : "cursuri-araba"}
     enHref={legacy ? null : "/en/learn-lebanese-arabic"}
+    deHref={legacy ? null : "/de/arabisch-lernen"}
     canonicalHref={legacy ? "/cursuri-araba" : undefined}
     title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
     metaTitle={legacy ? "Cursuri de Arabă Libaneză | București și Online" : "Cursuri Arabă Libaneză A1–C2 | București și Online"}

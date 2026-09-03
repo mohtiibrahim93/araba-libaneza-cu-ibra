@@ -6,6 +6,7 @@ import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
 import posterCursuriGrup from "@/assets/poster-cursuri-grup-sep2026.webp";
+import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -18,7 +19,10 @@ const CursGrup = () => {
   const courseSchema = {
     name: t.courseGrupH1,
     description: t.courseGrupMetaDesc,
-    courseMode: ["onsite", "online"],
+    hasCourseInstance: courseInstances({
+      workload: GROUP_WEEKLY_WORKLOAD,
+      repeatFrequency: "Weekly",
+    }),
     educationalLevel: "A1, A2, B1, B2, C1, C2",
     offers: {
       "@type": "Offer",

@@ -56,6 +56,7 @@ const LearnLebaneseArabic = () => (
     faq={FAQ}
     courseSchema
     roHref="/cursuri-araba"
+    deHref="/de/arabisch-lernen"
   >
     <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">
       <div className="flex flex-wrap items-center gap-4 md:gap-6">

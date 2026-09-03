@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import { LEARN_CLUSTER, LEARN_X_DEFAULT } from "@/lib/hreflangCluster";
 
 const BASE = "https://centruldearabalibaneza.com";
 const URL = `${BASE}/de/arabisch-lernen`;
@@ -84,8 +85,8 @@ const ArabischLernen = () => (
       <link rel="canonical" href={URL} />
       <link rel="alternate" hrefLang="de" href={URL} />
       <link rel="alternate" hrefLang="en" href={`${BASE}/en/learn-lebanese-arabic`} />
-      <link rel="alternate" hrefLang="ro" href={`${BASE}/`} />
-      <link rel="alternate" hrefLang="x-default" href={`${BASE}/`} />
+      <link rel="alternate" hrefLang="ro" href={`${BASE}${LEARN_CLUSTER.ro}`} />
+      <link rel="alternate" hrefLang="x-default" href={`${BASE}${LEARN_X_DEFAULT}`} />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Arabisch lernen online — mit Muttersprachler" />
       <meta
