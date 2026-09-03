@@ -97,6 +97,14 @@ const STATIC_ROUTES: Route[] = [
   { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București." },
   { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
   { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectăm, folosim și protejăm datele tale personale, conform GDPR." },
+  // Both of these are app routes that had no prerendered page. Anything not
+  // prerendered falls back to the SPA shell, which is the homepage's HTML —
+  // so a crawler asking for them got the homepage's <head>, canonical and
+  // body under a different URL. /stergere-date is the worse of the two: it is
+  // linked from the footer of all 62 pages, so it was guaranteed to be
+  // crawled. Neither is an SEO target, hence noindex.
+  { path: "/stergere-date", title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra", description: "Cere ștergerea datelor tale personale din evidențele centrului, conform GDPR.", noindex: true },
+  { path: "/cursuri/online", title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra", description: "Pagina s-a mutat. Vezi toate cursurile de arabă libaneză, online și fizic în București.", canonical: "/cursuri", noindex: true },
   { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii și condițiile de utilizare a serviciilor Centrului de Arabă Libaneză cu Ibra." },
 ];
 
@@ -480,6 +488,33 @@ export function seoPrerenderPlugin(): Plugin {
         // in there, since a one-way annotation silently emits no hreflang at all.
         try {
           const problems: string[] = [];
+
+          // Shell-fallback guard. A route that is not prerendered falls back to
+          // the SPA shell, which is the homepage's HTML — so the URL answers
+          // 200 with the homepage's head, canonical and body. /stergere-date
+          // reached production that way while being linked from every footer.
+          // A route is allowed to skip prerendering only if robots.txt keeps
+          // crawlers off it.
+          {
+            const appSrc = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
+            const robots = fs.readFileSync(path.join(root, "public/robots.txt"), "utf8");
+            const disallowed = robots
+              .split("\n")
+              .filter((l) => l.trim().toLowerCase().startsWith("disallow:"))
+              .map((l) => l.split(":")[1].trim())
+              .filter(Boolean);
+            const known = new Set(allRoutes().map((r) => r.path));
+            for (const m of appSrc.matchAll(/<Route\s+path="([^"]+)"/g)) {
+              const routePath = m[1];
+              if (routePath.includes(":") || routePath === "*") continue;
+              if (known.has(routePath)) continue;
+              if (disallowed.some((d) => routePath === d || routePath.startsWith(d))) continue;
+              problems.push(
+                `${routePath}: routed in App.tsx but not prerendered and not disallowed in robots.txt — ` +
+                  "it will serve the homepage shell to crawlers",
+              );
+            }
+          }
 
           // Duplicate guard. Two indexable URLs sharing a title or a
           // description are two crawl destinations competing for the same
