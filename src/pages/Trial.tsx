@@ -108,7 +108,7 @@ const TrialPage = () => {
   const title = t.trialPageSeoTitle;
 
   return (
-    <main className="min-h-screen bg-background py-12 px-gutter">
+    <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={t.trialPageSeoDesc} />

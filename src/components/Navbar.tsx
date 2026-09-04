@@ -226,7 +226,12 @@ const Navbar = () => {
           {links.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              // "/#faq", not "#faq": these sections live on the homepage, so on
+              // any other page a bare hash points at an id that is not there.
+              // goToAnchor handles the click, but the href has to be right on
+              // its own — for a middle-click, for "open in new tab", and for
+              // anything reading the markup before React attaches.
+              href={`/${l.href}`}
               onClick={goToAnchor(l.href)}
               className="hover:text-foreground transition-colors"
             >
@@ -354,7 +359,7 @@ const Navbar = () => {
             {links.map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={`/${l.href}`}
                 onClick={goToAnchor(l.href)}
                 className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center"
               >

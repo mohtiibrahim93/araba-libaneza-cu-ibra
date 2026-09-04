@@ -74,7 +74,9 @@ const CumInvetiArabaLibaneza = () => {
           ro: "Alătură-te unui curs cu profesor nativ, în București sau online.",
           en: "Join a course with a native teacher, in Bucharest or online.",
         },
-        href: "/#inscriere",
+        // #inscriere exists only on the course-detail pages, not on the
+        // homepage, so "/#inscriere" scrolled nowhere.
+        href: "/cursuri",
         label: { ro: "Înscrie-te la un curs", en: "Enrol in a course" },
       }}
       faq={FAQ}

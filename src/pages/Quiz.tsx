@@ -29,7 +29,7 @@ const Quiz = () => {
         <meta name="robots" content="index,follow" />
       </Helmet>
       <Navbar />
-      <main className="flex-1 pt-20">
+      <main id="main-content" className="flex-1 pt-20">
         <FindYourTrackQuiz />
 
         {/* Below the quiz: the page's only visible prose was the questions

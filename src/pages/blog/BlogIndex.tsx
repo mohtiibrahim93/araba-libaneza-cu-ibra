@@ -70,7 +70,7 @@ const BlogIndex = () => {
 
       <Navbar />
 
-      <main className="pt-16">
+      <main id="main-content" className="pt-16">
         <nav aria-label="Breadcrumb" className="w-full max-w-content mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link to="/" className="hover:text-foreground transition-colors">{c.home}</Link></li>

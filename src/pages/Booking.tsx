@@ -31,7 +31,7 @@ const BookingInner = () => {
   if (!hasValidRegistration) {
     const en = lang === "en";
     return (
-      <main className="min-h-screen bg-background py-12 px-gutter">
+      <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
         <Helmet>
           <title>{(en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
           <meta name="description" content={en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București."} />
