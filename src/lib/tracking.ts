@@ -30,6 +30,56 @@ export function trackFormSubmit(formType: "group" | "private" | "kids" | "trial"
   });
 }
 
+// ---------------------------------------------------------------------------
+// Registration funnel
+//
+// GA4's enhanced measurement emits an automatic `form_start` on first
+// interaction with ANY form on the site — the resource-download boxes, the
+// trial booker, the newsletter field — while `Lead` fires only on a completed
+// course registration. Comparing the two ("27 form_start, 14 leads") therefore
+// compares two different populations, and any drop-off read from it is an
+// artefact rather than a measurement.
+//
+// These events cover one form, name the step, and say which field rejected the
+// submission, so the funnel can be read as a funnel.
+// ---------------------------------------------------------------------------
+
+export type RegistrationFormType = "group" | "private" | "kids";
+
+/** First real interaction with the registration form, once per mount. */
+export function trackRegistrationStart(formType: RegistrationFormType | "unknown") {
+  trackEvent("registration_start", { form_type: formType });
+}
+
+/** A required choice was made — course type, format, level, cohort. */
+export function trackRegistrationStep(
+  step: "course_type" | "format" | "level" | "cohort" | "quantity",
+  formType: RegistrationFormType | "unknown",
+  value?: string | number | null,
+) {
+  trackEvent("registration_step", {
+    step,
+    form_type: formType,
+    value: value ?? undefined,
+  });
+}
+
+/**
+ * Submit was pressed and rejected. `field` is the point of the event: without
+ * it we know people fail, not what they fail on.
+ */
+export function trackRegistrationValidationFailed(
+  field: "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
+  formType: RegistrationFormType | "unknown",
+) {
+  trackEvent("registration_validation_failed", { field, form_type: formType });
+}
+
+/** Submit passed validation and the insert was attempted. */
+export function trackRegistrationSubmit(formType: RegistrationFormType) {
+  trackEvent("registration_submit", { form_type: formType });
+}
+
 // Convenience: track Stripe checkout initiation.
 export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
   trackEvent("InitiateCheckout", { content_name: courseType });

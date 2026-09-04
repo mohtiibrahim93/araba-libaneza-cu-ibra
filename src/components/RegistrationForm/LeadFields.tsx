@@ -48,6 +48,12 @@ interface Props {
   onPhoneChange: (v: string) => void;
   onEmailChange: (v: string) => void;
   onMessageChange: (v: string) => void;
+  /**
+   * Reveal validation errors even on fields the visitor never blurred.
+   * Submit sets this: a field that was never focused can still be the reason
+   * the form was rejected, and until now that error was invisible.
+   */
+  showErrors?: boolean;
 }
 
 const LeadFields = ({
@@ -60,12 +66,13 @@ const LeadFields = ({
   onPhoneChange,
   onEmailChange,
   onMessageChange,
+  showErrors = false,
 }: Props) => {
   const { t } = useI18n();
   const [phoneTouched, setPhoneTouched] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
-  const phoneError = phoneTouched && phone && !isValidPhone(phone);
-  const emailError = emailTouched && email && !isValidEmail(email);
+  const phoneError = (phoneTouched || showErrors) && !isValidPhone(phone);
+  const emailError = (emailTouched || showErrors) && Boolean(email) && !isValidEmail(email);
 
   return (
     <>

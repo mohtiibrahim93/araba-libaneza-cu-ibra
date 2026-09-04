@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,13 @@ import GdprCheckbox from "@/components/GdprCheckbox";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
-import { trackEvent } from "@/lib/tracking";
+import {
+  trackEvent,
+  trackRegistrationStart,
+  trackRegistrationStep,
+  trackRegistrationSubmit,
+  trackRegistrationValidationFailed,
+} from "@/lib/tracking";
 import { getRecaptchaToken } from "@/lib/recaptcha";
 import TrustBand from "@/components/TrustBand";
 
@@ -51,6 +57,17 @@ interface RegistrationFormSectionProps {
 
 export const STORAGE_KEY = "registration_form_draft";
 
+/** Which field rejected a submit — also the value reported to analytics. */
+type InvalidField =
+  | "course_type"
+  | "format"
+  | "level"
+  | "center"
+  | "gdpr"
+  | "phone"
+  | "email"
+  | null;
+
 const RegistrationFormSection = ({
   defaultCourseType,
   defaultFormat,
@@ -77,6 +94,19 @@ const RegistrationFormSection = ({
   const [gdpr, setGdpr] = useState(false);
   const [formatError, setFormatError] = useState(false);
   const [centerError, setCenterError] = useState(false);
+  /**
+   * Which field rejected the last submit, if any.
+   *
+   * Only `format` and `center` used to mark themselves; the other five checks
+   * fired a toast and returned. On a phone a toast that names a field you
+   * cannot see is close to no error at all — you press submit, something
+   * flashes, nothing on screen changes, and you leave.
+   */
+  const [invalidField, setInvalidField] = useState<InvalidField>(null);
+  /** Submit has been attempted, so fields never blurred still show their errors. */
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+  /** Fires registration_start once, on the first real interaction. */
+  const startedRef = useRef(false);
   const [referralCode, setReferralCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -243,6 +273,32 @@ const RegistrationFormSection = ({
         ? getCapacity("kids", null)
         : null;
 
+  /** Note the first real interaction, so the funnel has a real starting point. */
+  const noteStart = () => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    trackRegistrationStart((courseType || "unknown") as CourseType | "unknown");
+  };
+
+  /**
+   * Reject the submission and say so where the visitor is looking: mark the
+   * field, scroll it into view, focus it, and record which field it was so the
+   * drop-off can be read from analytics instead of guessed at.
+   */
+  const fail = (field: Exclude<InvalidField, null>, message: string, elementId?: string) => {
+    setInvalidField(field);
+    if (field === "format") setFormatError(true);
+    if (field === "center") setCenterError(true);
+    toast.error(message);
+    trackRegistrationValidationFailed(field, (courseType || "unknown") as CourseType | "unknown");
+    const el = elementId ? document.getElementById(elementId) : null;
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      // focus after the scroll so the browser doesn't fight the animation
+      window.setTimeout(() => el.focus({ preventScroll: true }), 250);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -254,38 +310,43 @@ const RegistrationFormSection = ({
 
     setFormatError(false);
     setCenterError(false);
+    setInvalidField(null);
+    setSubmitAttempted(true);
 
     if (!courseType) {
-      toast.error(t.mainLeadErrorCourseType);
+      fail("course_type", t.mainLeadErrorCourseType, "courseType");
       return;
     }
     if (!format) {
-      setFormatError(true);
-      toast.error(courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat);
+      fail(
+        "format",
+        courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat,
+        "format",
+      );
       return;
     }
     if (courseType === "group" && !level) {
-      toast.error(t.mainLeadErrorLevel);
+      fail("level", t.mainLeadErrorLevel, "level");
       return;
     }
     if (format === "fizic" && !center) {
-      setCenterError(true);
-      toast.error(t.mainLeadErrorLocation);
+      fail("center", t.mainLeadErrorLocation, "center");
       return;
     }
     if (!gdpr) {
-      toast.error(t.gdprRequired);
+      fail("gdpr", t.gdprRequired, "gdpr");
       return;
     }
     if (!isValidPhone(phone)) {
-      toast.error(t.validPhoneError);
+      fail("phone", t.validPhoneError, "phone");
       return;
     }
     if (email && !isValidEmail(email)) {
-      toast.error(t.validEmailError);
+      fail("email", t.validEmailError, "email");
       return;
     }
 
+    trackRegistrationSubmit(courseType as CourseType);
     setSubmitting(true);
     try {
       // reCAPTCHA v3 verification is intentionally soft: a missing token or
@@ -471,8 +532,24 @@ const RegistrationFormSection = ({
           {(lockSelection || lockCourseType) && courseType ? null : (
           <div className="space-y-2">
             <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
-            <Select value={courseType} onValueChange={(v) => onCourseChange(v as CourseType)}>
-              <SelectTrigger id="courseType">
+            <Select
+              value={courseType}
+              onValueChange={(v) => {
+                noteStart();
+                setInvalidField(null);
+                trackRegistrationStep("course_type", v as CourseType, v);
+                onCourseChange(v as CourseType);
+              }}
+            >
+              <SelectTrigger
+                id="courseType"
+                aria-invalid={invalidField === "course_type" || undefined}
+                className={
+                  invalidField === "course_type"
+                    ? "border-destructive focus:ring-destructive"
+                    : ""
+                }
+              >
                 <SelectValue placeholder={t.mainLeadCourseTypePlaceholder} />
               </SelectTrigger>
               <SelectContent>
@@ -481,6 +558,9 @@ const RegistrationFormSection = ({
                 <SelectItem value="kids">{t.mainLeadCourseKids}</SelectItem>
               </SelectContent>
             </Select>
+            {invalidField === "course_type" && (
+              <p className="text-xs text-destructive">{t.mainLeadErrorCourseType}</p>
+            )}
           </div>
           )}
 
@@ -491,8 +571,11 @@ const RegistrationFormSection = ({
               <Select
                 value={format}
                 onValueChange={(v) => {
+                  noteStart();
                   setFormat(v as FormatType);
                   setFormatError(false);
+                  setInvalidField(null);
+                  trackRegistrationStep("format", (courseType || "unknown") as CourseType | "unknown", v);
                 }}
               >
                 <SelectTrigger
@@ -524,7 +607,13 @@ const RegistrationFormSection = ({
           {courseType === "group" && (
             <GroupFields
               level={level}
-              onLevelChange={setLevel}
+              onLevelChange={(lvl) => {
+                noteStart();
+                setInvalidField(null);
+                trackRegistrationStep("level", "group", lvl);
+                setLevel(lvl);
+              }}
+              levelError={invalidField === "level"}
               format={format}
               groupPlan={groupPlan}
               onGroupPlanChange={setGroupPlan}
@@ -616,6 +705,7 @@ const RegistrationFormSection = ({
 
           {/* Contact + message */}
           <LeadFields
+            showErrors={submitAttempted}
             courseType={courseType}
             name={name}
             phone={phone}
@@ -633,7 +723,14 @@ const RegistrationFormSection = ({
 
           <p className="text-xs text-muted-foreground">{t.mainLeadCallbackNote}</p>
 
-          <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+          <GdprCheckbox
+            checked={gdpr}
+            onCheckedChange={(v) => {
+              setGdpr(v);
+              if (v) setInvalidField(null);
+            }}
+            error={invalidField === "gdpr"}
+          />
 
           <div className="space-y-1.5">
             <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">

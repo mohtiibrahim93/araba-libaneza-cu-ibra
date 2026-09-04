@@ -26,6 +26,8 @@ interface Props {
   onCohortChange: (cohort: Cohort | null) => void;
   /** When true, hide the level selector and show the locked level as read-only. */
   locked?: boolean;
+  /** Submit was rejected because no level was chosen — mark the field. */
+  levelError?: boolean;
 }
 
 const GroupFields = ({
@@ -37,6 +39,7 @@ const GroupFields = ({
   cohortId,
   onCohortChange,
   locked = false,
+  levelError = false,
 }: Props) => {
   const { t } = useI18n();
   const [showModal, setShowModal] = useState(false);
@@ -70,7 +73,11 @@ const GroupFields = ({
           </button>
         </div>
         <Select value={level} onValueChange={(v) => onLevelChange(v as LevelType)}>
-          <SelectTrigger id="level">
+          <SelectTrigger
+            id="level"
+            aria-invalid={levelError || undefined}
+            className={levelError ? "border-destructive focus:ring-destructive" : ""}
+          >
             <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
           </SelectTrigger>
           <SelectContent>
@@ -82,6 +89,9 @@ const GroupFields = ({
             <SelectItem value="C2">C2 — {t.levelC2Subtitle}</SelectItem>
           </SelectContent>
         </Select>
+        {levelError && (
+          <p className="text-xs text-destructive">{t.mainLeadErrorLevel}</p>
+        )}
         <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
       </div>
       )}
