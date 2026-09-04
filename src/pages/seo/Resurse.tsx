@@ -39,7 +39,7 @@ const Resurse = () => (
 
     <h2>1. Cheat-sheet Arabizi</h2>
     <p>
-      O pagină cu tabelul cifrelor (2, 3, 5, 6, 7, 8, 9) și literele arabe pe care le înlocuiesc, 20
+      O pagină cu tabelul cifrelor (2, 3, 5, 7, 8) și literele arabe pe care le înlocuiesc, 20
       de expresii esențiale și un mesaj real de WhatsApp decodat cuvânt cu cuvânt. Ghidul complet
       stă pe <Link to="/arabizi">pagina Arabizi</Link>.
     </p>

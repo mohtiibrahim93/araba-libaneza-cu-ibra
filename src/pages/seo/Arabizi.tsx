@@ -7,7 +7,6 @@ const NUMBERS: [string, string, string, string][] = [
   ["2", "ء / ق", "oprire glotală — pauza scurtă din „co-operare”; în libaneză și ق se pronunță așa", "2ana (eu), 2alb (inimă), 2amar (lună)"],
   ["3", "ع", "sunet gutural adânc din gât, specific arab", "3afwan, ya3ni, 3anjad"],
   ["5", "خ", "h aspru, ca „ch” în germană „Bach”", "5alas, 5ayye (frate)"],
-  ["6", "ط", "t emfatic, apăsat (folosit mai rar)", "6ayyeb (bine)"],
   ["7", "ح", "h puternic din gât, fără echivalent în română", "mar7aba, 7abibi"],
   ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "8ada (prânz), 8ali (scump)"],
 ];
@@ -44,7 +43,7 @@ const Arabizi = () => (
     slug="arabizi"
     title="Arabizi: ghid complet — ce înseamnă 2, 3, 5 și 7 în arabă"
     metaTitle="Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă"
-    description="Învață ce înseamnă cifrele 2, 3, 5, 6, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit."
+    description="Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit."
     crumb="Arabizi"
     lead="Araba scrisă cu litere latine și cifre. Aici găsești tabelul complet de decodare, exemple reale de mesaje și cheat-sheet-ul PDF gratuit."
     enHref={null}

@@ -16,7 +16,7 @@ const ArabiziCheatSheetForm = ({ source }: Props) => (
     idPrefix="cs"
     fileHref="/arabizi-cheat-sheet.pdf"
     title="Ia cheat-sheet-ul Arabizi (PDF, gratuit)"
-    description="Tabelul cifrelor (2, 3, 5, 6, 7, 8, 9), 20 de expresii libaneze esențiale și un mesaj real decodat cuvânt cu cuvânt. Îl primești pe email în câteva secunde."
+    description="Tabelul cifrelor (2, 3, 5, 7, 8), 20 de expresii libaneze esențiale și un mesaj real decodat cuvânt cu cuvânt. Îl primești pe email în câteva secunde."
   />
 );
 
