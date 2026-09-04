@@ -3,6 +3,12 @@
 // a blank page. Loaded only by the admin bundle. Content parity note: the
 // table-of-contents asides and per-cell RTL styling are chrome, not content —
 // tables keep every row; Arabic text renders fine in Markdown tables.
+//
+// The arabizi digit table is interpolated from src/data/arabizi.ts rather
+// than written out here. This copy still listed 9 (ق) long after it was
+// removed everywhere else, which meant opening the Blog editor prefilled
+// the article with a row the site no longer teaches.
+import { arabiziMarkdownTable } from "@/data/arabizi";
 
 export interface SeedBody {
   lead_ro: string;
@@ -382,14 +388,7 @@ Want to see where you start? Take the [free level test](/quiz) or read the [comp
 
 Araba are câteva sunete care nu există în română și nu au o literă latină potrivită. Soluția ingenioasă a vorbitorilor: folosesc cifre a căror formă seamănă cu litera arabă corespunzătoare. Iată cheia:
 
-| Cifră | Literă arabă | Sunet |
-| --- | --- | --- |
-| 2 | ء / ق | oprire glotală (ca pauza din „co-operare”) |
-| 3 | ع | sunet gutural din gât, specific arab |
-| 5 | خ | h aspru, ca „ch” în germana „Bach” |
-| 7 | ح | h puternic din gât, fără echivalent în română |
-| 8 | غ | gh, ca un „r” franțuzesc răgușit |
-| 9 | ق | q gutural (uneori) |
+${arabiziMarkdownTable("ro")}
 
 ## Exemple reale
 
@@ -409,14 +408,7 @@ Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. 
 
 Arabic has a few sounds that don't exist in English and have no matching Latin letter. Speakers found a clever fix: they use numbers whose shape resembles the corresponding Arabic letter. Here's the key:
 
-| Number | Arabic letter | Sound |
-| --- | --- | --- |
-| 2 | ء / ق | glottal stop (like the pause in 'co-operate') |
-| 3 | ع | guttural sound from the throat, specific to Arabic |
-| 5 | خ | harsh h, like 'ch' in German 'Bach' |
-| 7 | ح | strong h from the throat, no English equivalent |
-| 8 | غ | gh, like a raspy French 'r' |
-| 9 | ق | guttural q (sometimes) |
+${arabiziMarkdownTable("en")}
 
 ## Real examples
 

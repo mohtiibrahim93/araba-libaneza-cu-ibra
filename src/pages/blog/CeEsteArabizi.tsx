@@ -2,15 +2,8 @@ import { Link } from "react-router-dom";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
 import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
 import { useI18n } from "@/lib/i18n";
+import { ARABIZI_DIGITS } from "@/data/arabizi";
 
-// [number, arabic-letter, sound-ro, sound-en]
-const NUMBERS: [string, string, string, string][] = [
-  ["2", "ء / ق", "oprire glotală (ca pauza din „co-operare”)", "glottal stop (like the pause in 'co-operate')"],
-  ["3", "ع", "sunet gutural din gât, specific arab", "guttural sound from the throat, specific to Arabic"],
-  ["5", "خ", "h aspru, ca „ch” în germană „Bach”", "harsh h, like 'ch' in German 'Bach'"],
-  ["7", "ح", "h puternic din gât, fără echivalent în română", "strong h from the throat, no English equivalent"],
-  ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "gh, like a raspy French 'r'"],
-];
 
 // Questions specific to this article; anything answered elsewhere on the
 // site stays there, so the same answer never lives on two URLs.
@@ -80,11 +73,11 @@ const CeEsteArabizi = () => {
             </tr>
           </thead>
           <tbody>
-            {NUMBERS.map(([n, letter, soundRo, soundEn]) => (
-              <tr key={n} className="border-b border-border/60 align-top">
-                <td className="py-2 pr-3 font-bold text-lg text-primary">{n}</td>
+            {ARABIZI_DIGITS.map(({ digit, letter, sound }) => (
+              <tr key={digit} className="border-b border-border/60 align-top">
+                <td className="py-2 pr-3 font-bold text-lg text-primary">{digit}</td>
                 <td className="py-2 px-3 font-arabic text-xl text-brand-green" dir="rtl" lang="ar">{letter}</td>
-                <td className="py-2 pl-3 text-foreground/80">{en ? soundEn : soundRo}</td>
+                <td className="py-2 pl-3 text-foreground/80">{en ? sound.en : sound.ro}</td>
               </tr>
             ))}
           </tbody>

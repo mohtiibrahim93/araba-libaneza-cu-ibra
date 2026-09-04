@@ -1,15 +1,8 @@
 import { Link } from "react-router-dom";
 import LandingLayout from "@/components/seo/LandingLayout";
+import { ARABIZI_DIGITS } from "@/data/arabizi";
 import ArabiziCheatSheetForm from "@/components/ArabiziCheatSheetForm";
 
-// [cifră, literă arabă, sunet, exemple]
-const NUMBERS: [string, string, string, string][] = [
-  ["2", "ء / ق", "oprire glotală — pauza scurtă din „co-operare”; în libaneză și ق se pronunță așa", "2ana (eu), 2alb (inimă), 2amar (lună)"],
-  ["3", "ع", "sunet gutural adânc din gât, specific arab", "3afwan, ya3ni, 3anjad"],
-  ["5", "خ", "h aspru, ca „ch” în germană „Bach”", "5alas, 5ayye (frate)"],
-  ["7", "ح", "h puternic din gât, fără echivalent în română", "mar7aba, 7abibi"],
-  ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "8ada (prânz), 8ali (scump)"],
-];
 
 const FAQ = [
   {
@@ -72,12 +65,15 @@ const Arabizi = () => (
           </tr>
         </thead>
         <tbody>
-          {NUMBERS.map(([n, letter, sound, examples]) => (
+          {ARABIZI_DIGITS.map(({ digit: n, letter, sound, note, examples }) => (
             <tr key={n} className="border-b border-border/60 align-top">
               <td className="py-2 pr-3 font-bold text-lg text-primary">{n}</td>
               <td className="py-2 px-3 font-arabic text-xl text-brand-green" dir="rtl" lang="ar">{letter}</td>
-              <td className="py-2 px-3 text-foreground/80">{sound}</td>
-              <td className="py-2 pl-3 text-foreground/80">{examples}</td>
+              <td className="py-2 px-3 text-foreground/80">
+                {sound.ro}
+                {note ? ` — ${note.ro}` : ""}
+              </td>
+              <td className="py-2 pl-3 text-foreground/80">{examples.ro}</td>
             </tr>
           ))}
         </tbody>

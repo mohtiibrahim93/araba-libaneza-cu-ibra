@@ -114,7 +114,7 @@ const DialecteArabe = () => (
     <p>
       Libaneza și siriana din Damasc sunt atât de apropiate încât vorbitorii nici nu observă că
       trec de la una la alta. Semnul cel mai audibil e <strong>ق</strong>: și la Beirut, și la
-      Damasc se pronunță ca oprire glotală, deci <em>qalb</em> („inimă”) devine <em>2alb</em>.
+      Damasc se pronunță ca oprire glotală, deci <em>qalb</em> („inimă”) devine <em>2aleb</em>.
       Libaneza înclină spre vocale mai deschise, mai „ridicate” (<em>imēle</em>) — <em>kēn</em> la
       Beirut față de <em>kān</em> la Damasc. Tot libaneza are cel mai gros strat de franceză și
       engleză dintre toate dialectele arabe: <em>bonjour</em>, <em>merci</em> și{" "}

@@ -6,35 +6,26 @@
  * every page. It is the file people receive by email, so it was the one place
  * still contradicting the site.
  *
- * Generating it from the same table the site renders means that can't recur.
- * Run: node scripts/buildCheatSheet.mjs
+ * It now reads the same array the site renders, src/data/arabizi.ts, so the
+ * PDF cannot say something the pages do not.
+ * Run: npx vite-node scripts/buildCheatSheet.ts
  *
  * Layout, colours and section order follow the original: A4, brand red, Lora
  * for display type, the same three numbered sections and the same closing page.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { ARABIZI_DIGITS } from "../src/data/arabizi";
 
-const root = resolve(import.meta.dirname, "..");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const font = (p) => readFileSync(resolve(root, "node_modules/@fontsource", p)).toString("base64");
 
 const LORA_400 = font("lora/files/lora-latin-400-normal.woff2");
 const LORA_700 = font("lora/files/lora-latin-700-normal.woff2");
 const NASKH_600 = font("noto-naskh-arabic/files/noto-naskh-arabic-arabic-600-normal.woff2");
-
-/**
- * The digits Lebanese arabizi actually uses. 6 (ط) and 9 (ق) are not part of
- * it — they belong to other transliteration conventions — and this table is
- * the same set shown on /arabizi.
- */
-const DIGITS = [
-  ["2", "ء / ق", "oprire glotală, ca pauza din „co-operare”", "ta2burni, 2ana"],
-  ["3", "ع", "sunet gutural adânc din gât, specific arab", "3afwan, ya3ni"],
-  ["5", "خ", "h aspru, ca „ch” în germană „Bach”", "5alas, 5ayye"],
-  ["7", "ح", "h puternic din gât, fără echivalent în română", "mar7aba, 7abibi"],
-  ["8", "غ", "gh, ca un „r” franțuzesc răgușit", "8ada, 8ali"],
-];
 
 const PHRASES = [
   ["Mar7aba", "Salut"],
@@ -129,9 +120,9 @@ const html = `<!doctype html>
 <h2>1. Cifrele = litere arabe</h2>
 <table>
   <tr><th>Cifră</th><th>Literă</th><th>Sunet</th><th>Exemplu</th></tr>
-  ${DIGITS.map(([d, l, s, e]) => `<tr>
-    <td class="digit">${d}</td><td class="letter">${l}</td>
-    <td>${esc(s)}</td><td class="ex">${esc(e)}</td></tr>`).join("")}
+  ${ARABIZI_DIGITS.map((d) => `<tr>
+    <td class="digit">${d.digit}</td><td class="letter">${d.letter}</td>
+    <td>${esc(d.sound.ro)}</td><td class="ex">${esc(d.examples.ro)}</td></tr>`).join("")}
 </table>
 <div class="gold"><b>Regula de aur:</b> cifra seamănă la formă cu litera arabă. Restul se citește exact ca în română.</div>
 
@@ -168,4 +159,13 @@ await browser.close();
 
 const bytes = readFileSync(out).length;
 writeFileSync(resolve(root, "scripts/.cheat-sheet-preview.html"), html);
-console.log(`[cheat-sheet] wrote ${out} (${(bytes / 1024).toFixed(0)} KB), ${DIGITS.length} digits, ${PHRASES.length} phrases`);
+
+// Fingerprint of the content this PDF was built from. A test compares it with
+// a hash recomputed from the current data, so editing the table without
+// rerunning this script fails the build instead of silently shipping a PDF
+// that contradicts the site — which is exactly how 6 and 9 survived in it.
+writeFileSync(
+  resolve(root, "public/arabizi-cheat-sheet.hash"),
+  createHash("sha256").update(JSON.stringify({ ARABIZI_DIGITS, PHRASES })).digest("hex") + "\n",
+);
+console.log(`[cheat-sheet] wrote ${out} (${(bytes / 1024).toFixed(0)} KB), ${ARABIZI_DIGITS.length} digits, ${PHRASES.length} phrases`);
