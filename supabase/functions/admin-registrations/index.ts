@@ -2,6 +2,13 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { gcalDiagnose } from "../_shared/booking.ts";
+import {
+  COURSE_LESSONS,
+  computeRefund,
+  formatBani,
+  type RefundBreakdown,
+} from "../_shared/refund.ts";
+import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -17,6 +24,78 @@ function isAllowedSenderEmail(email: string) {
   const normalized = email.trim().toLowerCase();
   const domain = normalized.split("@")[1];
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) && allowedSenderDomains.includes(domain);
+}
+
+
+/**
+ * Everything computeRefund needs for one registration, read from the row, the
+ * cohort it belongs to, and the real Stripe charge.
+ *
+ * `paidBani` deliberately comes from Stripe rather than the price table: a
+ * student who paid before a price change, or on a hand-made discount, must be
+ * refunded against what they actually paid.
+ *
+ * `lessonsTaken` is supplied by the admin, who knows how many lessons actually
+ * happened. It defaults to 0, which is the generous reading — nothing consumed
+ * — so a forgotten field can never refund a student less than they are owed.
+ */
+async function refundInputsFor(
+  supabase: ReturnType<typeof createClient>,
+  stripe: Stripe,
+  reg: Record<string, unknown>,
+  lessonsTaken: number,
+): Promise<{ breakdown: RefundBreakdown; paymentIntentId: string } | { error: string }> {
+  const sessionOrIntent = String(reg.stripe_session_id ?? "");
+  if (!sessionOrIntent) return { error: "Nu s-a găsit plata Stripe asociată" };
+
+  let paymentIntentId = sessionOrIntent;
+  if (paymentIntentId.startsWith("cs_")) {
+    const session = await stripe.checkout.sessions.retrieve(paymentIntentId);
+    const pi = session.payment_intent;
+    paymentIntentId = typeof pi === "string" ? pi : pi?.id ?? "";
+  }
+  if (!paymentIntentId) return { error: "Nu s-a găsit plata Stripe asociată" };
+
+  const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  // amount_received is what actually cleared; amount is only what was asked for.
+  const paidBani = Number(intent.amount_received ?? intent.amount ?? 0);
+  if (!paidBani) return { error: "Plata Stripe nu are o sumă încasată" };
+
+  const alreadyRefunded = Number(intent.amount_refunded ?? 0);
+  if (alreadyRefunded >= paidBani) return { error: "Plata a fost deja rambursată integral" };
+
+  // How many lessons the whole course holds, so a pro-rata share means something.
+  const formType = String(reg.form_type ?? "");
+  const level = String(reg.level ?? "").toUpperCase();
+  let totalLessons: number;
+  if (formType === "kids") {
+    totalLessons = KIDS_GROUP_MONTHS * 8; // a kids "month" is 8 lessons, as for groups
+  } else if (formType === "private") {
+    totalLessons = Math.max(1, Number(reg.quantity ?? 1));
+  } else {
+    totalLessons = COURSE_LESSONS[level] ?? GROUP_MONTHS.A1 * 8;
+  }
+
+  // The start date decides which of the three tiers applies.
+  let courseStartsAt: string | null = null;
+  if (reg.cohort_id) {
+    const { data: cohort } = await supabase
+      .from("group_cohorts")
+      .select("start_date")
+      .eq("id", reg.cohort_id)
+      .maybeSingle();
+    if (cohort?.start_date) courseStartsAt = `${cohort.start_date}T00:00:00.000Z`;
+  }
+
+  return {
+    paymentIntentId,
+    breakdown: computeRefund({
+      paidBani,
+      totalLessons,
+      lessonsTaken,
+      courseStartsAt,
+    }),
+  };
 }
 
 Deno.serve(async (req) => {
@@ -1192,6 +1271,39 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, data });
     }
 
+    // Shows what the published policy would return, without moving any money.
+    // The admin sees the tier and the arithmetic before confirming, the same
+    // way preview_cancel_subscription works for subscriptions.
+    if (action === "preview_refund") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const taken = Number(body.lessons_taken ?? 0);
+      if (!Number.isInteger(taken) || taken < 0) {
+        return jsonResponse({ error: "Număr de lecții invalid" });
+      }
+
+      const { data: reg, error: regError } = await supabase
+        .from("registrations")
+        .select("id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at")
+        .eq("id", id)
+        .maybeSingle();
+      if (regError) throw regError;
+      if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+      if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
+      if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
+        return jsonResponse({ error: "Doar înscrierile plătite pot fi rambursate" });
+      }
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+        apiVersion: "2025-08-27.basil",
+      });
+      const inputs = await refundInputsFor(supabase, stripe, reg, taken);
+      if ("error" in inputs) return jsonResponse({ error: inputs.error });
+      return jsonResponse({
+        success: true,
+        data: { ...inputs.breakdown, refund_label: formatBani(inputs.breakdown.refundBani) },
+      });
+    }
+
     if (action === "refund") {
       if (typeof id !== "string") {
         return jsonResponse({ error: "ID invalid" });
@@ -1199,10 +1311,14 @@ Deno.serve(async (req) => {
       if (refund_reason != null && (typeof refund_reason !== "string" || refund_reason.length > 500)) {
         return jsonResponse({ error: "Motiv invalid" });
       }
+      const lessonsTaken = Number(body.lessons_taken ?? 0);
+      if (!Number.isInteger(lessonsTaken) || lessonsTaken < 0) {
+        return jsonResponse({ error: "Număr de lecții invalid" });
+      }
 
       const { data: reg, error: regError } = await supabase
         .from("registrations")
-        .select("id, payment_status, stripe_session_id, refunded_at")
+        .select("id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at")
         .eq("id", id)
         .maybeSingle();
 
@@ -1217,22 +1333,27 @@ Deno.serve(async (req) => {
         apiVersion: "2025-08-27.basil",
       });
 
-      // stripe_session_id holds either a PaymentIntent id (cs create-payment-intent
-      // flow, "pi_...") or a Checkout Session id (create-checkout flow, "cs_...").
-      // Stripe's refund API needs a payment_intent id either way.
-      let paymentIntentId = reg.stripe_session_id;
-      if (paymentIntentId.startsWith("cs_")) {
-        const session = await stripe.checkout.sessions.retrieve(paymentIntentId);
-        const pi = session.payment_intent;
-        paymentIntentId = typeof pi === "string" ? pi : pi?.id ?? "";
-        if (!paymentIntentId) {
-          return jsonResponse({ error: "Nu s-a găsit plata Stripe asociată" });
-        }
+      // The published refund policy, applied. This button used to call
+      // stripe.refunds.create with no amount, which refunds the charge in
+      // full — the three tiers in Terms section 4 existed on the site and in
+      // _shared/refund.ts but nothing ever ran them.
+      const inputs = await refundInputsFor(supabase, stripe, reg, lessonsTaken);
+      if ("error" in inputs) return jsonResponse({ error: inputs.error });
+      const { breakdown, paymentIntentId } = inputs;
+
+      if (breakdown.refundBani <= 0) {
+        return jsonResponse({
+          error:
+            "Politica de rambursare nu returnează nimic în acest caz (lecțiile consumate nu se rambursează).",
+        });
       }
 
       let refund;
       try {
-        refund = await stripe.refunds.create({ payment_intent: paymentIntentId });
+        refund = await stripe.refunds.create({
+          payment_intent: paymentIntentId,
+          amount: breakdown.refundBani,
+        });
       } catch (stripeErr) {
         console.error("[admin-registrations] stripe refund failed", stripeErr);
         const msg = stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
@@ -1245,6 +1366,9 @@ Deno.serve(async (req) => {
           payment_status: "refunded",
           refunded_at: new Date().toISOString(),
           refund_reason: refund_reason || null,
+          // What actually went back, so the admin list and any later
+          // reconciliation show the policy amount rather than the full charge.
+          refunded_amount: breakdown.refundBani,
         })
         .eq("id", id)
         .select("*")
@@ -1262,13 +1386,26 @@ Deno.serve(async (req) => {
         });
       }
 
+      // The whole breakdown is logged, not just the total: the tier and the
+      // lesson count are what make a refund defensible if it is ever queried.
       await supabase.from("audit_logs").insert({
         actor: callerEmail!,
         action: "refund",
         registration_id: id,
-        details: { refund_id: refund.id, reason: refund_reason || null },
+        details: {
+          refund_id: refund.id,
+          reason: refund_reason || null,
+          lessons_taken: lessonsTaken,
+          ...breakdown,
+        },
       });
-      return jsonResponse({ success: true, data: updated, refund_id: refund.id });
+      return jsonResponse({
+        success: true,
+        data: updated,
+        refund_id: refund.id,
+        breakdown,
+        refund_label: formatBani(breakdown.refundBani),
+      });
     }
 
     // ============ Group subscription cancel + grace refund ============

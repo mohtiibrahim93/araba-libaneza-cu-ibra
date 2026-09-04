@@ -53,7 +53,7 @@ import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
-import RegistrationsTable from "@/components/admin/RegistrationsTable";
+import RegistrationsTable, { type RefundPreview } from "@/components/admin/RegistrationsTable";
 import {
   leadStatusLabels,
   LEAD_STATUSES,
@@ -313,18 +313,40 @@ const Admin = () => {
     }
   };
 
-  const handleRefund = async (id: string, reason: string) => {
+  /**
+   * What the published policy returns, before anything is charged back.
+   * `lessonsTaken` is the owner's input: the lessons already delivered are not
+   * refundable, and nothing in the system knows how many those are.
+   */
+  const previewRefund = useCallback(async (id: string, lessonsTaken: number) => {
+    const { data, error: fnError } = await invokeAdmin({
+      action: "preview_refund",
+      id,
+      lessons_taken: lessonsTaken,
+    });
+    if (fnError) throw fnError;
+    if (data?.error) throw new Error(data.error);
+    return data.data as RefundPreview;
+  }, []);
+
+  const handleRefund = async (id: string, reason: string, lessonsTaken: number) => {
     setRefundingId(id);
     try {
       const { data, error: fnError } = await invokeAdmin({
         action: "refund",
         id,
         refund_reason: reason || null,
+        lessons_taken: lessonsTaken,
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRegistrations((prev) => prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)));
-      toast({ title: "Rambursare procesată cu succes" });
+      toast({
+        title: "Rambursare procesată",
+        description: data?.refund_label
+          ? `S-au returnat ${data.refund_label} conform politicii.`
+          : undefined,
+      });
     } catch (err) {
       toast({
         title: "Rambursare eșuată",
@@ -755,6 +777,7 @@ const Admin = () => {
                   onToggleAll={toggleAll}
                   onStatusChange={handleStatusChange}
                   onRefund={handleRefund}
+                  onPreviewRefund={previewRefund}
                   onPreviewCancel={previewCancelSubscription}
                   onCancelSubscription={handleCancelSubscription}
                 />

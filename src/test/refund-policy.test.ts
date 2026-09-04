@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   ADMIN_FEE_RATE,
   COURSE_LESSONS,
@@ -111,5 +113,45 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
   it("formats bani the way the admin displays money", () => {
     expect(formatBani(151_875).replace(/ /g, " ")).toBe("1.518,75 lei");
     expect(formatBani(0)).toBe("0,00 lei");
+  });
+});
+
+/**
+ * The policy existed in _shared/refund.ts, in the published Terms and in this
+ * test file for weeks while the admin "Rambursează" button called
+ * stripe.refunds.create with no `amount` — which refunds the charge in full.
+ * Every refund issued in that window ignored all three tiers.
+ *
+ * These read the shipped handler rather than the helper, because the defect was
+ * never in the arithmetic; it was that nothing called it.
+ */
+describe("the admin refund button applies the policy", () => {
+  const handler = readFileSync(
+    resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
+    "utf8",
+  );
+
+  it("passes an explicit amount to Stripe", () => {
+    const call = handler.match(/stripe\.refunds\.create\(\{[\s\S]{0,200}?\}\)/);
+    expect(call, "no stripe.refunds.create call found").toBeTruthy();
+    expect(call![0]).toContain("amount:");
+    expect(call![0]).toContain("breakdown.refundBani");
+  });
+
+  it("computes that amount with computeRefund", () => {
+    expect(handler).toContain('from "../_shared/refund.ts"');
+    expect(handler).toContain("computeRefund(");
+  });
+
+  it("offers a preview so the number is seen before the money moves", () => {
+    expect(handler).toContain('action === "preview_refund"');
+  });
+
+  it("records what was actually returned, not the full charge", () => {
+    expect(handler).toContain("refunded_amount: breakdown.refundBani");
+  });
+
+  it("refuses rather than sending a zero or negative refund", () => {
+    expect(handler).toContain("breakdown.refundBani <= 0");
   });
 });
