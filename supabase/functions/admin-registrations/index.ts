@@ -513,7 +513,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, format, teaching_language, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
+        .select("id, form_type, level, format, teaching_language, break_note_ro, break_note_en, end_date_is_estimate, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -529,6 +529,9 @@ Deno.serve(async (req) => {
         level: cLevel,
         format: cFormat,
         teaching_language,
+        break_note_ro,
+        break_note_en,
+        end_date_is_estimate,
         start_date,
         schedule_label_ro,
         schedule_label_en,
@@ -589,6 +592,12 @@ Deno.serve(async (req) => {
         // back to 'ro' — every cohort so far is Romanian-taught, and a null
         // here would hide the cohort from everyone.
         teaching_language: teaching_language === "en" ? "en" : "ro",
+        // The exact holiday break is agreed with each group, so this is free
+        // text rather than a date range, and end_date_is_estimate lets the site
+        // say "estimated" instead of stating an end it may not meet.
+        break_note_ro: trimOrNull(break_note_ro),
+        break_note_en: trimOrNull(break_note_en),
+        end_date_is_estimate: end_date_is_estimate === true,
         start_date,
         schedule_label_ro: typeof schedule_label_ro === "string" ? schedule_label_ro : "",
         schedule_label_en: typeof schedule_label_en === "string" ? schedule_label_en : "",

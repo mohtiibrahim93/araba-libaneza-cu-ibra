@@ -626,6 +626,8 @@ export const translations = {
     cohortLangRo: "Predat în română",
     cohortLangEn: "Predat în engleză",
     cohortStartsOn: "Start",
+    cohortEndsOn: "Se încheie",
+    cohortEndEstimate: "estimativ",
     cohortSeatsLeft: "locuri rămase",
     cohortFull: "Lista de așteptare",
     // Status badges (§32, §46) — surfaced on cohort cards
@@ -1386,6 +1388,8 @@ export const translations = {
     cohortLangRo: "Taught in Romanian",
     cohortLangEn: "Taught in English",
     cohortStartsOn: "Starts",
+    cohortEndsOn: "Ends",
+    cohortEndEstimate: "estimated",
     cohortSeatsLeft: "spots left",
     cohortFull: "Waitlist",
     cohortStatusForming: "Forming",

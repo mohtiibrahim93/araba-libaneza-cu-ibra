@@ -13,6 +13,12 @@ export interface Cohort {
   sort_order: number;
   /** Language the cohort is taught in — must match what the student needs. */
   teaching_language: "ro" | "en";
+  end_date: string | null;
+  /** True when end_date allows for a break whose exact dates are not settled. */
+  end_date_is_estimate: boolean;
+  /** Holiday break shown on the card, per language. */
+  break_note_ro: string | null;
+  break_note_en: string | null;
   status: CohortStatus;
   taken: number;
   seatsLeft: number;
@@ -48,7 +54,7 @@ async function fetchCohorts(
   const today = new Date().toISOString().slice(0, 10);
   let q = supabase
     .from("group_cohorts")
-    .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status, teaching_language")
+    .select("id, form_type, level, format, start_date, end_date, end_date_is_estimate, break_note_ro, break_note_en, schedule_label_ro, schedule_label_en, max_seats, sort_order, status, teaching_language")
     .eq("form_type", formType)
     .in("status", PUBLIC_COHORT_STATUSES)
     .gte("start_date", today)
@@ -89,6 +95,10 @@ async function fetchCohorts(
       form_type: c.form_type as "group" | "kids",
       status: (c.status as CohortStatus) ?? "forming",
       teaching_language: (c.teaching_language as "ro" | "en") ?? "ro",
+      end_date: c.end_date ?? null,
+      end_date_is_estimate: Boolean(c.end_date_is_estimate),
+      break_note_ro: c.break_note_ro ?? null,
+      break_note_en: c.break_note_en ?? null,
       taken,
       seatsLeft: Math.max(0, c.max_seats - taken),
       full: taken >= c.max_seats,

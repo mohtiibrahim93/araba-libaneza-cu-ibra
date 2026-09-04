@@ -45,6 +45,11 @@ interface Cohort {
   /** Language the class is taught in — students only see matching cohorts. */
   teaching_language: "ro" | "en";
   start_date: string;
+  /** Holiday break shown on the cohort card; exact dates are set with the group. */
+  break_note_ro?: string | null;
+  break_note_en?: string | null;
+  /** Labels end_date as an estimate when a break is allowed for but not fixed. */
+  end_date_is_estimate?: boolean;
   schedule_label_ro: string;
   schedule_label_en: string;
   max_seats: number;
@@ -76,6 +81,9 @@ const blank = (): Cohort => ({
   format: "online",
   teaching_language: "ro",
   start_date: todayIso(),
+  break_note_ro: "",
+  break_note_en: "",
+  end_date_is_estimate: false,
   schedule_label_ro: "",
   schedule_label_en: "",
   // A new cohort starts as online, so it takes the online cap. Switching the
@@ -236,6 +244,32 @@ const CohortsAdmin = () => {
               </Select>
             </div>
           )}
+          <div className="md:col-span-2">
+            <Label className="text-xs">Pauză de sărbători (RO)</Label>
+            <Input
+              placeholder="Ex: Pauză aproximativ două săptămâni în jurul Crăciunului — datele exacte se stabilesc cu grupa"
+              value={draft.break_note_ro ?? ""}
+              onChange={(e) => setDraft({ ...draft, break_note_ro: e.target.value })}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Label className="text-xs">Pauză de sărbători (EN)</Label>
+            <Input
+              placeholder="e.g. Holiday break of roughly two weeks — exact dates agreed with the group"
+              value={draft.break_note_en ?? ""}
+              onChange={(e) => setDraft({ ...draft, break_note_en: e.target.value })}
+            />
+          </div>
+          <div className="flex items-end">
+            <label className="flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={Boolean(draft.end_date_is_estimate)}
+                onChange={(e) => setDraft({ ...draft, end_date_is_estimate: e.target.checked })}
+              />
+              Data de final e estimativă
+            </label>
+          </div>
           <div>
             <Label className="text-xs">Limba de predare</Label>
             <Select

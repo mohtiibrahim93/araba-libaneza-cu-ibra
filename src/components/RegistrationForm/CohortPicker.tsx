@@ -1,7 +1,7 @@
 import { useI18n } from "@/lib/i18n";
 import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 import { Label } from "@/components/ui/label";
-import { Calendar, Users, Loader2 } from "lucide-react";
+import { Calendar, CalendarOff, Users, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function statusBadge(status: Cohort["status"], t: ReturnType<typeof useI18n>["t"]) {
@@ -69,6 +69,7 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
         {cohorts.map((c) => {
           const active = c.id === selectedCohortId;
           const label = lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;
+          const breakNote = lang === "ro" ? c.break_note_ro : c.break_note_en;
           const lowSeats = c.seatsLeft > 0 && c.seatsLeft < 5;
           const badge = statusBadge(c.status, t);
           return (
@@ -96,6 +97,24 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
                 {formatStart(c.start_date, lang)}
               </p>
               {label && <p className="text-xs text-muted-foreground mt-1">{label}</p>}
+              {c.end_date && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t.cohortEndsOn} {formatStart(c.end_date, lang)}
+                  {/* Said out loud rather than implied: the end date already
+                      allows for a holiday break whose exact dates are settled
+                      with the group, so stating it flatly would be a promise
+                      the calendar has not made yet. */}
+                  {c.end_date_is_estimate && (
+                    <span className="italic"> ({t.cohortEndEstimate})</span>
+                  )}
+                </p>
+              )}
+              {breakNote && (
+                <p className="mt-1 flex items-start gap-1.5 text-xs text-muted-foreground">
+                  <CalendarOff className="w-3.5 h-3.5 mt-px flex-shrink-0" aria-hidden="true" />
+                  <span>{breakNote}</span>
+                </p>
+              )}
               <div className="mt-2 flex items-center gap-1.5 text-xs">
                 <Users className="w-3.5 h-3.5 text-muted-foreground" />
                 {c.full ? (
