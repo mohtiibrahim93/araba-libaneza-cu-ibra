@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: { ro: "Lecțiile private se ieftinesc dacă iau mai multe?", en: "Do private lessons get cheaper if I book more?" },
-    a: { ro: "Da, reducerea se aplică automat după numărul de lecții: −5% de la 5 lecții, −10% de la 10 și −20% de la 20. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, the discount applies automatically by lesson count: −5% from 5 lessons, −10% from 10 and −20% from 20. The starting price is 150 lei for a 60-minute lesson." },
+    a: { ro: "Da, reducerea se aplică automat după numărul de lecții: −10% de la 10 lecții și −20% de la 20. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, the discount applies automatically by lesson count: −10% from 10 lessons and −20% from 20. The starting price is 150 lei for a 60-minute lesson." },
   },
 ];
 
@@ -95,8 +95,8 @@ const CatCostaCursurile = () => {
       <h2>{en ? "Kids course (ages 6–10)" : "Curs pentru copii (6–10 ani)"}</h2>
       <p>
         {en
-          ? "The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 500 lei/month for the program's duration. See the "
-          : "Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 500 lei/lună pe durata programului. Vezi "}
+          ? "The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 600 lei/month for the program's duration. See the "
+          : "Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 600 lei/lună pe durata programului. Vezi "}
         <Link to="/cursuri/copii">{en ? "kids course" : "cursul pentru copii"}</Link>.
       </p>
 

@@ -8,7 +8,7 @@ const FAQ = [
   },
   {
     q: "Do you offer Arabic classes near me if I'm outside Bucharest?",
-    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 8), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
+    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 6 online), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
   },
   {
     q: "How much do the classes cost?",
@@ -36,7 +36,7 @@ const ArabicClassesNearMe = () => (
     metaTitle="Arabic Classes Near Me — Bucharest & Online | Native Teacher"
     description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month."
     crumb="Arabic classes near me"
-    lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 8), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
+    lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 online, 10 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
     <p>
       Looking for <strong>Arabic classes near you</strong>? Two options, same native teacher, same
@@ -65,8 +65,8 @@ const ArabicClassesNearMe = () => (
 
     <h2>Class formats</h2>
     <ul>
-      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 4 lessons of 90 min per month, max 8 students.</li>
-      <li><strong>Group course, online:</strong> 500 LEI / month, 4 lessons of 90 min per month, max 8 students.</li>
+      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 4 lessons of 90 min per month, max 10 students.</li>
+      <li><strong>Group course, online:</strong> 500 LEI / month, 4 lessons of 90 min per month, max 6 students.</li>
       <li><strong>Private 1-on-1:</strong> 150 LEI / 90 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
       <li><strong>Kids (7–14):</strong> in-person only, small groups, playful method.</li>
     </ul>

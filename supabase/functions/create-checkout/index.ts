@@ -2,7 +2,13 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { groupMonthlyUnitAmount, privateLessonUnitAmount } from "../_shared/prices.ts";
+import {
+  KIDS_DEPOSIT_SHARE,
+  groupMonthlyUnitAmount,
+  kidsDepositUnitAmount,
+  privateDiscountFor,
+  privateLessonUnitAmount,
+} from "../_shared/prices.ts";
 
 const COURSE_TYPES = ["group", "private"];
 
@@ -98,14 +104,17 @@ serve(async (req) => {
     // as create-payment-intent (-10% at 3+ months, -20% at 20+ lessons).
     let lineItems;
     if (courseType === "kids_deposit") {
+      const depositBani = kidsDepositUnitAmount();
+      const depositLei = Math.round(depositBani / 100);
+      const pct = Math.round(KIDS_DEPOSIT_SHARE * 100);
       lineItems = [{
         price_data: {
           currency: "ron",
           product_data: {
             name: "Avans loc grupa Copii — Arabă Libaneză",
-            description: "Avans rambursabil 25% (125 LEI) pentru rezervarea locului în grupa de copii.",
+            description: `Avans rambursabil ${pct}% (${depositLei} LEI) pentru rezervarea locului în grupa de copii.`,
           },
-          unit_amount: 12500,
+          unit_amount: depositBani,
         },
         quantity: 1,
       }];
@@ -113,13 +122,13 @@ serve(async (req) => {
       const quantity = Math.max(1, Math.min(100, Number.parseInt(String(existingReg?.quantity ?? 1), 10) || 1));
       const unitAmount = courseType === "group"
         ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
-        : privateLessonUnitAmount();
+        : privateLessonUnitAmount(existingReg?.format);
+      // Only private lessons have a volume ladder (10 -> -10%, 20 -> -20%).
+      // A `group && quantity >= 3 -> 0.9` branch used to live here, left over
+      // from when a group "quantity" meant months; groups now always submit
+      // quantity 1 and their upfront discount is groupFullCourseUnitAmount.
       const discountRate =
-        courseType === "private" && quantity >= 20
-          ? 0.8
-          : courseType === "group" && quantity >= 3
-            ? 0.9
-            : 1;
+        courseType === "private" ? 1 - privateDiscountFor(quantity) : 1;
       const productName = courseType === "group"
         ? `Curs de grup Arabă Libaneză${existingReg?.level ? ` — nivel ${existingReg.level}` : ""}`
         : "Lecții private Arabă Libaneză";

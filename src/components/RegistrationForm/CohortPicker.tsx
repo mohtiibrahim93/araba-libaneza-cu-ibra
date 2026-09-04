@@ -38,7 +38,8 @@ function formatStart(iso: string, lang: "ro" | "en") {
 
 const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: Props) => {
   const { t, lang } = useI18n();
-  const { cohorts, loading } = useGroupCohorts(formType, level ?? null, format ?? null);
+  // Only cohorts taught in the language this visitor is reading the site in.
+  const { cohorts, loading } = useGroupCohorts(formType, level ?? null, format ?? null, lang);
 
   if (loading) {
     return (
@@ -50,9 +51,13 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
   }
 
   if (cohorts.length === 0) {
+    // Every cohort is Romanian-taught for now, so an English visitor lands here
+    // rather than being shown a class they could not follow. Saying which
+    // language is missing is the difference between "nothing available" and a
+    // student who knows to ask.
     return (
       <div className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-        {t.cohortPickerEmpty}
+        {lang === "en" ? t.cohortPickerEmptyEn : t.cohortPickerEmpty}
       </div>
     );
   }

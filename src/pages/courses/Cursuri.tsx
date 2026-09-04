@@ -26,7 +26,7 @@ const MODES: Choice[] = [
   { value: "fizic", icon: MapPin, ro: "Fizic, în București", en: "In person, Bucharest", note: { ro: "Strada Icoanei 80", en: "Str. Icoanei 80" } },
 ];
 const TYPES: Choice[] = [
-  { value: "grup", icon: Users, ro: "Grup", en: "Group", note: { ro: "4–10 cursanți, preț mai mic", en: "4–10 learners, lower price" } },
+  { value: "grup", icon: Users, ro: "Grup", en: "Group", note: { ro: "max. 6 online / 10 fizic, preț mai mic", en: "max 6 online / 10 in person, lower price" } },
   { value: "privat", icon: UserRound, ro: "Privat", en: "Private", note: { ro: "1:1, program flexibil", en: "1:1, flexible schedule" } },
 ];
 

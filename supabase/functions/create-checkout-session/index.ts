@@ -20,6 +20,7 @@ import {
   kidsGroupFullCourseUnitAmount,
   kidsGroupMonthlyUnitAmount,
   KIDS_GROUP_MONTHS,
+  privateDiscountFor,
   privateLessonUnitAmount,
 } from "../_shared/prices.ts";
 
@@ -223,9 +224,9 @@ serve(async (req) => {
           : courseType === "kids"
             ? kidsGroupFullCourseUnitAmount()
             : Math.round(
-                privateLessonUnitAmount() *
+                privateLessonUnitAmount(reg.format) *
                   quantity *
-                  (quantity >= 20 ? 0.8 : 1),
+                  (1 - privateDiscountFor(quantity)),
               );
       const productName = isPrivate
         ? "Lecții private Arabă Libaneză"

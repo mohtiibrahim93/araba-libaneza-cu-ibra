@@ -313,7 +313,20 @@ const RegistrationsTable = ({
             </TableCell>
             {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
             <TableCell className="align-top">
-              <p className="font-semibold text-foreground leading-tight">{r.name}</p>
+              <p className="font-semibold text-foreground leading-tight">
+                {r.name}
+                {/* Anyone who registered in English needs an English-taught
+                    cohort, and there is none yet — so it is flagged rather than
+                    left to be discovered on the first day of class. */}
+                {r.language === "en" && (
+                  <span
+                    title="S-a înscris în engleză — are nevoie de o grupă predată în engleză"
+                    className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-100 text-sky-800 align-middle"
+                  >
+                    EN
+                  </span>
+                )}
+              </p>
               {r.email && (
                 <span className="flex items-center gap-1.5 max-w-[220px]">
                   <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary truncate min-w-0">

@@ -61,7 +61,7 @@ const RegistrationFormSection = ({
   embedded = false,
   onBack,
 }: RegistrationFormSectionProps = {}) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { get: getCapacity } = useGroupCapacities();
 
   const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
@@ -369,6 +369,12 @@ const RegistrationFormSection = ({
         cohort_id: courseType === "group" ? cohortId : null,
         kids_slot_id: courseType === "kids" ? kidsSlotId : null,
         quantity,
+        // Which language this student needs the class explained in. Taken from
+        // the site language they filled the form in, the same way trials set
+        // bookings.language. Without it an English-speaking registrant looked
+        // exactly like a Romanian one, and there was nothing to notice before
+        // putting them in a Romanian-language cohort.
+        language: lang,
       });
 
       if (error) throw error;

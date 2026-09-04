@@ -4,7 +4,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Cât costă o meditație de arabă?",
-    a: "150 lei/lecție (60 min) pentru meditații 1:1, cu reduceri automate la pachet: −5% de la 5 lecții, −10% de la 10 și −20% de la 20. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
+    a: "150 lei/lecție (60 min) pentru meditații 1:1, cu reduceri automate la pachet: −10% de la 10 lecții și −20% de la 20. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
   },
   {
     q: "Meditațiile sunt fizic sau online?",
@@ -62,11 +62,6 @@ const MeditatiiAraba = () => (
             <td className="py-2 pr-3 font-semibold">Lecție individuală (60 min)</td>
             <td className="py-2 px-3">150 lei</td>
             <td className="py-2 pl-3">—</td>
-          </tr>
-          <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">5 lecții</td>
-            <td className="py-2 px-3">712 lei</td>
-            <td className="py-2 pl-3">−5%</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">10 lecții</td>

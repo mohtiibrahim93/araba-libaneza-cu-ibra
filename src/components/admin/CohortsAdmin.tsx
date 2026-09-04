@@ -14,6 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import CourseDetailsEditor from "@/components/admin/CourseDetailsEditor";
 import type { CourseContent } from "@/lib/courses";
+import { MAX_GROUP_SIZE } from "@/lib/groupSize";
 
 type CohortStatus =
   | "draft"
@@ -41,6 +42,8 @@ interface Cohort {
   form_type: "group" | "kids";
   level: string | null;
   format: string | null;
+  /** Language the class is taught in — students only see matching cohorts. */
+  teaching_language: "ro" | "en";
   start_date: string;
   schedule_label_ro: string;
   schedule_label_en: string;
@@ -71,10 +74,14 @@ const blank = (): Cohort => ({
   form_type: "group",
   level: "A1",
   format: "online",
+  teaching_language: "ro",
   start_date: todayIso(),
   schedule_label_ro: "",
   schedule_label_en: "",
-  max_seats: 10,
+  // A new cohort starts as online, so it takes the online cap. Switching the
+  // format below adjusts it; the database also refuses an online cohort with
+  // more than MAX_GROUP_SIZE.online seats (group_cohorts_online_max_seats).
+  max_seats: MAX_GROUP_SIZE.online,
   is_active: true,
   status: "forming",
   sort_order: 0,
@@ -230,6 +237,22 @@ const CohortsAdmin = () => {
             </div>
           )}
           <div>
+            <Label className="text-xs">Limba de predare</Label>
+            <Select
+              value={draft.teaching_language}
+              onValueChange={(v) => setDraft({ ...draft, teaching_language: v as "ro" | "en" })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ro">Română</SelectItem>
+                <SelectItem value="en">Engleză</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Cursanții văd doar grupele predate în limba lor.
+            </p>
+          </div>
+          <div>
             <Label className="text-xs">Start</Label>
             <Input
               type="date"
@@ -240,10 +263,15 @@ const CohortsAdmin = () => {
           <div>
             <Label className="text-xs">Locuri</Label>
             <Input
-              type="number" min={1}
+              type="number"
+              min={1}
+              max={draft.format === "online" ? MAX_GROUP_SIZE.online : MAX_GROUP_SIZE.fizic}
               value={draft.max_seats}
               onChange={(e) => setDraft({ ...draft, max_seats: Number(e.target.value) })}
             />
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Max. {MAX_GROUP_SIZE.online} online · {MAX_GROUP_SIZE.fizic} fizic
+            </p>
           </div>
           <div className="md:col-span-2">
             <Label className="text-xs">Program (RO)</Label>
@@ -279,7 +307,7 @@ const CohortsAdmin = () => {
         <div className="space-y-2">
           {rows.map((r) => (
             <div key={r.id} className="rounded-md border border-border bg-background p-2">
-             <div className="grid gap-2 md:grid-cols-[70px_50px_96px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
+             <div className="grid gap-2 md:grid-cols-[70px_50px_96px_64px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
               <div className="text-xs font-semibold">{r.form_type === "kids" ? "Copii" : "Grup"}</div>
               <div className="text-xs font-semibold">{r.level ?? "—"}</div>
               {r.form_type === "kids" ? (
@@ -296,6 +324,16 @@ const CohortsAdmin = () => {
                   </SelectContent>
                 </Select>
               )}
+              <Select
+                value={r.teaching_language ?? "ro"}
+                onValueChange={(v) => update(r.id, { teaching_language: v as "ro" | "en" })}
+              >
+                <SelectTrigger className="h-9 text-xs" title="Limba de predare"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ro">RO</SelectItem>
+                  <SelectItem value="en">EN</SelectItem>
+                </SelectContent>
+              </Select>
               <Input
                 type="date"
                 value={r.start_date}

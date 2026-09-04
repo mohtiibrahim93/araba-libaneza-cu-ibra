@@ -54,6 +54,12 @@ export interface Registration {
   canceled_at?: string | null;
   refunded_amount?: number | null;
   anonymized_at?: string | null;
+  /**
+   * Language the student needs the class explained in, from the site language
+   * they registered in. Anything other than 'ro' needs a matching cohort —
+   * every cohort is Romanian-taught until an English one is opened.
+   */
+  language?: "ro" | "en" | null;
   /** Computed server-side: how many registrations share this email. */
   email_dup_count?: number;
 }

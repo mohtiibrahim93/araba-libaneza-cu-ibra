@@ -32,8 +32,9 @@ export const ONLINE_PRICES = {
   privateLesson: 150,
   /** Kids private 1:1 lesson (online). */
   kidsPrivateLesson: 150,
-  /** Kids group — monthly fee per child, minimum 4 (online). */
-  kidsGroupMonthly: 500,
+  /** Kids group — monthly fee per child, minimum 4. In-person only, so this
+   *  is the price charged as-is; the physical multiplier is not applied. */
+  kidsGroupMonthly: 600,
 };
 
 /**
@@ -54,15 +55,42 @@ export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
 };
 
 /**
- * Private-lesson package: buy 20 or more and the checkout applies -20%.
+ * Private-lesson volume discount — the whole ladder, in one place.
  *
- * These live here because the price card used to hard-code "3.000 LEI" struck
- * through and "2.400 LEI" — correct arithmetic today, but silently wrong the
- * moment privateLesson changes. The rate mirrors create-checkout, which is
- * what Stripe actually bills; pricing-display.test.ts asserts they agree.
+ * There are exactly two tiers: 10 lessons and 20 lessons. A -5% tier at 5
+ * lessons used to be advertised in fourteen places across the site, the form,
+ * the blog and the seeded article bodies; it was never a real offer and has
+ * been removed. Ordered highest-first so `find` returns the best tier.
+ *
+ * The server mirrors this in supabase/functions/_shared/prices.ts, and
+ * pricing-display.test.ts asserts the two ladders stay identical — the site
+ * quoting a discount the checkout does not apply is a billing bug, and it was
+ * a live one: 10 lessons displayed 1.350 and Stripe charged 1.500.
  */
+export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
+  { from: 20, rate: 0.2 },
+  { from: 10, rate: 0.1 },
+];
+
+/** Discount fraction for a lesson count: 0 below 10, .1 from 10, .2 from 20. */
+export const privateDiscountFor = (quantity: number): number =>
+  PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0;
+
+/** The next tier a buyer has not reached yet, for "N more to unlock -X%". */
+export const nextPrivateTier = (
+  quantity: number,
+): { needed: number; pct: number } | null => {
+  const upcoming = [...PRIVATE_DISCOUNT_TIERS]
+    .reverse()
+    .find((tier) => quantity < tier.from);
+  return upcoming
+    ? { needed: upcoming.from - quantity, pct: Math.round(upcoming.rate * 100) }
+    : null;
+};
+
+/** The package headlined on the price card: the top tier. */
 export const PRIVATE_PACKAGE_SIZE = 20;
-export const PRIVATE_PACKAGE_DISCOUNT = 0.2;
+export const PRIVATE_PACKAGE_DISCOUNT = privateDiscountFor(PRIVATE_PACKAGE_SIZE);
 
 /** Full price of the package before the discount. */
 export const privatePackageFull = (): number =>

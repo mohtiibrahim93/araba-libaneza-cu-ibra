@@ -9,6 +9,7 @@ import {
   kidsGroupFullCourseUnitAmount,
   kidsGroupMonthlyUnitAmount,
   KIDS_GROUP_MONTHS,
+  privateDiscountFor,
   privateLessonUnitAmount,
 } from "../_shared/prices.ts";
 
@@ -81,7 +82,7 @@ serve(async (req) => {
         ? KIDS_GROUP_MONTHS
         : 1;
     const discountApplied =
-      (courseType === "private" && quantity >= 20) ||
+      (courseType === "private" && privateDiscountFor(quantity) > 0) ||
       courseType === "group" ||
       courseType === "kids";
 
@@ -103,7 +104,7 @@ serve(async (req) => {
         ? groupMonthlyUnitAmount(regRow.level, regRow.format)
         : courseType === "kids"
           ? kidsGroupMonthlyUnitAmount()
-          : privateLessonUnitAmount();
+          : privateLessonUnitAmount(regRow.format);
     const currency = "ron";
 
     // Find or create customer (best-effort)
@@ -119,13 +120,14 @@ serve(async (req) => {
     }
 
     // Group / kids pay-in-full: whole course (monthly × months) −10%.
-    // Private: unit × lesson quantity, −20% at 20+. All from the server price table.
+    // Private: unit × lesson quantity, −10% from 10 lessons and −20% from 20.
+    // All from the server price table, so display and charge cannot drift.
     const finalAmount =
       courseType === "group"
         ? groupFullCourseUnitAmount(regRow.level, regRow.format)
         : courseType === "kids"
           ? kidsGroupFullCourseUnitAmount()
-          : Math.round(unitAmount * quantity * (quantity >= 20 ? 0.8 : 1));
+          : Math.round(unitAmount * quantity * (1 - privateDiscountFor(quantity)));
 
     // If a PaymentIntent already exists for this registration, reuse it when
     // the amount still matches. Otherwise (e.g. price was updated after the

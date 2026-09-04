@@ -434,7 +434,7 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
+        .select("id, form_type, level, format, teaching_language, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -449,6 +449,7 @@ Deno.serve(async (req) => {
         form_type,
         level: cLevel,
         format: cFormat,
+        teaching_language,
         start_date,
         schedule_label_ro,
         schedule_label_en,
@@ -476,12 +477,20 @@ Deno.serve(async (req) => {
       if (form_type === "group" && cFormat != null && cFormat !== "fizic" && cFormat !== "online") {
         return jsonResponse({ error: "Format invalid (fizic/online)" });
       }
+      if (teaching_language != null && teaching_language !== "ro" && teaching_language !== "en") {
+        return jsonResponse({ error: "Limbă de predare invalidă (ro/en)" });
+      }
       if (typeof start_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(start_date)) {
         return jsonResponse({ error: "Data invalidă (YYYY-MM-DD)" });
       }
       const max = Number(max_seats);
       if (!Number.isInteger(max) || max < 1) {
         return jsonResponse({ error: "Locuri invalide" });
+      }
+      // Mirrors the group_cohorts_online_max_seats constraint, so the admin
+      // sees a sentence rather than a raw constraint violation.
+      if (form_type === "group" && cFormat === "online" && max > 6) {
+        return jsonResponse({ error: "Grupele online au maximum 6 locuri" });
       }
       const ALLOWED_COHORT_STATUSES = [
         "draft","forming","minimum_reached","confirmed","full","in_progress","completed","cancelled",
@@ -496,6 +505,11 @@ Deno.serve(async (req) => {
         form_type,
         level: form_type === "kids" ? null : (cLevel || null),
         format: form_type === "kids" ? null : (cFormat || null),
+        // Which language the class is explained in. Students are only offered
+        // cohorts matching registrations.language, so an unset value must fall
+        // back to 'ro' — every cohort so far is Romanian-taught, and a null
+        // here would hide the cohort from everyone.
+        teaching_language: teaching_language === "en" ? "en" : "ro",
         start_date,
         schedule_label_ro: typeof schedule_label_ro === "string" ? schedule_label_ro : "",
         schedule_label_en: typeof schedule_label_en === "string" ? schedule_label_en : "",

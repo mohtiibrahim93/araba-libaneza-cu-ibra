@@ -97,7 +97,7 @@ const ArabicForTeenagers = () => (
     <h2>Pricing</h2>
     <ul>
       <li><strong>Group:</strong> from 500 LEI / month (2 × 90 min per week), 10% off when the level is paid in full.</li>
-      <li><strong>Private 1-on-1:</strong> 150 LEI per 60-minute lesson, with −5% from 5 lessons, −10% from 10 and −20% from 20.</li>
+      <li><strong>Private 1-on-1:</strong> 150 LEI per 60-minute lesson, with −10% from 10 lessons and −20% from 20.</li>
       <li><strong>Trial lesson (30 min):</strong> free, with a parent present if they prefer.</li>
     </ul>
 

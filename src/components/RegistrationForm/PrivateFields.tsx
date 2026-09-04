@@ -1,7 +1,14 @@
 import { useI18n } from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ONLINE_PRICES, priceFor, formatLei, type CourseFormat } from "@/lib/pricing";
+import {
+  ONLINE_PRICES,
+  formatLei,
+  nextPrivateTier,
+  priceFor,
+  privateDiscountFor,
+  type CourseFormat,
+} from "@/lib/pricing";
 
 interface Props {
   privateQuantity: number;
@@ -14,23 +21,10 @@ interface Props {
 
 const clamp = (n: number) => Math.min(100, Math.max(1, n));
 
-/** Returns the discount fraction (0, .05, .10, .20) for a given quantity. */
-const discountFor = (q: number): number => {
-  if (q >= 20) return 0.20;
-  if (q >= 10) return 0.10;
-  if (q >= 5) return 0.05;
-  return 0;
-};
-
-/** Next tier breakpoint info for "X more to unlock −Y%". */
-const nextTier = (q: number): { needed: number; pct: number } | null => {
-  if (q < 5) return { needed: 5 - q, pct: 5 };
-  if (q < 10) return { needed: 10 - q, pct: 10 };
-  if (q < 20) return { needed: 20 - q, pct: 20 };
-  return null;
-};
-
-const QUICK_PICKS = [1, 5, 10, 20];
+// The discount ladder lives in @/lib/pricing so the form, the price cards and
+// the Stripe functions all read one definition. There are two tiers, 10 and 20
+// — the -5%-at-5-lessons tier this file used to apply was never a real offer.
+const QUICK_PICKS = [1, 10, 20];
 
 const PrivateFields = ({
   privateQuantity,
@@ -40,11 +34,11 @@ const PrivateFields = ({
 }: Props) => {
   const { t } = useI18n();
   const unit = priceFor(basePriceOnline, format === "fizic" ? "fizic" : "online");
-  const discount = discountFor(privateQuantity);
+  const discount = privateDiscountFor(privateQuantity);
   const subtotal = privateQuantity * unit;
   const total = subtotal * (1 - discount);
   const saved = subtotal - total;
-  const next = nextTier(privateQuantity);
+  const next = nextPrivateTier(privateQuantity);
 
   return (
     <div className="space-y-2">
@@ -115,7 +109,7 @@ const PrivateFields = ({
         <span className="text-xs text-muted-foreground">{t.privateQuantityQuickPick}</span>
         {QUICK_PICKS.map((n) => {
           const active = privateQuantity === n;
-          const d = discountFor(n);
+          const d = privateDiscountFor(n);
           return (
             <button
               key={n}

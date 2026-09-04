@@ -59,6 +59,7 @@ const BlogLimbileVorbiteInLiban = lazyWithRetry(() => import("./pages/blog/Limbi
 const BlogLebaneseArabicLearningResources = lazyWithRetry(() => import("./pages/blog/LebaneseArabicLearningResources"));
 const LearnLebaneseArabic = lazyWithRetry(() => import("./pages/en/LearnLebaneseArabic"));
 const ArabicTutor = lazyWithRetry(() => import("./pages/en/ArabicTutor"));
+const EnFaq = lazyWithRetry(() => import("./pages/en/Faq"));
 const ArabicClassesNearMe = lazyWithRetry(() => import("./pages/en/ArabicClassesNearMe"));
 const ArabicDialectsGuide = lazyWithRetry(() => import("./pages/en/ArabicDialectsGuide"));
 const LebaneseVsMsaVsEgyptian = lazyWithRetry(() => import("./pages/en/LebaneseVsMsaVsEgyptian"));
@@ -68,6 +69,7 @@ const SeoCursuriAraba = lazyWithRetry(() => import("./pages/seo/CursuriAraba"));
 const SeoArabaPentruIncepatori = lazyWithRetry(() => import("./pages/seo/ArabaPentruIncepatori"));
 const SeoArabaOnline = lazyWithRetry(() => import("./pages/seo/ArabaOnline"));
 const SeoMeditatiiAraba = lazyWithRetry(() => import("./pages/seo/MeditatiiAraba"));
+const SeoIntrebariFrecvente = lazyWithRetry(() => import("./pages/seo/IntrebariFrecvente"));
 const SeoInvataAraba = lazyWithRetry(() => import("./pages/seo/InvataAraba"));
 const SeoCursuriArabaBucuresti = lazyWithRetry(() => import("./pages/seo/CursuriArabaBucuresti"));
 const SeoCursArabaCopii = lazyWithRetry(() => import("./pages/seo/CursArabaCopii"));
@@ -172,6 +174,7 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<Navigate to="/en/learn-lebanese-arabic" replace />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />
+            <Route path="/en/faq" element={<EnFaq />} />
             <Route path="/en/arabic-classes-near-me" element={<ArabicClassesNearMe />} />
             <Route path="/en/arabic-dialects-guide" element={<ArabicDialectsGuide />} />
             <Route path="/en/levantine-arabic-dialects-map" element={<Navigate to="/en/arabic-dialects-guide" replace />} />
@@ -189,6 +192,7 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
                 redirects like every other retired URL on the site. */}
             <Route path="/cursuri-limba-araba" element={<Navigate to="/cursuri-araba" replace />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
+            <Route path="/intrebari-frecvente" element={<SeoIntrebariFrecvente />} />
             <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
             <Route path="/curs-araba-copii" element={<SeoCursArabaCopii />} />

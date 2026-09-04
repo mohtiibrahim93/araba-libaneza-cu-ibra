@@ -33,8 +33,27 @@ export const GROUP_MONTHS: Record<GroupLevel, number> = {
   C2: 10,
 };
 
-/** Private 1:1 lesson, flat for all levels and formats, in whole RON. */
+/** Private 1:1 lesson, flat for all levels, in whole RON (online). */
 export const PRIVATE_LESSON = 150;
+
+/**
+ * Private-lesson volume discount. Exactly two tiers: 10 lessons and 20.
+ *
+ * Mirrors PRIVATE_DISCOUNT_TIERS in src/lib/pricing.ts, which is what the site
+ * DISPLAYS. They were out of step: the form quoted -10% from 10 lessons while
+ * this side only discounted from 20, so a 10-lesson buyer saw 1.350 and was
+ * charged 1.500. pricing-display.test.ts now asserts the two agree.
+ * Ordered highest-first so `find` returns the best applicable tier.
+ */
+export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
+  { from: 20, rate: 0.2 },
+  { from: 10, rate: 0.1 },
+];
+
+/** Discount fraction for a lesson count: 0 below 10, .1 from 10, .2 from 20. */
+export function privateDiscountFor(quantity: number): number {
+  return PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0;
+}
 
 /** In-center classes cost +40%, rounded to the nearest 10 RON. */
 const PHYSICAL_MULTIPLIER = 1.4;
@@ -59,9 +78,17 @@ export function groupMonthlyUnitAmount(
   return withFormat * 100;
 }
 
-/** Private lesson unit amount in bani (flat across levels and formats). */
-export function privateLessonUnitAmount(): number {
-  return PRIVATE_LESSON * 100;
+/**
+ * Private lesson unit amount in bani.
+ *
+ * In-center lessons carry the same +40% as group classes (150 -> 210). The
+ * format must come from the registration ROW, never the request body; an
+ * unknown value falls back to online, the cheaper of the two, so a data gap
+ * can never overcharge.
+ */
+export function privateLessonUnitAmount(format?: string | null): number {
+  const ron = format === "fizic" ? round10(PRIVATE_LESSON * PHYSICAL_MULTIPLIER) : PRIVATE_LESSON;
+  return ron * 100;
 }
 
 /**
@@ -92,14 +119,14 @@ export function groupMonthsFor(level: string | null | undefined): number {
 // ---------------------------------------------------------------------------
 // Kids group course pricing
 //
-// Kids in this app = group course, physical only, 3 months, 500 LEI / month.
+// Kids in this app = group course, physical only, 3 months, 600 LEI / month.
 // No CEFR level, no online/fizic split, no volume discount. Mirrors the price
-// card displayed on the site (ProgramsSection: 500 / month, 1.500 total,
-// 1.350 LEI with the −10% upfront discount).
+// card displayed on the site (600 / month, 1.800 total, 1.620 LEI with the
+// -10% upfront discount). Physical-only, so the +40% multiplier is NOT applied.
 // ---------------------------------------------------------------------------
 
 /** Kids group course — monthly fee per child, whole RON. */
-export const KIDS_GROUP_MONTHLY = 500;
+export const KIDS_GROUP_MONTHLY = 600;
 
 /** Total number of monthly charges for the kids group course. */
 export const KIDS_GROUP_MONTHS = 3;
@@ -115,4 +142,16 @@ export function kidsGroupMonthlyUnitAmount(): number {
  */
 export function kidsGroupFullCourseUnitAmount(): number {
   return Math.round(kidsGroupMonthlyUnitAmount() * KIDS_GROUP_MONTHS * 0.9);
+}
+
+/** Share of one month held as a refundable deposit to reserve a kids seat. */
+export const KIDS_DEPOSIT_SHARE = 0.25;
+
+/**
+ * Refundable kids-seat deposit, in bani. Derived rather than written down: it
+ * was hard-coded as 12500 in create-checkout while the copy said "25%", so
+ * raising the monthly fee would have quietly turned 25% into something else.
+ */
+export function kidsDepositUnitAmount(): number {
+  return Math.round(kidsGroupMonthlyUnitAmount() * KIDS_DEPOSIT_SHARE);
 }

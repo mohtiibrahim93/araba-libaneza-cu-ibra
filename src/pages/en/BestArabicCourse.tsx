@@ -106,7 +106,7 @@ const BestArabicCourse = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/en/arabic-tutor">Private 1-on-1</Link></td>
             <td className="py-2 px-3">Specific goals, fastest progress, flexible hours</td>
-            <td className="py-2 px-3">150 LEI / 60 min (−5% / −10% / −20% packages)</td>
+            <td className="py-2 px-3">150 LEI / 60 min (−10% / −20% packages)</td>
             <td className="py-2 pl-3">Higher hourly cost</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
@@ -129,7 +129,7 @@ const BestArabicCourse = () => (
     <ul>
       <li><strong>Native speaker of the dialect taught.</strong> For Lebanese, a native Lebanese teacher — living pronunciation and idiom don't come from textbooks.</li>
       <li><strong>You speak from lesson one.</strong> If the first months are alphabet drills and grammar tables, you'll quit before you speak.</li>
-      <li><strong>Small groups (max 8).</strong> Above eight students, your own speaking time drops below five minutes per lesson.</li>
+      <li><strong>Small groups (max 6 online, 10 in person).</strong> Past that, your own speaking time drops below five minutes per lesson.</li>
       <li><strong>CEFR structure (A1–C2)</strong> with an assessment every 8–10 lessons, so your level is an objective fact.</li>
       <li><strong>Public pricing and a trial lesson.</strong> A good course has no reason to hide either.</li>
     </ul>

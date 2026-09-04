@@ -6,6 +6,7 @@ import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
 import { LEVEL_TITLE_RO } from "../src/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
+import { allFaqs, faqJsonLd, featuredFaqs } from "../src/data/faq";
 
 /**
  * Build-time SEO prerender.
@@ -55,7 +56,7 @@ interface Route {
 const STATIC_ROUTES: Route[] = [
   { path: "/", title: "Cursuri de Arabă Libaneză în București și Online — Ibra", description: "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții." },
   { path: "/cursuri", title: "Cursuri Arabă Libaneză — Adulți, Tineri, Copii | Online", description: "Cursuri de arabă libaneză pentru adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
-  { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupuri de 4–10 cursanți, fizic în București sau online. De la 500 LEI / lună." },
+  { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
@@ -65,10 +66,11 @@ const STATIC_ROUTES: Route[] = [
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții." },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită." },
   { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
+  { path: "/intrebari-frecvente", title: "Întrebări frecvente despre cursurile de arabă libaneză | Ibra", description: "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica." },
   { path: "/invata-araba", title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic." },
   { path: "/cursuri-araba-bucuresti", title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită", description: "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită." },
   { path: "/curs-araba-copii", title: "Curs de Arabă pentru Copii în București | 6–10 ani", description: "Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez." },
-  { path: "/arabizi", title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă", description: "Învață ce înseamnă cifrele 2, 3, 5, 6, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit." },
+  { path: "/arabizi", title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă", description: "Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit." },
   { path: "/invata-araba-gratis", title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții", description: "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători." },
   { path: "/resurse", title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat", description: "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse." },
   { path: "/fara-alfabet-arab", title: "Pot Învăța Araba Fără Alfabet? Ghid Practic", description: "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul." },
@@ -82,6 +84,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic", noindex: true },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
+  { path: "/en/faq", title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels", description: "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, which dialect to learn, and how the grammar works." },
   { path: "/en/arabic-dialects-guide", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher." },
   { path: "/en/levantine-arabic-dialects-map", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.", lang: "en", canonical: "/en/arabic-dialects-guide", noindex: true },
   { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month." },
@@ -459,6 +462,29 @@ function renderRoute(
       `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n` +
       `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + LEARN_X_DEFAULT)}" />\n`;
   }
+  // FAQPage, emitted into the static head.
+  //
+  // The components already build this markup through react-helmet-async, but a
+  // Helmet <script> only exists once React has run: the prerendered HTML that
+  // crawlers read first carried none of it. Building it here from the same
+  // src/data/faq.ts the pages render puts it in the file itself, and it stays
+  // in step because both sides read one array.
+  //
+  // Only what the page actually shows is marked up — six on the homepage, all
+  // of them on the FAQ pages — because Google requires the structured data to
+  // match the visible content.
+  const FAQ_ROUTES: Record<string, { lang: "ro" | "en"; items: () => { q: string; a: string }[] }> = {
+    "/": { lang: "ro", items: () => featuredFaqs("ro") },
+    "/intrebari-frecvente": { lang: "ro", items: () => allFaqs("ro") },
+    "/en/faq": { lang: "en", items: () => allFaqs("en") },
+  };
+  const faqRoute = FAQ_ROUTES[route.path];
+  if (faqRoute) {
+    const items = faqRoute.items();
+    inject +=
+      `    <script type="application/ld+json">${JSON.stringify(faqJsonLd(items)).replace(/</g, "\\u003c")}</script>\n`;
+  }
+
   if (route.type === "article") {
     const articleJsonLd = {
       "@context": "https://schema.org",

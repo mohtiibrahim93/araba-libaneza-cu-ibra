@@ -87,7 +87,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     "meta_title": "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
     "meta_description": "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month.",
     "h1": "Arabic classes near me — Bucharest & online worldwide",
-    "lead": "In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 8), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
+    "lead": "In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 online, 10 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   },
   {
     "path": "/en/arabic-dialects-guide",

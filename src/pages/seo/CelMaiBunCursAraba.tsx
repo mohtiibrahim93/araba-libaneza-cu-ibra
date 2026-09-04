@@ -8,7 +8,7 @@ const FAQ = [
   },
   {
     q: "Cum recunosc un curs de arabă bun?",
-    a: "Cinci semne: (1) profesorul e vorbitor nativ al dialectului predat, (2) vorbești din prima lecție, nu după 3 luni de alfabet, (3) grupele au maximum 8 persoane, (4) programul e aliniat pe niveluri CEFR (A1–C2) cu evaluări clare, (5) prețul e afișat public, fără costuri ascunse.",
+    a: "Cinci semne: (1) profesorul e vorbitor nativ al dialectului predat, (2) vorbești din prima lecție, nu după 3 luni de alfabet, (3) grupele sunt mici — maximum 6 persoane online, 10 fizic, (4) programul e aliniat pe niveluri CEFR (A1–C2) cu evaluări clare, (5) prețul e afișat public, fără costuri ascunse.",
   },
   {
     q: "Cursuri de grup sau lecții private — ce e mai bun?",
@@ -106,7 +106,7 @@ const CelMaiBunCursAraba = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/meditatii-araba">Meditații 1:1</Link></td>
             <td className="py-2 px-3">Obiective precise, progres rapid, program flexibil</td>
-            <td className="py-2 px-3">150 lei / 60 min (−5% / −10% / −20% pe pachet)</td>
+            <td className="py-2 px-3">150 lei / 60 min (−10% / −20% pe pachet)</td>
             <td className="py-2 pl-3">Cost mai mare pe oră</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
@@ -129,7 +129,7 @@ const CelMaiBunCursAraba = () => (
     <ul>
       <li><strong>Profesor nativ al dialectului predat.</strong> Pentru libaneză, un vorbitor nativ libanez — pronunția și expresiile vii nu se învață din manual.</li>
       <li><strong>Vorbești din prima lecție.</strong> Dacă primele luni sunt doar alfabet și tabele de gramatică, vei renunța înainte să vorbești.</li>
-      <li><strong>Grupe mici (max. 8).</strong> Peste 8 persoane, timpul tău de vorbire pe lecție scade sub 5 minute.</li>
+      <li><strong>Grupe mici (max. 6 online, 10 fizic).</strong> Peste atât, timpul tău de vorbire pe lecție scade sub 5 minute.</li>
       <li><strong>Structură CEFR (A1–C2)</strong> cu evaluări la 8–10 lecții, ca să știi obiectiv unde ești.</li>
       <li><strong>Preț public și lecție de probă.</strong> Un curs bun nu are nevoie să ascundă prețul și îți dă ocazia să testezi înainte.</li>
     </ul>
