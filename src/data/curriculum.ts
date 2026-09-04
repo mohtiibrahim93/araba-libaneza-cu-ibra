@@ -24,6 +24,18 @@ export interface CurriculumLevel {
   writingStrand?: { intro: string; items: string[] };
   /** C2 has modular thematic blocks. */
   blocks?: CurriculumBlock[];
+  /**
+   * Prose shown above the curriculum: who the level is for and what changes
+   * from the one before it.
+   *
+   * The level pages were stats plus a bullet list and nothing else, which reads
+   * as provisional for a 70-lesson course — B1 and B2 were the thinnest pages
+   * on the site. Every paragraph here restates topics already listed in
+   * `items` / `blocks`; nothing new is claimed.
+   */
+  intro?: string[];
+  /** "By the end you can…", in terms a reader can picture. */
+  outcomes?: string[];
   note?: string;
 }
 
@@ -134,50 +146,136 @@ const RO: CurriculumLevel[] = [
     id: "b1",
     title: "Nivel B1 — Intermediar (Utilizator Independent)",
     objective:
-      "Cursantul susține conversații pe teme variate, argumentează și înțelege media uzuală. Exclusiv vorbit — fără alfabet arab.",
+      "B1 este nivelul la care araba libaneză încetează să mai fie un set de fraze și devine o limbă în care gândești. Cursantul susține conversații pe teme variate, își argumentează poziția și înțelege media uzuală — știri, interviuri, discuții obișnuite. Sistemul verbal se închide complet: toate timpurile, verbele slabe și cele dublate, condiționalul real și ireal, pasivul, subjonctivul și vorbirea indirectă. Exclusiv vorbit — fără alfabet arab.",
+    intro: [
+      "La A2 puteai purta o conversație dacă interlocutorul te ajuta puțin. La B1 nu mai ai nevoie de ajutorul acela. Cele 70 de lecții pornesc de la o recapitulare A2 cu diagnostic — ca să știm exact ce s-a așezat și ce nu — și se termină cu discurs extins și dezbatere.",
+      "Cea mai mare parte a nivelului o ocupă gramatica pe care A1 și A2 au ocolit-o deliberat: consolidarea întregului sistem verbal, pronumele avansate și grupurile de clitice, condiționalul complet, pasivul și participiile, contextele de subjonctiv, modalele complexe, vorbirea indirectă și subordonarea. Nu sunt tabele de memorat — fiecare structură intră prin conversație, în contextul în care o vei folosi.",
+      "În paralel se deschid temele abstracte — politică, economie, societate, la nivel introductiv — plus cultura, istoria și regiunile Libanului, idiomurile, proverbele și umorul. Sunt ~8 luni, două lecții de 90 de minute pe săptămână, iar nivelul se deschide după finalizarea A2.",
+    ],
+    outcomes: [
+      "Susții o conversație pe teme variate fără ca celălalt să-și simplifice vorbirea",
+      "Îți argumentezi opinia și o aperi într-o dezbatere",
+      "Urmărești știri și discuții obișnuite în libaneză",
+      "Folosești condiționalul real și ireal, pasivul și vorbirea indirectă în vorbirea curentă",
+      "Construiești fraze lungi, cu propoziții relative și subordonate",
+      "Recunoști idiomuri, proverbe și glume — și înțelegi de ce sunt amuzante",
+    ],
+    blocks: [
+      {
+        title: "Bloc 1 — Punctul de plecare (Lecțiile 1–6)",
+        items: [
+          "Recapitulare A2 & diagnostic",
+        ],
+      },
+      {
+        title: "Bloc 2 — Sistemul verbal, complet (Lecțiile 7–24)",
+        items: [
+          "Consolidarea sistemului verbal (toate timpurile, verbe slabe, verbe dublate)",
+          "Pronume avansate & grupuri de clitice",
+          "Sistemul condițional complet (real & ireal)",
+          "Pasivul & participiile",
+        ],
+      },
+      {
+        title: "Bloc 3 — Fraza complexă (Lecțiile 25–40)",
+        items: [
+          "Contexte de subjonctiv & modale complexe",
+          "Vorbirea indirectă (reported speech)",
+          "Propoziții relative & subordonate complexe",
+        ],
+      },
+      {
+        title: "Bloc 4 — Teme abstracte & opinie (Lecțiile 41–54)",
+        items: [
+          "Teme abstracte: politică, economie, societate (introductiv)",
+          "Opinie & argumentare",
+          "Media & comprehensiunea știrilor",
+        ],
+      },
+      {
+        title: "Bloc 5 — Cultură & registru viu (Lecțiile 55–64)",
+        items: [
+          "Cultură, istorie & regiuni libaneze",
+          "Idiomuri, proverbe, umor II",
+        ],
+      },
+      {
+        title: "Bloc 6 — Discurs & evaluare (Lecțiile 65–70)",
+        items: [
+          "Discurs extins & dezbatere",
+          "Recapitulare & evaluare",
+        ],
+      },
+    ],
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit",
     schedule: ["~8 luni · se deschide după finalizarea A2 (dată în curând)"],
-    items: [
-      "Recapitulare A2 & diagnostic",
-      "Consolidarea sistemului verbal (toate timpurile, verbe slabe, verbe dublate)",
-      "Pronume avansate & grupuri de clitice",
-      "Sistemul condițional complet (real & ireal)",
-      "Pasivul & participiile",
-      "Contexte de subjonctiv & modale complexe",
-      "Vorbirea indirectă (reported speech)",
-      "Propoziții relative & subordonate complexe",
-      "Teme abstracte: politică, economie, societate (introductiv)",
-      "Opinie & argumentare",
-      "Media & comprehensiunea știrilor",
-      "Cultură, istorie & regiuni libaneze",
-      "Idiomuri, proverbe, umor II",
-      "Discurs extins & dezbatere",
-      "Recapitulare & evaluare",
-    ],
   },
   {
     id: "b2",
     title: "Nivel B2 — Intermediar Superior",
     objective:
-      "Cursantul comută între registre, negociază, analizează media și se exprimă spontan pe teme complexe. Exclusiv vorbit.",
+      "B2 este nivelul la care nu mai vorbești doar corect, ci potrivit. Cursantul comută între registre — de la limbajul de stradă la cel formal — negociază, analizează media și se exprimă spontan pe teme complexe, inclusiv profesionale: drept, afaceri, medicină, tehnologie. Exclusiv vorbit.",
+    intro: [
+      "Diferența dintre B1 și B2 nu este cât știi, ci cât de bine alegi. La B2 aceeași idee se spune în trei feluri, iar tu îl alegi pe cel potrivit situației — cu un prieten, cu un client, într-o dezbatere. Aici intră registrul stilistic, code-switching-ul și conectorii nuanțați care fac diferența între cineva care vorbește araba și cineva care sună a libanez.",
+      "Cele 70 de lecții pornesc de la o recapitulare B1 cu diagnostic și adaugă vocabular abstract și profesional, persuasiune, negociere și dezbatere, narațiune și descriere complexă. Partea de media urcă de la înțelegerea știrilor la analiză: filme, melodii, talk-show-uri.",
+      "Ultima parte a nivelului intră în profunzime culturală — religie, politică, variațiile dialectale dintre regiunile Libanului — și se încheie cu discurs extins spontan. Sunt ~8–9 luni, două lecții de 90 de minute pe săptămână, iar nivelul se deschide după B1.",
+    ],
+    outcomes: [
+      "Treci natural între registrul formal și cel de stradă, în funcție de cine te ascultă",
+      "Negociezi, convingi și susții o poziție într-o dezbatere",
+      "Folosești vocabular profesional din domeniul tău (drept, afaceri, medicină, tehnologie)",
+      "Analizezi un film, o melodie sau un talk-show, nu doar le înțelegi",
+      "Povestești și descrii pe larg, cu nuanță și conectori potriviți",
+      "Recunoști de unde e cineva din Liban după felul în care vorbește",
+    ],
+    blocks: [
+      {
+        title: "Bloc 1 — Punctul de plecare (Lecțiile 1–6)",
+        items: [
+          "Recapitulare B1 & diagnostic",
+        ],
+      },
+      {
+        title: "Bloc 2 — Registru & nuanță (Lecțiile 7–22)",
+        items: [
+          "Registrul stilistic (formal vs. de stradă, code-switching)",
+          "Conectori nuanțați & mărci de discurs",
+        ],
+      },
+      {
+        title: "Bloc 3 — Vocabular profesional (Lecțiile 23–38)",
+        items: [
+          "Vocabular abstract & profesional (drept, afaceri, medicină, tehnologie)",
+        ],
+      },
+      {
+        title: "Bloc 4 — Persuasiune & narațiune (Lecțiile 39–52)",
+        items: [
+          "Persuasiune, negociere, dezbatere",
+          "Narațiune & descriere complexă",
+        ],
+      },
+      {
+        title: "Bloc 5 — Media & profunzime culturală (Lecțiile 53–64)",
+        items: [
+          "Media: filme, melodii, talk-show-uri, analiză de știri",
+          "Profunzime culturală: religie, politică, variații dialectale interne",
+        ],
+      },
+      {
+        title: "Bloc 6 — Spontaneitate & evaluare (Lecțiile 65–70)",
+        items: [
+          "Discurs extins spontan",
+          "Evaluare",
+        ],
+      },
+    ],
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit",
     schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
-    items: [
-      "Recapitulare B1 & diagnostic",
-      "Registrul stilistic (formal vs. de stradă, code-switching)",
-      "Conectori nuanțați & mărci de discurs",
-      "Vocabular abstract & profesional (drept, afaceri, medicină, tehnologie)",
-      "Persuasiune, negociere, dezbatere",
-      "Narațiune & descriere complexă",
-      "Media: filme, melodii, talk-show-uri, analiză de știri",
-      "Profunzime culturală: religie, politică, variații dialectale interne",
-      "Discurs extins spontan",
-      "Evaluare",
-    ],
   },
   {
     id: "c1",
@@ -446,50 +544,136 @@ const EN: CurriculumLevel[] = [
     id: "b1",
     title: "Level B1 — Intermediate (Independent User)",
     objective:
-      "Learner sustains conversations on varied topics, argues a point and understands everyday media. Spoken only — no Arabic alphabet.",
+      "B1 is where Lebanese Arabic stops being a set of phrases and becomes a language you think in. You sustain conversations on varied topics, argue a position and follow everyday media — news, interviews, ordinary discussion. The verb system closes completely here: all tenses, weak and doubled verbs, the real and unreal conditional, the passive, the subjunctive and reported speech. Spoken only — no Arabic alphabet.",
+    intro: [
+      "At A2 you could hold a conversation if the other person met you halfway. At B1 you no longer need them to. The 70 lessons open with an A2 review and diagnostic — so we know exactly what has settled and what has not — and close with extended discourse and debate.",
+      "Most of the level is the grammar A1 and A2 deliberately stepped around: consolidating the whole verb system, advanced pronouns and clitic clusters, the full conditional, the passive and participles, subjunctive contexts, complex modals, reported speech and subordination. None of it arrives as a table to memorise — every structure comes in through conversation, in the context where you will actually use it.",
+      "Running alongside that, the abstract topics open up — politics, economy and society at an introductory level — plus Lebanese culture, history and regions, idioms, proverbs and humour. Around 8 months, two 90-minute lessons a week, opening once A2 finishes.",
+    ],
+    outcomes: [
+      "Hold a conversation on varied topics without the other person simplifying their speech",
+      "Argue an opinion and defend it in a debate",
+      "Follow the news and ordinary discussion in Lebanese",
+      "Use the real and unreal conditional, the passive and reported speech in normal talk",
+      "Build long sentences with relative clauses and subordination",
+      "Recognise idioms, proverbs and jokes — and understand why they are funny",
+    ],
+    blocks: [
+      {
+        title: "Block 1 — Where you start (Lessons 1–6)",
+        items: [
+          "A2 review & diagnostic",
+        ],
+      },
+      {
+        title: "Block 2 — The verb system, in full (Lessons 7–24)",
+        items: [
+          "Consolidating the verb system (all tenses, weak & doubled verbs)",
+          "Advanced pronouns & clitic clusters",
+          "Full conditional system (real & unreal)",
+          "Passive voice & participles",
+        ],
+      },
+      {
+        title: "Block 3 — The complex sentence (Lessons 25–40)",
+        items: [
+          "Subjunctive contexts & complex modals",
+          "Reported speech",
+          "Relative clauses & complex subordination",
+        ],
+      },
+      {
+        title: "Block 4 — Abstract topics & opinion (Lessons 41–54)",
+        items: [
+          "Abstract topics: politics, economy, society (introductory)",
+          "Opinion & argumentation",
+          "Media & news comprehension",
+        ],
+      },
+      {
+        title: "Block 5 — Culture & living register (Lessons 55–64)",
+        items: [
+          "Culture, history & Lebanese regions",
+          "Idioms, proverbs, humor II",
+        ],
+      },
+      {
+        title: "Block 6 — Discourse & assessment (Lessons 65–70)",
+        items: [
+          "Extended discourse & debate",
+          "Review & assessment",
+        ],
+      },
+    ],
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken",
     schedule: ["~8 months · opens after A2 finishes (date coming soon)"],
-    items: [
-      "A2 review & diagnostic",
-      "Consolidating the verb system (all tenses, weak & doubled verbs)",
-      "Advanced pronouns & clitic clusters",
-      "Full conditional system (real & unreal)",
-      "Passive voice & participles",
-      "Subjunctive contexts & complex modals",
-      "Reported speech",
-      "Relative clauses & complex subordination",
-      "Abstract topics: politics, economy, society (introductory)",
-      "Opinion & argumentation",
-      "Media & news comprehension",
-      "Culture, history & Lebanese regions",
-      "Idioms, proverbs, humor II",
-      "Extended discourse & debate",
-      "Review & assessment",
-    ],
   },
   {
     id: "b2",
     title: "Level B2 — Upper-Intermediate",
     objective:
-      "Learner switches register, negotiates, analyses media and speaks spontaneously on complex topics. Spoken only.",
+      "B2 is where you stop merely speaking correctly and start speaking appropriately. You switch between registers — street language to formal — negotiate, analyse media and express yourself spontaneously on complex topics, including professional ones: law, business, medicine, technology. Spoken only.",
+    intro: [
+      "The difference between B1 and B2 is not how much you know but how well you choose. At B2 the same idea can be said three ways and you pick the one that fits — with a friend, with a client, in an argument. That is what stylistic register, code-switching and nuanced connectors are for: they are the difference between someone who speaks Arabic and someone who sounds Lebanese.",
+      "The 70 lessons open with a B1 review and diagnostic, then add abstract and professional vocabulary, persuasion, negotiation and debate, and complex narration and description. The media work steps up from understanding the news to analysing it: films, songs, talk shows.",
+      "The last stretch goes into cultural depth — religion, politics, and the dialect variation between Lebanese regions — and finishes on spontaneous extended discourse. Around 8–9 months, two 90-minute lessons a week, opening after B1.",
+    ],
+    outcomes: [
+      "Move naturally between formal and street register depending on who is listening",
+      "Negotiate, persuade and hold a position in a debate",
+      "Use the professional vocabulary of your own field (law, business, medicine, technology)",
+      "Analyse a film, a song or a talk show rather than just follow it",
+      "Narrate and describe at length, with nuance and the right connectors",
+      "Tell where in Lebanon someone is from by how they speak",
+    ],
+    blocks: [
+      {
+        title: "Block 1 — Where you start (Lessons 1–6)",
+        items: [
+          "B1 review & diagnostic",
+        ],
+      },
+      {
+        title: "Block 2 — Register & nuance (Lessons 7–22)",
+        items: [
+          "Stylistic register (formal vs. street, code-switching)",
+          "Nuanced connectors & discourse markers",
+        ],
+      },
+      {
+        title: "Block 3 — Professional vocabulary (Lessons 23–38)",
+        items: [
+          "Abstract & professional vocabulary (law, business, medicine, technology)",
+        ],
+      },
+      {
+        title: "Block 4 — Persuasion & narration (Lessons 39–52)",
+        items: [
+          "Persuasion, negotiation, debate",
+          "Complex narration & description",
+        ],
+      },
+      {
+        title: "Block 5 — Media & cultural depth (Lessons 53–64)",
+        items: [
+          "Media: films, songs, talk shows, news analysis",
+          "Cultural depth: religion, politics, internal dialect variation",
+        ],
+      },
+      {
+        title: "Block 6 — Spontaneity & assessment (Lessons 65–70)",
+        items: [
+          "Spontaneous extended discourse",
+          "Assessment",
+        ],
+      },
+    ],
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken",
     schedule: ["~8–9 months · opens after B1 — future enrollment"],
-    items: [
-      "B1 review & diagnostic",
-      "Stylistic register (formal vs. street, code-switching)",
-      "Nuanced connectors & discourse markers",
-      "Abstract & professional vocabulary (law, business, medicine, tech)",
-      "Persuasion, negotiation, debate",
-      "Complex narration & description",
-      "Media: films, songs, talk shows, news analysis",
-      "Cultural depth: religion, politics, internal dialect variation",
-      "Spontaneous extended discourse",
-      "Assessment",
-    ],
   },
   {
     id: "c1",

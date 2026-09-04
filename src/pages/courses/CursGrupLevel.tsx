@@ -202,6 +202,33 @@ const CursGrupLevel = () => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Curriculum */}
             <div className="min-w-0 lg:col-span-3">
+              {/* Prose above the curriculum. The pages used to be stats plus a
+                  bullet list, which reads as provisional for a course of this
+                  length — B1 and B2 were the two thinnest pages on the site. */}
+              {curriculum.intro && (
+                <div className="mb-8 space-y-3 text-foreground/80 leading-relaxed">
+                  {curriculum.intro.map((para, i) => (
+                    <p key={i} className="text-sm">{para}</p>
+                  ))}
+                </div>
+              )}
+
+              {curriculum.outcomes && (
+                <div className="mb-8 rounded-2xl border border-border bg-muted/30 p-5">
+                  <h2 className="text-lg font-bold text-foreground mb-3">
+                    {t.levelPageOutcomesTitle}
+                  </h2>
+                  <ul className="space-y-2">
+                    {curriculum.outcomes.map((o, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="min-w-0 text-foreground">{o}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <h2 className="text-2xl font-bold text-foreground mb-4">{t.levelPageCurriculumTitle}</h2>
 
               {/* Flat list (A1, A2, B1, B2) */}
