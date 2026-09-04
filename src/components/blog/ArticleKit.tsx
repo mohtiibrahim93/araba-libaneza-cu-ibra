@@ -136,6 +136,7 @@ export const InlineCta = ({ title, text, href, label }: { title: Loc; text: Loc;
       <p className="mt-2 text-sm text-muted-foreground">{pick(text, lang)}</p>
       <Link
         to={href}
+        data-cta
         className="mt-4 inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
       >
         {pick(label, lang)}

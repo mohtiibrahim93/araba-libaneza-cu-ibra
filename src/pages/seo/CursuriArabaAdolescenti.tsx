@@ -76,7 +76,8 @@ const CursuriArabaAdolescenti = () => (
       <div className="mt-5">
         <Link
           to="/trial"
-          className="inline-block rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
+          data-cta
+        className="inline-block rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
         >
           Rezervă lecția de probă gratuită (30 min)
         </Link>

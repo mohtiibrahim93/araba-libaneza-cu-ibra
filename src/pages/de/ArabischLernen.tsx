@@ -137,7 +137,7 @@ const ArabischLernen = () => (
           ))}
         </div>
 
-        <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a]:text-primary [&_a]:underline">
+        <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
           <h2>Warum libanesisches Arabisch lernen?</h2>
           <p>
             Libanesisches Arabisch ist die lebendige Sprache des Libanon — was Menschen zu Hause,
@@ -216,7 +216,8 @@ const ArabischLernen = () => (
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/trial"
-              className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+              data-cta
+        className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
             >
               Probestunde buchen
             </Link>

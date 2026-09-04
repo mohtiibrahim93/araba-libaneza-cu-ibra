@@ -200,6 +200,7 @@ const LearnLebaneseArabic = () => (
       </p>
       <Link
         to="/blog/learn-lebanese-arabic"
+        data-cta
         className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:bg-primary/90 transition-colors"
       >
         Read the beginner guide
@@ -213,6 +214,7 @@ const LearnLebaneseArabic = () => (
     <div className="flex flex-wrap gap-3 not-prose">
       <Link
         to="/trial"
+        data-cta
         className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
       >
         Book a free trial lesson
