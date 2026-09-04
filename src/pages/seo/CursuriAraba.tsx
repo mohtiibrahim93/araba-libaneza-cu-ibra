@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import LandingLayout from "@/components/seo/LandingLayout";
+import { CURSURI_ARABA_META } from "@/lib/pageMeta";
 
 const FAQ = [
   {
@@ -37,8 +38,8 @@ const CursuriAraba = () => (
     enHref="/en/learn-lebanese-arabic"
     deHref="/de/arabisch-lernen"
     title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
-    metaTitle="Cursuri Arabă Libaneză A1–C2 | București și Online"
-    description="Cursuri de arabă libaneză A1–C2 în București și online: grupe, lecții private 1:1 și cursuri pentru copii, toate cu profesor nativ. Probă gratuită."
+    metaTitle={CURSURI_ARABA_META.title}
+    description={CURSURI_ARABA_META.description}
     crumb="Cursuri de limbă arabă"
     lead="Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online."
     faq={FAQ}

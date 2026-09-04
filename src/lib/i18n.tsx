@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { useSiteTexts } from "@/hooks/useSiteTexts";
+import { HOME_META } from "@/lib/pageMeta";
 
 type Lang = "ro" | "en";
 
@@ -473,8 +474,8 @@ export const translations = {
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
     // 60 characters is where Google truncates; the old wording was 64 and
     // also disagreed with the title the prerender writes into the static head.
-    homeSeoTitle: "Cursuri de Arabă Libaneză în București și Online — Ibra",
-    homeSeoDescription: "Cursuri de arabă în București și online cu profesor nativ libanez. Grupe mici, lecții private, curs pentru copii. Lecție de probă gratuită. Începe să vorbești araba libaneză.",
+    homeSeoTitle: HOME_META.ro.title,
+    homeSeoDescription: HOME_META.ro.description,
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
     bookingPageTitleTrial: "Lecție gratuită de probă",
@@ -1236,8 +1237,8 @@ export const translations = {
     thankYouBackHome: "Back to homepage",
     thankYouLoading: "Loading details...",
     thankYouError: "We couldn't load payment details, but your registration was received.",
-    homeSeoTitle: "Lebanese Arabic Courses with Ibra — Bucharest | Free Trial",
-    homeSeoDescription: "Learn Lebanese Arabic with Ibra, a native instructor. Group, private, and kids courses — in person in Bucharest or online. First lesson free!",
+    homeSeoTitle: HOME_META.en.title,
+    homeSeoDescription: HOME_META.en.description,
     // Booking page (per-type)
     bookingPageTitlePaid: "Book your lesson",
     bookingPageTitleTrial: "Free trial lesson",
