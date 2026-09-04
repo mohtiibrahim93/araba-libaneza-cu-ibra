@@ -13,7 +13,7 @@
  * Layout, colours and section order follow the original: A4, brand red, Lora
  * for display type, the same three numbered sections and the same closing page.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -149,8 +149,53 @@ const html = `<!doctype html>
   <div class="foot">Centrul de Arabă Libaneză cu Ibra — București (Str. Icoanei 80) și online.</div>
 </div>`;
 
+
+/**
+ * Finds a usable Chromium, or nothing.
+ *
+ * Playwright's own executablePath() points at the build it expects, which is
+ * not always the build that is installed — here it names chromium-1234 while
+ * chromium-1194 is what exists on disk. So check candidates rather than trust
+ * one answer, and treat "absent" as a normal outcome: this script runs inside
+ * `npm run build`, and a missing browser must not stop the site deploying over
+ * a lead-magnet PDF. The test in src/test/arabizi-consistency.test.ts catches
+ * the PDF being stale either way.
+ */
+function findChromium(): string | null {
+  const candidates: string[] = [];
+  if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE) {
+    candidates.push(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE);
+  }
+  try {
+    candidates.push(chromium.executablePath());
+  } catch {
+    // Playwright can throw when no browser is registered at all.
+  }
+  const browsersRoot = process.env.PLAYWRIGHT_BROWSERS_PATH || "/opt/pw-browsers";
+  try {
+    for (const dir of readdirSync(browsersRoot)) {
+      if (!dir.startsWith("chromium")) continue;
+      for (const sub of ["chrome-linux/chrome", "chrome-linux64/chrome", "chrome-mac/Chromium.app/Contents/MacOS/Chromium"]) {
+        candidates.push(resolve(browsersRoot, dir, sub));
+      }
+    }
+  } catch {
+    // No browsers directory — fall through to whatever else is in the list.
+  }
+  return candidates.find((c) => c && existsSync(c)) ?? null;
+}
+
+const executablePath = findChromium();
+if (!executablePath) {
+  console.warn(
+    "[cheat-sheet] no Chromium found — skipping PDF regeneration. " +
+      "The committed PDF is used as-is; the test suite still fails if it is out of date.",
+  );
+  process.exit(0);
+}
+
 const out = resolve(root, "public/arabizi-cheat-sheet.pdf");
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
+const browser = await chromium.launch({ executablePath });
 const page = await browser.newPage();
 await page.setContent(html, { waitUntil: "load" });
 await page.evaluate(() => document.fonts.ready);
