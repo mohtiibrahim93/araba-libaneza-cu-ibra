@@ -110,13 +110,13 @@ const LimbileVorbiteInLiban = () => {
       </p>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Ai decis pe care o înveți?", en: "Decided which one to learn?" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "Predăm dialectul libanez — limba vorbită zilnic. Grupe A1–C2, lecții 1:1 sau curs pentru copii.",
+          en: "We teach the Lebanese dialect — the language spoken daily. Groups A1–C2, 1-on-1 or the kids course.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri-araba"
+        label={{ ro: "Vezi cursurile", en: "See the courses" }}
       />
 
 
@@ -126,6 +126,14 @@ const LimbileVorbiteInLiban = () => {
         <li>{en ? "Want to read Arabic news or classical texts — add MSA later, after A2 dialect." : "Vrei să citești presă arabă sau texte clasice — adaugă MSA mai târziu, după A2 la dialect."}</li>
         <li>{en ? "Doing business with Lebanon — English or French will get you through meetings, but Lebanese Arabic is what earns trust." : "Faci business cu Libanul — engleza sau franceza te scot din ședințe, dar araba libaneză e ce câștigă încrederea."}</li>
       </ul>
+
+      <p>
+        {en
+          ? "If the answer is Lebanese Arabic, that is the only thing we teach — "
+          : "Dacă răspunsul e araba libaneză, e singurul lucru pe care îl predăm — "}
+        <Link to="/cursuri-araba">{en ? "groups, private lessons and a kids course" : "grupe, lecții private și curs pentru copii"}</Link>
+        {en ? ", all with a native teacher." : ", toate cu profesor nativ."}
+      </p>
 
       <p>
         {en ? "Related:" : "Alte articole utile:"}{" "}

@@ -91,13 +91,13 @@ const ArabaPentruCopii = () => {
       </ul>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Cursul pentru copii, în detaliu", en: "The kids course, in detail" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "6–10 ani, prin joc, poveste și activitate — nu prin gramatică. Grupă mică, fizic în București.",
+          en: "Ages 6–10, through play, story and activity — not grammar. Small group, in person in Bucharest.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri/copii"
+        label={{ ro: "Vezi cursul pentru copii", en: "See the kids course" }}
       />
 
 

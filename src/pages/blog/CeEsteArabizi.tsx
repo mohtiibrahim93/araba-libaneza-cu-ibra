@@ -114,6 +114,13 @@ const CeEsteArabizi = () => {
           : "Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs folosim arabizi la început și trecem treptat la alfabetul arab, în ritmul tău, prin metoda "}
         <strong>Oral First</strong>{en ? " method." : "."}
       </p>
+      <p>
+        {en ? "That method runs through every format we teach — " : "Metoda asta e aceeași în toate formatele — "}
+        <Link to="/cursuri-araba">{en ? "see the courses and levels" : "vezi cursurile și nivelurile"}</Link>
+        {en
+          ? ", from beginner groups to one-on-one lessons."
+          : ", de la grupele de început până la lecțiile 1:1."}
+      </p>
     </BlogArticleLayout>
   );
 };

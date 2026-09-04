@@ -110,13 +110,13 @@ const CatCostaCursurile = () => {
       </p>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Toate prețurile, într-un singur loc", en: "Every price in one place" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "Grupe A1–C2, lecții private și cursul pentru copii — cu prețul lunar și cel pentru tot nivelul, afișate.",
+          en: "Groups A1–C2, private lessons and the kids course — monthly and whole-level prices, shown.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri-araba"
+        label={{ ro: "Vezi cursurile și prețurile", en: "See courses and prices" }}
       />
 
 

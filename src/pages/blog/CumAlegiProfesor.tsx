@@ -122,13 +122,13 @@ const CumAlegiProfesor = () => {
       </ul>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Testează criteriile de mai sus", en: "Put the checklist to the test" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "Lecțiile 1:1 sunt cel mai direct mod de a verifica metoda unui profesor — program flexibil, ritmul tău.",
+          en: "A 1-on-1 lesson is the most direct way to test a teacher's method — flexible schedule, your pace.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri/private"
+        label={{ ro: "Vezi lecțiile private", en: "See private lessons" }}
       />
 
 

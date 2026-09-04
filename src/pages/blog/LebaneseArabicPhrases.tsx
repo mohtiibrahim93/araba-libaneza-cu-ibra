@@ -177,6 +177,13 @@ const LebaneseArabicPhrases = () => {
         <li>{en ? "Say each phrase out loud 10 times, then use it in a fake mini-dialogue." : "Spune fiecare expresie cu voce tare de 10 ori, apoi folosește-o într-un mini-dialog imaginar."}</li>
         <li>{en ? "Post one phrase in a Lebanese friend's DMs — real use beats flashcards." : "Trimite o expresie unui prieten libanez pe DM — folosirea reală bate flashcard-urile."}</li>
       </ul>
+      <p>
+        {en
+          ? "A list only gets you so far: phrases stick once someone answers back. That is most of what a lesson is — "
+          : "O listă te duce doar până la un punct: expresiile se fixează când cineva îți răspunde. Cam asta e o lecție — "}
+        <Link to="/cursuri-araba">{en ? "see the courses" : "vezi cursurile"}</Link>
+        {en ? "." : "."}
+      </p>
 
       <ResourceDownloadForm
         resource="100-expresii-libaneze"

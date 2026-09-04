@@ -198,13 +198,13 @@ const GramaticaArabaLibaneza = () => {
 
       <section id="vs-msa" className="scroll-mt-24 space-y-4">
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Aici se închide gramatica", en: "This is where the grammar closes" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "Structurile de mai sus — condițional, pasiv, vorbire indirectă — se predau integral la nivelul B1, în grupă mică.",
+          en: "The structures above — conditional, passive, reported speech — are taught in full at B1, in a small group.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri/grup/b1"
+        label={{ ro: "Vezi nivelul B1", en: "See level B1" }}
       />
 
         <h2>{en ? "5. How is Lebanese grammar different from MSA?" : "5. Prin ce diferă gramatica libaneză de MSA?"}</h2>
@@ -236,6 +236,13 @@ const GramaticaArabaLibaneza = () => {
           <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">{en ? "Lebanese Arabic vs MSA vs Egyptian" : "Araba libaneză vs MSA vs egipteană"}</Link>
           {en ? " or the RO article " : " sau articolul "}
           <Link to="/blog/araba-libaneza-vs-araba-standard">{en ? "Lebanese vs Standard Arabic" : "Araba libaneză vs araba standard"}</Link>.
+        </p>
+        <p>
+          {en
+            ? "None of this is taught as a table to memorise. The verb system, the conditional and reported speech are worked through in conversation across "
+            : "Nimic din toate astea nu se predă ca tabel de memorat. Sistemul verbal, condiționalul și vorbirea indirectă se lucrează prin conversație, de-a lungul "}
+          <Link to="/cursuri-araba">{en ? "the A1–C2 levels" : "nivelurilor A1–C2"}</Link>
+          {en ? "." : "."}
         </p>
       </section>
     </BlogArticleLayout>

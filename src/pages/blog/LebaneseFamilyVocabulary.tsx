@@ -146,13 +146,13 @@ const LebaneseFamilyVocabulary = () => {
       </ul>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{ ro: "Vocabular pentru familia ta, nu pentru un manual", en: "Vocabulary for your family, not a textbook" }}
         text={{
-          ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
-          en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
+          ro: "La lecțiile 1:1 adaptăm materialul exact la relațiile și situațiile tale — soacră, cumnați, mese de duminică.",
+          en: "In 1-on-1 lessons the material is shaped around your actual relatives and situations.",
         }}
-        href="/trial"
-        label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
+        href="/cursuri/private"
+        label={{ ro: "Vezi lecțiile private", en: "See private lessons" }}
       />
 
 
@@ -174,6 +174,16 @@ const LebaneseFamilyVocabulary = () => {
             : "Cuvântul „eyle” (familie) înseamnă de obicei familia extinsă, nu doar cea nucleu."}
         </li>
       </ul>
+
+      <p>
+        {en
+          ? "Family vocabulary is the one area where a generic word list rarely fits: what you need depends on who your relatives actually are. In "
+          : "Vocabularul de familie e zona în care o listă generală rareori se potrivește: ai nevoie de cuvintele legate de rudele tale. La "}
+        <Link to="/cursuri/private">{en ? "one-on-one lessons" : "lecțiile private 1:1"}</Link>
+        {en
+          ? " the material is built around your own family — and around the situations you will actually be in."
+          : " materialul se construiește în jurul familiei tale — și al situațiilor în care chiar ajungi."}
+      </p>
 
       <p>
         {en ? "Related:" : "Alte articole utile:"}{" "}
