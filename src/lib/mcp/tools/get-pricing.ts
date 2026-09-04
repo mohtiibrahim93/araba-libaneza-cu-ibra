@@ -6,7 +6,7 @@ const ONLINE_PRICES = {
   groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 } as Record<string, number>,
   privateLesson: 150,
   kidsPrivateLesson: 150,
-  kidsGroupMonthly: 600,
+  kidsGroupMonthly: 500,
 };
 const round10 = (n: number) => Math.round(n / 10) * 10;
 const physicalPrice = (online: number) => round10(online * 1.4);

@@ -3,7 +3,12 @@ import { useI18n } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import { ChevronRight, MessageCircle, Sparkles, Building2 } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
-import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
+import {
+  GROUP_COURSE_MONTHS,
+  ONLINE_PRICES,
+  formatLei,
+  physicalPrice,
+} from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
 import posterCursuriGrup from "@/assets/poster-cursuri-grup-sep2026.webp";
 import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
@@ -81,6 +86,92 @@ const CursGrup = () => {
           decoding="async"
           className="w-full max-w-md rounded-2xl border border-border shadow-sm mb-8"
         />
+
+        {/* All six levels side by side.
+            The cards below say everything this table says, but one level at a
+            time — someone deciding between A2 and B1, or working out what the
+            whole path costs, had to open six of them and hold the numbers in
+            their head. Every figure is derived: prices from pricing.ts, lesson
+            counts and hours from curriculum.ts, months from GROUP_COURSE_MONTHS
+            (which is also what Stripe bills against), so none of it can go
+            stale the way a hand-written table would. */}
+        <div className="not-prose mb-8 overflow-x-auto rounded-2xl border border-border">
+          <table className="w-full text-sm border-collapse min-w-[46rem]">
+            <caption className="sr-only">
+              {lang === "en"
+                ? "Lebanese Arabic group courses: level, length, monthly price and full-course price"
+                : "Cursuri de grup de arabă libaneză: nivel, durată, preț lunar și preț pe tot nivelul"}
+            </caption>
+            <thead>
+              <tr className="border-b border-border bg-muted/40 text-left text-muted-foreground">
+                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Level" : "Nivel"}</th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Lessons" : "Lecții"}</th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Length" : "Durată"}</th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Per month" : "Pe lună"}</th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en" ? "Whole level, paid upfront (−10%)" : "Tot nivelul, plătit integral (−10%)"}
+                </th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Enrolment" : "Înscrieri"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {LEVELS.map((lvl) => {
+                const data = curriculum.find((c) => c.id === lvl.toLowerCase())!;
+                const online = ONLINE_PRICES.groupMonthly[lvl];
+                const fizic = physicalPrice(online);
+                const months = GROUP_COURSE_MONTHS[lvl];
+                // The pay-in-full price the checkout actually charges:
+                // monthly x months, less the 10% upfront discount.
+                const fullOnline = Math.round(online * months * 0.9);
+                const fullFizic = Math.round(fizic * months * 0.9);
+                const available = isAvailable(lvl);
+                return (
+                  <tr key={lvl} className="border-b border-border/60 last:border-0 align-top">
+                    <th scope="row" className="py-2.5 px-3 text-left font-bold text-foreground whitespace-nowrap">
+                      <Link to={`/cursuri/grup/${lvl.toLowerCase()}`} className="text-primary hover:underline underline-offset-4">
+                        {lvl}
+                      </Link>
+                    </th>
+                    <td className="py-2.5 px-3 whitespace-nowrap">{data.lessons}</td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      {months} {lang === "en" ? (months === 1 ? "month" : "months") : "luni"}
+                    </td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      <span className="font-semibold text-foreground">{formatLei(online)}</span>{" "}
+                      <span className="text-muted-foreground">{t.priceOnlineShort}</span>
+                      {" · "}
+                      <span className="font-semibold text-foreground">{formatLei(fizic)}</span>{" "}
+                      <span className="text-muted-foreground">{t.priceFizicShort}</span>
+                    </td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      <span className="font-semibold text-foreground">{formatLei(fullOnline)}</span>{" "}
+                      <span className="text-muted-foreground">{t.priceOnlineShort}</span>
+                      {" · "}
+                      <span className="font-semibold text-foreground">{formatLei(fullFizic)}</span>{" "}
+                      <span className="text-muted-foreground">{t.priceFizicShort}</span>
+                    </td>
+                    <td className="py-2.5 px-3">
+                      {available ? (
+                        <span className="font-medium text-primary">
+                          {lang === "en" ? "Open now" : "Deschise acum"}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          {lang === "en" ? "After the previous level" : "După nivelul anterior"}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-muted-foreground mb-8 max-w-2xl">
+          {lang === "en"
+            ? "All prices are per person. Two 90-minute lessons a week. Monthly payment stops automatically at the end of the level; paying the whole level upfront takes 10% off. The first 30-minute trial lesson is free."
+            : "Prețurile sunt de persoană. Două lecții de 90 de minute pe săptămână. Plata lunară se oprește automat la finalul nivelului; plata integrală a nivelului are 10% reducere. Prima lecție de probă, de 30 de minute, este gratuită."}
+        </p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {LEVELS.map((lvl) => {

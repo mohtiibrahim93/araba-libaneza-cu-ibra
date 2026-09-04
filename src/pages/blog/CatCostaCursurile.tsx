@@ -95,8 +95,8 @@ const CatCostaCursurile = () => {
       <h2>{en ? "Kids course (ages 6–10)" : "Curs pentru copii (6–10 ani)"}</h2>
       <p>
         {en
-          ? "The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 600 lei/month for the program's duration. See the "
-          : "Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 600 lei/lună pe durata programului. Vezi "}
+          ? "The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 500 lei/month online (700 lei/month in person) for the program's duration. See the "
+          : "Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 500 lei/lună online (700 lei/lună fizic) pe durata programului. Vezi "}
         <Link to="/cursuri/copii">{en ? "kids course" : "cursul pentru copii"}</Link>.
       </p>
 

@@ -32,9 +32,9 @@ export const ONLINE_PRICES = {
   privateLesson: 150,
   /** Kids private 1:1 lesson (online). */
   kidsPrivateLesson: 150,
-  /** Kids group — monthly fee per child, minimum 4. In-person only, so this
-   *  is the price charged as-is; the physical multiplier is not applied. */
-  kidsGroupMonthly: 600,
+  /** Kids group — monthly fee per child, minimum 4 (online). In person takes
+   *  the same +40% as every other course. */
+  kidsGroupMonthly: 500,
 };
 
 /**

@@ -119,29 +119,40 @@ export function groupMonthsFor(level: string | null | undefined): number {
 // ---------------------------------------------------------------------------
 // Kids group course pricing
 //
-// Kids in this app = group course, physical only, 3 months, 600 LEI / month.
+// Kids in this app = group course, 3 months, 500 LEI / month online and the
+// usual +40% in person. The group is not open yet; this is the shape it takes
+// when it is.
 // No CEFR level, no online/fizic split, no volume discount. Mirrors the price
-// card displayed on the site (600 / month, 1.800 total, 1.620 LEI with the
-// -10% upfront discount). Physical-only, so the +40% multiplier is NOT applied.
+// card displayed on the site (500 / month online, 1.500 total, 1.350 LEI with
+// the -10% upfront discount).
 // ---------------------------------------------------------------------------
 
 /** Kids group course — monthly fee per child, whole RON. */
-export const KIDS_GROUP_MONTHLY = 600;
+export const KIDS_GROUP_MONTHLY = 500;
 
 /** Total number of monthly charges for the kids group course. */
 export const KIDS_GROUP_MONTHS = 3;
 
-/** Kids group monthly unit amount, in bani. */
-export function kidsGroupMonthlyUnitAmount(): number {
-  return KIDS_GROUP_MONTHLY * 100;
+/**
+ * Kids group monthly unit amount, in bani.
+ *
+ * Takes the same +40% in person as every other course. Format comes from the
+ * registration row; an unknown value falls back to online, the cheaper of the
+ * two, so a data gap can never overcharge.
+ */
+export function kidsGroupMonthlyUnitAmount(format?: string | null): number {
+  const ron = format === "fizic"
+    ? round10(KIDS_GROUP_MONTHLY * PHYSICAL_MULTIPLIER)
+    : KIDS_GROUP_MONTHLY;
+  return ron * 100;
 }
 
 /**
  * Kids group full-course amount in bani for the pay-in-full path: the whole
  * course (monthly × months) with a 10% upfront discount.
  */
-export function kidsGroupFullCourseUnitAmount(): number {
-  return Math.round(kidsGroupMonthlyUnitAmount() * KIDS_GROUP_MONTHS * 0.9);
+export function kidsGroupFullCourseUnitAmount(format?: string | null): number {
+  return Math.round(kidsGroupMonthlyUnitAmount(format) * KIDS_GROUP_MONTHS * 0.9);
 }
 
 /** Share of one month held as a refundable deposit to reserve a kids seat. */
@@ -152,6 +163,6 @@ export const KIDS_DEPOSIT_SHARE = 0.25;
  * was hard-coded as 12500 in create-checkout while the copy said "25%", so
  * raising the monthly fee would have quietly turned 25% into something else.
  */
-export function kidsDepositUnitAmount(): number {
-  return Math.round(kidsGroupMonthlyUnitAmount() * KIDS_DEPOSIT_SHARE);
+export function kidsDepositUnitAmount(format?: string | null): number {
+  return Math.round(kidsGroupMonthlyUnitAmount(format) * KIDS_DEPOSIT_SHARE);
 }

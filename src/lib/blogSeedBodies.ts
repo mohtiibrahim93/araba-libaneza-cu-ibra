@@ -97,7 +97,7 @@ Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă *
 
 ## Curs pentru copii (6–10 ani)
 
-Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 600 lei/lună pe durata programului. Vezi [cursul pentru copii](/cursuri/copii).
+Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 500 lei/lună online (700 lei/lună fizic) pe durata programului. Vezi [cursul pentru copii](/cursuri/copii).
 
 ## Proba este gratuită
 
@@ -123,7 +123,7 @@ If you want a personalized pace or a flexible schedule, private lessons cost **1
 
 ## Kids course (ages 6–10)
 
-The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 600 lei/month for the program's duration. See the [kids course](/cursuri/copii).
+The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 500 lei/month online (700 lei/month in person) for the program's duration. See the [kids course](/cursuri/copii).
 
 ## The trial is free
 

@@ -93,10 +93,10 @@ serve(async (req) => {
 
     // Amount + length come from the server price table keyed by the level+format
     // persisted on the row — never a client value, which could be manipulated.
-    // Kids is flat (no level, physical-only, 3-month course).
+    // Kids has no level, but takes the same +40% in person as everything else.
     const isKids = regRow.form_type === "kids";
     const monthlyUnitAmount = isKids
-      ? kidsGroupMonthlyUnitAmount()
+      ? kidsGroupMonthlyUnitAmount(regRow.format)
       : groupMonthlyUnitAmount(regRow.level, regRow.format);
     const monthsTotal = isKids ? KIDS_GROUP_MONTHS : groupMonthsFor(regRow.level);
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));

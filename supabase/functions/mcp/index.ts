@@ -11,7 +11,7 @@ var ONLINE_PRICES = {
   groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1e3 },
   privateLesson: 150,
   kidsPrivateLesson: 150,
-  kidsGroupMonthly: 600
+  kidsGroupMonthly: 500
 };
 var round10 = (n) => Math.round(n / 10) * 10;
 var physicalPrice = (online) => round10(online * 1.4);

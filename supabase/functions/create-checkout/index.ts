@@ -100,11 +100,13 @@ serve(async (req) => {
 
     // Group/private amounts come from the server-side price table keyed by
     // the level + format on the registration row — the old fixed Stripe
-    // price ID charged every group level the A1 rate. Same discount rules
-    // as create-payment-intent (-10% at 3+ months, -20% at 20+ lessons).
+    // price ID charged every group level the A1 rate. Private lessons take the
+    // volume ladder from _shared/prices.ts (-10% at 10, -20% at 20).
     let lineItems;
     if (courseType === "kids_deposit") {
-      const depositBani = kidsDepositUnitAmount();
+      // The deposit is a share of the month the family will actually be billed,
+      // so an in-person seat holds a proportionally larger deposit.
+      const depositBani = kidsDepositUnitAmount(existingReg?.format);
       const depositLei = Math.round(depositBani / 100);
       const pct = Math.round(KIDS_DEPOSIT_SHARE * 100);
       lineItems = [{

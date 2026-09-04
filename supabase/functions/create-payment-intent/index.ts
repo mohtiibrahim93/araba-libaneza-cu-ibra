@@ -103,7 +103,7 @@ serve(async (req) => {
       courseType === "group"
         ? groupMonthlyUnitAmount(regRow.level, regRow.format)
         : courseType === "kids"
-          ? kidsGroupMonthlyUnitAmount()
+          ? kidsGroupMonthlyUnitAmount(regRow.format)
           : privateLessonUnitAmount(regRow.format);
     const currency = "ron";
 
@@ -126,7 +126,7 @@ serve(async (req) => {
       courseType === "group"
         ? groupFullCourseUnitAmount(regRow.level, regRow.format)
         : courseType === "kids"
-          ? kidsGroupFullCourseUnitAmount()
+          ? kidsGroupFullCourseUnitAmount(regRow.format)
           : Math.round(unitAmount * quantity * (1 - privateDiscountFor(quantity)));
 
     // If a PaymentIntent already exists for this registration, reuse it when

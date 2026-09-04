@@ -162,7 +162,7 @@ serve(async (req) => {
     if (isSubscription) {
       const monthly =
         courseType === "kids"
-          ? kidsGroupMonthlyUnitAmount()
+          ? kidsGroupMonthlyUnitAmount(reg.format)
           : groupMonthlyUnitAmount(reg.level, reg.format);
       const discountApplied = courseType !== "kids" && quantity >= 3;
       const unitAmount = discountApplied ? Math.round(monthly * 0.9) : monthly;
@@ -222,7 +222,7 @@ serve(async (req) => {
         courseType === "group"
           ? groupFullCourseUnitAmount(reg.level, reg.format)
           : courseType === "kids"
-            ? kidsGroupFullCourseUnitAmount()
+            ? kidsGroupFullCourseUnitAmount(reg.format)
             : Math.round(
                 privateLessonUnitAmount(reg.format) *
                   quantity *
