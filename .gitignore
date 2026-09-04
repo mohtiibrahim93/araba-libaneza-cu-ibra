@@ -36,3 +36,7 @@ dump-jsonld.mjs
 inspect-*.py
 jsonld-dump.json
 check-meta-len.mjs
+
+# Generated preview from scripts/buildCheatSheet.mjs
+scripts/.cheat-sheet-preview.html
+cheatsheet-preview.png
