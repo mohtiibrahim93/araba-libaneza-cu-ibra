@@ -6,7 +6,13 @@ import { Check, MessageCircle, ChevronRight } from "lucide-react";
 import RegistrationFormSection, { STORAGE_KEY } from "@/components/RegistrationFormSection";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
+import {
+  ONLINE_PRICES,
+  physicalPrice,
+  formatLei,
+  privatePackageFull,
+  privatePackageDiscounted,
+} from "@/lib/pricing";
 import { getCurriculum } from "@/data/curriculum";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
@@ -360,8 +366,8 @@ const ProgramsSection = () => {
                       <div className="flex items-baseline justify-between gap-2">
                         <span className="text-muted-foreground">{t.privatePrice20Label}</span>
                         <span>
-                          <span className="line-through text-muted-foreground">3.000 LEI</span>
-                          <span className="ml-2 font-bold text-primary">2.400 LEI</span>
+                          <span className="line-through text-muted-foreground">{formatLei(privatePackageFull())} LEI</span>
+                          <span className="ml-2 font-bold text-primary">{formatLei(privatePackageDiscounted())} LEI</span>
                         </span>
                       </div>
                     </div>
@@ -580,8 +586,8 @@ const ProgramsSection = () => {
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
                             <span>
-                              <span className="line-through text-muted-foreground">3.000 LEI</span>
-                              <span className="ml-2 font-bold text-primary">2.400 LEI</span>
+                              <span className="line-through text-muted-foreground">{formatLei(privatePackageFull())} LEI</span>
+                              <span className="ml-2 font-bold text-primary">{formatLei(privatePackageDiscounted())} LEI</span>
                             </span>
                           </div>
                         </div>

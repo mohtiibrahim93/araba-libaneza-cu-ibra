@@ -53,6 +53,25 @@ export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
   C2: 10,
 };
 
+/**
+ * Private-lesson package: buy 20 or more and the checkout applies -20%.
+ *
+ * These live here because the price card used to hard-code "3.000 LEI" struck
+ * through and "2.400 LEI" — correct arithmetic today, but silently wrong the
+ * moment privateLesson changes. The rate mirrors create-checkout, which is
+ * what Stripe actually bills; pricing-display.test.ts asserts they agree.
+ */
+export const PRIVATE_PACKAGE_SIZE = 20;
+export const PRIVATE_PACKAGE_DISCOUNT = 0.2;
+
+/** Full price of the package before the discount. */
+export const privatePackageFull = (): number =>
+  ONLINE_PRICES.privateLesson * PRIVATE_PACKAGE_SIZE;
+
+/** What the package actually costs. */
+export const privatePackageDiscounted = (): number =>
+  Math.round(privatePackageFull() * (1 - PRIVATE_PACKAGE_DISCOUNT));
+
 export const formatLei = (n: number): string => n.toLocaleString("ro-RO");
 
 /** Compact dual-price string, e.g. "Online 500 · Fizic 700 LEI / lună". */

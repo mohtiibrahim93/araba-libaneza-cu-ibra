@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
+import { ONLINE_PRICES, formatLei, physicalPrice } from "@/lib/pricing";
 
 const BookingInner = () => {
   const { t, lang } = useI18n();
@@ -62,6 +63,42 @@ const BookingInner = () => {
             <div className="space-y-3">
               <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingWhichH2}</h2>
               <p className="text-muted-foreground leading-relaxed">{t.bookingLandingWhichP}</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-border bg-muted/30 p-4">
+                  <h3 className="mb-2 font-semibold text-foreground">{t.bookingLandingTrialH3}</h3>
+                  <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
+                    <li>{t.bookingLandingTrialLi1}</li>
+                    <li>{t.bookingLandingTrialLi2}</li>
+                    <li>{t.bookingLandingTrialLi3}</li>
+                  </ul>
+                </div>
+                <div className="rounded-xl border border-border bg-muted/30 p-4">
+                  <h3 className="mb-2 font-semibold text-foreground">{t.bookingLandingEnrollH3}</h3>
+                  <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
+                    <li>{t.bookingLandingEnrollLi1}</li>
+                    <li>{t.bookingLandingEnrollLi2}</li>
+                    <li>{t.bookingLandingEnrollLi3}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingFormatsH2}</h2>
+              <p className="text-muted-foreground leading-relaxed">{t.bookingLandingFormatsP}</p>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingPricesH2}</h2>
+              {/* Every figure comes from pricing.ts, so the page cannot quote a
+                  price the checkout would not charge. */}
+              <p className="text-muted-foreground leading-relaxed">
+                {t.bookingLandingPricesP
+                  .replace("{groupOnline}", formatLei(ONLINE_PRICES.groupMonthly.A1))
+                  .replace("{groupFizic}", formatLei(physicalPrice(ONLINE_PRICES.groupMonthly.A1)))
+                  .replace("{priv}", formatLei(ONLINE_PRICES.privateLesson))
+                  .replace("{privFizic}", formatLei(physicalPrice(ONLINE_PRICES.privateLesson)))}
+              </p>
             </div>
             <div className="space-y-3">
               <h2 className="text-xl font-semibold text-foreground">{t.bookingLandingWhereH2}</h2>
