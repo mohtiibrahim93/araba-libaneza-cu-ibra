@@ -69,14 +69,20 @@
     </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F167Y815JL"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' });
-      gtag('config', 'G-F167Y815JL');
+      if (window.__ANALYTICS_ENABLED__) {
+        var gt = document.createElement("script");
+        gt.async = true;
+        gt.src = "https://www.googletagmanager.com/gtag/js?id=G-F167Y815JL";
+        document.head.appendChild(gt);
+        gtag('js', new Date());
+        gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' });
+        gtag('config', 'G-F167Y815JL');
+      }
     </script>
+
 
     <title>Cursuri de Arabă Libaneză în București și Online — Ibra</title>
     <meta name="description" content="Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții." />
