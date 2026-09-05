@@ -9,10 +9,26 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
     <!-- Consent platform: Adopt (loads before the Google tag so it can gate analytics via Consent Mode). -->
     <meta name="adopt-website-id" content="1771d601-0d76-4374-9255-347fecce75e3" />
-    <script
-      src="https://tag.goadopt.io/injector.js?website_code=1771d601-0d76-4374-9255-347fecce75e3"
-      class="adopt-injector"
-    ></script>
+    <script>
+      // Skip consent/analytics vendors inside the Lovable editor preview iframe:
+      // they probe the parent frame and throw cross-origin SecurityErrors there.
+      window.__ANALYTICS_ENABLED__ = (function () {
+        try {
+          if (/lovableproject\.com$/.test(location.hostname)) return false;
+          if (window.top !== window.self) return false;
+        } catch (e) {
+          return false;
+        }
+        return true;
+      })();
+      if (window.__ANALYTICS_ENABLED__) {
+        var adopt = document.createElement("script");
+        adopt.src = "https://tag.goadopt.io/injector.js?website_code=1771d601-0d76-4374-9255-347fecce75e3";
+        adopt.className = "adopt-injector";
+        document.head.appendChild(adopt);
+      }
+    </script>
+
 
 
     <!-- One-time cleanup of the previous CMP (consentmanager.net) leftovers. -->
