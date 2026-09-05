@@ -641,12 +641,15 @@ export type Database = {
       group_cohorts: {
         Row: {
           age_category: string | null
+          break_note_en: string | null
+          break_note_ro: string | null
           content: Json
           course_type: string
           created_at: string
           days_of_week: number[] | null
           duration_minutes: number | null
           end_date: string | null
+          end_date_is_estimate: boolean
           end_time: string | null
           form_type: string
           format: string | null
@@ -666,6 +669,7 @@ export type Database = {
           start_date: string
           start_time: string | null
           status: string
+          teaching_language: string
           timezone: string
           title_en: string | null
           title_ro: string | null
@@ -676,12 +680,15 @@ export type Database = {
         }
         Insert: {
           age_category?: string | null
+          break_note_en?: string | null
+          break_note_ro?: string | null
           content?: Json
           course_type?: string
           created_at?: string
           days_of_week?: number[] | null
           duration_minutes?: number | null
           end_date?: string | null
+          end_date_is_estimate?: boolean
           end_time?: string | null
           form_type: string
           format?: string | null
@@ -701,6 +708,7 @@ export type Database = {
           start_date: string
           start_time?: string | null
           status?: string
+          teaching_language?: string
           timezone?: string
           title_en?: string | null
           title_ro?: string | null
@@ -711,12 +719,15 @@ export type Database = {
         }
         Update: {
           age_category?: string | null
+          break_note_en?: string | null
+          break_note_ro?: string | null
           content?: Json
           course_type?: string
           created_at?: string
           days_of_week?: number[] | null
           duration_minutes?: number | null
           end_date?: string | null
+          end_date_is_estimate?: boolean
           end_time?: string | null
           form_type?: string
           format?: string | null
@@ -736,6 +747,7 @@ export type Database = {
           start_date?: string
           start_time?: string | null
           status?: string
+          teaching_language?: string
           timezone?: string
           title_en?: string | null
           title_ro?: string | null
@@ -992,6 +1004,7 @@ export type Database = {
           id: string
           is_waitlist_deposit: boolean
           kids_slot_id: string | null
+          language: string | null
           lead_status: string
           level: string | null
           months_paid: number
@@ -1028,6 +1041,7 @@ export type Database = {
           id?: string
           is_waitlist_deposit?: boolean
           kids_slot_id?: string | null
+          language?: string | null
           lead_status?: string
           level?: string | null
           months_paid?: number
@@ -1064,6 +1078,7 @@ export type Database = {
           id?: string
           is_waitlist_deposit?: boolean
           kids_slot_id?: string | null
+          language?: string | null
           lead_status?: string
           level?: string | null
           months_paid?: number

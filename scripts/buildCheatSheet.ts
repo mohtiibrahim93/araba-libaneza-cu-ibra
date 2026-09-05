@@ -17,7 +17,6 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
 import { ARABIZI_DIGITS } from "../src/data/arabizi";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -161,13 +160,22 @@ const html = `<!doctype html>
  * a lead-magnet PDF. The test in src/test/arabizi-consistency.test.ts catches
  * the PDF being stale either way.
  */
+let chromium: typeof import("playwright").chromium | null = null;
+try {
+  // playwright is a dev-only dependency and is absent in the production build
+  // image. A missing browser must never fail `npm run build`.
+  ({ chromium } = await import("playwright"));
+} catch {
+  chromium = null;
+}
+
 function findChromium(): string | null {
   const candidates: string[] = [];
   if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE) {
     candidates.push(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE);
   }
   try {
-    candidates.push(chromium.executablePath());
+    if (chromium) candidates.push(chromium.executablePath());
   } catch {
     // Playwright can throw when no browser is registered at all.
   }
@@ -185,7 +193,7 @@ function findChromium(): string | null {
   return candidates.find((c) => c && existsSync(c)) ?? null;
 }
 
-const executablePath = findChromium();
+const executablePath = chromium ? findChromium() : null;
 if (!executablePath) {
   console.warn(
     "[cheat-sheet] no Chromium found — skipping PDF regeneration. " +
@@ -195,7 +203,7 @@ if (!executablePath) {
 }
 
 const out = resolve(root, "public/arabizi-cheat-sheet.pdf");
-const browser = await chromium.launch({ executablePath });
+const browser = await chromium!.launch({ executablePath });
 const page = await browser.newPage();
 await page.setContent(html, { waitUntil: "load" });
 await page.evaluate(() => document.fonts.ready);
