@@ -55,6 +55,19 @@ const RO: CurriculumLevel[] = [
       "Online: grupa în desfășurare, locurile sunt ocupate — lasă-ți datele pentru următoarea grupă",
       "Examen final inclus",
     ],
+    intro: [
+      "A1 este nivelul de la zero. Nu presupune nimic: nici alfabet, nici gramatică, nici vreo experiență anterioară cu araba. Primele două lecții sunt despre sunete — ح și ع, apoi ط, غ și ق — și despre sistemul arabizi, care îți dă o cale de a scrie ce auzi din prima zi, fără să te blochezi la alfabetul arab.",
+      "De acolo, cele 32 de lecții merg prin exact lucrurile de care ai nevoie ca să te descurci: prezentare personală și formule de politețe, familia, naționalitățile și profesiile, posesivele, genul, prezentul verbelor regulate cu particula بـ, numerele până la 100, ora, zilele săptămânii și rutina zilnică, negația și cuvintele de întrebare (šu, wēn, kīf, ēmta).",
+      "A doua jumătate iese din clasă: mâncare și comenzi la restaurant, cumpărături și prețuri, culori și descrieri, direcții și locuri în oraș, transport, vremea, corpul și sănătatea de bază, casa. Se termină cu o introducere în trecut, dialoguri extinse și o simulare orală finală. Examen final inclus.",
+    ],
+    outcomes: [
+      "Te prezinți, saluți și porți o conversație scurtă despre tine și familia ta",
+      "Comanzi la restaurant, faci cumpărături și întrebi de preț",
+      "Ceri și înțelegi indicații în oraș, folosești transportul",
+      "Spui ora, zilele și numerele până la 100",
+      "Pui întrebări cu šu, wēn, kīf și ēmta, și negi cu ma…",
+      "Scrii și citești arabizi — deci poți da mesaje în libaneză fără alfabetul arab",
+    ],
     items: [
       "Sunete I: ح ع + sistemul Arabizi",
       "Sunete II: ط غ ق + salutări",
@@ -100,6 +113,19 @@ const RO: CurriculumLevel[] = [
       "Fizic: marți și joi 19:00–20:30 · start marți, 1 septembrie 2026 – 4 martie 2027 (54 lecții) · Strada Icoanei 80",
       "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
+    ],
+    intro: [
+      "A1 ți-a dat prezentul. A2 îți dă restul timpului: trecutul verbelor regulate și apoi al celor neregulate, narațiunea la trecut, viitorul cu raḥ, și trecutul habitual cu kān. În momentul în care poți spune ce ai făcut ieri și ce ai de gând mâine, conversația încetează să mai fie o serie de propoziții izolate.",
+      "Nivelul adaugă și mecanica de care ai nevoie ca să sune natural: pronumele complement direct și indirect, comparativele și superlativele, acordul adjectivelor, pluralele „sparte”, imperativul și imperativul negativ, verbele modale (lāzim, fī, bidd-), propozițiile relative cu illi, condiționalul de bază cu iza și conectorii (bass, la2an, ma3 inno).",
+      "În paralel se deschid situațiile reale: la doctor și la farmacie, programări și întâlniri, conversații telefonice, călătorii și rezervări, aeroport și hotel, bani și noțiuni bancare, muncă și birou, hobby-uri. Plus descrierea persoanelor, emoțiile și opiniile, primele expresii culturale libaneze și idiomuri, jocuri de rol extinse și ascultare din media reală. 54 de lecții, cu evaluare orală finală.",
+    ],
+    outcomes: [
+      "Povestești ce ai făcut ieri și ce planuri ai, la trecut și la viitor",
+      "Te descurci la doctor, la farmacie, la hotel și la aeroport",
+      "Porți o conversație telefonică fără să o eviți",
+      "Ceri, dai și urmezi instrucțiuni, folosind imperativul",
+      "Descrii oameni — fizic și caracter — și îți exprimi opiniile și emoțiile",
+      "Legi propozițiile între ele cu illi, iza și conectorii uzuali",
     ],
     items: [
       "Recapitulare A1 & diagnostic",
@@ -286,6 +312,19 @@ const RO: CurriculumLevel[] = [
     hours: 105,
     trackLabel: "Vorbit / Vorbit + Scris (simultan)",
     schedule: ["~10 luni · se deschide după B2 — înscrieri viitoare"],
+    intro: [
+      "La C1 corectitudinea nu mai e subiectul. Subiectul e ce se spune fără să fie spus: sensul implicit, cititul printre rânduri, ironia și sarcasmul, umorul cu timing și jocuri de cuvinte, idiomurile avansate și proverbele așa cum se folosesc de fapt. Este nivelul la care începi să înțelegi gluma din camera în care ești, nu după ce ți se explică.",
+      "Aici intră și harta socială a limbii: variația regională între Beirut și Muntele Liban, apoi Sud, Nord și Bekaa; sociolingvistica — cine vorbește cum, după clasă, vârstă și comunitate; code-switching-ul libaneză ↔ franceză ↔ engleză; și frazarea elevată, elementele cu aromă fuṣḥā care apar firesc în vorbirea educată. Plus măiestria povestirii, dezbaterea, persuasiunea, negocierea și exprimarea nuanței — atenuare, îndoială, certitudine.",
+      "Partea culturală nu e decor: Fairuz pentru limbă și imagistică, Ziad Rahbani pentru ironie și registru, zajal-ul și tradiția poeziei orale, teatrul și monologul, cinematograful și autenticitatea dialectală, religia, politica și referințele istorice așa cum apar în vorbirea de zi cu zi. C1 este și nivelul la care se deschide scrisul: poți alege trackul vorbit sau vorbit + scris, cu alfabetul arab rulând simultan, în paralel — și e vorba de araba libaneză în litere arabe, nu de fuṣḥā.",
+    ],
+    outcomes: [
+      "Prinzi ironia, sarcasmul și gluma în timp real, nu după explicație",
+      "Recunoști de unde e cineva și cam din ce mediu, după felul în care vorbește",
+      "Faci code-switching între libaneză, franceză și engleză cum o fac libanezii",
+      "Susții o dezbatere, negociezi și convingi, cu nuanță și registru controlat",
+      "Asculți conversație la viteză nativă și urmărești talk-show-uri și comentariu politic",
+      "Opțional: citești și scrii araba libaneză cu alfabetul arab",
+    ],
     spokenCore: {
       intro: "Nucleul vorbit (toți cursanții)",
       items: [
@@ -365,6 +404,19 @@ const RO: CurriculumLevel[] = [
     hours: 120,
     trackLabel: "Vorbit / Scris integrat",
     schedule: ["~10 luni · se deschide după C1 — înscrieri viitoare"],
+    intro: [
+      "C2 este araba libaneză la nivel academic și specializat — dar fără gramatica fuṣḥā completă. Fără cazuri, fără declinări. Doar registrul educat și terminologia pe care profesioniștii și scriitorii libanezi le folosesc efectiv, în meseriile lor.",
+      "Cele 80 de lecții sunt organizate în blocuri modulare, ceea ce înseamnă că îți poți prioritiza domeniul: politică și actualitate, afaceri și economie, drept, sănătate și guvernanță, tehnologie și știință, media și jurnalism, arte, literatură și viață intelectuală. Dacă ești medic, blocul medical contează mai mult decât cel juridic — și programul se poate așeza în consecință.",
+      "Primul bloc rămâne comun tuturor: registrul educat față de cel de stradă, adresarea formală, vocabularul elevat și frazarea selectivă „cu aromă fuṣḥā”, polisarea retorică, nuanțele de ton și intenție, plus textele de opinie și eseul cultural — citite și produse. Este nivelul la care limba încetează să fie un obiectiv și devine un instrument de lucru.",
+    ],
+    outcomes: [
+      "Comuți controlat între registrul educat și cel de stradă, inclusiv în adresarea formală",
+      "Folosești terminologia domeniului tău — juridic, medical, financiar, tehnic sau editorial",
+      "Susții o dezbatere la nivel de expert și citești editoriale cu tot subtextul lor",
+      "Scrii un text de opinie sau un eseu cultural în libaneză",
+      "Analizezi presa libaneză reală și separi faptul de opinie",
+      "Îți alegi blocurile în funcție de meseria ta, nu invers",
+    ],
     blocks: [
       {
         title: "Bloc 1 — Registru & rafinament (Lecțiile 1–10)",
@@ -453,6 +505,19 @@ const EN: CurriculumLevel[] = [
       "Online: group in progress and full — leave your details for the next one",
       "Final exam included",
     ],
+    intro: [
+      "A1 starts from nothing. It assumes no alphabet, no grammar and no previous contact with Arabic. The first two lessons are about sounds — ح and ع, then ط, غ and ق — and about the arabizi system, which gives you a way to write down what you hear from day one without getting stuck on the Arabic script.",
+      "From there the 32 lessons cover exactly what it takes to cope: introducing yourself and the polite formulas, family, nationalities and professions, possessives, gender, the present tense of regular verbs with the بـ particle, numbers to 100, telling the time, the days of the week and daily routine, negation, and the question words (šu, wēn, kīf, ēmta).",
+      "The second half leaves the classroom: food and ordering in a restaurant, shopping and prices, colours and descriptions, directions and places around town, transport, the weather, the body and basic health, the house. It closes with an introduction to the past tense, extended dialogues and a final spoken simulation. Final exam included.",
+    ],
+    outcomes: [
+      "Introduce yourself, greet people and hold a short conversation about yourself and your family",
+      "Order in a restaurant, shop, and ask what something costs",
+      "Ask for and follow directions around town, and use transport",
+      "Tell the time, the days and the numbers up to 100",
+      "Ask questions with šu, wēn, kīf and ēmta, and negate with ma…",
+      "Read and write arabizi — so you can text in Lebanese without the Arabic alphabet",
+    ],
     items: [
       "Sounds I: ح ع + the Arabizi system",
       "Sounds II: ط غ ق + greetings",
@@ -498,6 +563,19 @@ const EN: CurriculumLevel[] = [
       "In person: Tuesdays & Thursdays 19:00–20:30 · starts Tuesday 1 September 2026 – 4 March 2027 (54 lessons) · Strada Icoanei 80",
       "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
+    ],
+    intro: [
+      "A1 gave you the present tense. A2 gives you the rest of time: the past of regular verbs and then the irregular ones, narration in the past, the future with raḥ, and the habitual past with kān. The moment you can say what you did yesterday and what you plan for tomorrow, conversation stops being a series of isolated sentences.",
+      "The level also adds the machinery that makes it sound natural: direct and indirect object pronouns, comparatives and superlatives, adjective agreement in depth, broken plurals, the imperative and the negative imperative, modal verbs (lāzim, fī, bidd-), relative clauses with illi, the basic conditional with iza, and connectors (bass, la2an, ma3 inno).",
+      "Alongside that, the real situations open up: the doctor and the pharmacy, appointments, phone calls, travel and bookings, the airport and the hotel, money and banking, work and office vocabulary, hobbies. Plus describing people physically and by character, emotions and opinions, the first Lebanese cultural expressions and idioms, extended role plays and listening to real media. 54 lessons, with a final spoken assessment.",
+    ],
+    outcomes: [
+      "Tell someone what you did yesterday and what you are planning, in past and future",
+      "Handle the doctor, the pharmacy, a hotel and an airport",
+      "Take a phone call in Lebanese instead of avoiding it",
+      "Ask for, give and follow instructions using the imperative",
+      "Describe people — appearance and character — and give opinions and feelings",
+      "Join sentences together with illi, iza and the everyday connectors",
     ],
     items: [
       "A1 review & diagnostic",
@@ -684,6 +762,19 @@ const EN: CurriculumLevel[] = [
     hours: 105,
     trackLabel: "Spoken / Spoken + Written (simultaneous)",
     schedule: ["~10 months · opens after B2 — future enrollment"],
+    intro: [
+      "At C1 correctness is no longer the subject. The subject is what gets said without being said: implied meaning, reading between the lines, irony and sarcasm, humour with timing and wordplay, advanced idioms and proverbs as they are actually used. This is the level where you catch the joke in the room you are in, rather than after someone explains it.",
+      "It also covers the social map of the language: regional variation between Beirut and Mount Lebanon, then the South, the North and the Bekaa; sociolinguistics — who speaks how, by class, age and community; code-switching between Lebanese, French and English; and elevated phrasing, the fuṣḥā-flavoured elements that turn up naturally in educated speech. Plus storytelling mastery, debate, persuasion, negotiation, and expressing nuance — hedging, doubt, certainty.",
+      "The cultural material is not decoration: Fairuz for language and imagery, Ziad Rahbani for irony and register, zajal and the oral poetry tradition, theatre and monologue, cinema and dialect authenticity, and religion, politics and historical reference as they appear in ordinary speech. C1 is also where writing opens up: you choose the spoken track or spoken + written, with the Arabic alphabet running simultaneously alongside it — and that means Lebanese Arabic in Arabic letters, not fuṣḥā.",
+    ],
+    outcomes: [
+      "Catch irony, sarcasm and the joke in real time rather than after the explanation",
+      "Tell where someone is from, and roughly their background, by how they speak",
+      "Code-switch between Lebanese, French and English the way Lebanese speakers do",
+      "Hold a debate, negotiate and persuade, with controlled nuance and register",
+      "Follow conversation at native speed, plus talk shows and political commentary",
+      "Optionally: read and write Lebanese Arabic in the Arabic alphabet",
+    ],
     spokenCore: {
       intro: "Spoken core (all learners)",
       items: [
@@ -763,6 +854,19 @@ const EN: CurriculumLevel[] = [
     hours: 120,
     trackLabel: "Spoken / Written integrated",
     schedule: ["~10 months · opens after C1 — future enrollment"],
+    intro: [
+      "C2 is Lebanese Arabic at an academic and specialist level — but without full fuṣḥā grammar. No case endings, no declensions. Just the educated register and the terminology Lebanese professionals and writers actually use in their own work.",
+      "The 80 lessons are arranged in modular blocks, which means you can prioritise your own field: politics and current affairs, business and economics, law, health and governance, technology and science, media and journalism, arts, literature and intellectual life. If you are a doctor, the medical block matters more than the legal one — and the schedule can be arranged that way.",
+      "The first block stays common to everyone: educated versus street register, formal address, elevated vocabulary and the selective fuṣḥā-flavoured phrasing of educated speech, rhetorical polish, shades of tone and intent, plus opinion pieces and the cultural essay, both read and produced. This is the level at which the language stops being the goal and becomes a tool you work with.",
+    ],
+    outcomes: [
+      "Move deliberately between educated and street register, formal address included",
+      "Use the terminology of your own field — legal, medical, financial, technical or editorial",
+      "Hold an expert-level debate and read editorials with all their subtext",
+      "Write an opinion piece or a cultural essay in Lebanese",
+      "Analyse the real Lebanese press and separate fact from opinion",
+      "Choose the blocks that match your profession, rather than the other way round",
+    ],
     blocks: [
       {
         title: "Block 1 — Register & refinement (Lessons 1–10)",
