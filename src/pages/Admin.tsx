@@ -849,10 +849,10 @@ const Admin = () => {
               onLogout={handleLogout}
             />
           </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+      </Tabs>
+    </AdminShell>
   );
+
 };
 
 export default Admin;
