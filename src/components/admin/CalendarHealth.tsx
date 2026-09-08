@@ -89,7 +89,21 @@ const CalendarHealth = () => {
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      setHealth(data.data as Health);
+      const raw = (data?.data ?? {}) as Partial<Health>;
+      const normalized: Health = {
+        keys: { lovable: false, googleCalendar: false, ...(raw.keys ?? {}) },
+        read: { ok: false, status: null, detail: null, ...(raw.read ?? {}) },
+        write: raw.write ? { ok: false, status: null, detail: null, ...raw.write } : null,
+        bookings: {
+          total: 0,
+          synced: 0,
+          failed: 0,
+          unsynced: [],
+          ...(raw.bookings ?? {}),
+        },
+        feed: { configured: false, url: null, ...(raw.feed ?? {}) },
+      };
+      setHealth(normalized);
       if (probeWrite) {
         const w = (data.data as Health).write;
         toast({
