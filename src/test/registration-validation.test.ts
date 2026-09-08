@@ -74,3 +74,42 @@ describe("registration validation", () => {
     expect(form).toMatch(/if \(startedRef\.current\) return;/);
   });
 });
+
+/**
+ * GA4 event names are case-sensitive, and that one letter cost every
+ * conversion number on the property.
+ *
+ * The GA4 property has three key events configured — close_convert_lead,
+ * qualify_lead and purchase. The site fires none of them: the first two are
+ * Google's default lead-gen suggestions that no code path emits, and the third
+ * is spelled `Purchase` here (the Meta Pixel convention) on three pages. So the
+ * key event never matched an event, and every channel reported 0 conversions
+ * while leads were in fact arriving.
+ *
+ * `Lead` was already mirrored to `generate_lead` for the same reason. This
+ * asserts `Purchase` is mirrored too, and that the mirror keeps GA4's spelling.
+ */
+describe("GA4 event names match what the property counts", () => {
+  const tracking = readFileSync(
+    resolve(process.cwd(), "src/lib/tracking.ts"),
+    "utf8",
+  );
+
+  it("mirrors Lead to GA4's generate_lead", () => {
+    expect(tracking).toContain('eventName === "Lead"');
+    expect(tracking).toContain('"generate_lead"');
+  });
+
+  it("mirrors Purchase to GA4's lowercase purchase", () => {
+    expect(tracking).toContain('eventName === "Purchase"');
+    expect(tracking).toMatch(/gtag\("event", "purchase"/);
+  });
+
+  it("keeps the two spellings distinct rather than renaming one", () => {
+    // The capitalised names stay for Meta Pixel and reporting continuity; the
+    // lowercase ones exist so GA4's reserved events and key events fire.
+    for (const name of ['"Lead"', '"Purchase"', '"generate_lead"', '"purchase"']) {
+      expect(tracking, `${name} missing`).toContain(name);
+    }
+  });
+});

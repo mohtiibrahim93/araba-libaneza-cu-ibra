@@ -19,6 +19,18 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>) 
       ...params,
     });
   }
+
+  // Same problem, one letter wide: three pages send `Purchase` (the Meta Pixel
+  // spelling) while GA4's reserved ecommerce event — and the key event already
+  // configured on the property — is lowercase `purchase`. GA4 event names are
+  // case-sensitive, so the configured key event had never once matched a real
+  // event and every channel reported zero conversions.
+  if (eventName === "Purchase") {
+    (window as any).gtag("event", "purchase", {
+      page_path: window.location.pathname,
+      ...params,
+    });
+  }
 }
 
 // Convenience: track a successful form submission.
