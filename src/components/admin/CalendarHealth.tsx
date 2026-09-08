@@ -105,7 +105,7 @@ const CalendarHealth = () => {
       };
       setHealth(normalized);
       if (probeWrite) {
-        const w = (data.data as Health).write;
+        const w = normalized.write;
         toast({
           title: w?.ok
             ? "Test reușit — evenimentul a fost creat și șters"
