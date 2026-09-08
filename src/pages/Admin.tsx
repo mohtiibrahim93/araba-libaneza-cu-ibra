@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import AdminNav from "@/components/AdminNav";
+import AdminShell from "@/components/admin/AdminShell";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
@@ -662,7 +662,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
-          <TabsContent value="leads" className="mt-5 space-y-4">
+          <TabsContent value="leads" className="mt-0 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}
@@ -797,14 +797,14 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
-          <TabsContent value="bookings" className="mt-5 space-y-6">
+          <TabsContent value="bookings" className="mt-0 space-y-6">
             <CalendarHealth />
             <AvailabilityAdmin />
             <BookingsAdmin />
           </TabsContent>
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
-          <TabsContent value="groups" className="mt-5 space-y-6">
+          <TabsContent value="groups" className="mt-0 space-y-6">
             <GroupOverview />
             <CapacitiesAdmin />
             <CourseRequestsAdmin />
@@ -813,29 +813,29 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Blog: editare articole (CMS override) ────────────────────── */}
-          <TabsContent value="blog" className="mt-5">
+          <TabsContent value="blog" className="mt-0">
             <BlogAdmin />
           </TabsContent>
 
           {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
-          <TabsContent value="resources" className="mt-5">
+          <TabsContent value="resources" className="mt-0">
             <ResourcesAdmin />
           </TabsContent>
 
-          <TabsContent value="pages" className="mt-5">
+          <TabsContent value="pages" className="mt-0">
             <PagesAdmin />
           </TabsContent>
 
-          <TabsContent value="site-texts" className="mt-5">
+          <TabsContent value="site-texts" className="mt-0">
             <SiteTextsAdmin />
           </TabsContent>
 
-          <TabsContent value="seo" className="mt-5">
+          <TabsContent value="seo" className="mt-0">
             <BacklinksAdmin />
           </TabsContent>
 
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
-          <TabsContent value="settings" className="mt-5">
+          <TabsContent value="settings" className="mt-0">
             <SettingsTab
               emailSettings={emailSettings}
               savingEmailSettings={savingEmailSettings}
