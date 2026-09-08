@@ -50,9 +50,11 @@ describe("registration validation", () => {
     expect(form).toContain("border-destructive");
     expect(form).toContain("scrollIntoView");
     expect(form).toContain("aria-invalid");
-    // The two components that own their own fields take an error prop.
-    expect(form).toContain('error={invalidField === "gdpr"}');
-    expect(form).toContain('levelError={invalidField === "level"}');
+    // The two components that own their own fields take an error prop. Assert
+    // the wiring, not the exact expression: GdprCheckbox takes `string |
+    // undefined`, so the value passed is the message, not the boolean.
+    expect(form).toMatch(/error=\{invalidField === "gdpr"/);
+    expect(form).toMatch(/levelError=\{invalidField === "level"/);
     expect(read("src/components/RegistrationForm/GroupFields.tsx")).toContain("levelError");
   });
 
