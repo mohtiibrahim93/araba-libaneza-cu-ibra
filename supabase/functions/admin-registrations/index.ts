@@ -1597,6 +1597,16 @@ Deno.serve(async (req) => {
     return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@centruldearabalibaneza.com" } });
   } catch (err) {
     console.error("[admin-registrations] error", err);
+    // Database check constraints (e.g. online cohorts capped at 6 seats) are a
+    // user input problem, not a server fault — surface a readable sentence.
+    const e = err as { code?: string; message?: string };
+    if (e?.code === "23514") {
+      const msg = e.message?.includes("group_cohorts_online_max_seats")
+        ? "Grupele online au maximum 6 locuri"
+        : "Valori invalide pentru acest formular";
+      return jsonResponse({ error: msg });
+    }
     return jsonResponse({ error: "Internal server error" }, 500);
+
   }
 });
