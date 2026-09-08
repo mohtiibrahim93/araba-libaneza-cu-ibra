@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import AdminNav from "@/components/AdminNav";
+import AdminShell from "@/components/admin/AdminShell";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
@@ -568,61 +568,72 @@ const Admin = () => {
     { label: "Abonamente active", value: stats.activeSubs, icon: Repeat },
   ];
 
+  const navGroups = [
+    {
+      title: "Activitate",
+      items: [
+        {
+          value: "overview",
+          label: "Panou general",
+          icon: LayoutDashboard,
+          hint: "Cifrele zilei și traseul cursanților",
+        },
+        {
+          value: "leads",
+          label: "Înscrieri",
+          icon: ClipboardList,
+          badge: registrations.length,
+          hint: "Toate cererile și plățile",
+        },
+        {
+          value: "bookings",
+          label: "Programări",
+          icon: CalendarDays,
+          hint: "Disponibilitate, rezervări și calendar",
+        },
+        {
+          value: "groups",
+          label: "Grupe",
+          icon: GraduationCap,
+          hint: "Capacitate, cohorte și cereri de curs",
+        },
+      ],
+    },
+    {
+      title: "Conținut",
+      items: [
+        { value: "blog", label: "Blog", icon: Newspaper, hint: "Articolele de pe site" },
+        { value: "resources", label: "Resurse", icon: FileText, hint: "Materiale descărcabile" },
+        { value: "pages", label: "Pagini", icon: FileText, hint: "Texte și SEO pe pagini" },
+        {
+          value: "site-texts",
+          label: "Texte site",
+          icon: Languages,
+          hint: "Toate textele afișate pe site",
+        },
+      ],
+    },
+    {
+      title: "Sistem",
+      items: [
+        { value: "seo", label: "SEO", icon: LineChart, hint: "Backlink-uri și sănătatea domeniului" },
+        { value: "settings", label: "Setări", icon: Settings, hint: "Email, plăți și cont" },
+      ],
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-muted/30">
-      <AdminNav onLogout={handleLogout} />
-
-      <main className="w-full max-w-content mx-auto px-gutter sm:px-gutter py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto -mx-4 px-gutter sm:mx-0 sm:px-0 pb-1">
-            <TabsList className="h-11 bg-background border border-border shadow-sm">
-              <TabsTrigger value="overview" className="gap-1.5 px-3 sm:px-gutter">
-                <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden sm:inline">Panou general</span>
-                <span className="sm:hidden">Panou</span>
-              </TabsTrigger>
-              <TabsTrigger value="leads" className="gap-1.5 px-3 sm:px-gutter">
-                <ClipboardList className="w-4 h-4" />
-                Înscrieri
-                <span className="text-xs text-muted-foreground">({registrations.length})</span>
-              </TabsTrigger>
-              <TabsTrigger value="bookings" className="gap-1.5 px-3 sm:px-gutter">
-                <CalendarDays className="w-4 h-4" />
-                Programări
-              </TabsTrigger>
-              <TabsTrigger value="groups" className="gap-1.5 px-3 sm:px-gutter">
-                <GraduationCap className="w-4 h-4" />
-                Grupe
-              </TabsTrigger>
-              <TabsTrigger value="blog" className="gap-1.5 px-3 sm:px-gutter">
-                <Newspaper className="w-4 h-4" />
-                Blog
-              </TabsTrigger>
-              <TabsTrigger value="resources" className="gap-1.5 px-3 sm:px-gutter">
-                <FileText className="w-4 h-4" />
-                Resurse
-              </TabsTrigger>
-              <TabsTrigger value="pages" className="gap-1.5 px-3 sm:px-gutter">
-                <FileText className="w-4 h-4" />
-                Pagini
-              </TabsTrigger>
-              <TabsTrigger value="site-texts" className="gap-1.5 px-3 sm:px-gutter">
-                <Languages className="w-4 h-4" />
-                Texte site
-              </TabsTrigger>
-              <TabsTrigger value="seo" className="gap-1.5 px-3 sm:px-gutter">
-                <LineChart className="w-4 h-4" />
-                SEO
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-1.5 px-3 sm:px-gutter">
-                <Settings className="w-4 h-4" />
-                Setări
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
+    <AdminShell
+      groups={navGroups}
+      active={activeTab}
+      onChange={setActiveTab}
+      adminEmail={adminEmail}
+      onLogout={handleLogout}
+    >
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
-          <TabsContent value="overview" className="mt-5 space-y-6">
+          <TabsContent value="overview" className="mt-0 space-y-6">
+
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {statCards.map(({ label, value, icon: Icon }) => (
                 <div
@@ -651,7 +662,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
-          <TabsContent value="leads" className="mt-5 space-y-4">
+          <TabsContent value="leads" className="mt-0 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}
@@ -786,14 +797,14 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
-          <TabsContent value="bookings" className="mt-5 space-y-6">
+          <TabsContent value="bookings" className="mt-0 space-y-6">
             <CalendarHealth />
             <AvailabilityAdmin />
             <BookingsAdmin />
           </TabsContent>
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
-          <TabsContent value="groups" className="mt-5 space-y-6">
+          <TabsContent value="groups" className="mt-0 space-y-6">
             <GroupOverview />
             <CapacitiesAdmin />
             <CourseRequestsAdmin />
@@ -802,29 +813,29 @@ const Admin = () => {
           </TabsContent>
 
           {/* ── Blog: editare articole (CMS override) ────────────────────── */}
-          <TabsContent value="blog" className="mt-5">
+          <TabsContent value="blog" className="mt-0">
             <BlogAdmin />
           </TabsContent>
 
           {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
-          <TabsContent value="resources" className="mt-5">
+          <TabsContent value="resources" className="mt-0">
             <ResourcesAdmin />
           </TabsContent>
 
-          <TabsContent value="pages" className="mt-5">
+          <TabsContent value="pages" className="mt-0">
             <PagesAdmin />
           </TabsContent>
 
-          <TabsContent value="site-texts" className="mt-5">
+          <TabsContent value="site-texts" className="mt-0">
             <SiteTextsAdmin />
           </TabsContent>
 
-          <TabsContent value="seo" className="mt-5">
+          <TabsContent value="seo" className="mt-0">
             <BacklinksAdmin />
           </TabsContent>
 
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
-          <TabsContent value="settings" className="mt-5">
+          <TabsContent value="settings" className="mt-0">
             <SettingsTab
               emailSettings={emailSettings}
               savingEmailSettings={savingEmailSettings}
@@ -838,10 +849,10 @@ const Admin = () => {
               onLogout={handleLogout}
             />
           </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+      </Tabs>
+    </AdminShell>
   );
+
 };
 
 export default Admin;

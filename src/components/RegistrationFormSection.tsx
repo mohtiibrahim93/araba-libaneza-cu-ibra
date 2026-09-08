@@ -729,7 +729,7 @@ const RegistrationFormSection = ({
               setGdpr(v);
               if (v) setInvalidField(null);
             }}
-            error={invalidField === "gdpr"}
+            error={invalidField === "gdpr" ? t.gdprRequired : undefined}
           />
 
           <div className="space-y-1.5">
