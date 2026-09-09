@@ -95,7 +95,7 @@ const DeCeInvatamAraba2026 = () => {
             Araba libaneză e dialectul de prestigiu media al Levantului — limba lui Fairuz, a
             cinematografiei libaneze, a diasporei. E reciproc inteligibilă cu siriana și larg
             înțeleasă în Iordania și Palestina. Vezi{" "}
-            <Link to="/cursuri-araba">pagina detaliată a cursurilor</Link> pentru context.
+            <Link to="/cursuri-limba-araba">pagina detaliată a cursurilor</Link> pentru context.
           </>
         )}
       </p>

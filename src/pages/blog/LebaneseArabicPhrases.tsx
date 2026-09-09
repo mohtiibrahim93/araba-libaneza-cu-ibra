@@ -181,7 +181,7 @@ const LebaneseArabicPhrases = () => {
         {en
           ? "A list only gets you so far: phrases stick once someone answers back. That is most of what a lesson is — "
           : "O listă te duce doar până la un punct: expresiile se fixează când cineva îți răspunde. Cam asta e o lecție — "}
-        <Link to="/cursuri-araba">{en ? "see the courses" : "vezi cursurile"}</Link>
+        <Link to="/cursuri-limba-araba">{en ? "see the courses" : "vezi cursurile"}</Link>
         {en ? "." : "."}
       </p>
 

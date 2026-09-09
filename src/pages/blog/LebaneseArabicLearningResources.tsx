@@ -167,7 +167,7 @@ const LebaneseArabicLearningResources = () => {
         {en
           ? "Every resource above is something you use alone. The one thing none of them provides is a native speaker correcting your pronunciation while you talk — that is what "
           : "Toate resursele de mai sus se folosesc singur. Singurul lucru pe care niciuna nu îl dă e un vorbitor nativ care îți corectează pronunția în timp ce vorbești — asta fac "}
-        <Link to="/cursuri-araba">{en ? "the courses" : "cursurile"}</Link>
+        <Link to="/cursuri-limba-araba">{en ? "the courses" : "cursurile"}</Link>
         {en ? " are for." : "."}
       </p>
 

@@ -47,7 +47,7 @@ describe("canonical and noindex are never combined", () => {
       "/cursuri/privat",
       "/cursuri/tineri",
       "/cursuri/online",
-      "/cursuri-limba-araba",
+      "/cursuri-araba",
       "/en/learn-levantine-arabic",
       "/en/levantine-arabic-dialects-map",
     ]) {

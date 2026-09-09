@@ -131,7 +131,7 @@ const LimbileVorbiteInLiban = () => {
         {en
           ? "If the answer is Lebanese Arabic, that is the only thing we teach — "
           : "Dacă răspunsul e araba libaneză, e singurul lucru pe care îl predăm — "}
-        <Link to="/cursuri-araba">{en ? "groups, private lessons and a kids course" : "grupe, lecții private și curs pentru copii"}</Link>
+        <Link to="/cursuri-limba-araba">{en ? "groups, private lessons and a kids course" : "grupe, lecții private și curs pentru copii"}</Link>
         {en ? ", all with a native teacher." : ", toate cu profesor nativ."}
       </p>
 

@@ -55,7 +55,7 @@ const LearnLebaneseArabic = () => (
     lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by 30–35 million people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
     faq={FAQ}
     courseSchema
-    roHref="/cursuri-araba"
+    roHref="/cursuri-limba-araba"
     deHref="/de/arabisch-lernen"
   >
     <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">

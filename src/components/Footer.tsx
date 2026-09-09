@@ -46,7 +46,7 @@ const Footer = () => {
             {lang === "en" ? "Guides" : "Ghiduri"}
           </p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <li><Link to="/cursuri-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
+            <li><Link to="/cursuri-limba-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
             <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
             <li><Link to="/araba-pentru-incepatori" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for beginners" : "Arabă pentru începători"}</Link></li>
             <li><Link to="/curs-araba-copii" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic course for children" : "Curs de arabă pentru copii"}</Link></li>

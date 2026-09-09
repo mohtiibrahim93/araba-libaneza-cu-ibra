@@ -116,7 +116,7 @@ const CeEsteArabizi = () => {
       </p>
       <p>
         {en ? "That method runs through every format we teach — " : "Metoda asta e aceeași în toate formatele — "}
-        <Link to="/cursuri-araba">{en ? "see the courses and levels" : "vezi cursurile și nivelurile"}</Link>
+        <Link to="/cursuri-limba-araba">{en ? "see the courses and levels" : "vezi cursurile și nivelurile"}</Link>
         {en
           ? ", from beginner groups to one-on-one lessons."
           : ", de la grupele de început până la lecțiile 1:1."}

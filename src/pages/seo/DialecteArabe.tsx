@@ -153,7 +153,7 @@ const DialecteArabe = () => (
       în toată lumea arabă, așa că vorbirea libaneză e înțeleasă mult dincolo de Levant — cea mai
       largă acoperire pasivă pentru cel mai mic efort. Detalii în{" "}
       <Link to="/blog/limbile-vorbite-in-liban">limbile vorbite în Liban</Link>, iar dacă vrei să
-      o înveți, vezi <Link to="/cursuri-araba">cursurile de arabă (libaneză)</Link>.
+      o înveți, vezi <Link to="/cursuri-limba-araba">cursurile de arabă (libaneză)</Link>.
     </p>
 
     <h2>Dialect sau arabă standard?</h2>

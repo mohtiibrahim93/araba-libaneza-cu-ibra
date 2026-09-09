@@ -34,7 +34,7 @@ const FAQ = [
 // canonical. That alias now redirects (see App.tsx), so the branch is gone.
 const CursuriAraba = () => (
   <LandingLayout
-    slug="cursuri-araba"
+    slug="cursuri-limba-araba"
     enHref="/en/learn-lebanese-arabic"
     deHref="/de/arabisch-lernen"
     title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"

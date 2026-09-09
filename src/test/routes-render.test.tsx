@@ -72,7 +72,10 @@ const REDIRECTS: [from: string, toHeadingContains: string][] = [
  * rather than the outcome and broke the moment the mechanism changed.
  */
 const CANONICALISED_ALIASES: [from: string, canonical: string][] = [
-  ["/cursuri-limba-araba", "https://centruldearabalibaneza.com/cursuri-araba"],
+  // The hub moved: /cursuri-limba-araba carries the content because its slug
+  // matches far more of the site's real query set, and /cursuri-araba is now
+  // the retired URL kept alive for old inbound links.
+  ["/cursuri-araba", "https://centruldearabalibaneza.com/cursuri-limba-araba"],
 ];
 
 describe("retired URLs still redirect", () => {
@@ -269,9 +272,11 @@ describe("site structure", () => {
       "/admin", "/admin/notifications", "/auth", "/checkout", "/thank-you",
       "/payment-status", "/unsubscribe", "/stergere-date", "/private-status", "/booking/manage",
     ]);
-    // Kept alive for old inbound links; canonicalises to /cursuri-araba, so
-    // linking it from the chrome would promote a URL that disclaims itself.
-    const ALIASES = new Set(["/cursuri-limba-araba"]);
+    // Kept alive for old inbound links; canonicalises to /cursuri-limba-araba,
+    // so linking it from the chrome would promote a URL that disclaims itself.
+    // The two swapped roles when the hub moved: the slug carrying "limba araba"
+    // matches far more of the site's real query set.
+    const ALIASES = new Set(["/cursuri-araba"]);
 
     const orphans = routes.filter(
       (p) =>

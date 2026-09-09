@@ -181,7 +181,7 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/en/lebanese-arabic-vs-msa-vs-egyptian" element={<LebaneseVsMsaVsEgyptian />} />
             <Route path="/en/how-to-learn-lebanese-arabic" element={<HowToLearnLebaneseArabic />} />
             <Route path="/de/arabisch-lernen" element={<DeArabischLernen />} />
-            <Route path="/cursuri-araba" element={<SeoCursuriAraba />} />
+            <Route path="/cursuri-limba-araba" element={<SeoCursuriAraba />} />
             <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
             <Route path="/araba-online" element={<SeoArabaOnline />} />
             {/* Legacy alias: keep a distinct runtime title while canonicalising
@@ -190,7 +190,7 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
                 /cursuri-araba — an audit put the two at Jaccard 1.00 — which is
                 a second crawlable destination for the same content. It now
                 redirects like every other retired URL on the site. */}
-            <Route path="/cursuri-limba-araba" element={<Navigate to="/cursuri-araba" replace />} />
+            <Route path="/cursuri-araba" element={<Navigate to="/cursuri-limba-araba" replace />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
             <Route path="/intrebari-frecvente" element={<SeoIntrebariFrecvente />} />
             <Route path="/invata-araba" element={<SeoInvataAraba />} />

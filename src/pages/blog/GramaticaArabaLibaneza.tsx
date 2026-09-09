@@ -241,7 +241,7 @@ const GramaticaArabaLibaneza = () => {
           {en
             ? "None of this is taught as a table to memorise. The verb system, the conditional and reported speech are worked through in conversation across "
             : "Nimic din toate astea nu se predă ca tabel de memorat. Sistemul verbal, condiționalul și vorbirea indirectă se lucrează prin conversație, de-a lungul "}
-          <Link to="/cursuri-araba">{en ? "the A1–C2 levels" : "nivelurilor A1–C2"}</Link>
+          <Link to="/cursuri-limba-araba">{en ? "the A1–C2 levels" : "nivelurilor A1–C2"}</Link>
           {en ? "." : "."}
         </p>
       </section>

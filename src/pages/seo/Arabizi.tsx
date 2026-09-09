@@ -151,7 +151,7 @@ const Arabizi = () => (
     <p>
       Varianta scurtă a acestui ghid, cu accent pe cultură și utilizare, e în articolul{" "}
       <Link to="/blog/ce-este-arabizi">ce este arabizi</Link>. Când vrei să treci de la citit la
-      vorbit, ai <Link to="/cursuri-araba">cursurile de arabă libaneză</Link> (grup, private,
+      vorbit, ai <Link to="/cursuri-limba-araba">cursurile de arabă libaneză</Link> (grup, private,
       online).
     </p>
   </LandingLayout>

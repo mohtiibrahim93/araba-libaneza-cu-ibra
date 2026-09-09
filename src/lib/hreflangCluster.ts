@@ -15,7 +15,7 @@
  * ignored. The homepage has no translation and now declares no hreflang at all.
  */
 export const LEARN_CLUSTER = {
-  ro: "/cursuri-araba",
+  ro: "/cursuri-limba-araba",
   en: "/en/learn-lebanese-arabic",
   de: "/de/arabisch-lernen",
 } as const;
