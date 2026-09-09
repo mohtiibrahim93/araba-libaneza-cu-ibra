@@ -191,6 +191,17 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/booking/manage/:token" element={<BookingManage />} />
             <Route path="/trial" element={<Trial />} />
             <Route path="/quiz" element={<Quiz />} />
+            {/* English twins of the remaining bilingual pages. All five already
+                carry a full English copy (a COPY[lang] object or i18n keys); they
+                simply had no English URL, so the English text could not be
+                indexed or linked. The Romanian privacy policy and terms remain
+                the binding versions — /en/privacy and /en/terms are the existing
+                English translation of them, given an address. */}
+            <Route path="/en/privacy" element={<Privacy />} />
+            <Route path="/en/terms" element={<Terms />} />
+            <Route path="/en/booking" element={<Booking />} />
+            <Route path="/en/trial" element={<Trial />} />
+            <Route path="/en/quiz" element={<Quiz />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/cursuri" element={<Cursuri />} />
             <Route path="/cursuri/privat" element={<Navigate to="/cursuri/private" replace />} />

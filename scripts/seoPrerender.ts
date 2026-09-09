@@ -93,6 +93,13 @@ const STATIC_ROUTES: Route[] = [
   { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
   // English twins of the course pages. The components are the same bilingual
   // ones the Romanian URLs render; only the URL and this head differ.
+  // English twins of the remaining bilingual pages. The components already
+  // carry both languages; these give the English side an address.
+  { path: "/en/trial", title: "Free Lebanese Arabic Trial Lesson | Ibra", description: "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.", lang: "en" },
+  { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free trial lesson or enrol on a Lebanese Arabic course — online or in person in Bucharest.", lang: "en" },
+  { path: "/en/quiz", title: "Free Level Test — Lebanese Arabic with Ibra", description: "Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.", lang: "en" },
+  { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How we collect, use and protect your personal data, in line with GDPR.", lang: "en" },
+  { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms and conditions for using the services of the Lebanese Arabic Center with Ibra.", lang: "en" },
   { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
   { path: "/en/courses/group", title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest", description: "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.", lang: "en" },
   { path: "/en/courses/private", title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest", description: "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.", lang: "en" },
@@ -361,6 +368,11 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
   pairs.set(indexPair.en, indexPair);
   // Course pages: one bilingual component, two URLs, generated together.
   const coursePairs: Array<[string, string]> = [
+    ["/trial", "/en/trial"],
+    ["/booking", "/en/booking"],
+    ["/quiz", "/en/quiz"],
+    ["/privacy", "/en/privacy"],
+    ["/terms", "/en/terms"],
     ["/cursuri", "/en/courses"],
     ["/cursuri/grup", "/en/courses/group"],
     ["/cursuri/private", "/en/courses/private"],

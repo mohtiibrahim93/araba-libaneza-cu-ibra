@@ -302,7 +302,7 @@ const Navbar = () => {
             </div>
 
             <Link
-              to="/booking"
+              to={lang === "en" ? "/en/booking" : "/booking"}
               onClick={() => setOpen(false)}
               className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
             >

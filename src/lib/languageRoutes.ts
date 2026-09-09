@@ -29,6 +29,12 @@ const EN_FOR_RO: Record<string, string> = {
   "/invata-araba-gratis": "/blog/lebanese-arabic-learning-resources",
   "/arabizi": "/blog/lebanese-arabic-learning-resources",
   "/fara-alfabet-arab": "/en/how-to-learn-lebanese-arabic",
+  // Conversion and legal pages: bilingual components, one URL per language.
+  "/trial": "/en/trial",
+  "/booking": "/en/booking",
+  "/quiz": "/en/quiz",
+  "/privacy": "/en/privacy",
+  "/terms": "/en/terms",
   // Course pages: same bilingual component, one URL per language.
   "/cursuri": "/en/courses",
   "/cursuri/grup": "/en/courses/group",
@@ -76,6 +82,11 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/ce-araba-sa-inveti",
   "/en/how-to-learn-lebanese-arabic": "/blog/cum-inveti-araba-libaneza",
   "/de/arabisch-lernen": "/cursuri-limba-araba",
+  "/en/trial": "/trial",
+  "/en/booking": "/booking",
+  "/en/quiz": "/quiz",
+  "/en/privacy": "/privacy",
+  "/en/terms": "/terms",
   // Course pages, the other way round.
   "/en/courses": "/cursuri",
   "/en/courses/group": "/cursuri/grup",

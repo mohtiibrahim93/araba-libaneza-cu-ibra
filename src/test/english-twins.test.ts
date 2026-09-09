@@ -21,6 +21,11 @@ const prerender = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts")
 const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 
 const COURSE_PAIRS: Array<[string, string]> = [
+  ["/trial", "/en/trial"],
+  ["/booking", "/en/booking"],
+  ["/quiz", "/en/quiz"],
+  ["/privacy", "/en/privacy"],
+  ["/terms", "/en/terms"],
   ["/cursuri", "/en/courses"],
   ["/cursuri/grup", "/en/courses/group"],
   ["/cursuri/private", "/en/courses/private"],
