@@ -120,6 +120,7 @@ const PaymentForm = ({
 const Checkout = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const checkoutStartSent = useRef(false);
   const courseType = (params.get("courseType") as CourseType) || "group";
   const email = params.get("email") || "";
   const name = params.get("name") || "";
@@ -165,7 +166,13 @@ const Checkout = () => {
         if (!courseType || !["group", "private", "kids"].includes(courseType)) {
           throw new Error("Tip de curs invalid");
         }
-        trackCheckoutStart(courseType);
+        // Once per visit to this page. The effect re-runs when the query
+        // params or the fallback flag change, and a retry is not a second
+        // checkout.
+        if (!checkoutStartSent.current) {
+          checkoutStartSent.current = true;
+          trackCheckoutStart(courseType);
+        }
         // Group / kids monthly → subscription. Pay-in-full and private → a
         // one-time PaymentIntent (the edge function derives the amount).
         const useSubscription =

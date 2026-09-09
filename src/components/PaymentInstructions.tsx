@@ -10,7 +10,6 @@ import {
   ArrowRight,
   ChevronDown,
 } from "lucide-react";
-import { trackCheckoutStart } from "@/lib/tracking";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -31,7 +30,10 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
 
   const handleStripeCheckout = () => {
     if (!courseType) return;
-    trackCheckoutStart(courseType);
+    // No begin_checkout here. This button only navigates to /checkout, which
+    // fires the event itself on arrival. Tracking both counted every checkout
+    // twice, and the arrival is the better place: it also catches visitors who
+    // reach /checkout from a payment link rather than from this button.
     const params = new URLSearchParams({ courseType });
     if (email) params.set("email", email);
     if (name) params.set("name", name);

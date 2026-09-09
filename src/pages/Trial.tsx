@@ -10,9 +10,6 @@ import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import {
-  trackGenerateLead,
-} from "@/lib/tracking";
 import { isBlockedEmail, isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 
 const TrialPage = () => {
@@ -96,7 +93,16 @@ const TrialPage = () => {
         lead_status: "incomplete",
       });
       if (error) throw error;
-      trackGenerateLead("trial");
+      // No generate_lead here. This is step 1 of the trial flow: the visitor
+      // then picks a slot in step 2, booking-create promotes the row from
+      // "incomplete" to "new", and that fires trial_booking_complete. Counting
+      // step 1 as a lead as well made one trial booking two conversions.
+      //
+      // The trade-off is deliberate and worth naming: someone who fills in
+      // step 1 and never picks a slot is a real enquiry and no longer appears
+      // in GA4. The row is still written with lead_status "incomplete", so the
+      // contact is not lost — it is visible in the admin, just not counted as
+      // a conversion, which is the correct reading of an unfinished booking.
       setRegistrationId(id);
 
     } catch (err) {

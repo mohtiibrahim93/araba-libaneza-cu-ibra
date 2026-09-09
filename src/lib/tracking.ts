@@ -133,9 +133,16 @@ export function trackRegistrationSubmit(formType: RegistrationFormType) {
   trackEvent("registration_submit", { form_type: formType });
 }
 
-// Convenience: track Stripe checkout initiation.
+/**
+ * Stripe checkout was opened. Not a conversion — it says nothing about whether
+ * the payment settled; `purchase` does that.
+ *
+ * This used to send GA4's `begin_checkout` and Meta's `InitiateCheckout` for
+ * the same action, the third instance of the duplicate-spelling pattern that
+ * also affected Lead/generate_lead and Purchase/purchase. Only the GA4 name
+ * remains.
+ */
 export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
-  trackEvent("InitiateCheckout", { content_name: courseType });
   trackEvent("begin_checkout", { course_type: courseType });
 }
 
