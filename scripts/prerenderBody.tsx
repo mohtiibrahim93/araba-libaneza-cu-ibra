@@ -28,8 +28,32 @@ import { allRoutes } from "./seoPrerender";
 const DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist");
 const ROOT_DIV = '<div id="root"></div>';
 
+/** What one rendered route yields: its markup, and the head Helmet collected. */
+interface Rendered {
+  body: string;
+  /** JSON-LD blocks the page declared through <Helmet>, as HTML strings. */
+  jsonLd: string[];
+}
+
+/** react-helmet-async writes its collected head into the context object. */
+interface HelmetContext {
+  helmet?: { script?: { toString(): string } };
+}
+
+/**
+ * Pulls the <script type="application/ld+json"> blocks out of Helmet's
+ * server output. Only the structured data: title, meta, link and hreflang are
+ * already written by seoPrerender, which owns the length guards and the
+ * reciprocity check, and emitting them twice is the duplicate-head-tag bug
+ * this project has already had once.
+ */
+function jsonLdFrom(context: HelmetContext): string[] {
+  const rendered = context.helmet?.script?.toString() ?? "";
+  return rendered.match(/<script[^>]*application\/ld\+json[^>]*>[\s\S]*?<\/script>/g) ?? [];
+}
+
 /** Collects a React stream into a string, or gives up after `ms`. */
-function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<string> {
+function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<Rendered> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     const sink = new Writable({
@@ -51,8 +75,17 @@ function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<str
       reject(new Error(`timed out after ${ms}ms`));
     }, ms);
 
+    // Held in a variable on purpose. This used to be an inline `context={{}}`:
+    // Helmet dutifully wrote every page's collected head into that object and
+    // nothing kept a reference, so all of it was discarded. The visible effect
+    // was that 23 pages rendered an FAQ on screen and shipped no FAQPage
+    // structured data at all — the schema existed only in the client-side DOM,
+    // which is exactly where a crawler that does not run JavaScript can't see
+    // it. Same for the Course and BreadcrumbList blocks.
+    const helmetContext: HelmetContext = {};
+
     const stream = renderToPipeableStream(
-      <HelmetProvider context={{}}>
+      <HelmetProvider context={helmetContext}>
         <App Router={Router} lang={lang} />
       </HelmetProvider>,
       {
@@ -64,7 +97,10 @@ function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<str
             if (settled) return;
             settled = true;
             clearTimeout(timer);
-            resolve(Buffer.concat(chunks).toString("utf8"));
+            resolve({
+              body: Buffer.concat(chunks).toString("utf8"),
+              jsonLd: jsonLdFrom(helmetContext),
+            });
           });
           stream.pipe(sink);
         },
@@ -91,6 +127,7 @@ async function main() {
   // canonical pointing elsewhere is the tell, so don't flag them as thin.
   const isAlias = new Map(routes.map((r) => [r.path, !!r.canonical && r.canonical !== r.path]));
   let done = 0;
+  let schemaAdded = 0;
   const failures: Array<{ route: string; reason: string }> = [];
   const thin: Array<{ route: string; chars: number }> = [];
 
@@ -109,8 +146,9 @@ async function main() {
     }
 
     let body: string;
+    let jsonLd: string[];
     try {
-      body = await renderRoute(route, lang === "en" ? "en" : "ro");
+      ({ body, jsonLd } = await renderRoute(route, lang === "en" ? "en" : "ro"));
     } catch (err) {
       failures.push({ route, reason: err instanceof Error ? err.message : String(err) });
       continue;
@@ -121,11 +159,29 @@ async function main() {
     const text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     if (text.length < 200 && !isAlias.get(route)) thin.push({ route, chars: text.length });
 
-    await writeFile(file, html.replace(ROOT_DIV, `<div id="root">${body}</div>`), "utf8");
+    let out = html.replace(ROOT_DIV, `<div id="root">${body}</div>`);
+
+    // Fold the page's own structured data into the head it was always meant to
+    // be in. seoPrerender already emits FAQPage for the three routes it knows
+    // about by name, so skip anything already present rather than shipping the
+    // same block twice.
+    const fresh = jsonLd.filter((block) => {
+      const type = block.match(/"@type"\s*:\s*"([^"]+)"/)?.[1];
+      return !type || !out.includes(`"@type":"${type}"`);
+    });
+    if (fresh.length) {
+      out = out.replace("</head>", `${fresh.join("\n")}\n  </head>`);
+      schemaAdded += fresh.length;
+    }
+
+    await writeFile(file, out, "utf8");
     done++;
   }
 
-  console.log(`[prerender-body] rendered ${done}/${routes.length} routes to static HTML`);
+  console.log(
+    `[prerender-body] rendered ${done}/${routes.length} routes to static HTML` +
+      `, folded in ${schemaAdded} JSON-LD block(s) from <Helmet>`,
+  );
   if (thin.length) {
     console.warn(
       `[prerender-body] ${thin.length} route(s) rendered very little text:\n` +
