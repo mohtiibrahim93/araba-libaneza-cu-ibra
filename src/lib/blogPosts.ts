@@ -100,10 +100,18 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: "learn-lebanese-arabic",
-    // Near-duplicate of cum-inveti-araba-libaneza: same language, same topic,
-    // near-identical title, and the English slug is misleading because the
-    // content is Romanian. It had 1 impression at position 35 against the
-    // other's established ranking, so the other one is the survivor.
+    // Near-duplicate of cum-inveti-araba-libaneza. Both articles are in fact
+    // bilingual and both have real English titles — the earlier note here
+    // claiming this one was "Romanian content under an English slug" was wrong.
+    //
+    // What makes them duplicates is narrower and still decisive: only the
+    // Romanian title is prerendered (allRoutes maps p.title.ro), so the page
+    // Google indexes for both is Romanian, and those two Romanian titles are
+    // near-identical. The English versions appear only after a client-side
+    // language toggle, which no crawler performs.
+    //
+    // This one had 1 impression at position 35 against the other's established
+    // ranking, so the survivor was not a close call.
     canonicalTo: "cum-inveti-araba-libaneza",
     title: {
       ro: "Cum înveți araba libaneză: ghid practic pentru începători",
