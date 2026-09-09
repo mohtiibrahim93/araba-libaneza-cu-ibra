@@ -87,6 +87,13 @@ const Footer = () => {
             <li><Link to="/en/arabic-tutor" className="hover:text-foreground transition-colors" hrefLang="en">Arabic tutor</Link></li>
             <li><Link to="/en/arabic-dialects-guide" className="hover:text-foreground transition-colors" hrefLang="en">Arabic dialects guide</Link></li>
             <li><Link to="/en/arabic-classes-near-me" className="hover:text-foreground transition-colors" hrefLang="en">Arabic classes near me</Link></li>
+            {/* These two were reachable only from the English navbar, which a
+                crawler starting on the Romanian homepage never renders. That
+                left one at click depth 3 and the other with a single inbound
+                link. The footer ships on every page, so they now sit at depth
+                1 like the rest. */}
+            <li><Link to="/en/how-to-learn-lebanese-arabic" className="hover:text-foreground transition-colors" hrefLang="en">How to learn Lebanese Arabic</Link></li>
+            <li><Link to="/en/lebanese-arabic-vs-msa-vs-egyptian" className="hover:text-foreground transition-colors" hrefLang="en">Lebanese vs MSA vs Egyptian</Link></li>
             <li><Link to="/en/faq" className="hover:text-foreground transition-colors" hrefLang="en">Lebanese Arabic FAQ</Link></li>
             <li><Link to="/de/arabisch-lernen" className="hover:text-foreground transition-colors" hrefLang="de">Arabisch lernen</Link></li>
           </ul>
