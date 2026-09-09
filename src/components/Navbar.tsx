@@ -145,7 +145,7 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="min-w-56">
               <DropdownMenuItem asChild>
-                <Link to="/cursuri">{lang === "en" ? "All courses" : "Toate cursurile"}</Link>
+                <Link to={lang === "en" ? "/en/courses" : "/cursuri"}>{lang === "en" ? "All courses" : "Toate cursurile"}</Link>
               </DropdownMenuItem>
               {courseMenu.map((item) => (
                 <DropdownMenuItem key={item.to} asChild>
@@ -266,7 +266,7 @@ const Navbar = () => {
         <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-2 gap-1">
             <Link
-              to="/cursuri"
+              to={lang === "en" ? "/en/courses" : "/cursuri"}
               onClick={() => setOpen(false)}
               className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
             >

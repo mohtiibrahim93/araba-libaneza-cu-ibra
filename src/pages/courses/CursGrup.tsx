@@ -128,7 +128,7 @@ const CursGrup = () => {
                 return (
                   <tr key={lvl} className="border-b border-border/60 last:border-0 align-top">
                     <th scope="row" className="py-2.5 px-3 text-left font-bold text-foreground whitespace-nowrap">
-                      <Link to={`/cursuri/grup/${lvl.toLowerCase()}`} className="text-primary hover:underline underline-offset-4">
+                      <Link to={`${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${lvl.toLowerCase()}`} className="text-primary hover:underline underline-offset-4">
                         {lvl}
                       </Link>
                     </th>
@@ -182,7 +182,7 @@ const CursGrup = () => {
             return (
               <Link
                 key={lvl}
-                to={`/cursuri/grup/${lvl.toLowerCase()}`}
+                to={`${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${lvl.toLowerCase()}`}
                 className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-2">

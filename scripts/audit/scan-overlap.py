@@ -52,12 +52,27 @@ for dp, _d, fs in os.walk(DIST):
     h1 = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.S)
     h1 = re.sub(r"<[^>]+>", " ", h1.group(1)) if h1 else ""
     words = [w for w in norm(f"{title} {h1}").split() if w and w not in STOP and len(w) > 2]
-    pages[route] = {"title": title.strip(), "sig": frozenset(words)}
+    # An hreflang twin is the same page in another language. It is supposed to
+    # say the same thing, and hreflang is what tells Google these are variants
+    # rather than rivals — so a RO/EN pair is not a competing-pages problem.
+    # Without this, any pair whose keywords survive translation ("private",
+    # "A1") reads as a duplicate. Keyed by the pair so each is grouped once.
+    alts = sorted(
+        m.replace("https://centruldearabalibaneza.com", "") or "/"
+        for m in re.findall(r'rel="alternate" hreflang="(?:ro|en)" href="([^"]*)"', head)
+    )
+    pages[route] = {"title": title.strip(), "sig": frozenset(words), "pair": tuple(alts)}
 
 groups = defaultdict(list)
+seen_pairs = set()
 for route, p in pages.items():
-    if p["sig"]:
-        groups[p["sig"]].append(route)
+    if not p["sig"]:
+        continue
+    if p["pair"]:
+        if p["pair"] in seen_pairs:
+            continue
+        seen_pairs.add(p["pair"])
+    groups[p["sig"]].append(route)
 
 print(f"indexable pages examined: {len(pages)}\n")
 print("=== PAGES WITH AN IDENTICAL TITLE/H1 KEYWORD SIGNATURE ===")

@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
-import { LEVEL_TITLE_RO } from "../src/lib/levelMeta";
+import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "../src/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "../src/data/faq";
 import { CURSURI_ARABA_META, HOME_META } from "../src/lib/pageMeta";
@@ -91,6 +91,13 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cel-mai-bun-curs-de-araba", title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere", description: "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi." },
   { path: "/cursuri-araba-adolescenti", title: "Arabă Libaneză pentru Adolescenți | Curs 11–17 ani", description: "Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită." },
   { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
+  // English twins of the course pages. The components are the same bilingual
+  // ones the Romanian URLs render; only the URL and this head differ.
+  { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
+  { path: "/en/courses/group", title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest", description: "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.", lang: "en" },
+  { path: "/en/courses/private", title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest", description: "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.", lang: "en" },
+  { path: "/en/courses/children", title: "Lebanese Arabic for Children (6–10) — Bucharest", description: "Lebanese Arabic classes for children aged 6 to 10 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.", lang: "en" },
+  { path: "/en/courses/adults", title: "Lebanese Arabic Courses for Adults (18+)", description: "Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.", lang: "en" },
   { path: "/en/blog", title: "Blog — guides and articles about Lebanese Arabic", description: "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.", lang: "en" },
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic" },
@@ -173,6 +180,29 @@ function levelRoutes(): Route[] {
     .filter((r): r is Route => r !== null);
 }
 
+/**
+ * The same six level pages in English, at /en/courses/group/<id>.
+ *
+ * Title and objective come from LEVEL_TITLE_EN and the English curriculum —
+ * the same data the component renders — so these cannot drift from the page
+ * any more than the Romanian ones can.
+ */
+function levelRoutesEn(): Route[] {
+  const en = getCurriculum("en");
+  return (["a1", "a2", "b1", "b2", "c1", "c2"] as const)
+    .map((id) => {
+      const lvl = en.find((l) => l.id === id);
+      if (!lvl) return null;
+      return {
+        path: `/en/courses/group/${id}`,
+        title: LEVEL_TITLE_EN[id],
+        description: lvl.objective.slice(0, 155),
+        lang: "en" as const,
+      };
+    })
+    .filter((r): r is Route => r !== null);
+}
+
 export function allRoutes(): Route[] {
   // Blog articles: RO title/description straight from the shared registry.
   const blog: Route[] = BLOG_POSTS.map((p) => ({
@@ -200,7 +230,7 @@ export function allRoutes(): Route[] {
     lang: "en" as const,
     ...(p.canonicalTo ? { canonical: `/en/blog/${p.canonicalTo}` } : {}),
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...blog, ...blogEn]
+  return [...STATIC_ROUTES, ...levelRoutes(), ...levelRoutesEn(), ...blog, ...blogEn]
     .map((route) =>
       route.path === "/cursuri/grup/b2"
         ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
@@ -329,6 +359,22 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
   const indexPair = { ro: "/blog", en: "/en/blog" };
   pairs.set(indexPair.ro, indexPair);
   pairs.set(indexPair.en, indexPair);
+  // Course pages: one bilingual component, two URLs, generated together.
+  const coursePairs: Array<[string, string]> = [
+    ["/cursuri", "/en/courses"],
+    ["/cursuri/grup", "/en/courses/group"],
+    ["/cursuri/private", "/en/courses/private"],
+    ["/cursuri/copii", "/en/courses/children"],
+    ["/cursuri/adulti", "/en/courses/adults"],
+    ...(["a1", "a2", "b1", "b2", "c1", "c2"] as const).map(
+      (id) => [`/cursuri/grup/${id}`, `/en/courses/group/${id}`] as [string, string],
+    ),
+  ];
+  for (const [ro, en] of coursePairs) {
+    const pair = { ro, en };
+    pairs.set(ro, pair);
+    pairs.set(en, pair);
+  }
   return pairs;
 }
 

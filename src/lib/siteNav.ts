@@ -27,11 +27,15 @@ export interface NavGroup {
 export const courseMenu = (lang: "ro" | "en"): NavLink[] =>
   lang === "en"
     ? [
-        { to: "/cursuri/grup", label: "Group course (A1–C2)" },
-        { to: "/cursuri/private", label: "Private lessons" },
-        { to: "/cursuri/copii", label: "Kids (6–10)" },
+        // The course pages have English twins now, so the English menu points at
+        // those rather than sending an English reader to a Romanian URL. It is
+        // also what gives /en/courses/* their internal links: without them the
+        // pages existed only in the sitemap.
+        { to: "/en/courses/group", label: "Group course (A1–C2)" },
+        { to: "/en/courses/private", label: "Private lessons" },
+        { to: "/en/courses/children", label: "Kids (6–10)" },
         { to: "/en/arabic-for-teenagers", label: "Teens (11–17)" },
-        { to: "/cursuri/adulti", label: "Adults" },
+        { to: "/en/courses/adults", label: "Adults" },
         { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
         { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
       ]

@@ -204,6 +204,17 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/cursuri/private" element={<CursPrivate />} />
             <Route path="/cursuri/copii" element={<CursCopii />} />
             <Route path="/cursuri/online" element={<Navigate to="/cursuri" replace />} />
+            {/* English twins of the course pages. Same components — they have
+                always rendered both languages — but until now only the Romanian
+                URL existed, so the English version of the course pages could
+                not be indexed or linked. LanguageFromPath forces English on
+                /en/. */}
+            <Route path="/en/courses" element={<Cursuri />} />
+            <Route path="/en/courses/adults" element={<CursAdulti />} />
+            <Route path="/en/courses/group" element={<CursGrup />} />
+            <Route path="/en/courses/group/:level" element={<CursGrupLevel />} />
+            <Route path="/en/courses/private" element={<CursPrivate />} />
+            <Route path="/en/courses/children" element={<CursCopii />} />
             <Route path="/blog" element={<BlogIndex />} />
             <Route path="/blog/cum-inveti-araba-libaneza" element={<BlogCumInvetiArabaLibaneza />} />
             <Route path="/blog/araba-libaneza-vs-araba-standard" element={<BlogArabaLibanezaVsArabaStandard />} />

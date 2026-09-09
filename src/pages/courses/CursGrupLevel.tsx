@@ -85,7 +85,7 @@ const CursGrupLevel = () => {
     setSearchParams(next, { replace: true });
   };
 
-  const canonical = `${BASE_URL}/cursuri/grup/${slug}`;
+  const canonical = `${BASE_URL}${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${slug}`;
   // A1 is the highest-intent SERP entry point ("curs araba incepatori
   // bucuresti"). Give it a keyword-optimised meta title/description; other
   // levels keep the generic pattern.

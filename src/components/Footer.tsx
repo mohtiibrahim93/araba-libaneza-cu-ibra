@@ -33,11 +33,12 @@ const Footer = () => {
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.navCourses}</p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <li><Link to="/cursuri/grup" className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
-            <li><Link to="/cursuri/private" className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
-            <li><Link to="/cursuri/copii" className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses" : "/cursuri"} className="hover:text-foreground transition-colors">{lang === "en" ? "All courses" : "Toate cursurile"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses/group" : "/cursuri/grup"} className="hover:text-foreground transition-colors">{t.courseGrupH1}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses/private" : "/cursuri/private"} className="hover:text-foreground transition-colors">{t.coursePrivateH1}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses/children" : "/cursuri/copii"} className="hover:text-foreground transition-colors">{t.courseCopiiH1}</Link></li>
             <li><Link to={lang === "en" ? "/en/arabic-for-teenagers" : "/cursuri-araba-adolescenti"} className="hover:text-foreground transition-colors">{lang === "en" ? "Teens (11–17)" : "Adolescenți (11–17)"}</Link></li>
-            <li><Link to="/cursuri/adulti" className="hover:text-foreground transition-colors">{lang === "en" ? "Adults" : "Adulți"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses/adults" : "/cursuri/adulti"} className="hover:text-foreground transition-colors">{lang === "en" ? "Adults" : "Adulți"}</Link></li>
             <li><Link to="/meditatii-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "1-on-1 tutoring" : "Meditații arabă 1:1"}</Link></li>
             <li><Link to="/cursuri-araba-bucuresti" className="hover:text-foreground transition-colors">{lang === "en" ? "Courses in Bucharest" : "Cursuri arabă București"}</Link></li>
           </ul>
