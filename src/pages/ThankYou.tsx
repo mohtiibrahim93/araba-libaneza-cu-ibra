@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2, Mail, Video, Calendar, Share2, Loader2, ArrowLeft } from "lucide-react";
@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
-import { trackEvent } from "@/lib/tracking";
+import { trackPurchase } from "@/lib/tracking";
 
 type CourseType = "group" | "private" | "kids_deposit";
 
@@ -35,16 +35,8 @@ const ThankYou = () => {
     registrationId: params.get("registration_id"),
   });
   const [errored, setErrored] = useState(false);
-
-  // Fire conversion tracking once on mount
-  useEffect(() => {
-    trackEvent("Purchase", {
-      content_name: fallbackType || details.courseType || "course",
-      value: (fallbackAmount || details.amountTotal || 0) / 100,
-      currency: (fallbackCurrency || details.currency || "ron").toUpperCase(),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  /** Guards against a second send if the effect re-runs. */
+  const purchaseSent = useRef(false);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -68,6 +60,20 @@ const ThankYou = () => {
           courseType: data.courseType,
           registrationId: data.registrationId ?? null,
         });
+
+        // Only now, and only if Stripe says the session is paid. This used to
+        // fire on mount, so simply opening or reloading /thank-you recorded a
+        // sale that may never have completed. transaction_id is the Stripe
+        // session id, which lets GA4 discard the duplicate on a reload.
+        if (data.paymentStatus === "paid" && !purchaseSent.current) {
+          purchaseSent.current = true;
+          trackPurchase({
+            transactionId: sessionId,
+            value: (data.amountTotal || 0) / 100,
+            currency: data.currency || "ron",
+            courseType: data.courseType,
+          });
+        }
       } catch (e) {
         if (!cancelled) setErrored(true);
       } finally {

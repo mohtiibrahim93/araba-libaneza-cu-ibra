@@ -8,7 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
-import { trackEvent } from "@/lib/tracking";
+import {
+  trackGenerateLead,
+} from "@/lib/tracking";
 
 interface NotifyMeFormProps {
   /** What the person is asking to be notified about — stored so the admin
@@ -66,7 +68,7 @@ const NotifyMeForm = ({ context, level, className }: NotifyMeFormProps) => {
         notes: `Cerere „anunță-mă”: ${context}`,
       });
       if (error) throw error;
-      trackEvent("Lead", { content_name: "notify_me", context });
+      trackGenerateLead("notify_me", { context });
       setSent(true);
     } catch (err) {
       console.error("[notify-me] insert failed", err);

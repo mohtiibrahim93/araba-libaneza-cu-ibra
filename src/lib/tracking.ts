@@ -6,39 +6,80 @@
 
 export function trackEvent(eventName: string, params?: Record<string, unknown>) {
   if (typeof (window as any).gtag !== "function") return;
-
   (window as any).gtag("event", eventName, params);
-
-  // Legacy form code sends `Lead`. Mirror it to GA4's recommended lead event
-  // so the Lead acquisition report and a future key-event rule work without
-  // rewriting every form. Keep the original event for reporting continuity.
-  if (eventName === "Lead") {
-    (window as any).gtag("event", "generate_lead", {
-      method: "website_form",
-      page_path: window.location.pathname,
-      ...params,
-    });
-  }
-
-  // Same problem, one letter wide: three pages send `Purchase` (the Meta Pixel
-  // spelling) while GA4's reserved ecommerce event — and the key event already
-  // configured on the property — is lowercase `purchase`. GA4 event names are
-  // case-sensitive, so the configured key event had never once matched a real
-  // event and every channel reported zero conversions.
-  if (eventName === "Purchase") {
-    (window as any).gtag("event", "purchase", {
-      page_path: window.location.pathname,
-      ...params,
-    });
-  }
 }
 
-// Convenience: track a successful form submission.
-export function trackFormSubmit(formType: "group" | "private" | "kids" | "trial") {
-  trackEvent("Lead", {
-    content_name: `${formType}_registration`,
-    content_category: "registration",
-    form_type: formType,
+// ---------------------------------------------------------------------------
+// Conversions
+//
+// Three events, each fired at exactly one point, none of them a button click:
+//
+//   generate_lead           a lead form was accepted by the server
+//   trial_booking_complete  booking-create returned ok
+//   purchase                a payment was confirmed paid
+//
+// Booking and payment stay separate because a trial can be booked without
+// paying. A paid booking legitimately fires both.
+//
+// These used to be `Lead` and `Purchase` — the Meta Pixel spellings — with
+// trackEvent silently mirroring each to its GA4 name. That meant one action
+// sent two events, and the mirrors were invisible at the call site. The call
+// sites now name the GA4 event directly and nothing is duplicated.
+// ---------------------------------------------------------------------------
+
+/**
+ * A genuine enquiry reached the database. Call only after the insert or the
+ * edge function has succeeded, never on submit.
+ */
+export function trackGenerateLead(
+  source: string,
+  params?: Record<string, unknown>,
+) {
+  trackEvent("generate_lead", {
+    method: "website_form",
+    content_name: source,
+    page_path: window.location.pathname,
+    ...params,
+  });
+}
+
+export interface PurchaseDetails {
+  /** Stripe session or payment-intent id — GA4 dedupes repeat sends on this. */
+  transactionId: string;
+  /** Major units, not bani. */
+  value: number;
+  currency: string;
+  courseType?: string | null;
+}
+
+/**
+ * A payment is confirmed settled.
+ *
+ * Never call this from a checkout button, a redirect parameter or page mount.
+ * The two call sites both hold a real confirmation: PaymentStatus polls the
+ * server until the registration reads paid, and ThankYou reads Stripe's
+ * session.payment_status. `transaction_id` matters beyond reporting — GA4 uses
+ * it to discard a duplicate purchase if a user reloads the page.
+ */
+export function trackPurchase({
+  transactionId,
+  value,
+  currency,
+  courseType,
+}: PurchaseDetails) {
+  trackEvent("purchase", {
+    transaction_id: transactionId,
+    value,
+    currency: (currency || "RON").toUpperCase(),
+    items: [
+      {
+        item_id: courseType || "course",
+        item_name: courseType || "Curs arabă libaneză",
+        item_category: "course",
+        price: value,
+        quantity: 1,
+      },
+    ],
   });
 }
 

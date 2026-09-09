@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { trackEvent } from "@/lib/tracking";
+import { trackPurchase } from "@/lib/tracking";
 
 type Status = "pending" | "succeeded" | "failed" | "canceled";
 
@@ -77,10 +77,14 @@ const PaymentStatus = () => {
           if (s !== "pending") {
             setStatus(s);
             if (s === "succeeded" && !trackedRef) {
-              trackEvent("Purchase", {
-                content_name: courseType || "course",
+              // Reached only after the poll above reads a settled payment from
+              // the server (or Stripe's redirect_status), never on arrival.
+              trackPurchase({
+                transactionId:
+                  registrationId || piClientSecret?.split("_secret")[0] || "unknown",
                 value: (amount || amountParam || 0) / 100,
                 currency,
+                courseType,
               });
               setTrackedRef(true);
             }

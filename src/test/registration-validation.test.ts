@@ -78,40 +78,77 @@ describe("registration validation", () => {
 });
 
 /**
- * GA4 event names are case-sensitive, and that one letter cost every
- * conversion number on the property.
+ * GA4 conversions fire once, from a confirmation, never from a click.
  *
- * The GA4 property has three key events configured — close_convert_lead,
- * qualify_lead and purchase. The site fires none of them: the first two are
- * Google's default lead-gen suggestions that no code path emits, and the third
- * is spelled `Purchase` here (the Meta Pixel convention) on three pages. So the
- * key event never matched an event, and every channel reported 0 conversions
- * while leads were in fact arriving.
- *
- * `Lead` was already mirrored to `generate_lead` for the same reason. This
- * asserts `Purchase` is mirrored too, and that the mirror keeps GA4's spelling.
+ * Three faults, all live:
+ *   - `Lead` and `Purchase` (Meta Pixel spellings) were each mirrored inside
+ *     trackEvent to their GA4 name, so one action sent two events and the
+ *     mirror was invisible at the call site.
+ *   - ThankYou fired Purchase on mount, before the session was fetched: simply
+ *     opening or reloading the page recorded a sale that may never have
+ *     completed.
+ *   - Index fired it again off the ?payment=success URL parameter, which is a
+ *     URL anyone can type, so every real sale was also counted twice.
  */
-describe("GA4 event names match what the property counts", () => {
-  const tracking = readFileSync(
-    resolve(process.cwd(), "src/lib/tracking.ts"),
-    "utf8",
-  );
+describe("GA4 conversions", () => {
+  const tracking = readFileSync(resolve(process.cwd(), "src/lib/tracking.ts"), "utf8");
+  const read = (f: string) => readFileSync(resolve(process.cwd(), f), "utf8");
 
-  it("mirrors Lead to GA4's generate_lead", () => {
-    expect(tracking).toContain('eventName === "Lead"');
-    expect(tracking).toContain('"generate_lead"');
+  it("fires the GA4 names directly, with no mirroring", () => {
+    expect(tracking).not.toMatch(/eventName === "Lead"/);
+    expect(tracking).not.toMatch(/eventName === "Purchase"/);
+    expect(tracking).toContain("trackGenerateLead");
+    expect(tracking).toContain("trackPurchase");
   });
 
-  it("mirrors Purchase to GA4's lowercase purchase", () => {
-    expect(tracking).toContain('eventName === "Purchase"');
-    expect(tracking).toMatch(/gtag\("event", "purchase"/);
-  });
-
-  it("keeps the two spellings distinct rather than renaming one", () => {
-    // The capitalised names stay for Meta Pixel and reporting continuity; the
-    // lowercase ones exist so GA4's reserved events and key events fire.
-    for (const name of ['"Lead"', '"Purchase"', '"generate_lead"', '"purchase"']) {
-      expect(tracking, `${name} missing`).toContain(name);
+  it("has retired the Meta Pixel spellings from every call site", () => {
+    for (const f of [
+      "src/components/RegistrationFormSection.tsx",
+      "src/components/NotifyMeForm.tsx",
+      "src/pages/Trial.tsx",
+      "src/pages/Index.tsx",
+      "src/pages/ThankYou.tsx",
+      "src/pages/PaymentStatus.tsx",
+    ]) {
+      const src = read(f);
+      expect(src, `${f} still sends "Lead"`).not.toMatch(/trackEvent\(\s*"Lead"/);
+      expect(src, `${f} still sends "Purchase"`).not.toMatch(/trackEvent\(\s*"Purchase"/);
     }
   });
+
+  it("sends purchase as a real ecommerce event", () => {
+    for (const k of ["transaction_id", "value", "currency", "items"]) {
+      expect(tracking, `purchase is missing ${k}`).toContain(k);
+    }
+  });
+
+  it("never fires purchase from a URL parameter or on mount", () => {
+    // Index handles the ?payment=success redirect; it must not report a sale.
+    expect(read("src/pages/Index.tsx")).not.toContain("trackPurchase");
+    // ThankYou must read Stripe's status before sending anything.
+    const ty = read("src/pages/ThankYou.tsx");
+    expect(ty).toContain('data.paymentStatus === "paid"');
+    expect(ty).toContain("purchaseSent");
+  });
+
+  it("guards both purchase call sites against a second send", () => {
+    expect(read("src/pages/ThankYou.tsx")).toContain("purchaseSent.current");
+    expect(read("src/pages/PaymentStatus.tsx")).toContain("!trackedRef");
+  });
+
+  it("cannot send the two key events nothing implements", () => {
+    // close_convert_lead and qualify_lead are GA4 defaults the site never
+    // fired; no code path may introduce them.
+    const all = ["src/lib/tracking.ts", "src/pages/ThankYou.tsx", "src/pages/PaymentStatus.tsx",
+                 "src/pages/Index.tsx", "src/components/NotifyMeForm.tsx"].map(read).join("\n");
+    expect(all).not.toContain("close_convert_lead");
+    expect(all).not.toContain("qualify_lead");
+  });
+
+  it("keeps booking and payment as separate events", () => {
+    // A trial can be booked without paying, so the two must never be merged.
+    expect(tracking).toContain("trial_booking_complete");
+    expect(tracking).toContain("paid_booking_complete");
+  });
 });
+

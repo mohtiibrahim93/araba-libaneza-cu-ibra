@@ -51,7 +51,11 @@ const PageContent = () => {
       } else {
         toast.success(t.paymentSuccessGeneric);
       }
-      trackEvent("Purchase", { content_name: type || "course" });
+      // No purchase event here. This branch fires on the ?payment=success
+      // redirect parameter, which is a URL anyone can type and which arrives
+      // before anything has confirmed the charge — and the same payment is
+      // already reported, once and verified, by /payment-status and
+      // /thank-you. Sending it here made every real sale count twice.
       window.history.replaceState({}, "", "/");
     } else if (payment === "canceled") {
       toast.info(t.paymentCanceled);

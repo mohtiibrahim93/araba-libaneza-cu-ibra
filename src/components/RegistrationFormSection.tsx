@@ -16,7 +16,7 @@ import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
 import {
-  trackEvent,
+  trackGenerateLead,
   trackRegistrationStart,
   trackRegistrationStep,
   trackRegistrationSubmit,
@@ -444,7 +444,7 @@ const RegistrationFormSection = ({
         body: { registrationId: id },
       });
 
-      trackEvent("Lead", { content_name: formTypeLabel });
+      trackGenerateLead(formTypeLabel);
       toast.success(t.mainLeadSuccess);
       setSubmittedData({
         courseType: courseType as CourseType,

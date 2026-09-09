@@ -10,7 +10,9 @@ import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { trackEvent } from "@/lib/tracking";
+import {
+  trackGenerateLead,
+} from "@/lib/tracking";
 import { isBlockedEmail, isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 
 const TrialPage = () => {
@@ -94,7 +96,7 @@ const TrialPage = () => {
         lead_status: "incomplete",
       });
       if (error) throw error;
-      trackEvent("Lead", { content_name: "trial" });
+      trackGenerateLead("trial");
       setRegistrationId(id);
 
     } catch (err) {
