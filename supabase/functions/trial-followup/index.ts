@@ -70,7 +70,9 @@ Deno.serve(async (req) => {
     }
 
     let sent = 0;
-    for (const r of rows ?? []) {
+    // The select list is built at runtime, so the client can't infer a row type.
+    type Row = { id: string; student_name: string; student_email: string; language: string | null };
+    for (const r of ((rows ?? []) as unknown as Row[])) {
       const lang = (r.language as "ro" | "en") ?? "ro";
       try {
         const resp = await fetch(
