@@ -1572,6 +1572,14 @@ export const I18nProvider = ({
 }) => {
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window === "undefined") return initialLang ?? "ro";
+    // An /en/ URL is an English URL. Its body is English either way, but the
+    // chrome around it used to follow localStorage, so a visitor whose last
+    // choice was Romanian got Romanian navigation wrapped around English copy —
+    // and, now that the blog has /en/blog/* twins rendering the same bilingual
+    // component, would have got a Romanian *body* at an English URL. The path
+    // wins here; the toggle still works, because leaving English navigates to
+    // the Romanian counterpart (see languageRoutes.ts).
+    if (window.location.pathname.startsWith("/en/")) return "en";
     const savedLang = window.localStorage.getItem("site-language");
     return savedLang === "en" || savedLang === "ro" ? savedLang : "ro";
   });

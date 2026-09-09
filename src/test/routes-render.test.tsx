@@ -132,7 +132,6 @@ describe("licensed images keep their attribution", () => {
 describe("blog articles get a working outline", () => {
   it.each([
     ["/blog/cum-inveti-araba-libaneza", "ro"],
-    ["/blog/learn-lebanese-arabic", "en"],
   ])("%s builds an outline whose links resolve", async (route, lang) => {
     window.localStorage.setItem("site-language", lang);
     window.history.pushState({}, "", route);

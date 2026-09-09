@@ -37,7 +37,11 @@ const COPY = {
 const BlogIndex = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
-  const canonical = `${BASE_URL}/blog`;
+  // In English the index lives at /en/blog and links to the English half of
+  // each article. Both halves render from the same component; only the URL
+  // differs, and it is the URL that decides which language a crawler sees.
+  const base = lang === "en" ? "/en/blog" : "/blog";
+  const canonical = `${BASE_URL}${base}`;
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
       day: "numeric", month: "long", year: "numeric",
@@ -49,7 +53,7 @@ const BlogIndex = () => {
     itemListElement: blogPostsNewestFirst.map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/blog/${p.slug}`,
+      url: `${BASE_URL}${base}/${p.slug}`,
       name: L(p.title, lang),
     })),
   };
@@ -87,6 +91,18 @@ const BlogIndex = () => {
           <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {c.intro}
           </p>
+          {/* A real link to the other language, not just the toggle. The toggle
+              is JavaScript, so without this the English half of the blog had no
+              crawlable path in — twenty articles reachable only by guessing the
+              URL. */}
+          <p className="text-sm text-muted-foreground mt-4">
+            <Link
+              to={lang === "en" ? "/blog" : "/en/blog"}
+              className="underline underline-offset-4 hover:text-foreground transition-colors"
+            >
+              {lang === "en" ? "Citește articolele în română" : "Read these articles in English"}
+            </Link>
+          </p>
         </header>
 
         <section className="w-full max-w-content mx-auto px-gutter pb-16">
@@ -94,7 +110,7 @@ const BlogIndex = () => {
             {blogPostsNewestFirst.map((post) => (
               <li key={post.slug}>
                 <Link
-                  to={`/blog/${post.slug}`}
+                  to={`${base}/${post.slug}`}
                   className="group flex h-full min-h-[16rem] flex-col rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all"
                 >
                   <div className="mb-3 flex items-center gap-2">

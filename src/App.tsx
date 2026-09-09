@@ -1,12 +1,12 @@
-import { Suspense, type ComponentType, type ReactNode } from "react";
+import { Suspense, useEffect, type ComponentType, type ReactNode } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Loader2 } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { I18nProvider } from "@/lib/i18n";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 // Homepage + the tiny catch-all stay eager (critical path); everything else is
 // code-split so it doesn't weigh down the initial homepage bundle.
@@ -50,7 +50,6 @@ const BlogArabaPentruCopii = lazyWithRetry(() => import("./pages/blog/ArabaPentr
 const BlogCumAlegiProfesor = lazyWithRetry(() => import("./pages/blog/CumAlegiProfesor"));
 const BlogInvataArabaOnline = lazyWithRetry(() => import("./pages/blog/InvataArabaOnline"));
 const BlogNumereInLibaneza = lazyWithRetry(() => import("./pages/blog/NumereInLibaneza"));
-const BlogLearnLebaneseArabic = lazyWithRetry(() => import("./pages/blog/LearnLebaneseArabic"));
 const BlogGramaticaArabaLibaneza = lazyWithRetry(() => import("./pages/blog/GramaticaArabaLibaneza"));
 const BlogLebaneseArabicPhrases = lazyWithRetry(() => import("./pages/blog/LebaneseArabicPhrases"));
 const BlogLebaneseFamilyVocabulary = lazyWithRetry(() => import("./pages/blog/LebaneseFamilyVocabulary"));
@@ -96,6 +95,63 @@ const RouteAnalytics = () => {
   return null;
 };
 
+/**
+ * Keep the UI language in step with the URL on /en/ routes.
+ *
+ * I18nProvider settles the language once, from the path on first paint. That is
+ * enough for a cold load but not for client-side navigation: following a link
+ * from a Romanian page into /en/blog/... would otherwise leave the language on
+ * Romanian and render the Romanian half of a bilingual article under an English
+ * URL. Only /en/ forces a language — everywhere else the toggle stays free,
+ * because those pages are bilingual at a single URL.
+ */
+const LanguageFromPath = () => {
+  const { pathname } = useLocation();
+  const { lang, setLang } = useI18n();
+  useEffect(() => {
+    if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
+  }, [pathname, lang, setLang]);
+  return null;
+};
+
+/**
+ * English twins of the blog, at /en/blog/<same-slug>.
+ *
+ * Every article component is already bilingual — it picks its language from
+ * the i18n context — but until now only the Romanian URL existed, so the
+ * English half of twenty articles was invisible to search engines: no URL to
+ * index, nothing to point an hreflang at. These routes give that half an
+ * address. The component is the same one the Romanian URL renders;
+ * LanguageFromPath above is what makes it come out in English.
+ */
+const BLOG_COMPONENTS: Record<string, ComponentType> = {
+  "cum-inveti-araba-libaneza": BlogCumInvetiArabaLibaneza,
+  "araba-libaneza-vs-araba-standard": BlogArabaLibanezaVsArabaStandard,
+  "primele-20-de-expresii-libaneze": BlogPrimele20Expresii,
+  "cat-costa-cursurile-de-araba-libaneza": BlogCatCostaCursurile,
+  "alfabetul-arab-pentru-incepatori": BlogAlfabetulArab,
+  "ce-este-arabizi": BlogCeEsteArabizi,
+  "cultura-libaneza-obiceiuri-mancare-traditii": BlogCulturaLibaneza,
+  "cum-saluti-in-libaneza": BlogCumSalutiInLibaneza,
+  "cat-dureaza-sa-inveti-araba-libaneza": BlogCatDureaza,
+  "araba-pentru-copii-ghidul-parintilor": BlogArabaPentruCopii,
+  "cum-alegi-profesor-de-araba": BlogCumAlegiProfesor,
+  "invata-araba-libaneza-online": BlogInvataArabaOnline,
+  "numere-in-araba-libaneza": BlogNumereInLibaneza,
+  "gramatica-arabei-libaneze": BlogGramaticaArabaLibaneza,
+  "lebanese-arabic-phrases": BlogLebaneseArabicPhrases,
+  "lebanese-family-vocabulary": BlogLebaneseFamilyVocabulary,
+  "de-ce-invatam-araba-in-2026": BlogDeCeInvatamAraba2026,
+  "limbile-vorbite-in-liban": BlogLimbileVorbiteInLiban,
+  "lebanese-arabic-learning-resources": BlogLebaneseArabicLearningResources,
+};
+
+const EnBlogPost = () => {
+  const { slug } = useParams();
+  const Post = slug ? BLOG_COMPONENTS[slug] : undefined;
+  return Post ? <Post /> : <NotFound />;
+};
+
 interface AppProps {
   /**
    * The router to mount the routes under. Defaults to BrowserRouter for the
@@ -116,6 +172,7 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
       <I18nProvider initialLang={lang}>
       <Router>
         <RouteAnalytics />
+        <LanguageFromPath />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -161,13 +218,21 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/blog/cum-alegi-profesor-de-araba" element={<BlogCumAlegiProfesor />} />
             <Route path="/blog/invata-araba-libaneza-online" element={<BlogInvataArabaOnline />} />
             <Route path="/blog/numere-in-araba-libaneza" element={<BlogNumereInLibaneza />} />
-            <Route path="/blog/learn-lebanese-arabic" element={<BlogLearnLebaneseArabic />} />
+            {/* Retired: a section-for-section rewrite of cum-inveti-araba-libaneza
+                in both languages, so it duplicated the survivor twice over. Its
+                English half was the only argument for keeping it, and that
+                argument died when /en/blog/<slug> gave every article an English
+                URL of its own. */}
+            <Route path="/blog/learn-lebanese-arabic" element={<Navigate to="/blog/cum-inveti-araba-libaneza" replace />} />
+            <Route path="/en/blog/learn-lebanese-arabic" element={<Navigate to="/en/blog/cum-inveti-araba-libaneza" replace />} />
             <Route path="/blog/gramatica-arabei-libaneze" element={<BlogGramaticaArabaLibaneza />} />
             <Route path="/blog/lebanese-arabic-phrases" element={<BlogLebaneseArabicPhrases />} />
             <Route path="/blog/lebanese-family-vocabulary" element={<BlogLebaneseFamilyVocabulary />} />
             <Route path="/blog/de-ce-invatam-araba-in-2026" element={<BlogDeCeInvatamAraba2026 />} />
             <Route path="/blog/limbile-vorbite-in-liban" element={<BlogLimbileVorbiteInLiban />} />
             <Route path="/blog/lebanese-arabic-learning-resources" element={<BlogLebaneseArabicLearningResources />} />
+            <Route path="/en/blog" element={<BlogIndex />} />
+            <Route path="/en/blog/:slug" element={<EnBlogPost />} />
             <Route path="/en/learn-lebanese-arabic" element={<LearnLebaneseArabic />} />
             <Route path="/en/learn-levantine-arabic" element={<Navigate to="/en/learn-lebanese-arabic" replace />} />
             <Route path="/en/arabic-tutor" element={<ArabicTutor />} />

@@ -99,33 +99,6 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     tag: { ro: "Vocabular", en: "Vocabulary" },
   },
   {
-    slug: "learn-lebanese-arabic",
-    // Near-duplicate of cum-inveti-araba-libaneza. Both articles are in fact
-    // bilingual and both have real English titles — the earlier note here
-    // claiming this one was "Romanian content under an English slug" was wrong.
-    //
-    // What makes them duplicates is narrower and still decisive: only the
-    // Romanian title is prerendered (allRoutes maps p.title.ro), so the page
-    // Google indexes for both is Romanian, and those two Romanian titles are
-    // near-identical. The English versions appear only after a client-side
-    // language toggle, which no crawler performs.
-    //
-    // This one had 1 impression at position 35 against the other's established
-    // ranking, so the survivor was not a close call.
-    canonicalTo: "cum-inveti-araba-libaneza",
-    title: {
-      ro: "Cum înveți araba libaneză: ghid practic pentru începători",
-      en: "Learn Lebanese Arabic: a practical beginner's guide",
-    },
-    description: {
-      ro: "Învață araba libaneză pas cu pas: diferențe față de MSA, metode eficiente, greșeli frecvente și primele fraze utile pentru începători.",
-      en: "A step-by-step guide to learning Lebanese Arabic: what the Lebanese dialect is, how it differs from MSA, how long it takes, effective methods, common mistakes and your first useful phrases.",
-    },
-    published: "2026-07-24",
-    readingMinutes: 8,
-    tag: { ro: "Ghid", en: "Guide" },
-  },
-  {
     slug: "invata-araba-libaneza-online",
     title: {
       ro: "Cum înveți araba libaneză online (de oriunde)",

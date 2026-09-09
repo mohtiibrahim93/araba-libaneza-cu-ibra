@@ -91,6 +91,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cel-mai-bun-curs-de-araba", title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere", description: "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi." },
   { path: "/cursuri-araba-adolescenti", title: "Arabă Libaneză pentru Adolescenți | Curs 11–17 ani", description: "Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită." },
   { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
+  { path: "/en/blog", title: "Blog — guides and articles about Lebanese Arabic", description: "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.", lang: "en" },
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic" },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
@@ -184,7 +185,22 @@ export function allRoutes(): Route[] {
     // canonical at the survivor, so the two stop competing for one query.
     ...(p.canonicalTo ? { canonical: `/blog/${p.canonicalTo}` } : {}),
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...blog]
+  // The English half of the same articles, at /en/blog/<slug>. The components
+  // have always rendered both languages; only the Romanian URL was ever
+  // prerendered, so every English translation on the blog was unreachable —
+  // twenty articles that could not be indexed, linked to, or paired by
+  // hreflang. Titles and descriptions come from the same registry, English
+  // side. A post consolidated into another follows it in English too.
+  const blogEn: Route[] = BLOG_POSTS.map((p) => ({
+    path: `/en/blog/${p.slug}`,
+    title: p.title.en,
+    description: p.description.en,
+    type: "article" as const,
+    published: p.published,
+    lang: "en" as const,
+    ...(p.canonicalTo ? { canonical: `/en/blog/${p.canonicalTo}` } : {}),
+  }));
+  return [...STATIC_ROUTES, ...levelRoutes(), ...blog, ...blogEn]
     .map((route) =>
       route.path === "/cursuri/grup/b2"
         ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
@@ -299,6 +315,20 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
     pairs.set(pair.ro, pair);
     pairs.set(pair.en, pair);
   }
+  // Blog twins. These need no reciprocity check: /blog/<slug> and
+  // /en/blog/<slug> are generated from one registry entry, so the pair exists
+  // or neither side does. A consolidated post is left out — its canonical
+  // already points at the survivor, and hreflang on a canonicalised URL is the
+  // contradiction this file avoids everywhere else.
+  for (const p of BLOG_POSTS) {
+    if (p.canonicalTo) continue;
+    const pair = { ro: `/blog/${p.slug}`, en: `/en/blog/${p.slug}` };
+    pairs.set(pair.ro, pair);
+    pairs.set(pair.en, pair);
+  }
+  const indexPair = { ro: "/blog", en: "/en/blog" };
+  pairs.set(indexPair.ro, indexPair);
+  pairs.set(indexPair.en, indexPair);
   return pairs;
 }
 
@@ -442,6 +472,12 @@ function renderRoute(
   const canonicalHref = escAttr(route.canonical ? BASE + route.canonical : url);
 
   let html = template;
+  // The shell is checked in with lang="ro", and the browser corrects it after
+  // hydration — which is no help to a crawler reading the static file. Every
+  // English page was shipping <html lang="ro"> around English copy, telling
+  // Google the wrong language for the document it was about to read. Stamp the
+  // route's own language instead.
+  html = html.replace(/(<html[^>]*\blang=")[^"]*(")/, `$1${route.lang ?? "ro"}$2`);
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
   html = setMeta(html, "name", "description", desc);
   html = setMeta(html, "property", "og:type", route.type ?? "website");

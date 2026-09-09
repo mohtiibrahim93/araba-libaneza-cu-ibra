@@ -196,10 +196,10 @@ const LearnLebaneseArabic = () => (
         <BookOpen className="w-5 h-5 text-primary" /> Want a step-by-step beginner guide?
       </h3>
       <p className="text-sm text-muted-foreground mb-4">
-        Read our dedicated guide on <Link to="/blog/learn-lebanese-arabic">how to learn Lebanese Arabic</Link> — it covers dialect differences, study methods, common mistakes and your first useful phrases.
+        Read our dedicated guide on <Link to="/en/blog/cum-inveti-araba-libaneza">how to learn Lebanese Arabic</Link> — it covers dialect differences, study methods, common mistakes and your first useful phrases.
       </p>
       <Link
-        to="/blog/learn-lebanese-arabic"
+        to="/en/blog/cum-inveti-araba-libaneza"
         data-cta
         className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:bg-primary/90 transition-colors"
       >

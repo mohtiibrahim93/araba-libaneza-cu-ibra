@@ -73,7 +73,7 @@ const Footer = () => {
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-foreground mb-4">{t.footerQuickLinks}</p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <li><Link to="/blog" className="hover:text-foreground transition-colors">{lang === "en" ? "Blog" : "Blog"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/blog" : "/blog"} className="hover:text-foreground transition-colors">Blog</Link></li>
             <li><Link to="/quiz" className="hover:text-foreground transition-colors">{lang === "en" ? "Level test" : "Test de nivel"}</Link></li>
             <li><Link to="/trial" className="hover:text-foreground transition-colors">{lang === "en" ? "Free trial lesson" : "Lecție de probă gratuită"}</Link></li>
             <li><Link to="/booking" className="hover:text-foreground transition-colors">{lang === "en" ? "Book a lesson" : "Rezervă o lecție"}</Link></li>
