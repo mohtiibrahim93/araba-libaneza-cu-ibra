@@ -108,8 +108,15 @@ const CursuriAraba = () => (
     <h2>Cursuri de arabă în București vs online</h2>
     <p>
       Fizic, la Raduga Creative Center (Strada Icoanei 80, sector 2), ai energia grupei și feedbackul
-      direct. Online, pe Zoom, ai flexibilitate și acces de oriunde. Ambele formate folosesc același
-      profesor nativ și aceeași metodă. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau <Link to="/araba-online">cursurile de arabă online</Link> pentru detalii despre fiecare format.
+      direct. Online înseamnă lecții <strong>live pe Zoom</strong>, nu înregistrări: vezi și auzi
+      profesorul, vorbești din primele minute, primești corecturi pe loc, iar materialele se împart
+      pe ecran — ai nevoie doar de un laptop sau telefon cu cameră. Ambele formate folosesc același
+      profesor nativ și aceeași metodă, iar toate nivelurile au variantă online.
+    </p>
+    <p>
+      Online funcționează de oriunde, atâta timp cât programul se potrivește cu fusul orar al
+      Bucureștiului (EET) — avem cursanți din diaspora și din alte țări. Pentru detalii despre
+      varianta fizică, vezi <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link>.
     </p>
 
     <h2>Ce înseamnă „arabă levantină” și de ce contează</h2>

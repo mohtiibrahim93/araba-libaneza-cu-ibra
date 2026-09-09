@@ -109,7 +109,7 @@ const CursuriArabaBucuresti = () => (
       </li>
       <li>
         <strong>Sector 6 & Militari</strong> — 25 min cu M3 → M2, sau alegi{" "}
-        <Link to="/araba-online">varianta online</Link>.
+        <Link to="/cursuri-limba-araba">varianta online</Link>.
       </li>
       <li>
         <strong>Pipera, Băneasa, Ilfov (Voluntari, Otopeni)</strong> — cel mai simplu pe M2 până la
@@ -151,7 +151,7 @@ const CursuriArabaBucuresti = () => (
       săptămânal care te ține pe cale. Online e mai flexibil și mai ieftin, dar pierzi din energia
       grupei. Dacă locuiești în București și programul îți permite, <strong>fizic e alegerea mai
       bună</strong>. Dacă locuiești în alt oraș sau în diaspora, ai{" "}
-      <Link to="/araba-online">cursuri online</Link> cu aceeași metodă.
+      <Link to="/cursuri-limba-araba">cursuri online</Link> cu aceeași metodă.
     </p>
 
     <p>

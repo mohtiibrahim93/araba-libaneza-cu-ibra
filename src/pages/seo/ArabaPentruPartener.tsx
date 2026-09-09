@@ -88,7 +88,7 @@ const ArabaPentruPartener = () => (
       <Link to="/meditatii-araba">meditațiile de arabă 1:1</Link> sunt cele mai eficiente — lucrăm exact
       pe situațiile tale. Dacă vrei ritm constant și costuri mai mici, alege{" "}
       <Link to="/cursuri/grup">cursul de grup A1</Link>, fizic în București sau{" "}
-      <Link to="/araba-online">online</Link>. Prima lecție de probă e{" "}
+      <Link to="/cursuri-limba-araba">online</Link>. Prima lecție de probă e{" "}
       <Link to="/trial">gratuită</Link> — vino cu contextul tău și pornim de acolo.
     </p>
   </LandingLayout>

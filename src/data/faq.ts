@@ -135,6 +135,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
             q: "Trebuie să învăț alfabetul arab de la început?",
             a: "Nu obligatoriu. Începem cu transliterare latină pentru a te concentra pe vorbire, iar alfabetul îl introducem treptat — pentru cei care vor să citească și să scrie. Poți vorbi libaneză fluent fără să citești în arabă.",
           },
+          {
+            q: "Pot învăța araba singur, fără profesor?",
+            a: "Poți învăța vocabular și gramatică din aplicații (Duolingo, Memrise), dar fără feedback pe pronunție rămâi cu greșeli care se fixează — iar în arabă sunete ca ع, ح, ق nu există în română. Recomandăm minim o lecție pe săptămână cu profesor nativ pentru corectare, plus practică zilnică cu resurse gratuite între lecții.",
+          },
         ],
       },
       {
@@ -155,6 +159,14 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cum exersez vorbirea dacă nu trăiesc în Liban?",
             a: "La curs practici cu profesorul nativ și cu ceilalți cursanți. În plus recomandăm: parteneri de conversație (tandem), consum zilnic de conținut libanez, exerciții de shadowing (repetare după audio nativ) și un jurnal vorbit de 5 minute pe zi.",
+          },
+          {
+            q: "Cum se desfășoară o lecție de arabă online?",
+            a: "Live pe Zoom, cu profesorul nativ — nu înregistrări. Vezi și auzi profesorul, vorbești din primele minute, primești corecturi pe loc, iar materialele se împart pe ecran. Ai nevoie doar de un laptop sau telefon cu cameră și o conexiune stabilă.",
+          },
+          {
+            q: "Pot face lecții online din afara României?",
+            a: "Da — cursurile online funcționează de oriunde, atâta timp cât programul se potrivește cu fusul orar al Bucureștiului (EET). Avem cursanți din diaspora și din alte țări, iar lecțiile se pot ține în engleză, franceză sau arabă dacă nu vorbești română.",
           },
         ],
       },
@@ -342,6 +354,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
             q: "Can I learn online effectively, or do I need in-person classes?",
             a: "Yes, online learning with a native teacher over Zoom works very well — many of our students learn that way. In-person classes at Raduga Creative Center in Bucharest are an option if you prefer face-to-face interaction.",
           },
+          {
+            q: "Can I learn Arabic on my own, without a teacher?",
+            a: "You can pick up vocabulary and grammar from apps (Duolingo, Memrise), but without feedback on pronunciation the mistakes set in — and Arabic has sounds like ع, ح and ق that most European languages don't. We recommend at least one lesson a week with a native teacher for correction, plus daily practice with free resources in between.",
+          },
         ],
       },
       {
@@ -362,6 +378,14 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "How do I practise speaking if I don't live in Lebanon?",
             a: "In class you practise with the native teacher and other students. On top of that: language partners (tandem), daily Lebanese content, shadowing (repeating after native audio), and a 5-minute spoken diary each day.",
+          },
+          {
+            q: "How does an online Arabic lesson actually work?",
+            a: "Live on Zoom with the native teacher — not recordings. You see and hear the teacher, speak from the first minutes, get corrected on the spot, and materials are shared on screen. All you need is a laptop or phone with a camera and a stable connection.",
+          },
+          {
+            q: "Can I take online lessons from outside Romania?",
+            a: "Yes — online lessons work from anywhere, as long as the schedule fits Bucharest time (EET). We teach students across the diaspora and beyond, and lessons can be held in English, French or Arabic.",
           },
         ],
       },

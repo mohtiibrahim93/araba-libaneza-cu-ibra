@@ -47,8 +47,6 @@ const Footer = () => {
           </p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to="/cursuri-limba-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic courses — overview" : "Cursuri de arabă — toate formatele"}</Link></li>
-            <li><Link to="/invata-araba" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic — guide" : "Învață araba — ghid"}</Link></li>
-            <li><Link to="/araba-pentru-incepatori" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for beginners" : "Arabă pentru începători"}</Link></li>
             <li><Link to="/curs-araba-copii" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic course for children" : "Curs de arabă pentru copii"}</Link></li>
             <li><Link to={lang === "en" ? "/en/best-arabic-course" : "/cel-mai-bun-curs-de-araba"} className="hover:text-foreground transition-colors">{lang === "en" ? "Best Arabic course guide" : "Cel mai bun curs de arabă"}</Link></li>
             <li><Link to="/ce-araba-sa-inveti" className="hover:text-foreground transition-colors">{lang === "en" ? "Which Arabic to learn" : "Ce arabă să înveți"}</Link></li>
@@ -61,7 +59,6 @@ const Footer = () => {
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
             <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
-            <li><Link to="/araba-online" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic online" : "Arabă online"}</Link></li>
             <li><Link to="/araba-pentru-partener" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for your partner" : "Arabă pentru partener"}</Link></li>
             <li><Link to="/araba-in-familie" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic in the family" : "Arabă în familie"}</Link></li>
             {/* These two were reachable only from the navbar dropdown, which

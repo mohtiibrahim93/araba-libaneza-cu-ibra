@@ -14,10 +14,7 @@
 const EN_FOR_RO: Record<string, string> = {
   // Course / offer landings
   "/meditatii-araba": "/en/arabic-tutor",
-  "/cursuri-araba": "/en/learn-lebanese-arabic",
-  "/araba-online": "/en/learn-lebanese-arabic",
-  "/araba-pentru-incepatori": "/en/learn-lebanese-arabic",
-  "/invata-araba": "/en/learn-lebanese-arabic",
+  "/cursuri-limba-araba": "/en/learn-lebanese-arabic",
   "/cursuri-araba-bucuresti": "/en/arabic-classes-near-me",
   "/curs-araba-copii": "/en/learn-lebanese-arabic",
   "/araba-pentru-partener": "/en/learn-lebanese-arabic",
@@ -57,7 +54,7 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/arabic-tutor": "/meditatii-araba",
   "/en/best-arabic-course": "/cel-mai-bun-curs-de-araba",
   "/en/arabic-for-teenagers": "/cursuri-araba-adolescenti",
-  "/en/learn-lebanese-arabic": "/cursuri-araba",
+  "/en/learn-lebanese-arabic": "/cursuri-limba-araba",
   "/en/arabic-dialects-guide": "/dialecte-arabe",
   "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/ce-araba-sa-inveti",
@@ -67,7 +64,7 @@ const RO_FOR_EN: Record<string, string> = {
   "/blog/lebanese-arabic-phrases": "/blog/primele-20-de-expresii-libaneze",
   "/blog/lebanese-family-vocabulary": "/blog/cultura-libaneza-obiceiuri-mancare-traditii",
   "/blog/lebanese-arabic-learning-resources": "/resurse",
-  "/de/arabisch-lernen": "/cursuri-araba",
+  "/de/arabisch-lernen": "/cursuri-limba-araba",
 };
 
 /**

@@ -66,11 +66,8 @@ const LebaneseVsMsaVsEgyptian = lazyWithRetry(() => import("./pages/en/LebaneseV
 const HowToLearnLebaneseArabic = lazyWithRetry(() => import("./pages/en/HowToLearnLebaneseArabic"));
 const DeArabischLernen = lazyWithRetry(() => import("./pages/de/ArabischLernen"));
 const SeoCursuriAraba = lazyWithRetry(() => import("./pages/seo/CursuriAraba"));
-const SeoArabaPentruIncepatori = lazyWithRetry(() => import("./pages/seo/ArabaPentruIncepatori"));
-const SeoArabaOnline = lazyWithRetry(() => import("./pages/seo/ArabaOnline"));
 const SeoMeditatiiAraba = lazyWithRetry(() => import("./pages/seo/MeditatiiAraba"));
 const SeoIntrebariFrecvente = lazyWithRetry(() => import("./pages/seo/IntrebariFrecvente"));
-const SeoInvataAraba = lazyWithRetry(() => import("./pages/seo/InvataAraba"));
 const SeoCursuriArabaBucuresti = lazyWithRetry(() => import("./pages/seo/CursuriArabaBucuresti"));
 const SeoCursArabaCopii = lazyWithRetry(() => import("./pages/seo/CursArabaCopii"));
 const SeoArabizi = lazyWithRetry(() => import("./pages/seo/Arabizi"));
@@ -182,18 +179,22 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/en/how-to-learn-lebanese-arabic" element={<HowToLearnLebaneseArabic />} />
             <Route path="/de/arabisch-lernen" element={<DeArabischLernen />} />
             <Route path="/cursuri-limba-araba" element={<SeoCursuriAraba />} />
-            <Route path="/araba-pentru-incepatori" element={<SeoArabaPentruIncepatori />} />
-            <Route path="/araba-online" element={<SeoArabaOnline />} />
-            {/* Legacy alias: keep a distinct runtime title while canonicalising
-                to the higher-volume surviving URL. */}
-            {/* Legacy alias. It used to render a byte-identical copy of
-                /cursuri-araba — an audit put the two at Jaccard 1.00 — which is
-                a second crawlable destination for the same content. It now
-                redirects like every other retired URL on the site. */}
+            {/* Retired duplicates of the courses hub.
+                /cursuri-araba used to render a byte-identical copy of it — an
+                audit put the two at Jaccard 1.00. The other three each covered
+                a slice the hub already covers (from zero, for beginners,
+                online) and, tellingly, all three named /en/learn-lebanese-arabic
+                as their English twin — the same page the hub itself pairs with,
+                so by the site's own mapping they were the hub under other
+                names. Their unique answers moved into src/data/faq.ts and the
+                hub's own "București vs online" section; the URLs now redirect
+                rather than serving a second copy of the same intent. */}
             <Route path="/cursuri-araba" element={<Navigate to="/cursuri-limba-araba" replace />} />
+            <Route path="/araba-pentru-incepatori" element={<Navigate to="/cursuri-limba-araba" replace />} />
+            <Route path="/araba-online" element={<Navigate to="/cursuri-limba-araba" replace />} />
+            <Route path="/invata-araba" element={<Navigate to="/cursuri-limba-araba" replace />} />
             <Route path="/meditatii-araba" element={<SeoMeditatiiAraba />} />
             <Route path="/intrebari-frecvente" element={<SeoIntrebariFrecvente />} />
-            <Route path="/invata-araba" element={<SeoInvataAraba />} />
             <Route path="/cursuri-araba-bucuresti" element={<SeoCursuriArabaBucuresti />} />
             <Route path="/curs-araba-copii" element={<SeoCursArabaCopii />} />
             <Route path="/arabizi" element={<SeoArabizi />} />

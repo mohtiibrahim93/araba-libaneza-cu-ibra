@@ -20,20 +20,6 @@ export const PAGE_SEEDS: PageSeed[] = [
     "lead": "Pentru familiile mixte româno-libaneze: cum păstrezi limba în casă, ce faci concret în fiecare zi și de unde începe fiecare membru al familiei."
   },
   {
-    "path": "/araba-online",
-    "meta_title": "Cursuri de Arabă Libaneză Online | Profesor Nativ",
-    "meta_description": "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.",
-    "h1": "Cursuri de arabă libaneză online, live cu profesor nativ",
-    "lead": "Lecții live pe Zoom cu profesor nativ — grupă de weekend sau private 1:1, de oriunde te afli. Fără înregistrări, fără aplicații care nu te corectează."
-  },
-  {
-    "path": "/araba-pentru-incepatori",
-    "meta_title": "Arabă Libaneză pentru Începători | Curs de la Zero",
-    "meta_description": "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.",
-    "h1": "Arabă libaneză pentru începători: vorbește din prima lecție",
-    "lead": "Zero cunoștințe? Perfect. Grupele A1 sunt gândite exact pentru început de drum: vorbești din prima lecție, fără să te blochezi în alfabet."
-  },
-  {
     "path": "/araba-pentru-partener",
     "meta_title": "Arabă Libaneză pentru Partener și Familie | Curs 1:1",
     "meta_description": "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București.",
@@ -130,13 +116,6 @@ export const PAGE_SEEDS: PageSeed[] = [
     "meta_description": "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul.",
     "h1": "Nu ai nevoie de alfabetul arab ca să începi să vorbești",
     "lead": "Alfabetul este motivul numărul unu pentru care oamenii se apucă de arabă și renunță în prima lună. Nu e obligatoriu ca să vorbești — iată cum arată drumul fără el."
-  },
-  {
-    "path": "/invata-araba",
-    "meta_title": "Învață Arabă Libaneză de la Zero | Ghid și Cursuri",
-    "meta_description": "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.",
-    "h1": "Învață araba libaneză de la zero — ghid complet + cursuri cu profesor nativ",
-    "lead": "Vrei să înveți araba libaneză, dar nu știi de unde să începi? Ghid clar despre alegerea dialectului, metoda potrivită și timpul necesar — plus cursuri cu profesor nativ."
   },
   {
     "path": "/invata-araba-gratis",

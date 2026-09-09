@@ -67,7 +67,7 @@ const DialecteArabe = () => (
 
     <h2>Familiile de dialecte, pe scurt</h2>
     <ul>
-      <li><strong>Levantin (shami)</strong> — Liban, Siria, Palestina, Iordania. Melodic, ușor de urmărit, foarte prezent în muzică. Aici intră <Link to="/invata-araba">araba libaneză</Link>.</li>
+      <li><strong>Levantin (shami)</strong> — Liban, Siria, Palestina, Iordania. Melodic, ușor de urmărit, foarte prezent în muzică. Aici intră <Link to="/cursuri-limba-araba">araba libaneză</Link>.</li>
       <li><strong>Egiptean</strong> — cel mai „auzit” dialect, datorită filmelor și televiziunii. Litera ج se pronunță „g”: <em>gamiil</em> în loc de <em>jamiil</em>.</li>
       <li><strong>Din Golf (khaliji)</strong> — Emirate, Kuweit, Qatar, Arabia Saudită. Util pentru muncă în regiune.</li>
       <li><strong>Mesopotamian (irakian)</strong> — influențe turcești și persane, vocabular distinct.</li>
@@ -172,7 +172,7 @@ const DialecteArabe = () => (
       gratuite din <Link to="/resurse">pagina de resurse</Link> și, când vrei corectare reală,
       alegi între <Link to="/cursuri/grup">cursurile de grup</Link>,{" "}
       <Link to="/meditatii-araba">meditațiile 1:1</Link> sau{" "}
-      <Link to="/araba-online">varianta online</Link>. Prima lecție de probă e{" "}
+      <Link to="/cursuri-limba-araba">varianta online</Link>. Prima lecție de probă e{" "}
       <Link to="/trial">gratuită</Link>.
     </p>
   </LandingLayout>

@@ -110,7 +110,7 @@ const CelMaiBunCursAraba = () => (
             <td className="py-2 pl-3">Cost mai mare pe oră</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/araba-online">Online (Zoom)</Link></td>
+            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri-limba-araba">Online (Zoom)</Link></td>
             <td className="py-2 px-3">Cursanți din alte orașe sau din diasporă</td>
             <td className="py-2 px-3">Același preț ca fizic</td>
             <td className="py-2 pl-3">Necesită autodisciplină</td>

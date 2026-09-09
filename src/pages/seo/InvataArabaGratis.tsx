@@ -117,7 +117,7 @@ const InvataArabaGratis = () => (
       De aceea, după prima lună de studiu singur, o oră pe săptămână cu un profesor nativ schimbă
       complet ritmul: vezi <Link to="/cursuri/grup">cursurile de grup</Link>,{" "}
       <Link to="/meditatii-araba">meditațiile 1:1</Link> sau{" "}
-      <Link to="/araba-online">varianta online</Link>. Detalii despre ritm în{" "}
+      <Link to="/cursuri-limba-araba">varianta online</Link>. Detalii despre ritm în{" "}
       <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">cât durează să înveți araba libaneză</Link>.
     </p>
   </LandingLayout>
