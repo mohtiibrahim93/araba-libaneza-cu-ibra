@@ -188,7 +188,7 @@ const CursuriArabaAdolescenti = () => (
     <p>
       Grupele dedicate adolescenților (11–17 ani) sunt în formare: pornim o cohortă imediat ce avem
       suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
-      poți începe oricând cu <Link to="/meditatii-araba">lecții private 1:1</Link>.
+      poți începe oricând cu <Link to="/meditatii-araba">meditații de arabă 1:1</Link>.
     </p>
     <NotifyMeForm context="Grupă adolescenți 11–17" className="not-prose my-6" />
   </LandingLayout>

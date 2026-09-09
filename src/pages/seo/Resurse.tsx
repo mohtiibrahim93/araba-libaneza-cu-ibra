@@ -94,8 +94,8 @@ const Resurse = () => (
     <p>
       PDF-urile te duc până la primele conversații simple. Dacă vrei corectare pe pronunție și
       progres constant, continuă cu un <Link to="/cursuri-araba">curs de arabă libaneză</Link> —
-      grupe mici A1–C2 <Link to="/cursuri-araba-bucuresti">în București</Link> sau online, ori
-      <Link to="/meditatii-araba"> meditații 1:1</Link> adaptate obiectivului tău.
+      grupe mici A1–C2 <Link to="/cursuri-araba-bucuresti">în București</Link> sau online, ori{" "}
+      <Link to="/meditatii-araba">meditații de arabă 1:1</Link> adaptate obiectivului tău.
     </p>
   </LandingLayout>
 );

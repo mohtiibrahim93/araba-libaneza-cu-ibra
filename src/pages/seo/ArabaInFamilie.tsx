@@ -62,7 +62,7 @@ const ArabaInFamilie = () => (
     <ul>
       <li><strong>Copii 4–10 ani</strong> — <Link to="/curs-araba-copii">curs prin joc, fizic în București</Link>, cântece, povești, jocuri de rol.</li>
       <li><strong>Copii 11–17 ani</strong> — <Link to="/cursuri-araba-adolescenti">cursuri de arabă pentru adolescenți</Link>, cu accent pe conversație și cultură.</li>
-      <li><strong>Părinți</strong> — <Link to="/cursuri/grup">grupa A1 de adulți</Link> sau <Link to="/meditatii-araba">lecții 1:1</Link>; dacă e vorba de socri și relație, vezi <Link to="/araba-pentru-partener">araba pentru partener</Link>.</li>
+      <li><strong>Părinți</strong> — <Link to="/cursuri/grup">grupa A1 de adulți</Link> sau <Link to="/meditatii-araba">meditații de arabă 1:1</Link>; dacă e vorba de socri și relație, vezi <Link to="/araba-pentru-partener">araba pentru partener</Link>.</li>
       <li><strong>Familii în afara Bucureștiului</strong> — <Link to="/araba-online">varianta online</Link>, live pe Zoom.</li>
     </ul>
 

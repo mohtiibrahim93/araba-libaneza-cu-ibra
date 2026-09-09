@@ -85,7 +85,7 @@ const ArabaPentruPartener = () => (
     <h2>Ce format ți se potrivește</h2>
     <p>
       Pentru un obiectiv personal și un termen clar (o vizită, o nuntă, o întâlnire cu socrii),{" "}
-      <Link to="/meditatii-araba">lecțiile private 1:1</Link> sunt cele mai eficiente — lucrăm exact
+      <Link to="/meditatii-araba">meditațiile de arabă 1:1</Link> sunt cele mai eficiente — lucrăm exact
       pe situațiile tale. Dacă vrei ritm constant și costuri mai mici, alege{" "}
       <Link to="/cursuri/grup">cursul de grup A1</Link>, fizic în București sau{" "}
       <Link to="/araba-online">online</Link>. Prima lecție de probă e{" "}
