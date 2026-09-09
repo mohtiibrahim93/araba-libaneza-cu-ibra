@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { courseMenu as courseLinks, resourceMenu as resourceLinks } from "@/lib/siteNav";
 import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
@@ -104,53 +105,12 @@ const Navbar = () => {
     { href: "#contact", label: t.navContact },
   ];
 
-  // Course + resource menus. These give every important landing page at least
-  // one prominent internal link (footer-only links crawl poorly).
-  const courseMenu =
-    lang === "en"
-      ? [
-          { to: "/cursuri/grup", label: "Group course (A1–C2)" },
-          { to: "/cursuri/private", label: "Private lessons" },
-          { to: "/cursuri/copii", label: "Kids (6–10)" },
-          { to: "/en/arabic-for-teenagers", label: "Teens (11–17)" },
-          { to: "/cursuri/adulti", label: "Adults" },
-          { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
-          { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
-        ]
-      : [
-          { to: "/cursuri/grup", label: "Curs de grup (A1–C2)" },
-          { to: "/cursuri/private", label: "Lecții private" },
-          { to: "/cursuri/copii", label: "Copii (6–10)" },
-          { to: "/cursuri-araba-adolescenti", label: "Adolescenți (11–17)" },
-          { to: "/cursuri/adulti", label: "Adulți" },
-          { to: "/cursuri-araba-bucuresti", label: "Cursuri în București" },
-          { to: "/meditatii-araba", label: "Meditații 1:1" },
-        ];
-
-  // In English the resource menu points at the English guides, so the /en/*
-  // pages get real internal links instead of living only in the sitemap.
-  const resourceMenu =
-    lang === "en"
-      ? [
-          { to: "/en/learn-lebanese-arabic", label: "Learn Lebanese Arabic" },
-          { to: "/en/how-to-learn-lebanese-arabic", label: "How to learn it" },
-          { to: "/blog/lebanese-arabic-learning-resources", label: "Free learning resources" },
-          { to: "/blog/lebanese-arabic-phrases", label: "Essential phrases" },
-          { to: "/en/arabic-dialects-guide", label: "Arabic dialects guide" },
-          { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
-        ]
-      : [
-          { to: "/resurse", label: "Resurse gratuite" },
-          { to: "/invata-araba-gratis", label: "Învață araba gratis" },
-          { to: "/arabizi", label: "Arabizi" },
-          { to: "/fara-alfabet-arab", label: "Fără alfabet arab" },
-          { to: "/dialecte-arabe", label: "Dialectele arabe" },
-          { to: "/ce-araba-sa-inveti", label: "Ce arabă să înveți" },
-          { to: "/araba-pentru-partener", label: "Arabă pentru partener" },
-          { to: "/araba-in-familie", label: "Arabă în familie" },
-        ];
-
-
+  // Course + resource menus, from src/lib/siteNav.ts. Shared with the footer,
+  // which renders the same structure as plain anchors — these dropdowns mount
+  // their contents only when opened, so on their own they are invisible to any
+  // crawler that does not run JavaScript.
+  const courseMenu = courseLinks(lang);
+  const resourceMenu = resourceLinks(lang);
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">

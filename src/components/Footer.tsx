@@ -64,6 +64,11 @@ const Footer = () => {
             <li><Link to="/araba-online" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic online" : "Arabă online"}</Link></li>
             <li><Link to="/araba-pentru-partener" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for your partner" : "Arabă pentru partener"}</Link></li>
             <li><Link to="/araba-in-familie" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic in the family" : "Arabă în familie"}</Link></li>
+            {/* These two were reachable only from the navbar dropdown, which
+                mounts its contents when opened and so never reaches the
+                prerendered HTML: both appeared zero times on the homepage. */}
+            <li><Link to="/arabizi" className="hover:text-foreground transition-colors">Arabizi</Link></li>
+            <li><Link to="/fara-alfabet-arab" className="hover:text-foreground transition-colors">{lang === "en" ? "Without the Arabic alphabet" : "Fără alfabet arab"}</Link></li>
           </ul>
         </div>
 
