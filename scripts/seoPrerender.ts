@@ -174,6 +174,9 @@ export function allRoutes(): Route[] {
     description: p.description.ro,
     type: "article" as const,
     published: p.published,
+    // A post that consolidates into another keeps its URL but points its
+    // canonical at the survivor, so the two stop competing for one query.
+    ...(p.canonicalTo ? { canonical: `/blog/${p.canonicalTo}` } : {}),
   }));
   return [...STATIC_ROUTES, ...levelRoutes(), ...blog]
     .map((route) =>

@@ -12,6 +12,7 @@ import ArticleOutline from "@/components/blog/ArticleOutline";
 import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";
+import { BLOG_POSTS } from "@/lib/blogPosts";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -89,6 +90,12 @@ const BlogArticleLayout = ({
 }: Props) => {
   const { lang } = useI18n();
   const url = `${BASE}/blog/${slug}`;
+  // A post that consolidates into another canonicalises to the survivor. Read
+  // from the shared registry rather than a prop so the runtime head and the
+  // one scripts/seoPrerender.ts writes cannot disagree — that drift is what
+  // made /cursuri-araba serve two different titles to two kinds of crawler.
+  const consolidatesInto = BLOG_POSTS.find((p) => p.slug === slug)?.canonicalTo;
+  const canonicalUrl = consolidatesInto ? `${BASE}/blog/${consolidatesInto}` : url;
   // Scoped to the body + FAQ so the outline lists the article's own sections,
   // not the "related posts" and CTA headings that follow every article.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -177,7 +184,7 @@ const BlogArticleLayout = ({
       <Helmet>
         <title>{resolvedMetaTitle}</title>
         <meta name="description" content={resolvedMetaDescription} />
-        <link rel="canonical" href={url} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={resolvedMetaTitle} />
         <meta property="og:description" content={resolvedMetaDescription} />

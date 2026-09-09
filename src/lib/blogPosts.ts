@@ -13,6 +13,15 @@ export interface BlogPostMeta {
   published: string; // ISO date
   readingMinutes: number;
   tag: Localized;
+  /**
+   * Slug of the article this one consolidates into.
+   *
+   * Set when two posts cover the same ground in the same language: the
+   * duplicate keeps its URL and its content for anyone who has the link, and
+   * points its canonical at the survivor so search engines merge the signals
+   * instead of choosing between them. scan-overlap.py finds these.
+   */
+  canonicalTo?: string;
 }
 
 /** Pick a localized string for the current language. */
@@ -91,6 +100,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: "learn-lebanese-arabic",
+    // Near-duplicate of cum-inveti-araba-libaneza: same language, same topic,
+    // near-identical title, and the English slug is misleading because the
+    // content is Romanian. It had 1 impression at position 35 against the
+    // other's established ranking, so the other one is the survivor.
+    canonicalTo: "cum-inveti-araba-libaneza",
     title: {
       ro: "Cum înveți araba libaneză: ghid practic pentru începători",
       en: "Learn Lebanese Arabic: a practical beginner's guide",
