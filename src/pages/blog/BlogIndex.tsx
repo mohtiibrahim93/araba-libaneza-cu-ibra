@@ -35,7 +35,7 @@ const COPY = {
 } as const;
 
 const BlogIndex = () => {
-  const { lang } = useI18n();
+  const { lang, setLang } = useI18n();
   const c = COPY[lang];
   // In English the index lives at /en/blog and links to the English half of
   // each article. Both halves render from the same component; only the URL
@@ -94,10 +94,17 @@ const BlogIndex = () => {
           {/* A real link to the other language, not just the toggle. The toggle
               is JavaScript, so without this the English half of the blog had no
               crawlable path in — twenty articles reachable only by guessing the
-              URL. */}
+              URL.
+
+              It has to set the language as well as navigate. LanguageFromPath
+              forces English on the way *into* /en/ but never restores Romanian
+              on the way out, so following this link from /en/blog used to land
+              on /blog with the English copy still rendering — the link looked
+              like it did nothing. Same two steps the navbar toggle takes. */}
           <p className="text-sm text-muted-foreground mt-4">
             <Link
               to={lang === "en" ? "/blog" : "/en/blog"}
+              onClick={() => setLang(lang === "en" ? "ro" : "en")}
               className="underline underline-offset-4 hover:text-foreground transition-colors"
             >
               {lang === "en" ? "Citește articolele în română" : "Read these articles in English"}

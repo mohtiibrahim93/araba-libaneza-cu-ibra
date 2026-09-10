@@ -78,6 +78,11 @@ describe("English twins", () => {
     // unreachable for anything that does not run JavaScript.
     const index = readFileSync(resolve(process.cwd(), "src/pages/blog/BlogIndex.tsx"), "utf8");
     expect(index).toContain('to={lang === "en" ? "/blog" : "/en/blog"}');
+    // It must switch the language too, not only the URL. LanguageFromPath
+    // forces English into /en/ but never restores Romanian on the way out, so
+    // a bare <Link> landed on /blog with the English copy still rendering and
+    // the link appeared to do nothing.
+    expect(index).toContain('onClick={() => setLang(lang === "en" ? "ro" : "en")}');
     const footer = readFileSync(resolve(process.cwd(), "src/components/Footer.tsx"), "utf8");
     expect(footer).toContain('to={lang === "en" ? "/en/blog" : "/blog"}');
   });
