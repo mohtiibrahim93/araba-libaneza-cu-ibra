@@ -133,7 +133,26 @@ describe("GA4 conversions", () => {
 
   it("guards both purchase call sites against a second send", () => {
     expect(read("src/pages/ThankYou.tsx")).toContain("purchaseSent.current");
-    expect(read("src/pages/PaymentStatus.tsx")).toContain("!trackedRef");
+    expect(read("src/pages/PaymentStatus.tsx")).toContain("purchaseSent.current");
+  });
+
+  it("never counts a sale from a URL parameter", () => {
+    // redirect_status is appended by Stripe on the way back and can be typed by
+    // anyone. It may drive what the visitor is shown, but a purchase must come
+    // from the server having confirmed the payment.
+    const ps = read("src/pages/PaymentStatus.tsx");
+    expect(ps).toContain('return { status: mapped, confirmed: true }');
+    expect(ps).toContain('{ status: "succeeded", confirmed: false }');
+    expect(ps).toMatch(/s === "succeeded" && confirmed &&/);
+  });
+
+  it("sends a real transaction_id or none at all", () => {
+    // "unknown" as a fallback would collapse every such sale into one GA4
+    // transaction, because transaction_id is what GA4 deduplicates on.
+    const ps = read("src/pages/PaymentStatus.tsx");
+    expect(ps).not.toMatch(/transactionId:\s*\n?\s*.*"unknown"/);
+    expect(ps).toContain("const transactionId = paymentIntentId || registrationId;");
+    expect(ps).toMatch(/confirmed && transactionId &&/);
   });
 
   it("cannot send the two key events nothing implements", () => {

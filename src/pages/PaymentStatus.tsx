@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
@@ -34,13 +34,28 @@ const PaymentStatus = () => {
   const [status, setStatus] = useState<Status>("pending");
   const [amount, setAmount] = useState<number>(amountParam || 0);
   const [message, setMessage] = useState<string>("Confirmăm plata...");
-  const [trackedRef, setTrackedRef] = useState(false);
+  // A ref, not state: this guards a side effect that must happen at most once,
+  // and a state update is not visible to the polling closure that set it.
+  const purchaseSent = useRef(false);
+
+  // Stripe's PaymentIntent id, recovered from the client secret. It identifies
+  // the payment itself, so it is the right transaction_id — GA4 deduplicates on
+  // it, which is what makes a page reload harmless.
+  const paymentIntentId = piClientSecret ? piClientSecret.split("_secret")[0] : "";
 
   useEffect(() => {
     let cancelled = false;
     let attempt = 0;
 
-    const check = async (): Promise<Status> => {
+    /**
+     * `confirmed` means the server vouched for this status.
+     *
+     * `redirect_status` is a URL parameter Stripe appends on the way back. It
+     * is good enough to show the visitor a result, but it is not evidence that
+     * money moved — anyone can type it — so `purchase` must never be based on
+     * it. Only the database read below can confirm a sale.
+     */
+    const check = async (): Promise<{ status: Status; confirmed: boolean }> => {
       // 1) DB is source of truth (webhook writes here)
       if (registrationId) {
         try {
@@ -55,38 +70,40 @@ const PaymentStatus = () => {
           if (res.ok) {
             const json = await res.json();
             const mapped = mapRegistrationPaymentStatus(json?.payment_status);
-            if (mapped) return mapped;
+            if (mapped) return { status: mapped, confirmed: true };
           }
         } catch (e) {
           console.warn("[payment-status] fetch failed", e);
         }
       }
 
-      // 3) Final fallback: redirect_status from Stripe
-      if (redirectStatus === "succeeded") return "succeeded";
-      if (redirectStatus === "failed") return "failed";
-      return "pending";
+      // 3) Final fallback: redirect_status from Stripe. Shown to the visitor,
+      //    never counted as a sale — hence confirmed: false.
+      if (redirectStatus === "succeeded") return { status: "succeeded", confirmed: false };
+      if (redirectStatus === "failed") return { status: "failed", confirmed: false };
+      return { status: "pending", confirmed: false };
     };
 
     const loop = async () => {
       while (!cancelled && attempt < MAX_POLLS) {
         attempt += 1;
         try {
-          const s = await check();
+          const { status: s, confirmed } = await check();
           if (cancelled) return;
           if (s !== "pending") {
             setStatus(s);
-            if (s === "succeeded" && !trackedRef) {
-              // Reached only after the poll above reads a settled payment from
-              // the server (or Stripe's redirect_status), never on arrival.
+            // Only a server-confirmed success counts, and only once. The
+            // transaction id must be a real one: "unknown" would collapse
+            // every such sale into a single GA4 transaction.
+            const transactionId = paymentIntentId || registrationId;
+            if (s === "succeeded" && confirmed && transactionId && !purchaseSent.current) {
+              purchaseSent.current = true;
               trackPurchase({
-                transactionId:
-                  registrationId || piClientSecret?.split("_secret")[0] || "unknown",
+                transactionId,
                 value: (amount || amountParam || 0) / 100,
                 currency,
                 courseType,
               });
-              setTrackedRef(true);
             }
             return;
           }
