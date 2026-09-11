@@ -1,10 +1,119 @@
-# centrul de araba libaneza
+# Centrul de Arabă Libaneză cu Ibra
 
-> Cursuri de arabă libaneză cu profesor nativ în București și online — pentru adulți (grup și privat) și copii. Toate nivelurile CEFR (A1–C2).
+> Cursuri de arabă libaneză (dialect levantin) cu profesor nativ, în București
+> și online. Grupe CEFR A1–C2, lecții private 1:1 și curs pentru copii.
+> Lebanese Arabic courses with a native teacher, in Bucharest and online.
 
-## Pages
+Generat la build din registrul de rute — nu edita manual.
 
-- [Home](/): Prezentare generală a cursurilor, instructorul Ibra, programe, prețuri, înscriere și FAQ.
-- [Privacy Policy](/privacy): Cum sunt colectate, folosite și protejate datele personale (GDPR).
-- [Terms & Conditions](/terms): Termenii de utilizare a serviciilor educaționale, înscriere, plăți, anulare.
-- [Unsubscribe](/unsubscribe): Dezabonare de la comunicările prin email.
+## Cursuri
+
+- [Curs de Arabă pentru Copii în București | 6–10 ani](/curs-araba-copii): Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez.
+- [Găsește cursul de arabă potrivit pentru tine](/cursuri): Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc.
+- [Arabă Libaneză pentru Adolescenți | Curs 11–17 ani](/cursuri-araba-adolescenti): Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită.
+- [Cursuri Arabă București 2026 | Prima Lecție Gratuită](/cursuri-araba-bucuresti): Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.
+- [Cursuri Arabă Libaneză A1–C2 | Prețuri și Niveluri](/cursuri-limba-araba): Toate cursurile de arabă libaneză într-un loc: grupe A1–C2, lecții private 1:1 și curs pentru copii, cu prețuri afișate. Probă gratuită de 30 de minute.
+- [Cursuri Arabă Libaneză — Adulți (18+)](/cursuri/adulti): Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București.
+- [Cursuri de Arabă Libaneză pentru Copii — București](/cursuri/copii): Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.
+- [Curs de Grup de Arabă Libaneză (A1–C2) — București & online](/cursuri/grup): Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună.
+- [Curs Arabă A1 în București și Online | Arabă Libaneză](/cursuri/grup/a1): Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.
+- [Curs de Arabă Libaneză A2 — Grup, București & Online](/cursuri/grup/a2): Cursantul descurcă majoritatea situațiilor cotidiene, narează la trecut/viitor și își exprimă opinii simple. Consolidare + gamă conversațională reală.
+- [Curs de Arabă Libaneză B1 – Grup | Ibra](/cursuri/grup/b1): B1 este nivelul la care araba libaneză încetează să mai fie un set de fraze și devine o limbă în care gândești. Cursantul susține conversații pe teme varia
+- [Curs B2 de Arabă Libaneză — Grup, București & Online](/cursuri/grup/b2): B2 este nivelul la care nu mai vorbești doar corect, ci potrivit. Cursantul comută între registre — de la limbajul de stradă la cel formal — negociază, ana
+- [Curs de Arabă Libaneză C1 — Nivel Avansat](/cursuri/grup/c1): Utilizator avansat. Aici începe opțiunea de scriere. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTA
+- [Curs C2 de Arabă Libaneză — Academic și Specializat](/cursuri/grup/c2): Araba libaneză la nivel academic și specializat. FĂRĂ gramatică fuṣḥā completă — fără cazuri, fără declinări. Doar registrul educat și terminologia pe care
+- [Lecții Private de Arabă Libaneză 1:1 — București & online](/cursuri/private): Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.
+
+## Ghiduri și resurse
+
+- [Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid](/araba-in-familie): Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online.
+- [Arabă Libaneză pentru Partener și Familie | Curs 1:1](/araba-pentru-partener): Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București.
+- [Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă](/arabizi): Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.
+- [Rezervă o lecție — Arabă Libaneză cu Ibra](/booking): Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București.
+- [Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană](/ce-araba-sa-inveti): Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute.
+- [Cel mai bun curs de arabă în 2026 | Ghid de alegere](/cel-mai-bun-curs-de-araba): Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi.
+- [Arabisch lernen online — Libanesisch mit Muttersprachler](/de/arabisch-lernen): Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde.
+- [Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb](/dialecte-arabe): Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat.
+- [Pot Învăța Araba Fără Alfabet? Ghid Practic](/fara-alfabet-arab): Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul.
+- [Întrebări frecvente — cursuri de arabă libaneză | Ibra](/intrebari-frecvente): Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica.
+- [Învață Arabă Libaneză Gratis: PDF-uri și Lecții](/invata-araba-gratis): Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători.
+- [Meditații Arabă 1:1 București & Online | 150 lei/oră](/meditatii-araba): Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită.
+- [Test de nivel gratuit — Arabă Libaneză cu Ibra](/quiz): Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare.
+- [Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat](/resurse): Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse.
+- [Lecție gratuită de arabă libaneză | Ibra](/trial): Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.
+
+## Blog
+
+- [Blog — ghiduri și articole despre araba libaneză](/blog): Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă.
+- [Alfabetul arab: cele 28 de litere, cu pronunție în română](/blog/alfabetul-arab-pentru-incepatori): Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.
+- [Araba libaneză vs araba standard (MSA): ce înveți?](/blog/araba-libaneza-vs-araba-standard): Comparație clară între araba libaneză (dialect) și araba standard (Fusha/MSA): utilizări practice, dificultate, context cultural și ce curs să alegi.
+- [Cursuri de arabă pentru copii: ghidul părinților](/blog/araba-pentru-copii-ghidul-parintilor): De la ce vârstă pot învăța copiii arabă libaneză, cum arată o lecție, ce metode funcționează și cum îi ajuți acasă. Ghid practic pentru părinți.
+- [Cât costă cursurile de arabă libaneză în 2026?](/blog/cat-costa-cursurile-de-araba-libaneza): Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.
+- [Cât durează să înveți arabă libaneză?](/blog/cat-dureaza-sa-inveti-araba-libaneza): De cât timp ai nevoie ca să vorbești arabă libaneză: durata pe fiecare nivel (A1–C2), câte ore pe săptămână și ce influențează ritmul. Estimări realiste.
+- [Ce este arabizi și cum îl folosești (cu tabel)](/blog/ce-este-arabizi): Arabizi este araba scrisă cu litere latine și cifre. Ce înseamnă cifrele 2, 3, 5, 7, cum citești și de ce e cea mai rapidă cale să începi să vorbești libaneză.
+- [Cultura libaneză: obiceiuri, mâncare și tradiții](/blog/cultura-libaneza-obiceiuri-mancare-traditii): Un ghid cald despre cultura Libanului: ospitalitatea, mâncarea (mezze, tabbouleh, kibbeh), muzica și tradițiile — contextul viu din spatele limbii.
+- [Cum alegi un profesor de arabă: întrebările esențiale](/blog/cum-alegi-profesor-de-araba): Ghid pentru a alege profesorul de arabă potrivit: ce să întrebi despre experiență, metodă, preț, format și rezultate — plus semnalele de alarmă de evitat.
+- [Cum înveți araba libaneză în 2026: ghid pentru începători](/blog/cum-inveti-araba-libaneza): Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.
+- [Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye](/blog/cum-saluti-in-libaneza): Învață saluturile esențiale în araba libaneză: Mar7aba, Kifak și yalla bye, cu pronunție, scriere arabă și când se folosește fiecare.
+- [De ce merită să înveți arabă în 2026](/blog/de-ce-invatam-araba-in-2026): Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.
+- [Gramatica arabă libaneză: 5 întrebări frecvente](/blog/gramatica-arabei-libaneze): Învață simplu gramatica arabă libaneză: prefixul b-, pronumele, trecutul și ordinea cuvintelor, cu exemple clare și comparații cu MSA.
+- [Cum înveți araba libaneză online (de oriunde)](/blog/invata-araba-libaneza-online): Află cum funcționează cursurile de arabă libaneză online, cum arată o lecție pe Zoom și dacă acest format ți se potrivește.
+- [Resurse pentru araba libaneză: aplicații și podcasturi](/blog/lebanese-arabic-learning-resources): Ghid curat al aplicațiilor, podcasturilor, cărților și serialelor pentru a învăța araba libaneză — dialect libanez, nu MSA. Recomandate de un profesor nativ.
+- [35+ Expresii în Arabă Libaneză pentru Viața de Zi cu Zi](/blog/lebanese-arabic-phrases): Învață 35+ expresii în arabă libaneză pentru saluturi, cafenea, taxi și familie, cu pronunție arabizi, scriere arabă și traducere în română.
+- [Familia în araba libaneză: vocabular complet](/blog/lebanese-family-vocabulary): Vocabularul complet al familiei în araba libaneză: părinți, frați, bunici, unchi/mătuși (mamă vs tată), veri, socri, plus pronumele posesive.
+- [Limbile vorbite în Liban: libaneză, MSA, franceză, engleză](/blog/limbile-vorbite-in-liban): Ghid despre limbile din Liban — araba libaneză, araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.
+- [Numerele în araba libaneză: de la 0 la 1000 (cu tabel)](/blog/numere-in-araba-libaneza): Cum numeri în araba libaneză: cifrele 0–10, zecile, sutele și miile, în arabizi și scriere arabă — plus cum ceri prețul și dai un număr de telefon.
+- [20 de expresii în arabă libaneză pentru începători](/blog/primele-20-de-expresii-libaneze): Cele mai utile 20 de expresii libaneze pentru începători — salut, politețe, cafenea, taxi — scrise în arabizi cu pronunție și traducere.
+
+## English
+
+- [Arabic Classes Near Me — Bucharest & Online | Native Teacher](/en/arabic-classes-near-me): Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month.
+- [Arabic Dialects & Map: Levantine, Egyptian, Gulf & More](/en/arabic-dialects-guide): Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.
+- [Lebanese Arabic Classes for Teenagers | Bucharest & Online](/en/arabic-for-teenagers): Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial.
+- [Arabic Tutor Online — 1-on-1 Lessons | Native Teacher](/en/arabic-tutor): Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min.
+- [Best Arabic Course 2026 — How to Choose | Lebanese vs MSA](/en/best-arabic-course): Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals.
+- [Blog — guides and articles about Lebanese Arabic](/en/blog): Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.
+- [The Arabic Alphabet: 28 Letters and How to Pronounce Them](/en/blog/alfabetul-arab-pentru-incepatori): All 28 Arabic letters with their names and sounds: right-to-left writing, how letters change shape in a word, and the sounds English does not have (ح, ع, ق).
+- [Lebanese Arabic vs Standard Arabic (MSA): what do you learn?](/en/blog/araba-libaneza-vs-araba-standard): A clear comparison between Lebanese Arabic (dialect) and Standard Arabic (Fusha/MSA): practical uses, difficulty, cultural context and which course to choose.
+- [Arabic courses for kids: a parent's guide](/en/blog/araba-pentru-copii-ghidul-parintilor): From what age kids can learn Lebanese Arabic, what a lesson looks like, which methods work and how to help at home. A practical parent's guide.
+- [How much do Lebanese Arabic courses cost in 2026?](/en/blog/cat-costa-cursurile-de-araba-libaneza): Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial. No hidden fees.
+- [How long does it take to learn Lebanese Arabic?](/en/blog/cat-dureaza-sa-inveti-araba-libaneza): How much time you need to speak Lebanese Arabic: duration per level (A1–C2), hours per week and what affects your pace. Realistic estimates.
+- [What is Arabizi and how to use it (with a table)](/en/blog/ce-este-arabizi): Arabizi is Arabic written with Latin letters and numbers. What 2, 3, 5, 7 mean, how to read it and why it's the fastest way to start speaking Lebanese.
+- [Lebanese culture: customs, food and traditions](/en/blog/cultura-libaneza-obiceiuri-mancare-traditii): A warm guide to Lebanese culture: hospitality, food (mezze, tabbouleh, kibbeh), music and traditions — the living context behind the language.
+- [How to choose an Arabic tutor: the essential questions](/en/blog/cum-alegi-profesor-de-araba): A guide to choosing the right Arabic tutor: what to ask about experience, method, price, format and results — plus the red flags to avoid.
+- [How to learn Lebanese Arabic in 2026: a beginner's guide](/en/blog/cum-inveti-araba-libaneza): A step-by-step guide to Lebanese Arabic: how it differs from Fusha, how long it takes, the best methods, common mistakes and your first useful phrases.
+- [How to Greet in Lebanese Arabic: Mar7aba, Kifak and More](/en/blog/cum-saluti-in-libaneza): From 'Mar7aba' to 'yalla bye': the greetings heard daily in Lebanon, with Arabizi, Arabic script and the right moment for each, in masculine and feminine.
+- [Why learn Arabic in 2026 — and why the dialect, not MSA](/en/blog/de-ce-invatam-araba-in-2026): Arabic is one of the world's most spoken languages, demand is rising, and in 2026 dialects have overtaken MSA in online searches.
+- [Lebanese Arabic grammar: the 5 questions learners ask most](/en/blog/gramatica-arabei-libaneze): The five grammar questions Lebanese Arabic learners ask most: the بـ prefix, past-tense verbs, pronouns, word order, and what differs from Standard Arabic.
+- [How to learn Lebanese Arabic online (from anywhere)](/en/blog/invata-araba-libaneza-online): How online Lebanese Arabic courses work: what you need, what a Zoom lesson looks like, whether online is as good as in person and who it's for.
+- [Best Lebanese Arabic resources: apps, podcasts and media](/en/blog/lebanese-arabic-learning-resources): A curated guide to the apps, podcasts, books and TV series worth using to learn Lebanese Arabic — Lebanese dialect, not MSA. Recommended by a native teacher.
+- [35+ Lebanese Arabic Phrases You'll Actually Hear Every Day](/en/blog/lebanese-arabic-phrases): The Lebanese phrases people really use, grouped by situation — greetings, introductions, café, taxi, feelings — each with Arabizi and Arabic script.
+- [Lebanese Arabic family vocabulary: core, extended, in-laws](/en/blog/lebanese-family-vocabulary): The complete family vocabulary in Lebanese Arabic: parents, siblings, grandparents, uncles/aunts (maternal vs paternal), cousins, in-laws.
+- [Languages of Lebanon: Lebanese Arabic, MSA, French, English](/en/blog/limbile-vorbite-in-liban): A complete guide to the languages of Lebanon — Lebanese Arabic, Modern Standard Arabic, French and English. Who speaks what, and why Lebanese Arabic is the key.
+- [Numbers in Lebanese Arabic: from 0 to 1000 (with a table)](/en/blog/numere-in-araba-libaneza): How to count in Lebanese Arabic: digits 0–10, tens, hundreds and thousands, in Arabizi and Arabic script — plus how to ask a price and give a phone number.
+- [The first 20 Lebanese Arabic phrases (with pronunciation)](/en/blog/primele-20-de-expresii-libaneze): The 20 most useful Lebanese phrases for beginners — greetings, politeness, café, taxi — written in Arabizi with pronunciation and translation.
+- [Book a Lesson — Lebanese Arabic with Ibra](/en/booking): Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. No card needed.
+- [Lebanese Arabic Courses — Group, 1-on-1 & Kids](/en/courses): Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.
+- [Lebanese Arabic Courses for Adults (18+)](/en/courses/adults): Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.
+- [Lebanese Arabic for Children (6–10) — Bucharest](/en/courses/children): Lebanese Arabic classes for children aged 6 to 10 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.
+- [Lebanese Arabic Group Course (A1–C2) — Online & Bucharest](/en/courses/group): Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.
+- [Beginner Arabic Course Bucharest & Online — A1](/en/courses/group/a1): Learner can introduce themselves, hold simple daily conversations and handle basic transactions. Oral foundation + Arabizi, no Arabic alphabet.
+- [Lebanese Arabic A2 Group Course — Bucharest & Online](/en/courses/group/a2): Learner handles most everyday situations, narrates in past/future and expresses simple opinions. Consolidation + real conversational range.
+- [Lebanese Arabic B1 Group Course | Ibra](/en/courses/group/b1): B1 is where Lebanese Arabic stops being a set of phrases and becomes a language you think in. You sustain conversations on varied topics, argue a position 
+- [Lebanese Arabic B2 Group Course — Bucharest & Online](/en/courses/group/b2): B2 is where you stop merely speaking correctly and start speaking appropriately. You switch between registers — street language to formal — negotiate, anal
+- [Lebanese Arabic C1 Course — Advanced](/en/courses/group/c1): Advanced user. The writing option begins here. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULT
+- [Lebanese Arabic C2 Course — Academic & Specialised](/en/courses/group/c2): Lebanese Arabic at an academic & specialized level. NO full fuṣḥā grammar — no cases, no declensions. Only the educated register and specialized terminolog
+- [Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest](/en/courses/private): One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.
+- [Lebanese Arabic Course FAQ | Price, Schedule, Levels](/en/faq): Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn.
+- [How to Learn Lebanese Arabic — Step-by-Step Guide (2026)](/en/how-to-learn-lebanese-arabic): Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.
+- [Learn Lebanese Arabic Online | Native Teacher & Free Trial](/en/learn-lebanese-arabic): Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial.
+- [Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)](/en/lebanese-arabic-vs-msa-vs-egyptian): Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher.
+- [Privacy Policy — Lebanese Arabic with Ibra](/en/privacy): How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.
+- [Free Level Test — Lebanese Arabic with Ibra](/en/quiz): Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.
+- [Terms and Conditions — Lebanese Arabic with Ibra](/en/terms): The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.
+- [Free Lebanese Arabic Trial Lesson | Ibra](/en/trial): Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.
+
+## Legal
+
+- [Politica de confidențialitate — Arabă Libaneză cu Ibra](/privacy): Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor.
+- [Termeni și condiții — Arabă Libaneză cu Ibra](/terms): Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile.

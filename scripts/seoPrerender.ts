@@ -490,6 +490,54 @@ function writeSitemap(root: string, routes: Route[]): number {
   return entries.length;
 }
 
+/**
+ * Writes llms.txt from the same route registry as the sitemap.
+ *
+ * The checked-in file listed four pages, three of which were the privacy
+ * policy, the terms and the unsubscribe page. A file whose whole purpose is
+ * telling an AI crawler what a site offers was advertising the legal notices
+ * and nothing else — not one course, guide or article.
+ *
+ * Generated, so it cannot fall behind the site the way a hand-written list
+ * does. Redirects and noindex pages are left out for the same reason they are
+ * left out of the sitemap: they are not answers, they are signposts.
+ */
+function writeLlmsTxt(root: string, routes: Route[]): number {
+  const live = routes.filter((r) => !r.noindex && !r.canonical);
+
+  const section = (heading: string, match: (r: Route) => boolean) => {
+    const rows = live
+      .filter(match)
+      .sort((a, b) => a.path.localeCompare(b.path))
+      .map((r) => `- [${r.title}](${r.path}): ${r.description}`);
+    return rows.length ? `## ${heading}\n\n${rows.join("\n")}\n` : "";
+  };
+
+  const isEn = (r: Route) => r.path.startsWith("/en/");
+  const isBlog = (r: Route) => r.path.startsWith("/blog");
+  const isCourse = (r: Route) => r.path.startsWith("/cursuri") || r.path.startsWith("/curs-");
+  const legal = ["/privacy", "/terms", "/stergere-date"];
+
+  const body =
+    "# Centrul de Arabă Libaneză cu Ibra\n\n" +
+    "> Cursuri de arabă libaneză (dialect levantin) cu profesor nativ, în București\n" +
+    "> și online. Grupe CEFR A1–C2, lecții private 1:1 și curs pentru copii.\n" +
+    "> Lebanese Arabic courses with a native teacher, in Bucharest and online.\n\n" +
+    "Generat la build din registrul de rute — nu edita manual.\n\n" +
+    section("Cursuri", (r) => isCourse(r) && !isEn(r)) +
+    "\n" +
+    section("Ghiduri și resurse", (r) => !isCourse(r) && !isBlog(r) && !isEn(r) && !legal.includes(r.path) && r.path !== "/") +
+    "\n" +
+    section("Blog", (r) => isBlog(r) && !isEn(r)) +
+    "\n" +
+    section("English", isEn) +
+    "\n" +
+    section("Legal", (r) => legal.includes(r.path));
+
+  fs.writeFileSync(path.join(root, "llms.txt"), body);
+  return live.length;
+}
+
 const escAttr = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -704,11 +752,12 @@ export function seoPrerenderPlugin(): Plugin {
           count++;
         }
         const sitemapCount = writeSitemap(root, allRoutes());
+        const llmsCount = writeLlmsTxt(root, allRoutes());
         // eslint-disable-next-line no-console
         console.log(
           `[seo-prerender] wrote static <head> for ${count} routes ` +
             `(${pairs.size / 2} reciprocal RO/EN hreflang pairs), ` +
-            `sitemap.xml with ${sitemapCount} URLs and real lastmod dates.`,
+            `sitemap.xml with ${sitemapCount} URLs and llms.txt with ${llmsCount} pages.`,
         );
 
         // Drift guard: any URL in the sitemap that we don't prerender ships the
