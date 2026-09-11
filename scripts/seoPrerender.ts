@@ -59,7 +59,11 @@ const STATIC_ROUTES: Route[] = [
   // runtime <title> cannot drift apart. Brand-first: the transactional "cursuri
   // de arabă libaneză" query belongs to /cursuri-araba, not here.
   { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
-  { path: "/cursuri", title: "Cursuri Arabă Libaneză — Adulți, Tineri, Copii | Online", description: "Cursuri de arabă libaneză pentru adulți (18+), tineri (11–17) și copii (6–10). Grup sau 1:1, online sau fizic în București. Profesor nativ." },
+  // Not a listing — a three-step chooser (who it is for, how to attend, group
+  // or private) ending on the courses that match. Titled as the tool it is, so
+  // it stops reading like a second copy of /cursuri-limba-araba, which is the
+  // guide that covers the same ground in prose.
+  { path: "/cursuri", title: "Găsește cursul de arabă potrivit pentru tine", description: "Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc." },
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
