@@ -32,7 +32,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "lebanese-arabic-learning-resources",
     title: {
       ro: "Resurse pentru araba libaneză: aplicații și podcasturi",
-      en: "The best Lebanese Arabic learning resources (apps, podcasts, media)",
+      en: "Best Lebanese Arabic resources: apps, podcasts and media",
     },
     description: {
       ro: "Ghid curat al aplicațiilor, podcasturilor, cărților și serialelor pentru a învăța araba libaneză — dialect libanez, nu MSA. Recomandate de un profesor nativ.",
@@ -46,7 +46,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "limbile-vorbite-in-liban",
     title: {
       ro: "Limbile vorbite în Liban: libaneză, MSA, franceză, engleză",
-      en: "Languages of Lebanon: Lebanese Arabic, MSA, French and English",
+      en: "Languages of Lebanon: Lebanese Arabic, MSA, French, English",
     },
     description: {
       ro: "Ghid despre limbile din Liban — araba libaneză, araba standard (MSA), franceza și engleza. Cine ce vorbește și de ce libaneza e cheia.",
@@ -60,7 +60,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "de-ce-invatam-araba-in-2026",
     title: {
       ro: "De ce merită să înveți arabă în 2026",
-      en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
+      en: "Why learn Arabic in 2026 — and why the dialect, not MSA",
     },
     description: {
       ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.",
@@ -78,7 +78,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     },
     description: {
       ro: "Învață 35+ expresii în arabă libaneză pentru saluturi, cafenea, taxi și familie, cu pronunție arabizi, scriere arabă și traducere în română.",
-      en: "The Lebanese phrases people really use, grouped by situation: greetings, introductions, café, taxi, feelings, time. Each one with Arabizi pronunciation and Arabic script, from a native teacher.",
+      en: "The Lebanese phrases people really use, grouped by situation — greetings, introductions, café, taxi, feelings — each with Arabizi and Arabic script.",
     },
     published: "2026-07-24",
     readingMinutes: 7,
@@ -88,7 +88,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "lebanese-family-vocabulary",
     title: {
       ro: "Familia în araba libaneză: vocabular complet",
-      en: "Family vocabulary in Lebanese Arabic (core, extended, in-laws)",
+      en: "Lebanese Arabic family vocabulary: core, extended, in-laws",
     },
     description: {
       ro: "Vocabularul complet al familiei în araba libaneză: părinți, frați, bunici, unchi/mătuși (mamă vs tată), veri, socri, plus pronumele posesive.",
@@ -186,11 +186,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "alfabetul-arab-pentru-incepatori",
     title: {
       ro: "Alfabetul arab: cele 28 de litere, cu pronunție în română",
-      en: "The Arabic Alphabet: 28 Letters, Pronunciation & Why You Can Speak Without It",
+      en: "The Arabic Alphabet: 28 Letters and How to Pronounce Them",
     },
     description: {
       ro: "Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.",
-      en: "The full table of all 28 Arabic letters, each with its name and sound. Right-to-left writing, how letters change shape inside a word, and the sounds that don't exist in English (ح, ع, ق) — from a native Lebanese teacher.",
+      en: "All 28 Arabic letters with their names and sounds: right-to-left writing, how letters change shape in a word, and the sounds English does not have (ح, ع, ق).",
     },
     published: "2026-07-16",
     readingMinutes: 7,
@@ -228,11 +228,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "cum-saluti-in-libaneza",
     title: {
       ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye",
-      en: "How to Greet in Lebanese Arabic: Mar7aba, Kifak & When to Use Each",
+      en: "How to Greet in Lebanese Arabic: Mar7aba, Kifak and More",
     },
     description: {
       ro: "Învață saluturile esențiale în araba libaneză: Mar7aba, Kifak și yalla bye, cu pronunție, scriere arabă și când se folosește fiecare.",
-      en: "From 'Mar7aba' to 'yalla bye': the greetings you hear daily in Lebanon, with Arabizi pronunciation, Arabic script and the right moment for each — including the masculine and feminine forms.",
+      en: "From 'Mar7aba' to 'yalla bye': the greetings heard daily in Lebanon, with Arabizi, Arabic script and the right moment for each, in masculine and feminine.",
     },
     published: "2026-07-16",
     readingMinutes: 4,
@@ -274,7 +274,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     },
     description: {
       ro: "Ghid pas cu pas pentru a învăța araba libaneză: diferența față de araba standard (Fusha), cât durează, cele mai bune metode, greșeli frecvente și fraze utile.",
-      en: "A step-by-step guide to learning Lebanese Arabic: the difference from Standard Arabic (Fusha), how long it takes, the best methods, common mistakes and useful phrases.",
+      en: "A step-by-step guide to Lebanese Arabic: how it differs from Fusha, how long it takes, the best methods, common mistakes and your first useful phrases.",
     },
     published: "2026-07-10",
     readingMinutes: 8,
@@ -284,11 +284,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     slug: "gramatica-arabei-libaneze",
     title: {
       ro: "Gramatica arabă libaneză: 5 întrebări frecvente",
-      en: "Lebanese Arabic grammar: top 5 questions (b-, pronouns, word order)",
+      en: "Lebanese Arabic grammar: the 5 questions learners ask most",
     },
     description: {
       ro: "Învață simplu gramatica arabă libaneză: prefixul b-, pronumele, trecutul și ordinea cuvintelor, cu exemple clare și comparații cu MSA.",
-      en: "A clear guide to the top 5 grammar questions in Lebanese Arabic: the بـ prefix, past-tense verbs with attached pronouns, personal and possessive pronouns, word order, and the key differences from MSA.",
+      en: "The five grammar questions Lebanese Arabic learners ask most: the بـ prefix, past-tense verbs, pronouns, word order, and what differs from Standard Arabic.",
     },
     published: "2026-07-24",
     readingMinutes: 9,

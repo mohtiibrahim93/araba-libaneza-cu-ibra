@@ -63,14 +63,14 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună." },
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
-  { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București." },
+  { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București." },
   { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti" },
   { path: "/cursuri-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description, canonical: "/cursuri-limba-araba" },
   { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
   { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
-  { path: "/intrebari-frecvente", title: "Întrebări frecvente despre cursurile de arabă libaneză | Ibra", description: "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica." },
+  { path: "/intrebari-frecvente", title: "Întrebări frecvente — cursuri de arabă libaneză | Ibra", description: "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica." },
   { path: "/invata-araba", title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.", canonical: "/cursuri-limba-araba" },
   { path: "/cursuri-araba-bucuresti", title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită", description: "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită." },
   { path: "/curs-araba-copii", title: "Curs de Arabă pentru Copii în București | 6–10 ani", description: "Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez." },
@@ -96,10 +96,10 @@ const STATIC_ROUTES: Route[] = [
   // English twins of the remaining bilingual pages. The components already
   // carry both languages; these give the English side an address.
   { path: "/en/trial", title: "Free Lebanese Arabic Trial Lesson | Ibra", description: "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.", lang: "en" },
-  { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free trial lesson or enrol on a Lebanese Arabic course — online or in person in Bucharest.", lang: "en" },
+  { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. No card needed.", lang: "en" },
   { path: "/en/quiz", title: "Free Level Test — Lebanese Arabic with Ibra", description: "Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.", lang: "en" },
-  { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How we collect, use and protect your personal data, in line with GDPR.", lang: "en" },
-  { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms and conditions for using the services of the Lebanese Arabic Center with Ibra.", lang: "en" },
+  { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.", lang: "en" },
+  { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.", lang: "en" },
   { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
   { path: "/en/courses/group", title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest", description: "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.", lang: "en" },
   { path: "/en/courses/private", title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest", description: "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.", lang: "en" },
@@ -109,7 +109,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
   { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic" },
   { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
-  { path: "/en/faq", title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels", description: "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, which dialect to learn, and how the grammar works." },
+  { path: "/en/faq", title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels", description: "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn." },
   { path: "/en/arabic-dialects-guide", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher." },
   { path: "/en/levantine-arabic-dialects-map", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.", lang: "en", canonical: "/en/arabic-dialects-guide" },
   { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month." },
@@ -123,18 +123,18 @@ const STATIC_ROUTES: Route[] = [
   // sitemap — an inconsistency, not a decision.
   { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private" },
   { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
-  { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București." },
+  { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București." },
   { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
-  { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectăm, folosim și protejăm datele tale personale, conform GDPR." },
+  { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor." },
   // Both of these are app routes that had no prerendered page. Anything not
   // prerendered falls back to the SPA shell, which is the homepage's HTML —
   // so a crawler asking for them got the homepage's <head>, canonical and
   // body under a different URL. /stergere-date is the worse of the two: it is
   // linked from the footer of all 62 pages, so it was guaranteed to be
   // crawled. Neither is an SEO target, hence noindex.
-  { path: "/stergere-date", title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra", description: "Cere ștergerea datelor tale personale din evidențele centrului, conform GDPR.", noindex: true },
-  { path: "/cursuri/online", title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra", description: "Pagina s-a mutat. Vezi toate cursurile de arabă libaneză, online și fizic în București.", canonical: "/cursuri" },
-  { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii și condițiile de utilizare a serviciilor Centrului de Arabă Libaneză cu Ibra." },
+  { path: "/stergere-date", title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra", description: "Cere ștergerea datelor tale personale din evidențele Centrului de Arabă Libaneză, conform GDPR. Îți confirmăm pe email în cel mult 30 de zile.", noindex: true },
+  { path: "/cursuri/online", title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra", description: "Pagina cursurilor online s-a mutat. Vezi toate cursurile de arabă libaneză — grup A1–C2, lecții private și curs pentru copii, online sau în București.", canonical: "/cursuri" },
+  { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile." },
 ];
 
 /**
