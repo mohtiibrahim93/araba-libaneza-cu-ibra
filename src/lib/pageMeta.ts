@@ -36,9 +36,9 @@ export interface PageMeta {
 
 export const HOME_META: Record<"ro" | "en", PageMeta> = {
   ro: {
-    title: "Arabă Libaneză cu Ibra — Profesor Nativ în București",
+    title: "Cursuri de arabă în București — Arabă libaneză cu Ibra",
     description:
-      "Ibra, profesor nativ de arabă libaneză în București, predă adulților, adolescenților și copiilor — fizic sau online. Prima lecție de probă e gratuită.",
+      "Cursuri de arabă în București, în dialect libanez, cu Ibra — profesor nativ. Adulți, adolescenți și copii, fizic sau online. Prima lecție de probă e gratuită.",
   },
   en: {
     title: "Lebanese Arabic with Ibra — Native Teacher, Bucharest",

@@ -50,10 +50,11 @@ describe("page meta", () => {
     const home = HOME_META.ro.title.toLowerCase();
     const hub = CURSURI_ARABA_META.title.toLowerCase();
     expect(home).not.toBe(hub);
-    // The homepage leads with the brand; the hub leads with the category.
-    expect(home.startsWith("arabă libaneză cu ibra")).toBe(true);
+    // The homepage targets the local query and still carries the brand;
+    // the hub stays on the generic category term.
+    expect(home).toContain("bucurești");
+    expect(home).toContain("ibra");
     expect(hub.startsWith("cursuri")).toBe(true);
-    // And the homepage no longer opens on the transactional head term.
-    expect(home.startsWith("cursuri")).toBe(false);
+    expect(hub).not.toContain("bucurești");
   });
 });
