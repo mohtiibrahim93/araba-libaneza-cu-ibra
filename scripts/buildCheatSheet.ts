@@ -193,6 +193,36 @@ function findChromium(): string | null {
   return candidates.find((c) => c && existsSync(c)) ?? null;
 }
 
+/**
+ * Fingerprint of the content this PDF is built from.
+ *
+ * Computed before anything is generated, because it decides whether anything
+ * needs to be. A test compares it with a hash recomputed from the current data,
+ * so editing the table without rerunning this script fails the build instead of
+ * silently shipping a PDF that contradicts the site — which is exactly how 6 and
+ * 9 survived in it.
+ */
+const contentHash = createHash("sha256")
+  .update(JSON.stringify({ ARABIZI_DIGITS, PHRASES }))
+  .digest("hex");
+
+const hashFile = resolve(root, "public/arabizi-cheat-sheet.hash");
+const pdfFile = resolve(root, "public/arabizi-cheat-sheet.pdf");
+
+// Nothing to do when the source data is unchanged. Chromium stamps a
+// CreationDate into every PDF it renders, so regenerating unconditionally
+// rewrote the file on every single build — six bytes different, same content —
+// which left the working tree permanently dirty and buried real changes in
+// binary churn. Skipping also saves launching a browser.
+if (
+  existsSync(pdfFile) &&
+  existsSync(hashFile) &&
+  readFileSync(hashFile, "utf8").trim() === contentHash
+) {
+  console.log("[cheat-sheet] arabizi data unchanged — keeping the committed PDF");
+  process.exit(0);
+}
+
 const executablePath = chromium ? findChromium() : null;
 if (!executablePath) {
   console.warn(
@@ -202,7 +232,7 @@ if (!executablePath) {
   process.exit(0);
 }
 
-const out = resolve(root, "public/arabizi-cheat-sheet.pdf");
+const out = pdfFile;
 const browser = await chromium!.launch({ executablePath });
 const page = await browser.newPage();
 await page.setContent(html, { waitUntil: "load" });
@@ -210,15 +240,30 @@ await page.evaluate(() => document.fonts.ready);
 await page.pdf({ path: out, format: "A4", printBackground: true });
 await browser.close();
 
-const bytes = readFileSync(out).length;
-writeFileSync(resolve(root, "scripts/.cheat-sheet-preview.html"), html);
-
-// Fingerprint of the content this PDF was built from. A test compares it with
-// a hash recomputed from the current data, so editing the table without
-// rerunning this script fails the build instead of silently shipping a PDF
-// that contradicts the site — which is exactly how 6 and 9 survived in it.
-writeFileSync(
-  resolve(root, "public/arabizi-cheat-sheet.hash"),
-  createHash("sha256").update(JSON.stringify({ ARABIZI_DIGITS, PHRASES })).digest("hex") + "\n",
+/**
+ * Replace Chromium's build-time timestamps with a fixed one.
+ *
+ * Two regenerations of identical data should produce an identical file. The
+ * replacement is byte-for-byte the same length as what it overwrites, which
+ * matters: a PDF's xref table addresses objects by absolute byte offset, so
+ * shifting anything by even one byte corrupts the file.
+ */
+const FIXED_PDF_DATE = "D:20260101000000+00'00'";
+const raw = readFileSync(out);
+let stamped = raw.toString("latin1");
+stamped = stamped.replace(/D:\d{14}\+00'00'/g, (match) =>
+  match.length === FIXED_PDF_DATE.length ? FIXED_PDF_DATE : match,
 );
+const normalised = Buffer.from(stamped, "latin1");
+if (normalised.length !== raw.length) {
+  throw new Error(
+    `[cheat-sheet] date normalisation changed the file length (${raw.length} → ${normalised.length}); ` +
+      "that would corrupt the PDF xref table, so the original has been kept.",
+  );
+}
+writeFileSync(out, normalised);
+
+const bytes = normalised.length;
+writeFileSync(resolve(root, "scripts/.cheat-sheet-preview.html"), html);
+writeFileSync(hashFile, contentHash + "\n");
 console.log(`[cheat-sheet] wrote ${out} (${(bytes / 1024).toFixed(0)} KB), ${ARABIZI_DIGITS.length} digits, ${PHRASES.length} phrases`);
