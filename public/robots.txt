@@ -3,6 +3,19 @@
 # Bingbot, …) would each need their own copy of the Disallow lines — otherwise
 # the disallows below silently would not apply to those bots. Keeping one
 # wildcard group guarantees admin/checkout/etc. stay off-limits to every crawler.
+#
+# AI crawlers are allowed here ON PURPOSE, and the way to keep it that way is to
+# add nothing. Google-Extended (Gemini grounding and training), GPTBot, ClaudeBot
+# and the rest all match the wildcard group below, so they are already permitted.
+#
+# Do NOT "allow" one of them explicitly. Because a bot obeys only its most
+# specific matching group, a `User-agent: Google-Extended` block would make that
+# crawler stop reading the Disallow lines below — handing it /admin, /checkout
+# and /auth. An explicit allow would be strictly worse than silence.
+#
+# Blocking Google-Extended would remove this site from Gemini's grounding. It
+# has no effect on Search ranking either way.
+#
 User-agent: *
 Allow: /
 Disallow: /admin
