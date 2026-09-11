@@ -116,6 +116,10 @@ const RegistrationFormSection = ({
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
   const [honeypot, setHoneypot] = useState("");
   const [cohortId, setCohortId] = useState<string | null>(null);
+  // The language the chosen class is taught in, which is not necessarily the
+  // language the form was filled in. Kept so the registration records what the
+  // student actually signed up for.
+  const [cohortLanguage, setCohortLanguage] = useState<"ro" | "en" | null>(null);
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
   const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
   const [retryingDeposit, setRetryingDeposit] = useState(false);
@@ -436,6 +440,10 @@ const RegistrationFormSection = ({
         // exactly like a Romanian one, and there was nothing to notice before
         // putting them in a Romanian-language cohort.
         language: lang,
+        // What they want to be taught in — taken from the class they picked, so
+        // a Romanian speaker who chose the English group is recorded as such.
+        // Falls back to the reading language when no cohort applies.
+        teaching_language: cohortLanguage ?? lang,
       });
 
       if (error) throw error;
@@ -618,7 +626,10 @@ const RegistrationFormSection = ({
               groupPlan={groupPlan}
               onGroupPlanChange={setGroupPlan}
               cohortId={cohortId}
-              onCohortChange={(c) => setCohortId(c?.id ?? null)}
+              onCohortChange={(c) => {
+                setCohortId(c?.id ?? null);
+                setCohortLanguage(c?.teaching_language ?? null);
+              }}
               locked={lockSelection && !!defaultLevel}
             />
           )}

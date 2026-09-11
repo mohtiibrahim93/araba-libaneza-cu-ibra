@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 import { Label } from "@/components/ui/label";
@@ -38,8 +39,70 @@ function formatStart(iso: string, lang: "ro" | "en") {
 
 const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: Props) => {
   const { t, lang } = useI18n();
-  // Only cohorts taught in the language this visitor is reading the site in.
-  const { cohorts, loading } = useGroupCohorts(formType, level ?? null, format ?? null, lang);
+  // Fetch every language, then filter here rather than in the query. The
+  // language a student wants to be taught in is not the language they happen to
+  // be reading the site in — someone reading Romanian may want English lessons,
+  // and an English reader should still see Romanian classes when those are the
+  // only ones running. Fetching all of them is also what lets us tell whether
+  // there is a real choice to offer.
+  const { cohorts: allCohorts, loading } = useGroupCohorts(
+    formType,
+    level ?? null,
+    format ?? null,
+    null,
+  );
+
+  const languagesAvailable = useMemo(
+    () => Array.from(new Set(allCohorts.map((c) => c.teaching_language))).sort(),
+    [allCohorts],
+  );
+
+  // Default to the language being read, but only if classes exist in it —
+  // otherwise start on a language that actually has something to join.
+  const [chosen, setChosen] = useState<"ro" | "en" | null>(null);
+  const teachingLanguage: "ro" | "en" =
+    chosen ?? (languagesAvailable.includes(lang) ? lang : (languagesAvailable[0] as "ro" | "en") ?? lang);
+
+  const cohorts = useMemo(
+    () => allCohorts.filter((c) => c.teaching_language === teachingLanguage),
+    [allCohorts, teachingLanguage],
+  );
+
+  // Selecting a different language cannot leave a cohort from the old one
+  // selected underneath.
+  const switchLanguage = (next: "ro" | "en") => {
+    if (next === teachingLanguage) return;
+    setChosen(next);
+    if (selectedCohortId && !allCohorts.some((c) => c.id === selectedCohortId && c.teaching_language === next)) {
+      onSelect(null);
+    }
+  };
+
+  const languageChoice = languagesAvailable.length > 1 && (
+    <div className="space-y-2">
+      <Label>{lang === "en" ? "Language of instruction" : "Limba de predare"} *</Label>
+      <div className="flex flex-wrap gap-2">
+        {(languagesAvailable as ("ro" | "en")[]).map((code) => (
+          <button
+            key={code}
+            type="button"
+            onClick={() => switchLanguage(code)}
+            aria-pressed={code === teachingLanguage}
+            className={cn(
+              "rounded-lg border px-3 py-2 text-sm transition-colors min-h-11",
+              code === teachingLanguage
+                ? "border-primary bg-primary/10 text-primary font-medium"
+                : "border-border hover:border-primary/50",
+            )}
+          >
+            {code === "en"
+              ? lang === "en" ? "English" : "Engleză"
+              : lang === "en" ? "Romanian" : "Română"}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   if (loading) {
     return (
@@ -51,19 +114,23 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
   }
 
   if (cohorts.length === 0) {
-    // Every cohort is Romanian-taught for now, so an English visitor lands here
-    // rather than being shown a class they could not follow. Saying which
-    // language is missing is the difference between "nothing available" and a
-    // student who knows to ask.
+    // No class in the language they picked. The selector stays on screen so
+    // switching back is one click rather than a dead end, and the message still
+    // names the gap — the difference between "nothing available" and a student
+    // who knows to ask.
     return (
-      <div className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-        {lang === "en" ? t.cohortPickerEmptyEn : t.cohortPickerEmpty}
+      <div className="space-y-3">
+        {languageChoice}
+        <div className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+          {teachingLanguage === "en" ? t.cohortPickerEmptyEn : t.cohortPickerEmpty}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
+      {languageChoice}
       <Label>{t.cohortPickerLabel} *</Label>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {cohorts.map((c) => {
