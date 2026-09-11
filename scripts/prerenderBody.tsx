@@ -126,6 +126,12 @@ async function main() {
   // they exist to bounce visitors and to carry a canonical, not to be read. A
   // canonical pointing elsewhere is the tell, so don't flag them as thin.
   const isAlias = new Map(routes.map((r) => [r.path, !!r.canonical && r.canonical !== r.path]));
+  const aliasTarget = new Map(
+    routes
+      .filter((r) => !!r.canonical && r.canonical !== r.path)
+      .map((r) => [r.path, r.canonical as string]),
+  );
+  const titleOf = new Map(routes.map((r) => [r.path, r.title]));
   let done = 0;
   let schemaAdded = 0;
   const failures: Array<{ route: string; reason: string }> = [];
@@ -156,7 +162,42 @@ async function main() {
 
     // A page that renders almost nothing is worse than useless — it would ship
     // an empty-looking body to a crawler while claiming to be prerendered.
-    const text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    let text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+    // Retired URLs render <Navigate>, which produces no markup at all. The head
+    // carried a canonical, but the body was literally empty: no h1, no words, no
+    // outgoing link. A crawler reading the static file sees a blank page, and an
+    // audit reports that three times over — missing h1, low word count, no
+    // outgoing links — across every alias on the site.
+    //
+    // Give them the page they should have been: a sentence saying the address
+    // moved and a real link to where it went. Visitors with JavaScript still get
+    // the instant redirect; everyone else, crawlers included, gets somewhere to
+    // go instead of a dead end.
+    if (isAlias.get(route) && text.length < 40) {
+      const target = aliasTarget.get(route)!;
+      const lang2 = route.startsWith("/en/") ? "en" : "ro";
+      const name = titleOf.get(target) ?? target;
+      const copy =
+        lang2 === "en"
+          ? {
+              h1: "This page has moved",
+              p: `The address <code>${route}</code> is no longer used. Everything that was here now lives on the page below, kept up to date.`,
+              cta: `Go to ${name}`,
+            }
+          : {
+              h1: "Pagina s-a mutat",
+              p: `Adresa <code>${route}</code> nu mai este folosită. Tot ce se afla aici se găsește acum pe pagina de mai jos, ținută la zi.`,
+              cta: `Mergi la ${name}`,
+            };
+      body =
+        `<main style="max-width:42rem;margin:0 auto;padding:4rem 1.25rem">` +
+        `<h1>${copy.h1}</h1><p>${copy.p}</p>` +
+        `<p><a href="${target}">${copy.cta}</a></p>` +
+        `</main>`;
+      text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    }
+
     if (text.length < 200 && !isAlias.get(route)) thin.push({ route, chars: text.length });
 
     let out = html.replace(ROOT_DIV, `<div id="root">${body}</div>`);

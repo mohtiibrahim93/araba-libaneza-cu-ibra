@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
+import { Link as CrossLanguageLink } from "react-router-dom";
 import { ChevronRight, ArrowRight, Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -102,13 +103,16 @@ const BlogIndex = () => {
               on /blog with the English copy still rendering — the link looked
               like it did nothing. Same two steps the navbar toggle takes. */}
           <p className="text-sm text-muted-foreground mt-4">
-            <Link
+            {/* Deliberately NOT the localised Link: this one is meant to cross
+                languages, and LocalizedLink would map /blog straight back to
+                /en/blog and leave the reader where they started. */}
+            <CrossLanguageLink
               to={lang === "en" ? "/blog" : "/en/blog"}
               onClick={() => setLang(lang === "en" ? "ro" : "en")}
               className="underline underline-offset-4 hover:text-foreground transition-colors"
             >
               {lang === "en" ? "Citește articolele în română" : "Read these articles in English"}
-            </Link>
+            </CrossLanguageLink>
           </p>
         </header>
 
