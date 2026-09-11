@@ -84,6 +84,12 @@ const TrialPage = () => {
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim(),
+        // The language the visitor is actually reading the site in. Without it
+        // a trial lead arrived with language NULL, so there was no way to tell
+        // an English enquiry from a Romanian one — which is also what decides
+        // which cohorts they can be offered, since cohorts carry a
+        // teaching_language. Every other registration path already records it.
+        language: lang,
         // Step 1 only captures the lead. Until a slot is picked in step 2 the
         // trial is NOT booked, so it is recorded as "incomplete" rather than as
         // a real lead. booking-create promotes it to "new" once a slot is

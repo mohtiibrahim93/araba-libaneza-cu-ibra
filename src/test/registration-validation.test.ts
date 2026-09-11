@@ -155,6 +155,23 @@ describe("GA4 conversions", () => {
     expect(ps).toMatch(/confirmed && transactionId &&/);
   });
 
+  it("records the visitor's language on every registration", () => {
+    // A lead with language NULL cannot be told apart from a Romanian one, and
+    // language is what decides which cohorts they can join — group_cohorts
+    // carries a teaching_language and the picker filters on it. The trial form
+    // shipped without this, so its leads arrived unattributable.
+    const inserts = ["src/pages/Trial.tsx", "src/components/RegistrationFormSection.tsx"];
+    for (const f of inserts) {
+      const src = read(f);
+      expect(src, `${f} does not insert into registrations`).toContain(
+        'from("registrations").insert(',
+      );
+      expect(src, `${f} inserts a registration without a language`).toMatch(
+        /language:\s*lang\b/,
+      );
+    }
+  });
+
   it("cannot send the two key events nothing implements", () => {
     // close_convert_lead and qualify_lead are GA4 defaults the site never
     // fired; no code path may introduce them.
