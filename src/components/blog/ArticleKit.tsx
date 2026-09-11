@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import { AlertCircle, Target, Wrench } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";

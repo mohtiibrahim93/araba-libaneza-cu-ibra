@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen, Star, ShieldCheck } from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
 

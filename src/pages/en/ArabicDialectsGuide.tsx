@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
 import CreditedFigure from "@/components/content/CreditedFigure";
 import levantineDialectsMap from "@/assets/levantine-dialects-map.png.asset.json";

@@ -51,4 +51,33 @@ describe("localized in-article links", () => {
     expect(src).toContain('import { Link as CrossLanguageLink } from "react-router-dom"');
     expect(src).toMatch(/<CrossLanguageLink\s+to=\{lang === "en" \? "\/blog" : "\/en\/blog"\}/);
   });
+
+  it("routes the shared blog chrome through LocalizedLink too", () => {
+    // The article components were only half the story: the related-posts block,
+    // the inline CTAs and the breadcrumb live in shared components, and those
+    // were still emitting Romanian paths on English pages. Four Romanian links
+    // per English article came from here, not from the articles.
+    for (const f of [
+      "src/components/blog/BlogArticleLayout.tsx",
+      "src/components/blog/ArticleKit.tsx",
+      "src/components/blog/RelatedPosts.tsx",
+      "src/components/ResourcesTeaser.tsx",
+    ]) {
+      expect(read(f), `${f} still imports the plain router Link`).not.toContain(
+        'import { Link } from "react-router-dom"',
+      );
+    }
+  });
+
+  it("never maps an English destination to a Romanian URL", () => {
+    // /arabizi mapped to /blog/lebanese-arabic-learning-resources — the
+    // Romanian address — so a localised link sent English readers back into
+    // Romanian while looking like it had done its job.
+    const src = read("src/lib/languageRoutes.ts");
+    const block = src.split("const EN_FOR_RO")[1].split("};")[0];
+    const offenders = [...block.matchAll(/"([^"]+)":\s*"([^"]+)"/g)]
+      .filter(([, , target]) => !target.startsWith("/en/"))
+      .map(([, from, to]) => `${from} -> ${to}`);
+    expect(offenders).toEqual([]);
+  });
 });

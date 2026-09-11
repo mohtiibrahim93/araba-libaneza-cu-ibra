@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
 import FaqGroups from "@/components/FaqGroups";
 import { allFaqs } from "@/data/faq";

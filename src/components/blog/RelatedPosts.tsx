@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import { ArrowRight } from "lucide-react";
 import { blogPostsNewestFirst, L } from "@/lib/blogPosts";
 import { useI18n } from "@/lib/i18n";

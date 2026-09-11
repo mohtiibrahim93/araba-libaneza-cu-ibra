@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
 import { BookOpen, MessageCircle, Languages } from "lucide-react";
 

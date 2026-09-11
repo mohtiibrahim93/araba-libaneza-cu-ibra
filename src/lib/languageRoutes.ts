@@ -25,9 +25,14 @@ const EN_FOR_RO: Record<string, string> = {
   "/dialecte-arabe": "/en/arabic-dialects-guide",
   "/ce-araba-sa-inveti": "/en/lebanese-arabic-vs-msa-vs-egyptian",
   // Resources / method
-  "/resurse": "/blog/lebanese-arabic-learning-resources",
-  "/invata-araba-gratis": "/blog/lebanese-arabic-learning-resources",
-  "/arabizi": "/blog/lebanese-arabic-learning-resources",
+  // These three point at the resources article, which now has an English URL
+  // of its own. They used to send an English reader to /blog/<slug> — the
+  // Romanian address — which the localised links then treated as the correct
+  // English destination, so a reader clicking "Arabizi guide" on an English
+  // page landed back in Romanian.
+  "/resurse": "/en/blog/lebanese-arabic-learning-resources",
+  "/invata-araba-gratis": "/en/blog/lebanese-arabic-learning-resources",
+  "/arabizi": "/en/blog/lebanese-arabic-learning-resources",
   "/fara-alfabet-arab": "/en/how-to-learn-lebanese-arabic",
   // Conversion and legal pages: bilingual components, one URL per language.
   "/trial": "/en/trial",
