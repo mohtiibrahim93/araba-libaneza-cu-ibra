@@ -13,14 +13,23 @@
  * which forces Google to pick one and splits the signals between them. They now
  * target different intents:
  *
- *   /               brand and teacher — someone looking for Ibra, or for a
- *                   native Lebanese teacher in Bucharest.
- *   /cursuri-araba  the transactional query — courses, levels, prices. This is
- *                   the hub the homepage links to, and the page the blog should
- *                   point at.
+ *   /                         brand, teacher and overview — someone looking for
+ *                             Ibra, or wanting to see who teaches, what starts
+ *                             now and how to begin. No per-level detail: it
+ *                             sends people onward rather than ranking for the
+ *                             course query itself.
+ *   /cursuri-limba-araba      the transactional query — courses, levels,
+ *                             prices, all formats in one place. The hub the
+ *                             homepage links to and the blog points at.
+ *   /cursuri/grup             the actual list of group cohorts A1–C2. Where
+ *                             someone searching for a course to join lands.
+ *   /cursuri-araba-bucuresti  local intent ("cursuri arabă București").
  *
- * Local intent ("cursuri arabă București") deliberately stays with
- * /cursuri-araba-bucuresti rather than being claimed a third time here.
+ * Four pages, four intents, and none of them may lead on another's term. The
+ * homepage title drifted onto "Cursuri de arabă în București" once, which is
+ * the Bucharest page's whole reason to exist — src/test/page-meta.test.ts now
+ * asserts the separation on all four rather than two, because checking only
+ * two is what let that through.
  *
  * One entry per page, imported by both the build script and the component, so
  * they cannot disagree again. The build asserts every title is at most
@@ -36,9 +45,9 @@ export interface PageMeta {
 
 export const HOME_META: Record<"ro" | "en", PageMeta> = {
   ro: {
-    title: "Cursuri de arabă în București — Arabă libaneză cu Ibra",
+    title: "Arabă Libaneză cu Ibra — Profesor Nativ în București",
     description:
-      "Cursuri de arabă în București, în dialect libanez, cu Ibra — profesor nativ. Adulți, adolescenți și copii, fizic sau online. Prima lecție de probă e gratuită.",
+      "Ibra, profesor nativ de arabă libaneză: cine sunt, cum predau, ce grupe încep acum și resurse gratuite ca să începi. Prima lecție de probă e gratuită.",
   },
   en: {
     title: "Lebanese Arabic with Ibra — Native Teacher, Bucharest",

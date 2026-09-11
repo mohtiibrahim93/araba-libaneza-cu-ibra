@@ -44,17 +44,46 @@ describe("page meta", () => {
     expect(read("src/lib/i18n.tsx")).toContain("HOME_META.ro.title");
   });
 
-  it("stops the homepage and /cursuri-araba chasing the same query", () => {
-    // Not a keyword rule — just that one of them is not a copy of the other,
-    // which is what made Google choose between them.
+  it("keeps the four course-intent pages off each other's query", () => {
+    // Four pages, four intents (see the note in src/lib/pageMeta.ts):
+    //   /                        brand, teacher, overview
+    //   /cursuri-limba-araba     the category term — courses, levels, prices
+    //   /cursuri/grup            the list of group cohorts
+    //   /cursuri-araba-bucuresti the local query
+    //
+    // This used to compare only the first two, and the homepage title drifted
+    // onto "Cursuri de arabă în București" — the Bucharest page's entire
+    // reason to exist — without a single test failing. Hence all four.
+    const prerender = read("scripts/seoPrerender.ts");
+    const titleOf = (path: string) => {
+      const line = prerender
+        .split("\n")
+        .find((l) => l.trimStart().startsWith(`{ path: "${path}"`));
+      expect(line, `no prerender entry for ${path}`).toBeDefined();
+      return (line!.match(/title: "([^"]*)"/)?.[1] ?? "").toLowerCase();
+    };
+
     const home = HOME_META.ro.title.toLowerCase();
     const hub = CURSURI_ARABA_META.title.toLowerCase();
-    expect(home).not.toBe(hub);
-    // The homepage targets the local query and still carries the brand;
-    // the hub stays on the generic category term.
-    expect(home).toContain("bucurești");
-    expect(home).toContain("ibra");
+    const local = titleOf("/cursuri-araba-bucuresti");
+    const list = titleOf("/cursuri/grup");
+
+    // All four distinct.
+    expect(new Set([home, hub, local, list]).size).toBe(4);
+
+    // The local query belongs to the Bucharest page, and leads its title.
+    expect(local.startsWith("cursuri arabă bucurești")).toBe(true);
+
+    // The homepage leads on the brand, not on the course or the city.
+    expect(home.startsWith("arabă libaneză cu ibra")).toBe(true);
+    expect(home.startsWith("cursuri")).toBe(false);
+
+    // The hub leads on the category term and stays off the city.
     expect(hub.startsWith("cursuri")).toBe(true);
     expect(hub).not.toContain("bucurești");
+
+    // Only one of them may open on the city.
+    const leadsOnCity = [home, hub, local, list].filter((t) => t.startsWith("cursuri arabă bucurești"));
+    expect(leadsOnCity).toEqual([local]);
   });
 });
