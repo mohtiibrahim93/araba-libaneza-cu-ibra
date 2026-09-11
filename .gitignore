@@ -40,3 +40,6 @@ check-meta-len.mjs
 # Generated preview from scripts/buildCheatSheet.mjs
 scripts/.cheat-sheet-preview.html
 cheatsheet-preview.png
+
+# IndexNow submission record — machine-local, regenerated on each submit.
+scripts/.indexnow-state.json

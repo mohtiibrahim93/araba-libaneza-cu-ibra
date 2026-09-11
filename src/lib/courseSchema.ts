@@ -42,7 +42,7 @@ export const GROUP_WEEKLY_WORKLOAD = "PT3H";
 export const PRIVATE_LESSON_WORKLOAD = "PT1H";
 
 interface InstanceOptions {
-  /** ISO 8601 duration of expected work per `repeatFrequency`. */
+  /** ISO 8601 duration of expected work per repeat, e.g. "PT3H" a week. */
   workload?: string;
   /** e.g. "Weekly". Omit when the schedule is arranged per student. */
   repeatFrequency?: string;
@@ -50,20 +50,41 @@ interface InstanceOptions {
   modes?: readonly CourseMode[];
 }
 
+/** "Weekly" and friends as the ISO 8601 durations Schedule expects. */
+const REPEAT_AS_DURATION: Record<string, string> = {
+  Weekly: "P1W",
+  Daily: "P1D",
+  Monthly: "P1M",
+};
+
 /**
  * Builds the `hasCourseInstance` array. One entry per delivery mode, because
  * `courseMode` describes an instance and the onsite one also carries a place.
+ *
+ * The cadence goes inside a `Schedule` under `courseSchedule`, not straight on
+ * the instance. `repeatFrequency` belongs to Schedule — putting it directly on
+ * a CourseInstance is an undefined property for that type, which is what a
+ * schema.org validator flags, and it was doing so on all eight pages that
+ * describe a course.
  */
 export function courseInstances({
   workload,
   repeatFrequency,
   modes = ["onsite", "online"],
 }: InstanceOptions = {}): Record<string, unknown>[] {
+  const schedule = repeatFrequency
+    ? {
+        courseSchedule: {
+          "@type": "Schedule",
+          repeatFrequency: REPEAT_AS_DURATION[repeatFrequency] ?? repeatFrequency,
+        },
+      }
+    : {};
   return modes.map((mode) => ({
     "@type": "CourseInstance",
     courseMode: mode,
     ...(workload ? { courseWorkload: workload } : {}),
-    ...(repeatFrequency ? { repeatFrequency } : {}),
+    ...schedule,
     ...(mode === "onsite" ? { location: ONSITE_LOCATION } : {}),
     instructor: {
       "@type": "Person",
