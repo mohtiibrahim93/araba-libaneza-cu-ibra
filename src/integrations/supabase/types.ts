@@ -1025,6 +1025,7 @@ export type Database = {
           stripe_subscription_id: string | null
           student_id: string | null
           subscription_status: string | null
+          teaching_language: string | null
           track_preference: string | null
           whatsapp_sent_at: string | null
         }
@@ -1062,6 +1063,7 @@ export type Database = {
           stripe_subscription_id?: string | null
           student_id?: string | null
           subscription_status?: string | null
+          teaching_language?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
@@ -1099,6 +1101,7 @@ export type Database = {
           stripe_subscription_id?: string | null
           student_id?: string | null
           subscription_status?: string | null
+          teaching_language?: string | null
           track_preference?: string | null
           whatsapp_sent_at?: string | null
         }
