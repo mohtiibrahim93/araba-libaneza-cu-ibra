@@ -34,7 +34,7 @@ serve(async (req) => {
       studentName: session.metadata?.student_name || null,
       registrationId: session.metadata?.registration_id || null,
       lineItems:
-        session.line_items?.data.map((li) => ({
+        session.line_items?.data.map((li: { description: string | null; quantity: number | null; amount_total: number }) => ({
           description: li.description,
           quantity: li.quantity,
           amount: li.amount_total,

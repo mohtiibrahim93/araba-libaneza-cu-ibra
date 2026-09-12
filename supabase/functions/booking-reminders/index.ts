@@ -113,8 +113,20 @@ Deno.serve(async (req) => {
       return { stage: stage.key, sent: 0, error: error.message };
     }
 
+    type ReminderRow = {
+      id: string;
+      start_at: string;
+      student_name: string;
+      student_email: string;
+      format: string;
+      meet_link: string | null;
+      manage_token: string;
+      language: string | null;
+    };
+    const rowsTyped = (rows ?? []) as unknown as ReminderRow[];
+
     let sent = 0;
-    for (const r of rows ?? []) {
+    for (const r of rowsTyped) {
       const lang = (r.language as "ro" | "en") ?? "ro";
       sendBookingEmail(
         "booking-reminder",
