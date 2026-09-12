@@ -40,7 +40,8 @@ function isAllowedSenderEmail(email: string) {
  * — so a forgotten field can never refund a student less than they are owed.
  */
 async function refundInputsFor(
-  supabase: ReturnType<typeof createClient>,
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
   stripe: Stripe,
   reg: Record<string, unknown>,
   lessonsTaken: number,
@@ -79,11 +80,12 @@ async function refundInputsFor(
   // The start date decides which of the three tiers applies.
   let courseStartsAt: string | null = null;
   if (reg.cohort_id) {
-    const { data: cohort } = await supabase
+    const { data: cohortData } = await supabase
       .from("group_cohorts")
       .select("start_date")
       .eq("id", reg.cohort_id)
       .maybeSingle();
+    const cohort = cohortData as { start_date: string | null } | null;
     if (cohort?.start_date) courseStartsAt = `${cohort.start_date}T00:00:00.000Z`;
   }
 

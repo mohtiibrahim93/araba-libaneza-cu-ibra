@@ -201,7 +201,7 @@ function levelRoutes(): Route[] {
 function levelRoutesEn(): Route[] {
   const en = getCurriculum("en");
   return (["a1", "a2", "b1", "b2", "c1", "c2"] as const)
-    .map((id) => {
+    .map((id): Route | null => {
       const lvl = en.find((l) => l.id === id);
       if (!lvl) return null;
       return {
