@@ -61,3 +61,27 @@ export const CURSURI_ARABA_META: PageMeta = {
   description:
     "Toate cursurile de arabă libaneză într-un loc: grupe A1–C2, lecții private 1:1 și curs pentru copii, cu prețuri afișate. Probă gratuită de 30 de minute.",
 };
+
+/**
+ * /joaca — the Yalla practice game.
+ *
+ * A fifth intent, and deliberately not a sixth course page: nobody searching
+ * "cursuri de arabă" should land here, and nothing here competes for that term.
+ * It targets free practice ("exerciții", "joc") — people who want to drill
+ * rather than enrol — and its job is to send them on to a course once they do.
+ *
+ * The game itself is a static app under /public/yalla, embedded on this page.
+ * Its own /yalla/index.html is kept out of the index via robots.txt so it
+ * cannot become a second, chrome-less crawl destination for the same content.
+ *
+ * Romanian only, and there is no English twin on purpose: the learner content
+ * is written in Romanian throughout (Romanian is the only translation language
+ * the card bank carries), so an /en/ URL would promise a translation that does
+ * not exist. A route with no declared twin emits no hreflang, which is correct
+ * here rather than a gap.
+ */
+export const JOACA_META: PageMeta = {
+  title: "Joacă și învață arabă libaneză — exerciții gratuite",
+  description:
+    "Exersează araba libaneză gratuit: peste 4.300 de expresii cu sens în română, exerciții, potriviri și recapitulări programate. Fără cont, direct în browser.",
+};

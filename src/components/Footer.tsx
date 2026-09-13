@@ -58,6 +58,10 @@ const Footer = () => {
             {lang === "en" ? "Free & situations" : "Gratuit & situații"}
           </p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+            {/* The practice game. Same reason as the two below: the navbar
+                dropdown mounts its contents only when opened, so without this
+                the page would be linked nowhere a crawler can see. */}
+            <li><Link to="/joaca" className="hover:text-foreground transition-colors">{lang === "en" ? "Practice game (in Romanian)" : "Joacă și învață"}</Link></li>
             <li><Link to="/resurse" className="hover:text-foreground transition-colors">{lang === "en" ? "Free resources" : "Resurse gratuite"}</Link></li>
             <li><Link to="/invata-araba-gratis" className="hover:text-foreground transition-colors">{lang === "en" ? "Learn Arabic free" : "Învață araba gratis"}</Link></li>
             <li><Link to="/araba-pentru-partener" className="hover:text-foreground transition-colors">{lang === "en" ? "Arabic for your partner" : "Arabă pentru partener"}</Link></li>

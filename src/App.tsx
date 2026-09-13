@@ -22,6 +22,7 @@ const Booking = lazyWithRetry(() => import("./pages/Booking"));
 const BookingManage = lazyWithRetry(() => import("./pages/BookingManage"));
 const Trial = lazyWithRetry(() => import("./pages/Trial"));
 const Quiz = lazyWithRetry(() => import("./pages/Quiz"));
+const Joaca = lazyWithRetry(() => import("./pages/Joaca"));
 const Auth = lazyWithRetry(() => import("./pages/Auth"));
 const Admin = lazyWithRetry(() => import("./pages/Admin"));
 const AdminNotifications = lazyWithRetry(() => import("./pages/AdminNotifications"));
@@ -191,6 +192,9 @@ const App = ({ Router = BrowserRouter, lang }: AppProps = {}) => (
             <Route path="/booking/manage/:token" element={<BookingManage />} />
             <Route path="/trial" element={<Trial />} />
             <Route path="/quiz" element={<Quiz />} />
+            {/* Romanian only: the game's card bank carries Romanian meanings
+                alone, so there is no /en twin to pair it with. */}
+            <Route path="/joaca" element={<Joaca />} />
             {/* English twins of the remaining bilingual pages. All five already
                 carry a full English copy (a COPY[lang] object or i18n keys); they
                 simply had no English URL, so the English text could not be
