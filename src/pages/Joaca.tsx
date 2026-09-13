@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
+import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -24,6 +26,8 @@ import { JOACA_META } from "@/lib/pageMeta";
  */
 const COPY = {
   ro: {
+    home: "Acasă",
+    crumb: "Joacă",
     eyebrow: "Gratuit · fără cont",
     h1: "Joacă și învață arabă libaneză",
     intro:
@@ -42,6 +46,8 @@ const COPY = {
     ctaTrial: "Lecție de probă gratuită",
   },
   en: {
+    home: "Home",
+    crumb: "Play",
     eyebrow: "Free · no account",
     h1: "Play and learn Lebanese Arabic",
     intro:
@@ -86,8 +92,20 @@ const Joaca = () => {
 
       <Navbar />
 
-      <main id="main-content" className="flex-1 pt-20">
-        <header className="w-full max-w-content mx-auto px-gutter pt-6 pb-8 text-center">
+      <main id="main-content" className="flex-1 pt-16">
+        <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground">
+          <ol className="flex flex-wrap items-center gap-1">
+            <li>
+              <Link to="/" className="transition-colors hover:text-foreground">{c.home}</Link>
+            </li>
+            <li aria-hidden="true">
+              <ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" />
+            </li>
+            <li className="font-medium text-foreground" aria-current="page">{c.crumb}</li>
+          </ol>
+        </nav>
+
+        <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
           <span className="text-sm font-medium text-primary mb-2 block">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
@@ -102,38 +120,34 @@ const Joaca = () => {
           )}
         </header>
 
-        <div className="w-full max-w-content mx-auto pb-section">
+        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
           <YallaGame lang={lang} />
         </div>
 
         {/* Prose below the frame. A page whose only content sits inside an
             iframe reads as empty to a crawler: iframe content never counts
             toward the embedding page. */}
-        <section className="mx-auto w-full max-w-2xl space-y-8 px-gutter pb-section text-left">
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">{c.howH2}</h2>
-            <p className="text-muted-foreground leading-relaxed">{c.howP}</p>
-          </div>
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">{c.progressH2}</h2>
-            <p className="text-muted-foreground leading-relaxed">{c.progressP}</p>
-          </div>
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">{c.courseH2}</h2>
-            <p className="text-muted-foreground leading-relaxed">{c.courseP}</p>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                to="/cursuri-limba-araba"
-                className="inline-flex items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
-              >
-                {c.ctaCourses}
-              </Link>
-              <Link
-                to="/trial"
-                className="inline-flex items-center rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:border-primary/50 transition-colors"
-              >
-                {c.ctaTrial}
-              </Link>
+        <section className="w-full bg-cream">
+          <div className="mx-auto grid w-full max-w-content gap-8 px-gutter py-section sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+            <div className="space-y-3">
+              <h2 className="font-display text-2xl font-bold text-foreground">{c.howH2}</h2>
+              <p className="leading-relaxed text-muted-foreground">{c.howP}</p>
+            </div>
+            <div className="space-y-3">
+              <h2 className="font-display text-2xl font-bold text-foreground">{c.progressH2}</h2>
+              <p className="leading-relaxed text-muted-foreground">{c.progressP}</p>
+            </div>
+            <div className="space-y-3 sm:col-span-2 lg:col-span-1">
+              <h2 className="font-display text-2xl font-bold text-foreground">{c.courseH2}</h2>
+              <p className="leading-relaxed text-muted-foreground">{c.courseP}</p>
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row lg:flex-col xl:flex-row">
+                <Button asChild>
+                  <Link to="/cursuri-limba-araba">{c.ctaCourses}</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/trial">{c.ctaTrial}</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
