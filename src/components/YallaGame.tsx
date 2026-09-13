@@ -15,6 +15,7 @@
  * does; the game's own transfer control is how a learner moves progress.
  */
 import { useEffect, useState } from "react";
+import { ExternalLink } from "lucide-react";
 
 type YallaGameProps = {
   /** Which of the game's own views to open on. `journey` is the practice game. */
@@ -54,15 +55,17 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
   useEffect(() => setMounted(true), []);
 
   return (
-    <section aria-label={c.label} className="w-full">
-      <div className="mb-3 flex justify-end px-gutter">
+    <section aria-label={c.label} className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <div className="flex min-h-12 items-center justify-between gap-4 border-b border-border bg-muted/30 px-4 sm:px-5">
+        <span className="truncate text-sm font-semibold text-foreground">Yalla</span>
         <a
           href={src}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-medium text-primary underline underline-offset-4 hover:text-foreground transition-colors"
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-foreground"
         >
-          {c.open} ↗
+          {c.open}
+          <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
       </div>
       {/* `key` forces a remount when the mode changes: the game reads its view
@@ -73,8 +76,7 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
         src={mounted ? src : undefined}
         title={TITLES[mode]}
         allow="microphone 'self'"
-        className="w-full rounded-2xl border border-border bg-card"
-        style={{ height: "85dvh", minHeight: 600 }}
+        className="block h-[78dvh] min-h-[38rem] max-h-[56rem] w-full border-0 bg-card"
       />
     </section>
   );
