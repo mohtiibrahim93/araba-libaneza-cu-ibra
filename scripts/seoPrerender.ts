@@ -68,7 +68,7 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
   { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
   { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București." },
-  { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti" },
+  { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti", noindex: true },
   { path: "/cursuri-araba", title: "Cursuri de arabă: pagina s-a mutat | Ibra", description: "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.", canonical: "/cursuri-limba-araba" },
   { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
@@ -149,16 +149,11 @@ const STATIC_ROUTES: Route[] = [
  * crawlers the consolidation signal a client-side redirect cannot. They are
  * deliberately absent from the sitemap.
  *
- * They carry a canonical and NOT noindex, because the two contradict each
- * other. A canonical says "this page and the target are the same thing, merge
- * them"; noindex says "drop this page". Google resolves that conflict by
- * honouring the noindex — and a page it has dropped is a page whose canonical
- * it never processes, so the consolidation signal is thrown away along with
- * whatever links the old URL had earned. Worse, Google has documented the
- * noindex propagating along the canonical to the target, which would put
- * /cursuri-araba and /en/learn-lebanese-arabic at risk from their own aliases.
- * Being absent from the sitemap is what keeps them from being promoted; the
- * canonical is what makes them useful.
+ * Most aliases carry a canonical and stay out of the sitemap. /cursuri/tineri
+ * additionally carries noindex because it is a retired route with its own
+ * move-notice page; the live replacement remains self-canonical and indexable.
+ * Replace this client-side handling with a server-side permanent redirect if
+ * the hosting platform adds path-level redirect support.
  *
  * /stergere-date is different: noindex with no canonical, because it is a
  * genuinely private page rather than a duplicate of anything.
