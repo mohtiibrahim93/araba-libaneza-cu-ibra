@@ -1,6 +1,6 @@
 import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
-import { BookOpen, MessageCircle, Languages } from "lucide-react";
+import { BookOpen, MessageCircle, Languages, Gamepad2 } from "lucide-react";
 
 const ResourcesTeaser = () => {
   const { lang } = useI18n();
@@ -68,6 +68,33 @@ const ResourcesTeaser = () => {
             </Link>
           ))}
         </div>
+
+        {/* The practice game. Deliberately one wide card under the grid rather
+            than a fourth item in it: the grid is three columns at lg, so a
+            fourth card would leave a gap on the row. It is also not a guide —
+            the others are things you read, this is something you use. */}
+        <Link
+          to="/joaca"
+          className="group mt-6 flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-sm hover:shadow-md transition-all [overflow-wrap:anywhere]"
+        >
+          <span className="inline-flex shrink-0 items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
+            <Gamepad2 className="w-6 h-6" />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-lg font-semibold group-hover:text-primary transition-colors">
+              {isEn ? "Practice game (in Romanian)" : "Joacă și învață"}
+            </span>
+            <span className="block text-sm text-muted-foreground">
+              {isEn
+                ? "Over 4,300 expressions with spaced review, free and with no account. The game itself is in Romanian."
+                : "Peste 4.300 de expresii, cu recapitulări programate. Gratuit, fără cont, direct în browser."}
+            </span>
+          </span>
+          <span className="ml-auto hidden shrink-0 text-sm font-medium text-primary sm:inline-flex items-center">
+            {isEn ? "Play" : "Joacă"}
+            <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+          </span>
+        </Link>
 
         <div className="mt-10 text-center">
           <Link

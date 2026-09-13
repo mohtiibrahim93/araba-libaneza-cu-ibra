@@ -7,7 +7,7 @@ import { getCurriculum } from "../src/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "../src/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "../src/data/faq";
-import { CURSURI_ARABA_META, HOME_META } from "../src/lib/pageMeta";
+import { CURSURI_ARABA_META, HOME_META, JOACA_META } from "../src/lib/pageMeta";
 
 /**
  * Build-time SEO prerender.
@@ -71,6 +71,9 @@ const STATIC_ROUTES: Route[] = [
   { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti", noindex: true },
   { path: "/cursuri-araba", title: "Cursuri de arabă: pagina s-a mutat | Ibra", description: "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.", canonical: "/cursuri-limba-araba" },
   { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
+  // Free practice, not a sixth course page. No twin: the card bank is Romanian
+  // only, so an /en URL would advertise a translation that does not exist.
+  { path: "/joaca", title: JOACA_META.title, description: JOACA_META.description },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
   { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },

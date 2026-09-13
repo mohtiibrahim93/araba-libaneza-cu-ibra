@@ -16,8 +16,18 @@
 # Blocking Google-Extended would remove this site from Gemini's grounding. It
 # has no effect on Search ranking either way.
 #
+# /yalla/ is the practice game's own static app, embedded on /joaca. It is shut
+# out here so it cannot become a second crawl destination for the same content:
+# it renders the same game with no header, footer or explanatory prose, and an
+# indexed /yalla/index.html would compete with /joaca for the same queries while
+# being the worse result. Nothing is lost by blocking it — iframe content never
+# counts toward the page that embeds it, so /joaca ranks on its own prose either
+# way. Visitors and the "open full screen" link are unaffected; robots.txt binds
+# crawlers, not browsers.
+#
 User-agent: *
 Allow: /
+Disallow: /yalla/
 Disallow: /admin
 Disallow: /admin/
 Disallow: /private-status/
