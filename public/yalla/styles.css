@@ -34,3 +34,16 @@
 @media(max-width:700px){.learning-next{padding:1.3rem}.learning-row{padding:1rem;gap:.6rem}.teacher-editor,.speaking-card{padding:1rem}.sidebar nav{max-height:none}.lesson-actions .btn{font-size:.875rem}.academy-toolbar{align-items:stretch}.academy-toolbar label{min-width:100%}.learning-next h2,.speaking-card h2{font-size:1.6rem}}
 
 .level-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin:0 0 1.5rem}.level-path button{display:flex;flex-direction:column;gap:.4rem;padding:1rem;text-align:left;border:1px solid #c7d5e9;border-radius:12px;background:white;color:#253854;font:inherit;min-width:0}.level-path button.selected{background:#254fbd;color:white;border-color:#254fbd}.level-path b{font-size:1.3rem}.level-path span{font-weight:600;font-size:1rem}.level-path small{font-size:.875rem;opacity:.85}.level-path button:focus-visible{outline:3px solid #ffbf47;outline-offset:3px}@media(max-width:850px){.level-path{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Write-it-again after a wrong answer. Practice only: the round result and the
+   review date were both decided when the answer was checked, so this changes
+   neither. It exists because being told the right answer and having to move on
+   is not the same as producing it yourself. */
+.fix-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.75rem}
+.fix-row label{font-size:.8rem;font-weight:600;opacity:.8;flex:0 0 auto}
+.fix-row input{flex:1 1 8rem;min-width:0;padding:.5rem .65rem;border-radius:.6rem;
+  border:1px solid rgba(0,0,0,.18);font:inherit;background:#fff;color:inherit}
+.fix-row .btn{flex:0 0 auto}
+.fix-row.done{font-size:.9rem;font-weight:600}
+.fix-row.done svg{width:1.1rem;height:1.1rem;flex:0 0 auto}
+.fix-note{margin:.4rem 0 0;font-size:.78rem;opacity:.72;line-height:1.45}
