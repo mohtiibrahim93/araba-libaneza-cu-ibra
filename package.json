@@ -11,8 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "indexnow": "vite-node scripts/submitIndexNow.ts",
-    "corrections": "vite-node scripts/applyCorrections.ts --"
+    "indexnow": "vite-node scripts/submitIndexNow.ts"
   },
   "dependencies": {
     "@fontsource/lora": "^5.2.8",
