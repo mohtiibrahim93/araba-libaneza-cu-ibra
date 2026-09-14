@@ -1,16 +1,14 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import ActiveCoursesBanner from "@/components/ActiveCoursesBanner";
 import SocialProofStrip from "@/components/SocialProofStrip";
 import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
 import CulturalValueSection from "@/components/CulturalValueSection";
 import ResourcesTeaser from "@/components/ResourcesTeaser";
 import InstructorSection from "@/components/InstructorSection";
-import ProgramsSection from "@/components/ProgramsSection";
 
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
@@ -22,6 +20,27 @@ import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
 import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
+
+/**
+ * The only two homepage sections that read from Supabase, split out of the
+ * first-load bundle.
+ *
+ * Every other section on this page is static. These two are not: the banner
+ * reads live cohorts and the programs grid reads group capacity, and pulling
+ * in the Supabase client for them put 216 KB of JavaScript (56 KB gzipped) on
+ * the critical path — modulepreloaded, so the browser fetched it before the
+ * page could paint, for data that is not on screen at first paint anyway.
+ *
+ * Nothing is lost to search. Their live data was never in the prerendered
+ * HTML — it arrives from a client fetch either way — and the prerender awaits
+ * lazy boundaries before it writes the file, so their static copy is still in
+ * index.html. The build asserts exactly that; see the guard in
+ * src/test/homepage-critical-path.test.ts.
+ *
+ * The fallbacks reserve height so the page does not jump when each arrives.
+ */
+const ActiveCoursesBanner = lazy(() => import("@/components/ActiveCoursesBanner"));
+const ProgramsSection = lazy(() => import("@/components/ProgramsSection"));
 
 const PageContent = () => {
   const { lang, t } = useI18n();
@@ -179,10 +198,14 @@ const PageContent = () => {
       <Navbar />
       <main id="main-content">
         <HeroSection />
-        <ActiveCoursesBanner />
+        <Suspense fallback={<div className="min-h-[18rem]" aria-hidden="true" />}>
+          <ActiveCoursesBanner />
+        </Suspense>
         <SocialProofStrip />
         <StepsSection />
-        <ProgramsSection />
+        <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
+          <ProgramsSection />
+        </Suspense>
         <WhySection />
         <CulturalValueSection />
         <ResourcesTeaser />
