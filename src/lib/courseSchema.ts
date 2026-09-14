@@ -35,13 +35,14 @@ export const ORGANIZATION_SAME_AS: readonly string[] = [
   // Tutoring platforms and directories, where the business is listed under its
   // own name with reviews attached.
   "https://preply.com/en/tutor/471612",
-  "https://www.superprof.com.ro/profesor-care-preda-limba-romana-celor-care-vorbesc-limba-araba.html",
+  "https://www.superprof.com.ro/vorbitor-nativ-araba-libaneza-experiente-peste-ani-predarea-dialectul-libanez.html",
   "https://meditatii.ro/meditatii/limba-araba-ibrahim-gabriel-moaty-26623",
   "https://anunturi-meditatii.ro/araba/meditator-ibrahim-gabriel_52392",
   "https://www.olx.ro/d/oferta/araba-libaneza-cu-ibra-IDgE526.html",
   // Social profiles.
   "https://www.instagram.com/culturalibanezaro",
   "https://www.tiktok.com/@lebanesewithibra",
+  "https://www.facebook.com/share/1FKpnqyggC/",
 ] as const;
 
 export const COURSE_PROVIDER = {
