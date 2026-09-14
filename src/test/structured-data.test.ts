@@ -58,3 +58,45 @@ describe("Helmet structured data reaches the built HTML", () => {
     }
   });
 });
+
+/**
+ * sameAs has to point somewhere other than this site.
+ *
+ * It read `${BASE_URL}/` on every page carrying the provider schema, which
+ * says "this organisation is also itself". The field exists to tie the site
+ * to independent profiles so search engines can read them as one entity, and
+ * a self-reference ties it to nothing — the markup was present, valid, and
+ * doing no work at all.
+ */
+describe("Organization sameAs", () => {
+  const schema = readFileSync(resolve(process.cwd(), "src/lib/courseSchema.ts"), "utf8");
+
+  it("is defined once and reused, not copied per page", () => {
+    expect(schema).toContain("export const ORGANIZATION_SAME_AS");
+    for (const f of [
+      "src/components/course/CourseLayout.tsx",
+      "src/pages/courses/CourseDetail.tsx",
+    ]) {
+      const src = readFileSync(resolve(process.cwd(), f), "utf8");
+      expect(src, `${f} should reuse the shared list`).toContain("sameAs: ORGANIZATION_SAME_AS");
+      expect(src, `${f} still has a hand-rolled sameAs`).not.toMatch(/sameAs: `\$\{BASE_URL\}/);
+    }
+  });
+
+  it("never lists this site as its own sameAs", () => {
+    const block = schema.slice(
+      schema.indexOf("ORGANIZATION_SAME_AS"),
+      schema.indexOf("COURSE_PROVIDER"),
+    );
+    expect(block).not.toContain("BASE_URL");
+    expect(block).not.toContain("centruldearabalibaneza.com");
+  });
+
+  it("lists at least one real external profile", () => {
+    const block = schema.slice(
+      schema.indexOf("ORGANIZATION_SAME_AS"),
+      schema.indexOf("COURSE_PROVIDER"),
+    );
+    expect(block).toMatch(/https:\/\/[a-z0-9.-]+\.[a-z]{2,}/);
+  });
+});

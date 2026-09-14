@@ -18,10 +18,28 @@ const BASE_URL = "https://centruldearabalibaneza.com";
 
 export type CourseMode = "onsite" | "online";
 
+/**
+ * Profiles that identify this organisation elsewhere on the web.
+ *
+ * sameAs used to be `${BASE_URL}/` — the markup said "this organisation is
+ * also itself", which is a tautology and tells Google nothing. The field
+ * exists to connect the site to independent profiles so they can be read as
+ * one entity, and a self-reference connects it to nothing.
+ *
+ * Only real, verifiable profiles belong here. A sameAs pointing at a page
+ * that does not exist, or does not clearly belong to this business, is worse
+ * than an empty list. Add social and directory profiles as they are
+ * confirmed.
+ */
+export const ORGANIZATION_SAME_AS: readonly string[] = [
+  "https://preply.com/en/tutor/471612",
+] as const;
+
 export const COURSE_PROVIDER = {
   "@type": "Organization",
   name: "Centrul de Arabă Libaneză cu Ibra",
-  sameAs: `${BASE_URL}/`,
+  url: `${BASE_URL}/`,
+  sameAs: ORGANIZATION_SAME_AS,
 } as const;
 
 /** The one physical venue, matching the address shown in the footer. */

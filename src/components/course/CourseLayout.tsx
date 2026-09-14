@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useI18n } from "@/lib/i18n";
+import { ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -81,7 +82,8 @@ const CourseLayout = ({
     provider: {
       "@type": "Organization",
       name: "Centrul de Arabă Libaneză cu Ibra",
-      sameAs: `${BASE_URL}/`,
+      url: `${BASE_URL}/`,
+      sameAs: ORGANIZATION_SAME_AS,
     },
     ...courseSchema,
   };

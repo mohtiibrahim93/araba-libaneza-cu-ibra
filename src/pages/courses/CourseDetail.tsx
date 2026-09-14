@@ -11,6 +11,7 @@ import { useI18n } from "@/lib/i18n";
 import { courseStatusBadge, courseTitle, MODALITY_LABELS, type CourseContent } from "@/lib/courses";
 import { courseFallback } from "@/lib/courseFallback";
 import type { FormatType, LevelType } from "@/components/RegistrationForm/types";
+import { ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -123,7 +124,8 @@ const CourseDetail = () => {
     provider: {
       "@type": "Organization",
       name: "Centrul de Arabă Libaneză cu Ibra",
-      sameAs: `${BASE_URL}/`,
+      url: `${BASE_URL}/`,
+      sameAs: ORGANIZATION_SAME_AS,
     },
     hasCourseInstance: {
       "@type": "CourseInstance",
