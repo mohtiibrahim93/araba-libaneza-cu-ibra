@@ -144,17 +144,33 @@
   }
   const hint=s.hinted&&!s.answered&&q.type!=='learn'?`<div class="hint-box">${icon('info')}<span>${grammar?h(q.drill.note):q.type==='reverse'?h(c.note||'Sensul începe cu: '+c.ro.slice(0,Math.max(1,Math.ceil(c.ro.length/3)))+'…'):'Începe cu: <b>'+h(c.ar.slice(0,Math.max(1,Math.ceil(c.ar.length/3))))+'…</b>'} <small>Cu indiciu, cardul rămâne de exersat.</small></span></div>`:'';
   const feedback=s.answered?`<div class="feedback ${s.result?'positive':'negative'}" role="status"><div class="feedback-symbol">${icon(s.result?'check':'refresh')}</div><div><strong>${s.result?(s.hinted?'Ai găsit! Încearcă data viitoare fără indiciu.':s.streak>=3?'Ktiir mnii7! Continuă așa.':'Mnii7! Ai răspuns corect.'):'Încă un pas spre răspunsul bun.'}</strong>${!s.result?`<p>Răspuns: <b dir="ltr">${h(q.answer)}</b></p>`:''}<p>${h(grammar?q.drill.note:['write','order'].includes(q.type)?E.feedback(c,s.typed):c.note||(q.type==='reverse'?c.ar+' = '+c.ro:c.ro))}</p></div>${!s.result?(s.fixed?`<div class="fix-row done" role="status">${icon('check')}<span>Exact. Cardul rămâne programat pentru recapitulare.</span></div>`:`<form id="fix-form" class="fix-row" autocomplete="off"><label for="fix-answer">Scrie-l corect</label><input id="fix-answer" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false" value="${h(s.fixTyped||'')}" placeholder="${h(q.answer)}"><button class="btn secondary" type="submit">Verifică</button></form><p class="fix-note">Exersezi scrierea. Nu schimbă rezultatul rundei — cardul revine oricum la recapitulare.</p>`):''}<button class="btn ${s.result?'primary':'retry-btn'}" data-next>Continuă ${icon('arrow')}</button></div>`:'';
-  shell(`<section class="game-wrap">${gameHeader()}<div class="challenge-card"><div class="challenge-kicker">${icon(q.drill?.dialog?'chat':q.type==='learn'?'layers':'spark')} ${label}${q.retry?'<span>ÎNCĂ O ȘANSĂ</span>':''}</div><h1 class="question-title">${h(heading)}</h1>${prompt?`<div class="question-prompt ${q.type==='reverse'?'arabizi-prompt':''}" dir="ltr">${h(prompt)}</div>`:''}${c?.lang==='en'?'<div class="english-label">EN · Sens în engleză</div>':''}${body}${hint}${feedback}<div class="challenge-bottom"><span>${h(sourceLine(grammar?q.drill:c))}</span>${!s.answered&&q.type!=='learn'?`<button class="hint-button" data-hint ${s.hinted?'disabled':''}>${icon('info')} Un indiciu</button>`:''}</div></div><p class="game-keyboard">${q.type==='learn'?'Descoperirea nu acordă XP. Câștigi puncte când îți amintești singur.':q.type==='write'?'Enter pentru verificare · fără limită de timp':'Tastele 1–4 pentru răspuns · Enter pentru a continua'}</p></section>`);
+  shell(`<section class="game-wrap">${gameHeader()}<div class="challenge-card"><div class="challenge-kicker">${icon(q.drill?.dialog?'chat':q.type==='learn'?'layers':'spark')} ${label}</div><h1 class="question-title">${h(heading)}</h1>${prompt?`<div class="question-prompt ${q.type==='reverse'?'arabizi-prompt':''}" dir="ltr">${h(prompt)}</div>`:''}${c?.lang==='en'?'<div class="english-label">EN · Sens în engleză</div>':''}${body}${hint}${feedback}<div class="challenge-bottom"><span>${h(sourceLine(grammar?q.drill:c))}</span>${!s.answered&&q.type!=='learn'?`<button class="hint-button" data-hint ${s.hinted?'disabled':''}>${icon('info')} Un indiciu</button>`:''}</div></div><p class="game-keyboard">${q.type==='learn'?'Descoperirea nu acordă XP. Câștigi puncte când îți amintești singur.':q.type==='write'?'Enter pentru verificare · fără limită de timp':'Tastele 1–4 pentru răspuns · Enter pentru a continua'}</p></section>`);
   if(q.type==='write'&&!s.answered)$('#typed-answer')?.focus({preventScroll:true});
  }
  function answer(value){const s=session;if(!s||s.answered||s.done)return;const q=s.questions[s.index];let correct=q.card&&['write','order'].includes(q.type)?E.accepts(q.card,value):E.exact(q.answer)===E.exact(value);
   s.answered=true;s.result=correct;s.selectedOption=value;s.typed=value;
   const earned=correct&&!s.hinted;
   state.progress=E.record(state.progress,q.id,correct,s.hinted);
-  if(earned){s.streak++;const points=10+(s.streak%3===0?5:0);s.xp+=points;state.xp+=points;state.daily[day()]=(state.daily[day()]||0)+1;if(!q.retry)s.correct++;}
+  if(earned){s.streak++;const points=10+(s.streak%3===0?5:0);s.xp+=points;state.xp+=points;state.daily[day()]=(state.daily[day()]||0)+1;s.correct++;}
   else{s.streak=0;if(!s.misses.includes(q.id))s.misses.push(q.id);}
   save();renderGame();
  }
+ /* There is deliberately no in-round retry: a missed card is not re-asked
+    before the round ends. Scaffolding for one used to be here (a q.retry flag
+    feeding an "ÎNCĂ O ȘANSĂ" badge and a guard that withheld the round point)
+    but nothing ever set the flag, and it is removed rather than revived —
+    reviving it breaks two rules at once.
+
+    A round is exactly 20 items; verify-rounds asserts it with the message
+    "Mistakes must not silently lengthen rounds". Appending a retry lengthens
+    the round by definition.
+
+    And E.record writes `wrong: !earned`, so answering a retry correctly clears
+    the mistake flag — the card would drop straight out of "Reia greșelile",
+    erasing the mistake the learner is supposed to come back to.
+
+    tryFix below is what replaces it: write the answer again for practice,
+    scoring and scheduling untouched. */
  function tryFix(value){const s=session;if(!s||!s.answered||s.result)return;
   const q=s.questions[s.index];
   const ok=q.card&&['write','order'].includes(q.type)?E.accepts(q.card,value):E.exact(q.answer)===E.exact(value);
