@@ -436,6 +436,72 @@ Deno.serve(async (req) => {
       return jsonResponse({ data });
     }
 
+    /**
+     * Yalla card corrections.
+     *
+     * The teacher edits cards inside the game, which stores them in that
+     * browser only. These actions promote a correction to the shared overlay
+     * in yalla_card_overrides, which every learner's game reads at start-up.
+     *
+     * save_card_overrides takes the whole set rather than one card at a time,
+     * and deletes what is missing from it. That makes the published state a
+     * mirror of what the teacher sees: removing a correction in the workspace
+     * removes it for students, instead of leaving an orphan nobody can find.
+     */
+    if (action === "save_card_overrides") {
+      const { edits } = body;
+      if (!edits || typeof edits !== "object" || Array.isArray(edits)) {
+        return jsonResponse({ error: "Corecturi invalide" });
+      }
+      const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+      const rows: { card_id: string; ar: string; ro: string; variants: string[] }[] = [];
+      for (const [card_id, raw] of Object.entries(edits as Record<string, unknown>)) {
+        if (!/^[A-Za-z0-9_-]{1,64}$/.test(card_id)) {
+          return jsonResponse({ error: `Identificator de card invalid: ${card_id.slice(0, 40)}` });
+        }
+        const v = raw as { ar?: unknown; ro?: unknown; variants?: unknown };
+        const ar = str(v?.ar, 500);
+        const ro = str(v?.ro, 1000);
+        // The table rejects blanks too; refusing here names the offending card
+        // instead of surfacing a constraint violation.
+        if (!ar || !ro) return jsonResponse({ error: `Card incomplet: ${card_id}` });
+        const variants = Array.isArray(v?.variants)
+          ? (v.variants as unknown[])
+              .map((x) => str(x, 500))
+              // A card's own form is never a variant of itself: the game
+              // filters it too, and leaving it in matches on the wrong branch.
+              .filter((x) => x && x !== ar)
+              .slice(0, 30)
+          : [];
+        rows.push({ card_id, ar, ro, variants });
+      }
+      if (rows.length > 5000) return jsonResponse({ error: "Prea multe corecturi într-o singură cerere" });
+
+      const keep = rows.map((r) => r.card_id);
+      if (rows.length) {
+        const { error } = await supabase
+          .from("yalla_card_overrides")
+          .upsert(rows, { onConflict: "card_id" });
+        if (error) throw error;
+      }
+      // Drop anything the teacher has since reverted.
+      const del = supabase.from("yalla_card_overrides").delete();
+      const { error: delError } = keep.length
+        ? await del.not("card_id", "in", `(${keep.map((k) => `"${k}"`).join(",")})`)
+        : await del.neq("card_id", "");
+      if (delError) throw delError;
+      return jsonResponse({ success: true, count: rows.length });
+    }
+
+    if (action === "list_card_overrides") {
+      const { data, error } = await supabase
+        .from("yalla_card_overrides")
+        .select("card_id, ar, ro, variants, updated_at")
+        .order("updated_at", { ascending: false });
+      if (error) throw error;
+      return jsonResponse({ data });
+    }
+
     if (action === "upsert_site_text") {
       const { key, value_ro, value_en } = body;
       if (typeof key !== "string" || !/^[A-Za-z0-9_.-]{1,200}$/.test(key)) {
