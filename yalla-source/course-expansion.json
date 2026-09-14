@@ -1,0 +1,4639 @@
+{
+  "sources": [
+    {
+      "id": "march",
+      "title": "Curs A1 · grupa din 24 martie 2026",
+      "detail": "Notele lecțiilor 1–21 și 23. Exercițiile cu corecturi sunt adaptate; numerotarea diferă de planul tematic."
+    },
+    {
+      "id": "plan",
+      "title": "Curs Arabă Libaneză A1.xlsx · 24 teme",
+      "detail": "Planul tematic al cursului; etichetele de vocabular în engleză sunt păstrate."
+    },
+    {
+      "id": "keys",
+      "title": "Fișe A1 și recapitulări din folderul A2",
+      "detail": "Răspunsuri confruntate cu cele două chei ale profesorului. Fișele A2 primite repetă aceste exerciții A1."
+    },
+    {
+      "id": "guide",
+      "title": "Ghid învățare A1–B1",
+      "detail": "Referință suplimentară, neatribuită profesorului. Scenariile de conversație sunt adaptate; nu reprezintă un curs B1 complet."
+    }
+  ],
+  "units": [
+    {
+      "id": "m1",
+      "title": "01 · Primele conversații",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Mar7aba",
+          "Bună! / Salut!"
+        ],
+        [
+          "Ahlan",
+          "Salut! / Bun venit!"
+        ],
+        [
+          "Mar7abten",
+          "Salut! (răspuns)"
+        ],
+        [
+          "Sabaa7o",
+          "Neața!"
+        ],
+        [
+          "Sabaa7 el 5er",
+          "Bună dimineața!"
+        ],
+        [
+          "Sabaa7 el nuur",
+          "Bună dimineața! (răspuns)"
+        ],
+        [
+          "Shu esmak?",
+          "Cum te cheamă? (către un băiat)"
+        ],
+        [
+          "Shu esmik?",
+          "Cum te cheamă? (către o fată)"
+        ],
+        [
+          "Esme George",
+          "Numele meu este George."
+        ],
+        [
+          "Ana George",
+          "Eu sunt George."
+        ],
+        [
+          "Esemkon",
+          "Numele vostru"
+        ],
+        [
+          "Asemiikon",
+          "Numele voastre"
+        ],
+        [
+          "Esmen",
+          "Două nume"
+        ],
+        [
+          "7adertak",
+          "Dumneavoastră (către un bărbat)"
+        ],
+        [
+          "7adertik",
+          "Dumneavoastră (către o femeie)"
+        ],
+        [
+          "7adretkon",
+          "Dumneavoastră (către mai multe persoane)"
+        ],
+        [
+          "Ana",
+          "Eu"
+        ],
+        [
+          "Enta",
+          "Tu (masculin)"
+        ],
+        [
+          "Ente",
+          "Tu (feminin)"
+        ],
+        [
+          "Huwwe",
+          "El"
+        ],
+        [
+          "Heyye",
+          "Ea"
+        ],
+        [
+          "Ne7na",
+          "Noi"
+        ],
+        [
+          "Ento",
+          "Voi"
+        ],
+        [
+          "Hinne",
+          "Ei / Ele"
+        ],
+        [
+          "Be2ra",
+          "Citesc"
+        ],
+        [
+          "Ba2ra",
+          "Vacă"
+        ],
+        [
+          "Sa2er",
+          "Vultur"
+        ],
+        [
+          "Sa2al",
+          "El a întrebat."
+        ],
+        [
+          "Su2aal",
+          "O întrebare"
+        ],
+        [
+          "As2ila",
+          "Întrebări"
+        ],
+        [
+          "2aktar",
+          "Mai mult"
+        ],
+        [
+          "2ee3ed",
+          "Stând / așezat (masculin)"
+        ],
+        [
+          "Terwii2a",
+          "Micul dejun"
+        ],
+        [
+          "7elo",
+          "Frumos (masculin)"
+        ],
+        [
+          "7elwe",
+          "Frumoasă"
+        ],
+        [
+          "Subo7",
+          "O dimineață"
+        ],
+        [
+          "3ammo",
+          "Unchi (patern)"
+        ],
+        [
+          "Ma3",
+          "Cu"
+        ],
+        [
+          "3asha",
+          "Cină"
+        ],
+        [
+          "3arabe",
+          "Arabă / arab"
+        ],
+        [
+          "3ayle",
+          "Familie"
+        ],
+        [
+          "Ba3ref",
+          "Știu"
+        ],
+        [
+          "3ali",
+          "Ali (nume)"
+        ],
+        [
+          "3aali",
+          "Înalt / ridicat"
+        ],
+        [
+          "Se3er",
+          "Preț"
+        ],
+        [
+          "5all",
+          "Oțet"
+        ],
+        [
+          "5aal",
+          "Unchi (matern)"
+        ],
+        [
+          "Ma5zan",
+          "Depozit"
+        ],
+        [
+          "Ba5iil",
+          "Zgârcit"
+        ],
+        [
+          "A5dar",
+          "Verde (masculin)"
+        ],
+        [
+          "5odra",
+          "Legume"
+        ],
+        [
+          "5oo5",
+          "Prune"
+        ],
+        [
+          "5abar",
+          "O știre"
+        ],
+        [
+          "Ma ma3e 5abar",
+          "Nu știu / n-am habar."
+        ],
+        [
+          "8aale",
+          "Scump / valoros"
+        ],
+        [
+          "8erfe",
+          "O cameră"
+        ],
+        [
+          "8ata",
+          "Capac"
+        ],
+        [
+          "8abe",
+          "Prost / idiot"
+        ],
+        [
+          "8aabe",
+          "Pădure"
+        ],
+        [
+          "8ada",
+          "Prânz"
+        ],
+        [
+          "Mara",
+          "O femeie"
+        ],
+        [
+          "Marra",
+          "O dată / odată"
+        ],
+        [
+          "Warde",
+          "Floare"
+        ],
+        [
+          "Sayyara",
+          "Mașină"
+        ],
+        [
+          "Shu",
+          "Ce?"
+        ],
+        [
+          "Kiif",
+          "Cum?"
+        ],
+        [
+          "Aymta",
+          "Când? (întrebare)"
+        ],
+        [
+          "Miin",
+          "Cine?"
+        ],
+        [
+          "Wen",
+          "Unde?"
+        ],
+        [
+          "Men",
+          "Din / de la"
+        ],
+        [
+          "Ayya",
+          "Care?"
+        ],
+        [
+          "Men wen enta?",
+          "De unde ești? (către un băiat)"
+        ],
+        [
+          "Miin enta?",
+          "Cine ești? (către un băiat)"
+        ],
+        [
+          "Aymta baddak?",
+          "Când vrei? (către un băiat)"
+        ],
+        [
+          "Kiif baddak?",
+          "Cum vrei? (către un băiat)"
+        ],
+        [
+          "Miin baddak?",
+          "Pe cine vrei? (către un băiat)"
+        ],
+        [
+          "Shu baddak?",
+          "Ce vrei? (către un băiat)"
+        ],
+        [
+          "Ayya baddak?",
+          "Care vrei? (către un băiat)"
+        ],
+        [
+          "Kifak?",
+          "Cum ești? (către un băiat)"
+        ],
+        [
+          "Kifik?",
+          "Cum ești? (către o fată)"
+        ]
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "02 · Întrebări și stări",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Tsharrafna",
+          "Încântați de cunoștință!"
+        ],
+        [
+          "Ana kamen",
+          "Și eu / și mie"
+        ],
+        [
+          "Ana bil aktar",
+          "Eu și mai mult"
+        ],
+        [
+          "Basita",
+          "E în regulă / nu-i nimic."
+        ],
+        [
+          "Afwan",
+          "Pardon / scuze"
+        ],
+        [
+          "Shukran",
+          "Mulțumesc!"
+        ],
+        [
+          "Yeslamo",
+          "Mulțumesc! (pentru un ajutor / efort)"
+        ],
+        [
+          "Lesh",
+          "De ce?"
+        ],
+        [
+          "Bas",
+          "Doar / dar / când / gata"
+        ],
+        [
+          "Kam",
+          "Cât / câți? (lucruri numărabile)"
+        ],
+        [
+          "Adde",
+          "Cât? (cantitate / vârstă)"
+        ],
+        [
+          "Hek",
+          "Așa"
+        ],
+        [
+          "La2",
+          "Nu"
+        ],
+        [
+          "La",
+          "Pentru / către"
+        ],
+        [
+          "Ana badde",
+          "Eu vreau."
+        ],
+        [
+          "Enta baddak",
+          "Tu vrei. (masculin)"
+        ],
+        [
+          "Ente baddik",
+          "Tu vrei. (feminin)"
+        ],
+        [
+          "Huwwe baddo",
+          "El vrea."
+        ],
+        [
+          "Hiyye badda",
+          "Ea vrea."
+        ],
+        [
+          "Ne7na baddna",
+          "Noi vrem."
+        ],
+        [
+          "Ento baddkon",
+          "Voi vreți."
+        ],
+        [
+          "Henne baddon",
+          "Ei / Ele vor."
+        ],
+        [
+          "Kam walad 3andak?",
+          "Câți copii ai? (către un băiat)"
+        ],
+        [
+          "Kam kilo baddak?",
+          "Câte kilograme vrei? (către un băiat)"
+        ],
+        [
+          "Adde baddak?",
+          "Cât vrei? (către un băiat)"
+        ],
+        [
+          "Addesh 3omrak?",
+          "Câți ani ai? (către un băiat)"
+        ],
+        [
+          "Ana men Rumania",
+          "Eu sunt din România."
+        ],
+        [
+          "La shu?",
+          "Pentru ce?"
+        ],
+        [
+          "Shu 3am ta3mel?",
+          "Ce faci acum? (către un băiat)"
+        ],
+        [
+          "Shu 3am ta3mle?",
+          "Ce faci acum? (către o fată)"
+        ],
+        [
+          "Shu baddak a3mel?",
+          "Ce vrei să fac? (către un băiat)"
+        ],
+        [
+          "Lesh baddak a3mel hek?",
+          "De ce vrei să fac așa? (către un băiat)"
+        ],
+        [
+          "Shu fi ma fi?",
+          "Ce mai faci? / Ce se mai întâmplă?"
+        ],
+        [
+          "Shu a5barak?",
+          "Ce noutăți ai? (către un băiat)"
+        ],
+        [
+          "Badde banadoura",
+          "Vreau roșii."
+        ],
+        [
+          "Za3leen",
+          "Supărat (masculin)"
+        ],
+        [
+          "Za3leene",
+          "Supărată"
+        ],
+        [
+          "7aziin",
+          "Trist (masculin)"
+        ],
+        [
+          "MabsuuT",
+          "Fericit (masculin)"
+        ],
+        [
+          "MabsuuTa",
+          "Fericită"
+        ],
+        [
+          "Ta3been",
+          "Obosit (masculin)"
+        ],
+        [
+          "Ta3beene",
+          "Obosită"
+        ],
+        [
+          "Mariid",
+          "Bolnav (masculin)"
+        ],
+        [
+          "Ju3aan",
+          "Flămând (masculin)"
+        ],
+        [
+          "Ju3aane",
+          "Flămândă"
+        ],
+        [
+          "3atsheen",
+          "Însetat (masculin)"
+        ],
+        [
+          "3atsheene",
+          "Însetată"
+        ],
+        [
+          "Mnii7",
+          "Bine (masculin)"
+        ],
+        [
+          "Mnii7a",
+          "Bine (feminin)"
+        ],
+        [
+          "M3assab",
+          "Nervos / enervat"
+        ],
+        [
+          "M3assbe",
+          "Nervoasă / enervată"
+        ],
+        [
+          "Reye2",
+          "Calm (masculin)"
+        ],
+        [
+          "Rey2a",
+          "Calmă"
+        ],
+        [
+          "Merte7",
+          "Relaxat / confortabil"
+        ],
+        [
+          "Merte7a",
+          "Relaxată / confortabilă"
+        ],
+        [
+          "Maz3ouj",
+          "Deranjat"
+        ],
+        [
+          "Maz3ouje",
+          "Deranjată"
+        ],
+        [
+          "Mbere7",
+          "Ieri"
+        ],
+        [
+          "Liom",
+          "Azi"
+        ],
+        [
+          "Bukra",
+          "Mâine"
+        ],
+        [
+          "Ktiir",
+          "Mult / foarte"
+        ],
+        [
+          "Kbiir",
+          "Mare (masculin)"
+        ],
+        [
+          "3ande",
+          "Am (în general) / la mine"
+        ],
+        [
+          "Ma3e",
+          "Am la mine / cu mine"
+        ],
+        [
+          "Ana 3andak",
+          "Eu sunt la tine. (către un băiat)"
+        ],
+        [
+          "Ana 3and George",
+          "Sunt la George acasă."
+        ],
+        [
+          "Ma3e masare",
+          "Am bani la mine."
+        ],
+        [
+          "Masare",
+          "Bani"
+        ],
+        [
+          "7alle2",
+          "Frizer"
+        ],
+        [
+          "Coaffer",
+          "Coafor"
+        ]
+      ]
+    },
+    {
+      "id": "m3",
+      "title": "03 · Posesiv și dual",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "5aale",
+          "Mătușă (maternă)"
+        ],
+        [
+          "Walad",
+          "Copil"
+        ],
+        [
+          "3ayn",
+          "Ochi"
+        ],
+        [
+          "War2a",
+          "Hârtie"
+        ],
+        [
+          "Beeb",
+          "Ușă"
+        ],
+        [
+          "Sejjeede",
+          "Covor"
+        ],
+        [
+          "5aalen",
+          "Doi unchi (materni)"
+        ],
+        [
+          "5aalten",
+          "Două mătuși (materne)"
+        ],
+        [
+          "3aylten",
+          "Două familii"
+        ],
+        [
+          "3aynten",
+          "Doi ochi"
+        ],
+        [
+          "7aziine",
+          "Tristă"
+        ],
+        [
+          "Zaké",
+          "Deștept"
+        ],
+        [
+          "Zakiyyé",
+          "Deșteaptă"
+        ],
+        [
+          "Tawiil",
+          "Înalt (masculin)"
+        ],
+        [
+          "Tawiile",
+          "Înaltă"
+        ],
+        [
+          "Kbiire",
+          "Mare (feminin)"
+        ],
+        [
+          "Z8iir",
+          "Mic (masculin)"
+        ],
+        [
+          "Z8iire",
+          "Mică"
+        ],
+        [
+          "Ij-jou3",
+          "Foamea"
+        ],
+        [
+          "L-3atash",
+          "Setea"
+        ],
+        [
+          "Kif 7aalak?",
+          "Cum ești? (către un bărbat)"
+        ],
+        [
+          "Kif 7aalik?",
+          "Cum ești? (către o femeie)"
+        ],
+        [
+          "Ana mariida",
+          "Eu sunt bolnavă."
+        ],
+        [
+          "Mnee7",
+          "Buni / bine (plural)"
+        ],
+        [
+          "Shu bek?",
+          "Ce ai? / Ce-i cu tine? (către un băiat)"
+        ],
+        [
+          "Shu beke?",
+          "Ce ai? / Ce-i cu tine? (către o fată)"
+        ],
+        [
+          "Wen seret?",
+          "Unde ai ajuns?"
+        ],
+        [
+          "Sar",
+          "S-a întâmplat / a ajuns"
+        ],
+        [
+          "Shu sar?",
+          "Ce s-a întâmplat?"
+        ],
+        [
+          "Shi",
+          "Ceva"
+        ],
+        [
+          "Ma shi",
+          "Nimic"
+        ],
+        [
+          "Kell",
+          "Fiecare"
+        ],
+        [
+          "Kell shi",
+          "Totul"
+        ],
+        [
+          "Meshe",
+          "Bine / OK"
+        ],
+        [
+          "Meshe l 7al",
+          "Merge / nu mă plâng."
+        ],
+        [
+          "Tamem",
+          "Foarte bine / în regulă"
+        ],
+        [
+          "Killo tameem?",
+          "Totul e în regulă?"
+        ],
+        [
+          "Killo tameem",
+          "Totul e bine."
+        ],
+        [
+          "Sho8ol",
+          "Treabă / muncă"
+        ],
+        [
+          "Esh-shames",
+          "Soarele"
+        ],
+        [
+          "L-2amar",
+          "Luna"
+        ],
+        [
+          "It-taree2",
+          "Drumul"
+        ],
+        [
+          "5aale",
+          "unchiul meu"
+        ],
+        [
+          "5aalak",
+          "unchiul tău (băiat)"
+        ],
+        [
+          "5aalik",
+          "unchiul tău (fată)"
+        ],
+        [
+          "5aalo",
+          "unchiul lui"
+        ],
+        [
+          "5aala",
+          "unchiul ei"
+        ],
+        [
+          "5aalna",
+          "unchiul nostru"
+        ],
+        [
+          "5aalkon",
+          "unchiul vostru"
+        ],
+        [
+          "5aalon",
+          "unchiul lor"
+        ],
+        [
+          "5aalte",
+          "mătușa mea"
+        ],
+        [
+          "5aaltak",
+          "mătușa ta (băiat)"
+        ],
+        [
+          "5aaltik",
+          "mătușa ta (fată)"
+        ],
+        [
+          "5aalto",
+          "mătușa lui"
+        ],
+        [
+          "5aaleta",
+          "mătușa ei"
+        ],
+        [
+          "5aaletna",
+          "mătușa noastră"
+        ],
+        [
+          "5aaletkon",
+          "mătușa voastră"
+        ],
+        [
+          "5aaleton",
+          "mătușa lor"
+        ],
+        [
+          "walade",
+          "copilul meu"
+        ],
+        [
+          "waladak",
+          "copilul tău (băiat)"
+        ],
+        [
+          "waladik",
+          "copilul tău (fată)"
+        ],
+        [
+          "walado",
+          "copilul lui"
+        ],
+        [
+          "walada",
+          "copilul ei"
+        ],
+        [
+          "waladna",
+          "copilul nostru"
+        ],
+        [
+          "waladkon",
+          "copilul vostru"
+        ],
+        [
+          "waladon",
+          "copilul lor"
+        ],
+        [
+          "3aylte",
+          "familia mea"
+        ],
+        [
+          "3ayltak",
+          "familia ta (băiat)"
+        ],
+        [
+          "3ayltik",
+          "familia ta (fată)"
+        ],
+        [
+          "3aylto",
+          "familia lui"
+        ],
+        [
+          "3ayleta",
+          "familia ei"
+        ],
+        [
+          "3ayletna",
+          "familia noastră"
+        ],
+        [
+          "3ayletkon",
+          "familia voastră"
+        ],
+        [
+          "3ayleton",
+          "familia lor"
+        ],
+        [
+          "3ayne",
+          "ochiul meu"
+        ],
+        [
+          "3aynak",
+          "ochiul tău (băiat)"
+        ],
+        [
+          "3aynik",
+          "ochiul tău (fată)"
+        ],
+        [
+          "3ayno",
+          "ochiul lui"
+        ],
+        [
+          "3ayna",
+          "ochiul ei"
+        ],
+        [
+          "3aynna",
+          "ochiul nostru"
+        ],
+        [
+          "3aynkon",
+          "ochiul vostru"
+        ],
+        [
+          "3aynon",
+          "ochiul lor"
+        ],
+        [
+          "ware2te",
+          "hârtia mea"
+        ],
+        [
+          "ware2tak",
+          "hârtia ta (băiat)"
+        ],
+        [
+          "ware2tik",
+          "hârtia ta (fată)"
+        ],
+        [
+          "ware2to",
+          "hârtia lui"
+        ],
+        [
+          "war2eta",
+          "hârtia ei"
+        ],
+        [
+          "war2etna",
+          "hârtia noastră"
+        ],
+        [
+          "war2etkon",
+          "hârtia voastră"
+        ],
+        [
+          "war2eton",
+          "hârtia lor"
+        ],
+        [
+          "Beebe",
+          "ușa mea"
+        ],
+        [
+          "Beebak",
+          "ușa ta (băiat)"
+        ],
+        [
+          "Beebik",
+          "ușa ta (fată)"
+        ],
+        [
+          "Beebo",
+          "ușa lui"
+        ],
+        [
+          "Beeba",
+          "ușa ei"
+        ],
+        [
+          "Beebna",
+          "ușa noastră"
+        ],
+        [
+          "Beebkon",
+          "ușa voastră"
+        ],
+        [
+          "Beebon",
+          "ușa lor"
+        ],
+        [
+          "sejjedte",
+          "covorul meu"
+        ],
+        [
+          "sejjedtak",
+          "covorul tău (băiat)"
+        ],
+        [
+          "sejjedtik",
+          "covorul tău (fată)"
+        ],
+        [
+          "sejjedto",
+          "covorul lui"
+        ],
+        [
+          "sejjedeta",
+          "covorul ei"
+        ],
+        [
+          "sejjedetna",
+          "covorul nostru"
+        ],
+        [
+          "sejjedetkon",
+          "covorul vostru"
+        ],
+        [
+          "sejjedeton",
+          "covorul lor"
+        ]
+      ]
+    },
+    {
+      "id": "m4",
+      "title": "04 · Pot, vreau, am",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "3ande",
+          "Am / la mine"
+        ],
+        [
+          "3andak",
+          "Ai / la tine (masculin)"
+        ],
+        [
+          "3andik",
+          "Ai / la tine (feminin)"
+        ],
+        [
+          "3ando",
+          "Are / la el"
+        ],
+        [
+          "3anda",
+          "Are / la ea"
+        ],
+        [
+          "3andna",
+          "Avem / la noi"
+        ],
+        [
+          "3andkon",
+          "Aveți / la voi"
+        ],
+        [
+          "3andon",
+          "Au / la ei ori ele"
+        ],
+        [
+          "Fi",
+          "Este / există"
+        ],
+        [
+          "Fiye",
+          "Pot"
+        ],
+        [
+          "Fik",
+          "Poți (masculin)"
+        ],
+        [
+          "Fike",
+          "Poți (feminin)"
+        ],
+        [
+          "Fio",
+          "El poate"
+        ],
+        [
+          "Fiiha",
+          "Ea poate"
+        ],
+        [
+          "Fiina",
+          "Putem"
+        ],
+        [
+          "Fikon",
+          "Puteți"
+        ],
+        [
+          "Fihon",
+          "Ei / Ele pot"
+        ],
+        [
+          "Ma3e",
+          "Cu mine / am la mine"
+        ],
+        [
+          "Ma3ak",
+          "Cu tine (masculin)"
+        ],
+        [
+          "Ma3ik",
+          "Cu tine (feminin)"
+        ],
+        [
+          "Ma3o",
+          "Cu el"
+        ],
+        [
+          "Ma3a",
+          "Cu ea"
+        ],
+        [
+          "Ma3na",
+          "Cu noi"
+        ],
+        [
+          "Ma3kon",
+          "Cu voi"
+        ],
+        [
+          "Ma3on",
+          "Cu ei / ele"
+        ],
+        [
+          "Badde",
+          "Vreau"
+        ],
+        [
+          "Baddak",
+          "Vrei (masculin)"
+        ],
+        [
+          "Baddik",
+          "Vrei (feminin)"
+        ],
+        [
+          "Baddo",
+          "El vrea"
+        ],
+        [
+          "Badda",
+          "Ea vrea"
+        ],
+        [
+          "Baddna",
+          "Vrem"
+        ],
+        [
+          "Baddkon",
+          "Vreți"
+        ],
+        [
+          "Baddon",
+          "Ei / Ele vor"
+        ],
+        [
+          "Ken",
+          "A fost"
+        ],
+        [
+          "Kenet",
+          "Eu am fost"
+        ],
+        [
+          "7a ykun",
+          "El va fi"
+        ],
+        [
+          "7a tkun",
+          "Ea va fi"
+        ],
+        [
+          "Raye7",
+          "Merg / în drum spre (masculin)"
+        ],
+        [
+          "Ray7a",
+          "Merg / în drum spre (feminin)"
+        ],
+        [
+          "Ray7iin",
+          "În drum spre (plural)"
+        ],
+        [
+          "Jeeye",
+          "Vin / voi veni (feminin)"
+        ],
+        [
+          "Felel",
+          "Plec / voi pleca (masculin)"
+        ],
+        [
+          "Te7ke",
+          "Tu vorbești / să vorbești"
+        ],
+        [
+          "3ann",
+          "Despre"
+        ],
+        [
+          "3a",
+          "Pe / către"
+        ],
+        [
+          "Bet",
+          "Casă"
+        ],
+        [
+          "Lebnen",
+          "Liban"
+        ],
+        [
+          "Lebnene",
+          "Libanez"
+        ],
+        [
+          "Lebneniyye",
+          "Libaneză"
+        ],
+        [
+          "Halla2",
+          "Acum"
+        ],
+        [
+          "Ba3den",
+          "Pe urmă / mai târziu"
+        ],
+        [
+          "Illa",
+          "Fără / cu excepția"
+        ],
+        [
+          "5amse illa rebe3",
+          "Cinci fără un sfert"
+        ],
+        [
+          "Killon illa enta",
+          "Toți în afară de tine. (masculin)"
+        ],
+        [
+          "Ma badde eshrab ahwe halla2",
+          "Nu vreau să beau cafea acum."
+        ],
+        [
+          "Ken badde eshrab ahwe",
+          "Voiam să beau cafea."
+        ],
+        [
+          "Halla2 badde eshrab mayy",
+          "Acum vreau să beau apă."
+        ],
+        [
+          "Shu ya3ne tawle bir romaane?",
+          "Ce înseamnă tawle în română?"
+        ],
+        [
+          "Shu ya3ne masa bil lebneene?",
+          "Ce înseamnă masă în libaneză?"
+        ],
+        [
+          "Liife",
+          "Burete"
+        ],
+        [
+          "Ma8sale",
+          "Chiuvetă"
+        ],
+        [
+          "Shel",
+          "Șal / fular"
+        ],
+        [
+          "Bantalon",
+          "Pantaloni"
+        ],
+        [
+          "Kaleb",
+          "Câine"
+        ],
+        [
+          "Short",
+          "Pantaloni scurți"
+        ],
+        [
+          "Shatranj",
+          "Șah"
+        ],
+        [
+          "Kamanja",
+          "Vioară"
+        ],
+        [
+          "Accordion",
+          "Acordeon"
+        ],
+        [
+          "Sandwiché",
+          "Sandviș"
+        ],
+        [
+          "Kotob",
+          "Cărți"
+        ],
+        [
+          "2reye",
+          "Citire"
+        ],
+        [
+          "3waynet",
+          "Ochelari"
+        ],
+        [
+          "Saf",
+          "Clasă (sală)"
+        ],
+        [
+          "Tayyaara",
+          "Avion"
+        ],
+        [
+          "Dares",
+          "Lecție"
+        ],
+        [
+          "Buus",
+          "Autobuz"
+        ],
+        [
+          "L-Mabsut",
+          "fericitul"
+        ],
+        [
+          "Is-Sa2er",
+          "vulturul"
+        ],
+        [
+          "L-3asha",
+          "cina"
+        ],
+        [
+          "Iz-Za3leen",
+          "supăratul"
+        ],
+        [
+          "Is-Su2aal",
+          "întrebarea"
+        ],
+        [
+          "Ir-Reye2",
+          "cel calm"
+        ],
+        [
+          "L7elo",
+          "cel frumos"
+        ],
+        [
+          "L-Ma8sale",
+          "chiuveta"
+        ],
+        [
+          "Ish-Shel",
+          "șalul"
+        ],
+        [
+          "L-Bantalon",
+          "pantalonii"
+        ],
+        [
+          "L-kaleb",
+          "câinele"
+        ],
+        [
+          "Ish-Short",
+          "pantalonii scurți"
+        ],
+        [
+          "Ish-Shatranj",
+          "șahul"
+        ],
+        [
+          "L-Kamanja",
+          "vioara"
+        ],
+        [
+          "L-Accordion",
+          "acordeonul"
+        ],
+        [
+          "Is-Sandwich",
+          "sandvișul"
+        ],
+        [
+          "L-Kotob",
+          "cărțile"
+        ],
+        [
+          "L-2reye",
+          "cititul"
+        ],
+        [
+          "L-3waynet",
+          "ochelarii"
+        ],
+        [
+          "Is-Saf",
+          "clasa"
+        ],
+        [
+          "L-warde",
+          "floarea"
+        ],
+        [
+          "L-war2a",
+          "hârtia"
+        ],
+        [
+          "Is-Sayyaara",
+          "mașina"
+        ],
+        [
+          "It-Tayyaara",
+          "avionul"
+        ],
+        [
+          "Id-Dares",
+          "lecția"
+        ],
+        [
+          "L-Walad",
+          "copilul"
+        ],
+        [
+          "L-bet",
+          "casa"
+        ],
+        [
+          "L-Buus",
+          "autobuzul"
+        ],
+        [
+          "L-5aal",
+          "unchiul matern"
+        ],
+        [
+          "L-3ayle",
+          "familia"
+        ],
+        [
+          "Is-Se3er",
+          "prețul"
+        ]
+      ]
+    },
+    {
+      "id": "m5",
+      "title": "05 · Acesta, aceea, casa mea",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "hayda",
+          "acesta (masculin)"
+        ],
+        [
+          "hayde",
+          "aceasta (feminin)"
+        ],
+        [
+          "haydeek",
+          "acela (masculin)"
+        ],
+        [
+          "haydiik",
+          "aceea (feminin)"
+        ],
+        [
+          "hol",
+          "aceștia / acestea"
+        ],
+        [
+          "3ammo",
+          "unchiul lui (patern)"
+        ],
+        [
+          "3amto",
+          "mătușa lui (paternă)"
+        ],
+        [
+          "beb",
+          "o ușă"
+        ],
+        [
+          "shebbeek",
+          "o fereastră"
+        ],
+        [
+          "balkon",
+          "balcon"
+        ],
+        [
+          "7et",
+          "perete"
+        ],
+        [
+          "sate7",
+          "acoperiș"
+        ],
+        [
+          "2anteen",
+          "antenă"
+        ],
+        [
+          "kbiir",
+          "mare (masculin)"
+        ],
+        [
+          "kbiire",
+          "mare (feminin)"
+        ],
+        [
+          "kbaar",
+          "mari"
+        ],
+        [
+          "akbar",
+          "mai mare"
+        ],
+        [
+          "z8iir",
+          "mic (masculin)"
+        ],
+        [
+          "z8iire",
+          "mică"
+        ],
+        [
+          "zghar",
+          "mici"
+        ],
+        [
+          "azghar",
+          "mai mic"
+        ],
+        [
+          "ahwe ma3 sekkar",
+          "cafea cu zahăr"
+        ],
+        [
+          "ahwe bala sekkar",
+          "cafea fără zahăr"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m6",
+      "title": "06 · Numără și cere",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "waa7ad",
+          "1"
+        ],
+        [
+          "tneen",
+          "2"
+        ],
+        [
+          "tleete",
+          "3"
+        ],
+        [
+          "arb3a",
+          "4"
+        ],
+        [
+          "5amse",
+          "5"
+        ],
+        [
+          "sette",
+          "6"
+        ],
+        [
+          "sab3a",
+          "7"
+        ],
+        [
+          "tmeene",
+          "8"
+        ],
+        [
+          "tes3a",
+          "9"
+        ],
+        [
+          "3ashra",
+          "10"
+        ],
+        [
+          "3eshriin",
+          "20"
+        ],
+        [
+          "miyye",
+          "100"
+        ],
+        [
+          "alf",
+          "1000"
+        ],
+        [
+          "badde teffe7a",
+          "Vreau un măr"
+        ],
+        [
+          "badde teffe7ten",
+          "Vreau două mere"
+        ],
+        [
+          "badde tlet teffe7eet",
+          "Vreau trei mere"
+        ],
+        [
+          "badde 7da3shar teffe7a",
+          "Vreau unsprezece mere"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m7",
+      "title": "07 · Ore și zile",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "noss",
+          "jumătate"
+        ],
+        [
+          "rebe3",
+          "un sfert"
+        ],
+        [
+          "telet",
+          "o treime"
+        ],
+        [
+          "da2ii2a",
+          "un minut"
+        ],
+        [
+          "senye",
+          "o secundă"
+        ],
+        [
+          "sawene",
+          "secunde"
+        ],
+        [
+          "arb3a illa d2ii2ten",
+          "4 fără 2 minute"
+        ],
+        [
+          "L-2a7ad",
+          "duminică"
+        ],
+        [
+          "it-tanen",
+          "luni"
+        ],
+        [
+          "it-taleta",
+          "marți"
+        ],
+        [
+          "L-2urb3a",
+          "miercuri"
+        ],
+        [
+          "L-5amiis",
+          "joi"
+        ],
+        [
+          "j-jem3a",
+          "vineri"
+        ],
+        [
+          "s-sabet",
+          "sâmbătă"
+        ],
+        [
+          "bshufak",
+          "te văd / ne vedem (către un bărbat)"
+        ],
+        [
+          "bshufik",
+          "te văd / ne vedem (către o femeie)"
+        ],
+        [
+          "bshufkon",
+          "vă văd / ne vedem (către mai mulți)"
+        ],
+        [
+          "yawmen",
+          "două zile"
+        ],
+        [
+          "iyyeem",
+          "zile"
+        ],
+        [
+          "bukra",
+          "mâine"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m8",
+      "title": "08 · Stabilim o întâlnire",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Adde is-se3a?",
+          "Cât e ceasul?"
+        ],
+        [
+          "Liom shu?",
+          "Ce zi e azi?"
+        ],
+        [
+          "Bshufak bukra?",
+          "Ne vedem mâine? (către un bărbat)"
+        ],
+        [
+          "Bshufkon bukra?",
+          "Ne vedem mâine? (către mai mulți)"
+        ],
+        [
+          "Shu 3eemel j-jem3a j-jeye?",
+          "Ce ai planificat săptămâna viitoare? (masculin)"
+        ],
+        [
+          "shaher",
+          "lună calendaristică"
+        ],
+        [
+          "Fina nshuf ba3d l-2urb3a 3a is-se3a sab3a l-masa",
+          "Ne putem vedea miercuri la ora 19"
+        ],
+        [
+          "Ana fine bukra 3a is-se3a sitte l-masa",
+          "Eu pot mâine la ora 18"
+        ],
+        [
+          "Kam banadoura baddak liom?",
+          "Câte roșii vrei azi? (masculin)"
+        ],
+        [
+          "sobo7",
+          "dimineață"
+        ],
+        [
+          "dohor",
+          "prânz"
+        ],
+        [
+          "masa",
+          "seară"
+        ],
+        [
+          "lel",
+          "noapte"
+        ],
+        [
+          "fo2",
+          "deasupra"
+        ],
+        [
+          "ta7et",
+          "dedesubt"
+        ],
+        [
+          "juwwa",
+          "înăuntru"
+        ],
+        [
+          "barra",
+          "afară"
+        ],
+        [
+          "ben",
+          "între"
+        ],
+        [
+          "wara",
+          "în spate"
+        ],
+        [
+          "eddeem",
+          "în față"
+        ],
+        [
+          "7add",
+          "lângă"
+        ],
+        [
+          "dod",
+          "împotrivă"
+        ],
+        [
+          "kamen",
+          "și / de asemenea"
+        ],
+        [
+          "ma 3ada",
+          "cu excepția"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m9",
+      "title": "09 · Povestește programul",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Bukra 3as-se3a sab3a w tleetaw 3eshriin d2ii2a ray7a la 3and emme",
+          "Mâine la 7:23 merg la mama (vorbitoare)"
+        ],
+        [
+          "5ayye jeeye l-a7ad ba3d-dohor",
+          "Fratele meu vine duminică după-amiază"
+        ],
+        [
+          "Ma fiyye it-taneen",
+          "Nu pot luni"
+        ],
+        [
+          "Fik it-taleta l-masa?",
+          "Poți marți seara? (către un bărbat)"
+        ],
+        [
+          "Ta7et it-tawle fi wardten",
+          "Sub masă sunt două flori"
+        ],
+        [
+          "Liom m3assbe la2enno 3ande ktiir shoghol",
+          "Azi sunt furioasă pentru că am mult de lucru"
+        ],
+        [
+          "kermeel",
+          "pentru / de dragul"
+        ],
+        [
+          "3ashen",
+          "pentru că"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m10",
+      "title": "10 · Lunile și anotimpurile",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Kanoun et-teene",
+          "ianuarie"
+        ],
+        [
+          "Shbaat",
+          "februarie"
+        ],
+        [
+          "Adaar",
+          "martie"
+        ],
+        [
+          "Niseen",
+          "aprilie"
+        ],
+        [
+          "Ayyaar",
+          "mai"
+        ],
+        [
+          "7zayraan",
+          "iunie"
+        ],
+        [
+          "Tammuuz",
+          "iulie"
+        ],
+        [
+          "Aab",
+          "august"
+        ],
+        [
+          "Ayluul",
+          "septembrie"
+        ],
+        [
+          "Teshrin il-awwal",
+          "octombrie"
+        ],
+        [
+          "Teshrin et-tani",
+          "noiembrie"
+        ],
+        [
+          "Keenuun il-awwal",
+          "decembrie"
+        ],
+        [
+          "ir-rabii3",
+          "primăvara"
+        ],
+        [
+          "es-sef",
+          "vara"
+        ],
+        [
+          "L-5ariif",
+          "toamna"
+        ],
+        [
+          "es-sheta",
+          "iarna"
+        ],
+        [
+          "shajret L-mileed",
+          "bradul de Crăciun"
+        ],
+        [
+          "mnlee2iya",
+          "o găsim"
+        ],
+        [
+          "mnlee2iyon",
+          "îi / le găsim"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m11",
+      "title": "11 · Familia în culori",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "il-bay",
+          "tatăl"
+        ],
+        [
+          "il-emm",
+          "mama"
+        ],
+        [
+          "il-5ayy",
+          "fratele"
+        ],
+        [
+          "il-e5et",
+          "sora"
+        ],
+        [
+          "il-walad",
+          "copilul"
+        ],
+        [
+          "il-benet",
+          "fata / fiica"
+        ],
+        [
+          "a5dar",
+          "verde (masculin)"
+        ],
+        [
+          "aswad",
+          "negru"
+        ],
+        [
+          "banafsje",
+          "mov"
+        ],
+        [
+          "azra2",
+          "albastru"
+        ],
+        [
+          "rmeede",
+          "gri"
+        ],
+        [
+          "a7mar",
+          "roșu (masculin)"
+        ],
+        [
+          "asfar",
+          "galben"
+        ],
+        [
+          "benne",
+          "maro"
+        ],
+        [
+          "zaher",
+          "roz"
+        ],
+        [
+          "abyad",
+          "alb"
+        ],
+        [
+          "Bsh-sheta fi talej",
+          "Iarna e zăpadă"
+        ],
+        [
+          "B ir-rabii3 is-shajar bizahher",
+          "Primăvara copacii înfloresc"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m12",
+      "title": "12 · Acord și anotimpuri",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "sayyarto L-7amra",
+          "mașina lui roșie"
+        ],
+        [
+          "warda safra",
+          "o floare galbenă"
+        ],
+        [
+          "L-7amemet mnlee2iyon bir-rabii3",
+          "Porumbeii îi găsim primăvara"
+        ],
+        [
+          "L-7asharat mnlee2iyon bis-sayf",
+          "Insectele le găsim vara"
+        ],
+        [
+          "Btshatte b fasel L-5ariif",
+          "Plouă toamna"
+        ],
+        [
+          "Es-ski mnlee2i b fasel esh-sheta",
+          "Schiul îl găsim iarna"
+        ],
+        [
+          "Sette e3de juwwa 3ashen barra bared",
+          "Bunica stă înăuntru pentru că afară este frig"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m13",
+      "title": "13 · Verbe pentru fiecare persoană",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "ana beshrab",
+          "eu beau"
+        ],
+        [
+          "enta bteshrab",
+          "tu bei (masculin)"
+        ],
+        [
+          "ente bteshrabe",
+          "tu bei (feminin)"
+        ],
+        [
+          "huwwe byeshrab",
+          "el bea"
+        ],
+        [
+          "hiyye bteshrab",
+          "ea bea"
+        ],
+        [
+          "ne7na mneshrab",
+          "noi bem"
+        ],
+        [
+          "ento bteshrabo",
+          "voi beți"
+        ],
+        [
+          "henne byeshrabo",
+          "ei / ele beau"
+        ],
+        [
+          "ana daraset",
+          "eu am învățat"
+        ],
+        [
+          "enta daraset",
+          "tu ai învățat (masculin)"
+        ],
+        [
+          "ente daraste",
+          "tu ai învățat (feminin)"
+        ],
+        [
+          "huwwe daras",
+          "el a învățat"
+        ],
+        [
+          "hiyye daraset",
+          "ea a învățat"
+        ],
+        [
+          "ne7na darasna",
+          "noi am învățat"
+        ],
+        [
+          "ento darasto",
+          "voi ați învățat"
+        ],
+        [
+          "henne daraso",
+          "ei / ele au învățat"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m14",
+      "title": "14 · La restaurant",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "zbuon",
+          "client"
+        ],
+        [
+          "sha5es",
+          "persoană"
+        ],
+        [
+          "ash5as",
+          "persoane"
+        ],
+        [
+          "3andkon tawle fadye?",
+          "Aveți o masă liberă?"
+        ],
+        [
+          "la sha5es wa7ad",
+          "pentru o persoană"
+        ],
+        [
+          "jebla",
+          "adu-i (ei)"
+        ],
+        [
+          "3tiine 5ams d2aye2",
+          "Dă-mi cinci minute"
+        ],
+        [
+          "ma fi meshkle",
+          "Nu e nicio problemă"
+        ],
+        [
+          "badde 3asiir",
+          "Vreau suc natural"
+        ],
+        [
+          "shu kamen?",
+          "Ce altceva?"
+        ],
+        [
+          "shi tene?",
+          "Altceva?"
+        ],
+        [
+          "hayde kil shi?",
+          "Asta este tot?"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m15",
+      "title": "15 · Comandăm și răspundem",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "3am netlob",
+          "Noi comandăm"
+        ],
+        [
+          "baddik wa2et?",
+          "Ai nevoie de timp? (către o femeie)"
+        ],
+        [
+          "aw beje ba3den?",
+          "Sau vin mai târziu?"
+        ],
+        [
+          "bt3rfe shu baddik?",
+          "Știi ce vrei? (către o femeie)"
+        ],
+        [
+          "badde sa7en snitzel ma3 batata piure",
+          "Vreau o farfurie de șnițel cu piure de cartofi"
+        ],
+        [
+          "5alliilik L-meniu hon",
+          "Îți las meniul aici (către o femeie)"
+        ],
+        [
+          "e5te daharet min l-bet l-5amiis is-sobo7",
+          "Sora mea a ieșit din casă joi dimineață"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m16",
+      "title": "16 · Rădăcini în conversație",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Addesh 3omrik?",
+          "Câți ani ai? (către o femeie)"
+        ],
+        [
+          "Wen 3eyesh bi Beirut?",
+          "Unde locuiești în Beirut? (către un bărbat)"
+        ],
+        [
+          "Shu bt3ref 3anne?",
+          "Ce știi despre mine? (către un bărbat)"
+        ],
+        [
+          "Ayya se3a rej3et mbere7 l-masa?",
+          "La ce oră te-ai întors aseară? (masculin)"
+        ],
+        [
+          "Badde ekol samak",
+          "Vreau să mănânc pește"
+        ],
+        [
+          "jeyye 3a bele",
+          "îmi vine în gând / mi-e poftă"
+        ],
+        [
+          "Mish jeyye 3a bele is-samak",
+          "Nu am poftă de pește"
+        ],
+        [
+          "jeyye 3a bele l-5odra",
+          "Am poftă de legume"
+        ],
+        [
+          "shmel",
+          "nord"
+        ],
+        [
+          "jnuub",
+          "sud"
+        ],
+        [
+          "shar2",
+          "est"
+        ],
+        [
+          "8arb",
+          "vest"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m17",
+      "title": "17 · Obiceiuri și sărbători",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "3aade",
+          "obicei"
+        ],
+        [
+          "L-3aade",
+          "obiceiul"
+        ],
+        [
+          "3iid",
+          "sărbătoare"
+        ],
+        [
+          "3iid L-mara",
+          "Ziua Femeii"
+        ],
+        [
+          "3iid L-walad",
+          "Ziua Copilului"
+        ],
+        [
+          "3iid L-fusuh",
+          "Paștele"
+        ],
+        [
+          "3iid L-mileed",
+          "Crăciunul"
+        ],
+        [
+          "yn3aad 3laykon",
+          "Să o sărbătoriți din nou! (urare către mai mulți)"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m18",
+      "title": "18 · Odihnă și viața de zi cu zi",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "ana brte7",
+          "eu mă odihnesc"
+        ],
+        [
+          "enta bterte7",
+          "tu te odihnești (masculin)"
+        ],
+        [
+          "ente bterte7e",
+          "tu te odihnești (feminin)"
+        ],
+        [
+          "huwwe byerte7",
+          "el se odihnește"
+        ],
+        [
+          "hiyye bterte7",
+          "ea se odihnește"
+        ],
+        [
+          "ne7na mnerte7",
+          "noi ne odihnim"
+        ],
+        [
+          "ento bterte7o",
+          "voi vă odihniți"
+        ],
+        [
+          "henne byerte7o",
+          "ei / ele se odihnesc"
+        ],
+        [
+          "2ariib",
+          "aproape"
+        ],
+        [
+          "b3iid",
+          "departe"
+        ],
+        [
+          "3anjad?",
+          "Pe bune?"
+        ],
+        [
+          "emti7an",
+          "examen"
+        ],
+        [
+          "su2aal",
+          "întrebare"
+        ],
+        [
+          "jaweeb",
+          "răspuns"
+        ],
+        [
+          "el-jaw",
+          "vremea / atmosfera"
+        ],
+        [
+          "8aale",
+          "scump"
+        ],
+        [
+          "8ane",
+          "bogat"
+        ],
+        [
+          "8anam",
+          "oi / ovine"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m19",
+      "title": "19 · Muncă și planuri",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "mudiir",
+          "manager"
+        ],
+        [
+          "jdiid",
+          "nou"
+        ],
+        [
+          "adiim",
+          "vechi"
+        ],
+        [
+          "mashru3",
+          "proiect"
+        ],
+        [
+          "ijtimee3",
+          "întâlnire"
+        ],
+        [
+          "3atle",
+          "zi liberă / vacanță"
+        ],
+        [
+          "Ma3 miin ra7 tru7?",
+          "Cu cine vei merge?"
+        ],
+        [
+          "Shu ra7 ta3mel b Lebnen?",
+          "Ce vei face în Liban?"
+        ],
+        [
+          "Shu ra7 ta3mel ba3d l-ijtimee3?",
+          "Ce vei face după întâlnire?"
+        ],
+        [
+          "Shu ra7 ta3mel bi l-3atle?",
+          "Ce vei face în vacanță?"
+        ],
+        [
+          "Ra7 t23od bi l-maktab teshtghel 3a l-mashru3 jdiid",
+          "Vei sta la birou să lucrezi la proiectul nou"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m20",
+      "title": "20 · Ziua mea, nevoile mele",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "tyeb",
+          "haine"
+        ],
+        [
+          "8asiil",
+          "rufe / haine la spălat"
+        ],
+        [
+          "bi 7aje ekol shi tayeb",
+          "Am nevoie să mănânc ceva bun"
+        ],
+        [
+          "J-jem3a badde 7ot t-tyebe 3a l-8asiil",
+          "Vineri vreau să-mi pun hainele la spălat"
+        ],
+        [
+          "Kif ken nhaarik?",
+          "Cum ți-a fost ziua? (către o femeie)"
+        ],
+        [
+          "Kenet b sh-shoghol",
+          "Am fost la muncă"
+        ],
+        [
+          "Bukra s-sobo7 ra7 edhar sob s-sab3a",
+          "Mâine dimineață voi ieși pe la șapte"
+        ],
+        [
+          "Addish wa2et ra7 t23od?",
+          "Cât timp vei sta?"
+        ],
+        [
+          "Jeyye 3a bele ekol shawarma djej",
+          "Mi-e poftă să mănânc shawarma de pui"
+        ],
+        [
+          "Ra7 e23od b l-bayt latta erte7",
+          "Voi sta acasă ca să mă odihnesc"
+        ],
+        [
+          "Ba3d bukra s-sabet",
+          "Poimâine este sâmbătă"
+        ],
+        [
+          "Ru7 la eddem",
+          "Du-te înainte"
+        ],
+        [
+          "7awele",
+          "în jur de"
+        ],
+        [
+          "teta",
+          "bunica"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m21",
+      "title": "21 · Patru feluri de „te rog”",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "Eza betriid",
+          "Te rog (literal: dacă dorești)"
+        ],
+        [
+          "Law sama7et",
+          "Te rog (literal: dacă permiți)"
+        ],
+        [
+          "Badde 3azzbak",
+          "Te rog (formulă de solicitare)"
+        ],
+        [
+          "3mol ma3ruf",
+          "Fă-mi o favoare / te rog"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "m23",
+      "title": "23 · Familie, ordine și frecvență",
+      "group": "A1 · cursul din martie",
+      "source": "march",
+      "cards": [
+        [
+          "awal",
+          "primul"
+        ],
+        [
+          "ula",
+          "prima"
+        ],
+        [
+          "teene",
+          "al doilea"
+        ],
+        [
+          "tenie",
+          "a doua"
+        ],
+        [
+          "teelet",
+          "al treilea"
+        ],
+        [
+          "telte",
+          "a treia"
+        ],
+        [
+          "raabe3",
+          "al patrulea"
+        ],
+        [
+          "rab3a",
+          "a patra"
+        ],
+        [
+          "5aames",
+          "al cincilea"
+        ],
+        [
+          "5amse",
+          "a cincea"
+        ],
+        [
+          "seedes",
+          "al șaselea"
+        ],
+        [
+          "sedse",
+          "a șasea"
+        ],
+        [
+          "saabe3",
+          "al șaptelea"
+        ],
+        [
+          "seb3a",
+          "a șaptea"
+        ],
+        [
+          "teemen",
+          "al optulea"
+        ],
+        [
+          "temne",
+          "a opta"
+        ],
+        [
+          "tese3",
+          "al nouălea"
+        ],
+        [
+          "tes3a",
+          "a noua"
+        ],
+        [
+          "3aaser",
+          "al zecelea"
+        ],
+        [
+          "3ashra",
+          "a zecea"
+        ],
+        [
+          "7anun",
+          "afectuos / grijuliu"
+        ],
+        [
+          "ebn",
+          "fiu"
+        ],
+        [
+          "benet",
+          "fiică"
+        ],
+        [
+          "jed",
+          "bunic"
+        ],
+        [
+          "teeta",
+          "bunică"
+        ],
+        [
+          "3ale2a",
+          "relație"
+        ],
+        [
+          "3adatan",
+          "de obicei"
+        ],
+        [
+          "a7yenan",
+          "uneori"
+        ],
+        [
+          "deeyman",
+          "mereu"
+        ],
+        [
+          "abadan",
+          "niciodată"
+        ],
+        [
+          "fawran",
+          "imediat"
+        ],
+        [
+          "masalan",
+          "de exemplu"
+        ],
+        [
+          "ta2riiban",
+          "aproximativ"
+        ],
+        [
+          "5assatan",
+          "în special"
+        ],
+        [
+          "bakkiir",
+          "devreme"
+        ],
+        [
+          "m2a55ar",
+          "târziu"
+        ],
+        [
+          "jariide",
+          "ziar"
+        ],
+        [
+          "se3er",
+          "preț"
+        ],
+        [
+          "akiid",
+          "sigur"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "mrev1",
+      "title": "Revizie · obiecte și posesive",
+      "group": "A2 · recapitulare",
+      "source": "keys",
+      "cards": [
+        [
+          "shibbekak",
+          "fereastra ta (masculin)"
+        ],
+        [
+          "tannourtik",
+          "fusta ta (feminin)"
+        ],
+        [
+          "sham3eta",
+          "lumânarea ei"
+        ],
+        [
+          "shawketna",
+          "furculița noastră"
+        ],
+        [
+          "jaraskon",
+          "clopotul vostru"
+        ],
+        [
+          "tanjareton",
+          "oala lor"
+        ],
+        [
+          "lo7e",
+          "tabla mea"
+        ],
+        [
+          "bree2o",
+          "ibricul lui"
+        ],
+        [
+          "shibbeken",
+          "două ferestre"
+        ],
+        [
+          "sham3ten",
+          "două lumânări"
+        ],
+        [
+          "tannourten",
+          "două fuste"
+        ],
+        [
+          "bree2en",
+          "două ibrice"
+        ],
+        [
+          "3aynten",
+          "exact doi ochi"
+        ],
+        [
+          "Ne7na baddna shay halla2",
+          "Noi vrem ceai acum"
+        ],
+        [
+          "Shibbeke kbiir",
+          "Fereastra mea este mare"
+        ],
+        [
+          "Hiyye 3anda tannoura 7elwe",
+          "Ea are o fustă frumoasă"
+        ],
+        [
+          "Ento 3andkon bree2 jdiid bil matba5",
+          "Voi aveți un ibric nou în bucătărie"
+        ]
+      ],
+      "drills": []
+    },
+    {
+      "id": "mrev2",
+      "title": "Revizie · situații și transformări",
+      "group": "A2 · recapitulare",
+      "source": "keys",
+      "cards": [
+        [
+          "Ana ma badde eshrab ahwe halla2",
+          "Nu vreau să beau cafea acum"
+        ],
+        [
+          "Hiyye ray7a 3al madrase",
+          "Ea merge la școală"
+        ],
+        [
+          "Ne7na ray7iin 3al madrase",
+          "Noi mergem la școală"
+        ],
+        [
+          "Mbere7 ken badde eshrab mayy",
+          "Ieri voiam să beau apă"
+        ],
+        [
+          "Bukra 7a ykun badde eshrab mayy",
+          "Mâine voi vrea să beau apă"
+        ],
+        [
+          "Ma fiina nefta7 l beeb",
+          "Nu putem deschide ușa"
+        ],
+        [
+          "Fike tefta7e sh-shibbek?",
+          "Poți deschide fereastra? (către o femeie)"
+        ],
+        [
+          "Ana fiye efta7 sh-shibbek",
+          "Eu pot deschide fereastra"
+        ],
+        [
+          "Ana raye7 3al maktabe",
+          "Merg la bibliotecă (vorbitor masculin)"
+        ],
+        [
+          "Ma3ak ma77aye?",
+          "Ai o radieră la tine? (către un bărbat)"
+        ],
+        [
+          "Ana ma3e ma77aye w mastra",
+          "Am la mine o radieră și o riglă"
+        ],
+        [
+          "Shu 3am ta3mle halla2?",
+          "Ce faci acum? (către o femeie)"
+        ],
+        [
+          "Aymta baddak l kteb?",
+          "Când vrei cartea? (către un bărbat)"
+        ]
+      ],
+      "drills": [
+        [
+          "Vorbești unei femei. Alege cererea corectă.",
+          "Fike tefta7e sh-shibbek?",
+          [
+            "Fik tefta7 sh-shibbek?",
+            "Fiina nefta7 sh-shibbek?"
+          ],
+          "Fike și tefta7e se adresează unei femei.",
+          true
+        ],
+        [
+          "Spune că obiectul se află la tine acum.",
+          "Ma3e masare halla2",
+          [
+            "Ma3ak masare halla2",
+            "Ma3on masare halla2"
+          ],
+          "Ma3e indică „la mine”; sufixul -e este persoana întâi.",
+          true
+        ],
+        [
+          "Transformă la feminin: Huwwe mabsuut.",
+          "Hiyye mabsuuta.",
+          [
+            "Hiyye mabsuut.",
+            "Huwwe mabsuuta."
+          ],
+          "Se schimbă atât pronumele, cât și adjectivul."
+        ],
+        [
+          "Transformă pentru „noi”: Ana badde mayy.",
+          "Ne7na baddna mayy.",
+          [
+            "Ne7na baddkon mayy.",
+            "Ne7na baddon mayy."
+          ],
+          "Baddna este forma pentru noi."
+        ]
+      ]
+    },
+    {
+      "id": "guide-1",
+      "title": "Cap. 1 · Salutări",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "mar7aba",
+          "salut, bună"
+        ],
+        [
+          "ahla",
+          "salut, bine ai venit"
+        ],
+        [
+          "saba7 el 5ayr",
+          "bună dimineața"
+        ],
+        [
+          "masa el 5ayr",
+          "bună seara"
+        ],
+        [
+          "kifak?",
+          "ce mai faci? (masculin)"
+        ],
+        [
+          "kifik?",
+          "ce mai faci? (feminin)"
+        ],
+        [
+          "mni7",
+          "bine, ok"
+        ],
+        [
+          "el 7amdella",
+          "mulțumesc lui Dumnezeu (= bine)"
+        ],
+        [
+          "esme",
+          "mă cheamă"
+        ],
+        [
+          "ana",
+          "eu"
+        ],
+        [
+          "enta",
+          "tu (masculin)"
+        ],
+        [
+          "ente",
+          "tu (feminin)"
+        ],
+        [
+          "min wayn?",
+          "de unde ești?"
+        ],
+        [
+          "men lebnen",
+          "din Liban"
+        ],
+        [
+          "men romania",
+          "din România"
+        ],
+        [
+          "tsharrafna",
+          "încântat de cunoștință"
+        ],
+        [
+          "yalla",
+          "hai, să mergem"
+        ],
+        [
+          "shukran",
+          "mulțumesc"
+        ],
+        [
+          "3afwan",
+          "cu plăcere"
+        ],
+        [
+          "ma3 el saleme",
+          "la revedere"
+        ],
+        [
+          "bay",
+          "pa, bye"
+        ],
+        [
+          "shu?",
+          "ce?"
+        ],
+        [
+          "eh / ah",
+          "da"
+        ],
+        [
+          "la2",
+          "nu"
+        ],
+        [
+          "tayyeb",
+          "ok, bine"
+        ],
+        [
+          "meshi",
+          "ok, merge"
+        ],
+        [
+          "ktir",
+          "mult"
+        ],
+        [
+          "shway",
+          "puțin"
+        ],
+        [
+          "halla2",
+          "acum"
+        ]
+      ]
+    },
+    {
+      "id": "guide-2",
+      "title": "Cap. 2 · Familia",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "3ayle",
+          "familie"
+        ],
+        [
+          "abe / bayye",
+          "tatăl meu, tata"
+        ],
+        [
+          "emme",
+          "mama mea"
+        ],
+        [
+          "5ayy",
+          "frate"
+        ],
+        [
+          "e5et",
+          "soră"
+        ],
+        [
+          "eben",
+          "fiu"
+        ],
+        [
+          "bent",
+          "fiică"
+        ],
+        [
+          "jedd",
+          "bunic"
+        ],
+        [
+          "jedde",
+          "bunică"
+        ],
+        [
+          "3amm",
+          "unchi (din partea tatălui)"
+        ],
+        [
+          "3amme",
+          "mătușă (din partea tatălui)"
+        ],
+        [
+          "5al",
+          "unchi (din partea mamei)"
+        ],
+        [
+          "5ale",
+          "mătușă (din partea mamei)"
+        ],
+        [
+          "3ande",
+          "am"
+        ],
+        [
+          "ma 3ande",
+          "nu am"
+        ],
+        [
+          "kam?",
+          "câți? câte?"
+        ],
+        [
+          "wa7ad",
+          "unu"
+        ],
+        [
+          "tneen",
+          "doi"
+        ],
+        [
+          "tleete",
+          "trei"
+        ],
+        [
+          "arb3a",
+          "patru"
+        ],
+        [
+          "kbir",
+          "mare, în vârstă"
+        ],
+        [
+          "z8ir",
+          "mic, tânăr"
+        ],
+        [
+          "metzawwaj",
+          "căsătorit"
+        ],
+        [
+          "a3zab",
+          "necăsătorit"
+        ]
+      ]
+    },
+    {
+      "id": "guide-3",
+      "title": "Cap. 3 · Meserii și activități",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "shu bte3mel?",
+          "ce lucrezi? ce faci?"
+        ],
+        [
+          "beshte8el",
+          "lucrez"
+        ],
+        [
+          "bedrus",
+          "studiez"
+        ],
+        [
+          "sho8ol",
+          "muncă, job"
+        ],
+        [
+          "taleb",
+          "student / studentă (masculin)"
+        ],
+        [
+          "talbe",
+          "student / studentă (feminin)"
+        ],
+        [
+          "muhandis",
+          "inginer"
+        ],
+        [
+          "muhandise",
+          "ingineră"
+        ],
+        [
+          "duktor",
+          "doctor"
+        ],
+        [
+          "duktora",
+          "doctoriță"
+        ],
+        [
+          "m3allem",
+          "profesor"
+        ],
+        [
+          "m3allme",
+          "profesoară"
+        ],
+        [
+          "m7ame",
+          "avocat"
+        ],
+        [
+          "m7amye",
+          "avocată"
+        ],
+        [
+          "mwazzaf",
+          "angajat"
+        ],
+        [
+          "mwazzafe",
+          "angajată"
+        ],
+        [
+          "mudir",
+          "manager"
+        ],
+        [
+          "mudire",
+          "manageră"
+        ],
+        [
+          "bayt",
+          "casă"
+        ],
+        [
+          "maktab",
+          "birou"
+        ],
+        [
+          "sherke",
+          "companie"
+        ],
+        [
+          "madrase",
+          "școală"
+        ],
+        [
+          "jem3a",
+          "universitate"
+        ],
+        [
+          "mustashfa",
+          "spital"
+        ],
+        [
+          "mat3am",
+          "restaurant"
+        ],
+        [
+          "ma7all",
+          "magazin"
+        ],
+        [
+          "bru7",
+          "merg"
+        ],
+        [
+          "berja3",
+          "mă întorc"
+        ],
+        [
+          "bo23od",
+          "stau, rămân"
+        ],
+        [
+          "ba3mel",
+          "fac"
+        ],
+        [
+          "kell yom",
+          "în fiecare zi"
+        ],
+        [
+          "es sobe7",
+          "dimineața"
+        ],
+        [
+          "bel layl",
+          "seara, noaptea"
+        ],
+        [
+          "wayn?",
+          "unde?"
+        ],
+        [
+          "hon",
+          "aici"
+        ],
+        [
+          "hunik",
+          "acolo"
+        ]
+      ]
+    },
+    {
+      "id": "guide-4",
+      "title": "Cap. 4 · Mâncare și băuturi",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "akel",
+          "mâncare"
+        ],
+        [
+          "shorb",
+          "băutură"
+        ],
+        [
+          "bhibb",
+          "îmi place"
+        ],
+        [
+          "ma bhibb",
+          "nu îmi place"
+        ],
+        [
+          "badde",
+          "vreau"
+        ],
+        [
+          "ma badde",
+          "nu vreau"
+        ],
+        [
+          "jou3an",
+          "flămând/ă (masculin)"
+        ],
+        [
+          "jou3ane",
+          "flămând/ă (feminin)"
+        ],
+        [
+          "3atshan",
+          "însetat/ă (masculin)"
+        ],
+        [
+          "3atshane",
+          "însetat/ă (feminin)"
+        ],
+        [
+          "tayyeb",
+          "gustos, bun"
+        ],
+        [
+          "laziz",
+          "delicios"
+        ],
+        [
+          "7elo",
+          "dulce, frumos"
+        ],
+        [
+          "7arr",
+          "picant, fierbinte"
+        ],
+        [
+          "male7",
+          "sărat"
+        ],
+        [
+          "7amed",
+          "acru"
+        ],
+        [
+          "hommos",
+          "humus"
+        ],
+        [
+          "tabbule",
+          "tabouleh"
+        ],
+        [
+          "fattush",
+          "fattoush (salată)"
+        ],
+        [
+          "kibbe",
+          "kibbeh"
+        ],
+        [
+          "shawerma",
+          "shawarma"
+        ],
+        [
+          "falafel",
+          "falafel"
+        ],
+        [
+          "5obz",
+          "pâine"
+        ],
+        [
+          "rezz",
+          "orez"
+        ],
+        [
+          "la7me",
+          "carne"
+        ],
+        [
+          "djej",
+          "pui"
+        ],
+        [
+          "samak",
+          "pește"
+        ],
+        [
+          "ahwe",
+          "cafea"
+        ],
+        [
+          "shay",
+          "ceai"
+        ],
+        [
+          "mayy",
+          "apă"
+        ],
+        [
+          "3asir",
+          "suc"
+        ]
+      ]
+    },
+    {
+      "id": "guide-6",
+      "title": "Cap. 6 · Orientare",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "wayn?",
+          "unde?"
+        ],
+        [
+          "hon",
+          "aici"
+        ],
+        [
+          "hunik",
+          "acolo"
+        ],
+        [
+          "2arib",
+          "aproape, lângă"
+        ],
+        [
+          "b3id",
+          "departe"
+        ],
+        [
+          "yamiin",
+          "dreapta"
+        ],
+        [
+          "shmel",
+          "stânga"
+        ],
+        [
+          "dou8ri",
+          "drept înainte"
+        ],
+        [
+          "7add",
+          "lângă, alături"
+        ],
+        [
+          "wara",
+          "în spatele"
+        ],
+        [
+          "2oddem",
+          "în fața"
+        ],
+        [
+          "fo2",
+          "deasupra, sus"
+        ],
+        [
+          "ta7et",
+          "dedesubt, jos"
+        ],
+        [
+          "share3",
+          "stradă"
+        ],
+        [
+          "tari2",
+          "drum, cale"
+        ],
+        [
+          "saydaliyye",
+          "farmacie"
+        ],
+        [
+          "bank",
+          "bancă"
+        ],
+        [
+          "supermarket",
+          "supermarket"
+        ],
+        [
+          "ma7atta",
+          "stație"
+        ],
+        [
+          "maw2af",
+          "parcare, stație"
+        ],
+        [
+          "ishara",
+          "semafor"
+        ],
+        [
+          "dawwar",
+          "sens giratoriu"
+        ],
+        [
+          "binaye",
+          "clădire"
+        ],
+        [
+          "tabe2",
+          "etaj"
+        ],
+        [
+          "mas3ad",
+          "lift, ascensor"
+        ]
+      ]
+    },
+    {
+      "id": "guide-7",
+      "title": "Cap. 7 · Cumpărături",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "Addesh 7a22o?",
+          "cât costă?"
+        ],
+        [
+          "se3er",
+          "preț"
+        ],
+        [
+          "8ali",
+          "scump"
+        ],
+        [
+          "r5is",
+          "ieftin"
+        ],
+        [
+          "beshtere",
+          "cumpăr"
+        ],
+        [
+          "bbi3",
+          "vând"
+        ],
+        [
+          "hayda",
+          "acesta (m)"
+        ],
+        [
+          "hayde",
+          "aceasta (f)"
+        ],
+        [
+          "lon",
+          "culoare"
+        ],
+        [
+          "a7mar",
+          "roșu"
+        ],
+        [
+          "azra2",
+          "albastru"
+        ],
+        [
+          "abyad",
+          "alb"
+        ],
+        [
+          "aswad",
+          "negru"
+        ],
+        [
+          "a5dar",
+          "verde"
+        ],
+        [
+          "7ajem",
+          "mărime"
+        ],
+        [
+          "wasat",
+          "mediu"
+        ],
+        [
+          "kilo",
+          "kilogram"
+        ],
+        [
+          "lira",
+          "liră (monedă)"
+        ],
+        [
+          "dollar",
+          "dolar"
+        ],
+        [
+          "masare",
+          "bani"
+        ],
+        [
+          "ta5fid",
+          "reducere"
+        ],
+        [
+          "jdid",
+          "nou"
+        ],
+        [
+          "2adim",
+          "vechi"
+        ],
+        [
+          "bashi3",
+          "urât"
+        ],
+        [
+          "su2",
+          "piață, souk"
+        ]
+      ]
+    },
+    {
+      "id": "guide-8",
+      "title": "Cap. 8 · Ce faci acum?",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "3am",
+          "marker prezent continuu"
+        ],
+        [
+          "shu 3am te3mel?",
+          "ce faci (acum)?"
+        ],
+        [
+          "be2ra",
+          "citesc"
+        ],
+        [
+          "bektob",
+          "scriu"
+        ],
+        [
+          "betfarraj",
+          "mă uit"
+        ],
+        [
+          "besma3",
+          "ascult"
+        ],
+        [
+          "bel3ab",
+          "mă joc"
+        ],
+        [
+          "bnem",
+          "dorm"
+        ],
+        [
+          "bs7a",
+          "mă trezesc"
+        ],
+        [
+          "bel7a2",
+          "ajung din urmă"
+        ],
+        [
+          "bestanna",
+          "aștept"
+        ],
+        [
+          "bfakker",
+          "mă gândesc"
+        ],
+        [
+          "be7ke",
+          "vorbesc"
+        ],
+        [
+          "bed7ak",
+          "râd"
+        ],
+        [
+          "bebke",
+          "plâng"
+        ],
+        [
+          "halla2",
+          "acum"
+        ],
+        [
+          "ba3dayn",
+          "mai târziu"
+        ],
+        [
+          "kteb",
+          "carte"
+        ],
+        [
+          "film",
+          "film"
+        ],
+        [
+          "musi2a",
+          "muzică"
+        ],
+        [
+          "telefizyon",
+          "televizor"
+        ],
+        [
+          "telefon",
+          "telefon"
+        ],
+        [
+          "sho8le",
+          "lucru, treabă"
+        ],
+        [
+          "mash8ul",
+          "ocupat"
+        ],
+        [
+          "fade",
+          "liber, disponibil"
+        ]
+      ]
+    },
+    {
+      "id": "guide-9",
+      "title": "Cap. 9 · Povestiri la trecut",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "ken",
+          "a fost"
+        ],
+        [
+          "sar",
+          "a devenit, s-a întâmplat"
+        ],
+        [
+          "ra7",
+          "a mers"
+        ],
+        [
+          "eja",
+          "a venit"
+        ],
+        [
+          "3emel",
+          "a făcut"
+        ],
+        [
+          "2al",
+          "a spus"
+        ],
+        [
+          "shef",
+          "a văzut"
+        ],
+        [
+          "akal",
+          "a mâncat"
+        ],
+        [
+          "shereb",
+          "a băut"
+        ],
+        [
+          "eshtara",
+          "a cumpărat"
+        ],
+        [
+          "2ara",
+          "a citit"
+        ],
+        [
+          "katab",
+          "a scris"
+        ],
+        [
+          "nem",
+          "a dormit"
+        ],
+        [
+          "s7a",
+          "s-a trezit"
+        ],
+        [
+          "li3eb",
+          "s-a jucat"
+        ],
+        [
+          "7ke",
+          "a vorbit"
+        ],
+        [
+          "seme3",
+          "a auzit"
+        ],
+        [
+          "fehem",
+          "a înțeles"
+        ],
+        [
+          "embere7",
+          "ieri"
+        ],
+        [
+          "awwal embere7",
+          "alaltăieri"
+        ],
+        [
+          "el esbu3 el made",
+          "săptămâna trecută"
+        ],
+        [
+          "esh shaher el made",
+          "luna trecută"
+        ],
+        [
+          "es sene el madye",
+          "anul trecut"
+        ],
+        [
+          "zamen",
+          "demult, odinioară"
+        ],
+        [
+          "2abel",
+          "înainte, acum (timp)"
+        ],
+        [
+          "ba3ed",
+          "după"
+        ],
+        [
+          "lamma",
+          "când (în trecut)"
+        ],
+        [
+          "wa2et",
+          "timp, moment"
+        ]
+      ]
+    },
+    {
+      "id": "guide-11",
+      "title": "Cap. 11 · Preferințe și opinii",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "b3ajebne",
+          "îmi place"
+        ],
+        [
+          "ma b3ajebne",
+          "nu îmi place"
+        ],
+        [
+          "ra2ye",
+          "opinia mea"
+        ],
+        [
+          "shu ra2yak?",
+          "care e opinia ta?"
+        ],
+        [
+          "a7san",
+          "mai bun, cel mai bun"
+        ],
+        [
+          "aswa2",
+          "mai rău, cel mai rău"
+        ],
+        [
+          "mofaddal",
+          "preferat"
+        ],
+        [
+          "hwaye",
+          "hobby"
+        ],
+        [
+          "ehtimem",
+          "interes"
+        ],
+        [
+          "riyada",
+          "sport"
+        ],
+        [
+          "fann",
+          "artă"
+        ],
+        [
+          "o8niye",
+          "cântec"
+        ],
+        [
+          "musalsal",
+          "serial"
+        ],
+        [
+          "safar",
+          "călătorie"
+        ],
+        [
+          "rasm",
+          "desen"
+        ],
+        [
+          "taswir",
+          "fotografie"
+        ],
+        [
+          "2raye",
+          "citit"
+        ],
+        [
+          "mamell",
+          "plictisitor"
+        ],
+        [
+          "mthir",
+          "interesant, captivant"
+        ],
+        [
+          "momte3",
+          "distractiv"
+        ],
+        [
+          "mohemm",
+          "important"
+        ],
+        [
+          "mish mohemm",
+          "neimportant"
+        ],
+        [
+          "sa7",
+          "corect, adevărat"
+        ],
+        [
+          "8alat",
+          "greșit"
+        ]
+      ]
+    },
+    {
+      "id": "guide-12",
+      "title": "Cap. 12 · Obligații și posibilități",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "lezem",
+          "trebuie"
+        ],
+        [
+          "momken",
+          "posibil, pot"
+        ],
+        [
+          "b2dar",
+          "pot, sunt capabil"
+        ],
+        [
+          "ma b2dar",
+          "nu pot"
+        ],
+        [
+          "ma fi",
+          "nu se poate, nu există"
+        ],
+        [
+          "mamnū3",
+          "interzis"
+        ],
+        [
+          "masmu7",
+          "permis"
+        ],
+        [
+          "darūri",
+          "necesar"
+        ],
+        [
+          "muhemm",
+          "important"
+        ],
+        [
+          "3ade",
+          "normal, ok"
+        ],
+        [
+          "mish mushkile",
+          "nu e problemă"
+        ],
+        [
+          "mushkile",
+          "problemă"
+        ],
+        [
+          "fine",
+          "pot eu (literal: în mine)"
+        ],
+        [
+          "ma fine",
+          "nu pot eu"
+        ],
+        [
+          "bsir",
+          "se poate, devine"
+        ],
+        [
+          "ma bsir",
+          "nu se poate"
+        ],
+        [
+          "ejbere",
+          "obligatoriu"
+        ],
+        [
+          "e5tiyere",
+          "opțional"
+        ],
+        [
+          "2anun",
+          "lege, regulă"
+        ],
+        [
+          "2a3de",
+          "regulă"
+        ],
+        [
+          "ezen",
+          "permisiune"
+        ],
+        [
+          "sama7",
+          "permisiune, iertare"
+        ],
+        [
+          "7a2",
+          "drept"
+        ],
+        [
+          "wejeb",
+          "datorie, obligație"
+        ]
+      ]
+    },
+    {
+      "id": "guide-13",
+      "title": "Cap. 13 · Condiții și ipoteze",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "iza",
+          "dacă (condiție reală)"
+        ],
+        [
+          "law",
+          "dacă (ipotetic)"
+        ],
+        [
+          "momken",
+          "posibil, poate"
+        ],
+        [
+          "akid",
+          "sigur, cu siguranță"
+        ],
+        [
+          "yimken",
+          "poate, probabil"
+        ],
+        [
+          "balke",
+          "poate, s-ar putea"
+        ],
+        [
+          "aw",
+          "sau"
+        ],
+        [
+          "bass",
+          "dar, doar"
+        ],
+        [
+          "lazem",
+          "trebuie, necesar"
+        ],
+        [
+          "darure",
+          "necesar, obligatoriu"
+        ],
+        [
+          "musta7il",
+          "imposibil"
+        ],
+        [
+          "m7tamal",
+          "probabil"
+        ],
+        [
+          "shart",
+          "condiție"
+        ],
+        [
+          "7ale",
+          "situație, caz"
+        ],
+        [
+          "fursa",
+          "șansă, ocazie"
+        ],
+        [
+          "mushkle",
+          "problemă"
+        ],
+        [
+          "7all",
+          "soluție"
+        ],
+        [
+          "ta2es",
+          "vreme"
+        ],
+        [
+          "matar",
+          "ploaie"
+        ],
+        [
+          "shams",
+          "soare"
+        ],
+        [
+          "bard",
+          "frig"
+        ],
+        [
+          "safar",
+          "călătorie"
+        ],
+        [
+          "5ette",
+          "plan"
+        ]
+      ]
+    },
+    {
+      "id": "guide-14",
+      "title": "Cap. 14 · Planuri și intenții",
+      "group": "Ghid · supliment",
+      "source": "guide",
+      "desc": "Vocabular suplimentar, cu grafii armonizate după lecțiile profesorului.",
+      "cards": [
+        [
+          "ra7",
+          "marker pentru viitor"
+        ],
+        [
+          "shu ra7 te3mel?",
+          "ce vei face?"
+        ],
+        [
+          "ra7 ru7",
+          "voi merge"
+        ],
+        [
+          "ra7 ashte8el",
+          "voi lucra"
+        ],
+        [
+          "ra7 2abel",
+          "voi întâlni"
+        ],
+        [
+          "ra7 safer",
+          "voi călători"
+        ],
+        [
+          "ra7 a3mol",
+          "voi face"
+        ],
+        [
+          "ra7 kun",
+          "voi fi"
+        ],
+        [
+          "ra7 je",
+          "voi veni"
+        ],
+        [
+          "ra7 wassal",
+          "voi ajunge"
+        ],
+        [
+          "ra7 e7ke",
+          "voi vorbi"
+        ],
+        [
+          "ra7 shuf",
+          "voi vedea"
+        ],
+        [
+          "bukra",
+          "mâine"
+        ],
+        [
+          "ba3ed bukra",
+          "poimâine"
+        ],
+        [
+          "el esbu3 el jey",
+          "săptămâna viitoare"
+        ],
+        [
+          "esh shaher el jey",
+          "luna viitoare"
+        ],
+        [
+          "es sene el jeye",
+          "anul viitor"
+        ],
+        [
+          "inshallah",
+          "dacă vrea Dumnezeu"
+        ],
+        [
+          "yimken",
+          "poate"
+        ],
+        [
+          "akid",
+          "sigur"
+        ],
+        [
+          "5otte",
+          "plan"
+        ],
+        [
+          "maw3ed",
+          "întâlnire, programare"
+        ],
+        [
+          "re7le",
+          "călătorie"
+        ],
+        [
+          "3otle",
+          "vacanță"
+        ],
+        [
+          "mosta2bal",
+          "viitor"
+        ],
+        [
+          "7elem",
+          "vis, visare"
+        ]
+      ]
+    }
+  ],
+  "planTabs": [
+    {
+      "title": "Greetings and Introductions",
+      "cards": [
+        [
+          "Mar7aba",
+          "Hello"
+        ],
+        [
+          "Ahlan wa sahlan",
+          "Welcome"
+        ],
+        [
+          "Kifak?",
+          "How are you? (to male)"
+        ],
+        [
+          "Kifik?",
+          "How are you? (to female)"
+        ],
+        [
+          "Mni7 / Mni7a",
+          "Fine / Good"
+        ],
+        [
+          "Shukran",
+          "Thank you"
+        ],
+        [
+          "Ma3es-saleeme",
+          "Goodbye"
+        ]
+      ]
+    },
+    {
+      "title": "Numbers and Counting",
+      "cards": [
+        [
+          "Waa7ad",
+          "One"
+        ],
+        [
+          "Tneen",
+          "Two"
+        ],
+        [
+          "Tleete",
+          "Three"
+        ],
+        [
+          "3ashra",
+          "Ten"
+        ],
+        [
+          "3eshreen",
+          "Twenty"
+        ],
+        [
+          "Miyye",
+          "One hundred"
+        ],
+        [
+          "Addeesh",
+          "How many?"
+        ]
+      ]
+    },
+    {
+      "title": "Family and Relationships",
+      "cards": [
+        [
+          "3ayle",
+          "Family"
+        ],
+        [
+          "bayy / Bayye",
+          "Father"
+        ],
+        [
+          "emm / emme",
+          "Mother"
+        ],
+        [
+          "5ayy / Khayye",
+          "Brother"
+        ],
+        [
+          "Ekhet / Ekhte",
+          "Sister"
+        ],
+        [
+          "3aylte",
+          "My family"
+        ]
+      ]
+    },
+    {
+      "title": "Food and Drink",
+      "cards": [
+        [
+          "Badde",
+          "I want"
+        ],
+        [
+          "Ahwe",
+          "Coffee"
+        ],
+        [
+          "Shaay",
+          "Tea"
+        ],
+        [
+          "Mayy",
+          "Water"
+        ],
+        [
+          "Khebez",
+          "Bread"
+        ],
+        [
+          "Tayyeb kteer",
+          "Very Delicious "
+        ]
+      ]
+    },
+    {
+      "title": "Daily Routines",
+      "cards": [
+        [
+          "Bfii2/buu3a",
+          "I wake up"
+        ],
+        [
+          "Btrawwa2",
+          "I eat breakfast"
+        ],
+        [
+          "Bru7 3ala(3a) el sheghel",
+          "I go to work"
+        ],
+        [
+          "Barja3 3al bet",
+          "I come home"
+        ],
+        [
+          "Bnem",
+          "I sleep"
+        ]
+      ]
+    },
+    {
+      "title": "Home and Furniture",
+      "cards": [
+        [
+          "Bet/bayt",
+          "House"
+        ],
+        [
+          "Ouda/8erfe",
+          "Room"
+        ],
+        [
+          "Ta5et",
+          "Bed"
+        ],
+        [
+          "Tawle",
+          "Table"
+        ],
+        [
+          "Korse/kerse",
+          "Chair"
+        ],
+        [
+          "Matba5",
+          "Kitchen"
+        ]
+      ]
+    },
+    {
+      "title": "Shopping and Money",
+      "cards": []
+    },
+    {
+      "title": "Directions and Transport",
+      "cards": []
+    },
+    {
+      "title": "Jobs and Work",
+      "cards": []
+    },
+    {
+      "title": "Hobbies and Free Time",
+      "cards": [
+        [
+          "B7ebb",
+          "I like"
+        ],
+        [
+          "Riyada",
+          "Sport"
+        ],
+        [
+          "Musi2a",
+          "Music"
+        ],
+        [
+          "2reeye",
+          "Reading"
+        ],
+        [
+          "Fatbol/futbol..etc",
+          "Football"
+        ]
+      ]
+    },
+    {
+      "title": "Weather and Seasons",
+      "cards": []
+    },
+    {
+      "title": "Clothes and Appearance",
+      "cards": []
+    },
+    {
+      "title": "Health and the Body",
+      "cards": []
+    },
+    {
+      "title": "Time, Days, and Dates",
+      "cards": [
+        [
+          "Addesh el sa3a?",
+          "What time is it?"
+        ],
+        [
+          "El tanen",
+          "Monday"
+        ],
+        [
+          "El jom3a",
+          "Friday"
+        ],
+        [
+          "El yom/yawm",
+          "Today"
+        ],
+        [
+          "Bukra",
+          "Tomorrow"
+        ]
+      ]
+    },
+    {
+      "title": "Asking Questions",
+      "cards": []
+    },
+    {
+      "title": "Describing People and Things",
+      "cards": []
+    },
+    {
+      "title": "Making Plans",
+      "cards": []
+    },
+    {
+      "title": "At the Restaurant",
+      "cards": []
+    },
+    {
+      "title": "Travel and Holidays",
+      "cards": []
+    },
+    {
+      "title": "At the Doctor",
+      "cards": []
+    },
+    {
+      "title": "Groceries and Markets",
+      "cards": []
+    },
+    {
+      "title": "Public Transport",
+      "cards": []
+    },
+    {
+      "title": "Leisure Activities",
+      "cards": []
+    },
+    {
+      "title": "Review and Practice",
+      "cards": []
+    }
+  ]
+}
