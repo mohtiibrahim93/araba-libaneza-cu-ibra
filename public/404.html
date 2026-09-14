@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagina nu există — Arabă Libaneză cu Ibra</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://centruldearabalibaneza.com/">
+<!--
+  Served for addresses that are not pages.
+
+  Without this file the host answers every unmatched path with dist/index.html,
+  and the prerender has written the homepage into that file — so /services,
+  /blog/post-1 or any typo returned 200 carrying the homepage's title, its
+  content and a canonical pointing at "/". React then replaced it with the 404
+  screen once JavaScript ran, but a crawler that does not render, and a person
+  watching the page load, both saw the homepage at an address that does not
+  exist. Search Console calls that a soft 404.
+
+  This page is deliberately standalone: no bundle, no fonts, no JavaScript. An
+  error page that depends on the app is an error page that fails when the app
+  does, and it should stay correct even when nothing else loads.
+
+  It is noindex so it can never be indexed itself, and follow so the links
+  below still pass a crawler back into the real site.
+-->
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #faf7f2; color: #1b1b1b;
+  }
+  @media (prefers-color-scheme: dark) { body { background: #14100c; color: #ece7e1; } }
+  main { max-width: 34rem; width: 100%; }
+  .eyebrow { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #a33; font-weight: 600; }
+  h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.2; margin: .4rem 0 .8rem; }
+  p { margin: 0 0 1.4rem; opacity: .8; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+  a { color: inherit; text-decoration: none; }
+  li a {
+    display: block; padding: .7rem .9rem; border-radius: .6rem;
+    border: 1px solid rgba(128,128,128,.32);
+  }
+  li a:hover { border-color: #a33; }
+  li a b { display: block; font-weight: 600; }
+  li a span { font-size: .87rem; opacity: .7; }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Eroare 404</p>
+  <h1>Pagina aceasta nu există</h1>
+  <p>Adresa pe care ai deschis-o nu duce nicăieri. Probabil linkul e greșit sau pagina s-a mutat. Mai jos sunt paginile căutate cel mai des.</p>
+  <ul>
+    <li><a href="/"><b>Pagina principală</b><span>Cine sunt, cum predau și ce grupe încep acum</span></a></li>
+    <li><a href="/cursuri-limba-araba"><b>Toate cursurile</b><span>Grupe A1–C2, lecții private și cursul pentru copii, cu prețuri</span></a></li>
+    <li><a href="/cursuri/grup"><b>Grupele care încep acum</b><span>Date de start, orar și locuri rămase</span></a></li>
+    <li><a href="/joaca"><b>Joacă și învață</b><span>Peste 4.300 de expresii, gratuit și fără cont</span></a></li>
+    <li><a href="/blog"><b>Blog</b><span>Ghiduri despre araba libaneză, scrise de un profesor nativ</span></a></li>
+  </ul>
+</main>
+</body>
+</html>
