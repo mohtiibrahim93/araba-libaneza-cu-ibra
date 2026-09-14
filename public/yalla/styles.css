@@ -47,3 +47,13 @@
 .fix-row.done{font-size:.9rem;font-weight:600}
 .fix-row.done svg{width:1.1rem;height:1.1rem;flex:0 0 auto}
 .fix-note{margin:.4rem 0 0;font-size:.78rem;opacity:.72;line-height:1.45}
+
+/* Inline correcting, shown only to a signed-in owner. Deliberately plain: it
+   appears inside a vocabulary card and inside a round, so it must not compete
+   with the word it is there to fix. */
+.inline-edit{display:grid;gap:.5rem;margin-top:.6rem;padding-top:.6rem;border-top:1px solid rgba(0,0,0,.12)}
+.inline-edit label{display:grid;gap:.2rem;font-size:.75rem;font-weight:600;opacity:.75}
+.inline-edit input{padding:.45rem .6rem;border-radius:.5rem;border:1px solid rgba(0,0,0,.18);
+  font:inherit;background:#fff;color:inherit;min-width:0}
+.inline-edit-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.15rem}
+.inline-edit-open{margin-top:.6rem;font-size:.8rem}

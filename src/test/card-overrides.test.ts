@@ -104,3 +104,46 @@ describe("the read path", () => {
     expect(block).toContain("return false");
   });
 });
+
+/**
+ * Correcting a card where you see it.
+ *
+ * The teacher workspace could already fix a card, but only by searching a list
+ * of 4,315 and filling a form — which is not how anyone notices a mistake. You
+ * notice it reading the word, or the moment a round marks you wrong. Both of
+ * those now carry an edit control.
+ */
+describe("inline correcting", () => {
+  const game = readFileSync(resolve(process.cwd(), "public/yalla/app.js"), "utf8");
+
+  it("shows edit controls only when the page says an owner is present", () => {
+    expect(game).toContain("const canEdit=()=>window.YALLA_TEACHER===true");
+    // Both entry points: the word browser and the round's answer screen.
+    expect(game.match(/data-start-edit=/g)?.length).toBe(2);
+  });
+
+  it("puts the handlers above the round-only guard", () => {
+    // Everything after `if(!session||session.done)return;` fires only mid-round.
+    // The word browser has no session, so a handler below that line can never
+    // run there — which is exactly how this broke the first time.
+    const click = game.slice(game.indexOf("document.addEventListener('click'"));
+    const edit = click.indexOf("b.dataset.startEdit");
+    const guard = click.indexOf("if(!session||session.done)return;");
+    expect(edit).toBeGreaterThan(-1);
+    expect(guard).toBeGreaterThan(-1);
+    expect(edit, "startEdit must be handled before the session guard").toBeLessThan(guard);
+  });
+
+  it("carries existing corrections across when saving one card", () => {
+    // commitEdits replaces the whole map, so writing a single card without
+    // merging would silently discard every other correction made that session.
+    expect(game).toContain("yalla-teacher-edits-v1");
+    expect(game).toMatch(/commitEdits\(\{\.\.\.current,\[id\]:\{ar,ro,variants\}\}\)/);
+  });
+
+  it("tells the teacher a correction is not published yet", () => {
+    // Saving here changes this browser only. Without saying so, an owner would
+    // reasonably assume students already had the fix.
+    expect(game).toMatch(/Publica corecturile|Publică corecturile/);
+  });
+});

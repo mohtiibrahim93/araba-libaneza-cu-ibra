@@ -77,6 +77,7 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
     const win = frameRef.current?.contentWindow as
       | (Window & {
           YallaAcademy?: { commitEdits?: (e: CardOverrides) => void };
+          YALLA_TEACHER?: boolean;
         })
       | null
       | undefined;
@@ -135,6 +136,30 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
       setPublishing("error");
     }
   }, []);
+
+  // Tell the game an owner is present, which is what reveals its inline
+  // "Corectează" controls. Learners never get them. This is presentation only:
+  // an unsigned visitor who set the flag by hand could still edit nothing but
+  // their own browser, because publishing goes through the admin function.
+  useEffect(() => {
+    if (!mounted || !signedIn) return;
+    let tries = 0;
+    const flag = () => {
+      const win = frameRef.current?.contentWindow as (Window & { YALLA_TEACHER?: boolean }) | null;
+      if (!win) return false;
+      try {
+        win.YALLA_TEACHER = true;
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    if (flag()) return;
+    const id = window.setInterval(() => {
+      if (flag() || ++tries > 20) window.clearInterval(id);
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [mounted, signedIn]);
 
   useEffect(() => {
     if (!mounted || !Object.keys(published).length) return;
