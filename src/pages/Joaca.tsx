@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
@@ -44,6 +44,11 @@ const COPY = {
       "Exersezi singur vocabular și structuri, și atât. Pronunția, conversația și corectarea în timp real cer un profesor. Dacă vrei să vorbești, nu doar să recunoști cuvinte, începe cu o lecție de probă gratuită.",
     ctaCourses: "Vezi cursurile",
     ctaTrial: "Lecție de probă gratuită",
+    levelH2: "Verifică-ți nivelul în joc",
+    levelP:
+      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibrahim.",
+    ctaLevel: "Începe testul de nivel",
+    ctaBack: "Înapoi la exerciții",
   },
   en: {
     home: "Home",
