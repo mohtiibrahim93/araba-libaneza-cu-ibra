@@ -29,9 +29,9 @@ describe("page meta", () => {
     }
   });
 
-  it("is imported by the build script rather than written out again", () => {
-    const src = read("scripts/seoPrerender.ts");
-    expect(src).toContain('from "../src/lib/pageMeta"');
+  it("is imported by the head table rather than written out again", () => {
+    const src = read("src/lib/seoHead.ts");
+    expect(src).toContain('from "@/lib/pageMeta"');
     expect(src).toContain("HOME_META.ro.title");
     expect(src).toContain("CURSURI_ARABA_META.title");
     // The old hard-coded strings must not survive anywhere in the route table.
@@ -54,12 +54,12 @@ describe("page meta", () => {
     // This used to compare only the first two, and the homepage title drifted
     // onto "Cursuri de arabă în București" — the Bucharest page's entire
     // reason to exist — without a single test failing. Hence all four.
-    const prerender = read("scripts/seoPrerender.ts");
+    const prerender = read("src/lib/seoHead.ts");
     const titleOf = (path: string) => {
       const line = prerender
         .split("\n")
         .find((l) => l.trimStart().startsWith(`{ path: "${path}"`));
-      expect(line, `no prerender entry for ${path}`).toBeDefined();
+      expect(line, `no head entry for ${path}`).toBeDefined();
       return (line!.match(/title: "([^"]*)"/)?.[1] ?? "").toLowerCase();
     };
 

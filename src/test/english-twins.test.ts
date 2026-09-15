@@ -18,7 +18,7 @@ import { hasRoute } from "./helpers/routes";
  * cannot ship with only one of them.
  */
 const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
-const prerender = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts"), "utf8");
+const prerender = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
 const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 
 const COURSE_PAIRS: Array<[string, string]> = [
@@ -61,11 +61,11 @@ describe("English twins", () => {
     expect(languageCounterpart(en, "ro")).toBe(ro);
   });
 
-  it("prerenders the English course pages and lists them in the sitemap", () => {
+  it("gives the English course pages a head and lists them in the sitemap", () => {
     for (const [, en] of COURSE_PAIRS) {
       const generated = /\/group\/[a-c]\d$/.test(en); // built by levelRoutesEn()
       if (!generated) {
-        expect(prerender, `no prerender entry for ${en}`).toContain(`{ path: "${en}"`);
+        expect(prerender, `no head entry for ${en}`).toContain(`{ path: "${en}"`);
       }
       expect(sitemap, `${en} missing from sitemap`).toContain(
         `<loc>https://centruldearabalibaneza.com${en}</loc>`,
@@ -98,8 +98,8 @@ describe("English twins", () => {
   });
 
   it("stamps the route's own language on <html>", () => {
-    // The shell is checked in as lang="ro"; every English page used to claim
-    // Romanian to any crawler reading the static file.
-    expect(prerender).toContain("<html[^>]*\\blang=\"");
+    // The shell used to be checked in as lang="ro"; every English page claimed
+    // Romanian to any crawler. The server now derives it from the URL.
+    expect(root).toContain("<html lang={shellLang}");
   });
 });

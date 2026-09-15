@@ -27,7 +27,7 @@ const RETIRED = [
   "/araba-online",
 ];
 
-const prerender = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts"), "utf8");
+const prerender = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
 const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 
 describe("retired duplicates of the courses hub", () => {
@@ -40,7 +40,7 @@ describe("retired duplicates of the courses hub", () => {
     const line = prerender
       .split("\n")
       .find((l) => l.trimStart().startsWith(`{ path: "${path}"`));
-    expect(line, `no prerender entry for ${path}`).toBeDefined();
+    expect(line, `no head entry for ${path}`).toBeDefined();
     expect(line).toContain('canonical: "/cursuri-limba-araba"');
   });
 

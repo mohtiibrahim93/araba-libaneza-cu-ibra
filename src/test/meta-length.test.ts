@@ -1,14 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { allRoutes } from "../../scripts/seoPrerender";
+import { allSeoRoutes } from "@/lib/seoHead";
 
 /**
  * Title and description lengths, asserted where failure is visible.
  *
- * seoPrerender already checks the upper bounds, but it reports them through
- * this.warn() — a Rollup warning that scrolls past in a successful build. That
- * is how a 220-character description reached production: the guard fired and
- * nobody saw it. The build is deliberately never failed by that plugin, so the
- * check belongs here too, where a breach stops the suite.
+ * A 220-character description once reached production because the only guard
+ * was a build warning that scrolled past in a successful build. The check
+ * belongs here, where a breach stops the suite.
  *
  * The lower bound is new. Nine pages had shipped with descriptions too short to
  * say anything useful — 70 characters on the privacy pages — which Google
@@ -18,9 +16,9 @@ const TITLE_MAX = 60;
 const DESC_MAX = 160;
 const DESC_MIN = 110;
 
-const routes = allRoutes();
+const routes = allSeoRoutes();
 
-describe("prerendered meta lengths", () => {
+describe("per-page meta lengths", () => {
   it("has routes to check", () => {
     expect(routes.length).toBeGreaterThan(100);
   });
