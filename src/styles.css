@@ -1,6 +1,10 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+/* Self-hosted display fonts (headlines + brand lockup) — ported from main.tsx */
+@import "@fontsource/lora/600.css";
+@import "@fontsource/lora/700.css";
+@import "@fontsource/noto-naskh-arabic/600.css";
 
 @custom-variant dark (&:is(.dark *));
 
