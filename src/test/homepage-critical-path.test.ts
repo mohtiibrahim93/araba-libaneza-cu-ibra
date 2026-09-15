@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { screen } from "@testing-library/react";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { renderRoute } from "./helpers/appRouter";
+
 
 /**
  * The Supabase client must stay off the first-load path.
