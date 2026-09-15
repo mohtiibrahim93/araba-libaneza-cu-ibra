@@ -85,7 +85,7 @@ describe("per-page heads", () => {
     // The pages still render their own head through react-helmet-async after
     // hydration. Without data-rh, Helmet appends a second title, description
     // and canonical next to the server-rendered ones.
-    const head = seoHead("/joaca");
+    const head = seoHead("/joc");
     for (const tag of [...head.meta, ...head.links]) {
       expect(tag["data-rh"]).toBe("true");
     }

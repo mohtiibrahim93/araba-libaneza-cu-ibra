@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { JOACA_META, TITLE_MAX, DESC_MAX } from "@/lib/pageMeta";
-import { hasRoute } from "./helpers/routes";
+import { hasRoute, redirectsTo } from "./helpers/routes";
 
 /**
  * The Yalla practice game, served from this domain rather than embedded from
@@ -67,12 +67,12 @@ describe("Yalla game assets", () => {
   });
 });
 
-describe("/joaca", () => {
+describe("/joc", () => {
   it("is routed and has its own head", () => {
-    expect(hasRoute("/joaca"), "no route for /joaca").toBe(true);
+    expect(hasRoute("/joc"), "no route for /joc").toBe(true);
     // Without a STATIC_ROUTES entry the route serves the site-wide head to
     // crawlers instead of its own.
-    expect(seoHeadSrc).toContain('{ path: "/joaca"');
+    expect(seoHeadSrc).toContain('{ path: "/joc"');
   });
 
   it("keeps its head inside the length limits", () => {
@@ -91,22 +91,27 @@ describe("/joaca", () => {
   it("is linked from the footer, not only the navbar dropdown", () => {
     // The dropdown mounts its contents when opened, so its links never reach
     // the server-rendered HTML. A footer link is what makes it crawlable.
-    expect(read("src/components/Footer.tsx")).toContain('to="/joaca"');
+    expect(read("src/components/Footer.tsx")).toContain('to="/joc"');
+  });
+
+  it("keeps the old /joaca address as a permanent redirect", () => {
+    // /joaca was indexed and listed in the sitemap before the rename.
+    expect(redirectsTo("/joaca"), "/joaca must redirect to /joc").toBe("/joc");
   });
 
   it("declares no English twin", () => {
     // The card bank carries Romanian meanings only, so an /en/ URL would
     // advertise a translation that does not exist. A route with no twin emits
     // no hreflang, which is correct here rather than an omission.
-    expect(hasRoute("/en/joaca"), "/joaca has no English twin by design").toBe(false);
-    expect(read("src/lib/languageRoutes.ts")).not.toContain("/joaca");
+    expect(hasRoute("/en/joc"), "/joc has no English twin by design").toBe(false);
+    expect(read("src/lib/languageRoutes.ts")).not.toContain("/joc");
   });
 });
 
 describe("the game's own URL stays out of the index", () => {
   it("disallows /yalla/ in robots.txt", () => {
     // /yalla/index.html renders the same game with no header, footer or prose.
-    // Indexed, it would compete with /joaca for the same queries as the worse
+    // Indexed, it would compete with /joc for the same queries as the worse
     // result. Nothing is lost: iframe content never counts toward the page
     // that embeds it.
     expect(robots).toContain("Disallow: /yalla/");
