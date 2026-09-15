@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { seoHead } from "@/lib/seoHead";
 import type { ComponentType } from "react";
 import NotFound from "@/pages/NotFound";
 import BlogCumInvetiArabaLibaneza from "@/pages/blog/CumInvetiArabaLibaneza";
@@ -55,5 +56,6 @@ function EnBlogPost() {
 }
 
 export const Route = createFileRoute("/en/blog/$slug")({
+  head: ({ params }) => seoHead(`/en/blog/${params.slug}`),
   component: EnBlogPost,
 });

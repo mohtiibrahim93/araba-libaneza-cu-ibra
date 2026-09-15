@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, beforeEach } from "vitest";
-import { MemoryRouter } from "@/lib/router-compat";
+import { MemoryRouter } from "./helpers/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Navbar from "./Navbar";
+import Navbar from "@/components/Navbar";
 import { I18nProvider } from "@/lib/i18n";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 // I18nProvider reads owner-edited overrides through useSiteTexts(), so it needs
-// a QueryClient above it — same nesting order as App.tsx. A fresh client per
+// a QueryClient above it — same nesting order as src/routes/__root.tsx. A fresh client per
 // render keeps the cache from leaking between tests; retry off so the offline
 // fetch fails fast and the code-shipped strings render.
 const renderNavbar = () =>

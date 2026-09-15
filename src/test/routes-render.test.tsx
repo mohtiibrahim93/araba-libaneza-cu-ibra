@@ -1,9 +1,8 @@
-import { render, screen, cleanup, waitFor } from "@testing-library/react";
+import { screen, cleanup, waitFor } from "@testing-library/react";
 import { describe, expect, it, afterEach, beforeAll, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { HelmetProvider } from "react-helmet-async";
-import App from "@/App";
+import { renderRoute, currentPath } from "./helpers/appRouter";
 
 /**
  * Smoke test for every publicly reachable content route.
@@ -11,7 +10,7 @@ import App from "@/App";
  * The site is a prerendered SPA: if a page throws on render, the build still
  * succeeds and the static <head> is still written, so a broken page ships
  * looking perfectly healthy to every check we have except an actual visit.
- * This renders each route through the real App tree — same providers, same
+ * This mounts each route through the real route tree — same providers, same
  * lazy imports, same router — and asserts it paints an <h1>.
  *
  * Routes are read from the sitemap so a new page is covered the moment it is
@@ -40,13 +39,7 @@ describe("every sitemap route renders", () => {
   });
 
   it.each(routes)("%s paints an h1", async (route) => {
-    window.history.pushState({}, "", route);
-    // HelmetProvider lives in main.tsx, above App — mirror that nesting.
-    render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    renderRoute(route);
     const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     expect(h1).toBeInTheDocument();
     expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
@@ -81,15 +74,10 @@ const CANONICALISED_ALIASES: [from: string, canonical: string][] = [
 describe("retired URLs still redirect", () => {
   it.each(REDIRECTS)("%s lands on a real page", async (from, expected) => {
     window.localStorage.setItem("site-language", from.startsWith("/en/") ? "en" : "ro");
-    window.history.pushState({}, "", from);
-    render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    const { router } = renderRoute(from);
     const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     expect(h1.textContent).toContain(expected);
-    expect(window.location.pathname).not.toBe(from);
+    expect(currentPath(router)).not.toBe(from);
   });
 });
 
@@ -106,12 +94,7 @@ describe("licensed images keep their attribution", () => {
     ["/dialecte-arabe", "ro", "Rafy"],
   ])("%s credits the dialect map", async (route, lang, author) => {
     window.localStorage.setItem("site-language", lang);
-    window.history.pushState({}, "", route);
-    const { container } = render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    const { container } = renderRoute(route);
     await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     const img = container.querySelector('img[src*="arabic-dialects-map"]');
     expect(img).toBeTruthy();
@@ -134,12 +117,7 @@ describe("blog articles get a working outline", () => {
     ["/blog/cum-inveti-araba-libaneza", "ro"],
   ])("%s builds an outline whose links resolve", async (route, lang) => {
     window.localStorage.setItem("site-language", lang);
-    window.history.pushState({}, "", route);
-    const { container } = render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    const { container } = renderRoute(route);
     await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     // The outline is built in an effect after paint, so it lands a tick later
     // than the h1 the wait above resolves on.
@@ -171,12 +149,7 @@ describe("structured data links the business to the organisation", () => {
     ["/cursuri-araba-bucuresti", "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness"],
   ])("%s declares a LocalBusiness owned by #organization", async (route, expectedId) => {
     window.localStorage.setItem("site-language", "ro");
-    window.history.pushState({}, "", route);
-    render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    const { container } = renderRoute(route);
     await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
 
     const local = await waitFor(() => {
@@ -197,12 +170,7 @@ describe("structured data links the business to the organisation", () => {
 describe("retired URLs that render instead of redirecting", () => {
   it.each(CANONICALISED_ALIASES)("%s serves content but canonicalises away", async (from, canonical) => {
     window.localStorage.setItem("site-language", "ro");
-    window.history.pushState({}, "", from);
-    render(
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>,
-    );
+    const { container } = renderRoute(from);
     const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
 

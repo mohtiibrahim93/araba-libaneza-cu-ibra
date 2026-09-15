@@ -48,7 +48,7 @@ describe("localized in-article links", () => {
     // That link is meant to cross languages. Routed through LocalizedLink it
     // would map /blog back to /en/blog and strand the reader where they were.
     const src = read("src/pages/blog/BlogIndex.tsx");
-    expect(src).toContain('import { Link as CrossLanguageLink } from "react-router-dom"');
+    expect(src).toContain('import { Link as CrossLanguageLink } from "@/lib/router-compat"');
     expect(src).toMatch(/<CrossLanguageLink\s+to=\{lang === "en" \? "\/blog" : "\/en\/blog"\}/);
   });
 

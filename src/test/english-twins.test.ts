@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { languageCounterpart } from "@/lib/languageRoutes";
+import { hasRoute } from "./helpers/routes";
 
 /**
  * Every bilingual page needs a URL per language.
@@ -16,7 +17,7 @@ import { languageCounterpart } from "@/lib/languageRoutes";
  * These assertions pin the two halves together so a new article or course page
  * cannot ship with only one of them.
  */
-const app = readFileSync(resolve(process.cwd(), "src/App.tsx"), "utf8");
+const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
 const prerender = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts"), "utf8");
 const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 
@@ -38,14 +39,14 @@ const COURSE_PAIRS: Array<[string, string]> = [
 
 describe("English twins", () => {
   it("routes the English blog and course pages", () => {
-    expect(app).toContain('<Route path="/en/blog" element={<BlogIndex />} />');
-    expect(app).toContain('<Route path="/en/blog/:slug"');
+    expect(hasRoute("/en/blog"), "no route for /en/blog").toBe(true);
+    expect(hasRoute("/en/blog/$slug"), "no route for English articles").toBe(true);
     for (const [, en] of COURSE_PAIRS) {
       // Level pages are served by one parameterised route.
       if (/\/group\/[a-c]\d$/.test(en)) continue;
-      expect(app, `no route for ${en}`).toContain(`<Route path="${en}"`);
+      expect(hasRoute(en), `no route for ${en}`).toBe(true);
     }
-    expect(app).toContain('<Route path="/en/courses/group/:level"');
+    expect(hasRoute("/en/courses/group/$level"), "no route for English level pages").toBe(true);
   });
 
   it("maps every blog post to an English URL in both directions", () => {
@@ -92,8 +93,8 @@ describe("English twins", () => {
     // the Romanian half of a bilingual component at an /en/ URL.
     const i18n = readFileSync(resolve(process.cwd(), "src/lib/i18n.tsx"), "utf8");
     expect(i18n).toContain('window.location.pathname.startsWith("/en/")');
-    expect(app).toContain("const LanguageFromPath");
-    expect(app).toContain("<LanguageFromPath />");
+    expect(root).toContain("const LanguageFromPath");
+    expect(root).toContain("<LanguageFromPath />");
   });
 
   it("stamps the route's own language on <html>", () => {

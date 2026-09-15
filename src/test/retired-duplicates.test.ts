@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { hasRoute, redirectsTo } from "./helpers/routes";
 
 /**
  * The four URLs that used to be second copies of the courses hub.
@@ -26,18 +27,13 @@ const RETIRED = [
   "/araba-online",
 ];
 
-const app = readFileSync(resolve(process.cwd(), "src/App.tsx"), "utf8");
 const prerender = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts"), "utf8");
 const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 
 describe("retired duplicates of the courses hub", () => {
   it.each(RETIRED)("%s redirects instead of rendering a page", (path) => {
-    const route = app
-      .split("\n")
-      .find((l) => l.includes(`<Route path="${path}"`));
-    expect(route, `no route declared for ${path}`).toBeDefined();
-    expect(route).toContain("<Navigate");
-    expect(route).toContain('to="/cursuri-limba-araba"');
+    expect(hasRoute(path), `no route declared for ${path}`).toBe(true);
+    expect(redirectsTo(path), `${path} should redirect to the hub`).toBe("/cursuri-limba-araba");
   });
 
   it.each(RETIRED)("%s canonicalises to the hub", (path) => {
