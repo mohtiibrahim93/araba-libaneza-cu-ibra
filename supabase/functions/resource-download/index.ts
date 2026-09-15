@@ -1,6 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
 
 // Free-resource lead magnet: the visitor submits name + email on the Arabizi
 // pages, we store the lead and email them the cheat-sheet PDF link.
@@ -86,11 +88,8 @@ Deno.serve(async (req) => {
       // Keep going — the visitor should still receive the resource.
     }
 
-    const { error } = await supabase.functions.invoke("send-transactional-email", {
-      headers: { Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
-      body: {
-        templateName: template,
-        recipientEmail: cleanEmail,
+    try {
+      await sendTemplateEmail(template, cleanEmail, {
         idempotencyKey: `${key}-${cleanEmail}-${new Date().toISOString().slice(0, 16)}`,
         templateData: {
           name: cleanName || undefined,
@@ -101,12 +100,12 @@ Deno.serve(async (req) => {
               ? row.file_url
               : undefined,
         },
-      },
-    });
-    if (error) {
-      console.error("resource-download email send failed", error);
+      });
+    } catch (sendError) {
+      console.error("resource-download email send failed", sendError);
       return json({ error: "Trimiterea emailului a eșuat. Încearcă din nou." }, 500);
     }
+
 
     return json({ success: true });
   } catch (err) {

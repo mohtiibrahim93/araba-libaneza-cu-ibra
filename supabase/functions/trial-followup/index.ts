@@ -1,5 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
 
 /**
  * Cron-driven (twice daily). Sends exactly two follow-up emails per trial:
@@ -75,36 +77,23 @@ Deno.serve(async (req) => {
     for (const r of ((rows ?? []) as unknown as Row[])) {
       const lang = (r.language as "ro" | "en") ?? "ro";
       try {
-        const resp = await fetch(
-          `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-            },
-            body: JSON.stringify({
-              templateName: "trial-followup",
-              recipientEmail: r.student_email,
-              idempotencyKey: `${stage.idemPrefix}-${r.id}`,
-              templateData: {
-                name: r.student_name,
-                lang,
-                stage: stage.key,
-                enrollUrl: "https://centruldearabalibaneza.com/#programs",
-              },
-            }),
+        const result = await sendTemplateEmail("trial-followup", r.student_email, {
+          idempotencyKey: `${stage.idemPrefix}-${r.id}`,
+          templateData: {
+            name: r.student_name,
+            lang,
+            stage: stage.key,
+            enrollUrl: "https://centruldearabalibaneza.com/#programs",
           },
-        );
-        if (!resp.ok) {
-          console.error("[trial-followup] send failed", stage.key, r.id, await resp.text());
-          continue;
-        }
+        });
+        // A suppressed recipient is final — flag the stage so the cron does not
+        // keep retrying a send that can never be delivered.
         await supabase
           .from("bookings")
           .update({ [stage.flag]: new Date().toISOString() })
           .eq("id", r.id);
-        sent++;
+        if (result.sent) sent++;
+
       } catch (e) {
         console.error("[trial-followup] error", stage.key, r.id, e);
       }

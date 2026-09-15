@@ -2,7 +2,13 @@ import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/r
 
 import { renderErrorPage } from "./lib/error-page";
 
-const errorMiddleware = createMiddleware().server(async ({ next }) => {
+const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
+  // Lovable email routes authenticate themselves (signed webhook / API key) and
+  // must never be rewritten or intercepted.
+  if (request && new URL(request.url).pathname.startsWith("/lovable/")) {
+    return next();
+  }
+
   try {
     return await next();
   } catch (error) {
