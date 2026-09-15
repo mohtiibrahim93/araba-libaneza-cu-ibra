@@ -30,17 +30,17 @@ export function useCardOverrides() {
     queryKey: ["yalla-card-overrides"],
     queryFn: async (): Promise<CardOverrides> => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("yalla_card_overrides")
         .select("card_id, ar, ro, variants");
       if (error || !data) return {};
       const out: CardOverrides = {};
-      for (const row of data as Array<{
+      for (const row of (data as unknown as Array<{
         card_id: string;
         ar: string;
         ro: string;
         variants: unknown;
-      }>) {
+      }>)) {
         out[row.card_id] = {
           ar: row.ar,
           ro: row.ro,
