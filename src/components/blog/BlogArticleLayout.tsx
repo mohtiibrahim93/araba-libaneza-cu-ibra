@@ -231,6 +231,20 @@ const BlogArticleLayout = ({
             </h1>
             <p className="text-lg text-muted-foreground">{tLead}</p>
             <p className="text-sm text-muted-foreground">{metaLine}</p>
+            {cover && (
+              /* Eager + high priority: this is the largest element above the
+                 fold, so lazy-loading it would only delay the paint. */
+              <img
+                src={cover.src}
+                alt={L(cover.alt, lang)}
+                width={1200}
+                height={675}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="aspect-[16/9] w-full rounded-2xl border border-border object-cover"
+              />
+            )}
           </header>
 
           <div ref={bodyRef}>
