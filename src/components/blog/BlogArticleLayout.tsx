@@ -116,6 +116,12 @@ const BlogArticleLayout = ({
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
   const tCrumb = crumb ? pick(crumb, lang) : tTitle;
 
+  // The article's own photo doubles as its link-preview image. Fall back to the
+  // site-wide OG card for an article that has no cover yet, so a share never
+  // ends up with no image at all.
+  const cover = getBlogCover(slug);
+  const socialImage = cover ? `${BASE}${cover.src}` : `${BASE}/og-image.png`;
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
