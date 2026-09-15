@@ -1346,6 +1346,30 @@ export type Database = {
         }
         Relationships: []
       }
+      yalla_card_overrides: {
+        Row: {
+          ar: string
+          card_id: string
+          ro: string
+          updated_at: string
+          variants: Json
+        }
+        Insert: {
+          ar: string
+          card_id: string
+          ro: string
+          updated_at?: string
+          variants?: Json
+        }
+        Update: {
+          ar?: string
+          card_id?: string
+          ro?: string
+          updated_at?: string
+          variants?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

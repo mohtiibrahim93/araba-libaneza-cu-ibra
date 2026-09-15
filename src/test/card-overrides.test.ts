@@ -81,6 +81,15 @@ describe("the read path", () => {
     expect(hook).toContain("retry: false");
   });
 
+  it("is declared in the generated client types", () => {
+    // Without the table here, supabase.from("yalla_card_overrides") does not
+    // typecheck, and the tempting repair is a cast to any — which silently
+    // discards the row types this hook maps. tsc is the guard; this test says
+    // why, so a regenerated types.ts that predates the migration is noticed.
+    expect(read("src/integrations/supabase/types.ts")).toContain("yalla_card_overrides: {");
+    expect(read("src/hooks/useCardOverrides.ts")).not.toContain("as any");
+  });
+
   it("keeps Supabase off /joaca's critical path", () => {
     // /joaca is a public page. A static import would put 216 KB back in front
     // of first paint — the regression src/hooks/useSiteTexts.ts documents.
