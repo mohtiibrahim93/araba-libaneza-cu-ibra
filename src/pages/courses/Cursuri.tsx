@@ -9,6 +9,7 @@ import CourseCard from "@/components/courses/CourseCard";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import { useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { AGE_LABELS, MODALITY_LABELS, type AgeCategory, type Modality } from "@/lib/courses";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -33,7 +34,7 @@ const TYPES: Choice[] = [
 const Cursuri = () => {
   const { t, lang } = useI18n();
   const [params, setParams] = useSearchParams();
-  const canonical = `${BASE_URL}/cursuri`;
+  const canonical = `${BASE_URL}${canonicalPath("/cursuri", lang)}`;
   const L = (o: { ro: string; en: string }) => (lang === "en" ? o.en : o.ro);
 
   const age = params.get("varsta");

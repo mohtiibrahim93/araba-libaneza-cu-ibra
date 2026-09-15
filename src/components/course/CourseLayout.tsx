@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -60,7 +61,10 @@ const CourseLayout = ({
   children,
 }: CourseLayoutProps) => {
   const { t, lang } = useI18n();
-  const canonical = `${BASE_URL}${path}`;
+  // Self-canonical per language: the English course pages render from this
+  // same component at /en/courses/*, and pointing them at the Romanian path
+  // asked Google to drop them.
+  const canonical = `${BASE_URL}${canonicalPath(path, lang)}`;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

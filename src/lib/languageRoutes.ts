@@ -136,3 +136,23 @@ export function languageCounterpart(path: string, target: "ro" | "en"): string |
   const clean = path.replace(/\/+$/, "") || "/";
   return (target === "en" ? EN_FOR_RO : RO_FOR_EN)[clean] ?? null;
 }
+
+/**
+ * The canonical path for a page currently rendering in `lang`.
+ *
+ * Every bilingual page on this site renders from one component at two URLs —
+ * /trial and /en/trial, /blog/<slug> and /en/blog/<slug> — and the canonical
+ * has to name the URL the reader actually arrived on. Hardcoding the Romanian
+ * one, which is what most pages did, tells Google the English URL is a
+ * duplicate of the Romanian page and should be dropped: the English half
+ * existed, served English, and asked not to be indexed.
+ *
+ * Pass the Romanian path; in Romanian it comes back unchanged, and in English
+ * it becomes that page's own /en/ URL. A page with no English twin has no
+ * counterpart and keeps its single URL, so this is safe to apply everywhere —
+ * which is the point, since the bug came from each page deciding for itself.
+ */
+export function canonicalPath(roPath: string, lang: "ro" | "en"): string {
+  if (lang !== "en") return roPath;
+  return languageCounterpart(roPath, "en") ?? roPath;
+}

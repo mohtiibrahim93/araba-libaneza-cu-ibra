@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
@@ -25,7 +26,7 @@ const Quiz = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={t.quizDesc} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/quiz" />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/quiz", lang)}`} />
         <meta name="robots" content="index,follow" />
       </Helmet>
       <Navbar />

@@ -11,6 +11,7 @@ import MarkdownBody from "@/components/blog/MarkdownBody";
 import ArticleOutline from "@/components/blog/ArticleOutline";
 import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import type { Localized } from "@/lib/blogPosts";
 import { BLOG_POSTS, L } from "@/lib/blogPosts";
 import { getBlogCover } from "@/lib/blogCovers";
@@ -90,13 +91,19 @@ const BlogArticleLayout = ({
   steps,
 }: Props) => {
   const { lang } = useI18n();
-  const url = `${BASE}/blog/${slug}`;
+  // The URL this article is actually being read at: /blog/<slug> in Romanian,
+  // /en/blog/<slug> in English. This was hardcoded to the Romanian path, so
+  // every English article canonicalised itself away to its Romanian twin —
+  // nineteen pages that served English and then asked not to be indexed.
+  const url = `${BASE}${canonicalPath(`/blog/${slug}`, lang)}`;
   // A post that consolidates into another canonicalises to the survivor. Read
   // from the shared registry rather than a prop so the runtime head and the
   // one scripts/seoPrerender.ts writes cannot disagree — that drift is what
   // made /cursuri-araba serve two different titles to two kinds of crawler.
   const consolidatesInto = BLOG_POSTS.find((p) => p.slug === slug)?.canonicalTo;
-  const canonicalUrl = consolidatesInto ? `${BASE}/blog/${consolidatesInto}` : url;
+  const canonicalUrl = consolidatesInto
+    ? `${BASE}${canonicalPath(`/blog/${consolidatesInto}`, lang)}`
+    : url;
   // Scoped to the body + FAQ so the outline lists the article's own sections,
   // not the "related posts" and CTA headings that follow every article.
   const bodyRef = useRef<HTMLDivElement>(null);

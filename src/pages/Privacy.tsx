@@ -1,4 +1,5 @@
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -47,7 +48,7 @@ const PrivacyContent = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/privacy" />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/privacy", lang)}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/privacy" />

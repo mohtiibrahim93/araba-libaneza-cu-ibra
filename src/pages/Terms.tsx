@@ -1,4 +1,5 @@
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -49,7 +50,7 @@ const TermsContent = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/terms" />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/terms", lang)}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content="https://centruldearabalibaneza.com/terms" />

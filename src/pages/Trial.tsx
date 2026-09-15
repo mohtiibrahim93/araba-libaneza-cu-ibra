@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { isBlockedEmail, isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
@@ -126,7 +127,7 @@ const TrialPage = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={t.trialPageSeoDesc} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/trial" />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/trial", lang)}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={t.trialPageSeoDesc} />
       </Helmet>

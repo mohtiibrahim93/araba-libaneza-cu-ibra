@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "@/lib/router-compat";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
+import { canonicalPath } from "@/lib/languageRoutes";
 import { ONLINE_PRICES, formatLei, physicalPrice } from "@/lib/pricing";
 
 const BookingInner = () => {
@@ -36,7 +37,7 @@ const BookingInner = () => {
         <Helmet>
           <title>{(en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
           <meta name="description" content={en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București."} />
-          <link rel="canonical" href="https://centruldearabalibaneza.com/booking" />
+          <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/booking", lang)}`} />
         </Helmet>
         <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
@@ -119,7 +120,7 @@ const BookingInner = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`https://centruldearabalibaneza.com/booking`} />
+        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/booking", lang)}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={`https://centruldearabalibaneza.com/booking`} />
