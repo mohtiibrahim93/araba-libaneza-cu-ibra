@@ -12,7 +12,7 @@ import YallaGame from "@/components/YallaGame";
 import { JOACA_META } from "@/lib/pageMeta";
 
 /**
- * /joaca — free practice, and the one page on the site that asks for nothing.
+ * /joc — free practice, and the one page on the site that asks for nothing.
  *
  * Head comes from src/lib/pageMeta.ts, shared with scripts/seoPrerender.ts so
  * the static and runtime <title> cannot drift apart — the same arrangement the

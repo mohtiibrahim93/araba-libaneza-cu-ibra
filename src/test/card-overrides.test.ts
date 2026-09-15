@@ -93,8 +93,8 @@ describe("the read path", () => {
     expect(read("src/hooks/useCardOverrides.ts")).not.toContain("as any");
   });
 
-  it("keeps Supabase off /joaca's critical path", () => {
-    // /joaca is a public page. A static import would put 216 KB back in front
+  it("keeps Supabase off /joc's critical path", () => {
+    // /joc is a public page. A static import would put 216 KB back in front
     // of first paint — the regression src/hooks/useSiteTexts.ts documents.
     const hook = read("src/hooks/useCardOverrides.ts");
     expect(hook).toContain('await import("@/integrations/supabase/client")');

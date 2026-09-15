@@ -74,7 +74,7 @@ const ResourcesTeaser = () => {
             fourth card would leave a gap on the row. It is also not a guide —
             the others are things you read, this is something you use. */}
         <Link
-          to="/joaca"
+          to="/joc"
           className="group mt-6 flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-xs hover:shadow-md transition-all [overflow-wrap:anywhere]"
         >
           <span className="inline-flex shrink-0 items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
@@ -82,7 +82,7 @@ const ResourcesTeaser = () => {
           </span>
           <span className="min-w-0">
             <span className="block text-lg font-semibold group-hover:text-primary transition-colors">
-              {isEn ? "Practice game (in Romanian)" : "Joacă și învață"}
+              {isEn ? "The Yalla game (in Romanian)" : "Jocul Yalla"}
             </span>
             <span className="block text-sm text-muted-foreground">
               {isEn
@@ -90,10 +90,12 @@ const ResourcesTeaser = () => {
                 : "Peste 4.300 de expresii, cu recapitulări programate. Gratuit, fără cont, direct în browser."}
             </span>
           </span>
+
           <span className="ml-auto hidden shrink-0 text-sm font-medium text-primary sm:inline-flex items-center">
-            {isEn ? "Play" : "Joacă"}
+            {isEn ? "Play" : "Joacă Yalla"}
             <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
           </span>
+
         </Link>
 
         <div className="mt-10 text-center">
