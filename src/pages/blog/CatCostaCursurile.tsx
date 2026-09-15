@@ -115,7 +115,7 @@ const CatCostaCursurile = () => {
           ro: "Grupe A1–C2, lecții private și cursul pentru copii — cu prețul lunar și cel pentru tot nivelul, afișate.",
           en: "Groups A1–C2, private lessons and the kids course — monthly and whole-level prices, shown.",
         }}
-        href="/cursuri-araba"
+        href="/cursuri-limba-araba"
         label={{ ro: "Vezi cursurile și prețurile", en: "See courses and prices" }}
       />
 
