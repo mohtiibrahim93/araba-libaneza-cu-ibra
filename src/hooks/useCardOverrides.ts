@@ -30,7 +30,12 @@ export function useCardOverrides() {
     queryKey: ["yalla-card-overrides"],
     queryFn: async (): Promise<CardOverrides> => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase
+      // The generated Supabase types don't yet include yalla_card_overrides,
+      // so the query chain is loosened while the row shape stays explicit.
+      interface Row { card_id: string; ar: string; ro: string; variants: unknown }
+      const { data, error } = await (supabase as unknown as {
+        from: (t: string) => { select: (c: string) => Promise<{ data: Row[] | null; error: unknown }> };
+      })
         .from("yalla_card_overrides")
         .select("card_id, ar, ro, variants");
       if (error || !data) return {};
@@ -42,6 +47,7 @@ export function useCardOverrides() {
           variants: Array.isArray(row.variants) ? (row.variants as string[]) : [],
         };
       }
+
       return out;
     },
     staleTime: 5 * 60 * 1000,
