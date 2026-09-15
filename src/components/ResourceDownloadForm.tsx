@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Download, Loader2, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";

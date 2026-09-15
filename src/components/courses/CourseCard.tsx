@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { CalendarDays, Clock, Users, MapPin, Wifi, ChevronRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import {

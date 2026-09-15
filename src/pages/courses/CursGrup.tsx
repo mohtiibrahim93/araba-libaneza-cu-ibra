@@ -1,6 +1,6 @@
 import CourseLayout from "@/components/course/CourseLayout";
 import { useI18n } from "@/lib/i18n";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ChevronRight, MessageCircle, Sparkles, Building2 } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
 import {

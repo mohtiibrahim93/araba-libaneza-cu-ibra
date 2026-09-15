@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/router-compat";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Send, LogOut, ArrowLeft } from "lucide-react";
 

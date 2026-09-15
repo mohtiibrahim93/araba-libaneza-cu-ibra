@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, beforeEach } from "vitest";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "@/lib/router-compat";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from "./Navbar";
 import { I18nProvider } from "@/lib/i18n";

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate, useSearchParams } from "react-router-dom";
+import { Link, useParams, Navigate, useSearchParams } from "@/lib/router-compat";
 import { ChevronRight, MessageCircle, CheckCircle2, BookOpen, Clock, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

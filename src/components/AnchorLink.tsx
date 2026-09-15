@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "@/lib/router-compat";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {

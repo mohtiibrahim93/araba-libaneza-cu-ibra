@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "@/lib/router-compat";
 import { ChevronRight, GraduationCap, User, Baby, Wifi, MapPin, Users, UserRound, Loader2, Sparkles, Building2, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

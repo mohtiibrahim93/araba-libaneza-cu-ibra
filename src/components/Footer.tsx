@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import AnchorLink from "@/components/AnchorLink";
 import BrandLogo from "@/components/BrandLogo";
 import SocialLinks from "@/components/SocialLinks";

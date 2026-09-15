@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router-compat";
 import {
   MessageCircle,
   Banknote,

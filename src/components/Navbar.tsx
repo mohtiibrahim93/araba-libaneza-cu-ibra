@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { courseMenu as courseLinks, resourceMenu as resourceLinks } from "@/lib/siteNav";
 import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "@/lib/router-compat";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import { languageCounterpart } from "@/lib/languageRoutes";
 import { Button } from "@/components/ui/button";

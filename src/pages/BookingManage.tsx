@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "@/lib/router-compat";
 import { ArrowLeft, Calendar, CheckCircle2, Download, Loader2, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";

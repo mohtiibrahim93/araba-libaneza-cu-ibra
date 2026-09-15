@@ -1,4 +1,4 @@
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "@/lib/router-compat";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
