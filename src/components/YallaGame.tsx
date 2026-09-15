@@ -174,7 +174,7 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
   }, [mounted, published, applyOverrides]);
 
   return (
-    <section aria-label={c.label} className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+    <section aria-label={c.label} className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-xs">
       <div className="flex min-h-12 items-center justify-between gap-4 border-b border-border bg-muted/30 px-4 sm:px-5">
         <span className="truncate text-sm font-semibold text-foreground">Yalla</span>
         {signedIn && (

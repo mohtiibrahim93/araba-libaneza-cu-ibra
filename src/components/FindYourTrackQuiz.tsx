@@ -30,7 +30,7 @@ const OptionCard = ({ title, desc, icon, onClick }: OptionCardProps) => (
   <button
     type="button"
     onClick={onClick}
-    className="group text-left w-full rounded-xl border border-border bg-background p-5 hover:border-primary hover:bg-primary/5 transition-all hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    className="group text-left w-full rounded-xl border border-border bg-background p-5 hover:border-primary hover:bg-primary/5 transition-all hover:shadow-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
   >
     <div className="flex items-start gap-4">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -105,7 +105,7 @@ const FindYourTrackQuiz = () => {
   if (showForm && track) {
     return (
       <section id="quiz" className="py-section px-6 bg-muted/50 scroll-mt-20">
-        <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-sm">
+        <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-xs">
           <RegistrationFormSection
             defaultCourseType={track}
             embedded
@@ -284,7 +284,7 @@ const FindYourTrackQuiz = () => {
           <p className="text-muted-foreground max-w-xl mx-auto">{t.quizDesc}</p>
         </div>
 
-        <Card className="shadow-sm">
+        <Card className="shadow-xs">
           <CardContent className="p-6 sm:p-8">
             {/* Progress dots + step label */}
             <div className="flex items-center justify-between mb-6">

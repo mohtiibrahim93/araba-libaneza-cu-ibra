@@ -78,7 +78,7 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
   if (selectedTrack) {
     return (
       <section id="quiz" className="py-section px-6 bg-muted/50 scroll-mt-20">
-        <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-sm">
+        <div className="max-w-2xl mx-auto bg-background rounded-2xl border border-border p-6 shadow-xs">
           <RegistrationFormSection
             defaultCourseType={selectedTrack}
             embedded

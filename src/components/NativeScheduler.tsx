@@ -407,7 +407,7 @@ const NativeScheduler = ({
       timeZone: TZ, hour: "2-digit", minute: "2-digit",
     }).format(startDate);
     return (
-      <div className="rounded-xl border border-border bg-card p-8 text-center space-y-6 shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-8 text-center space-y-6 shadow-xs">
         <div className="flex justify-center">
           <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center">
             <CheckCircle2 className="w-9 h-9 text-green-600" strokeWidth={2.5} />

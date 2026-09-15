@@ -52,7 +52,7 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <AnchorLink
               to="#programs"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg shadow-sm transition-all hover:bg-primary/90"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg shadow-xs transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
             </AnchorLink>
@@ -99,13 +99,13 @@ const HeroSection = () => {
           </div>
 
           {/* Floating card: real Preply rating */}
-          <div className="absolute top-4 right-4 bg-background/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-3">
+          <div className="absolute top-4 right-4 bg-background/95 backdrop-blur-xs rounded-xl shadow-lg px-4 py-3">
             <p className="text-sm font-bold text-foreground">{t.heroJoin}</p>
             <p className="text-xs text-muted-foreground">{t.heroHappy}</p>
           </div>
 
           {/* Floating card: lessons */}
-          <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-xs rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
             <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
               <BookOpen className="w-5 h-5 text-primary" />
             </div>

@@ -40,7 +40,7 @@ const WhySection = () => {
           {benefits.map(({ Icon, title, desc }) => (
             <div
               key={title}
-              className="bg-background rounded-2xl border border-border/60 p-6 shadow-sm"
+              className="bg-background rounded-2xl border border-border/60 p-6 shadow-xs"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-green/10 mb-4">
                 <Icon className="w-5 h-5 text-brand-green" aria-hidden="true" />

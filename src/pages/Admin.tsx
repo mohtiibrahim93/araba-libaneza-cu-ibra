@@ -638,7 +638,7 @@ const Admin = () => {
               {statCards.map(({ label, value, icon: Icon }) => (
                 <div
                   key={label}
-                  className="bg-background rounded-xl border border-border p-4 sm:p-5 shadow-sm"
+                  className="bg-background rounded-xl border border-border p-4 sm:p-5 shadow-xs"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-xs sm:text-sm text-muted-foreground">{label}</p>
@@ -716,7 +716,7 @@ const Admin = () => {
             />
 
             {selected.size > 0 && (
-              <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-sm">
+              <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
                 <span className="text-sm text-muted-foreground">
                   {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
                 </span>
@@ -777,7 +777,7 @@ const Admin = () => {
                 Nu există lead-uri pentru filtrele selectate.
               </p>
             ) : (
-              <div className="bg-background rounded-xl shadow-sm">
+              <div className="bg-background rounded-xl shadow-xs">
                 <RegistrationsTable
                   rows={filteredRegistrations}
                   selected={selected}

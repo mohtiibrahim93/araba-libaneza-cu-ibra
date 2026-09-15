@@ -190,7 +190,7 @@ const CourseLayout = ({
                 width={1200}
                 height={800}
                 loading="eager"
-                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-sm"
+                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-xs"
               />
             </div>
           </div>

@@ -330,7 +330,7 @@ const Checkout = () => {
           Înapoi
         </button>
 
-        <div className="bg-background rounded-2xl border border-border shadow-sm p-6 sm:p-8">
+        <div className="bg-background rounded-2xl border border-border shadow-xs p-6 sm:p-8">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-foreground">Finalizează plata</h1>
             <p className="text-sm text-muted-foreground mt-1">

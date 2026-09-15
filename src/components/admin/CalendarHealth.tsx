@@ -264,7 +264,7 @@ const CalendarHealth = () => {
                   mai jos. Rezervările apar automat, în sens unic.
                 </p>
                 <div className="mt-2 flex items-center gap-2">
-                  <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 text-xs">
+                  <code className="min-w-0 flex-1 truncate rounded-[4px] bg-muted px-2 py-1 text-xs">
                     {health.feed.url}
                   </code>
                   <Button variant="outline" size="sm" onClick={copyFeed}>
@@ -276,7 +276,7 @@ const CalendarHealth = () => {
             ) : (
               <p className="mt-1 text-sm text-muted-foreground">
                 Neconfigurat. Adaugă în Supabase secretul{" "}
-                <code className="rounded bg-muted px-1">OWNER_CALENDAR_TOKEN</code> cu o valoare
+                <code className="rounded-[4px] bg-muted px-1">OWNER_CALENDAR_TOKEN</code> cu o valoare
                 lungă și aleatorie, apoi reverifică — linkul de abonare va apărea aici.
               </p>
             )}

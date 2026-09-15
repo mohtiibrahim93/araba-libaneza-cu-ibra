@@ -60,7 +60,7 @@ const PostSubmitView = ({
     >
       <div className={embedded ? "space-y-6" : "max-w-2xl mx-auto space-y-6"}>
         {/* Confirmation header */}
-        <div className="bg-background rounded-2xl border border-border p-8 shadow-sm">
+        <div className="bg-background rounded-2xl border border-border p-8 shadow-xs">
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6 text-primary" />
@@ -135,7 +135,7 @@ const PostSubmitView = ({
 
         {/* Kids deposit: checkout redirect failed after submit — offer a retry instead of a dead end. */}
         {isKidsDeposit && depositCheckoutFailed && (
-          <div className="bg-background rounded-2xl border border-destructive/30 p-6 sm:p-8 shadow-sm space-y-4">
+          <div className="bg-background rounded-2xl border border-destructive/30 p-6 sm:p-8 shadow-xs space-y-4">
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-destructive" />
@@ -146,7 +146,7 @@ const PostSubmitView = ({
               type="button"
               onClick={onRetryDepositCheckout}
               disabled={retryingDeposit}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold shadow-xs hover:bg-primary/90 transition-colors disabled:opacity-60"
             >
               {retryingDeposit ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -164,7 +164,7 @@ const PostSubmitView = ({
             <button
               type="button"
               onClick={() => setPrivateChoice("trial")}
-              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-sm transition-colors group"
+              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-xs transition-colors group"
             >
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                 <Gift className="w-5 h-5 text-primary" />
@@ -185,7 +185,7 @@ const PostSubmitView = ({
             <button
               type="button"
               onClick={() => setPrivateChoice("pay")}
-              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-sm transition-colors group"
+              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-xs transition-colors group"
             >
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                 <CreditCard className="w-5 h-5 text-primary" />
@@ -208,7 +208,7 @@ const PostSubmitView = ({
 
         {/* Free trial booking — native scheduler. */}
         {showPrivateTrial && (
-          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-xs">
             <button
               type="button"
               onClick={() => setPrivateChoice(null)}

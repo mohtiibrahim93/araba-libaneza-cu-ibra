@@ -14,7 +14,7 @@ const InstructorSection = () => {
 
   return (
     <section className="py-section px-gutter bg-cream">
-      <div className="w-full max-w-content mx-auto grid md:grid-cols-[300px_1fr] gap-10 md:gap-14 items-center rounded-[2rem] border border-border/60 bg-background p-6 sm:p-10 shadow-sm">
+      <div className="w-full max-w-content mx-auto grid md:grid-cols-[300px_1fr] gap-10 md:gap-14 items-center rounded-[2rem] border border-border/60 bg-background p-6 sm:p-10 shadow-xs">
         {/* Photo */}
         <div className="flex flex-col items-center gap-3">
           <picture>

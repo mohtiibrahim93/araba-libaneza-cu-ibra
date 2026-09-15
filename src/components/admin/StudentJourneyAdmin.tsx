@@ -134,9 +134,9 @@ const StudentJourneyAdmin = () => {
               type="button"
               onClick={() => setFilter(b.v)}
               className={cn(
-                "px-3 py-1 text-xs font-medium rounded transition-colors",
+                "px-3 py-1 text-xs font-medium rounded-[4px] transition-colors",
                 filter === b.v
-                  ? "bg-background text-foreground shadow-sm"
+                  ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -160,7 +160,7 @@ const StudentJourneyAdmin = () => {
                 <div className="flex items-baseline gap-2 min-w-0">
                   <span className="font-medium text-foreground truncate">{r.name}</span>
                   <span className="text-xs text-muted-foreground truncate">{r.email || r.phone}</span>
-                  <span className="inline-flex px-1.5 py-0.5 rounded text-[10px] font-medium bg-primary/10 text-primary">
+                  <span className="inline-flex px-1.5 py-0.5 rounded-[4px] text-[10px] font-medium bg-primary/10 text-primary">
                     {formTypeLabels[r.form_type] || r.form_type}
                   </span>
                 </div>

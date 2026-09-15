@@ -343,7 +343,7 @@ const CursGrupLevel = () => {
                         height={800}
                         loading="lazy"
                         decoding="async"
-                        className="w-full max-w-md rounded-2xl border border-border shadow-sm"
+                        className="w-full max-w-md rounded-2xl border border-border shadow-xs"
                       />
                     );
                   })()}

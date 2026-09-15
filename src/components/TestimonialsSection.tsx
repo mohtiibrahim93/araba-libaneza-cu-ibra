@@ -24,7 +24,7 @@ const TestimonialsSection = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map(({ text, author }, i) => (
-            <div key={i} className="bg-background rounded-2xl border border-border p-6 shadow-sm">
+            <div key={i} className="bg-background rounded-2xl border border-border p-6 shadow-xs">
               <div className="flex gap-1 mb-3">
                 {[...Array(5)].map((_, j) => (
                   <Star key={j} className="w-4 h-4 fill-primary text-primary" />

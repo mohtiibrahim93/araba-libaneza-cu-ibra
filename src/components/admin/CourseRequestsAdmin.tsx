@@ -43,7 +43,7 @@ const CourseRequestsAdmin = () => {
   }, [load]);
 
   return (
-    <section className="rounded-xl border border-border bg-background p-5 shadow-sm">
+    <section className="rounded-xl border border-border bg-background p-5 shadow-xs">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">

@@ -44,7 +44,7 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
   };
 
   return (
-    <div className="bg-background rounded-2xl border border-border shadow-sm p-6 sm:p-8 space-y-6">
+    <div className="bg-background rounded-2xl border border-border shadow-xs p-6 sm:p-8 space-y-6">
       <div>
         <h3 className="text-xl font-bold text-foreground">{t.paymentTitle}</h3>
         <p className="text-sm text-muted-foreground mt-1">{t.paymentDesc}</p>
@@ -54,7 +54,7 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
         <div className="space-y-3">
           <button
             onClick={handleStripeCheckout}
-            className="group w-full flex items-center justify-between gap-4 rounded-xl bg-primary text-primary-foreground px-5 py-4 font-semibold shadow-sm hover:bg-primary/90 transition-colors"
+            className="group w-full flex items-center justify-between gap-4 rounded-xl bg-primary text-primary-foreground px-5 py-4 font-semibold shadow-xs hover:bg-primary/90 transition-colors"
           >
             <span className="flex items-center gap-3">
               <CreditCard className="w-5 h-5" />

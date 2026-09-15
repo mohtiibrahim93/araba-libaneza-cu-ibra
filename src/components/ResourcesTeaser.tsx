@@ -52,7 +52,7 @@ const ResourcesTeaser = () => {
             <Link
               key={r.to}
               to={r.to}
-              className="group flex min-w-0 flex-col h-full rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-sm hover:shadow-md transition-all [overflow-wrap:anywhere]"
+              className="group flex min-w-0 flex-col h-full rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-xs hover:shadow-md transition-all [overflow-wrap:anywhere]"
             >
               <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
                 <r.icon className="w-6 h-6" />
@@ -75,7 +75,7 @@ const ResourcesTeaser = () => {
             the others are things you read, this is something you use. */}
         <Link
           to="/joaca"
-          className="group mt-6 flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-sm hover:shadow-md transition-all [overflow-wrap:anywhere]"
+          className="group mt-6 flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-background p-5 sm:p-6 shadow-xs hover:shadow-md transition-all [overflow-wrap:anywhere]"
         >
           <span className="inline-flex shrink-0 items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
             <Gamepad2 className="w-6 h-6" />

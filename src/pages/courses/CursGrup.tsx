@@ -84,7 +84,7 @@ const CursGrup = () => {
           height={1024}
           loading="lazy"
           decoding="async"
-          className="w-full max-w-md rounded-2xl border border-border shadow-sm mb-8"
+          className="w-full max-w-md rounded-2xl border border-border shadow-xs mb-8"
         />
 
         {/* All six levels side by side.
@@ -188,7 +188,7 @@ const CursGrup = () => {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-2xl font-extrabold text-foreground">{lvl}</span>
                   {!available && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded-[4px]">
                       {t.grupLevelInPrepBadge}
                     </span>
                   )}
