@@ -82,6 +82,16 @@ const Joaca = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
 
+  // The frame hosts both the practice game and the level test; switching
+  // modes remounts it (YallaGame keys on mode), so progress in one view is
+  // untouched by opening the other.
+  const [mode, setMode] = useState<"journey" | "placement">("journey");
+  const frameRef = useRef<HTMLDivElement>(null);
+  const openPlacement = () => {
+    setMode("placement");
+    frameRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
