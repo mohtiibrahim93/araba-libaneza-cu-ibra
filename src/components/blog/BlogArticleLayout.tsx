@@ -131,7 +131,7 @@ const BlogArticleLayout = ({
     dateModified: published,
     inLanguage: lang === "en" ? "en" : "ro",
     mainEntityOfPage: url,
-    image: `${BASE}/og-image.png`,
+    image: socialImage,
     author: { "@type": "Person", name: "Ibra — Centrul de Arabă Libaneză" },
     publisher: {
       "@type": "Organization",
