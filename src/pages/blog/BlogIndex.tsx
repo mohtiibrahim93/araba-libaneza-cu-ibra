@@ -160,6 +160,7 @@ const BlogIndex = () => {
                       {c.read} <ArrowRight className="w-4 h-4" />
                     </span>
                   </div>
+                  </div>
                 </Link>
               </li>
             ))}
