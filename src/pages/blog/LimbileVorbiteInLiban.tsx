@@ -115,7 +115,7 @@ const LimbileVorbiteInLiban = () => {
           ro: "Predăm dialectul libanez — limba vorbită zilnic. Grupe A1–C2, lecții 1:1 sau curs pentru copii.",
           en: "We teach the Lebanese dialect — the language spoken daily. Groups A1–C2, 1-on-1 or the kids course.",
         }}
-        href="/cursuri-araba"
+        href="/cursuri-limba-araba"
         label={{ ro: "Vezi cursurile", en: "See the courses" }}
       />
 

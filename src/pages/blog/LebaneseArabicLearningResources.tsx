@@ -138,7 +138,7 @@ const LebaneseArabicLearningResources = () => {
           ro: "Toate cursurile într-un loc: grupe pe niveluri, lecții 1:1 sau curs pentru copii — cu profesor nativ.",
           en: "Every course in one place: levelled groups, 1-on-1 lessons or the kids course — with a native teacher.",
         }}
-        href="/cursuri-araba"
+        href="/cursuri-limba-araba"
         label={{ ro: "Vezi cursurile", en: "See the courses" }}
       />
 
