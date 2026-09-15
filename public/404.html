@@ -7,22 +7,26 @@
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://centruldearabalibaneza.com/">
 <!--
-  Served for addresses that are not pages.
+  An error page the current host does not use. Read this before assuming the
+  soft 404 is fixed — it is not, and cannot be here.
 
-  Without this file the host answers every unmatched path with dist/index.html,
-  and the prerender has written the homepage into that file — so /services,
-  /blog/post-1 or any typo returned 200 carrying the homepage's title, its
-  content and a canonical pointing at "/". React then replaced it with the 404
-  screen once JavaScript ran, but a crawler that does not render, and a person
-  watching the page load, both saw the homepage at an address that does not
-  exist. Search Console calls that a soft 404.
+  Lovable's hosting is SPA-only. Every unmatched path is answered with
+  index.html at HTTP 200, and their documentation is explicit that none of
+  public/_redirects, public/_headers, netlify.toml, vercel.json or this file is
+  processed as a fallback. Confirmed with Lovable directly, 15 September 2026.
+  So this file is reachable at /404.html and nowhere else; /services or any typo
+  still returns 200 with the app shell, and React swaps in the 404 screen once
+  JavaScript runs. Search Console calls that a soft 404. It misleads crawlers
+  only — a person always sees the right page.
 
-  This page is deliberately standalone: no bundle, no fonts, no JavaScript. An
-  error page that depends on the app is an error page that fails when the app
-  does, and it should stay correct even when nothing else loads.
+  It is kept rather than deleted because it is the whole fix the moment the site
+  is served by anything that honours a 404 document (Netlify, Vercel, Cloudflare
+  Pages, nginx), and re-deriving it later costs more than the two kilobytes.
 
-  It is noindex so it can never be indexed itself, and follow so the links
-  below still pass a crawler back into the real site.
+  Deliberately standalone: no bundle, no fonts, no JavaScript. An error page
+  that depends on the app is an error page that fails when the app does. It is
+  noindex so it can never be indexed itself, and follow so the links below still
+  pass a crawler back into the real site.
 -->
 <style>
   :root { color-scheme: light dark; }
