@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
@@ -44,6 +44,11 @@ const COPY = {
       "Exersezi singur vocabular și structuri, și atât. Pronunția, conversația și corectarea în timp real cer un profesor. Dacă vrei să vorbești, nu doar să recunoști cuvinte, începe cu o lecție de probă gratuită.",
     ctaCourses: "Vezi cursurile",
     ctaTrial: "Lecție de probă gratuită",
+    levelH2: "Verifică-ți nivelul în joc",
+    levelP:
+      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibrahim.",
+    ctaLevel: "Începe testul de nivel",
+    ctaBack: "Înapoi la exerciții",
   },
   en: {
     home: "Home",
@@ -65,12 +70,31 @@ const COPY = {
       "You practise vocabulary and structures on your own, and that is all it does. Pronunciation, conversation and being corrected as you speak need a teacher. If you want to speak rather than just recognise words, start with a free trial lesson.",
     ctaCourses: "See the courses",
     ctaTrial: "Free trial lesson",
+    levelH2: "Check your level in the game",
+    levelP:
+      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibrahim.",
+    ctaLevel: "Start the level test",
+    ctaBack: "Back to practice",
   },
 } as const;
 
 const Joaca = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+
+  // The frame hosts both the practice game and the level test; switching
+  // modes remounts it (YallaGame keys on mode), so progress in one view is
+  // untouched by opening the other.
+  const [mode, setMode] = useState<"journey" | "placement">("journey");
+  const frameRef = useRef<HTMLDivElement>(null);
+  const toggleMode = () => {
+    if (mode === "placement") {
+      setMode("journey");
+      return;
+    }
+    setMode("placement");
+    frameRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -120,8 +144,23 @@ const Joaca = () => {
           )}
         </header>
 
-        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <YallaGame lang={lang} />
+        {/* Level test callout — switches the frame to the placement pilot. */}
+        <div className="mx-auto w-full max-w-content px-gutter pb-6">
+          <div className="flex flex-col gap-4 rounded-xl border bg-card p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
+            <div className="flex-1">
+              <h2 className="font-display text-2xl font-bold text-foreground">{c.levelH2}</h2>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{c.levelP}</p>
+            </div>
+            <div className="shrink-0">
+              <Button size="lg" variant={mode === "placement" ? "outline" : "default"} onClick={toggleMode}>
+                {mode === "placement" ? c.ctaBack : c.ctaLevel}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm" ref={frameRef}>
+          <YallaGame lang={lang} mode={mode} />
         </div>
 
         {/* Prose below the frame. A page whose only content sits inside an
