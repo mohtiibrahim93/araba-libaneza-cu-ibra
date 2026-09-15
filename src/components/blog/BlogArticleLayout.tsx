@@ -196,11 +196,13 @@ const BlogArticleLayout = ({
         <meta property="og:title" content={resolvedMetaTitle} />
         <meta property="og:description" content={resolvedMetaDescription} />
         <meta property="og:url" content={url} />
-        <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:image" content={socialImage} />
+        {cover && <meta property="og:image:alt" content={L(cover.alt, lang)} />}
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
         <meta property="article:published_time" content={published} />
         <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={socialImage} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
