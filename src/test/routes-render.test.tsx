@@ -3,6 +3,7 @@ import { describe, expect, it, afterEach, beforeAll, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderRoute, currentPath } from "./helpers/appRouter";
+import { routeFiles, redirectsTo } from "./helpers/routes";
 
 /**
  * Smoke test for every publicly reachable content route.
@@ -228,11 +229,10 @@ describe("site structure", () => {
       [...read("src/components/Navbar.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
        ...read("src/components/Footer.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]),
     );
-    const app = read("src/App.tsx");
-    const redirects = new Set([...app.matchAll(/path="([^"]+)" element=\{<Navigate/g)].map((m) => m[1]));
-    const routes = [...app.matchAll(/path="([^"]+)"/g)]
-      .map((m) => m[1])
-      .filter((p) => !p.includes(":") && !p.includes("*"));
+    const routes = routeFiles()
+      .map((r) => r.path)
+      .filter((p) => !p.includes("$") && !p.startsWith("/lovable/"));
+    const redirects = new Set(routes.filter((p) => redirectsTo(p) !== undefined));
 
     // Admin, auth and pages you only reach by completing an action.
     const PRIVATE = new Set([
