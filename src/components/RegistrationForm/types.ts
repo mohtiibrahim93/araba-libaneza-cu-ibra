@@ -7,9 +7,9 @@ export interface SubmittedData {
   email: string;
   name: string;
   registrationId: string;
-  quantity?: number;
-  groupPlan?: "monthly" | "full";
-  waitlistDeposit?: boolean;
-  cohortId?: string | null;
-  kidsSlotId?: string | null;
+  quantity?: number | undefined;
+  groupPlan?: "monthly" | "full" | undefined;
+  waitlistDeposit?: boolean | undefined;
+  cohortId?: string | null | undefined;
+  kidsSlotId?: string | null | undefined;
 }

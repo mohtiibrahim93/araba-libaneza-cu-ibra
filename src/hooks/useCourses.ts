@@ -22,7 +22,7 @@ function withSeats(rows: Row[], counts: { cohort_id: string; taken: number }[] |
     const t = Math.min(taken.get(r.id) || 0, r.max_seats);
     return {
       ...(r as unknown as Course),
-      content: (r.content as Course["content"]) || {},
+      content: (r["content"] as Course["content"]) || {},
       taken: t,
       seatsLeft: Math.max(0, r.max_seats - t),
       full: t >= r.max_seats,
@@ -103,14 +103,14 @@ export function useCourseBySlug(slug: string | undefined) {
         const m = (slug as string).match(/^([a-cA-C][12])-(online|fizic)$/);
         if (m) {
           ({ data: rows } = await table().select(COLS)
-            .eq("level", m[1].toUpperCase()).eq("format", m[2].toLowerCase())
+            .eq("level", m[1]!.toUpperCase()).eq("format", m[2]!.toLowerCase())
             .eq("course_type", "grup").eq("is_active", true)
             .order("start_date", { ascending: true }).limit(1));
         }
       }
       if (!active) return;
       const row = rows && rows[0];
-      setCourse(row ? withSeats([row as Row], counts)[0] : null);
+      setCourse(row ? withSeats([row as Row], counts)[0] ?? null : null);
       setLoading(false);
     })();
     return () => {

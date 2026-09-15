@@ -13,8 +13,8 @@ const Unsubscribe = () => {
     const validate = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/handle-email-unsubscribe?token=${token}`,
-          { headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY } }
+          `${import.meta.env["VITE_SUPABASE_URL"]}/functions/v1/handle-email-unsubscribe?token=${token}`,
+          { headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] } }
         );
         const data = await res.json();
         if (!res.ok) setStatus("invalid");

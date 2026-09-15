@@ -25,7 +25,7 @@ interface Props {
   eventType?: EventType;
   prefill?: { name?: string; email?: string; phone?: string };
   defaultFormat?: Format;
-  onBooked?: (b: { booking_id: string; manage_token: string; meet_link?: string | null }) => void;
+  onBooked?: (b: { booking_id: string; manage_token: string; meet_link?: string | null | undefined }) => void;
   /**
    * "create" (default) shows the full booking form and creates a new booking.
    * "pick" simply calls onPick(iso) after the user selects a slot — used in the
@@ -84,7 +84,7 @@ function fmtFullInTz(iso: string, lang: "ro" | "en", tz: string) {
 }
 function fmtDayHeader(dateKey: string, lang: "ro" | "en") {
   // dateKey YYYY-MM-DD interpreted as local date
-  const [y, m, d] = dateKey.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = dateKey.split("-").map(Number);
   const probe = new Date(Date.UTC(y, m - 1, d, 12, 0));
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
     timeZone: TZ,
@@ -117,10 +117,10 @@ const NativeScheduler = ({
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState<{
     start_at: string;
-    meet_link?: string | null;
+    meet_link?: string | null | undefined;
     manage_token: string;
-    end_at?: string;
-    booking_id?: string;
+    end_at?: string | undefined;
+    booking_id?: string | undefined;
   } | null>(null);
   // Trial-only: the server rejects a second free trial for the same email.
   const [trialUsed, setTrialUsed] = useState(false);
@@ -154,11 +154,11 @@ const NativeScheduler = ({
       setError(null);
       try {
         const url =
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-availability` +
+          `${import.meta.env["VITE_SUPABASE_URL"]}/functions/v1/booking-availability` +
           `?event_type=${eventType}&date_from=${dateRange.from}&date_to=${dateRange.to}` +
           `&format=${format}`;
         const res = await fetch(url, {
-          headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+          headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] },
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json?.error ?? "load failed");
@@ -518,12 +518,12 @@ const NativeScheduler = ({
   const slotsForDate = selectedDate ? slotsByDate[selectedDate] ?? [] : [];
   const availableDateSet = new Set(mergedDateKeys);
   const availableDates = mergedDateKeys.map((k) => {
-    const [y, m, d] = k.split("-").map(Number);
+    const [y = 1970, m = 1, d = 1] = k.split("-").map(Number);
     return new Date(y, m - 1, d);
   });
   const selectedDateObj = selectedDate
     ? (() => {
-        const [y, m, d] = selectedDate.split("-").map(Number);
+        const [y = 1970, m = 1, d = 1] = selectedDate.split("-").map(Number);
         return new Date(y, m - 1, d);
       })()
     : undefined;
@@ -638,13 +638,13 @@ const NativeScheduler = ({
         <div className="flex justify-center md:justify-start">
           <CalendarPicker
             mode="single"
-            selected={selectedDateObj}
+            {...(selectedDateObj !== undefined ? { selected: selectedDateObj } : {})}
             onSelect={(d) => {
               if (d) setSelectedDate(localDateKey(d));
             }}
-            defaultMonth={selectedDateObj ?? minDate}
-            fromDate={minDate}
-            toDate={maxDate}
+            {...((selectedDateObj ?? minDate) !== undefined ? { defaultMonth: (selectedDateObj ?? minDate) as Date } : {})}
+            {...(minDate !== undefined ? { fromDate: minDate } : {})}
+            {...(maxDate !== undefined ? { toDate: maxDate } : {})}
             disabled={(date) => !availableDateSet.has(localDateKey(date))}
             modifiers={{ available: availableDates }}
             modifiersClassNames={{

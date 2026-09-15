@@ -299,6 +299,7 @@ const BlogAdmin = () => {
                   onClick={() => {
                     if (!confirm("Înlocuiești textul din editor cu textul original al articolului?")) return;
                     const seed = BLOG_SEED[draft.slug];
+                    if (!seed) return;
                     setDraft({ ...draft, body_ro: seed.ro, body_en: seed.en, lead_ro: seed.lead_ro, lead_en: seed.lead_en });
                   }}
                 >

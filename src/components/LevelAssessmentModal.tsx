@@ -40,6 +40,7 @@ const LevelAssessmentModal = ({
     (answer: "yes" | "no") => {
       if (step.type !== "question") return;
       const q = questions[step.index];
+      if (!q) return;
       if (answer === "no") {
         setStep({ type: "result", level: q.noResult });
       } else if (q.yesNext !== null) {
@@ -92,7 +93,7 @@ const LevelAssessmentModal = ({
                 <GraduationCap className="w-5 h-5" />
               </div>
               <p className="text-base font-medium text-foreground leading-snug">
-                {questions[step.index].text}
+                {questions[step.index]?.text}
               </p>
             </div>
 

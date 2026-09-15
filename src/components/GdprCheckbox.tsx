@@ -10,7 +10,7 @@ interface GdprCheckboxProps {
    * toast alone is easy to miss here: the eye is on the checkbox and the
    * submit button, so an unchecked box reads as "nothing happened".
    */
-  error?: string;
+  error?: string | undefined;
 }
 
 const GdprCheckbox = ({ checked, onCheckedChange, error }: GdprCheckboxProps) => {

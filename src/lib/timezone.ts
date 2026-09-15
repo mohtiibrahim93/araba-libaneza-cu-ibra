@@ -71,7 +71,7 @@ export function weeklyBucharestInTz(
   hhmm: string,
   targetTz: string,
 ): { weekday: number; time: string; sameAsSource: boolean } {
-  const [h, m] = hhmm.split(":").map(Number);
+  const [h = 0, m = 0] = hhmm.split(":").map(Number);
   const today = new Date();
   // Find the next date (in Bucharest) matching the weekday.
   const todayParts = new Intl.DateTimeFormat("en-US", {

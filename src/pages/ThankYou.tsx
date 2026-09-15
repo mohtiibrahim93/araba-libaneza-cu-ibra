@@ -43,11 +43,11 @@ const ThankYou = () => {
     let cancelled = false;
     (async () => {
       try {
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-checkout-session?session_id=${encodeURIComponent(sessionId)}`;
+        const url = `${import.meta.env["VITE_SUPABASE_URL"]}/functions/v1/get-checkout-session?session_id=${encodeURIComponent(sessionId)}`;
         const res = await fetch(url, {
           headers: {
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+            Authorization: `Bearer ${import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]}`,
           },
         });
         if (!res.ok) throw new Error("session fetch failed");

@@ -97,14 +97,14 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
       <div className="grid gap-2 sm:grid-cols-2">
         {filtered.map((s) => {
           const active = s.id === selectedSlotId;
-          const weekdayLabel = t[WEEKDAY_KEYS[Math.min(Math.max(s.weekday - 1, 0), 6)]];
+          const weekdayLabel = t[WEEKDAY_KEYS[Math.min(Math.max(s.weekday - 1, 0), 6)]!];
           const lowSeats = s.seatsLeft > 0 && s.seatsLeft < 3;
           const local =
             showLocalTz && localTz !== BUCHAREST_TZ
               ? weeklyBucharestInTz(s.weekday, s.start_time.slice(0, 5), localTz)
               : null;
           const localWeekdayLabel = local
-            ? t[WEEKDAY_KEYS[Math.min(Math.max(local.weekday - 1, 0), 6)]]
+            ? t[WEEKDAY_KEYS[Math.min(Math.max(local.weekday - 1, 0), 6)]!]
             : null;
           return (
             <button

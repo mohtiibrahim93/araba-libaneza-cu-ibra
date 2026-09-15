@@ -32,15 +32,15 @@ function escapeText(s: string): string {
 export interface IcsEvent {
   uid: string;
   title: string;
-  description?: string;
-  location?: string;
+  description?: string | undefined;
+  location?: string | undefined;
   startISO: string;
   endISO: string;
-  url?: string;
-  organizerEmail?: string;
-  organizerName?: string;
-  attendeeEmail?: string;
-  attendeeName?: string;
+  url?: string | undefined;
+  organizerEmail?: string | undefined;
+  organizerName?: string | undefined;
+  attendeeEmail?: string | undefined;
+  attendeeName?: string | undefined;
 }
 
 export function buildIcs(ev: IcsEvent): string {

@@ -25,10 +25,10 @@ const TrialPage = () => {
   // own bubble, which renders in the browser's UI language (English on a
   // Romanian page) and flags only one field at a time.
   const [errors, setErrors] = useState<{
-    name?: string;
-    email?: string;
-    phone?: string;
-    gdpr?: string;
+    name?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    gdpr?: string | undefined;
   }>({});
 
   const required = lang === "en" ? "This field is required." : "Acest câmp este obligatoriu.";
