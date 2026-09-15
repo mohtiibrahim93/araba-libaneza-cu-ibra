@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { JOACA_META, TITLE_MAX, DESC_MAX } from "@/lib/pageMeta";
+import { hasRoute } from "./helpers/routes";
 
 /**
  * The Yalla practice game, served from this domain rather than embedded from
@@ -15,7 +16,6 @@ import { JOACA_META, TITLE_MAX, DESC_MAX } from "@/lib/pageMeta";
  * These assertions pin the parts that have no other guard.
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
-const app = read("src/App.tsx");
 const prerender = read("scripts/seoPrerender.ts");
 const robots = read("public/robots.txt");
 
@@ -69,7 +69,7 @@ describe("Yalla game assets", () => {
 
 describe("/joaca", () => {
   it("is routed and prerendered", () => {
-    expect(app).toContain('<Route path="/joaca"');
+    expect(hasRoute("/joaca"), "no route for /joaca").toBe(true);
     // Without a STATIC_ROUTES entry the build guard fails the route as serving
     // the homepage shell to crawlers.
     expect(prerender).toContain('{ path: "/joaca"');
@@ -98,7 +98,7 @@ describe("/joaca", () => {
     // The card bank carries Romanian meanings only, so an /en/ URL would
     // advertise a translation that does not exist. A route with no twin emits
     // no hreflang, which is correct here rather than an omission.
-    expect(app).not.toContain('path="/en/joaca"');
+    expect(hasRoute("/en/joaca"), "/joaca has no English twin by design").toBe(false);
     expect(read("src/lib/languageRoutes.ts")).not.toContain("/joaca");
   });
 });

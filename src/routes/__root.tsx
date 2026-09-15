@@ -135,8 +135,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
-      { title: "Cursuri de Arabă Libaneză în București și Online — Ibra" },
+      { "data-rh": "true", title: "Cursuri de Arabă Libaneză în București și Online — Ibra" },
       {
+        "data-rh": "true",
         name: "description",
         content:
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
@@ -144,23 +145,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "centrul de araba libaneza" },
       { name: "adopt-website-id", content: ADOPT_WEBSITE_CODE },
       { name: "google-site-verification", content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://centruldearabalibaneza.com/" },
-      { property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
+      { "data-rh": "true", property: "og:type", content: "website" },
+      { "data-rh": "true", property: "og:url", content: "https://centruldearabalibaneza.com/" },
+      { "data-rh": "true", property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
       {
+        "data-rh": "true",
         property: "og:description",
         content:
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
       },
-      { property: "og:image", content: "https://centruldearabalibaneza.com/og-image.png" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
+      { "data-rh": "true", property: "og:image", content: "https://centruldearabalibaneza.com/og-image.png" },
+      { "data-rh": "true", name: "twitter:card", content: "summary_large_image" },
+      { "data-rh": "true", name: "twitter:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
       {
+        "data-rh": "true",
         name: "twitter:description",
         content:
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
       },
-      { name: "twitter:image", content: "https://centruldearabalibaneza.com/og-image.png" },
+      { "data-rh": "true", name: "twitter:image", content: "https://centruldearabalibaneza.com/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

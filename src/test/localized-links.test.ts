@@ -48,7 +48,7 @@ describe("localized in-article links", () => {
     // That link is meant to cross languages. Routed through LocalizedLink it
     // would map /blog back to /en/blog and strand the reader where they were.
     const src = read("src/pages/blog/BlogIndex.tsx");
-    expect(src).toContain('import { Link as CrossLanguageLink } from "react-router-dom"');
+    expect(src).toContain('import { Link as CrossLanguageLink } from "@/lib/router-compat"');
     expect(src).toMatch(/<CrossLanguageLink\s+to=\{lang === "en" \? "\/blog" : "\/en\/blog"\}/);
   });
 
@@ -74,9 +74,9 @@ describe("localized in-article links", () => {
     // Romanian address — so a localised link sent English readers back into
     // Romanian while looking like it had done its job.
     const src = read("src/lib/languageRoutes.ts");
-    const block = src.split("const EN_FOR_RO")[1].split("};")[0];
+    const block = (src.split("const EN_FOR_RO")[1] ?? "").split("};")[0] ?? "";
     const offenders = [...block.matchAll(/"([^"]+)":\s*"([^"]+)"/g)]
-      .filter(([, , target]) => !target.startsWith("/en/"))
+      .filter(([, , target]) => !(target ?? "").startsWith("/en/"))
       .map(([, from, to]) => `${from} -> ${to}`);
     expect(offenders).toEqual([]);
   });
