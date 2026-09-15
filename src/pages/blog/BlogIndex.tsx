@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { blogPostsNewestFirst, L } from "@/lib/blogPosts";
+import { getBlogCover } from "@/lib/blogCovers";
 import { useI18n } from "@/lib/i18n";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -122,8 +123,24 @@ const BlogIndex = () => {
               <li key={post.slug}>
                 <Link
                   to={`${base}/${post.slug}`}
-                  className="group flex h-full min-h-[16rem] flex-col rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all"
+                  className="group flex h-full min-h-[16rem] flex-col overflow-hidden rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all"
                 >
+                  {(() => {
+                    const cover = getBlogCover(post.slug);
+                    if (!cover) return null;
+                    return (
+                      <img
+                        src={cover.src}
+                        alt={L(cover.alt, lang)}
+                        width={1200}
+                        height={900}
+                        loading="lazy"
+                        decoding="async"
+                        className="aspect-[4/3] w-full object-cover"
+                      />
+                    );
+                  })()}
+                  <div className="flex flex-1 flex-col p-5">
                   <div className="mb-3 flex items-center gap-2">
                     <span className="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 text-primary">
                       {L(post.tag, lang)}
@@ -142,6 +159,7 @@ const BlogIndex = () => {
                     <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline underline-offset-4">
                       {c.read} <ArrowRight className="w-4 h-4" />
                     </span>
+                  </div>
                   </div>
                 </Link>
               </li>

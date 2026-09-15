@@ -12,7 +12,8 @@ import ArticleOutline from "@/components/blog/ArticleOutline";
 import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";
-import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_POSTS, L } from "@/lib/blogPosts";
+import { getBlogCover } from "@/lib/blogCovers";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -115,6 +116,12 @@ const BlogArticleLayout = ({
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
   const tCrumb = crumb ? pick(crumb, lang) : tTitle;
 
+  // The article's own photo doubles as its link-preview image. Fall back to the
+  // site-wide OG card for an article that has no cover yet, so a share never
+  // ends up with no image at all.
+  const cover = getBlogCover(slug);
+  const socialImage = cover ? `${BASE}${cover.src}` : `${BASE}/og-image.png`;
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -124,7 +131,7 @@ const BlogArticleLayout = ({
     dateModified: published,
     inLanguage: lang === "en" ? "en" : "ro",
     mainEntityOfPage: url,
-    image: `${BASE}/og-image.png`,
+    image: socialImage,
     author: { "@type": "Person", name: "Ibra — Centrul de Arabă Libaneză" },
     publisher: {
       "@type": "Organization",
@@ -189,11 +196,13 @@ const BlogArticleLayout = ({
         <meta property="og:title" content={resolvedMetaTitle} />
         <meta property="og:description" content={resolvedMetaDescription} />
         <meta property="og:url" content={url} />
-        <meta property="og:image" content={`${BASE}/og-image.png`} />
+        <meta property="og:image" content={socialImage} />
+        {cover && <meta property="og:image:alt" content={L(cover.alt, lang)} />}
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
         <meta property="article:published_time" content={published} />
         <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={socialImage} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
@@ -222,6 +231,20 @@ const BlogArticleLayout = ({
             </h1>
             <p className="text-lg text-muted-foreground">{tLead}</p>
             <p className="text-sm text-muted-foreground">{metaLine}</p>
+            {cover && (
+              /* Eager + high priority: this is the largest element above the
+                 fold, so lazy-loading it would only delay the paint. */
+              <img
+                src={cover.src}
+                alt={L(cover.alt, lang)}
+                width={1200}
+                height={675}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="aspect-[16/9] w-full rounded-2xl border border-border object-cover"
+              />
+            )}
           </header>
 
           <div ref={bodyRef}>
