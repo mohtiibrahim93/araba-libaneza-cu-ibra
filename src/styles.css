@@ -1,0 +1,222 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition — ported from the Classic src/index.css +
+ * tailwind.config.ts during the TanStack Start migration.
+ *
+ * Token values stay as HSL triplets (as before) and the @theme inline block
+ * wraps them in hsl(), so existing `hsl(var(--token))` usages in components
+ * keep resolving identically.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-ring-offset-background: hsl(var(--background));
+  /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
+  --color-brand-green: hsl(var(--brand-green));
+  --color-cream: hsl(var(--cream));
+  /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
+     matching pre-migration behaviour). */
+  --color-cedar: hsl(var(--cedar-green));
+  --color-lebanese-red: hsl(var(--lebanese-red));
+  --color-stone-gold: hsl(var(--stone-gold));
+  --color-parchment: hsl(var(--parchment));
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Serif display for headlines; Arabic script for the brand lockup line. */
+  --font-display: "Lora", Georgia, serif;
+  --font-arabic: "Noto Naskh Arabic", serif;
+
+  /* Fluid layout scale (max-w-content). */
+  --container-content: min(90vw, 120rem);
+
+  /* Fluid gutters and section rhythm. */
+  --spacing-gutter: clamp(1rem, 5vw, 4rem);
+  --spacing-section: clamp(3rem, 7vw, 6rem);
+  --spacing-section-sm: clamp(1.75rem, 3.5vw, 3rem);
+
+  /* Fluid display sizes for headings. */
+  --text-display-xl: clamp(2.25rem, 1.4rem + 3.4vw, 4rem);
+  --text-display-xl--line-height: 1.08;
+  --text-display-lg: clamp(1.875rem, 1.35rem + 2.2vw, 3rem);
+  --text-display-lg--line-height: 1.15;
+  --text-display-md: clamp(1.5rem, 1.2rem + 1.3vw, 2.25rem);
+  --text-display-md--line-height: 1.22;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* v3-style container: centered, 2rem padding, capped at 1400px. */
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  max-width: 1400px;
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 220 14% 10%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 14% 10%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 14% 10%;
+
+  --primary: 0 72% 51%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
+  --brand-green: 152 42% 22%;
+  --cream: 40 33% 96%;
+
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 220 14% 10%;
+
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 10% 36%;
+
+  --accent: 220 14% 96%;
+  --accent-foreground: 220 14% 10%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 0 72% 51%;
+
+  --radius: 0.75rem;
+
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+.dark {
+  --background: 220 14% 10%;
+  --foreground: 0 0% 98%;
+
+  --card: 220 14% 12%;
+  --card-foreground: 0 0% 98%;
+
+  --popover: 220 14% 12%;
+  --popover-foreground: 0 0% 98%;
+
+  --primary: 0 80% 62%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Brand tokens lighten in dark mode so they stay legible on dark surfaces. */
+  --brand-green: 152 35% 58%;
+  --cream: 220 14% 13%;
+
+  --secondary: 220 14% 16%;
+  --secondary-foreground: 0 0% 98%;
+
+  --muted: 220 14% 16%;
+  --muted-foreground: 220 12% 72%;
+
+  --accent: 220 14% 16%;
+  --accent-foreground: 0 0% 98%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 14% 20%;
+  --input: 220 14% 20%;
+  --ring: 0 80% 62%;
+
+  --sidebar-background: 220 14% 10%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 0 0% 100%;
+  --sidebar-primary-foreground: 220 14% 10%;
+  --sidebar-accent: 220 14% 16%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 220 14% 20%;
+  --sidebar-ring: 0 72% 51%;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Default fallback; Navbar updates this to its real height */
+    --nav-h: 64px;
+  }
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-body);
+  }
+  /* Stable anchor offset for any in-page link or scrollIntoView call */
+  :where([id]) {
+    scroll-margin-top: calc(var(--nav-h) + 12px);
+  }
+}

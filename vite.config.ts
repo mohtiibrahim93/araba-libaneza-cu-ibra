@@ -1,56 +1,19 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
+// or the app will break with duplicate plugins:
+//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
+//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
+//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
+// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
-import { seoPrerenderPlugin } from "./scripts/seoPrerender";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    // Bind on all interfaces (IPv4 + IPv6). Using "::" alone fails with
-    // EAFNOSUPPORT in containers without IPv6 (e.g. some GitHub Codespaces),
-    // which stops the dev/preview server from ever coming up on the
-    // forwarded port. `true` maps to 0.0.0.0 and works everywhere.
-    host: true,
-    port: 8080,
-    // Allow the app to be served through Codespaces / tunnel proxy hostnames
-    // (e.g. *.app.github.dev) instead of being rejected as a blocked host.
-    allowedHosts: true,
-    hmr: {
-      overlay: false,
-    },
+export default defineConfig({
+  tanstackStart: {
+    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+    // nitro/vite builds from this
+    server: { entry: "server" },
   },
-  plugins: [react(), mode === "development" && componentTagger(), mcpPlugin(), seoPrerenderPlugin()].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+  vite: {
+    plugins: [mcpPlugin()],
   },
-  build: {
-    rollupOptions: {
-      output: {
-        // Split heavy, rarely-changing vendor code into long-cacheable chunks
-        // so an app-code change doesn't bust the whole ~290 KB gzip bundle.
-        // The entire React ecosystem MUST stay in one chunk — splitting react
-        // from react-dom/router causes duplicate-React "invalid hook call".
-        // Only peel out the big, stable, homepage-loaded vendors into
-        // long-cacheable chunks. Everything else is left to Rollup's default
-        // chunking so admin/PDF-only libs (html2canvas, jspdf, …) stay in
-        // their own async chunks and never load on the homepage.
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          if (
-            /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler|@tanstack[\\/]react-query)[\\/]/.test(
-              id,
-            )
-          ) {
-            return "vendor-react";
-          }
-          if (id.includes("/node_modules/@radix-ui/")) return "vendor-radix";
-          if (id.includes("/node_modules/@supabase/")) return "vendor-supabase";
-        },
-      },
-    },
-  },
-}));
+});
