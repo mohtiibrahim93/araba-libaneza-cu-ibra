@@ -38,6 +38,7 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResurseRouteImport } from './routes/resurse'
 import { Route as StergereDateRouteImport } from './routes/stergere-date'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TestDeNivelRouteImport } from './routes/test-de-nivel'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TrialRouteImport } from './routes/trial'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -251,6 +252,11 @@ const StergereDateRoute = StergereDateRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestDeNivelRoute = TestDeNivelRouteImport.update({
+  id: '/test-de-nivel',
+  path: '/test-de-nivel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThankYouRoute = ThankYouRouteImport.update({
@@ -651,6 +657,7 @@ export interface FileRoutesByFullPath {
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
   '/terms': typeof TermsRoute
+  '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -751,6 +758,7 @@ export interface FileRoutesByTo {
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
   '/terms': typeof TermsRoute
+  '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -852,6 +860,7 @@ export interface FileRoutesById {
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
   '/terms': typeof TermsRoute
+  '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -954,6 +963,7 @@ export interface FileRouteTypes {
     | '/resurse'
     | '/stergere-date'
     | '/terms'
+    | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
@@ -1054,6 +1064,7 @@ export interface FileRouteTypes {
     | '/resurse'
     | '/stergere-date'
     | '/terms'
+    | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
@@ -1154,6 +1165,7 @@ export interface FileRouteTypes {
     | '/resurse'
     | '/stergere-date'
     | '/terms'
+    | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
@@ -1255,6 +1267,7 @@ export interface RootRouteChildren {
   ResurseRoute: typeof ResurseRoute
   StergereDateRoute: typeof StergereDateRoute
   TermsRoute: typeof TermsRoute
+  TestDeNivelRoute: typeof TestDeNivelRoute
   ThankYouRoute: typeof ThankYouRoute
   TrialRoute: typeof TrialRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
@@ -1529,6 +1542,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-de-nivel': {
+      id: '/test-de-nivel'
+      path: '/test-de-nivel'
+      fullPath: '/test-de-nivel'
+      preLoaderRoute: typeof TestDeNivelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/thank-you': {
@@ -2047,6 +2067,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResurseRoute: ResurseRoute,
   StergereDateRoute: StergereDateRoute,
   TermsRoute: TermsRoute,
+  TestDeNivelRoute: TestDeNivelRoute,
   ThankYouRoute: ThankYouRoute,
   TrialRoute: TrialRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,

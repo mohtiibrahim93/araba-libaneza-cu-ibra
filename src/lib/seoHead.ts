@@ -23,7 +23,7 @@ import { getCurriculum } from "@/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "@/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
-import { CURSURI_ARABA_META, HOME_META, JOACA_META } from "@/lib/pageMeta";
+import { CURSURI_ARABA_META, HOME_META, JOACA_META, TEST_NIVEL_META } from "@/lib/pageMeta";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -48,6 +48,10 @@ const STATIC_ROUTES: SeoRoute[] = [
   // runtime <title> cannot drift apart. Brand-first: the transactional "cursuri
   // de arabă libaneză" query belongs to /cursuri-araba, not here.
   { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
+  // The placement test on its own page. /quiz used to carry this query in its
+  // title while being a course chooser; this page is the test, so the two stop
+  // competing. Romanian only, like /joc — the card bank's meanings are Romanian.
+  { path: "/test-de-nivel", title: TEST_NIVEL_META.title, description: TEST_NIVEL_META.description },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the

@@ -85,3 +85,23 @@ export const JOACA_META: PageMeta = {
   description:
     "Exersează araba libaneză gratuit: peste 4.300 de expresii cu sens în română, exerciții, potriviri și recapitulări programate. Fără cont, direct în browser.",
 };
+
+/**
+ * /test-de-nivel — the placement test, on a page that is the test.
+ *
+ * Split out from /quiz, which promised "test de nivel gratuit" in its title and
+ * then asked the visitor to declare their own level from a list. The two were
+ * competing for one query while neither served it: the chooser could not test
+ * anyone, and the real 24-question test sat inside the game with no page of its
+ * own. This page is the test; /quiz is now titled as the 30-second chooser it
+ * is, so they stop cannibalising each other.
+ *
+ * Romanian only, like /joc: the test reads situations and takes answers in
+ * Arabizi against a card bank whose meanings are Romanian, so an /en/ URL would
+ * advertise a translation that does not exist.
+ */
+export const TEST_NIVEL_META: PageMeta = {
+  title: "Test de nivel gratuit la arabă libaneză | Ibra",
+  description:
+    "Test gratuit de nivel la araba libaneză: 24 de întrebări, aproximativ 15 minute, fără cronometru. Rezultatul îți arată de unde să începi.",
+};

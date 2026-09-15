@@ -255,7 +255,7 @@ const FindYourTrackQuiz = () => {
           <p className="pt-1 text-center text-sm text-muted-foreground">
             {t.quizQ3NotSure}{" "}
             <Link
-              to="/joc?view=placement"
+              to="/test-de-nivel"
               onClick={rememberContext}
               className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
             >
