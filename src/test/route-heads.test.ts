@@ -1,30 +1,22 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { allRoutes } from "../../scripts/seoPrerender";
 import { allSeoRoutes, hreflangPairs, seoHead } from "@/lib/seoHead";
 import { TITLE_MAX, DESC_MAX } from "@/lib/pageMeta";
 
 /**
- * The per-page head now lives in src/lib/seoHead.ts, read by each route's
- * head() and rendered into the server HTML.
- *
- * scripts/seoPrerender.ts held the same table when the pages were prerendered
- * into static files. Its copy stays the reference: this file compares the two
- * entry by entry, so no title, description or canonical can drift between them
- * — the failure mode the script itself was written to close, one level up.
+ * The per-page head lives in src/lib/seoHead.ts, read by each route's head()
+ * and rendered into the server HTML. It is the single source for titles,
+ * descriptions, canonicals, hreflang and JSON-LD — nothing bakes heads into
+ * static files any more.
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
 describe("per-page heads", () => {
-  it("carries exactly the routes the prerender script declares", () => {
-    const mine = allSeoRoutes()
-      .map((r) => JSON.stringify(r))
-      .sort();
-    const theirs = allRoutes()
-      .map((r) => JSON.stringify(r))
-      .sort();
-    expect(mine).toEqual(theirs);
+  it("declares every page once", () => {
+    const paths = allSeoRoutes().map((r) => r.path);
+    expect(paths.length).toBeGreaterThan(100);
+    expect(new Set(paths).size).toBe(paths.length);
   });
 
   it("stays inside the title and description limits", () => {

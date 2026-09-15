@@ -16,7 +16,7 @@ import { hasRoute } from "./helpers/routes";
  * These assertions pin the parts that have no other guard.
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
-const prerender = read("scripts/seoPrerender.ts");
+const seoHeadSrc = read("src/lib/seoHead.ts");
 const robots = read("public/robots.txt");
 
 /** Exactly what public/yalla/index.html loads, in the order it loads it. */
@@ -68,11 +68,11 @@ describe("Yalla game assets", () => {
 });
 
 describe("/joaca", () => {
-  it("is routed and prerendered", () => {
+  it("is routed and has its own head", () => {
     expect(hasRoute("/joaca"), "no route for /joaca").toBe(true);
-    // Without a STATIC_ROUTES entry the build guard fails the route as serving
-    // the homepage shell to crawlers.
-    expect(prerender).toContain('{ path: "/joaca"');
+    // Without a STATIC_ROUTES entry the route serves the site-wide head to
+    // crawlers instead of its own.
+    expect(seoHeadSrc).toContain('{ path: "/joaca"');
   });
 
   it("keeps its head inside the length limits", () => {
@@ -81,16 +81,16 @@ describe("/joaca", () => {
   });
 
   it("takes its head from the shared registry, not a second copy", () => {
-    // The failure this prevents: the prerendered <title> and the runtime one
-    // drifting apart, so a crawler that runs JavaScript reads a different page
-    // from one that does not.
+    // The failure this prevents: the server-rendered <title> and the runtime
+    // one drifting apart, so a crawler that runs JavaScript reads a different
+    // page from one that does not.
     expect(read("src/pages/Joaca.tsx")).toContain("JOACA_META");
-    expect(prerender).toContain("JOACA_META");
+    expect(seoHeadSrc).toContain("JOACA_META");
   });
 
   it("is linked from the footer, not only the navbar dropdown", () => {
     // The dropdown mounts its contents when opened, so its links never reach
-    // the prerendered HTML. A footer link is what makes the page crawlable.
+    // the server-rendered HTML. A footer link is what makes it crawlable.
     expect(read("src/components/Footer.tsx")).toContain('to="/joaca"');
   });
 

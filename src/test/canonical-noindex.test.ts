@@ -16,7 +16,7 @@ import { resolve } from "node:path";
  * Retired aliases keep the canonical and are kept out of the sitemap instead.
  * Genuinely private pages (/stergere-date) keep noindex and have no canonical.
  */
-const src = readFileSync(resolve(process.cwd(), "scripts/seoPrerender.ts"), "utf8");
+const src = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
 
 describe("canonical and noindex are never combined", () => {
   const routeLines = src
