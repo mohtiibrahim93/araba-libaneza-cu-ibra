@@ -55,6 +55,9 @@ q(2,'Obligație','Ce exprimă lezem?','Necesitate / obligație.',['O simplă alt
 q(2,'Frecvență','Alege sensul lui „3adatan”.','De obicei.',['Imediat.','Niciodată.'],'march');
 q(2,'Producție','KTB: scrie „bibliotecă / librărie” în Arabizi.','Maktabe',null,'workbook');
 const stageNames=['Bază','Consolidare','Extindere'];
+/* Orientative CEFR tags shown next to the stage names on the result screen.
+   Labels stay "orientativ" — the pilot validates neither thresholds nor CEFR. */
+const stageLevels=['A1','A2','B1'];
 function outcome(scores){if(scores[0]<4)return {title:'Punct de pornire: început A1',unit:'l1'};if(scores[0]<6||scores[1]<6)return {title:'Punct de pornire: consolidare A1',unit:'m13'};if(scores[2]<6)return {title:'Discuție de plasare pentru A2',unit:'mrev2'};return {title:'Discuție de plasare pentru A2 / B1',unit:'guide-13'};}
 let api,run=null,exam=null,activeView='';
 function init(a){api=a;}
