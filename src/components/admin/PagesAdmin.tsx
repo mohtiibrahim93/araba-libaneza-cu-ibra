@@ -225,7 +225,7 @@ const PagesAdmin = () => {
                 placeholder="Întrebare"
                 value={item.q}
                 onChange={(e) => {
-                  const faq = [...draft.faq]; faq[i] = { ...faq[i], q: e.target.value }; setDraft({ ...draft, faq });
+                  const faq = [...draft.faq]; faq[i] = { ...(faq[i] ?? { q: "", a: "" }), q: e.target.value }; setDraft({ ...draft, faq });
                 }}
               />
               <Textarea
@@ -233,7 +233,7 @@ const PagesAdmin = () => {
                 placeholder="Răspuns"
                 value={item.a}
                 onChange={(e) => {
-                  const faq = [...draft.faq]; faq[i] = { ...faq[i], a: e.target.value }; setDraft({ ...draft, faq });
+                  const faq = [...draft.faq]; faq[i] = { ...(faq[i] ?? { q: "", a: "" }), a: e.target.value }; setDraft({ ...draft, faq });
                 }}
               />
               <Button size="sm" variant="ghost" onClick={() => setDraft({ ...draft, faq: draft.faq.filter((_, j) => j !== i) })}>

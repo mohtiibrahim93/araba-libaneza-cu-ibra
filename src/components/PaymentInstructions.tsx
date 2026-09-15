@@ -14,13 +14,13 @@ import {
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
 interface PaymentInstructionsProps {
-  courseType?: "group" | "private" | "kids";
-  email?: string;
-  name?: string;
-  registrationId?: string;
-  quantity?: number;
+  courseType?: "group" | "private" | "kids" | undefined;
+  email?: string | undefined;
+  name?: string | undefined;
+  registrationId?: string | undefined;
+  quantity?: number | undefined;
   /** Group / kids only: monthly subscription vs. pay the whole course upfront. */
-  plan?: "monthly" | "full";
+  plan?: "monthly" | "full" | undefined;
 }
 
 const PaymentInstructions = ({ courseType, email, name, registrationId, quantity, plan }: PaymentInstructionsProps) => {

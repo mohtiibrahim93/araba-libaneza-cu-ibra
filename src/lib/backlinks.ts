@@ -23,7 +23,7 @@ export async function invokeBacklinks<T = any>(body: Record<string, unknown>) {
   const token = sessionData.session?.access_token;
   return supabase.functions.invoke<T>("backlink-snapshot", {
     body,
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
   });
 }
 

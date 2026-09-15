@@ -197,8 +197,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // English pages live under /en/; everything else is Romanian. The i18n
+  // effect keeps this in sync client-side after language toggles.
+  const { pathname } = useLocation();
+  const shellLang = pathname.startsWith("/en/") || pathname === "/en" ? "en" : "ro";
   return (
-    <html lang="ro" suppressHydrationWarning>
+    <html lang={shellLang} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -230,6 +234,10 @@ const LanguageFromPath = () => {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // SSR renders /en/* pages with English chrome so the server HTML matches
+  // the client's first render (the client initializer also picks "en" there).
+  const { pathname } = useLocation();
+  const initialLang = pathname.startsWith("/en/") ? ("en" as const) : ("ro" as const);
 
   // ported from main.tsx
   useEffect(() => {
@@ -242,7 +250,7 @@ function RootComponent() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <I18nProvider>
+          <I18nProvider initialLang={initialLang}>
             <RouteAnalytics />
             <LanguageFromPath />
             <Outlet />

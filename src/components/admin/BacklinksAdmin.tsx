@@ -38,7 +38,7 @@ const SOURCE_LABELS: Record<string, string> = {
   unknown: "—",
 };
 
-function SourceBadge({ source }: { source?: string | null }) {
+function SourceBadge({ source }: { source?: string | null | undefined }) {
   if (!source) return null;
   return (
     <Badge variant="secondary" className="text-[10px] font-normal">
@@ -94,7 +94,7 @@ function splitCsvLine(line: string): string[] {
 function parseGscLinksCsv(
   lines: string[],
 ): { form: Partial<SnapshotForm>; topDomains: TopDomain[] } | null {
-  const headers = splitCsvLine(lines[0]).map((h) => h.toLowerCase());
+  const headers = splitCsvLine(lines[0] ?? "").map((h) => h.toLowerCase());
   const looksLikeGsc =
     headers.some((h) => h.includes("site") || h.includes("domeniu")) &&
     headers.some(
@@ -140,8 +140,8 @@ function parseCsvOverview(text: string): Partial<SnapshotForm> {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   if (lines.length < 2) return {};
 
-  const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
-  const values = lines[1].split(",").map((v) => v.trim());
+  const headers = (lines[0] ?? "").split(",").map((h) => h.trim().toLowerCase());
+  const values = (lines[1] ?? "").split(",").map((v) => v.trim());
 
   const get = (names: string[]) => {
     for (const name of names) {
@@ -231,7 +231,7 @@ function RefreshStatus({
   latest,
 }: {
   attempts: FetchAttempt[];
-  latest?: BacklinkSnapshot;
+  latest?: BacklinkSnapshot | undefined;
 }) {
   const lastAttempt = attempts[0];
   const lastSuccess = attempts.find((a) => a.outcome === "success");
@@ -470,7 +470,7 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <TrendingUp className="w-3.5 h-3.5" /> Authority Score
-                <SourceBadge source={latest.metric_sources?.authority_score} />
+                <SourceBadge source={latest.metric_sources?.["authority_score"]} />
               </CardDescription>
               <CardTitle>{latest.authority_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -482,7 +482,7 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <ShieldAlert className="w-3.5 h-3.5" /> Trust Score
-                <SourceBadge source={latest.metric_sources?.trust_score} />
+                <SourceBadge source={latest.metric_sources?.["trust_score"]} />
               </CardDescription>
               <CardTitle>{latest.trust_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -494,7 +494,7 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Link2 className="w-3.5 h-3.5" /> Backlink-uri totale
-                <SourceBadge source={latest.metric_sources?.backlinks_total} />
+                <SourceBadge source={latest.metric_sources?.["backlinks_total"]} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.backlinks_total)}</CardTitle>
             </CardHeader>
@@ -506,7 +506,7 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Globe className="w-3.5 h-3.5" /> Domenii referitoare
-                <SourceBadge source={latest.metric_sources?.referring_domains} />
+                <SourceBadge source={latest.metric_sources?.["referring_domains"]} />
               </CardDescription>
               <CardTitle>{formatNumber(latest.referring_domains)}</CardTitle>
             </CardHeader>

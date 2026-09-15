@@ -28,7 +28,7 @@ interface Props {
 }
 
 function formatStart(iso: string, lang: "ro" | "en") {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = iso.split("-").map(Number);
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
     weekday: "long",
     day: "numeric",

@@ -38,14 +38,14 @@ const FORMATS: { key: "online" | "fizic"; label: string; icon: typeof Wifi }[] =
 ];
 
 function fmtDate(iso: string) {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = iso.split("-").map(Number);
   return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "short", year: "numeric" }).format(
     new Date(y, m - 1, d),
   );
 }
 
 const CohortLine = ({ c, taken }: { c: Cohort; taken: number }) => {
-  const meta = STATUS_META[c.status] ?? STATUS_META.forming;
+  const meta = STATUS_META[c.status] ?? STATUS_META["forming"]!;
   const seatsLeft = Math.max(0, c.max_seats - taken);
   return (
     <div className="flex items-center justify-between gap-2 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs">
@@ -76,7 +76,7 @@ const FormatColumn = ({
   cohorts: Cohort[];
   counts: Map<string, number>;
 }) => {
-  const openCount = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META.forming).open).length;
+  const openCount = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open).length;
   return (
     <div className="rounded-lg border border-border bg-muted/20 p-2.5">
       <div className="mb-2 flex items-center justify-between">
@@ -145,7 +145,7 @@ const GroupOverview = () => {
       .filter((c) => c.level === level && (c.format === format || c.format == null))
       .sort((a, b) => a.start_date.localeCompare(b.start_date));
 
-  const totalOpen = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META.forming).open).length;
+  const totalOpen = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open).length;
 
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">

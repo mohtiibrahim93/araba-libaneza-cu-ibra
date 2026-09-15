@@ -48,7 +48,7 @@ const CourseDetailsEditor = ({ value, onChange }: Props) => {
     onChange({ content: { ...content, ...patch } });
 
   const faq = content.faq ?? [];
-  const setFaq = (next: CourseContent["faq"]) => setContent({ faq: next });
+  const setFaq = (next: CourseContent["faq"]) => setContent({ faq: next ?? [] });
 
   const cv = (k: string) => (content as Record<string, unknown>)[k] as string | undefined;
 

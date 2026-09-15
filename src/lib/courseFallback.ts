@@ -42,6 +42,6 @@ export function courseFallback(level: string | null | undefined, lang: "ro" | "e
     curriculum: buildCurriculumText(lvl),
     sessionCount: lvl.lessons,
     totalHours: lvl.hours,
-    schedule: lvl.schedule,
+    ...(lvl.schedule !== undefined ? { schedule: lvl.schedule } : {}),
   };
 }

@@ -41,10 +41,10 @@ const RegistrationFilters = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Toate cursurile</SelectItem>
-            <SelectItem value="group">{formTypeLabels.group}</SelectItem>
+            <SelectItem value="group">{formTypeLabels["group"]}</SelectItem>
             <SelectItem value="private">Lead-uri lecții private</SelectItem>
-            <SelectItem value="kids">{formTypeLabels.kids}</SelectItem>
-            <SelectItem value="trial">{formTypeLabels.trial}</SelectItem>
+            <SelectItem value="kids">{formTypeLabels["kids"]}</SelectItem>
+            <SelectItem value="trial">{formTypeLabels["trial"]}</SelectItem>
           </SelectContent>
         </Select>
       </div>

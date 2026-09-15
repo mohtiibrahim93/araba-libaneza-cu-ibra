@@ -28,7 +28,7 @@ interface Heading {
   text: string;
 }
 
-const ArticleOutline = ({ containerRef }: { containerRef: RefObject<HTMLElement> }) => {
+const ArticleOutline = ({ containerRef }: { containerRef: RefObject<HTMLElement | null> }) => {
   const { lang } = useI18n();
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState<string>("");

@@ -93,7 +93,7 @@ const CalendarHealth = () => {
       const normalized: Health = {
         keys: { lovable: false, googleCalendar: false, ...(raw.keys ?? {}) },
         read: { ok: false, status: null, detail: null, ...(raw.read ?? {}) },
-        write: raw.write ? { ok: false, status: null, detail: null, ...raw.write } : null,
+        write: raw.write ? { ok: false, status: null, detail: null, ...(raw.write as Partial<NonNullable<Health["write"]>>) } : null,
         bookings: {
           total: 0,
           synced: 0,

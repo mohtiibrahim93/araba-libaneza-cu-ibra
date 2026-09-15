@@ -59,8 +59,8 @@ const PaymentStatus = () => {
       // 1) DB is source of truth (webhook writes here)
       if (registrationId) {
         try {
-          const base = import.meta.env.VITE_SUPABASE_URL as string;
-          const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+          const base = import.meta.env["VITE_SUPABASE_URL"] as string;
+          const anon = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string;
           const res = await fetch(
             `${base}/functions/v1/get-payment-status?registration_id=${encodeURIComponent(registrationId)}`,
             {

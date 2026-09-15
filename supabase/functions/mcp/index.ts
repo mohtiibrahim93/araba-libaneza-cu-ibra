@@ -105,6 +105,8 @@ var mcp_default = defineMcp({
   title: "Arab\u0103 Libanez\u0103 cu Ibra",
   version: "0.1.0",
   instructions: "Public tools for the Arab\u0103 Libanez\u0103 cu Ibra Lebanese-Arabic language school. Use `get_pricing` for course fees (LEI), `list_curriculum_levels` for the CEFR A1\u2013C2 structure, and `get_contact_info` for how to reach the school.",
+  // Upstream @lovable.dev/mcp-js types declare outputSchema as required ZodRawShape,
+  // which conflicts with exactOptionalPropertyTypes for tools without one.
   tools: [get_pricing_default, list_curriculum_levels_default, get_contact_info_default]
 });
 

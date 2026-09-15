@@ -55,13 +55,13 @@ const BookingManageInner = () => {
   const [rescheduleOpen, setRescheduleOpen] = useState(false);
   const [pendingSlot, setPendingSlot] = useState<string | null>(null);
 
-  const baseUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/booking-manage/${token}`;
+  const baseUrl = `${import.meta.env["VITE_SUPABASE_URL"]}/functions/v1/booking-manage/${token}`;
 
   const load = async () => {
     setLoading(true);
     try {
       const res = await fetch(baseUrl, {
-        headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] },
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error ?? "not found");
@@ -83,7 +83,7 @@ const BookingManageInner = () => {
     try {
       const res = await fetch(baseUrl, {
         method: "DELETE",
-        headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] },
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error ?? t.manageGenericError);
@@ -103,7 +103,7 @@ const BookingManageInner = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
         },
         body: JSON.stringify({ start_at: startAt }),
       });
