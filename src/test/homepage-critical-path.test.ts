@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { screen } from "@testing-library/react";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { renderRoute } from "./helpers/appRouter";
+
 
 /**
  * The Supabase client must stay off the first-load path.
@@ -59,21 +62,57 @@ describe("Supabase stays out of the first-load bundle", () => {
 });
 
 /**
- * Build output assertions. Skipped when dist/ is absent so `npx vitest run`
- * works on a fresh checkout; they run in any tree where a build has happened.
+ * These two used to read dist/index.html. Under SSR there is no static
+ * index.html to read — the homepage HTML is produced per request — so they were
+ * skipped in every tree, which is worse than not having them. They now assert
+ * the same two facts from what is always available:
+ *
+ *   - nothing on the homepage's static import graph reaches the Supabase
+ *     client, which is what put its chunk in front of first paint;
+ *   - the lazy sections still contribute their text to the rendered page, so
+ *     the split costs no indexable copy.
  */
-const dist = resolve(process.cwd(), "dist/index.html");
-describe.skipIf(!existsSync(dist))("the built homepage", () => {
-  const html = () => readFileSync(dist, "utf8");
+describe("the homepage's critical path", () => {
+  const importsOf = (source: string) =>
+    [...source.matchAll(/^\s*import\s[^;]*?from\s+"(@\/[^"]+)"/gm)].map((m) => m[1]!);
 
-  it("does not preload the Supabase vendor chunk", () => {
-    expect(html()).not.toContain("vendor-supabase");
+  const resolveModule = (spec: string) => {
+    const base = `src/${spec.slice(2)}`;
+    for (const candidate of [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`]) {
+      if (existsSync(resolve(process.cwd(), candidate))) return candidate;
+    }
+    return undefined;
+  };
+
+  it("never reaches the Supabase client through a static import", () => {
+    const seen = new Set<string>();
+    const queue = ["src/routes/index.tsx", "src/routes/__root.tsx"];
+    const offenders: string[] = [];
+    while (queue.length) {
+      const file = queue.shift()!;
+      if (seen.has(file)) continue;
+      seen.add(file);
+      const source = read(file);
+      for (const spec of importsOf(source)) {
+        if (spec.startsWith("@/integrations/supabase/client")) {
+          offenders.push(`${file} -> ${spec}`);
+          continue;
+        }
+        const next = resolveModule(spec);
+        if (next) queue.push(next);
+      }
+    }
+    // Guard the guard: an empty walk would make this vacuous.
+    expect(seen.size).toBeGreaterThan(20);
+    expect(offenders).toEqual([]);
   });
 
-  it("still prerenders the content of the lazy sections", () => {
-    // The whole point: splitting the chunk must not cost indexable text.
-    // React awaits lazy boundaries before onAllReady fires, so the static copy
-    // is still written into the file even though the chunk is now async.
-    expect(html()).toContain("Meditații arabă 1:1 — cum funcționează");
+  it("still renders the text of the lazy sections", async () => {
+    renderRoute("/");
+    // Inside ProgramsSection, which is a lazy boundary.
+    expect(
+      await screen.findByText("Meditații arabă 1:1 — cum funcționează", {}, { timeout: 10000 }),
+    ).toBeTruthy();
   });
 });
+

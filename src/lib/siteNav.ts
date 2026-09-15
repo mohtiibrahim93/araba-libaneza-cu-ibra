@@ -58,7 +58,7 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
     ? [
         // The game is Romanian-only, so the English label says so rather than
         // sending a reader to a page they cannot use without warning.
-        { to: "/joaca", label: "Practice game (in Romanian)" },
+        { to: "/joc", label: "The Yalla game (in Romanian)" },
         { to: "/en/learn-lebanese-arabic", label: "Learn Lebanese Arabic" },
         { to: "/en/how-to-learn-lebanese-arabic", label: "How to learn it" },
         { to: "/blog/lebanese-arabic-learning-resources", label: "Free learning resources" },
@@ -67,7 +67,7 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
         { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
       ]
     : [
-        { to: "/joaca", label: "Joacă și învață" },
+        { to: "/joc", label: "Jocul Yalla" },
         { to: "/resurse", label: "Resurse gratuite" },
         { to: "/invata-araba-gratis", label: "Învață araba gratis" },
         { to: "/arabizi", label: "Arabizi" },

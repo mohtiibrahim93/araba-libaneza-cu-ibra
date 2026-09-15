@@ -22,7 +22,7 @@ export type CardOverrides = Record<string, CardOverride>;
  * is a large one.
  *
  * The Supabase client is imported inside the query rather than at module
- * scope. /joaca is a public page, and a static import would put 216 KB back on
+ * scope. /joc is a public page, and a static import would put 216 KB back on
  * its critical path — the same mistake src/hooks/useSiteTexts.ts documents.
  */
 export function useCardOverrides() {

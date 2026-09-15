@@ -63,7 +63,7 @@ export const CURSURI_ARABA_META: PageMeta = {
 };
 
 /**
- * /joaca — the Yalla practice game.
+ * /joc — the Yalla practice game.
  *
  * A fifth intent, and deliberately not a sixth course page: nobody searching
  * "cursuri de arabă" should land here, and nothing here competes for that term.
