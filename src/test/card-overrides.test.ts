@@ -88,7 +88,7 @@ describe("the read path", () => {
     // in useCardOverrides.ts rather than `as any`, which would throw away the
     // row types the hook maps.
     expect(read("supabase/migrations/20260914180000_yalla_card_overrides.sql")).toContain(
-      "create table public.yalla_card_overrides",
+      "CREATE TABLE public.yalla_card_overrides",
     );
     expect(read("src/hooks/useCardOverrides.ts")).not.toContain("as any");
   });
