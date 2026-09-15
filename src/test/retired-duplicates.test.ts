@@ -72,3 +72,23 @@ describe("retired duplicates of the courses hub", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("other retired addresses", () => {
+  /**
+   * /arabizi-pentru-incepatori was the Arabizi guide's first URL. Its redirect
+   * lived only in the old prerender script, so disconnecting that script left
+   * the address rendering the 404 view — invisible on the site (nothing links
+   * to it, it is not in the sitemap) but a dead end for old external links.
+   */
+  it("/arabizi-pentru-incepatori redirects to the Arabizi guide", () => {
+    expect(hasRoute("/arabizi-pentru-incepatori")).toBe(true);
+    expect(redirectsTo("/arabizi-pentru-incepatori")).toBe("/arabizi");
+  });
+
+  it("/arabizi-pentru-incepatori stays out of the sitemap", () => {
+    expect(sitemap).not.toContain(
+      "<loc>https://centruldearabalibaneza.com/arabizi-pentru-incepatori</loc>",
+    );
+  });
+});
+
