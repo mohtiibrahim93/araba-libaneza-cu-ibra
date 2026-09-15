@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { ExternalLink, Loader2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";

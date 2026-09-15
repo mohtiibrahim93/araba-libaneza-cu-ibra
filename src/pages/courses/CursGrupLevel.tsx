@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate, useSearchParams } from "react-router-dom";
+import { Link, useParams, Navigate, useSearchParams } from "@/lib/router-compat";
 import { ChevronRight, MessageCircle, CheckCircle2, BookOpen, Clock, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -343,7 +343,7 @@ const CursGrupLevel = () => {
                         height={800}
                         loading="lazy"
                         decoding="async"
-                        className="w-full max-w-md rounded-2xl border border-border shadow-sm"
+                        className="w-full max-w-md rounded-2xl border border-border shadow-xs"
                       />
                     );
                   })()}

@@ -521,7 +521,7 @@ const RegistrationFormSection = ({
           className={
             embedded
               ? "space-y-5"
-              : "bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-sm space-y-5"
+              : "bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-xs space-y-5"
           }
         >
           {/* Honeypot — hidden from real users, attractive to bots */}

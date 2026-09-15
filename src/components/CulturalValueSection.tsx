@@ -23,7 +23,7 @@ const CulturalValueSection = () => {
           {cards.map(({ Icon, title, desc }) => (
             <div
               key={title}
-              className="rounded-2xl border border-border bg-background p-6 shadow-sm"
+              className="rounded-2xl border border-border bg-background p-6 shadow-xs"
             >
               <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                 <Icon className="w-5 h-5 text-primary" />

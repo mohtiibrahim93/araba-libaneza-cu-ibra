@@ -155,7 +155,7 @@ const GroupFields = ({
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-foreground">{o.title}</span>
                       {o.badge && (
-                        <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded-[4px]">
                           {o.badge}
                         </span>
                       )}

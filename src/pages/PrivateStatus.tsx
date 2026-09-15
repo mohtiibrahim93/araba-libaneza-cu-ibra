@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "@/lib/router-compat";
 import { ArrowLeft, Calendar, CheckCircle2, Clock, Loader2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,7 +57,7 @@ const PrivateStatus = () => {
           <Link to="/"><ArrowLeft className="h-4 w-4" /> Înapoi la site</Link>
         </Button>
 
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-border bg-card p-6 shadow-xs sm:p-8">
           {loading ? (
             <div className="flex min-h-48 items-center justify-center text-muted-foreground">
               <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Se încarcă statusul...

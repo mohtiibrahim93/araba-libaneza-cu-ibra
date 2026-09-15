@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { CalendarClock, MapPin, Monitor, ChevronRight, Flame } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useActiveCohorts } from "@/hooks/useActiveCohorts";

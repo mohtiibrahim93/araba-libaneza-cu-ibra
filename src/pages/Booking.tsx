@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "@/lib/router-compat";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";

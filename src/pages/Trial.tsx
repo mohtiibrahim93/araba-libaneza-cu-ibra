@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -178,7 +178,7 @@ const TrialPage = () => {
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="space-y-5 bg-background rounded-2xl border border-border p-6 shadow-sm"
+            className="space-y-5 bg-background rounded-2xl border border-border p-6 shadow-xs"
           >
             <div className="space-y-2">
               <Label htmlFor="trial-name">{t.labelName} *</Label>
@@ -261,7 +261,7 @@ const TrialPage = () => {
             </Button>
           </form>
         ) : (
-          <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
+          <div className="bg-background rounded-2xl border border-border p-6 shadow-xs">
             <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-gutter py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
               {lang === "en" ? (
                 <><strong>Almost done!</strong> Pick a time slot below to confirm your free trial — it isn't booked until you choose one.</>

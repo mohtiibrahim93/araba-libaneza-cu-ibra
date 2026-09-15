@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "@/components/LocalizedLink";
-import { Link as CrossLanguageLink } from "react-router-dom";
+import { Link as CrossLanguageLink } from "@/lib/router-compat";
 import { ChevronRight, ArrowRight, Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

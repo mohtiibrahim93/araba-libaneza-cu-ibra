@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { CalendarDays, Clock, Users, MapPin, Wifi, ChevronRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -49,7 +49,7 @@ const CourseCard = ({ course }: { course: Course }) => {
   const href = levelHref || (slug ? `/cursuri/curs/${slug}` : null);
 
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-xs transition-shadow hover:shadow-md">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           {course.level && (

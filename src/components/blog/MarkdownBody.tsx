@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 const AUDIO_RE = /\.(mp3|m4a|ogg|wav)(\?.*)?$/i;
 

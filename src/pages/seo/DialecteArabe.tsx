@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
 import CreditedFigure from "@/components/content/CreditedFigure";
 import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";

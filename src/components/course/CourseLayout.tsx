@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ChevronRight, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -190,7 +190,7 @@ const CourseLayout = ({
                 width={1200}
                 height={800}
                 loading="eager"
-                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-sm"
+                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-xs"
               />
             </div>
           </div>

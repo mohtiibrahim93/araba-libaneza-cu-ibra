@@ -1,5 +1,5 @@
 import CourseLayout from "@/components/course/CourseLayout";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { ChevronRight, Users, User } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import groupImg from "@/assets/group-course.jpg";

@@ -20,7 +20,7 @@ const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
           <li key={p.slug}>
             <Link
               to={`/blog/${p.slug}`}
-              className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 hover:border-primary/50 hover:shadow-sm transition-all"
+              className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 hover:border-primary/50 hover:shadow-xs transition-all"
             >
               <span className="inline-flex w-fit px-2 py-0.5 mb-2 rounded-full text-[11px] font-medium bg-primary/10 text-primary">
                 {L(p.tag, lang)}

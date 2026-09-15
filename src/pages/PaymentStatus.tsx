@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

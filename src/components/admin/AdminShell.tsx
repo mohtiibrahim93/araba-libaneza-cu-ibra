@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import {
   ArrowLeft,
   LogOut,
@@ -136,7 +136,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
       <div className="mx-auto flex max-w-[1400px] gap-6 px-3 py-5 sm:px-6 sm:py-6">
         {/* Desktop sidebar */}
         <aside className="hidden w-60 shrink-0 lg:block">
-          <div className="sticky top-20 rounded-xl border border-border bg-background p-3 shadow-sm">
+          <div className="sticky top-20 rounded-xl border border-border bg-background p-3 shadow-xs">
             <NavList />
             <div className="mt-6 border-t border-border pt-3">
               <p className="truncate px-3 text-xs text-muted-foreground">{adminEmail || "—"}</p>

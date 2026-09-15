@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
 import ResourceDownloadForm from "@/components/ResourceDownloadForm";
 

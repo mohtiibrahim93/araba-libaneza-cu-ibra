@@ -1,5 +1,5 @@
 import { Bell, CreditCard, ExternalLink, LogOut, Mail, ShieldCheck, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Button } from "@/components/ui/button";
 import EmailSettingsForm from "./EmailSettingsForm";
 import TestEmailForm from "./TestEmailForm";
@@ -29,7 +29,7 @@ const SectionCard = ({
   desc: string;
   children: React.ReactNode;
 }) => (
-  <section className="rounded-xl border border-border bg-background p-5 shadow-sm">
+  <section className="rounded-xl border border-border bg-background p-5 shadow-xs">
     <div className="mb-4 flex items-start gap-3">
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
         <Icon className="h-5 w-5 text-primary" />

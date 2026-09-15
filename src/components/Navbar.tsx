@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { courseMenu as courseLinks, resourceMenu as resourceLinks } from "@/lib/siteNav";
 import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "@/lib/router-compat";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
 import { languageCounterpart } from "@/lib/languageRoutes";
 import { Button } from "@/components/ui/button";
@@ -139,7 +139,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground font-medium">
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-hidden">
               {t.navCourses}
               <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
             </DropdownMenuTrigger>
@@ -155,7 +155,7 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none">
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-hidden">
               {lang === "en" ? "Resources" : "Resurse"}
               <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
             </DropdownMenuTrigger>
@@ -230,9 +230,9 @@ const Navbar = () => {
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground min-h-9"
               >
                 {lang === "ro" ? (
-                  <FlagRO className="h-3.5 w-5 rounded-[2px] shadow-sm" />
+                  <FlagRO className="h-3.5 w-5 rounded-[2px] shadow-xs" />
                 ) : (
-                  <FlagGB className="h-3.5 w-5 rounded-[2px] shadow-sm" />
+                  <FlagGB className="h-3.5 w-5 rounded-[2px] shadow-xs" />
                 )}
                 <span className="hidden sm:inline uppercase">{lang}</span>
                 <ChevronDown className="h-3.5 w-3.5" />

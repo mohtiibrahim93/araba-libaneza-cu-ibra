@@ -81,9 +81,9 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
             type="button"
             onClick={() => setFilter(tab.value)}
             className={cn(
-              "px-3 py-1 text-xs font-medium rounded transition-colors",
+              "px-3 py-1 text-xs font-medium rounded-[4px] transition-colors",
               filter === tab.value
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-background text-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >

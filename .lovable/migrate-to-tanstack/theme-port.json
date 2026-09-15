@@ -1,0 +1,19 @@
+{
+  "customizations": [
+    { "token": "--brand-green (light+dark)", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--cream (light+dark)", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--font-body", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "full shadcn HSL palette (light+dark, incl. custom red primary)", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--nav-h + smooth scroll + scroll-margin-top base rules", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "body antialiased + font-family base rule", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "* border-color base rule", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--color-brand-green / --color-cream utilities (bg-cream, text-brand-green, …)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "--font-display (Lora) / --font-arabic (Noto Naskh Arabic)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "--container-content (max-w-content)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "--spacing-gutter / --spacing-section / --spacing-section-sm", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "--text-display-xl/lg/md with line-heights", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "accordion-down/up keyframes + animations", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "container utility (center, 2rem padding, 1400px cap)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "cedar / lebanese-red / stone-gold / parchment legacy color aliases", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Link as RouterLink, type LinkProps } from "react-router-dom";
+import { Link as RouterLink, type LinkProps } from "@/lib/router-compat";
 import { useI18n } from "@/lib/i18n";
 import { languageCounterpart } from "@/lib/languageRoutes";
 

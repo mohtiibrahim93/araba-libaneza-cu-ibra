@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { useI18n } from "@/lib/i18n";
 import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
@@ -129,7 +129,7 @@ const ProgramsSection = () => {
               {(inlineForm === null || inlineForm === "group") && (
           <div
             id="group-levels"
-            className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
+            className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
               inlineForm === "group" ? "md:col-span-3" : ""
             }`}
           >
@@ -234,7 +234,7 @@ const ProgramsSection = () => {
                       {activeLevelData.title}
                     </h4>
                     {!isAvailable(activeLevel) && (
-                      <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded flex-shrink-0">
+                      <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded-[4px] flex-shrink-0">
                         {t.grupLevelInPrepBadge}
                       </span>
                     )}
@@ -322,7 +322,7 @@ const ProgramsSection = () => {
           {(inlineForm === null || inlineForm === "private") && (
             <>
               {inlineForm === "private" ? (
-                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col md:col-span-2">
+                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-xs flex flex-col md:col-span-2">
                   <div className="p-6">
                     <RegistrationFormSection
                       defaultCourseType="private"
@@ -333,7 +333,7 @@ const ProgramsSection = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col">
                   <img src={privateImg} alt={t.privateCardTitle} className="w-full h-52 object-cover" />
                   <div className="p-6 flex flex-col flex-1">
                     <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
@@ -429,7 +429,7 @@ const ProgramsSection = () => {
               {(inlineForm === null || inlineForm === "kids") && (
                 <div
                   id="kids-group"
-                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
+                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
                     inlineForm === "kids" ? "md:col-span-2" : ""
                   }`}
                 >
@@ -546,7 +546,7 @@ const ProgramsSection = () => {
               {(inlineForm === null || inlineForm === "kids-private") && (
                 <div
                   id="kids-private"
-                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
+                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
                     inlineForm === "kids-private" ? "md:col-span-2" : ""
                   }`}
                 >
@@ -647,7 +647,7 @@ const ProgramsSection = () => {
           </TabsContent>
 
           <TabsContent value="tineri">
-            <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-sm">
+            <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-xs">
               <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 {lang === "en" ? "Teens · 11–17" : "Adolescenți · 11–17 ani"}
               </span>
