@@ -29,7 +29,7 @@ import { Route as FaraAlfabetArabRouteImport } from './routes/fara-alfabet-arab'
 import { Route as IntrebariFrecventeRouteImport } from './routes/intrebari-frecvente'
 import { Route as InvataArabaRouteImport } from './routes/invata-araba'
 import { Route as InvataArabaGratisRouteImport } from './routes/invata-araba-gratis'
-import { Route as JoacaRouteImport } from './routes/joaca'
+import { Route as JocRouteImport } from './routes/joc'
 import { Route as MeditatiiArabaRouteImport } from './routes/meditatii-araba'
 import { Route as PaymentStatusRouteImport } from './routes/payment-status'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -207,9 +207,9 @@ const InvataArabaGratisRoute = InvataArabaGratisRouteImport.update({
   path: '/invata-araba-gratis',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JoacaRoute = JoacaRouteImport.update({
-  id: '/joaca',
-  path: '/joaca',
+const JocRoute = JocRouteImport.update({
+  id: '/joc',
+  path: '/joc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiArabaRoute = MeditatiiArabaRouteImport.update({
@@ -636,7 +636,7 @@ export interface FileRoutesByFullPath {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
-  '/joaca': typeof JoacaRoute
+  '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -735,7 +735,7 @@ export interface FileRoutesByTo {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
-  '/joaca': typeof JoacaRoute
+  '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -835,7 +835,7 @@ export interface FileRoutesById {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
-  '/joaca': typeof JoacaRoute
+  '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -936,7 +936,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
-    | '/joaca'
+    | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
     | '/privacy'
@@ -1035,7 +1035,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
-    | '/joaca'
+    | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
     | '/privacy'
@@ -1134,7 +1134,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
-    | '/joaca'
+    | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
     | '/privacy'
@@ -1234,7 +1234,7 @@ export interface RootRouteChildren {
   IntrebariFrecventeRoute: typeof IntrebariFrecventeRoute
   InvataArabaRoute: typeof InvataArabaRoute
   InvataArabaGratisRoute: typeof InvataArabaGratisRoute
-  JoacaRoute: typeof JoacaRoute
+  JocRoute: typeof JocRoute
   MeditatiiArabaRoute: typeof MeditatiiArabaRoute
   PaymentStatusRoute: typeof PaymentStatusRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -1455,11 +1455,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvataArabaGratisRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/joaca': {
-      id: '/joaca'
-      path: '/joaca'
-      fullPath: '/joaca'
-      preLoaderRoute: typeof JoacaRouteImport
+    '/joc': {
+      id: '/joc'
+      path: '/joc'
+      fullPath: '/joc'
+      preLoaderRoute: typeof JocRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-araba': {
@@ -2018,7 +2018,7 @@ const rootRouteChildren: RootRouteChildren = {
   IntrebariFrecventeRoute: IntrebariFrecventeRoute,
   InvataArabaRoute: InvataArabaRoute,
   InvataArabaGratisRoute: InvataArabaGratisRoute,
-  JoacaRoute: JoacaRoute,
+  JocRoute: JocRoute,
   MeditatiiArabaRoute: MeditatiiArabaRoute,
   PaymentStatusRoute: PaymentStatusRoute,
   PrivacyRoute: PrivacyRoute,
