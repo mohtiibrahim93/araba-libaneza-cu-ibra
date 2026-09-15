@@ -183,7 +183,7 @@ const AlfabetulArab = () => {
       </ul>
       <p>
         {en ? "Want to see where you start? Take the " : "Vrei să vezi de unde pornești? Fă "}
-        <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>
+        <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
         {en ? " or read the " : " sau citește "}
         <Link to="/blog/cum-inveti-araba-libaneza">{en ? "complete beginner's guide" : "ghidul complet pentru începători"}</Link>.
       </p>

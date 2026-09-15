@@ -101,7 +101,7 @@ const FaraAlfabetArab = () => (
     <p>
       Cursuri de <Link to="/cursuri/grup">grup A1–C2</Link>, <Link to="/cursuri/private">lecții
       private 1:1</Link>, fizic în București sau <Link to="/cursuri-limba-araba">online pe Zoom</Link>. Dacă
-      nu știi de unde pornești, <Link to="/quiz">testul de nivel</Link> îți spune în două minute.
+      nu știi de unde pornești, <Link to="/test-de-nivel">testul de nivel</Link> îți spune în ~15 minute.
     </p>
   </LandingLayout>
 );

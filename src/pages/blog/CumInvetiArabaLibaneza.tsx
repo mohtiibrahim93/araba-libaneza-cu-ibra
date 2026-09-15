@@ -216,7 +216,7 @@ const CumInvetiArabaLibaneza = () => {
         <ul>
           <li>
             {en ? "Take the " : "Vezi "}
-            <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>{en ? " to find where you start." : " ca să afli de unde pornești."}
+            <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>{en ? " to find where you start." : " ca să afli de unde pornești."}
           </li>
           <li>
             {en ? "Choose a " : "Alege un "}

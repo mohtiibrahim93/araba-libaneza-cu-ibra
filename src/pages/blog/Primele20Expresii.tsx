@@ -173,7 +173,7 @@ const Primele20Expresii = () => {
         </li>
         <li>
           {en ? "Not sure where to start? Take the " : "Nu știi de unde pornești? Fă "}
-          <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>.
+          <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>.
         </li>
       </ul>
     </BlogArticleLayout>

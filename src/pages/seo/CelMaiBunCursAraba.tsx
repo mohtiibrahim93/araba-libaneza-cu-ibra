@@ -157,7 +157,7 @@ const CelMaiBunCursAraba = () => (
     <p>
       Cel mai simplu mod de a afla dacă e cursul potrivit pentru tine:{" "}
       <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>. Sau răspunde la{" "}
-      <Link to="/quiz">quizul de 1 minut</Link> și îți recomandăm formatul.
+      <Link to="/quiz">quizul de 30 de secunde</Link> și îți recomandăm formatul.
     </p>
   </LandingLayout>
 );

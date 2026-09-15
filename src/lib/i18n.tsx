@@ -728,8 +728,8 @@ export const translations = {
     // Don't know your level block (shared on /cursuri/grup)
     dontKnowLevelTitle: "Nu știi ce nivel ți se potrivește?",
     dontKnowLevelDesc: "Sunt 3 moduri rapide de a afla — alege ce ți se potrivește:",
-    dontKnowOptQuizTitle: "Fă quiz-ul (2 min)",
-    dontKnowOptQuizDesc: "Răspunde la câteva întrebări și îți recomandăm nivelul potrivit.",
+    dontKnowOptQuizTitle: "Fă quiz-ul (30 sec)",
+    dontKnowOptQuizDesc: "Răspunde la câteva întrebări și îți recomandăm cursul potrivit.",
     dontKnowOptTestTitle: "Test la centru (gratuit)",
     dontKnowOptTestDesc: "Programează un test rapid 1:1 cu profesorul, fizic sau online.",
     dontKnowOptWhatsAppTitle: "Vorbim pe WhatsApp",
@@ -1489,8 +1489,8 @@ export const translations = {
 
     dontKnowLevelTitle: "Not sure which level fits you?",
     dontKnowLevelDesc: "Three quick ways to find out — pick whichever works for you:",
-    dontKnowOptQuizTitle: "Take the quiz (2 min)",
-    dontKnowOptQuizDesc: "Answer a few questions and we'll recommend the right level.",
+    dontKnowOptQuizTitle: "Take the quiz (30 sec)",
+    dontKnowOptQuizDesc: "Answer a few questions and we'll recommend the right course.",
     dontKnowOptTestTitle: "Test at the center (free)",
     dontKnowOptTestDesc: "Book a quick 1:1 test with the instructor, in person or online.",
     dontKnowOptWhatsAppTitle: "Chat on WhatsApp",

@@ -210,7 +210,7 @@ const ArabaLibanezaVsArabaStandard = () => {
         <ul>
           <li>
             {en ? "Take the " : "Fă "}
-            <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>{en ? " to find where you start." : " ca să afli de unde pornești."}
+            <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>{en ? " to find where you start." : " ca să afli de unde pornești."}
           </li>
           <li>
             {en ? "See the " : "Vezi "}

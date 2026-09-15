@@ -126,7 +126,7 @@ const CatDureaza = () => {
       <h2>{en ? "How to find your starting point" : "Cum afli de unde pornești"}</h2>
       <p>
         {en ? "If you already know a few words, you can skip A1. Take the " : "Dacă știi deja câteva cuvinte, poți sări peste A1. Fă "}
-        <Link to="/quiz">{en ? "free level test" : "testul de nivel gratuit"}</Link>
+        <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
         {en ? " (2 minutes) or a " : " (2 minute) sau o "}
         <Link to="/trial">{en ? "free trial lesson" : "lecție de probă gratuită"}</Link>
         {en ? " — the teacher tells you exactly where it's best to start." : " — profesorul îți spune exact de unde e cel mai bine să începi."}

@@ -203,10 +203,10 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
                 Rezervă proba gratuită
               </Link>
               <Link
-                to="/quiz"
+                to="/test-de-nivel"
                 className="inline-block border border-border px-6 py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
               >
-                Fă testul de nivel (2 min)
+                Fă testul de nivel (~15 min)
               </Link>
             </div>
             {/* Cross-links to the two priority pages — skipped on those pages

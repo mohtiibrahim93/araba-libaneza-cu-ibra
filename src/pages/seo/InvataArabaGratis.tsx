@@ -94,7 +94,7 @@ const InvataArabaGratis = () => (
     <ul>
       <li><Link to="/arabizi">Ghidul Arabizi</Link> — tabelul cifrelor și cheat-sheet-ul PDF.</li>
       <li><Link to="/fara-alfabet-arab">Metoda fără alfabet arab</Link> — cum vorbești din prima lecție.</li>
-      <li><Link to="/quiz">Testul de nivel</Link> — 2 minute, îți spune de unde pornești.</li>
+      <li><Link to="/test-de-nivel">Testul de nivel</Link> — ~15 minute, îți spune de unde pornești.</li>
       <li><Link to="/blog">Blogul</Link> — expresii, gramatică, numere, cultură libaneză.</li>
       <li><Link to="/trial">Lecția de probă</Link> — 30 de minute cu profesor nativ, fără plată.</li>
       <li><Link to="/resurse">Pagina de resurse</Link> — toate PDF-urile într-un singur loc.</li>

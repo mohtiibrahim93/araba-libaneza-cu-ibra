@@ -83,7 +83,7 @@ const Resurse = () => (
     <h2>Resurse gratuite direct pe site</h2>
     <ul>
       <li><Link to="/joc">Jocul Yalla</Link> — peste 4.300 de expresii libaneze, cu recapitulări programate. Gratuit, fără cont.</li>
-      <li><Link to="/quiz">Test de nivel</Link> — 2 minute, îți spune de unde pornești.</li>
+      <li><Link to="/test-de-nivel">Test de nivel</Link> — ~15 minute, îți spune de unde pornești.</li>
 
       <li><Link to="/fara-alfabet-arab">Cum înveți fără alfabetul arab</Link>.</li>
       <li><Link to="/blog/primele-20-de-expresii-libaneze">Primele 20 de expresii libaneze</Link>.</li>
