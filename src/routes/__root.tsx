@@ -230,6 +230,10 @@ const LanguageFromPath = () => {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // SSR renders /en/* pages with English chrome so the server HTML matches
+  // the client's first render (the client initializer also picks "en" there).
+  const { pathname } = useLocation();
+  const initialLang = pathname.startsWith("/en/") ? ("en" as const) : ("ro" as const);
 
   // ported from main.tsx
   useEffect(() => {
@@ -242,7 +246,7 @@ function RootComponent() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <I18nProvider>
+          <I18nProvider initialLang={initialLang}>
             <RouteAnalytics />
             <LanguageFromPath />
             <Outlet />
