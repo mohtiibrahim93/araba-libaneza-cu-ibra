@@ -74,9 +74,9 @@ describe("localized in-article links", () => {
     // Romanian address — so a localised link sent English readers back into
     // Romanian while looking like it had done its job.
     const src = read("src/lib/languageRoutes.ts");
-    const block = src.split("const EN_FOR_RO")[1].split("};")[0];
+    const block = (src.split("const EN_FOR_RO")[1] ?? "").split("};")[0] ?? "";
     const offenders = [...block.matchAll(/"([^"]+)":\s*"([^"]+)"/g)]
-      .filter(([, , target]) => !target.startsWith("/en/"))
+      .filter(([, , target]) => !(target ?? "").startsWith("/en/"))
       .map(([, from, to]) => `${from} -> ${to}`);
     expect(offenders).toEqual([]);
   });

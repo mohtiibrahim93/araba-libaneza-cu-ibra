@@ -22,7 +22,7 @@ const BASE = "https://centruldearabalibaneza.com";
 const routes = (() => {
   const xml = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-    .map((m) => m[1].replace(BASE, "") || "/")
+    .map((m) => (m[1] ?? "").replace(BASE, "") || "/")
     .map((p) => (p.length > 1 ? p.replace(/\/$/, "") : p));
 })();
 

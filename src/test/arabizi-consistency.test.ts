@@ -54,7 +54,7 @@ describe("arabizi digits have a single source", () => {
     ];
     for (const f of files) {
       for (const [, list] of read(f).matchAll(/cifre(?:le)?\s*\(?([\d,\s șiand]+)\)?/gi)) {
-        const stated = (list.match(/\d/g) ?? []).filter((d) => d !== "0");
+        const stated = ((list ?? "").match(/\d/g) ?? []).filter((d) => d !== "0");
         for (const d of stated) {
           expect(DIGITS, `${f} lists digit ${d}, which is not in the table`).toContain(d);
         }
