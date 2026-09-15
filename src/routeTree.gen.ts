@@ -15,7 +15,6 @@ import { Route as ArabaOnlineRouteImport } from './routes/araba-online'
 import { Route as ArabaPentruIncepatoriRouteImport } from './routes/araba-pentru-incepatori'
 import { Route as ArabaPentruPartenerRouteImport } from './routes/araba-pentru-partener'
 import { Route as ArabiziRouteImport } from './routes/arabizi'
-import { Route as ArabiziPentruIncepatoriRouteImport } from './routes/arabizi-pentru-incepatori'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CeArabaSaInvetiRouteImport } from './routes/ce-araba-sa-inveti'
 import { Route as CelMaiBunCursDeArabaRouteImport } from './routes/cel-mai-bun-curs-de-araba'
@@ -137,11 +136,6 @@ const ArabaPentruPartenerRoute = ArabaPentruPartenerRouteImport.update({
 const ArabiziRoute = ArabiziRouteImport.update({
   id: '/arabizi',
   path: '/arabizi',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArabiziPentruIncepatoriRoute = ArabiziPentruIncepatoriRouteImport.update({
-  id: '/arabizi-pentru-incepatori',
-  path: '/arabizi-pentru-incepatori',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -634,7 +628,6 @@ export interface FileRoutesByFullPath {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
-  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -735,7 +728,6 @@ export interface FileRoutesByTo {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
-  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -837,7 +829,6 @@ export interface FileRoutesById {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
-  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -940,7 +931,6 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
-    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -1041,7 +1031,6 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
-    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -1142,7 +1131,6 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
-    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -1244,7 +1232,6 @@ export interface RootRouteChildren {
   ArabaPentruIncepatoriRoute: typeof ArabaPentruIncepatoriRoute
   ArabaPentruPartenerRoute: typeof ArabaPentruPartenerRoute
   ArabiziRoute: typeof ArabiziRoute
-  ArabiziPentruIncepatoriRoute: typeof ArabiziPentruIncepatoriRoute
   AuthRoute: typeof AuthRoute
   CeArabaSaInvetiRoute: typeof CeArabaSaInvetiRoute
   CelMaiBunCursDeArabaRoute: typeof CelMaiBunCursDeArabaRoute
@@ -1381,13 +1368,6 @@ declare module '@tanstack/react-router' {
       path: '/arabizi'
       fullPath: '/arabizi'
       preLoaderRoute: typeof ArabiziRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/arabizi-pentru-incepatori': {
-      id: '/arabizi-pentru-incepatori'
-      path: '/arabizi-pentru-incepatori'
-      fullPath: '/arabizi-pentru-incepatori'
-      preLoaderRoute: typeof ArabiziPentruIncepatoriRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -2044,7 +2024,6 @@ const rootRouteChildren: RootRouteChildren = {
   ArabaPentruIncepatoriRoute: ArabaPentruIncepatoriRoute,
   ArabaPentruPartenerRoute: ArabaPentruPartenerRoute,
   ArabiziRoute: ArabiziRoute,
-  ArabiziPentruIncepatoriRoute: ArabiziPentruIncepatoriRoute,
   AuthRoute: AuthRoute,
   CeArabaSaInvetiRoute: CeArabaSaInvetiRoute,
   CelMaiBunCursDeArabaRoute: CelMaiBunCursDeArabaRoute,
