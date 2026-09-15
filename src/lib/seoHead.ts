@@ -62,7 +62,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
   // Free practice, not a sixth course page. No twin: the card bank is Romanian
   // only, so an /en URL would advertise a translation that does not exist.
-  { path: "/joaca", title: JOACA_META.title, description: JOACA_META.description },
+  { path: "/joc", title: JOACA_META.title, description: JOACA_META.description },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
   { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },

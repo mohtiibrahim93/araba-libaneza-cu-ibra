@@ -81,12 +81,12 @@ const Joaca = () => {
       <Helmet>
         <title>{JOACA_META.title}</title>
         <meta name="description" content={JOACA_META.description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/joaca" />
+        <link rel="canonical" href="https://centruldearabalibaneza.com/joc" />
         <meta name="robots" content="index,follow" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={JOACA_META.title} />
         <meta property="og:description" content={JOACA_META.description} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/joaca" />
+        <meta property="og:url" content="https://centruldearabalibaneza.com/joc" />
         <meta property="og:locale" content="ro_RO" />
       </Helmet>
 
