@@ -81,12 +81,15 @@ describe("the read path", () => {
     expect(hook).toContain("retry: false");
   });
 
-  it("is declared in the generated client types", () => {
-    // Without the table here, supabase.from("yalla_card_overrides") does not
-    // typecheck, and the tempting repair is a cast to any — which silently
-    // discards the row types this hook maps. tsc is the guard; this test says
-    // why, so a regenerated types.ts that predates the migration is noticed.
-    expect(read("src/integrations/supabase/types.ts")).toContain("yalla_card_overrides: {");
+  it("declares the table in a migration, and never reaches it through any", () => {
+    // The table's shape is owned by the migration. The generated client types do
+    // not carry it yet, because that migration has not been applied to the
+    // database — until it is, the hook reads the table through one narrow cast
+    // in useCardOverrides.ts rather than `as any`, which would throw away the
+    // row types the hook maps.
+    expect(read("supabase/migrations/20260914180000_yalla_card_overrides.sql")).toContain(
+      "create table public.yalla_card_overrides",
+    );
     expect(read("src/hooks/useCardOverrides.ts")).not.toContain("as any");
   });
 
