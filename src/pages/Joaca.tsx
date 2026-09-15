@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
+import { useSearchParams } from "@/lib/router-compat";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
@@ -85,7 +86,16 @@ const Joaca = () => {
   // The frame hosts both the practice game and the level test; switching
   // modes remounts it (YallaGame keys on mode), so progress in one view is
   // untouched by opening the other.
-  const [mode, setMode] = useState<"journey" | "placement">("journey");
+  //
+  // The starting mode comes from ?view=, which is what gives the level test an
+  // address other pages can link to: /joc?view=placement is how the level step
+  // of /quiz hands a visitor to the real placement test instead of asking them
+  // to guess. Checked against the two modes this page offers rather than passed
+  // through, because the value ends up in the iframe's src.
+  const [searchParams] = useSearchParams();
+  const [mode, setMode] = useState<"journey" | "placement">(
+    searchParams.get("view") === "placement" ? "placement" : "journey",
+  );
   const frameRef = useRef<HTMLDivElement>(null);
   const toggleMode = () => {
     if (mode === "placement") {

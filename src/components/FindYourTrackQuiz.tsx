@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { Link } from "@/components/LocalizedLink";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, User, Baby, GraduationCap, ChevronRight } from "lucide-react";
@@ -200,6 +201,21 @@ const FindYourTrackQuiz = () => {
               </div>
             ))}
           </div>
+          {/* This step asks people to declare a level, which is the one thing a
+              beginner cannot do — and "Test de nivel gratuit" is what the page
+              title promises them. The game already runs a real 24-question
+              placement test, so send them there instead of making them guess.
+              Its result screen links back to the trial lesson, closing the loop. */}
+          <p className="pt-1 text-center text-sm text-muted-foreground">
+            {t.quizQ3NotSure}{" "}
+            <Link
+              to="/joc?view=placement"
+              className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+            >
+              {t.quizQ3Placement}
+              <ChevronRight className="inline w-3.5 h-3.5 -mt-0.5" aria-hidden />
+            </Link>
+          </p>
         </div>
       );
     }
