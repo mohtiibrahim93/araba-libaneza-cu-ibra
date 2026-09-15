@@ -15,6 +15,7 @@ import { Route as ArabaOnlineRouteImport } from './routes/araba-online'
 import { Route as ArabaPentruIncepatoriRouteImport } from './routes/araba-pentru-incepatori'
 import { Route as ArabaPentruPartenerRouteImport } from './routes/araba-pentru-partener'
 import { Route as ArabiziRouteImport } from './routes/arabizi'
+import { Route as ArabiziPentruIncepatoriRouteImport } from './routes/arabizi-pentru-incepatori'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CeArabaSaInvetiRouteImport } from './routes/ce-araba-sa-inveti'
 import { Route as CelMaiBunCursDeArabaRouteImport } from './routes/cel-mai-bun-curs-de-araba'
@@ -29,6 +30,7 @@ import { Route as FaraAlfabetArabRouteImport } from './routes/fara-alfabet-arab'
 import { Route as IntrebariFrecventeRouteImport } from './routes/intrebari-frecvente'
 import { Route as InvataArabaRouteImport } from './routes/invata-araba'
 import { Route as InvataArabaGratisRouteImport } from './routes/invata-araba-gratis'
+import { Route as JoacaRouteImport } from './routes/joaca'
 import { Route as JocRouteImport } from './routes/joc'
 import { Route as MeditatiiArabaRouteImport } from './routes/meditatii-araba'
 import { Route as PaymentStatusRouteImport } from './routes/payment-status'
@@ -137,6 +139,11 @@ const ArabiziRoute = ArabiziRouteImport.update({
   path: '/arabizi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArabiziPentruIncepatoriRoute = ArabiziPentruIncepatoriRouteImport.update({
+  id: '/arabizi-pentru-incepatori',
+  path: '/arabizi-pentru-incepatori',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -205,6 +212,11 @@ const InvataArabaRoute = InvataArabaRouteImport.update({
 const InvataArabaGratisRoute = InvataArabaGratisRouteImport.update({
   id: '/invata-araba-gratis',
   path: '/invata-araba-gratis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoacaRoute = JoacaRouteImport.update({
+  id: '/joaca',
+  path: '/joaca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JocRoute = JocRouteImport.update({
@@ -622,6 +634,7 @@ export interface FileRoutesByFullPath {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
+  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -636,6 +649,7 @@ export interface FileRoutesByFullPath {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
+  '/joaca': typeof JoacaRoute
   '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
@@ -721,6 +735,7 @@ export interface FileRoutesByTo {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
+  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -735,6 +750,7 @@ export interface FileRoutesByTo {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
+  '/joaca': typeof JoacaRoute
   '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
@@ -821,6 +837,7 @@ export interface FileRoutesById {
   '/araba-pentru-incepatori': typeof ArabaPentruIncepatoriRoute
   '/araba-pentru-partener': typeof ArabaPentruPartenerRoute
   '/arabizi': typeof ArabiziRoute
+  '/arabizi-pentru-incepatori': typeof ArabiziPentruIncepatoriRoute
   '/auth': typeof AuthRoute
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
@@ -835,6 +852,7 @@ export interface FileRoutesById {
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
+  '/joaca': typeof JoacaRoute
   '/joc': typeof JocRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
@@ -922,6 +940,7 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
+    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -936,6 +955,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
+    | '/joaca'
     | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
@@ -1021,6 +1041,7 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
+    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -1035,6 +1056,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
+    | '/joaca'
     | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
@@ -1120,6 +1142,7 @@ export interface FileRouteTypes {
     | '/araba-pentru-incepatori'
     | '/araba-pentru-partener'
     | '/arabizi'
+    | '/arabizi-pentru-incepatori'
     | '/auth'
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
@@ -1134,6 +1157,7 @@ export interface FileRouteTypes {
     | '/intrebari-frecvente'
     | '/invata-araba'
     | '/invata-araba-gratis'
+    | '/joaca'
     | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
@@ -1220,6 +1244,7 @@ export interface RootRouteChildren {
   ArabaPentruIncepatoriRoute: typeof ArabaPentruIncepatoriRoute
   ArabaPentruPartenerRoute: typeof ArabaPentruPartenerRoute
   ArabiziRoute: typeof ArabiziRoute
+  ArabiziPentruIncepatoriRoute: typeof ArabiziPentruIncepatoriRoute
   AuthRoute: typeof AuthRoute
   CeArabaSaInvetiRoute: typeof CeArabaSaInvetiRoute
   CelMaiBunCursDeArabaRoute: typeof CelMaiBunCursDeArabaRoute
@@ -1234,6 +1259,7 @@ export interface RootRouteChildren {
   IntrebariFrecventeRoute: typeof IntrebariFrecventeRoute
   InvataArabaRoute: typeof InvataArabaRoute
   InvataArabaGratisRoute: typeof InvataArabaGratisRoute
+  JoacaRoute: typeof JoacaRoute
   JocRoute: typeof JocRoute
   MeditatiiArabaRoute: typeof MeditatiiArabaRoute
   PaymentStatusRoute: typeof PaymentStatusRoute
@@ -1357,6 +1383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArabiziRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/arabizi-pentru-incepatori': {
+      id: '/arabizi-pentru-incepatori'
+      path: '/arabizi-pentru-incepatori'
+      fullPath: '/arabizi-pentru-incepatori'
+      preLoaderRoute: typeof ArabiziPentruIncepatoriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -1453,6 +1486,13 @@ declare module '@tanstack/react-router' {
       path: '/invata-araba-gratis'
       fullPath: '/invata-araba-gratis'
       preLoaderRoute: typeof InvataArabaGratisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/joaca': {
+      id: '/joaca'
+      path: '/joaca'
+      fullPath: '/joaca'
+      preLoaderRoute: typeof JoacaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/joc': {
@@ -2004,6 +2044,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArabaPentruIncepatoriRoute: ArabaPentruIncepatoriRoute,
   ArabaPentruPartenerRoute: ArabaPentruPartenerRoute,
   ArabiziRoute: ArabiziRoute,
+  ArabiziPentruIncepatoriRoute: ArabiziPentruIncepatoriRoute,
   AuthRoute: AuthRoute,
   CeArabaSaInvetiRoute: CeArabaSaInvetiRoute,
   CelMaiBunCursDeArabaRoute: CelMaiBunCursDeArabaRoute,
@@ -2018,6 +2059,7 @@ const rootRouteChildren: RootRouteChildren = {
   IntrebariFrecventeRoute: IntrebariFrecventeRoute,
   InvataArabaRoute: InvataArabaRoute,
   InvataArabaGratisRoute: InvataArabaGratisRoute,
+  JoacaRoute: JoacaRoute,
   JocRoute: JocRoute,
   MeditatiiArabaRoute: MeditatiiArabaRoute,
   PaymentStatusRoute: PaymentStatusRoute,
