@@ -75,14 +75,13 @@ describe("retired duplicates of the courses hub", () => {
 
 describe("other retired addresses", () => {
   /**
-   * /arabizi-pentru-incepatori was the Arabizi guide's first URL. Its redirect
-   * lived only in the old prerender script, so disconnecting that script left
-   * the address rendering the 404 view — invisible on the site (nothing links
-   * to it, it is not in the sitemap) but a dead end for old external links.
+   * /arabizi-pentru-incepatori was the Arabizi guide's first URL. The guide
+   * lives at /arabizi now; the owner retired the old address completely, so
+   * it must not exist as a route (it renders the 404 view) and must stay
+   * out of the sitemap.
    */
-  it("/arabizi-pentru-incepatori redirects to the Arabizi guide", () => {
-    expect(hasRoute("/arabizi-pentru-incepatori")).toBe(true);
-    expect(redirectsTo("/arabizi-pentru-incepatori")).toBe("/arabizi");
+  it("/arabizi-pentru-incepatori is not a route", () => {
+    expect(hasRoute("/arabizi-pentru-incepatori")).toBe(false);
   });
 
   it("/arabizi-pentru-incepatori stays out of the sitemap", () => {
