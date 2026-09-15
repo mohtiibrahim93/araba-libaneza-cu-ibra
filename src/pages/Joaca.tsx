@@ -87,7 +87,11 @@ const Joaca = () => {
   // untouched by opening the other.
   const [mode, setMode] = useState<"journey" | "placement">("journey");
   const frameRef = useRef<HTMLDivElement>(null);
-  const openPlacement = () => {
+  const toggleMode = () => {
+    if (mode === "placement") {
+      setMode("journey");
+      return;
+    }
     setMode("placement");
     frameRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -140,8 +144,23 @@ const Joaca = () => {
           )}
         </header>
 
-        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <YallaGame lang={lang} />
+        {/* Level test callout — switches the frame to the placement pilot. */}
+        <div className="mx-auto w-full max-w-content px-gutter pb-6">
+          <div className="flex flex-col gap-4 rounded-xl border bg-card p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
+            <div className="flex-1">
+              <h2 className="font-display text-2xl font-bold text-foreground">{c.levelH2}</h2>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{c.levelP}</p>
+            </div>
+            <div className="shrink-0">
+              <Button size="lg" variant={mode === "placement" ? "outline" : "default"} onClick={toggleMode}>
+                {mode === "placement" ? c.ctaBack : c.ctaLevel}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm" ref={frameRef}>
+          <YallaGame lang={lang} mode={mode} />
         </div>
 
         {/* Prose below the frame. A page whose only content sits inside an
