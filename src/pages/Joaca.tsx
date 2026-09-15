@@ -70,6 +70,11 @@ const COPY = {
       "You practise vocabulary and structures on your own, and that is all it does. Pronunciation, conversation and being corrected as you speak need a teacher. If you want to speak rather than just recognise words, start with a free trial lesson.",
     ctaCourses: "See the courses",
     ctaTrial: "Free trial lesson",
+    levelH2: "Check your level in the game",
+    levelP:
+      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibrahim.",
+    ctaLevel: "Start the level test",
+    ctaBack: "Back to practice",
   },
 } as const;
 
