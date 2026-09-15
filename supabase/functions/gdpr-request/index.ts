@@ -1,6 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
 
 // Self-service GDPR erasure request: the visitor submits their email and the
 // school inbox gets an actionable notification (the actual deletion is done by
@@ -56,11 +58,9 @@ Deno.serve(async (req) => {
       timeStyle: "short",
       timeZone: "Europe/Bucharest",
     });
-    const { error } = await supabase.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "gdpr-erasure-request",
-        // Template pins the recipient to the school inbox; this is ignored.
-        recipientEmail: "",
+    try {
+      // Template pins the recipient to the school inbox.
+      await sendTemplateEmail("gdpr-erasure-request", "", {
         idempotencyKey: `gdpr-${email.trim().toLowerCase()}-${new Date().toISOString().slice(0, 10)}`,
         templateData: {
           email: email.trim(),
@@ -68,12 +68,12 @@ Deno.serve(async (req) => {
           message: (message || "").trim() || undefined,
           requestedAt,
         },
-      },
-    });
-    if (error) {
-      console.error("gdpr-request email send failed", error);
+      });
+    } catch (sendError) {
+      console.error("gdpr-request email send failed", sendError);
       return json({ error: "Trimiterea a eșuat. Scrie-ne direct pe email." }, 500);
     }
+
 
     return json({ success: true });
   } catch (err) {

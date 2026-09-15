@@ -1,5 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
 
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
 const SITE_URL = "https://centruldearabalibaneza.com";
@@ -97,26 +99,26 @@ Deno.serve(async (req) => {
     }
 
     const invokeEmail = async (body: Record<string, unknown>) => {
+      const templateName = String(body.templateName);
       try {
-        const res = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${serviceKey}`,
-            apikey: serviceKey,
+        const result = await sendTemplateEmail(
+          templateName,
+          String(body.recipientEmail ?? ""),
+          {
+            templateData: (body.templateData ?? {}) as Record<string, unknown>,
+            idempotencyKey: body.idempotencyKey as string | undefined,
           },
-          body: JSON.stringify(body),
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          console.error("send-transactional-email failed", body.templateName, res.status, text);
+        );
+        if (result.sent) {
+          console.log("managed email sent", templateName);
         } else {
-          console.log("send-transactional-email ok", body.templateName, body.recipientEmail);
+          console.log("managed email suppressed", templateName);
         }
       } catch (e) {
-        console.error("send-transactional-email invocation error", e);
+        console.error("managed email send failed", templateName, e);
       }
     };
+
 
     // 1) Confirmation to the registrant (only if they provided an email)
     if (reg.email) {

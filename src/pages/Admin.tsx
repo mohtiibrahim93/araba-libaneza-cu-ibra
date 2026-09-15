@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import {
@@ -506,25 +507,15 @@ const Admin = () => {
     if (!recipient) return;
     setSendingTestEmail(true);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke(
-        "send-transactional-email",
-        {
-          body: {
-            templateName: "private-registration-confirmation",
-            recipientEmail: recipient,
-            idempotencyKey: `reg-confirm-test-${Date.now()}`,
-            templateData: {
-              name: "Maria Popescu",
-              format: "online",
-              message: "Aș prefera lecții seara, după ora 18:00, cu accent pe conversație.",
-              statusUrl: `${window.location.origin}/private-status/exemplu`,
-            },
-          },
-        },
-      );
+      const { data, error: fnError } = await invokeAdmin({
+        action: "send_test_email",
+        recipient_email: recipient,
+        status_url: `${window.location.origin}/private-status/exemplu`,
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       toast({ title: "Emailul de test a fost trimis" });
+
     } catch {
       toast({ title: "Emailul de test nu a putut fi trimis", variant: "destructive" });
     } finally {

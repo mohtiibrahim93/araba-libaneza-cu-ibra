@@ -39,7 +39,6 @@ import { Route as StergereDateRouteImport } from './routes/stergere-date'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TrialRouteImport } from './routes/trial'
-import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminNotificationsRouteImport } from './routes/admin/notifications'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -101,8 +100,12 @@ import { Route as EnCoursesIndexRouteImport } from './routes/en/courses/index'
 import { Route as EnCoursesAdultsRouteImport } from './routes/en/courses/adults'
 import { Route as EnCoursesChildrenRouteImport } from './routes/en/courses/children'
 import { Route as EnCoursesPrivateRouteImport } from './routes/en/courses/private'
+import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as EnCoursesGroupIndexRouteImport } from './routes/en/courses/group/index'
 import { Route as EnCoursesGroupLevelRouteImport } from './routes/en/courses/group/$level'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -252,11 +255,6 @@ const ThankYouRoute = ThankYouRouteImport.update({
 const TrialRoute = TrialRouteImport.update({
   id: '/trial',
   path: '/trial',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -585,6 +583,11 @@ const EnCoursesPrivateRoute = EnCoursesPrivateRouteImport.update({
   path: '/en/courses/private',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnCoursesGroupIndexRoute = EnCoursesGroupIndexRouteImport.update({
   id: '/en/courses/group/',
   path: '/en/courses/group/',
@@ -595,6 +598,22 @@ const EnCoursesGroupLevelRoute = EnCoursesGroupLevelRouteImport.update({
   path: '/en/courses/group/$level',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -627,7 +646,6 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
-  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
@@ -686,10 +704,14 @@ export interface FileRoutesByFullPath {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup/': typeof CursuriGrupIndexRoute
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/en/courses/group/': typeof EnCoursesGroupIndexRoute
 }
 export interface FileRoutesByTo {
@@ -723,7 +745,6 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
-  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
@@ -782,10 +803,14 @@ export interface FileRoutesByTo {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup': typeof CursuriGrupIndexRoute
   '/en/blog': typeof EnBlogIndexRoute
   '/en/courses': typeof EnCoursesIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/en/courses/group': typeof EnCoursesGroupIndexRoute
 }
 export interface FileRoutesById {
@@ -820,7 +845,6 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
-  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
@@ -879,10 +903,14 @@ export interface FileRoutesById {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup/': typeof CursuriGrupIndexRoute
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/en/courses/group/': typeof EnCoursesGroupIndexRoute
 }
 export interface FileRouteTypes {
@@ -918,7 +946,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/thank-you'
     | '/trial'
-    | '/unsubscribe'
     | '/admin/notifications'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
@@ -977,10 +1004,14 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/lovable/email/events'
     | '/cursuri/grup/'
     | '/en/blog/'
     | '/en/courses/'
     | '/en/courses/group/$level'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/en/courses/group/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1014,7 +1045,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/thank-you'
     | '/trial'
-    | '/unsubscribe'
     | '/admin/notifications'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
@@ -1073,10 +1103,14 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/lovable/email/events'
     | '/cursuri/grup'
     | '/en/blog'
     | '/en/courses'
     | '/en/courses/group/$level'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/en/courses/group'
   id:
     | '__root__'
@@ -1110,7 +1144,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/thank-you'
     | '/trial'
-    | '/unsubscribe'
     | '/admin/notifications'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
@@ -1169,10 +1202,14 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/lovable/email/events'
     | '/cursuri/grup/'
     | '/en/blog/'
     | '/en/courses/'
     | '/en/courses/group/$level'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/en/courses/group/'
   fileRoutesById: FileRoutesById
 }
@@ -1207,7 +1244,6 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ThankYouRoute: typeof ThankYouRoute
   TrialRoute: typeof TrialRoute
-  UnsubscribeRoute: typeof UnsubscribeRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
   BlogAlfabetulArabPentruIncepatoriRoute: typeof BlogAlfabetulArabPentruIncepatoriRoute
   BlogArabaLibanezaVsArabaStandardRoute: typeof BlogArabaLibanezaVsArabaStandardRoute
@@ -1266,10 +1302,14 @@ export interface RootRouteChildren {
   EnCoursesAdultsRoute: typeof EnCoursesAdultsRoute
   EnCoursesChildrenRoute: typeof EnCoursesChildrenRoute
   EnCoursesPrivateRoute: typeof EnCoursesPrivateRoute
+  LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   CursuriGrupIndexRoute: typeof CursuriGrupIndexRoute
   EnBlogIndexRoute: typeof EnBlogIndexRoute
   EnCoursesIndexRoute: typeof EnCoursesIndexRoute
   EnCoursesGroupLevelRoute: typeof EnCoursesGroupLevelRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
   EnCoursesGroupIndexRoute: typeof EnCoursesGroupIndexRoute
 }
 
@@ -1483,13 +1523,6 @@ declare module '@tanstack/react-router' {
       path: '/trial'
       fullPath: '/trial'
       preLoaderRoute: typeof TrialRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1919,6 +1952,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCoursesPrivateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/courses/group/': {
       id: '/en/courses/group/'
       path: '/en/courses/group'
@@ -1931,6 +1971,27 @@ declare module '@tanstack/react-router' {
       path: '/en/courses/group/$level'
       fullPath: '/en/courses/group/$level'
       preLoaderRoute: typeof EnCoursesGroupLevelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1967,7 +2028,6 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ThankYouRoute: ThankYouRoute,
   TrialRoute: TrialRoute,
-  UnsubscribeRoute: UnsubscribeRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
   BlogAlfabetulArabPentruIncepatoriRoute:
     BlogAlfabetulArabPentruIncepatoriRoute,
@@ -2032,10 +2092,14 @@ const rootRouteChildren: RootRouteChildren = {
   EnCoursesAdultsRoute: EnCoursesAdultsRoute,
   EnCoursesChildrenRoute: EnCoursesChildrenRoute,
   EnCoursesPrivateRoute: EnCoursesPrivateRoute,
+  LovableEmailEventsRoute: LovableEmailEventsRoute,
   CursuriGrupIndexRoute: CursuriGrupIndexRoute,
   EnBlogIndexRoute: EnBlogIndexRoute,
   EnCoursesIndexRoute: EnCoursesIndexRoute,
   EnCoursesGroupLevelRoute: EnCoursesGroupLevelRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
   EnCoursesGroupIndexRoute: EnCoursesGroupIndexRoute,
 }
 export const routeTree = rootRouteImport

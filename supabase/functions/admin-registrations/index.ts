@@ -9,6 +9,8 @@ import {
   type RefundBreakdown,
 } from "../_shared/refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -1170,28 +1172,57 @@ Deno.serve(async (req) => {
       const templateName = templateByForm[reg.form_type];
       if (!templateName) return jsonResponse({ error: "Tip înscriere necunoscut" });
 
-      const invokeResp = await fetch(
-        `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-          },
-          body: JSON.stringify({
-            templateName,
-            recipientEmail: reg.email,
-            idempotencyKey: `reg-resend-${reg.id}-${Date.now()}`,
-            templateData: { name: reg.name },
-          }),
+      try {
+        const result = await sendTemplateEmail(templateName, reg.email, {
+          idempotencyKey: `reg-resend-${reg.id}-${Date.now()}`,
+          templateData: { name: reg.name },
+        });
+        if (!result.sent) {
+          return jsonResponse({ error: "Adresa nu mai poate primi emailuri" });
         }
-      );
-      const invokeData = await invokeResp.json().catch(() => ({}));
-      if (!invokeResp.ok || invokeData?.error) {
-        return jsonResponse({ error: invokeData?.error || "Trimitere eșuată" });
+      } catch (sendError) {
+        console.error("resend_confirmation failed", sendError);
+        return jsonResponse({ error: "Trimitere eșuată" });
       }
       return jsonResponse({ success: true });
     }
+
+    if (action === "send_test_email") {
+      const recipient = typeof body.recipient_email === "string"
+        ? body.recipient_email.trim().toLowerCase()
+        : "";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
+        return jsonResponse({ error: "Email destinatar invalid" });
+      }
+      const statusUrl = typeof body.status_url === "string" &&
+          /^https?:\/\//.test(body.status_url)
+        ? body.status_url
+        : "https://centruldearabalibaneza.com/private-status/exemplu";
+      try {
+        const result = await sendTemplateEmail(
+          "private-registration-confirmation",
+          recipient,
+          {
+            idempotencyKey: `reg-confirm-test-${Date.now()}`,
+            templateData: {
+              name: "Maria Popescu",
+              format: "online",
+              message:
+                "Aș prefera lecții seara, după ora 18:00, cu accent pe conversație.",
+              statusUrl,
+            },
+          },
+        );
+        if (!result.sent) {
+          return jsonResponse({ error: "Adresa nu mai poate primi emailuri" });
+        }
+      } catch (sendError) {
+        console.error("send_test_email failed", sendError);
+        return jsonResponse({ error: "Trimitere eșuată" });
+      }
+      return jsonResponse({ success: true });
+    }
+
 
     if (action === "update_email_settings") {
       const senderName = typeof sender_name === "string" ? sender_name.trim() : "";
