@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { invokeAdmin } from "@/lib/adminAuth";
 
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
