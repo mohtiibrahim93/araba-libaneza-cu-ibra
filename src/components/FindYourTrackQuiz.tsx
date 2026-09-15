@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/components/LocalizedLink";
+import { useSearchParams } from "@/lib/router-compat";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, User, Baby, GraduationCap, ChevronRight } from "lucide-react";
@@ -12,6 +13,19 @@ type Audience = "self" | "kids";
 type Format = "group" | "private";
 type Level = "A1" | "A2" | "B1" | "B2";
 type Track = "group" | "private" | "kids";
+
+const LEVELS: Level[] = ["A1", "A2", "B1", "B2"];
+
+/**
+ * Where the visitor had got to before being handed to the placement test.
+ *
+ * The test lives in the game, on another page, so coming back is a fresh page
+ * load and the answers they already gave are gone. Without this they would
+ * return holding a tested level and be asked question one again — which is the
+ * whole reason they left. sessionStorage rather than localStorage: this is one
+ * journey, not a preference to remember next month.
+ */
+const CONTEXT_KEY = "quiz-context";
 
 const GROUP_PRICE_BY_LEVEL: Record<Level, number> = {
   A1: 500,
@@ -54,6 +68,38 @@ const FindYourTrackQuiz = () => {
   const [level, setLevel] = useState<Level | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  // Remember the answers before handing off, so the test's result can drop them
+  // back on their recommendation rather than at the start.
+  const rememberContext = () => {
+    try {
+      sessionStorage.setItem(CONTEXT_KEY, JSON.stringify({ audience, format }));
+    } catch {
+      // Private mode or blocked storage: they answer the two questions again.
+    }
+  };
+
+  // Coming back from the placement test with a tested level. Done in an effect
+  // rather than in the initial state so the server and the first client render
+  // agree — this page is server-rendered, and a hydration mismatch here is the
+  // class of bug the migration already had to fix once.
+  useEffect(() => {
+    const tested = searchParams.get("level");
+    if (!tested || !LEVELS.includes(tested as Level)) return;
+    let saved: { audience?: Audience; format?: Format } = {};
+    try {
+      saved = JSON.parse(sessionStorage.getItem(CONTEXT_KEY) ?? "{}");
+    } catch {
+      // Nothing stored — fall through to the defaults below.
+    }
+    // The level step is only reachable on the self + group branch, so that is
+    // what someone arriving straight from the game was being measured for.
+    setAudience(saved.audience ?? "self");
+    setFormat(saved.format ?? "group");
+    setLevel(tested as Level);
+    setStep(4);
+  }, [searchParams]);
 
   // Compute total/current steps for the dots
   const isKidsPath = audience === "kids";
@@ -210,6 +256,7 @@ const FindYourTrackQuiz = () => {
             {t.quizQ3NotSure}{" "}
             <Link
               to="/joc?view=placement"
+              onClick={rememberContext}
               className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
             >
               {t.quizQ3Placement}
