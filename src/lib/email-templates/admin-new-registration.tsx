@@ -38,7 +38,7 @@ const AdminNewRegistrationEmail = ({ name, phone, email, formType, format, cente
 
 export const template = {
   component: AdminNewRegistrationEmail,
-  subject: (data: Record<string, any>) => `Înscriere nouă: ${data?.name || 'cursant'}${data?.formType ? ` (${data.formType})` : ''}`,
+  subject: (data: Record<string, any>) => `Înscriere nouă: ${data?.['name'] || 'cursant'}${data?.['formType'] ? ` (${data['formType']})` : ''}`,
   displayName: 'Notificare admin — înscriere nouă',
   previewData: { name: 'Maria Popescu', phone: '+40 712 345 678', email: 'maria@example.com', formType: 'Grup', format: 'online', center: 'Online', notes: 'Nivel: A1' },
 } satisfies TemplateEntry

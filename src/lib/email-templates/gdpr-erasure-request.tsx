@@ -36,7 +36,7 @@ const GdprErasureRequestEmail = ({ email, name, message, requestedAt }: GdprEras
 
 export const template = {
   component: GdprErasureRequestEmail,
-  subject: (data: Record<string, any>) => `Cerere ștergere date (GDPR): ${data?.email || 'necunoscut'}`,
+  subject: (data: Record<string, any>) => `Cerere ștergere date (GDPR): ${data?.['email'] || 'necunoscut'}`,
   to: 'marhaba@centruldearabalibaneza.com',
   displayName: 'Notificare admin — cerere ștergere date (GDPR)',
   previewData: { email: 'maria@example.com', name: 'Maria Popescu', message: 'Vă rog să îmi ștergeți contul.', requestedAt: '10 iul. 2026, 14:30' },

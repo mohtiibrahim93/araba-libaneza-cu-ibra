@@ -88,8 +88,8 @@ export const template = {
   component: AdminBookingEmail,
   subject: (data: Record<string, any>) => {
     const action: Action = (data?.action as Action) || 'new'
-    const prefix = SUBJECT_PREFIX[action] ?? SUBJECT_PREFIX.new
-    return `${prefix}: ${data?.studentName || 'cursant'}${data?.eventName ? ` (${data.eventName})` : ''}`
+    const prefix = SUBJECT_PREFIX[action] ?? SUBJECT_PREFIX['new']
+    return `${prefix}: ${data?.['studentName'] || 'cursant'}${data?.['eventName'] ? ` (${data['eventName']})` : ''}`
   },
   displayName: 'Notificare admin — rezervare',
   previewData: {
