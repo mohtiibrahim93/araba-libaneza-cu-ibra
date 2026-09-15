@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "vite-node scripts/generateSitemap.ts && vite build",
+    "build:dev": "vite-node scripts/generateSitemap.ts && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "indexnow": "vite-node scripts/submitIndexNow.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "sitemap": "vite-node scripts/generateSitemap.ts"
   },
   "overrides": {
     "dompurify": "^3.4.13",

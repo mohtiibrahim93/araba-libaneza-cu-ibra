@@ -1327,7 +1327,7 @@ export const translations = {
     quizQ3OptB1: "I can have simple conversations",
     quizQ3OptB2: "Fluent conversation",
     quizQ3NotSure: "Not sure which level you're at?",
-    quizQ3Placement: "Take the level test (~15 min)",
+    quizQ3Placement: "Take the level test (~15 min, in Romanian)",
     quizResultTitle: "Your recommended course",
     quizResultGroupTitle: "Group Course — level {level}",
     quizResultGroupDesc: "Small groups, native teachers and a friendly price.",

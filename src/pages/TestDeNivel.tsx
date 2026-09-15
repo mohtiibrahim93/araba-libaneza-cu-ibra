@@ -26,6 +26,7 @@ const COPY = {
   ro: {
     home: "Acasă",
     crumb: "Test de nivel",
+    langNote: null as string | null,
     eyebrow: "Gratuit · aproximativ 15 minute",
     h1: "Ce nivel ai la araba libaneză?",
     intro:
@@ -48,6 +49,8 @@ const COPY = {
   en: {
     home: "Home",
     crumb: "Level test",
+    langNote:
+      "The test itself runs in Romanian: it scores answers in Arabizi against meanings written in Romanian, so there is no English version of it. The result and the course recommendation are in English.",
     eyebrow: "Free · about 15 minutes",
     h1: "What is your level in Lebanese Arabic?",
     intro:
@@ -110,6 +113,13 @@ const TestDeNivel = () => {
           <span className="mb-2 block text-sm font-medium text-primary">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">{c.h1}</h1>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
+          {/* Only an English reader is surprised by this, so only they are told
+              — the same arrangement /joc uses for the game itself. */}
+          {c.langNote && (
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              {c.langNote}
+            </p>
+          )}
         </header>
 
         {/* The test itself. `placement` is one of the game's own views, so this
