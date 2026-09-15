@@ -12,7 +12,8 @@ import ArticleOutline from "@/components/blog/ArticleOutline";
 import { useBlogOverride } from "@/hooks/useBlogOverride";
 import { useI18n } from "@/lib/i18n";
 import type { Localized } from "@/lib/blogPosts";
-import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_POSTS, L } from "@/lib/blogPosts";
+import { getBlogCover } from "@/lib/blogCovers";
 
 const BASE = "https://centruldearabalibaneza.com";
 
