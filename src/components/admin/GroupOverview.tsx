@@ -44,22 +44,56 @@ function fmtDate(iso: string) {
   );
 }
 
+/**
+ * One cohort: when it starts, where it stands, and how full it is.
+ *
+ * This used to be a single flex row with the date, the status pill and the seat
+ * count all on one line — each of them nowrap or shrink-0, inside a card a
+ * quarter of the page wide. Nothing could give, so the row overflowed and the
+ * seat count rendered on top of the date: the one number an admin opens this
+ * page to read was the one made unreadable.
+ *
+ * Two lines instead, and the occupancy gets a bar. Reading "how full is this
+ * group" across six levels should be a glance down a column, not arithmetic on
+ * "3/12" in 10px type, so the numbers are tabular and the fill is visual.
+ */
 const CohortLine = ({ c, taken }: { c: Cohort; taken: number }) => {
   const meta = STATUS_META[c.status] ?? STATUS_META["forming"]!;
   const seatsLeft = Math.max(0, c.max_seats - taken);
+  // Clamped: an over-booked cohort (waitlist) would otherwise overflow the bar.
+  const pct = c.max_seats > 0 ? Math.min(100, Math.round((taken / c.max_seats) * 100)) : 0;
+  const full = seatsLeft === 0;
   return (
-    <div className="flex items-center justify-between gap-2 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs">
-      <div className="flex items-center gap-1.5 min-w-0">
+    <div className="space-y-2 rounded-md border border-border bg-background px-2.5 py-2 text-xs">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        <span className="font-medium text-foreground whitespace-nowrap">{fmtDate(c.start_date)}</span>
-        <span className={`ml-1 inline-flex shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${meta.tone}`}>
+        <span className="font-medium text-foreground">{fmtDate(c.start_date)}</span>
+        <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${meta.tone}`}>
           {meta.label}
         </span>
       </div>
-      <div className="flex items-center gap-1 shrink-0 text-muted-foreground">
-        <Users className="h-3.5 w-3.5" />
-        <span className="font-medium text-foreground">{taken}</span>/{c.max_seats}
-        <span className="text-[10px]">({seatsLeft} libere)</span>
+
+      <div>
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="flex items-center gap-1 text-muted-foreground">
+            <Users className="h-3.5 w-3.5 shrink-0" />
+            <span className="text-sm font-semibold tabular-nums text-foreground">{taken}</span>
+            <span className="tabular-nums">/ {c.max_seats} înscriși</span>
+          </span>
+          <span className={`tabular-nums ${full ? "font-medium text-amber-700 dark:text-amber-400" : "text-muted-foreground"}`}>
+            {full ? "niciun loc liber" : `${seatsLeft} libere`}
+          </span>
+        </div>
+        <div
+          className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted"
+          role="img"
+          aria-label={`${taken} din ${c.max_seats} locuri ocupate`}
+        >
+          <div
+            className={`h-full rounded-full transition-all ${full ? "bg-amber-500" : "bg-primary"}`}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
       </div>
     </div>
   );
