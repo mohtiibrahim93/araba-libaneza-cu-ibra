@@ -257,6 +257,7 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/trial", "/en/trial"],
   ["/booking", "/en/booking"],
   ["/quiz", "/en/quiz"],
+  ["/te-ajutam", "/en/find-your-page"],
   ["/privacy", "/en/privacy"],
   ["/terms", "/en/terms"],
   ["/cursuri", "/en/courses"],
