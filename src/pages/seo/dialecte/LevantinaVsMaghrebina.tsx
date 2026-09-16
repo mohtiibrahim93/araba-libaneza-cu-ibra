@@ -35,7 +35,7 @@ const LevantinaVsMaghrebina = () => (
     crumb="Levantină vs. maghrebină"
     parents={DIALECT_PARENTS}
     lead="Cea mai mare distanță din lumea arabă: două capete ale aceleiași limbi care, vorbite repede, nu se mai întâlnesc."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>

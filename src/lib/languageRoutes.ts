@@ -23,6 +23,12 @@ const EN_FOR_RO: Record<string, string> = {
   "/cursuri-araba-adolescenti": "/en/arabic-for-teenagers",
   // Dialect cluster
   "/dialecte-arabe": "/en/arabic-dialects-guide",
+  "/dialecte-arabe/libaneza-vs-egipteana": "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
+  "/dialecte-arabe/libaneza-vs-siriana": "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
+  "/dialecte-arabe/levantina-vs-golf": "/en/arabic-dialects-guide/levantine-vs-gulf-arabic",
+  "/dialecte-arabe/levantina-vs-irakiana": "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic",
+  "/dialecte-arabe/levantina-vs-maghrebina": "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
+  "/dialecte-arabe/levantina-vs-peninsulara": "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
   "/ce-araba-sa-inveti": "/en/lebanese-arabic-vs-msa-vs-egyptian",
   // Resources / method
   // These three point at the resources article, which now has an English URL
@@ -84,6 +90,12 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/arabic-for-teenagers": "/cursuri-araba-adolescenti",
   "/en/learn-lebanese-arabic": "/cursuri-limba-araba",
   "/en/arabic-dialects-guide": "/dialecte-arabe",
+  "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic": "/dialecte-arabe/libaneza-vs-egipteana",
+  "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic": "/dialecte-arabe/libaneza-vs-siriana",
+  "/en/arabic-dialects-guide/levantine-vs-gulf-arabic": "/dialecte-arabe/levantina-vs-golf",
+  "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic": "/dialecte-arabe/levantina-vs-irakiana",
+  "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic": "/dialecte-arabe/levantina-vs-maghrebina",
+  "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic": "/dialecte-arabe/levantina-vs-peninsulara",
   "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/ce-araba-sa-inveti",
   "/en/how-to-learn-lebanese-arabic": "/blog/cum-inveti-araba-libaneza",

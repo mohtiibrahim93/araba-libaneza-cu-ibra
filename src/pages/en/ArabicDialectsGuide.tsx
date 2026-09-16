@@ -43,6 +43,7 @@ const ArabicDialectsGuide = () => (
     metaTitle="Arabic Dialects & Map: Levantine, Egyptian, Gulf & More"
     description="Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher."
     crumb="Arabic dialects guide"
+    parents={[{ name: "Which Arabic to learn", href: "/en/lebanese-arabic-vs-msa-vs-egyptian" }]}
     lead="A practical, non-academic guide to the Arabic dialect landscape — written by a native Lebanese teacher. What each family sounds like, where it's spoken, and how they relate to each other."
     courseSchema={false}
   >
@@ -180,6 +181,21 @@ const ArabicDialectsGuide = () => (
     <ul>
       <li><strong>Chad:</strong> not officially an Arab-League member in the same way, but Chadian Arabic is widely spoken and patterns closest to Libyan / Maghrebi.</li>
       <li><strong>Djibouti, Somalia, Comoros:</strong> Arabic is an official or co-official language, but daily life happens in local languages (Somali, Afar, Comorian). Given historical Yemeni and Omani presence in the Horn of Africa and Indian Ocean coast, the Arabic used there likely carries South Arabian influence — this classification is debated among linguists.</li>
+    </ul>
+
+    <h2>The comparisons, one by one</h2>
+    <p>
+      This page is the map. Every pair people actually compare has its own page, with a table,
+      examples and a direct answer to "which one should I learn?":
+    </p>
+    <ul>
+      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic">Lebanese vs Egyptian Arabic</Link> — the two dialects you hear most.</li>
+      <li><Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">Lebanese vs MSA vs Egyptian</Link> — spoken dialect against the written standard.</li>
+      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic">Lebanese vs Syrian, Palestinian and Jordanian</Link> — how much the accent really matters.</li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic (khaliji)</Link> — what is spoken in the UAE, Qatar and Kuwait.</li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link> — the eastern neighbour, with a different g and different loanwords.</li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">Levantine vs Maghrebi Arabic (darija)</Link> — the widest gap in the Arab world.</li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">Levantine vs Peninsular Arabic</Link> — Hijazi, Najdi and the Yemeni dialects.</li>
     </ul>
 
     <h2>MSA vs the dialects</h2>

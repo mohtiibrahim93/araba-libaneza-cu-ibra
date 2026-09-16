@@ -23,7 +23,7 @@ import { getCurriculum } from "@/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "@/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
-import { CURSURI_ARABA_META, HOME_META, JOACA_META, TEST_NIVEL_META } from "@/lib/pageMeta";
+import { CURSURI_ARABA_META, HOME_META, JOACA_META, QUIZ_META, TEST_NIVEL_META } from "@/lib/pageMeta";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -109,9 +109,17 @@ const STATIC_ROUTES: SeoRoute[] = [
   // ones the Romanian URLs render; only the URL and this head differ.
   // English twins of the remaining bilingual pages. The components already
   // carry both languages; these give the English side an address.
+  // English twins of the six dialect comparisons, nested under the guide the
+  // same way the Romanian ones are nested under /dialecte-arabe.
+  { path: "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic", title: "Lebanese vs Egyptian Arabic: Every Difference", description: "Lebanese or Egyptian Arabic? Compare pronunciation, grammar and vocabulary, see the same sentence in both, and get a straight answer on which to learn.", lang: "en" },
+  { path: "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic", title: "Lebanese vs Syrian, Palestinian and Jordanian Arabic", description: "How different is Lebanese from Syrian, Palestinian and Jordanian Arabic? Pronunciation, negation, vocabulary, and what learning one gets you in the others.", lang: "en" },
+  { path: "/en/arabic-dialects-guide/levantine-vs-gulf-arabic", title: "Levantine vs Gulf Arabic (Khaliji): The Differences", description: "Levantine or khaliji? Compare pronunciation, verbs and vocabulary, see who understands whom, and find out which dialect helps if you work in the Gulf.", lang: "en" },
+  { path: "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic", title: "Levantine vs Iraqi (Mesopotamian) Arabic", description: "How different is Iraqi Arabic from Levantine? Pronunciation, verb prefixes, Turkish and Persian loanwords, and how much speakers actually understand.", lang: "en" },
+  { path: "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic", title: "Levantine vs Maghrebi Arabic (Darija)", description: "Why can't a Lebanese and a Moroccan understand each other? Vowels, conjugation, Berber and French loanwords, and which Arabic you need for Morocco or Tunisia.", lang: "en" },
+  { path: "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic", title: "Levantine vs Peninsular Arabic: Hijazi and Najdi", description: "Hijazi, Najdi, Yemeni: what is spoken in Saudi Arabia and Yemen, how it differs from Levantine, and how far Lebanese Arabic gets you if you go there.", lang: "en" },
   { path: "/en/trial", title: "Free Lebanese Arabic Trial Lesson | Ibra", description: "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.", lang: "en" },
   { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. No card needed.", lang: "en" },
-  { path: "/en/quiz", title: "Free Level Test — Lebanese Arabic with Ibra", description: "Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.", lang: "en" },
+  { path: "/en/quiz", title: QUIZ_META.en.title, description: QUIZ_META.en.description, lang: "en" },
   { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.", lang: "en" },
   { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.", lang: "en" },
   { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
@@ -138,7 +146,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private" },
   { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
   { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București." },
-  { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
+  { path: "/quiz", title: QUIZ_META.ro.title, description: QUIZ_META.ro.description },
   { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor." },
   // Both of these are app routes that had no prerendered page. Anything not
   // prerendered falls back to the SPA shell, which is the homepage's HTML —
@@ -257,6 +265,12 @@ const LANDING_PAIRS: Array<[string, string]> = [
   ["/cursuri-araba-adolescenti", "/en/arabic-for-teenagers"],
   ["/cursuri-araba-bucuresti", "/en/arabic-classes-near-me"],
   ["/dialecte-arabe", "/en/arabic-dialects-guide"],
+  ["/dialecte-arabe/libaneza-vs-egipteana", "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic"],
+  ["/dialecte-arabe/libaneza-vs-siriana", "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic"],
+  ["/dialecte-arabe/levantina-vs-golf", "/en/arabic-dialects-guide/levantine-vs-gulf-arabic"],
+  ["/dialecte-arabe/levantina-vs-irakiana", "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic"],
+  ["/dialecte-arabe/levantina-vs-maghrebina", "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic"],
+  ["/dialecte-arabe/levantina-vs-peninsulara", "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic"],
   ["/intrebari-frecvente", "/en/faq"],
   ["/meditatii-araba", "/en/arabic-tutor"],
 ];

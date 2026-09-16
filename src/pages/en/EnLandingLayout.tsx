@@ -23,6 +23,13 @@ interface Props {
   metaTitle: string;
   description: string;
   crumb: string;
+  /**
+   * Ancestors between the homepage and this page, nearest the homepage first.
+   * Mirrors the prop of the same name on the Romanian LandingLayout: the
+   * dialect comparisons sit two levels down and a flat "Home › title" crumb
+   * would hide a hierarchy the content really has.
+   */
+  parents?: { name: string; href: string }[];
   lead: string;
   faq?: Faq[];
   courseSchema?: boolean;
@@ -54,6 +61,7 @@ const EnLandingLayout = ({
   metaTitle: metaTitleProp,
   description: descriptionProp,
   crumb,
+  parents = [],
   lead: leadProp,
   faq: faqProp,
   courseSchema = true,
@@ -93,13 +101,20 @@ const EnLandingLayout = ({
       }
     : null;
 
+  const trail = [
+    { name: "Home", href: "/" },
+    ...parents,
+    { name: crumb, href: `/en/${slug}` },
+  ];
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
-      { "@type": "ListItem", position: 2, name: crumb, item: url },
-    ],
+    itemListElement: trail.map((step, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: step.name,
+      item: `${BASE}${step.href}`,
+    })),
   };
   const faqJsonLd = faq?.length
     ? {
@@ -149,8 +164,12 @@ const EnLandingLayout = ({
           <article className="min-w-0 w-full max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
-              <Link to="/" className="hover:text-primary">Home</Link>
-              <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
+              {trail.slice(0, -1).map((step) => (
+                <span key={step.href}>
+                  <Link to={step.href} className="hover:text-primary">{step.name}</Link>
+                  <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
+                </span>
+              ))}
               <span className="text-foreground">{crumb}</span>
             </span>
           </nav>

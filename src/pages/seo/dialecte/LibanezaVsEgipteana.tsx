@@ -35,7 +35,7 @@ const LibanezaVsEgipteana = () => (
     crumb="Libaneză vs. egipteană"
     parents={DIALECT_PARENTS}
     lead="Cele două dialecte arabe pe care le auzi cel mai des — unul din muzică, celălalt din filme. Iată ce le desparte și pe care merită s-o alegi."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>

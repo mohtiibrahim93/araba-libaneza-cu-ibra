@@ -35,7 +35,7 @@ const LevantinaVsIrakiana = () => (
     crumb="Levantină vs. irakiană"
     parents={DIALECT_PARENTS}
     lead="Două familii vecine, cu aceeași gramatică de bază și două sunete care le despart imediat la ureche."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>

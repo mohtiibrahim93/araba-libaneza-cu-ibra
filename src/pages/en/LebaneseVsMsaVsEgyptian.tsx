@@ -211,6 +211,21 @@ const LebaneseVsMsaVsEgyptian = () => (
       at once dilutes progress in each.
     </p>
 
+    <h2>Going deeper</h2>
+    <p>
+      This page answers the big question: standard or dialect, and which dialect. Below it sits the{" "}
+      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>, which maps every family,
+      and below that one page for each comparison people keep asking about:
+    </p>
+    <ul>
+      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic">Lebanese vs Egyptian</Link></li>
+      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic">Lebanese vs Syrian, Palestinian, Jordanian</Link></li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic</Link></li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link></li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">Levantine vs Maghrebi Arabic</Link></li>
+      <li><Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">Levantine vs Peninsular Arabic</Link></li>
+    </ul>
+
     <h2>Where Lebanese fits</h2>
     <p>
       Lebanese sits inside the broader Levantine Arabic{" "}

@@ -35,7 +35,7 @@ const LevantinaVsGolf = () => (
     crumb="Levantină vs. Golf"
     parents={DIALECT_PARENTS}
     lead="Două familii de dialecte separate de o mie de kilometri de deșert. Se înțeleg parțial — și nu în aceeași măsură în ambele sensuri."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/levantine-vs-gulf-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>

@@ -105,3 +105,28 @@ export const TEST_NIVEL_META: PageMeta = {
   description:
     "Test gratuit de nivel la araba libaneză: 24 de întrebări, aproximativ 15 minute, fără cronometru. Rezultatul îți arată de unde să începi.",
 };
+
+/**
+ * /quiz — the 30-second course chooser.
+ *
+ * The other half of the split described above. Its head was left behind: the
+ * runtime Helmet already said "găsește cursul potrivit", but the server-side
+ * entry in src/lib/seoHead.ts still promised "test de nivel gratuit … în 2
+ * minute". So a crawler that runs JavaScript read the chooser and one that
+ * does not read a level test — and the stale half went on competing with
+ * /test-de-nivel for the query that page exists to serve.
+ *
+ * One entry, imported by both, so the two heads cannot drift again.
+ */
+export const QUIZ_META: Record<"ro" | "en", PageMeta> = {
+  ro: {
+    title: "Găsește cursul potrivit de arabă libaneză | Ibra",
+    description:
+      "Răspunde la câteva întrebări scurte și îți recomandăm în 30 de secunde cursul de arabă libaneză potrivit: grup, lecții 1:1 sau curs pentru copii.",
+  },
+  en: {
+    title: "Find the right Lebanese Arabic course | Ibra",
+    description:
+      "Answer a few short questions and we will recommend the right Lebanese Arabic course in 30 seconds: small group, 1-on-1 lessons or the children's class.",
+  },
+};

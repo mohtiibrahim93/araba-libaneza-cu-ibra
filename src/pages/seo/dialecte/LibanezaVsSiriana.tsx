@@ -35,7 +35,7 @@ const LibanezaVsSiriana = () => (
     crumb="Libaneză vs. restul levantinei"
     parents={DIALECT_PARENTS}
     lead="Libaneza, siriana, palestiniana și iordaniana sunt patru accente ale aceleiași familii. Iată exact unde se despart — și de ce contează atât de puțin."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>

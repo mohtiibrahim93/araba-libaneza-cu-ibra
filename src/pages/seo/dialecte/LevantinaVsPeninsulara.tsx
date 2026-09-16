@@ -35,7 +35,7 @@ const LevantinaVsPeninsulara = () => (
     crumb="Levantină vs. peninsulară"
     parents={DIALECT_PARENTS}
     lead="Peninsula nu vorbește un singur fel de arabă. Iată cele trei grupuri mari și ce le desparte de vorbirea din Liban și Siria."
-    enHref={null}
+    enHref="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic"
     faq={FAQ}
   >
     <h2>Pe scurt</h2>
