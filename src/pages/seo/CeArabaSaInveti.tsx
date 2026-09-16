@@ -3,6 +3,12 @@ import LandingLayout from "@/components/seo/LandingLayout";
 
 const FAQ = [
   {
+    // Phrased the way the question is actually asked, so the FAQPage JSON-LD
+    // matches it rather than a tidied-up version of it.
+    q: "Ce diferență e între araba standard și araba dialectală și pe care să o aleg?",
+    a: "Araba standard (fusha) este limba scrisă comună: presă, cărți, documente, context religios. Nimeni nu o vorbește acasă. Arabele dialectale — libaneza, egipteana și celelalte — sunt limbile vorbite efectiv, fiecare în regiunea ei. Nu sunt opțiuni concurente: alegi în funcție de ce vrei să faci. Dacă vrei să vorbești cu oameni, înveți dialectul lor; dacă vrei să citești presă sau să dai un examen, înveți fusha.",
+  },
+  {
     q: "Ce arabă să învăț: standard sau dialect?",
     a: "Dacă scopul e conversația cu oameni reali, învață dialectul. Araba standard (fusha) e limba scrisă, folosită în presă și documente oficiale — nimeni nu o vorbește acasă. Pentru majoritatea celor care învață din motive personale sau de familie, dialectul e alegerea corectă.",
   },
@@ -39,6 +45,82 @@ const CeArabaSaInveti = () => (
       Majoritatea celor care abandonează araba au ales varianta greșită de la început: au studiat
       araba standard când voiau, de fapt, să vorbească cu soacra, cu prietenii sau cu partenerul.
       Alege întâi <strong>pentru cine</strong> înveți.
+    </p>
+
+    <h2>Pe scurt</h2>
+    <p>
+      „Libaneză, egipteană sau standard?” este cea mai frecventă întrebare a începătorilor — și
+      răspunsul onest e că <strong>nu sunt trei opțiuni care se exclud</strong>. Araba standard e
+      standardul scris comun. Libaneza și egipteana sunt două dintre cele mai mari dialecte
+      vorbite. Care îți este utilă depinde de <em>motivul</em> pentru care înveți.
+    </p>
+    <ul>
+      <li>
+        <strong>Arabă standard (fusha)</strong> — standardul formal, pan-arab, scris. Presă, cărți,
+        discursuri oficiale, context religios. Nimeni nu o vorbește acasă.
+      </li>
+      <li>
+        <strong>Arabă libaneză</strong> — dialect levantin, vorbit în Liban și îndeaproape înrudit
+        cu siriana, palestiniana și iordaniana. Dominantă în muzica arabă modernă și în televiziunea
+        prin satelit.
+      </li>
+      <li>
+        <strong>Arabă egipteană</strong> — dialectul Egiptului (~110 milioane de vorbitori), răspândit
+        global prin decenii de cinema și televiziune. Cel mai larg înțeles dialect vorbit din lumea
+        arabă.
+      </li>
+    </ul>
+
+    <h2>Comparație pe puncte</h2>
+    <div className="overflow-x-auto -mx-4 md:mx-0">
+      <table className="min-w-full text-left border border-border rounded-lg overflow-hidden">
+        <thead className="bg-muted">
+          <tr>
+            <th className="p-3 text-sm font-semibold text-foreground">Criteriu</th>
+            <th className="p-3 text-sm font-semibold text-foreground">Standard (fusha)</th>
+            <th className="p-3 text-sm font-semibold text-foreground">Libaneză</th>
+            <th className="p-3 text-sm font-semibold text-foreground">Egipteană</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ["Unde se folosește zilnic", "Citit, știri, scriere formală, context religios.", "Acasă, la muncă, muzică, TV, WhatsApp.", "Acasă, la muncă, cinema, muzică, rețele sociale."],
+            ["Dificultatea gramaticii", "Cea mai mare — terminații cazuale, dual, conjugări complexe.", "Mai simplă — fără terminații cazuale, verbe mai regulate.", "Mai simplă — simplificări asemănătoare, cu tipare proprii."],
+            ["Pronunția lui ق", "Un q profund, din fundul gâtului.", "De obicei oprire glotală: „qalb” → „ʔalb”.", "De obicei tot oprire glotală: „qalb” → „ʔalb”."],
+            ["Pronunția lui ج", "„j” ca în englezescul „jam”.", "„j” / „zh” moale, ca în „jurnal”.", "„g” dur, ca în „gară”: „gamal”, nu „jamal”."],
+            ["Împrumuturi", "Aproape deloc — deliberat puristă.", "Multă franceză și engleză; ceva turcă și aramaică.", "Engleză, ceva turcă și italiană."],
+            ["Acoperire media", "Știri (Al Jazeera, BBC Arabic), emisiuni formale.", "Muzică modernă (Fairuz, Wael Kfoury), TV prin satelit.", "Cinema, seriale TV, muzică."],
+            ["Potrivită dacă vrei să…", "Citești presă, studiezi islamul, lucrezi academic sau formal.", "Vorbești cu familie libaneză/siriană/iordaniană/palestiniană.", "Înțelegi filmele egiptene și cea mai largă parte a lumii arabe."],
+          ].map(([criteriu, msa, lb, eg]) => (
+            <tr key={criteriu} className="border-t border-border align-top">
+              <td className="p-3 text-sm font-medium text-foreground">{criteriu}</td>
+              <td className="p-3 text-sm text-muted-foreground">{msa}</td>
+              <td className="p-3 text-sm text-muted-foreground">{lb}</td>
+              <td className="p-3 text-sm text-muted-foreground">{eg}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Cum sună aceeași propoziție în fiecare</h2>
+    <p>O propoziție simplă: <em>„Vreau să beau o cafea.”</em></p>
+    <ul>
+      <li>
+        <strong>Standard:</strong> <em>ʾurīdu an ashraba qahwatan</em> — corectă gramatical, sună
+        formal, nimeni nu vorbește așa la cafenea.
+      </li>
+      <li>
+        <strong>Libaneză:</strong> <em>baddi ishrab ʾahwe</em> — scurt, relaxat, ق devine oprire
+        glotală.
+      </li>
+      <li>
+        <strong>Egipteană:</strong> <em>ʿāyiz ashrab ʾahwa</em> — alt verb („ʿāyiz” în loc de
+        „baddi”), aceeași oprire glotală pe ق.
+      </li>
+    </ul>
+    <p>
+      Același alfabet, aceeași rădăcină (ش-ر-ب „sh-r-b” = a bea), cu totul altă textură.
     </p>
 
     <h2>Comparația rapidă</h2>
