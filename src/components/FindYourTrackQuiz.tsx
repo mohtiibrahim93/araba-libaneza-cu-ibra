@@ -168,7 +168,7 @@ const FindYourTrackQuiz = () => {
     if (step === 1) {
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h3 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ1}</h3>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ1}</h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             <OptionCard
               title={t.quizQ1OptSelf}
@@ -195,7 +195,7 @@ const FindYourTrackQuiz = () => {
     if (step === 2) {
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h3 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ2}</h3>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ2}</h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             <OptionCard
               title={t.quizQ2OptGroup}
@@ -228,7 +228,7 @@ const FindYourTrackQuiz = () => {
       ];
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h3 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ3}</h3>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ3}</h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             {levels.map((l) => (
               <div key={l.value} className="relative">
