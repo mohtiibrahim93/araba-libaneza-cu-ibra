@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import PageFinder from "@/components/PageFinder";
 import { trackEvent } from "@/lib/tracking";
 import { useI18n } from "@/lib/i18n";
 import { resolveRedirect } from "@/lib/redirects";
@@ -24,29 +25,6 @@ const NotFound = () => {
   if (redirect) return <Navigate to={redirect} replace />;
 
   const en = lang === "en";
-  const links: { to: string; label: string }[] = en
-    ? [
-        { to: "/", label: "Home" },
-        { to: "/cursuri", label: "All courses" },
-        { to: "/cursuri/grup", label: "Group courses" },
-        { to: "/cursuri/private", label: "Private lessons" },
-        { to: "/curs-araba-copii", label: "Arabic for kids" },
-        { to: "/trial", label: "Free trial lesson" },
-        { to: "/blog", label: "Blog" },
-        { to: "/resurse", label: "Free resources" },
-        { to: "/en/learn-lebanese-arabic", label: "English hub" },
-      ]
-    : [
-        { to: "/", label: "Acasă" },
-        { to: "/cursuri", label: "Toate cursurile" },
-        { to: "/cursuri/grup", label: "Cursuri de grup" },
-        { to: "/cursuri/private", label: "Lecții private" },
-        { to: "/curs-araba-copii", label: "Arabă pentru copii" },
-        { to: "/trial", label: "Lecție de probă gratuită" },
-        { to: "/blog", label: "Blog" },
-        { to: "/resurse", label: "Resurse gratuite" },
-        { to: "/#contact", label: "Contact" },
-      ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,27 +46,27 @@ const NotFound = () => {
       </Helmet>
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <main className="mx-auto max-w-5xl px-4 py-16">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary">404</p>
         <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
           {en ? "We couldn't find that page" : "Nu am găsit pagina căutată"}
         </h1>
-        <p className="mt-4 text-muted-foreground">
+        <p className="mt-4 max-w-2xl text-muted-foreground">
           {en
-            ? "The link may be old or mistyped. Here's where most people go next:"
-            : "Linkul pare vechi sau scris greșit. Iată unde merg de obicei vizitatorii:"}
+            ? "The link may be old or mistyped. Here's what you were most likely looking for:"
+            : "Linkul pare vechi sau scris greșit. Iată ce căutai, cel mai probabil:"}
         </p>
-        <nav className="mt-8 grid gap-3 sm:grid-cols-3" aria-label={en ? "Popular pages" : "Pagini populare"}>
-          {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="mt-12">
+          <PageFinder lang={en ? "en" : "ro"} wrongPath={location.pathname} />
+        </div>
+        <p className="mt-12 text-sm text-muted-foreground">
+          <Link
+            to={en ? "/en/find-your-page" : "/te-ajutam"}
+            className="font-medium text-primary hover:underline"
+          >
+            {en ? "See every page on the site" : "Vezi toate paginile site-ului"} →
+          </Link>
+        </p>
       </main>
       <Footer />
     </div>
