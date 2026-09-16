@@ -52,6 +52,11 @@ const STATIC_ROUTES: SeoRoute[] = [
   // title while being a course chooser; this page is the test, so the two stop
   // competing. Romanian only, like /joc — the card bank's meanings are Romanian.
   { path: "/test-de-nivel", title: TEST_NIVEL_META.title, description: TEST_NIVEL_META.description },
+  // Where a visitor who arrived at a dead address is sent: search plus the
+  // courses, resources and articles. The 404 page shows a shortlist of the same
+  // recommendations, but a 404 has no URL anyone can link to — this does.
+  { path: "/te-ajutam", title: "Te ajutăm să găsești pagina potrivită | Arabă libaneză", description: "Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc." },
+  { path: "/en/find-your-page", title: "Find the right page | Lebanese Arabic with Ibra", description: "Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.", lang: "en" },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
@@ -252,6 +257,7 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/trial", "/en/trial"],
   ["/booking", "/en/booking"],
   ["/quiz", "/en/quiz"],
+  ["/te-ajutam", "/en/find-your-page"],
   ["/privacy", "/en/privacy"],
   ["/terms", "/en/terms"],
   ["/cursuri", "/en/courses"],

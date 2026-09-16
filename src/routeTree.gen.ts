@@ -37,6 +37,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResurseRouteImport } from './routes/resurse'
 import { Route as StergereDateRouteImport } from './routes/stergere-date'
+import { Route as TeAjutamRouteImport } from './routes/te-ajutam'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TestDeNivelRouteImport } from './routes/test-de-nivel'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
@@ -80,6 +81,7 @@ import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
 import { Route as EnBestArabicCourseRouteImport } from './routes/en/best-arabic-course'
 import { Route as EnBookingRouteImport } from './routes/en/booking'
 import { Route as EnFaqRouteImport } from './routes/en/faq'
+import { Route as EnFindYourPageRouteImport } from './routes/en.find-your-page'
 import { Route as EnHowToLearnLebaneseArabicRouteImport } from './routes/en/how-to-learn-lebanese-arabic'
 import { Route as EnLearnLebaneseArabicRouteImport } from './routes/en/learn-lebanese-arabic'
 import { Route as EnLearnLevantineArabicRouteImport } from './routes/en/learn-levantine-arabic'
@@ -247,6 +249,11 @@ const ResurseRoute = ResurseRouteImport.update({
 const StergereDateRoute = StergereDateRouteImport.update({
   id: '/stergere-date',
   path: '/stergere-date',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeAjutamRoute = TeAjutamRouteImport.update({
+  id: '/te-ajutam',
+  path: '/te-ajutam',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -481,6 +488,11 @@ const EnFaqRoute = EnFaqRouteImport.update({
   path: '/en/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnFindYourPageRoute = EnFindYourPageRouteImport.update({
+  id: '/en/find-your-page',
+  path: '/en/find-your-page',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnHowToLearnLebaneseArabicRoute =
   EnHowToLearnLebaneseArabicRouteImport.update({
     id: '/en/how-to-learn-lebanese-arabic',
@@ -656,6 +668,7 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
+  '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
@@ -695,6 +708,7 @@ export interface FileRoutesByFullPath {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/faq': typeof EnFaqRoute
+  '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
   '/en/learn-lebanese-arabic': typeof EnLearnLebaneseArabicRoute
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
@@ -757,6 +771,7 @@ export interface FileRoutesByTo {
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
+  '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
@@ -796,6 +811,7 @@ export interface FileRoutesByTo {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/faq': typeof EnFaqRoute
+  '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
   '/en/learn-lebanese-arabic': typeof EnLearnLebaneseArabicRoute
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
@@ -859,6 +875,7 @@ export interface FileRoutesById {
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/stergere-date': typeof StergereDateRoute
+  '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
@@ -898,6 +915,7 @@ export interface FileRoutesById {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/faq': typeof EnFaqRoute
+  '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
   '/en/learn-lebanese-arabic': typeof EnLearnLebaneseArabicRoute
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
@@ -962,6 +980,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/resurse'
     | '/stergere-date'
+    | '/te-ajutam'
     | '/terms'
     | '/test-de-nivel'
     | '/thank-you'
@@ -1001,6 +1020,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/faq'
+    | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
     | '/en/learn-lebanese-arabic'
     | '/en/learn-levantine-arabic'
@@ -1063,6 +1083,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/resurse'
     | '/stergere-date'
+    | '/te-ajutam'
     | '/terms'
     | '/test-de-nivel'
     | '/thank-you'
@@ -1102,6 +1123,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/faq'
+    | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
     | '/en/learn-lebanese-arabic'
     | '/en/learn-levantine-arabic'
@@ -1164,6 +1186,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/resurse'
     | '/stergere-date'
+    | '/te-ajutam'
     | '/terms'
     | '/test-de-nivel'
     | '/thank-you'
@@ -1203,6 +1226,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/faq'
+    | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
     | '/en/learn-lebanese-arabic'
     | '/en/learn-levantine-arabic'
@@ -1266,6 +1290,7 @@ export interface RootRouteChildren {
   QuizRoute: typeof QuizRoute
   ResurseRoute: typeof ResurseRoute
   StergereDateRoute: typeof StergereDateRoute
+  TeAjutamRoute: typeof TeAjutamRoute
   TermsRoute: typeof TermsRoute
   TestDeNivelRoute: typeof TestDeNivelRoute
   ThankYouRoute: typeof ThankYouRoute
@@ -1305,6 +1330,7 @@ export interface RootRouteChildren {
   EnBestArabicCourseRoute: typeof EnBestArabicCourseRoute
   EnBookingRoute: typeof EnBookingRoute
   EnFaqRoute: typeof EnFaqRoute
+  EnFindYourPageRoute: typeof EnFindYourPageRoute
   EnHowToLearnLebaneseArabicRoute: typeof EnHowToLearnLebaneseArabicRoute
   EnLearnLebaneseArabicRoute: typeof EnLearnLebaneseArabicRoute
   EnLearnLevantineArabicRoute: typeof EnLearnLevantineArabicRoute
@@ -1535,6 +1561,13 @@ declare module '@tanstack/react-router' {
       path: '/stergere-date'
       fullPath: '/stergere-date'
       preLoaderRoute: typeof StergereDateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/te-ajutam': {
+      id: '/te-ajutam'
+      path: '/te-ajutam'
+      fullPath: '/te-ajutam'
+      preLoaderRoute: typeof TeAjutamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1838,6 +1871,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnFaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/find-your-page': {
+      id: '/en/find-your-page'
+      path: '/en/find-your-page'
+      fullPath: '/en/find-your-page'
+      preLoaderRoute: typeof EnFindYourPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/how-to-learn-lebanese-arabic': {
       id: '/en/how-to-learn-lebanese-arabic'
       path: '/en/how-to-learn-lebanese-arabic'
@@ -2066,6 +2106,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuizRoute: QuizRoute,
   ResurseRoute: ResurseRoute,
   StergereDateRoute: StergereDateRoute,
+  TeAjutamRoute: TeAjutamRoute,
   TermsRoute: TermsRoute,
   TestDeNivelRoute: TestDeNivelRoute,
   ThankYouRoute: ThankYouRoute,
@@ -2111,6 +2152,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnBestArabicCourseRoute: EnBestArabicCourseRoute,
   EnBookingRoute: EnBookingRoute,
   EnFaqRoute: EnFaqRoute,
+  EnFindYourPageRoute: EnFindYourPageRoute,
   EnHowToLearnLebaneseArabicRoute: EnHowToLearnLebaneseArabicRoute,
   EnLearnLebaneseArabicRoute: EnLearnLebaneseArabicRoute,
   EnLearnLevantineArabicRoute: EnLearnLevantineArabicRoute,
