@@ -67,14 +67,6 @@ const AlfabetulArab = () => {
         ro: "Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.",
         en: "Complete Arabic alphabet table: all 28 letters, pronunciation, right-to-left writing. Plus how to start speaking Lebanese without learning the alphabet first.",
       }}
-      metaTitle={{
-        ro: "Alfabetul arab pentru începători: 28 de litere",
-        en: "Arabic Alphabet for Beginners: All 28 Letters",
-      }}
-      metaDescription={{
-        ro: "Învață cele 28 de litere arabe: pronunția în română, formele în cuvinte și scrierea de la dreapta la stânga, explicate simplu pentru începători.",
-        en: "Learn all 28 Arabic letters, their pronunciation, word forms and right-to-left writing with clear explanations for beginners.",
-      }}
       published="2026-07-16"
       readingMinutes={7}
       faq={FAQ}

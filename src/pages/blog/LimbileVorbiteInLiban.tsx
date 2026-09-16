@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/components/LocalizedLink";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
 import { Tldr, InlineCta } from "@/components/blog/ArticleKit";
@@ -24,13 +23,6 @@ const FAQ = [
 const LimbileVorbiteInLiban = () => {
   const { lang } = useI18n();
   const en = lang === "en";
-  const seoTitle = en
-    ? "Languages Spoken in Lebanon: Arabic, French and English"
-    : "Ce limbi se vorbesc în Liban? Arabă, franceză și engleză";
-  const seoDescription = en
-    ? "Discover the languages spoken in Lebanon, from Lebanese Arabic and MSA to French and English, and which ones people use in daily life."
-    : "Află ce limbi se vorbesc în Liban, de la araba libaneză și MSA la franceză și engleză, plus ce folosește populația în viața de zi cu zi.";
-
   return (
     <BlogArticleLayout
       slug="limbile-vorbite-in-liban"
@@ -59,14 +51,6 @@ const LimbileVorbiteInLiban = () => {
           { ro: "Engleza te duce departe în Beirut, dar nu în conversațiile de familie.", en: "English takes you far in Beirut, but not into family conversation." },
         ]}
       />
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-      </Helmet>
       <h2>{en ? "1. Lebanese Arabic — the everyday language" : "1. Araba libaneză — limba de zi cu zi"}</h2>
       <p>
         {en

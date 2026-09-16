@@ -28,9 +28,6 @@ interface Props {
   slug: string;
   title: Loc;
   description: Loc;
-  /** Optional fixed metadata, independent of owner-edited article headings. */
-  metaTitle?: Loc;
-  metaDescription?: Loc;
   published: string; // ISO
   readingMinutes: number;
   /** Short crumb label (falls back to title). */
@@ -79,8 +76,6 @@ const BlogArticleLayout = ({
   slug,
   title,
   description,
-  metaTitle,
-  metaDescription,
   published,
   readingMinutes,
   crumb,
@@ -100,7 +95,8 @@ const BlogArticleLayout = ({
   // from the shared registry rather than a prop so the runtime head and the
   // one scripts/seoPrerender.ts writes cannot disagree — that drift is what
   // made /cursuri-araba serve two different titles to two kinds of crawler.
-  const consolidatesInto = BLOG_POSTS.find((p) => p.slug === slug)?.canonicalTo;
+  const registryPost = BLOG_POSTS.find((p) => p.slug === slug);
+  const consolidatesInto = registryPost?.canonicalTo;
   const canonicalUrl = consolidatesInto
     ? `${BASE}${canonicalPath(`/blog/${consolidatesInto}`, lang)}`
     : url;
@@ -116,8 +112,21 @@ const BlogArticleLayout = ({
 
   const tTitle = (override && ov(override.title_en, override.title_ro)) || pick(title, lang);
   const tDesc = (override && ov(override.description_en, override.description_ro)) || pick(description, lang);
-  const resolvedMetaTitle = metaTitle ? pick(metaTitle, lang) : tTitle;
-  const resolvedMetaDescription = metaDescription ? pick(metaDescription, lang) : tDesc;
+  // The head comes from the registry in src/lib/blogPosts.ts, not from this
+  // page's own props. src/lib/seoHead.ts serves that same registry value
+  // server-side, and src/test/meta-length.test.ts keeps it inside the
+  // truncation limits; the props are the article's on-page heading and
+  // standfirst, which are deliberately longer and freer. Reading two different
+  // values meant thirteen of nineteen posts sent one title to a crawler that
+  // runs JavaScript and another to one that does not, several of them well
+  // past the length a result ever shows. An owner edit still wins over both:
+  // that one is deliberate, and the server cannot know about it anyway.
+  const resolvedMetaTitle =
+    (override && ov(override.title_en, override.title_ro)) ||
+    (registryPost ? pick(registryPost.title, lang) : tTitle);
+  const resolvedMetaDescription =
+    (override && ov(override.description_en, override.description_ro)) ||
+    (registryPost ? pick(registryPost.description, lang) : tDesc);
   const tLead = (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
   const overrideBody = override ? ov(override.body_en, override.body_ro) : "";
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
