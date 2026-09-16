@@ -33,6 +33,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import NavDropdown from "@/components/NavDropdown";
 
 
 const Navbar = () => {
@@ -105,12 +106,17 @@ const Navbar = () => {
     { href: "#contact", label: t.navContact },
   ];
 
-  // Course + resource menus, from src/lib/siteNav.ts. Shared with the footer,
-  // which renders the same structure as plain anchors — these dropdowns mount
-  // their contents only when opened, so on their own they are invisible to any
-  // crawler that does not run JavaScript.
+  // Course + resource menus, from src/lib/siteNav.ts. The desktop menus render
+  // them through NavDropdown, which keeps every link in the served HTML; the
+  // mobile menu lists the same links below. The index page is only prepended
+  // for the desktop menu — on mobile the section heading is already a link to
+  // it.
   const courseMenu = courseLinks(lang);
   const resourceMenu = resourceLinks(lang);
+  const coursesIndex = {
+    to: lang === "en" ? "/en/courses" : "/cursuri",
+    label: lang === "en" ? "All courses" : "Toate cursurile",
+  };
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -138,35 +144,8 @@ const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground font-medium">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-hidden">
-              {t.navCourses}
-              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="min-w-56">
-              <DropdownMenuItem asChild>
-                <Link to={lang === "en" ? "/en/courses" : "/cursuri"}>{lang === "en" ? "All courses" : "Toate cursurile"}</Link>
-              </DropdownMenuItem>
-              {courseMenu.map((item) => (
-                <DropdownMenuItem key={item.to} asChild>
-                  <Link to={item.to}>{item.label}</Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors focus:outline-hidden">
-              {lang === "en" ? "Resources" : "Resurse"}
-              <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="min-w-56">
-              {resourceMenu.map((item) => (
-                <DropdownMenuItem key={item.to} asChild>
-                  <Link to={item.to}>{item.label}</Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <NavDropdown label={t.navCourses} items={[coursesIndex, ...courseMenu]} />
+          <NavDropdown label={lang === "en" ? "Resources" : "Resurse"} items={resourceMenu} />
           <Link
             to="/booking"
             onClick={() => setOpen(false)}
