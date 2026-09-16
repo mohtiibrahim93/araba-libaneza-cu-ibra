@@ -24,29 +24,6 @@ const NotFound = () => {
   if (redirect) return <Navigate to={redirect} replace />;
 
   const en = lang === "en";
-  const links: { to: string; label: string }[] = en
-    ? [
-        { to: "/", label: "Home" },
-        { to: "/cursuri", label: "All courses" },
-        { to: "/cursuri/grup", label: "Group courses" },
-        { to: "/cursuri/private", label: "Private lessons" },
-        { to: "/curs-araba-copii", label: "Arabic for kids" },
-        { to: "/trial", label: "Free trial lesson" },
-        { to: "/blog", label: "Blog" },
-        { to: "/resurse", label: "Free resources" },
-        { to: "/en/learn-lebanese-arabic", label: "English hub" },
-      ]
-    : [
-        { to: "/", label: "Acasă" },
-        { to: "/cursuri", label: "Toate cursurile" },
-        { to: "/cursuri/grup", label: "Cursuri de grup" },
-        { to: "/cursuri/private", label: "Lecții private" },
-        { to: "/curs-araba-copii", label: "Arabă pentru copii" },
-        { to: "/trial", label: "Lecție de probă gratuită" },
-        { to: "/blog", label: "Blog" },
-        { to: "/resurse", label: "Resurse gratuite" },
-        { to: "/#contact", label: "Contact" },
-      ];
 
   return (
     <div className="min-h-screen bg-background">
