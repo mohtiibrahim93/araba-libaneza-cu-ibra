@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import { QUIZ_META } from "@/lib/pageMeta";
+import { Link } from "@/lib/router-compat";
 import { canonicalPath } from "@/lib/languageRoutes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -44,6 +45,14 @@ const Quiz = () => {
           <div className="space-y-3">
             <h2 className="text-xl font-semibold text-foreground">{t.quizNotH2}</h2>
             <p className="text-muted-foreground leading-relaxed">{t.quizNotP}</p>
+            {/* The paragraph names the level test; this makes it reachable,
+                including for a crawler reading the page without running the
+                quiz. */}
+            <p className="text-muted-foreground leading-relaxed">
+              <Link to="/test-de-nivel" className="font-medium text-primary underline underline-offset-4">
+                {t.quizLevelTestCta}
+              </Link>
+            </p>
           </div>
           <div className="space-y-3">
             <h2 className="text-xl font-semibold text-foreground">{t.quizAfterH2}</h2>

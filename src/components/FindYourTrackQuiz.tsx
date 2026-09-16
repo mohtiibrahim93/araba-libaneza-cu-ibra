@@ -378,6 +378,24 @@ const FindYourTrackQuiz = () => {
             {renderStep()}
           </CardContent>
         </Card>
+
+        {/* The level test used to be mentioned only inside step 3, which most
+            visitors never reach: pick "for my child" or "1:1 lessons" and the
+            quiz skips straight to the result. So someone landing on /quiz
+            looking for the placement test saw no sign that one exists — and
+            this page is where the site's own links send them. Shown at every
+            step, below the card, so it never competes with the question. */}
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          {t.quizLevelTestPrompt}{" "}
+          <Link
+            to="/test-de-nivel"
+            onClick={rememberContext}
+            className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+          >
+            {t.quizLevelTestCta}
+            <ChevronRight className="inline w-3.5 h-3.5 -mt-0.5" aria-hidden />
+          </Link>
+        </p>
       </div>
     </section>
   );
