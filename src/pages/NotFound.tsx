@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import PageFinder from "@/components/PageFinder";
 import { trackEvent } from "@/lib/tracking";
 import { useI18n } from "@/lib/i18n";
 import { resolveRedirect } from "@/lib/redirects";
@@ -45,27 +46,27 @@ const NotFound = () => {
       </Helmet>
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <main className="mx-auto max-w-5xl px-4 py-16">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary">404</p>
         <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
           {en ? "We couldn't find that page" : "Nu am găsit pagina căutată"}
         </h1>
-        <p className="mt-4 text-muted-foreground">
+        <p className="mt-4 max-w-2xl text-muted-foreground">
           {en
-            ? "The link may be old or mistyped. Here's where most people go next:"
-            : "Linkul pare vechi sau scris greșit. Iată unde merg de obicei vizitatorii:"}
+            ? "The link may be old or mistyped. Here's what you were most likely looking for:"
+            : "Linkul pare vechi sau scris greșit. Iată ce căutai, cel mai probabil:"}
         </p>
-        <nav className="mt-8 grid gap-3 sm:grid-cols-3" aria-label={en ? "Popular pages" : "Pagini populare"}>
-          {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="mt-12">
+          <PageFinder lang={en ? "en" : "ro"} wrongPath={location.pathname} />
+        </div>
+        <p className="mt-12 text-sm text-muted-foreground">
+          <Link
+            to={en ? "/en/find-your-page" : "/te-ajutam"}
+            className="font-medium text-primary hover:underline"
+          >
+            {en ? "See every page on the site" : "Vezi toate paginile site-ului"} →
+          </Link>
+        </p>
       </main>
       <Footer />
     </div>
