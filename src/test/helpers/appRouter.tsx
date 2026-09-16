@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { RouterProvider, createMemoryHistory, createRouter } from "@tanstack/react-router";
+import { RouterProvider, createMemoryHistory, createRouter, stringifySearchWith } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { routeTree } from "@/routeTree.gen";
 import type { ReactNode } from "react";
@@ -29,6 +29,9 @@ export function renderRoute(path: string) {
     routeTree: withoutDocumentShell(),
     context: { queryClient: new QueryClient({ defaultOptions: { queries: { retry: false } } }) },
     history: createMemoryHistory({ initialEntries: [path] }),
+    // Same search serialisation as src/router.tsx, or the tests would exercise
+    // a router the site does not ship.
+    stringifySearch: stringifySearchWith(JSON.stringify),
   });
   // HelmetProvider also lives inside the root route; a second one here would
   // give the page two heads to write into.

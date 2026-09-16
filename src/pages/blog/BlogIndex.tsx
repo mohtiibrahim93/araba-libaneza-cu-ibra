@@ -8,19 +8,22 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { blogPostsNewestFirst, L } from "@/lib/blogPosts";
+import { BLOG_PER_PAGE, blogPageFrom, blogPageHref, blogTotalPages } from "@/lib/blogPagination";
 import { getBlogCover } from "@/lib/blogCovers";
 import { useI18n } from "@/lib/i18n";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 
 /**
- * Articles per page. Nineteen over twelve is two pages, which is what the
- * design calls for. Paging is driven by ?page= rather than component state so
- * page two has an address: it can be linked, shared and crawled, and the
- * server renders it directly. A useState pager would have hidden seven
- * articles behind a click no crawler performs.
+ * Paging is driven by ?page= rather than component state so page two has an
+ * address: it can be linked, shared and crawled, and the server renders it
+ * directly. A useState pager would have hidden seven articles behind a click
+ * no crawler performs.
+ *
+ * The page number, the clamping and the href shape come from
+ * src/lib/blogPagination.ts, which the route's head() reads too — the two used
+ * to compute them separately and disagreed about which page this was.
  */
-const PER_PAGE = 12;
 const COPY = {
   ro: {
     title: "Blog — Arabă libaneză explicată simplu | Ibra",
@@ -60,14 +63,11 @@ const BlogIndex = () => {
   // differs, and it is the URL that decides which language a crawler sees.
   const base = lang === "en" ? "/en/blog" : "/blog";
   const [searchParams] = useSearchParams();
-  const totalPages = Math.max(1, Math.ceil(blogPostsNewestFirst.length / PER_PAGE));
-  // Clamped rather than trusted: ?page=0, ?page=99 and ?page=abc are all things
-  // a stray link or a crawler will ask for, and none should render an empty grid.
-  const requested = Number.parseInt(searchParams.get("page") ?? "1", 10);
-  const page = Number.isFinite(requested) ? Math.min(Math.max(requested, 1), totalPages) : 1;
-  const start = (page - 1) * PER_PAGE;
-  const visible = blogPostsNewestFirst.slice(start, start + PER_PAGE);
-  const hrefFor = (n: number) => (n === 1 ? base : `${base}?page=${n}`);
+  const totalPages = blogTotalPages();
+  const page = blogPageFrom(searchParams.get("page"));
+  const start = (page - 1) * BLOG_PER_PAGE;
+  const visible = blogPostsNewestFirst.slice(start, start + BLOG_PER_PAGE);
+  const hrefFor = (n: number) => blogPageHref(base, n);
   // Each page is its own canonical. Pointing page two at page one would ask
   // Google to merge them and then drop the seven articles only page two lists.
   const canonical = `${BASE_URL}${hrefFor(page)}`;

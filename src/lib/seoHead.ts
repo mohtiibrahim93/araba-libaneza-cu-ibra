@@ -346,7 +346,18 @@ interface HeadResult {
  * An unknown path yields nothing, which leaves the site-wide head from
  * src/routes/__root.tsx in place rather than a half-built one.
  */
-export function seoHead(path: string): HeadResult {
+export interface SeoHeadOptions {
+  /**
+   * Query string to append to the canonical and og:url, "?page=2" style.
+   *
+   * The table below is keyed by path, so a paginated index would otherwise
+   * serve page two a canonical pointing at page one — which is a request to
+   * drop the articles only page two lists. Used by the blog index routes.
+   */
+  canonicalSearch?: string;
+}
+
+export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   const route = seoRouteFor(path);
   if (!route) return { meta: [], links: [], scripts: [] };
 
@@ -355,7 +366,8 @@ export function seoHead(path: string): HeadResult {
   const ogLocale = lang === "en" ? "en_US" : lang === "de" ? "de_DE" : "ro_RO";
   const { title, description } = route;
   // Canonical (and og:url) point at the consolidation target when set.
-  const canonicalHref = route.canonical ? BASE + route.canonical : url;
+  const canonicalHref =
+    (route.canonical ? BASE + route.canonical : url) + (opts?.canonicalSearch ?? "");
 
   const meta: Record<string, string>[] = [
     { ...RH, title },

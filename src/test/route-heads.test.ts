@@ -105,7 +105,10 @@ describe("per-page heads", () => {
         if (entry.isDirectory()) walk(`${dir}/${entry.name}`);
         else if (entry.name.endsWith(".tsx")) {
           const src = read(`${dir}/${entry.name}`);
-          for (const m of src.matchAll(/seoHead\("([^"]+)"\)/g)) wired.add(m[1]!);
+          // [,)] rather than ) alone: the blog index routes pass a second
+          // argument to canonicalise page two at itself, and the head is just
+          // as wired for it.
+          for (const m of src.matchAll(/seoHead\("([^"]+)"[,)]/g)) wired.add(m[1]!);
           // A route that only 301s never renders a head; its title lives on
           // the page it redirects to.
           if (src.includes("throw redirect(")) {
