@@ -20,7 +20,7 @@
  */
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { getCurriculum } from "@/data/curriculum";
-import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "@/lib/levelMeta";
+import { LEVEL_TITLE_RO, LEVEL_TITLE_EN, LEVEL_A1_DESCRIPTION } from "@/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
 import { CURSURI_ARABA_META, HOME_META, JOACA_META, QUIZ_META, TEST_NIVEL_META } from "@/lib/pageMeta";
@@ -169,8 +169,7 @@ function levelRoutes(): SeoRoute[] {
         ? {
             path: "/cursuri/grup/a1",
             title: LEVEL_TITLE_RO.a1,
-            description:
-              "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.",
+            description: LEVEL_A1_DESCRIPTION.ro,
           }
         : {
             path: `/cursuri/grup/${id}`,
@@ -199,7 +198,9 @@ function levelRoutesEn(): SeoRoute[] {
       return {
         path: `/en/courses/group/${id}`,
         title: LEVEL_TITLE_EN[id],
-        description: lvl.objective.slice(0, 155),
+        // A1 carries the same commercial copy its Romanian twin does; the rest
+        // fall back to the CEFR objective.
+        description: id === "a1" ? LEVEL_A1_DESCRIPTION.en : lvl.objective.slice(0, 155),
         lang: "en" as const,
       };
     })
@@ -346,6 +347,20 @@ interface HeadResult {
  * An unknown path yields nothing, which leaves the site-wide head from
  * src/routes/__root.tsx in place rather than a half-built one.
  */
+/**
+ * The title and description this path is served with.
+ *
+ * For components that render their own Helmet on a bilingual page. Reading the
+ * same table the route's head() reads is what keeps the two heads from saying
+ * different things, and it is this table that src/test/meta-length.test.ts
+ * holds inside the truncation limits — a component-local string is checked by
+ * nothing.
+ */
+export function seoMeta(path: string): { title: string; description: string } | undefined {
+  const r = seoRouteFor(path);
+  return r ? { title: r.title, description: r.description } : undefined;
+}
+
 export interface SeoHeadOptions {
   /**
    * Query string to append to the canonical and og:url, "?page=2" style.

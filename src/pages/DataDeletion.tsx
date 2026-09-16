@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { seoMeta } from "@/lib/seoHead";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -50,6 +51,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DataDeletion = () => {
   const { lang } = useI18n();
   const page = content[lang];
+  // From the route table, like every other head on the site: written here as
+  // well, the two said different things — this one still carried the old
+  // lowercase, diacritic-less brand name.
+  const meta = seoMeta("/stergere-date");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
@@ -83,7 +88,7 @@ const DataDeletion = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{page.seoTitle}</title>
+        <title>{meta?.title ?? page.seoTitle}</title>
         <meta name="robots" content="noindex" />
         <link rel="canonical" href="https://centruldearabalibaneza.com/stergere-date" />
       </Helmet>

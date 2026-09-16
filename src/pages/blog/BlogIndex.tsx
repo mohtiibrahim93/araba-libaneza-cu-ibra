@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { blogPostsNewestFirst, L } from "@/lib/blogPosts";
 import { BLOG_PER_PAGE, blogPageFrom, blogPageHref, blogTotalPages } from "@/lib/blogPagination";
 import { getBlogCover } from "@/lib/blogCovers";
+import { seoMeta } from "@/lib/seoHead";
 import { useI18n } from "@/lib/i18n";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -71,6 +72,13 @@ const BlogIndex = () => {
   // Each page is its own canonical. Pointing page two at page one would ask
   // Google to merge them and then drop the seven articles only page two lists.
   const canonical = `${BASE_URL}${hrefFor(page)}`;
+  // Title and description from the route table, which is what the route's
+  // head() serves and what meta-length.test.ts length-checks. The COPY block
+  // below still owns the visible page copy; it owned the head too, and the
+  // two had drifted.
+  const routeMeta = seoMeta(base);
+  const metaTitle = routeMeta?.title ?? c.title;
+  const metaDescription = routeMeta?.description ?? c.description;
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
       day: "numeric", month: "long", year: "numeric",
@@ -91,12 +99,12 @@ const BlogIndex = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{c.title}</title>
-        <meta name="description" content={c.description} />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonical} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={c.title} />
-        <meta property="og:description" content={c.description} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={canonical} />
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>

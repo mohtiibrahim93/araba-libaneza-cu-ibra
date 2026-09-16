@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useI18n } from "@/lib/i18n";
 import { canonicalPath } from "@/lib/languageRoutes";
+import { seoMeta } from "@/lib/seoHead";
 import { ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -65,6 +66,13 @@ const CourseLayout = ({
   // same component at /en/courses/*, and pointing them at the Romanian path
   // asked Google to drop them.
   const canonical = `${BASE_URL}${canonicalPath(path, lang)}`;
+  // The head comes from the route table in src/lib/seoHead.ts, which is what
+  // the route's head() serves and what meta-length.test.ts keeps inside the
+  // truncation limits. The props carried a second set of strings, and on the
+  // four English course URLs the two had drifted apart.
+  const routeMeta = seoMeta(canonicalPath(path, lang));
+  const resolvedMetaTitle = routeMeta?.title ?? metaTitle;
+  const resolvedMetaDescription = routeMeta?.description ?? metaDescription;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -95,11 +103,11 @@ const CourseLayout = ({
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+        <title>{resolvedMetaTitle}</title>
+        <meta name="description" content={resolvedMetaDescription} />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
+        <meta property="og:title" content={resolvedMetaTitle} />
+        <meta property="og:description" content={resolvedMetaDescription} />
         <meta property="og:url" content={canonical} />
         <meta property="og:type" content="website" />
         {/* No hreflang here on purpose. These four course pages exist only in

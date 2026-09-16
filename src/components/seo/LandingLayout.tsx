@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import MarkdownBody from "@/components/blog/MarkdownBody";
 import { usePageContent } from "@/hooks/usePageContent";
+import { seoMeta } from "@/lib/seoHead";
 import ArticleOutline from "@/components/blog/ArticleOutline";
 
 const BASE = "https://centruldearabalibaneza.com";
@@ -87,8 +88,13 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
   // falls back to the code-shipped content.
   const override = usePageContent(`/${slug}`);
   const title = override?.h1?.trim() || titleProp;
-  const metaTitle = override?.meta_title?.trim() || metaTitleProp;
-  const description = override?.meta_description?.trim() || descriptionProp;
+  // The route table in src/lib/seoHead.ts is what the server sends and what
+  // meta-length.test.ts length-checks, so it decides the head; the props are
+  // the fallback for a page not in the table. An owner's edit still wins over
+  // both — that one is deliberate, and the server cannot know about it.
+  const routeMeta = seoMeta(`/${slug}`);
+  const metaTitle = override?.meta_title?.trim() || routeMeta?.title || metaTitleProp;
+  const description = override?.meta_description?.trim() || routeMeta?.description || descriptionProp;
   const lead = override?.lead?.trim() || leadProp;
   const faq = override?.faq?.length ? override.faq : faqProp;
   const bodyMd = override?.body_md?.trim() || "";

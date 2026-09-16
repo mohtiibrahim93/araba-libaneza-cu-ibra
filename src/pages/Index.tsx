@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
+import { seoMeta } from "@/lib/seoHead";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofStrip from "@/components/SocialProofStrip";
@@ -103,8 +104,12 @@ const PageContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const homeTitle = t.homeSeoTitle;
-  const homeDescription = t.homeSeoDescription;
+  // From the route table, which is what the route's head() serves. HOME_META
+  // feeds that table; reading it here too is what keeps the homepage from
+  // sending two different titles to two kinds of crawler.
+  const homeMeta = seoMeta("/");
+  const homeTitle = homeMeta?.title ?? t.homeSeoTitle;
+  const homeDescription = homeMeta?.description ?? t.homeSeoDescription;
 
   // FAQPage JSON-LD comes from FAQSection (generated from the rendered FAQ
   // content) — emitting a second one here made the page invalid for FAQ rich

@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
 import { canonicalPath } from "@/lib/languageRoutes";
+import { seoMeta } from "@/lib/seoHead";
 import { ONLINE_PRICES, formatLei, physicalPrice } from "@/lib/pricing";
 
 const BookingInner = () => {
@@ -32,11 +33,15 @@ const BookingInner = () => {
   // that routes to the right starting step instead of bouncing to the homepage.
   if (!hasValidRegistration) {
     const en = lang === "en";
+    // This is the indexable /booking entry point, so its head comes from the
+    // route table rather than from strings written here: the two said
+    // different things, and only the table is length-checked.
+    const landingMeta = seoMeta(canonicalPath("/booking", lang));
     return (
       <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
         <Helmet>
-          <title>{(en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
-          <meta name="description" content={en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București."} />
+          <title>{landingMeta?.title ?? (en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
+          <meta name="description" content={landingMeta?.description ?? (en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București.")} />
           <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/booking", lang)}`} />
         </Helmet>
         <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">

@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import { canonicalPath } from "@/lib/languageRoutes";
+import { seoMeta } from "@/lib/seoHead";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -38,8 +39,12 @@ const PrivacyContent = () => {
   const { lang, t } = useI18n();
   const page = content[lang];
 
-  const title = t.privacySeoTitle;
-  const description = t.privacySeoDescription;
+  // Title and description come from the route table in src/lib/seoHead.ts —
+  // the same one the route's head() serves and the one meta-length.test.ts
+  // keeps inside the truncation limits. Written here as well, the two drifted.
+  const meta = seoMeta(canonicalPath("/privacy", lang));
+  const title = meta?.title ?? t.privacySeoTitle;
+  const description = meta?.description ?? t.privacySeoDescription;
 
   const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 

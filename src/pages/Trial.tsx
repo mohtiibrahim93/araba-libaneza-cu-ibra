@@ -9,6 +9,7 @@ import GdprCheckbox from "@/components/GdprCheckbox";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
 import { canonicalPath } from "@/lib/languageRoutes";
+import { seoMeta } from "@/lib/seoHead";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { isBlockedEmail, isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
@@ -120,16 +121,21 @@ const TrialPage = () => {
     }
   };
 
-  const title = t.trialPageSeoTitle;
+  // From the route table in src/lib/seoHead.ts — the same one the route's
+  // head() serves, and the one meta-length.test.ts holds inside the truncation
+  // limits. Written here as well, the two heads drifted.
+  const meta = seoMeta(canonicalPath("/trial", lang));
+  const title = meta?.title ?? t.trialPageSeoTitle;
+  const description = meta?.description ?? t.trialPageSeoDesc;
 
   return (
     <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
       <Helmet>
         <title>{title}</title>
-        <meta name="description" content={t.trialPageSeoDesc} />
+        <meta name="description" content={description} />
         <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/trial", lang)}`} />
         <meta property="og:title" content={title} />
-        <meta property="og:description" content={t.trialPageSeoDesc} />
+        <meta property="og:description" content={description} />
       </Helmet>
       <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link

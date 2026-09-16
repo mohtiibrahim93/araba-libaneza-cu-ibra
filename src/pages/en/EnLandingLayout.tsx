@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import MarkdownBody from "@/components/blog/MarkdownBody";
 import { usePageContent } from "@/hooks/usePageContent";
+import { seoMeta } from "@/lib/seoHead";
 import ArticleOutline from "@/components/blog/ArticleOutline";
 
 const BASE = "https://centruldearabalibaneza.com";
@@ -79,8 +80,11 @@ const EnLandingLayout = ({
   // back to the code-shipped content.
   const override = usePageContent(`/en/${slug}`);
   const title = override?.h1?.trim() || titleProp;
-  const metaTitle = override?.meta_title?.trim() || metaTitleProp;
-  const description = override?.meta_description?.trim() || descriptionProp;
+  // Same rule as the Romanian LandingLayout: the route table decides the head,
+  // the props are the fallback, an owner's edit still wins over both.
+  const routeMeta = seoMeta(`/en/${slug}`);
+  const metaTitle = override?.meta_title?.trim() || routeMeta?.title || metaTitleProp;
+  const description = override?.meta_description?.trim() || routeMeta?.description || descriptionProp;
   const lead = override?.lead?.trim() || leadProp;
   const faq = override?.faq?.length ? override.faq : faqProp;
   const bodyMd = override?.body_md?.trim() || "";

@@ -10,6 +10,7 @@ import NotifyMeForm from "@/components/NotifyMeForm";
 import { useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
 import { canonicalPath } from "@/lib/languageRoutes";
+import { seoMeta } from "@/lib/seoHead";
 import { AGE_LABELS, MODALITY_LABELS, type AgeCategory, type Modality } from "@/lib/courses";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -35,6 +36,11 @@ const Cursuri = () => {
   const { t, lang } = useI18n();
   const [params, setParams] = useSearchParams();
   const canonical = `${BASE_URL}${canonicalPath("/cursuri", lang)}`;
+  // From the route table, for the same reason as everywhere else: written in
+  // two places, the server head and this one had drifted on /en/courses.
+  const routeMeta = seoMeta(canonicalPath("/cursuri", lang));
+  const metaTitle = routeMeta?.title ?? t.cursuriMetaTitle;
+  const metaDesc = routeMeta?.description ?? t.cursuriMetaDesc;
   const L = (o: { ro: string; en: string }) => (lang === "en" ? o.en : o.ro);
 
   const age = params.get("varsta");
@@ -55,11 +61,11 @@ const Cursuri = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{t.cursuriMetaTitle}</title>
-        <meta name="description" content={t.cursuriMetaDesc} />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDesc} />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={t.cursuriMetaTitle} />
-        <meta property="og:description" content={t.cursuriMetaDesc} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDesc} />
         <meta property="og:url" content={canonical} />
       </Helmet>
       <Navbar />

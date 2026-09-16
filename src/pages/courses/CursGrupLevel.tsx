@@ -15,6 +15,7 @@ import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
+import { seoMeta } from "@/lib/seoHead";
 import { levelTitle } from "@/lib/levelMeta";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
@@ -89,17 +90,16 @@ const CursGrupLevel = () => {
   // A1 is the highest-intent SERP entry point ("curs araba incepatori
   // bucuresti"). Give it a keyword-optimised meta title/description; other
   // levels keep the generic pattern.
-  const isA1 = slug === "a1";
   // One shared table with the prerender (src/lib/levelMeta.ts). The old inline
   // ladder only special-cased A1, B1 and B2; A2, C1 and C2 fell through to
   // `${curriculum.title} — ${t.courseGrupH1}`, which ran to 76 characters on
   // C2 and disagreed with the title the static head already carried.
-  const metaTitle = levelTitle(slug, lang);
-  const metaDesc = isA1
-    ? (lang === "en"
-        ? "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial."
-        : "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.")
-    : curriculum.objective.slice(0, 155);
+  // Straight from the route table, which is what the route's head() serves.
+  // Both halves used to be rebuilt here and the English A1 description had
+  // drifted from the one the server sends.
+  const routeMeta = seoMeta(canonical.replace(BASE_URL, ""));
+  const metaTitle = routeMeta?.title ?? levelTitle(slug, lang);
+  const metaDesc = routeMeta?.description ?? curriculum.objective.slice(0, 155);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
