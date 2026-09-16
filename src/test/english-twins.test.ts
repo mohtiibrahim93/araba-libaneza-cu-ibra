@@ -84,8 +84,11 @@ describe("English twins", () => {
     // a bare <Link> landed on /blog with the English copy still rendering and
     // the link appeared to do nothing.
     expect(index).toContain('onClick={() => setLang(lang === "en" ? "ro" : "en")}');
-    const footer = readFileSync(resolve(process.cwd(), "src/components/Footer.tsx"), "utf8");
-    expect(footer).toContain('to={lang === "en" ? "/en/blog" : "/blog"}');
+    // The chrome link moved from the footer to the navbar when the navbar
+    // menus became server-rendered. It has to stay language-aware there: a
+    // bare to="/blog" sent an English reader to the Romanian index.
+    const navbar = readFileSync(resolve(process.cwd(), "src/components/Navbar.tsx"), "utf8");
+    expect(navbar).toContain('to={lang === "en" ? "/en/blog" : "/blog"}');
   });
 
   it("forces English on /en/ URLs so the body matches the address", () => {

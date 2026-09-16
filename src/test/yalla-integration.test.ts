@@ -88,10 +88,15 @@ describe("/joc", () => {
     expect(seoHeadSrc).toContain("JOACA_META");
   });
 
-  it("is linked from the footer, not only the navbar dropdown", () => {
-    // The dropdown mounts its contents when opened, so its links never reach
-    // the server-rendered HTML. A footer link is what makes it crawlable.
-    expect(read("src/components/Footer.tsx")).toContain('to="/joc"');
+  it("is linked from navigation that reaches the served HTML", () => {
+    // This used to insist on a footer link: the navbar menu was a portaled
+    // Radix dropdown that mounted its contents only when opened, so none of
+    // its links ever reached the server-rendered HTML. NavDropdown renders
+    // the list every time and merely hides it while closed, so a siteNav
+    // entry is a real crawlable anchor now — which is why the footer no
+    // longer repeats it.
+    expect(read("src/lib/siteNav.ts")).toContain('to: "/joc"');
+    expect(read("src/components/NavDropdown.tsx")).toContain("hidden={!open}");
   });
 
   it("keeps the old /joaca address as a permanent redirect", () => {

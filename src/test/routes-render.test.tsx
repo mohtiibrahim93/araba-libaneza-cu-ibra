@@ -225,8 +225,13 @@ describe("trial step 1 does not look like a booking", () => {
 describe("site structure", () => {
   it("links every public page from the nav or the footer", () => {
     const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
+    // siteNav.ts counts as chrome: the navbar menus render from it, and they
+    // render into the served HTML now, so a page listed there is as reachable
+    // as one written into the footer by hand. Before that was true the footer
+    // had to duplicate all seventeen of those links to satisfy this guard.
     const chrome = new Set(
       [...read("src/components/Navbar.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
+       ...read("src/lib/siteNav.ts").matchAll(/"(\/[a-z0-9\-/]+)"/g),
        ...read("src/components/Footer.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]),
     );
     const routes = routeFiles()

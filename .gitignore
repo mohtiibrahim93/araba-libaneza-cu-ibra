@@ -43,3 +43,7 @@ cheatsheet-preview.png
 
 # IndexNow submission record — machine-local, regenerated on each submit.
 scripts/.indexnow-state.json
+
+# Nitro build output (bun run build) — regenerated, never committed.
+.output
+.wrangler

@@ -147,7 +147,7 @@ const Navbar = () => {
           <NavDropdown label={t.navCourses} items={[coursesIndex, ...courseMenu]} />
           <NavDropdown label={lang === "en" ? "Resources" : "Resurse"} items={resourceMenu} />
           <Link
-            to="/booking"
+            to={lang === "en" ? "/en/booking" : "/booking"}
             onClick={() => setOpen(false)}
             className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
           >
@@ -155,7 +155,7 @@ const Navbar = () => {
             {t.navBooking}
           </Link>
           <Link
-            to="/blog"
+            to={lang === "en" ? "/en/blog" : "/blog"}
             onClick={() => setOpen(false)}
             className="hover:text-foreground transition-colors"
           >
@@ -289,7 +289,7 @@ const Navbar = () => {
               {t.navBooking}
             </Link>
             <Link
-              to="/blog"
+              to={lang === "en" ? "/en/blog" : "/blog"}
               onClick={() => setOpen(false)}
               className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
             >
