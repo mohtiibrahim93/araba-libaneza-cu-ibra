@@ -106,6 +106,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/libaneza-vs-egipteana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/libaneza-vs-siriana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/levantina-vs-golf</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/levantina-vs-irakiana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/levantina-vs-maghrebina</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/dialecte-arabe/levantina-vs-peninsulara</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://centruldearabalibaneza.com/ce-araba-sa-inveti</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

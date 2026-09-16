@@ -149,6 +149,22 @@ const CeArabaSaInveti = () => (
       completă a variantelor în <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
     </p>
 
+    <h2>Mergi mai în adâncime</h2>
+    <p>
+      Pagina asta răspunde la întrebarea mare: standard sau dialect, și care dialect. Sub ea stă{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>, care acoperă toate familiile de dialecte,
+      iar sub el câte o pagină pentru fiecare comparație care se pune des:
+    </p>
+    <ul>
+      <li><Link to="/dialecte-arabe/libaneza-vs-egipteana">Libaneză vs. egipteană</Link></li>
+      <li><Link to="/blog/araba-libaneza-vs-araba-standard">Libaneză vs. arabă standard</Link></li>
+      <li><Link to="/dialecte-arabe/libaneza-vs-siriana">Libaneză vs. siriană, palestiniană, iordaniană</Link></li>
+      <li><Link to="/dialecte-arabe/levantina-vs-golf">Levantină vs. araba din Golf</Link></li>
+      <li><Link to="/dialecte-arabe/levantina-vs-irakiana">Levantină vs. araba irakiană</Link></li>
+      <li><Link to="/dialecte-arabe/levantina-vs-maghrebina">Levantină vs. araba maghrebină</Link></li>
+      <li><Link to="/dialecte-arabe/levantina-vs-peninsulara">Levantină vs. araba din Peninsula Arabică</Link></li>
+    </ul>
+
     <h2>Ce faci mai departe</h2>
     <p>
       Dă <Link to="/test-de-nivel">testul de nivel</Link> (~15 minute), descarcă{" "}

@@ -23,6 +23,14 @@ interface Props {
   metaTitle: string;
   description: string;
   crumb: string;
+  /**
+   * Ancestors between the homepage and this page, nearest the homepage first.
+   * The dialect comparisons sit two levels down — /ce-araba-sa-inveti, then
+   * /dialecte-arabe, then the comparison itself — and a flat "Acasă › titlu"
+   * crumb would hide a hierarchy the content really has, from readers and from
+   * the BreadcrumbList alike.
+   */
+  parents?: { name: string; href: string }[];
   lead: string;
   faq?: Faq[];
   /**
@@ -64,7 +72,7 @@ interface Props {
  * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, lead: leadProp, faq: faqProp, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, parents = [], lead: leadProp, faq: faqProp, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -101,13 +109,20 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
     // Course itself — see src/lib/courseSchema.ts.
     ...(courseInstances?.length ? { hasCourseInstance: courseInstances } : {}),
   };
+  const trail = [
+    { name: "Acasă", href: "/" },
+    ...parents,
+    { name: crumb, href: `/${slug}` },
+  ];
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Acasă", item: `${BASE}/` },
-      { "@type": "ListItem", position: 2, name: crumb, item: url },
-    ],
+    itemListElement: trail.map((step, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: step.name,
+      item: `${BASE}${step.href}`,
+    })),
   };
   const faqJsonLd = faq?.length
     ? {
@@ -155,8 +170,12 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
           <article className="min-w-0 w-full max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
             <span>
-              <Link to="/" className="hover:text-primary">Acasă</Link>
-              <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
+              {trail.slice(0, -1).map((step) => (
+                <span key={step.href}>
+                  <Link to={step.href} className="hover:text-primary">{step.name}</Link>
+                  <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
+                </span>
+              ))}
               <span className="text-foreground">{crumb}</span>
             </span>
           </nav>

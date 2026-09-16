@@ -42,6 +42,7 @@ const DialecteArabe = () => (
     metaTitle="Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb"
     description="Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat."
     crumb="Dialectele arabe"
+    parents={[{ name: "Ce arabă să înveți", href: "/ce-araba-sa-inveti" }]}
     lead="Araba nu e o singură limbă vorbită, ci o familie de dialecte plus o limbă standard scrisă. Iată harta, fără jargon lingvistic."
     enHref="/en/arabic-dialects-guide"
     faq={FAQ}
@@ -145,6 +146,21 @@ const DialecteArabe = () => (
       regiune. Practic, cine învață bine o variantă levantină urmărește conversații în toate cele
       patru țări — distanța e mult mai mică decât cea dintre levantină și egipteană sau fusha.
     </p>
+
+    <h2>Comparațiile, una câte una</h2>
+    <p>
+      Pagina asta e harta. Fiecare pereche care se compară des are propria pagină, cu tabel,
+      exemple și un răspuns direct la „pe care s-o învăț”:
+    </p>
+    <ul>
+      <li><Link to="/dialecte-arabe/libaneza-vs-egipteana">Araba libaneză vs. araba egipteană</Link> — cele două dialecte pe care le auzi cel mai des.</li>
+      <li><Link to="/blog/araba-libaneza-vs-araba-standard">Araba libaneză vs. araba standard</Link> — dialect vorbit față de limba scrisă.</li>
+      <li><Link to="/dialecte-arabe/libaneza-vs-siriana">Libaneza vs. siriana, palestiniana și iordaniana</Link> — cât de mult contează, de fapt, accentul.</li>
+      <li><Link to="/dialecte-arabe/levantina-vs-golf">Levantina vs. araba din Golf (khaliji)</Link> — ce se vorbește în Emirate, Qatar și Kuweit.</li>
+      <li><Link to="/dialecte-arabe/levantina-vs-irakiana">Levantina vs. araba irakiană</Link> — vecina de est, cu alt „g” și alte împrumuturi.</li>
+      <li><Link to="/dialecte-arabe/levantina-vs-maghrebina">Levantina vs. araba maghrebină (darija)</Link> — cea mai mare distanță din lumea arabă.</li>
+      <li><Link to="/dialecte-arabe/levantina-vs-peninsulara">Levantina vs. araba din Peninsula Arabică</Link> — hijazi, najdi și dialectele yemenite.</li>
+    </ul>
 
     <h2>Unde stă araba libaneză</h2>
     <p>
