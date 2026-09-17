@@ -47,10 +47,11 @@ struct ContentFoundationTests {
         let unit = JourneyUnit(
             id: "unit.restaurant",
             level: .a1,
-            expressionIDs: [expression.id]
+            expressionIDs: [expression.id],
+            localizations: ["ro": JourneyUnitLocalization(title: "Restaurant", description: "")]
         )
         let package = ContentPackage(
-            manifest: ContentManifest(schemaVersion: 1, contentVersion: "1.0.0", defaultLearnerLocale: "ro"),
+            manifest: ContentManifest(schemaVersion: 2, contentVersion: "2.0.0", defaultLearnerLocale: "ro"),
             expressions: [expression],
             units: [unit]
         )
@@ -63,10 +64,11 @@ struct ContentFoundationTests {
         let unit = JourneyUnit(
             id: "unit.restaurant",
             level: .a1,
-            expressionIDs: ["expr.missing"]
+            expressionIDs: ["expr.missing"],
+            localizations: ["ro": JourneyUnitLocalization(title: "Restaurant", description: "")]
         )
         let package = ContentPackage(
-            manifest: ContentManifest(schemaVersion: 1, contentVersion: "1.0.0", defaultLearnerLocale: "ro"),
+            manifest: ContentManifest(schemaVersion: 2, contentVersion: "2.0.0", defaultLearnerLocale: "ro"),
             expressions: [],
             units: [unit]
         )
@@ -84,8 +86,8 @@ struct ContentRepositoryTests {
         let json = #"""
         {
           "manifest": {
-            "schemaVersion": 1,
-            "contentVersion": "1.0.0",
+            "schemaVersion": 2,
+            "contentVersion": "2.0.0",
             "defaultLearnerLocale": "ro"
           },
           "expressions": [
@@ -93,6 +95,7 @@ struct ContentRepositoryTests {
               "id": "expr.hello",
               "canonicalArabizi": "mar7aba",
               "arabicScript": "مرحبا",
+              "variants": [],
               "localizations": {
                 "ro": { "naturalMeaning": "salut" },
                 "en": { "naturalMeaning": "hello" }
@@ -103,9 +106,13 @@ struct ContentRepositoryTests {
             {
               "id": "unit.welcome",
               "level": "a1",
-              "expressionIDs": ["expr.hello"]
+              "expressionIDs": ["expr.hello"],
+              "localizations": {
+                "ro": { "title": "Saluturi", "description": "" }
+              }
             }
-          ]
+          ],
+          "exercises": []
         }
         """#
 
@@ -123,7 +130,7 @@ struct ContentRepositoryTests {
             localizations: ["en": ExpressionLocalization(naturalMeaning: "hello")]
         )
         let package = ContentPackage(
-            manifest: ContentManifest(schemaVersion: 1, contentVersion: "1.0.0", defaultLearnerLocale: "ro"),
+            manifest: ContentManifest(schemaVersion: 2, contentVersion: "2.0.0", defaultLearnerLocale: "ro"),
             expressions: [expression],
             units: []
         )
