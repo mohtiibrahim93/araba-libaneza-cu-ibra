@@ -5,6 +5,8 @@ public protocol ContentRepository: Sendable {
     func unit(id: String) throws -> JourneyUnit?
     func exercise(id: String) throws -> ExerciseDefinition?
     func lexiconCollection(id: String) throws -> LexiconCollection?
+    func root(id: String) throws -> Root?
+    func rootFamilyGraph(rootID: String) throws -> RootFamilyGraph?
     func expressions(in unitID: String) throws -> [Expression]
     func expressions(inLexiconCollection collectionID: String) throws -> [Expression]
     func exercises(in unitID: String) throws -> [ExerciseDefinition]
@@ -19,6 +21,8 @@ public struct JSONContentRepository: ContentRepository, Sendable {
     private let exercisesByID: [String: ExerciseDefinition]
     private let lexiconCollectionsByID: [String: LexiconCollection]
     private let exercisesByUnitID: [String: [ExerciseDefinition]]
+    private let rootsByID: [String: Root]
+    private let morphologyLinks: [MorphologyLink]
 
     public init(data: Data) throws {
         let decoded = try JSONDecoder().decode(ContentPackage.self, from: data)
@@ -28,12 +32,20 @@ public struct JSONContentRepository: ContentRepository, Sendable {
         self.exercisesByID = Dictionary(uniqueKeysWithValues: decoded.exercises.map { ($0.id, $0) })
         self.lexiconCollectionsByID = Dictionary(uniqueKeysWithValues: decoded.lexiconCollections.map { ($0.id, $0) })
         self.exercisesByUnitID = Dictionary(grouping: decoded.exercises, by: \.unitID)
+        self.rootsByID = Dictionary(uniqueKeysWithValues: decoded.roots.map { ($0.id, $0) })
+        self.morphologyLinks = decoded.morphologyLinks
     }
 
     public func expression(id: String) throws -> Expression? { expressionsByID[id] }
     public func unit(id: String) throws -> JourneyUnit? { unitsByID[id] }
     public func exercise(id: String) throws -> ExerciseDefinition? { exercisesByID[id] }
     public func lexiconCollection(id: String) throws -> LexiconCollection? { lexiconCollectionsByID[id] }
+    public func root(id: String) throws -> Root? { rootsByID[id] }
+
+    public func rootFamilyGraph(rootID: String) throws -> RootFamilyGraph? {
+        guard let root = rootsByID[rootID] else { return nil }
+        return RootFamilyGraphBuilder().build(root: root, expressionsByID: expressionsByID, links: morphologyLinks)
+    }
 
     public func expressions(in unitID: String) throws -> [Expression] {
         guard let unit = unitsByID[unitID] else { return [] }
@@ -65,11 +77,15 @@ public struct JSONContentRepository: ContentRepository, Sendable {
             }
         }
 
+        let rootTermsByExpressionID: [String: [String]] = morphologyLinks.reduce(into: [:]) { result, link in
+            guard let root = rootsByID[link.rootID] else { return }
+            result[link.expressionID, default: []].append(root.displayKey)
+            if let arabic = root.arabicRadicals { result[link.expressionID, default: []].append(arabic) }
+        }
+
         return expressionsByID.values
             .filter { expression in
-                if !filter.levels.isEmpty && filter.levels.isDisjoint(with: expression.levelTags) {
-                    return false
-                }
+                if !filter.levels.isEmpty && filter.levels.isDisjoint(with: expression.levelTags) { return false }
                 if !normalizedTopics.isEmpty {
                     let expressionTopics = Set(expression.topics.map { normalize($0, locale: locale) })
                     if normalizedTopics.isDisjoint(with: expressionTopics) { return false }
@@ -86,36 +102,23 @@ public struct JSONContentRepository: ContentRepository, Sendable {
                     if let pragmatic = localization.pragmaticMeaning { candidates.append(pragmatic) }
                 }
                 candidates.append(contentsOf: collectionSearchTermsByExpressionID[expression.id] ?? [])
+                candidates.append(contentsOf: rootTermsByExpressionID[expression.id] ?? [])
                 return candidates.contains { normalize($0, locale: locale).contains(needle) }
             }
             .sorted { $0.id < $1.id }
     }
 
     public func usage(for expressionID: String) throws -> ExpressionUsage {
-        let journeyUnitIDs = unitsByID.values
-            .filter { $0.expressionIDs.contains(expressionID) }
-            .map(\.id)
-            .sorted()
-        let lexiconCollectionIDs = lexiconCollectionsByID.values
-            .filter { $0.expressionIDs.contains(expressionID) }
-            .map(\.id)
-            .sorted()
-        let exerciseIDs = exercisesByID.values
-            .filter { $0.expressionIDs.contains(expressionID) }
-            .map(\.id)
-            .sorted()
-        return ExpressionUsage(
-            journeyUnitIDs: journeyUnitIDs,
-            lexiconCollectionIDs: lexiconCollectionIDs,
-            exerciseIDs: exerciseIDs
-        )
+        let journeyUnitIDs = unitsByID.values.filter { $0.expressionIDs.contains(expressionID) }.map(\.id).sorted()
+        let lexiconCollectionIDs = lexiconCollectionsByID.values.filter { $0.expressionIDs.contains(expressionID) }.map(\.id).sorted()
+        let exerciseIDs = exercisesByID.values.filter { $0.expressionIDs.contains(expressionID) }.map(\.id).sorted()
+        return ExpressionUsage(journeyUnitIDs: journeyUnitIDs, lexiconCollectionIDs: lexiconCollectionIDs, exerciseIDs: exerciseIDs)
     }
 
     private func normalize(_ value: String, locale: String) -> String {
         let folded = value
             .folding(options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive], locale: Locale(identifier: locale))
             .trimmingCharacters(in: .whitespacesAndNewlines)
-
         let scalars = folded.unicodeScalars.filter { scalar in
             let value = scalar.value
             let isArabicMark = (0x064B...0x065F).contains(value) || value == 0x0670 || (0x06D6...0x06ED).contains(value)
