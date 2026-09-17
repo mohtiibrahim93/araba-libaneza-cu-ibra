@@ -41,6 +41,7 @@ Generat la build din registrul de rute — nu edita manual.
 - [Meditații Arabă 1:1 București & Online | 150 lei/oră](/meditatii-araba): Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită.
 - [Test de nivel gratuit — Arabă Libaneză cu Ibra](/quiz): Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare.
 - [Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat](/resurse): Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse.
+- [Te ajutăm să găsești pagina potrivită | Arabă libaneză](/te-ajutam): Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc.
 - [Lecție gratuită de arabă libaneză | Ibra](/trial): Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.
 
 ## Blog
@@ -106,6 +107,7 @@ Generat la build din registrul de rute — nu edita manual.
 - [Lebanese Arabic C2 Course — Academic & Specialised](/en/courses/group/c2): Lebanese Arabic at an academic & specialized level. NO full fuṣḥā grammar — no cases, no declensions. Only the educated register and specialized terminolog
 - [Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest](/en/courses/private): One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.
 - [Lebanese Arabic Course FAQ | Price, Schedule, Levels](/en/faq): Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn.
+- [Find the right page | Lebanese Arabic with Ibra](/en/find-your-page): Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.
 - [How to Learn Lebanese Arabic — Step-by-Step Guide (2026)](/en/how-to-learn-lebanese-arabic): Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.
 - [Learn Lebanese Arabic Online | Native Teacher & Free Trial](/en/learn-lebanese-arabic): Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial.
 - [Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)](/en/lebanese-arabic-vs-msa-vs-egyptian): Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher.

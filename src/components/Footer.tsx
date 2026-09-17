@@ -130,6 +130,7 @@ const Footer = () => {
             <li><Link to={lang === "en" ? "/en/privacy" : "/privacy"} className="hover:text-foreground transition-colors">{t.footerPrivacy}</Link></li>
             <li><Link to={lang === "en" ? "/en/terms" : "/terms"} className="hover:text-foreground transition-colors">{t.footerTerms}</Link></li>
             <li><Link to="/stergere-date" className="hover:text-foreground transition-colors">{lang === "en" ? "Delete my data (GDPR)" : "Ștergerea datelor (GDPR)"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/find-your-page" : "/te-ajutam"} className="hover:text-foreground transition-colors">{lang === "en" ? "Find the right page" : "Găsește pagina potrivită"}</Link></li>
             <li>
               <button
                 type="button"
