@@ -93,7 +93,11 @@ private struct JourneyView: View {
     private func unitRow(_ unit: JourneyUnitSummary) -> some View {
         if let detail = detail(for: unit.id) {
             NavigationLink {
-                JourneyUnitDetailView(detail: detail, locale: locale)
+                JourneyUnitDetailView(
+                    detail: detail,
+                    expressions: package.expressions,
+                    locale: locale
+                )
             } label: {
                 JourneyUnitRow(unit: unit)
             }
@@ -155,6 +159,7 @@ private struct PracticeView: View {
             NavigationLink {
                 PracticeDestinationView(
                     destination: destination,
+                    expressions: package.expressions,
                     locale: locale,
                     title: mode.title
                 )
