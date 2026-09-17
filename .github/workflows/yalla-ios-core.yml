@@ -1,0 +1,52 @@
+name: Yalla iOS Core CI
+
+on:
+  push:
+    branches:
+      - yalla-app-ios
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core-and-importer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+
+      - name: Set up Swift 6.2
+        uses: swift-actions/setup-swift@65540b95f51493d65f5e59e97dcef9629ddf11bf
+        with:
+          swift-version: "6.2"
+
+      - name: Run Swift core tests
+        run: swift test --package-path ios-app
+
+      - name: Run importer unit tests
+        run: node --test ios-app/Tools/YallaImporter/tests/importer.test.mjs
+
+      - name: Dry-run importer against current Yalla source
+        run: |
+          node ios-app/Tools/YallaImporter/yalla-importer.mjs \
+            --source public/yalla \
+            --output /tmp/yalla-native-content.json \
+            --content-version ci
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('/tmp/yalla-native-content.json').read_text())
+          assert data['manifest']['schemaVersion'] == 3
+          assert data['expressions'], 'Importer produced no expressions'
+          assert data['units'], 'Importer produced no Journey units'
+          assert data['lexiconCollections'], 'Importer produced no lexicon collections'
+          print(
+              'Imported',
+              len(data['expressions']), 'expressions,',
+              len(data['units']), 'Journey units,',
+              len(data['lexiconCollections']), 'lexicon collections,',
+              len(data['exercises']), 'explicit exercises'
+          )
+          PY
