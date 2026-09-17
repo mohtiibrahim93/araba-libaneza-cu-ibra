@@ -20,8 +20,24 @@ enum AppSampleContent {
         ]
 
         let exercises = [
-            ExerciseDefinition(id: "exercise.hello.choice", unitID: "unit.welcome", type: .multipleChoiceProduction, expressionIDs: ["expr.hello"]),
-            ExerciseDefinition(id: "exercise.want.write", unitID: "unit.needs", type: .freeProduction, expressionIDs: ["expr.want.first-person"])
+            ExerciseDefinition(
+                id: "exercise.hello.choice",
+                type: .multipleChoiceProduction,
+                unitID: "unit.welcome",
+                expressionIDs: ["expr.hello"],
+                prompt: ["ro": "Cum spui salut?"],
+                answer: "mar7aba",
+                wrongAnswers: ["merci"]
+            ),
+            ExerciseDefinition(
+                id: "exercise.want.write",
+                type: .freeProduction,
+                unitID: "unit.needs",
+                expressionIDs: ["expr.want.first-person"],
+                prompt: ["ro": "Cum spui vreau?"],
+                answer: "badde",
+                wrongAnswers: []
+            )
         ]
 
         let root = Root(id: "root.ktb", arabiziRadicals: ["k", "t", "b"], arabicRadicals: "كتب")
