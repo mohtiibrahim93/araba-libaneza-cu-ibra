@@ -1,8 +1,10 @@
-public enum LevelBand: String, Codable, Equatable, Sendable {
+public enum LevelBand: String, Codable, Equatable, Sendable, CaseIterable {
     case a1
     case a2
-    case b1Partial = "b1-partial"
-    case supplemental
+    case b1
+    case b2
+    case c1
+    case c2
 }
 
 public struct JourneyUnitLocalization: Codable, Equatable, Sendable {
