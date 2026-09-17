@@ -2,11 +2,14 @@ public enum ContentValidationError: Error, Equatable, Sendable {
     case duplicateExpressionID(String)
     case duplicateUnitID(String)
     case duplicateExerciseID(String)
+    case duplicateLexiconCollectionID(String)
     case missingExpressionReference(unitID: String, expressionID: String)
     case missingDefaultLocalization(expressionID: String, locale: String)
     case missingDefaultUnitLocalization(unitID: String, locale: String)
     case missingExerciseUnitReference(exerciseID: String, unitID: String)
     case missingExerciseExpressionReference(exerciseID: String, expressionID: String)
+    case missingDefaultLexiconCollectionLocalization(collectionID: String, locale: String)
+    case missingLexiconExpressionReference(collectionID: String, expressionID: String)
 }
 
 public struct ContentValidator: Sendable {
@@ -38,8 +41,24 @@ public struct ContentValidator: Sendable {
                 )
             }
             for expressionID in unit.expressionIDs where !expressionIDs.contains(expressionID) {
-                throw ContentValidationError.missingExpressionReference(
-                    unitID: unit.id,
+                throw ContentValidationError.missingExpressionReference(unitID: unit.id, expressionID: expressionID)
+            }
+        }
+
+        var collectionIDs = Set<String>()
+        for collection in package.lexiconCollections {
+            guard collectionIDs.insert(collection.id).inserted else {
+                throw ContentValidationError.duplicateLexiconCollectionID(collection.id)
+            }
+            guard collection.localizations[package.manifest.defaultLearnerLocale] != nil else {
+                throw ContentValidationError.missingDefaultLexiconCollectionLocalization(
+                    collectionID: collection.id,
+                    locale: package.manifest.defaultLearnerLocale
+                )
+            }
+            for expressionID in collection.expressionIDs where !expressionIDs.contains(expressionID) {
+                throw ContentValidationError.missingLexiconExpressionReference(
+                    collectionID: collection.id,
                     expressionID: expressionID
                 )
             }
@@ -51,10 +70,7 @@ public struct ContentValidator: Sendable {
                 throw ContentValidationError.duplicateExerciseID(exercise.id)
             }
             guard unitIDs.contains(exercise.unitID) else {
-                throw ContentValidationError.missingExerciseUnitReference(
-                    exerciseID: exercise.id,
-                    unitID: exercise.unitID
-                )
+                throw ContentValidationError.missingExerciseUnitReference(exerciseID: exercise.id, unitID: exercise.unitID)
             }
             for expressionID in exercise.expressionIDs where !expressionIDs.contains(expressionID) {
                 throw ContentValidationError.missingExerciseExpressionReference(
