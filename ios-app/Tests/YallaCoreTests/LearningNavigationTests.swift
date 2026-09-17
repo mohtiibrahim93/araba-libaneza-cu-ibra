@@ -73,6 +73,55 @@ struct LearningNavigationTests {
         #expect(Set(session.map(\.id)) == Set(["ex.choice", "ex.write"]))
     }
 
+    @Test("Smart practice mode resolves to a real session destination")
+    func smartPracticeDestination() throws {
+        let optionalDestination = try LearningNavigationBuilder().practiceDestination(
+            id: "smart-session",
+            from: package(),
+            locale: "ro",
+            count: 20
+        )
+        let destination = try #require(optionalDestination)
+
+        guard case let .smartSession(exercises) = destination else {
+            Issue.record("Expected smart-session to resolve to a smart practice destination")
+            return
+        }
+
+        #expect(exercises.count == 2)
+        #expect(Set(exercises.map(\.id)) == Set(["ex.choice", "ex.write"]))
+    }
+
+    @Test("Speed drill mode resolves to a localized expression session")
+    func speedDrillDestination() throws {
+        let optionalDestination = try LearningNavigationBuilder().practiceDestination(
+            id: "speed-drill",
+            from: package(),
+            locale: "ro",
+            count: 20
+        )
+        let destination = try #require(optionalDestination)
+
+        guard case let .speedDrill(expressions) = destination else {
+            Issue.record("Expected speed-drill to resolve to a speed drill destination")
+            return
+        }
+
+        #expect(expressions.map(\.arabizi) == ["mar7aba", "merci"])
+        #expect(expressions.map(\.meaning) == ["salut", "mulțumesc"])
+    }
+
+    @Test("Unavailable practice modes do not fabricate a destination")
+    func unavailablePracticeDestination() throws {
+        let destination = try LearningNavigationBuilder().practiceDestination(
+            id: "listening",
+            from: package(),
+            locale: "ro"
+        )
+
+        #expect(destination == nil)
+    }
+
     @Test("Unknown Journey unit does not fabricate a destination")
     func missingUnit() throws {
         let detail = try LearningNavigationBuilder().journeyUnit(
