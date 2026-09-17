@@ -15,7 +15,7 @@ struct ExerciseSessionView: View {
 
     init(
         exercises: [ExerciseDefinition],
-        expressions: [Expression],
+        expressions: [YallaCore.Expression],
         locale: String,
         title: String
     ) {
