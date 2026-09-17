@@ -8,6 +8,8 @@ public struct ContentPackage: Codable, Equatable, Sendable {
     public let morphologicalPatterns: [MorphologicalPattern]
     public let morphologyLinks: [MorphologyLink]
     public let inflectionRelations: [InflectionRelation]
+    public let audioAssets: [AudioAsset]
+    public let listeningPrompts: [ListeningPrompt]
 
     public init(
         manifest: ContentManifest,
@@ -18,7 +20,9 @@ public struct ContentPackage: Codable, Equatable, Sendable {
         roots: [Root] = [],
         morphologicalPatterns: [MorphologicalPattern] = [],
         morphologyLinks: [MorphologyLink] = [],
-        inflectionRelations: [InflectionRelation] = []
+        inflectionRelations: [InflectionRelation] = [],
+        audioAssets: [AudioAsset] = [],
+        listeningPrompts: [ListeningPrompt] = []
     ) {
         self.manifest = manifest
         self.expressions = expressions
@@ -29,11 +33,14 @@ public struct ContentPackage: Codable, Equatable, Sendable {
         self.morphologicalPatterns = morphologicalPatterns
         self.morphologyLinks = morphologyLinks
         self.inflectionRelations = inflectionRelations
+        self.audioAssets = audioAssets
+        self.listeningPrompts = listeningPrompts
     }
 
     private enum CodingKeys: String, CodingKey {
         case manifest, expressions, units, exercises, lexiconCollections
         case roots, morphologicalPatterns, morphologyLinks, inflectionRelations
+        case audioAssets, listeningPrompts
     }
 
     public init(from decoder: Decoder) throws {
@@ -47,5 +54,7 @@ public struct ContentPackage: Codable, Equatable, Sendable {
         morphologicalPatterns = try container.decodeIfPresent([MorphologicalPattern].self, forKey: .morphologicalPatterns) ?? []
         morphologyLinks = try container.decodeIfPresent([MorphologyLink].self, forKey: .morphologyLinks) ?? []
         inflectionRelations = try container.decodeIfPresent([InflectionRelation].self, forKey: .inflectionRelations) ?? []
+        audioAssets = try container.decodeIfPresent([AudioAsset].self, forKey: .audioAssets) ?? []
+        listeningPrompts = try container.decodeIfPresent([ListeningPrompt].self, forKey: .listeningPrompts) ?? []
     }
 }
