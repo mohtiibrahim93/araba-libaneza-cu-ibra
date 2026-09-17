@@ -7,6 +7,8 @@ public protocol ContentRepository: Sendable {
     func lexiconCollection(id: String) throws -> LexiconCollection?
     func root(id: String) throws -> Root?
     func rootFamilyGraph(rootID: String) throws -> RootFamilyGraph?
+    func preferredAudioAsset(for expressionID: String) throws -> AudioAsset?
+    func listeningPrompts(for expressionID: String) throws -> [ListeningPrompt]
     func expressions(in unitID: String) throws -> [Expression]
     func expressions(inLexiconCollection collectionID: String) throws -> [Expression]
     func exercises(in unitID: String) throws -> [ExerciseDefinition]
@@ -23,6 +25,8 @@ public struct JSONContentRepository: ContentRepository, Sendable {
     private let exercisesByUnitID: [String: [ExerciseDefinition]]
     private let rootsByID: [String: Root]
     private let morphologyLinks: [MorphologyLink]
+    private let audioAssets: [AudioAsset]
+    private let listeningPromptsByExpressionID: [String: [ListeningPrompt]]
 
     public init(data: Data) throws {
         let decoded = try JSONDecoder().decode(ContentPackage.self, from: data)
@@ -34,6 +38,8 @@ public struct JSONContentRepository: ContentRepository, Sendable {
         self.exercisesByUnitID = Dictionary(grouping: decoded.exercises, by: \.unitID)
         self.rootsByID = Dictionary(uniqueKeysWithValues: decoded.roots.map { ($0.id, $0) })
         self.morphologyLinks = decoded.morphologyLinks
+        self.audioAssets = decoded.audioAssets
+        self.listeningPromptsByExpressionID = Dictionary(grouping: decoded.listeningPrompts, by: \.expressionID)
     }
 
     public func expression(id: String) throws -> Expression? { expressionsByID[id] }
@@ -45,6 +51,14 @@ public struct JSONContentRepository: ContentRepository, Sendable {
     public func rootFamilyGraph(rootID: String) throws -> RootFamilyGraph? {
         guard let root = rootsByID[rootID] else { return nil }
         return RootFamilyGraphBuilder().build(root: root, expressionsByID: expressionsByID, links: morphologyLinks)
+    }
+
+    public func preferredAudioAsset(for expressionID: String) throws -> AudioAsset? {
+        AudioAssetResolver().bestAsset(for: expressionID, from: audioAssets)
+    }
+
+    public func listeningPrompts(for expressionID: String) throws -> [ListeningPrompt] {
+        (listeningPromptsByExpressionID[expressionID] ?? []).sorted { $0.id < $1.id }
     }
 
     public func expressions(in unitID: String) throws -> [Expression] {
