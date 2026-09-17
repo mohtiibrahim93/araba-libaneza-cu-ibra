@@ -39,12 +39,12 @@ jobs:
       - name: Run importer unit tests
         run: node --test ios-app/Tools/YallaImporter/tests/importer.test.mjs
 
-      - name: Dry-run importer against current Yalla source
+      - name: Build and validate native content bundle
         run: |
           node ios-app/Tools/YallaImporter/yalla-importer.mjs \
             --source public/yalla \
             --output /tmp/yalla-native-content.json \
-            --content-version ci
+            --content-version bundled-legacy
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -62,3 +62,11 @@ jobs:
               len(data['exercises']), 'explicit exercises'
           )
           PY
+
+      - name: Publish native content bundle candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: yalla-native-content
+          path: /tmp/yalla-native-content.json
+          if-no-files-found: error
+          retention-days: 1
