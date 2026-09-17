@@ -3,7 +3,7 @@ import YallaCore
 
 struct JourneyUnitDetailView: View {
     let detail: JourneyUnitDetail
-    let expressions: [Expression]
+    let expressions: [YallaCore.Expression]
     let locale: String
 
     var body: some View {
@@ -78,7 +78,7 @@ struct JourneyUnitDetailView: View {
 
 struct PracticeDestinationView: View {
     let destination: PracticeDestination
-    let expressions: [Expression]
+    let expressions: [YallaCore.Expression]
     let locale: String
     let title: String
 
@@ -100,7 +100,7 @@ struct PracticeDestinationView: View {
 
 private struct SmartPracticeOverviewView: View {
     let exercises: [ExerciseDefinition]
-    let expressions: [Expression]
+    let expressions: [YallaCore.Expression]
     let locale: String
     let title: String
 
