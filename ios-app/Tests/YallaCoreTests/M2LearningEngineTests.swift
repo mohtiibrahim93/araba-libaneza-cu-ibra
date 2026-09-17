@@ -46,43 +46,87 @@ struct AnswerEvaluationTests {
 @Suite("SRS scheduling")
 struct SRSTests {
     let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let day: TimeInterval = 86_400
 
     @Test("Wrong answer returns tomorrow and resets stage")
     func wrongTomorrow() {
-        let current = ReviewState(stage: 3, dueAt: now)
-        let next = DefaultReviewScheduler().nextState(current: current, outcome: .incorrect, now: now)
-        #expect(next.stage == 0)
-        #expect(next.dueAt == Calendar(identifier: .gregorian).date(byAdding: .day, value: 1, to: now))
+        let current = ReviewState(
+            seen: 3,
+            correct: 2,
+            streak: 2,
+            wrong: false,
+            lastAttemptAt: now.addingTimeInterval(-day),
+            reviewStage: 3,
+            dueAt: now
+        )
+        let next = ReviewScheduler().record(current, correct: false, hinted: false, at: now)
+        #expect(next.reviewStage == 0)
+        #expect(next.dueAt == now.addingTimeInterval(day))
     }
 
     @Test("Hinted correct does not earn clean review")
     func hintedCorrect() {
-        let current = ReviewState(stage: 2, dueAt: now)
-        let next = DefaultReviewScheduler().nextState(current: current, outcome: .correct(usedHint: true), now: now)
-        #expect(next.stage == 0)
+        let current = ReviewState(
+            seen: 2,
+            correct: 2,
+            streak: 2,
+            wrong: false,
+            lastAttemptAt: now.addingTimeInterval(-day),
+            reviewStage: 2,
+            dueAt: now
+        )
+        let next = ReviewScheduler().record(current, correct: true, hinted: true, at: now)
+        #expect(next.reviewStage == 0)
+        #expect(next.correct == current.correct)
     }
 
     @Test("Early clean correct preserves schedule")
     func earlyCorrectPreserves() {
-        let future = Calendar(identifier: .gregorian).date(byAdding: .day, value: 3, to: now)!
-        let current = ReviewState(stage: 2, dueAt: future)
-        let next = DefaultReviewScheduler().nextState(current: current, outcome: .correct(usedHint: false), now: now)
-        #expect(next == current)
+        let future = now.addingTimeInterval(3 * day)
+        let current = ReviewState(
+            seen: 3,
+            correct: 3,
+            streak: 2,
+            wrong: false,
+            lastAttemptAt: now.addingTimeInterval(-day),
+            reviewStage: 2,
+            dueAt: future
+        )
+        let next = ReviewScheduler().record(current, correct: true, hinted: false, at: now)
+        #expect(next.reviewStage == current.reviewStage)
+        #expect(next.dueAt == future)
     }
 
     @Test("Due clean correct advances stage and caps at final interval")
     func dueCorrectAdvances() {
-        let scheduler = DefaultReviewScheduler()
-        let current = ReviewState(stage: 2, dueAt: now)
-        let next = scheduler.nextState(current: current, outcome: .correct(usedHint: false), now: now)
-        #expect(next.stage == 3)
-
-        let maxed = scheduler.nextState(
-            current: ReviewState(stage: 4, dueAt: now),
-            outcome: .correct(usedHint: false),
-            now: now
+        let scheduler = ReviewScheduler()
+        let current = ReviewState(
+            seen: 2,
+            correct: 2,
+            streak: 2,
+            wrong: false,
+            lastAttemptAt: now.addingTimeInterval(-day),
+            reviewStage: 2,
+            dueAt: now
         )
-        #expect(maxed.stage == 4)
+        let next = scheduler.record(current, correct: true, hinted: false, at: now)
+        #expect(next.reviewStage == 3)
+
+        let maxed = scheduler.record(
+            ReviewState(
+                seen: 5,
+                correct: 5,
+                streak: 3,
+                wrong: false,
+                lastAttemptAt: now.addingTimeInterval(-day),
+                reviewStage: 4,
+                dueAt: now
+            ),
+            correct: true,
+            hinted: false,
+            at: now
+        )
+        #expect(maxed.reviewStage == 4)
     }
 }
 
@@ -90,36 +134,39 @@ struct SRSTests {
 struct MasteryTests {
     @Test("Recognition success does not increase speaking mastery")
     func skillIsolation() {
-        var mastery = ExpressionMastery(expressionID: "expr.hello")
-        let attempt = Attempt(
-            expressionID: "expr.hello",
-            skill: .recognition,
-            firstTryCorrect: true,
-            usedHint: false,
-            responseTime: 1.2
+        let mastery = MasteryUpdater().record(
+            ExpressionMastery(expressionID: "expr.hello"),
+            skills: [.recognition],
+            correct: true,
+            hinted: false,
+            at: Date(timeIntervalSince1970: 1_700_000_000)
         )
 
-        MasteryEngine().apply(attempt: attempt, to: &mastery)
-
-        #expect(mastery.score(for: .recognition) > 0)
-        #expect(mastery.score(for: .speaking) == 0)
+        #expect(mastery.progress(for: .recognition).cleanCorrect == 1)
+        #expect(mastery.progress(for: .speaking).attempts == 0)
     }
 
-    @Test("Hinted answer is useful but weaker than clean success")
+    @Test("Hinted answer records evidence but not clean mastery credit")
     func hintPenalty() {
-        var clean = ExpressionMastery(expressionID: "expr.hello")
-        var hinted = ExpressionMastery(expressionID: "expr.hello")
-        let engine = MasteryEngine()
-
-        engine.apply(
-            attempt: Attempt(expressionID: "expr.hello", skill: .production, firstTryCorrect: true, usedHint: false, responseTime: 1),
-            to: &clean
+        let updater = MasteryUpdater()
+        let now = Date(timeIntervalSince1970: 1_700_000_000)
+        let clean = updater.record(
+            ExpressionMastery(expressionID: "expr.hello"),
+            skills: [.production],
+            correct: true,
+            hinted: false,
+            at: now
         )
-        engine.apply(
-            attempt: Attempt(expressionID: "expr.hello", skill: .production, firstTryCorrect: true, usedHint: true, responseTime: 1),
-            to: &hinted
+        let hinted = updater.record(
+            ExpressionMastery(expressionID: "expr.hello"),
+            skills: [.production],
+            correct: true,
+            hinted: true,
+            at: now
         )
 
-        #expect(clean.score(for: .production) > hinted.score(for: .production))
+        #expect(clean.progress(for: .production).cleanCorrect == 1)
+        #expect(hinted.progress(for: .production).cleanCorrect == 0)
+        #expect(hinted.progress(for: .production).correctAttempts == 1)
     }
 }

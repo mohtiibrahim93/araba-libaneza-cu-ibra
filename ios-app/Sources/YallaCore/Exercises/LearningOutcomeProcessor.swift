@@ -20,14 +20,14 @@ public struct LearningUpdate: Equatable, Sendable {
 }
 
 public struct LearningOutcomeProcessor: Sendable {
-    private let masteryEngine: MasteryEngine
-    private let reviewScheduler: DefaultReviewScheduler
+    private let masteryUpdater: MasteryUpdater
+    private let reviewScheduler: ReviewScheduler
 
     public init(
-        masteryEngine: MasteryEngine = MasteryEngine(),
-        reviewScheduler: DefaultReviewScheduler = DefaultReviewScheduler()
+        masteryUpdater: MasteryUpdater = MasteryUpdater(),
+        reviewScheduler: ReviewScheduler = ReviewScheduler()
     ) {
-        self.masteryEngine = masteryEngine
+        self.masteryUpdater = masteryUpdater
         self.reviewScheduler = reviewScheduler
     }
 
@@ -46,16 +46,18 @@ public struct LearningOutcomeProcessor: Sendable {
             )
         }
 
-        var mastery = currentMastery
-        masteryEngine.apply(attempt: attempt, to: &mastery)
-
-        let reviewOutcome: ReviewOutcome = attempt.firstTryCorrect
-            ? .correct(usedHint: attempt.usedHint)
-            : .incorrect
-        let review = reviewScheduler.nextState(
-            current: currentReview,
-            outcome: reviewOutcome,
-            now: now
+        let mastery = masteryUpdater.record(
+            currentMastery,
+            skills: Set([attempt.skill]),
+            correct: attempt.firstTryCorrect,
+            hinted: attempt.usedHint,
+            at: now
+        )
+        let review = reviewScheduler.record(
+            currentReview,
+            correct: attempt.firstTryCorrect,
+            hinted: attempt.usedHint,
+            at: now
         )
 
         return LearningUpdate(
