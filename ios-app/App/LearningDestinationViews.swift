@@ -3,6 +3,7 @@ import YallaCore
 
 struct JourneyUnitDetailView: View {
     let detail: JourneyUnitDetail
+    let expressions: [Expression]
     let locale: String
 
     var body: some View {
@@ -22,6 +23,22 @@ struct JourneyUnitDetailView: View {
                     .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 4)
+            }
+
+            if !detail.exercises.isEmpty {
+                Section {
+                    NavigationLink {
+                        ExerciseSessionView(
+                            exercises: detail.exercises,
+                            expressions: expressions,
+                            locale: locale,
+                            title: detail.title
+                        )
+                    } label: {
+                        Label("Începe exercițiile", systemImage: "play.fill")
+                            .font(.headline)
+                    }
+                }
             }
 
             Section("Expresii") {
@@ -61,6 +78,7 @@ struct JourneyUnitDetailView: View {
 
 struct PracticeDestinationView: View {
     let destination: PracticeDestination
+    let expressions: [Expression]
     let locale: String
     let title: String
 
@@ -70,6 +88,7 @@ struct PracticeDestinationView: View {
         case let .smartSession(exercises):
             SmartPracticeOverviewView(
                 exercises: exercises,
+                expressions: expressions,
                 locale: locale,
                 title: title
             )
@@ -81,6 +100,7 @@ struct PracticeDestinationView: View {
 
 private struct SmartPracticeOverviewView: View {
     let exercises: [ExerciseDefinition]
+    let expressions: [Expression]
     let locale: String
     let title: String
 
@@ -94,6 +114,22 @@ private struct SmartPracticeOverviewView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 4)
+            }
+
+            if !exercises.isEmpty {
+                Section {
+                    NavigationLink {
+                        ExerciseSessionView(
+                            exercises: exercises,
+                            expressions: expressions,
+                            locale: locale,
+                            title: title
+                        )
+                    } label: {
+                        Label("Începe sesiunea", systemImage: "play.fill")
+                            .font(.headline)
+                    }
+                }
             }
 
             Section("Exerciții") {
