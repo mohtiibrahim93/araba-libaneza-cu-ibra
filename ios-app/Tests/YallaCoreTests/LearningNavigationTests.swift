@@ -52,13 +52,12 @@ struct LearningNavigationTests {
 
     @Test("Journey detail resolves localized expressions and exercises from one unit")
     func journeyDetail() throws {
-        let detail = try #require(
-            LearningNavigationBuilder().journeyUnit(
-                id: "unit.welcome",
-                from: package(),
-                locale: "ro"
-            )
+        let optionalDetail = try LearningNavigationBuilder().journeyUnit(
+            id: "unit.welcome",
+            from: package(),
+            locale: "ro"
         )
+        let detail = try #require(optionalDetail)
 
         #expect(detail.title == "Primele replici")
         #expect(detail.expressions.map(\.arabizi) == ["mar7aba", "merci"])
