@@ -14,6 +14,12 @@ struct AnswerNormalizationTests {
         #expect(AnswerNormalizer.normalize("khalas") == AnswerNormalizer.normalize("5alas"))
         #expect(AnswerNormalizer.normalize("ghali") == AnswerNormalizer.normalize("8ali"))
     }
+
+    @Test("Repeated vowels collapse but doubled consonants remain meaningful")
+    func vowelCollapseOnly() {
+        #expect(AnswerNormalizer.normalize("shouu") == AnswerNormalizer.normalize("shou"))
+        #expect(AnswerNormalizer.normalize("mara") != AnswerNormalizer.normalize("marra"))
+    }
 }
 
 @Suite("Answer evaluation")
