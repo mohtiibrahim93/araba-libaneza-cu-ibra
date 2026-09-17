@@ -15,6 +15,41 @@ public enum ExerciseDefinitionType: String, Codable, Equatable, Sendable, CaseIt
     case speakingCompare = "speaking-compare"
     case transferChallenge = "transfer-challenge"
     case speedRecall = "speed-recall"
+
+    public var defaultMasterySkills: Set<MasterySkill> {
+        switch self {
+        case .multipleChoiceProduction:
+            return [.recall]
+        case .multipleChoiceMeaning, .reverseProduction:
+            return [.meaning]
+        case .freeProduction:
+            return [.recall, .production]
+        case .matching:
+            return [.recognition, .meaning]
+        case .wordOrder:
+            return [.sentenceBuilding]
+        case .discovery:
+            return []
+        case .fillGap:
+            return [.recall, .sentenceBuilding]
+        case .grammarDrill:
+            return [.sentenceBuilding]
+        case .transformation:
+            return [.production, .sentenceBuilding]
+        case .dialogueResponse:
+            return [.production, .transfer]
+        case .listeningChoice:
+            return [.listening, .meaning]
+        case .listeningWrite:
+            return [.listening, .production]
+        case .speakingCompare:
+            return [.speaking, .production]
+        case .transferChallenge:
+            return [.transfer, .production]
+        case .speedRecall:
+            return [.retrievalFluency, .recall]
+        }
+    }
 }
 
 public struct ExerciseDefinition: Codable, Equatable, Sendable, Identifiable {
