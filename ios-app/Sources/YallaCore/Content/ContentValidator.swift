@@ -5,6 +5,8 @@ public enum ContentValidationError: Error, Equatable, Sendable {
     case duplicateLexiconCollectionID(String)
     case duplicateRootID(String)
     case duplicateMorphologicalPatternID(String)
+    case duplicateAudioAssetID(String)
+    case duplicateListeningPromptID(String)
     case missingExpressionReference(unitID: String, expressionID: String)
     case missingDefaultLocalization(expressionID: String, locale: String)
     case missingDefaultUnitLocalization(unitID: String, locale: String)
@@ -18,6 +20,9 @@ public enum ContentValidationError: Error, Equatable, Sendable {
     case missingInflectionSourceExpressionReference(expressionID: String)
     case missingInflectionTargetExpressionReference(expressionID: String)
     case missingInflectionPatternReference(patternID: String)
+    case missingAudioExpressionReference(audioAssetID: String, expressionID: String)
+    case missingListeningAudioReference(promptID: String, audioAssetID: String)
+    case missingListeningExpressionReference(promptID: String, expressionID: String)
 }
 
 public struct ContentValidator: Sendable {
@@ -123,6 +128,38 @@ public struct ContentValidator: Sendable {
             }
             if let patternID = relation.patternID, !patternIDs.contains(patternID) {
                 throw ContentValidationError.missingInflectionPatternReference(patternID: patternID)
+            }
+        }
+
+        var audioAssetIDs = Set<String>()
+        for audio in package.audioAssets {
+            guard audioAssetIDs.insert(audio.id).inserted else {
+                throw ContentValidationError.duplicateAudioAssetID(audio.id)
+            }
+            if let expressionID = audio.expressionID, !expressionIDs.contains(expressionID) {
+                throw ContentValidationError.missingAudioExpressionReference(
+                    audioAssetID: audio.id,
+                    expressionID: expressionID
+                )
+            }
+        }
+
+        var listeningPromptIDs = Set<String>()
+        for prompt in package.listeningPrompts {
+            guard listeningPromptIDs.insert(prompt.id).inserted else {
+                throw ContentValidationError.duplicateListeningPromptID(prompt.id)
+            }
+            guard audioAssetIDs.contains(prompt.audioAssetID) else {
+                throw ContentValidationError.missingListeningAudioReference(
+                    promptID: prompt.id,
+                    audioAssetID: prompt.audioAssetID
+                )
+            }
+            guard expressionIDs.contains(prompt.expressionID) else {
+                throw ContentValidationError.missingListeningExpressionReference(
+                    promptID: prompt.id,
+                    expressionID: prompt.expressionID
+                )
             }
         }
     }
