@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   core-and-importer:
@@ -63,10 +63,29 @@ jobs:
           )
           PY
 
-      - name: Publish native content bundle candidate
-        uses: actions/upload-artifact@v4
-        with:
-          name: yalla-native-content
-          path: /tmp/yalla-native-content.json
-          if-no-files-found: error
-          retention-days: 1
+      - name: Bootstrap native content resource
+        shell: bash
+        run: |
+          set -euo pipefail
+          resource=ios-app/App/Resources/yalla-native-content.json
+          if [[ -f "$resource" ]]; then
+            echo "Native content resource already exists; no bootstrap commit needed."
+            exit 0
+          fi
+
+          mkdir -p "$(dirname "$resource")"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          source = Path('/tmp/yalla-native-content.json')
+          target = Path('ios-app/App/Resources/yalla-native-content.json')
+          data = json.loads(source.read_text())
+          target.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n')
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$resource"
+          git commit -m "chore(ios): add generated native content bundle"
+          git push origin HEAD:yalla-app-ios
