@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   core-and-importer:
@@ -49,11 +49,15 @@ jobs:
           import json
           from pathlib import Path
 
-          data = json.loads(Path('/tmp/yalla-native-content.json').read_text())
+          source = Path('/tmp/yalla-native-content.json')
+          data = json.loads(source.read_text())
           assert data['manifest']['schemaVersion'] == 3
           assert data['expressions'], 'Importer produced no expressions'
           assert data['units'], 'Importer produced no Journey units'
           assert data['lexiconCollections'], 'Importer produced no lexicon collections'
+          Path('/tmp/yalla-native-content.min.json').write_text(
+              json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n'
+          )
           print(
               'Imported',
               len(data['expressions']), 'expressions,',
@@ -63,29 +67,5 @@ jobs:
           )
           PY
 
-      - name: Bootstrap native content resource
-        shell: bash
-        run: |
-          set -euo pipefail
-          resource=ios-app/App/Resources/yalla-native-content.json
-          if [[ -f "$resource" ]]; then
-            echo "Native content resource already exists; no bootstrap commit needed."
-            exit 0
-          fi
-
-          mkdir -p "$(dirname "$resource")"
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          source = Path('/tmp/yalla-native-content.json')
-          target = Path('ios-app/App/Resources/yalla-native-content.json')
-          data = json.loads(source.read_text())
-          target.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n')
-          PY
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$resource"
-          git commit -m "chore(ios): add generated native content bundle"
-          git push origin HEAD:yalla-app-ios
+      - name: Verify checked-in native content is reproducible
+        run: cmp /tmp/yalla-native-content.min.json ios-app/App/Resources/yalla-native-content.json
