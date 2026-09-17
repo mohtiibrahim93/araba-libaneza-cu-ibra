@@ -1,6 +1,7 @@
 public struct LearningSessionState: Equatable, Sendable {
     public let targetCount: Int
     public private(set) var completedCount: Int
+    public private(set) var assessedCount: Int
     public private(set) var cleanFirstTryCount: Int
     public private(set) var hintedCount: Int
     public private(set) var mistakes: [ExerciseMistake]
@@ -9,6 +10,7 @@ public struct LearningSessionState: Equatable, Sendable {
     public init(targetCount: Int) {
         self.targetCount = max(targetCount, 0)
         self.completedCount = 0
+        self.assessedCount = 0
         self.cleanFirstTryCount = 0
         self.hintedCount = 0
         self.mistakes = []
@@ -16,18 +18,23 @@ public struct LearningSessionState: Equatable, Sendable {
     }
 
     public var cleanAccuracy: Double {
-        guard completedCount > 0 else { return 0 }
-        return Double(cleanFirstTryCount) / Double(completedCount)
+        guard assessedCount > 0 else { return 0 }
+        return Double(cleanFirstTryCount) / Double(assessedCount)
     }
 
     public var isComplete: Bool {
         completedCount >= targetCount
     }
 
+    public mutating func recordDiscoveryCompletion() {
+        completedCount += 1
+    }
+
     public mutating func record(_ resolution: ExerciseResolution) {
         guard resolution.completed, let attempt = resolution.attempt else { return }
 
         completedCount += 1
+        assessedCount += 1
 
         if attempt.firstTryCorrect && !attempt.usedHint {
             cleanFirstTryCount += 1
