@@ -1,0 +1,320 @@
+import Foundation
+import SwiftUI
+import YallaCore
+
+struct ExerciseSessionView: View {
+    let locale: String
+    let title: String
+
+    @State private var player: ExerciseSessionPlayer?
+    @State private var answer = ""
+    @State private var latestResolution: ExerciseResolution?
+    @State private var hintVisible = false
+    @State private var exerciseStartedAt = Date()
+    @FocusState private var answerFieldFocused: Bool
+
+    init(
+        exercises: [ExerciseDefinition],
+        expressions: [Expression],
+        locale: String,
+        title: String
+    ) {
+        self.locale = locale
+        self.title = title
+        _player = State(
+            initialValue: try? ExerciseSessionPlayer(
+                exercises: exercises,
+                expressions: expressions
+            )
+        )
+    }
+
+    var body: some View {
+        Group {
+            if let player {
+                if player.isFinished {
+                    SessionSummaryView(state: player.sessionState)
+                } else if let exercise = player.currentExercise {
+                    exerciseBody(exercise: exercise, player: player)
+                } else {
+                    ContentUnavailableView(
+                        "Exercițiu indisponibil",
+                        systemImage: "exclamationmark.triangle",
+                        description: Text("Sesiunea nu conține un exercițiu care poate fi afișat.")
+                    )
+                }
+            } else {
+                ContentUnavailableView(
+                    "Sesiune indisponibilă",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text("Unele tipuri de exerciții din această sesiune nu sunt încă suportate de playerul nativ.")
+                )
+            }
+        }
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func exerciseBody(
+        exercise: ExerciseDefinition,
+        player: ExerciseSessionPlayer
+    ) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                progressHeader(player: player)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(prompt(for: exercise))
+                        .font(.title2.bold())
+
+                    if hintVisible {
+                        Label("Indiciu: \(exercise.answer)", systemImage: "lightbulb.fill")
+                            .font(.subheadline.weight(.semibold))
+                            .padding(12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                    }
+                }
+
+                TextField("Scrie răspunsul în Arabizi", text: $answer)
+                    .textFieldStyle(.roundedBorder)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .focused($answerFieldFocused)
+                    .submitLabel(.done)
+                    .disabled(player.isCurrentExerciseCompleted)
+                    .onSubmit {
+                        if !player.isCurrentExerciseCompleted {
+                            submitAnswer()
+                        }
+                    }
+
+                if let latestResolution {
+                    FeedbackCard(resolution: latestResolution)
+                }
+
+                HStack(spacing: 12) {
+                    if !player.isCurrentExerciseCompleted {
+                        Button {
+                            useHint()
+                        } label: {
+                            Label("Indiciu", systemImage: "lightbulb")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .disabled(hintVisible)
+
+                        Button {
+                            submitAnswer()
+                        } label: {
+                            Text(latestResolution?.needsCorrection == true ? "Verifică din nou" : "Verifică")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    } else {
+                        Button {
+                            advance()
+                        } label: {
+                            Text(isLastExercise(player: player) ? "Vezi rezultatul" : "Continuă")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            answerFieldFocused = true
+        }
+    }
+
+    private func progressHeader(player: ExerciseSessionPlayer) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Exercițiul \(min(player.sessionState.completedCount + 1, player.sessionState.targetCount)) din \(player.sessionState.targetCount)")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("\(player.sessionState.firstTryCorrectCount) din prima")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            ProgressView(
+                value: Double(player.sessionState.completedCount),
+                total: Double(max(player.sessionState.targetCount, 1))
+            )
+        }
+    }
+
+    private func prompt(for exercise: ExerciseDefinition) -> String {
+        exercise.prompt[locale]
+            ?? exercise.prompt["ro"]
+            ?? exercise.prompt.values.first
+            ?? "Răspunde în libaneză"
+    }
+
+    private func isLastExercise(player: ExerciseSessionPlayer) -> Bool {
+        player.sessionState.completedCount >= max(player.sessionState.targetCount - 1, 0)
+    }
+
+    private func submitAnswer() {
+        guard var player else { return }
+        let elapsed = max(Date().timeIntervalSince(exerciseStartedAt), 0)
+        guard let resolution = player.submit(answer, responseTime: elapsed) else { return }
+
+        self.player = player
+        latestResolution = resolution
+
+        if resolution.completed {
+            answerFieldFocused = false
+        } else {
+            answer = ""
+            answerFieldFocused = true
+        }
+    }
+
+    private func useHint() {
+        guard var player else { return }
+        guard player.useHint() else { return }
+        self.player = player
+        hintVisible = true
+        answerFieldFocused = true
+    }
+
+    private func advance() {
+        guard var player else { return }
+        guard player.advance() else { return }
+
+        self.player = player
+        answer = ""
+        latestResolution = nil
+        hintVisible = false
+        exerciseStartedAt = Date()
+        answerFieldFocused = true
+    }
+}
+
+private struct FeedbackCard: View {
+    let resolution: ExerciseResolution
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var icon: String {
+        resolution.completed ? "checkmark.circle.fill" : "arrow.counterclockwise.circle.fill"
+    }
+
+    private var title: String {
+        switch resolution.evaluation {
+        case .exact:
+            return "Corect"
+        case .acceptedSpellingVariant:
+            return "Variantă acceptată"
+        case .acceptedPronunciationVariant:
+            return "Pronunție acceptată"
+        case .incorrect:
+            return "Mai încearcă"
+        }
+    }
+
+    private var message: String {
+        if resolution.needsCorrection {
+            return "Corectează răspunsul înainte să continui. Prima încercare rămâne înregistrată."
+        }
+        if resolution.mistake != nil {
+            return "Corectarea este bună. Prima încercare rămâne păstrată în istoricul sesiunii."
+        }
+        switch resolution.evaluation {
+        case .acceptedSpellingVariant:
+            return "Forma introdusă este o variantă de scriere aprobată."
+        case .acceptedPronunciationVariant:
+            return "Forma introdusă este o variantă de pronunție aprobată."
+        case .exact:
+            return "Răspunsul corespunde formei de referință."
+        case .incorrect:
+            return "Încearcă din nou."
+        }
+    }
+}
+
+private struct SessionSummaryView: View {
+    let state: LearningSessionState
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 42))
+                    Text("Sesiune terminată")
+                        .font(.largeTitle.bold())
+                    Text("Ai parcurs toate exercițiile pregătite pentru această sesiune.")
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: 12) {
+                    SummaryMetric(value: state.completedCount, label: "completate")
+                    SummaryMetric(value: state.firstTryCorrectCount, label: "din prima")
+                }
+
+                HStack(spacing: 12) {
+                    SummaryMetric(value: state.hintedCount, label: "cu indiciu")
+                    SummaryMetric(value: state.mistakes.count, label: "greșeli inițiale")
+                }
+
+                if !state.mistakes.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("De revăzut")
+                            .font(.title2.bold())
+                        ForEach(Array(state.mistakes.enumerated()), id: \.offset) { _, mistake in
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(mistake.submittedAnswer)
+                                    .font(.headline)
+                                Text("→ \(mistake.correctAnswer)")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.vertical, 3)
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+private struct SummaryMetric: View {
+    let value: Int
+    let label: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("\(value)")
+                .font(.title.bold())
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+}
