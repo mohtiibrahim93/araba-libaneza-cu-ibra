@@ -9,6 +9,8 @@ public protocol ContentRepository: Sendable {
     func expressions(inLexiconCollection collectionID: String) throws -> [Expression]
     func exercises(in unitID: String) throws -> [ExerciseDefinition]
     func searchExpressions(query: String, locale: String) throws -> [Expression]
+    func searchExpressions(query: String, locale: String, filter: LexiconFilter) throws -> [Expression]
+    func usage(for expressionID: String) throws -> ExpressionUsage
 }
 
 public struct JSONContentRepository: ContentRepository, Sendable {
@@ -48,8 +50,12 @@ public struct JSONContentRepository: ContentRepository, Sendable {
     }
 
     public func searchExpressions(query: String, locale: String) throws -> [Expression] {
+        try searchExpressions(query: query, locale: locale, filter: LexiconFilter())
+    }
+
+    public func searchExpressions(query: String, locale: String, filter: LexiconFilter) throws -> [Expression] {
         let needle = normalize(query, locale: locale)
-        guard !needle.isEmpty else { return [] }
+        let normalizedTopics = Set(filter.topics.map { normalize($0, locale: locale) })
 
         let collectionSearchTermsByExpressionID: [String: [String]] = lexiconCollectionsByID.values.reduce(into: [:]) { result, collection in
             let localization = collection.localizations[locale]
@@ -61,6 +67,15 @@ public struct JSONContentRepository: ContentRepository, Sendable {
 
         return expressionsByID.values
             .filter { expression in
+                if !filter.levels.isEmpty && filter.levels.isDisjoint(with: expression.levelTags) {
+                    return false
+                }
+                if !normalizedTopics.isEmpty {
+                    let expressionTopics = Set(expression.topics.map { normalize($0, locale: locale) })
+                    if normalizedTopics.isDisjoint(with: expressionTopics) { return false }
+                }
+                if needle.isEmpty { return true }
+
                 var candidates = [expression.canonicalArabizi]
                 candidates.append(contentsOf: expression.variants.map(\.value))
                 if let arabicScript = expression.arabicScript { candidates.append(arabicScript) }
@@ -74,6 +89,26 @@ public struct JSONContentRepository: ContentRepository, Sendable {
                 return candidates.contains { normalize($0, locale: locale).contains(needle) }
             }
             .sorted { $0.id < $1.id }
+    }
+
+    public func usage(for expressionID: String) throws -> ExpressionUsage {
+        let journeyUnitIDs = unitsByID.values
+            .filter { $0.expressionIDs.contains(expressionID) }
+            .map(\.id)
+            .sorted()
+        let lexiconCollectionIDs = lexiconCollectionsByID.values
+            .filter { $0.expressionIDs.contains(expressionID) }
+            .map(\.id)
+            .sorted()
+        let exerciseIDs = exercisesByID.values
+            .filter { $0.expressionIDs.contains(expressionID) }
+            .map(\.id)
+            .sorted()
+        return ExpressionUsage(
+            journeyUnitIDs: journeyUnitIDs,
+            lexiconCollectionIDs: lexiconCollectionIDs,
+            exerciseIDs: exerciseIDs
+        )
     }
 
     private func normalize(_ value: String, locale: String) -> String {
