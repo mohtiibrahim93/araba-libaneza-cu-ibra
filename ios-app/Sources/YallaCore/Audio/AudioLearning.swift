@@ -30,6 +30,20 @@ public struct AudioAsset: Codable, Equatable, Sendable, Identifiable {
     }
 }
 
+public struct AudioAssetResolver: Sendable {
+    public init() {}
+
+    public func bestAsset(for expressionID: String, from assets: [AudioAsset]) -> AudioAsset? {
+        assets
+            .filter { $0.expressionID == expressionID }
+            .sorted {
+                if $0.source.priority == $1.source.priority { return $0.id < $1.id }
+                return $0.source.priority < $1.source.priority
+            }
+            .first
+    }
+}
+
 public enum ListeningMode: String, Codable, Equatable, Sendable {
     case multipleChoice
     case freeWrite
