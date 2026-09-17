@@ -40,6 +40,8 @@ public struct Expression: Codable, Equatable, Sendable, Identifiable {
     public let canonicalArabizi: String
     public let arabicScript: String?
     public let variants: [ExpressionVariant]
+    public let levelTags: [LevelBand]
+    public let topics: [String]
     public let localizations: [String: ExpressionLocalization]
 
     public init(
@@ -47,12 +49,16 @@ public struct Expression: Codable, Equatable, Sendable, Identifiable {
         canonicalArabizi: String,
         arabicScript: String? = nil,
         variants: [ExpressionVariant] = [],
+        levelTags: [LevelBand] = [],
+        topics: [String] = [],
         localizations: [String: ExpressionLocalization]
     ) {
         self.id = id
         self.canonicalArabizi = canonicalArabizi
         self.arabicScript = arabicScript
         self.variants = variants
+        self.levelTags = levelTags
+        self.topics = topics
         self.localizations = localizations
     }
 
@@ -61,5 +67,20 @@ public struct Expression: Codable, Equatable, Sendable, Identifiable {
             throw LocalizationError.missingLocale(locale)
         }
         return localization
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, canonicalArabizi, arabicScript, variants, levelTags, topics, localizations
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        canonicalArabizi = try container.decode(String.self, forKey: .canonicalArabizi)
+        arabicScript = try container.decodeIfPresent(String.self, forKey: .arabicScript)
+        variants = try container.decodeIfPresent([ExpressionVariant].self, forKey: .variants) ?? []
+        levelTags = try container.decodeIfPresent([LevelBand].self, forKey: .levelTags) ?? []
+        topics = try container.decodeIfPresent([String].self, forKey: .topics) ?? []
+        localizations = try container.decode([String: ExpressionLocalization].self, forKey: .localizations)
     }
 }
