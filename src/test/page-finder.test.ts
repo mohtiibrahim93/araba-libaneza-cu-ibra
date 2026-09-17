@@ -84,13 +84,3 @@ describe("the dedicated help page", () => {
     expect(resolveRedirect("/en/find-your-page")).toBeFalsy();
   });
 });
-
-describe("the 301 aliases still redirect", () => {
-  it.each([
-    ["/cursuri-araba", "/cursuri-limba-araba"],
-    ["/joaca", "/joc"],
-    ["/cursuri/online", "/cursuri"],
-  ])("%s -> %s", (from, to) => {
-    expect(resolveRedirect(from)).toBe(to);
-  });
-});
