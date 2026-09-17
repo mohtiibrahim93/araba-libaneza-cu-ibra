@@ -2,6 +2,7 @@ public enum LevelBand: String, Codable, Equatable, Sendable {
     case a1
     case a2
     case b1Partial = "b1-partial"
+    case supplemental
 }
 
 public struct JourneyUnitLocalization: Codable, Equatable, Sendable {
