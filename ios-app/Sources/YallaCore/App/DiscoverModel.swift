@@ -105,7 +105,7 @@ public struct DiscoverModelBuilder: Sendable {
                 rootID: rootByExpressionID[expression.id]
             )
         }
-        .sorted { $0.arabizi.localizedCaseInsensitiveCompare($1.arabizi) == .orderedAscending }
+        .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
 
         let expressionsByID = Dictionary(uniqueKeysWithValues: package.expressions.map { ($0.id, $0) })
         let linksByRootID = Dictionary(grouping: package.morphologyLinks, by: \.rootID)
@@ -132,7 +132,7 @@ public struct DiscoverModelBuilder: Sendable {
                     patternID: link.patternID
                 )
             }
-            .sorted { $0.label.localizedCaseInsensitiveCompare($1.label) == .orderedAscending }
+            .sorted { caseInsensitiveLess($0.label, $1.label) }
 
             graphs[root.id] = RootExplorerSummary(
                 rootID: root.id,
@@ -144,5 +144,11 @@ public struct DiscoverModelBuilder: Sendable {
         roots.sort { $0.displayKey < $1.displayKey }
 
         return DiscoverModel(entries: entries, roots: roots, graphsByRootID: graphs)
+    }
+
+    private func caseInsensitiveLess(_ lhs: String, _ rhs: String) -> Bool {
+        let left = lhs.lowercased()
+        let right = rhs.lowercased()
+        return left == right ? lhs < rhs : left < right
     }
 }
