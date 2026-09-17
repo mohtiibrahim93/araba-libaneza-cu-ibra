@@ -32,9 +32,12 @@ struct AppPresentationTests {
         )
         let exercise = ExerciseDefinition(
             id: "exercise.hello.choice",
-            unitID: welcome.id,
             type: .multipleChoiceProduction,
-            expressionIDs: [hello.id]
+            unitID: welcome.id,
+            expressionIDs: [hello.id],
+            prompt: ["ro": "Cum spui «salut»?"],
+            answer: "mar7aba",
+            wrongAnswers: ["merci", "yalla"]
         )
         return ContentPackage(
             manifest: .init(schemaVersion: 3, contentVersion: "test", defaultLearnerLocale: "ro"),

@@ -29,7 +29,8 @@ struct RootRepositoryTests {
         """#
 
         let repository = try JSONContentRepository(data: Data(json.utf8))
-        let graph = try #require(repository.rootFamilyGraph(rootID: "root.ktb"))
+        let optionalGraph = try repository.rootFamilyGraph(rootID: "root.ktb")
+        let graph = try #require(optionalGraph)
 
         #expect(graph.root.displayKey == "KTB")
         #expect(graph.nodes.filter { $0.kind == .expression }.count == 2)
