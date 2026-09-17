@@ -32,7 +32,8 @@ struct ExerciseSessionPlayerTests {
             expressions: [expression]
         )
 
-        let resolution = try #require(player.submit("badde", responseTime: 1.2))
+        let submitted = player.submit("badde", responseTime: 1.2)
+        let resolution = try #require(submitted)
 
         #expect(resolution.completed)
         #expect(player.sessionState.completedCount == 1)
@@ -41,7 +42,8 @@ struct ExerciseSessionPlayerTests {
         #expect(player.isCurrentExerciseCompleted)
         #expect(!player.isFinished)
 
-        #expect(player.advance())
+        let advanced = player.advance()
+        #expect(advanced)
         #expect(player.isFinished)
         #expect(player.currentExercise == nil)
     }
@@ -53,14 +55,18 @@ struct ExerciseSessionPlayerTests {
             expressions: [expression]
         )
 
-        let first = try #require(player.submit("baddak", responseTime: 2.0))
+        let firstSubmitted = player.submit("baddak", responseTime: 2.0)
+        let first = try #require(firstSubmitted)
         #expect(first.needsCorrection)
         #expect(!first.completed)
         #expect(player.sessionState.completedCount == 0)
         #expect(player.attempts.isEmpty)
-        #expect(!player.advance())
 
-        let correction = try #require(player.submit("badde", responseTime: 0.8))
+        let advancedBeforeCorrection = player.advance()
+        #expect(!advancedBeforeCorrection)
+
+        let correctionSubmitted = player.submit("badde", responseTime: 0.8)
+        let correction = try #require(correctionSubmitted)
         #expect(correction.completed)
         #expect(correction.mistake?.submittedAnswer == "baddak")
         #expect(correction.attempt?.firstTryCorrect == false)
@@ -75,7 +81,8 @@ struct ExerciseSessionPlayerTests {
             expressions: [expression]
         )
 
-        #expect(player.useHint())
+        let didUseHint = player.useHint()
+        #expect(didUseHint)
         _ = player.submit("badde", responseTime: 3.0)
 
         #expect(player.attempts.first?.usedHint == true)
@@ -88,14 +95,16 @@ struct ExerciseSessionPlayerTests {
             exercises: [exercise(id: "exercise.spelling")],
             expressions: [expression]
         )
-        let spelling = try #require(spellingPlayer.submit("baddi", responseTime: 1.0))
+        let spellingSubmitted = spellingPlayer.submit("baddi", responseTime: 1.0)
+        let spelling = try #require(spellingSubmitted)
         #expect(spelling.evaluation == .acceptedSpellingVariant)
 
         var pronunciationPlayer = try ExerciseSessionPlayer(
             exercises: [exercise(id: "exercise.pronunciation")],
             expressions: [expression]
         )
-        let pronunciation = try #require(pronunciationPlayer.submit("baddeh", responseTime: 1.0))
+        let pronunciationSubmitted = pronunciationPlayer.submit("baddeh", responseTime: 1.0)
+        let pronunciation = try #require(pronunciationSubmitted)
         #expect(pronunciation.evaluation == .acceptedPronunciationVariant)
     }
 
@@ -117,12 +126,14 @@ struct ExerciseSessionPlayerTests {
 
         #expect(player.currentExercise?.id == "exercise.want")
         _ = player.submit("badde", responseTime: 1)
-        #expect(player.advance())
+        let advancedFirst = player.advance()
+        #expect(advancedFirst)
         #expect(player.currentExercise?.id == "exercise.second")
         #expect(player.sessionState.completedCount == 1)
 
         _ = player.submit("badde", responseTime: 1)
-        #expect(player.advance())
+        let advancedSecond = player.advance()
+        #expect(advancedSecond)
         #expect(player.isFinished)
         #expect(player.sessionState.completedCount == 2)
         #expect(player.attempts.count == 2)
