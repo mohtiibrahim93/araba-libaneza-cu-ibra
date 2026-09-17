@@ -137,7 +137,7 @@ struct ExerciseSessionView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text("\(player.sessionState.firstTryCorrectCount) din prima")
+                Text("\(player.sessionState.cleanFirstTryCount) din prima")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -271,7 +271,7 @@ private struct SessionSummaryView: View {
 
                 HStack(spacing: 12) {
                     SummaryMetric(value: state.completedCount, label: "completate")
-                    SummaryMetric(value: state.firstTryCorrectCount, label: "din prima")
+                    SummaryMetric(value: state.cleanFirstTryCount, label: "din prima")
                 }
 
                 HStack(spacing: 12) {
