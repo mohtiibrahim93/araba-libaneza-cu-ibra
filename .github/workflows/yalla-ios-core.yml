@@ -69,3 +69,38 @@ jobs:
 
       - name: Verify checked-in native content is reproducible
         run: cmp /tmp/yalla-native-content.min.json ios-app/App/Resources/yalla-native-content.json
+
+  native-app-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios-app
+        run: xcodegen generate
+
+      - name: Build native iOS app
+        working-directory: ios-app
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project YallaNative.xcodeproj \
+            -scheme YallaApp \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee /tmp/yalla-xcodebuild.log
+
+      - name: Preserve Xcode diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-build-diagnostics
+          path: /tmp/yalla-xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 1
