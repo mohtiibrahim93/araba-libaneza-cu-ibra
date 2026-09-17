@@ -17,10 +17,7 @@ struct YallaApp: App {
         WindowGroup {
             switch launchState {
             case let .ready(content):
-                RootTabView(
-                    model: content.shell,
-                    discoverModel: content.discover
-                )
+                RootTabView(content: content)
             case let .failed(message):
                 ContentLoadFailureView(message: message)
             }
