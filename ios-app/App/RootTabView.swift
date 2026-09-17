@@ -2,29 +2,28 @@ import SwiftUI
 import YallaCore
 
 struct RootTabView: View {
-    let model: LearnerShellModel
-    let discoverModel: DiscoverModel
-
-    init(
-        model: LearnerShellModel = AppSampleContent.shellModel,
-        discoverModel: DiscoverModel = AppSampleContent.discoverModel
-    ) {
-        self.model = model
-        self.discoverModel = discoverModel
-    }
+    let content: AppContentSnapshot
 
     var body: some View {
         TabView {
-            HomeView(summary: model.home)
+            HomeView(summary: content.shell.home)
                 .tabItem { Label("Acasă", systemImage: "house") }
 
-            JourneyView(sections: model.journeySections)
-                .tabItem { Label("Parcurs", systemImage: "map") }
+            JourneyView(
+                sections: content.shell.journeySections,
+                package: content.package,
+                locale: content.locale
+            )
+            .tabItem { Label("Parcurs", systemImage: "map") }
 
-            PracticeView(modes: model.practiceModes)
-                .tabItem { Label("Practică", systemImage: "bolt") }
+            PracticeView(
+                modes: content.shell.practiceModes,
+                package: content.package,
+                locale: content.locale
+            )
+            .tabItem { Label("Practică", systemImage: "bolt") }
 
-            DiscoverView(model: discoverModel)
+            DiscoverView(model: content.discover)
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
 
             ProfileView()
@@ -70,6 +69,10 @@ private struct HomeView: View {
 
 private struct JourneyView: View {
     let sections: [JourneySectionSummary]
+    let package: ContentPackage
+    let locale: String
+
+    private let navigationBuilder = LearningNavigationBuilder()
 
     var body: some View {
         NavigationStack {
@@ -77,17 +80,7 @@ private struct JourneyView: View {
                 ForEach(sections) { section in
                     Section(section.level.rawValue.uppercased()) {
                         ForEach(section.units) { unit in
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(unit.title)
-                                    .font(.headline)
-                                Text(unit.description)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                Text("\(unit.expressionCount) expresii")
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
-                            .padding(.vertical, 4)
+                            unitRow(unit)
                         }
                     }
                 }
@@ -95,34 +88,120 @@ private struct JourneyView: View {
             .navigationTitle("Parcurs")
         }
     }
+
+    @ViewBuilder
+    private func unitRow(_ unit: JourneyUnitSummary) -> some View {
+        if let detail = detail(for: unit.id) {
+            NavigationLink {
+                JourneyUnitDetailView(detail: detail, locale: locale)
+            } label: {
+                JourneyUnitRow(unit: unit)
+            }
+        } else {
+            JourneyUnitRow(unit: unit)
+        }
+    }
+
+    private func detail(for unitID: String) -> JourneyUnitDetail? {
+        do {
+            return try navigationBuilder.journeyUnit(
+                id: unitID,
+                from: package,
+                locale: locale
+            )
+        } catch {
+            return nil
+        }
+    }
+}
+
+private struct JourneyUnitRow: View {
+    let unit: JourneyUnitSummary
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(unit.title)
+                .font(.headline)
+            Text(unit.description)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Text("\(unit.expressionCount) expresii")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(.vertical, 4)
+    }
 }
 
 private struct PracticeView: View {
     let modes: [PracticeModeSummary]
+    let package: ContentPackage
+    let locale: String
+
+    private let navigationBuilder = LearningNavigationBuilder()
 
     var body: some View {
         NavigationStack {
             List(modes) { mode in
-                HStack(spacing: 14) {
-                    Image(systemName: symbol(for: mode.id))
-                        .font(.title2)
-                        .frame(width: 34)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(mode.title)
-                            .font(.headline)
-                        Text(mode.subtitle)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Text(mode.isAvailable ? "Disponibil" : "În curând")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(mode.isAvailable ? .primary : .secondary)
-                }
-                .padding(.vertical, 5)
+                practiceRow(mode)
             }
             .navigationTitle("Practică")
         }
+    }
+
+    @ViewBuilder
+    private func practiceRow(_ mode: PracticeModeSummary) -> some View {
+        if let destination = destination(for: mode) {
+            NavigationLink {
+                PracticeDestinationView(
+                    destination: destination,
+                    locale: locale,
+                    title: mode.title
+                )
+            } label: {
+                PracticeModeRow(mode: mode, isNavigable: true)
+            }
+        } else {
+            PracticeModeRow(mode: mode, isNavigable: false)
+        }
+    }
+
+    private func destination(for mode: PracticeModeSummary) -> PracticeDestination? {
+        guard mode.isAvailable else { return nil }
+        do {
+            return try navigationBuilder.practiceDestination(
+                id: mode.id,
+                from: package,
+                locale: locale
+            )
+        } catch {
+            return nil
+        }
+    }
+}
+
+private struct PracticeModeRow: View {
+    let mode: PracticeModeSummary
+    let isNavigable: Bool
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: symbol(for: mode.id))
+                .font(.title2)
+                .frame(width: 34)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(mode.title)
+                    .font(.headline)
+                Text(mode.subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Text(isNavigable ? "Disponibil" : "În curând")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(isNavigable ? .primary : .secondary)
+        }
+        .padding(.vertical, 5)
     }
 
     private func symbol(for id: String) -> String {
