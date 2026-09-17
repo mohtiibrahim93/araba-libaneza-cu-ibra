@@ -37,6 +37,11 @@ public struct JourneyUnitDetail: Identifiable, Equatable, Sendable {
     }
 }
 
+public enum PracticeDestination: Equatable, Sendable {
+    case smartSession([ExerciseDefinition])
+    case speedDrill([JourneyExpressionSummary])
+}
+
 public struct LearningNavigationBuilder: Sendable {
     private let sessionBuilder: MixedSessionBuilder
 
@@ -78,5 +83,30 @@ public struct LearningNavigationBuilder: Sendable {
 
     public func smartPractice(from package: ContentPackage, count: Int = 20) -> [ExerciseDefinition] {
         sessionBuilder.build(from: package.exercises, count: count)
+    }
+
+    public func practiceDestination(
+        id: String,
+        from package: ContentPackage,
+        locale: String,
+        count: Int = 20
+    ) throws -> PracticeDestination? {
+        switch id {
+        case "smart-session":
+            return .smartSession(smartPractice(from: package, count: count))
+        case "speed-drill":
+            let target = max(count, 0)
+            let expressions = try package.expressions.prefix(target).map { expression in
+                JourneyExpressionSummary(
+                    id: expression.id,
+                    arabizi: expression.canonicalArabizi,
+                    arabicScript: expression.arabicScript,
+                    meaning: try expression.localization(for: locale).naturalMeaning
+                )
+            }
+            return .speedDrill(expressions)
+        default:
+            return nil
+        }
     }
 }
