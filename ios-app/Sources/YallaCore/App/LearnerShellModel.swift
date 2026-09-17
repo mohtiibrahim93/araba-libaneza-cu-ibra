@@ -70,7 +70,7 @@ public struct LearnerShellModelBuilder: Sendable {
 
     public func build(from package: ContentPackage, locale: String) throws -> LearnerShellModel {
         let grouped = Dictionary(grouping: package.units, by: \.level)
-        let sections = LevelBand.allCases.compactMap { level -> JourneySectionSummary? in
+        let sections = try LevelBand.allCases.compactMap { level -> JourneySectionSummary? in
             guard let units = grouped[level], !units.isEmpty else { return nil }
             let summaries = try units.map { unit in
                 let localization = try unit.localization(for: locale)
