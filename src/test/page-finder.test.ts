@@ -65,7 +65,7 @@ describe("the dedicated help page", () => {
     expect(hasRoute("/en/find-your-page")).toBe(true);
     expect(languageCounterpart("/te-ajutam", "en")).toBe("/en/find-your-page");
     expect(languageCounterpart("/en/find-your-page", "ro")).toBe("/te-ajutam");
-    expect(hreflangPairs().some(([ro, en]) => ro === "/te-ajutam" && en === "/en/find-your-page")).toBe(true);
+    expect(hreflangPairs().get("/te-ajutam")).toEqual({ ro: "/te-ajutam", en: "/en/find-your-page" });
   });
 
   it("carries indexable metadata", () => {
