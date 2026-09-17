@@ -1,6 +1,20 @@
-public enum ExerciseDefinitionType: String, Codable, Equatable, Sendable {
+public enum ExerciseDefinitionType: String, Codable, Equatable, Sendable, CaseIterable {
+    case multipleChoiceProduction = "multiple-choice-production"
+    case multipleChoiceMeaning = "multiple-choice-meaning"
+    case freeProduction = "free-production"
+    case reverseProduction = "reverse-production"
+    case matching
+    case wordOrder = "word-order"
+    case discovery
+    case fillGap = "fill-gap"
     case grammarDrill = "grammar-drill"
+    case transformation
     case dialogueResponse = "dialogue-response"
+    case listeningChoice = "listening-choice"
+    case listeningWrite = "listening-write"
+    case speakingCompare = "speaking-compare"
+    case transferChallenge = "transfer-challenge"
+    case speedRecall = "speed-recall"
 }
 
 public struct ExerciseDefinition: Codable, Equatable, Sendable, Identifiable {
