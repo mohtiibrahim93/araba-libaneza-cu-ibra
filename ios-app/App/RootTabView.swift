@@ -3,9 +3,14 @@ import YallaCore
 
 struct RootTabView: View {
     let model: LearnerShellModel
+    let discoverModel: DiscoverModel
 
-    init(model: LearnerShellModel = AppSampleContent.shellModel) {
+    init(
+        model: LearnerShellModel = AppSampleContent.shellModel,
+        discoverModel: DiscoverModel = AppSampleContent.discoverModel
+    ) {
         self.model = model
+        self.discoverModel = discoverModel
     }
 
     var body: some View {
@@ -19,7 +24,7 @@ struct RootTabView: View {
             PracticeView(modes: model.practiceModes)
                 .tabItem { Label("Practică", systemImage: "bolt") }
 
-            DiscoverView()
+            DiscoverView(model: discoverModel)
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
 
             ProfileView()
@@ -132,15 +137,160 @@ private struct PracticeView: View {
 }
 
 private struct DiscoverView: View {
+    let model: DiscoverModel
+    @State private var query = ""
+
+    private var filteredEntries: [DictionaryEntrySummary] {
+        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return model.entries }
+        let needle = query.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+        return model.entries.filter { entry in
+            let fields = [entry.arabizi, entry.arabicScript ?? "", entry.meaning] + entry.topics
+            return fields.contains { field in
+                field.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current).contains(needle)
+            }
+        }
+    }
+
     var body: some View {
         NavigationStack {
-            FeaturePlaceholderView(
-                title: "Descoperă Libanul",
-                subtitle: "Dicționar, rădăcini, gramatică, cultură, muzică și situații reale.",
-                systemImage: "sparkles"
-            )
+            List {
+                if !model.roots.isEmpty {
+                    Section("Rădăcini") {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(model.roots) { root in
+                                    if let graph = model.rootGraph(rootID: root.id) {
+                                        NavigationLink {
+                                            RootExplorerView(graph: graph)
+                                        } label: {
+                                            VStack(spacing: 4) {
+                                                Text(root.displayKey)
+                                                    .font(.headline)
+                                                if let arabic = root.arabicRadicals {
+                                                    Text(arabic)
+                                                        .font(.subheadline)
+                                                }
+                                                Text("\(root.memberCount) forme")
+                                                    .font(.caption2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 10)
+                                            .background(.thinMaterial, in: Capsule())
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+
+                Section("Dicționar") {
+                    ForEach(filteredEntries) { entry in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(entry.arabizi)
+                                    .font(.headline)
+                                if let arabic = entry.arabicScript {
+                                    Text(arabic)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if let rootID = entry.rootID,
+                                   let root = model.roots.first(where: { $0.id == rootID }),
+                                   let graph = model.rootGraph(rootID: rootID) {
+                                    NavigationLink(root.displayKey) {
+                                        RootExplorerView(graph: graph)
+                                    }
+                                    .font(.caption.bold())
+                                    .buttonStyle(.bordered)
+                                }
+                            }
+                            Text(entry.meaning)
+                                .foregroundStyle(.secondary)
+                            if !entry.topics.isEmpty {
+                                Text(entry.topics.joined(separator: " · "))
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
+                        .padding(.vertical, 3)
+                    }
+                }
+            }
+            .searchable(text: $query, prompt: "Caută Arabizi, arabă sau română")
             .navigationTitle("Descoperă")
         }
+    }
+}
+
+private struct RootExplorerView: View {
+    let graph: RootExplorerSummary
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("Familia rădăcinii")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                GeometryReader { proxy in
+                    let size = proxy.size
+                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                    let radius = max(min(size.width, size.height) * 0.34, 90)
+
+                    ZStack {
+                        ForEach(Array(graph.members.enumerated()), id: \.element.id) { index, member in
+                            let angle = (Double(index) / Double(max(graph.members.count, 1))) * (Double.pi * 2) - Double.pi / 2
+                            let x = center.x + CGFloat(cos(angle)) * radius
+                            let y = center.y + CGFloat(sin(angle)) * radius
+
+                            Path { path in
+                                path.move(to: center)
+                                path.addLine(to: CGPoint(x: x, y: y))
+                            }
+                            .stroke(.secondary.opacity(0.35), lineWidth: 1.5)
+
+                            Text(member.label)
+                                .font(.subheadline.weight(.semibold))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(.thinMaterial, in: Capsule())
+                                .position(x: x, y: y)
+                        }
+
+                        Text(graph.centerLabel)
+                            .font(.title2.bold())
+                            .padding(22)
+                            .background(.regularMaterial, in: Circle())
+                            .overlay(Circle().stroke(.secondary.opacity(0.25)))
+                            .position(center)
+                    }
+                }
+                .frame(height: 360)
+
+                DisclosureGroup("Gramatică și tipare") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(graph.members) { member in
+                            HStack {
+                                Text(member.label)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                Text(member.patternID ?? "fără tipar etichetat")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+            }
+            .padding()
+        }
+        .navigationTitle(graph.centerLabel)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
