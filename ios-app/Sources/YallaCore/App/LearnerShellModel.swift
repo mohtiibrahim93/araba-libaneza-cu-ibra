@@ -85,7 +85,10 @@ public struct LearnerShellModelBuilder: Sendable {
         }
 
         let listeningAvailable = !package.listeningPrompts.isEmpty && !package.audioAssets.isEmpty
-        let speakingAvailable = !package.audioAssets.isEmpty
+        let audioResolver = AudioAssetResolver()
+        let speakingAvailable = package.expressions.contains { expression in
+            audioResolver.bestAsset(for: expression.id, from: package.audioAssets) != nil
+        }
 
         return LearnerShellModel(
             home: HomeSummary(
