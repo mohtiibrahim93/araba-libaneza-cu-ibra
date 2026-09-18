@@ -8,6 +8,10 @@ struct M8ListeningNavigationTests {
         let hello = Expression(
             id: "expr.hello",
             canonicalArabizi: "mar7aba",
+            variants: [
+                .init(value: "marhaba", kind: .spelling),
+                .init(value: "mar7abeh", kind: .pronunciation)
+            ],
             localizations: ["ro": .init(naturalMeaning: "salut")]
         )
         let thanks = Expression(
@@ -64,6 +68,8 @@ struct M8ListeningNavigationTests {
         #expect(items[0].choices.contains("mulțumesc"))
         #expect(items[0].choices.contains("te rog"))
         #expect(items[0].revealWrittenLebaneseInitially == false)
+        #expect(items[0].spellingVariants == ["marhaba"])
+        #expect(items[0].pronunciationVariants == ["mar7abeh"])
     }
 
     @Test("Free-write listening does not fabricate multiple-choice answers")
