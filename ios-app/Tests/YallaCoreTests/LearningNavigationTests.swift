@@ -91,6 +91,31 @@ struct LearningNavigationTests {
         #expect(detail.exercises.map(\.id) == ["ex.choice", "ex.write"])
     }
 
+    @Test("Targeted practice uses only existing exercises tied to selected expressions")
+    func targetedPractice() {
+        let builder = LearningNavigationBuilder()
+
+        let hello = builder.targetedPractice(
+            expressionIDs: ["expr.hello"],
+            from: package(),
+            count: 12
+        )
+        let family = builder.targetedPractice(
+            expressionIDs: ["expr.hello", "expr.thanks"],
+            from: package(),
+            count: 12
+        )
+        let missing = builder.targetedPractice(
+            expressionIDs: ["expr.missing"],
+            from: package(),
+            count: 12
+        )
+
+        #expect(hello.map(\.id) == ["ex.choice"])
+        #expect(Set(family.map(\.id)) == Set(["ex.choice", "ex.write"]))
+        #expect(missing.isEmpty)
+    }
+
     @Test("Smart practice returns a bounded mixed session from real package exercises")
     func smartPractice() {
         let session = LearningNavigationBuilder().smartPractice(from: package(), count: 20)
