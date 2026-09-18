@@ -36,6 +36,28 @@ public struct LearnerProgressMigrator: Sendable {
     }
 }
 
+public struct SpeedDrillProgressSummary: Equatable, Sendable {
+    public let sessionCount: Int
+    public let bestCorrectPerMinute: Double
+    public let averageAccuracy: Double
+    public let latestCorrectPerMinute: Double?
+    public let latestAccuracy: Double?
+
+    public init(
+        sessionCount: Int = 0,
+        bestCorrectPerMinute: Double = 0,
+        averageAccuracy: Double = 0,
+        latestCorrectPerMinute: Double? = nil,
+        latestAccuracy: Double? = nil
+    ) {
+        self.sessionCount = sessionCount
+        self.bestCorrectPerMinute = bestCorrectPerMinute
+        self.averageAccuracy = averageAccuracy
+        self.latestCorrectPerMinute = latestCorrectPerMinute
+        self.latestAccuracy = latestAccuracy
+    }
+}
+
 public struct ExpressionGroupProgress: Equatable, Sendable {
     public let totalCount: Int
     public let practicedCount: Int
@@ -155,6 +177,29 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
 
     public var seenExpressionIDs: Set<String> {
         Set(attempts.map(\.expressionID))
+    }
+
+    public var speedDrillProgress: SpeedDrillProgressSummary {
+        guard !speedDrillHistory.isEmpty else {
+            return SpeedDrillProgressSummary()
+        }
+
+        let latest = speedDrillHistory.max { lhs, rhs in
+            lhs.completedAt < rhs.completedAt
+        }
+        let averageAccuracy = speedDrillHistory
+            .map(\.accuracy)
+            .reduce(0, +) / Double(speedDrillHistory.count)
+
+        return SpeedDrillProgressSummary(
+            sessionCount: speedDrillHistory.count,
+            bestCorrectPerMinute: speedDrillHistory
+                .map(\.correctPerMinute)
+                .max() ?? 0,
+            averageAccuracy: averageAccuracy,
+            latestCorrectPerMinute: latest?.correctPerMinute,
+            latestAccuracy: latest?.accuracy
+        )
     }
 
     public var weakSkills: Set<MasterySkill> {

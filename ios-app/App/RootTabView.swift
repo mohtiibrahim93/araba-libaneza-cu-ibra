@@ -550,6 +550,10 @@ private struct ProfileView: View {
     let progress: LearnerProgressSnapshot
     let persistenceError: String?
 
+    private var fluency: SpeedDrillProgressSummary {
+        progress.speedDrillProgress
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -571,6 +575,32 @@ private struct ProfileView: View {
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
                     LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
                     LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
+                }
+
+                if fluency.sessionCount > 0 {
+                    Section("Fluență · Yalla! Două minute") {
+                        LabeledContent("Sesiuni", value: "\(fluency.sessionCount)")
+                        LabeledContent(
+                            "Cel mai bun ritm",
+                            value: "\(fluency.bestCorrectPerMinute.formatted(.number.precision(.fractionLength(1)))) corecte/min"
+                        )
+                        LabeledContent(
+                            "Acuratețe medie",
+                            value: "\((fluency.averageAccuracy * 100).formatted(.number.precision(.fractionLength(0))))%"
+                        )
+                        if let latestRate = fluency.latestCorrectPerMinute {
+                            LabeledContent(
+                                "Ultimul ritm",
+                                value: "\(latestRate.formatted(.number.precision(.fractionLength(1)))) corecte/min"
+                            )
+                        }
+                        if let latestAccuracy = fluency.latestAccuracy {
+                            LabeledContent(
+                                "Ultima acuratețe",
+                                value: "\((latestAccuracy * 100).formatted(.number.precision(.fractionLength(0))))%"
+                            )
+                        }
+                    }
                 }
 
                 Section {

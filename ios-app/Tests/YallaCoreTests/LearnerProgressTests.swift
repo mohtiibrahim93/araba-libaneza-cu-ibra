@@ -247,6 +247,50 @@ struct LearnerProgressTests {
         #expect(duplicate.speedDrillHistory.count == 1)
     }
 
+    @Test("Speed drill progress summary aggregates history and uses the latest completed session")
+    func speedDrillProgressSummary() {
+        var firstSession = SpeedDrillSession(
+            direction: .learnerLanguageToLebanese,
+            durationSeconds: 120
+        )
+        firstSession.record(expressionID: "expr.want", outcome: .correct, responseTime: 1)
+        firstSession.record(expressionID: "expr.want", outcome: .correct, responseTime: 1)
+
+        var secondSession = SpeedDrillSession(
+            direction: .lebaneseToLearnerLanguage,
+            durationSeconds: 120
+        )
+        secondSession.record(expressionID: "expr.want", outcome: .correct, responseTime: 1)
+        secondSession.record(expressionID: "expr.want", outcome: .wrong, responseTime: 2)
+
+        let first = SpeedDrillHistoryEntry(
+            id: "speed-first",
+            direction: firstSession.direction,
+            durationSeconds: firstSession.durationSeconds,
+            elapsedSeconds: 30,
+            completedAt: now,
+            metrics: firstSession.metrics(elapsedSeconds: 30)
+        )
+        let second = SpeedDrillHistoryEntry(
+            id: "speed-second",
+            direction: secondSession.direction,
+            durationSeconds: secondSession.durationSeconds,
+            elapsedSeconds: 60,
+            completedAt: now.addingTimeInterval(60),
+            metrics: secondSession.metrics(elapsedSeconds: 60)
+        )
+
+        let summary = LearnerProgressSnapshot(
+            speedDrillHistory: [first, second]
+        ).speedDrillProgress
+
+        #expect(summary.sessionCount == 2)
+        #expect(summary.bestCorrectPerMinute == 4)
+        #expect(summary.averageAccuracy == 0.75)
+        #expect(summary.latestCorrectPerMinute == 1)
+        #expect(summary.latestAccuracy == 0.5)
+    }
+
     @Test("Repository persists updates through its store abstraction")
     func repositoryRoundTrip() async throws {
         let store = InMemoryLearnerProgressStore()
