@@ -1,6 +1,41 @@
 import Foundation
 
+public enum LearnerProgressSchema {
+    public static let currentVersion = 2
+}
+
+public enum LearnerProgressMigrationError: Error, Equatable, Sendable {
+    case unsupportedVersion(Int)
+}
+
+public struct LearnerProgressMigrator: Sendable {
+    public init() {}
+
+    public func migrate(_ snapshot: LearnerProgressSnapshot) throws -> LearnerProgressSnapshot {
+        guard snapshot.schemaVersion >= 1,
+              snapshot.schemaVersion <= LearnerProgressSchema.currentVersion
+        else {
+            throw LearnerProgressMigrationError.unsupportedVersion(snapshot.schemaVersion)
+        }
+
+        guard snapshot.schemaVersion < LearnerProgressSchema.currentVersion else {
+            return snapshot
+        }
+
+        return LearnerProgressSnapshot(
+            schemaVersion: LearnerProgressSchema.currentVersion,
+            attempts: snapshot.attempts,
+            masteryByExpressionID: snapshot.masteryByExpressionID,
+            reviewByExpressionID: snapshot.reviewByExpressionID,
+            activeMistakeExpressionIDs: snapshot.activeMistakeExpressionIDs,
+            reinforcementExpressionIDs: snapshot.reinforcementExpressionIDs,
+            currentJourneyUnitID: snapshot.currentJourneyUnitID
+        )
+    }
+}
+
 public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
+    public let schemaVersion: Int
     public let attempts: [LearningAttempt]
     public let masteryByExpressionID: [String: ExpressionMastery]
     public let reviewByExpressionID: [String: ReviewState]
@@ -9,6 +44,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let currentJourneyUnitID: String?
 
     public init(
+        schemaVersion: Int = LearnerProgressSchema.currentVersion,
         attempts: [LearningAttempt] = [],
         masteryByExpressionID: [String: ExpressionMastery] = [:],
         reviewByExpressionID: [String: ReviewState] = [:],
@@ -16,12 +52,60 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         reinforcementExpressionIDs: Set<String> = [],
         currentJourneyUnitID: String? = nil
     ) {
+        self.schemaVersion = schemaVersion
         self.attempts = attempts
         self.masteryByExpressionID = masteryByExpressionID
         self.reviewByExpressionID = reviewByExpressionID
         self.activeMistakeExpressionIDs = activeMistakeExpressionIDs
         self.reinforcementExpressionIDs = reinforcementExpressionIDs
         self.currentJourneyUnitID = currentJourneyUnitID
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case schemaVersion
+        case attempts
+        case masteryByExpressionID
+        case reviewByExpressionID
+        case activeMistakeExpressionIDs
+        case reinforcementExpressionIDs
+        case currentJourneyUnitID
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        schemaVersion = try container.decodeIfPresent(Int.self, forKey: .schemaVersion) ?? 1
+        attempts = try container.decodeIfPresent([LearningAttempt].self, forKey: .attempts) ?? []
+        masteryByExpressionID = try container.decodeIfPresent(
+            [String: ExpressionMastery].self,
+            forKey: .masteryByExpressionID
+        ) ?? [:]
+        reviewByExpressionID = try container.decodeIfPresent(
+            [String: ReviewState].self,
+            forKey: .reviewByExpressionID
+        ) ?? [:]
+        activeMistakeExpressionIDs = try container.decodeIfPresent(
+            Set<String>.self,
+            forKey: .activeMistakeExpressionIDs
+        ) ?? []
+        reinforcementExpressionIDs = try container.decodeIfPresent(
+            Set<String>.self,
+            forKey: .reinforcementExpressionIDs
+        ) ?? []
+        currentJourneyUnitID = try container.decodeIfPresent(
+            String.self,
+            forKey: .currentJourneyUnitID
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(schemaVersion, forKey: .schemaVersion)
+        try container.encode(attempts, forKey: .attempts)
+        try container.encode(masteryByExpressionID, forKey: .masteryByExpressionID)
+        try container.encode(reviewByExpressionID, forKey: .reviewByExpressionID)
+        try container.encode(activeMistakeExpressionIDs, forKey: .activeMistakeExpressionIDs)
+        try container.encode(reinforcementExpressionIDs, forKey: .reinforcementExpressionIDs)
+        try container.encodeIfPresent(currentJourneyUnitID, forKey: .currentJourneyUnitID)
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -127,6 +211,7 @@ public struct LearnerProgressUpdater: Sendable {
         }
 
         return LearnerProgressSnapshot(
+            schemaVersion: snapshot.schemaVersion,
             attempts: snapshot.attempts + [attempt],
             masteryByExpressionID: mastery,
             reviewByExpressionID: reviews,
@@ -161,23 +246,27 @@ public actor InMemoryLearnerProgressStore: LearnerProgressStore {
 public actor LearnerProgressRepository {
     private let store: any LearnerProgressStore
     private let updater: LearnerProgressUpdater
+    private let migrator: LearnerProgressMigrator
 
     public init(
         store: any LearnerProgressStore,
-        updater: LearnerProgressUpdater = LearnerProgressUpdater()
+        updater: LearnerProgressUpdater = LearnerProgressUpdater(),
+        migrator: LearnerProgressMigrator = LearnerProgressMigrator()
     ) {
         self.store = store
         self.updater = updater
+        self.migrator = migrator
     }
 
     public func load() async throws -> LearnerProgressSnapshot {
-        try await store.load()
+        try await loadMigrated()
     }
 
     @discardableResult
     public func setCurrentJourneyUnitID(_ unitID: String?) async throws -> LearnerProgressSnapshot {
-        let current = try await store.load()
+        let current = try await loadMigrated()
         let updated = LearnerProgressSnapshot(
+            schemaVersion: current.schemaVersion,
             attempts: current.attempts,
             masteryByExpressionID: current.masteryByExpressionID,
             reviewByExpressionID: current.reviewByExpressionID,
@@ -191,9 +280,18 @@ public actor LearnerProgressRepository {
 
     @discardableResult
     public func record(_ attempt: LearningAttempt) async throws -> LearnerProgressSnapshot {
-        let current = try await store.load()
+        let current = try await loadMigrated()
         let updated = updater.record(attempt, in: current)
         try await store.save(updated)
         return updated
+    }
+
+    private func loadMigrated() async throws -> LearnerProgressSnapshot {
+        let stored = try await store.load()
+        let migrated = try migrator.migrate(stored)
+        if migrated != stored {
+            try await store.save(migrated)
+        }
+        return migrated
     }
 }
