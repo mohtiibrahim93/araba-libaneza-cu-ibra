@@ -179,7 +179,10 @@ public struct DiscoverModelBuilder: Sendable {
             }
             .sorted { caseInsensitiveLess($0.label, $1.label) }
 
-            var searchTerms = root.searchTerms
+            var searchTerms = [root.displayKey]
+            if let arabicRadicals = root.arabicRadicals {
+                searchTerms.append(arabicRadicals)
+            }
             searchTerms.append(contentsOf: members.map(\.label))
 
             roots.append(
