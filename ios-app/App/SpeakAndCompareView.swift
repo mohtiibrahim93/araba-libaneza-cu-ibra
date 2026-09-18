@@ -47,7 +47,7 @@ struct SpeakAndCompareView: View {
         .onDisappear {
             audio.stopPlayback()
             if audio.isRecording {
-                _ = audio.stopRecording()
+                audio.cancelRecording()
             }
         }
     }
