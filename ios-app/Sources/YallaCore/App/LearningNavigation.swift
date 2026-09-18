@@ -44,9 +44,14 @@ public enum PracticeDestination: Equatable, Sendable {
 
 public struct LearningNavigationBuilder: Sendable {
     private let sessionBuilder: MixedSessionBuilder
+    private let candidateClassifier: SessionCandidateClassifier
 
-    public init(sessionBuilder: MixedSessionBuilder = MixedSessionBuilder()) {
+    public init(
+        sessionBuilder: MixedSessionBuilder = MixedSessionBuilder(),
+        candidateClassifier: SessionCandidateClassifier = SessionCandidateClassifier()
+    ) {
         self.sessionBuilder = sessionBuilder
+        self.candidateClassifier = candidateClassifier
     }
 
     public func journeyUnit(
@@ -85,15 +90,41 @@ public struct LearningNavigationBuilder: Sendable {
         sessionBuilder.build(from: package.exercises, count: count)
     }
 
+    public func smartPracticePlan(
+        from package: ContentPackage,
+        context: SessionCandidateContext,
+        count: Int = 20
+    ) -> SessionPlan {
+        let candidates = candidateClassifier.candidates(
+            from: package.exercises,
+            context: context
+        )
+        return DefaultSessionPlanner(targetCount: count).makeSession(from: candidates)
+    }
+
+    public func smartPractice(
+        from package: ContentPackage,
+        context: SessionCandidateContext,
+        count: Int = 20
+    ) -> [ExerciseDefinition] {
+        smartPracticePlan(from: package, context: context, count: count)
+            .items
+            .map(\.exercise)
+    }
+
     public func practiceDestination(
         id: String,
         from package: ContentPackage,
         locale: String,
-        count: Int = 20
+        count: Int = 20,
+        learnerContext: SessionCandidateContext? = nil
     ) throws -> PracticeDestination? {
         switch id {
         case "smart-session":
-            return .smartSession(smartPractice(from: package, count: count))
+            let exercises = learnerContext.map {
+                smartPractice(from: package, context: $0, count: count)
+            } ?? smartPractice(from: package, count: count)
+            return .smartSession(exercises)
         case "speed-drill":
             let target = max(count, 0)
             let expressions = try package.expressions.prefix(target).map { expression in
