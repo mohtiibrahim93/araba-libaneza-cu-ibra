@@ -159,6 +159,14 @@ const TestDeNivel = () => {
                   {c.knowsCta}
                   <ChevronRight className="h-4 w-4" aria-hidden />
                 </Link>
+                {/* The game's practice history is a level signal too — the
+                    alternative to sitting this test. */}
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {c.playedP}{" "}
+                  <Link to="/joc/scor" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
+                    {c.playedCta}
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
