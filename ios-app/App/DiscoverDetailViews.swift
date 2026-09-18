@@ -4,12 +4,22 @@ import YallaCore
 struct DictionaryEntryDetailView: View {
     let entry: DictionaryEntrySummary
     let model: DiscoverModel
+    let package: ContentPackage
+    let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
 
     @StateObject private var audio = NativeAudioController()
 
     private var isSaved: Bool {
         progressModel.snapshot.savedExpressionIDs.contains(entry.id)
+    }
+
+    private var targetedExercises: [ExerciseDefinition] {
+        LearningNavigationBuilder().targetedPractice(
+            expressionIDs: [entry.id],
+            from: package,
+            count: 12
+        )
     }
 
     var body: some View {
@@ -31,6 +41,22 @@ struct DictionaryEntryDetailView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 6)
+            }
+
+            if !targetedExercises.isEmpty {
+                Section("Practică") {
+                    NavigationLink {
+                        ExerciseSessionView(
+                            exercises: targetedExercises,
+                            expressions: package.expressions,
+                            locale: locale,
+                            title: "Practică: \(entry.arabizi)",
+                            progressModel: progressModel
+                        )
+                    } label: {
+                        Label("Practică acest cuvânt", systemImage: "bolt.fill")
+                    }
+                }
             }
 
             if let audioAsset = entry.preferredAudioAsset {
@@ -64,6 +90,8 @@ struct DictionaryEntryDetailView: View {
                         RootExplorerView(
                             graph: graph,
                             model: model,
+                            package: package,
+                            locale: locale,
                             progressModel: progressModel
                         )
                     } label: {
@@ -125,7 +153,17 @@ struct DictionaryEntryDetailView: View {
 struct RootExplorerView: View {
     let graph: RootExplorerSummary
     let model: DiscoverModel
+    let package: ContentPackage
+    let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
+
+    private var targetedExercises: [ExerciseDefinition] {
+        LearningNavigationBuilder().targetedPractice(
+            expressionIDs: Set(graph.members.map(\.id)),
+            from: package,
+            count: 12
+        )
+    }
 
     var body: some View {
         ScrollView {
@@ -133,6 +171,24 @@ struct RootExplorerView: View {
                 Text("Familia rădăcinii")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+
+                if !targetedExercises.isEmpty {
+                    NavigationLink {
+                        ExerciseSessionView(
+                            exercises: targetedExercises,
+                            expressions: package.expressions,
+                            locale: locale,
+                            title: "Practică rădăcina \(graph.centerLabel)",
+                            progressModel: progressModel
+                        )
+                    } label: {
+                        Label("Practică această rădăcină", systemImage: "bolt.fill")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    }
+                    .buttonStyle(.plain)
+                }
 
                 GeometryReader { proxy in
                     let size = proxy.size
@@ -201,6 +257,8 @@ struct RootExplorerView: View {
                 DictionaryEntryDetailView(
                     entry: entry,
                     model: model,
+                    package: package,
+                    locale: locale,
                     progressModel: progressModel
                 )
             } label: {
