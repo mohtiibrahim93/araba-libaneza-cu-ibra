@@ -37,9 +37,20 @@ public struct JourneyUnitDetail: Identifiable, Equatable, Sendable {
     }
 }
 
+public struct SpeakAndCompareDestination: Equatable, Sendable {
+    public let expression: JourneyExpressionSummary
+    public let referenceAudioAsset: AudioAsset
+
+    public init(expression: JourneyExpressionSummary, referenceAudioAsset: AudioAsset) {
+        self.expression = expression
+        self.referenceAudioAsset = referenceAudioAsset
+    }
+}
+
 public enum PracticeDestination: Equatable, Sendable {
     case smartSession([ExerciseDefinition])
     case speedDrill([JourneyExpressionSummary])
+    case speakAndCompare(SpeakAndCompareDestination)
 }
 
 public struct LearningNavigationBuilder: Sendable {
@@ -136,6 +147,28 @@ public struct LearningNavigationBuilder: Sendable {
                 )
             }
             return .speedDrill(expressions)
+        case "speaking":
+            let resolver = AudioAssetResolver()
+            for expression in package.expressions {
+                guard let asset = resolver.bestAsset(
+                    for: expression.id,
+                    from: package.audioAssets
+                ) else {
+                    continue
+                }
+                return .speakAndCompare(
+                    SpeakAndCompareDestination(
+                        expression: JourneyExpressionSummary(
+                            id: expression.id,
+                            arabizi: expression.canonicalArabizi,
+                            arabicScript: expression.arabicScript,
+                            meaning: try expression.localization(for: locale).naturalMeaning
+                        ),
+                        referenceAudioAsset: asset
+                    )
+                )
+            }
+            return nil
         default:
             return nil
         }
