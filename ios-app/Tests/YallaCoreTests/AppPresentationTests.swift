@@ -65,6 +65,46 @@ struct AppPresentationTests {
         #expect(model.home.exerciseCount == 1)
     }
 
+    @Test("Speaking availability requires expression-linked reference audio")
+    func speakingRequiresLinkedAudio() throws {
+        let expression = Expression(
+            id: "expr.hello",
+            canonicalArabizi: "mar7aba",
+            localizations: ["ro": .init(naturalMeaning: "salut")]
+        )
+        let genericAudioPackage = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "generic-audio", defaultLearnerLocale: "ro"),
+            expressions: [expression],
+            units: [],
+            audioAssets: [
+                AudioAsset(
+                    id: "audio.generic",
+                    source: .genericFallback,
+                    locator: "generic.m4a"
+                )
+            ]
+        )
+        let linkedAudioPackage = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "linked-audio", defaultLearnerLocale: "ro"),
+            expressions: [expression],
+            units: [],
+            audioAssets: [
+                AudioAsset(
+                    id: "audio.hello",
+                    expressionID: expression.id,
+                    source: .approvedNative,
+                    locator: "hello.m4a"
+                )
+            ]
+        )
+
+        let genericModel = try LearnerShellModelBuilder().build(from: genericAudioPackage, locale: "ro")
+        let linkedModel = try LearnerShellModelBuilder().build(from: linkedAudioPackage, locale: "ro")
+
+        #expect(genericModel.practiceModes.first(where: { $0.id == "speaking" })?.isAvailable == false)
+        #expect(linkedModel.practiceModes.first(where: { $0.id == "speaking" })?.isAvailable == true)
+    }
+
     @Test("Practice surfaces core learning modes without pretending unavailable media exists")
     func practiceModesReflectCapabilities() throws {
         let model = try LearnerShellModelBuilder().build(from: package(), locale: "ro")
