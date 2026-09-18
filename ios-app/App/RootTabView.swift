@@ -32,6 +32,7 @@ struct RootTabView: View {
                 summary: content.shell.home,
                 progress: progressModel.snapshot,
                 currentUnitTitle: currentUnitTitle,
+                persistenceError: progressModel.persistenceError,
                 onContinueJourney: {
                     if let unitID = progressModel.snapshot.currentJourneyUnitID {
                         journeyPath = [unitID]
@@ -74,7 +75,10 @@ struct RootTabView: View {
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
                 .tag(RootTab.discover)
 
-            ProfileView(progress: progressModel.snapshot)
+            ProfileView(
+                progress: progressModel.snapshot,
+                persistenceError: progressModel.persistenceError
+            )
                 .tabItem { Label("Eu", systemImage: "person") }
                 .tag(RootTab.profile)
         }
@@ -96,6 +100,7 @@ private struct HomeView: View {
     let summary: HomeSummary
     let progress: LearnerProgressSnapshot
     let currentUnitTitle: String?
+    let persistenceError: String?
     let onContinueJourney: () -> Void
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
@@ -113,6 +118,17 @@ private struct HomeView: View {
                             .font(.largeTitle.bold())
                         Text("Alege următorul pas: lecție, recapitulare sau practică rapidă.")
                             .foregroundStyle(.secondary)
+                    }
+
+                    if persistenceError != nil {
+                        Label(
+                            "Progresul local nu a putut fi încărcat. Datele existente nu au fost șterse.",
+                            systemImage: "exclamationmark.triangle.fill"
+                        )
+                        .font(.subheadline.weight(.semibold))
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
                     }
 
                     HStack(spacing: 12) {
@@ -420,10 +436,23 @@ private struct DiscoverView: View {
 
 private struct ProfileView: View {
     let progress: LearnerProgressSnapshot
+    let persistenceError: String?
 
     var body: some View {
         NavigationStack {
             List {
+                if let persistenceError {
+                    Section("Stocare locală") {
+                        Label(
+                            "Progresul nu a putut fi citit. Datele locale nu au fost resetate automat.",
+                            systemImage: "exclamationmark.triangle.fill"
+                        )
+                        Text(persistenceError)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Section("Progres local") {
                     LabeledContent("Încercări", value: "\(progress.attempts.count)")
                     LabeledContent("Expresii văzute", value: "\(progress.seenExpressionIDs.count)")
