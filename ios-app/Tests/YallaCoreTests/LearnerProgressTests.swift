@@ -179,6 +179,21 @@ struct LearnerProgressTests {
         #expect(context.currentUnitIDs == ["unit.restaurant"])
     }
 
+    @Test("Saved dictionary expressions persist and can be removed")
+    func savedExpressionsPersist() async throws {
+        let store = InMemoryLearnerProgressStore()
+        let repository = LearnerProgressRepository(store: store)
+
+        let saved = try await repository.setExpressionSaved("expr.want", saved: true)
+        #expect(saved.savedExpressionIDs == ["expr.want"])
+
+        let reloaded = try await repository.load()
+        #expect(reloaded.savedExpressionIDs == ["expr.want"])
+
+        let removed = try await repository.setExpressionSaved("expr.want", saved: false)
+        #expect(removed.savedExpressionIDs.isEmpty)
+    }
+
     @Test("Repository persists updates through its store abstraction")
     func repositoryRoundTrip() async throws {
         let store = InMemoryLearnerProgressStore()
