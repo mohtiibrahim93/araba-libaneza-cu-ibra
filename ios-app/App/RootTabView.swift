@@ -224,25 +224,32 @@ private struct DiscoverView: View {
     let model: DiscoverModel
     @State private var query = ""
 
+    private var searchResults: [DiscoverSearchResult] {
+        model.search(query)
+    }
+
+    private var filteredRoots: [RootSummary] {
+        searchResults.compactMap { result in
+            guard case let .root(root) = result else { return nil }
+            return root
+        }
+    }
+
     private var filteredEntries: [DictionaryEntrySummary] {
-        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return model.entries }
-        let needle = query.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-        return model.entries.filter { entry in
-            let fields = [entry.arabizi, entry.arabicScript ?? "", entry.meaning] + entry.topics
-            return fields.contains { field in
-                field.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current).contains(needle)
-            }
+        searchResults.compactMap { result in
+            guard case let .entry(entry) = result else { return nil }
+            return entry
         }
     }
 
     var body: some View {
         NavigationStack {
             List {
-                if !model.roots.isEmpty {
+                if !filteredRoots.isEmpty {
                     Section("Rădăcini") {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
-                                ForEach(model.roots) { root in
+                                ForEach(filteredRoots) { root in
                                     if let graph = model.rootGraph(rootID: root.id) {
                                         NavigationLink {
                                             RootExplorerView(graph: graph)
@@ -271,37 +278,43 @@ private struct DiscoverView: View {
                     }
                 }
 
-                Section("Dicționar") {
-                    ForEach(filteredEntries) { entry in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(entry.arabizi)
-                                    .font(.headline)
-                                if let arabic = entry.arabicScript {
-                                    Text(arabic)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                if let rootID = entry.rootID,
-                                   let root = model.roots.first(where: { $0.id == rootID }),
-                                   let graph = model.rootGraph(rootID: rootID) {
-                                    NavigationLink(root.displayKey) {
-                                        RootExplorerView(graph: graph)
+                if !filteredEntries.isEmpty {
+                    Section("Dicționar") {
+                        ForEach(filteredEntries) { entry in
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text(entry.arabizi)
+                                        .font(.headline)
+                                    if let arabic = entry.arabicScript {
+                                        Text(arabic)
+                                            .foregroundStyle(.secondary)
                                     }
-                                    .font(.caption.bold())
-                                    .buttonStyle(.bordered)
+                                    Spacer()
+                                    if let rootID = entry.rootID,
+                                       let root = model.roots.first(where: { $0.id == rootID }),
+                                       let graph = model.rootGraph(rootID: rootID) {
+                                        NavigationLink(root.displayKey) {
+                                            RootExplorerView(graph: graph)
+                                        }
+                                        .font(.caption.bold())
+                                        .buttonStyle(.bordered)
+                                    }
+                                }
+                                Text(entry.meaning)
+                                    .foregroundStyle(.secondary)
+                                if !entry.topics.isEmpty {
+                                    Text(entry.topics.joined(separator: " · "))
+                                        .font(.caption)
+                                        .foregroundStyle(.tertiary)
                                 }
                             }
-                            Text(entry.meaning)
-                                .foregroundStyle(.secondary)
-                            if !entry.topics.isEmpty {
-                                Text(entry.topics.joined(separator: " · "))
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
+                            .padding(.vertical, 3)
                         }
-                        .padding(.vertical, 3)
                     }
+                }
+
+                if filteredRoots.isEmpty && filteredEntries.isEmpty {
+                    ContentUnavailableView.search(text: query)
                 }
             }
             .searchable(text: $query, prompt: "Caută Arabizi, arabă sau română")
