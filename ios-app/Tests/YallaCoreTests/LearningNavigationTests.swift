@@ -50,6 +50,32 @@ struct LearningNavigationTests {
         )
     }
 
+    private func audioPackage() -> ContentPackage {
+        let hello = Expression(
+            id: "expr.hello",
+            canonicalArabizi: "mar7aba",
+            levelTags: [.a1],
+            localizations: ["ro": .init(naturalMeaning: "salut")]
+        )
+        return ContentPackage(
+            manifest: .init(
+                schemaVersion: 3,
+                contentVersion: "audio-navigation-test",
+                defaultLearnerLocale: "ro"
+            ),
+            expressions: [hello],
+            units: [],
+            audioAssets: [
+                AudioAsset(
+                    id: "audio.hello",
+                    expressionID: hello.id,
+                    source: .approvedNative,
+                    locator: "hello.m4a"
+                )
+            ]
+        )
+    }
+
     @Test("Journey detail resolves localized expressions and exercises from one unit")
     func journeyDetail() throws {
         let optionalDetail = try LearningNavigationBuilder().journeyUnit(
@@ -111,6 +137,25 @@ struct LearningNavigationTests {
         #expect(expressions.map(\.meaning) == ["salut", "mulțumesc"])
     }
 
+    @Test("Speaking mode resolves only when reference audio exists")
+    func speakingDestination() throws {
+        let optionalDestination = try LearningNavigationBuilder().practiceDestination(
+            id: "speaking",
+            from: audioPackage(),
+            locale: "ro"
+        )
+        let destination = try #require(optionalDestination)
+
+        guard case let .speakAndCompare(speaking) = destination else {
+            Issue.record("Expected speaking to resolve to Speak & Compare")
+            return
+        }
+
+        #expect(speaking.expression.arabizi == "mar7aba")
+        #expect(speaking.expression.meaning == "salut")
+        #expect(speaking.referenceAudioAsset.id == "audio.hello")
+    }
+
     @Test("Unavailable practice modes do not fabricate a destination")
     func unavailablePracticeDestination() throws {
         let destination = try LearningNavigationBuilder().practiceDestination(
@@ -120,6 +165,13 @@ struct LearningNavigationTests {
         )
 
         #expect(destination == nil)
+
+        let speaking = try LearningNavigationBuilder().practiceDestination(
+            id: "speaking",
+            from: package(),
+            locale: "ro"
+        )
+        #expect(speaking == nil)
     }
 
     @Test("Unknown Journey unit does not fabricate a destination")
