@@ -25,6 +25,8 @@ struct DiscoverPresentationTests {
             expressions: expressions,
             units: [],
             roots: [root],
+            morphologicalPatterns: patterns,
+            morphologyLinks: links,
             audioAssets: [
                 AudioAsset(
                     id: "audio.keeteb.generated",
@@ -38,9 +40,7 @@ struct DiscoverPresentationTests {
                     source: .ibrahimRecorded,
                     locator: "keeteb-ibrahim.m4a"
                 )
-            ],
-            morphologicalPatterns: patterns,
-            morphologyLinks: links
+            ]
         )
     }
 
