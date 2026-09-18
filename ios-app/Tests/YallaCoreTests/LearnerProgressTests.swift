@@ -85,6 +85,37 @@ struct LearnerProgressTests {
         #expect(context.weakSkills == [.production])
     }
 
+    @Test("Recording the same durable attempt twice is idempotent")
+    func duplicateAttemptIsIgnored() {
+        let updater = LearnerProgressUpdater()
+        let durable = attempt(id: "attempt-duplicate", firstTryCorrect: false)
+        let first = updater.record(durable, in: LearnerProgressSnapshot())
+        let second = updater.record(durable, in: first)
+
+        #expect(second == first)
+        #expect(second.attempts.count == 1)
+        #expect(second.reviewByExpressionID["expr.want"]?.seen == 1)
+        #expect(second.masteryByExpressionID["expr.want"]?.progress(for: .production).attempts == 1)
+    }
+
+    @Test("Older persisted snapshots decode without the current Journey unit field")
+    func legacySnapshotStillDecodes() throws {
+        let legacyJSON = """
+        {
+          "attempts": [],
+          "masteryByExpressionID": {},
+          "reviewByExpressionID": {},
+          "activeMistakeExpressionIDs": [],
+          "reinforcementExpressionIDs": []
+        }
+        """.data(using: .utf8)!
+
+        let decoded = try JSONDecoder().decode(LearnerProgressSnapshot.self, from: legacyJSON)
+
+        #expect(decoded.currentJourneyUnitID == nil)
+        #expect(decoded.attempts.isEmpty)
+    }
+
     @Test("Current Journey unit persists and automatically feeds Smart Practice context")
     func currentJourneyUnitPersists() async throws {
         let store = InMemoryLearnerProgressStore()
