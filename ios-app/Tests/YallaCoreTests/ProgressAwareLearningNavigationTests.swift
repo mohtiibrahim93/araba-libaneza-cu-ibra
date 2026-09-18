@@ -79,15 +79,14 @@ struct ProgressAwareLearningNavigationTests {
             ]
         )
 
-        let destination = try #require(
-            LearningNavigationBuilder().practiceDestination(
-                id: "speed-drill",
-                from: package,
-                locale: "ro",
-                count: 5,
-                learnerContext: context
-            )
+        let optionalDestination = try LearningNavigationBuilder().practiceDestination(
+            id: "speed-drill",
+            from: package,
+            locale: "ro",
+            count: 5,
+            learnerContext: context
         )
+        let destination = try #require(optionalDestination)
 
         guard case let .speedDrill(selected) = destination else {
             Issue.record("Expected progress-aware Speed Drill destination")
