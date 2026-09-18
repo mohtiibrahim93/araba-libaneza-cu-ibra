@@ -18,19 +18,25 @@ public struct ExerciseResolution: Equatable, Sendable {
     public let needsCorrection: Bool
     public let attempt: Attempt?
     public let mistake: ExerciseMistake?
+    public let submittedAnswer: String?
+    public let retryCount: Int
 
     public init(
         evaluation: EvaluationResult,
         completed: Bool,
         needsCorrection: Bool,
         attempt: Attempt?,
-        mistake: ExerciseMistake?
+        mistake: ExerciseMistake?,
+        submittedAnswer: String? = nil,
+        retryCount: Int = 0
     ) {
         self.evaluation = evaluation
         self.completed = completed
         self.needsCorrection = needsCorrection
         self.attempt = attempt
         self.mistake = mistake
+        self.submittedAnswer = submittedAnswer
+        self.retryCount = retryCount
     }
 }
 
@@ -45,6 +51,7 @@ public struct ExerciseRunner: Sendable {
     private var usedHint = false
     private var originalMistake: ExerciseMistake?
     private var firstResponseTime: Double?
+    private var retryCount = 0
 
     public init(
         exercise: ExerciseDefinition,
@@ -92,7 +99,9 @@ public struct ExerciseRunner: Sendable {
                     completed: false,
                     needsCorrection: true,
                     attempt: nil,
-                    mistake: mistake
+                    mistake: mistake,
+                    submittedAnswer: answer,
+                    retryCount: retryCount
                 )
             }
 
@@ -101,9 +110,13 @@ public struct ExerciseRunner: Sendable {
                 completed: true,
                 needsCorrection: false,
                 attempt: makeAttempt(firstTryCorrect: true),
-                mistake: nil
+                mistake: nil,
+                submittedAnswer: answer,
+                retryCount: retryCount
             )
         }
+
+        retryCount += 1
 
         guard evaluation != .incorrect else {
             return ExerciseResolution(
@@ -111,7 +124,9 @@ public struct ExerciseRunner: Sendable {
                 completed: false,
                 needsCorrection: true,
                 attempt: nil,
-                mistake: originalMistake
+                mistake: originalMistake,
+                submittedAnswer: answer,
+                retryCount: retryCount
             )
         }
 
@@ -120,7 +135,9 @@ public struct ExerciseRunner: Sendable {
             completed: true,
             needsCorrection: false,
             attempt: makeAttempt(firstTryCorrect: false),
-            mistake: originalMistake
+            mistake: originalMistake,
+            submittedAnswer: answer,
+            retryCount: retryCount
         )
     }
 
