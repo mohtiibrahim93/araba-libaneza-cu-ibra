@@ -73,6 +73,8 @@ struct RootTabView: View {
 
             DiscoverView(
                 model: content.discover,
+                package: content.package,
+                locale: content.locale,
                 progressModel: progressModel
             )
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
@@ -333,6 +335,8 @@ private struct PracticeModeRow: View {
 
 private struct DiscoverView: View {
     let model: DiscoverModel
+    let package: ContentPackage
+    let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
     @State private var query = ""
 
@@ -367,6 +371,8 @@ private struct DiscoverView: View {
                                             RootExplorerView(
                                                 graph: graph,
                                                 model: model,
+                                                package: package,
+                                                locale: locale,
                                                 progressModel: progressModel
                                             )
                                         } label: {
@@ -401,6 +407,8 @@ private struct DiscoverView: View {
                                 DictionaryEntryDetailView(
                                     entry: entry,
                                     model: model,
+                                    package: package,
+                                    locale: locale,
                                     progressModel: progressModel
                                 )
                             } label: {
