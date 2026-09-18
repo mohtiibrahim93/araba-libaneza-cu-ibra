@@ -114,6 +114,7 @@ struct LearnerProgressTests {
 
         #expect(decoded.schemaVersion == 1)
         #expect(decoded.currentJourneyUnitID == nil)
+        #expect(decoded.savedExpressionIDs.isEmpty)
         #expect(decoded.attempts.isEmpty)
     }
 
@@ -145,6 +146,23 @@ struct LearnerProgressTests {
         await #expect(throws: LearnerProgressMigrationError.self) {
             _ = try await repository.load()
         }
+    }
+
+    @Test("Saved dictionary expressions persist and can be toggled without affecting learning evidence")
+    func savedExpressionsPersist() async throws {
+        let store = InMemoryLearnerProgressStore()
+        let repository = LearnerProgressRepository(store: store)
+
+        let saved = try await repository.toggleSavedExpressionID("expr.want")
+        #expect(saved.savedExpressionIDs == ["expr.want"])
+        #expect(saved.attempts.isEmpty)
+
+        let reloaded = try await repository.load()
+        #expect(reloaded.savedExpressionIDs == ["expr.want"])
+
+        let unsaved = try await repository.toggleSavedExpressionID("expr.want")
+        #expect(unsaved.savedExpressionIDs.isEmpty)
+        #expect(unsaved.attempts.isEmpty)
     }
 
     @Test("Current Journey unit persists and automatically feeds Smart Practice context")
