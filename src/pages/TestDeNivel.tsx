@@ -60,6 +60,8 @@ const COPY = {
     knowsH2: "Already know your level?",
     knowsP: "Then you do not need the test. Pick the right course in 30 seconds.",
     knowsCta: "Find the right course",
+    playedP: "Already practising in the Yalla game? Your game score can suggest a level, no test needed.",
+    playedCta: "See your score and level",
     honestH2: "What the test measures — and what it does not",
     honest: [
       "It measures reading and short written answers in Arabizi.",
