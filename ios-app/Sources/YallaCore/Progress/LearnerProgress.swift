@@ -6,19 +6,22 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let reviewByExpressionID: [String: ReviewState]
     public let activeMistakeExpressionIDs: Set<String>
     public let reinforcementExpressionIDs: Set<String>
+    public let currentJourneyUnitID: String?
 
     public init(
         attempts: [LearningAttempt] = [],
         masteryByExpressionID: [String: ExpressionMastery] = [:],
         reviewByExpressionID: [String: ReviewState] = [:],
         activeMistakeExpressionIDs: Set<String> = [],
-        reinforcementExpressionIDs: Set<String> = []
+        reinforcementExpressionIDs: Set<String> = [],
+        currentJourneyUnitID: String? = nil
     ) {
         self.attempts = attempts
         self.masteryByExpressionID = masteryByExpressionID
         self.reviewByExpressionID = reviewByExpressionID
         self.activeMistakeExpressionIDs = activeMistakeExpressionIDs
         self.reinforcementExpressionIDs = reinforcementExpressionIDs
+        self.currentJourneyUnitID = currentJourneyUnitID
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -49,7 +52,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
 
     public func sessionCandidateContext(
         at date: Date,
-        currentUnitIDs: Set<String> = [],
+        currentUnitIDs: Set<String>? = nil,
         probeExerciseIDs: Set<String> = []
     ) -> SessionCandidateContext {
         let scheduler = ReviewScheduler()
@@ -59,12 +62,16 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             }
         )
 
+        let resolvedCurrentUnitIDs = currentUnitIDs
+            ?? currentJourneyUnitID.map { Set([$0]) }
+            ?? []
+
         return SessionCandidateContext(
             dueExpressionIDs: dueExpressionIDs,
             mistakeExpressionIDs: activeMistakeExpressionIDs,
             reinforcementExpressionIDs: reinforcementExpressionIDs,
             weakSkills: weakSkills,
-            currentUnitIDs: currentUnitIDs,
+            currentUnitIDs: resolvedCurrentUnitIDs,
             seenExpressionIDs: seenExpressionIDs,
             probeExerciseIDs: probeExerciseIDs
         )
@@ -120,7 +127,8 @@ public struct LearnerProgressUpdater: Sendable {
             masteryByExpressionID: mastery,
             reviewByExpressionID: reviews,
             activeMistakeExpressionIDs: mistakes,
-            reinforcementExpressionIDs: reinforcement
+            reinforcementExpressionIDs: reinforcement,
+            currentJourneyUnitID: snapshot.currentJourneyUnitID
         )
     }
 }
@@ -160,6 +168,21 @@ public actor LearnerProgressRepository {
 
     public func load() async throws -> LearnerProgressSnapshot {
         try await store.load()
+    }
+
+    @discardableResult
+    public func setCurrentJourneyUnitID(_ unitID: String?) async throws -> LearnerProgressSnapshot {
+        let current = try await store.load()
+        let updated = LearnerProgressSnapshot(
+            attempts: current.attempts,
+            masteryByExpressionID: current.masteryByExpressionID,
+            reviewByExpressionID: current.reviewByExpressionID,
+            activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
+            reinforcementExpressionIDs: current.reinforcementExpressionIDs,
+            currentJourneyUnitID: unitID
+        )
+        try await store.save(updated)
+        return updated
     }
 
     @discardableResult
