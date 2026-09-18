@@ -30,6 +30,7 @@ targets:
         PRODUCT_NAME: YallaApp
         SWIFT_VERSION: "6.0"
         GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Microfonul este folosit doar când alegi să te înregistrezi pentru Spune și compară."
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: NO
 
