@@ -6,7 +6,19 @@ struct DiscoverPresentationTests {
     private func package() -> ContentPackage {
         let expressions = [
             Expression(id: "expr.kteb", canonicalArabizi: "kteb", levelTags: [.a1], topics: ["cuvinte"], localizations: ["ro": .init(naturalMeaning: "carte")]),
-            Expression(id: "expr.keeteb", canonicalArabizi: "keeteb", levelTags: [.a1], topics: ["verbe"], localizations: ["ro": .init(naturalMeaning: "a scris")]),
+            Expression(
+                id: "expr.keeteb",
+                canonicalArabizi: "keeteb",
+                levelTags: [.a1],
+                topics: ["verbe"],
+                localizations: [
+                    "ro": .init(
+                        naturalMeaning: "a scris",
+                        literalMeaning: "el a scris",
+                        pragmaticMeaning: "formă de trecut aprobată pentru acest exemplu"
+                    )
+                ]
+            ),
             Expression(id: "expr.maktab", canonicalArabizi: "maktab", levelTags: [.a1], topics: ["locuri"], localizations: ["ro": .init(naturalMeaning: "birou")])
         ]
         let root = Root(id: "root.ktb", arabiziRadicals: ["k", "t", "b"], arabicRadicals: "كتب")
@@ -58,6 +70,22 @@ struct DiscoverPresentationTests {
 
         #expect(model.entries.count == 3)
         #expect(model.entries.contains { $0.arabizi == "kteb" && $0.meaning == "carte" })
+    }
+
+    @Test("Dictionary entries preserve authored literal and pragmatic meanings")
+    func exposesMeaningLayers() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+        let entry = try #require(model.entries.first { $0.id == "expr.keeteb" })
+
+        #expect(entry.meaning == "a scris")
+        #expect(entry.literalMeaning == "el a scris")
+        #expect(entry.pragmaticMeaning == "formă de trecut aprobată pentru acest exemplu")
+
+        let searchResults = model.search("trecut aprobată")
+        #expect(searchResults.contains { result in
+            guard case let .entry(found) = result else { return false }
+            return found.id == entry.id
+        })
     }
 
     @Test("Dictionary entries expose the preferred linked audio asset")

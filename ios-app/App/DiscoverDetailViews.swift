@@ -51,6 +51,23 @@ struct DictionaryEntryDetailView: View {
                 .padding(.vertical, 6)
             }
 
+            if entry.literalMeaning != nil || entry.pragmaticMeaning != nil {
+                Section("Sens și folosire") {
+                    if let literalMeaning = entry.literalMeaning {
+                        LabeledContent("Literal", value: literalMeaning)
+                    }
+                    if let pragmaticMeaning = entry.pragmaticMeaning {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("În context")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            Text(pragmaticMeaning)
+                        }
+                        .padding(.vertical, 2)
+                    }
+                }
+            }
+
             if wasPracticed || needsReview {
                 Section("Progres") {
                     if wasPracticed {

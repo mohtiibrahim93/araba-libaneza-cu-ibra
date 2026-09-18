@@ -50,6 +50,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let arabizi: String
     public let arabicScript: String?
     public let meaning: String
+    public let literalMeaning: String?
+    public let pragmaticMeaning: String?
     public let levels: [LevelBand]
     public let topics: [String]
     public let rootID: String?
@@ -61,6 +63,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         arabizi: String,
         arabicScript: String?,
         meaning: String,
+        literalMeaning: String? = nil,
+        pragmaticMeaning: String? = nil,
         levels: [LevelBand],
         topics: [String],
         rootID: String?,
@@ -71,6 +75,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         self.arabizi = arabizi
         self.arabicScript = arabicScript
         self.meaning = meaning
+        self.literalMeaning = literalMeaning
+        self.pragmaticMeaning = pragmaticMeaning
         self.levels = levels
         self.topics = topics
         self.rootID = rootID
@@ -186,7 +192,13 @@ public struct DiscoverModel: Equatable, Sendable {
         }
 
         let entryResults = entries.filter { entry in
-            let candidates = [entry.arabizi, entry.arabicScript ?? "", entry.meaning] + entry.topics
+            let candidates = [
+                entry.arabizi,
+                entry.arabicScript ?? "",
+                entry.meaning,
+                entry.literalMeaning ?? "",
+                entry.pragmaticMeaning ?? ""
+            ] + entry.topics
             return candidates.contains { normalized($0).contains(needle) }
         }
 
@@ -257,11 +269,14 @@ public struct DiscoverModelBuilder: Sendable {
         }
 
         let entries = try package.expressions.map { expression in
-            DictionaryEntrySummary(
+            let localization = try expression.localization(for: locale)
+            return DictionaryEntrySummary(
                 id: expression.id,
                 arabizi: expression.canonicalArabizi,
                 arabicScript: expression.arabicScript,
-                meaning: try expression.localization(for: locale).naturalMeaning,
+                meaning: localization.naturalMeaning,
+                literalMeaning: localization.literalMeaning,
+                pragmaticMeaning: localization.pragmaticMeaning,
                 levels: expression.levelTags,
                 topics: expression.topics,
                 rootID: rootByExpressionID[expression.id],
