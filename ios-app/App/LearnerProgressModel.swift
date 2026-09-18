@@ -31,6 +31,18 @@ final class LearnerProgressModel: ObservableObject {
         }
     }
 
+    func setExpressionSaved(_ expressionID: String, saved: Bool) async {
+        do {
+            snapshot = try await repository.setExpressionSaved(
+                expressionID,
+                saved: saved
+            )
+            persistenceError = nil
+        } catch {
+            persistenceError = error.localizedDescription
+        }
+    }
+
     func record(_ attempt: LearningAttempt) async {
         do {
             snapshot = try await repository.record(attempt)
