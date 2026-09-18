@@ -5,6 +5,7 @@ struct JourneyUnitDetailView: View {
     let detail: JourneyUnitDetail
     let expressions: [YallaCore.Expression]
     let locale: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
         List {
@@ -32,7 +33,8 @@ struct JourneyUnitDetailView: View {
                             exercises: detail.exercises,
                             expressions: expressions,
                             locale: locale,
-                            title: detail.title
+                            title: detail.title,
+                            progressModel: progressModel
                         )
                     } label: {
                         Label("Începe exercițiile", systemImage: "play.fill")
@@ -81,6 +83,7 @@ struct PracticeDestinationView: View {
     let expressions: [YallaCore.Expression]
     let locale: String
     let title: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     @ViewBuilder
     var body: some View {
@@ -90,7 +93,8 @@ struct PracticeDestinationView: View {
                 exercises: exercises,
                 expressions: expressions,
                 locale: locale,
-                title: title
+                title: title,
+                progressModel: progressModel
             )
         case let .speedDrill(expressions):
             SpeedDrillOverviewView(expressions: expressions, title: title)
@@ -103,6 +107,7 @@ private struct SmartPracticeOverviewView: View {
     let expressions: [YallaCore.Expression]
     let locale: String
     let title: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
         List {
@@ -123,7 +128,8 @@ private struct SmartPracticeOverviewView: View {
                             exercises: exercises,
                             expressions: expressions,
                             locale: locale,
-                            title: title
+                            title: title,
+                            progressModel: progressModel
                         )
                     } label: {
                         Label("Începe sesiunea", systemImage: "play.fill")
