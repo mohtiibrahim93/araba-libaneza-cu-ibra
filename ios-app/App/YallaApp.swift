@@ -7,7 +7,10 @@ struct YallaApp: App {
 
     init() {
         do {
-            launchState = .ready(try BundledContentLoader().load())
+            let content = try BundledContentLoader().load()
+            let store = try SwiftDataLearnerProgressStore()
+            let repository = LearnerProgressRepository(store: store)
+            launchState = .ready(content, repository)
         } catch {
             launchState = .failed(error.localizedDescription)
         }
@@ -16,8 +19,11 @@ struct YallaApp: App {
     var body: some Scene {
         WindowGroup {
             switch launchState {
-            case let .ready(content):
-                RootTabView(content: content)
+            case let .ready(content, repository):
+                RootTabView(
+                    content: content,
+                    progressRepository: repository
+                )
             case let .failed(message):
                 ContentLoadFailureView(message: message)
             }
@@ -26,7 +32,7 @@ struct YallaApp: App {
 }
 
 private enum AppLaunchState {
-    case ready(AppContentSnapshot)
+    case ready(AppContentSnapshot, LearnerProgressRepository)
     case failed(String)
 }
 
