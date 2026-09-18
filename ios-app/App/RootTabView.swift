@@ -3,37 +3,57 @@ import YallaCore
 
 struct RootTabView: View {
     let content: AppContentSnapshot
+    @StateObject private var progressModel: LearnerProgressModel
+
+    init(
+        content: AppContentSnapshot,
+        progressRepository: LearnerProgressRepository
+    ) {
+        self.content = content
+        _progressModel = StateObject(
+            wrappedValue: LearnerProgressModel(repository: progressRepository)
+        )
+    }
 
     var body: some View {
         TabView {
-            HomeView(summary: content.shell.home)
+            HomeView(
+                summary: content.shell.home,
+                progress: progressModel.snapshot
+            )
                 .tabItem { Label("Acasă", systemImage: "house") }
 
             JourneyView(
                 sections: content.shell.journeySections,
                 package: content.package,
-                locale: content.locale
+                locale: content.locale,
+                progressModel: progressModel
             )
             .tabItem { Label("Parcurs", systemImage: "map") }
 
             PracticeView(
                 modes: content.shell.practiceModes,
                 package: content.package,
-                locale: content.locale
+                locale: content.locale,
+                progressModel: progressModel
             )
             .tabItem { Label("Practică", systemImage: "bolt") }
 
             DiscoverView(model: content.discover)
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
 
-            ProfileView()
+            ProfileView(progress: progressModel.snapshot)
                 .tabItem { Label("Eu", systemImage: "person") }
+        }
+        .task {
+            await progressModel.load()
         }
     }
 }
 
 private struct HomeView: View {
     let summary: HomeSummary
+    let progress: LearnerProgressSnapshot
 
     var body: some View {
         NavigationStack {
@@ -48,8 +68,8 @@ private struct HomeView: View {
 
                     HStack(spacing: 12) {
                         MetricCard(value: summary.journeyUnitCount, label: "unități")
-                        MetricCard(value: summary.expressionCount, label: "expresii")
-                        MetricCard(value: summary.exerciseCount, label: "exerciții")
+                        MetricCard(value: progress.attempts.count, label: "încercări")
+                        MetricCard(value: progress.activeMistakeExpressionIDs.count, label: "de revăzut")
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
@@ -71,6 +91,7 @@ private struct JourneyView: View {
     let sections: [JourneySectionSummary]
     let package: ContentPackage
     let locale: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     private let navigationBuilder = LearningNavigationBuilder()
 
@@ -96,7 +117,8 @@ private struct JourneyView: View {
                 JourneyUnitDetailView(
                     detail: detail,
                     expressions: package.expressions,
-                    locale: locale
+                    locale: locale,
+                    progressModel: progressModel
                 )
             } label: {
                 JourneyUnitRow(unit: unit)
@@ -141,6 +163,7 @@ private struct PracticeView: View {
     let modes: [PracticeModeSummary]
     let package: ContentPackage
     let locale: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     private let navigationBuilder = LearningNavigationBuilder()
 
@@ -161,7 +184,8 @@ private struct PracticeView: View {
                     destination: destination,
                     expressions: package.expressions,
                     locale: locale,
-                    title: mode.title
+                    title: mode.title,
+                    progressModel: progressModel
                 )
             } label: {
                 PracticeModeRow(mode: mode, isNavigable: true)
@@ -177,7 +201,8 @@ private struct PracticeView: View {
             return try navigationBuilder.practiceDestination(
                 id: mode.id,
                 from: package,
-                locale: locale
+                locale: locale,
+                learnerContext: progressModel.snapshot.sessionCandidateContext(at: Date())
             )
         } catch {
             return nil
@@ -327,13 +352,23 @@ private struct DiscoverView: View {
 }
 
 private struct ProfileView: View {
+    let progress: LearnerProgressSnapshot
+
     var body: some View {
         NavigationStack {
-            FeaturePlaceholderView(
-                title: "Progresul tău",
-                subtitle: "Stăpânire, puncte slabe, cuvinte salvate, înregistrări și setări.",
-                systemImage: "person"
-            )
+            List {
+                Section("Progres local") {
+                    LabeledContent("Încercări", value: "\(progress.attempts.count)")
+                    LabeledContent("Expresii văzute", value: "\(progress.seenExpressionIDs.count)")
+                    LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
+                    LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
+                }
+
+                Section {
+                    Text("Progresul este păstrat local pe dispozitiv și funcționează fără cont.")
+                        .foregroundStyle(.secondary)
+                }
+            }
             .navigationTitle("Eu")
         }
     }
