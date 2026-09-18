@@ -22,6 +22,14 @@ struct DictionaryEntryDetailView: View {
         )
     }
 
+    private var wasPracticed: Bool {
+        progressModel.snapshot.seenExpressionIDs.contains(entry.id)
+    }
+
+    private var needsReview: Bool {
+        progressModel.snapshot.activeMistakeExpressionIDs.contains(entry.id)
+    }
+
     var body: some View {
         List {
             Section {
@@ -41,6 +49,17 @@ struct DictionaryEntryDetailView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 6)
+            }
+
+            if wasPracticed || needsReview {
+                Section("Progres") {
+                    if wasPracticed {
+                        Label("Ai exersat această expresie", systemImage: "checkmark.circle.fill")
+                    }
+                    if needsReview {
+                        Label("Are o greșeală activă de revăzut", systemImage: "arrow.counterclockwise.circle.fill")
+                    }
+                }
             }
 
             if !targetedExercises.isEmpty {
@@ -157,12 +176,28 @@ struct RootExplorerView: View {
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
 
+    private var memberIDs: Set<String> {
+        Set(graph.members.map(\.id))
+    }
+
     private var targetedExercises: [ExerciseDefinition] {
         LearningNavigationBuilder().targetedPractice(
-            expressionIDs: Set(graph.members.map(\.id)),
+            expressionIDs: memberIDs,
             from: package,
             count: 12
         )
+    }
+
+    private var practicedCount: Int {
+        memberIDs.intersection(progressModel.snapshot.seenExpressionIDs).count
+    }
+
+    private var reviewCount: Int {
+        memberIDs.intersection(progressModel.snapshot.activeMistakeExpressionIDs).count
+    }
+
+    private var savedCount: Int {
+        memberIDs.intersection(progressModel.snapshot.savedExpressionIDs).count
     }
 
     var body: some View {
@@ -171,6 +206,12 @@ struct RootExplorerView: View {
                 Text("Familia rădăcinii")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+
+                HStack(spacing: 10) {
+                    RootProgressMetric(value: practicedCount, label: "exersate")
+                    RootProgressMetric(value: reviewCount, label: "de revăzut")
+                    RootProgressMetric(value: savedCount, label: "salvate")
+                }
 
                 if !targetedExercises.isEmpty {
                     NavigationLink {
@@ -272,11 +313,26 @@ struct RootExplorerView: View {
     }
 
     private func memberLabel(_ member: RootExplorerMember) -> some View {
-        Text(member.label)
-            .font(.subheadline.weight(.semibold))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(.thinMaterial, in: Capsule())
+        HStack(spacing: 5) {
+            Text(member.label)
+                .font(.subheadline.weight(.semibold))
+
+            if progressModel.snapshot.activeMistakeExpressionIDs.contains(member.id) {
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .font(.caption2)
+            } else if progressModel.snapshot.seenExpressionIDs.contains(member.id) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.caption2)
+            }
+
+            if progressModel.snapshot.savedExpressionIDs.contains(member.id) {
+                Image(systemName: "bookmark.fill")
+                    .font(.caption2)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.thinMaterial, in: Capsule())
     }
 
     private func patternMetadata(for member: RootExplorerMember) -> String? {
@@ -308,5 +364,24 @@ struct RootExplorerView: View {
         case .limited: return "limitat"
         case .lexicalized: return "lexicalizat"
         }
+    }
+}
+
+
+private struct RootProgressMetric: View {
+    let value: Int
+    let label: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("\(value)")
+                .font(.headline)
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 }
