@@ -275,26 +275,50 @@ public struct LearningNavigationBuilder: Sendable {
             return resolved.isEmpty ? nil : .listening(resolved)
         case "speaking":
             let resolver = AudioAssetResolver()
-            for expression in package.expressions {
-                guard let asset = resolver.bestAsset(
+            let audioBackedExpressions = package.expressions.filter { expression in
+                resolver.bestAsset(
                     for: expression.id,
                     from: package.audioAssets
-                ) else {
-                    continue
-                }
-                return .speakAndCompare(
-                    SpeakAndCompareDestination(
-                        expression: JourneyExpressionSummary(
-                            id: expression.id,
-                            arabizi: expression.canonicalArabizi,
-                            arabicScript: expression.arabicScript,
-                            meaning: try expression.localization(for: locale).naturalMeaning
-                        ),
-                        referenceAudioAsset: asset
-                    )
-                )
+                ) != nil
             }
-            return nil
+
+            let selectedExpression: Expression?
+            if let learnerContext {
+                let selectedID = SpeedDrillSelectionPlanner(targetCount: 1)
+                    .makeSelection(
+                        expressions: audioBackedExpressions,
+                        units: package.units,
+                        context: learnerContext
+                    )
+                    .first?
+                    .expressionID
+                selectedExpression = selectedID.flatMap { selectedID in
+                    audioBackedExpressions.first { $0.id == selectedID }
+                }
+            } else {
+                selectedExpression = audioBackedExpressions.first
+            }
+
+            guard let expression = selectedExpression,
+                  let asset = resolver.bestAsset(
+                    for: expression.id,
+                    from: package.audioAssets
+                  )
+            else {
+                return nil
+            }
+
+            return .speakAndCompare(
+                SpeakAndCompareDestination(
+                    expression: JourneyExpressionSummary(
+                        id: expression.id,
+                        arabizi: expression.canonicalArabizi,
+                        arabicScript: expression.arabicScript,
+                        meaning: try expression.localization(for: locale).naturalMeaning
+                    ),
+                    referenceAudioAsset: asset
+                )
+            )
         default:
             return nil
         }

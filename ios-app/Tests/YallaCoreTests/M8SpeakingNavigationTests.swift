@@ -56,6 +56,63 @@ struct M8SpeakingNavigationTests {
         #expect(speaking.referenceAudioAsset.id == "audio.hello.ibrahim")
     }
 
+    @Test("Speaking prefers learner-relevant audio-backed material when progress is available")
+    func speakingUsesLearnerSignals() throws {
+        let neutral = Expression(
+            id: "expr.neutral",
+            canonicalArabizi: "neutral",
+            localizations: ["ro": .init(naturalMeaning: "neutral")]
+        )
+        let due = Expression(
+            id: "expr.due",
+            canonicalArabizi: "due",
+            localizations: ["ro": .init(naturalMeaning: "due")]
+        )
+        let package = ContentPackage(
+            manifest: .init(
+                schemaVersion: 3,
+                contentVersion: "progress-aware-speaking",
+                defaultLearnerLocale: "ro"
+            ),
+            expressions: [neutral, due],
+            units: [],
+            audioAssets: [
+                AudioAsset(
+                    id: "audio.neutral",
+                    expressionID: neutral.id,
+                    source: .approvedNative,
+                    locator: "neutral.m4a"
+                ),
+                AudioAsset(
+                    id: "audio.due",
+                    expressionID: due.id,
+                    source: .approvedNative,
+                    locator: "due.m4a"
+                )
+            ]
+        )
+        let context = SessionCandidateContext(
+            dueExpressionIDs: [due.id],
+            seenExpressionIDs: [neutral.id, due.id]
+        )
+
+        let optionalDestination = try LearningNavigationBuilder().practiceDestination(
+            id: "speaking",
+            from: package,
+            locale: "ro",
+            learnerContext: context
+        )
+        let destination = try #require(optionalDestination)
+
+        guard case let .speakAndCompare(speaking) = destination else {
+            Issue.record("Expected progress-aware speak-and-compare destination")
+            return
+        }
+
+        #expect(speaking.expression.id == due.id)
+        #expect(speaking.referenceAudioAsset.id == "audio.due")
+    }
+
     @Test("Speaking stays unavailable when the package has no reference audio")
     func speakingRequiresReferenceAudio() throws {
         let package = ContentPackage(
