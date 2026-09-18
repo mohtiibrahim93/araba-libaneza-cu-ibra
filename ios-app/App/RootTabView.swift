@@ -339,28 +339,89 @@ private struct DiscoverView: View {
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
     @State private var query = ""
+    @State private var showSavedOnly = false
+
+    private var savedExpressionIDs: Set<String> {
+        progressModel.snapshot.savedExpressionIDs
+    }
+
+    private var savedPracticeExercises: [ExerciseDefinition] {
+        LearningNavigationBuilder().targetedPractice(
+            expressionIDs: savedExpressionIDs,
+            from: package,
+            count: 20
+        )
+    }
 
     private var searchResults: [DiscoverSearchResult] {
         model.search(query)
     }
 
     private var filteredRoots: [RootSummary] {
-        searchResults.compactMap { result in
+        let roots = searchResults.compactMap { result -> RootSummary? in
             guard case let .root(root) = result else { return nil }
             return root
+        }
+
+        guard showSavedOnly else { return roots }
+
+        return roots.filter { root in
+            guard let graph = model.rootGraph(rootID: root.id) else { return false }
+            return graph.members.contains { savedExpressionIDs.contains($0.id) }
         }
     }
 
     private var filteredEntries: [DictionaryEntrySummary] {
-        searchResults.compactMap { result in
+        let entries = searchResults.compactMap { result -> DictionaryEntrySummary? in
             guard case let .entry(entry) = result else { return nil }
             return entry
         }
+
+        guard showSavedOnly else { return entries }
+        return entries.filter { savedExpressionIDs.contains($0.id) }
     }
 
     var body: some View {
         NavigationStack {
             List {
+                if !savedExpressionIDs.isEmpty {
+                    Section("Salvate") {
+                        HStack {
+                            Label(
+                                "\(savedExpressionIDs.count) expresii salvate",
+                                systemImage: "bookmark.fill"
+                            )
+                            Spacer()
+                            if showSavedOnly {
+                                Text("filtru activ")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        if !savedPracticeExercises.isEmpty {
+                            NavigationLink {
+                                ExerciseSessionView(
+                                    exercises: savedPracticeExercises,
+                                    expressions: package.expressions,
+                                    locale: locale,
+                                    title: "Practică expresiile salvate",
+                                    progressModel: progressModel
+                                )
+                            } label: {
+                                Label(
+                                    "Practică expresiile salvate",
+                                    systemImage: "bolt.fill"
+                                )
+                            }
+                        } else {
+                            Text("Expresiile salvate nu au încă exerciții native aprobate asociate.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
                 if !filteredRoots.isEmpty {
                     Section("Rădăcini") {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -450,11 +511,37 @@ private struct DiscoverView: View {
                 }
 
                 if filteredRoots.isEmpty && filteredEntries.isEmpty {
-                    ContentUnavailableView.search(text: query)
+                    if showSavedOnly && savedExpressionIDs.isEmpty {
+                        ContentUnavailableView(
+                            "Nicio expresie salvată",
+                            systemImage: "bookmark",
+                            description: Text("Salvează expresii din dicționar ca să le găsești aici.")
+                        )
+                    } else if showSavedOnly {
+                        ContentUnavailableView(
+                            "Niciun rezultat salvat",
+                            systemImage: "bookmark.slash",
+                            description: Text("Nu există expresii salvate care să corespundă căutării curente.")
+                        )
+                    } else {
+                        ContentUnavailableView.search(text: query)
+                    }
                 }
             }
             .searchable(text: $query, prompt: "Caută Arabizi, arabă sau română")
             .navigationTitle("Descoperă")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSavedOnly.toggle()
+                    } label: {
+                        Image(systemName: showSavedOnly ? "bookmark.fill" : "bookmark")
+                    }
+                    .accessibilityLabel(
+                        showSavedOnly ? "Arată toate expresiile" : "Arată doar expresiile salvate"
+                    )
+                }
+            }
         }
     }
 }
