@@ -104,7 +104,7 @@ struct PracticeDestinationView: View {
         case let .listening(items):
             ListeningPracticeView(
                 items: items,
-                expressions: expressions,
+                title: title,
                 progressModel: progressModel
             )
         case let .speakAndCompare(speaking):
