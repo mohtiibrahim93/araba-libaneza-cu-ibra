@@ -252,7 +252,7 @@ private struct DiscoverView: View {
                                 ForEach(filteredRoots) { root in
                                     if let graph = model.rootGraph(rootID: root.id) {
                                         NavigationLink {
-                                            RootExplorerView(graph: graph)
+                                            RootExplorerView(graph: graph, model: model)
                                         } label: {
                                             VStack(spacing: 4) {
                                                 Text(root.displayKey)
@@ -281,34 +281,37 @@ private struct DiscoverView: View {
                 if !filteredEntries.isEmpty {
                     Section("Dicționar") {
                         ForEach(filteredEntries) { entry in
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack {
-                                    Text(entry.arabizi)
-                                        .font(.headline)
-                                    if let arabic = entry.arabicScript {
-                                        Text(arabic)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Spacer()
-                                    if let rootID = entry.rootID,
-                                       let root = model.roots.first(where: { $0.id == rootID }),
-                                       let graph = model.rootGraph(rootID: rootID) {
-                                        NavigationLink(root.displayKey) {
-                                            RootExplorerView(graph: graph)
+                            NavigationLink {
+                                DictionaryEntryDetailView(entry: entry, model: model)
+                            } label: {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text(entry.arabizi)
+                                            .font(.headline)
+                                        if let arabic = entry.arabicScript {
+                                            Text(arabic)
+                                                .foregroundStyle(.secondary)
                                         }
-                                        .font(.caption.bold())
-                                        .buttonStyle(.bordered)
+                                        Spacer()
+                                        if let rootID = entry.rootID,
+                                           let root = model.roots.first(where: { $0.id == rootID }) {
+                                            Text(root.displayKey)
+                                                .font(.caption.bold())
+                                                .padding(.horizontal, 8)
+                                                .padding(.vertical, 4)
+                                                .background(.thinMaterial, in: Capsule())
+                                        }
+                                    }
+                                    Text(entry.meaning)
+                                        .foregroundStyle(.secondary)
+                                    if !entry.topics.isEmpty {
+                                        Text(entry.topics.joined(separator: " · "))
+                                            .font(.caption)
+                                            .foregroundStyle(.tertiary)
                                     }
                                 }
-                                Text(entry.meaning)
-                                    .foregroundStyle(.secondary)
-                                if !entry.topics.isEmpty {
-                                    Text(entry.topics.joined(separator: " · "))
-                                        .font(.caption)
-                                        .foregroundStyle(.tertiary)
-                                }
+                                .padding(.vertical, 3)
                             }
-                            .padding(.vertical, 3)
                         }
                     }
                 }
@@ -320,74 +323,6 @@ private struct DiscoverView: View {
             .searchable(text: $query, prompt: "Caută Arabizi, arabă sau română")
             .navigationTitle("Descoperă")
         }
-    }
-}
-
-private struct RootExplorerView: View {
-    let graph: RootExplorerSummary
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("Familia rădăcinii")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                GeometryReader { proxy in
-                    let size = proxy.size
-                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
-                    let radius = max(min(size.width, size.height) * 0.34, 90)
-
-                    ZStack {
-                        ForEach(Array(graph.members.enumerated()), id: \.element.id) { index, member in
-                            let angle = (Double(index) / Double(max(graph.members.count, 1))) * (Double.pi * 2) - Double.pi / 2
-                            let x = center.x + CGFloat(cos(angle)) * radius
-                            let y = center.y + CGFloat(sin(angle)) * radius
-
-                            Path { path in
-                                path.move(to: center)
-                                path.addLine(to: CGPoint(x: x, y: y))
-                            }
-                            .stroke(.secondary.opacity(0.35), lineWidth: 1.5)
-
-                            Text(member.label)
-                                .font(.subheadline.weight(.semibold))
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(.thinMaterial, in: Capsule())
-                                .position(x: x, y: y)
-                        }
-
-                        Text(graph.centerLabel)
-                            .font(.title2.bold())
-                            .padding(22)
-                            .background(.regularMaterial, in: Circle())
-                            .overlay(Circle().stroke(.secondary.opacity(0.25)))
-                            .position(center)
-                    }
-                }
-                .frame(height: 360)
-
-                DisclosureGroup("Gramatică și tipare") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        ForEach(graph.members) { member in
-                            HStack {
-                                Text(member.label)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Text(member.patternID ?? "fără tipar etichetat")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(.top, 8)
-                }
-            }
-            .padding()
-        }
-        .navigationTitle(graph.centerLabel)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
