@@ -1,65 +1,68 @@
+import Foundation
 import SwiftUI
 import YallaCore
 
 struct ListeningPracticeView: View {
     let items: [ListeningPracticeItem]
-    let expressions: [YallaCore.Expression]
+    let title: String
     @ObservedObject var progressModel: LearnerProgressModel
 
     @StateObject private var audio = NativeAudioController()
     @State private var currentIndex = 0
-    @State private var runner: ExerciseRunner?
-    @State private var answer = ""
-    @State private var latestResolution: ExerciseResolution?
+    @State private var selectedChoice: String?
+    @State private var freeWriteAnswer = ""
+    @State private var submissionCount = 0
+    @State private var currentCompleted = false
+    @State private var feedbackMessage: String?
+    @State private var feedbackIsCorrect = false
+    @State private var revealWrittenLebanese = false
+    @State private var usedReveal = false
     @State private var startedAt = Date()
-    @State private var persistedPromptIDs = Set<String>()
-    @FocusState private var answerFocused: Bool
+    @State private var completedCount = 0
 
     private var currentItem: ListeningPracticeItem? {
         guard currentIndex >= 0, currentIndex < items.count else { return nil }
         return items[currentIndex]
     }
 
-    private var currentExpression: YallaCore.Expression? {
-        guard let item = currentItem else { return nil }
-        return expressions.first(where: { $0.id == item.expression.id })
+    private var isFinished: Bool {
+        currentIndex >= items.count
     }
 
     var body: some View {
         Group {
-            if items.isEmpty {
+            if isFinished {
+                finishedView
+            } else if let item = currentItem {
+                practiceView(item)
+            } else {
                 ContentUnavailableView(
                     "Ascultare indisponibilă",
-                    systemImage: "ear.badge.exclamationmark",
-                    description: Text("Nu există încă exerciții cu audio de referință valid.")
+                    systemImage: "ear.badge.exclamationmark"
                 )
-            } else if currentIndex >= items.count {
-                completionView
-            } else if let item = currentItem {
-                exerciseView(item)
             }
         }
-        .navigationTitle("Ascultare")
+        .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             audio.stopPlayback()
         }
     }
 
-    private func exerciseView(_ item: ListeningPracticeItem) -> some View {
+    private func practiceView(_ item: ListeningPracticeItem) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 progressHeader
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(item.mode == .multipleChoice ? "Ce înseamnă ce auzi?" : "Scrie în Arabizi ce auzi.")
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(item.mode == .multipleChoice
+                         ? "Ce înseamnă ce auzi?"
+                         : "Scrie în Arabizi ce auzi.")
                         .font(.title2.bold())
 
-                    if item.revealWrittenLebaneseInitially || latestResolution?.completed == true {
-                        Text(item.expression.arabizi)
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text("Ascultă înainte să răspunzi. Poți reda fraza de mai multe ori.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
 
                 Button {
@@ -70,25 +73,35 @@ struct ListeningPracticeView: View {
                     }
                 } label: {
                     Label(
-                        audio.isPlaying ? "Oprește audio" : "Ascultă",
+                        audio.isPlaying ? "Oprește redarea" : "Ascultă",
                         systemImage: audio.isPlaying ? "stop.fill" : "speaker.wave.2.fill"
                     )
                     .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
 
-                switch item.mode {
-                case .multipleChoice:
-                    choiceAnswers(item)
-                case .freeWrite:
-                    freeWriteAnswer
+                writtenLebaneseSection(item)
+
+                if item.mode == .multipleChoice {
+                    multipleChoiceSection(item)
+                } else {
+                    freeWriteSection
                 }
 
-                if let resolution = latestResolution {
-                    listeningFeedback(resolution, item: item)
+                if let feedbackMessage {
+                    Label(
+                        feedbackMessage,
+                        systemImage: feedbackIsCorrect
+                            ? "checkmark.circle.fill"
+                            : "arrow.counterclockwise.circle.fill"
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
                 }
 
-                if latestResolution?.completed == true {
+                if currentCompleted {
                     Button {
                         advance()
                     } label: {
@@ -96,34 +109,35 @@ struct ListeningPracticeView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                } else {
+                    Button {
+                        verify(item)
+                    } label: {
+                        Text(submissionCount > 0 ? "Verifică din nou" : "Verifică")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!answerIsReady(for: item))
                 }
 
-                if let errorMessage = audio.errorMessage {
-                    Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
-                        .font(.subheadline)
+                if let error = audio.errorMessage {
+                    Label(error, systemImage: "exclamationmark.triangle.fill")
+                        .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
                 }
             }
             .padding()
-        }
-        .onAppear {
-            if item.mode == .freeWrite {
-                answerFocused = true
-            }
         }
     }
 
     private var progressHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Exercițiul \(min(currentIndex + 1, items.count)) din \(items.count)")
+                Text("Ascultarea \(min(currentIndex + 1, items.count)) din \(items.count)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text("\(currentIndex) completate")
+                Text("\(completedCount) completate")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -135,202 +149,153 @@ struct ListeningPracticeView: View {
         }
     }
 
-    private func choiceAnswers(_ item: ListeningPracticeItem) -> some View {
+    @ViewBuilder
+    private func writtenLebaneseSection(_ item: ListeningPracticeItem) -> some View {
+        if item.revealWrittenLebaneseInitially || revealWrittenLebanese {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(item.expression.arabizi)
+                    .font(.headline)
+                if let arabic = item.expression.arabicScript {
+                    Text(arabic)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        } else {
+            Button {
+                revealWrittenLebanese = true
+                usedReveal = true
+            } label: {
+                Label("Arată forma scrisă", systemImage: "text.viewfinder")
+            }
+            .buttonStyle(.bordered)
+            .disabled(currentCompleted)
+        }
+    }
+
+    private func multipleChoiceSection(_ item: ListeningPracticeItem) -> some View {
         VStack(spacing: 10) {
             ForEach(item.choices, id: \.self) { choice in
                 Button {
-                    submit(choice)
+                    selectedChoice = choice
                 } label: {
                     HStack {
                         Text(choice)
-                            .multilineTextAlignment(.leading)
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if selectedChoice == choice {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
                     }
-                    .padding(.vertical, 6)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.bordered)
-                .disabled(latestResolution?.completed == true)
+                .disabled(currentCompleted)
             }
         }
     }
 
-    private var freeWriteAnswer: some View {
-        VStack(spacing: 12) {
-            TextField("Scrie ce ai auzit", text: $answer)
-                .textFieldStyle(.roundedBorder)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .focused($answerFocused)
-                .submitLabel(.done)
-                .disabled(latestResolution?.completed == true)
-                .onSubmit {
-                    submitFreeWrite()
-                }
-
-            if latestResolution?.completed != true {
-                Button {
-                    submitFreeWrite()
-                } label: {
-                    Text(latestResolution?.needsCorrection == true ? "Verifică din nou" : "Verifică")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            }
-        }
+    private var freeWriteSection: some View {
+        TextField("Scrie ce auzi în Arabizi", text: $freeWriteAnswer)
+            .textFieldStyle(.roundedBorder)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .disabled(currentCompleted)
     }
 
-    private func listeningFeedback(
-        _ resolution: ExerciseResolution,
-        item: ListeningPracticeItem
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Label(
-                resolution.completed ? "Corect" : "Mai încearcă",
-                systemImage: resolution.completed ? "checkmark.circle.fill" : "arrow.counterclockwise.circle.fill"
-            )
-            .font(.headline)
-
-            if resolution.completed {
-                Text("Ai identificat forma „\(item.expression.arabizi)”.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("Corectează răspunsul înainte să continui. Prima încercare rămâne înregistrată.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-
-    private var completionView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 48))
-            Text("Sesiune de ascultare terminată")
-                .font(.title.bold())
-                .multilineTextAlignment(.center)
-            Text("Ai parcurs \(items.count) exerciții cu audio de referință.")
-                .foregroundStyle(.secondary)
+    private var finishedView: some View {
+        ContentUnavailableView {
+            Label("Sesiune terminată", systemImage: "checkmark.circle.fill")
+        } description: {
+            Text("Ai completat \(completedCount) exerciții de ascultare.")
         }
         .padding()
     }
 
-    private func submitFreeWrite() {
-        let trimmed = answer.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-        submit(trimmed)
+    private func answerIsReady(for item: ListeningPracticeItem) -> Bool {
+        switch item.mode {
+        case .multipleChoice:
+            return selectedChoice != nil
+        case .freeWrite:
+            return !freeWriteAnswer
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .isEmpty
+        }
     }
 
-    private func submit(_ submittedAnswer: String) {
-        guard let item = currentItem,
-              let expression = currentExpression,
-              latestResolution?.completed != true
-        else {
-            return
-        }
+    private func verify(_ item: ListeningPracticeItem) {
+        guard !currentCompleted else { return }
 
-        var activeRunner = runner ?? makeRunner(item: item, expression: expression)
-        let responseTime = max(Date().timeIntervalSince(startedAt), 0)
-        let resolution = activeRunner.submit(
-            submittedAnswer,
-            responseTime: responseTime
-        )
-        runner = activeRunner
-        latestResolution = resolution
+        submissionCount += 1
+        let submittedAnswer: String
+        let correct: Bool
 
-        if resolution.completed {
-            answerFocused = false
-            persist(
-                resolution,
-                item: item
+        switch item.mode {
+        case .multipleChoice:
+            submittedAnswer = selectedChoice ?? ""
+            correct = submittedAnswer.compare(
+                item.expression.meaning,
+                options: [.caseInsensitive, .diacriticInsensitive]
+            ) == .orderedSame
+
+        case .freeWrite:
+            submittedAnswer = freeWriteAnswer
+            let evaluation = AnswerEvaluator().evaluate(
+                answer: submittedAnswer,
+                canonical: item.expression.arabizi,
+                spellingVariants: item.spellingVariants,
+                pronunciationVariants: item.pronunciationVariants
             )
-        } else if item.mode == .freeWrite {
-            answer = ""
-            answerFocused = true
-        }
-    }
-
-    private func makeRunner(
-        item: ListeningPracticeItem,
-        expression: YallaCore.Expression
-    ) -> ExerciseRunner {
-        let type: ExerciseDefinitionType = item.mode == .multipleChoice
-            ? .listeningChoice
-            : .listeningWrite
-
-        let correctAnswer = item.mode == .multipleChoice
-            ? item.expression.meaning
-            : expression.canonicalArabizi
-
-        let exercise = ExerciseDefinition(
-            id: item.id,
-            type: type,
-            unitID: "native-listening",
-            expressionIDs: [expression.id],
-            prompt: ["ro": "Ascultă"],
-            answer: correctAnswer,
-            wrongAnswers: item.choices.filter { $0 != correctAnswer }
-        )
-
-        let spellingVariants = expression.variants
-            .filter { $0.kind == .spelling }
-            .map(\.value)
-        let pronunciationVariants = expression.variants
-            .filter { $0.kind == .pronunciation }
-            .map(\.value)
-
-        return ExerciseRunner(
-            exercise: exercise,
-            expressionID: expression.id,
-            skill: .listening,
-            spellingVariants: item.mode == .freeWrite ? spellingVariants : [],
-            pronunciationVariants: item.mode == .freeWrite ? pronunciationVariants : []
-        )
-    }
-
-    private func persist(
-        _ resolution: ExerciseResolution,
-        item: ListeningPracticeItem
-    ) {
-        guard !persistedPromptIDs.contains(item.id) else { return }
-
-        let type: ExerciseDefinitionType = item.mode == .multipleChoice
-            ? .listeningChoice
-            : .listeningWrite
-
-        guard let durableAttempt = LearningAttemptFactory().make(
-            id: UUID().uuidString,
-            resolution: resolution,
-            occurredAt: Date(),
-            skills: type.defaultMasterySkills
-        ) else {
-            return
+            correct = evaluation != .incorrect
         }
 
-        persistedPromptIDs.insert(item.id)
-        Task {
-            await progressModel.record(durableAttempt)
+        if correct {
+            currentCompleted = true
+            feedbackIsCorrect = true
+            feedbackMessage = submissionCount == 1 && !usedReveal
+                ? "Corect din prima."
+                : "Corect. Prima încercare rămâne păstrată dacă ai avut nevoie de corectare."
+
+            let elapsed = max(Date().timeIntervalSince(startedAt), 0)
+            let attempt = LearningAttempt(
+                id: UUID().uuidString,
+                expressionID: item.expression.id,
+                skills: [.listening],
+                submittedAnswer: submittedAnswer,
+                firstTryCorrect: submissionCount == 1,
+                completedCorrectly: true,
+                usedHint: usedReveal,
+                retryCount: max(submissionCount - 1, 0),
+                responseTimeMilliseconds: Int((elapsed * 1_000).rounded()),
+                occurredAt: Date()
+            )
+
+            Task {
+                await progressModel.record(attempt)
+            }
+        } else {
+            feedbackIsCorrect = false
+            feedbackMessage = "Mai încearcă. Răspunsul inițial rămâne parte din evidența sesiunii."
+            if item.mode == .freeWrite {
+                freeWriteAnswer = ""
+            }
         }
     }
 
     private func advance() {
-        guard latestResolution?.completed == true else { return }
+        guard currentCompleted else { return }
 
         audio.stopPlayback()
+        completedCount += 1
         currentIndex += 1
-        runner = nil
-        answer = ""
-        latestResolution = nil
+        selectedChoice = nil
+        freeWriteAnswer = ""
+        submissionCount = 0
+        currentCompleted = false
+        feedbackMessage = nil
+        feedbackIsCorrect = false
+        revealWrittenLebanese = false
+        usedReveal = false
         startedAt = Date()
-
-        if currentIndex < items.count,
-           items[currentIndex].mode == .freeWrite {
-            answerFocused = true
-        }
     }
 }
