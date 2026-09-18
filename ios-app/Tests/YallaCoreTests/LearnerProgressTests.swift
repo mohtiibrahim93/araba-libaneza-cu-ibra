@@ -112,8 +112,39 @@ struct LearnerProgressTests {
 
         let decoded = try JSONDecoder().decode(LearnerProgressSnapshot.self, from: legacyJSON)
 
+        #expect(decoded.schemaVersion == 1)
         #expect(decoded.currentJourneyUnitID == nil)
         #expect(decoded.attempts.isEmpty)
+    }
+
+    @Test("Repository upgrades older snapshots to the current learner progress schema")
+    func repositoryMigratesLegacySnapshot() async throws {
+        let legacy = LearnerProgressSnapshot(
+            schemaVersion: 1,
+            currentJourneyUnitID: nil
+        )
+        let store = InMemoryLearnerProgressStore(snapshot: legacy)
+        let repository = LearnerProgressRepository(store: store)
+
+        let migrated = try await repository.load()
+        let persisted = try await store.load()
+
+        #expect(migrated.schemaVersion == LearnerProgressSchema.currentVersion)
+        #expect(persisted.schemaVersion == LearnerProgressSchema.currentVersion)
+    }
+
+    @Test("Repository rejects learner progress created by an unsupported future schema")
+    func futureSchemaIsRejected() async {
+        let future = LearnerProgressSnapshot(
+            schemaVersion: LearnerProgressSchema.currentVersion + 1
+        )
+        let repository = LearnerProgressRepository(
+            store: InMemoryLearnerProgressStore(snapshot: future)
+        )
+
+        await #expect(throws: LearnerProgressMigrationError.self) {
+            _ = try await repository.load()
+        }
     }
 
     @Test("Current Journey unit persists and automatically feeds Smart Practice context")
