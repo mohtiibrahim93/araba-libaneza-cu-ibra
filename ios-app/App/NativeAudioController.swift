@@ -1,4 +1,4 @@
-import AVFoundation
+@preconcurrency import AVFoundation
 import Foundation
 import SwiftUI
 import YallaCore
@@ -27,7 +27,7 @@ enum NativeAudioError: LocalizedError {
 }
 
 @MainActor
-final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDelegate {
+final class NativeAudioController: ObservableObject {
     @Published private(set) var isPlaying = false
     @Published private(set) var isRecording = false
     @Published private(set) var lastRecording: LearnerRecording?
@@ -36,11 +36,11 @@ final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDele
     private var player: AVAudioPlayer?
     private var recorder: AVAudioRecorder?
     private var activeRecordingLocator: String?
+    private var playbackToken: UUID?
     private let fileManager: FileManager
 
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
-        super.init()
     }
 
     func playReference(
@@ -67,6 +67,7 @@ final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDele
     }
 
     func stopPlayback() {
+        playbackToken = nil
         player?.stop()
         player = nil
         isPlaying = false
@@ -142,13 +143,6 @@ final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDele
         errorMessage = nil
     }
 
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if self.player === player {
-            self.player = nil
-            isPlaying = false
-        }
-    }
-
     private func requestMicrophonePermission() async -> Bool {
         await withCheckedContinuation { continuation in
             AVAudioSession.sharedInstance().requestRecordPermission { granted in
@@ -170,7 +164,6 @@ final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDele
         let player = try AVAudioPlayer(contentsOf: url)
         player.enableRate = true
         player.rate = Float(rate.rawValue)
-        player.delegate = self
         player.prepareToPlay()
         guard player.play() else {
             throw NativeAudioError.playbackDidNotStart
@@ -178,6 +171,21 @@ final class NativeAudioController: NSObject, ObservableObject, AVAudioPlayerDele
 
         self.player = player
         isPlaying = true
+
+        let token = UUID()
+        playbackToken = token
+        let seconds = max(
+            player.duration / Double(max(Float(rate.rawValue), 0.1)),
+            0
+        )
+        Task { @MainActor [weak self] in
+            let nanoseconds = UInt64(seconds * 1_000_000_000)
+            try? await Task.sleep(nanoseconds: nanoseconds)
+            guard let self, self.playbackToken == token else { return }
+            self.player = nil
+            self.playbackToken = nil
+            self.isPlaying = false
+        }
     }
 
     private func referenceURL(for asset: AudioAsset) throws -> URL {
