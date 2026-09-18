@@ -33,12 +33,20 @@ public struct RootSummary: Identifiable, Equatable, Sendable {
     public let displayKey: String
     public let arabicRadicals: String?
     public let memberCount: Int
+    public let searchTerms: [String]
 
-    public init(id: String, displayKey: String, arabicRadicals: String?, memberCount: Int) {
+    public init(
+        id: String,
+        displayKey: String,
+        arabicRadicals: String?,
+        memberCount: Int,
+        searchTerms: [String] = []
+    ) {
         self.id = id
         self.displayKey = displayKey
         self.arabicRadicals = arabicRadicals
         self.memberCount = memberCount
+        self.searchTerms = searchTerms
     }
 }
 
@@ -66,6 +74,20 @@ public struct RootExplorerSummary: Equatable, Sendable {
     }
 }
 
+public enum DiscoverSearchResult: Identifiable, Equatable, Sendable {
+    case root(RootSummary)
+    case entry(DictionaryEntrySummary)
+
+    public var id: String {
+        switch self {
+        case let .root(root):
+            return "root:\(root.id)"
+        case let .entry(entry):
+            return "entry:\(entry.id)"
+        }
+    }
+}
+
 public struct DiscoverModel: Equatable, Sendable {
     public let entries: [DictionaryEntrySummary]
     public let roots: [RootSummary]
@@ -83,6 +105,37 @@ public struct DiscoverModel: Equatable, Sendable {
 
     public func rootGraph(rootID: String) -> RootExplorerSummary? {
         graphsByRootID[rootID]
+    }
+
+    public func search(_ query: String) -> [DiscoverSearchResult] {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            return roots.map(DiscoverSearchResult.root)
+                + entries.map(DiscoverSearchResult.entry)
+        }
+
+        let needle = normalized(trimmed)
+
+        let rootResults = roots.filter { root in
+            let candidates = [root.displayKey, root.arabicRadicals ?? ""] + root.searchTerms
+            return candidates.contains { normalized($0).contains(needle) }
+        }
+
+        let entryResults = entries.filter { entry in
+            let candidates = [entry.arabizi, entry.arabicScript ?? "", entry.meaning] + entry.topics
+            return candidates.contains { normalized($0).contains(needle) }
+        }
+
+        return rootResults.map(DiscoverSearchResult.root)
+            + entryResults.map(DiscoverSearchResult.entry)
+    }
+
+    private func normalized(_ value: String) -> String {
+        value
+            .lowercased()
+            .replacingOccurrences(of: "-", with: "")
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "_", with: "")
     }
 }
 
@@ -115,14 +168,6 @@ public struct DiscoverModelBuilder: Sendable {
 
         for root in package.roots {
             let links = linksByRootID[root.id] ?? []
-            roots.append(
-                RootSummary(
-                    id: root.id,
-                    displayKey: root.displayKey,
-                    arabicRadicals: root.arabicRadicals,
-                    memberCount: links.count
-                )
-            )
 
             let members = links.compactMap { link -> RootExplorerMember? in
                 guard let expression = expressionsByID[link.expressionID] else { return nil }
@@ -133,6 +178,19 @@ public struct DiscoverModelBuilder: Sendable {
                 )
             }
             .sorted { caseInsensitiveLess($0.label, $1.label) }
+
+            var searchTerms = root.searchTerms
+            searchTerms.append(contentsOf: members.map(\.label))
+
+            roots.append(
+                RootSummary(
+                    id: root.id,
+                    displayKey: root.displayKey,
+                    arabicRadicals: root.arabicRadicals,
+                    memberCount: links.count,
+                    searchTerms: Array(Set(searchTerms)).sorted()
+                )
+            )
 
             graphs[root.id] = RootExplorerSummary(
                 rootID: root.id,
