@@ -54,6 +54,11 @@ struct DiscoverPresentationTests {
 
         #expect(graph.centerLabel == "KTB")
         #expect(Set(graph.members.map(\.label)) == Set(["kteb", "keeteb", "maktab"]))
+
+        let keeteb = try #require(graph.members.first { $0.id == "expr.keeteb" })
+        #expect(keeteb.patternLabel == "Verb pattern")
+        #expect(keeteb.patternKind == .verbStem)
+        #expect(keeteb.patternProductivity == .limited)
     }
     @Test("Direct root search accepts compact, segmented, and Arabic radicals")
     func directRootSearch() throws {
