@@ -27,6 +27,14 @@ struct DiscoverPresentationTests {
             roots: [root],
             morphologicalPatterns: patterns,
             morphologyLinks: links,
+            inflectionRelations: [
+                InflectionRelation(
+                    sourceExpressionID: "expr.keeteb",
+                    targetExpressionID: "expr.maktab",
+                    kind: .derivedForm,
+                    patternID: "pattern.noun.place"
+                )
+            ],
             audioAssets: [
                 AudioAsset(
                     id: "audio.keeteb.generated",
@@ -58,6 +66,24 @@ struct DiscoverPresentationTests {
         let entry = try #require(model.entries.first { $0.id == "expr.keeteb" })
 
         #expect(entry.preferredAudioAsset?.id == "audio.keeteb.ibrahim")
+    }
+
+    @Test("Dictionary entries expose only explicit inflection relations with approved pattern metadata")
+    func exposesInflectionRelations() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+
+        let source = try #require(model.entries.first { $0.id == "expr.keeteb" })
+        let outgoing = try #require(source.inflectionRelations.first)
+        #expect(outgoing.relatedExpressionID == "expr.maktab")
+        #expect(outgoing.relatedArabizi == "maktab")
+        #expect(outgoing.kind == .derivedForm)
+        #expect(outgoing.direction == .outgoing)
+        #expect(outgoing.patternLabel == "Place noun")
+
+        let target = try #require(model.entries.first { $0.id == "expr.maktab" })
+        let incoming = try #require(target.inflectionRelations.first)
+        #expect(incoming.relatedExpressionID == "expr.keeteb")
+        #expect(incoming.direction == .incoming)
     }
 
     @Test("Discover exposes root bubbles with family counts")
