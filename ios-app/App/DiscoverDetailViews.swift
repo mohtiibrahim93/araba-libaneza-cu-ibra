@@ -4,8 +4,13 @@ import YallaCore
 struct DictionaryEntryDetailView: View {
     let entry: DictionaryEntrySummary
     let model: DiscoverModel
+    @ObservedObject var progressModel: LearnerProgressModel
 
     @StateObject private var audio = NativeAudioController()
+
+    private var isSaved: Bool {
+        progressModel.snapshot.savedExpressionIDs.contains(entry.id)
+    }
 
     var body: some View {
         List {
@@ -56,7 +61,11 @@ struct DictionaryEntryDetailView: View {
                let graph = model.rootGraph(rootID: rootID) {
                 Section("Rădăcină") {
                     NavigationLink {
-                        RootExplorerView(graph: graph, model: model)
+                        RootExplorerView(
+                            graph: graph,
+                            model: model,
+                            progressModel: progressModel
+                        )
                     } label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
@@ -92,6 +101,21 @@ struct DictionaryEntryDetailView: View {
         }
         .navigationTitle(entry.arabizi)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    Task {
+                        await progressModel.setExpressionSaved(
+                            entry.id,
+                            saved: !isSaved
+                        )
+                    }
+                } label: {
+                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                }
+                .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează expresia")
+            }
+        }
         .onDisappear {
             audio.stopPlayback()
         }
@@ -101,6 +125,7 @@ struct DictionaryEntryDetailView: View {
 struct RootExplorerView: View {
     let graph: RootExplorerSummary
     let model: DiscoverModel
+    @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
         ScrollView {
@@ -173,7 +198,11 @@ struct RootExplorerView: View {
     private func memberNode(_ member: RootExplorerMember) -> some View {
         if let entry = model.entries.first(where: { $0.id == member.id }) {
             NavigationLink {
-                DictionaryEntryDetailView(entry: entry, model: model)
+                DictionaryEntryDetailView(
+                    entry: entry,
+                    model: model,
+                    progressModel: progressModel
+                )
             } label: {
                 memberLabel(member)
             }
