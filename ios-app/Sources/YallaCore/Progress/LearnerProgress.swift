@@ -50,17 +50,21 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         })
     }
 
+    public func dueExpressionIDs(at date: Date) -> Set<String> {
+        let scheduler = ReviewScheduler()
+        return Set(
+            reviewByExpressionID.compactMap { expressionID, review in
+                scheduler.isDue(review, at: date) ? expressionID : nil
+            }
+        )
+    }
+
     public func sessionCandidateContext(
         at date: Date,
         currentUnitIDs: Set<String>? = nil,
         probeExerciseIDs: Set<String> = []
     ) -> SessionCandidateContext {
-        let scheduler = ReviewScheduler()
-        let dueExpressionIDs = Set(
-            reviewByExpressionID.compactMap { expressionID, review in
-                scheduler.isDue(review, at: date) ? expressionID : nil
-            }
-        )
+        let dueExpressionIDs = dueExpressionIDs(at: date)
 
         let resolvedCurrentUnitIDs = currentUnitIDs
             ?? currentJourneyUnitID.map { Set([$0]) }
