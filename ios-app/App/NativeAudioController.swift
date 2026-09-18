@@ -139,6 +139,14 @@ final class NativeAudioController: ObservableObject {
         return recording
     }
 
+    func cancelRecording() {
+        guard let recording = stopRecording() else { return }
+        if let url = try? recordingURL(for: recording) {
+            try? fileManager.removeItem(at: url)
+        }
+        lastRecording = nil
+    }
+
     func clearError() {
         errorMessage = nil
     }
