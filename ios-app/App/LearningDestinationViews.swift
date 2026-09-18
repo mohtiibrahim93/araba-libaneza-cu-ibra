@@ -101,6 +101,8 @@ struct PracticeDestinationView: View {
             )
         case let .speedDrill(expressions):
             SpeedDrillOverviewView(expressions: expressions, title: title)
+        case let .speaking(items):
+            SpeakAndCompareOverviewView(items: items, title: title)
         }
     }
 }
