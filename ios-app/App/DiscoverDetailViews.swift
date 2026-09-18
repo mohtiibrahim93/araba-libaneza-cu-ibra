@@ -188,16 +188,11 @@ struct RootExplorerView: View {
         )
     }
 
-    private var practicedCount: Int {
-        memberIDs.intersection(progressModel.snapshot.seenExpressionIDs).count
-    }
-
-    private var reviewCount: Int {
-        memberIDs.intersection(progressModel.snapshot.activeMistakeExpressionIDs).count
-    }
-
-    private var savedCount: Int {
-        memberIDs.intersection(progressModel.snapshot.savedExpressionIDs).count
+    private var familyProgress: ExpressionGroupProgress {
+        progressModel.snapshot.expressionGroupProgress(
+            expressionIDs: memberIDs,
+            at: Date()
+        )
     }
 
     var body: some View {
@@ -207,10 +202,26 @@ struct RootExplorerView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                HStack(spacing: 10) {
-                    RootProgressMetric(value: practicedCount, label: "exersate")
-                    RootProgressMetric(value: reviewCount, label: "de revăzut")
-                    RootProgressMetric(value: savedCount, label: "salvate")
+                LazyVGrid(
+                    columns: [GridItem(.flexible()), GridItem(.flexible())],
+                    spacing: 10
+                ) {
+                    RootProgressMetric(
+                        value: "\(familyProgress.practicedCount)/\(familyProgress.totalCount)",
+                        label: "exersate"
+                    )
+                    RootProgressMetric(
+                        value: "\(familyProgress.unseenCount)",
+                        label: "noi"
+                    )
+                    RootProgressMetric(
+                        value: "\(familyProgress.dueCount)",
+                        label: "de repetat"
+                    )
+                    RootProgressMetric(
+                        value: "\(familyProgress.mistakeCount)",
+                        label: "greșeli active"
+                    )
                 }
 
                 if !targetedExercises.isEmpty {
@@ -369,12 +380,12 @@ struct RootExplorerView: View {
 
 
 private struct RootProgressMetric: View {
-    let value: Int
+    let value: String
     let label: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text("\(value)")
+            Text(value)
                 .font(.headline)
             Text(label)
                 .font(.caption2)
