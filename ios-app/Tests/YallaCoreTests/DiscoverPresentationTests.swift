@@ -25,6 +25,20 @@ struct DiscoverPresentationTests {
             expressions: expressions,
             units: [],
             roots: [root],
+            audioAssets: [
+                AudioAsset(
+                    id: "audio.keeteb.generated",
+                    expressionID: "expr.keeteb",
+                    source: .curatedGenerated,
+                    locator: "keeteb-generated.m4a"
+                ),
+                AudioAsset(
+                    id: "audio.keeteb.ibrahim",
+                    expressionID: "expr.keeteb",
+                    source: .ibrahimRecorded,
+                    locator: "keeteb-ibrahim.m4a"
+                )
+            ],
             morphologicalPatterns: patterns,
             morphologyLinks: links
         )
@@ -36,6 +50,14 @@ struct DiscoverPresentationTests {
 
         #expect(model.entries.count == 3)
         #expect(model.entries.contains { $0.arabizi == "kteb" && $0.meaning == "carte" })
+    }
+
+    @Test("Dictionary entries expose the preferred linked audio asset")
+    func exposesPreferredAudio() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+        let entry = try #require(model.entries.first { $0.id == "expr.keeteb" })
+
+        #expect(entry.preferredAudioAsset?.id == "audio.keeteb.ibrahim")
     }
 
     @Test("Discover exposes root bubbles with family counts")
