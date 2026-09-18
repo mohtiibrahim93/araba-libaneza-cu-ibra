@@ -44,7 +44,6 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let reinforcementExpressionIDs: Set<String>
     public let currentJourneyUnitID: String?
     public let savedExpressionIDs: Set<String>
-    public let savedExpressionIDs: Set<String>
 
     public init(
         schemaVersion: Int = LearnerProgressSchema.currentVersion,
@@ -64,7 +63,6 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         self.reinforcementExpressionIDs = reinforcementExpressionIDs
         self.currentJourneyUnitID = currentJourneyUnitID
         self.savedExpressionIDs = savedExpressionIDs
-        self.savedExpressionIDs = savedExpressionIDs
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -75,7 +73,6 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         case activeMistakeExpressionIDs
         case reinforcementExpressionIDs
         case currentJourneyUnitID
-        case savedExpressionIDs
         case savedExpressionIDs
     }
 
@@ -107,10 +104,6 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             Set<String>.self,
             forKey: .savedExpressionIDs
         ) ?? []
-        savedExpressionIDs = try container.decodeIfPresent(
-            Set<String>.self,
-            forKey: .savedExpressionIDs
-        ) ?? []
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -122,7 +115,6 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         try container.encode(activeMistakeExpressionIDs, forKey: .activeMistakeExpressionIDs)
         try container.encode(reinforcementExpressionIDs, forKey: .reinforcementExpressionIDs)
         try container.encodeIfPresent(currentJourneyUnitID, forKey: .currentJourneyUnitID)
-        try container.encode(savedExpressionIDs, forKey: .savedExpressionIDs)
         try container.encode(savedExpressionIDs, forKey: .savedExpressionIDs)
     }
 
