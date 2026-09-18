@@ -476,6 +476,7 @@ private struct ProfileView: View {
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
                     LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
                     LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
+                    LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
                 }
 
                 Section {
