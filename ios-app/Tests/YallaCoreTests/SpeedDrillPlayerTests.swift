@@ -41,9 +41,11 @@ struct SpeedDrillPlayerTests {
         )
 
         #expect(player.currentPrompt?.expressionID == "expr.hello")
-        #expect(player.record(.correct, responseTime: 1.4))
+        let recordedCorrect = player.record(.correct, responseTime: 1.4)
+        #expect(recordedCorrect)
         #expect(player.currentPrompt?.expressionID == "expr.thanks")
-        #expect(player.record(.wrong, responseTime: 2.1))
+        let recordedWrong = player.record(.wrong, responseTime: 2.1)
+        #expect(recordedWrong)
         #expect(player.currentPrompt?.expressionID == "expr.hello")
 
         #expect(player.session.metrics.seen == 2)
@@ -60,7 +62,8 @@ struct SpeedDrillPlayerTests {
         )
 
         #expect(player.currentPrompt == nil)
-        #expect(!player.record(.correct, responseTime: 1))
+        let recorded = player.record(.correct, responseTime: 1)
+        #expect(!recorded)
         #expect(player.session.attempts.isEmpty)
     }
 
