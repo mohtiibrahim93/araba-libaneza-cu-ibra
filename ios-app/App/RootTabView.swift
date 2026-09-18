@@ -189,10 +189,18 @@ private struct JourneyView: View {
                         ForEach(section.units) { unit in
                             if detail(for: unit.id) != nil {
                                 NavigationLink(value: unit.id) {
-                                    JourneyUnitRow(unit: unit)
+                                    JourneyUnitRow(
+                                        unit: unit,
+                                        progress: progress(for: unit.id),
+                                        isCurrent: progressModel.snapshot.currentJourneyUnitID == unit.id
+                                    )
                                 }
                             } else {
-                                JourneyUnitRow(unit: unit)
+                                JourneyUnitRow(
+                                    unit: unit,
+                                    progress: progress(for: unit.id),
+                                    isCurrent: progressModel.snapshot.currentJourneyUnitID == unit.id
+                                )
                             }
                         }
                     }
@@ -214,6 +222,17 @@ private struct JourneyView: View {
         }
     }
 
+    private func progress(for unitID: String) -> ExpressionGroupProgress {
+        guard let unit = package.units.first(where: { $0.id == unitID }) else {
+            return ExpressionGroupProgress()
+        }
+
+        return progressModel.snapshot.expressionGroupProgress(
+            expressionIDs: Set(unit.expressionIDs),
+            at: Date()
+        )
+    }
+
     private func detail(for unitID: String) -> JourneyUnitDetail? {
         do {
             return try navigationBuilder.journeyUnit(
@@ -229,17 +248,43 @@ private struct JourneyView: View {
 
 private struct JourneyUnitRow: View {
     let unit: JourneyUnitSummary
+    let progress: ExpressionGroupProgress
+    let isCurrent: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text(unit.title)
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(unit.title)
+                    .font(.headline)
+                Spacer()
+                if isCurrent {
+                    Text("curentă")
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(.thinMaterial, in: Capsule())
+                }
+            }
+
             Text(unit.description)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            Text("\(unit.expressionCount) expresii")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+
+            HStack(spacing: 5) {
+                Text("\(progress.practicedCount)/\(progress.totalCount) exersate")
+
+                if progress.dueCount > 0 {
+                    Text("·")
+                    Text("\(progress.dueCount) de repetat")
+                }
+
+                if progress.mistakeCount > 0 {
+                    Text("·")
+                    Text("\(progress.mistakeCount) greșeli")
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 4)
     }
