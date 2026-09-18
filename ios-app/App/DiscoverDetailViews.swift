@@ -242,14 +242,31 @@ struct RootExplorerView: View {
                     .buttonStyle(.plain)
                 }
 
+                let layoutPositions = RootGraphLayoutPlanner().positions(
+                    memberCount: graph.members.count
+                )
+
                 GeometryReader { proxy in
                     let size = proxy.size
                     let center = CGPoint(x: size.width / 2, y: size.height / 2)
-                    let radius = max(min(size.width, size.height) * 0.34, 90)
+                    let ringCount = max(
+                        (layoutPositions.map(\.ringIndex).max() ?? 0) + 1,
+                        1
+                    )
+                    let minDimension = min(size.width, size.height)
+                    let innerRadius = max(minDimension * 0.20, 72)
+                    let outerRadius = max(minDimension * 0.40, innerRadius)
 
                     ZStack {
-                        ForEach(Array(graph.members.enumerated()), id: \.element.id) { index, member in
-                            let angle = (Double(index) / Double(max(graph.members.count, 1))) * (Double.pi * 2) - Double.pi / 2
+                        ForEach(layoutPositions, id: \.memberIndex) { position in
+                            let member = graph.members[position.memberIndex]
+                            let radius = ringRadius(
+                                ringIndex: position.ringIndex,
+                                ringCount: ringCount,
+                                innerRadius: innerRadius,
+                                outerRadius: outerRadius
+                            )
+                            let angle = position.angleTurns * (Double.pi * 2) - Double.pi / 2
                             let x = center.x + CGFloat(cos(angle)) * radius
                             let y = center.y + CGFloat(sin(angle)) * radius
 
@@ -271,7 +288,7 @@ struct RootExplorerView: View {
                             .position(center)
                     }
                 }
-                .frame(height: 360)
+                .frame(height: graphHeight)
 
                 DisclosureGroup("Gramatică și tipare") {
                     VStack(alignment: .leading, spacing: 10) {
@@ -300,6 +317,31 @@ struct RootExplorerView: View {
         }
         .navigationTitle(graph.centerLabel)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var graphHeight: CGFloat {
+        switch graph.members.count {
+        case ...8:
+            return 360
+        case ...16:
+            return 440
+        default:
+            return 520
+        }
+    }
+
+    private func ringRadius(
+        ringIndex: Int,
+        ringCount: Int,
+        innerRadius: CGFloat,
+        outerRadius: CGFloat
+    ) -> CGFloat {
+        guard ringCount > 1 else {
+            return (innerRadius + outerRadius) / 2
+        }
+
+        let progress = CGFloat(ringIndex) / CGFloat(ringCount - 1)
+        return innerRadius + ((outerRadius - innerRadius) * progress)
     }
 
     @ViewBuilder
