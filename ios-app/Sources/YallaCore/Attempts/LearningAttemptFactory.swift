@@ -6,7 +6,8 @@ public struct LearningAttemptFactory: Sendable {
     public func make(
         id: String,
         resolution: ExerciseResolution,
-        occurredAt: Date
+        occurredAt: Date,
+        skills: Set<MasterySkill>? = nil
     ) -> LearningAttempt? {
         guard resolution.completed,
               let attempt = resolution.attempt,
@@ -18,7 +19,7 @@ public struct LearningAttemptFactory: Sendable {
         return LearningAttempt(
             id: id,
             expressionID: attempt.expressionID,
-            skills: [attempt.skill],
+            skills: skills ?? [attempt.skill],
             submittedAnswer: submittedAnswer,
             firstTryCorrect: attempt.firstTryCorrect,
             completedCorrectly: true,
