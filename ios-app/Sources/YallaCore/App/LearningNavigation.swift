@@ -43,6 +43,8 @@ public struct ListeningPracticeItem: Identifiable, Equatable, Sendable {
     public let expression: JourneyExpressionSummary
     public let audioAsset: AudioAsset
     public let choices: [String]
+    public let spellingVariants: [String]
+    public let pronunciationVariants: [String]
     public let revealWrittenLebaneseInitially: Bool
 
     public init(
@@ -51,6 +53,8 @@ public struct ListeningPracticeItem: Identifiable, Equatable, Sendable {
         expression: JourneyExpressionSummary,
         audioAsset: AudioAsset,
         choices: [String] = [],
+        spellingVariants: [String] = [],
+        pronunciationVariants: [String] = [],
         revealWrittenLebaneseInitially: Bool = false
     ) {
         self.id = id
@@ -58,6 +62,8 @@ public struct ListeningPracticeItem: Identifiable, Equatable, Sendable {
         self.expression = expression
         self.audioAsset = audioAsset
         self.choices = choices
+        self.spellingVariants = spellingVariants
+        self.pronunciationVariants = pronunciationVariants
         self.revealWrittenLebaneseInitially = revealWrittenLebaneseInitially
     }
 }
@@ -223,6 +229,12 @@ public struct LearningNavigationBuilder: Sendable {
                         ),
                         audioAsset: audio,
                         choices: choices,
+                        spellingVariants: expression.variants
+                            .filter { $0.kind == .spelling }
+                            .map(\.value),
+                        pronunciationVariants: expression.variants
+                            .filter { $0.kind == .pronunciation }
+                            .map(\.value),
                         revealWrittenLebaneseInitially: prompt.revealWrittenLebaneseInitially
                     )
                 }
