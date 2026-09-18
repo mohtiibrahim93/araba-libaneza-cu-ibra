@@ -87,6 +87,17 @@ export const JOACA_META: PageMeta = {
 };
 
 /**
+ * /joc/scor — scorul din joc citit din browser, cu nivelul A1/A2/B1 sugerat.
+ * Romanian only, like /joc and /test-de-nivel: the card bank's meanings are
+ * Romanian, so an /en URL would advertise a translation that does not exist.
+ */
+export const JOC_SCOR_META: PageMeta = {
+  title: "Scorul tău din Jocul Yalla și nivelul sugerat | Arabă libaneză",
+  description:
+    "Vezi ce ai strâns în Jocul Yalla — XP, runde, expresii consolidate — și ce nivel A1, A2 sau B1 sugerează scorul tău, cu cursul potrivit.",
+};
+
+/**
  * /test-de-nivel — the placement test, on a page that is the test.
  *
  * Split out from /quiz, which promised "test de nivel gratuit" in its title and

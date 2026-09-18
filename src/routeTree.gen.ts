@@ -96,6 +96,7 @@ import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
 import { Route as EnTrialRouteImport } from './routes/en/trial'
+import { Route as JocScorRouteImport } from './routes/joc.scor'
 import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id'
 import { Route as AdminPrivateLeadsIdRouteImport } from './routes/admin/private-leads/$id'
 import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
@@ -584,6 +585,11 @@ const EnTrialRoute = EnTrialRouteImport.update({
   path: '/en/trial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JocScorRoute = JocScorRouteImport.update({
+  id: '/scor',
+  path: '/scor',
+  getParentRoute: () => JocRoute,
+} as any)
 const PrivateStatusIdRoute = PrivateStatusIdRouteImport.update({
   id: '/private-status/$id',
   path: '/private-status/$id',
@@ -745,7 +751,7 @@ export interface FileRoutesByFullPath {
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
-  '/joc': typeof JocRoute
+  '/joc': typeof JocRouteWithChildren
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -807,6 +813,7 @@ export interface FileRoutesByFullPath {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -860,7 +867,7 @@ export interface FileRoutesByTo {
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
-  '/joc': typeof JocRoute
+  '/joc': typeof JocRouteWithChildren
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -922,6 +929,7 @@ export interface FileRoutesByTo {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -976,7 +984,7 @@ export interface FileRoutesById {
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
-  '/joc': typeof JocRoute
+  '/joc': typeof JocRouteWithChildren
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/privacy': typeof PrivacyRoute
@@ -1038,6 +1046,7 @@ export interface FileRoutesById {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -1155,6 +1164,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/joc/scor'
     | '/private-status/$id'
     | '/admin/'
     | '/blog/'
@@ -1270,6 +1280,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/joc/scor'
     | '/private-status/$id'
     | '/admin'
     | '/blog'
@@ -1385,6 +1396,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/joc/scor'
     | '/private-status/$id'
     | '/admin/'
     | '/blog/'
@@ -1439,7 +1451,7 @@ export interface RootRouteChildren {
   InvataArabaRoute: typeof InvataArabaRoute
   InvataArabaGratisRoute: typeof InvataArabaGratisRoute
   JoacaRoute: typeof JoacaRoute
-  JocRoute: typeof JocRoute
+  JocRoute: typeof JocRouteWithChildren
   MeditatiiArabaRoute: typeof MeditatiiArabaRoute
   PaymentStatusRoute: typeof PaymentStatusRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -2145,6 +2157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnTrialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/joc/scor': {
+      id: '/joc/scor'
+      path: '/scor'
+      fullPath: '/joc/scor'
+      preLoaderRoute: typeof JocScorRouteImport
+      parentRoute: typeof JocRoute
+    }
     '/private-status/$id': {
       id: '/private-status/$id'
       path: '/private-status/$id'
@@ -2330,6 +2349,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface JocRouteChildren {
+  JocScorRoute: typeof JocScorRoute
+}
+
+const JocRouteChildren: JocRouteChildren = {
+  JocScorRoute: JocScorRoute,
+}
+
+const JocRouteWithChildren = JocRoute._addFileChildren(JocRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArabaInFamilieRoute: ArabaInFamilieRoute,
@@ -2351,7 +2380,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvataArabaRoute: InvataArabaRoute,
   InvataArabaGratisRoute: InvataArabaGratisRoute,
   JoacaRoute: JoacaRoute,
-  JocRoute: JocRoute,
+  JocRoute: JocRouteWithChildren,
   MeditatiiArabaRoute: MeditatiiArabaRoute,
   PaymentStatusRoute: PaymentStatusRoute,
   PrivacyRoute: PrivacyRoute,
