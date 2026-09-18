@@ -33,19 +33,6 @@ struct DictionaryEntryDetailView: View {
                 .padding(.vertical, 6)
             }
 
-            Section("Învățare") {
-                Button {
-                    Task {
-                        await progressModel.toggleSavedExpressionID(entry.id)
-                    }
-                } label: {
-                    Label(
-                        isSaved ? "Elimină din salvate" : "Salvează cuvântul",
-                        systemImage: isSaved ? "bookmark.fill" : "bookmark"
-                    )
-                }
-            }
-
             if let audioAsset = entry.preferredAudioAsset {
                 Section("Audio") {
                     Button {
@@ -138,7 +125,6 @@ struct DictionaryEntryDetailView: View {
 struct RootExplorerView: View {
     let graph: RootExplorerSummary
     let model: DiscoverModel
-    @ObservedObject var progressModel: LearnerProgressModel
     @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
