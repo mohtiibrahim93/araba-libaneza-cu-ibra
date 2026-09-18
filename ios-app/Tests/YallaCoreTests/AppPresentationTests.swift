@@ -180,6 +180,44 @@ struct AppPresentationTests {
         #expect(validModel.practiceModes.first(where: { $0.id == "listening" })?.isAvailable == true)
     }
 
+    @Test("Listening availability rejects audio linked to a different expression")
+    func listeningRejectsMismatchedAudioExpression() throws {
+        let hello = Expression(
+            id: "expr.hello",
+            canonicalArabizi: "mar7aba",
+            localizations: ["ro": .init(naturalMeaning: "salut")]
+        )
+        let thanks = Expression(
+            id: "expr.thanks",
+            canonicalArabizi: "merci",
+            localizations: ["ro": .init(naturalMeaning: "mulțumesc")]
+        )
+        let thanksAudio = AudioAsset(
+            id: "audio.thanks",
+            expressionID: thanks.id,
+            source: .approvedNative,
+            locator: "thanks.m4a"
+        )
+        let package = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "mismatched-listening", defaultLearnerLocale: "ro"),
+            expressions: [hello, thanks],
+            units: [],
+            audioAssets: [thanksAudio],
+            listeningPrompts: [
+                ListeningPrompt(
+                    id: "listen.hello",
+                    audioAssetID: thanksAudio.id,
+                    expressionID: hello.id,
+                    mode: .freeWrite
+                )
+            ]
+        )
+
+        let model = try LearnerShellModelBuilder().build(from: package, locale: "ro")
+
+        #expect(model.practiceModes.first(where: { $0.id == "listening" })?.isAvailable == false)
+    }
+
     @Test("Practice surfaces core learning modes without pretending unavailable media exists")
     func practiceModesReflectCapabilities() throws {
         let model = try LearnerShellModelBuilder().build(from: package(), locale: "ro")

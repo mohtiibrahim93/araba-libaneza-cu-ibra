@@ -119,6 +119,52 @@ struct M8ListeningNavigationTests {
         #expect(items[0].choices.isEmpty)
     }
 
+    @Test("Listening destination rejects audio linked to a different expression")
+    func listeningDestinationRejectsMismatchedAudioExpression() throws {
+        let hello = Expression(
+            id: "expr.hello",
+            canonicalArabizi: "mar7aba",
+            localizations: ["ro": .init(naturalMeaning: "salut")]
+        )
+        let thanks = Expression(
+            id: "expr.thanks",
+            canonicalArabizi: "merci",
+            localizations: ["ro": .init(naturalMeaning: "mulțumesc")]
+        )
+        let thanksAudio = AudioAsset(
+            id: "audio.thanks",
+            expressionID: thanks.id,
+            source: .approvedNative,
+            locator: "thanks.m4a"
+        )
+        let package = ContentPackage(
+            manifest: .init(
+                schemaVersion: 3,
+                contentVersion: "mismatched-listening",
+                defaultLearnerLocale: "ro"
+            ),
+            expressions: [hello, thanks],
+            units: [],
+            audioAssets: [thanksAudio],
+            listeningPrompts: [
+                ListeningPrompt(
+                    id: "listen.hello",
+                    audioAssetID: thanksAudio.id,
+                    expressionID: hello.id,
+                    mode: .freeWrite
+                )
+            ]
+        )
+
+        let destination = try LearningNavigationBuilder().practiceDestination(
+            id: "listening",
+            from: package,
+            locale: "ro"
+        )
+
+        #expect(destination == nil)
+    }
+
     @Test("Listening stays unavailable without a listening prompt")
     func listeningRequiresPrompt() throws {
         let package = ContentPackage(
