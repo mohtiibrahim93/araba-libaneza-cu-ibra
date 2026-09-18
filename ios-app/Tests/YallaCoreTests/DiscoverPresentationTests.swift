@@ -9,6 +9,10 @@ struct DiscoverPresentationTests {
             Expression(
                 id: "expr.keeteb",
                 canonicalArabizi: "keeteb",
+                variants: [
+                    ExpressionVariant(value: "author-spelling", kind: .spelling),
+                    ExpressionVariant(value: "author-pronunciation", kind: .pronunciation)
+                ],
                 levelTags: [.a1],
                 topics: ["verbe"],
                 localizations: [
@@ -86,6 +90,28 @@ struct DiscoverPresentationTests {
             guard case let .entry(found) = result else { return false }
             return found.id == entry.id
         })
+    }
+
+    @Test("Dictionary entries preserve authored spelling and pronunciation variants")
+    func exposesAuthoredVariants() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+        let entry = try #require(model.entries.first { $0.id == "expr.keeteb" })
+
+        #expect(entry.spellingVariants == ["author-spelling"])
+        #expect(entry.pronunciationVariants == ["author-pronunciation"])
+
+        for query in ["author-spelling", "author-pronunciation"] {
+            let searchResults = model.search(query)
+
+            #expect(searchResults.contains { result in
+                guard case let .entry(found) = result else { return false }
+                return found.id == entry.id
+            })
+            #expect(searchResults.contains { result in
+                guard case let .root(root) = result else { return false }
+                return root.id == "root.ktb"
+            })
+        }
     }
 
     @Test("Dictionary entries expose the preferred linked audio asset")

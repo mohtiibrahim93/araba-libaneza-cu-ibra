@@ -68,6 +68,23 @@ struct DictionaryEntryDetailView: View {
                 }
             }
 
+            if !entry.spellingVariants.isEmpty || !entry.pronunciationVariants.isEmpty {
+                Section("Variante") {
+                    if !entry.spellingVariants.isEmpty {
+                        LabeledContent(
+                            "Scriere",
+                            value: entry.spellingVariants.joined(separator: " · ")
+                        )
+                    }
+                    if !entry.pronunciationVariants.isEmpty {
+                        LabeledContent(
+                            "Pronunție",
+                            value: entry.pronunciationVariants.joined(separator: " · ")
+                        )
+                    }
+                }
+            }
+
             if wasPracticed || needsReview {
                 Section("Progres") {
                     if wasPracticed {

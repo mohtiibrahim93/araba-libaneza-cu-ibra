@@ -52,6 +52,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let meaning: String
     public let literalMeaning: String?
     public let pragmaticMeaning: String?
+    public let spellingVariants: [String]
+    public let pronunciationVariants: [String]
     public let levels: [LevelBand]
     public let topics: [String]
     public let rootID: String?
@@ -65,6 +67,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         meaning: String,
         literalMeaning: String? = nil,
         pragmaticMeaning: String? = nil,
+        spellingVariants: [String] = [],
+        pronunciationVariants: [String] = [],
         levels: [LevelBand],
         topics: [String],
         rootID: String?,
@@ -77,6 +81,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         self.meaning = meaning
         self.literalMeaning = literalMeaning
         self.pragmaticMeaning = pragmaticMeaning
+        self.spellingVariants = spellingVariants
+        self.pronunciationVariants = pronunciationVariants
         self.levels = levels
         self.topics = topics
         self.rootID = rootID
@@ -198,7 +204,7 @@ public struct DiscoverModel: Equatable, Sendable {
                 entry.meaning,
                 entry.literalMeaning ?? "",
                 entry.pragmaticMeaning ?? ""
-            ] + entry.topics
+            ] + entry.spellingVariants + entry.pronunciationVariants + entry.topics
             return candidates.contains { normalized($0).contains(needle) }
         }
 
@@ -277,6 +283,12 @@ public struct DiscoverModelBuilder: Sendable {
                 meaning: localization.naturalMeaning,
                 literalMeaning: localization.literalMeaning,
                 pragmaticMeaning: localization.pragmaticMeaning,
+                spellingVariants: expression.variants
+                    .filter { $0.kind == .spelling }
+                    .map(\.value),
+                pronunciationVariants: expression.variants
+                    .filter { $0.kind == .pronunciation }
+                    .map(\.value),
                 levels: expression.levelTags,
                 topics: expression.topics,
                 rootID: rootByExpressionID[expression.id],
@@ -316,6 +328,11 @@ public struct DiscoverModelBuilder: Sendable {
                 searchTerms.append(arabicRadicals)
             }
             searchTerms.append(contentsOf: members.map(\.label))
+            for link in links {
+                if let expression = expressionsByID[link.expressionID] {
+                    searchTerms.append(contentsOf: expression.variants.map(\.value))
+                }
+            }
 
             roots.append(
                 RootSummary(
