@@ -36,6 +36,22 @@ public struct LearnerProgressMigrator: Sendable {
     }
 }
 
+public struct ReviewQueueSummary: Equatable, Sendable {
+    public let dueNowCount: Int
+    public let upcomingCount: Int
+    public let nextUpcomingAt: Date?
+
+    public init(
+        dueNowCount: Int = 0,
+        upcomingCount: Int = 0,
+        nextUpcomingAt: Date? = nil
+    ) {
+        self.dueNowCount = dueNowCount
+        self.upcomingCount = upcomingCount
+        self.nextUpcomingAt = nextUpcomingAt
+    }
+}
+
 public struct SpeedDrillProgressSummary: Equatable, Sendable {
     public let sessionCount: Int
     public let bestCorrectPerMinute: Double
@@ -222,6 +238,32 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             let cleanRate = Double(total.clean) / Double(total.attempts)
             return cleanRate < 0.6 ? skill : nil
         })
+    }
+
+    public func reviewQueueSummary(at date: Date) -> ReviewQueueSummary {
+        let scheduler = ReviewScheduler()
+        var dueNowCount = 0
+        var upcomingCount = 0
+        var nextUpcomingAt: Date?
+
+        for review in reviewByExpressionID.values {
+            guard let dueAt = scheduler.dueDate(for: review) else { continue }
+
+            if dueAt <= date {
+                dueNowCount += 1
+            } else {
+                upcomingCount += 1
+                if nextUpcomingAt == nil || dueAt < nextUpcomingAt! {
+                    nextUpcomingAt = dueAt
+                }
+            }
+        }
+
+        return ReviewQueueSummary(
+            dueNowCount: dueNowCount,
+            upcomingCount: upcomingCount,
+            nextUpcomingAt: nextUpcomingAt
+        )
     }
 
     public func dueExpressionIDs(at date: Date) -> Set<String> {

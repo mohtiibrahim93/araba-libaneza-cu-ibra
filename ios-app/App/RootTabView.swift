@@ -110,8 +110,12 @@ private struct HomeView: View {
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
 
+    private var reviewQueue: ReviewQueueSummary {
+        progress.reviewQueueSummary(at: Date())
+    }
+
     private var dueCount: Int {
-        progress.dueExpressionIDs(at: Date()).count
+        reviewQueue.dueNowCount
     }
 
     var body: some View {
@@ -599,6 +603,10 @@ private struct ProfileView: View {
         progress.speedDrillProgress
     }
 
+    private var reviewQueue: ReviewQueueSummary {
+        progress.reviewQueueSummary(at: Date())
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -620,6 +628,28 @@ private struct ProfileView: View {
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
                     LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
                     LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
+                }
+
+                if reviewQueue.dueNowCount > 0 || reviewQueue.upcomingCount > 0 {
+                    Section("Recapitulări programate") {
+                        LabeledContent(
+                            "De făcut acum",
+                            value: "\(reviewQueue.dueNowCount)"
+                        )
+                        LabeledContent(
+                            "Programate mai târziu",
+                            value: "\(reviewQueue.upcomingCount)"
+                        )
+                        if let nextUpcomingAt = reviewQueue.nextUpcomingAt {
+                            LabeledContent(
+                                "Următoarea",
+                                value: nextUpcomingAt.formatted(
+                                    date: .abbreviated,
+                                    time: .shortened
+                                )
+                            )
+                        }
+                    }
                 }
 
                 if fluency.sessionCount > 0 {

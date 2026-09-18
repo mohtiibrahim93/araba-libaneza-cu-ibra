@@ -291,6 +291,44 @@ struct LearnerProgressTests {
         #expect(summary.latestAccuracy == 0.5)
     }
 
+    @Test("Review queue separates due work from future reviews and reports the next upcoming date")
+    func reviewQueueSummary() {
+        let soon = now.addingTimeInterval(ReviewScheduler.day)
+        let later = now.addingTimeInterval(3 * ReviewScheduler.day)
+        let snapshot = LearnerProgressSnapshot(
+            reviewByExpressionID: [
+                "expr.due": ReviewState(
+                    seen: 1,
+                    correct: 0,
+                    lastAttemptAt: now.addingTimeInterval(-ReviewScheduler.day),
+                    reviewStage: 0,
+                    dueAt: now.addingTimeInterval(-60)
+                ),
+                "expr.soon": ReviewState(
+                    seen: 1,
+                    correct: 1,
+                    lastAttemptAt: now,
+                    reviewStage: 0,
+                    dueAt: soon
+                ),
+                "expr.later": ReviewState(
+                    seen: 2,
+                    correct: 2,
+                    lastAttemptAt: now,
+                    reviewStage: 1,
+                    dueAt: later
+                ),
+                "expr.unseen": ReviewState()
+            ]
+        )
+
+        let summary = snapshot.reviewQueueSummary(at: now)
+
+        #expect(summary.dueNowCount == 1)
+        #expect(summary.upcomingCount == 2)
+        #expect(summary.nextUpcomingAt == soon)
+    }
+
     @Test("Repository persists updates through its store abstraction")
     func repositoryRoundTrip() async throws {
         let store = InMemoryLearnerProgressStore()
