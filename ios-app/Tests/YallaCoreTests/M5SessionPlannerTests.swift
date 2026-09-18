@@ -58,7 +58,7 @@ struct AdaptiveSessionPlannerTests {
 
         #expect(first.items.map(\.exercise.id) == second.items.map(\.exercise.id))
         #expect(Array(first.items.prefix(6).map(\.source)) == [
-            .due, .current, .mistake, .weakSkill, .newMaterial, .reinforcement
+            .mistake, .due, .weakSkill, .current, .newMaterial, .reinforcement
         ])
     }
 
