@@ -86,7 +86,7 @@ public struct LearnerRecording: Codable, Equatable, Sendable {
     }
 }
 
-public enum ReferencePlaybackRate: Double, Codable, Equatable, Sendable {
+public enum ReferencePlaybackRate: Double, Codable, Equatable, Hashable, Sendable {
     case slow = 0.6
     case reduced = 0.8
     case normal = 1.0
