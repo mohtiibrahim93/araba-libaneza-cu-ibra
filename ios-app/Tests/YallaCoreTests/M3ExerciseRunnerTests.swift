@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import YallaCore
 
@@ -22,6 +23,8 @@ struct ExerciseRunnerTests {
         #expect(!result.needsCorrection)
         #expect(result.attempt?.firstTryCorrect == true)
         #expect(result.attempt?.usedHint == false)
+        #expect(result.submittedAnswer == "baddé")
+        #expect(result.retryCount == 0)
         #expect(result.mistake == nil)
     }
 
@@ -39,6 +42,8 @@ struct ExerciseRunnerTests {
 
         #expect(correction.completed)
         #expect(correction.attempt?.firstTryCorrect == false)
+        #expect(correction.submittedAnswer == "baddé")
+        #expect(correction.retryCount == 1)
         #expect(correction.mistake?.submittedAnswer == "baddak")
     }
 
@@ -50,7 +55,32 @@ struct ExerciseRunnerTests {
 
         #expect(!second.completed)
         #expect(second.needsCorrection)
+        #expect(second.submittedAnswer == "badna")
+        #expect(second.retryCount == 1)
         #expect(second.mistake?.submittedAnswer == "baddak")
+    }
+
+    @Test("Completed resolution converts to durable learning evidence")
+    func durableAttemptBridge() throws {
+        var runner = ExerciseRunner(exercise: exercise, skill: .production)
+        _ = runner.submit("baddak", responseTime: 2)
+        let resolution = runner.submit("baddé", responseTime: 1)
+
+        let attempt = try #require(
+            LearningAttemptFactory().make(
+                id: "attempt-1",
+                resolution: resolution,
+                occurredAt: Date(timeIntervalSince1970: 1_700_000_000)
+            )
+        )
+
+        #expect(attempt.expressionID == "expr.want")
+        #expect(attempt.skills == [.production])
+        #expect(attempt.submittedAnswer == "baddé")
+        #expect(attempt.firstTryCorrect == false)
+        #expect(attempt.completedCorrectly)
+        #expect(attempt.retryCount == 1)
+        #expect(attempt.responseTimeMilliseconds == 2_000)
     }
 
     @Test("Hint used before a correct answer remains on emitted attempt")
