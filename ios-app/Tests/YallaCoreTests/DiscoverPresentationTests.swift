@@ -55,4 +55,32 @@ struct DiscoverPresentationTests {
         #expect(graph.centerLabel == "KTB")
         #expect(Set(graph.members.map(\.label)) == Set(["kteb", "keeteb", "maktab"]))
     }
+    @Test("Direct root search accepts compact, segmented, and Arabic radicals")
+    func directRootSearch() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+
+        for query in ["KTB", "K-T-B", "كتب"] {
+            let results = model.search(query)
+            #expect(results.contains { result in
+                guard case let .root(root) = result else { return false }
+                return root.id == "root.ktb"
+            })
+        }
+    }
+
+    @Test("Searching a family member surfaces both the expression and its root")
+    func familyMemberSearch() throws {
+        let model = try DiscoverModelBuilder().build(from: package(), locale: "ro")
+        let results = model.search("keeteb")
+
+        #expect(results.contains { result in
+            guard case let .entry(entry) = result else { return false }
+            return entry.id == "expr.keeteb"
+        })
+        #expect(results.contains { result in
+            guard case let .root(root) = result else { return false }
+            return root.id == "root.ktb"
+        })
+    }
+
 }
