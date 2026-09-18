@@ -45,16 +45,15 @@ struct M8SpeakingNavigationTests {
             locale: "ro"
         )
 
-        guard case let .speaking(items) = destination else {
-            Issue.record("Expected a speaking destination")
+        guard case let .speakAndCompare(speaking) = destination else {
+            Issue.record("Expected a speak-and-compare destination")
             return
         }
 
-        #expect(items.count == 1)
-        #expect(items[0].expressionID == hello.id)
-        #expect(items[0].lebanese == "mar7aba")
-        #expect(items[0].learnerMeaning == "salut")
-        #expect(items[0].referenceAudioAsset.id == "audio.hello.ibrahim")
+        #expect(speaking.expression.id == hello.id)
+        #expect(speaking.expression.arabizi == "mar7aba")
+        #expect(speaking.expression.meaning == "salut")
+        #expect(speaking.referenceAudioAsset.id == "audio.hello.ibrahim")
     }
 
     @Test("Speaking stays unavailable when the package has no reference audio")
