@@ -8,6 +8,7 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let levels: [LevelBand]
     public let topics: [String]
     public let rootID: String?
+    public let preferredAudioAsset: AudioAsset?
 
     public init(
         id: String,
@@ -16,7 +17,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         meaning: String,
         levels: [LevelBand],
         topics: [String],
-        rootID: String?
+        rootID: String?,
+        preferredAudioAsset: AudioAsset? = nil
     ) {
         self.id = id
         self.arabizi = arabizi
@@ -25,6 +27,7 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         self.levels = levels
         self.topics = topics
         self.rootID = rootID
+        self.preferredAudioAsset = preferredAudioAsset
     }
 }
 
@@ -160,6 +163,8 @@ public struct DiscoverModelBuilder: Sendable {
             result[link.expressionID] = link.rootID
         }
 
+        let audioResolver = AudioAssetResolver()
+
         let entries = try package.expressions.map { expression in
             DictionaryEntrySummary(
                 id: expression.id,
@@ -168,7 +173,11 @@ public struct DiscoverModelBuilder: Sendable {
                 meaning: try expression.localization(for: locale).naturalMeaning,
                 levels: expression.levelTags,
                 topics: expression.topics,
-                rootID: rootByExpressionID[expression.id]
+                rootID: rootByExpressionID[expression.id],
+                preferredAudioAsset: audioResolver.bestAsset(
+                    for: expression.id,
+                    from: package.audioAssets
+                )
             )
         }
         .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
