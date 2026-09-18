@@ -3,16 +3,23 @@ import SwiftUI
 import YallaCore
 
 struct SpeedDrillView: View {
+    @ObservedObject var progressModel: LearnerProgressModel
+
     @State private var player: SpeedDrillPlayer
     @State private var startedAt = Date()
     @State private var promptStartedAt = Date()
     @State private var answerVisible = false
     @State private var endedManually = false
+    @State private var endedAtElapsedSeconds: Int?
+    @State private var didPersistResult = false
+    @State private var historyID = UUID().uuidString
 
     init(
         expressions: [JourneyExpressionSummary],
+        progressModel: LearnerProgressModel,
         direction: SpeedDrillDirection = .learnerLanguageToLebanese
     ) {
+        self.progressModel = progressModel
         let cards = expressions.map {
             SpeedDrillCard(
                 id: $0.id,
@@ -32,10 +39,19 @@ struct SpeedDrillView: View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             let elapsed = elapsedSeconds(at: timeline.date)
             let finished = endedManually || player.isExpired(atElapsed: elapsed)
+            let effectiveElapsed = endedAtElapsedSeconds
+                ?? min(max(elapsed, 1), player.session.durationSeconds)
+            let metrics = player.session.metrics(elapsedSeconds: effectiveElapsed)
 
             Group {
                 if finished {
-                    SpeedDrillSummaryView(metrics: player.session.metrics)
+                    SpeedDrillSummaryView(metrics: metrics)
+                        .task {
+                            await persistResultIfNeeded(
+                                elapsedSeconds: effectiveElapsed,
+                                metrics: metrics
+                            )
+                        }
                 } else if let prompt = player.currentPrompt {
                     drillBody(
                         prompt: prompt,
@@ -56,6 +72,7 @@ struct SpeedDrillView: View {
             if !endedManually && !player.session.attempts.isEmpty {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Încheie") {
+                        endedAtElapsedSeconds = max(elapsedSeconds(at: Date()), 1)
                         endedManually = true
                     }
                 }
@@ -180,6 +197,25 @@ struct SpeedDrillView: View {
         player = updated
         answerVisible = false
         promptStartedAt = Date()
+    }
+
+    @MainActor
+    private func persistResultIfNeeded(
+        elapsedSeconds: Int,
+        metrics: SpeedDrillMetrics
+    ) async {
+        guard !didPersistResult, metrics.seen > 0 else { return }
+        didPersistResult = true
+
+        let entry = SpeedDrillHistoryEntry(
+            id: historyID,
+            direction: player.session.direction,
+            durationSeconds: player.session.durationSeconds,
+            elapsedSeconds: elapsedSeconds,
+            completedAt: Date(),
+            metrics: metrics
+        )
+        await progressModel.recordSpeedDrill(entry)
     }
 
     private func elapsedSeconds(at date: Date) -> Int {

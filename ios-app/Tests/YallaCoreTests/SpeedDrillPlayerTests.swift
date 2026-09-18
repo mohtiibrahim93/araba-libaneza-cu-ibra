@@ -67,6 +67,22 @@ struct SpeedDrillPlayerTests {
         #expect(player.session.attempts.isEmpty)
     }
 
+    @Test("Fluency rate uses actual elapsed time when a drill ends early")
+    func actualElapsedRate() {
+        var player = SpeedDrillPlayer(
+            cards: cards,
+            direction: .learnerLanguageToLebanese
+        )
+
+        let first = player.record(.correct, responseTime: 1)
+        let second = player.record(.correct, responseTime: 1)
+        #expect(first)
+        #expect(second)
+
+        let metrics = player.session.metrics(elapsedSeconds: 30)
+        #expect(metrics.correctPerMinute == 4)
+    }
+
     @Test("Expiry delegates to the two-minute session clock")
     func expiry() {
         let player = SpeedDrillPlayer(

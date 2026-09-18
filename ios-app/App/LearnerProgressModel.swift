@@ -52,6 +52,15 @@ final class LearnerProgressModel: ObservableObject {
         }
     }
 
+    func recordSpeedDrill(_ entry: SpeedDrillHistoryEntry) async {
+        do {
+            snapshot = try await repository.recordSpeedDrill(entry)
+            persistenceError = nil
+        } catch {
+            persistenceError = error.localizedDescription
+        }
+    }
+
     func record(_ attempt: LearningAttempt) async {
         do {
             snapshot = try await repository.record(attempt)

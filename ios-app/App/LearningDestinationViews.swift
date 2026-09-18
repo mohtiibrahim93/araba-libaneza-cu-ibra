@@ -100,7 +100,11 @@ struct PracticeDestinationView: View {
                 progressModel: progressModel
             )
         case let .speedDrill(expressions):
-            SpeedDrillOverviewView(expressions: expressions, title: title)
+            SpeedDrillOverviewView(
+                expressions: expressions,
+                title: title,
+                progressModel: progressModel
+            )
         case let .listening(items):
             ListeningPracticeView(
                 items: items,
@@ -168,6 +172,7 @@ private struct SmartPracticeOverviewView: View {
 private struct SpeedDrillOverviewView: View {
     let expressions: [JourneyExpressionSummary]
     let title: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
         List {
@@ -184,7 +189,10 @@ private struct SpeedDrillOverviewView: View {
             if !expressions.isEmpty {
                 Section {
                     NavigationLink {
-                        SpeedDrillView(expressions: expressions)
+                        SpeedDrillView(
+                            expressions: expressions,
+                            progressModel: progressModel
+                        )
                     } label: {
                         Label("Pornește cronometrul", systemImage: "timer")
                             .font(.headline)

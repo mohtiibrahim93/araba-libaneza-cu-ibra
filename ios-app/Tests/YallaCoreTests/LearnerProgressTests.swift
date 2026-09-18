@@ -194,6 +194,59 @@ struct LearnerProgressTests {
         #expect(removed.savedExpressionIDs.isEmpty)
     }
 
+    @Test("Legacy snapshots decode with empty speed drill history")
+    func legacySnapshotHasNoFluencyHistory() throws {
+        let legacyJSON = """
+        {
+          "schemaVersion": 3,
+          "attempts": [],
+          "masteryByExpressionID": {},
+          "reviewByExpressionID": {},
+          "activeMistakeExpressionIDs": [],
+          "reinforcementExpressionIDs": [],
+          "savedExpressionIDs": []
+        }
+        """.data(using: .utf8)!
+
+        let decoded = try JSONDecoder().decode(LearnerProgressSnapshot.self, from: legacyJSON)
+
+        #expect(decoded.speedDrillHistory.isEmpty)
+    }
+
+    @Test("Speed drill history persists without changing mastery or SRS")
+    func speedDrillHistoryIsSeparateFromMastery() async throws {
+        let store = InMemoryLearnerProgressStore()
+        let repository = LearnerProgressRepository(store: store)
+        var session = SpeedDrillSession(
+            direction: .learnerLanguageToLebanese,
+            durationSeconds: 120
+        )
+        session.record(expressionID: "expr.want", outcome: .correct, responseTime: 1.2)
+        session.record(expressionID: "expr.want", outcome: .wrong, responseTime: 2.3)
+
+        let metrics = session.metrics(elapsedSeconds: 30)
+        let entry = SpeedDrillHistoryEntry(
+            id: "speed-1",
+            direction: session.direction,
+            durationSeconds: session.durationSeconds,
+            elapsedSeconds: 30,
+            completedAt: now,
+            metrics: metrics
+        )
+
+        let updated = try await repository.recordSpeedDrill(entry)
+        let duplicate = try await repository.recordSpeedDrill(entry)
+
+        #expect(updated.speedDrillHistory.count == 1)
+        #expect(updated.speedDrillHistory.first?.correct == 1)
+        #expect(updated.speedDrillHistory.first?.wrong == 1)
+        #expect(updated.speedDrillHistory.first?.correctPerMinute == 2)
+        #expect(updated.attempts.isEmpty)
+        #expect(updated.masteryByExpressionID.isEmpty)
+        #expect(updated.reviewByExpressionID.isEmpty)
+        #expect(duplicate.speedDrillHistory.count == 1)
+    }
+
     @Test("Repository persists updates through its store abstraction")
     func repositoryRoundTrip() async throws {
         let store = InMemoryLearnerProgressStore()

@@ -1,7 +1,7 @@
 import Foundation
 
 public enum LearnerProgressSchema {
-    public static let currentVersion = 3
+    public static let currentVersion = 4
 }
 
 public enum LearnerProgressMigrationError: Error, Equatable, Sendable {
@@ -30,7 +30,8 @@ public struct LearnerProgressMigrator: Sendable {
             activeMistakeExpressionIDs: snapshot.activeMistakeExpressionIDs,
             reinforcementExpressionIDs: snapshot.reinforcementExpressionIDs,
             currentJourneyUnitID: snapshot.currentJourneyUnitID,
-            savedExpressionIDs: snapshot.savedExpressionIDs
+            savedExpressionIDs: snapshot.savedExpressionIDs,
+            speedDrillHistory: snapshot.speedDrillHistory
         )
     }
 }
@@ -69,6 +70,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let reinforcementExpressionIDs: Set<String>
     public let currentJourneyUnitID: String?
     public let savedExpressionIDs: Set<String>
+    public let speedDrillHistory: [SpeedDrillHistoryEntry]
 
     public init(
         schemaVersion: Int = LearnerProgressSchema.currentVersion,
@@ -78,7 +80,8 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         activeMistakeExpressionIDs: Set<String> = [],
         reinforcementExpressionIDs: Set<String> = [],
         currentJourneyUnitID: String? = nil,
-        savedExpressionIDs: Set<String> = []
+        savedExpressionIDs: Set<String> = [],
+        speedDrillHistory: [SpeedDrillHistoryEntry] = []
     ) {
         self.schemaVersion = schemaVersion
         self.attempts = attempts
@@ -88,6 +91,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         self.reinforcementExpressionIDs = reinforcementExpressionIDs
         self.currentJourneyUnitID = currentJourneyUnitID
         self.savedExpressionIDs = savedExpressionIDs
+        self.speedDrillHistory = speedDrillHistory
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -99,6 +103,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         case reinforcementExpressionIDs
         case currentJourneyUnitID
         case savedExpressionIDs
+        case speedDrillHistory
     }
 
     public init(from decoder: Decoder) throws {
@@ -129,6 +134,10 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             Set<String>.self,
             forKey: .savedExpressionIDs
         ) ?? []
+        speedDrillHistory = try container.decodeIfPresent(
+            [SpeedDrillHistoryEntry].self,
+            forKey: .speedDrillHistory
+        ) ?? []
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -141,6 +150,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         try container.encode(reinforcementExpressionIDs, forKey: .reinforcementExpressionIDs)
         try container.encodeIfPresent(currentJourneyUnitID, forKey: .currentJourneyUnitID)
         try container.encode(savedExpressionIDs, forKey: .savedExpressionIDs)
+        try container.encode(speedDrillHistory, forKey: .speedDrillHistory)
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -270,7 +280,8 @@ public struct LearnerProgressUpdater: Sendable {
             activeMistakeExpressionIDs: mistakes,
             reinforcementExpressionIDs: reinforcement,
             currentJourneyUnitID: snapshot.currentJourneyUnitID,
-            savedExpressionIDs: snapshot.savedExpressionIDs
+            savedExpressionIDs: snapshot.savedExpressionIDs,
+            speedDrillHistory: snapshot.speedDrillHistory
         )
     }
 }
@@ -326,7 +337,8 @@ public actor LearnerProgressRepository {
             activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: unitID,
-            savedExpressionIDs: current.savedExpressionIDs
+            savedExpressionIDs: current.savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory
         )
         try await store.save(updated)
         return updated
@@ -354,7 +366,8 @@ public actor LearnerProgressRepository {
             activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: current.currentJourneyUnitID,
-            savedExpressionIDs: savedExpressionIDs
+            savedExpressionIDs: savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory
         )
         try await store.save(updated)
         return updated
@@ -378,7 +391,32 @@ public actor LearnerProgressRepository {
             activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: current.currentJourneyUnitID,
-            savedExpressionIDs: savedExpressionIDs
+            savedExpressionIDs: savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory
+        )
+        try await store.save(updated)
+        return updated
+    }
+
+    @discardableResult
+    public func recordSpeedDrill(
+        _ entry: SpeedDrillHistoryEntry
+    ) async throws -> LearnerProgressSnapshot {
+        let current = try await loadMigrated()
+        guard !current.speedDrillHistory.contains(where: { $0.id == entry.id }) else {
+            return current
+        }
+
+        let updated = LearnerProgressSnapshot(
+            schemaVersion: current.schemaVersion,
+            attempts: current.attempts,
+            masteryByExpressionID: current.masteryByExpressionID,
+            reviewByExpressionID: current.reviewByExpressionID,
+            activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
+            reinforcementExpressionIDs: current.reinforcementExpressionIDs,
+            currentJourneyUnitID: current.currentJourneyUnitID,
+            savedExpressionIDs: current.savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory + [entry]
         )
         try await store.save(updated)
         return updated
