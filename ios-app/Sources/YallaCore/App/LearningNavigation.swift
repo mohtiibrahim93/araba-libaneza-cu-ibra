@@ -182,8 +182,27 @@ public struct LearningNavigationBuilder: Sendable {
             return .smartSession(exercises)
         case "speed-drill":
             let target = max(count, 0)
-            let expressions = try package.expressions.prefix(target).map { expression in
-                JourneyExpressionSummary(
+            let expressionByID = Dictionary(
+                uniqueKeysWithValues: package.expressions.map { ($0.id, $0) }
+            )
+            let selectedIDs: [String]
+            if let learnerContext {
+                selectedIDs = SpeedDrillSelectionPlanner(targetCount: target)
+                    .makeSelection(
+                        expressions: package.expressions,
+                        units: package.units,
+                        context: learnerContext
+                    )
+                    .map(\.expressionID)
+            } else {
+                selectedIDs = package.expressions
+                    .prefix(target)
+                    .map(\.id)
+            }
+
+            let expressions = try selectedIDs.compactMap { expressionID -> JourneyExpressionSummary? in
+                guard let expression = expressionByID[expressionID] else { return nil }
+                return JourneyExpressionSummary(
                     id: expression.id,
                     arabizi: expression.canonicalArabizi,
                     arabicScript: expression.arabicScript,
