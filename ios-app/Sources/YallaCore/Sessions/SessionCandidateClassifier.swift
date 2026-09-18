@@ -39,11 +39,11 @@ public struct SessionCandidateClassifier: Sendable {
     ) -> SessionCandidateSource {
         let expressionIDs = Set(exercise.expressionIDs)
 
-        if !expressionIDs.isDisjoint(with: context.dueExpressionIDs) {
-            return .due
-        }
         if !expressionIDs.isDisjoint(with: context.mistakeExpressionIDs) {
             return .mistake
+        }
+        if !expressionIDs.isDisjoint(with: context.dueExpressionIDs) {
+            return .due
         }
         if let skill = skillMapper.skill(for: exercise.type), context.weakSkills.contains(skill) {
             return .weakSkill
