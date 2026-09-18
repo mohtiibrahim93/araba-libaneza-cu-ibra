@@ -75,6 +75,9 @@ struct JourneyUnitDetailView: View {
         }
         .navigationTitle(detail.title)
         .navigationBarTitleDisplayMode(.inline)
+        .task(id: detail.id) {
+            await progressModel.setCurrentJourneyUnitID(detail.id)
+        }
     }
 }
 
