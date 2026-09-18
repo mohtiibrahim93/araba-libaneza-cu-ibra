@@ -34,6 +34,8 @@ const COPY = {
     knowsH2: "Știi deja ce nivel ai?",
     knowsP: "Atunci nu ai nevoie de test. Alege cursul potrivit în 30 de secunde.",
     knowsCta: "Găsește cursul potrivit",
+    playedP: "Ai exersat deja în Jocul Yalla? Scorul tău din joc poate sugera nivelul, fără test.",
+    playedCta: "Vezi scorul și nivelul",
     honestH2: "Ce măsoară testul — și ce nu",
     honest: [
       "Măsoară citirea și răspunsurile scurte scrise în arabizi.",

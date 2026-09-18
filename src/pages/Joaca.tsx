@@ -50,6 +50,7 @@ const COPY = {
       "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibrahim.",
     ctaLevel: "Începe testul de nivel",
     ctaBack: "Înapoi la exerciții",
+    ctaScore: "Vezi scorul și nivelul tău",
   },
   en: {
     home: "Home",
@@ -76,6 +77,7 @@ const COPY = {
       "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibrahim.",
     ctaLevel: "Start the level test",
     ctaBack: "Back to practice",
+    ctaScore: "See your score and level",
   },
 } as const;
 
@@ -161,9 +163,14 @@ const Joaca = () => {
               <h2 className="font-display text-2xl font-bold text-foreground">{c.levelH2}</h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{c.levelP}</p>
             </div>
-            <div className="shrink-0">
+            <div className="flex shrink-0 flex-col gap-3">
               <Button size="lg" variant={mode === "placement" ? "outline" : "default"} onClick={toggleMode}>
                 {mode === "placement" ? c.ctaBack : c.ctaLevel}
+              </Button>
+              {/* The practice history is a level signal too — /joc/scor reads
+                  it from the browser and suggests A1/A2/B1 without a test. */}
+              <Button asChild size="lg" variant="secondary">
+                <Link to="/joc/scor">{c.ctaScore}</Link>
               </Button>
             </div>
           </div>
