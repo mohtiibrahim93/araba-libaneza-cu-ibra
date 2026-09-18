@@ -129,6 +129,18 @@ public struct LearningNavigationBuilder: Sendable {
         )
     }
 
+    public func targetedPractice(
+        expressionIDs: Set<String>,
+        from package: ContentPackage,
+        count: Int = 12
+    ) -> [ExerciseDefinition] {
+        guard !expressionIDs.isEmpty else { return [] }
+        let candidates = package.exercises.filter { exercise in
+            !Set(exercise.expressionIDs).isDisjoint(with: expressionIDs)
+        }
+        return sessionBuilder.build(from: candidates, count: count)
+    }
+
     public func smartPractice(from package: ContentPackage, count: Int = 20) -> [ExerciseDefinition] {
         sessionBuilder.build(from: package.exercises, count: count)
     }
