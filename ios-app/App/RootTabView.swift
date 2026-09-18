@@ -71,7 +71,10 @@ struct RootTabView: View {
             .tabItem { Label("Practică", systemImage: "bolt") }
             .tag(RootTab.practice)
 
-            DiscoverView(model: content.discover)
+            DiscoverView(
+                model: content.discover,
+                progressModel: progressModel
+            )
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
                 .tag(RootTab.discover)
 
@@ -330,6 +333,7 @@ private struct PracticeModeRow: View {
 
 private struct DiscoverView: View {
     let model: DiscoverModel
+    @ObservedObject var progressModel: LearnerProgressModel
     @State private var query = ""
 
     private var searchResults: [DiscoverSearchResult] {
@@ -360,7 +364,11 @@ private struct DiscoverView: View {
                                 ForEach(filteredRoots) { root in
                                     if let graph = model.rootGraph(rootID: root.id) {
                                         NavigationLink {
-                                            RootExplorerView(graph: graph, model: model)
+                                            RootExplorerView(
+                                                graph: graph,
+                                                model: model,
+                                                progressModel: progressModel
+                                            )
                                         } label: {
                                             VStack(spacing: 4) {
                                                 Text(root.displayKey)
@@ -390,7 +398,11 @@ private struct DiscoverView: View {
                     Section("Dicționar") {
                         ForEach(filteredEntries) { entry in
                             NavigationLink {
-                                DictionaryEntryDetailView(entry: entry, model: model)
+                                DictionaryEntryDetailView(
+                                    entry: entry,
+                                    model: model,
+                                    progressModel: progressModel
+                                )
                             } label: {
                                 VStack(alignment: .leading, spacing: 4) {
                                     HStack {
@@ -401,6 +413,11 @@ private struct DiscoverView: View {
                                                 .foregroundStyle(.secondary)
                                         }
                                         Spacer()
+                                        if progressModel.snapshot.savedExpressionIDs.contains(entry.id) {
+                                            Image(systemName: "bookmark.fill")
+                                                .foregroundStyle(.secondary)
+                                                .accessibilityLabel("Salvat")
+                                        }
                                         if let rootID = entry.rootID,
                                            let root = model.roots.first(where: { $0.id == rootID }) {
                                             Text(root.displayKey)
@@ -458,6 +475,7 @@ private struct ProfileView: View {
                     LabeledContent("Expresii văzute", value: "\(progress.seenExpressionIDs.count)")
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
                     LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
+                    LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
                 }
 
                 Section {
