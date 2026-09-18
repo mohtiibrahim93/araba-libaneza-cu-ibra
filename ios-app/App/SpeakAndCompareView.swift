@@ -82,10 +82,14 @@ struct SpeakAndCompareView: View {
             }
 
             Button {
-                audio.playReference(
-                    destination.referenceAudioAsset,
-                    rate: session.referencePlaybackRate
-                )
+                if audio.isPlaying {
+                    audio.stopPlayback()
+                } else {
+                    audio.playReference(
+                        destination.referenceAudioAsset,
+                        rate: session.referencePlaybackRate
+                    )
+                }
             } label: {
                 Label(
                     audio.isPlaying ? "Oprește redarea" : "Ascultă referința",
