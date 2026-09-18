@@ -59,7 +59,7 @@ struct AdaptiveLearningLoopTests {
             attempt(
                 id: "reinforce-1",
                 expressionID: "expr.reinforce",
-                skill: .meaning,
+                skill: .recall,
                 firstTryCorrect: true,
                 usedHint: true,
                 at: planDate
@@ -81,7 +81,7 @@ struct AdaptiveLearningLoopTests {
                 exercise("exercise.weak", unit: "unit.old", expression: "expr.weak", type: .listeningWrite),
                 exercise("exercise.current", unit: "unit.current", expression: "expr.current", type: .wordOrder),
                 exercise("exercise.new", unit: "unit.next", expression: "expr.new", type: .multipleChoiceProduction),
-                exercise("exercise.reinforce", unit: "unit.old", expression: "expr.reinforce", type: .reverseProduction)
+                exercise("exercise.reinforce", unit: "unit.old", expression: "expr.reinforce", type: .multipleChoiceProduction)
             ]
         )
 
@@ -106,7 +106,8 @@ struct AdaptiveLearningLoopTests {
         #expect(context.weakSkills == [.listening])
         #expect(context.currentUnitIDs == ["unit.current"])
         #expect(!context.mistakeExpressionIDs.contains("expr.weak"))
-        #expect(context.reinforcementExpressionIDs == ["expr.reinforce"])
+        #expect(context.reinforcementExpressionIDs.contains("expr.mistake"))
+        #expect(context.reinforcementExpressionIDs.contains("expr.reinforce"))
     }
 
     private func attempt(
