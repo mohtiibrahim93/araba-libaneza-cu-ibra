@@ -85,6 +85,20 @@ struct LearnerProgressTests {
         #expect(context.weakSkills == [.production])
     }
 
+    @Test("Current Journey unit persists and automatically feeds Smart Practice context")
+    func currentJourneyUnitPersists() async throws {
+        let store = InMemoryLearnerProgressStore()
+        let repository = LearnerProgressRepository(store: store)
+
+        let updated = try await repository.setCurrentJourneyUnitID("unit.restaurant")
+        let reloaded = try await repository.load()
+        let context = reloaded.sessionCandidateContext(at: now)
+
+        #expect(updated.currentJourneyUnitID == "unit.restaurant")
+        #expect(reloaded.currentJourneyUnitID == "unit.restaurant")
+        #expect(context.currentUnitIDs == ["unit.restaurant"])
+    }
+
     @Test("Repository persists updates through its store abstraction")
     func repositoryRoundTrip() async throws {
         let store = InMemoryLearnerProgressStore()
