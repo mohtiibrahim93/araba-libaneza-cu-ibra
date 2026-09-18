@@ -231,6 +231,7 @@ public struct LearningNavigationBuilder: Sendable {
                 .compactMap { prompt -> ListeningPracticeItem? in
                     guard let expression = expressionsByID[prompt.expressionID],
                           let audio = audioByID[prompt.audioAssetID],
+                          audio.expressionID == expression.id,
                           let meaning = localizedMeanings[expression.id]
                     else {
                         return nil

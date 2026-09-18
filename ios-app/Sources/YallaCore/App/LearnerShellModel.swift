@@ -85,10 +85,14 @@ public struct LearnerShellModelBuilder: Sendable {
         }
 
         let expressionIDs = Set(package.expressions.map(\.id))
-        let audioAssetIDs = Set(package.audioAssets.map(\.id))
+        let audioByID = Dictionary(uniqueKeysWithValues: package.audioAssets.map { ($0.id, $0) })
         let listeningAvailable = package.listeningPrompts.contains { prompt in
-            expressionIDs.contains(prompt.expressionID)
-                && audioAssetIDs.contains(prompt.audioAssetID)
+            guard expressionIDs.contains(prompt.expressionID),
+                  let audio = audioByID[prompt.audioAssetID]
+            else {
+                return false
+            }
+            return audio.expressionID == prompt.expressionID
         }
         let audioResolver = AudioAssetResolver()
         let speakingAvailable = package.expressions.contains { expression in
