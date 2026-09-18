@@ -35,6 +35,31 @@ public struct LearnerProgressMigrator: Sendable {
     }
 }
 
+public struct ExpressionGroupProgress: Equatable, Sendable {
+    public let totalCount: Int
+    public let practicedCount: Int
+    public let unseenCount: Int
+    public let dueCount: Int
+    public let mistakeCount: Int
+    public let savedCount: Int
+
+    public init(
+        totalCount: Int = 0,
+        practicedCount: Int = 0,
+        unseenCount: Int = 0,
+        dueCount: Int = 0,
+        mistakeCount: Int = 0,
+        savedCount: Int = 0
+    ) {
+        self.totalCount = totalCount
+        self.practicedCount = practicedCount
+        self.unseenCount = unseenCount
+        self.dueCount = dueCount
+        self.mistakeCount = mistakeCount
+        self.savedCount = savedCount
+    }
+}
+
 public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let schemaVersion: Int
     public let attempts: [LearningAttempt]
@@ -150,6 +175,23 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             reviewByExpressionID.compactMap { expressionID, review in
                 scheduler.isDue(review, at: date) ? expressionID : nil
             }
+        )
+    }
+
+    public func expressionGroupProgress(
+        expressionIDs: Set<String>,
+        at date: Date
+    ) -> ExpressionGroupProgress {
+        let practicedIDs = seenExpressionIDs.intersection(expressionIDs)
+        let dueIDs = dueExpressionIDs(at: date).intersection(expressionIDs)
+
+        return ExpressionGroupProgress(
+            totalCount: expressionIDs.count,
+            practicedCount: practicedIDs.count,
+            unseenCount: expressionIDs.count - practicedIDs.count,
+            dueCount: dueIDs.count,
+            mistakeCount: activeMistakeExpressionIDs.intersection(expressionIDs).count,
+            savedCount: savedExpressionIDs.intersection(expressionIDs).count
         )
     }
 
