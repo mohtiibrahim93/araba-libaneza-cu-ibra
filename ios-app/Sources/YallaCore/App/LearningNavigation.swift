@@ -37,6 +37,31 @@ public struct JourneyUnitDetail: Identifiable, Equatable, Sendable {
     }
 }
 
+public struct ListeningPracticeItem: Identifiable, Equatable, Sendable {
+    public let id: String
+    public let mode: ListeningMode
+    public let expression: JourneyExpressionSummary
+    public let audioAsset: AudioAsset
+    public let choices: [String]
+    public let revealWrittenLebaneseInitially: Bool
+
+    public init(
+        id: String,
+        mode: ListeningMode,
+        expression: JourneyExpressionSummary,
+        audioAsset: AudioAsset,
+        choices: [String] = [],
+        revealWrittenLebaneseInitially: Bool = false
+    ) {
+        self.id = id
+        self.mode = mode
+        self.expression = expression
+        self.audioAsset = audioAsset
+        self.choices = choices
+        self.revealWrittenLebaneseInitially = revealWrittenLebaneseInitially
+    }
+}
+
 public struct SpeakAndCompareDestination: Equatable, Sendable {
     public let expression: JourneyExpressionSummary
     public let referenceAudioAsset: AudioAsset
@@ -50,6 +75,7 @@ public struct SpeakAndCompareDestination: Equatable, Sendable {
 public enum PracticeDestination: Equatable, Sendable {
     case smartSession([ExerciseDefinition])
     case speedDrill([JourneyExpressionSummary])
+    case listening([ListeningPracticeItem])
     case speakAndCompare(SpeakAndCompareDestination)
 }
 
@@ -147,6 +173,63 @@ public struct LearningNavigationBuilder: Sendable {
                 )
             }
             return .speedDrill(expressions)
+        case "listening":
+            let target = max(count, 0)
+            guard target > 0 else { return nil }
+
+            let expressionsByID = Dictionary(
+                uniqueKeysWithValues: package.expressions.map { ($0.id, $0) }
+            )
+            let audioByID = Dictionary(
+                uniqueKeysWithValues: package.audioAssets.map { ($0.id, $0) }
+            )
+
+            var localizedMeanings: [String: String] = [:]
+            for expression in package.expressions {
+                localizedMeanings[expression.id] = try expression.localization(for: locale).naturalMeaning
+            }
+
+            let items = try package.listeningPrompts
+                .sorted { $0.id < $1.id }
+                .compactMap { prompt -> ListeningPracticeItem? in
+                    guard let expression = expressionsByID[prompt.expressionID],
+                          let audio = audioByID[prompt.audioAssetID],
+                          let meaning = localizedMeanings[expression.id]
+                    else {
+                        return nil
+                    }
+
+                    let choices: [String]
+                    if prompt.mode == .multipleChoice {
+                        let distractors = package.expressions
+                            .filter { $0.id != expression.id }
+                            .compactMap { localizedMeanings[$0.id] }
+                            .filter { $0 != meaning }
+                            .sorted()
+                            .prefix(3)
+                        choices = Array(([meaning] + distractors).sorted())
+                    } else {
+                        choices = []
+                    }
+
+                    return ListeningPracticeItem(
+                        id: prompt.id,
+                        mode: prompt.mode,
+                        expression: JourneyExpressionSummary(
+                            id: expression.id,
+                            arabizi: expression.canonicalArabizi,
+                            arabicScript: expression.arabicScript,
+                            meaning: meaning
+                        ),
+                        audioAsset: audio,
+                        choices: choices,
+                        revealWrittenLebaneseInitially: prompt.revealWrittenLebaneseInitially
+                    )
+                }
+                .prefix(target)
+
+            let resolved = Array(items)
+            return resolved.isEmpty ? nil : .listening(resolved)
         case "speaking":
             let resolver = AudioAssetResolver()
             for expression in package.expressions {
