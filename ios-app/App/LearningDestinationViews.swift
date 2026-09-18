@@ -164,23 +164,39 @@ private struct SpeedDrillOverviewView: View {
                 .padding(.vertical, 4)
             }
 
-            Section("Expresii") {
-                ForEach(expressions) { expression in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(expression.arabizi)
-                                .font(.headline)
-                            Text(expression.meaning)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        if let arabic = expression.arabicScript {
-                            Text(arabic)
-                                .foregroundStyle(.secondary)
-                        }
+            if !expressions.isEmpty {
+                Section {
+                    NavigationLink {
+                        SpeedDrillView(expressions: expressions)
+                    } label: {
+                        Label("Pornește cronometrul", systemImage: "timer")
+                            .font(.headline)
                     }
-                    .padding(.vertical, 3)
+                }
+            }
+
+            Section("Expresii") {
+                if expressions.isEmpty {
+                    Text("Nu există încă expresii disponibile pentru acest mod.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(expressions) { expression in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(expression.arabizi)
+                                    .font(.headline)
+                                Text(expression.meaning)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if let arabic = expression.arabicScript {
+                                Text(arabic)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 3)
+                    }
                 }
             }
         }
