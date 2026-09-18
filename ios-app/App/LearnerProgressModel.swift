@@ -22,6 +22,15 @@ final class LearnerProgressModel: ObservableObject {
         }
     }
 
+    func setCurrentJourneyUnitID(_ unitID: String?) async {
+        do {
+            snapshot = try await repository.setCurrentJourneyUnitID(unitID)
+            persistenceError = nil
+        } catch {
+            persistenceError = error.localizedDescription
+        }
+    }
+
     func record(_ attempt: LearningAttempt) async {
         do {
             snapshot = try await repository.record(attempt)
