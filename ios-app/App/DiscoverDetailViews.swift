@@ -5,6 +5,8 @@ struct DictionaryEntryDetailView: View {
     let entry: DictionaryEntrySummary
     let model: DiscoverModel
 
+    @StateObject private var audio = NativeAudioController()
+
     var body: some View {
         List {
             Section {
@@ -24,6 +26,29 @@ struct DictionaryEntryDetailView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 6)
+            }
+
+            if let audioAsset = entry.preferredAudioAsset {
+                Section("Audio") {
+                    Button {
+                        if audio.isPlaying {
+                            audio.stopPlayback()
+                        } else {
+                            audio.playReference(audioAsset)
+                        }
+                    } label: {
+                        Label(
+                            audio.isPlaying ? "Oprește redarea" : "Ascultă pronunția",
+                            systemImage: audio.isPlaying ? "stop.fill" : "speaker.wave.2.fill"
+                        )
+                    }
+
+                    if let errorMessage = audio.errorMessage {
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             if let rootID = entry.rootID,
@@ -67,6 +92,9 @@ struct DictionaryEntryDetailView: View {
         }
         .navigationTitle(entry.arabizi)
         .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            audio.stopPlayback()
+        }
     }
 }
 
