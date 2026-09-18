@@ -3,8 +3,8 @@ import Testing
 
 @Suite("Session candidate classification")
 struct SessionCandidateClassifierTests {
-    @Test("Due review outranks every other learning signal")
-    func dueHasHighestPriority() {
+    @Test("Known mistakes outrank due review and every other learning signal")
+    func mistakeHasHighestPriority() {
         let exercise = Self.exercise(id: "ex.due", unitID: "unit.current", expressionID: "expr.1", type: .freeProduction)
         let context = SessionCandidateContext(
             dueExpressionIDs: ["expr.1"],
@@ -16,7 +16,7 @@ struct SessionCandidateClassifierTests {
             probeExerciseIDs: ["ex.due"]
         )
 
-        #expect(SessionCandidateClassifier().source(for: exercise, context: context) == .due)
+        #expect(SessionCandidateClassifier().source(for: exercise, context: context) == .mistake)
     }
 
     @Test("Mistakes outrank weak skill and current lesson")
