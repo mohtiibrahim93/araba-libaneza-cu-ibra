@@ -115,13 +115,20 @@ struct RootExplorerView: View {
                 DisclosureGroup("Gramatică și tipare") {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(graph.members) { member in
-                            HStack {
+                            HStack(alignment: .top) {
                                 Text(member.label)
                                     .fontWeight(.semibold)
                                 Spacer()
-                                Text(member.patternID ?? "fără tipar etichetat")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                VStack(alignment: .trailing, spacing: 2) {
+                                    Text(member.patternLabel ?? "fără tipar aprobat")
+                                        .font(.caption.weight(.semibold))
+                                    if let metadata = patternMetadata(for: member) {
+                                        Text(metadata)
+                                            .font(.caption2)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .multilineTextAlignment(.trailing)
                             }
                         }
                     }
@@ -155,5 +162,36 @@ struct RootExplorerView: View {
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
             .background(.thinMaterial, in: Capsule())
+    }
+
+    private func patternMetadata(for member: RootExplorerMember) -> String? {
+        let values = [
+            member.patternKind.map(patternKindLabel),
+            member.patternProductivity.map(productivityLabel)
+        ].compactMap { $0 }
+
+        return values.isEmpty ? nil : values.joined(separator: " · ")
+    }
+
+    private func patternKindLabel(_ kind: MorphologicalPatternKind) -> String {
+        switch kind {
+        case .verbStem: return "tipar verbal"
+        case .verbalNoun: return "substantiv verbal"
+        case .participle: return "participiu"
+        case .agentNoun: return "nume de agent"
+        case .placeNoun: return "nume de loc"
+        case .adjective: return "adjectiv"
+        case .noun: return "substantiv"
+        case .plural: return "plural"
+        case .other: return "alt tipar"
+        }
+    }
+
+    private func productivityLabel(_ productivity: PatternProductivity) -> String {
+        switch productivity {
+        case .productive: return "productiv"
+        case .limited: return "limitat"
+        case .lexicalized: return "lexicalizat"
+        }
     }
 }
