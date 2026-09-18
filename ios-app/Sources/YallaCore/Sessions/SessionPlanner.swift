@@ -65,7 +65,7 @@ public struct DefaultSessionPlanner: Sendable {
             .probe: 1
         ]
         let sourceCycle: [SessionCandidateSource] = [
-            .due, .current, .mistake, .weakSkill, .newMaterial, .reinforcement
+            .mistake, .due, .weakSkill, .current, .newMaterial, .reinforcement
         ]
 
         var selected: [SessionCandidate] = []
@@ -122,7 +122,7 @@ public struct DefaultSessionPlanner: Sendable {
         }
 
         let backfillOrder: [SessionCandidateSource] = [
-            .due, .current, .mistake, .weakSkill, .newMaterial, .reinforcement
+            .mistake, .due, .weakSkill, .current, .newMaterial, .reinforcement
         ]
         while selected.count < min(targetCount, unique.count) {
             var added = false
