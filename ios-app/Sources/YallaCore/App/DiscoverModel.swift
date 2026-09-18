@@ -1,5 +1,50 @@
 import Foundation
 
+public enum DictionaryInflectionDirection: String, Equatable, Sendable {
+    case outgoing
+    case incoming
+}
+
+public struct DictionaryInflectionRelationSummary: Identifiable, Equatable, Sendable {
+    public let relatedExpressionID: String
+    public let relatedArabizi: String
+    public let kind: InflectionRelationKind
+    public let direction: DictionaryInflectionDirection
+    public let patternID: String?
+    public let patternLabel: String?
+    public let patternKind: MorphologicalPatternKind?
+    public let patternProductivity: PatternProductivity?
+
+    public var id: String {
+        [
+            direction.rawValue,
+            relatedExpressionID,
+            kind.rawValue,
+            patternID ?? "no-pattern"
+        ].joined(separator: ":")
+    }
+
+    public init(
+        relatedExpressionID: String,
+        relatedArabizi: String,
+        kind: InflectionRelationKind,
+        direction: DictionaryInflectionDirection,
+        patternID: String? = nil,
+        patternLabel: String? = nil,
+        patternKind: MorphologicalPatternKind? = nil,
+        patternProductivity: PatternProductivity? = nil
+    ) {
+        self.relatedExpressionID = relatedExpressionID
+        self.relatedArabizi = relatedArabizi
+        self.kind = kind
+        self.direction = direction
+        self.patternID = patternID
+        self.patternLabel = patternLabel
+        self.patternKind = patternKind
+        self.patternProductivity = patternProductivity
+    }
+}
+
 public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let id: String
     public let arabizi: String
@@ -9,6 +54,7 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let topics: [String]
     public let rootID: String?
     public let preferredAudioAsset: AudioAsset?
+    public let inflectionRelations: [DictionaryInflectionRelationSummary]
 
     public init(
         id: String,
@@ -18,7 +64,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         levels: [LevelBand],
         topics: [String],
         rootID: String?,
-        preferredAudioAsset: AudioAsset? = nil
+        preferredAudioAsset: AudioAsset? = nil,
+        inflectionRelations: [DictionaryInflectionRelationSummary] = []
     ) {
         self.id = id
         self.arabizi = arabizi
@@ -28,6 +75,7 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         self.topics = topics
         self.rootID = rootID
         self.preferredAudioAsset = preferredAudioAsset
+        self.inflectionRelations = inflectionRelations
     }
 }
 
@@ -163,7 +211,50 @@ public struct DiscoverModelBuilder: Sendable {
             result[link.expressionID] = link.rootID
         }
 
+        let expressionsByID = Dictionary(uniqueKeysWithValues: package.expressions.map { ($0.id, $0) })
+        let patternsByID = Dictionary(uniqueKeysWithValues: package.morphologicalPatterns.map { ($0.id, $0) })
         let audioResolver = AudioAssetResolver()
+
+        var inflectionsByExpressionID: [String: [DictionaryInflectionRelationSummary]] = [:]
+        for relation in package.inflectionRelations {
+            let pattern = relation.patternID.flatMap { patternsByID[$0] }
+
+            if let target = expressionsByID[relation.targetExpressionID] {
+                inflectionsByExpressionID[relation.sourceExpressionID, default: []].append(
+                    DictionaryInflectionRelationSummary(
+                        relatedExpressionID: target.id,
+                        relatedArabizi: target.canonicalArabizi,
+                        kind: relation.kind,
+                        direction: .outgoing,
+                        patternID: relation.patternID,
+                        patternLabel: pattern?.label,
+                        patternKind: pattern?.kind,
+                        patternProductivity: pattern?.productivity
+                    )
+                )
+            }
+
+            if let source = expressionsByID[relation.sourceExpressionID] {
+                inflectionsByExpressionID[relation.targetExpressionID, default: []].append(
+                    DictionaryInflectionRelationSummary(
+                        relatedExpressionID: source.id,
+                        relatedArabizi: source.canonicalArabizi,
+                        kind: relation.kind,
+                        direction: .incoming,
+                        patternID: relation.patternID,
+                        patternLabel: pattern?.label,
+                        patternKind: pattern?.kind,
+                        patternProductivity: pattern?.productivity
+                    )
+                )
+            }
+        }
+
+        for expressionID in inflectionsByExpressionID.keys {
+            inflectionsByExpressionID[expressionID]?.sort {
+                caseInsensitiveLess($0.relatedArabizi, $1.relatedArabizi)
+            }
+        }
 
         let entries = try package.expressions.map { expression in
             DictionaryEntrySummary(
@@ -177,13 +268,12 @@ public struct DiscoverModelBuilder: Sendable {
                 preferredAudioAsset: audioResolver.bestAsset(
                     for: expression.id,
                     from: package.audioAssets
-                )
+                ),
+                inflectionRelations: inflectionsByExpressionID[expression.id] ?? []
             )
         }
         .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
 
-        let expressionsByID = Dictionary(uniqueKeysWithValues: package.expressions.map { ($0.id, $0) })
-        let patternsByID = Dictionary(uniqueKeysWithValues: package.morphologicalPatterns.map { ($0.id, $0) })
         let linksByRootID = Dictionary(grouping: package.morphologyLinks, by: \.rootID)
 
         var roots: [RootSummary] = []

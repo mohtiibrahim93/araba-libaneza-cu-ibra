@@ -132,6 +132,28 @@ struct DictionaryEntryDetailView: View {
                 }
             }
 
+            if !entry.inflectionRelations.isEmpty {
+                Section("Forme și relații aprobate") {
+                    ForEach(entry.inflectionRelations) { relation in
+                        if let relatedEntry = model.entries.first(where: { $0.id == relation.relatedExpressionID }) {
+                            NavigationLink {
+                                DictionaryEntryDetailView(
+                                    entry: relatedEntry,
+                                    model: model,
+                                    package: package,
+                                    locale: locale,
+                                    progressModel: progressModel
+                                )
+                            } label: {
+                                InflectionRelationRow(relation: relation)
+                            }
+                        } else {
+                            InflectionRelationRow(relation: relation)
+                        }
+                    }
+                }
+            }
+
             if !entry.levels.isEmpty || !entry.topics.isEmpty {
                 Section("Etichete") {
                     if !entry.levels.isEmpty {
@@ -420,6 +442,47 @@ struct RootExplorerView: View {
     }
 }
 
+
+private struct InflectionRelationRow: View {
+    let relation: DictionaryInflectionRelationSummary
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: relation.direction == .outgoing ? "arrow.right.circle" : "arrow.left.circle")
+                .foregroundStyle(.secondary)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(relation.relatedArabizi)
+                    .font(.headline)
+
+                Text(metadata)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    private var metadata: String {
+        var values = [relationKindLabel(relation.kind)]
+        if let patternLabel = relation.patternLabel {
+            values.append(patternLabel)
+        }
+        values.append(relation.direction == .outgoing ? "formă asociată" : "formă de bază asociată")
+        return values.joined(separator: " · ")
+    }
+
+    private func relationKindLabel(_ kind: InflectionRelationKind) -> String {
+        switch kind {
+        case .plural: return "plural"
+        case .feminine: return "feminin"
+        case .dual: return "dual"
+        case .conjugatedForm: return "formă conjugată"
+        case .derivedForm: return "formă derivată"
+        case .other: return "relație aprobată"
+        }
+    }
+}
 
 private struct RootProgressMetric: View {
     let value: String
