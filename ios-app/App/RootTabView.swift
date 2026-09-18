@@ -15,11 +15,20 @@ struct RootTabView: View {
         )
     }
 
+    private var currentUnitTitle: String? {
+        guard let currentUnitID = progressModel.snapshot.currentJourneyUnitID else { return nil }
+        return content.shell.journeySections
+            .flatMap(\.units)
+            .first(where: { $0.id == currentUnitID })?
+            .title
+    }
+
     var body: some View {
         TabView {
             HomeView(
                 summary: content.shell.home,
-                progress: progressModel.snapshot
+                progress: progressModel.snapshot,
+                currentUnitTitle: currentUnitTitle
             )
                 .tabItem { Label("Acasă", systemImage: "house") }
 
@@ -54,6 +63,11 @@ struct RootTabView: View {
 private struct HomeView: View {
     let summary: HomeSummary
     let progress: LearnerProgressSnapshot
+    let currentUnitTitle: String?
+
+    private var dueCount: Int {
+        progress.dueExpressionIDs(at: Date()).count
+    }
 
     var body: some View {
         NavigationStack {
@@ -67,16 +81,24 @@ private struct HomeView: View {
                     }
 
                     HStack(spacing: 12) {
-                        MetricCard(value: summary.journeyUnitCount, label: "unități")
-                        MetricCard(value: progress.attempts.count, label: "încercări")
-                        MetricCard(value: progress.activeMistakeExpressionIDs.count, label: "de revăzut")
+                        MetricCard(value: dueCount, label: "recapitulări")
+                        MetricCard(value: progress.activeMistakeExpressionIDs.count, label: "greșeli")
+                        MetricCard(value: progress.weakSkills.count, label: "puncte slabe")
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Pentru azi")
                             .font(.title2.bold())
-                        HomeActionRow(title: "Continuă parcursul", subtitle: "Revino la următoarea unitate", icon: "arrow.right.circle.fill")
-                        HomeActionRow(title: "Practică inteligentă", subtitle: "Recapitulări, greșeli și puncte slabe", icon: "brain.head.profile")
+                        HomeActionRow(
+                            title: "Continuă parcursul",
+                            subtitle: currentUnitTitle.map { "Continuă: \($0)" } ?? "Alege prima unitate din Parcurs",
+                            icon: "arrow.right.circle.fill"
+                        )
+                        HomeActionRow(
+                            title: "Practică inteligentă",
+                            subtitle: "\(dueCount) recapitulări · \(progress.activeMistakeExpressionIDs.count) greșeli active",
+                            icon: "brain.head.profile"
+                        )
                         HomeActionRow(title: "Yalla! Două minute", subtitle: "Exersează viteza de reamintire", icon: "timer")
                     }
                 }
