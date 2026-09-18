@@ -4,6 +4,9 @@ import YallaCore
 struct RootTabView: View {
     let content: AppContentSnapshot
     @StateObject private var progressModel: LearnerProgressModel
+    @State private var selectedTab: RootTab = .home
+    @State private var journeyPath: [String] = []
+    @State private var practicePath: [String] = []
 
     init(
         content: AppContentSnapshot,
@@ -24,35 +27,56 @@ struct RootTabView: View {
     }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             HomeView(
                 summary: content.shell.home,
                 progress: progressModel.snapshot,
-                currentUnitTitle: currentUnitTitle
+                currentUnitTitle: currentUnitTitle,
+                onContinueJourney: {
+                    if let unitID = progressModel.snapshot.currentJourneyUnitID {
+                        journeyPath = [unitID]
+                    }
+                    selectedTab = .journey
+                },
+                onSmartPractice: {
+                    practicePath = ["smart-session"]
+                    selectedTab = .practice
+                },
+                onSpeedDrill: {
+                    practicePath = ["speed-drill"]
+                    selectedTab = .practice
+                }
             )
-                .tabItem { Label("Acasă", systemImage: "house") }
+            .tabItem { Label("Acasă", systemImage: "house") }
+            .tag(RootTab.home)
 
             JourneyView(
                 sections: content.shell.journeySections,
                 package: content.package,
                 locale: content.locale,
-                progressModel: progressModel
+                progressModel: progressModel,
+                path: $journeyPath
             )
             .tabItem { Label("Parcurs", systemImage: "map") }
+            .tag(RootTab.journey)
 
             PracticeView(
                 modes: content.shell.practiceModes,
                 package: content.package,
                 locale: content.locale,
-                progressModel: progressModel
+                progressModel: progressModel,
+                path: $practicePath
             )
             .tabItem { Label("Practică", systemImage: "bolt") }
+            .tag(RootTab.practice)
 
             DiscoverView(model: content.discover)
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
+                .tag(RootTab.discover)
 
             ProfileView(progress: progressModel.snapshot)
                 .tabItem { Label("Eu", systemImage: "person") }
+                .tag(RootTab.profile)
         }
         .task {
             await progressModel.load()
@@ -60,10 +84,21 @@ struct RootTabView: View {
     }
 }
 
+private enum RootTab: Hashable {
+    case home
+    case journey
+    case practice
+    case discover
+    case profile
+}
+
 private struct HomeView: View {
     let summary: HomeSummary
     let progress: LearnerProgressSnapshot
     let currentUnitTitle: String?
+    let onContinueJourney: () -> Void
+    let onSmartPractice: () -> Void
+    let onSpeedDrill: () -> Void
 
     private var dueCount: Int {
         progress.dueExpressionIDs(at: Date()).count
@@ -92,14 +127,21 @@ private struct HomeView: View {
                         HomeActionRow(
                             title: "Continuă parcursul",
                             subtitle: currentUnitTitle.map { "Continuă: \($0)" } ?? "Alege prima unitate din Parcurs",
-                            icon: "arrow.right.circle.fill"
+                            icon: "arrow.right.circle.fill",
+                            action: onContinueJourney
                         )
                         HomeActionRow(
                             title: "Practică inteligentă",
                             subtitle: "\(dueCount) recapitulări · \(progress.activeMistakeExpressionIDs.count) greșeli active",
-                            icon: "brain.head.profile"
+                            icon: "brain.head.profile",
+                            action: onSmartPractice
                         )
-                        HomeActionRow(title: "Yalla! Două minute", subtitle: "Exersează viteza de reamintire", icon: "timer")
+                        HomeActionRow(
+                            title: "Yalla! Două minute",
+                            subtitle: "Exersează viteza de reamintire",
+                            icon: "timer",
+                            action: onSpeedDrill
+                        )
                     }
                 }
                 .padding()
@@ -114,39 +156,40 @@ private struct JourneyView: View {
     let package: ContentPackage
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
+    @Binding var path: [String]
 
     private let navigationBuilder = LearningNavigationBuilder()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 ForEach(sections) { section in
                     Section(section.level.rawValue.uppercased()) {
                         ForEach(section.units) { unit in
-                            unitRow(unit)
+                            if detail(for: unit.id) != nil {
+                                NavigationLink(value: unit.id) {
+                                    JourneyUnitRow(unit: unit)
+                                }
+                            } else {
+                                JourneyUnitRow(unit: unit)
+                            }
                         }
                     }
                 }
             }
             .navigationTitle("Parcurs")
-        }
-    }
-
-    @ViewBuilder
-    private func unitRow(_ unit: JourneyUnitSummary) -> some View {
-        if let detail = detail(for: unit.id) {
-            NavigationLink {
-                JourneyUnitDetailView(
-                    detail: detail,
-                    expressions: package.expressions,
-                    locale: locale,
-                    progressModel: progressModel
-                )
-            } label: {
-                JourneyUnitRow(unit: unit)
+            .navigationDestination(for: String.self) { unitID in
+                if let detail = detail(for: unitID) {
+                    JourneyUnitDetailView(
+                        detail: detail,
+                        expressions: package.expressions,
+                        locale: locale,
+                        progressModel: progressModel
+                    )
+                } else {
+                    ContentUnavailableView("Unitate indisponibilă", systemImage: "exclamationmark.triangle")
+                }
             }
-        } else {
-            JourneyUnitRow(unit: unit)
         }
     }
 
@@ -186,34 +229,36 @@ private struct PracticeView: View {
     let package: ContentPackage
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
+    @Binding var path: [String]
 
     private let navigationBuilder = LearningNavigationBuilder()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List(modes) { mode in
-                practiceRow(mode)
+                if destination(for: mode) != nil {
+                    NavigationLink(value: mode.id) {
+                        PracticeModeRow(mode: mode, isNavigable: true)
+                    }
+                } else {
+                    PracticeModeRow(mode: mode, isNavigable: false)
+                }
             }
             .navigationTitle("Practică")
-        }
-    }
-
-    @ViewBuilder
-    private func practiceRow(_ mode: PracticeModeSummary) -> some View {
-        if let destination = destination(for: mode) {
-            NavigationLink {
-                PracticeDestinationView(
-                    destination: destination,
-                    expressions: package.expressions,
-                    locale: locale,
-                    title: mode.title,
-                    progressModel: progressModel
-                )
-            } label: {
-                PracticeModeRow(mode: mode, isNavigable: true)
+            .navigationDestination(for: String.self) { modeID in
+                if let mode = modes.first(where: { $0.id == modeID }),
+                   let destination = destination(for: mode) {
+                    PracticeDestinationView(
+                        destination: destination,
+                        expressions: package.expressions,
+                        locale: locale,
+                        title: mode.title,
+                        progressModel: progressModel
+                    )
+                } else {
+                    ContentUnavailableView("Mod indisponibil", systemImage: "exclamationmark.triangle")
+                }
             }
-        } else {
-            PracticeModeRow(mode: mode, isNavigable: false)
         }
     }
 
@@ -418,9 +463,11 @@ private struct HomeActionRow: View {
     let title: String
     let subtitle: String
     let icon: String
+    let action: () -> Void
 
     var body: some View {
-        HStack(spacing: 14) {
+        Button(action: action) {
+            HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.title2)
                 .frame(width: 34)
@@ -432,10 +479,12 @@ private struct HomeActionRow: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundStyle(.tertiary)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.tertiary)
+            }
+            .padding()
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18))
         }
-        .padding()
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18))
+        .buttonStyle(.plain)
     }
 }
