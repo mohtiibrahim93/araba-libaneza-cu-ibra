@@ -84,7 +84,12 @@ public struct LearnerShellModelBuilder: Sendable {
             return JourneySectionSummary(level: level, units: summaries)
         }
 
-        let listeningAvailable = !package.listeningPrompts.isEmpty && !package.audioAssets.isEmpty
+        let expressionIDs = Set(package.expressions.map(\.id))
+        let audioAssetIDs = Set(package.audioAssets.map(\.id))
+        let listeningAvailable = package.listeningPrompts.contains { prompt in
+            expressionIDs.contains(prompt.expressionID)
+                && audioAssetIDs.contains(prompt.audioAssetID)
+        }
         let audioResolver = AudioAssetResolver()
         let speakingAvailable = package.expressions.contains { expression in
             audioResolver.bestAsset(for: expression.id, from: package.audioAssets) != nil

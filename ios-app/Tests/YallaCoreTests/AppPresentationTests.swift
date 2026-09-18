@@ -105,6 +105,81 @@ struct AppPresentationTests {
         #expect(linkedModel.practiceModes.first(where: { $0.id == "speaking" })?.isAvailable == true)
     }
 
+    @Test("Listening availability requires a prompt whose expression and audio references both resolve")
+    func listeningRequiresResolvablePromptReferences() throws {
+        let expression = Expression(
+            id: "expr.hello",
+            canonicalArabizi: "mar7aba",
+            localizations: ["ro": .init(naturalMeaning: "salut")]
+        )
+        let audio = AudioAsset(
+            id: "audio.hello",
+            expressionID: expression.id,
+            source: .approvedNative,
+            locator: "hello.m4a"
+        )
+
+        let brokenExpressionPackage = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "broken-expression", defaultLearnerLocale: "ro"),
+            expressions: [expression],
+            units: [],
+            audioAssets: [audio],
+            listeningPrompts: [
+                ListeningPrompt(
+                    id: "listen.broken-expression",
+                    audioAssetID: audio.id,
+                    expressionID: "expr.missing",
+                    mode: .freeWrite
+                )
+            ]
+        )
+        let brokenAudioPackage = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "broken-audio", defaultLearnerLocale: "ro"),
+            expressions: [expression],
+            units: [],
+            audioAssets: [audio],
+            listeningPrompts: [
+                ListeningPrompt(
+                    id: "listen.broken-audio",
+                    audioAssetID: "audio.missing",
+                    expressionID: expression.id,
+                    mode: .freeWrite
+                )
+            ]
+        )
+        let validPackage = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "valid-listening", defaultLearnerLocale: "ro"),
+            expressions: [expression],
+            units: [],
+            audioAssets: [audio],
+            listeningPrompts: [
+                ListeningPrompt(
+                    id: "listen.hello",
+                    audioAssetID: audio.id,
+                    expressionID: expression.id,
+                    mode: .freeWrite
+                )
+            ]
+        )
+
+        let brokenExpressionModel = try LearnerShellModelBuilder().build(
+            from: brokenExpressionPackage,
+            locale: "ro"
+        )
+        let brokenAudioModel = try LearnerShellModelBuilder().build(
+            from: brokenAudioPackage,
+            locale: "ro"
+        )
+        let validModel = try LearnerShellModelBuilder().build(
+            from: validPackage,
+            locale: "ro"
+        )
+
+        #expect(brokenExpressionModel.practiceModes.first(where: { $0.id == "listening" })?.isAvailable == false)
+        #expect(brokenAudioModel.practiceModes.first(where: { $0.id == "listening" })?.isAvailable == false)
+        #expect(validModel.practiceModes.first(where: { $0.id == "listening" })?.isAvailable == true)
+    }
+
     @Test("Practice surfaces core learning modes without pretending unavailable media exists")
     func practiceModesReflectCapabilities() throws {
         let model = try LearnerShellModelBuilder().build(from: package(), locale: "ro")
