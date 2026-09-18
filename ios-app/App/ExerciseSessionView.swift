@@ -5,22 +5,26 @@ import YallaCore
 struct ExerciseSessionView: View {
     let locale: String
     let title: String
+    @ObservedObject var progressModel: LearnerProgressModel
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
     @State private var latestResolution: ExerciseResolution?
     @State private var hintVisible = false
     @State private var exerciseStartedAt = Date()
+    @State private var persistedAttemptCount = 0
     @FocusState private var answerFieldFocused: Bool
 
     init(
         exercises: [ExerciseDefinition],
         expressions: [YallaCore.Expression],
         locale: String,
-        title: String
+        title: String,
+        progressModel: LearnerProgressModel
     ) {
         self.locale = locale
         self.title = title
+        self.progressModel = progressModel
         _player = State(
             initialValue: try? ExerciseSessionPlayer(
                 exercises: exercises,
@@ -170,9 +174,33 @@ struct ExerciseSessionView: View {
 
         if resolution.completed {
             answerFieldFocused = false
+            persistCompletedAttempt(
+                resolution: resolution,
+                player: player
+            )
         } else {
             answer = ""
             answerFieldFocused = true
+        }
+    }
+
+    private func persistCompletedAttempt(
+        resolution: ExerciseResolution,
+        player: ExerciseSessionPlayer
+    ) {
+        guard player.attempts.count > persistedAttemptCount else { return }
+        persistedAttemptCount = player.attempts.count
+
+        guard let durableAttempt = LearningAttemptFactory().make(
+            id: UUID().uuidString,
+            resolution: resolution,
+            occurredAt: Date()
+        ) else {
+            return
+        }
+
+        Task {
+            await progressModel.record(durableAttempt)
         }
     }
 
