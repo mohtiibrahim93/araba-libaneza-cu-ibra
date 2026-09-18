@@ -54,11 +54,24 @@ public struct RootExplorerMember: Identifiable, Equatable, Sendable {
     public let id: String
     public let label: String
     public let patternID: String?
+    public let patternLabel: String?
+    public let patternKind: MorphologicalPatternKind?
+    public let patternProductivity: PatternProductivity?
 
-    public init(id: String, label: String, patternID: String?) {
+    public init(
+        id: String,
+        label: String,
+        patternID: String?,
+        patternLabel: String? = nil,
+        patternKind: MorphologicalPatternKind? = nil,
+        patternProductivity: PatternProductivity? = nil
+    ) {
         self.id = id
         self.label = label
         self.patternID = patternID
+        self.patternLabel = patternLabel
+        self.patternKind = patternKind
+        self.patternProductivity = patternProductivity
     }
 }
 
@@ -161,6 +174,7 @@ public struct DiscoverModelBuilder: Sendable {
         .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
 
         let expressionsByID = Dictionary(uniqueKeysWithValues: package.expressions.map { ($0.id, $0) })
+        let patternsByID = Dictionary(uniqueKeysWithValues: package.morphologicalPatterns.map { ($0.id, $0) })
         let linksByRootID = Dictionary(grouping: package.morphologyLinks, by: \.rootID)
 
         var roots: [RootSummary] = []
@@ -171,10 +185,14 @@ public struct DiscoverModelBuilder: Sendable {
 
             let members = links.compactMap { link -> RootExplorerMember? in
                 guard let expression = expressionsByID[link.expressionID] else { return nil }
+                let pattern = link.patternID.flatMap { patternsByID[$0] }
                 return RootExplorerMember(
                     id: expression.id,
                     label: expression.canonicalArabizi,
-                    patternID: link.patternID
+                    patternID: link.patternID,
+                    patternLabel: pattern?.label,
+                    patternKind: pattern?.kind,
+                    patternProductivity: pattern?.productivity
                 )
             }
             .sorted { caseInsensitiveLess($0.label, $1.label) }
