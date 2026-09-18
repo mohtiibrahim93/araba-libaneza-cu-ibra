@@ -179,8 +179,8 @@ struct LearnerProgressTests {
         #expect(context.currentUnitIDs == ["unit.restaurant"])
     }
 
-    @Test("Saved dictionary expressions persist and can be removed")
-    func savedExpressionsPersist() async throws {
+    @Test("Explicit saved-state updates persist and can be removed")
+    func explicitSavedStatePersistsAndRemoves() async throws {
         let store = InMemoryLearnerProgressStore()
         let repository = LearnerProgressRepository(store: store)
 
