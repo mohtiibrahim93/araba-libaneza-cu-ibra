@@ -92,7 +92,7 @@ export const JOACA_META: PageMeta = {
  * Romanian, so an /en URL would advertise a translation that does not exist.
  */
 export const JOC_SCOR_META: PageMeta = {
-  title: "Scorul tău din Jocul Yalla și nivelul sugerat | Arabă libaneză",
+  title: "Scorul din Jocul Yalla și nivelul sugerat | Arabă libaneză",
   description:
     "Vezi ce ai strâns în Jocul Yalla — XP, runde, expresii consolidate — și ce nivel A1, A2 sau B1 sugerează scorul tău, cu cursul potrivit.",
 };
