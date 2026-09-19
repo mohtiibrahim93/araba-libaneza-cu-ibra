@@ -7,6 +7,7 @@ struct RootTabView: View {
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
     @State private var practicePath: [String] = []
+    @State private var showingReviews = false
 
     init(
         content: AppContentSnapshot,
@@ -33,6 +34,7 @@ struct RootTabView: View {
                 progress: progressModel.snapshot,
                 currentUnitTitle: currentUnitTitle,
                 persistenceError: progressModel.persistenceError,
+                onReviews: { showingReviews = true },
                 onContinueJourney: {
                     if let unitID = progressModel.snapshot.currentJourneyUnitID {
                         journeyPath = [unitID]
@@ -82,10 +84,14 @@ struct RootTabView: View {
 
             ProfileView(
                 progress: progressModel.snapshot,
-                persistenceError: progressModel.persistenceError
+                persistenceError: progressModel.persistenceError,
+                onReviews: { showingReviews = true }
             )
                 .tabItem { Label("Eu", systemImage: "person") }
                 .tag(RootTab.profile)
+        }
+        .sheet(isPresented: $showingReviews) {
+            ReviewQueueView(package: content.package, locale: content.locale, progressModel: progressModel)
         }
         .task {
             await progressModel.load()
@@ -106,6 +112,7 @@ private struct HomeView: View {
     let progress: LearnerProgressSnapshot
     let currentUnitTitle: String?
     let persistenceError: String?
+    let onReviews: () -> Void
     let onContinueJourney: () -> Void
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
@@ -141,7 +148,11 @@ private struct HomeView: View {
                     }
 
                     HStack(spacing: 12) {
-                        MetricCard(value: dueCount, label: "recapitulări")
+                        Button(action: onReviews) {
+                            MetricCard(value: dueCount, label: "recapitulări")
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityHint("Vezi expresiile de repetat")
                         MetricCard(value: progress.activeMistakeExpressionIDs.count, label: "greșeli")
                         MetricCard(value: progress.weakSkills.count, label: "puncte slabe")
                     }
@@ -598,6 +609,7 @@ private struct DiscoverView: View {
 private struct ProfileView: View {
     let progress: LearnerProgressSnapshot
     let persistenceError: String?
+    let onReviews: () -> Void
 
     private var fluency: SpeedDrillProgressSummary {
         progress.speedDrillProgress
@@ -628,6 +640,12 @@ private struct ProfileView: View {
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")
                     LabeledContent("Puncte slabe", value: "\(progress.weakSkills.count)")
                     LabeledContent("Cuvinte salvate", value: "\(progress.savedExpressionIDs.count)")
+                }
+
+                Section {
+                    Button(action: onReviews) {
+                        Label("Vezi recapitulările", systemImage: "clock.arrow.circlepath")
+                    }
                 }
 
                 if reviewQueue.dueNowCount > 0 || reviewQueue.upcomingCount > 0 {
@@ -735,3 +753,4 @@ private struct HomeActionRow: View {
         .buttonStyle(.plain)
     }
 }
+
