@@ -18,7 +18,7 @@ public struct ReviewQueueBuilder: Sendable {
         at date: Date
     ) throws -> [ReviewQueueItemSummary] {
         let scheduler = ReviewScheduler()
-        let practiceIDs = Set(playableExercises(in: package).compactMap { $0.expressionIDs.first })
+        let practiceIDs = Set(playableExercises(in: package, locale: locale).compactMap { $0.expressionIDs.first })
         return try package.expressions.compactMap { expression -> ReviewQueueItemSummary? in
             guard let review = progress.reviewByExpressionID[expression.id],
                   let dueAt = scheduler.dueDate(for: review) else { return nil }
@@ -42,12 +42,13 @@ public struct ReviewQueueBuilder: Sendable {
         from package: ContentPackage,
         progress: LearnerProgressSnapshot,
         at date: Date,
-        count: Int = 20
+        count: Int = 20,
+        locale: String? = nil
     ) -> [ExerciseDefinition] {
         guard count > 0 else { return [] }
         let scheduler = ReviewScheduler()
         let dueIDs = progress.dueExpressionIDs(at: date)
-        let candidates = playableExercises(in: package).filter {
+        let candidates = playableExercises(in: package, locale: locale ?? package.manifest.defaultLearnerLocale).filter {
             guard let target = $0.expressionIDs.first else { return false }
             return dueIDs.contains(target)
         }.sorted { lhs, rhs in
@@ -66,10 +67,11 @@ public struct ReviewQueueBuilder: Sendable {
         }.prefix(count))
     }
 
-    private func playableExercises(in package: ContentPackage) -> [ExerciseDefinition] {
+    private func playableExercises(in package: ContentPackage, locale: String) -> [ExerciseDefinition] {
         let expressionIDs = Set(package.expressions.map(\.id))
-        return package.exercises.filter { exercise in
-            guard !exercise.expressionIDs.isEmpty,
+        let authored = package.exercises.filter { exercise in
+            guard exercise.prompt[locale] != nil,
+                  !exercise.expressionIDs.isEmpty,
                   Set(exercise.expressionIDs).isSubset(of: expressionIDs),
                   !exercise.answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             else { return false }
@@ -83,5 +85,6 @@ public struct ReviewQueueBuilder: Sendable {
                 return false
             }
         }
+        return ExpressionRecallBuilder().supplement(authored, from: package, locale: locale)
     }
 }

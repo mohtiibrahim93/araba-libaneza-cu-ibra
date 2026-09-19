@@ -117,7 +117,10 @@ public struct LearningNavigationBuilder: Sendable {
                 meaning: try expression.localization(for: locale).naturalMeaning
             )
         }
-        let exercises = package.exercises.filter { $0.unitID == unit.id }
+        let exercises = ExpressionRecallBuilder().supplement(
+            package.exercises.filter { $0.unitID == unit.id },
+            from: package, expressionIDs: Set(unit.expressionIDs), locale: locale
+        )
 
         return JourneyUnitDetail(
             id: unit.id,
@@ -135,23 +138,31 @@ public struct LearningNavigationBuilder: Sendable {
         count: Int = 12
     ) -> [ExerciseDefinition] {
         guard !expressionIDs.isEmpty else { return [] }
-        let candidates = package.exercises.filter { exercise in
+        let candidates = ExpressionRecallBuilder().supplement(
+            package.exercises, from: package, expressionIDs: expressionIDs,
+            locale: package.manifest.defaultLearnerLocale
+        ).filter { exercise in
             !Set(exercise.expressionIDs).isDisjoint(with: expressionIDs)
         }
         return sessionBuilder.build(from: candidates, count: count)
     }
 
-    public func smartPractice(from package: ContentPackage, count: Int = 20) -> [ExerciseDefinition] {
-        sessionBuilder.build(from: package.exercises, count: count)
+    public func smartPractice(from package: ContentPackage, count: Int = 20, locale: String? = nil) -> [ExerciseDefinition] {
+        sessionBuilder.build(from: ExpressionRecallBuilder().supplement(
+            package.exercises, from: package, locale: locale ?? package.manifest.defaultLearnerLocale
+        ), count: count)
     }
 
     public func smartPracticePlan(
         from package: ContentPackage,
         context: SessionCandidateContext,
-        count: Int = 20
+        count: Int = 20,
+        locale: String? = nil
     ) -> SessionPlan {
         let candidates = candidateClassifier.candidates(
-            from: package.exercises,
+            from: ExpressionRecallBuilder().supplement(
+                package.exercises, from: package, locale: locale ?? package.manifest.defaultLearnerLocale
+            ),
             context: context
         )
         return DefaultSessionPlanner(targetCount: count).makeSession(from: candidates)
@@ -160,9 +171,10 @@ public struct LearningNavigationBuilder: Sendable {
     public func smartPractice(
         from package: ContentPackage,
         context: SessionCandidateContext,
-        count: Int = 20
+        count: Int = 20,
+        locale: String? = nil
     ) -> [ExerciseDefinition] {
-        smartPracticePlan(from: package, context: context, count: count)
+        smartPracticePlan(from: package, context: context, count: count, locale: locale)
             .items
             .map(\.exercise)
     }
@@ -177,8 +189,8 @@ public struct LearningNavigationBuilder: Sendable {
         switch id {
         case "smart-session":
             let exercises = learnerContext.map {
-                smartPractice(from: package, context: $0, count: count)
-            } ?? smartPractice(from: package, count: count)
+                smartPractice(from: package, context: $0, count: count, locale: locale)
+            } ?? smartPractice(from: package, count: count, locale: locale)
             return .smartSession(exercises)
         case "speed-drill":
             let target = max(count, 0)
@@ -325,3 +337,4 @@ public struct LearningNavigationBuilder: Sendable {
         }
     }
 }
+

@@ -44,7 +44,7 @@ struct ReviewQueueView: View {
             let due = items.filter(\.isDue)
             let upcoming = items.filter { !$0.isDue }
             let exercises = ReviewQueueBuilder().practice(
-                from: package, progress: progressModel.snapshot, at: date
+                from: package, progress: progressModel.snapshot, at: date, locale: locale
             )
             List {
                 if let error = progressModel.persistenceError {
@@ -62,7 +62,7 @@ struct ReviewQueueView: View {
                             Button {
                                 // Freeze the selected session while attempts update the queue.
                                 sessionExercises = ReviewQueueBuilder().practice(
-                                    from: package, progress: progressModel.snapshot, at: Date()
+                                    from: package, progress: progressModel.snapshot, at: Date(), locale: locale
                                 )
                                 showingSession = !sessionExercises.isEmpty
                             } label: {
