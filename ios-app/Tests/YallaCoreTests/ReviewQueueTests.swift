@@ -61,15 +61,19 @@ struct ReviewQueueTests {
         #expect(ReviewQueueBuilder().practice(from: content, progress: .init(), at: now).isEmpty)
     }
 
-    @Test("A due expression without a playable exercise stays visible without fabricated practice")
-    func retainsUnpracticableDueItems() throws {
+    @Test("Due expressions use canonical factory recall when no linked exercise exists")
+    func buildsCanonicalRecall() throws {
         let content = package(["due"])
         let progress = LearnerProgressSnapshot(reviewByExpressionID: ["due": .init(dueAt: now)])
         let queue = try ReviewQueueBuilder().items(from: content, progress: progress, locale: "ro", at: now)
         #expect(queue.count == 1)
         #expect(queue.first?.isDue == true)
-        #expect(queue.first?.canPractice == false)
-        #expect(ReviewQueueBuilder().practice(from: content, progress: progress, at: now).isEmpty)
+        #expect(queue.first?.canPractice == true)
+        let exercises = ReviewQueueBuilder().practice(from: content, progress: progress, at: now)
+        #expect(exercises.count == 1)
+        #expect(exercises.first?.expressionIDs == ["due"])
+        #expect(exercises.first?.answer == "due")
+        #expect(exercises.first?.prompt["ro"] == "sens due")
     }
 
     @Test("Successful persisted review moves from due to upcoming after repository reload")
@@ -90,6 +94,50 @@ struct ReviewQueueTests {
         #expect(queue.first?.dueAt == now.addingTimeInterval(86_400))
         #expect(reloaded.attempts.count == 1)
         #expect(ReviewQueueBuilder().practice(from: content, progress: reloaded, at: now).isEmpty)
+    }
+
+    @Test("Journey and Smart Practice include linked recall even when legacy drills have no expression IDs")
+    func productionShapedContentProducesDurableTargets() throws {
+        let unit = JourneyUnit(id: "unit", level: .a1, expressionIDs: ["word"],
+            localizations: ["ro": .init(title: "Unitate", description: "")])
+        let content = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "test", defaultLearnerLocale: "ro"),
+            expressions: [expression("word")], units: [unit],
+            exercises: [exercise("legacy", [])])
+        let detail = try LearningNavigationBuilder().journeyUnit(id: "unit", from: content, locale: "ro")
+        #expect(detail?.exercises.contains { $0.expressionIDs == ["word"] } == true)
+        let selected = LearningNavigationBuilder().smartPractice(
+            from: content, context: .init(dueExpressionIDs: ["word"]), count: 1)
+        #expect(selected.first?.expressionIDs == ["word"])
+        #expect(selected.first?.answer == "word")
+    }
+
+    @Test("Actual bundled content can produce a durable due-expression attempt without inferred drill links")
+    func realBundleRecallPersists() async throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let content = try JSONDecoder().decode(ContentPackage.self,
+            from: Data(contentsOf: root.appendingPathComponent("App/Resources/yalla-native-content.json")))
+        let expression = try #require(content.expressions.first)
+        let initial = LearnerProgressSnapshot(reviewByExpressionID: [expression.id: .init(dueAt: now)])
+        let exercises = ReviewQueueBuilder().practice(from: content, progress: initial, at: now)
+        #expect(exercises.count == 1)
+        #expect(exercises.first?.expressionIDs == [expression.id])
+        var player = try ExerciseSessionPlayer(exercises: exercises, expressions: content.expressions)
+        let wrong = player.submit("definitely-wrong-test-response", responseTime: 1)
+        #expect(wrong?.needsCorrection == true)
+        let corrected = player.submit(expression.canonicalArabizi, responseTime: 1)
+        let resolution = try #require(corrected)
+        let attempt = try #require(LearningAttemptFactory().make(
+            id: "real-bundle-review", resolution: resolution, occurredAt: now))
+        let store = InMemoryLearnerProgressStore(snapshot: initial)
+        let repository = LearnerProgressRepository(store: store)
+        try await repository.record(attempt)
+        let reloaded = try await LearnerProgressRepository(store: store).load()
+        #expect(reloaded.attempts.first?.expressionID == expression.id)
+        #expect(reloaded.attempts.first?.wasInitialMistake == true)
+        #expect(reloaded.activeMistakeExpressionIDs.contains(expression.id))
+        #expect(reloaded.reviewByExpressionID[expression.id]?.wrong == true)
     }
 
     @Test("Missing requested localization is reported rather than silently dropping a review")
