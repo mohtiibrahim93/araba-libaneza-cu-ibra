@@ -5,6 +5,7 @@ import Foundation
 @MainActor
 public final class ProgressSaveQueue {
     public enum Operation: Sendable {
+        case orientation(OrientationCheckpoint?)
         case reload
         case attempt(LearningAttempt)
         case speedDrill(SpeedDrillHistoryEntry)
@@ -41,6 +42,8 @@ public final class ProgressSaveQueue {
             while let operation = self.pending.first {
                 let saved: LearnerProgressSnapshot
                 switch operation {
+                case let .orientation(checkpoint):
+                    saved = try await repository.setOrientationCheckpoint(checkpoint)
                 case .reload:
                     saved = try await repository.load()
                 case let .attempt(attempt):

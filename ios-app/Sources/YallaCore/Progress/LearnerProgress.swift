@@ -1,7 +1,7 @@
 import Foundation
 
 public enum LearnerProgressSchema {
-    public static let currentVersion = 4
+    public static let currentVersion = 5
 }
 
 public enum LearnerProgressMigrationError: Error, Equatable, Sendable {
@@ -31,7 +31,8 @@ public struct LearnerProgressMigrator: Sendable {
             reinforcementExpressionIDs: snapshot.reinforcementExpressionIDs,
             currentJourneyUnitID: snapshot.currentJourneyUnitID,
             savedExpressionIDs: snapshot.savedExpressionIDs,
-            speedDrillHistory: snapshot.speedDrillHistory
+            speedDrillHistory: snapshot.speedDrillHistory,
+            orientationCheckpoint: snapshot.orientationCheckpoint
         )
     }
 }
@@ -109,6 +110,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let currentJourneyUnitID: String?
     public let savedExpressionIDs: Set<String>
     public let speedDrillHistory: [SpeedDrillHistoryEntry]
+    public let orientationCheckpoint: OrientationCheckpoint?
 
     public init(
         schemaVersion: Int = LearnerProgressSchema.currentVersion,
@@ -119,7 +121,8 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         reinforcementExpressionIDs: Set<String> = [],
         currentJourneyUnitID: String? = nil,
         savedExpressionIDs: Set<String> = [],
-        speedDrillHistory: [SpeedDrillHistoryEntry] = []
+        speedDrillHistory: [SpeedDrillHistoryEntry] = [],
+        orientationCheckpoint: OrientationCheckpoint? = nil
     ) {
         self.schemaVersion = schemaVersion
         self.attempts = attempts
@@ -130,6 +133,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         self.currentJourneyUnitID = currentJourneyUnitID
         self.savedExpressionIDs = savedExpressionIDs
         self.speedDrillHistory = speedDrillHistory
+        self.orientationCheckpoint = orientationCheckpoint
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -142,6 +146,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         case currentJourneyUnitID
         case savedExpressionIDs
         case speedDrillHistory
+        case orientationCheckpoint
     }
 
     public init(from decoder: Decoder) throws {
@@ -172,6 +177,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             Set<String>.self,
             forKey: .savedExpressionIDs
         ) ?? []
+        orientationCheckpoint = try container.decodeIfPresent(OrientationCheckpoint.self, forKey: .orientationCheckpoint)
         speedDrillHistory = try container.decodeIfPresent(
             [SpeedDrillHistoryEntry].self,
             forKey: .speedDrillHistory
@@ -189,6 +195,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         try container.encodeIfPresent(currentJourneyUnitID, forKey: .currentJourneyUnitID)
         try container.encode(savedExpressionIDs, forKey: .savedExpressionIDs)
         try container.encode(speedDrillHistory, forKey: .speedDrillHistory)
+        try container.encodeIfPresent(orientationCheckpoint, forKey: .orientationCheckpoint)
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -373,7 +380,8 @@ public struct LearnerProgressUpdater: Sendable {
             reinforcementExpressionIDs: reinforcement,
             currentJourneyUnitID: snapshot.currentJourneyUnitID,
             savedExpressionIDs: snapshot.savedExpressionIDs,
-            speedDrillHistory: snapshot.speedDrillHistory
+            speedDrillHistory: snapshot.speedDrillHistory,
+            orientationCheckpoint: snapshot.orientationCheckpoint
         )
     }
 }
@@ -430,7 +438,8 @@ public actor LearnerProgressRepository {
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: unitID,
             savedExpressionIDs: current.savedExpressionIDs,
-            speedDrillHistory: current.speedDrillHistory
+            speedDrillHistory: current.speedDrillHistory,
+            orientationCheckpoint: current.orientationCheckpoint
         )
         try await store.save(updated)
         return updated
@@ -459,7 +468,8 @@ public actor LearnerProgressRepository {
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: current.currentJourneyUnitID,
             savedExpressionIDs: savedExpressionIDs,
-            speedDrillHistory: current.speedDrillHistory
+            speedDrillHistory: current.speedDrillHistory,
+            orientationCheckpoint: current.orientationCheckpoint
         )
         try await store.save(updated)
         return updated
@@ -484,7 +494,8 @@ public actor LearnerProgressRepository {
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: current.currentJourneyUnitID,
             savedExpressionIDs: savedExpressionIDs,
-            speedDrillHistory: current.speedDrillHistory
+            speedDrillHistory: current.speedDrillHistory,
+            orientationCheckpoint: current.orientationCheckpoint
         )
         try await store.save(updated)
         return updated
@@ -508,7 +519,8 @@ public actor LearnerProgressRepository {
             reinforcementExpressionIDs: current.reinforcementExpressionIDs,
             currentJourneyUnitID: current.currentJourneyUnitID,
             savedExpressionIDs: current.savedExpressionIDs,
-            speedDrillHistory: current.speedDrillHistory + [entry]
+            speedDrillHistory: current.speedDrillHistory + [entry],
+            orientationCheckpoint: current.orientationCheckpoint
         )
         try await store.save(updated)
         return updated
@@ -518,6 +530,25 @@ public actor LearnerProgressRepository {
     public func record(_ attempt: LearningAttempt) async throws -> LearnerProgressSnapshot {
         let current = try await loadMigrated()
         let updated = updater.record(attempt, in: current)
+        try await store.save(updated)
+        return updated
+    }
+
+    @discardableResult
+    public func setOrientationCheckpoint(_ checkpoint: OrientationCheckpoint?) async throws -> LearnerProgressSnapshot {
+        let current = try await loadMigrated()
+        let updated = LearnerProgressSnapshot(
+            schemaVersion: current.schemaVersion,
+            attempts: current.attempts,
+            masteryByExpressionID: current.masteryByExpressionID,
+            reviewByExpressionID: current.reviewByExpressionID,
+            activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
+            reinforcementExpressionIDs: current.reinforcementExpressionIDs,
+            currentJourneyUnitID: current.currentJourneyUnitID,
+            savedExpressionIDs: current.savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory,
+            orientationCheckpoint: checkpoint
+        )
         try await store.save(updated)
         return updated
     }

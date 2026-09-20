@@ -14,6 +14,10 @@ final class LearnerProgressModel: ObservableObject {
 
     init(repository: LearnerProgressRepository) { self.repository = repository }
 
+    func saveOrientation(_ checkpoint: OrientationCheckpoint?) async {
+        await perform(.orientation(checkpoint))
+    }
+
     func load() async { await perform(.reload) }
 
     func setCurrentJourneyUnitID(_ unitID: String?) async {

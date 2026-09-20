@@ -39,15 +39,34 @@ public struct OrientationStepPresentation: Equatable, Sendable {
     public let choices: [String]
 }
 
+public struct OrientationCheckpoint: Codable, Equatable, Sendable {
+    public struct Answer: Codable, Equatable, Sendable {
+        public let questionID: String
+        public let answer: String?
+        public init(questionID: String, answer: String?) {
+            self.questionID = questionID
+            self.answer = answer
+        }
+    }
+    public let items: [OrientationPilotItem]
+    public let answers: [Answer]
+    public init(items: [OrientationPilotItem], answers: [Answer]) {
+        self.items = items
+        self.answers = answers
+    }
+}
+
 public enum OrientationSessionError: Error, Equatable, Sendable {
     case invalidItem(String)
+    case invalidCheckpoint
 }
 
 public struct OrientationSession: Sendable {
     private let items: [OrientationPilotItem]
     private var responses: [OrientationResponse] = []
+    private var recordedAnswers: [OrientationCheckpoint.Answer] = []
 
-    public init(items: [OrientationPilotItem]) throws {
+    public init(items: [OrientationPilotItem], checkpoint: OrientationCheckpoint? = nil) throws {
         try OrientationQuestionBankValidator().validate(items.map(\.question))
         for item in items {
             guard (1...24).contains(item.ordinal),
@@ -64,6 +83,18 @@ public struct OrientationSession: Sendable {
             else { throw OrientationSessionError.invalidItem(item.id) }
         }
         self.items = items.sorted { $0.ordinal < $1.ordinal }
+        if let checkpoint {
+            guard checkpoint.items == self.items else { throw OrientationSessionError.invalidCheckpoint }
+            for response in checkpoint.answers {
+                guard record(questionID: response.questionID, answer: response.answer) else {
+                    throw OrientationSessionError.invalidCheckpoint
+                }
+            }
+        }
+    }
+
+    public var checkpoint: OrientationCheckpoint {
+        OrientationCheckpoint(items: items, answers: recordedAnswers)
     }
 
     public var isFinished: Bool { responses.count == items.count }
@@ -101,6 +132,7 @@ public struct OrientationSession: Sendable {
         } else {
             correct = false
         }
+        recordedAnswers.append(.init(questionID: item.id, answer: answer))
         responses.append(OrientationResponse(questionID: item.id, isCorrect: correct))
         return true
     }

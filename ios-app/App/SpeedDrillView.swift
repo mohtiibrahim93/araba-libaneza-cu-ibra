@@ -6,8 +6,9 @@ struct SpeedDrillView: View {
     @ObservedObject var progressModel: LearnerProgressModel
 
     @State private var player: SpeedDrillPlayer
-    @State private var startedAt = Date()
-    @State private var promptStartedAt = Date()
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var clock = ActivePracticeClock(startedAt: Date())
+    @State private var promptStartedAtElapsed: TimeInterval = 0
     @State private var answerVisible = false
     @State private var endedManually = false
     @State private var endedAtElapsedSeconds: Int?
@@ -52,6 +53,16 @@ struct SpeedDrillView: View {
                                 metrics: metrics
                             )
                         }
+                } else if clock.isPaused {
+                    VStack(spacing: 18) {
+                        Image(systemName: "pause.circle").font(.largeTitle)
+                        Text("Exercițiu în pauză").font(.title2.bold())
+                        Text("Timpul petrecut în pauză nu intră în rezultat.")
+                            .foregroundStyle(.secondary)
+                        Button("Reia exercițiul") { clock.resume(at: Date()) }
+                            .buttonStyle(.borderedProminent)
+                    }
+                    .padding()
                 } else if let prompt = player.currentPrompt {
                     drillBody(
                         prompt: prompt,
@@ -68,11 +79,27 @@ struct SpeedDrillView: View {
         }
         .navigationTitle("Yalla! Două minute")
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { clock.pause(at: Date()) }
+        }
+        .onDisappear {
+            clock.pause(at: Date())
+            let elapsed = min(max(elapsedSeconds(at: Date()), 1), player.session.durationSeconds)
+            let metrics = player.session.metrics(elapsedSeconds: elapsed)
+            endedAtElapsedSeconds = elapsed
+            endedManually = true
+            Task { await persistResultIfNeeded(elapsedSeconds: elapsed, metrics: metrics) }
+        }
         .toolbar {
+            if !endedManually && !clock.isPaused && !player.isExpired(atElapsed: elapsedSeconds(at: Date())) {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Pauză") { clock.pause(at: Date()) }
+                }
+            }
             if !endedManually && !player.session.attempts.isEmpty {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Încheie") {
-                        endedAtElapsedSeconds = max(elapsedSeconds(at: Date()), 1)
+                        endedAtElapsedSeconds = min(max(elapsedSeconds(at: Date()), 1), player.session.durationSeconds)
                         endedManually = true
                     }
                 }
@@ -157,7 +184,7 @@ struct SpeedDrillView: View {
             } else {
                 VStack(spacing: 12) {
                     Button {
-                        answerVisible = true
+                        if canAnswer { answerVisible = true }
                     } label: {
                         Text("Arată răspunsul")
                             .frame(maxWidth: .infinity)
@@ -190,13 +217,14 @@ struct SpeedDrillView: View {
     }
 
     private func record(_ outcome: SpeedDrillOutcome) {
+        guard canAnswer else { return }
         var updated = player
-        let responseTime = max(Date().timeIntervalSince(promptStartedAt), 0)
+        let responseTime = max(clock.elapsed(at: Date()) - promptStartedAtElapsed, 0)
         guard updated.record(outcome, responseTime: responseTime) else { return }
 
         player = updated
         answerVisible = false
-        promptStartedAt = Date()
+        promptStartedAtElapsed = clock.elapsed(at: Date())
     }
 
     @MainActor
@@ -218,8 +246,12 @@ struct SpeedDrillView: View {
         await progressModel.recordSpeedDrill(entry)
     }
 
+    private var canAnswer: Bool {
+        !endedManually && !clock.isPaused && !player.isExpired(atElapsed: elapsedSeconds(at: Date()))
+    }
+
     private func elapsedSeconds(at date: Date) -> Int {
-        max(Int(date.timeIntervalSince(startedAt)), 0)
+        max(Int(clock.elapsed(at: date)), 0)
     }
 
     private func timeString(_ seconds: Int) -> String {
@@ -236,7 +268,7 @@ private struct SpeedDrillSummaryView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Image(systemName: "timer")
                         .font(.system(size: 42))
-                    Text("Două minute terminate")
+                    Text("Exercițiu încheiat")
                         .font(.largeTitle.bold())
                     Text("Acesta este un exercițiu de fluență și viteză de reamintire, separat de stăpânirea obișnuită.")
                         .foregroundStyle(.secondary)
@@ -249,7 +281,7 @@ private struct SpeedDrillSummaryView: View {
 
                 HStack(spacing: 12) {
                     SpeedMetric(
-                        value: "(Int((metrics.accuracy * 100).rounded()))%",
+                        value: "\(Int((metrics.accuracy * 100).rounded()))%",
                         label: "acuratețe"
                     )
                     SpeedMetric(
