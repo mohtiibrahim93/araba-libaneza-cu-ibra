@@ -96,7 +96,7 @@ struct ExerciseSessionView: View {
                     FeedbackCard(resolution: latestResolution)
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     if !player.isCurrentExerciseCompleted {
                         Button {
                             useHint()
@@ -128,6 +128,7 @@ struct ExerciseSessionView: View {
             }
             .padding()
         }
+        .scrollDismissesKeyboard(.interactively)
         .onAppear {
             answerFieldFocused = NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale) == .text
         }
@@ -138,6 +139,7 @@ struct ExerciseSessionView: View {
         switch NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale) {
         case .text:
             TextField(exercise.type == .freeProduction ? "Scrie răspunsul în Arabizi" : "Scrie răspunsul", text: $answer)
+                .accessibilityLabel("Răspunsul tău")
                 .textFieldStyle(.roundedBorder)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -266,7 +268,7 @@ struct ExerciseSessionView: View {
 
     private func progressHeader(player: ExerciseSessionPlayer) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
+            AdaptiveRow {
                 Text("\(player.sessionState.completedCount) din \(player.sessionState.targetCount) răspunsuri completate")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
@@ -436,12 +438,12 @@ private struct SessionSummaryView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     SummaryMetric(value: state.completedCount, label: "completate")
                     SummaryMetric(value: state.cleanFirstTryCount, label: "din prima")
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     SummaryMetric(value: state.hintedCount, label: "cu indiciu")
                     SummaryMetric(value: state.mistakes.count, label: "greșeli inițiale")
                 }
@@ -483,6 +485,7 @@ private struct SummaryMetric: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityElement(children: .combine)
     }
 }
 

@@ -136,11 +136,12 @@ struct ListeningPracticeView: View {
             }
             .padding()
         }
+        .scrollDismissesKeyboard(.interactively)
     }
 
     private var progressHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
+            AdaptiveRow {
                 Text("Ascultarea \(min(currentIndex + 1, items.count)) din \(items.count)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
@@ -199,12 +200,18 @@ struct ListeningPracticeView: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(currentCompleted)
+                .accessibilityAddTraits(selectedChoice == choice ? .isSelected : [])
             }
         }
     }
 
     private var freeWriteSection: some View {
         TextField("Scrie ce auzi în Arabizi", text: $freeWriteAnswer)
+            .accessibilityLabel("Răspunsul auzit în Arabizi")
+            .submitLabel(.done)
+            .onSubmit {
+                if let item = currentItem, !currentCompleted, answerIsReady(for: item) { verify(item) }
+            }
             .textFieldStyle(.roundedBorder)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()

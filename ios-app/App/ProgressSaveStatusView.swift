@@ -6,7 +6,7 @@ struct ProgressSaveStatusView: View {
     var body: some View {
         if progressModel.persistenceError != nil {
             VStack(alignment: .leading, spacing: 8) {
-                Label("Progres nesalvat", systemImage: "exclamationmark.triangle")
+                Label("Stocare locală indisponibilă", systemImage: "exclamationmark.triangle")
                     .font(.headline)
                 Text("Reîncearcă salvarea înainte să închizi aplicația. Modificările în așteptare sunt păstrate doar cât timp aplicația rămâne deschisă.")
                     .font(.caption)

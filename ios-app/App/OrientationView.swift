@@ -36,6 +36,7 @@ struct OrientationView: View {
                 .padding()
                 .disabled(saving)
             }
+            .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
             .navigationTitle("Orientare · pilot")
             .navigationBarTitleDisplayMode(.inline)
@@ -123,6 +124,7 @@ struct OrientationView: View {
             Text(step.question.prompt).font(.title2.bold())
             if step.choices.isEmpty {
                 TextField("Răspuns în Arabizi", text: $answer)
+                    .accessibilityLabel("Răspuns în Arabizi")
                     .textFieldStyle(.roundedBorder)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

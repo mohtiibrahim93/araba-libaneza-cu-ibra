@@ -111,6 +111,7 @@ struct SpeedDrillView: View {
         prompt: SpeedDrillPrompt,
         remainingSeconds: Int
     ) -> some View {
+        ScrollView {
         VStack(spacing: 24) {
             VStack(spacing: 8) {
                 Text(timeString(remainingSeconds))
@@ -130,7 +131,7 @@ struct SpeedDrillView: View {
                     .textCase(.uppercase)
 
                 Text(prompt.question)
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.7)
 
@@ -154,7 +155,7 @@ struct SpeedDrillView: View {
 
             if answerVisible {
                 VStack(spacing: 12) {
-                    HStack(spacing: 12) {
+                    AdaptiveRow(spacing: 12) {
                         Button {
                             record(.wrong)
                         } label: {
@@ -203,6 +204,7 @@ struct SpeedDrillView: View {
             }
         }
         .padding()
+        }
     }
 
     private var promptLabel: String {
@@ -274,12 +276,12 @@ private struct SpeedDrillSummaryView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     SpeedMetric(value: "\(metrics.correct)", label: "corecte")
                     SpeedMetric(value: "\(metrics.seen)", label: "văzute")
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     SpeedMetric(
                         value: "\(Int((metrics.accuracy * 100).rounded()))%",
                         label: "acuratețe"
@@ -290,7 +292,7 @@ private struct SpeedDrillSummaryView: View {
                     )
                 }
 
-                HStack(spacing: 12) {
+                AdaptiveRow(spacing: 12) {
                     SpeedMetric(value: "\(metrics.bestCorrectStreak)", label: "serie maximă")
                     SpeedMetric(
                         value: String(format: "%.1fs", metrics.medianResponseTime),
@@ -318,5 +320,6 @@ private struct SpeedMetric: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityElement(children: .combine)
     }
 }

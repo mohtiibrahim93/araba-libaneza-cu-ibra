@@ -41,9 +41,10 @@ private struct ContentLoadFailureView: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label("Conținut indisponibil", systemImage: "exclamationmark.triangle")
+            Label("Aplicație indisponibilă", systemImage: "exclamationmark.triangle")
         } description: {
-            Text(message)
+            Text("Conținutul sau progresul local nu a putut fi încărcat. Încearcă să redeschizi aplicația. Datele nu au fost resetate.")
+            Text(message).font(.caption)
         }
         .padding()
     }

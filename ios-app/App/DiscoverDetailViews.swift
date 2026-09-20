@@ -34,7 +34,7 @@ struct DictionaryEntryDetailView: View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    AdaptiveRow(spacing: 10) {
                         Text(entry.arabizi)
                             .font(.largeTitle.bold())
                         if let arabicScript = entry.arabicScript {
@@ -208,10 +208,7 @@ struct DictionaryEntryDetailView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await progressModel.setExpressionSaved(
-                            entry.id,
-                            saved: !isSaved
-                        )
+                        await progressModel.toggleSavedExpressionID(entry.id)
                     }
                 } label: {
                     Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
@@ -226,6 +223,8 @@ struct DictionaryEntryDetailView: View {
 }
 
 struct RootExplorerView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     let graph: RootExplorerSummary
     let model: DiscoverModel
     let package: ContentPackage
@@ -259,7 +258,7 @@ struct RootExplorerView: View {
                     .foregroundStyle(.secondary)
 
                 LazyVGrid(
-                    columns: [GridItem(.flexible()), GridItem(.flexible())],
+                    columns: dynamicTypeSize.isAccessibilitySize ? [GridItem(.flexible())] : [GridItem(.flexible()), GridItem(.flexible())],
                     spacing: 10
                 ) {
                     RootProgressMetric(
@@ -302,6 +301,15 @@ struct RootExplorerView: View {
                     memberCount: graph.members.count
                 )
 
+                if dynamicTypeSize.isAccessibilitySize || voiceOverEnabled {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(graph.centerLabel).font(.title2.bold())
+                            .accessibilityAddTraits(.isHeader)
+                        ForEach(graph.members) { member in
+                            memberNode(member)
+                        }
+                    }
+                } else {
                 GeometryReader { proxy in
                     let size = proxy.size
                     let center = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -331,6 +339,7 @@ struct RootExplorerView: View {
                                 path.addLine(to: CGPoint(x: x, y: y))
                             }
                             .stroke(.secondary.opacity(0.35), lineWidth: 1.5)
+                            .accessibilityHidden(true)
 
                             memberNode(member)
                                 .position(x: x, y: y)
@@ -345,6 +354,7 @@ struct RootExplorerView: View {
                     }
                 }
                 .frame(height: graphHeight)
+                }
 
                 DisclosureGroup("Gramatică și tipare") {
                     VStack(alignment: .leading, spacing: 10) {
@@ -533,5 +543,6 @@ private struct RootProgressMetric: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .accessibilityElement(children: .combine)
     }
 }

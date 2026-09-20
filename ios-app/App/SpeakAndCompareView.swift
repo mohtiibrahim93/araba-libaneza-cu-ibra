@@ -98,7 +98,7 @@ struct SpeakAndCompareView: View {
             Text("Referință")
                 .font(.title2.bold())
 
-            HStack(spacing: 8) {
+            AdaptiveRow(spacing: 8) {
                 ForEach(playbackRates, id: \.self) { rate in
                     rateButton(rate)
                 }

@@ -170,7 +170,7 @@ private struct HomeView: View {
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
                     }
 
-                    HStack(spacing: 12) {
+                    AdaptiveRow(spacing: 12) {
                         Button(action: onReviews) {
                             MetricCard(value: dueCount, label: "recapitulări")
                         }
@@ -652,7 +652,7 @@ private struct ProfileView: View {
                 if let persistenceError {
                     Section("Stocare locală") {
                         Label(
-                            "Progresul nu a putut fi citit. Datele locale nu au fost resetate automat.",
+                            "Încărcarea sau salvarea progresului nu a reușit. Folosește butonul de reîncercare; datele locale nu au fost resetate.",
                             systemImage: "exclamationmark.triangle.fill"
                         )
                         Text(persistenceError)
@@ -762,6 +762,7 @@ private struct MetricCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18))
+        .accessibilityElement(children: .combine)
     }
 }
 
