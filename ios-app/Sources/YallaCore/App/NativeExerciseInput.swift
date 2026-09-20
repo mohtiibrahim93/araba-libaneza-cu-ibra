@@ -6,9 +6,18 @@ public enum NativeExerciseInput: Equatable, Sendable {
     case text
     case choices([String])
     case wordOrder(WordOrderState)
+    case matching(MatchingState)
     case unavailable
 
-    public init(exercise: ExerciseDefinition) {
+    public init(exercise: ExerciseDefinition, expressions: [Expression] = [], locale: String = "ro") {
+        if exercise.type == .matching {
+            if let pairs = MatchingExerciseBuilder().pairs(for: exercise, expressions: expressions, locale: locale) {
+                self = .matching(MatchingState(pairs: pairs))
+            } else {
+                self = .unavailable
+            }
+            return
+        }
         guard !exercise.answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             self = .unavailable
             return

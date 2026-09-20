@@ -17,7 +17,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 | M0 | Swift core, SwiftUI target, XcodeGen, Linux/macOS CI | Real-device and release verification |
 | M1 | Reproducible imported package; 4,315 expressions, 32 units, 558 drills, 14 lexicon collections | Teacher approval/coverage audit, explicit provenance and richer content |
 | M2 | Attempts, distinct mastery dimensions, SRS, local progress repository | Production-content integration and device persistence QA |
-| M3 | Evaluation, correction retry, mistake preservation, native text, authored choice and word-order controls | Matching and dedicated media/transfer presentation; device interaction QA |
+| M3 | Evaluation, correction retry, mistake preservation, native text, authored choice, word-order and per-expression matching controls | Dedicated transfer presentation remains later scope; device interaction QA |
 | M4 | Five tabs and native navigation | Accessibility, Dynamic Type, empty/error states, device UX polish |
 | M5 | Adaptive selection and persistent learning signals | Confirm production expressions feed those signals; end-to-end device QA |
 | M6 | Validated scorer; exact legacy pilot bank; native optional flow; result-to-Journey; saved answers and latest result across restarts | Teacher calibration and device QA; complete historical results archive is not implemented |
@@ -82,3 +82,5 @@ Native work stays on yalla-app-ios; main is the separate live website.
 2. Supply approved reference recordings and explicit audio-to-expression mappings; supply reviewed roots/morphology only where authored. CONTENT_HANDOFF.md lists the existing fields.
 3. Resolve any device findings, finish accessibility and visual polish, then finalize name/icon, signing and TestFlight.
 4. Do not label M6–M9 or the offline release complete until these gates pass. M10–M15 remain outside this offline-v1 pass.
+
+- Matching is available from Journey unit details using up to six existing, unambiguous expression/meaning pairs. Each completed pair records recognition for its own expression, preserves initial mistakes/hints, rejects duplicate taps, and must be corrected before the whole board can advance. Missing/ambiguous authored boards fail preflight. No production content JSON or mastery/SRS rules changed.

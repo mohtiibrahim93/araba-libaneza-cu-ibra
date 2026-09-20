@@ -5,10 +5,13 @@ import YallaCore
 struct ExerciseSessionView: View {
     let locale: String
     let title: String
+    let expressions: [YallaCore.Expression]
     @ObservedObject var progressModel: LearnerProgressModel
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
+    @State private var selectedLeftID: String?
+    @State private var selectedRightID: String?
     @State private var wordOrder: WordOrderState?
     @State private var latestResolution: ExerciseResolution?
     @State private var hintVisible = false
@@ -25,15 +28,17 @@ struct ExerciseSessionView: View {
     ) {
         self.locale = locale
         self.title = title
+        self.expressions = expressions
         self.progressModel = progressModel
-        let supportsAll = exercises.allSatisfy { NativeExerciseInput(exercise: $0) != .unavailable }
+        let supportsAll = exercises.allSatisfy { NativeExerciseInput(exercise: $0, expressions: expressions, locale: locale) != .unavailable }
         _player = State(
             initialValue: supportsAll ? (try? ExerciseSessionPlayer(
                 exercises: exercises,
-                expressions: expressions
+                expressions: expressions,
+                locale: locale
             )) : nil
         )
-        if let first = exercises.first, case let .wordOrder(state) = NativeExerciseInput(exercise: first) {
+        if let first = exercises.first, case let .wordOrder(state) = NativeExerciseInput(exercise: first, expressions: expressions, locale: locale) {
             _wordOrder = State(initialValue: state)
         }
     }
@@ -77,7 +82,7 @@ struct ExerciseSessionView: View {
                         .font(.title2.bold())
 
                     if hintVisible {
-                        Label("Indiciu: \(exercise.answer)", systemImage: "lightbulb.fill")
+                        Label("Indiciu: \(hint(for: exercise))", systemImage: "lightbulb.fill")
                             .font(.subheadline.weight(.semibold))
                             .padding(12)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -124,13 +129,13 @@ struct ExerciseSessionView: View {
             .padding()
         }
         .onAppear {
-            answerFieldFocused = NativeExerciseInput(exercise: exercise) == .text
+            answerFieldFocused = NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale) == .text
         }
     }
 
     @ViewBuilder
     private func answerControls(exercise: ExerciseDefinition, completed: Bool) -> some View {
-        switch NativeExerciseInput(exercise: exercise) {
+        switch NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale) {
         case .text:
             TextField(exercise.type == .freeProduction ? "Scrie răspunsul în Arabizi" : "Scrie răspunsul", text: $answer)
                 .textFieldStyle(.roundedBorder)
@@ -183,13 +188,65 @@ struct ExerciseSessionView: View {
                     .disabled(completed || state.selectedTokens.isEmpty)
                 }
             }
+        case .matching:
+            if let state = player?.currentMatchingState {
+                matchingControls(state)
+            }
         case .unavailable:
             Text("Acest tip de exercițiu nu este încă disponibil aici.")
         }
     }
 
+    private func hint(for exercise: ExerciseDefinition) -> String {
+        if let state = player?.currentMatchingState {
+            return state.pairs.filter { !state.matchedPairIDs.contains($0.id) }
+                .map { "\($0.left) → \($0.right)" }.joined(separator: "\n")
+        }
+        return exercise.answer
+    }
+
+    private func matchingControls(_ state: MatchingState) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Alege o expresie și sensul ei, apoi verifică perechea.")
+                .font(.subheadline)
+            Text("\(state.matchedPairIDs.count) din \(state.pairs.count) perechi potrivite")
+                .font(.caption).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Libaneză").font(.headline)
+                ForEach(state.pairs) { pair in
+                    matchingButton(pair, state: state, isLeft: true)
+                }
+            }
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Sens").font(.headline)
+                ForEach(Array(state.pairs.reversed())) { pair in
+                    matchingButton(pair, state: state, isLeft: false)
+                }
+            }
+        }
+    }
+
+    private func matchingButton(_ pair: MatchingPair, state: MatchingState, isLeft: Bool) -> some View {
+        let matched = state.matchedPairIDs.contains(pair.id)
+        let selected = (isLeft ? selectedLeftID : selectedRightID) == pair.id
+        return Button {
+            if isLeft { selectedLeftID = pair.id } else { selectedRightID = pair.id }
+        } label: {
+            HStack {
+                Text(isLeft ? pair.left : pair.right).frame(maxWidth: .infinity, alignment: .leading)
+                if matched { Image(systemName: "checkmark.circle.fill") }
+                else if selected { Image(systemName: "circle.inset.filled") }
+            }
+        }
+        .buttonStyle(.bordered)
+        .disabled(matched)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityValue(matched ? "Potrivit" : selected ? "Selectat" : "Nepotrivit încă")
+    }
+
     private func canSubmit(_ exercise: ExerciseDefinition) -> Bool {
-        switch NativeExerciseInput(exercise: exercise) {
+        switch NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale) {
+        case .matching: return selectedLeftID != nil && selectedRightID != nil
         case .wordOrder: return wordOrder?.remainingTokens.isEmpty == true && !answer.isEmpty
         case .unavailable: return false
         default: return !answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -198,9 +255,11 @@ struct ExerciseSessionView: View {
 
     private func resetInput(for exercise: ExerciseDefinition?) {
         answer = ""
+        selectedLeftID = nil
+        selectedRightID = nil
         wordOrder = nil
         guard let exercise else { answerFieldFocused = false; return }
-        let input = NativeExerciseInput(exercise: exercise)
+        let input = NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale)
         if case let .wordOrder(state) = input { wordOrder = state }
         answerFieldFocused = input == .text
     }
@@ -208,7 +267,7 @@ struct ExerciseSessionView: View {
     private func progressHeader(player: ExerciseSessionPlayer) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Exercițiul \(min(player.sessionState.completedCount + 1, player.sessionState.targetCount)) din \(player.sessionState.targetCount)")
+                Text("\(player.sessionState.completedCount) din \(player.sessionState.targetCount) răspunsuri completate")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -238,18 +297,28 @@ struct ExerciseSessionView: View {
     private func submitAnswer() {
         guard var player else { return }
         let elapsed = max(Date().timeIntervalSince(exerciseStartedAt), 0)
-        guard let resolution = player.submit(answer, responseTime: elapsed) else { return }
+        let submitted: ExerciseResolution?
+        if let left = selectedLeftID, let right = selectedRightID, player.currentMatchingState != nil {
+            submitted = player.submitMatch(leftPairID: left, rightPairID: right, responseTime: elapsed)
+            selectedRightID = nil
+        } else {
+            submitted = player.submit(answer, responseTime: elapsed)
+        }
+        guard let resolution = submitted else { return }
 
         self.player = player
         latestResolution = resolution
 
         if resolution.completed {
+            selectedLeftID = nil
+            selectedRightID = nil
+            exerciseStartedAt = Date()
             answerFieldFocused = false
             persistCompletedAttempt(
                 resolution: resolution,
                 player: player
             )
-        } else {
+        } else if player.currentMatchingState == nil {
             resetInput(for: player.currentExercise)
         }
     }
@@ -279,7 +348,7 @@ struct ExerciseSessionView: View {
         guard player.useHint() else { return }
         self.player = player
         hintVisible = true
-        answerFieldFocused = player.currentExercise.map { NativeExerciseInput(exercise: $0) == .text } ?? false
+        answerFieldFocused = player.currentExercise.map { NativeExerciseInput(exercise: $0, expressions: expressions, locale: locale) == .text } ?? false
     }
 
     private func advance() {

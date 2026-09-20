@@ -1,6 +1,7 @@
 import Foundation
 
 public enum ExerciseSessionPlayerError: Error, Equatable, Sendable {
+    case invalidMatchingExercise(exerciseID: String)
     case unsupportedExerciseType(exerciseID: String, type: ExerciseDefinitionType)
 }
 
@@ -8,6 +9,10 @@ public struct ExerciseSessionPlayer: Sendable {
     private let exercises: [ExerciseDefinition]
     private let expressionsByID: [String: Expression]
     private let skillMapper: ExerciseSkillMapper
+
+    private let matchingPairsByIndex: [Int: [MatchingPair]]
+    private var matchingRunners: [String: ExerciseRunner] = [:]
+    public private(set) var currentMatchingState: MatchingState?
 
     private var currentIndex: Int
     private var currentRunner: ExerciseRunner?
@@ -19,6 +24,7 @@ public struct ExerciseSessionPlayer: Sendable {
     public init(
         exercises: [ExerciseDefinition],
         expressions: [Expression],
+        locale: String = "ro",
         skillMapper: ExerciseSkillMapper = ExerciseSkillMapper()
     ) throws {
         for exercise in exercises where skillMapper.skill(for: exercise.type) == nil {
@@ -28,13 +34,22 @@ public struct ExerciseSessionPlayer: Sendable {
             )
         }
 
+        var matchingPairs: [Int: [MatchingPair]] = [:]
+        for (index, exercise) in exercises.enumerated() where exercise.type == .matching {
+            guard let pairs = MatchingExerciseBuilder().pairs(for: exercise, expressions: expressions, locale: locale) else {
+                throw ExerciseSessionPlayerError.invalidMatchingExercise(exerciseID: exercise.id)
+            }
+            matchingPairs[index] = pairs
+        }
+        self.matchingPairsByIndex = matchingPairs
+        self.currentMatchingState = matchingPairs[0].map { MatchingState(pairs: $0) }
         self.exercises = exercises
         self.expressionsByID = Dictionary(uniqueKeysWithValues: expressions.map { ($0.id, $0) })
         self.skillMapper = skillMapper
         self.currentIndex = 0
         self.currentRunner = nil
         self.lastResolution = nil
-        self.sessionState = LearningSessionState(targetCount: exercises.count)
+        self.sessionState = LearningSessionState(targetCount: exercises.enumerated().reduce(0) { $0 + (matchingPairs[$1.offset]?.count ?? 1) })
         self.attempts = []
     }
 
@@ -44,7 +59,8 @@ public struct ExerciseSessionPlayer: Sendable {
     }
 
     public var isCurrentExerciseCompleted: Bool {
-        currentExercise != nil && lastResolution?.completed == true
+        if let currentMatchingState { return currentMatchingState.isComplete }
+        return currentExercise != nil && lastResolution?.completed == true
     }
 
     public var isFinished: Bool {
@@ -54,6 +70,14 @@ public struct ExerciseSessionPlayer: Sendable {
     @discardableResult
     public mutating func useHint() -> Bool {
         guard currentExercise != nil, !isCurrentExerciseCompleted else { return false }
+        if let state = currentMatchingState {
+            for pair in state.pairs where !state.matchedPairIDs.contains(pair.id) {
+                var runner = matchingRunner(for: pair)
+                runner.useHint()
+                matchingRunners[pair.id] = runner
+            }
+            return true
+        }
         prepareRunnerIfNeeded()
         guard var runner = currentRunner else { return false }
         runner.useHint()
@@ -62,7 +86,7 @@ public struct ExerciseSessionPlayer: Sendable {
     }
 
     public mutating func submit(_ answer: String, responseTime: Double) -> ExerciseResolution? {
-        guard currentExercise != nil else { return nil }
+        guard currentExercise != nil, currentMatchingState == nil else { return nil }
 
         if let lastResolution, lastResolution.completed {
             return lastResolution
@@ -85,6 +109,41 @@ public struct ExerciseSessionPlayer: Sendable {
         return resolution
     }
 
+    /// Each pairing is a separate recognition attempt using its actual expression ID.
+    public mutating func submitMatch(leftPairID: String, rightPairID: String, responseTime: Double) -> ExerciseResolution? {
+        guard var state = currentMatchingState,
+              !state.matchedPairIDs.contains(leftPairID),
+              !state.matchedPairIDs.contains(rightPairID),
+              let left = state.pairs.first(where: { $0.id == leftPairID }),
+              let right = state.pairs.first(where: { $0.id == rightPairID })
+        else { return nil }
+        var runner = matchingRunner(for: left)
+        let resolution = runner.submit(right.right, responseTime: responseTime)
+        matchingRunners[left.id] = runner
+        lastResolution = resolution
+        if resolution.completed {
+            _ = state.attempt(leftPairID: leftPairID, rightPairID: rightPairID)
+            currentMatchingState = state
+            sessionState.record(resolution)
+            if let attempt = resolution.attempt { attempts.append(attempt) }
+        }
+        return resolution
+    }
+
+    private func matchingRunner(for pair: MatchingPair) -> ExerciseRunner {
+        if let existing = matchingRunners[pair.id] { return existing }
+        let exercise = ExerciseDefinition(
+            id: currentExercise?.id ?? "",
+            type: .matching,
+            unitID: currentExercise?.unitID ?? "",
+            expressionIDs: [pair.id],
+            prompt: currentExercise?.prompt ?? [:],
+            answer: pair.right,
+            wrongAnswers: []
+        )
+        return ExerciseRunner(exercise: exercise, expressionID: pair.id, skill: .recognition)
+    }
+
     /// Legacy drill IDs are valid session identifiers, not expression IDs.
     /// Only an explicit, resolvable primary target may update expression progress.
     public func learningAttempt(
@@ -92,12 +151,14 @@ public struct ExerciseSessionPlayer: Sendable {
         resolution: ExerciseResolution,
         occurredAt: Date
     ) -> LearningAttempt? {
-        guard isCurrentExerciseCompleted,
-              lastResolution == resolution,
-              let expressionID = currentExercise?.expressionIDs.first,
-              expressionsByID[expressionID] != nil,
-              resolution.attempt?.expressionID == expressionID
-        else { return nil }
+        guard lastResolution == resolution, resolution.completed,
+              let expressionID = resolution.attempt?.expressionID,
+              expressionsByID[expressionID] != nil else { return nil }
+        if let state = currentMatchingState {
+            guard state.matchedPairIDs.contains(expressionID) else { return nil }
+        } else {
+            guard isCurrentExerciseCompleted, currentExercise?.expressionIDs.first == expressionID else { return nil }
+        }
         return LearningAttemptFactory().make(
             id: id, resolution: resolution, occurredAt: occurredAt
         )
@@ -108,6 +169,8 @@ public struct ExerciseSessionPlayer: Sendable {
         guard currentExercise != nil, isCurrentExerciseCompleted else { return false }
 
         currentIndex += 1
+        matchingRunners = [:]
+        currentMatchingState = matchingPairsByIndex[currentIndex].map { MatchingState(pairs: $0) }
         currentRunner = nil
         lastResolution = nil
         return true

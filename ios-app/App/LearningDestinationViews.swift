@@ -43,6 +43,24 @@ struct JourneyUnitDetailView: View {
                 }
             }
 
+            if let matching = MatchingExerciseBuilder().practice(
+                expressionIDs: detail.expressions.map(\.id),
+                expressions: expressions, unitID: detail.id, locale: locale
+            ) {
+                Section {
+                    NavigationLink {
+                        ExerciseSessionView(
+                            exercises: [matching], expressions: expressions, locale: locale,
+                            title: "Potrivește expresiile", progressModel: progressModel
+                        )
+                    } label: {
+                        Label("Potrivește expresiile", systemImage: "square.grid.2x2")
+                    }
+                    Text("Până la 6 expresii din această unitate.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+            }
+
             Section("Expresii") {
                 ForEach(detail.expressions) { expression in
                     VStack(alignment: .leading, spacing: 4) {
