@@ -1,0 +1,368 @@
+[
+  {
+    "id": "p1",
+    "ordinal": 1,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Ce înseamnă „Shu esmak?”"
+    },
+    "answer": "Cum te cheamă?",
+    "variants": [],
+    "choices": [
+      "Cum te cheamă?",
+      "Unde locuiești?",
+      "Cât e ceasul?"
+    ],
+    "source": "s1"
+  },
+  {
+    "id": "p2",
+    "ordinal": 2,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Completează: Ne7na ___ mayy."
+    },
+    "answer": "baddna",
+    "variants": [],
+    "choices": [
+      "baddna",
+      "baddkon",
+      "baddon"
+    ],
+    "source": "s1"
+  },
+  {
+    "id": "p3",
+    "ordinal": 3,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "„Ma3e masare halla2” înseamnă:"
+    },
+    "answer": "Am bani la mine acum.",
+    "variants": [],
+    "choices": [
+      "Am bani la mine acum.",
+      "Ai bani la tine acum.",
+      "Nu am bani acum."
+    ],
+    "source": "s2"
+  },
+  {
+    "id": "p4",
+    "ordinal": 4,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Întrebi câți câini are cineva: ___ kaleb 3andik?"
+    },
+    "answer": "Kam",
+    "variants": [],
+    "choices": [
+      "Kam",
+      "Miin",
+      "Wen"
+    ],
+    "source": "keys"
+  },
+  {
+    "id": "p5",
+    "ordinal": 5,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Scrie „Vreau apă”, folosind badde."
+    },
+    "answer": "Badde mayy",
+    "variants": [
+      "badde may"
+    ],
+    "choices": [],
+    "source": "keys"
+  },
+  {
+    "id": "p6",
+    "ordinal": 6,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Completează: Hiyye ___."
+    },
+    "answer": "mabsuuta",
+    "variants": [],
+    "choices": [
+      "mabsuuta",
+      "mabsuut",
+      "mabsuutiin"
+    ],
+    "source": "keys"
+  },
+  {
+    "id": "p7",
+    "ordinal": 7,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Cum ceri exact două mere?"
+    },
+    "answer": "Badde teffe7ten.",
+    "variants": [],
+    "choices": [
+      "Badde teffe7ten.",
+      "Badde teffe7a.",
+      "Badde tlet teffe7eet."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p8",
+    "ordinal": 8,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Scrie întrebarea „Unde?” în Arabizi."
+    },
+    "answer": "Wen?",
+    "variants": [
+      "wayn"
+    ],
+    "choices": [],
+    "source": "s1"
+  },
+  {
+    "id": "p9",
+    "ordinal": 9,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Completează: Mbere7 ___ badde eshrab mayy."
+    },
+    "answer": "ken",
+    "variants": [],
+    "choices": [
+      "ken",
+      "7a ykun",
+      "bukra"
+    ],
+    "source": "keys"
+  },
+  {
+    "id": "p10",
+    "ordinal": 10,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "„Ma fiyye it-taneen; fik it-taleta l-masa?” — ce propune vorbitorul?"
+    },
+    "answer": "Marți seara, fiindcă nu poate luni.",
+    "variants": [],
+    "choices": [
+      "Marți seara, fiindcă nu poate luni.",
+      "Luni dimineața.",
+      "Marți dimineața, fiindcă luni este ocupat."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p11",
+    "ordinal": 11,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "„Tanjareton” este:"
+    },
+    "answer": "Oala lor.",
+    "variants": [],
+    "choices": [
+      "Oala lor.",
+      "Oala noastră.",
+      "Oala ei."
+    ],
+    "source": "keys"
+  },
+  {
+    "id": "p12",
+    "ordinal": 12,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "„Sab3a illa rebe3 l-masa” indică:"
+    },
+    "answer": "18:45",
+    "variants": [],
+    "choices": [
+      "18:45",
+      "19:15",
+      "19:45"
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p13",
+    "ordinal": 13,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "DRS: scrie „noi am învățat”, cu pronumele ne7na."
+    },
+    "answer": "Ne7na darasna",
+    "variants": [],
+    "choices": [],
+    "source": "workbook"
+  },
+  {
+    "id": "p14",
+    "ordinal": 14,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Alege „Nu putem deschide ușa”."
+    },
+    "answer": "Ma fiina nefta7 l beeb.",
+    "variants": [],
+    "choices": [
+      "Ma fiina nefta7 l beeb.",
+      "Fiina nefta7 l beeb.",
+      "Ma fik tefta7 l beeb."
+    ],
+    "source": "keys"
+  },
+  {
+    "id": "p15",
+    "ordinal": 15,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "În „za3len la2inno fi talej barra”, la2inno introduce:"
+    },
+    "answer": "Motivul stării.",
+    "variants": [],
+    "choices": [
+      "Motivul stării.",
+      "O întrebare despre loc.",
+      "O alternativă."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p16",
+    "ordinal": 16,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Scrie „mâine” în Arabizi."
+    },
+    "answer": "Bukra",
+    "variants": [
+      "bokra"
+    ],
+    "choices": [],
+    "source": "march"
+  },
+  {
+    "id": "p17",
+    "ordinal": 17,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Ce cuvânt introduce de obicei o condiție posibilă?"
+    },
+    "answer": "Eza",
+    "variants": [],
+    "choices": [
+      "Eza",
+      "Abel",
+      "Wara"
+    ],
+    "source": "s7"
+  },
+  {
+    "id": "p18",
+    "ordinal": 18,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Într-o situație ipotetică / ireală, alegi:"
+    },
+    "answer": "Law",
+    "variants": [],
+    "choices": [
+      "Law",
+      "Wen",
+      "Miin"
+    ],
+    "source": "s7"
+  },
+  {
+    "id": "p19",
+    "ordinal": 19,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Ra7 e23od b l-bayt latta erte7” — de ce rămâne acasă?"
+    },
+    "answer": "Ca să se odihnească.",
+    "variants": [],
+    "choices": [
+      "Ca să se odihnească.",
+      "Ca să învețe.",
+      "Fiindcă este deja odihnit."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p20",
+    "ordinal": 20,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Jeyye 3a bele ekol samak” exprimă:"
+    },
+    "answer": "Pofta de a mânca pește.",
+    "variants": [],
+    "choices": [
+      "Pofta de a mânca pește.",
+      "Faptul că a mâncat deja pește.",
+      "Interdicția de a mânca pește."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p21",
+    "ordinal": 21,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Scrie „niciodată” în Arabizi."
+    },
+    "answer": "Abadan",
+    "variants": [],
+    "choices": [],
+    "source": "march"
+  },
+  {
+    "id": "p22",
+    "ordinal": 22,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Ce exprimă lezem?"
+    },
+    "answer": "Necesitate / obligație.",
+    "variants": [],
+    "choices": [
+      "Necesitate / obligație.",
+      "O simplă alternativă.",
+      "Un loc îndepărtat."
+    ],
+    "source": "guide"
+  },
+  {
+    "id": "p23",
+    "ordinal": 23,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Alege sensul lui „3adatan”."
+    },
+    "answer": "De obicei.",
+    "variants": [],
+    "choices": [
+      "De obicei.",
+      "Imediat.",
+      "Niciodată."
+    ],
+    "source": "march"
+  },
+  {
+    "id": "p24",
+    "ordinal": 24,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "KTB: scrie „bibliotecă / librărie” în Arabizi."
+    },
+    "answer": "Maktabe",
+    "variants": [],
+    "choices": [],
+    "source": "workbook"
+  }
+]

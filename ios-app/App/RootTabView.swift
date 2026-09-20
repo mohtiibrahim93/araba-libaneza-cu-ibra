@@ -8,6 +8,7 @@ struct RootTabView: View {
     @State private var journeyPath: [String] = []
     @State private var practicePath: [String] = []
     @State private var showingReviews = false
+    @State private var showingOrientation = false
 
     init(
         content: AppContentSnapshot,
@@ -35,6 +36,7 @@ struct RootTabView: View {
                 currentUnitTitle: currentUnitTitle,
                 persistenceError: progressModel.persistenceError,
                 onReviews: { showingReviews = true },
+                onOrientation: { showingOrientation = true },
                 onContinueJourney: {
                     if let unitID = progressModel.snapshot.currentJourneyUnitID {
                         journeyPath = [unitID]
@@ -85,13 +87,24 @@ struct RootTabView: View {
             ProfileView(
                 progress: progressModel.snapshot,
                 persistenceError: progressModel.persistenceError,
-                onReviews: { showingReviews = true }
+                onReviews: { showingReviews = true },
+                onOrientation: { showingOrientation = true }
             )
                 .tabItem { Label("Eu", systemImage: "person") }
                 .tag(RootTab.profile)
         }
         .sheet(isPresented: $showingReviews) {
             ReviewQueueView(package: content.package, locale: content.locale, progressModel: progressModel)
+        }
+        .sheet(isPresented: $showingOrientation) {
+            OrientationView(
+                package: content.package, locale: content.locale, progressModel: progressModel,
+                onStartJourney: { unitID in
+                    journeyPath = [unitID]
+                    selectedTab = .journey
+                },
+                onChooseJourney: { selectedTab = .journey }
+            )
         }
         .task {
             await progressModel.load()
@@ -113,6 +126,7 @@ private struct HomeView: View {
     let currentUnitTitle: String?
     let persistenceError: String?
     let onReviews: () -> Void
+    let onOrientation: () -> Void
     let onContinueJourney: () -> Void
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
@@ -158,6 +172,12 @@ private struct HomeView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
+                        HomeActionRow(
+                            title: "De unde încep?",
+                            subtitle: "Orientare opțională · 24 de întrebări · pilot",
+                            icon: "signpost.right",
+                            action: onOrientation
+                        )
                         Text("Pentru azi")
                             .font(.title2.bold())
                         HomeActionRow(
@@ -610,6 +630,7 @@ private struct ProfileView: View {
     let progress: LearnerProgressSnapshot
     let persistenceError: String?
     let onReviews: () -> Void
+    let onOrientation: () -> Void
 
     private var fluency: SpeedDrillProgressSummary {
         progress.speedDrillProgress
@@ -631,6 +652,12 @@ private struct ProfileView: View {
                         Text(persistenceError)
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                    }
+                }
+
+                Section {
+                    Button(action: onOrientation) {
+                        Label("Orientare · pilot", systemImage: "signpost.right")
                     }
                 }
 

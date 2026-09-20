@@ -83,3 +83,7 @@ test('refuses an unknown curriculum group instead of silently inventing a level'
     /No native level mapping/
   );
 });
+
+// Keep the separate pilot resource reproducible from its legacy source.
+import './orientation.test.mjs';
+
