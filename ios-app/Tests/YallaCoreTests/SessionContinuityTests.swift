@@ -15,8 +15,10 @@ struct SessionContinuityTests {
     func resumesOrientation() async throws {
         let items = try bank()
         var session = try OrientationSession(items: items)
-        #expect(session.record(questionID: items[0].id, answer: items[0].answer))
-        #expect(session.record(questionID: items[1].id, answer: nil))
+        let firstAccepted = session.record(questionID: items[0].id, answer: items[0].answer)
+        #expect(firstAccepted)
+        let secondAccepted = session.record(questionID: items[1].id, answer: nil)
+        #expect(secondAccepted)
         let repository = LearnerProgressRepository(store: InMemoryLearnerProgressStore())
         try await repository.setOrientationCheckpoint(session.checkpoint)
         try await repository.setExpressionSaved("word", saved: true)
