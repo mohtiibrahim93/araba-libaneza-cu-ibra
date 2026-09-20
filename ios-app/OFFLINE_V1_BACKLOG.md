@@ -19,9 +19,9 @@ Local progress and failed-save retry; review queue and content-aware counts; can
 
 | ID | Work | Completion condition | Dependency/status |
 | --- | --- | --- | --- |
-| 1 | Remaining exercise presentation | Complete matching interaction using supported approved content; explicitly handle exercise types that cannot yet run. Preserve correction/mistake rules. No new AI-transfer system. | Implemented: Journey matching and per-pair correction/progress; CI verification pending |
-| 2 | Recording management | Learners can find, replay and delete local recordings after leaving a session; denied microphone access has a clear recovery path. No upload. | Code; next |
-| 3 | UI/accessibility completion | Consistent navigation, keyboard handling, empty/error states, VoiceOver labels, Dynamic Type, contrast and layouts. Review each relevant screen once. | Code first; device confirmation in 11 |
+| 1 | Remaining exercise presentation | Complete matching interaction using supported approved content; explicitly handle exercise types that cannot yet run. Preserve correction/mistake rules. No new AI-transfer system. | Implemented and verified: Journey matching and per-pair correction/progress |
+| 2 | Recording management | Learners can find, replay and delete local recordings after leaving a session; denied microphone access has a clear recovery path. No upload. | Implemented: local library, confirmed deletion and Settings recovery; device interaction remains in 11 |
+| 3 | UI/accessibility completion | Consistent navigation, keyboard handling, empty/error states, VoiceOver labels, Dynamic Type, contrast and layouts. Review each relevant screen once. | Next: code pass; device confirmation in 11 |
 | 4 | Production curriculum and drill links | Review existing coverage and provenance; supply explicit approved expression mappings for unlinked legacy drills. Keep unavailable levels/features honest. | Teacher input for mappings/approval |
 | 5 | Orientation calibration | Teacher approves pilot questions, thresholds and recommended Journey starts. No CEFR-certification claim. | Teacher review |
 | 6 | Production Listening/Speaking | Supply actual approved recordings and expression IDs; integrate bundled assets/listening prompts through reproducible content inputs. | Recordings/approval needed |

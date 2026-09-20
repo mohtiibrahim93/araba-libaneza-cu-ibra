@@ -32,6 +32,7 @@ final class NativeAudioController: ObservableObject {
     @Published private(set) var isRecording = false
     @Published private(set) var lastRecording: LearnerRecording?
     @Published private(set) var errorMessage: String?
+    @Published private(set) var microphonePermissionDenied = false
 
     @Published private var recordingRequest = RecordingRequestGate()
     var isRequestingPermission: Bool { recordingRequest.isPending }
@@ -83,6 +84,7 @@ final class NativeAudioController: ObservableObject {
         stopPlayback()
 
         let granted = await requestMicrophonePermission()
+        microphonePermissionDenied = !granted
         guard recordingRequest.complete(request), !Task.isCancelled else { return }
         guard granted else {
             present(NativeAudioError.microphonePermissionDenied)
@@ -250,13 +252,16 @@ final class NativeAudioController: ObservableObject {
         throw NativeAudioError.referenceNotFound(asset.locator)
     }
 
+    func refreshMicrophonePermission() {
+        microphonePermissionDenied = AVAudioSession.sharedInstance().recordPermission == .denied
+    }
+
+    func localRecordings() throws -> [LocalRecordingSummary] {
+        try LocalRecordingLibrary(directory: recordingsDirectory()).recordings()
+    }
+
     private func recordingURL(for recording: LearnerRecording) throws -> URL {
-        let support = try applicationSupportDirectory()
-        let candidate = support.appendingPathComponent(recording.localLocator)
-        guard fileManager.fileExists(atPath: candidate.path) else {
-            throw NativeAudioError.learnerRecordingNotFound(recording.localLocator)
-        }
-        return candidate
+        try LocalRecordingLibrary(directory: recordingsDirectory()).url(for: recording)
     }
 
     private func recordingsDirectory() throws -> URL {

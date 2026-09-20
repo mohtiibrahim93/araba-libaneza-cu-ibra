@@ -73,7 +73,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 - M6 checkpoints use progress schema v5. Older snapshots migrate without discarding attempts, bookmarks, Journey position or drill history. Only the latest orientation is retained, and it never awards mastery/SRS credit.
 - M7 pauses on inactive/background transitions and requires explicit resume. Paused time is excluded from response time and drill duration. Navigating away ends and saves a nonempty partial session. Accuracy now renders a percentage.
 - M8 permission completions are invalidated when canceled; repeated permission requests are blocked. Listening playback stops on interruption. Unfinished recordings are canceled when leaving or interrupting Speak & Compare; the learner can explicitly delete completed recordings from the current session.
-- Native recording files are local, but there is no cross-session recording library UI yet. Real-device AVAudioSession permission/interruption tests remain mandatory.
+- Native recording files are local. A cross-session library is now available from Profile and Speak & Compare, with replay and confirmed deletion. Real-device AVAudioSession permission/interruption tests remain mandatory.
 - Independent review could not run because the reviewer hit its usage limit. Changes received direct code review plus core/importer tests and native build validation.
 
 ## Next release pass
@@ -84,3 +84,5 @@ Native work stays on yalla-app-ios; main is the separate live website.
 4. Do not label M6–M9 or the offline release complete until these gates pass. M10–M15 remain outside this offline-v1 pass.
 
 - Matching is available from Journey unit details using up to six existing, unambiguous expression/meaning pairs. Each completed pair records recognition for its own expression, preserves initial mistakes/hints, rejects duplicate taps, and must be corrected before the whole board can advance. Missing/ambiguous authored boards fail preflight. No production content JSON or mastery/SRS rules changed.
+
+- Recording management uses the existing local files, including recordings made before the library UI existed. Only regular m4a files in the Recordings directory can be replayed/deleted; path traversal and symbolic links are rejected. Microphone denial has a Settings recovery action. Device verification remains in the final release pass.

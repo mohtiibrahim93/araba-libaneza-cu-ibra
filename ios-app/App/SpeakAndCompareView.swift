@@ -1,11 +1,13 @@
 @preconcurrency import AVFoundation
 import SwiftUI
+import UIKit
 import YallaCore
 
 struct SpeakAndCompareView: View {
     let destination: SpeakAndCompareDestination
 
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
     @StateObject private var audio = NativeAudioController()
     @State private var session: SpeakAndCompareSession
 
@@ -46,10 +48,21 @@ struct SpeakAndCompareView: View {
         }
         .navigationTitle("Spune și compară")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            audio.refreshMicrophonePermission()
+            if let files = try? audio.localRecordings() {
+                let existing = Set(files.map(\.id))
+                for recording in session.recordingHistory where !existing.contains(recording.localLocator) {
+                    session.removeLearnerRecording(localLocator: recording.localLocator)
+                }
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active {
                 audio.stopPlayback()
                 audio.cancelRecording()
+            } else {
+                audio.refreshMicrophonePermission()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { _ in
@@ -132,6 +145,15 @@ struct SpeakAndCompareView: View {
             Text("Vocea ta")
                 .font(.title2.bold())
 
+            if audio.microphonePermissionDenied {
+                Text("Accesul la microfon este dezactivat. Îl poți activa din configurările aplicației.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Button("Deschide configurările") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                }
+                .buttonStyle(.bordered)
+            }
+
             if audio.isRecording {
                 Button(role: .destructive) {
                     finishRecording()
@@ -152,6 +174,13 @@ struct SpeakAndCompareView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(audio.isRequestingPermission)
             }
+
+            NavigationLink {
+                RecordingLibraryView()
+            } label: {
+                Label("Toate înregistrările mele", systemImage: "waveform")
+            }
+            .disabled(audio.isRecording || audio.isRequestingPermission)
 
             if let recording = session.learnerRecording {
                 Button {

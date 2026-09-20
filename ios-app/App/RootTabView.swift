@@ -667,6 +667,14 @@ private struct ProfileView: View {
                     }
                 }
 
+                Section {
+                    NavigationLink {
+                        RecordingLibraryView()
+                    } label: {
+                        Label("Înregistrările mele", systemImage: "waveform")
+                    }
+                }
+
                 Section("Progres local") {
                     LabeledContent("Încercări", value: "\(progress.attempts.count)")
                     LabeledContent("Expresii văzute", value: "\(progress.seenExpressionIDs.count)")

@@ -37,7 +37,8 @@ These checks require a real Mac/iPhone/iPad and approved content. They have not 
 - No late recording starts after leaving; repeated taps do not create simultaneous recordings.
 - Phone call/headset interruption and backgrounding stop playback and unfinished recording.
 - Finish, replay and explicitly delete a learner recording; previous session recordings remain independently addressable within that session.
-- No automatic uploads. A cross-session recording library is still not implemented.
+- No automatic uploads. Open the recording library from Profile after restarting; replay an older recording, cancel deletion, then confirm deletion and verify it stays removed.
+- Deny microphone permission, open Settings from Speak & Compare, grant access and return; confirm the denial notice updates.
 
 ## Presentation and distribution
 
