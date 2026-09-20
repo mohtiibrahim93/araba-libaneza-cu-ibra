@@ -14,6 +14,7 @@ struct ReviewQueueView: View {
             TimelineView(.periodic(from: .now, by: 30)) { context in
                 queueContent(at: context.date)
             }
+            .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
             .navigationTitle("Recapitulări")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

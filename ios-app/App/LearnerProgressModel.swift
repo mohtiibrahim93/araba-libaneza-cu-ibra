@@ -6,67 +6,53 @@ import YallaCore
 final class LearnerProgressModel: ObservableObject {
     @Published private(set) var snapshot = LearnerProgressSnapshot()
     @Published private(set) var persistenceError: String?
+    @Published private(set) var pendingSaveCount = 0
+    @Published private(set) var isSaving = false
 
     private let repository: LearnerProgressRepository
+    private let saveQueue = ProgressSaveQueue()
 
-    init(repository: LearnerProgressRepository) {
-        self.repository = repository
-    }
+    init(repository: LearnerProgressRepository) { self.repository = repository }
 
-    func load() async {
-        do {
-            snapshot = try await repository.load()
-            persistenceError = nil
-        } catch {
-            persistenceError = error.localizedDescription
-        }
-    }
+    func load() async { await perform(.reload) }
 
     func setCurrentJourneyUnitID(_ unitID: String?) async {
-        do {
-            snapshot = try await repository.setCurrentJourneyUnitID(unitID)
-            persistenceError = nil
-        } catch {
-            persistenceError = error.localizedDescription
-        }
+        await perform(.journeyUnit(unitID))
     }
 
     func setExpressionSaved(_ expressionID: String, saved: Bool) async {
-        do {
-            snapshot = try await repository.setExpressionSaved(
-                expressionID,
-                saved: saved
-            )
-            persistenceError = nil
-        } catch {
-            persistenceError = error.localizedDescription
-        }
+        await perform(.savedExpression(expressionID, saved))
     }
 
     func toggleSavedExpressionID(_ expressionID: String) async {
-        do {
-            snapshot = try await repository.toggleSavedExpressionID(expressionID)
-            persistenceError = nil
-        } catch {
-            persistenceError = error.localizedDescription
-        }
+        let desired = !saveQueue.isExpressionSaved(expressionID, in: snapshot)
+        await perform(.savedExpression(expressionID, desired))
     }
 
     func recordSpeedDrill(_ entry: SpeedDrillHistoryEntry) async {
-        do {
-            snapshot = try await repository.recordSpeedDrill(entry)
-            persistenceError = nil
-        } catch {
-            persistenceError = error.localizedDescription
-        }
+        await perform(.speedDrill(entry))
     }
 
     func record(_ attempt: LearningAttempt) async {
+        await perform(.attempt(attempt))
+    }
+
+    func retryPendingSaves() async {
+        isSaving = true
         do {
-            snapshot = try await repository.record(attempt)
+            try await saveQueue.flush(using: repository)
             persistenceError = nil
         } catch {
             persistenceError = error.localizedDescription
         }
+        if let saved = saveQueue.latestSnapshot { snapshot = saved }
+        pendingSaveCount = saveQueue.pendingCount
+        isSaving = saveQueue.isSaving
+    }
+
+    private func perform(_ operation: ProgressSaveQueue.Operation) async {
+        saveQueue.enqueue(operation)
+        pendingSaveCount = saveQueue.pendingCount
+        await retryPendingSaves()
     }
 }

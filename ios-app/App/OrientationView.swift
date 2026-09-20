@@ -33,6 +33,7 @@ struct OrientationView: View {
                 }
                 .padding()
             }
+            .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
             .navigationTitle("Orientare · pilot")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
