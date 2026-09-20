@@ -103,7 +103,10 @@ struct RootTabView: View {
                     journeyPath = [unitID]
                     selectedTab = .journey
                 },
-                onChooseJourney: { selectedTab = .journey }
+                onChooseJourney: {
+                    journeyPath = []
+                    selectedTab = .journey
+                }
             )
         }
         .task {

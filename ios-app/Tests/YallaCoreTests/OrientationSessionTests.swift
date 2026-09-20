@@ -20,7 +20,8 @@ struct OrientationSessionTests {
     func singleResponsePerQuestion() throws {
         var session = try OrientationSession(items: bank())
         #expect(try session.result() == nil)
-        let step = try #require(session.current(locale: "ro"))
+        let current = try session.current(locale: "ro")
+        let step = try #require(current)
         #expect(step.question.questionNumber == 1)
         #expect(step.question.totalQuestions == 24)
         let accepted = session.record(questionID: "p1", answer: "wrong")
@@ -30,7 +31,8 @@ struct OrientationSessionTests {
         #expect(try session.current(locale: "ro")?.id == "p2")
         #expect(try session.result() == nil)
         for number in 2...24 { session.record(questionID: "p\(number)", answer: nil) }
-        let result = try #require(session.result())
+        let scored = try session.result()
+        let result = try #require(scored)
         #expect(result.startingPoint == .a1Foundation)
         #expect(result.bandScores[.a1] == 0)
         #expect(!result.isCEFRCertification)
@@ -44,7 +46,8 @@ struct OrientationSessionTests {
             let answer: String? = (number <= 14 || number == 17 || number == 18) ? "variant\(number)" : nil
             session.record(questionID: "p\(number)", answer: answer)
         }
-        let result = try #require(session.result())
+        let scored = try session.result()
+        let result = try #require(scored)
         #expect(result.bandScores[.a1] == 8)
         #expect(result.bandScores[.a2] == 6)
         #expect(result.bandScores[.b1] == 2)
@@ -66,13 +69,15 @@ struct OrientationSessionTests {
             from: Data(contentsOf: root.appendingPathComponent("App/Resources/orientation-pilot.json")))
         #expect(items.count == 24)
         var session = try OrientationSession(items: items)
-        let step = try #require(session.current(locale: "ro"))
+        let current = try session.current(locale: "ro")
+        let step = try #require(current)
         #expect(step.choices.count == 3)
         #expect(step.choices.contains("Cum te cheamă?"))
         let invalid = session.record(questionID: step.id, answer: "not-a-choice")
         #expect(!invalid)
         for item in items { session.record(questionID: item.id, answer: item.answer) }
-        let result = try #require(session.result())
+        let scored = try session.result()
+        let result = try #require(scored)
         #expect(result.startingPoint == .reviewAndEnrichment)
         #expect(result.bandScores[.a1] == 8)
         #expect(result.bandScores[.a2] == 8)
@@ -89,3 +94,4 @@ struct OrientationSessionTests {
         }
     }
 }
+
