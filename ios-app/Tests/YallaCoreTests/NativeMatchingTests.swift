@@ -88,4 +88,19 @@ struct NativeMatchingTests {
             try ExerciseSessionPlayer(exercises: [board(["a", "missing"])], expressions: expressions, locale: "ro")
         }
     }
+    @Test("Journey matching uses existing expression meanings and excludes ambiguous candidates")
+    func journeyBoard() {
+        let candidates = expressions + [
+            YallaCore.Expression(id: "same", canonicalArabizi: "another",
+                localizations: ["ro": .init(naturalMeaning: "Vreau!")])
+        ]
+        let exercise = MatchingExerciseBuilder().practice(
+            expressionIDs: ["a", "same", "missing", "b"], expressions: candidates,
+            unitID: "unit", locale: "ro")
+        #expect(exercise?.expressionIDs == ["a", "b"])
+        #expect(exercise?.type == .matching)
+        #expect(MatchingExerciseBuilder().practice(
+            expressionIDs: ["a"], expressions: candidates, unitID: "unit", locale: "ro") == nil)
+    }
+
 }
