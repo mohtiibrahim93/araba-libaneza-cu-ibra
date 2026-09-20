@@ -1,3 +1,4 @@
+@preconcurrency import AVFoundation
 import Foundation
 import SwiftUI
 import YallaCore
@@ -7,6 +8,7 @@ struct ListeningPracticeView: View {
     let title: String
     @ObservedObject var progressModel: LearnerProgressModel
 
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var audio = NativeAudioController()
     @State private var currentIndex = 0
     @State private var selectedChoice: String?
@@ -44,6 +46,12 @@ struct ListeningPracticeView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { audio.stopPlayback() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { _ in
+            audio.stopPlayback()
+        }
         .onDisappear {
             audio.stopPlayback()
         }

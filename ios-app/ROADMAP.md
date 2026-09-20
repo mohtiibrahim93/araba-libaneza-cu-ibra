@@ -7,7 +7,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 
 - Implemented: review queue with scheduled expressions, ReviewScheduler dates, due practice, saved attempts and preserved correction semantics.
 - Implemented: canonical expression-linked recall supplements the 558 imported drills, which have empty expressionIDs. Journey, Smart Practice, saved/targeted practice and due review reuse ExerciseFactory. Legacy drills are preserved, with no guessed links.
-- Implemented M6 pilot: optional Home/Profile entry, 24-question blind flow, native scoring, cancellation and persisted chosen starting Journey unit. Teacher calibration and device QA remain.
+- Implemented M6 pilot: optional Home/Profile entry, 24-question blind flow, native scoring, cancellation and persisted chosen starting Journey unit, resumable answers and the latest result. Teacher calibration and device QA remain.
 - Finish M7–M9 learner flows and content coverage before starting M10.
 
 ## Phase ledger
@@ -20,9 +20,9 @@ Native work stays on yalla-app-ios; main is the separate live website.
 | M3 | Evaluation, correction retry, mistake preservation, native text, authored choice and word-order controls | Matching and dedicated media/transfer presentation; device interaction QA |
 | M4 | Five tabs and native navigation | Accessibility, Dynamic Type, empty/error states, device UX polish |
 | M5 | Adaptive selection and persistent learning signals | Confirm production expressions feed those signals; end-to-end device QA |
-| M6 | Validated scorer; exact legacy pilot bank; native optional flow; result-to-Journey | Teacher calibration, device QA; persistent orientation result/history and cross-restart resume are not implemented |
-| M7 | Speed Drill, history, progress-aware selection | Device timing/interruptions QA; audio directions depend on M8 |
-| M8 | Audio resolver, playback/recording, Listening and Speak & Compare flows | Production audio and listening prompts; real-device microphone/playback/privacy QA |
+| M6 | Validated scorer; exact legacy pilot bank; native optional flow; result-to-Journey; saved answers and latest result across restarts | Teacher calibration and device QA; complete historical results archive is not implemented |
+| M7 | Speed Drill, history, progress-aware selection, active-time pause/resume and partial-session save | Device timing/interruptions QA; audio directions depend on M8 |
+| M8 | Audio resolver, playback/recording, Listening and Speak & Compare, recording cancellation and explicit local deletion | Production audio and listening prompts; real-device microphone/playback/privacy QA |
 | M9 | Dictionary, saved expressions, root graph, authored variants/meanings/inflections | Production approved roots/morphology/inflections, context/culture; practical saved/root recall coverage |
 | M10 | Planned | Script Bridge |
 | M11 | Planned | Controlled AI transfer and approved-answer evaluation |
@@ -50,7 +50,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 ## Remaining order after this continuation
 
 1. M3/M4/M5: device verification of the real-content learning loop, correct exercise-specific controls, persistence failure handling and queue/navigation refresh. These were previously overstated as complete.
-2. M6: validate the pilot with Ibrahim, test cancellation and starting-point persistence on device. Only the selected Journey unit persists; incomplete sessions and orientation result details do not survive dismissal/restart.
+2. M6: validate the pilot with Ibrahim, test cancellation and starting-point persistence on device. Answers and the latest result now survive successful saves and restarts. Checkpoint restoration validates the exact pilot bank; outdated or invalid checkpoints require a new orientation.
 3. M7: verify timed drill foreground/background and interruption behavior on device.
 4. M8: supply reference recordings/listening prompts, then verify playback, permissions, recording and local-only privacy.
 5. M9: add explicit approved roots/morphology/inflections, contextual meanings and culture. Dictionary/saved/root practice can now use canonical recall where no authored linked exercise exists.
@@ -66,4 +66,19 @@ Native work stays on yalla-app-ios; main is the separate live website.
 - Native session persistence now requires an explicit expression link that resolves in the content. Unlinked legacy drills retain session feedback but create no new synthetic expression mastery/SRS records. Historical synthetic drill-ID records are preserved; a content-aware audit/migration remains follow-up work.
 - Choice and word-order controls preserve correction retries and initial mistakes; unsupported dedicated types fail session preflight explicitly.
 
-- Persistence recovery remains open: a failed completed-attempt save currently displays an error but retains no pending attempt for retry. Add explicit retry retention and test recovery before release; do not claim a successful save while storage fails.
+- Persistence recovery implemented: learner actions drain through one ordered queue; failed operations remain pending and have an explicit retry banner. Stable attempt IDs and explicit bookmark values prevent duplicate credit or inverted toggles on retry. The pending queue is memory-only; failed saves cannot be promised across force-quit or process termination.
+
+## Latest completion work
+
+- M6 checkpoints use progress schema v5. Older snapshots migrate without discarding attempts, bookmarks, Journey position or drill history. Only the latest orientation is retained, and it never awards mastery/SRS credit.
+- M7 pauses on inactive/background transitions and requires explicit resume. Paused time is excluded from response time and drill duration. Navigating away ends and saves a nonempty partial session. Accuracy now renders a percentage.
+- M8 permission completions are invalidated when canceled; repeated permission requests are blocked. Listening playback stops on interruption. Unfinished recordings are canceled when leaving or interrupting Speak & Compare; the learner can explicitly delete completed recordings from the current session.
+- Native recording files are local, but there is no cross-session recording library UI yet. Real-device AVAudioSession permission/interruption tests remain mandatory.
+- Independent review could not run because the reviewer hit its usage limit. Changes received direct code review plus core/importer tests and native build validation.
+
+## Next release pass
+
+1. Run the device checklist in RELEASE_CHECKLIST.md, including forced storage failure, permission denial, backgrounding and rotation. CI builds do not replace device interaction checks.
+2. Supply approved reference recordings and explicit audio-to-expression mappings; supply reviewed roots/morphology only where authored. CONTENT_HANDOFF.md lists the existing fields.
+3. Resolve any device findings, finish accessibility and visual polish, then finalize name/icon, signing and TestFlight.
+4. Do not label M6–M9 or the offline release complete until these gates pass. M10–M15 remain outside this offline-v1 pass.

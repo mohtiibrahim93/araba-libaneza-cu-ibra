@@ -114,6 +114,10 @@ public struct SpeakAndCompareSession: Codable, Equatable, Sendable {
         recordingHistory.last
     }
 
+    public mutating func removeLearnerRecording(localLocator: String) {
+        recordingHistory.removeAll { $0.localLocator == localLocator }
+    }
+
     public mutating func attachLearnerRecording(
         localLocator: String,
         sharingState: RecordingSharingState = .localOnly

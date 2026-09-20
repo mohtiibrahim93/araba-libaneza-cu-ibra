@@ -33,6 +33,9 @@ final class NativeAudioController: ObservableObject {
     @Published private(set) var lastRecording: LearnerRecording?
     @Published private(set) var errorMessage: String?
 
+    @Published private var recordingRequest = RecordingRequestGate()
+    var isRequestingPermission: Bool { recordingRequest.isPending }
+
     private var player: AVAudioPlayer?
     private var recorder: AVAudioRecorder?
     private var activeRecordingLocator: String?
@@ -47,6 +50,7 @@ final class NativeAudioController: ObservableObject {
         _ asset: AudioAsset,
         rate: ReferencePlaybackRate = .normal
     ) {
+        guard !isRecording, !isRequestingPermission else { return }
         do {
             let url = try referenceURL(for: asset)
             try startPlayback(url: url, rate: rate)
@@ -57,6 +61,7 @@ final class NativeAudioController: ObservableObject {
     }
 
     func playLearnerRecording(_ recording: LearnerRecording) {
+        guard !isRecording, !isRequestingPermission else { return }
         do {
             let url = try recordingURL(for: recording)
             try startPlayback(url: url, rate: .normal)
@@ -74,9 +79,11 @@ final class NativeAudioController: ObservableObject {
     }
 
     func startRecording() async {
+        guard recorder == nil, let request = recordingRequest.begin() else { return }
         stopPlayback()
 
         let granted = await requestMicrophonePermission()
+        guard recordingRequest.complete(request), !Task.isCancelled else { return }
         guard granted else {
             present(NativeAudioError.microphonePermissionDenied)
             return
@@ -120,7 +127,7 @@ final class NativeAudioController: ObservableObject {
 
     @discardableResult
     func stopRecording() -> LearnerRecording? {
-        guard let recorder, recorder.isRecording,
+        guard let recorder,
               let locator = activeRecordingLocator
         else {
             return nil
@@ -140,11 +147,35 @@ final class NativeAudioController: ObservableObject {
     }
 
     func cancelRecording() {
-        guard let recording = stopRecording() else { return }
-        if let url = try? recordingURL(for: recording) {
-            try? fileManager.removeItem(at: url)
+        recordingRequest.cancel()
+        let locator = activeRecordingLocator
+        recorder?.stop()
+        recorder = nil
+        activeRecordingLocator = nil
+        isRecording = false
+        if let locator {
+            let recording = LearnerRecording(localLocator: locator)
+            if let url = try? recordingURL(for: recording) {
+                try? fileManager.removeItem(at: url)
+            }
+            if lastRecording?.localLocator == locator { lastRecording = nil }
         }
-        lastRecording = nil
+    }
+
+    @discardableResult
+    func deleteRecording(_ recording: LearnerRecording) -> Bool {
+        guard !isRecording, !isRequestingPermission else { return false }
+        stopPlayback()
+        do {
+            let url = try recordingURL(for: recording)
+            try fileManager.removeItem(at: url)
+            if lastRecording == recording { lastRecording = nil }
+            errorMessage = nil
+            return true
+        } catch {
+            present(error)
+            return false
+        }
     }
 
     func clearError() {
@@ -248,10 +279,8 @@ final class NativeAudioController: ObservableObject {
     }
 
     private func present(_ error: Error) {
-        recorder?.stop()
-        recorder = nil
-        activeRecordingLocator = nil
-        isRecording = false
+        stopPlayback()
+        cancelRecording()
         errorMessage = error.localizedDescription
     }
 }

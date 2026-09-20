@@ -1,9 +1,11 @@
+@preconcurrency import AVFoundation
 import SwiftUI
 import YallaCore
 
 struct SpeakAndCompareView: View {
     let destination: SpeakAndCompareDestination
 
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var audio = NativeAudioController()
     @State private var session: SpeakAndCompareSession
 
@@ -44,11 +46,19 @@ struct SpeakAndCompareView: View {
         }
         .navigationTitle("Spune și compară")
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear {
-            audio.stopPlayback()
-            if audio.isRecording {
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active {
+                audio.stopPlayback()
                 audio.cancelRecording()
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { _ in
+            audio.stopPlayback()
+            audio.cancelRecording()
+        }
+        .onDisappear {
+            audio.stopPlayback()
+            audio.cancelRecording()
         }
     }
 
@@ -98,7 +108,7 @@ struct SpeakAndCompareView: View {
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .disabled(audio.isRecording)
+            .disabled(audio.isRecording || audio.isRequestingPermission)
         }
     }
 
@@ -136,10 +146,11 @@ struct SpeakAndCompareView: View {
                         await audio.startRecording()
                     }
                 } label: {
-                    Label("Înregistrează-te", systemImage: "mic.fill")
+                    Label(audio.isRequestingPermission ? "Se solicită accesul…" : "Înregistrează-te", systemImage: "mic.fill")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(audio.isRequestingPermission)
             }
 
             if let recording = session.learnerRecording {
@@ -150,7 +161,14 @@ struct SpeakAndCompareView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.bordered)
-                .disabled(audio.isRecording)
+                .disabled(audio.isRecording || audio.isRequestingPermission)
+
+                Button("Șterge înregistrarea", role: .destructive) {
+                    if audio.deleteRecording(recording) {
+                        session.removeLearnerRecording(localLocator: recording.localLocator)
+                    }
+                }
+                .disabled(audio.isRecording || audio.isRequestingPermission)
 
                 Text("\(session.recordingHistory.count) înregistrări locale în această sesiune")
                     .font(.caption)

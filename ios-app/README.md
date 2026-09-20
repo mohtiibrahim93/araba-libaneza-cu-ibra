@@ -46,4 +46,4 @@ xcodegen generate
 open YallaNative.xcodeproj
 ```
 
-The current execution environment can verify the cross-platform Swift package and importer, but it does not provide Xcode or the iOS Simulator, so the SwiftUI target still requires an Xcode/macOS build verification before TestFlight work.
+GitHub Actions verifies the Swift package, importer reproducibility and an unsigned native iOS Simulator build. This editing environment has no Swift/Xcode runtime; those checks run remotely. Real-device interaction, signing and TestFlight verification remain separate release gates. See ROADMAP.md and RELEASE_CHECKLIST.md.
