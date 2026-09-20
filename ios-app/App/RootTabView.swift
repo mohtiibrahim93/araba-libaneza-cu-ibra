@@ -3,6 +3,7 @@ import YallaCore
 
 struct RootTabView: View {
     let content: AppContentSnapshot
+    private let reviewExpressionIDs: Set<String>
     @StateObject private var progressModel: LearnerProgressModel
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
@@ -15,6 +16,7 @@ struct RootTabView: View {
         progressRepository: LearnerProgressRepository
     ) {
         self.content = content
+        self.reviewExpressionIDs = Set(content.package.expressions.map(\.id))
         _progressModel = StateObject(
             wrappedValue: LearnerProgressModel(repository: progressRepository)
         )
@@ -30,7 +32,9 @@ struct RootTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
+            TimelineView(.periodic(from: .now, by: 30)) { context in
             HomeView(
+                reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
                 summary: content.shell.home,
                 progress: progressModel.snapshot,
                 currentUnitTitle: currentUnitTitle,
@@ -52,6 +56,7 @@ struct RootTabView: View {
                     selectedTab = .practice
                 }
             )
+            }
             .tabItem { Label("Acasă", systemImage: "house") }
             .tag(RootTab.home)
 
@@ -84,12 +89,15 @@ struct RootTabView: View {
                 .tabItem { Label("Descoperă", systemImage: "sparkles") }
                 .tag(RootTab.discover)
 
+            TimelineView(.periodic(from: .now, by: 30)) { context in
             ProfileView(
+                reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
                 progress: progressModel.snapshot,
                 persistenceError: progressModel.persistenceError,
                 onReviews: { showingReviews = true },
                 onOrientation: { showingOrientation = true }
             )
+            }
                 .tabItem { Label("Eu", systemImage: "person") }
                 .tag(RootTab.profile)
         }
@@ -124,6 +132,7 @@ private enum RootTab: Hashable {
 }
 
 private struct HomeView: View {
+    let reviewQueue: ReviewQueueSummary
     let summary: HomeSummary
     let progress: LearnerProgressSnapshot
     let currentUnitTitle: String?
@@ -133,10 +142,6 @@ private struct HomeView: View {
     let onContinueJourney: () -> Void
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
-
-    private var reviewQueue: ReviewQueueSummary {
-        progress.reviewQueueSummary(at: Date())
-    }
 
     private var dueCount: Int {
         reviewQueue.dueNowCount
@@ -630,6 +635,7 @@ private struct DiscoverView: View {
 }
 
 private struct ProfileView: View {
+    let reviewQueue: ReviewQueueSummary
     let progress: LearnerProgressSnapshot
     let persistenceError: String?
     let onReviews: () -> Void
@@ -637,10 +643,6 @@ private struct ProfileView: View {
 
     private var fluency: SpeedDrillProgressSummary {
         progress.speedDrillProgress
-    }
-
-    private var reviewQueue: ReviewQueueSummary {
-        progress.reviewQueueSummary(at: Date())
     }
 
     var body: some View {

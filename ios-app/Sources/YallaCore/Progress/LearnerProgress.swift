@@ -240,13 +240,18 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         })
     }
 
-    public func reviewQueueSummary(at date: Date) -> ReviewQueueSummary {
+    /// Optionally limit presentation to current content without changing stored history.
+    public func reviewQueueSummary(
+        at date: Date,
+        expressionIDs: Set<String>? = nil
+    ) -> ReviewQueueSummary {
         let scheduler = ReviewScheduler()
         var dueNowCount = 0
         var upcomingCount = 0
         var nextUpcomingAt: Date?
 
-        for review in reviewByExpressionID.values {
+        for (expressionID, review) in reviewByExpressionID {
+            guard expressionIDs?.contains(expressionID) ?? true else { continue }
             guard let dueAt = scheduler.dueDate(for: review) else { continue }
 
             if dueAt <= date {

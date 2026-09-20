@@ -60,8 +60,10 @@ Native work stays on yalla-app-ios; main is the separate live website.
 
 - Review-session exercise selection must remain frozen while persistence updates the queue.
 - Queue time refresh must not reset an active player.
-- Home/Profile legacy counts can include removed content IDs whereas queue rows resolve only existing expressions; unify their content-aware counts in a follow-up.
+- Home/Profile review counts now include only current content IDs, matching resolved queue rows. Both refresh every 30 seconds using the existing scheduler; historical records remain unchanged.
 - An unsigned simulator build verifies compilation, not device interaction or release readiness.
 
 - Native session persistence now requires an explicit expression link that resolves in the content. Unlinked legacy drills retain session feedback but create no new synthetic expression mastery/SRS records. Historical synthetic drill-ID records are preserved; a content-aware audit/migration remains follow-up work.
 - Choice and word-order controls preserve correction retries and initial mistakes; unsupported dedicated types fail session preflight explicitly.
+
+- Persistence recovery remains open: a failed completed-attempt save currently displays an error but retains no pending attempt for retry. Add explicit retry retention and test recovery before release; do not claim a successful save while storage fails.
