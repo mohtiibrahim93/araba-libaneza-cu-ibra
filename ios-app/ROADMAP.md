@@ -17,7 +17,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 | M0 | Swift core, SwiftUI target, XcodeGen, Linux/macOS CI | Real-device and release verification |
 | M1 | Reproducible imported package; 4,315 expressions, 32 units, 558 drills, 14 lexicon collections | Teacher approval/coverage audit, explicit provenance and richer content |
 | M2 | Attempts, distinct mastery dimensions, SRS, local progress repository | Production-content integration and device persistence QA |
-| M3 | Evaluation, correction retry, mistake preservation, native text response player | Complete appropriate choice/matching/word-order UI; audit exercise-specific presentation and unsupported types |
+| M3 | Evaluation, correction retry, mistake preservation, native text, authored choice and word-order controls | Matching and dedicated media/transfer presentation; device interaction QA |
 | M4 | Five tabs and native navigation | Accessibility, Dynamic Type, empty/error states, device UX polish |
 | M5 | Adaptive selection and persistent learning signals | Confirm production expressions feed those signals; end-to-end device QA |
 | M6 | Validated scorer; exact legacy pilot bank; native optional flow; result-to-Journey | Teacher calibration, device QA; persistent orientation result/history and cross-restart resume are not implemented |
@@ -62,3 +62,6 @@ Native work stays on yalla-app-ios; main is the separate live website.
 - Queue time refresh must not reset an active player.
 - Home/Profile legacy counts can include removed content IDs whereas queue rows resolve only existing expressions; unify their content-aware counts in a follow-up.
 - An unsigned simulator build verifies compilation, not device interaction or release readiness.
+
+- Native session persistence now requires an explicit expression link that resolves in the content. Unlinked legacy drills retain session feedback but create no new synthetic expression mastery/SRS records. Historical synthetic drill-ID records are preserved; a content-aware audit/migration remains follow-up work.
+- Choice and word-order controls preserve correction retries and initial mistakes; unsupported dedicated types fail session preflight explicitly.

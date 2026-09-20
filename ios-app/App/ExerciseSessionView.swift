@@ -9,6 +9,7 @@ struct ExerciseSessionView: View {
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
+    @State private var wordOrder: WordOrderState?
     @State private var latestResolution: ExerciseResolution?
     @State private var hintVisible = false
     @State private var exerciseStartedAt = Date()
@@ -25,12 +26,16 @@ struct ExerciseSessionView: View {
         self.locale = locale
         self.title = title
         self.progressModel = progressModel
+        let supportsAll = exercises.allSatisfy { NativeExerciseInput(exercise: $0) != .unavailable }
         _player = State(
-            initialValue: try? ExerciseSessionPlayer(
+            initialValue: supportsAll ? (try? ExerciseSessionPlayer(
                 exercises: exercises,
                 expressions: expressions
-            )
+            )) : nil
         )
+        if let first = exercises.first, case let .wordOrder(state) = NativeExerciseInput(exercise: first) {
+            _wordOrder = State(initialValue: state)
+        }
     }
 
     var body: some View {
@@ -80,18 +85,7 @@ struct ExerciseSessionView: View {
                     }
                 }
 
-                TextField("Scrie răspunsul în Arabizi", text: $answer)
-                    .textFieldStyle(.roundedBorder)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .focused($answerFieldFocused)
-                    .submitLabel(.done)
-                    .disabled(player.isCurrentExerciseCompleted)
-                    .onSubmit {
-                        if !player.isCurrentExerciseCompleted {
-                            submitAnswer()
-                        }
-                    }
+                answerControls(exercise: exercise, completed: player.isCurrentExerciseCompleted)
 
                 if let latestResolution {
                     FeedbackCard(resolution: latestResolution)
@@ -115,7 +109,7 @@ struct ExerciseSessionView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
-                        .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(!canSubmit(exercise))
                     } else {
                         Button {
                             advance()
@@ -130,8 +124,85 @@ struct ExerciseSessionView: View {
             .padding()
         }
         .onAppear {
-            answerFieldFocused = true
+            answerFieldFocused = NativeExerciseInput(exercise: exercise) == .text
         }
+    }
+
+    @ViewBuilder
+    private func answerControls(exercise: ExerciseDefinition, completed: Bool) -> some View {
+        switch NativeExerciseInput(exercise: exercise) {
+        case .text:
+            TextField(exercise.type == .freeProduction ? "Scrie răspunsul în Arabizi" : "Scrie răspunsul", text: $answer)
+                .textFieldStyle(.roundedBorder)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused($answerFieldFocused)
+                .submitLabel(.done)
+                .disabled(completed)
+                .onSubmit { if !completed && canSubmit(exercise) { submitAnswer() } }
+        case let .choices(choices):
+            VStack(spacing: 10) {
+                ForEach(choices, id: \.self) { choice in
+                    Button { answer = choice } label: {
+                        HStack {
+                            Text(choice).frame(maxWidth: .infinity, alignment: .leading)
+                            if answer == choice { Image(systemName: "checkmark.circle.fill") }
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(completed)
+                    .accessibilityAddTraits(answer == choice ? .isSelected : [])
+                }
+            }
+        case .wordOrder:
+            if let state = wordOrder {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text(state.selectedTokens.isEmpty ? "Alege cuvintele în ordine" : state.submittedAnswer)
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
+                        ForEach(state.remainingTokens) { token in
+                            Button(token.value) {
+                                guard var state = wordOrder else { return }
+                                state.select(tokenID: token.id)
+                                wordOrder = state
+                                answer = state.submittedAnswer
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(completed)
+                        }
+                    }
+                    Button("Anulează ultimul cuvânt") {
+                        guard var state = wordOrder else { return }
+                        state.undoLastSelection()
+                        wordOrder = state
+                        answer = state.submittedAnswer
+                    }
+                    .disabled(completed || state.selectedTokens.isEmpty)
+                }
+            }
+        case .unavailable:
+            Text("Acest tip de exercițiu nu este încă disponibil aici.")
+        }
+    }
+
+    private func canSubmit(_ exercise: ExerciseDefinition) -> Bool {
+        switch NativeExerciseInput(exercise: exercise) {
+        case .wordOrder: return wordOrder?.remainingTokens.isEmpty == true && !answer.isEmpty
+        case .unavailable: return false
+        default: return !answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+    }
+
+    private func resetInput(for exercise: ExerciseDefinition?) {
+        answer = ""
+        wordOrder = nil
+        guard let exercise else { answerFieldFocused = false; return }
+        let input = NativeExerciseInput(exercise: exercise)
+        if case let .wordOrder(state) = input { wordOrder = state }
+        answerFieldFocused = input == .text
     }
 
     private func progressHeader(player: ExerciseSessionPlayer) -> some View {
@@ -161,7 +232,7 @@ struct ExerciseSessionView: View {
     }
 
     private func isLastExercise(player: ExerciseSessionPlayer) -> Bool {
-        player.sessionState.completedCount >= max(player.sessionState.targetCount - 1, 0)
+        player.sessionState.completedCount >= player.sessionState.targetCount
     }
 
     private func submitAnswer() {
@@ -179,8 +250,7 @@ struct ExerciseSessionView: View {
                 player: player
             )
         } else {
-            answer = ""
-            answerFieldFocused = true
+            resetInput(for: player.currentExercise)
         }
     }
 
@@ -191,7 +261,7 @@ struct ExerciseSessionView: View {
         guard player.attempts.count > persistedAttemptCount else { return }
         persistedAttemptCount = player.attempts.count
 
-        guard let durableAttempt = LearningAttemptFactory().make(
+        guard let durableAttempt = player.learningAttempt(
             id: UUID().uuidString,
             resolution: resolution,
             occurredAt: Date()
@@ -209,7 +279,7 @@ struct ExerciseSessionView: View {
         guard player.useHint() else { return }
         self.player = player
         hintVisible = true
-        answerFieldFocused = true
+        answerFieldFocused = player.currentExercise.map { NativeExerciseInput(exercise: $0) == .text } ?? false
     }
 
     private func advance() {
@@ -221,7 +291,7 @@ struct ExerciseSessionView: View {
         latestResolution = nil
         hintVisible = false
         exerciseStartedAt = Date()
-        answerFieldFocused = true
+        resetInput(for: player.currentExercise)
     }
 }
 
@@ -346,3 +416,4 @@ private struct SummaryMetric: View {
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 }
+

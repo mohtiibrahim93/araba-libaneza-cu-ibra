@@ -1,3 +1,5 @@
+import Foundation
+
 public enum ExerciseSessionPlayerError: Error, Equatable, Sendable {
     case unsupportedExerciseType(exerciseID: String, type: ExerciseDefinitionType)
 }
@@ -81,6 +83,24 @@ public struct ExerciseSessionPlayer: Sendable {
         }
 
         return resolution
+    }
+
+    /// Legacy drill IDs are valid session identifiers, not expression IDs.
+    /// Only an explicit, resolvable primary target may update expression progress.
+    public func learningAttempt(
+        id: String,
+        resolution: ExerciseResolution,
+        occurredAt: Date
+    ) -> LearningAttempt? {
+        guard isCurrentExerciseCompleted,
+              lastResolution == resolution,
+              let expressionID = currentExercise?.expressionIDs.first,
+              expressionsByID[expressionID] != nil,
+              resolution.attempt?.expressionID == expressionID
+        else { return nil }
+        return LearningAttemptFactory().make(
+            id: id, resolution: resolution, occurredAt: occurredAt
+        )
     }
 
     @discardableResult
