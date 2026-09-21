@@ -45,12 +45,12 @@ For each drill, choose session-only, linked (with exact existing expression IDs 
 
 ### Teacher-supplied conversation candidates — 2026-09-21
 
-These are supplied directly by Ibrahim during review. They are preserved as supplied and are not yet a decision to replace the existing drills, nor a choice between candidate 1 and candidate 2. Do not normalize spelling, names or phrasing without a subsequent teacher decision.
+These are supplied directly by Ibrahim during review. Teacher decision: keep both as separate A1 conversations because the previous imported dialogue was not coherent enough in its sequence of ideas. Introduce one gender pattern first, then the other; after both have been introduced, keep both active in practice. Do not otherwise normalize wording without teacher approval.
 
 **Candidate 1**
 
 - Mar7aba! shu esmak?
-- esme 3ali/rami ..choose a name.. W ente ?
+- esme Rami. W ente ?
 - esme Lara.
 - Kifik ?
 - mnii7a
@@ -66,7 +66,7 @@ These are supplied directly by Ibrahim during review. They are preserved as supp
 
 - mar7aba ! shu esimk ?
 - esme maria .. e enta ?
-- and Rami. min wen ente ?
+- Ana Rami. min wen ente ?
 - ana men romania. W enta ?
 - ana men lebnen.. min wen men romania ?
 - ana men bu5arest. w inta? men wen men lebnen ?
@@ -76,11 +76,19 @@ These are supplied directly by Ibrahim during review. They are preserved as supp
 - ana kamen. tcharrafna bas lezem fel. ma3 es-saleeme
 - ana bil aktar. alla ysalmak !
 
+**Remaining dialogue consistency check**
+
+Candidate 2 currently has Maria ask Rami `kifak?`, so the following stored candidate line `mnii7a, l7amdella w inta ?` conflicts with the approved genders: Rami is male, while `mnii7a` is the feminine form, and he is replying to Maria. Do not publish that line until its exact teacher-approved corrected wording is confirmed.
+
 **Teacher rules recorded from this review**
 
 - For ordinary conversational “how are you?”, use the teacher-approved spellings `kifak?` (masculine) / `kifik?` (feminine); `kif el 7aal` is formal. Do not use `kifk` as an alternate spelling.
 - In the reviewed “from where?” forms, use `wen`: `min wen enta?` / `min wen ente?`.
 - Use `wayn` when it carries a suffix, e.g. `waynak`, `wayno`.
+- Approved character genders: Rami and 3ali are male; Maria and Lara are female.
+- `Tcharrafna` and `Tsharrafna` are both accepted spellings.
+- Dialogue 1 uses Rami as the male name for internal coherence; George remains an acceptable name elsewhere where already approved.
+- Both supplied dialogues are intended as separate A1 conversations, not merged into one.
 
 
 ## a1-questions — Întreabă și spune ce vrei
