@@ -177,6 +177,7 @@ These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording
 - `Mjawwaz walla a3zab?` / `Mjawwaz aw a3zab?` — ești căsătorit sau necăsătorit?
 - Male `3ezzebe` is also accepted instead of `a3zab`.
 - `3ayltak kbiire` — familia ta e mare.
+- `Hiyye` and `Heyye` are both accepted forms for “she”. With sun-letter assimilation before `zghiire`, accept multiple natural Arabizi renderings of the same phrase (for example `Hiyye il-zghiire`, `Hiye ez-zghiire`, `Heyye z-z8iire`); do not treat these as different lexical items.
 
 | syn-context-syn-680e0aa51bd4 | dialogue-response | Alege replica pentru: „bunicul și bunica mea” | jedde w jeddte | Superseded. Teacher-approved: `Jedde w sitte`. |
 | syn-context-syn-66e4064dce20 | dialogue-response | Alege replica pentru: „ești căsătorit sau necăsătorit?” | metzawwaj walla a3zab? | Superseded. Teacher-approved alternatives: `Mjawwaz walla a3zab?` or `Mjawwaz aw a3zab?`. Male `3ezzebe` is also accepted instead of `a3zab`. |
@@ -187,7 +188,7 @@ These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording
 | syn-context-syn-cbb99b6619b3 | dialogue-response | Alege replica pentru: „Uau! Familia ta e mare.” | Wow! 3ayiltak kbire. | Superseded. Teacher-approved family phrase: `3ayltak kbiire`. |
 | syn-context-syn-abd809fe84db | dialogue-response | Alege replica pentru: „Da, foarte. Și tu?” | Eh, ktir. W ente? | |
 | syn-context-syn-e31c29942d77 | dialogue-response | Alege replica pentru: „Eu am doar o soră.” | Ana 3ande e5t wa7de bass. | |
-| syn-context-syn-d45335ca7ecc | dialogue-response | Alege replica pentru: „O cheamă Reem. E cea mică.” | Esmha Reem. Hiye ez z8ire. | |
+| syn-context-syn-d45335ca7ecc | dialogue-response | Alege replica pentru: „O cheamă Reem. E cea mică.” | Esmha Reem. Hiye ez z8ire. | Teacher correction: use `Esma Reem.` and accept `Hiyye` / `Heyye` for “she”. For “she is the little one”, keep one canonical teaching form but accept natural article/pronunciation variants such as `Hiyye il-zghiire`, `Hiye ez-zghiire`, `Heyye z-z8iire`, etc.; these are variants of the same expression, not separate vocabulary items. |
 | syn-context-syn-d2b3d581bc81 | dialogue-response | Alege replica pentru: „Frumos! Fratele meu cel mare e căsătorit.” | 7elo! A5e el kbir metzawwaj. | |
 | syn-context-syn-db59ff8bc2d1 | dialogue-response | Alege replica pentru: „Da, are o fiică.” | Eh, 3ando bent wa7de. | |
 | syn-context-syn-c53501ed4c95 | dialogue-response | Alege replica pentru: „Încântată! Și mătușa mea are trei copii.” | Tsharrafna! Ana kamen 3ammte 3andha tlat wled. | |
