@@ -27,21 +27,21 @@ For each drill, choose session-only, linked (with exact existing expression IDs 
 | xqbd1ca96ad153 | grammar-drill | Ce cifră reprezintă sunetul 8ayn? | 8 | Approved: session-only |
 | syn-rule-1-0 | grammar-drill | Vorbești cu o femeie. Completează: shu ___? | esmik | Approved link: `ce8f1c2f609c4` (primary) |
 | syn-rule-1-1 | grammar-drill | Cum introduci numele tău? | esme | Approved link: `x904c16c1cb31` (primary) |
-| syn-context-syn-9a79f6640456 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă? (masculin)” | Marhaba! Shu esmak? | |
-| syn-context-syn-ac9152691c69 | dialogue-response | Alege replica pentru: „Mă cheamă Lara. Dar tu? (masculin)” | Esme Lara. W enta? | |
-| syn-context-syn-1ee502ad508d | dialogue-response | Alege replica pentru: „Sunt din România.” | Ana men romania. | |
+| syn-context-syn-9a79f6640456 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă? (masculin)” | Marhaba! Shu esmak? | Superseded by teacher-authored A1 dialogues. Do not auto-approve this generated wording/sequence; rebuild from the approved dialogue structure. |
+| syn-context-syn-ac9152691c69 | dialogue-response | Alege replica pentru: „Mă cheamă Lara. Dar tu? (masculin)” | Esme Lara. W enta? | Superseded by teacher-authored A1 dialogues. Lara is female; retain only if it is reintroduced coherently in the approved dialogue sequence. |
+| syn-context-syn-1ee502ad508d | dialogue-response | Alege replica pentru: „Sunt din România.” | Ana men romania. | Wording appears in teacher Dialogue 2, but this generated drill belongs to the superseded sequence. Rebuild/link only as part of the approved dialogue implementation. |
 | syn-context-syn-2dcea3000b0d | dialogue-response | Alege replica pentru: „De unde ești? (feminin)” | Min wayn ente? | Teacher correction: current answer not approved. Use `Min wen ente?`; `wayn` is reserved here for suffixed forms such as `waynak` / `wayno`. No exact current expression ID for the corrected form. |
 | syn-context-syn-c603c327cdbb | dialogue-response | Alege replica pentru: „ce mai faci?” | kif el 7al? | Teacher correction: current answer not approved for this conversational drill; `kif el 7aal` is formal. Revise prompt to specify addressee gender, then use `Kifak?` (male; existing `cd35279e4b784`) or `Kifik?` (female; existing `c9c428344e043`). |
-| syn-context-syn-cad6862cd3b4 | dialogue-response | Alege replica pentru: „bine, mulțumesc” | mni7, el 7amdella | |
+| syn-context-syn-cad6862cd3b4 | dialogue-response | Alege replica pentru: „bine, mulțumesc” | mni7, el 7amdella | Superseded by teacher dialogue wording. Dialogue 2 explicitly approves `mnii7, l7amdella w ente?` for Rami replying to Maria. |
 | syn-context-syn-9ec2fdddb750 | dialogue-response | Alege replica pentru: „de unde ești?” | min wayn enta? | Teacher correction: current answer not approved. Use `min wen enta?`; `wayn` is reserved here for suffixed forms. No exact current expression ID for the corrected form. |
-| syn-context-syn-a44710654fd6 | dialogue-response | Alege replica pentru: „pentru puțin” | la shukr 3ala wejeb | |
-| syn-context-syn-adbe51b60572 | dialogue-response | Alege replica pentru: „la revedere” | ma3 el saleme | |
-| syn-context-syn-44e07d592b08 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă?” | Marhaba! Shu esmik? | |
-| syn-context-syn-7b17306217ad | dialogue-response | Alege replica pentru: „Mă cheamă Maria. Și tu?” | Esme Maria. W enta? | |
+| syn-context-syn-a44710654fd6 | dialogue-response | Alege replica pentru: „pentru puțin” | la shukr 3ala wejeb | Exclude from the approved A1 introduction dialogues unless separately teacher-approved later; it is not in either approved conversation. |
+| syn-context-syn-adbe51b60572 | dialogue-response | Alege replica pentru: „la revedere” | ma3 el saleme | Superseded by teacher dialogue spelling/context: `ma3 el saleeme` / `ma3 es-saleeme` as supplied in the two approved conversations. |
+| syn-context-syn-44e07d592b08 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă?” | Marhaba! Shu esmik? | Superseded by teacher-authored Dialogue 2; use the approved feminine-address form in that dialogue rather than this generated sequence. |
+| syn-context-syn-7b17306217ad | dialogue-response | Alege replica pentru: „Mă cheamă Maria. Și tu?” | Esme Maria. W enta? | Superseded by teacher-authored Dialogue 2; Maria is female and the dialogue sequence must preserve the approved gender roles. |
 | syn-context-syn-3ad4edfc36a5 | dialogue-response | Alege replica pentru: „Eu sunt Rami. De unde ești?” | Ana Rami. Min wayn ente? | Teacher correction: current answer not approved. Correct location question to `Min wen ente?`; revised full line requires production approval/link after corrected content is added. |
-| syn-context-syn-3d588cf04d62 | dialogue-response | Alege replica pentru: „Sunt din România. Și tu?” | Ana men romania. W enta? | |
-| syn-context-syn-6e058c4fbc31 | dialogue-response | Alege replica pentru: „Sunt din Liban, din Beirut.” | Ana men lebnen, men bayrut. | |
-| syn-context-syn-4a6501604343 | dialogue-response | Alege replica pentru: „Bine, mulțumesc. Și tu?” | Mni7a, el 7amdella. W enta? | |
+| syn-context-syn-3d588cf04d62 | dialogue-response | Alege replica pentru: „Sunt din România. Și tu?” | Ana men romania. W enta? | Teacher Dialogue 2 contains this idea, but the old generated sequence is superseded. Rebuild from the teacher dialogue rather than preserving this row automatically. |
+| syn-context-syn-6e058c4fbc31 | dialogue-response | Alege replica pentru: „Sunt din Liban, din Beirut.” | Ana men lebnen, men bayrut. | Related content is present in the teacher dialogues, but old generated sequencing is superseded. Rebuild from approved teacher lines. |
+| syn-context-syn-4a6501604343 | dialogue-response | Alege replica pentru: „Bine, mulțumesc. Și tu?” | Mni7a, el 7amdella. W enta? | Do not use for Rami→Maria. Teacher-approved Dialogue 2 response is `mnii7, l7amdella w ente?`; old generated row is superseded. |
 
 ### Teacher-supplied conversation candidates — 2026-09-21
 
@@ -90,6 +90,10 @@ Teacher-approved correction for Candidate 2: Maria asks Rami `kifak?`; Rami repl
 - Dialogue 1 uses Rami as the male name for internal coherence; George remains an acceptable name elsewhere where already approved.
 - Both supplied dialogues are intended as separate A1 conversations, not merged into one.
 
+
+**A1 dialogue status**
+
+The original generated dialogue-response sequence is not approved as the production conversation because its ideas were not coherent enough. The two teacher-supplied conversations above are the authoritative structure for the replacement. Existing generated rows may still provide reusable expression IDs only after their wording and gender agree with the teacher-approved dialogue; inclusion in the old sequence is not approval.
 
 ## a1-questions — Întreabă și spune ce vrei
 
