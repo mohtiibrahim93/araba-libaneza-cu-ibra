@@ -1,8 +1,12 @@
 # App Store copy — Romanian draft
 
-Status: prepared for owner review; not submitted. Public app name remains undecided.
+Status: prepared for owner review; not submitted. Provisional public name approved by the owner: Araba libaneza (changeable before release).
 Based on native branch yalla-app-ios at 27854a33602252d79ae2735d9b9117c3e49e5efb.
 Only features available in the current text-based build are promoted here.
+
+## App name
+
+Araba libaneza
 
 ## Subtitle
 
@@ -45,7 +49,7 @@ The current content package does not contain production reference recordings or 
 
 ## Before using this copy
 
-- Confirm public name and owner attribution; do not assume the internal name Yalla is final.
+- Current approved provisional public name: Araba libaneza. Confirm owner attribution and reconfirm the name before submission; internal project identifiers remain Yalla.
 - Apply teacher corrections to launch content and orientation, then confirm this copy still matches the shipping build.
 - Supply the actual support contact/URL and privacy-policy URL; no address has been invented.
 - Confirm distribution, pricing and age-rating answers separately in the submission account.
