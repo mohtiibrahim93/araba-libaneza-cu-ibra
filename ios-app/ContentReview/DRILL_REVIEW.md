@@ -71,14 +71,14 @@ These are supplied directly by Ibrahim during review. They are preserved as supp
 - ana men lebnen.. min wen men romania ?
 - ana men bu5arest. w inta? men wen men lebnen ?
 - ana men bayrut
-- wow. nice! kifk ?
+- wow. nice! kifak ?
 - mnii7a, l7amdella w inta ?
 - ana kamen. tcharrafna bas lezem fel. ma3 es-saleeme
 - ana bil aktar. alla ysalmak !
 
 **Teacher rules recorded from this review**
 
-- For ordinary conversational “how are you?”, use gendered `kifak?` / `kifik?`; `kif el 7aal` is formal.
+- For ordinary conversational “how are you?”, use the teacher-approved spellings `kifak?` (masculine) / `kifik?` (feminine); `kif el 7aal` is formal. Do not use `kifk` as an alternate spelling.
 - In the reviewed “from where?” forms, use `wen`: `min wen enta?` / `min wen ente?`.
 - Use `wayn` when it carries a suffix, e.g. `waynak`, `wayno`.
 
