@@ -239,10 +239,10 @@ Teacher note for `ma`: in Lebanese it is multifunctional. Besides negation, it c
 | syn-context-syn-7c91d20121d3 | dialogue-response | Alege replica pentru: „nu fac nimic” | ma 3am ba3mel she | |
 | syn-context-syn-fc4266bc44d9 | dialogue-response | Alege replica pentru: „Alo Ziad! Ce faci?” | Allo Ziad! Shu 3am te3mel? | |
 | syn-context-syn-d67ee0404cd3 | dialogue-response | Alege replica pentru: „Salut Nour! Citesc o carte.” | Marhaba Nour! 3am be2ra kteb. | Superseded spelling. Teacher-approved: `Mar7aba Nour! 3am be2ra kteb.` |
-| syn-context-syn-749b80ac0fd0 | dialogue-response | Alege replica pentru: „Frumos! Ce carte?” | 7elo! Shu el kteb? | |
+| syn-context-syn-749b80ac0fd0 | dialogue-response | Alege replica pentru: „Frumos! Ce carte?” | 7elo! Shu el kteb? | Teacher-approved. `Shu el kteb?` = “Care carte? / Ce carte?” (“What book?” / contextually “what is the book?”). |
 | syn-context-syn-7e27e79d1912 | dialogue-response | Alege replica pentru: „Un roman libanez. Foarte frumos.” | Riwaye lebneniyye. Ktir 7elwe. | Superseded spelling. Teacher-approved: `Riweye lebneniyye. Ktir 7elwe.` |
-| syn-context-syn-7da600df6cad | dialogue-response | Alege replica pentru: „Super! Eu mă uit la un film.” | Tamem! Ana 3am betfarraj 3a film. | |
-| syn-context-syn-e393491306c6 | dialogue-response | Alege replica pentru: „Ce film?” | Shu el film? | |
+| syn-context-syn-7da600df6cad | dialogue-response | Alege replica pentru: „Super! Eu mă uit la un film.” | Tamem! Ana 3am betfarraj 3a film. | Teacher-approved. `Tamem` and phonetic spelling `Tameem` are both accepted. |
+| syn-context-syn-e393491306c6 | dialogue-response | Alege replica pentru: „Ce film?” | Shu el film? | Teacher-approved canonical: `Shu el filem?`; `Shu el film?` is also accepted (French-like pronunciation/spelling). Meaning: “Ce film? / Care film?”; contextually “what/which is the movie?”. |
 | syn-context-syn-d452f09bda23 | dialogue-response | Alege replica pentru: „Un film american, dar nu e prea frumos.” | Film amerkene, bass mish ktir 7elo. | |
 | syn-context-syn-c3fdd656b15f | dialogue-response | Alege replica pentru: „Haha, bine, ce vrei să faci mai târziu?” | Hahaha, tayyeb shu baddik te3mle ba3dayn? | Teacher correction: use `ba3den`, not `ba3dayn`: `Hahaha, tayyeb shu baddik te3mle ba3den?`. |
 | syn-context-syn-7ac35bb401b3 | dialogue-response | Alege replica pentru: „Nu știu, poate merg la restaurant.” | Ma b3ref, yimken bru7 3al mat3am. | Superseded spelling. Teacher-approved: `Ma b3ref, yemkin ruu7 3al mat3am.` |
