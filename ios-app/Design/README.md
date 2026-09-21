@@ -12,6 +12,6 @@ The renderer deliberately supports only the straight paths and rounded rectangle
 
 LaunchScreen.storyboard uses systemBackgroundColor for light/dark appearance, matching the standard app surface. It has no text, animation, or artificial delay.
 
-Configuration: project.yml selects AppIcon and LaunchScreen. The existing App/Resources resource group bundles both.
+Configuration: project.yml selects AppIcon and LaunchScreen. App/Resources is explicitly assigned to the target's resources build phase; CI inspects the built app for the icon, launch screen and content JSON.
 
 Before release, inspect the icon under the system mask on iPhone/iPad and verify a cold launch in light/dark mode. Artwork preview and compilation do not replace those device checks.

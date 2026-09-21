@@ -92,9 +92,13 @@ jobs:
             -project YallaNative.xcodeproj \
             -scheme YallaApp \
             -sdk iphonesimulator \
+            -derivedDataPath /tmp/yalla-native-derived \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
             build 2>&1 | tee /tmp/yalla-xcodebuild.log
+
+      - name: Verify built app resources
+        run: python3 ios-app/Tools/verify_app_bundle.py /tmp/yalla-native-derived/Build/Products/Debug-iphonesimulator/YallaApp.app
 
       - name: Preserve Xcode diagnostics
         if: always()
