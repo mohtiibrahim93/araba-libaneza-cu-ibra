@@ -132,15 +132,15 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q28 | grammar-drill | Alege forma potrivită. | kbiire | |
-| q29 | grammar-drill | Alege forma potrivită. | z8iir | |
-| q30 | grammar-drill | Alege forma potrivită. | mariida | |
+| q28 | grammar-drill | Alege forma potrivită. | kbiire | Approved link: `cb3804386fe50` (primary) — feminine “mare”. |
+| q29 | grammar-drill | Alege forma potrivită. | z8iir | Approved link: `c59a8a7c3ab38` (primary) — masculine “mic”. |
+| q30 | grammar-drill | Alege forma potrivită. | mariida | Approved wording — feminine “bolnavă”. No exact standalone current expression; `Ana mariida` exists, but do not force-link the standalone answer to that longer expression. |
 | q31 | grammar-drill | Alege forma potrivită. | kbiire | Teacher correction: contextualize as `3ayletna kbiire` = “familia noastră e mare”. Exact existing A1 expression: `c977d2bfb47db`. |
-| q32 | grammar-drill | Alege forma potrivită. | jdiid | |
-| q33 | grammar-drill | Alege forma potrivită. | et-tawle | |
+| q32 | grammar-drill | Alege forma potrivită. | jdiid | Approved link: `xa31ba0fecd7b` (primary) — masculine “nou”. |
+| q33 | grammar-drill | Alege forma potrivită. | et-tawle | Approved link: `c43c298fdc426` (primary) — “masa” with article. |
 | q34 | grammar-drill | Alege forma potrivită. | el-2amar | Teacher clarification: keep the written form as `el amar` / `el 2amar`. Pronunciation contracts to `L-amar` / `L-2amar` because `amar/2amar` begins with a lunar letter. Do not replace the written exercise with the pronunciation spelling. Existing `L-2amar` (`c8e5a27b926b2`) represents the pronounced form. |
-| q35 | grammar-drill | Alege forma potrivită. | 3aylten | |
-| q36 | grammar-drill | Alege forma potrivită. | 3aynten | |
+| q35 | grammar-drill | Alege forma potrivită. | 3aylten | Approved link: `c338991da9563` (primary) — “două familii”. |
+| q36 | grammar-drill | Alege forma potrivită. | 3aynten | Approved link: `c2876bdbd1048` (primary) — “doi ochi”. |
 | q69 | dialogue-response | Spune că familia voastră este mare. | 3ayletna kbiire | |
 | q70 | dialogue-response | Întreabă un băiat ce are / ce-i cu el. | Shu bek? | |
 | syn-rule-2-0 | grammar-drill | Completează „Nu am”: ma ___. | 3ande | |
