@@ -135,10 +135,10 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q28 | grammar-drill | Alege forma potrivită. | kbiire | |
 | q29 | grammar-drill | Alege forma potrivită. | z8iir | |
 | q30 | grammar-drill | Alege forma potrivită. | mariida | |
-| q31 | grammar-drill | Alege forma potrivită. | kbiire | |
+| q31 | grammar-drill | Alege forma potrivită. | kbiire | Teacher correction: contextualize as `3ayletna kbiire` = “familia noastră e mare”. Exact existing A1 expression: `c977d2bfb47db`. |
 | q32 | grammar-drill | Alege forma potrivită. | jdiid | |
 | q33 | grammar-drill | Alege forma potrivită. | et-tawle | |
-| q34 | grammar-drill | Alege forma potrivită. | el-2amar | |
+| q34 | grammar-drill | Alege forma potrivită. | el-2amar | Teacher clarification: keep the written form as `el amar` / `el 2amar`. Pronunciation contracts to `L-amar` / `L-2amar` because `amar/2amar` begins with a lunar letter. Do not replace the written exercise with the pronunciation spelling. Existing `L-2amar` (`c8e5a27b926b2`) represents the pronounced form. |
 | q35 | grammar-drill | Alege forma potrivită. | 3aylten | |
 | q36 | grammar-drill | Alege forma potrivită. | 3aynten | |
 | q69 | dialogue-response | Spune că familia voastră este mare. | 3ayletna kbiire | |
