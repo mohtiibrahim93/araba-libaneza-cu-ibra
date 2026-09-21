@@ -145,16 +145,32 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q70 | dialogue-response | Întreabă un băiat ce are / ce-i cu el. | Shu bek? | Approved link: `cfd1707cf8e58` (primary) |
 | syn-rule-2-0 | grammar-drill | Completează „Nu am”: ma ___. | 3ande | Approved grammar drill. Link `3ande` component to `c02511bf38d1a` (primary); the negation pattern itself is grammar/session content. |
 | syn-rule-2-1 | grammar-drill | În abuk, la cine se referă -uk? | tatăl tău, adresare masculină | Teacher clarification: `abuk` is correct and exists, but `bayyak` is the preferred/nicer Lebanese teaching form for “tatăl tău” (addressing a male). Revise the teaching example to `bayyak`; do not describe `abuk` as incorrect. No exact current `bayyak` expression entry exists, so revise production content rather than fabricating a link. |
-| syn-context-syn-120b95bded6e | dialogue-response | Alege replica pentru: „Nu am surori.” | Ma 3ande a5wet. | |
-| syn-context-syn-45447086e1f3 | dialogue-response | Alege replica pentru: „Am un frate și o soră.” | 3ande a5 wa7ad w e5t wa7de. | |
-| syn-context-syn-cf8d1f3fcc2c | dialogue-response | Alege replica pentru: „Fratele meu mai mare este căsătorit.” | A5e el kbir metzawwaj. | |
-| syn-context-syn-93a51f3eff2f | dialogue-response | Alege replica pentru: „Cum îl cheamă pe fratele tău? (masculin)” | Shu esmo a5uk? | |
-| syn-context-syn-aa02f7a8f200 | dialogue-response | Alege replica pentru: „am un frate” | 3ande a5 wa7ad | |
-| syn-context-syn-0a4165dde490 | dialogue-response | Alege replica pentru: „nu am frați” | ma 3ande a5we | |
-| syn-context-syn-a7ea0d46073f | dialogue-response | Alege replica pentru: „câți frați ai?” | kam a5 3andak? | |
-| syn-context-syn-cb97044da4be | dialogue-response | Alege replica pentru: „fratele meu cel mare” | a5e el kbir | |
-| syn-context-syn-12e7553413a9 | dialogue-response | Alege replica pentru: „sora mea cea mică” | e5te ez z8ire | |
-| syn-context-syn-1f6522c94fb8 | dialogue-response | Alege replica pentru: „tatăl și mama mea” | abe w emme | |
+| syn-context-syn-120b95bded6e | dialogue-response | Alege replica pentru: „Nu am surori.” | Ma 3ande a5wet. | Superseded. Teacher-approved Lebanese: `Ma 3ande i5we` or `Ma 3ande i5wet` generally; `i5wet banet` for specifically female siblings; `i5wet shabeb` for specifically male siblings. No exact current corrected expression entry exists. |
+| syn-context-syn-45447086e1f3 | dialogue-response | Alege replica pentru: „Am un frate și o soră.” | 3ande a5 wa7ad w e5t wa7de. | Superseded. Teacher-approved: `3ande 5ayy waa7ad w e5et we7de`. |
+| syn-context-syn-cf8d1f3fcc2c | dialogue-response | Alege replica pentru: „Fratele meu mai mare este căsătorit.” | A5e el kbir metzawwaj. | Superseded. Teacher-approved: `5ayye el kbiir mjawwaz`. |
+| syn-context-syn-93a51f3eff2f | dialogue-response | Alege replica pentru: „Cum îl cheamă pe fratele tău? (masculin)” | Shu esmo a5uk? | Superseded. Teacher-approved: `Shu esmo 5ayyak?`. |
+| syn-context-syn-aa02f7a8f200 | dialogue-response | Alege replica pentru: „am un frate” | 3ande a5 wa7ad | Superseded. Teacher-approved: `3ande 5ayy waa7ad`. |
+| syn-context-syn-0a4165dde490 | dialogue-response | Alege replica pentru: „nu am frați” | ma 3ande a5we | Superseded. Teacher-approved: `Ma 3ande i5we` / `Ma 3ande i5wet`; use `i5wet shabeb` when specifically male siblings are meant. |
+| syn-context-syn-a7ea0d46073f | dialogue-response | Alege replica pentru: „câți frați ai?” | kam a5 3andak? | Superseded. Teacher-approved: `Kam 5ayy 3andak?`. |
+| syn-context-syn-cb97044da4be | dialogue-response | Alege replica pentru: „fratele meu cel mare” | a5e el kbir | Superseded. Teacher-approved: `5ayye el kbiir`. |
+| syn-context-syn-12e7553413a9 | dialogue-response | Alege replica pentru: „sora mea cea mică” | e5te ez z8ire | Superseded. Teacher-approved: `E5te el zghiire`. |
+| syn-context-syn-1f6522c94fb8 | dialogue-response | Alege replica pentru: „tatăl și mama mea” | abe w emme | Superseded. Teacher-approved: `Bayye w emme`. |
+### Teacher-approved Lebanese family wording — 2026-09-21
+
+- `Ma 3ande i5we` / `Ma 3ande i5wet` — general sibling form in the approved teaching set.
+- `i5wet banet` — specifically female siblings.
+- `i5wet shabeb` — specifically male siblings.
+- `3ande 5ayy waa7ad w e5et we7de` — am un frate și o soră.
+- `5ayye el kbiir mjawwaz` — fratele meu mai mare este căsătorit.
+- `Shu esmo 5ayyak?` — cum îl cheamă pe fratele tău?
+- `3ande 5ayy waa7ad` — am un frate.
+- `Kam 5ayy 3andak?` — câți frați ai?
+- `5ayye el kbiir` — fratele meu cel mare.
+- `E5te el zghiire` — sora mea cea mică.
+- `Bayye w emme` — tatăl și mama mea.
+
+These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording for production teaching content.
+
 | syn-context-syn-680e0aa51bd4 | dialogue-response | Alege replica pentru: „bunicul și bunica mea” | jedde w jeddte | |
 | syn-context-syn-66e4064dce20 | dialogue-response | Alege replica pentru: „ești căsătorit sau necăsătorit?” | metzawwaj walla a3zab? | |
 | syn-context-syn-7bd069a08aeb | dialogue-response | Alege replica pentru: „nu am copii” | ma 3ande wled | |
