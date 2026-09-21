@@ -562,7 +562,7 @@ Teacher review rules added:
 | syn-context-syn-4bf9ad383bee | dialogue-response | Alege replica pentru: „Am stat acasă.” | 2a3adt bel bayt. | Apply teacher house spelling: `2a3adt bel bet.` (`bayt` remains accepted). |
 | syn-context-syn-99f12673901d | dialogue-response | Alege replica pentru: „Am citit o carte și m-am uitat la un film.” | 2arayt kteb w tfarrajt 3a film. | |
 | syn-context-syn-21d54103c4b4 | dialogue-response | Alege replica pentru: „Apoi am mers la cinema.” | Ba3dayn re7na 3as sinema. | Superseded spelling: `Ba3den re7na 3as sinema.` |
-| syn-context-syn-f8c4dfb99ed9 | dialogue-response | Alege replica pentru: „ce ai făcut ieri?” | shu 3emelt embere7? | |
+| syn-context-syn-f8c4dfb99ed9 | dialogue-response | Alege replica pentru: „ce ai făcut ieri?” | shu 3emelt embere7? | Apply established spelling: `Shu 3emelt mbere7?` |
 | syn-context-syn-43818ad2dfe6 | dialogue-response | Alege replica pentru: „am mers la restaurant” | re7t 3al mat3am | |
 | syn-context-syn-a50a2472f7c7 | dialogue-response | Alege replica pentru: „nu s-a întâmplat nimic” | ma sar she | |
 | syn-context-syn-25afb8239c6a | dialogue-response | Alege replica pentru: „erau mulți oameni” | ken fi nes ktir | |
