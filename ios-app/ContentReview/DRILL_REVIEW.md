@@ -252,39 +252,49 @@ Teacher note for `ma`: in Lebanese it is multifunctional. Besides negation, it c
 
 ## a1-restaurant — La restaurant
 
+Teacher spelling/style rules for Romanian-speaking learners:
+- Prefer `u` / `uu` instead of `ou`; Romanian readers do not reliably interpret `ou` as intended. Use `uu` for a long /u/ when useful.
+- Use `Mar7aba`, `ju3aan`, `shawarma`, `B7ibb`, `falefel`, `7ommos`, `Tfaddalo`, `7aader`, `teshrabo`, and `sama7et`.
+- Prefer colloquial `sa7en` over formal `taba2` in restaurant teaching.
+- Prefer `7seb`; `L fetoura` is also a natural option for “the bill”.
+- For orange juice use `berd2en` or `laymuun`, not `borto2al`.
+- `Shu fi 3andkon?` and `Shu 3andkon?` are both correct.
+- Prefer `bas mayy` word order, although `mayy bas` is also correct.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
 | syn-rule-4-0 | grammar-drill | Neagă „Vreau ceai”: ___ badde shay. | ma | |
 | syn-rule-4-1 | grammar-drill | Ceri nota. Ce alegi? | el 7iseb law sama7t | |
-| syn-context-syn-cbdd5dd08eae | dialogue-response | Alege replica pentru: „Îmi place humusul.” | Bhibb el hommos. | |
+| syn-context-syn-cbdd5dd08eae | dialogue-response | Alege replica pentru: „Îmi place humusul.” | Bhibb el hommos. | Superseded spelling. Teacher-approved: `B7ibb el 7ommos.` |
 | syn-context-syn-2af71f245869 | dialogue-response | Alege replica pentru: „Nu îmi place mâncarea picantă.” | Ma bhibb el 7arr. | |
 | syn-context-syn-95f3fb3e584b | dialogue-response | Alege replica pentru: „Nu vreau ceai.” | Ma badde shay. | |
-| syn-context-syn-70272593e58a | dialogue-response | Alege replica pentru: „Ce aveți?” | Shu fi 3andkon? | |
-| syn-context-syn-2ecb1a5d02fe | dialogue-response | Alege replica pentru: „Vreau o șaorma de pui, te rog.” | Badde shawerma djej law sama7t. | |
+| syn-context-syn-70272593e58a | dialogue-response | Alege replica pentru: „Ce aveți?” | Shu fi 3andkon? | Teacher-approved: `Shu fi 3andkon?` and simpler `Shu 3andkon?` are both correct. |
+| syn-context-syn-2ecb1a5d02fe | dialogue-response | Alege replica pentru: „Vreau o șaorma de pui, te rog.” | Badde shawerma djej law sama7t. | Superseded spelling. Teacher-approved: `Badde shawarma djej law sama7et.` |
 | syn-context-syn-a5eef057cb53 | dialogue-response | Alege replica pentru: „Ce vrei să bei? (masculin)” | Shu baddak teshrab? | |
-| syn-context-syn-b71308a4f1b9 | dialogue-response | Alege replica pentru: „îmi place mâncarea libaneză” | bhibb el akel el lebnene | |
-| syn-context-syn-a0ac2538ecff | dialogue-response | Alege replica pentru: „ce îți place să mănânci?” | shu bte7ebb tekol? | |
-| syn-context-syn-614f2e964b79 | dialogue-response | Alege replica pentru: „sunt foarte flămând” | ana jou3an ktir | |
+| syn-context-syn-b71308a4f1b9 | dialogue-response | Alege replica pentru: „îmi place mâncarea libaneză” | bhibb el akel el lebnene | Superseded spelling. Teacher-approved: `B7ibb el akel el lebnene.` |
+| syn-context-syn-a0ac2538ecff | dialogue-response | Alege replica pentru: „ce îți place să mănânci?” | shu bte7ebb tekol? | Superseded spelling convention. Teacher-approved canonical should avoid `ou`; use `Shu bte7ebb tekol?` unless a long `u` is intended elsewhere, in which case use `uu`. |
+| syn-context-syn-614f2e964b79 | dialogue-response | Alege replica pentru: „sunt foarte flămând” | ana jou3an ktir | Superseded spelling. Teacher-approved: `Ana ju3aan ktiir.` |
 | syn-context-syn-7c077509f337 | dialogue-response | Alege replica pentru: „mâncarea este gustoasă” | el akel tayyeb | |
 | syn-context-syn-06b7209814bd | dialogue-response | Alege replica pentru: „nu îmi place picantul” | ma bhibb el 7arr | |
 | syn-context-syn-bb00a3f9df18 | dialogue-response | Alege replica pentru: „îmi place dulcele” | bhibb el 7elo | |
-| syn-context-syn-90c127d3a830 | dialogue-response | Alege replica pentru: „vreau o porție de tabbouleh” | badde taba2 tabbule | |
-| syn-context-syn-7132b735dd28 | dialogue-response | Alege replica pentru: „nota, te rog” | el 7iseb law sama7t | |
-| syn-context-syn-e42c007b31a6 | dialogue-response | Alege replica pentru: „ce aveți?” | shu fi 3andkon? | |
-| syn-context-syn-ed917f71ecbf | dialogue-response | Alege replica pentru: „Salut! Sunt foarte flămând.” | Marhaba! Ana jou3an ktir. | |
+| syn-context-syn-90c127d3a830 | dialogue-response | Alege replica pentru: „vreau o porție de tabbouleh” | badde taba2 tabbule | Superseded lexical choice. Teacher-approved natural Lebanese: `Badde sa7en tabbule.` `Taba2` is understood but more formal. |
+| syn-context-syn-7132b735dd28 | dialogue-response | Alege replica pentru: „nota, te rog” | el 7iseb law sama7t | Superseded spelling. Teacher-approved: `El 7seb law sama7et.` Also accepted: `L fetoura` for “the bill”. |
+| syn-context-syn-e42c007b31a6 | dialogue-response | Alege replica pentru: „ce aveți?” | shu fi 3andkon? | Teacher-approved: `Shu fi 3andkon?` and `Shu 3andkon?` are both correct. |
+| syn-context-syn-ed917f71ecbf | dialogue-response | Alege replica pentru: „Salut! Sunt foarte flămând.” | Marhaba! Ana jou3an ktir. | Superseded spelling. Teacher-approved: `Mar7aba! Ana ju3aan ktiir.` |
 | syn-context-syn-6e7578d08ad2 | dialogue-response | Alege replica pentru: „Eu la fel! Ce îți place să mănânci?” | Ana kamen! Shu bte7ebb tekol? | |
 | syn-context-syn-12b6e90ea192 | dialogue-response | Alege replica pentru: „Îmi place shawarma. Și ție?” | Bhibb el shawerma. W ente? | |
-| syn-context-syn-6bbf34f893f8 | dialogue-response | Alege replica pentru: „Îmi place falafel și tabouleh.” | Bhibb el falafel w el tabbule. | |
-| syn-context-syn-0228c7130df1 | dialogue-response | Alege replica pentru: „Perfect! Vreau shawarma de pui.” | Tamem! Badde shawerma djej. | |
-| syn-context-syn-594d41a5ff3a | dialogue-response | Alege replica pentru: „Și eu vreau falafel și humus.” | W ana badde falafel w hommos. | |
-| syn-context-syn-0b678b55180b | dialogue-response | Alege replica pentru: „Poftiți, ce doriți?” | Tfaddalou, shu baddkon? | |
-| syn-context-syn-d63c2f6caf95 | dialogue-response | Alege replica pentru: „Vreau shawarma de pui, te rog.” | Badde shawerma djej law sama7t. | |
-| syn-context-syn-d3a28ada9a8b | dialogue-response | Alege replica pentru: „Și eu vreau falafel și o porție de humus.” | W ana badde falafel w taba2 hommos. | |
-| syn-context-syn-12d184fa6dff | dialogue-response | Alege replica pentru: „Gata. Ce doriți să beți?” | 7ader. Shu baddkon teshrabou? | |
-| syn-context-syn-f890162ef459 | dialogue-response | Alege replica pentru: „Vreau suc de portocale.” | Badde 3asir borto2al. | |
-| syn-context-syn-508a86acae29 | dialogue-response | Alege replica pentru: „Și eu vreau doar apă.” | W ana badde mayy bass. | |
+| syn-context-syn-6bbf34f893f8 | dialogue-response | Alege replica pentru: „Îmi place falafel și tabouleh.” | Bhibb el falafel w el tabbule. | Superseded spelling. Teacher-approved: `B7ibb el falefel w el tabbule.` |
+| syn-context-syn-0228c7130df1 | dialogue-response | Alege replica pentru: „Perfect! Vreau shawarma de pui.” | Tamem! Badde shawerma djej. | Superseded spelling. Teacher-approved: `Tamem! Badde shawarma djej.` (`Tameem` also accepted). |
+| syn-context-syn-594d41a5ff3a | dialogue-response | Alege replica pentru: „Și eu vreau falafel și humus.” | W ana badde falafel w hommos. | Superseded spelling. Teacher-approved: `W ana badde falefel w 7ommos.` |
+| syn-context-syn-0b678b55180b | dialogue-response | Alege replica pentru: „Poftiți, ce doriți?” | Tfaddalou, shu baddkon? | Superseded spelling. Teacher-approved: `Tfaddalo, shu baddkon?` |
+| syn-context-syn-d63c2f6caf95 | dialogue-response | Alege replica pentru: „Vreau shawarma de pui, te rog.” | Badde shawerma djej law sama7t. | Superseded spelling. Teacher-approved: `Badde shawarma djej law sama7et.` |
+| syn-context-syn-d3a28ada9a8b | dialogue-response | Alege replica pentru: „Și eu vreau falafel și o porție de humus.” | W ana badde falafel w taba2 hommos. | Superseded wording/spelling. Teacher-approved natural Lebanese: `W ana badde falefel w sa7en 7ommos.` (`taba2` is more formal). |
+| syn-context-syn-12d184fa6dff | dialogue-response | Alege replica pentru: „Gata. Ce doriți să beți?” | 7ader. Shu baddkon teshrabou? | Superseded spelling. Teacher-approved: `7aader. Shu baddkon teshrabo?` |
+| syn-context-syn-f890162ef459 | dialogue-response | Alege replica pentru: „Vreau suc de portocale.” | Badde 3asir borto2al. | Superseded Lebanese lexical choice. Teacher-approved: `Badde 3asiir berd2en.` or `Badde 3asiir laymuun.` Do not use `borto2al` here. |
+| syn-context-syn-508a86acae29 | dialogue-response | Alege replica pentru: „Și eu vreau doar apă.” | W ana badde mayy bass. | Teacher-approved preferred order: `W ana badde bas mayy.` The stored `W ana badde mayy bas.` is also correct, but `bas mayy` is more natural. |
 | syn-context-syn-9011e4684aa6 | dialogue-response | Alege replica pentru: „Mâncarea a fost foarte delicioasă!” | El akel ken laziz ktir! | |
-| syn-context-syn-7b598f353dc1 | dialogue-response | Alege replica pentru: „Da, super! Nota, te rog.” | Eh, tamem! El 7iseb law sama7t. | |
+| syn-context-syn-7b598f353dc1 | dialogue-response | Alege replica pentru: „Da, super! Nota, te rog.” | Eh, tamem! El 7iseb law sama7t. | Superseded spelling. Teacher-approved: `Eh, Tamem! El 7seb law sama7et.` (`Tameem` also accepted; `L fetoura` also accepted for the bill). |
 
 ## a1-city — Găsește drumul
 
