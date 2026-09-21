@@ -97,6 +97,10 @@ The original generated dialogue-response sequence is not approved as the product
 
 ## a1-questions — Întreabă și spune ce vrei
 
+Teacher review note for this unit: standalone fragments that are only meaningful as suffixes or contextual function words should not be promoted to independent vocabulary entries. Prefer teacher-approved full phrases where supplied.
+
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
 | q11 | grammar-drill | Completează forma „a vrea”. | badde | Approved link: `xd5dd28b0ba0c` (primary) |
@@ -111,11 +115,11 @@ The original generated dialogue-response sequence is not approved as the product
 | q20 | grammar-drill | Completează expresia. | Addesh | |
 | q21 | grammar-drill | Completează expresia. | Kam | |
 | q22 | grammar-drill | Completează expresia. | Miin | |
-| q23 | grammar-drill | Completează expresia. | Ayya | |
-| q24 | grammar-drill | Completează expresia. | Men | |
+| q23 | grammar-drill | Completează expresia. | Ayya | Teacher correction: do not teach/review `Ayya` here as an isolated item. Revise into the approved contextual phrase `Ayya we7de belbos` (“pe care o îmbrac / which one do I wear”). No exact current expression entry exists for this full phrase, so do not fabricate a link. |
+| q24 | grammar-drill | Completează expresia. | Men | Teacher correction: use `Men` in context, e.g. approved `Men wen enta?` (“De unde ești?” toward a male). Existing exact A1 expression candidate: `ccbb5164d25d2`; it is currently outside the `a1-questions` unit, so production placement/linking must be handled explicitly rather than inferred. |
 | q25 | grammar-drill | Completează expresia. | Ma3e | |
 | q26 | grammar-drill | Completează expresia. | 3ande | |
-| q27 | grammar-drill | Completează expresia. | ik | |
+| q27 | grammar-drill | Completează expresia. | ik | Teacher correction: remove/revise. `-ik` is a suffix, not a standalone lexical item, and should not appear independently in this list. |
 | q64 | dialogue-response | „Men wen enta?” — spune că ești din România. | Ana men Rumania | |
 | q65 | dialogue-response | „Shu baddak?” — vrei cafea. | Badde ahwe | |
 | q66 | dialogue-response | Un prieten te întreabă „Kifak?”. Ești un băiat și ești obosit. | Ana ta3been | |
