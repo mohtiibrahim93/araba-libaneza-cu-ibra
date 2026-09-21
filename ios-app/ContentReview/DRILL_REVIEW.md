@@ -495,36 +495,36 @@ Teacher plans/future rules:
 | syn-rule-5-1 | grammar-drill | Care expresie exprimă o preferință? | bhibb el shawerma | |
 | syn-rule-10-0 | grammar-drill | Care exemplu descrie trecutul? | eshtarayt 2amis a7mar | |
 | syn-rule-10-1 | grammar-drill | Ce afli întrebând kam se3er el 2amis? | prețul cămășii | |
-| syn-context-syn-59fca2ec3a60 | dialogue-response | Alege replica pentru: „Salut! Mă cheamă Maria și sunt din România.” | Marhaba! Esme Maria w ana men romania. | |
+| syn-context-syn-59fca2ec3a60 | dialogue-response | Alege replica pentru: „Salut! Mă cheamă Maria și sunt din România.” | Marhaba! Esme Maria w ana men romania. | Apply established greeting rule: `Mar7aba! Esme Maria w ana men Romania.` |
 | syn-context-syn-f69f5a6d5007 | dialogue-response | Alege replica pentru: „Lucrez ca medic într-un spital în fiecare zi.” | Beshte8el duktor b mustashfa kell yom. | |
-| syn-context-syn-9d3d58a96116 | dialogue-response | Alege replica pentru: „Îmi plac șaorma și cafeaua libaneză.” | Bhibb el shawerma w el ahwe el lebneniyye. | |
-| syn-context-syn-bfe2a71a9de6 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă?” | Marhaba! Shu esmak? | |
+| syn-context-syn-9d3d58a96116 | dialogue-response | Alege replica pentru: „Îmi plac șaorma și cafeaua libaneză.” | Bhibb el shawerma w el ahwe el lebneniyye. | Apply established spelling: `B7ibb el shawarma w el ahwe el lebneniyye.` |
+| syn-context-syn-bfe2a71a9de6 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă?” | Marhaba! Shu esmak? | Apply established greeting spelling: `Mar7aba! Shu esmak?` |
 | syn-context-syn-0e47aeab4edf | dialogue-response | Alege replica pentru: „Mă cheamă Tarek. Și tu?” | Esme Tarek. W ente? | |
 | syn-context-syn-bc8dd5a2755e | dialogue-response | Alege replica pentru: „Eu sunt Maya, din România.” | Ana Maya, men romania. | |
 | syn-context-syn-af846fd69bcb | dialogue-response | Alege replica pentru: „Încântat! Sunt din Liban.” | Tsharrafna! Ana men lebnen. | |
 | syn-context-syn-fa18433c778b | dialogue-response | Alege replica pentru: „Ce mai faci? Ce lucrezi?” | Kifak? Shu bte3mel? | |
 | syn-context-syn-b6c2a576ed79 | dialogue-response | Alege replica pentru: „Bine, mulțumesc. Sunt inginer.” | Mni7, shukran. Ana muhandis. | |
-| syn-context-syn-6192684b4344 | dialogue-response | Alege replica pentru: „Frumos! Unde lucrezi?” | 7elo! Wayn bteshte8el? | |
+| syn-context-syn-6192684b4344 | dialogue-response | Alege replica pentru: „Frumos! Unde lucrezi?” | 7elo! Wayn bteshte8el? | Apply established standalone form: `7elo! Wen bteshte8el?` |
 | syn-context-syn-ca64cd382206 | dialogue-response | Alege replica pentru: „Lucrez la o companie în Beirut.” | Beshte8el b sherke b bayrut. | |
-| syn-context-syn-19ce671ec6e7 | dialogue-response | Alege replica pentru: „Super! Ai frați?” | Tamem! 3andak a5we? | |
-| syn-context-syn-78449a303eed | dialogue-response | Alege replica pentru: „Da, am o soră.” | Eh, 3ande e5t wa7de. | |
-| syn-context-syn-64c707c5341b | dialogue-response | Alege replica pentru: „Eu am un frate și două surori.” | Ana 3ande a5 w e5tayn. | |
-| syn-context-syn-3678dae1756e | dialogue-response | Alege replica pentru: „Familia ta e mare! Sunt flămând, vreau să mănânc.” | 3ayiltek kbire! Ana jou3an, badde ekol. | |
+| syn-context-syn-19ce671ec6e7 | dialogue-response | Alege replica pentru: „Super! Ai frați?” | Tamem! 3andak a5we? | Apply established family wording: `Tamem! 3andak i5we?` (`Tameem` also accepted). |
+| syn-context-syn-78449a303eed | dialogue-response | Alege replica pentru: „Da, am o soră.” | Eh, 3ande e5t wa7de. | Apply established family form: `Eh, 3ande e5et we7de.` |
+| syn-context-syn-64c707c5341b | dialogue-response | Alege replica pentru: „Eu am un frate și două surori.” | Ana 3ande a5 w e5tayn. | Apply established family form: `Ana 3ande 5ay w e5ten.` `i5ten` also accepted. |
+| syn-context-syn-3678dae1756e | dialogue-response | Alege replica pentru: „Familia ta e mare! Sunt flămând, vreau să mănânc.” | 3ayiltek kbire! Ana jou3an, badde ekol. | Apply established forms: `3ayltak kbiire! Ana ju3aan, badde ekol.` |
 | syn-context-syn-8d04227d0953 | dialogue-response | Alege replica pentru: „Eu la fel! Ce îți place să mănânci?” | Ana kamen! Shu bte7ebb tekol? | |
-| syn-context-syn-153031cc1de9 | dialogue-response | Alege replica pentru: „Îmi place mult shawarma.” | Bhibb el shawerma ktir. | |
-| syn-context-syn-55ba3b3b789e | dialogue-response | Alege replica pentru: „Mie îmi place humusul și tabouleh.” | Ana bhibb el hommos w el tabbule. | |
+| syn-context-syn-153031cc1de9 | dialogue-response | Alege replica pentru: „Îmi place mult shawarma.” | Bhibb el shawerma ktir. | Apply established spelling: `B7ibb el shawarma ktiir.` |
+| syn-context-syn-55ba3b3b789e | dialogue-response | Alege replica pentru: „Mie îmi place humusul și tabouleh.” | Ana bhibb el hommos w el tabbule. | Apply established spelling: `Ana b7ibb el 7ommos w el tabbule.` |
 | syn-context-syn-a98105f45196 | dialogue-response | Alege replica pentru: „Hai să mergem la restaurant!” | Yalla nru7 3al mat3am! | |
 | syn-context-syn-e406da572a85 | dialogue-response | Alege replica pentru: „Idee bună! Vreau și cafea.” | Fikra mni7a! Badde ahwe kamen. | |
-| syn-context-syn-ad5a5bdfc426 | dialogue-response | Alege replica pentru: „Îmi place cafeaua libaneză.” | Ana bhibb el ahwe el lebneniyye. | |
+| syn-context-syn-ad5a5bdfc426 | dialogue-response | Alege replica pentru: „Îmi place cafeaua libaneză.” | Ana bhibb el ahwe el lebneniyye. | Apply established spelling: `Ana b7ibb el ahwe el lebneniyye.` |
 | syn-context-syn-0efefc312efd | dialogue-response | Alege replica pentru: „Perfect! Hai să mergem.” | Tamem! Yalla bina. | |
-| syn-context-syn-dc86a43a3870 | dialogue-response | Alege replica pentru: „Farmacia este lângă bancă, aproape de aici.” | Es saydaliyye janb el bank, 2ariba men hon. | |
+| syn-context-syn-dc86a43a3870 | dialogue-response | Alege replica pentru: „Farmacia este lângă bancă, aproape de aici.” | Es saydaliyye janb el bank, 2ariba men hon. | Apply established City forms: `Es saydaliyye 7add el bank, 2ariibe men hon.` |
 | syn-context-syn-27fce2cc9265 | dialogue-response | Alege replica pentru: „Cât costă cămașa roșie?” | Kam se3er el 2amis el a7mar? | |
-| syn-context-syn-5225d522b17f | dialogue-response | Alege replica pentru: „Acum citesc o carte, dar mai târziu merg la cinema.” | 3am be2ra kteb halla2, bass ba3dayn bru7 3as sinema. | |
+| syn-context-syn-5225d522b17f | dialogue-response | Alege replica pentru: „Acum citesc o carte, dar mai târziu merg la cinema.” | 3am be2ra kteb halla2, bass ba3dayn bru7 3as sinema. | Apply established time spelling: `3am be2ra kteb halla2, bas ba3den bru7 3as sinema.` |
 | syn-context-syn-3c84cb20ac2e | dialogue-response | Alege replica pentru: „Am mers ieri la piață și am cumpărat fructe.” | Re7t 3as su2 embere7 w eshtarayt fwekih. | |
 | syn-context-syn-07a756c3f996 | dialogue-response | Alege replica pentru: „Am cumpărat o cămașă roșie.” | Eshtarayt 2amis a7mar. | |
-| syn-context-syn-ac0802384fa0 | dialogue-response | Alege replica pentru: „Salut Karim! Cum ai găsit locul?” | Marhaba Karim! Kif la2ayt el makan? | |
-| syn-context-syn-2d4cf4b7368b | dialogue-response | Alege replica pentru: „Salut! A fost ușor, aproape de bancă.” | Marhaba! Ken sahel, 2arib men el bank. | |
-| syn-context-syn-71b1f3365b45 | dialogue-response | Alege replica pentru: „Perfect! Ce faci acum?” | Tamem! Shu 3am te3mel halla2? | |
+| syn-context-syn-ac0802384fa0 | dialogue-response | Alege replica pentru: „Salut Karim! Cum ai găsit locul?” | Marhaba Karim! Kif la2ayt el makan? | Apply established greeting spelling: `Mar7aba Karim! Kif la2ayt el makan?` |
+| syn-context-syn-2d4cf4b7368b | dialogue-response | Alege replica pentru: „Salut! A fost ușor, aproape de bancă.” | Marhaba! Ken sahel, 2arib men el bank. | Apply established greeting and long-vowel spelling: `Mar7aba! Ken sahel, 2ariib men el bank.` |
+| syn-context-syn-71b1f3365b45 | dialogue-response | Alege replica pentru: „Perfect! Ce faci acum?” | Tamem! Shu 3am te3mel halla2? | Apply established action variants: `Tamem! Shu 3am ta3mel halla2?` / `ta3mol`; `bta3mel/bta3mol` also accepted. |
 | syn-context-syn-123c1509d947 | dialogue-response | Alege replica pentru: „Beau cafea. Și tu?” | 3am beshrab ahwe. W ente? | |
 | syn-context-syn-1df0b8b69176 | dialogue-response | Alege replica pentru: „Eu la fel. Ce ai făcut ieri?” | Ana kamen. Shu 3emelt embere7? | |
 | syn-context-syn-6c83e06d43cf | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat o cămașă.” | Re7t 3as su2 w eshtarayt 2amis. | |
@@ -533,8 +533,8 @@ Teacher plans/future rules:
 | syn-context-syn-ba37ac3768b3 | dialogue-response | Alege replica pentru: „Patruzeci de dolari. Dar e foarte frumos.” | Arb3in dollar. Bass 7elo ktir. | |
 | syn-context-syn-6996b78e494e | dialogue-response | Alege replica pentru: „Bine! Eu am mers la cinema.” | Mni7! Ana re7t 3as sinema. | |
 | syn-context-syn-64b2d9a36853 | dialogue-response | Alege replica pentru: „Un film libanez. A fost minunat!” | Film lebnene. Ken ra2e3! | |
-| syn-context-syn-9612f959f867 | dialogue-response | Alege replica pentru: „Unde e cinematograful?” | Wayn es sinema? | |
-| syn-context-syn-d5a7e5f0f030 | dialogue-response | Alege replica pentru: „Lângă mall-ul mare.” | Janb el mall el kbir. | |
+| syn-context-syn-9612f959f867 | dialogue-response | Alege replica pentru: „Unde e cinematograful?” | Wayn es sinema? | Apply established standalone form: `Wen es sinema?` |
+| syn-context-syn-d5a7e5f0f030 | dialogue-response | Alege replica pentru: „Lângă mall-ul mare.” | Janb el mall el kbir. | Apply established City preference: `7add el mall el kbiir.` |
 | syn-context-syn-c32133ea805d | dialogue-response | Alege replica pentru: „Ah, îl știu. E departe de aici?” | Ah b3erfo. B3id men hon? | |
 | syn-context-syn-d56463eaf234 | dialogue-response | Alege replica pentru: „Nu, aproape. Zece minute cu mașina.” | La2, 2arib. 3asher da2ayi2 bel sayyara. | |
 | syn-context-syn-caf02013bad9 | dialogue-response | Alege replica pentru: „Frumos! Ce faci acum?” | 7elo! Shu 3am bte3mle halla2? | |
