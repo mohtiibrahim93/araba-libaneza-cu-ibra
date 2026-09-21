@@ -113,14 +113,14 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q16 | grammar-drill | Completează forma „a vrea”. | baddna | Approved link: `x6cdc0f155514` (primary) |
 | q17 | grammar-drill | Completează forma „a vrea”. | baddkon | Approved link: `x6876105ec819` (primary) |
 | q18 | grammar-drill | Completează forma „a vrea”. | baddon | Approved link: `x4b1f67e5453e` (primary) |
-| q19 | grammar-drill | Completează expresia. | Kam | |
-| q20 | grammar-drill | Completează expresia. | Addesh | |
-| q21 | grammar-drill | Completează expresia. | Kam | |
-| q22 | grammar-drill | Completează expresia. | Miin | |
+| q19 | grammar-drill | Completează expresia. | Kam | Approved link: `c1d861004aa11` (primary) |
+| q20 | grammar-drill | Completează expresia. | Addesh | Approved link: `x5fa2a582420c` (primary) |
+| q21 | grammar-drill | Completează expresia. | Kam | Approved: revise into a contextual `Kam` exercise rather than duplicate standalone mastery credit; suggested existing context `Kam walad 3andak?` (`c618cda989543`). |
+| q22 | grammar-drill | Completează expresia. | Miin | Approved link: `x56dc620b49f3` (primary) |
 | q23 | grammar-drill | Completează expresia. | Ayya | Teacher correction: do not teach/review `Ayya` here as an isolated item. Revise into the approved contextual phrase `Ayya we7de belbos` (“pe care o îmbrac / which one do I wear”). No exact current expression entry exists for this full phrase, so do not fabricate a link. |
 | q24 | grammar-drill | Completează expresia. | Men | Teacher clarification: teach `men` as `from` / the question element used in `Men wen enta?` = “From where are you?”, while preserving its contextual Romanian meanings `de / din / de la / dintre / etc.` in statements. Approved examples: `tawle men khasab` = masă din lemn; `tawlet khasab` = masă de lemn; `jeeye men el sou2` = vin de la piață; `ana men lebnen` = sunt din Liban. Existing exact A1 expression candidate `ccbb5164d25d2` supports the specific question `Men wen enta?`. |
-| q25 | grammar-drill | Completează expresia. | Ma3e | |
-| q26 | grammar-drill | Completează expresia. | 3ande | |
+| q25 | grammar-drill | Completează expresia. | Ma3e | Approved link: `cac93b2e1ff73` (primary) |
+| q26 | grammar-drill | Completează expresia. | 3ande | Approved link: `c02511bf38d1a` (primary) |
 | q27 | grammar-drill | Completează expresia. | ik | Teacher correction: remove/revise. `-ik` is a suffix, not a standalone lexical item, and should not appear independently in this list. |
 | q64 | dialogue-response | „Men wen enta?” — spune că ești din România. | Ana men Rumania | |
 | q65 | dialogue-response | „Shu baddak?” — vrei cafea. | Badde ahwe | |
