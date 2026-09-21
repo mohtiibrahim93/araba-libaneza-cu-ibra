@@ -382,35 +382,45 @@ Teacher shopping rules:
 
 ## a1-work — Munca și studiile
 
+Teacher work/study rules:
+- `bteshte8el` = “tu lucrezi” (masculin).
+- Prefer `bet` for “house/home” in this unit; `bayt` remains an accepted spelling variant.
+- Use `3a-sh-sho8ol` in connected pronunciation where appropriate.
+- Use `subo7`, `jeem3a`, `a7yenan`, and `bil-lel` per teacher spelling.
+- For “muncesc mult”, use `beshte8el ktiir`, not literal `ba3mel sho8ol ktiir`.
+- Gender distinction: `btruu7` (masc.) / `btruu7e` (fem.).
+- Use `aymta` for “când” in this context.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| syn-rule-3-0 | grammar-drill | Alege forma pentru „tu lucrezi” (masculin). | bteshte8el | |
+| syn-rule-3-0 | grammar-drill | Alege forma pentru „tu lucrezi” (masculin). | bteshte8el | Teacher-approved as written: `bteshte8el`. |
 | syn-rule-3-1 | grammar-drill | Ce întrebi prin wayn bteshte8el? | unde lucrează interlocutorul | Superseded standalone `wayn`. Apply teacher rule: `Wen bteshte8el?` = “Unde lucrezi?” |
-| syn-context-syn-d12340f3b7f3 | dialogue-response | Alege replica pentru: „Lucrez într-un birou.” | Beshte8el b maktab. | |
-| syn-context-syn-28c3aa6353d0 | dialogue-response | Alege replica pentru: „Merg la muncă dimineața.” | Bru7 3al sho8ol es sobe7. | |
-| syn-context-syn-b2bd4637eafe | dialogue-response | Alege replica pentru: „Lucrez într-un spital.” | Beshte8el b mustashfa. | |
-| syn-context-syn-5537dace2a32 | dialogue-response | Alege replica pentru: „studiez la universitate” | bedrus bel jem3a | |
-| syn-context-syn-d85f41d222cc | dialogue-response | Alege replica pentru: „lucrez la o companie” | beshte8el b sherke | |
-| syn-context-syn-7af3bd8035dc | dialogue-response | Alege replica pentru: „lucrez la birou” | beshte8el b maktab | |
-| syn-context-syn-2a46d72d6d83 | dialogue-response | Alege replica pentru: „lucrez de acasă” | beshte8el men el bayt | |
-| syn-context-syn-649c4432ff43 | dialogue-response | Alege replica pentru: „merg la muncă” | bru7 3al sho8ol | |
-| syn-context-syn-38bed121a3df | dialogue-response | Alege replica pentru: „mă întorc acasă” | berja3 3al bayt | |
-| syn-context-syn-948ce2838019 | dialogue-response | Alege replica pentru: „în fiecare zi dimineața” | kell yom es sobe7 | |
-| syn-context-syn-b08f17a3d9c5 | dialogue-response | Alege replica pentru: „stau acasă” | bo23od bel bayt | |
-| syn-context-syn-02254b3c9745 | dialogue-response | Alege replica pentru: „fac multă muncă” | ba3mel sho8ol ktir | |
+| syn-context-syn-d12340f3b7f3 | dialogue-response | Alege replica pentru: „Lucrez într-un birou.” | Beshte8el b maktab. | Teacher-approved as written. |
+| syn-context-syn-28c3aa6353d0 | dialogue-response | Alege replica pentru: „Merg la muncă dimineața.” | Bru7 3al sho8ol es sobe7. | Superseded. Teacher-approved: `Bru7 3a-sh-sho8ol es subo7.` |
+| syn-context-syn-b2bd4637eafe | dialogue-response | Alege replica pentru: „Lucrez într-un spital.” | Beshte8el b mustashfa. | Teacher-approved as written. |
+| syn-context-syn-5537dace2a32 | dialogue-response | Alege replica pentru: „studiez la universitate” | bedrus bel jem3a | Superseded. Teacher-approved: `Bedrus b il jeem3a` = “învăț/studiez la universitate”. |
+| syn-context-syn-d85f41d222cc | dialogue-response | Alege replica pentru: „lucrez la o companie” | beshte8el b sherke | Teacher-approved as written. |
+| syn-context-syn-7af3bd8035dc | dialogue-response | Alege replica pentru: „lucrez la birou” | beshte8el b maktab | Teacher-approved as written. |
+| syn-context-syn-2a46d72d6d83 | dialogue-response | Alege replica pentru: „lucrez de acasă” | beshte8el men el bayt | Superseded spelling. Teacher-approved: `Beshte8el men el bet.` |
+| syn-context-syn-649c4432ff43 | dialogue-response | Alege replica pentru: „merg la muncă” | bru7 3al sho8ol | Approved core meaning; in connected speech teacher uses `3a-sh-sho8ol` where appropriate. |
+| syn-context-syn-38bed121a3df | dialogue-response | Alege replica pentru: „mă întorc acasă” | berja3 3al bayt | Superseded spelling. Teacher-approved: `Berja3 3al bet.` `bayt` remains an accepted spelling variant. |
+| syn-context-syn-948ce2838019 | dialogue-response | Alege replica pentru: „în fiecare zi dimineața” | kell yom es sobe7 | Superseded. Teacher-approved: `Kill yom el subo7.` |
+| syn-context-syn-b08f17a3d9c5 | dialogue-response | Alege replica pentru: „stau acasă” | bo23od bel bayt | Superseded. Teacher-approved: `Be23od bel bet.` |
+| syn-context-syn-02254b3c9745 | dialogue-response | Alege replica pentru: „fac multă muncă” | ba3mel sho8ol ktir | Superseded. Teacher-approved natural phrasing: `Beshte8el ktiir.` = “muncesc mult”. |
 | syn-context-syn-9bc369c12ae2 | dialogue-response | Alege replica pentru: „Salut Omar! Ce lucrezi?” | Marhaba Omar! Shu bte3mel? | Superseded greeting spelling. Use `Mar7aba Omar! Shu bte3mel?` pending any further lexical correction. |
 | syn-context-syn-3ce7c2d5e0fb | dialogue-response | Alege replica pentru: „Salut! Sunt inginer. Și tu?” | Marhaba! Ana muhandis. W ente? | Superseded greeting spelling. Use `Mar7aba! Ana muhandis. W ente?` pending any further lexical correction. |
-| syn-context-syn-67fecc1d6948 | dialogue-response | Alege replica pentru: „Sunt doctoriță, lucrez la spital.” | Ana duktora, beshte8el b mustashfa. | |
+| syn-context-syn-67fecc1d6948 | dialogue-response | Alege replica pentru: „Sunt doctoriță, lucrez la spital.” | Ana duktora, beshte8el b mustashfa. | Superseded spelling. Teacher-approved: `Ana doktora, beshte8el b mustashfa.` |
 | syn-context-syn-ad82883e3cc4 | dialogue-response | Alege replica pentru: „Uau! Unde e spitalul?” | Wow! Wayn el mustashfa? | Superseded standalone `Wayn`. Use `Wow! Wen el mustashfa?` pending any further lexical correction. |
-| syn-context-syn-96d2561806f5 | dialogue-response | Alege replica pentru: „În Beirut, aproape de aici.” | B bayrut, 2arib men hon. | |
+| syn-context-syn-96d2561806f5 | dialogue-response | Alege replica pentru: „În Beirut, aproape de aici.” | B bayrut, 2arib men hon. | Teacher-approved in dialogue continuation: `B Bayrut, 2ariib men hon.` |
 | syn-context-syn-acaaf1de11b7 | dialogue-response | Alege replica pentru: „Frumos! Eu lucrez la o companie.” | 7elo! Ana beshte8el b sherke. | |
 | syn-context-syn-da1ccd7132bf | dialogue-response | Alege replica pentru: „Ce faci la companie?” | Shu bte3mel bel sherke? | |
-| syn-context-syn-e224364dbd8b | dialogue-response | Alege replica pentru: „Fac design. Jobul meu e bun.” | Ba3mel tasmim. Sho8le mni7. | |
-| syn-context-syn-d5eceed41985 | dialogue-response | Alege replica pentru: „Super! Mergi în fiecare zi la muncă?” | Tamem! Btru7 kell yom 3al sho8ol? | |
-| syn-context-syn-85b14d0e1239 | dialogue-response | Alege replica pentru: „Da, în fiecare zi dimineața.” | Eh, kell yom es sobe7. | |
-| syn-context-syn-74b2193ccf09 | dialogue-response | Alege replica pentru: „Eu la fel, dar uneori seara.” | Ana kamen, bass a7yanan bel layl. | |
-| syn-context-syn-9ee5b8c06414 | dialogue-response | Alege replica pentru: „Greu! Când te întorci acasă?” | Sa3eb! Bterja3e mata 3al bayt? | |
-| syn-context-syn-d14c6de1e56f | dialogue-response | Alege replica pentru: „Seara, după muncă.” | Bel layl, ba3ed el sho8ol. | |
+| syn-context-syn-e224364dbd8b | dialogue-response | Alege replica pentru: „Fac design. Jobul meu e bun.” | Ba3mel tasmim. Sho8le mni7. | Superseded. Teacher-approved: `Beshte8el tasmiim. Sho8le mnii7 w 7elo.` |
+| syn-context-syn-d5eceed41985 | dialogue-response | Alege replica pentru: „Super! Mergi în fiecare zi la muncă?” | Tamem! Btru7 kell yom 3al sho8ol? | Teacher correction: gender matters. `Btruu7 kell yom 3al sho8ol?` to a man; `Btruu7e kell yom 3al sho8ol?` to a woman. `Tamem` / `Tameem` both accepted. |
+| syn-context-syn-85b14d0e1239 | dialogue-response | Alege replica pentru: „Da, în fiecare zi dimineața.” | Eh, kell yom es sobe7. | Teacher-approved as written for this reply. |
+| syn-context-syn-74b2193ccf09 | dialogue-response | Alege replica pentru: „Eu la fel, dar uneori seara.” | Ana kamen, bass a7yanan bel layl. | Superseded. Teacher-approved: `Ana kamen, bas a7yenan bil-lel.` |
+| syn-context-syn-9ee5b8c06414 | dialogue-response | Alege replica pentru: „Greu! Când te întorci acasă?” | Sa3eb! Bterja3e mata 3al bayt? | Superseded. Teacher-approved: `Sa3eb! Aymta bterja3e 3al bayt?` `bet` is also accepted as the preferred house spelling elsewhere in this unit. |
+| syn-context-syn-d14c6de1e56f | dialogue-response | Alege replica pentru: „Seara, după muncă.” | Bel layl, ba3ed el sho8ol. | Superseded. Teacher-approved: `Bil-lel, ba3ed el sho8ol.` |
 
 ## a1-plans — Planuri și sărbători
 
