@@ -122,11 +122,11 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q25 | grammar-drill | Completează expresia. | Ma3e | Approved link: `cac93b2e1ff73` (primary) |
 | q26 | grammar-drill | Completează expresia. | 3ande | Approved link: `c02511bf38d1a` (primary) |
 | q27 | grammar-drill | Completează expresia. | ik | Teacher correction: remove/revise. `-ik` is a suffix, not a standalone lexical item, and should not appear independently in this list. |
-| q64 | dialogue-response | „Men wen enta?” — spune că ești din România. | Ana men Rumania | |
-| q65 | dialogue-response | „Shu baddak?” — vrei cafea. | Badde ahwe | |
-| q66 | dialogue-response | Un prieten te întreabă „Kifak?”. Ești un băiat și ești obosit. | Ana ta3been | |
-| q67 | dialogue-response | Vrei să întrebi o fată ce face chiar acum. | Shu 3am ta3mle? | |
-| q68 | dialogue-response | Vrei să întrebi câte kilograme dorește un bărbat. | Kam kilo baddak? | |
+| q64 | dialogue-response | „Men wen enta?” — spune că ești din România. | Ana men Rumania | Approved link: `c9325a8ed2c47` (primary) |
+| q65 | dialogue-response | „Shu baddak?” — vrei cafea. | Badde ahwe | Approved link: `cd69dc2c2dc78` (primary) |
+| q66 | dialogue-response | Un prieten te întreabă „Kifak?”. Ești un băiat și ești obosit. | Ana ta3been | Approved wording. No exact current expression entry exists; add/revise production content before linking. |
+| q67 | dialogue-response | Vrei să întrebi o fată ce face chiar acum. | Shu 3am ta3mle? | Approved link: `cd133b98b2ecd` (primary) |
+| q68 | dialogue-response | Vrei să întrebi câte kilograme dorește un bărbat. | Kam kilo baddak? | Approved link: `cb19c0367f5f3` (primary) |
 
 ## a1-family — Familia și lucrurile mele
 
