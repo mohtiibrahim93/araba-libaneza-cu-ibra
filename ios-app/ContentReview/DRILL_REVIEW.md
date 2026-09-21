@@ -432,7 +432,7 @@ Teacher work/study rules:
 | syn-context-syn-1f20614e85aa | dialogue-response | Alege replica pentru: „Voi merge la mare.” | Ra7 ru7 3al ba7er. | |
 | syn-context-syn-1002cbd504e7 | dialogue-response | Alege replica pentru: „Ne vom vedea săptămâna viitoare. (masculin)” | Ra7 nshufak el esbu3 el jey. | |
 | syn-context-syn-69b39c5aae51 | dialogue-response | Alege replica pentru: „Voi călători în Turcia.” | Ra7 safer 3ala Turkya. | |
-| syn-context-syn-ce04f597bf33 | dialogue-response | Alege replica pentru: „Voi sta acasă.” | Ra7 23od bel bayt. | |
+| syn-context-syn-ce04f597bf33 | dialogue-response | Alege replica pentru: „Voi sta acasă.” | Ra7 23od bel bayt. | Apply teacher house spelling: `Ra7 23od bel bet.` (`bayt` remains accepted). |
 | syn-context-syn-0756c0993b4c | dialogue-response | Alege replica pentru: „Mulțumesc, dar nu am bani.” | Shukran, bass ma 3ande flus. | |
 | syn-context-syn-453551f079e4 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă și ne vom întoarce duminică.” | Ra7 nru7 es sabt w narja3 el a7ad. | |
 | syn-context-syn-86b90d56ddd1 | dialogue-response | Alege replica pentru: „ce vei face mâine?” | shu ra7 te3mel bukra? | |
