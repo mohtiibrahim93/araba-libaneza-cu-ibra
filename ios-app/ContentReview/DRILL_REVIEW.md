@@ -99,14 +99,14 @@ The original generated dialogue-response sequence is not approved as the product
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q11 | grammar-drill | Completează forma „a vrea”. | badde | |
-| q12 | grammar-drill | Completează forma „a vrea”. | baddak | |
-| q13 | grammar-drill | Completează forma „a vrea”. | baddik | |
-| q14 | grammar-drill | Completează forma „a vrea”. | baddo | |
-| q15 | grammar-drill | Completează forma „a vrea”. | badda | |
-| q16 | grammar-drill | Completează forma „a vrea”. | baddna | |
-| q17 | grammar-drill | Completează forma „a vrea”. | baddkon | |
-| q18 | grammar-drill | Completează forma „a vrea”. | baddon | |
+| q11 | grammar-drill | Completează forma „a vrea”. | badde | Approved link: `xd5dd28b0ba0c` (primary) |
+| q12 | grammar-drill | Completează forma „a vrea”. | baddak | Approved link: `x9e1dbafa6078` (primary) |
+| q13 | grammar-drill | Completează forma „a vrea”. | baddik | Approved link: `xbe873681e734` (primary) |
+| q14 | grammar-drill | Completează forma „a vrea”. | baddo | Approved link: `x81943bbf0d41` (primary) |
+| q15 | grammar-drill | Completează forma „a vrea”. | badda | Approved link: `xe8d412f10949` (primary) |
+| q16 | grammar-drill | Completează forma „a vrea”. | baddna | Approved link: `x6cdc0f155514` (primary) |
+| q17 | grammar-drill | Completează forma „a vrea”. | baddkon | Approved link: `x6876105ec819` (primary) |
+| q18 | grammar-drill | Completează forma „a vrea”. | baddon | Approved link: `x4b1f67e5453e` (primary) |
 | q19 | grammar-drill | Completează expresia. | Kam | |
 | q20 | grammar-drill | Completează expresia. | Addesh | |
 | q21 | grammar-drill | Completează expresia. | Kam | |
