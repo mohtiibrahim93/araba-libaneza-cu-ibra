@@ -99,7 +99,7 @@ The original generated dialogue-response sequence is not approved as the product
 
 Teacher review note for this unit: standalone fragments that are only meaningful as suffixes or contextual function words should not be promoted to independent vocabulary entries. Prefer teacher-approved full phrases where supplied.
 
-Teacher clarification: `men` itself may be taught as a productive preposition, but its Romanian gloss depends on context (`de`, `din`, `de la`, `dintre`, etc.). Do not reduce it to the single phrase `Men wen enta?`.
+Teacher clarification: `men` should be taught as `from`, including as the question element in `Men wen enta?` (“From where are you?”), and also with contextual Romanian equivalents such as `de`, `din`, `de la`, `dintre`, etc.
 
 
 
@@ -118,7 +118,7 @@ Teacher clarification: `men` itself may be taught as a productive preposition, b
 | q21 | grammar-drill | Completează expresia. | Kam | |
 | q22 | grammar-drill | Completează expresia. | Miin | |
 | q23 | grammar-drill | Completează expresia. | Ayya | Teacher correction: do not teach/review `Ayya` here as an isolated item. Revise into the approved contextual phrase `Ayya we7de belbos` (“pe care o îmbrac / which one do I wear”). No exact current expression entry exists for this full phrase, so do not fabricate a link. |
-| q24 | grammar-drill | Completează expresia. | Men | Teacher correction: `men` is a preposition meaning contextually `de / din / de la / dintre / etc.`, not a question word by itself. Approved examples: `tawle men khasab` = masă din lemn; `tawlet khasab` = masă de lemn; `jeeye men el sou2` = vin de la piață; `ana men lebnen` = sunt din Liban. `Men wen enta?` is one contextual use, not the definition. Existing exact A1 expression candidate `ccbb5164d25d2` may support that specific question after unit placement is reviewed. |
+| q24 | grammar-drill | Completează expresia. | Men | Teacher clarification: teach `men` as `from` / the question element used in `Men wen enta?` = “From where are you?”, while preserving its contextual Romanian meanings `de / din / de la / dintre / etc.` in statements. Approved examples: `tawle men khasab` = masă din lemn; `tawlet khasab` = masă de lemn; `jeeye men el sou2` = vin de la piață; `ana men lebnen` = sunt din Liban. Existing exact A1 expression candidate `ccbb5164d25d2` supports the specific question `Men wen enta?`. |
 | q25 | grammar-drill | Completează expresia. | Ma3e | |
 | q26 | grammar-drill | Completează expresia. | 3ande | |
 | q27 | grammar-drill | Completează expresia. | ik | Teacher correction: remove/revise. `-ik` is a suffix, not a standalone lexical item, and should not appear independently in this list. |
