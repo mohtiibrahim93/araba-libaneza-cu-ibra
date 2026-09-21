@@ -84,6 +84,18 @@ const BlogIndex = () => {
       day: "numeric", month: "long", year: "numeric",
     });
 
+  // The page renders a visible breadcrumb; without the markup Google has to
+  // infer the trail from the URL instead of being told it.
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      // Always "/": the site has no /en homepage, it is one bilingual page.
+      { "@type": "ListItem", position: 1, name: c.home, item: `${BASE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE_URL}${base}` },
+    ],
+  };
+
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -107,6 +119,7 @@ const BlogIndex = () => {
         <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={canonical} />
         <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
       </Helmet>
 

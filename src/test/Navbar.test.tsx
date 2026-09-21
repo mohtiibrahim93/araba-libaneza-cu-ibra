@@ -1,5 +1,7 @@
 import { fireEvent, screen, cleanup } from "@testing-library/react";
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { renderRoute } from "./helpers/appRouter";
 import { courseMenu, resourceMenu } from "@/lib/siteNav";
 
@@ -38,6 +40,37 @@ describe("Navbar accessibility", () => {
 
     fireEvent.click(screen.getByLabelText("Închide meniul de navigare"));
     expect(screen.getByLabelText("Deschide meniul de navigare")).toBeInTheDocument();
+  });
+});
+
+/**
+ * The bar and the hamburger have to swap at the same width.
+ *
+ * With eight links plus the brand, the enrol button, the theme toggle and the
+ * language switcher, the desktop bar did not fit its container anywhere below
+ * about 1400px, and nothing scrolls — so at 1280px the enrol button, the theme
+ * toggle and the language switcher were simply unreachable, and at 900px it
+ * started cutting from "Testimoniale". It shows from lg now, with the
+ * homepage-anchor links held back to 2xl.
+ *
+ * Layout cannot be measured in jsdom, so this asserts the thing that actually
+ * broke: three classes that have to agree. If one moves and the others do not,
+ * a band of widths gets either two navigations or none.
+ */
+describe("Navbar breakpoints", () => {
+  const src = readFileSync(resolve(process.cwd(), "src/components/Navbar.tsx"), "utf8");
+
+  it("shows the full bar from lg up", () => {
+    expect(src).toContain('className="hidden lg:flex items-center gap-3');
+  });
+
+  it("hands over to the hamburger at exactly the same width", () => {
+    expect(src).toMatch(/className="lg:hidden flex items-center justify-center/);
+    expect(src).toContain('<div id="mobile-navigation" className="lg:hidden');
+  });
+
+  it("holds the homepage anchors back until there is room for them", () => {
+    expect(src).toContain('className="hidden 2xl:inline hover:text-foreground');
   });
 });
 

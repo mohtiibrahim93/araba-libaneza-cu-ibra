@@ -143,7 +143,14 @@ const Navbar = () => {
           <BrandLogo />
         </a>
 
-        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-muted-foreground font-medium">
+        {/* lg, not md. With eight items plus the brand, the enrol button, the
+            theme toggle and the language switcher, the bar overflowed its own
+            container at every width below about 1400px — and nothing scrolls,
+            so whatever fell off the right edge was simply unreachable. At
+            1280px that was the enrol button, the theme toggle and the language
+            switcher; at 900px it started at "Testimoniale". Below lg the
+            hamburger carries all of it instead. */}
+        <div className="hidden lg:flex items-center gap-3 xl:gap-6 2xl:gap-8 text-sm text-muted-foreground font-medium">
           <NavDropdown label={t.navCourses} items={[coursesIndex, ...courseMenu]} />
           <NavDropdown label={lang === "en" ? "Resources" : "Resurse"} items={resourceMenu} />
           <Link
@@ -165,6 +172,9 @@ const Navbar = () => {
           {links.map((l) => (
             <a
               key={l.href}
+              // Section jumps on the homepage, and the first thing to drop when
+              // space is tight: everything they reach is also in the footer and
+              // the mobile menu.
               // "/#faq", not "#faq": these sections live on the homepage, so on
               // any other page a bare hash points at an id that is not there.
               // goToAnchor handles the click, but the href has to be right on
@@ -172,7 +182,7 @@ const Navbar = () => {
               // anything reading the markup before React attaches.
               href={`/${l.href}`}
               onClick={goToAnchor(l.href)}
-              className="hover:text-foreground transition-colors"
+              className="hidden 2xl:inline hover:text-foreground transition-colors"
             >
               {l.label}
             </a>
@@ -187,7 +197,7 @@ const Navbar = () => {
             href="/#programs"
             onClick={goToAnchor("#programs")}
             aria-label={t.navEnroll}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:hidden lg:inline-flex"
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
           >
             <GraduationCap className="w-4 h-4 text-primary" aria-hidden="true" />
             <span className="hidden sm:inline">{t.navEnroll}</span>
@@ -230,7 +240,7 @@ const Navbar = () => {
           </DropdownMenu>
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden flex items-center justify-center min-w-11 min-h-11 -mr-1 text-foreground"
+            className="lg:hidden flex items-center justify-center min-w-11 min-h-11 -mr-1 text-foreground"
             aria-label={open ? t.navCloseMenuLabel : t.navOpenMenuLabel}
             aria-expanded={open}
             aria-controls="mobile-navigation"
@@ -242,7 +252,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {open && (
-        <div id="mobile-navigation" className="md:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
+        <div id="mobile-navigation" className="lg:hidden border-t border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col px-6 py-2 gap-1">
             <Link
               to={lang === "en" ? "/en/courses" : "/cursuri"}

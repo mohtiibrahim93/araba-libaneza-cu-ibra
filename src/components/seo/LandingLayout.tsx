@@ -8,7 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import MarkdownBody from "@/components/blog/MarkdownBody";
 import { usePageContent } from "@/hooks/usePageContent";
-import { seoMeta } from "@/lib/seoHead";
+import { seoEmitsFaq, seoMeta } from "@/lib/seoHead";
 import ArticleOutline from "@/components/blog/ArticleOutline";
 
 const BASE = "https://centruldearabalibaneza.com";
@@ -163,7 +163,12 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-        {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
+          {/* Skipped when the route head already carries it: a JSON-LD script
+              is appended rather than replaced, so both firing left the page
+              with two FAQPage blocks, which Google reads as invalid. */}
+          {faqJsonLd && !seoEmitsFaq(`/${slug}`) && (
+            <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+          )}
       </Helmet>
 
       <Navbar />

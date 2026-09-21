@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
+import { seoEmitsFaq } from "@/lib/seoHead";
 
 /**
  * The homepage FAQ: six questions, two rows of three, and a link to the rest.
@@ -31,9 +32,15 @@ const FAQSection = () => {
 
   return (
     <section id="faq" className="py-section px-6 scroll-mt-20">
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd(featured))}</script>
-      </Helmet>
+      {/* The homepage's FAQPage is served by the route head (see FAQ_ROUTES in
+          src/lib/seoHead.ts). Emitting it here too appended a second, identical
+          block — JSON-LD scripts are not replaced by Helmet the way title and
+          canonical are — and a page with two FAQPage blocks is invalid. */}
+      {!seoEmitsFaq("/") && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(faqJsonLd(featured))}</script>
+        </Helmet>
+      )}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.faqBadge}</span>

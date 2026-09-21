@@ -20,7 +20,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
-import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
+import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, ORGANIZATION_SAME_AS, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
 
 /**
  * The only two homepage sections that read from Supabase, split out of the
@@ -134,6 +134,13 @@ const PageContent = () => {
       addressLocality: "București",
       addressCountry: "RO",
     },
+    // The same profile list the Course markup carries, so the two describe one
+    // business rather than two that happen to share a name. These are the
+    // listings that actually exist and carry reviews.
+    sameAs: ORGANIZATION_SAME_AS,
+    // Free-text hint, taken from the prices this site publishes: 500 LEI a
+    // month online, 700 in person. Deliberately not a made-up number.
+    priceRange: "500–700 RON",
     // No aggregateRating here. The 5.0 / 21 reviews are real but they live on
     // Preply, and Google's review-snippet guidelines say not to aggregate
     // ratings from another site into your own — the markup must describe

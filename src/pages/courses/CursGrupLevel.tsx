@@ -106,7 +106,10 @@ const CursGrupLevel = () => {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: t.courseBreadcrumbHome, item: `${BASE_URL}/` },
-      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/#programs` },
+      // /cursuri, not /#programs: a breadcrumb step should name a page, and
+      // the sibling breadcrumb on /cursuri/grup already points there. A
+      // fragment on the homepage made the same trail read two different ways.
+      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/cursuri` },
       { "@type": "ListItem", position: 3, name: t.courseGrupH1, item: `${BASE_URL}/cursuri/grup` },
       { "@type": "ListItem", position: 4, name: curriculum.title, item: canonical },
     ],

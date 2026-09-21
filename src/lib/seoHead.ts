@@ -325,6 +325,17 @@ const FAQ_ROUTES: Record<string, () => { q: string; a: string }[]> = {
   "/en/faq": () => allFaqs("en"),
 };
 
+/**
+ * Does the server-rendered head already carry this path's FAQPage?
+ *
+ * The runtime components below emit their own, and unlike <title> and
+ * canonical — which carry data-rh so Helmet replaces them — a JSON-LD <script>
+ * is appended. So the three pages in FAQ_ROUTES were shipping the FAQPage
+ * twice, which Google reads as invalid and drops. The server copy wins: it is
+ * the one a crawler that does not run JavaScript ever sees.
+ */
+export const seoEmitsFaq = (path: string): boolean => path in FAQ_ROUTES;
+
 let routeIndex: Map<string, SeoRoute> | null = null;
 
 /** The route table, keyed by path. */
