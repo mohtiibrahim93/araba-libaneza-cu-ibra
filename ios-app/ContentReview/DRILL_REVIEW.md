@@ -298,36 +298,46 @@ Teacher spelling/style rules for Romanian-speaking learners:
 
 ## a1-city — Găsește drumul
 
+Teacher city/directions rules:
+- Prefer `7add` for “lângă”; e.g. `7add el bank` / `7add L bank`.
+- `2oddem` and `eddem` are both accepted for “în fața”.
+- Use `bineeye`, `dewwar`, `Ayya tabe2?`, and feminine `2ariibe` where applicable.
+- For a feminine addressee, accepted “turn/go right” forms include `3mele yamiin`, `Leffe 3al yamiin`, and `5ede yaminik`.
+- Use `Yamiin 3and el ishaara`, `meshe`, `fhemet`.
+- `d2eeye2` has many accepted Arabizi spellings; examples include `d2eeye2`, `da2aaye2`, `da2aayi2`, `da2eeye2`.
+- Keep `3afwan` and `Yalla salemtak!` as separate utterances.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
 | syn-rule-6-0 | grammar-drill | Ce direcție indică dur shmel? | virează la stânga | |
-| syn-rule-6-1 | grammar-drill | Completează „lângă bancă”: ___ el bank. | janb | |
-| syn-context-syn-308bfe869e32 | dialogue-response | Alege replica pentru: „Unde este farmacia?” | Wayn es saydaliyye? | |
-| syn-context-syn-b29debf6c0fd | dialogue-response | Alege replica pentru: „Lângă bancă.” | Janb el bank. | |
-| syn-context-syn-699742dbef60 | dialogue-response | Alege replica pentru: „Supermarketul este lângă bancă.” | El supermarket janb el bank. | |
+| syn-rule-6-1 | grammar-drill | Completează „lângă bancă”: ___ el bank. | janb | Superseded for production teaching. Teacher preference: use `7add` for “lângă”, e.g. `7add el bank` / contracted `7add L bank`. |
+| syn-context-syn-308bfe869e32 | dialogue-response | Alege replica pentru: „Unde este farmacia?” | Wayn es saydaliyye? | Superseded standalone `Wayn`. Teacher-approved: `Wen es saydaliyye?`. |
+| syn-context-syn-b29debf6c0fd | dialogue-response | Alege replica pentru: „Lângă bancă.” | Janb el bank. | Teacher-preferred natural Lebanese: `7add el bank.` Contracted spelling/pronunciation `7add L bank` is also accepted. |
+| syn-context-syn-699742dbef60 | dialogue-response | Alege replica pentru: „Supermarketul este lângă bancă.” | El supermarket janb el bank. | Revise with teacher-preferred `7add`: `El supermarket 7add el bank.` |
 | syn-context-syn-a6c33e787f68 | dialogue-response | Alege replica pentru: „Casa mea este aproape de restaurant.” | Bayti 2arib men el mat3am. | |
-| syn-context-syn-4115e328aa78 | dialogue-response | Alege replica pentru: „unde e farmacia?” | wayn es saydaliyye? | |
+| syn-context-syn-4115e328aa78 | dialogue-response | Alege replica pentru: „unde e farmacia?” | wayn es saydaliyye? | Superseded standalone `wayn`. Teacher-approved: `Wen es saydaliyye?`. |
 | syn-context-syn-eff045c3ad41 | dialogue-response | Alege replica pentru: „aproape de aici” | 2arib men hon | |
 | syn-context-syn-ff71588eb3c9 | dialogue-response | Alege replica pentru: „lângă restaurant” | janb el mat3am | |
-| syn-context-syn-398ba3ec0744 | dialogue-response | Alege replica pentru: „în fața băncii” | 2oddem el bank | |
-| syn-context-syn-2de1bb24505c | dialogue-response | Alege replica pentru: „în spatele clădirii” | wara el binaye | |
+| syn-context-syn-398ba3ec0744 | dialogue-response | Alege replica pentru: „în fața băncii” | 2oddem el bank | Teacher-approved variants: `2oddem el bank` or `eddem el bank`. |
+| syn-context-syn-2de1bb24505c | dialogue-response | Alege replica pentru: „în spatele clădirii” | wara el binaye | Superseded spelling. Teacher-approved: `wara el bineeye`. |
 | syn-context-syn-3768afc84acb | dialogue-response | Alege replica pentru: „știi drumul?” | bte3ref et tari2? | |
 | syn-context-syn-20526a1decb2 | dialogue-response | Alege replica pentru: „la semafor” | 3and el ishara | |
-| syn-context-syn-6319958fd3cc | dialogue-response | Alege replica pentru: „după sensul giratoriu” | ba3ed ed dawwar | |
-| syn-context-syn-d69397a9546c | dialogue-response | Alege replica pentru: „la ce etaj?” | b ayy tabe2? | |
-| syn-context-syn-59a83c5ab673 | dialogue-response | Alege replica pentru: „Salut, poți să mă ajuți?” | Marhaba, fik tse3edne? | |
+| syn-context-syn-6319958fd3cc | dialogue-response | Alege replica pentru: „după sensul giratoriu” | ba3ed ed dawwar | Superseded spelling. Teacher-approved: `ba3ed ed dewwar`. |
+| syn-context-syn-d69397a9546c | dialogue-response | Alege replica pentru: „la ce etaj?” | b ayy tabe2? | Superseded phrasing. Teacher-approved: `Ayya tabe2?`. |
+| syn-context-syn-59a83c5ab673 | dialogue-response | Alege replica pentru: „Salut, poți să mă ajuți?” | Marhaba, fik tse3edne? | Superseded spelling. Teacher-approved: `Mar7aba, fik tse3edne?`. |
 | syn-context-syn-eaf06eb2e0ba | dialogue-response | Alege replica pentru: „Sigur, ce vrei?” | Akid, shu baddik? | |
-| syn-context-syn-4556ba25ad37 | dialogue-response | Alege replica pentru: „Unde e farmacia?” | Wayn es saydaliyye? | |
-| syn-context-syn-9eb06dc111e4 | dialogue-response | Alege replica pentru: „Farmacia e aproape de aici.” | Es saydaliyye 2ariba men hon. | |
+| syn-context-syn-4556ba25ad37 | dialogue-response | Alege replica pentru: „Unde e farmacia?” | Wayn es saydaliyye? | Superseded standalone `Wayn`. Teacher-approved: `Wen es saydaliyye?`. |
+| syn-context-syn-9eb06dc111e4 | dialogue-response | Alege replica pentru: „Farmacia e aproape de aici.” | Es saydaliyye 2ariba men hon. | Superseded spelling. Teacher-approved: `Es saydaliyye 2ariibe men hon.` |
 | syn-context-syn-ced297d92d16 | dialogue-response | Alege replica pentru: „Mergi drept până la capătul străzii.” | Ru7e dou8ri la e5er esh share3. | |
-| syn-context-syn-4207b8188210 | dialogue-response | Alege replica pentru: „Bine, și apoi?” | Tamem, w ba3dayn? | |
-| syn-context-syn-a2a67de95d37 | dialogue-response | Alege replica pentru: „Cotești la dreapta la semafor.” | Dure yamiin 3and el ishara. | |
-| syn-context-syn-2a4417a1b291 | dialogue-response | Alege replica pentru: „La dreapta la semafor, bine.” | Yamiin 3and el ishara, meshi. | |
-| syn-context-syn-fcf9ddfdfe8f | dialogue-response | Alege replica pentru: „Farmacia e lângă bancă.” | Es saydaliyye janb el bank. | |
-| syn-context-syn-9fff644972b7 | dialogue-response | Alege replica pentru: „Lângă bancă, am înțeles.” | Janb el bank, fehmet. | |
-| syn-context-syn-bf0130fd8b1c | dialogue-response | Alege replica pentru: „E puțin departe, cinci minute pe jos.” | B3ide shway, 5ames da2ayi2 mashe. | |
+| syn-context-syn-4207b8188210 | dialogue-response | Alege replica pentru: „Bine, și apoi?” | Tamem, w ba3dayn? | Superseded spelling. Teacher-approved: `Tamem, w ba3den?` (`Tameem` also accepted). |
+| syn-context-syn-a2a67de95d37 | dialogue-response | Alege replica pentru: „Cotești la dreapta la semafor.” | Dure yamiin 3and el ishara. | Superseded. Teacher-approved natural alternatives (addressing feminine): `3mele yamiin 3and el ishaara`, `Leffe 3al yamiin 3and el ishaara`, or `5ede yaminik 3and el ishaara`. |
+| syn-context-syn-2a4417a1b291 | dialogue-response | Alege replica pentru: „La dreapta la semafor, bine.” | Yamiin 3and el ishara, meshi. | Superseded spelling. Teacher-approved: `Yamiin 3and el ishaara, meshe.` |
+| syn-context-syn-fcf9ddfdfe8f | dialogue-response | Alege replica pentru: „Farmacia e lângă bancă.” | Es saydaliyye janb el bank. | Revise with teacher-preferred `7add`: `Es saydaliyye 7add el bank.` |
+| syn-context-syn-9fff644972b7 | dialogue-response | Alege replica pentru: „Lângă bancă, am înțeles.” | Janb el bank, fehmet. | Superseded. Teacher-approved: `7add el bank, fhemet.` |
+| syn-context-syn-bf0130fd8b1c | dialogue-response | Alege replica pentru: „E puțin departe, cinci minute pe jos.” | B3ide shway, 5ames da2ayi2 mashe. | Teacher correction: use `5ams`, not `5ames`. Accepted Arabizi variants for “minutes” include `d2eeye2`, `da2aaye2`, `da2aayi2`, `da2eeye2`, etc.; do not enforce one spelling as the only correct form. |
 | syn-context-syn-1cb1dbbb7ba8 | dialogue-response | Alege replica pentru: „Perfect, mulțumesc mult!” | Tamem, shukran ktir! | |
-| syn-context-syn-692cc7ce1a25 | dialogue-response | Alege replica pentru: „Cu plăcere, hai, drum bun!” | 3afwan, yalla salamtik! | |
+| syn-context-syn-692cc7ce1a25 | dialogue-response | Alege replica pentru: „Cu plăcere, hai, drum bun!” | 3afwan, yalla salamtik! | Superseded as a combined utterance. Split into separate natural utterances: `3afwan.` and `Yalla salemtak!`. Do not teach them as one combined sentence. |
 
 ## a1-shopping — La cumpărături
 
