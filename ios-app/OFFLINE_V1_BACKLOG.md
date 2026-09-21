@@ -13,7 +13,7 @@ This is the single execution order for known remaining work, based on the branch
 
 ## Already implemented — do not rebuild
 
-Local progress and failed-save retry; review queue and content-aware counts; canonical linked recall; text/choice/word-order controls; optional orientation with resume/latest result and Journey selection; Speed Drill history/pause/partial saves; dictionary and saved/root recall foundations; reference playback/recording abstractions and recording cancellation/current-session deletion.
+Local progress and durable failed-save retry; review queue and content-aware counts; canonical linked recall; text/choice/word-order controls; optional orientation with resume/latest result and Journey selection; Speed Drill history/pause/partial saves; dictionary and saved/root recall foundations; reference playback/recording abstractions and recording cancellation/current-session deletion.
 
 ## Ordered items
 
@@ -34,7 +34,7 @@ Local progress and failed-save retry; review queue and content-aware counts; can
 ## Separate scope decisions — not automatic offline-v1 blockers
 
 - Historical synthetic drill-ID progress: audit and define handling; preserve history unless a migration is explicitly chosen. New invalid entries are prevented.
-- Failed writes across force-quit: current retry queue survives only while the process stays alive. A durable outbox would be an additional reliability feature; do not claim it exists.
+- Failed writes across force-quit: a durable JSON outbox is implemented for queued progress operations. Replay uses idempotent writes; real-device force-quit/relaunch verification remains in item 11. If the outbox itself cannot be written, the app does not claim that unjournaled work will survive termination.
 - Orientation: only the latest session/result is retained; a full historical results archive is optional.
 - First-launch welcome/onboarding presentation: current orientation is optional from Home/Profile. An automatic welcome walkthrough is a separate UX choice.
 - Extra fluency content beyond the approved launch curriculum requires teacher materials; audio fluency is item 8.

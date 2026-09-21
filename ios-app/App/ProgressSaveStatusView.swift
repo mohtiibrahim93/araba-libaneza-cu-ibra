@@ -8,7 +8,7 @@ struct ProgressSaveStatusView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Label("Stocare locală indisponibilă", systemImage: "exclamationmark.triangle")
                     .font(.headline)
-                Text("Reîncearcă salvarea înainte să închizi aplicația. Modificările în așteptare sunt păstrate doar cât timp aplicația rămâne deschisă.")
+                Text("Reîncearcă salvarea. Operațiile deja puse în coada locală de recuperare pot fi reluate după redeschidere. Dacă însăși coada de recuperare nu poate fi scrisă, evită să închizi aplicația înainte de reîncercare.")
                     .font(.caption)
                 Button(progressModel.isSaving ? "Se reîncearcă…" : "Reîncearcă salvarea") {
                     Task { await progressModel.retryPendingSaves() }

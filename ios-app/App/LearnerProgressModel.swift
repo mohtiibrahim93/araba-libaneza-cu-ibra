@@ -10,9 +10,15 @@ final class LearnerProgressModel: ObservableObject {
     @Published private(set) var isSaving = false
 
     private let repository: LearnerProgressRepository
-    private let saveQueue = ProgressSaveQueue()
+    private let saveQueue: ProgressSaveQueue
 
-    init(repository: LearnerProgressRepository) { self.repository = repository }
+    init(
+        repository: LearnerProgressRepository,
+        outbox: any ProgressSaveOutbox = InMemoryProgressSaveOutbox()
+    ) {
+        self.repository = repository
+        self.saveQueue = ProgressSaveQueue(outbox: outbox)
+    }
 
     func saveOrientation(_ checkpoint: OrientationCheckpoint?) async {
         await perform(.orientation(checkpoint))

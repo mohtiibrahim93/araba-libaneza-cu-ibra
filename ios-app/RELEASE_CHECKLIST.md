@@ -7,8 +7,9 @@ These checks require a real Mac/iPhone/iPad and approved content. They have not 
 - Fresh install in airplane mode: production content loads, no sample fallback.
 - Exercise types: text, choices and word order; wrong answer then correction; hint; manual Continue; final summary.
 - Close/reopen after a successful save: attempts, mastery, reviews, mistakes, bookmarks, Journey and Speed Drill history remain.
-- Inject a storage failure: pending work remains in memory, the retry notice stays visible, and retry saves once. Repeated bookmark taps preserve final intent.
-- Force-quit while storage is failing: do not promise pending memory-only work survives.
+- Inject a primary progress-store failure after the recovery outbox has accepted the operation: the retry notice stays visible and retry saves once. Repeated bookmark taps preserve final intent.
+- Force-quit with a journaled failed write, relaunch, and verify the operation is restored and applied exactly once when storage recovers.
+- Separately make the recovery outbox itself unwritable: the app must keep the operation in memory, show the retry state, and must not imply that this specific unjournaled change will survive force-quit.
 - Review a due expression from Home/Profile; queue and counts update after saving. Leave the review screen open across a due boundary.
 - Check rapid successive actions for missing or duplicated progress.
 

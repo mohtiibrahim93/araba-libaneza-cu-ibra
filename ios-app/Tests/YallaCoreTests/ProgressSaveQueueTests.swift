@@ -76,6 +76,82 @@ struct ProgressSaveQueueTests {
         #expect(queue.latestSnapshot?.attempts.count == 20)
         #expect(queue.latestSnapshot?.reviewByExpressionID["word"]?.seen == 20)
     }
+    @Test("Failed write survives queue recreation and applies once after storage recovers")
+    func durableRetryAcrossQueueRecreation() async throws {
+        let store = RecoverableTestStore()
+        let repository = LearnerProgressRepository(store: store)
+        let outbox = InMemoryProgressSaveOutbox()
+        let firstQueue = ProgressSaveQueue(outbox: outbox)
+
+        firstQueue.enqueue(.attempt(attempt("durable")))
+        await store.failNextSave(afterCommit: false)
+        do {
+            try await firstQueue.flush(using: repository)
+            Issue.record("Expected storage error")
+        } catch is RecoverableStoreError {}
+
+        #expect(firstQueue.pendingCount == 1)
+        let journaled = try await outbox.load()
+        #expect(journaled.count == 1)
+
+        let restartedQueue = ProgressSaveQueue(outbox: outbox)
+        try await restartedQueue.flush(using: repository)
+
+        let persisted = try await repository.load()
+        #expect(restartedQueue.pendingCount == 0)
+        #expect(persisted.attempts.map(\.id) == ["durable"])
+        #expect(persisted.reviewByExpressionID["word"]?.seen == 1)
+        let cleared = try await outbox.load()
+        #expect(cleared.isEmpty)
+    }
+
+    @Test("Committed write can replay after queue recreation without duplicate credit")
+    func durableRetryAfterAmbiguousCommit() async throws {
+        let store = RecoverableTestStore()
+        let repository = LearnerProgressRepository(store: store)
+        let outbox = InMemoryProgressSaveOutbox()
+        let firstQueue = ProgressSaveQueue(outbox: outbox)
+
+        firstQueue.enqueue(.attempt(attempt("ambiguous")))
+        await store.failNextSave(afterCommit: true)
+        do {
+            try await firstQueue.flush(using: repository)
+            Issue.record("Expected storage error")
+        } catch is RecoverableStoreError {}
+
+        let restartedQueue = ProgressSaveQueue(outbox: outbox)
+        try await restartedQueue.flush(using: repository)
+
+        let persisted = try await repository.load()
+        #expect(persisted.attempts.map(\.id) == ["ambiguous"])
+        #expect(persisted.reviewByExpressionID["word"]?.seen == 1)
+    }
+
+    @Test("JSON outbox round-trips durable operations and omits reload")
+    func jsonOutboxRoundTrip() async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("yalla-progress-outbox-\(UUID().uuidString)", isDirectory: true)
+        let fileURL = directory.appendingPathComponent("pending.json")
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let outbox = JSONFileProgressSaveOutbox(fileURL: fileURL)
+        let durableAttempt = attempt("file")
+        try await outbox.replace(with: [
+            .reload,
+            .attempt(durableAttempt),
+            .savedExpression("word", true)
+        ])
+
+        let recovered = try await outbox.load()
+        #expect(recovered == [
+            .attempt(durableAttempt),
+            .savedExpression("word", true)
+        ])
+
+        try await outbox.replace(with: [])
+        #expect(!FileManager.default.fileExists(atPath: fileURL.path))
+    }
+
 }
 
 private enum RecoverableStoreError: Error { case unavailable }

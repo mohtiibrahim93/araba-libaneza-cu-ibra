@@ -10,7 +10,11 @@ struct YallaApp: App {
             let content = try BundledContentLoader().load()
             let store = try SwiftDataLearnerProgressStore()
             let repository = LearnerProgressRepository(store: store)
-            launchState = .ready(content, repository)
+            let outboxURL = FileManager.default
+                .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("progress-save-outbox-v1.json", isDirectory: false)
+            let outbox = JSONFileProgressSaveOutbox(fileURL: outboxURL)
+            launchState = .ready(content, repository, outbox)
         } catch {
             launchState = .failed(error.localizedDescription)
         }
@@ -19,10 +23,11 @@ struct YallaApp: App {
     var body: some Scene {
         WindowGroup {
             switch launchState {
-            case let .ready(content, repository):
+            case let .ready(content, repository, outbox):
                 RootTabView(
                     content: content,
-                    progressRepository: repository
+                    progressRepository: repository,
+                    progressOutbox: outbox
                 )
             case let .failed(message):
                 ContentLoadFailureView(message: message)
@@ -32,7 +37,7 @@ struct YallaApp: App {
 }
 
 private enum AppLaunchState {
-    case ready(AppContentSnapshot, LearnerProgressRepository)
+    case ready(AppContentSnapshot, LearnerProgressRepository, any ProgressSaveOutbox)
     case failed(String)
 }
 

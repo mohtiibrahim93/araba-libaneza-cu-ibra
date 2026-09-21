@@ -13,12 +13,16 @@ struct RootTabView: View {
 
     init(
         content: AppContentSnapshot,
-        progressRepository: LearnerProgressRepository
+        progressRepository: LearnerProgressRepository,
+        progressOutbox: any ProgressSaveOutbox
     ) {
         self.content = content
         self.reviewExpressionIDs = Set(content.package.expressions.map(\.id))
         _progressModel = StateObject(
-            wrappedValue: LearnerProgressModel(repository: progressRepository)
+            wrappedValue: LearnerProgressModel(
+                repository: progressRepository,
+                outbox: progressOutbox
+            )
         )
     }
 

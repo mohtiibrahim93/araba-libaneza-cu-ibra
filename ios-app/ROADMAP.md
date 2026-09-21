@@ -66,7 +66,7 @@ Native work stays on yalla-app-ios; main is the separate live website.
 - Native session persistence now requires an explicit expression link that resolves in the content. Unlinked legacy drills retain session feedback but create no new synthetic expression mastery/SRS records. Historical synthetic drill-ID records are preserved; a content-aware audit/migration remains follow-up work.
 - Choice and word-order controls preserve correction retries and initial mistakes; unsupported dedicated types fail session preflight explicitly.
 
-- Persistence recovery implemented: learner actions drain through one ordered queue; failed operations remain pending and have an explicit retry banner. Stable attempt IDs and explicit bookmark values prevent duplicate credit or inverted toggles on retry. The pending queue is memory-only; failed saves cannot be promised across force-quit or process termination.
+- Persistence recovery implemented: learner actions drain through one ordered queue; durable operations are journaled in a separate atomic JSON outbox before the primary progress store is mutated. Stable attempt IDs and explicit state-setting operations make replay idempotent, including after relaunch. If the outbox itself cannot be written, the operation remains only in memory and the retry UI stays visible; real-device force-quit/relaunch verification remains pending.
 
 ## Latest completion work
 
