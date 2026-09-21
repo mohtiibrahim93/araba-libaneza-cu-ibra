@@ -424,46 +424,60 @@ Teacher work/study rules:
 
 ## a1-plans — Planuri și sărbători
 
+Teacher plans/future rules:
+- `el esbu3 el jey` / `el esbu3 el jeye` are accepted variants.
+- Use `ta3mol` / `ta3mel`, not `te3mel`, in the future-question forms reviewed here.
+- `Terkiyya` / `Turkiyya` are accepted; `3ala` or contracted `3a` are both natural.
+- Prefer `masaare` over `fluus` here.
+- Use `es-sabet`, `ra7 ije/eje`, `huniik/honiik`, `ra7 ousal`, `2ariiban`.
+- Prefer `s7aabe`; `as7aabe` is also accepted. `5ottik` / `5ottetik` both accepted.
+- Use `Lesh` standalone; `laysh` with suffix.
+- Use `truu7o`, `W aymta ra7 terja3u?`, and `el tanen`.
+- `E7kiilik` is morphologically acceptable, but `5abrik` is more natural for “I’ll tell you about the trip”.
+- `el re7le` and phonetic `er-re7le` are both accepted.
+- Use `Mnshufik ariiban`, not `Benshufik 2arib`.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| syn-rule-14-0 | grammar-drill | Ce moment indică el esbu3 el jey? | săptămâna viitoare | |
+| syn-rule-14-0 | grammar-drill | Ce moment indică el esbu3 el jey? | săptămâna viitoare | Teacher-approved variants: `el esbu3 el jey` and `el esbu3 el jeye` among local variants. |
 | syn-rule-14-1 | grammar-drill | Neagă planul ra7 ru7. | ma ra7 ru7 | |
-| syn-context-syn-038f703a5245 | dialogue-response | Alege replica pentru: „Ce vei face mâine? (masculin)” | Shu ra7 te3mel bukra? | |
+| syn-context-syn-038f703a5245 | dialogue-response | Alege replica pentru: „Ce vei face mâine? (masculin)” | Shu ra7 te3mel bukra? | Teacher correction: use `ta3mol` or `ta3mel`, not `te3mel`: `Shu ra7 ta3mol bukra?` / `Shu ra7 ta3mel bukra?`. |
 | syn-context-syn-1f20614e85aa | dialogue-response | Alege replica pentru: „Voi merge la mare.” | Ra7 ru7 3al ba7er. | |
-| syn-context-syn-1002cbd504e7 | dialogue-response | Alege replica pentru: „Ne vom vedea săptămâna viitoare. (masculin)” | Ra7 nshufak el esbu3 el jey. | |
-| syn-context-syn-69b39c5aae51 | dialogue-response | Alege replica pentru: „Voi călători în Turcia.” | Ra7 safer 3ala Turkya. | |
+| syn-context-syn-1002cbd504e7 | dialogue-response | Alege replica pentru: „Ne vom vedea săptămâna viitoare. (masculin)” | Ra7 nshufak el esbu3 el jey. | Teacher-approved with `el esbu3 el jey` / `el esbu3 el jeye` variants. |
+| syn-context-syn-69b39c5aae51 | dialogue-response | Alege replica pentru: „Voi călători în Turcia.” | Ra7 safer 3ala Turkya. | Superseded spelling. Teacher-approved: `Ra7 safer 3ala Terkiyya.` or `Ra7 safer 3a Terkiyya.` `Turkiyya` is also accepted. |
 | syn-context-syn-ce04f597bf33 | dialogue-response | Alege replica pentru: „Voi sta acasă.” | Ra7 23od bel bayt. | Apply teacher house spelling: `Ra7 23od bel bet.` (`bayt` remains accepted). |
-| syn-context-syn-0756c0993b4c | dialogue-response | Alege replica pentru: „Mulțumesc, dar nu am bani.” | Shukran, bass ma 3ande flus. | |
-| syn-context-syn-453551f079e4 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă și ne vom întoarce duminică.” | Ra7 nru7 es sabt w narja3 el a7ad. | |
-| syn-context-syn-86b90d56ddd1 | dialogue-response | Alege replica pentru: „ce vei face mâine?” | shu ra7 te3mel bukra? | |
+| syn-context-syn-0756c0993b4c | dialogue-response | Alege replica pentru: „Mulțumesc, dar nu am bani.” | Shukran, bass ma 3ande flus. | Superseded lexical choice. Teacher-approved: `Shukran, bas ma 3ande masaare.` |
+| syn-context-syn-453551f079e4 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă și ne vom întoarce duminică.” | Ra7 nru7 es sabt w narja3 el a7ad. | Superseded spelling. Teacher-approved: `Ra7 nru7 es-sabet w narja3 el a7ad.` |
+| syn-context-syn-86b90d56ddd1 | dialogue-response | Alege replica pentru: „ce vei face mâine?” | shu ra7 te3mel bukra? | Teacher correction: `Shu ra7 ta3mol bukra?` / `Shu ra7 ta3mel bukra?`. |
 | syn-context-syn-66d476c45bc5 | dialogue-response | Alege replica pentru: „voi merge la muncă” | ra7 ru7 3al sho8ol | |
 | syn-context-syn-3cdbaaecb3cb | dialogue-response | Alege replica pentru: „ne vedem mâine” | ra7 nshufak bukra | |
 | syn-context-syn-86ee18423311 | dialogue-response | Alege replica pentru: „poate voi merge” | yimken ra7 ru7 | Superseded spelling. Apply teacher convention: `Yemkin ra7 ru7.` |
-| syn-context-syn-46f7d751827e | dialogue-response | Alege replica pentru: „sigur voi veni” | akid ra7 je | |
-| syn-context-syn-9e231be136e9 | dialogue-response | Alege replica pentru: „voi călători săptămâna viitoare” | ra7 safer el esbu3 el jey | |
+| syn-context-syn-46f7d751827e | dialogue-response | Alege replica pentru: „sigur voi veni” | akid ra7 je | Superseded. Teacher-approved: `Akiid ra7 ije.` or `Akiid ra7 eje.` |
+| syn-context-syn-9e231be136e9 | dialogue-response | Alege replica pentru: „voi călători săptămâna viitoare” | ra7 safer el esbu3 el jey | Teacher-approved with `el esbu3 el jey` / `el esbu3 el jeye` variants. |
 | syn-context-syn-eda39e9e1ad9 | dialogue-response | Alege replica pentru: „voi lua vacanță” | ra7 e5od 3otle | |
 | syn-context-syn-dd6c45ecc5c1 | dialogue-response | Alege replica pentru: „vom merge la mare” | ra7 nru7 3al ba7er | |
-| syn-context-syn-a324944a1c3d | dialogue-response | Alege replica pentru: „ce vei face în vacanță?” | shu ra7 te3mel bel 3otle? | |
-| syn-context-syn-7526d24d82e1 | dialogue-response | Alege replica pentru: „voi fi acolo” | ra7 kun hunik | |
-| syn-context-syn-843f1405c9f4 | dialogue-response | Alege replica pentru: „voi ajunge peste puțin” | ra7 wassal ba3ed shway | |
+| syn-context-syn-a324944a1c3d | dialogue-response | Alege replica pentru: „ce vei face în vacanță?” | shu ra7 te3mel bel 3otle? | Teacher correction: `Shu ra7 ta3mol bel 3otle?` / `Shu ra7 ta3mel bel 3otle?`. |
+| syn-context-syn-7526d24d82e1 | dialogue-response | Alege replica pentru: „voi fi acolo” | ra7 kun hunik | Teacher-approved variants: `Ra7 kuun huniik.` / `Ra7 kun huniik.`; `honiik` also accepted. |
+| syn-context-syn-843f1405c9f4 | dialogue-response | Alege replica pentru: „voi ajunge peste puțin” | ra7 wassal ba3ed shway | Superseded. Teacher-approved: `Ra7 ousal ba3ed shway.` |
 | syn-context-syn-0e09c58c0d5c | dialogue-response | Alege replica pentru: „îți voi vorbi mai târziu” | ra7 7kik ba3dayn | Superseded. Apply teacher distinction: `Ra7 be7kiik ba3den.` (`be7kiik` = “I’ll talk to you”; `ba3den`, not `ba3dayn`). |
 | syn-context-syn-876bde2c0090 | dialogue-response | Alege replica pentru: „nu voi merge” | ma ra7 ru7 | |
-| syn-context-syn-e2615110805f | dialogue-response | Alege replica pentru: „curând vom vedea” | 2arib ra7 nshuf | |
+| syn-context-syn-e2615110805f | dialogue-response | Alege replica pentru: „curând vom vedea” | 2arib ra7 nshuf | Superseded adverb. Teacher-approved: `2ariiban ra7 nshuf.` |
 | syn-context-syn-3cca63b48e1b | dialogue-response | Alege replica pentru: „Salut Karim! Ce vei face în weekend?” | Marhaba Karim! Shu ra7 te3mel bel weekend? | Superseded greeting spelling: `Mar7aba Karim! Shu ra7 te3mel bel weekend?` |
 | syn-context-syn-8b9c4f8c4e07 | dialogue-response | Alege replica pentru: „Salut! Poate voi merge la munte.” | Marhaba! Yimken ra7 ru7 3al jabal. | Superseded spelling: `Mar7aba! Yemkin ra7 ru7 3al jabal.` |
 | syn-context-syn-39077f619d98 | dialogue-response | Alege replica pentru: „Frumos! Cu cine vei merge?” | 7elo! Ma3 min ra7 tru7? | |
-| syn-context-syn-8ed3bc4261ea | dialogue-response | Alege replica pentru: „Cu prietenii. Și tu, care e planul tău?” | Ma3 as7abe. W ente shu 5ottik? | |
+| syn-context-syn-8ed3bc4261ea | dialogue-response | Alege replica pentru: „Cu prietenii. Și tu, care e planul tău?” | Ma3 as7abe. W ente shu 5ottik? | Teacher-preferred: `Ma3 s7aabe. W ente shu 5ottik?` `as7aabe` remains accepted. `5ottik` and `5ottetik` are both accepted. |
 | syn-context-syn-1c39090c0a8b | dialogue-response | Alege replica pentru: „Voi sta acasă și voi citi o carte.” | Ra7 23od bel bayt w ra7 2ra kteb. | Apply teacher house spelling: `Ra7 23od bel bet w ra7 2ra kteb.` (`bayt` remains an accepted variant). |
-| syn-context-syn-caf819e36cad | dialogue-response | Alege replica pentru: „De ce? Vino cu noi!” | Laysh? Ta3e ma3na! | |
+| syn-context-syn-caf819e36cad | dialogue-response | Alege replica pentru: „De ce? Vino cu noi!” | Laysh? Ta3e ma3na! | Superseded standalone form. Teacher rule: use `Lesh?` standalone; `laysh` is used with suffix. So: `Lesh? Ta3e ma3na!` |
 | syn-context-syn-dc55180eafcb | dialogue-response | Alege replica pentru: „Mulțumesc, dar am multă muncă.” | Shukran, bass 3ande sho8ol ktir. | |
 | syn-context-syn-23c805dae04f | dialogue-response | Alege replica pentru: „Bine, poate data viitoare.” | Tayyeb, yimken el marra el jeye. | Superseded spelling: `Tayyeb, yemkin el marra el jeye.` |
-| syn-context-syn-151f2794a9e3 | dialogue-response | Alege replica pentru: „Dacă vrea Dumnezeu! Când veți merge?” | Inshallah! Aymta ra7 tru7u? | |
+| syn-context-syn-151f2794a9e3 | dialogue-response | Alege replica pentru: „Dacă vrea Dumnezeu! Când veți merge?” | Inshallah! Aymta ra7 tru7u? | Superseded spelling. Teacher-approved: `Inshallah! Aymta ra7 truu7o?` |
 | syn-context-syn-e246cf1ad219 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă dimineața.” | Ra7 nru7 es sabt es sobe7. | Apply teacher spelling: `Ra7 nru7 es sabt es subo7.` |
-| syn-context-syn-4278209e10f8 | dialogue-response | Alege replica pentru: „Și când vă veți întoarce?” | W ra7 terja3u aymta? | |
+| syn-context-syn-4278209e10f8 | dialogue-response | Alege replica pentru: „Și când vă veți întoarce?” | W ra7 terja3u aymta? | Teacher-preferred word order: `W aymta ra7 terja3u?` |
 | syn-context-syn-60cd0ac8e493 | dialogue-response | Alege replica pentru: „Duminică seara.” | El a7ad bel layl. | Apply teacher spelling: `El a7ad bil-lel.` |
-| syn-context-syn-39c4eff33327 | dialogue-response | Alege replica pentru: „Perfect! Ne vedem luni?” | Tamem! Ra7 nshufak el etnain? | |
-| syn-context-syn-3c2dcc0a64e7 | dialogue-response | Alege replica pentru: „Sigur! Îți voi povesti despre călătorie.” | Akid! Ra7 7kilik 3an er re7le. | |
-| syn-context-syn-7423347a28e8 | dialogue-response | Alege replica pentru: „Mulțumesc! Ne vedem curând.” | Shukran! Benshufik 2arib. | |
+| syn-context-syn-39c4eff33327 | dialogue-response | Alege replica pentru: „Perfect! Ne vedem luni?” | Tamem! Ra7 nshufak el etnain? | Superseded weekday form. Teacher-approved: `Tamem! Ra7 nshufak el tanen?` (`Tameem` also accepted). |
+| syn-context-syn-3c2dcc0a64e7 | dialogue-response | Alege replica pentru: „Sigur! Îți voi povesti despre călătorie.” | Akid! Ra7 7kilik 3an er re7le. | Teacher correction: `E7kiilik` is the corrected verb form, but in this context `5abrik` is more natural. Preferred: `Akiid! Ra7 5abrik 3an el re7le.` `er-re7le` is also accepted as the phonetic article form. |
+| syn-context-syn-7423347a28e8 | dialogue-response | Alege replica pentru: „Mulțumesc! Ne vedem curând.” | Shukran! Benshufik 2arib. | Superseded. Teacher-approved: `Shukran! Mnshufik ariiban.` |
 
 ## a1-review — Pune totul împreună
 
