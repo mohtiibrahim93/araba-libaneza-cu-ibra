@@ -223,31 +223,31 @@ Teacher note for `ma`: in Lebanese it is multifunctional. Besides negation, it c
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| syn-rule-8-0 | grammar-drill | Ce exprimă 3am be2ra kteb? | citesc o carte acum | |
-| syn-rule-8-1 | grammar-drill | Care cuvânt înseamnă „acum”? | halla2 | |
+| syn-rule-8-0 | grammar-drill | Ce exprimă 3am be2ra kteb? | citesc o carte acum | Approved as grammar/session content; no separate expression link from the Romanian answer. |
+| syn-rule-8-1 | grammar-drill | Care cuvânt înseamnă „acum”? | halla2 | Approved link: `c6c5328255fa0` (primary). |
 | syn-context-syn-7a15e7999c58 | dialogue-response | Alege replica pentru: „Ce faci acum? (masculin)” | Shu 3am te3mel halla2? | Teacher-approved variants: `Shu 3am ta3mol halla2?`, `Shu 3am ta3mel halla2?`, `Shu 3am bta3mol halla2?`, `Shu 3am bta3mel halla2?`. |
-| syn-context-syn-22dbac28b402 | dialogue-response | Alege replica pentru: „Citesc o carte acum.” | 3am be2ra kteb. | |
-| syn-context-syn-3d21dc0b5e71 | dialogue-response | Alege replica pentru: „Mă uit la un film acum.” | 3am betfarraj 3a film. | |
-| syn-context-syn-014a5703fa52 | dialogue-response | Alege replica pentru: „Ascult muzică acum.” | 3am besma3 musi2a. | |
+| syn-context-syn-22dbac28b402 | dialogue-response | Alege replica pentru: „Citesc o carte acum.” | 3am be2ra kteb. | Approved link: `syn-22dbac28b402` (primary). |
+| syn-context-syn-3d21dc0b5e71 | dialogue-response | Alege replica pentru: „Mă uit la un film acum.” | 3am betfarraj 3a film. | Approved link: `syn-3d21dc0b5e71` (primary). |
+| syn-context-syn-014a5703fa52 | dialogue-response | Alege replica pentru: „Ascult muzică acum.” | 3am besma3 musi2a. | Approved link: `syn-014a5703fa52` (primary). |
 | syn-context-syn-566f9501b408 | dialogue-response | Alege replica pentru: „ce faci (acum)?” | shu 3am te3mel? | Teacher-approved variants: `Shu 3am ta3mol?`, `Shu 3am ta3mel?`, `Shu 3am bta3mol?`, `Shu 3am bta3mel?`. |
-| syn-context-syn-ac6f4d92248e | dialogue-response | Alege replica pentru: „mă uit la un film” | 3am betfarraj 3a film | |
-| syn-context-syn-9e9d84a21d1d | dialogue-response | Alege replica pentru: „ascult muzică” | 3am besma3 musi2a | |
+| syn-context-syn-ac6f4d92248e | dialogue-response | Alege replica pentru: „mă uit la un film” | 3am betfarraj 3a film | Approved link: `syn-ac6f4d92248e` (primary). |
+| syn-context-syn-9e9d84a21d1d | dialogue-response | Alege replica pentru: „ascult muzică” | 3am besma3 musi2a | Approved link: `syn-9e9d84a21d1d` (primary). |
 | syn-context-syn-467b88df0637 | dialogue-response | Alege replica pentru: „ce faci chiar acum?” | shu 3am bte3mel halla2? | Teacher-approved variants: `Shu 3am ta3mol halla2?`, `Shu 3am ta3mel halla2?`, `Shu 3am bta3mol halla2?`, `Shu 3am bta3mel halla2?`. |
-| syn-context-syn-376fc318c7c7 | dialogue-response | Alege replica pentru: „pregătesc mâncarea” | 3am b7adder el akel | |
-| syn-context-syn-3c52c2c89401 | dialogue-response | Alege replica pentru: „vorbesc cu tine” | 3am be7ke ma3ak | |
+| syn-context-syn-376fc318c7c7 | dialogue-response | Alege replica pentru: „pregătesc mâncarea” | 3am b7adder el akel | Approved link: `syn-376fc318c7c7` (primary). |
+| syn-context-syn-3c52c2c89401 | dialogue-response | Alege replica pentru: „vorbesc cu tine” | 3am be7ke ma3ak | Approved link: `syn-3c52c2c89401` (primary). |
 | syn-context-syn-6b3fa2fd4cd8 | dialogue-response | Alege replica pentru: „ce se întâmplă?” | shu 3am bysir? | Superseded. Teacher-approved: `Shu 3am bisiir?`. |
-| syn-context-syn-7c91d20121d3 | dialogue-response | Alege replica pentru: „nu fac nimic” | ma 3am ba3mel she | |
-| syn-context-syn-fc4266bc44d9 | dialogue-response | Alege replica pentru: „Alo Ziad! Ce faci?” | Allo Ziad! Shu 3am te3mel? | |
+| syn-context-syn-7c91d20121d3 | dialogue-response | Alege replica pentru: „nu fac nimic” | ma 3am ba3mel she | Approved link: `syn-7c91d20121d3` (primary). |
+| syn-context-syn-fc4266bc44d9 | dialogue-response | Alege replica pentru: „Alo Ziad! Ce faci?” | Allo Ziad! Shu 3am te3mel? | Approved structure; apply teacher-approved `ta3mol/ta3mel` and optional `b-` variants. |
 | syn-context-syn-d67ee0404cd3 | dialogue-response | Alege replica pentru: „Salut Nour! Citesc o carte.” | Marhaba Nour! 3am be2ra kteb. | Superseded spelling. Teacher-approved: `Mar7aba Nour! 3am be2ra kteb.` |
 | syn-context-syn-749b80ac0fd0 | dialogue-response | Alege replica pentru: „Frumos! Ce carte?” | 7elo! Shu el kteb? | Teacher-approved. `Shu el kteb?` = “Care carte? / Ce carte?” (“What book?” / contextually “what is the book?”). |
 | syn-context-syn-7e27e79d1912 | dialogue-response | Alege replica pentru: „Un roman libanez. Foarte frumos.” | Riwaye lebneniyye. Ktir 7elwe. | Superseded spelling. Teacher-approved: `Riweye lebneniyye. Ktir 7elwe.` |
 | syn-context-syn-7da600df6cad | dialogue-response | Alege replica pentru: „Super! Eu mă uit la un film.” | Tamem! Ana 3am betfarraj 3a film. | Teacher-approved. `Tamem` and phonetic spelling `Tameem` are both accepted. |
 | syn-context-syn-e393491306c6 | dialogue-response | Alege replica pentru: „Ce film?” | Shu el film? | Teacher-approved canonical: `Shu el filem?`; `Shu el film?` is also accepted. Meaning: “Care e filmul? / Ce film e?” — asking what the movie is. For selective “Care film?” / “Which movie?”, use `Ayya filem?`. |
-| syn-context-syn-d452f09bda23 | dialogue-response | Alege replica pentru: „Un film american, dar nu e prea frumos.” | Film amerkene, bass mish ktir 7elo. | |
+| syn-context-syn-d452f09bda23 | dialogue-response | Alege replica pentru: „Un film american, dar nu e prea frumos.” | Film amerkene, bass mish ktir 7elo. | Teacher-approved wording. `ktiir` spelling is also accepted according to the course's phonetic convention. |
 | syn-context-syn-c3fdd656b15f | dialogue-response | Alege replica pentru: „Haha, bine, ce vrei să faci mai târziu?” | Hahaha, tayyeb shu baddik te3mle ba3dayn? | Teacher correction: use `ba3den`, not `ba3dayn`: `Hahaha, tayyeb shu baddik te3mle ba3den?`. |
 | syn-context-syn-7ac35bb401b3 | dialogue-response | Alege replica pentru: „Nu știu, poate merg la restaurant.” | Ma b3ref, yimken bru7 3al mat3am. | Superseded spelling. Teacher-approved: `Ma b3ref, yemkin ruu7 3al mat3am.` |
-| syn-context-syn-5d200eaeb574 | dialogue-response | Alege replica pentru: „Frumos! Și eu sunt flămând.” | 7elo! Ana kamen jou3an. | |
-| syn-context-syn-5d78249e7425 | dialogue-response | Alege replica pentru: „Hai, vino cu mine!” | Yalla ta3a ma3e! | |
+| syn-context-syn-5d200eaeb574 | dialogue-response | Alege replica pentru: „Frumos! Și eu sunt flămând.” | 7elo! Ana kamen jou3an. | Approved link: `syn-5d200eaeb574` (primary). |
+| syn-context-syn-5d78249e7425 | dialogue-response | Alege replica pentru: „Hai, vino cu mine!” | Yalla ta3a ma3e! | Approved link: `syn-5d78249e7425` (primary). |
 | syn-context-syn-0d9908b23042 | dialogue-response | Alege replica pentru: „Hai, vorbim mai târziu!” | Yalla, b7akik ba3dayn! | Superseded. Teacher-approved canonical: `Mne7ke ba3den.` `Mne7ke` alone can pragmatically imply postponement (“we'll talk [later]”) without specifying when. Keep distinct: `be7kiik` = “I’ll talk to you”; `b7akiik` = “I’ll talk with you / we’ll talk with each other”. |
 
 ## a1-restaurant — La restaurant
