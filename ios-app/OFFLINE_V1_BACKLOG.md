@@ -34,7 +34,7 @@ Local progress and durable failed-save retry; review queue and content-aware cou
 ## Separate scope decisions — not automatic offline-v1 blockers
 
 - Historical synthetic drill-ID progress: audit and define handling; preserve history unless a migration is explicitly chosen. New invalid entries are prevented.
-- Failed writes across force-quit: a durable JSON outbox is implemented for queued progress operations. Replay uses idempotent writes; real-device force-quit/relaunch verification remains in item 11. If the outbox itself cannot be written, the app does not claim that unjournaled work will survive termination.
+- Failed writes across force-quit: a durable JSON outbox is implemented for queued progress operations. Replay uses idempotent writes. Automated verification passed in CI run 35570115698 (232 Swift tests plus native build/resource checks); real-device force-quit/relaunch verification remains in item 11. If the outbox itself cannot be written, the app does not claim that unjournaled work will survive termination.
 - Orientation: only the latest session/result is retained; a full historical results archive is optional.
 - First-launch welcome/onboarding presentation: current orientation is optional from Home/Profile. An automatic welcome walkthrough is a separate UX choice.
 - Extra fluency content beyond the approved launch curriculum requires teacher materials; audio fluency is item 8.
