@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Araba libaneza — cedar and conversation</title>
+  <rect width="1024" height="1024" fill="#123F35"/>
+  <rect x="164" y="176" width="696" height="620" rx="164" fill="#FFF7E8"/>
+  <path d="M272 728H442L272 866Z" fill="#FFF7E8"/>
+  <path d="M512 266L596 366H560L652 446H602L714 534H646L748 614H538V690H486V614H276L378 534H310L422 446H372L464 366H428Z" fill="#123F35"/>
+  <rect x="462" y="726" width="100" height="16" rx="8" fill="#C5443D"/>
+</svg>

@@ -29,7 +29,9 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.centruldearabalibaneza.app
         PRODUCT_NAME: YallaApp
         SWIFT_VERSION: "6.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
         INFOPLIST_KEY_CFBundleDisplayName: "Araba libaneza"
         INFOPLIST_KEY_NSMicrophoneUsageDescription: "Microfonul este folosit doar când alegi să te înregistrezi pentru Spune și compară."
         TARGETED_DEVICE_FAMILY: "1,2"
