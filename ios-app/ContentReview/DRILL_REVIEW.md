@@ -489,9 +489,9 @@ Teacher review rules added:
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q72 | dialogue-response | Colega ta este bolnavă. Ce îi spui? | Saleemtik | |
-| q73 | dialogue-response | Spune că mașina ta este frumoasă. | Sayyarte 7elwe | |
-| q74 | dialogue-response | Spune că în bucătărie este o chiuvetă. | Bil matba5 fi majla | |
+| q72 | dialogue-response | Colega ta este bolnavă. Ce îi spui? | Saleemtik | Teacher-approved as written. |
+| q73 | dialogue-response | Spune că mașina ta este frumoasă. | Sayyarte 7elwe | Teacher-approved as written. |
+| q74 | dialogue-response | Spune că în bucătărie este o chiuvetă. | Bil matba5 fi majla | Teacher-approved as written. |
 | q75 | dialogue-response | Vrei o farfurie. | Badde sa7en | Covered by approved Restaurant wording: `Badde sa7en.` |
 | xq5fe5230d87d7 | dialogue-response | Vorbești unei femei. Alege cererea corectă. | Fike tefta7e sh-shibbek? | Teacher-approved spelling: `Fike tefta7e esh-shibbek?` |
 | xqd255b5f8b19a | dialogue-response | Spune că obiectul se află la tine acum. | Ma3e masare halla2 | Teacher-approved spelling: `Ma3e masaare halla2.` |
@@ -537,7 +537,7 @@ Teacher review rules added:
 | syn-context-syn-da733d752414 | dialogue-response | Alege replica pentru: „Frumos! Ce culoare?” | 7elo! Shu el lon? | Teacher-approved Shopping phrase reused here: `7elo! Shu el lon?` |
 | syn-context-syn-9b35dc311667 | dialogue-response | Alege replica pentru: „Albastru. A fost puțin scump.” | Azra2. Ken 8ali shway. | Apply established adjective spelling: `Azra2. Ken 8ale shway.` |
 | syn-context-syn-ba37ac3768b3 | dialogue-response | Alege replica pentru: „Patruzeci de dolari. Dar e foarte frumos.” | Arb3in dollar. Bass 7elo ktir. | Apply established spelling convention: `Arb3iin dollar. Bas 7elo ktiir.` |
-| syn-context-syn-6996b78e494e | dialogue-response | Alege replica pentru: „Bine! Eu am mers la cinema.” | Mni7! Ana re7t 3as sinema. | |
+| syn-context-syn-6996b78e494e | dialogue-response | Alege replica pentru: „Bine! Eu am mers la cinema.” | Mni7! Ana re7t 3as sinema. | Teacher-approved as written. |
 | syn-context-syn-64b2d9a36853 | dialogue-response | Alege replica pentru: „Un film libanez. A fost minunat!” | Film lebnene. Ken ra2e3! | Teacher-approved contextual rewrite: `7deret filem lebnene. Ken ra2e3!` Accepted alternatives for the evaluation include `ktiir 7elo`, `fakhem` / `fa5em`, or `awe` depending on intended nuance/register. |
 | syn-context-syn-9612f959f867 | dialogue-response | Alege replica pentru: „Unde e cinematograful?” | Wayn es sinema? | Apply established standalone form: `Wen es sinema?` |
 | syn-context-syn-d5a7e5f0f030 | dialogue-response | Alege replica pentru: „Lângă mall-ul mare.” | Janb el mall el kbir. | Apply established City preference: `7add el mall el kbiir.` |
