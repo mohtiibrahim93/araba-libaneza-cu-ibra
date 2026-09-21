@@ -492,15 +492,15 @@ Teacher review rules added:
 | q72 | dialogue-response | Colega ta este bolnavă. Ce îi spui? | Saleemtik | |
 | q73 | dialogue-response | Spune că mașina ta este frumoasă. | Sayyarte 7elwe | |
 | q74 | dialogue-response | Spune că în bucătărie este o chiuvetă. | Bil matba5 fi majla | |
-| q75 | dialogue-response | Vrei o farfurie. | Badde sa7en | |
+| q75 | dialogue-response | Vrei o farfurie. | Badde sa7en | Covered by approved Restaurant wording: `Badde sa7en.` |
 | xq5fe5230d87d7 | dialogue-response | Vorbești unei femei. Alege cererea corectă. | Fike tefta7e sh-shibbek? | Teacher-approved spelling: `Fike tefta7e esh-shibbek?` |
 | xqd255b5f8b19a | dialogue-response | Spune că obiectul se află la tine acum. | Ma3e masare halla2 | Teacher-approved spelling: `Ma3e masaare halla2.` |
-| xqf538a64b0bb5 | grammar-drill | Transformă la feminin: Huwwe mabsuut. | Hiyye mabsuuta. | |
-| xq05d1b5f6c9a4 | grammar-drill | Transformă pentru „noi”: Ana badde mayy. | Ne7na baddna mayy. | |
+| xqf538a64b0bb5 | grammar-drill | Transformă la feminin: Huwwe mabsuut. | Hiyye mabsuuta. | Approved structure. `Hiyye` / `Heyye` are both accepted per teacher rule. |
+| xq05d1b5f6c9a4 | grammar-drill | Transformă pentru „noi”: Ana badde mayy. | Ne7na baddna mayy. | Approved structure: `Ne7na baddna mayy.` |
 | syn-rule-5-0 | grammar-drill | Ce întrebare cere ocupația? | shu bte3mel? | Needs semantic correction. Teacher rule: `Shu bte3mel?` = “ce faci?”; for work/occupation use `Shu bteshte8el?` / a context-specific occupation question. Do not teach `Shu bte3mel?` as uniquely “ce lucrezi?”. |
 | syn-rule-5-1 | grammar-drill | Care expresie exprimă o preferință? | bhibb el shawerma | Apply established spelling: `B7ibb el shawarma.` |
-| syn-rule-10-0 | grammar-drill | Care exemplu descrie trecutul? | eshtarayt 2amis a7mar | |
-| syn-rule-10-1 | grammar-drill | Ce afli întrebând kam se3er el 2amis? | prețul cămășii | |
+| syn-rule-10-0 | grammar-drill | Care exemplu descrie trecutul? | eshtarayt 2amis a7mar | Superseded by teacher past-tense form: `shtareet 2amis a7mar`. |
+| syn-rule-10-1 | grammar-drill | Ce afli întrebând kam se3er el 2amis? | prețul cămășii | Apply Shopping rule: use `addesh se3er el 2amis?` / accepted `adde` or `addaysh` variants, not `kam se3er`. |
 | syn-context-syn-59fca2ec3a60 | dialogue-response | Alege replica pentru: „Salut! Mă cheamă Maria și sunt din România.” | Marhaba! Esme Maria w ana men romania. | Apply established greeting rule: `Mar7aba! Esme Maria w ana men Romania.` |
 | syn-context-syn-f69f5a6d5007 | dialogue-response | Alege replica pentru: „Lucrez ca medic într-un spital în fiecare zi.” | Beshte8el duktor b mustashfa kell yom. | Superseded. Teacher-approved: `Beshte8el doktor b mustashfa.` Remove `kell yom` unless the Romanian prompt explicitly needs “în fiecare zi”. |
 | syn-context-syn-9d3d58a96116 | dialogue-response | Alege replica pentru: „Îmi plac șaorma și cafeaua libaneză.” | Bhibb el shawerma w el ahwe el lebneniyye. | Apply established spelling: `B7ibb el shawarma w el ahwe el lebneniyye.` |
@@ -508,7 +508,7 @@ Teacher review rules added:
 | syn-context-syn-0e47aeab4edf | dialogue-response | Alege replica pentru: „Mă cheamă Tarek. Și tu?” | Esme Tarek. W ente? | |
 | syn-context-syn-bc8dd5a2755e | dialogue-response | Alege replica pentru: „Eu sunt Maya, din România.” | Ana Maya, men romania. | |
 | syn-context-syn-af846fd69bcb | dialogue-response | Alege replica pentru: „Încântat! Sunt din Liban.” | Tsharrafna! Ana men lebnen. | |
-| syn-context-syn-fa18433c778b | dialogue-response | Alege replica pentru: „Ce mai faci? Ce lucrezi?” | Kifak? Shu bte3mel? | |
+| syn-context-syn-fa18433c778b | dialogue-response | Alege replica pentru: „Ce mai faci? Ce lucrezi?” | Kifak? Shu bte3mel? | Semantic correction from teacher rule: `Kifak? Shu bteshte8el?` because `Shu bte3mel?` means “ce faci?”, not specifically “ce lucrezi?”. |
 | syn-context-syn-b6c2a576ed79 | dialogue-response | Alege replica pentru: „Bine, mulțumesc. Sunt inginer.” | Mni7, shukran. Ana muhandis. | Superseded lexical form. Teacher-approved: `Mni7, shukran. Ana mhandes.` |
 | syn-context-syn-6192684b4344 | dialogue-response | Alege replica pentru: „Frumos! Unde lucrezi?” | 7elo! Wayn bteshte8el? | Apply established standalone form: `7elo! Wen bteshte8el?` |
 | syn-context-syn-ca64cd382206 | dialogue-response | Alege replica pentru: „Lucrez la o companie în Beirut.” | Beshte8el b sherke b bayrut. | |
@@ -533,7 +533,7 @@ Teacher review rules added:
 | syn-context-syn-71b1f3365b45 | dialogue-response | Alege replica pentru: „Perfect! Ce faci acum?” | Tamem! Shu 3am te3mel halla2? | Apply established action variants: `Tamem! Shu 3am ta3mel halla2?` / `ta3mol`; `bta3mel/bta3mol` also accepted. |
 | syn-context-syn-123c1509d947 | dialogue-response | Alege replica pentru: „Beau cafea. Și tu?” | 3am beshrab ahwe. W ente? | |
 | syn-context-syn-1df0b8b69176 | dialogue-response | Alege replica pentru: „Eu la fel. Ce ai făcut ieri?” | Ana kamen. Shu 3emelt embere7? | Superseded spelling. Teacher-approved: `Ana kamen. Shu 3emelt mbere7?` |
-| syn-context-syn-6c83e06d43cf | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat o cămașă.” | Re7t 3as su2 w eshtarayt 2amis. | |
+| syn-context-syn-6c83e06d43cf | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat o cămașă.” | Re7t 3as su2 w eshtarayt 2amis. | Apply approved past pattern: `Re7t 3a el su2 w shtareet 2amis.` |
 | syn-context-syn-da733d752414 | dialogue-response | Alege replica pentru: „Frumos! Ce culoare?” | 7elo! Shu el lon? | Teacher-approved Shopping phrase reused here: `7elo! Shu el lon?` |
 | syn-context-syn-9b35dc311667 | dialogue-response | Alege replica pentru: „Albastru. A fost puțin scump.” | Azra2. Ken 8ali shway. | Apply established adjective spelling: `Azra2. Ken 8ale shway.` |
 | syn-context-syn-ba37ac3768b3 | dialogue-response | Alege replica pentru: „Patruzeci de dolari. Dar e foarte frumos.” | Arb3in dollar. Bass 7elo ktir. | Apply established spelling convention: `Arb3iin dollar. Bas 7elo ktiir.` |
@@ -543,7 +543,7 @@ Teacher review rules added:
 | syn-context-syn-d5a7e5f0f030 | dialogue-response | Alege replica pentru: „Lângă mall-ul mare.” | Janb el mall el kbir. | Apply established City preference: `7add el mall el kbiir.` |
 | syn-context-syn-c32133ea805d | dialogue-response | Alege replica pentru: „Ah, îl știu. E departe de aici?” | Ah b3erfo. B3id men hon? | Apply long-vowel spelling: `Ah b3erfo. B3iid men hon?` |
 | syn-context-syn-d56463eaf234 | dialogue-response | Alege replica pentru: „Nu, aproape. Zece minute cu mașina.” | La2, 2arib. 3asher da2ayi2 bel sayyara. | Apply established `2ariib` and minute-variant rules: `La2, 2ariib. 3asher d2eeye2 bel sayyara.` Other approved `d2eeye2` spellings remain accepted. |
-| syn-context-syn-caf02013bad9 | dialogue-response | Alege replica pentru: „Frumos! Ce faci acum?” | 7elo! Shu 3am bte3mle halla2? | |
+| syn-context-syn-caf02013bad9 | dialogue-response | Alege replica pentru: „Frumos! Ce faci acum?” | 7elo! Shu 3am bte3mle halla2? | Apply approved feminine present-progressive form: `7elo! Shu 3am ta3mle halla2?` |
 | syn-context-syn-20ca1866edec | dialogue-response | Alege replica pentru: „Mă gândesc să merg la magazin.” | 3am bfakker ru7 3al ma7all. | Teacher-approved spelling: `3am bfakker ru7 3al ma77al.` Note: `ma77al` literally means “place” and can refer contextually to a shop/store/place; for a specific supermarket/minimarket/neighborhood shop, use the appropriate noun such as supermarket/minimarket/dekken. |
 | syn-context-syn-8dabad401cc1 | dialogue-response | Alege replica pentru: „Vrei să cumperi ceva?” | Baddik teshtre she? | Teacher-approved as written. |
 | syn-context-syn-f8c3f7e96290 | dialogue-response | Alege replica pentru: „Da, vreau o rochie pentru nuntă.” | Eh, badde fostan lal 3ers. | Superseded spelling. Teacher-approved: `Eh, badde fostan lal 3eres.` |
