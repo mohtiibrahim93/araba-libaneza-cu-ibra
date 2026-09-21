@@ -201,8 +201,8 @@ These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| xqb0fe7d243e19 | grammar-drill | Cum se pronunță il + shames? | ish-shames | |
-| xq682beb958aa6 | grammar-drill | Cum se pronunță articolul în L-balad? | L se păstrează | |
+| xqb0fe7d243e19 | grammar-drill | Cum se pronunță il + shames? | ish-shames | Teacher-approved: canonical `Esh-shames`; `ish-shames` is also accepted. Existing exact expressions include `cfba5ba3c9a1d` (`Esh-shames`) and `x1a409cbb64d1` (`ish-shames`). Use `Esh-shames` as primary. |
+| xq682beb958aa6 | grammar-drill | Cum se pronunță articolul în L-balad? | L se păstrează | Teacher-approved as written. Existing exact expression: `x12c19f83d9e0` (`L-balad`). |
 
 ## a1-needs — Am, vreau, pot
 
