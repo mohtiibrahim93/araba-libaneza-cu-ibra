@@ -141,10 +141,10 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q34 | grammar-drill | Alege forma potrivită. | el-2amar | Teacher clarification: keep the written form as `el amar` / `el 2amar`. Pronunciation contracts to `L-amar` / `L-2amar` because `amar/2amar` begins with a lunar letter. Do not replace the written exercise with the pronunciation spelling. Existing `L-2amar` (`c8e5a27b926b2`) represents the pronounced form. |
 | q35 | grammar-drill | Alege forma potrivită. | 3aylten | Approved link: `c338991da9563` (primary) — “două familii”. |
 | q36 | grammar-drill | Alege forma potrivită. | 3aynten | Approved link: `c2876bdbd1048` (primary) — “doi ochi”. |
-| q69 | dialogue-response | Spune că familia voastră este mare. | 3ayletna kbiire | |
-| q70 | dialogue-response | Întreabă un băiat ce are / ce-i cu el. | Shu bek? | |
-| syn-rule-2-0 | grammar-drill | Completează „Nu am”: ma ___. | 3ande | |
-| syn-rule-2-1 | grammar-drill | În abuk, la cine se referă -uk? | tatăl tău, adresare masculină | Teacher correction: replace this example. `abuk` is rare/non-preferred for the Lebanese course; use `bayyak` for “tatăl tău” (addressing a male) instead. No exact current `bayyak` expression entry exists, so revise production content rather than fabricating a link. |
+| q69 | dialogue-response | Spune că familia voastră este mare. | 3ayletna kbiire | Approved link: `c977d2bfb47db` (primary) |
+| q70 | dialogue-response | Întreabă un băiat ce are / ce-i cu el. | Shu bek? | Approved link: `cfd1707cf8e58` (primary) |
+| syn-rule-2-0 | grammar-drill | Completează „Nu am”: ma ___. | 3ande | Approved grammar drill. Link `3ande` component to `c02511bf38d1a` (primary); the negation pattern itself is grammar/session content. |
+| syn-rule-2-1 | grammar-drill | În abuk, la cine se referă -uk? | tatăl tău, adresare masculină | Teacher clarification: `abuk` is correct and exists, but `bayyak` is the preferred/nicer Lebanese teaching form for “tatăl tău” (addressing a male). Revise the teaching example to `bayyak`; do not describe `abuk` as incorrect. No exact current `bayyak` expression entry exists, so revise production content rather than fabricating a link. |
 | syn-context-syn-120b95bded6e | dialogue-response | Alege replica pentru: „Nu am surori.” | Ma 3ande a5wet. | |
 | syn-context-syn-45447086e1f3 | dialogue-response | Alege replica pentru: „Am un frate și o soră.” | 3ande a5 wa7ad w e5t wa7de. | |
 | syn-context-syn-cf8d1f3fcc2c | dialogue-response | Alege replica pentru: „Fratele meu mai mare este căsătorit.” | A5e el kbir metzawwaj. | |
