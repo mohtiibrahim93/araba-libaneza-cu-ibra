@@ -178,20 +178,24 @@ These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording
 - Male `3ezzebe` is also accepted instead of `a3zab`.
 - `3ayltak kbiire` — familia ta e mare.
 - `Hiyye` and `Heyye` are both accepted forms for “she”. With sun-letter assimilation before `zghiire`, accept multiple natural Arabizi renderings of the same phrase (for example `Hiyye il-zghiire`, `Hiye ez-zghiire`, `Heyye z-z8iire`); do not treat these as different lexical items.
+- Canonical `Ana 3ande e5et we7de bas`; accepted word-order variants include `Ana 3ande bas e5et we7de` and `Ana bas 3ande e5et we7de`.
+- Canonical `7elo! 5ayye el-kbiir mjawwaz` for “Frumos! Fratele meu cel mare e căsătorit.”
+- `Eh, 3ando benet we7de` — da, are o fiică.
+- Canonical `Tsharrafna! 3ammte kamen 3andha tlet wled`; `Kamen 3ammte 3andha tlet wled` is also accepted.
 
 | syn-context-syn-680e0aa51bd4 | dialogue-response | Alege replica pentru: „bunicul și bunica mea” | jedde w jeddte | Superseded. Teacher-approved: `Jedde w sitte`. |
 | syn-context-syn-66e4064dce20 | dialogue-response | Alege replica pentru: „ești căsătorit sau necăsătorit?” | metzawwaj walla a3zab? | Superseded. Teacher-approved alternatives: `Mjawwaz walla a3zab?` or `Mjawwaz aw a3zab?`. Male `3ezzebe` is also accepted instead of `a3zab`. |
-| syn-context-syn-7bd069a08aeb | dialogue-response | Alege replica pentru: „nu am copii” | ma 3ande wled | |
+| syn-context-syn-7bd069a08aeb | dialogue-response | Alege replica pentru: „nu am copii” | ma 3ande wled | Teacher-approved as written: `Ma 3ande wled`. |
 | syn-context-syn-40bd9f448119 | dialogue-response | Alege replica pentru: „cum îl cheamă pe fratele tău?” | shu esem a5uk? | Superseded. Teacher-approved alternatives: `Shu esmo 5ayyak?` or `Shu esem 5ayyak?`. |
 | syn-context-syn-34db33b665ce | dialogue-response | Alege replica pentru: „Salut Karim! Ai frați?” | Marhaba Karim! 3andak a5we? | Superseded. Teacher-approved: `Mar7aba Karim! 3andak i5we?` (`Mar7aba`, not `Marhaba`; `Karim`, not `Kariim`). |
 | syn-context-syn-af56b2b3cf85 | dialogue-response | Alege replica pentru: „Da, am un frate și două surori.” | Eh, 3ande a5 wa7ad w e5tayn. | Superseded. Teacher-approved: `3ande 5ay w e5ten`; `i5ten` is also accepted for `e5ten`. |
 | syn-context-syn-cbb99b6619b3 | dialogue-response | Alege replica pentru: „Uau! Familia ta e mare.” | Wow! 3ayiltak kbire. | Superseded. Teacher-approved family phrase: `3ayltak kbiire`. |
-| syn-context-syn-abd809fe84db | dialogue-response | Alege replica pentru: „Da, foarte. Și tu?” | Eh, ktir. W ente? | |
-| syn-context-syn-e31c29942d77 | dialogue-response | Alege replica pentru: „Eu am doar o soră.” | Ana 3ande e5t wa7de bass. | |
+| syn-context-syn-abd809fe84db | dialogue-response | Alege replica pentru: „Da, foarte. Și tu?” | Eh, ktir. W ente? | Needs contextual rewrite. Teacher noted isolated `Eh, ktir. W ente?` is not naturally equivalent to Romanian “Da, foarte. Și tu?”; answer should follow the actual idea/question (e.g. many children vs. another meaning of `ktiir`). Do not approve as a generic response. |
+| syn-context-syn-e31c29942d77 | dialogue-response | Alege replica pentru: „Eu am doar o soră.” | Ana 3ande e5t wa7de bass. | Superseded. Canonical: `Ana 3ande e5et we7de bas.` Accepted word-order variants include `Ana 3ande bas e5et we7de.` and `Ana bas 3ande e5et we7de.` |
 | syn-context-syn-d45335ca7ecc | dialogue-response | Alege replica pentru: „O cheamă Reem. E cea mică.” | Esmha Reem. Hiye ez z8ire. | Teacher correction: use `Esma Reem.` and accept `Hiyye` / `Heyye` for “she”. For “she is the little one”, keep one canonical teaching form but accept natural article/pronunciation variants such as `Hiyye il-zghiire`, `Hiye ez-zghiire`, `Heyye z-z8iire`, etc.; these are variants of the same expression, not separate vocabulary items. |
-| syn-context-syn-d2b3d581bc81 | dialogue-response | Alege replica pentru: „Frumos! Fratele meu cel mare e căsătorit.” | 7elo! A5e el kbir metzawwaj. | |
-| syn-context-syn-db59ff8bc2d1 | dialogue-response | Alege replica pentru: „Da, are o fiică.” | Eh, 3ando bent wa7de. | |
-| syn-context-syn-c53501ed4c95 | dialogue-response | Alege replica pentru: „Încântată! Și mătușa mea are trei copii.” | Tsharrafna! Ana kamen 3ammte 3andha tlat wled. | |
+| syn-context-syn-d2b3d581bc81 | dialogue-response | Alege replica pentru: „Frumos! Fratele meu cel mare e căsătorit.” | 7elo! A5e el kbir metzawwaj. | Superseded. Teacher-approved canonical: `7elo! 5ayye el-kbiir mjawwaz.` Natural article attachment/pronunciation variants around `5ayye` / `el-kbiir` are accepted. |
+| syn-context-syn-db59ff8bc2d1 | dialogue-response | Alege replica pentru: „Da, are o fiică.” | Eh, 3ando bent wa7de. | Superseded. Teacher-approved: `Eh, 3ando benet we7de.` |
+| syn-context-syn-c53501ed4c95 | dialogue-response | Alege replica pentru: „Încântată! Și mătușa mea are trei copii.” | Tsharrafna! Ana kamen 3ammte 3andha tlat wled. | Superseded. Teacher-approved canonical: `Tsharrafna! 3ammte kamen 3andha tlet wled.` Accepted variant: `Tsharrafna! Kamen 3ammte 3andha tlet wled.` |
 
 ## a1-description — Culori și descrieri
 
