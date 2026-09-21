@@ -72,13 +72,13 @@ These are supplied directly by Ibrahim during review. Teacher decision: keep bot
 - ana men bu5arest. w inta? men wen men lebnen ?
 - ana men bayrut
 - wow. nice! kifak ?
-- mnii7a, l7amdella w inta ?
+- mnii7, l7amdella w ente ?
 - ana kamen. tcharrafna bas lezem fel. ma3 es-saleeme
 - ana bil aktar. alla ysalmak !
 
 **Remaining dialogue consistency check**
 
-Candidate 2 currently has Maria ask Rami `kifak?`, so the following stored candidate line `mnii7a, l7amdella w inta ?` conflicts with the approved genders: Rami is male, while `mnii7a` is the feminine form, and he is replying to Maria. Do not publish that line until its exact teacher-approved corrected wording is confirmed.
+Teacher-approved correction for Candidate 2: Maria asks Rami `kifak?`; Rami replies `mnii7, l7amdella w ente?`. This uses masculine `mnii7` for Rami and feminine `ente` for Maria.
 
 **Teacher rules recorded from this review**
 
