@@ -385,7 +385,7 @@ Teacher shopping rules:
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
 | syn-rule-3-0 | grammar-drill | Alege forma pentru „tu lucrezi” (masculin). | bteshte8el | |
-| syn-rule-3-1 | grammar-drill | Ce întrebi prin wayn bteshte8el? | unde lucrează interlocutorul | |
+| syn-rule-3-1 | grammar-drill | Ce întrebi prin wayn bteshte8el? | unde lucrează interlocutorul | Superseded standalone `wayn`. Apply teacher rule: `Wen bteshte8el?` = “Unde lucrezi?” |
 | syn-context-syn-d12340f3b7f3 | dialogue-response | Alege replica pentru: „Lucrez într-un birou.” | Beshte8el b maktab. | |
 | syn-context-syn-28c3aa6353d0 | dialogue-response | Alege replica pentru: „Merg la muncă dimineața.” | Bru7 3al sho8ol es sobe7. | |
 | syn-context-syn-b2bd4637eafe | dialogue-response | Alege replica pentru: „Lucrez într-un spital.” | Beshte8el b mustashfa. | |
@@ -398,10 +398,10 @@ Teacher shopping rules:
 | syn-context-syn-948ce2838019 | dialogue-response | Alege replica pentru: „în fiecare zi dimineața” | kell yom es sobe7 | |
 | syn-context-syn-b08f17a3d9c5 | dialogue-response | Alege replica pentru: „stau acasă” | bo23od bel bayt | |
 | syn-context-syn-02254b3c9745 | dialogue-response | Alege replica pentru: „fac multă muncă” | ba3mel sho8ol ktir | |
-| syn-context-syn-9bc369c12ae2 | dialogue-response | Alege replica pentru: „Salut Omar! Ce lucrezi?” | Marhaba Omar! Shu bte3mel? | |
-| syn-context-syn-3ce7c2d5e0fb | dialogue-response | Alege replica pentru: „Salut! Sunt inginer. Și tu?” | Marhaba! Ana muhandis. W ente? | |
+| syn-context-syn-9bc369c12ae2 | dialogue-response | Alege replica pentru: „Salut Omar! Ce lucrezi?” | Marhaba Omar! Shu bte3mel? | Superseded greeting spelling. Use `Mar7aba Omar! Shu bte3mel?` pending any further lexical correction. |
+| syn-context-syn-3ce7c2d5e0fb | dialogue-response | Alege replica pentru: „Salut! Sunt inginer. Și tu?” | Marhaba! Ana muhandis. W ente? | Superseded greeting spelling. Use `Mar7aba! Ana muhandis. W ente?` pending any further lexical correction. |
 | syn-context-syn-67fecc1d6948 | dialogue-response | Alege replica pentru: „Sunt doctoriță, lucrez la spital.” | Ana duktora, beshte8el b mustashfa. | |
-| syn-context-syn-ad82883e3cc4 | dialogue-response | Alege replica pentru: „Uau! Unde e spitalul?” | Wow! Wayn el mustashfa? | |
+| syn-context-syn-ad82883e3cc4 | dialogue-response | Alege replica pentru: „Uau! Unde e spitalul?” | Wow! Wayn el mustashfa? | Superseded standalone `Wayn`. Use `Wow! Wen el mustashfa?` pending any further lexical correction. |
 | syn-context-syn-96d2561806f5 | dialogue-response | Alege replica pentru: „În Beirut, aproape de aici.” | B bayrut, 2arib men hon. | |
 | syn-context-syn-acaaf1de11b7 | dialogue-response | Alege replica pentru: „Frumos! Eu lucrez la o companie.” | 7elo! Ana beshte8el b sherke. | |
 | syn-context-syn-da1ccd7132bf | dialogue-response | Alege replica pentru: „Ce faci la companie?” | Shu bte3mel bel sherke? | |
