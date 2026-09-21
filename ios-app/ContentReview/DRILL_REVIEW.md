@@ -8,25 +8,25 @@ For each drill, choose session-only, linked (with exact existing expression IDs 
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q1 | grammar-drill | Ce cifră lipsește? | 7 | |
-| q2 | grammar-drill | Ce cifră lipsește? | 2 | |
-| q3 | grammar-drill | Ce cifră lipsește? | 5 | |
-| q4 | grammar-drill | Ce cifră lipsește? | 8 | |
-| q5 | grammar-drill | Ce cifră lipsește? | 3 | |
-| q6 | grammar-drill | Ce cifră lipsește? | 5 | |
-| q7 | grammar-drill | Ce cifră lipsește? | 2 | |
-| q8 | grammar-drill | Ce cifră lipsește? | 5 | |
-| q9 | grammar-drill | Ce cifră lipsește? | 7 | |
-| q10 | grammar-drill | Ce cifră lipsește? | 8 | |
-| q62 | dialogue-response | Cineva te întreabă „Shu esmak?”. Spune că te cheamă George. | Esme George | |
-| q63 | dialogue-response | Un coleg spune „Sabaa7 el 5er!”. Alege răspunsul din lecție. | Sabaa7 el nuur | |
-| xq3146af08f3de | grammar-drill | Ce cifră reprezintă sunetul Hamze? | 2 | |
-| xq967e3c4f938b | grammar-drill | Ce cifră reprezintă sunetul 3ayin? | 3 | |
-| xq9388423e7326 | grammar-drill | Ce cifră reprezintă sunetul 5aa2? | 5 | |
-| xq8a1d44f524d6 | grammar-drill | Ce cifră reprezintă sunetul 7aa2? | 7 | |
-| xqbd1ca96ad153 | grammar-drill | Ce cifră reprezintă sunetul 8ayn? | 8 | |
-| syn-rule-1-0 | grammar-drill | Vorbești cu o femeie. Completează: shu ___? | esmik | |
-| syn-rule-1-1 | grammar-drill | Cum introduci numele tău? | esme | |
+| q1 | grammar-drill | Ce cifră lipsește? | 7 | Approved: session-only |
+| q2 | grammar-drill | Ce cifră lipsește? | 2 | Approved: session-only |
+| q3 | grammar-drill | Ce cifră lipsește? | 5 | Approved: session-only |
+| q4 | grammar-drill | Ce cifră lipsește? | 8 | Approved: session-only |
+| q5 | grammar-drill | Ce cifră lipsește? | 3 | Approved: session-only |
+| q6 | grammar-drill | Ce cifră lipsește? | 5 | Approved: session-only |
+| q7 | grammar-drill | Ce cifră lipsește? | 2 | Approved: session-only |
+| q8 | grammar-drill | Ce cifră lipsește? | 5 | Approved: session-only |
+| q9 | grammar-drill | Ce cifră lipsește? | 7 | Approved: session-only |
+| q10 | grammar-drill | Ce cifră lipsește? | 8 | Approved: session-only |
+| q62 | dialogue-response | Cineva te întreabă „Shu esmak?”. Spune că te cheamă George. | Esme George | Approved link: `c11c38ce92378` (primary) |
+| q63 | dialogue-response | Un coleg spune „Sabaa7 el 5er!”. Alege răspunsul din lecție. | Sabaa7 el nuur | Approved link: `cddc03cded5ec` (primary) |
+| xq3146af08f3de | grammar-drill | Ce cifră reprezintă sunetul Hamze? | 2 | Approved: session-only |
+| xq967e3c4f938b | grammar-drill | Ce cifră reprezintă sunetul 3ayin? | 3 | Approved: session-only |
+| xq9388423e7326 | grammar-drill | Ce cifră reprezintă sunetul 5aa2? | 5 | Approved: session-only |
+| xq8a1d44f524d6 | grammar-drill | Ce cifră reprezintă sunetul 7aa2? | 7 | Approved: session-only |
+| xqbd1ca96ad153 | grammar-drill | Ce cifră reprezintă sunetul 8ayn? | 8 | Approved: session-only |
+| syn-rule-1-0 | grammar-drill | Vorbești cu o femeie. Completează: shu ___? | esmik | Approved link: `ce8f1c2f609c4` (primary) |
+| syn-rule-1-1 | grammar-drill | Cum introduci numele tău? | esme | Approved link: `x904c16c1cb31` (primary) |
 | syn-context-syn-9a79f6640456 | dialogue-response | Alege replica pentru: „Salut! Cum te cheamă? (masculin)” | Marhaba! Shu esmak? | |
 | syn-context-syn-ac9152691c69 | dialogue-response | Alege replica pentru: „Mă cheamă Lara. Dar tu? (masculin)” | Esme Lara. W enta? | |
 | syn-context-syn-1ee502ad508d | dialogue-response | Alege replica pentru: „Sunt din România.” | Ana men romania. | |
