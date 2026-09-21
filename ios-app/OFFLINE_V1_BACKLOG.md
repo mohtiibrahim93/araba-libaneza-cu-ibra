@@ -27,7 +27,7 @@ Local progress and failed-save retry; review queue and content-aware counts; can
 | 6 | Production Listening/Speaking | Supply actual approved recordings and expression IDs; integrate bundled assets/listening prompts through reproducible content inputs. | RECORDING_BATCH_01.md prepared from existing content; actual recordings/approval needed |
 | 7 | Production dictionary/roots/morphology | Supply approved roots, morphology, inflections, context/grammar/pragmatics; populate existing models and complete saved/root practice coverage. | Approved materials needed |
 | 8 | Audio Speed Drill | Connect the existing audio direction to actual reference playback and listening-safe prompts, without revealing the answer. | Item 6 |
-| 9 | Public identity and visual finish | Decide public name; finish app icon, launch appearance and coherent final styling. | Provisional name approved: Araba libaneza; display name configured. Cedar/conversation icon and adaptive system-background launch screen added; native build verification and final visual/device acceptance remain |
+| 9 | Public identity and visual finish | Decide public name; finish app icon, launch appearance and coherent final styling. | Provisional name approved: Araba libaneza; display name configured. Cedar/conversation icon and adaptive system-background launch screen added; native build and packaged-resource checks passed; final visual/device acceptance remains |
 | 10 | Release preparation | Prepare actual-behavior privacy information, App Store copy/screenshots, signing/archive and TestFlight distribution. | Romanian store copy, technical privacy inventory and screenshot plan prepared in Release; public identity/contact details, signed-build review and Apple developer/Mac access remain |
 | 11 | One full integration/release pass | Full automated checks plus real iPhone/iPad offline, restart, migration, retry, interruption, permission, accessibility and navigation tests; fix findings and retest affected areas. | Final content/build and devices |
 
@@ -51,3 +51,7 @@ Phase history and implemented foundations: ROADMAP.md.
 
 - Dictionary reference playback currently stops on leaving its screen; explicitly confirm background/audio-interruption behavior alongside the other audio screens.
 - Accessibility changes are code-reviewed and compiled, not visually or interactively certified. Confirm readable layouts, keyboard reachability and VoiceOver navigation on real iPhone/iPad sizes.
+
+## Packaging verification
+
+Icon/launch work exposed an existing XcodeGen resource declaration that did not include App/Resources in the target. Fixed in 9400dc984eec93648ecf823663d3fe448c372052. Native CI run 35569170124 passed, including a new built-app check for the display name, iPhone/iPad icon metadata, compiled launch screen and byte-identical bundled content JSON. This is packaging evidence, not a substitute for the final device launch/interaction pass.
