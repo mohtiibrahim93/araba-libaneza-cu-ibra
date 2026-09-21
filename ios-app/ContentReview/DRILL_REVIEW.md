@@ -343,32 +343,42 @@ Teacher city/directions rules:
 
 ## a1-shopping — La cumpărături
 
+Teacher shopping rules:
+- `Adde`, `addesh`, and `addaysh` are accepted local variants for “how much”; with suffixes, `addaysh` is most common.
+- Use `B adde kilo et-tiffe7?` for “cât costă un kilogram de mere?”.
+- Use `Adde el se3er?` for “cât costă?”.
+- Prefer `8ale ktiir! Fi solde?` / `Fi 5asem?`; plural `5sumet` is also available.
+- Use `Ba3do 8ale. Tletiin?` for “tot scump. Treizeci?”.
+- `ma besiir` / `ma biseer` and close vowel spellings are accepted variants.
+- `5amsaw w tletiin` and `5amse w tleetin` are accepted variants for 35 in this context.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
 | syn-rule-7-0 | grammar-drill | Care este forma feminină a lui a7mar? | 7amra | |
 | syn-rule-7-1 | grammar-drill | Ce exprimi prin 8ali ktir? | este foarte scump | |
 | syn-context-syn-684e1e71f91e | dialogue-response | Alege replica pentru: „Îl vreau pe cel roșu.” | Badde el a7mar. | |
-| syn-context-syn-326b9a3aaf57 | dialogue-response | Alege replica pentru: „Cât costă un kilogram de mere?” | B kam el kilo tiffe7? | |
+| syn-context-syn-326b9a3aaf57 | dialogue-response | Alege replica pentru: „Cât costă un kilogram de mere?” | B kam el kilo tiffe7? | Superseded. Teacher-approved: `B adde kilo et-tiffe7?` |
 | syn-context-syn-5db6dcd019cf | dialogue-response | Alege replica pentru: „Am plătit treizeci de dolari.” | Dafa3t tlatin dollar. | |
-| syn-context-syn-768687f8f55e | dialogue-response | Alege replica pentru: „cât costă?” | kam el se3er? | |
-| syn-context-syn-ae2f974e33e5 | dialogue-response | Alege replica pentru: „poți să scazi prețul?” | bte2dar tnazzil el se3er? | |
-| syn-context-syn-b430400434e0 | dialogue-response | Alege replica pentru: „ce culoare?” | shu el lon? | |
+| syn-context-syn-768687f8f55e | dialogue-response | Alege replica pentru: „cât costă?” | kam el se3er? | Superseded. Teacher-approved: `Adde el se3er?` `Adde`, `addesh`, and `addaysh` are local variants; with suffixes, `addaysh` is most common. |
+| syn-context-syn-ae2f974e33e5 | dialogue-response | Alege replica pentru: „poți să scazi prețul?” | bte2dar tnazzil el se3er? | Teacher-approved as written: `Bte2dar tnazzil el se3er?` |
+| syn-context-syn-b430400434e0 | dialogue-response | Alege replica pentru: „ce culoare?” | shu el lon? | Teacher-approved as written: `Shu el lon?` |
 | syn-context-syn-c0f42ddb93f4 | dialogue-response | Alege replica pentru: „vreau pe cel roșu” | badde el a7mar | |
-| syn-context-syn-df943e0720e0 | dialogue-response | Alege replica pentru: „ce mărime?” | shu el 7ajem? | |
-| syn-context-syn-d0f0fbcc62fc | dialogue-response | Alege replica pentru: „cât e kilogramul?” | b kam el kilo? | |
-| syn-context-syn-95e2988299c0 | dialogue-response | Alege replica pentru: „Salut, vreau să văd cămășile.” | Marhaba, badde shuf el 2omsan. | |
-| syn-context-syn-7f6e456d1333 | dialogue-response | Alege replica pentru: „Bine ai venit, poftim. Avem multe culori.” | Ahla, tfaddale. 3andna alwan ktir. | |
+| syn-context-syn-df943e0720e0 | dialogue-response | Alege replica pentru: „ce mărime?” | shu el 7ajem? | Teacher-approved as written: `Shu el 7ajem?` |
+| syn-context-syn-d0f0fbcc62fc | dialogue-response | Alege replica pentru: „cât e kilogramul?” | b kam el kilo? | Superseded. Teacher-approved: `Badde el kilo?` |
+| syn-context-syn-95e2988299c0 | dialogue-response | Alege replica pentru: „Salut, vreau să văd cămășile.” | Marhaba, badde shuf el 2omsan. | Superseded greeting spelling. Teacher-approved: `Mar7aba, badde shuf el 2omsan.` |
+| syn-context-syn-7f6e456d1333 | dialogue-response | Alege replica pentru: „Bine ai venit, poftim. Avem multe culori.” | Ahla, tfaddale. 3andna alwan ktir. | Superseded. Teacher-approved: `Ahla, tfaddale. 3annna alween ktiire.` |
 | syn-context-syn-701cf540f24d | dialogue-response | Alege replica pentru: „Frumos! Vreau pe cel roșu.” | 7elo! Badde el a7mar. | |
 | syn-context-syn-3130b69313ba | dialogue-response | Alege replica pentru: „Ce mărime?” | Shu el 7ajem? | |
-| syn-context-syn-b39fd2bf2f63 | dialogue-response | Alege replica pentru: „Mediu, te rog.” | Wasat law sama7t. | |
-| syn-context-syn-4b2aa7dc7862 | dialogue-response | Alege replica pentru: „Poftim, asta e mediu.” | Tfaddale, hay wasat. | |
-| syn-context-syn-b97376f1db81 | dialogue-response | Alege replica pentru: „Cât costă?” | Kam el se3er? | |
-| syn-context-syn-28a55f541d2d | dialogue-response | Alege replica pentru: „Foarte scump! E reducere?” | 8ali ktir! Fi ta5fid? | |
-| syn-context-syn-7efd17236224 | dialogue-response | Alege replica pentru: „Bine, patruzeci de dolari.” | Tayyeb, arb3in dollar. | |
-| syn-context-syn-634f0e423246 | dialogue-response | Alege replica pentru: „Tot scump. Treizeci?” | Lissa 8ali. Tlatin? | |
-| syn-context-syn-827b303652be | dialogue-response | Alege replica pentru: „Nu, nu se poate. Treizeci și cinci.” | La2, ma bsir. 5amse w tlatin. | |
-| syn-context-syn-411064057d02 | dialogue-response | Alege replica pentru: „Perfect, vrei pungă?” | Tamem, baddik kis? | |
-| syn-context-syn-fb87f2fe9e57 | dialogue-response | Alege replica pentru: „Da, te rog.” | Eh law sama7t. | |
+| syn-context-syn-b39fd2bf2f63 | dialogue-response | Alege replica pentru: „Mediu, te rog.” | Wasat law sama7t. | Superseded spelling. Teacher-approved: `Wasat law sama7et.` |
+| syn-context-syn-4b2aa7dc7862 | dialogue-response | Alege replica pentru: „Poftim, asta e mediu.” | Tfaddale, hay wasat. | Teacher-approved as written. |
+| syn-context-syn-b97376f1db81 | dialogue-response | Alege replica pentru: „Cât costă?” | Kam el se3er? | Superseded. Teacher-approved: `Adde el se3er?` `Adde` / `addesh` / `addaysh` are accepted local variants. |
+| syn-context-syn-28a55f541d2d | dialogue-response | Alege replica pentru: „Foarte scump! E reducere?” | 8ali ktir! Fi ta5fid? | Superseded. Teacher-approved: `8ale ktiir! Fi solde?` or `8ale ktiir! Fi 5asem?`; plural `5sumet` is also accepted where context calls for discounts. |
+| syn-context-syn-7efd17236224 | dialogue-response | Alege replica pentru: „Bine, patruzeci de dolari.” | Tayyeb, arb3in dollar. | Teacher-approved: `Tayyeb, arb3iin dollar.` |
+| syn-context-syn-634f0e423246 | dialogue-response | Alege replica pentru: „Tot scump. Treizeci?” | Lissa 8ali. Tlatin? | Superseded. Teacher-approved: `Ba3do 8ale. Tletiin?` |
+| syn-context-syn-827b303652be | dialogue-response | Alege replica pentru: „Nu, nu se poate. Treizeci și cinci.” | La2, ma bsir. 5amse w tlatin. | Superseded. Teacher-approved: `La2, ma besiir. 5amsaw w tletiin.` Accepted variants include `ma biseer` / equivalent vowel spellings and `5amse w tleetin`. |
+| syn-context-syn-411064057d02 | dialogue-response | Alege replica pentru: „Perfect, vrei pungă?” | Tamem, baddik kis? | Superseded spelling. Teacher-approved: `Tameem, baddik kiis?` (`Tamem` remains accepted). |
+| syn-context-syn-fb87f2fe9e57 | dialogue-response | Alege replica pentru: „Da, te rog.” | Eh law sama7t. | Superseded spelling. Teacher-approved: `Eh law sama7et.` |
 
 ## a1-work — Munca și studiile
 
