@@ -42,8 +42,27 @@ interface Props {
   /**
    * Required in "create" mode. Every booking must reference the registration
    * that produced it; bookings without one are rejected by the backend.
+   *
+   * A caller that wants to show the slots *before* asking for anything can
+   * leave this out and pass `ensureRegistration` instead.
    */
   registrationId?: string;
+  /**
+   * Creates the registration on demand, from the details this component just
+   * collected, and returns its id.
+   *
+   * /trial used to ask for name, email and phone on its own screen purely to
+   * have a registration row before the grid could be shown — so a visitor gave
+   * their details before seeing whether any time suited them, and then gave
+   * them again in the confirm form below. This lets the page put the grid
+   * first and create the row at the moment of booking instead. The backend
+   * contract is unchanged: booking-create still receives a registration_id.
+   */
+  ensureRegistration?: (details: {
+    name: string;
+    email: string;
+    phone: string;
+  }) => Promise<string | null>;
 }
 
 interface AvailabilityResp {
@@ -101,6 +120,7 @@ const NativeScheduler = ({
   onBooked,
   mode = "create",
   onPick,
+  ensureRegistration,
   currentSlotIso,
   registrationId,
 }: Props) => {
@@ -204,7 +224,7 @@ const NativeScheduler = ({
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
-    if (mode === "create" && !registrationId) {
+    if (mode === "create" && !registrationId && !ensureRegistration) {
       toast.error(t.schedulerBookingFailed);
       return;
     }
@@ -218,9 +238,20 @@ const NativeScheduler = ({
     }
     setSubmitting(true);
     try {
+      // Either the caller already had a registration, or it makes one now from
+      // what was just typed. Never both, and never a booking without one.
+      const resolvedRegistrationId =
+        registrationId ??
+        (await ensureRegistration?.({ name: name.trim(), email: email.trim(), phone: phone.trim() })) ??
+        null;
+      if (mode === "create" && !resolvedRegistrationId) {
+        toast.error(t.schedulerBookingFailed);
+        setSubmitting(false);
+        return;
+      }
       const res = await supabase.functions.invoke("booking-create", {
         body: {
-          registration_id: registrationId,
+          registration_id: resolvedRegistrationId,
           event_type: eventType,
           start_at: selectedSlot,
           format,

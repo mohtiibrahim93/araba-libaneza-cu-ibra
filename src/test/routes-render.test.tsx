@@ -192,11 +192,38 @@ describe("retired URLs that render instead of redirecting", () => {
  * string in a free-text notes field, which is exactly how abandoned step-1
  * entries ended up looking like genuine bookings.
  */
-describe("trial step 1 does not look like a booking", () => {
+describe("an unfinished trial does not look like a booking", () => {
   it("records the lead as incomplete, not as a new lead", () => {
     const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
     expect(trial).toContain('lead_status: "incomplete"');
     expect(trial).not.toContain("NEALES");
+  });
+
+  it("shows the times before it asks for anything", () => {
+    // The page used to collect name, email and phone on a screen of its own
+    // before the grid appeared — details handed over before the visitor knew
+    // whether any slot suited them, then typed again in the confirm form.
+    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    expect(trial).toContain("<NativeScheduler");
+    expect(trial).toContain("ensureRegistration={ensureRegistration}");
+    // No lead-capture fields of its own ahead of the scheduler.
+    expect(trial).not.toMatch(/id="trial-(name|email|phone)"/);
+    expect(trial).not.toContain("<GdprCheckbox");
+  });
+
+  it("creates the registration once, even if the first slot clashes", () => {
+    // A retry after "that time was just taken" must reuse the row rather than
+    // leaving a second incomplete lead behind.
+    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    expect(trial).toContain("if (registrationIdRef.current) return registrationIdRef.current;");
+  });
+
+  it("still sends a registration id with every booking", () => {
+    // The backend rejects a booking without one; the scheduler now resolves it
+    // from either the prop or the callback, never neither.
+    const sched = readFileSync(resolve(process.cwd(), "src/components/NativeScheduler.tsx"), "utf8");
+    expect(sched).toContain("registration_id: resolvedRegistrationId");
+    expect(sched).toMatch(/if \(mode === "create" && !resolvedRegistrationId\)/);
   });
 
   it("promotes the lead to a real one only when a slot is booked", () => {
