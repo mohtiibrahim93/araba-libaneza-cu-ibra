@@ -170,14 +170,21 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 - `Bayye w emme` — tatăl și mama mea.
 
 These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording for production teaching content.
+- `Shu esmo 5ayyak?` and `Shu esem 5ayyak?` are both accepted.
+- `Mar7aba Karim! 3andak i5we?` — preferred greeting/family wording.
+- `Eh, 3ande 5ayy waa7ad w e5ten.` — da, am un frate și două surori.
+- `Jedde w sitte` — bunicul și bunica mea.
+- `Mjawwaz walla a3zab?` / `Mjawwaz aw a3zab?` — ești căsătorit sau necăsătorit?
+- Male `3ezzebe` is also accepted instead of `a3zab`.
+- `3ayltak kbiire` — familia ta e mare.
 
-| syn-context-syn-680e0aa51bd4 | dialogue-response | Alege replica pentru: „bunicul și bunica mea” | jedde w jeddte | |
-| syn-context-syn-66e4064dce20 | dialogue-response | Alege replica pentru: „ești căsătorit sau necăsătorit?” | metzawwaj walla a3zab? | |
+| syn-context-syn-680e0aa51bd4 | dialogue-response | Alege replica pentru: „bunicul și bunica mea” | jedde w jeddte | Superseded. Teacher-approved: `Jedde w sitte`. |
+| syn-context-syn-66e4064dce20 | dialogue-response | Alege replica pentru: „ești căsătorit sau necăsătorit?” | metzawwaj walla a3zab? | Superseded. Teacher-approved alternatives: `Mjawwaz walla a3zab?` or `Mjawwaz aw a3zab?`. Male `3ezzebe` is also accepted instead of `a3zab`. |
 | syn-context-syn-7bd069a08aeb | dialogue-response | Alege replica pentru: „nu am copii” | ma 3ande wled | |
-| syn-context-syn-40bd9f448119 | dialogue-response | Alege replica pentru: „cum îl cheamă pe fratele tău?” | shu esem a5uk? | |
-| syn-context-syn-34db33b665ce | dialogue-response | Alege replica pentru: „Salut Karim! Ai frați?” | Marhaba Karim! 3andak a5we? | |
-| syn-context-syn-af56b2b3cf85 | dialogue-response | Alege replica pentru: „Da, am un frate și două surori.” | Eh, 3ande a5 wa7ad w e5tayn. | |
-| syn-context-syn-cbb99b6619b3 | dialogue-response | Alege replica pentru: „Uau! Familia ta e mare.” | Wow! 3ayiltak kbire. | |
+| syn-context-syn-40bd9f448119 | dialogue-response | Alege replica pentru: „cum îl cheamă pe fratele tău?” | shu esem a5uk? | Superseded. Teacher-approved alternatives: `Shu esmo 5ayyak?` or `Shu esem 5ayyak?`. |
+| syn-context-syn-34db33b665ce | dialogue-response | Alege replica pentru: „Salut Karim! Ai frați?” | Marhaba Karim! 3andak a5we? | Superseded. Teacher-approved: `Mar7aba Karim! 3andak i5we?` (`Mar7aba`, not `Marhaba`; `Karim`, not `Kariim`). |
+| syn-context-syn-af56b2b3cf85 | dialogue-response | Alege replica pentru: „Da, am un frate și două surori.” | Eh, 3ande a5 wa7ad w e5tayn. | Superseded. Teacher-approved: `Eh, 3ande 5ayy waa7ad w e5ten.` |
+| syn-context-syn-cbb99b6619b3 | dialogue-response | Alege replica pentru: „Uau! Familia ta e mare.” | Wow! 3ayiltak kbire. | Superseded. Teacher-approved family phrase: `3ayltak kbiire`. |
 | syn-context-syn-abd809fe84db | dialogue-response | Alege replica pentru: „Da, foarte. Și tu?” | Eh, ktir. W ente? | |
 | syn-context-syn-e31c29942d77 | dialogue-response | Alege replica pentru: „Eu am doar o soră.” | Ana 3ande e5t wa7de bass. | |
 | syn-context-syn-d45335ca7ecc | dialogue-response | Alege replica pentru: „O cheamă Reem. E cea mică.” | Esmha Reem. Hiye ez z8ire. | |
