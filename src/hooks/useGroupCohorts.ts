@@ -1,39 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
-export interface Cohort {
-  id: string;
-  form_type: "group" | "kids";
-  level: string | null;
-  format: string | null; // 'fizic' | 'online' | null (null = either)
-  start_date: string; // YYYY-MM-DD
-  schedule_label_ro: string;
-  schedule_label_en: string;
-  max_seats: number;
-  sort_order: number;
-  /** Language the cohort is taught in — must match what the student needs. */
-  teaching_language: "ro" | "en";
-  end_date: string | null;
-  /** True when end_date allows for a break whose exact dates are not settled. */
-  end_date_is_estimate: boolean;
-  /** Holiday break shown on the card, per language. */
-  break_note_ro: string | null;
-  break_note_en: string | null;
-  status: CohortStatus;
-  taken: number;
-  seatsLeft: number;
-  full: boolean;
-}
+export type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
-export type CohortStatus =
-  | "draft"
-  | "forming"
-  | "minimum_reached"
-  | "confirmed"
-  | "full"
-  | "in_progress"
-  | "completed"
-  | "cancelled";
 
 // Statuses that should appear on the public site / registration form.
 // `draft` is admin-only; `completed`/`cancelled` are historical; `in_progress`

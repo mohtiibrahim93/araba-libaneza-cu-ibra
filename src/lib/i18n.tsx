@@ -200,7 +200,6 @@ export const translations = {
     ctaScheduleTitle: "Programul cursurilor",
     ctaScheduleDesc: "Alege varianta potrivită și contactează-ne pentru disponibilitate rapidă.",
     ctaScheduleGroupLabel: "Curs de grup",
-    ctaScheduleGroupValue: "A1 fizic (Grupa 2): luni și miercuri 19:00–20:30 — start miercuri, 2 septembrie 2026\nA1 online: grupă în desfășurare, completă — lasă-ți datele pentru următoarea\nA2 fizic: marți și joi 19:00–20:30 — start marți, 1 septembrie 2026 · A2 online: în curând · B1–C2 se deschid succesiv",
     ctaSchedulePrivateLabel: "Private individuale",
     ctaSchedulePrivateValue: "Program flexibil · sesiuni de 60 minute · online sau fizic",
     ctaScheduleKidsLabel: "Curs copii",
@@ -670,6 +669,13 @@ export const translations = {
     activeNowToday: "Începe azi",
     activeNowStartsIn: "Începe în {n} zile",
     activeNowFull: "Listă de așteptare",
+    // Enrolment note, built from the live cohorts (see src/lib/cohortCopy.ts).
+    // The old note stated "start marți 1 și miercuri 2 septembrie 2026" in
+    // prose, which was still on the homepage three weeks after those courses
+    // had begun.
+    cohortNoteRunningSince: "în desfășurare din {date}",
+    cohortNoteStartsOn: "începe pe {date}",
+    cohortNoteFallback: "Grupele A1–C2 pornesc periodic. Scrie-ne și îți spunem exact când începe următoarea.",
     activeNowCta: "Vezi cursul și înscrie-te",
 
     // /cursuri/grup
@@ -724,7 +730,6 @@ export const translations = {
     grupLevelCardHours: "ore",
     grupLevelCardViewFull: "Vezi curriculum + înscriere →",
     grupLevelInPrepBadge: "În curând · înscrieri viitoare",
-    groupEnrollmentOpenNote: "Înscrierile pentru grupele fizice A1 (Grupa 2) și A2 sunt deschise — start marți 1 și miercuri 2 septembrie 2026, locuri limitate. Contactează-ne pentru înscriere.",
     levelPageScheduleLabel: "Program & calendar",
 
     // Don't know your level block (shared on /cursuri/grup)
@@ -983,7 +988,6 @@ export const translations = {
     ctaScheduleTitle: "Course schedule",
     ctaScheduleDesc: "Choose the right option and contact us for quick availability details.",
     ctaScheduleGroupLabel: "Group course",
-    ctaScheduleGroupValue: "A1 in person (Group 2): Mondays & Wednesdays 19:00–20:30 — starts Wednesday 2 September 2026\nA1 online: group in progress and full — leave your details for the next one\nA2 in person: Tuesdays & Thursdays 19:00–20:30 — starts Tuesday 1 September 2026 · A2 online: opening soon · B1–C2 open successively",
     ctaSchedulePrivateLabel: "Individual private lessons",
     ctaSchedulePrivateValue: "Flexible schedule · 60-minute sessions · online or in person",
     ctaScheduleKidsLabel: "Kids course",
@@ -1435,6 +1439,9 @@ export const translations = {
     activeNowToday: "Starts today",
     activeNowStartsIn: "Starts in {n} days",
     activeNowFull: "Waiting list",
+    cohortNoteRunningSince: "running since {date}",
+    cohortNoteStartsOn: "starts on {date}",
+    cohortNoteFallback: "A1–C2 groups start regularly. Get in touch and we'll tell you exactly when the next one begins.",
     activeNowCta: "See the course and enroll",
 
     // /cursuri/grup
@@ -1488,7 +1495,6 @@ export const translations = {
     grupLevelCardHours: "hours",
     grupLevelCardViewFull: "View curriculum + register →",
     grupLevelInPrepBadge: "Coming soon · future enrollment",
-    groupEnrollmentOpenNote: "Enrollment for the in-person A1 (Group 2) and A2 groups is open — starting Tuesday 1 and Wednesday 2 September 2026, limited spots. Contact us to register.",
     levelPageScheduleLabel: "Schedule & dates",
 
     dontKnowLevelTitle: "Not sure which level fits you?",

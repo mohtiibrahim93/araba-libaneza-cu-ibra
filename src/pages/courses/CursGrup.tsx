@@ -12,6 +12,7 @@ import {
 import groupImg from "@/assets/group-course.jpg";
 import posterCursuriGrup from "@/assets/poster-cursuri-grup-sep2026.webp";
 import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
+import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -61,7 +62,7 @@ const CursGrup = () => {
       <section id="choose-level" className="scroll-mt-24 mt-4">
         <h2 className="text-2xl font-bold text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
         <p className="text-sm text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
-        <p className="text-sm font-medium text-primary mb-6 max-w-2xl">{t.groupEnrollmentOpenNote}</p>
+        <CohortEnrollmentNote className="text-sm font-medium text-primary mb-6 max-w-2xl" />
 
         {/* These groups are for adults. Search engines were landing teen
             queries on this page, so send that intent to the page that answers

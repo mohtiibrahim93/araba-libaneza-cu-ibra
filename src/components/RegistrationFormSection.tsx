@@ -32,7 +32,7 @@ import LeadFields, { isValidPhone, isValidEmail } from "./RegistrationForm/LeadF
 import CapacityBanner from "./RegistrationForm/CapacityBanner";
 import PostSubmitView from "./RegistrationForm/PostSubmitView";
 import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
-import type { Cohort } from "@/hooks/useGroupCohorts";
+import type { Cohort } from "@/lib/cohortTypes";
 import type { KidsSlot } from "@/hooks/useKidsSlots";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";

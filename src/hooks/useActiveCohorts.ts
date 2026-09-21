@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import type { Cohort, CohortStatus } from "@/hooks/useGroupCohorts";
+import type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
 // Cohorts that are joinable right now: already-running ones (started in the
 // last 3 weeks) plus those starting within the next 2 months.
@@ -18,6 +17,11 @@ const ACTIVE_STATUSES: CohortStatus[] = [
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 async function fetchActive(): Promise<Cohort[]> {
+  // Imported here rather than at module scope: the Supabase client is 216 KB,
+  // and a static import puts it on the first-load path of every page that
+  // renders this hook — src/test/homepage-critical-path.test.ts exists
+  // because that happened once already. Same pattern as useSiteTexts.
+  const { supabase } = await import("@/integrations/supabase/client");
   const now = new Date();
   const from = new Date(now);
   from.setDate(from.getDate() - PAST_WINDOW_DAYS);

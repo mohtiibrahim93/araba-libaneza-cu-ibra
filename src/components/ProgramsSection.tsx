@@ -19,6 +19,7 @@ import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
+import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
@@ -164,7 +165,7 @@ const ProgramsSection = () => {
                   <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
                 </div>
               </div>
-              <p className="text-xs font-medium text-primary mb-4">{t.groupEnrollmentOpenNote}</p>
+              <CohortEnrollmentNote className="text-xs font-medium text-primary mb-4" />
 
               {/* A1 capacity — fizic and online counted separately */}
               {a1Segments.length > 0 && (

@@ -11,7 +11,7 @@ import {
 import LevelAssessmentModal from "@/components/LevelAssessmentModal";
 import type { LevelType, FormatType } from "./types";
 import CohortPicker from "./CohortPicker";
-import type { Cohort } from "@/hooks/useGroupCohorts";
+import type { Cohort } from "@/lib/cohortTypes";
 import { ONLINE_PRICES, GROUP_COURSE_MONTHS, priceFor, formatLei } from "@/lib/pricing";
 
 export type GroupPlan = "monthly" | "full";

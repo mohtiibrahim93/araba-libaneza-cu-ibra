@@ -1,6 +1,7 @@
 import { useI18n } from "@/lib/i18n";
 import { CalendarDays, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import SocialLinks from "@/components/SocialLinks";
+import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const PHONE_URL = "tel:+40763124514";
@@ -54,7 +55,7 @@ const CTASection = () => {
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-lg border border-border p-4">
               <p className="text-sm font-semibold text-foreground">{t.ctaScheduleGroupLabel}</p>
-              <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{t.ctaScheduleGroupValue}</p>
+              <CohortEnrollmentNote className="text-sm text-muted-foreground mt-1" />
             </div>
             <div className="rounded-lg border border-border p-4">
               <p className="text-sm font-semibold text-foreground">{t.ctaSchedulePrivateLabel}</p>
