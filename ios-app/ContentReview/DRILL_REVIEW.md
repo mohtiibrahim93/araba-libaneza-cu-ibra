@@ -298,6 +298,8 @@ Teacher spelling/style rules for Romanian-speaking learners:
 
 ## a1-city — Găsește drumul
 
+- Use `du8re` as the canonical Romanian-reader spelling for “straight”; `duu8re` and closely equivalent vowel-length variants are also accepted.
+
 Teacher city/directions rules:
 - Prefer `7add` for “lângă”; e.g. `7add el bank` / `7add L bank`.
 - `2oddem` and `eddem` are both accepted for “în fața”.
@@ -329,7 +331,7 @@ Teacher city/directions rules:
 | syn-context-syn-eaf06eb2e0ba | dialogue-response | Alege replica pentru: „Sigur, ce vrei?” | Akid, shu baddik? | |
 | syn-context-syn-4556ba25ad37 | dialogue-response | Alege replica pentru: „Unde e farmacia?” | Wayn es saydaliyye? | Superseded standalone `Wayn`. Teacher-approved: `Wen es saydaliyye?`. |
 | syn-context-syn-9eb06dc111e4 | dialogue-response | Alege replica pentru: „Farmacia e aproape de aici.” | Es saydaliyye 2ariba men hon. | Superseded spelling. Teacher-approved: `Es saydaliyye 2ariibe men hon.` |
-| syn-context-syn-ced297d92d16 | dialogue-response | Alege replica pentru: „Mergi drept până la capătul străzii.” | Ru7e dou8ri la e5er esh share3. | |
+| syn-context-syn-ced297d92d16 | dialogue-response | Alege replica pentru: „Mergi drept până la capătul străzii.” | Ru7e dou8ri la e5er esh share3. | Superseded `ou` spelling. Teacher-approved canonical: `Ru7e du8re la e5er esh share3.` `duu8re` and closely equivalent vowel-length spellings are also accepted; do not enforce only one Arabizi vowel rendering. |
 | syn-context-syn-4207b8188210 | dialogue-response | Alege replica pentru: „Bine, și apoi?” | Tamem, w ba3dayn? | Superseded spelling. Teacher-approved: `Tamem, w ba3den?` (`Tameem` also accepted). |
 | syn-context-syn-a2a67de95d37 | dialogue-response | Alege replica pentru: „Cotești la dreapta la semafor.” | Dure yamiin 3and el ishara. | Superseded. Teacher-approved natural alternatives (addressing feminine): `3mele yamiin 3and el ishaara`, `Leffe 3al yamiin 3and el ishaara`, or `5ede yaminik 3and el ishaara`. |
 | syn-context-syn-2a4417a1b291 | dialogue-response | Alege replica pentru: „La dreapta la semafor, bine.” | Yamiin 3and el ishara, meshi. | Superseded spelling. Teacher-approved: `Yamiin 3and el ishaara, meshe.` |
