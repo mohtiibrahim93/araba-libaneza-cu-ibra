@@ -492,7 +492,7 @@ Teacher plans/future rules:
 | xqf538a64b0bb5 | grammar-drill | Transformă la feminin: Huwwe mabsuut. | Hiyye mabsuuta. | |
 | xq05d1b5f6c9a4 | grammar-drill | Transformă pentru „noi”: Ana badde mayy. | Ne7na baddna mayy. | |
 | syn-rule-5-0 | grammar-drill | Ce întrebare cere ocupația? | shu bte3mel? | |
-| syn-rule-5-1 | grammar-drill | Care expresie exprimă o preferință? | bhibb el shawerma | |
+| syn-rule-5-1 | grammar-drill | Care expresie exprimă o preferință? | bhibb el shawerma | Apply established spelling: `B7ibb el shawarma.` |
 | syn-rule-10-0 | grammar-drill | Care exemplu descrie trecutul? | eshtarayt 2amis a7mar | |
 | syn-rule-10-1 | grammar-drill | Ce afli întrebând kam se3er el 2amis? | prețul cămășii | |
 | syn-context-syn-59fca2ec3a60 | dialogue-response | Alege replica pentru: „Salut! Mă cheamă Maria și sunt din România.” | Marhaba! Esme Maria w ana men romania. | Apply established greeting rule: `Mar7aba! Esme Maria w ana men Romania.` |
@@ -528,21 +528,21 @@ Teacher plans/future rules:
 | syn-context-syn-123c1509d947 | dialogue-response | Alege replica pentru: „Beau cafea. Și tu?” | 3am beshrab ahwe. W ente? | |
 | syn-context-syn-1df0b8b69176 | dialogue-response | Alege replica pentru: „Eu la fel. Ce ai făcut ieri?” | Ana kamen. Shu 3emelt embere7? | |
 | syn-context-syn-6c83e06d43cf | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat o cămașă.” | Re7t 3as su2 w eshtarayt 2amis. | |
-| syn-context-syn-da733d752414 | dialogue-response | Alege replica pentru: „Frumos! Ce culoare?” | 7elo! Shu el lon? | |
-| syn-context-syn-9b35dc311667 | dialogue-response | Alege replica pentru: „Albastru. A fost puțin scump.” | Azra2. Ken 8ali shway. | |
-| syn-context-syn-ba37ac3768b3 | dialogue-response | Alege replica pentru: „Patruzeci de dolari. Dar e foarte frumos.” | Arb3in dollar. Bass 7elo ktir. | |
+| syn-context-syn-da733d752414 | dialogue-response | Alege replica pentru: „Frumos! Ce culoare?” | 7elo! Shu el lon? | Teacher-approved Shopping phrase reused here: `7elo! Shu el lon?` |
+| syn-context-syn-9b35dc311667 | dialogue-response | Alege replica pentru: „Albastru. A fost puțin scump.” | Azra2. Ken 8ali shway. | Apply established adjective spelling: `Azra2. Ken 8ale shway.` |
+| syn-context-syn-ba37ac3768b3 | dialogue-response | Alege replica pentru: „Patruzeci de dolari. Dar e foarte frumos.” | Arb3in dollar. Bass 7elo ktir. | Apply established spelling convention: `Arb3iin dollar. Bas 7elo ktiir.` |
 | syn-context-syn-6996b78e494e | dialogue-response | Alege replica pentru: „Bine! Eu am mers la cinema.” | Mni7! Ana re7t 3as sinema. | |
 | syn-context-syn-64b2d9a36853 | dialogue-response | Alege replica pentru: „Un film libanez. A fost minunat!” | Film lebnene. Ken ra2e3! | |
 | syn-context-syn-9612f959f867 | dialogue-response | Alege replica pentru: „Unde e cinematograful?” | Wayn es sinema? | Apply established standalone form: `Wen es sinema?` |
 | syn-context-syn-d5a7e5f0f030 | dialogue-response | Alege replica pentru: „Lângă mall-ul mare.” | Janb el mall el kbir. | Apply established City preference: `7add el mall el kbiir.` |
-| syn-context-syn-c32133ea805d | dialogue-response | Alege replica pentru: „Ah, îl știu. E departe de aici?” | Ah b3erfo. B3id men hon? | |
-| syn-context-syn-d56463eaf234 | dialogue-response | Alege replica pentru: „Nu, aproape. Zece minute cu mașina.” | La2, 2arib. 3asher da2ayi2 bel sayyara. | |
+| syn-context-syn-c32133ea805d | dialogue-response | Alege replica pentru: „Ah, îl știu. E departe de aici?” | Ah b3erfo. B3id men hon? | Apply long-vowel spelling: `Ah b3erfo. B3iid men hon?` |
+| syn-context-syn-d56463eaf234 | dialogue-response | Alege replica pentru: „Nu, aproape. Zece minute cu mașina.” | La2, 2arib. 3asher da2ayi2 bel sayyara. | Apply established `2ariib` and minute-variant rules: `La2, 2ariib. 3asher d2eeye2 bel sayyara.` Other approved `d2eeye2` spellings remain accepted. |
 | syn-context-syn-caf02013bad9 | dialogue-response | Alege replica pentru: „Frumos! Ce faci acum?” | 7elo! Shu 3am bte3mle halla2? | |
 | syn-context-syn-20ca1866edec | dialogue-response | Alege replica pentru: „Mă gândesc să merg la magazin.” | 3am bfakker ru7 3al ma7all. | |
 | syn-context-syn-8dabad401cc1 | dialogue-response | Alege replica pentru: „Vrei să cumperi ceva?” | Baddik teshtre she? | |
 | syn-context-syn-f8c3f7e96290 | dialogue-response | Alege replica pentru: „Da, vreau o rochie pentru nuntă.” | Eh, badde fostan lal 3ers. | |
-| syn-context-syn-3b2e75b23131 | dialogue-response | Alege replica pentru: „E un magazin bun lângă bancă.” | Fi ma7all mni7 janb el bank. | |
-| syn-context-syn-9dfc75ef33a2 | dialogue-response | Alege replica pentru: „Perfect! Hai să mergem împreună.” | Tamem! Yalla nru7 sawa. | |
+| syn-context-syn-3b2e75b23131 | dialogue-response | Alege replica pentru: „E un magazin bun lângă bancă.” | Fi ma7all mni7 janb el bank. | Apply established City preference: `Fi ma7all mnii7 7add el bank.` |
+| syn-context-syn-9dfc75ef33a2 | dialogue-response | Alege replica pentru: „Perfect! Hai să mergem împreună.” | Tamem! Yalla nru7 sawa. | `Tamem` / `Tameem` both accepted; phrase otherwise preserved pending no new teacher correction. |
 | syn-context-syn-a10fbe73b057 | dialogue-response | Alege replica pentru: „Bine, hai să mergem!” | Meshi, yalla bina! | |
 
 ## a2-past — Ce s-a întâmplat?
