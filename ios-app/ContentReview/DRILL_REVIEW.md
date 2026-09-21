@@ -206,15 +206,18 @@ These teacher-approved forms supersede the older generated `a5/a5e/a5uk` wording
 
 ## a1-needs — Am, vreau, pot
 
+Teacher note for `ma`: in Lebanese it is multifunctional. Besides negation, it can function as a discourse/emphasis particle with pragmatic meaning supplied by context and intonation; do not force a single Romanian gloss.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q37 | grammar-drill | Completează propoziția. | fiina | |
-| q38 | grammar-drill | Completează propoziția. | 3andkon | |
-| q39 | grammar-drill | Completează propoziția. | Ken | |
-| q40 | grammar-drill | Completează propoziția. | Ma | |
-| q41 | grammar-drill | Completează propoziția. | illa | |
-| q42 | grammar-drill | Completează propoziția. | a | |
-| q71 | dialogue-response | Vrei să spui că acum dorești apă. | Halla2 badde eshrab mayy | |
+| q37 | grammar-drill | Completează propoziția. | fiina | Approved link: `c88f551c69f16` (primary). |
+| q38 | grammar-drill | Completează propoziția. | 3andkon | Approved link: `c6dcbdf1d5fbb` (primary). |
+| q39 | grammar-drill | Completează propoziția. | Ken | Approved link: `ca2abb7883652` (primary). In context such as `Ken badde...`, it can express “voiam...”. |
+| q40 | grammar-drill | Completează propoziția. | Ma | Teacher-approved contextual grammar item, not standalone vocabulary. `Ma` can mark negation (e.g. `Ma badde eshrab ahwe halla2`) but is not only negative in Lebanese: it can also act as a discourse/emphasis particle whose force depends on context and intonation, sometimes with no direct one-word Romanian equivalent. Teacher examples include `Ma ana 2eltellak heik` (roughly “but / I already told you like this”) and `Ma huwwe heik?` / `Ma huwe heik?` (roughly “well / isn’t that how it is?” depending on context). Do not define `ma` only as negation. |
+| q41 | grammar-drill | Completează propoziția. | illa | Approved contextual grammar item. Prefer examples such as `5amse illa rebe3` and `Killon illa enta` rather than isolated mastery only. Existing expression `c922ee21b5d38` may support the lexical item. |
+| q42 | grammar-drill | Completează propoziția. | a | Teacher-approved treatment: revise/remove as standalone vocabulary. `-a` is a suffix in this exercise family (contrasted with forms such as `-o`, `-kon`), so do not teach it as an independent lexical item. |
+| q71 | dialogue-response | Vrei să spui că acum dorești apă. | Halla2 badde eshrab mayy | Approved link: `cbad0a6fa22ac` (primary). |
 
 ## a1-actions — Ce faci acum?
 
