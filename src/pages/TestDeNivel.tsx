@@ -34,6 +34,8 @@ const COPY = {
     knowsH2: "Știi deja ce nivel ai?",
     knowsP: "Atunci nu ai nevoie de test. Alege cursul potrivit în 30 de secunde.",
     knowsCta: "Găsește cursul potrivit",
+    playedP: "Ai exersat deja în Jocul Yalla? Scorul tău din joc poate sugera nivelul, fără test.",
+    playedCta: "Vezi scorul și nivelul",
     honestH2: "Ce măsoară testul — și ce nu",
     honest: [
       "Măsoară citirea și răspunsurile scurte scrise în arabizi.",
@@ -58,6 +60,8 @@ const COPY = {
     knowsH2: "Already know your level?",
     knowsP: "Then you do not need the test. Pick the right course in 30 seconds.",
     knowsCta: "Find the right course",
+    playedP: "Already practising in the Yalla game? Your game score can suggest a level, no test needed.",
+    playedCta: "See your score and level",
     honestH2: "What the test measures — and what it does not",
     honest: [
       "It measures reading and short written answers in Arabizi.",
@@ -155,6 +159,14 @@ const TestDeNivel = () => {
                   {c.knowsCta}
                   <ChevronRight className="h-4 w-4" aria-hidden />
                 </Link>
+                {/* The game's practice history is a level signal too — the
+                    alternative to sitting this test. */}
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {c.playedP}{" "}
+                  <Link to="/joc/scor" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
+                    {c.playedCta}
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
