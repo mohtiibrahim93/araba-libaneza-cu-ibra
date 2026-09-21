@@ -438,7 +438,7 @@ Teacher work/study rules:
 | syn-context-syn-86b90d56ddd1 | dialogue-response | Alege replica pentru: „ce vei face mâine?” | shu ra7 te3mel bukra? | |
 | syn-context-syn-66d476c45bc5 | dialogue-response | Alege replica pentru: „voi merge la muncă” | ra7 ru7 3al sho8ol | |
 | syn-context-syn-3cdbaaecb3cb | dialogue-response | Alege replica pentru: „ne vedem mâine” | ra7 nshufak bukra | |
-| syn-context-syn-86ee18423311 | dialogue-response | Alege replica pentru: „poate voi merge” | yimken ra7 ru7 | |
+| syn-context-syn-86ee18423311 | dialogue-response | Alege replica pentru: „poate voi merge” | yimken ra7 ru7 | Superseded spelling. Apply teacher convention: `Yemkin ra7 ru7.` |
 | syn-context-syn-46f7d751827e | dialogue-response | Alege replica pentru: „sigur voi veni” | akid ra7 je | |
 | syn-context-syn-9e231be136e9 | dialogue-response | Alege replica pentru: „voi călători săptămâna viitoare” | ra7 safer el esbu3 el jey | |
 | syn-context-syn-eda39e9e1ad9 | dialogue-response | Alege replica pentru: „voi lua vacanță” | ra7 e5od 3otle | |
@@ -446,21 +446,21 @@ Teacher work/study rules:
 | syn-context-syn-a324944a1c3d | dialogue-response | Alege replica pentru: „ce vei face în vacanță?” | shu ra7 te3mel bel 3otle? | |
 | syn-context-syn-7526d24d82e1 | dialogue-response | Alege replica pentru: „voi fi acolo” | ra7 kun hunik | |
 | syn-context-syn-843f1405c9f4 | dialogue-response | Alege replica pentru: „voi ajunge peste puțin” | ra7 wassal ba3ed shway | |
-| syn-context-syn-0e09c58c0d5c | dialogue-response | Alege replica pentru: „îți voi vorbi mai târziu” | ra7 7kik ba3dayn | |
+| syn-context-syn-0e09c58c0d5c | dialogue-response | Alege replica pentru: „îți voi vorbi mai târziu” | ra7 7kik ba3dayn | Superseded. Apply teacher distinction: `Ra7 be7kiik ba3den.` (`be7kiik` = “I’ll talk to you”; `ba3den`, not `ba3dayn`). |
 | syn-context-syn-876bde2c0090 | dialogue-response | Alege replica pentru: „nu voi merge” | ma ra7 ru7 | |
 | syn-context-syn-e2615110805f | dialogue-response | Alege replica pentru: „curând vom vedea” | 2arib ra7 nshuf | |
-| syn-context-syn-3cca63b48e1b | dialogue-response | Alege replica pentru: „Salut Karim! Ce vei face în weekend?” | Marhaba Karim! Shu ra7 te3mel bel weekend? | |
-| syn-context-syn-8b9c4f8c4e07 | dialogue-response | Alege replica pentru: „Salut! Poate voi merge la munte.” | Marhaba! Yimken ra7 ru7 3al jabal. | |
+| syn-context-syn-3cca63b48e1b | dialogue-response | Alege replica pentru: „Salut Karim! Ce vei face în weekend?” | Marhaba Karim! Shu ra7 te3mel bel weekend? | Superseded greeting spelling: `Mar7aba Karim! Shu ra7 te3mel bel weekend?` |
+| syn-context-syn-8b9c4f8c4e07 | dialogue-response | Alege replica pentru: „Salut! Poate voi merge la munte.” | Marhaba! Yimken ra7 ru7 3al jabal. | Superseded spelling: `Mar7aba! Yemkin ra7 ru7 3al jabal.` |
 | syn-context-syn-39077f619d98 | dialogue-response | Alege replica pentru: „Frumos! Cu cine vei merge?” | 7elo! Ma3 min ra7 tru7? | |
 | syn-context-syn-8ed3bc4261ea | dialogue-response | Alege replica pentru: „Cu prietenii. Și tu, care e planul tău?” | Ma3 as7abe. W ente shu 5ottik? | |
-| syn-context-syn-1c39090c0a8b | dialogue-response | Alege replica pentru: „Voi sta acasă și voi citi o carte.” | Ra7 23od bel bayt w ra7 2ra kteb. | |
+| syn-context-syn-1c39090c0a8b | dialogue-response | Alege replica pentru: „Voi sta acasă și voi citi o carte.” | Ra7 23od bel bayt w ra7 2ra kteb. | Apply teacher house spelling: `Ra7 23od bel bet w ra7 2ra kteb.` (`bayt` remains an accepted variant). |
 | syn-context-syn-caf819e36cad | dialogue-response | Alege replica pentru: „De ce? Vino cu noi!” | Laysh? Ta3e ma3na! | |
 | syn-context-syn-dc55180eafcb | dialogue-response | Alege replica pentru: „Mulțumesc, dar am multă muncă.” | Shukran, bass 3ande sho8ol ktir. | |
-| syn-context-syn-23c805dae04f | dialogue-response | Alege replica pentru: „Bine, poate data viitoare.” | Tayyeb, yimken el marra el jeye. | |
+| syn-context-syn-23c805dae04f | dialogue-response | Alege replica pentru: „Bine, poate data viitoare.” | Tayyeb, yimken el marra el jeye. | Superseded spelling: `Tayyeb, yemkin el marra el jeye.` |
 | syn-context-syn-151f2794a9e3 | dialogue-response | Alege replica pentru: „Dacă vrea Dumnezeu! Când veți merge?” | Inshallah! Aymta ra7 tru7u? | |
-| syn-context-syn-e246cf1ad219 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă dimineața.” | Ra7 nru7 es sabt es sobe7. | |
+| syn-context-syn-e246cf1ad219 | dialogue-response | Alege replica pentru: „Vom merge sâmbătă dimineața.” | Ra7 nru7 es sabt es sobe7. | Apply teacher spelling: `Ra7 nru7 es sabt es subo7.` |
 | syn-context-syn-4278209e10f8 | dialogue-response | Alege replica pentru: „Și când vă veți întoarce?” | W ra7 terja3u aymta? | |
-| syn-context-syn-60cd0ac8e493 | dialogue-response | Alege replica pentru: „Duminică seara.” | El a7ad bel layl. | |
+| syn-context-syn-60cd0ac8e493 | dialogue-response | Alege replica pentru: „Duminică seara.” | El a7ad bel layl. | Apply teacher spelling: `El a7ad bil-lel.` |
 | syn-context-syn-39c4eff33327 | dialogue-response | Alege replica pentru: „Perfect! Ne vedem luni?” | Tamem! Ra7 nshufak el etnain? | |
 | syn-context-syn-3c2dcc0a64e7 | dialogue-response | Alege replica pentru: „Sigur! Îți voi povesti despre călătorie.” | Akid! Ra7 7kilik 3an er re7le. | |
 | syn-context-syn-7423347a28e8 | dialogue-response | Alege replica pentru: „Mulțumesc! Ne vedem curând.” | Shukran! Benshufik 2arib. | |
