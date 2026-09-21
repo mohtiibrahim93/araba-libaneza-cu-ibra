@@ -144,7 +144,7 @@ Teacher clarification: `men` should be taught as `from`, including as the questi
 | q69 | dialogue-response | Spune că familia voastră este mare. | 3ayletna kbiire | |
 | q70 | dialogue-response | Întreabă un băiat ce are / ce-i cu el. | Shu bek? | |
 | syn-rule-2-0 | grammar-drill | Completează „Nu am”: ma ___. | 3ande | |
-| syn-rule-2-1 | grammar-drill | În abuk, la cine se referă -uk? | tatăl tău, adresare masculină | |
+| syn-rule-2-1 | grammar-drill | În abuk, la cine se referă -uk? | tatăl tău, adresare masculină | Teacher correction: replace this example. `abuk` is rare/non-preferred for the Lebanese course; use `bayyak` for “tatăl tău” (addressing a male) instead. No exact current `bayyak` expression entry exists, so revise production content rather than fabricating a link. |
 | syn-context-syn-120b95bded6e | dialogue-response | Alege replica pentru: „Nu am surori.” | Ma 3ande a5wet. | |
 | syn-context-syn-45447086e1f3 | dialogue-response | Alege replica pentru: „Am un frate și o soră.” | 3ande a5 wa7ad w e5t wa7de. | |
 | syn-context-syn-cf8d1f3fcc2c | dialogue-response | Alege replica pentru: „Fratele meu mai mare este căsătorit.” | A5e el kbir metzawwaj. | |
