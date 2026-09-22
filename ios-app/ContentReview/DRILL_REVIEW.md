@@ -639,9 +639,9 @@ Teacher A2-opinions rules:
 
 Teacher A2-modals rules:
 - Masculine `Ma lezem tru7.` for “nu trebuie să mergi”.
-- Use `hek`, `na3mel`, `daruure`, `Mamnuu3 et tad5iin`, `Masmu7a es sbee7a`.
+- Use `hek`, `na3mel`, `daruure`, `Mamnuu3 et tad5iin`, `Masmuu7a es sbee7a`.
 - For “pot să mă trezesc devreme”, use `b2dar fii2 bakiir` or `b2dar ou3a bakiir`.
-- Prefer `Fike tjibe akel?` over a `Momken...` construction in this reviewed prompt.
+- Prefer `Fike tjiibe akel?` over a `Momken...` construction in this reviewed prompt.
 - Use progressive `Ana 3am 7adder sandwishet.` in this context.
 
 
@@ -664,13 +664,13 @@ Teacher A2-modals rules:
 | syn-context-syn-9f4f106aea70 | dialogue-response | Alege replica pentru: „Bine, e posibil duminică?” | Tayyeb, momken el a7ad? | Teacher-approved as written: `Tayyeb, momken el a7ad?` |
 | syn-context-syn-0c0ae560a960 | dialogue-response | Alege replica pentru: „Duminică pot! Ce vrei să facem?” | El a7ad b2dar! Shu baddik ne3mel? | Superseded verb spelling. Teacher-approved: `El a7ad b2dar! Shu baddik na3mel?` |
 | syn-context-syn-43f299eb3f2f | dialogue-response | Alege replica pentru: „Poate să mergem la mare?” | Yimken nru7 3al ba7er? | Apply established spelling: `Yemkin nru7 3al ba7er?` |
-| syn-context-syn-ef24e1ec2dc8 | dialogue-response | Alege replica pentru: „Idee bună! E permis să înotăm?” | Fikra 7elwe! Masmu7 es sibe7a? | Superseded agreement/spelling. Teacher-approved: `Fikra 7elwe! Masmu7a es sbee7a?` |
+| syn-context-syn-ef24e1ec2dc8 | dialogue-response | Alege replica pentru: „Idee bună! E permis să înotăm?” | Fikra 7elwe! Masmu7 es sibe7a? | Superseded agreement/spelling. Teacher-approved: `Fikra 7elwe! Masmuu7a es sbee7a?` |
 | syn-context-syn-f247f7f73317 | dialogue-response | Alege replica pentru: „Da, e permis. Dar fumatul e interzis.” | Eh, masmu7. Bass mamnu3 et tad5in. | Apply established spelling: `Eh, masmu7. Bas mamnu3 et tad5in.` |
 | syn-context-syn-da6d3e79f8dd | dialogue-response | Alege replica pentru: „Bine, eu nu fumez.” | 3ade, ana ma bda55en. | Teacher-approved as written. |
 | syn-context-syn-1236aa690087 | dialogue-response | Alege replica pentru: „Perfect! Trebuie să mergem devreme?” | Tamem! Lezem nru7 badre? | `Tamem` / `Tameem` both accepted; preserve remainder pending teacher review. |
 | syn-context-syn-20f887518bcd | dialogue-response | Alege replica pentru: „Da, trebuie. Ajung mulți oameni.” | Eh, lezem. Bysir fi nes ktir. | Apply established degree spelling: `Eh, lezem. Bysir fi nes ktiir.` |
 | syn-context-syn-67744d20af7b | dialogue-response | Alege replica pentru: „Bine, pot să mă trezesc devreme.” | Meshi, b2dar s7a badre. | Superseded. Teacher-approved: `Meshe, b2dar fii2 bakiir.` or `Meshe, b2dar ou3a bakiir.` |
-| syn-context-syn-e15c6fa4e714 | dialogue-response | Alege replica pentru: „Frumos! Poți să aduci mâncare?” | 7elo! Momken tjibe akel? | Superseded. Teacher-approved: `7elo! Fike tjibe akel?` |
+| syn-context-syn-e15c6fa4e714 | dialogue-response | Alege replica pentru: „Frumos! Poți să aduci mâncare?” | 7elo! Momken tjibe akel? | Superseded. Teacher-approved: `7elo! Fike tjiibe akel?` |
 | syn-context-syn-8b5f244bde51 | dialogue-response | Alege replica pentru: „Da, pot. Eu pregătesc sandvișuri.” | Eh, fine. Ana b7adder sandwishet. | Superseded aspect. Teacher-approved: `Eh, fine. Ana 3am 7adder sandwishet.` |
 | syn-context-syn-5b1e77bc4752 | dialogue-response | Alege replica pentru: „Mulțumesc! Hai, ne vedem duminică!” | Yeslamo! Yalla, benshufik el a7ad! | Apply established closing rule: `Yeslamo! Yalla, bshufik el a7ad!` or `Yeslamo! Yalla, mnshufik el a7ad!` |
 
