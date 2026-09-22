@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources } from '../yalla-importer.mjs';
+import { fileURLToPath } from 'node:url';
+import { applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -132,6 +133,34 @@ test('refuses stale approved overrides and missing expression links', () => {
     }),
     /missing expression/
   );
+});
+
+
+test('real approved overrides produce the reviewed native course decisions', () => {
+  const sourceDirectory = fileURLToPath(new URL('../../../../public/yalla', import.meta.url));
+  const imported = convertYallaToContentPackage(
+    loadYallaFromDirectory(sourceDirectory),
+    { contentVersion: 'test' }
+  );
+  const result = applyApprovedNativeOverrides(imported, loadApprovedNativeOverrides());
+  const exercises = new Map(result.exercises.map((exercise) => [exercise.id, exercise]));
+
+  assert.equal(result.exercises.length, imported.exercises.length - 16);
+  assert.equal(exercises.get('q76').answer, 'Eza baddak bjiblak mayy.');
+  assert.equal(
+    exercises.get('q43').prompt.ro,
+    'Completează: Es-sabe yalle 3am yedros huwwe 5ayye.'
+  );
+  assert.equal(
+    exercises.get('q52').prompt.ro,
+    'Ce formă verbală recunoști în „5arrab”?'
+  );
+  assert.deepEqual(exercises.get('q31').expressionIDs, ['c977d2bfb47db']);
+  assert.equal(
+    exercises.get('syn-context-syn-b070e7525663').answer,
+    'Addesh sarlak 3am teshte8el huniik?'
+  );
+  assert.equal(exercises.has('syn-context-syn-9a79f6640456'), false);
 });
 
 test('converts the cross-level vocabulary track into lexicon collections, not Journey levels', () => {
