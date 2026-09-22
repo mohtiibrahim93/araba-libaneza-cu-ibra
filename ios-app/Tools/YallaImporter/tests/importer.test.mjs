@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { applyApprovedAudioContent, applyApprovedMorphologyContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
+import { applyApprovedAudioContent, applyApprovedMorphologyContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedMorphologyContent, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -387,6 +387,39 @@ test('refuses an unknown curriculum group instead of silently inventing a level'
     () => convertYallaToContentPackage(yalla, { contentVersion: 'test' }),
     /No native level mapping/
   );
+});
+
+test('real approved morphology keeps Ibrahim root-family decisions exact', () => {
+  const sourceDirectory = fileURLToPath(new URL('../../../../public/yalla', import.meta.url));
+  const imported = convertYallaToContentPackage(
+    loadYallaFromDirectory(sourceDirectory),
+    { contentVersion: 'test' }
+  );
+  const reviewed = applyApprovedNativeOverrides(imported, loadApprovedNativeOverrides());
+  const result = applyApprovedMorphologyContent(reviewed, loadApprovedMorphologyContent());
+
+  const expressions = new Map(result.expressions.map((expression) => [expression.id, expression]));
+  assert.equal(expressions.get('c6d58317e8bdc').canonicalArabizi, 'm3alme');
+  assert.equal(expressions.get('x46f33585b5ad').canonicalArabizi, 'maleek');
+  assert.equal(expressions.get('rootexpr.nwm.mnawwem').canonicalArabizi, 'mnawwem');
+  assert.deepEqual(
+    expressions.get('rootexpr.nwm.mnawwem').variants,
+    [{ value: 'munawwem', kind: 'spelling' }]
+  );
+  assert.equal(expressions.get('rootexpr.l7m.yelte7em').canonicalArabizi, 'yelte7em');
+  assert.equal(expressions.get('rootexpr.3lm.3aleeme').canonicalArabizi, '3aleeme');
+
+  const l7mMembers = result.morphologyLinks
+    .filter((link) => link.rootID === 'root.l7m')
+    .map((link) => expressions.get(link.expressionID)?.canonicalArabizi)
+    .filter(Boolean);
+  for (const expected of ['la7me', 'la77am', 'tel7iim', 'ilta7am', 'yelte7em', 'mal7ame']) {
+    assert.ok(l7mMembers.includes(expected), 'Missing L7M member ' + expected);
+  }
+
+  const roots = new Map(result.roots.map((root) => [root.id, root]));
+  assert.deepEqual(roots.get('root.3lm').arabiziRadicals, ['3', 'l', 'm']);
+  assert.deepEqual(roots.get('root.mlk').arabiziRadicals, ['m', 'l', 'k']);
 });
 
 // Keep the separate pilot resource reproducible from its legacy source.
