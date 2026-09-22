@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { convertYallaToContentPackage, evaluateYallaSources } from '../yalla-importer.mjs';
+import { applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -52,6 +52,86 @@ test('converts explicit grammar and dialogue drills', () => {
   assert.equal(result.exercises[0].type, 'grammar-drill');
   assert.equal(result.exercises[1].type, 'dialogue-response');
   assert.deepEqual(result.exercises[1].prompt, { ro: 'Răspunde natural' });
+});
+
+
+test('applies approved native overrides without modifying legacy source data', () => {
+  const source = {
+    cards: [
+      { id: 'card-hello', unit: 'a1-dialogue', ar: 'mar7aba', ro: 'salut', variants: [] }
+    ],
+    units: [
+      { id: 'a1-dialogue', title: 'Dialog', desc: '', group: 'A1' }
+    ],
+    drills: [
+      {
+        id: 'd1',
+        unit: 'a1-dialogue',
+        prompt: 'Rezolvă provocarea.',
+        answer: 'legacy',
+        wrong: ['x'],
+        context: 'legacy context'
+      },
+      {
+        id: 'd2',
+        unit: 'a1-dialogue',
+        prompt: 'Răspunde',
+        answer: 'keep',
+        wrong: ['y']
+      }
+    ]
+  };
+
+  const imported = convertYallaToContentPackage(source, { contentVersion: 'test' });
+  const result = applyApprovedNativeOverrides(imported, {
+    exerciseOverrides: {
+      d1: {
+        answer: 'approved',
+        context: 'Approved ___ context.',
+        expressionIDs: ['card-hello']
+      },
+      d2: { exclude: true }
+    }
+  });
+
+  assert.equal(source.drills[0].answer, 'legacy');
+  assert.equal(result.exercises.length, 1);
+  assert.equal(result.exercises[0].answer, 'approved');
+  assert.equal(result.exercises[0].prompt.ro, 'Completează: Approved ___ context.');
+  assert.deepEqual(result.exercises[0].expressionIDs, ['card-hello']);
+});
+
+test('refuses stale approved overrides and missing expression links', () => {
+  const imported = {
+    manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
+    expressions: [{ id: 'e1' }],
+    units: [],
+    exercises: [
+      {
+        id: 'd1',
+        type: 'grammar-drill',
+        unitID: 'u1',
+        expressionIDs: [],
+        prompt: { ro: 'Prompt' },
+        answer: 'answer',
+        wrongAnswers: []
+      }
+    ],
+    lexiconCollections: []
+  };
+
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      exerciseOverrides: { missing: { answer: 'x' } }
+    }),
+    /missing exercise/
+  );
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      exerciseOverrides: { d1: { expressionIDs: ['missing-expression'] } }
+    }),
+    /missing expression/
+  );
 });
 
 test('converts the cross-level vocabulary track into lexicon collections, not Journey levels', () => {
