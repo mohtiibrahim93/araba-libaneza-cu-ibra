@@ -594,37 +594,45 @@ Teacher A2-past notes:
 
 ## a2-opinions — Preferințe și opinii
 
+Teacher A2-opinions rules:
+- Use `B3te2ed enno...` for “cred că...”.
+- Use `Hayda a7san.`
+- `bye3jebne` is the preferred “appeals to me / I like it” form in these reviewed examples; `b7eb` is also natural depending on construction.
+- For a feminine addressee: `Shu no3 el musi2a li bte7bbiya?`.
+- `ed-dene azwe2` is the idiomatic proverb about differing tastes; `Kil wa7ad w zaw2o` is the literal “fiecare cu gusturile lui”.
+
+
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| syn-rule-11-0 | grammar-drill | Completează „Cred că”: bfakker ___. | enno | |
-| syn-rule-11-1 | grammar-drill | Ce înseamnă hada a7san? | acesta este mai bun | |
+| syn-rule-11-0 | grammar-drill | Completează „Cred că”: bfakker ___. | enno | Superseded construction. Teacher-approved: `B3te2ed enno...` = “cred că...”. Do not teach `bfakker enno` as the primary opinion formula here. |
+| syn-rule-11-1 | grammar-drill | Ce înseamnă hada a7san? | acesta este mai bun | Superseded demonstrative. Teacher-approved: `Hayda a7san.` = “acesta e mai bun”. |
 | syn-context-syn-82e7084bfdb6 | dialogue-response | Alege replica pentru: „Nu îmi place sportul.” | Ma bhibb er riyada. | Apply established spelling: `Ma b7ibb er riyada.` |
-| syn-context-syn-2da83ea30cd8 | dialogue-response | Alege replica pentru: „Nu îmi place acest film.” | Ma b3ajebne hal film. | |
-| syn-context-syn-d280b14f30d3 | dialogue-response | Alege replica pentru: „Hobby-ul meu preferat este muzica.” | El hwaye el mofaddale 3ande hiye el musi2a. | |
+| syn-context-syn-2da83ea30cd8 | dialogue-response | Alege replica pentru: „Nu îmi place acest film.” | Ma b3ajebne hal film. | Superseded. Teacher-approved: `Ma bye3jebne hal filem.` or `Ma b7eb hal filem.` |
+| syn-context-syn-d280b14f30d3 | dialogue-response | Alege replica pentru: „Hobby-ul meu preferat este muzica.” | El hwaye el mofaddale 3ande hiye el musi2a. | Superseded spelling. Teacher-approved: `El hiweye el mofaddale 3ande heyye el musii2a.` (`Hiyye` remains an accepted variant of `Heyye`). |
 | syn-context-syn-6a5650287491 | dialogue-response | Alege replica pentru: „Îmi place să ascult muzică libaneză și arabă.” | Bhibb esma3 musi2a lebneniyye w 3arabiyye. | Apply established spelling: `B7ibb esma3 musi2a lebneniyye w 3arabiyye.` |
 | syn-context-syn-2d33d08af2d3 | dialogue-response | Alege replica pentru: „nu îmi place deloc” | ma bhibb abadan | Apply established spelling: `Ma b7ibb abadan.` |
-| syn-context-syn-cbca12375d50 | dialogue-response | Alege replica pentru: „îmi place lucrul ăsta” | b3ajebne hal she | |
-| syn-context-syn-8d4bfe997d36 | dialogue-response | Alege replica pentru: „preferatul meu” | el mofaddal 3ande | |
+| syn-context-syn-cbca12375d50 | dialogue-response | Alege replica pentru: „îmi place lucrul ăsta” | b3ajebne hal she | Superseded. Teacher-approved: `Bye3jebne hal shi.` |
+| syn-context-syn-8d4bfe997d36 | dialogue-response | Alege replica pentru: „preferatul meu” | el mofaddal 3ande | Teacher-approved as written: `El mofaddal 3ande.` |
 | syn-context-syn-f5475593e2bd | dialogue-response | Alege replica pentru: „îmi place sportul” | bhibb er riyada | Apply established spelling: `B7ibb er riyada.` |
 | syn-context-syn-f54fb6fad9d0 | dialogue-response | Alege replica pentru: „îmi place să călătoresc” | bhibb es safar | Apply established spelling: `B7ibb es safar.` |
-| syn-context-syn-10dbc6b30331 | dialogue-response | Alege replica pentru: „corect 100%” | sa7 miye bel miye | |
+| syn-context-syn-10dbc6b30331 | dialogue-response | Alege replica pentru: „corect 100%” | sa7 miye bel miye | Superseded spelling. Teacher-approved: `Sa7, miyye bel miyye.` |
 | syn-context-syn-967421fb4032 | dialogue-response | Alege replica pentru: „Salut Karim! Care e hobby-ul tău?” | Marhaba Karim! Shu hwaytak? | Apply established greeting spelling: `Mar7aba Karim! Shu hwaytak?` |
 | syn-context-syn-dc0f4d9bccdb | dialogue-response | Alege replica pentru: „Îmi place mult sportul, mai ales fotbalul.” | Bhibb er riyada ktir, 5asatan koret el 2adam. | Apply established spelling: `B7ibb er riyada ktiir, 5asatan koret el 2adam.` |
 | syn-context-syn-ef64b98836e0 | dialogue-response | Alege replica pentru: „Frumos! Mie îmi place muzica.” | 7elo! Ana bhibb el musi2a. | Apply established spelling: `7elo! Ana b7ibb el musi2a.` |
-| syn-context-syn-0e3c6cbb38b2 | dialogue-response | Alege replica pentru: „Ce fel de muzică îți place?” | Shu no3 el musi2a bte7bbe? | |
+| syn-context-syn-0e3c6cbb38b2 | dialogue-response | Alege replica pentru: „Ce fel de muzică îți place?” | Shu no3 el musi2a bte7bbe? | Superseded feminine phrasing. Teacher-approved: `Shu no3 el musi2a li bte7bbiya?` |
 | syn-context-syn-dc8056ef1851 | dialogue-response | Alege replica pentru: „Îmi place muzica libaneză și arabă.” | Bhibb el musi2a el lebneniyye w el 3arabiyye. | Apply established spelling: `B7ibb el musi2a el lebneniyye w el 3arabiyye.` |
 | syn-context-syn-db93bca31e7f | dialogue-response | Alege replica pentru: „Super! Ce părere ai despre Fairouz?” | Tamem! Shu ra2yik b Fairouz? | `Tamem` / `Tameem` both accepted; preserve remainder pending teacher review. |
 | syn-context-syn-48d35def2830 | dialogue-response | Alege replica pentru: „Fairouz e cea mai bună cântăreață! O iubesc mult.” | Fairouz a7san m8anniye! B7ebbha ktir. | Apply established long-vowel convention: `Fairouz a7san m8anniye! B7ebbha ktiir.` |
-| syn-context-syn-44dc337fa782 | dialogue-response | Alege replica pentru: „Și eu! Îmi place vocea ei.” | Ana kamen! B3ajebne sawtha. | |
-| syn-context-syn-e159e19de474 | dialogue-response | Alege replica pentru: „Ce părere ai despre filme?” | Shu ra2yak bel aflem? | |
+| syn-context-syn-44dc337fa782 | dialogue-response | Alege replica pentru: „Și eu! Îmi place vocea ei.” | Ana kamen! B3ajebne sawtha. | Superseded. Teacher-approved: `Ana kamen, bye3jebne sawta!` |
+| syn-context-syn-e159e19de474 | dialogue-response | Alege replica pentru: „Ce părere ai despre filme?” | Shu ra2yak bel aflem? | Teacher-approved as written: `Shu ra2yak bel aflem?` |
 | syn-context-syn-4f8fdb9fd717 | dialogue-response | Alege replica pentru: „Îmi plac filmele, dar nu foarte mult.” | Bhibb el aflem, bass mish ktir. | Apply established spelling: `B7ibb el aflem, bas mish ktiir.` |
 | syn-context-syn-e6beff6e554b | dialogue-response | Alege replica pentru: „Care e filmul tău preferat?” | Shu el film el mofaddal 3andak? | Apply established movie spelling: `Shu el filem el mofaddal 3andak?` |
 | syn-context-syn-bccbcf404ee5 | dialogue-response | Alege replica pentru: „Cred că "Capernaum" e cel mai bun film libanez.” | Bfakker enno "Capernaum" a7san film lebnene. | Apply established movie spelling: `Bfakker enno "Capernaum" a7san filem lebnene.` |
 | syn-context-syn-78792f0caf26 | dialogue-response | Alege replica pentru: „Corect! A fost un film foarte captivant.” | Sa7! Ken film mthir ktir. | Apply established movie/degree spelling: `Sa7! Ken filem mthir ktiir.` |
-| syn-context-syn-ba5114196bc5 | dialogue-response | Alege replica pentru: „Și tu, îți place să citești?” | W ente, bte7bbe el 2raye? | |
+| syn-context-syn-ba5114196bc5 | dialogue-response | Alege replica pentru: „Și tu, îți place să citești?” | W ente, bte7bbe el 2raye? | Superseded spelling. Teacher-approved to a woman: `W ente, bte7bbe el 2reye?` |
 | syn-context-syn-4a8ff27db794 | dialogue-response | Alege replica pentru: „Da, foarte mult! Îmi plac romanele.” | Eh ktir! Bhibb er riwayat. | Apply established spelling: `Eh ktiir! B7ibb er riwayat.` |
 | syn-context-syn-a43d04dd1d92 | dialogue-response | Alege replica pentru: „Mie nu îmi place să citesc, e puțin plictisitor.” | Ana ma bhibb el 2raye, mamell shway. | Apply established spelling: `Ana ma b7ibb el 2raye, mamell shway.` |
-| syn-context-syn-f5edf4d83ff1 | dialogue-response | Alege replica pentru: „Haha, fiecare cu gusturile lui!” | Hahaha, kell wa7ad w zo2o! | |
+| syn-context-syn-f5edf4d83ff1 | dialogue-response | Alege replica pentru: „Haha, fiecare cu gusturile lui!” | Hahaha, kell wa7ad w zo2o! | Teacher nuance: idiomatic proverb `Hahaha, ed-dene azwe2!` = roughly “gusturile diferă / despre gusturi nu se discută”. Literal alternative: `Kil wa7ad w zaw2o.` = “fiecare cu gusturile lui”. Keep the two meanings distinct. |
 | syn-context-syn-8cf16473ae54 | dialogue-response | Alege replica pentru: „Corect, hai, ne vedem!” | Sa7, yalla benshufik! | Apply established closing rule: `Sa7, yalla bshufik!` or `Sa7, yalla mnshufik!` |
 
 ## a2-modals — Obligații și posibilități
