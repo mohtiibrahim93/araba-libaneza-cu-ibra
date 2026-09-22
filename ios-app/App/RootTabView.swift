@@ -119,6 +119,9 @@ struct RootTabView: View {
                 onChooseJourney: {
                     journeyPath = []
                     selectedTab = .journey
+                },
+                onOpenTutor: {
+                    selectedTab = .profile
                 }
             )
         }
