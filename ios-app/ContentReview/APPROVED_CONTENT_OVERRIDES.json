@@ -2152,6 +2152,17 @@
     },
     "syn-fceca554f261": {
       "canonicalArabizi": "Tameem! El ba7er huwe el makan el mofaddal 3ande."
+    },
+    "c6d58317e8bdc": {
+      "canonicalArabizi": "m3alme"
+    },
+    "x46f33585b5ad": {
+      "canonicalArabizi": "maleek",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "înger"
+        }
+      }
     }
   }
 }
