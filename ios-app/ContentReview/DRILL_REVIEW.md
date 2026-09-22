@@ -794,42 +794,42 @@ Source-context recovery:
 | syn-rule-16-1 | grammar-drill | Ce afli prin kam sar lak hon? | de cât timp este interlocutorul aici | |
 | syn-context-syn-0e4e61930ef6 | dialogue-response | Alege replica pentru: „Sunt nouă aici, mă cheamă Maya.” | Ana jdide hon, esme Maya. | |
 | syn-context-syn-2ff34ecb2a8b | dialogue-response | Alege replica pentru: „Sunt ingineră, lucrez într-o firmă.” | Ana muhandise, beshte8el b sherke. | |
-| syn-context-syn-b070e7525663 | dialogue-response | Alege replica pentru: „De cât timp lucrezi acolo? (masculin)” | Kam sar lak 3am teshte8el hunik? | |
-| syn-context-syn-5e2a3a56f78b | dialogue-response | Alege replica pentru: „Îmi place mult mâncarea libaneză.” | Bhibb el akel el lebnene ktir. | |
-| syn-context-syn-7db567246872 | dialogue-response | Alege replica pentru: „Am mers ieri la piață.” | Re7t 3as su2 embere7. | |
+| syn-context-syn-b070e7525663 | dialogue-response | Alege replica pentru: „De cât timp lucrezi acolo? (masculin)” | Addesh sarlak 3am teshte8el huniik? | Approved teacher correction. |
+| syn-context-syn-5e2a3a56f78b | dialogue-response | Alege replica pentru: „Îmi place mult mâncarea libaneză.” | Bhibb el akel el lebnene ktiir. | |
+| syn-context-syn-7db567246872 | dialogue-response | Alege replica pentru: „Am mers ieri la piață.” | Re7t 3a-s-su2 mbeere7. | Approved teacher correction. `3as-su2` is also an accepted written variation. |
 | syn-context-syn-03841aefa66c | dialogue-response | Alege replica pentru: „Ești nouă aici?” | Ente jdide hon? | |
 | syn-context-syn-858983649bab | dialogue-response | Alege replica pentru: „Ce ai făcut ieri? (feminin)” | Shu 3melte embere7? | |
 | syn-context-syn-b0da3771e4c5 | dialogue-response | Alege replica pentru: „Unde ai mers ieri? (feminin)” | Wayn re7te embere7? | |
-| syn-context-syn-28ab1e1ccb01 | dialogue-response | Alege replica pentru: „De unde ești? (feminin)” | Min wayn ente? | |
+| syn-context-syn-28ab1e1ccb01 | dialogue-response | Alege replica pentru: „De unde ești? (feminin)” | Min wen ente? | Approved teacher correction. Masculine counterpart: `Min wen enta?` |
 | syn-context-syn-43dcc77af8db | dialogue-response | Alege replica pentru: „Ce faci în firmă? (masculin)” | Shu bte3mel bel sherke? | |
-| syn-context-syn-9042b3abae0d | dialogue-response | Alege replica pentru: „Sunt angajat în marketing.” | Ana mwazzaf bel marketing. | |
+| syn-context-syn-9042b3abae0d | dialogue-response | Alege replica pentru: „Sunt angajat în marketing.” | Ana beshte8el bel marketing. | Approved teacher correction. `bel teswii2` is the Arabic-marketing alternative. |
 | syn-context-syn-018ec4788209 | dialogue-response | Alege replica pentru: „De cât timp ești aici? (masculin)” | Kam sar lak hon? | |
-| syn-context-syn-a1b3d6f86486 | dialogue-response | Alege replica pentru: „Încă învăț.” | Lessa 3am ta3allam. | |
-| syn-context-syn-3878ee6591c3 | dialogue-response | Alege replica pentru: „Ești liber să vorbim la prânz? (masculin)” | Fade te7ke ma3e 3al 8ada? | |
-| syn-context-syn-f0baae3824b5 | dialogue-response | Alege replica pentru: „Unde ai vrea să mergem? (masculin)” | Wayn bte7ebb nru7? | |
+| syn-context-syn-a1b3d6f86486 | dialogue-response | Alege replica pentru: „Încă învăț.” | Ba3dne 3am bet3allam. | Approved preferred wording. `Lessa 3am bt3allam` is also accepted. |
+| syn-context-syn-3878ee6591c3 | dialogue-response | Alege replica pentru: „Ești liber să vorbim la prânz? (masculin)” | Faade ne7ke ed-dohor? | Approved teacher correction. |
+| syn-context-syn-f0baae3824b5 | dialogue-response | Alege replica pentru: „Unde ai vrea să mergem? (masculin)” | Wen bte7ebb nru7? | Approved teacher correction. |
 | syn-context-syn-afde5052c9ca | dialogue-response | Alege replica pentru: „Este un restaurant libanez aproape de aici.” | Fi mat3am lebnene 2arib men hon. | |
-| syn-context-syn-fa54b463aca7 | dialogue-response | Alege replica pentru: „Mâncarea lor este foarte bună.” | Aklhon tayyeb ktir. | |
-| syn-context-syn-661de8fd2ed5 | dialogue-response | Alege replica pentru: „Hai să mergem la ora unu?” | Yalla nru7 es se3a wa7de? | |
-| syn-context-syn-cf19b9343c36 | dialogue-response | Alege replica pentru: „Bine! Ne vedem aici. (masculin)” | Meshi! Benshufak hon. | |
-| syn-context-syn-e43621aef5ac | dialogue-response | Alege replica pentru: „Salut! Ești nouă aici?” | Marhaba! Ente jdide hon? | |
+| syn-context-syn-fa54b463aca7 | dialogue-response | Alege replica pentru: „Mâncarea lor este foarte bună.” | Aklon tayyeb ktiir. | Approved. `Aklon ktiir tayyeb.` is also correct. `kteer` is an accepted variant of `ktiir`. |
+| syn-context-syn-661de8fd2ed5 | dialogue-response | Alege replica pentru: „Hai să mergem la ora unu?” | Yalla nruu7 3a es see3a we7de? | Approved. `Yalla nru7 3al we7de?` is also approved. |
+| syn-context-syn-cf19b9343c36 | dialogue-response | Alege replica pentru: „Bine! Ne vedem aici. (masculin)” | Meeshe! bhsufak hon. | Approved teacher wording exactly as supplied. |
+| syn-context-syn-e43621aef5ac | dialogue-response | Alege replica pentru: „Salut! Ești nouă aici?” | Mar7aba! Ente jdide hon? | |
 | syn-context-syn-dd95327b2fe7 | dialogue-response | Alege replica pentru: „Da, sunt din România. Mă cheamă Maya.” | Eh, ana men romania. Esme Maya. | |
-| syn-context-syn-cce5d005ef50 | dialogue-response | Alege replica pentru: „Încântat! Eu sunt Karim. Ce te-a adus în Liban?” | Tsharrafna! Ana Karim. Shu jabik 3a lebnen? | |
+| syn-context-syn-cce5d005ef50 | dialogue-response | Alege replica pentru: „Încântat! Eu sunt Karim. Ce te-a adus în Liban?” | Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen? | Approved teacher correction. |
 | syn-context-syn-85950fed3ce1 | dialogue-response | Alege replica pentru: „Am venit pentru muncă. Lucrez la o companie aici.” | Jit lel sho8ol. 3am beshte8el b sherke hon. | |
 | syn-context-syn-8296c850f547 | dialogue-response | Alege replica pentru: „Frumos! Ce faci la companie?” | 7elo! Shu bte3mle bel sherke? | |
 | syn-context-syn-b914d832f2e9 | dialogue-response | Alege replica pentru: „Sunt ingineră. Și tu ce faci?” | Ana muhandise. W enta shu bte3mel? | |
 | syn-context-syn-9ca65770cc34 | dialogue-response | Alege replica pentru: „Sunt doctor, lucrez la un spital aproape de aici.” | Ana duktor, beshte8el b mustashfa 2arib men hon. | |
-| syn-context-syn-93e672f514f4 | dialogue-response | Alege replica pentru: „Uau! De cât timp lucrezi acolo?” | Wow! Kam sar lak 3am teshte8el hunik? | |
-| syn-context-syn-6d3f1fdf6fa2 | dialogue-response | Alege replica pentru: „Cinci ani. Îmi place mult jobul.” | 5ames snin. Bhibb sho8le ktir. | |
-| syn-context-syn-244aff0d3a2b | dialogue-response | Alege replica pentru: „Sigur e greu dar important.” | Akid sa3eb bass muhemm. | |
+| syn-context-syn-93e672f514f4 | dialogue-response | Alege replica pentru: „Uau! De cât timp lucrezi acolo?” | Wow! Kam sar lak 3am teshte8el huniik? | |
+| syn-context-syn-6d3f1fdf6fa2 | dialogue-response | Alege replica pentru: „Sunt aici de aproape cinci ani. Îmi place mult jobul.” | Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir. | Approved teacher correction; Romanian prompt updated to match the Lebanese meaning. |
+| syn-context-syn-244aff0d3a2b | dialogue-response | Alege replica pentru: „Sigur e greu dar important.” | Akiid sa3eb bass mhemm. | Approved teacher spelling. |
 | syn-context-syn-cf0689f82974 | dialogue-response | Alege replica pentru: „Da. Ce ai făcut ieri?” | Eh. Shu 3melte embere7? | |
-| syn-context-syn-7336e33d4bf1 | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat câteva lucruri.” | Re7t 3as su2 w eshtarayt shwayet a8rad. | |
+| syn-context-syn-7336e33d4bf1 | dialogue-response | Alege replica pentru: „Am mers la piață și am cumpărat câteva lucruri.” | Re7et 3as suu2 w shtareet shwayyet 8raad. | Approved teacher correction. |
 | syn-context-syn-7b6c42c329dd | dialogue-response | Alege replica pentru: „Frumos! Îți place piața libaneză?” | 7elo! Bte7ebbe es su2 el lebnene? | |
-| syn-context-syn-0596620bdc87 | dialogue-response | Alege replica pentru: „Foarte! Oamenii sunt drăguți și prețurile sunt bune.” | Ktir! En nes lotaf w el as3ar mni7a. | |
+| syn-context-syn-0596620bdc87 | dialogue-response | Alege replica pentru: „Foarte! Oamenii sunt drăguți și prețurile sunt bune.” | Ktiir! En nes mahdumin w el as3ar mnii7a. | Approved primary wording. `laziziin / taybeen / mnee7` are also valid alternatives for describing the people. Vowel note: in `mne7/mnii7`, `e` is short like English “elephant”; doubling marks the long vowel. |
 | syn-context-syn-a3c4779b186f | dialogue-response | Alege replica pentru: „Ce îți place să mănânci din mâncarea libaneză?” | Shu bte7ebbe tekle men el akel el lebnene? | |
-| syn-context-syn-7bce2b6efd7e | dialogue-response | Alege replica pentru: „Îmi place foarte mult humusul și tabbouleh-ul. Și shaorma!” | b7ebb el-7ommos w el-tabbule ktir. W el-shawarma! | |
-| syn-context-syn-a9dd2a104368 | dialogue-response | Alege replica pentru: „Kibbeh-ul e foarte bun! Îți place kibbeh nayyeh sau cel prăjit?” | el-kebbe tayyibe ktir! bt7ebb el-kebbe nayye walla el-m'alliye? | |
-| syn-context-syn-97c560f53b0c | dialogue-response | Alege replica pentru: „Și îți plac dulciurile libaneze?” | w bt7ebb el-7elwiyyat el-lebnaniyye? | |
-| syn-context-syn-b075a2b0e163 | dialogue-response | Alege replica pentru: „Și eu! Dar mâncarea mea preferată este kibbeh.” | Ana kamen! Bass aklti el-mfaddale hiyye el-kebbe. | |
-| syn-context-syn-090b0b874f85 | dialogue-response | Alege replica pentru: „Prefer varianta prăjită, dar și cea crudă este bună.” | Bfaddel el-m2alliyye, bass el-nayye kamen mni7a. | |
-| syn-context-syn-c70e6bbdca73 | dialogue-response | Alege replica pentru: „Sigur! Baklava și kanafeh… mulțumesc!” | Akid! El-ba2lewe w el-knefe... yeslamo! | |
+| syn-context-syn-7bce2b6efd7e | dialogue-response | Alege replica pentru: „Îmi place foarte mult humusul și tabbouleh-ul. Și shaorma!” | B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma! | Approved teacher spelling. |
+| syn-context-syn-a9dd2a104368 | dialogue-response | Alege replica pentru: „Kibbeh-ul e foarte bun! Îți place kibbeh nayyeh sau cel prăjit?” | El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale? | Approved teacher correction. |
+| syn-context-syn-97c560f53b0c | dialogue-response | Alege replica pentru: „Și îți plac dulciurile libaneze?” | W bt7ebb el-7elo el-libneene? | Approved primary wording. `el-7alawiyyeet el-lebneeniyye` is also approved. |
+| syn-context-syn-b075a2b0e163 | dialogue-response | Alege replica pentru: „Și eu! Dar mâncarea mea preferată este kibbeh.” | Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe. | Approved with established `kameen`. |
+| syn-context-syn-090b0b874f85 | dialogue-response | Alege replica pentru: „Prefer varianta prăjită, dar și cea crudă este bună.” | Bfaddel el-m`a2aale, bass el-nayye kameen mni7a. | Approved teacher correction. |
+| syn-context-syn-c70e6bbdca73 | dialogue-response | Alege replica pentru: „Sigur! Baklava și kanafeh… mulțumesc!” | Akiid! El-be2leewe w el-kneefe... yeslamo! | Approved primary spellings. Baklava variants also accepted: `be2leewa / ba2leewa / bi2leewe / bi2leewa` and close local variants. |
 
