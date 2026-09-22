@@ -54,6 +54,7 @@ public struct ListeningPrompt: Codable, Equatable, Sendable, Identifiable {
     public let audioAssetID: String
     public let expressionID: String
     public let mode: ListeningMode
+    public let choiceExpressionIDs: [String]
     public let revealWrittenLebaneseInitially: Bool
 
     public init(
@@ -61,13 +62,33 @@ public struct ListeningPrompt: Codable, Equatable, Sendable, Identifiable {
         audioAssetID: String,
         expressionID: String,
         mode: ListeningMode,
+        choiceExpressionIDs: [String] = [],
         revealWrittenLebaneseInitially: Bool = false
     ) {
         self.id = id
         self.audioAssetID = audioAssetID
         self.expressionID = expressionID
         self.mode = mode
+        self.choiceExpressionIDs = choiceExpressionIDs
         self.revealWrittenLebaneseInitially = revealWrittenLebaneseInitially
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, audioAssetID, expressionID, mode, choiceExpressionIDs
+        case revealWrittenLebaneseInitially
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        audioAssetID = try container.decode(String.self, forKey: .audioAssetID)
+        expressionID = try container.decode(String.self, forKey: .expressionID)
+        mode = try container.decode(ListeningMode.self, forKey: .mode)
+        choiceExpressionIDs = try container.decodeIfPresent([String].self, forKey: .choiceExpressionIDs) ?? []
+        revealWrittenLebaneseInitially = try container.decodeIfPresent(
+            Bool.self,
+            forKey: .revealWrittenLebaneseInitially
+        ) ?? false
     }
 }
 
