@@ -1,6 +1,6 @@
 # Offline v1 remaining work — ordered backlog
 
-This is the single execution order for known remaining work, based on the branch at 9251ff011e0448ebd82178303c12e77129308c01. It is not a claim that a final integration audit cannot uncover defects.
+This is the single execution order for known remaining work, based on the build-verified branch at dd23b05327d972db20b31d91a438158b281815b6. It is not a claim that a final integration/device audit cannot uncover defects.
 
 ## Working agreement
 
@@ -25,7 +25,7 @@ Local progress and durable failed-save retry; review queue and content-aware cou
 | 4 | Production curriculum and drill links | Review existing coverage and provenance; supply explicit approved expression mappings for unlinked legacy drills. Keep unavailable levels/features honest. | **Completed:** A1/A2/B1 teacher review applied through native-only reproducible overrides; approved drill links integrated; superseded/unsafe generated drills excluded; website remains read-only. |
 | 5 | Orientation calibration | Teacher approves pilot questions, thresholds and recommended Journey starts. No CEFR-certification claim. | **Completed:** calibrated 24-question bank approved (8/8/8), 6/8 provisional threshold pinned, explicit A1/A2/B1 Journey starts implemented, all-B1-pass result framed as review + tutor assessment rather than B2 certification. |
 | 6 | Production Listening/Speaking | Supply actual approved recordings and expression IDs; integrate bundled assets/listening prompts through reproducible content inputs. | Native ingestion/validation path completed: approved `.m4a` files, expression links, explicit Listening distractors and built-app file checks are enforced. Actual recordings/approval may be supplied after the text demo; Listening/Speaking remain unavailable (`În curând`) until then. |
-| 7 | Production dictionary/roots/morphology | Supply approved roots, morphology, inflections, context/grammar/pragmatics; populate existing models and complete saved/root practice coverage. | Native approved-morphology ingestion and strict ID/type validation completed. Teacher-approved root/morphology data still needed; root UI stays hidden when none is supplied and does not block the text demo. |
+| 7 | Production dictionary/roots/morphology | Supply approved roots, morphology, inflections, context/grammar/pragmatics; populate existing models and complete saved/root practice coverage. | **Partially completed with production data:** native approved-morphology ingestion and strict ID/type validation are complete; teacher-approved NWM, L7M, 3LM and MLK families are bundled, including `mnawwem/munawwem`, `la7me`, `la77am`, `tel7iim`, `ilta7am`, `yelte7em`, `mal7ame`, `m3allem`, `m3alme`, `3aleeme`, `malak` and `maleek`. More teacher-approved root families/inflections can be added later. |
 | 8 | Audio Speed Drill | Connect the existing audio direction to actual reference playback and listening-safe prompts, without revealing the answer. | Blocked only by item 6 recordings; not required for the text demo. |
 | 9 | Public identity and visual finish | Decide public name; finish app icon, launch appearance and coherent final styling. | Provisional name approved: Araba libaneza; display name configured. Cedar/conversation icon and adaptive system-background launch screen added; native build and packaged-resource checks passed; final visual/device acceptance remains |
 | 10 | Release preparation | Prepare actual-behavior privacy information, App Store copy/screenshots, signing/archive and TestFlight distribution. | Romanian store copy, screenshot plan and technical privacy inventory updated; `PrivacyInfo.xcprivacy` is bundled and packaging-checked; public support contact recorded. Final privacy-policy URL, signed-build review and Apple developer/Mac access remain. |
@@ -33,7 +33,7 @@ Local progress and durable failed-save retry; review queue and content-aware cou
 
 ## Demo readiness
 
-The current text/demo build does **not** require production recordings or root/morphology data. Demo-visible scope is Acasă, Parcurs, text/choice/word-order/matching exercises, review/progress, Orientation, Smart Practice, text Speed Drill, dictionary/search/saved expressions and Profile. Listening and Speak & Compare remain visibly unavailable as `În curând`; the Roots section remains absent until approved root data exists. Do not add generated/TTS placeholder audio just to make those destinations appear available.
+The current text/demo build does **not** require production recordings or a complete morphology catalogue. Demo-visible scope is Acasă, Parcurs, text/choice/word-order/matching exercises, review/progress, Orientation, Smart Practice, text Speed Drill, dictionary/search/saved expressions, the approved initial Roots families, and Profile. Listening and Speak & Compare remain visibly unavailable as `În curând`. Do not add generated/TTS placeholder audio just to make those destinations appear available.
 
 ## Separate scope decisions — not automatic offline-v1 blockers
 
@@ -56,7 +56,7 @@ Phase history and implemented foundations: ROADMAP.md.
 - Dictionary reference playback currently stops on leaving its screen; explicitly confirm background/audio-interruption behavior alongside the other audio screens.
 - Accessibility changes are code-reviewed and compiled, not visually or interactively certified. Confirm readable layouts, keyboard reachability and VoiceOver navigation on real iPhone/iPad sizes.
 
-- GitHub Actions currently terminates both iOS jobs before any runner steps are created (no step logs); this same infrastructure-level failure occurred on review-only commits before the production-content integration. Restore Actions/runner availability before the final automated release pass.
+- GitHub Actions runner access was restored by running the repository publicly. CI run 35732908599 on commit dd23b05327d972db20b31d91a438158b281815b6 passed end-to-end: Swift core tests, importer tests, native content regeneration/reproducibility, XcodeGen generation, native iOS `xcodebuild`, and built-app resource verification. If the repository is made private again without restoring private-repo Actions allowance/billing, future hosted runs may again fail before runner allocation.
 
 ## Packaging verification
 
