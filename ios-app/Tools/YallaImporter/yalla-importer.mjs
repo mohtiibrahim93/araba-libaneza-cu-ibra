@@ -158,37 +158,107 @@ export function convertYallaToContentPackage(
 
 
 export function applyApprovedNativeOverrides(contentPackage, overrideDocument = {}) {
-  const directives = overrideDocument.exerciseOverrides ?? {};
+  const expressionDirectives = overrideDocument.expressionOverrides ?? {};
+  const exerciseDirectives = overrideDocument.exerciseOverrides ?? {};
+  const expressionsByID = new Map(contentPackage.expressions.map((expression) => [expression.id, expression]));
   const exercisesByID = new Map(contentPackage.exercises.map((exercise) => [exercise.id, exercise]));
 
-  for (const id of Object.keys(directives)) {
+  for (const id of Object.keys(expressionDirectives)) {
+    if (!expressionsByID.has(id)) {
+      throw new Error(`Approved override references missing expression "${id}".`);
+    }
+  }
+  for (const id of Object.keys(exerciseDirectives)) {
     if (!exercisesByID.has(id)) {
       throw new Error(`Approved override references missing exercise "${id}".`);
     }
   }
 
-  const expressionIDs = new Set(contentPackage.expressions.map((expression) => expression.id));
-  const exercises = [];
+  const excludedExpressionIDs = new Set(
+    Object.entries(expressionDirectives)
+      .filter(([, directive]) => directive.exclude === true)
+      .map(([id]) => id)
+  );
 
-  for (const exercise of contentPackage.exercises) {
-    const directive = directives[exercise.id];
-    if (!directive) {
-      exercises.push(exercise);
-      continue;
+  const expressions = contentPackage.expressions.flatMap((expression) => {
+    const directive = expressionDirectives[expression.id];
+    if (directive?.exclude === true) return [];
+
+    const localizations = directive?.localizations
+      ? Object.fromEntries(
+          Object.entries(expression.localizations).map(([locale, localization]) => [
+            locale,
+            { ...localization, ...(directive.localizations[locale] ?? {}) }
+          ])
+        )
+      : expression.localizations;
+
+    return [{
+      ...expression,
+      ...(directive?.canonicalArabizi !== undefined
+        ? { canonicalArabizi: String(directive.canonicalArabizi) }
+        : {}),
+      ...(directive?.variants !== undefined ? { variants: directive.variants } : {}),
+      localizations
+    }];
+  });
+
+  const availableExpressionIDs = new Set(expressions.map((expression) => expression.id));
+  const units = contentPackage.units.map((unit) => ({
+    ...unit,
+    expressionIDs: unit.expressionIDs.filter((id) => availableExpressionIDs.has(id))
+  }));
+  const lexiconCollections = contentPackage.lexiconCollections.map((collection) => ({
+    ...collection,
+    expressionIDs: collection.expressionIDs.filter((id) => availableExpressionIDs.has(id))
+  }));
+
+  for (const link of contentPackage.morphologyLinks ?? []) {
+    if (excludedExpressionIDs.has(link.expressionID)) {
+      throw new Error(
+        `Cannot exclude expression "${link.expressionID}" while it is referenced by morphology.`
+      );
     }
-    if (directive.exclude === true) continue;
+  }
+  for (const relation of contentPackage.inflectionRelations ?? []) {
+    if (
+      excludedExpressionIDs.has(relation.sourceExpressionID) ||
+      excludedExpressionIDs.has(relation.targetExpressionID)
+    ) {
+      throw new Error('Cannot exclude an expression while it is referenced by an inflection relation.');
+    }
+  }
+  for (const audio of contentPackage.audioAssets ?? []) {
+    if (audio.expressionID && excludedExpressionIDs.has(audio.expressionID)) {
+      throw new Error(
+        `Cannot exclude expression "${audio.expressionID}" while it is referenced by audio.`
+      );
+    }
+  }
+  for (const listening of contentPackage.listeningPrompts ?? []) {
+    if (excludedExpressionIDs.has(listening.expressionID)) {
+      throw new Error(
+        `Cannot exclude expression "${listening.expressionID}" while it is referenced by listening content.`
+      );
+    }
+  }
 
-    const expressionIDsForExercise = directive.expressionIDs ?? exercise.expressionIDs;
+  const exercises = [];
+  for (const exercise of contentPackage.exercises) {
+    const directive = exerciseDirectives[exercise.id];
+    if (directive?.exclude === true) continue;
+
+    const expressionIDsForExercise = (directive?.expressionIDs ?? exercise.expressionIDs).map(String);
     for (const expressionID of expressionIDsForExercise) {
-      if (!expressionIDs.has(String(expressionID))) {
+      if (!availableExpressionIDs.has(expressionID)) {
         throw new Error(
-          `Approved override for "${exercise.id}" references missing expression "${expressionID}".`
+          `Approved override for "${exercise.id}" references missing or excluded expression "${expressionID}".`
         );
       }
     }
 
-    let prompt = directive.prompt ?? exercise.prompt;
-    if (typeof directive.context === 'string' && directive.context.trim()) {
+    let prompt = directive?.prompt ?? exercise.prompt;
+    if (typeof directive?.context === 'string' && directive.context.trim()) {
       const context = directive.context.trim();
       prompt = {
         ...prompt,
@@ -200,16 +270,16 @@ export function applyApprovedNativeOverrides(contentPackage, overrideDocument = 
 
     exercises.push({
       ...exercise,
-      ...(directive.answer !== undefined ? { answer: String(directive.answer) } : {}),
-      ...(directive.wrongAnswers !== undefined
+      ...(directive?.answer !== undefined ? { answer: String(directive.answer) } : {}),
+      ...(directive?.wrongAnswers !== undefined
         ? { wrongAnswers: directive.wrongAnswers.map(String) }
         : {}),
-      expressionIDs: expressionIDsForExercise.map(String),
+      expressionIDs: expressionIDsForExercise,
       prompt
     });
   }
 
-  return { ...contentPackage, exercises };
+  return { ...contentPackage, expressions, units, exercises, lexiconCollections };
 }
 
 export function loadApprovedNativeOverrides(overridePath = DEFAULT_OVERRIDE_PATH) {
