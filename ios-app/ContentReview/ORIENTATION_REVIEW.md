@@ -245,6 +245,27 @@ Passing a later band does not override a gap in an earlier band. Listening and s
 
 ---
 
+## Teacher approval — 22 September 2026
+
+Approved for the offline-v1 orientation:
+
+- 24 questions total, split 8 A1 / 8 A2 / 8 B1.
+- A1 questions 1–7 approved as reviewed.
+- Question 8 approved as: `Scrie întrebarea „Unde?” în Arabizi.` → `Wen?`; no standalone `wayn` variant.
+- Calibrated A2 and B1 replacement blocks approved.
+- Provisional pass threshold approved at **6/8 per band**.
+- Sequential gap priority approved: A1 gap first, then A2, then B1.
+- Explicit Journey starts approved:
+  - A1 gap → `a1-welcome`
+  - A2 gap → `a2-roots`
+  - B1 gap → `b1-experiences`
+  - all available B1 placement material passed → `b1-conversation` for review
+- Passing the available B1 bank must **not** be presented as a formal B2 or CEFR certification. The learner is told they passed the currently available B1 placement material, may review B1, and can contact the tutor for a fuller next-step assessment including speaking/listening.
+- Placement result opens the **Parcurs** root with the recommended unit saved as current rather than forcing the learner directly into the lesson.
+- Tutor contact is available from **Eu → Tutor**. Current native card uses the same public contact number already published on the site and describes availability as flexible/by appointment.
+
+The approved machine-readable source is `APPROVED_ORIENTATION_BANK.json`, and the bundled `orientation-pilot.json` must remain byte/content-equivalent to it.
+
 ## Calibration analysis against the reviewed native curriculum
 
 The original 24-question pilot is structurally valid, but its internal A2/B1 bands no longer line up well with the reviewed native Journey. Several pilot items labelled A2/B1 test expressions that now live in A1/A2 production content. For placement, this makes the higher bands too easy and weakens the meaning of the 6/8 threshold.
