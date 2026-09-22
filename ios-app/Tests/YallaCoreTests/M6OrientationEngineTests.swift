@@ -42,6 +42,27 @@ struct OrientationEngineTests {
         #expect(result.gapBands == [.a1])
     }
 
+    @Test("Six out of eight is the provisional pass boundary")
+    func sixOfEightPasses() throws {
+        let a1Pass = try OrientationEngine().score(
+            questions: Self.questionBank(),
+            responses: Self.responses(a1Correct: 6, a2Correct: 5, b1Correct: 8)
+        )
+        #expect(a1Pass.startingPoint == .a2Consolidation)
+
+        let a2Pass = try OrientationEngine().score(
+            questions: Self.questionBank(),
+            responses: Self.responses(a1Correct: 6, a2Correct: 6, b1Correct: 5)
+        )
+        #expect(a2Pass.startingPoint == .b1AvailableMaterial)
+
+        let allPass = try OrientationEngine().score(
+            questions: Self.questionBank(),
+            responses: Self.responses(a1Correct: 6, a2Correct: 6, b1Correct: 6)
+        )
+        #expect(allPass.startingPoint == .reviewAndEnrichment)
+    }
+
     @Test("A2 gap recommends A2 consolidation after a solid A1")
     func a2Gap() throws {
         let result = try OrientationEngine().score(
