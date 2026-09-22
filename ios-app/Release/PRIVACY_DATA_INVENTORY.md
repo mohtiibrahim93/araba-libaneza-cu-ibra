@@ -1,8 +1,8 @@
 # Offline v1 privacy data inventory
 
 Technical preparation, not a published privacy policy or completed App Store privacy declaration.
-Source snapshot: yalla-app-ios at 27854a33602252d79ae2735d9b9117c3e49e5efb.
-Scope inspected: native App Swift sources, project.yml and Package.swift.
+Updated against the current reviewed yalla-app-ios release candidate.
+Scope inspected: native App Swift sources, YallaCore, project.yml, Package.swift and bundled resources.
 
 ## Observed data behavior
 
@@ -43,8 +43,13 @@ Dacă alegi să te înregistrezi, aplicația îți cere acces la microfon. Înre
 - Owner supplies the responsible entity and a real privacy/support contact.
 - Owner approves and publishes the final privacy policy at an accessible URL.
 - Complete App Store privacy answers against the final signed build and then-current submission questions.
-- Review privacy-manifest / required-reason API requirements against the archive; no declaration or exemption is asserted here.
+- `App/Resources/PrivacyInfo.xcprivacy` is now bundled with tracking=false, no tracking domains, no declared collected-data types and no required-reason API entries based on the currently inspected first-party native code. Recheck the final archive and any added dependency/API use before submission.
 - Confirm permission wording, denial recovery, recording deletion and backup/restore behavior on a device.
 - Revisit this inventory before adding analytics, crash-reporting SDKs, accounts, cloud sync or external media.
 
 Evidence files: App/LearnerProgressPersistence.swift; App/LearnerProgressModel.swift; App/NativeAudioController.swift; App/RecordingLibraryView.swift; App/SpeakAndCompareView.swift; project.yml; Package.swift.
+
+
+## Privacy manifest release note
+
+The app target now includes `PrivacyInfo.xcprivacy`, and the built-app verifier requires it to be present in the packaged app. This is a release-candidate declaration for the current offline implementation, not a permanent exemption: if analytics, networking SDKs, cloud features or required-reason APIs are added, update the manifest and App Store privacy answers together.
