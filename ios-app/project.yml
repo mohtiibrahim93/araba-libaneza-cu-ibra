@@ -37,12 +37,34 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: NO
 
+  YallaAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: UITests
+    dependencies:
+      - target: YallaApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.centruldearabalibaneza.app.uitests
+        PRODUCT_NAME: YallaAppUITests
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: YallaApp
+        TARGETED_DEVICE_FAMILY: "1,2"
+
 schemes:
   YallaApp:
     build:
       targets:
         YallaApp: all
+        YallaAppUITests: [test]
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - YallaAppUITests
     archive:
       config: Release
