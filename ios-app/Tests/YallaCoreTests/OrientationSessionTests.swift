@@ -54,11 +54,14 @@ struct OrientationSessionTests {
         #expect(result.startingPoint == .b1AvailableMaterial)
         #expect(result.unassessedSkills == [.listening, .speaking])
         let units = [
-            JourneyUnit(id: "a1", level: .a1, expressionIDs: [], localizations: ["ro": .init(title: "A1", description: "")]),
-            JourneyUnit(id: "b1", level: .b1, expressionIDs: [], localizations: ["ro": .init(title: "B1", description: "")])
+            JourneyUnit(id: "a1-welcome", level: .a1, expressionIDs: [], localizations: ["ro": .init(title: "A1", description: "")]),
+            JourneyUnit(id: "a2-roots", level: .a2, expressionIDs: [], localizations: ["ro": .init(title: "A2", description: "")]),
+            JourneyUnit(id: "b1-experiences", level: .b1, expressionIDs: [], localizations: ["ro": .init(title: "B1", description: "")]),
+            JourneyUnit(id: "b1-conversation", level: .b1, expressionIDs: [], localizations: ["ro": .init(title: "B1 review", description: "")])
         ]
-        #expect(result.startingJourneyUnit(in: units)?.id == "b1")
-        #expect(result.startingJourneyUnit(in: Array(units.prefix(1))) == nil)
+        #expect(result.startingJourneyUnitID == "b1-experiences")
+        #expect(result.startingJourneyUnit(in: units)?.id == "b1-experiences")
+        #expect(result.startingJourneyUnit(in: Array(units.prefix(2))) == nil)
     }
 
     @Test("Production pilot bank decodes and supports choices without exposing answer correctness")
