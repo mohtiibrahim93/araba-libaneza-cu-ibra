@@ -22,7 +22,7 @@ Local progress and durable failed-save retry; review queue and content-aware cou
 | 1 | Remaining exercise presentation | Complete matching interaction using supported approved content; explicitly handle exercise types that cannot yet run. Preserve correction/mistake rules. No new AI-transfer system. | Implemented and verified: Journey matching and per-pair correction/progress |
 | 2 | Recording management | Learners can find, replay and delete local recordings after leaving a session; denied microphone access has a clear recovery path. No upload. | Implemented and verified: local library, confirmed deletion and Settings recovery; device interaction remains in 11 |
 | 3 | UI/accessibility completion | Consistent navigation, keyboard handling, empty/error states, VoiceOver labels, Dynamic Type, contrast and layouts. Review each relevant screen once. | Code pass compiled successfully: adaptive rows, keyboard/VoiceOver/error presentation; visual/device acceptance remains in 11 |
-| 4 | Production curriculum and drill links | Review existing coverage and provenance; supply explicit approved expression mappings for unlinked legacy drills. Keep unavailable levels/features honest. | Inventory/review sheets prepared in ContentReview; teacher decisions needed |
+| 4 | Production curriculum and drill links | Review existing coverage and provenance; supply explicit approved expression mappings for unlinked legacy drills. Keep unavailable levels/features honest. | **Completed:** A1/A2/B1 teacher review applied through native-only reproducible overrides; approved drill links integrated; superseded/unsafe generated drills excluded; website remains read-only. |
 | 5 | Orientation calibration | Teacher approves pilot questions, thresholds and recommended Journey starts. No CEFR-certification claim. | ORIENTATION_REVIEW.md prepared; teacher approval/calibration pending |
 | 6 | Production Listening/Speaking | Supply actual approved recordings and expression IDs; integrate bundled assets/listening prompts through reproducible content inputs. | RECORDING_BATCH_01.md prepared from existing content; actual recordings/approval needed |
 | 7 | Production dictionary/roots/morphology | Supply approved roots, morphology, inflections, context/grammar/pragmatics; populate existing models and complete saved/root practice coverage. | Approved materials needed |
@@ -51,6 +51,8 @@ Phase history and implemented foundations: ROADMAP.md.
 
 - Dictionary reference playback currently stops on leaving its screen; explicitly confirm background/audio-interruption behavior alongside the other audio screens.
 - Accessibility changes are code-reviewed and compiled, not visually or interactively certified. Confirm readable layouts, keyboard reachability and VoiceOver navigation on real iPhone/iPad sizes.
+
+- GitHub Actions currently terminates both iOS jobs before any runner steps are created (no step logs); this same infrastructure-level failure occurred on review-only commits before the production-content integration. Restore Actions/runner availability before the final automated release pass.
 
 ## Packaging verification
 
