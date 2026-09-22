@@ -1,0 +1,374 @@
+[
+  {
+    "id": "p1",
+    "ordinal": 1,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Ce înseamnă „Shu esmak?”"
+    },
+    "answer": "Cum te cheamă?",
+    "variants": [],
+    "choices": [
+      "Cum te cheamă?",
+      "Unde locuiești?",
+      "Cât e ceasul?"
+    ],
+    "source": "cc45be2acb040"
+  },
+  {
+    "id": "p2",
+    "ordinal": 2,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Completează: Ne7na ___ mayy."
+    },
+    "answer": "baddna",
+    "variants": [],
+    "choices": [
+      "baddna",
+      "baddkon",
+      "baddon"
+    ],
+    "source": "c01a22caa2619"
+  },
+  {
+    "id": "p3",
+    "ordinal": 3,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "„Ma3e masaare halla2” înseamnă:"
+    },
+    "answer": "Am bani la mine acum.",
+    "variants": [],
+    "choices": [
+      "Am bani la mine acum.",
+      "Ai bani la tine acum.",
+      "Nu am bani acum."
+    ],
+    "source": "teacher-approved-a1"
+  },
+  {
+    "id": "p4",
+    "ordinal": 4,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Întrebi câți câini are cineva: ___ kaleb 3andik?"
+    },
+    "answer": "Kam",
+    "variants": [],
+    "choices": [
+      "Kam",
+      "Miin",
+      "Wen"
+    ],
+    "source": "c1d861004aa11"
+  },
+  {
+    "id": "p5",
+    "ordinal": 5,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Scrie „Vreau apă”, folosind badde."
+    },
+    "answer": "Badde mayy",
+    "variants": [
+      "badde may"
+    ],
+    "choices": [],
+    "source": "syn-eee8f2ac9ac4"
+  },
+  {
+    "id": "p6",
+    "ordinal": 6,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Completează: Hiyye ___."
+    },
+    "answer": "mabsuuta",
+    "variants": [],
+    "choices": [
+      "mabsuuta",
+      "mabsuut",
+      "mabsuutiin"
+    ],
+    "source": "c36df17284ba5"
+  },
+  {
+    "id": "p7",
+    "ordinal": 7,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Cum ceri exact două mere?"
+    },
+    "answer": "Badde teffe7ten.",
+    "variants": [],
+    "choices": [
+      "Badde teffe7ten.",
+      "Badde teffe7a.",
+      "Badde tlet teffe7eet."
+    ],
+    "source": "xd2d5fb4646c9"
+  },
+  {
+    "id": "p8",
+    "ordinal": 8,
+    "internalBand": "a1",
+    "prompt": {
+      "ro": "Scrie întrebarea „Unde?” în Arabizi."
+    },
+    "answer": "Wen?",
+    "variants": [],
+    "choices": [],
+    "source": "c4f8d65740f93"
+  },
+  {
+    "id": "p9",
+    "ordinal": 9,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "„Shu 3emelt mbere7?” înseamnă:"
+    },
+    "answer": "Ce ai făcut ieri?",
+    "variants": [],
+    "choices": [
+      "Ce ai făcut ieri?",
+      "Ce faci mâine?",
+      "Unde ai fost ieri?"
+    ],
+    "source": "syn-f8c4dfb99ed9"
+  },
+  {
+    "id": "p10",
+    "ordinal": 10,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Completează „Cred că”: B3te2ed ___."
+    },
+    "answer": "enno",
+    "variants": [],
+    "choices": [
+      "enno",
+      "Law",
+      "Eza"
+    ],
+    "source": "syn-rule-11-0"
+  },
+  {
+    "id": "p11",
+    "ordinal": 11,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Alege „Nu pot să vin.”"
+    },
+    "answer": "Ma b2dar eje.",
+    "variants": [],
+    "choices": [
+      "Ma b2dar eje.",
+      "Ma b2dar se3dak.",
+      "Ma leezem ru7."
+    ],
+    "source": "teacher-approved-a2-modals"
+  },
+  {
+    "id": "p12",
+    "ordinal": 12,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Ce cuvânt introduce o condiție reală / posibilă?"
+    },
+    "answer": "Eza",
+    "variants": [],
+    "choices": [
+      "Eza",
+      "Law",
+      "Wen"
+    ],
+    "source": "c562610a5dfd5"
+  },
+  {
+    "id": "p13",
+    "ordinal": 13,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Ce cuvânt introduce o situație ipotetică / ireală?"
+    },
+    "answer": "Law",
+    "variants": [],
+    "choices": [
+      "Law",
+      "Eza",
+      "Wen"
+    ],
+    "source": "c6bcfc897332e"
+  },
+  {
+    "id": "p14",
+    "ordinal": 14,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Completează: Es-sabe ___ 3am yedros huwwe 5ayye."
+    },
+    "answer": "yalle",
+    "variants": [],
+    "choices": [
+      "yalle",
+      "Eza",
+      "Law"
+    ],
+    "source": "q43"
+  },
+  {
+    "id": "p15",
+    "ordinal": 15,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "Ce formă verbală recunoști în „5arrab”?"
+    },
+    "answer": "II",
+    "variants": [],
+    "choices": [
+      "II",
+      "I",
+      "VII"
+    ],
+    "source": "q52"
+  },
+  {
+    "id": "p16",
+    "ordinal": 16,
+    "internalBand": "a2",
+    "prompt": {
+      "ro": "„Ma bye3jebne hal filem.” înseamnă:"
+    },
+    "answer": "Nu îmi place acest film.",
+    "variants": [],
+    "choices": [
+      "Nu îmi place acest film.",
+      "Îmi place acest film.",
+      "Nu pot vedea acest film."
+    ],
+    "source": "syn-2da83ea30cd8"
+  },
+  {
+    "id": "p17",
+    "ordinal": 17,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Addesh sarlak 3am teshte8el huniik?” înseamnă:"
+    },
+    "answer": "De cât timp lucrezi acolo?",
+    "variants": [],
+    "choices": [
+      "De cât timp lucrezi acolo?",
+      "Unde lucrezi acum?",
+      "Când începi munca?"
+    ],
+    "source": "syn-b070e7525663"
+  },
+  {
+    "id": "p18",
+    "ordinal": 18,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Scrie „Încă învăț.” în Arabizi."
+    },
+    "answer": "Ba3dne 3am bet3allam.",
+    "variants": [
+      "Lessa 3am bt3allam."
+    ],
+    "choices": [],
+    "source": "syn-a1b3d6f86486"
+  },
+  {
+    "id": "p19",
+    "ordinal": 19,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.” înseamnă:"
+    },
+    "answer": "Dacă aș avea timp, aș merge la mare în fiecare weekend.",
+    "variants": [],
+    "choices": [
+      "Dacă aș avea timp, aș merge la mare în fiecare weekend.",
+      "Dacă am timp, merg la mare mâine.",
+      "Am avut timp și am mers la mare."
+    ],
+    "source": "syn-4a040b2aec92"
+  },
+  {
+    "id": "p20",
+    "ordinal": 20,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Alege „Cred că este mai bun decât muntele.”"
+    },
+    "answer": "B3te2ed enno a7san men el jabal.",
+    "variants": [],
+    "choices": [
+      "B3te2ed enno a7san men el jabal.",
+      "B7ebb el ba7er bass leezem eshte8el.",
+      "El jabal 7elo besh-shete."
+    ],
+    "source": "syn-4162e36eafea"
+  },
+  {
+    "id": "p21",
+    "ordinal": 21,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Eza ma 2aadra, fiina nru7 ba3ed esbuu3.” înseamnă:"
+    },
+    "answer": "Dacă nu poți, putem merge peste o săptămână.",
+    "variants": [],
+    "choices": [
+      "Dacă nu poți, putem merge peste o săptămână.",
+      "Dacă ai fi putut, am fi mers ieri.",
+      "Nu putem merge săptămâna viitoare."
+    ],
+    "source": "syn-9c0432d88058"
+  },
+  {
+    "id": "p22",
+    "ordinal": 22,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Faade ne7ke ed-dohor?” înseamnă:"
+    },
+    "answer": "Ești liber să vorbim la prânz?",
+    "variants": [],
+    "choices": [
+      "Ești liber să vorbim la prânz?",
+      "Mănânci la prânz?",
+      "Lucrezi până seara?"
+    ],
+    "source": "syn-3878ee6591c3"
+  },
+  {
+    "id": "p23",
+    "ordinal": 23,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "Scrie „Unde ai vrea să mergem?” către un bărbat."
+    },
+    "answer": "Wen bte7ebb nru7?",
+    "variants": [],
+    "choices": [],
+    "source": "syn-f0baae3824b5"
+  },
+  {
+    "id": "p24",
+    "ordinal": 24,
+    "internalBand": "b1",
+    "prompt": {
+      "ro": "„Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.” înseamnă:"
+    },
+    "answer": "Sunt aici de aproape cinci ani. Îmi place mult jobul.",
+    "variants": [],
+    "choices": [
+      "Sunt aici de aproape cinci ani. Îmi place mult jobul.",
+      "Am lucrat aici cinci zile și plec.",
+      "Sunt nou aici și încă îmi caut de lucru."
+    ],
+    "source": "syn-6d3f1fdf6fa2"
+  }
+]
