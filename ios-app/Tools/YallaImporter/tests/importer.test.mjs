@@ -85,6 +85,12 @@ test('applies approved native overrides without modifying legacy source data', (
 
   const imported = convertYallaToContentPackage(source, { contentVersion: 'test' });
   const result = applyApprovedNativeOverrides(imported, {
+    expressionOverrides: {
+      'card-hello': {
+        canonicalArabizi: 'approved',
+        localizations: { ro: { naturalMeaning: 'formă aprobată' } }
+      }
+    },
     exerciseOverrides: {
       d1: {
         answer: 'approved',
@@ -95,7 +101,10 @@ test('applies approved native overrides without modifying legacy source data', (
     }
   });
 
+  assert.equal(source.cards[0].ar, 'mar7aba');
   assert.equal(source.drills[0].answer, 'legacy');
+  assert.equal(result.expressions[0].canonicalArabizi, 'approved');
+  assert.equal(result.expressions[0].localizations.ro.naturalMeaning, 'formă aprobată');
   assert.equal(result.exercises.length, 1);
   assert.equal(result.exercises[0].answer, 'approved');
   assert.equal(result.exercises[0].prompt.ro, 'Completează: Approved ___ context.');
@@ -161,6 +170,18 @@ test('real approved overrides produce the reviewed native course decisions', () 
     'Addesh sarlak 3am teshte8el huniik?'
   );
   assert.equal(exercises.has('syn-context-syn-9a79f6640456'), false);
+
+  const expressions = new Map(result.expressions.map((expression) => [expression.id, expression]));
+  assert.equal(expressions.get('c5987c363bf91').canonicalArabizi, 'Eza baddak bjiblak mayy.');
+  assert.equal(
+    expressions.get('syn-b070e7525663').canonicalArabizi,
+    'Addesh sarlak 3am teshte8el huniik?'
+  );
+  assert.equal(expressions.has('syn-9a79f6640456'), false);
+  assert.equal(
+    result.units.some((unit) => unit.expressionIDs.includes('syn-9a79f6640456')),
+    false
+  );
 });
 
 test('converts the cross-level vocabulary track into lexicon collections, not Journey levels', () => {
