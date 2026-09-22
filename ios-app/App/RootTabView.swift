@@ -113,8 +113,8 @@ struct RootTabView: View {
         .sheet(isPresented: $showingOrientation) {
             OrientationView(
                 package: content.package, locale: content.locale, progressModel: progressModel,
-                onStartJourney: { _ in
-                    journeyPath = []
+                onStartJourney: { unitID in
+                    journeyPath = [unitID]
                     selectedTab = .journey
                 },
                 onChooseJourney: {
