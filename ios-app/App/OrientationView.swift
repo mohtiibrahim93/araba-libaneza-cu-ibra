@@ -8,6 +8,7 @@ struct OrientationView: View {
     @ObservedObject var progressModel: LearnerProgressModel
     let onStartJourney: (String) -> Void
     let onChooseJourney: () -> Void
+    let onOpenTutor: () -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var session: OrientationSession?
     @State private var started = false
@@ -155,10 +156,15 @@ struct OrientationView: View {
             ForEach([LevelBand.a1, .a2, .b1], id: \.self) { band in
                 LabeledContent(band.rawValue.uppercased() + " · orientativ", value: "\(result.bandScores[band, default: 0])/8")
             }
-            Text("Praguri pilot, nevalidate CEFR. Pentru stabilirea nivelului este necesară și o conversație cu Ibrahim. Ascultarea și vorbirea nu au fost evaluate.")
-                .foregroundStyle(.secondary)
+            if result.startingPoint == .reviewAndEnrichment {
+                Text("Ai trecut banca de orientare pentru materialul B1 disponibil în aplicație. Asta nu este o certificare B2; poți recapitula B1 sau cere o evaluare cu tutorul pentru următorul pas.")
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Prag provizoriu: 6/8 pe fiecare bandă. Rezultatul sugerează un punct de pornire și nu certifică un nivel CEFR. Ascultarea și vorbirea nu au fost evaluate.")
+                    .foregroundStyle(.secondary)
+            }
             if let unit = result.startingJourneyUnit(in: package.units) {
-                Button("Începe parcursul de aici") {
+                Button(result.startingPoint == .reviewAndEnrichment ? "Recapitulează B1 în Parcurs" : "Mergi la Parcurs") {
                     saving = true
                     Task {
                         await progressModel.setCurrentJourneyUnitID(unit.id)
@@ -174,6 +180,14 @@ struct OrientationView: View {
             } else {
                 Text("Nu există încă o unitate disponibilă pentru recomandare. Poți alege din Parcurs.")
             }
+            if result.startingPoint == .reviewAndEnrichment {
+                Button("Vezi tutorul") {
+                    onOpenTutor()
+                    dismiss()
+                }
+                .buttonStyle(.bordered)
+                .disabled(saving)
+            }
             if let error = progressModel.persistenceError {
                 Text("Punctul de pornire nu a putut fi salvat: " + error)
                     .font(.caption).foregroundStyle(.secondary)
@@ -188,7 +202,7 @@ struct OrientationView: View {
         case .a1Foundation: return "Începe cu bazele A1"
         case .a2Consolidation: return "Consolidează materialul A2"
         case .b1AvailableMaterial: return "Explorează materialul B1 disponibil"
-        case .reviewAndEnrichment: return "Recapitulare și aprofundare"
+        case .reviewAndEnrichment: return "Ai trecut materialul B1 disponibil"
         }
     }
 
