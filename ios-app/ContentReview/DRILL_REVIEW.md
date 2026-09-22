@@ -644,27 +644,27 @@ Teacher A2-opinions rules:
 | syn-context-syn-1c01883f538b | dialogue-response | Alege replica pentru: „Nu trebuie să merg.” | Ma lezem ru7. | |
 | syn-context-syn-0b7e7cae6e80 | dialogue-response | Alege replica pentru: „Nu pot să te ajut. (masculin)” | Ma b2dar se3dak. | |
 | syn-context-syn-e01da0d8fbac | dialogue-response | Alege replica pentru: „Nu, nu este necesar.” | La2, mish daruri. | |
-| syn-context-syn-3a47c9354640 | dialogue-response | Alege replica pentru: „Astăzi trebuie să lucrez mult.” | El yom lezem eshte8el ktir. | |
+| syn-context-syn-3a47c9354640 | dialogue-response | Alege replica pentru: „Astăzi trebuie să lucrez mult.” | El yom lezem eshte8el ktir. | Apply established long-vowel spelling: `El yom lezem eshte8el ktiir.` |
 | syn-context-syn-24d7369d09d7 | dialogue-response | Alege replica pentru: „nu pot să vin” | ma b2dar eje | |
 | syn-context-syn-ae1fc12ffb49 | dialogue-response | Alege replica pentru: „fumatul e interzis” | mamnū3 et tad5in | |
 | syn-context-syn-d5cd5b35bec2 | dialogue-response | Alege replica pentru: „trebuie să mergem acum” | lezem nru7 halla2 | |
 | syn-context-syn-2bd10c08b32a | dialogue-response | Alege replica pentru: „nu trebuie să mergi” | ma lezem tru7 | |
 | syn-context-syn-f12523bc5368 | dialogue-response | Alege replica pentru: „poți să faci așa?” | bte2dar te3mel hayk? | |
-| syn-context-syn-3f49fb7cf434 | dialogue-response | Alege replica pentru: „Salut Karim! Vrei să ieși cu mine în weekend?” | Marhaba Karim! Baddak totla3 ma3e bel weekend? | |
-| syn-context-syn-0823cb321526 | dialogue-response | Alege replica pentru: „Vreau, dar trebuie să lucrez sâmbătă.” | Badde, bass lezem eshte8el es sabt. | |
-| syn-context-syn-14a76eec3636 | dialogue-response | Alege replica pentru: „Da, am o treabă foarte importantă.” | Eh, 3ande sho8ol muhemm ktir. | |
+| syn-context-syn-3f49fb7cf434 | dialogue-response | Alege replica pentru: „Salut Karim! Vrei să ieși cu mine în weekend?” | Marhaba Karim! Baddak totla3 ma3e bel weekend? | Apply established greeting spelling: `Mar7aba Karim! Baddak totla3 ma3e bel weekend?` |
+| syn-context-syn-0823cb321526 | dialogue-response | Alege replica pentru: „Vreau, dar trebuie să lucrez sâmbătă.” | Badde, bass lezem eshte8el es sabt. | Apply established spellings: `Badde, bas lezem eshte8el es-sabet.` |
+| syn-context-syn-14a76eec3636 | dialogue-response | Alege replica pentru: „Da, am o treabă foarte importantă.” | Eh, 3ande sho8ol muhemm ktir. | Apply established long-vowel spelling: `Eh, 3ande sho8ol muhemm ktiir.` `shu8ol` and local vowel variants remain accepted. |
 | syn-context-syn-9f4f106aea70 | dialogue-response | Alege replica pentru: „Bine, e posibil duminică?” | Tayyeb, momken el a7ad? | |
 | syn-context-syn-0c0ae560a960 | dialogue-response | Alege replica pentru: „Duminică pot! Ce vrei să facem?” | El a7ad b2dar! Shu baddik ne3mel? | |
-| syn-context-syn-43f299eb3f2f | dialogue-response | Alege replica pentru: „Poate să mergem la mare?” | Yimken nru7 3al ba7er? | |
+| syn-context-syn-43f299eb3f2f | dialogue-response | Alege replica pentru: „Poate să mergem la mare?” | Yimken nru7 3al ba7er? | Apply established spelling: `Yemkin nru7 3al ba7er?` |
 | syn-context-syn-ef24e1ec2dc8 | dialogue-response | Alege replica pentru: „Idee bună! E permis să înotăm?” | Fikra 7elwe! Masmu7 es sibe7a? | |
-| syn-context-syn-f247f7f73317 | dialogue-response | Alege replica pentru: „Da, e permis. Dar fumatul e interzis.” | Eh, masmu7. Bass mamnu3 et tad5in. | |
+| syn-context-syn-f247f7f73317 | dialogue-response | Alege replica pentru: „Da, e permis. Dar fumatul e interzis.” | Eh, masmu7. Bass mamnu3 et tad5in. | Apply established spelling: `Eh, masmu7. Bas mamnu3 et tad5in.` |
 | syn-context-syn-da6d3e79f8dd | dialogue-response | Alege replica pentru: „Bine, eu nu fumez.” | 3ade, ana ma bda55en. | |
-| syn-context-syn-1236aa690087 | dialogue-response | Alege replica pentru: „Perfect! Trebuie să mergem devreme?” | Tamem! Lezem nru7 badre? | |
-| syn-context-syn-20f887518bcd | dialogue-response | Alege replica pentru: „Da, trebuie. Ajung mulți oameni.” | Eh, lezem. Bysir fi nes ktir. | |
+| syn-context-syn-1236aa690087 | dialogue-response | Alege replica pentru: „Perfect! Trebuie să mergem devreme?” | Tamem! Lezem nru7 badre? | `Tamem` / `Tameem` both accepted; preserve remainder pending teacher review. |
+| syn-context-syn-20f887518bcd | dialogue-response | Alege replica pentru: „Da, trebuie. Ajung mulți oameni.” | Eh, lezem. Bysir fi nes ktir. | Apply established degree spelling: `Eh, lezem. Bysir fi nes ktiir.` |
 | syn-context-syn-67744d20af7b | dialogue-response | Alege replica pentru: „Bine, pot să mă trezesc devreme.” | Meshi, b2dar s7a badre. | |
 | syn-context-syn-e15c6fa4e714 | dialogue-response | Alege replica pentru: „Frumos! Poți să aduci mâncare?” | 7elo! Momken tjibe akel? | |
 | syn-context-syn-8b5f244bde51 | dialogue-response | Alege replica pentru: „Da, pot. Eu pregătesc sandvișuri.” | Eh, fine. Ana b7adder sandwishet. | |
-| syn-context-syn-5b1e77bc4752 | dialogue-response | Alege replica pentru: „Mulțumesc! Hai, ne vedem duminică!” | Yeslamo! Yalla, benshufik el a7ad! | |
+| syn-context-syn-5b1e77bc4752 | dialogue-response | Alege replica pentru: „Mulțumesc! Hai, ne vedem duminică!” | Yeslamo! Yalla, benshufik el a7ad! | Apply established closing rule: `Yeslamo! Yalla, bshufik el a7ad!` or `Yeslamo! Yalla, mnshufik el a7ad!` |
 
 ## a2-connections — Condiții și legături între idei
 
