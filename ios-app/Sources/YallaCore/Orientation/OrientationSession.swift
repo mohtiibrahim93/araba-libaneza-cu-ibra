@@ -144,13 +144,20 @@ public struct OrientationSession: Sendable {
 }
 
 public extension OrientationResult {
-    func startingJourneyUnit(in units: [JourneyUnit]) -> JourneyUnit? {
-        let band: LevelBand
+    var startingJourneyUnitID: String {
         switch startingPoint {
-        case .a1Foundation: band = .a1
-        case .a2Consolidation: band = .a2
-        case .b1AvailableMaterial, .reviewAndEnrichment: band = .b1
+        case .a1Foundation:
+            return "a1-welcome"
+        case .a2Consolidation:
+            return "a2-roots"
+        case .b1AvailableMaterial:
+            return "b1-experiences"
+        case .reviewAndEnrichment:
+            return "b1-conversation"
         }
-        return units.first { $0.level == band }
+    }
+
+    func startingJourneyUnit(in units: [JourneyUnit]) -> JourneyUnit? {
+        units.first { $0.id == startingJourneyUnitID }
     }
 }
