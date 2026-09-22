@@ -1,0 +1,31 @@
+{
+  "formatVersion": 1,
+  "approvalStatus": "draft",
+  "_instructions": {
+    "productionFile": "APPROVED_AUDIO_CONTENT.json",
+    "approvalStatusRequired": "teacher-approved",
+    "audioFiles": "Bundle real .m4a files in ios-app/App/Resources. locator must be the unique filename only.",
+    "audioAssetsFields": [
+      "id",
+      "expressionID",
+      "source",
+      "locator"
+    ],
+    "allowedSources": [
+      "ibrahimRecorded",
+      "approvedNative"
+    ],
+    "listeningPromptFields": [
+      "id",
+      "audioAssetID",
+      "expressionID",
+      "mode",
+      "choiceExpressionIDs",
+      "revealWrittenLebaneseInitially"
+    ],
+    "multipleChoice": "Use 2-3 explicit distractor expression IDs; do not include the target expression.",
+    "freeWrite": "choiceExpressionIDs must be empty."
+  },
+  "audioAssets": [],
+  "listeningPrompts": []
+}
