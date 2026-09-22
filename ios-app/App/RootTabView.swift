@@ -191,7 +191,7 @@ private struct HomeView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HomeActionRow(
                             title: "De unde încep?",
-                            subtitle: "Orientare opțională · 24 de întrebări · pilot",
+                            subtitle: "Orientare opțională · 24 de întrebări",
                             icon: "signpost.right",
                             action: onOrientation
                         )
