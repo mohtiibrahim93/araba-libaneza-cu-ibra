@@ -98,6 +98,46 @@ jobs:
       - name: Verify built app resources
         run: python3 ios-app/Tools/verify_app_bundle.py /tmp/yalla-native-derived/Build/Products/Debug-iphonesimulator/YallaApp.app
 
+      - name: Select iPhone Simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIMULATOR_UDID="$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          data = json.load(sys.stdin)
+          for runtime, devices in data.get("devices", {}).items():
+              if "iOS" not in runtime:
+                  continue
+              for device in devices:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      print(device["udid"])
+                      raise SystemExit
+          raise SystemExit("No available iPhone Simulator found")
+          ')"
+          echo "SIMULATOR_UDID=$SIMULATOR_UDID" >> "$GITHUB_ENV"
+          echo "Selected simulator: $SIMULATOR_UDID"
+          xcrun simctl boot "$SIMULATOR_UDID" || true
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b
+
+      - name: Run iPhone UI smoke tests
+        working-directory: ios-app
+        shell: bash
+        run: |
+          set -o pipefail
+          rm -rf /tmp/yalla-ui-tests.xcresult
+          xcodebuild             -project YallaNative.xcodeproj             -scheme YallaApp             -destination "platform=iOS Simulator,id=$SIMULATOR_UDID"             -derivedDataPath /tmp/yalla-native-derived             -resultBundlePath /tmp/yalla-ui-tests.xcresult             CODE_SIGNING_ALLOWED=NO             test 2>&1 | tee /tmp/yalla-uitest.log
+
+      - name: Preserve UI test evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: yalla-ui-smoke-test-evidence
+          path: |
+            /tmp/yalla-uitest.log
+            /tmp/yalla-ui-tests.xcresult
+          if-no-files-found: warn
+          retention-days: 3
+
       - name: Preserve Xcode diagnostics
         if: always()
         uses: actions/upload-artifact@v6
