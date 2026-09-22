@@ -251,13 +251,10 @@ public struct LearningNavigationBuilder: Sendable {
 
                     let choices: [String]
                     if prompt.mode == .multipleChoice {
-                        let distractors = package.expressions
-                            .filter { $0.id != expression.id }
-                            .compactMap { localizedMeanings[$0.id] }
-                            .filter { $0 != meaning }
-                            .sorted()
-                            .prefix(3)
-                        choices = Array(([meaning] + distractors).sorted())
+                        let distractors = prompt.choiceExpressionIDs.compactMap { choiceID in
+                            localizedMeanings[choiceID]
+                        }
+                        choices = [meaning] + distractors
                     } else {
                         choices = []
                     }
