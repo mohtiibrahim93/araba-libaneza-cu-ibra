@@ -8,6 +8,16 @@ const DEFAULT_OVERRIDE_PATH = fileURLToPath(
   new URL('../../ContentReview/APPROVED_CONTENT_OVERRIDES.json', import.meta.url)
 );
 
+const DEFAULT_AUDIO_MANIFEST_PATH = fileURLToPath(
+  new URL('../../ContentReview/APPROVED_AUDIO_CONTENT.json', import.meta.url)
+);
+const DEFAULT_AUDIO_RESOURCE_DIR = fileURLToPath(
+  new URL('../../App/Resources', import.meta.url)
+);
+const APPROVED_AUDIO_SOURCES = new Set(['approvedNative', 'ibrahimRecorded']);
+const APPROVED_AUDIO_EXTENSIONS = new Set(['.m4a']);
+const LISTENING_MODES = new Set(['multipleChoice', 'freeWrite']);
+
 export function evaluateYallaSources(sources) {
   const context = {};
   context.window = context;
@@ -291,6 +301,222 @@ export function loadApprovedNativeOverrides(overridePath = DEFAULT_OVERRIDE_PATH
   return parsed;
 }
 
+
+function indexedResourceFiles(resourceDirectory) {
+  const filesByName = new Map();
+  if (!resourceDirectory || !fs.existsSync(resourceDirectory)) return filesByName;
+
+  const visit = (directory) => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const entryPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        visit(entryPath);
+      } else if (entry.isFile()) {
+        const matches = filesByName.get(entry.name) ?? [];
+        matches.push(entryPath);
+        filesByName.set(entry.name, matches);
+      }
+    }
+  };
+
+  visit(resourceDirectory);
+  return filesByName;
+}
+
+export function applyApprovedAudioContent(
+  contentPackage,
+  audioDocument = {},
+  { resourceDirectory = DEFAULT_AUDIO_RESOURCE_DIR, verifyFiles = true } = {}
+) {
+  const assetDirectives = Array.isArray(audioDocument.audioAssets)
+    ? audioDocument.audioAssets
+    : [];
+  const promptDirectives = Array.isArray(audioDocument.listeningPrompts)
+    ? audioDocument.listeningPrompts
+    : [];
+
+  if (assetDirectives.length === 0 && promptDirectives.length === 0) {
+    return contentPackage;
+  }
+
+  const expressionsByID = new Map(
+    contentPackage.expressions.map((expression) => [expression.id, expression])
+  );
+  const defaultLocale = contentPackage.manifest.defaultLearnerLocale;
+  const resourceFiles = verifyFiles ? indexedResourceFiles(resourceDirectory) : new Map();
+
+  const audioAssets = [];
+  const audioByID = new Map();
+
+  for (const raw of assetDirectives) {
+    const id = String(raw.id ?? '').trim();
+    const expressionID = String(raw.expressionID ?? '').trim();
+    const source = String(raw.source ?? '').trim();
+    const locator = String(raw.locator ?? '').trim();
+
+    if (!id) throw new Error('Approved audio asset is missing an id.');
+    if (audioByID.has(id)) throw new Error('Duplicate approved audio asset id "' + id + '".');
+    if (!expressionID || !expressionsByID.has(expressionID)) {
+      throw new Error('Approved audio asset "' + id + '" references missing expression "' + expressionID + '".');
+    }
+    if (!APPROVED_AUDIO_SOURCES.has(source)) {
+      throw new Error(
+        'Approved audio asset "' + id + '" uses non-production source "' + source +
+        '". Only approvedNative and ibrahimRecorded are accepted here.'
+      );
+    }
+    if (
+      !locator ||
+      locator !== path.basename(locator) ||
+      !APPROVED_AUDIO_EXTENSIONS.has(path.extname(locator).toLowerCase())
+    ) {
+      throw new Error(
+        'Approved audio asset "' + id +
+        '" must use a unique .m4a filename locator, not a path or URL.'
+      );
+    }
+
+    if (verifyFiles) {
+      const matches = resourceFiles.get(locator) ?? [];
+      if (matches.length === 0) {
+        throw new Error(
+          'Approved audio asset "' + id + '" is missing bundled source file "' + locator + '".'
+        );
+      }
+      if (matches.length > 1) {
+        throw new Error(
+          'Approved audio locator "' + locator +
+          '" is ambiguous in App/Resources; filenames must be unique.'
+        );
+      }
+    }
+
+    const asset = { id, expressionID, source, locator };
+    audioAssets.push(asset);
+    audioByID.set(id, asset);
+  }
+
+  const listeningPrompts = [];
+  const promptIDs = new Set();
+
+  for (const raw of promptDirectives) {
+    const id = String(raw.id ?? '').trim();
+    const audioAssetID = String(raw.audioAssetID ?? '').trim();
+    const expressionID = String(raw.expressionID ?? '').trim();
+    const mode = String(raw.mode ?? '').trim();
+    const choiceExpressionIDs = Array.isArray(raw.choiceExpressionIDs)
+      ? raw.choiceExpressionIDs.map(String)
+      : [];
+    const revealWrittenLebaneseInitially = raw.revealWrittenLebaneseInitially === true;
+
+    if (!id) throw new Error('Approved listening prompt is missing an id.');
+    if (promptIDs.has(id)) throw new Error('Duplicate approved listening prompt id "' + id + '".');
+    promptIDs.add(id);
+
+    const audio = audioByID.get(audioAssetID);
+    if (!audio) {
+      throw new Error(
+        'Approved listening prompt "' + id +
+        '" references missing audio asset "' + audioAssetID + '".'
+      );
+    }
+    if (!expressionsByID.has(expressionID)) {
+      throw new Error(
+        'Approved listening prompt "' + id +
+        '" references missing expression "' + expressionID + '".'
+      );
+    }
+    if (audio.expressionID !== expressionID) {
+      throw new Error(
+        'Approved listening prompt "' + id +
+        '" mismatches audio expression "' + audio.expressionID +
+        '" and prompt expression "' + expressionID + '".'
+      );
+    }
+    if (!LISTENING_MODES.has(mode)) {
+      throw new Error(
+        'Approved listening prompt "' + id +
+        '" uses unsupported mode "' + mode + '".'
+      );
+    }
+
+    if (mode === 'multipleChoice') {
+      const uniqueChoices = new Set(choiceExpressionIDs);
+      if (
+        choiceExpressionIDs.length < 2 ||
+        choiceExpressionIDs.length > 3 ||
+        uniqueChoices.size !== choiceExpressionIDs.length ||
+        uniqueChoices.has(expressionID)
+      ) {
+        throw new Error(
+          'Approved multiple-choice listening prompt "' + id +
+          '" must list 2-3 unique distractor expression IDs, excluding its target.'
+        );
+      }
+
+      const meanings = new Set();
+      const targetMeaning = expressionsByID.get(expressionID)?.localizations?.[defaultLocale]?.naturalMeaning;
+      if (targetMeaning) meanings.add(String(targetMeaning).trim().toLocaleLowerCase());
+
+      for (const choiceID of choiceExpressionIDs) {
+        const choice = expressionsByID.get(choiceID);
+        if (!choice) {
+          throw new Error(
+            'Approved listening prompt "' + id +
+            '" references missing choice expression "' + choiceID + '".'
+          );
+        }
+        const meaning = choice.localizations?.[defaultLocale]?.naturalMeaning;
+        if (!meaning) {
+          throw new Error(
+            'Approved listening choice "' + choiceID +
+            '" has no "' + defaultLocale + '" meaning.'
+          );
+        }
+        const normalizedMeaning = String(meaning).trim().toLocaleLowerCase();
+        if (meanings.has(normalizedMeaning)) {
+          throw new Error(
+            'Approved listening prompt "' + id + '" contains duplicate visible meanings.'
+          );
+        }
+        meanings.add(normalizedMeaning);
+      }
+    } else if (choiceExpressionIDs.length > 0) {
+      throw new Error(
+        'Approved free-write listening prompt "' + id +
+        '" must not define choiceExpressionIDs.'
+      );
+    }
+
+    listeningPrompts.push({
+      id,
+      audioAssetID,
+      expressionID,
+      mode,
+      choiceExpressionIDs,
+      revealWrittenLebaneseInitially
+    });
+  }
+
+  return { ...contentPackage, audioAssets, listeningPrompts };
+}
+
+export function loadApprovedAudioContent(audioManifestPath = DEFAULT_AUDIO_MANIFEST_PATH) {
+  if (!audioManifestPath || !fs.existsSync(audioManifestPath)) return {};
+  const parsed = JSON.parse(fs.readFileSync(audioManifestPath, 'utf8'));
+  if (parsed.formatVersion !== 1) {
+    throw new Error(
+      'Unsupported approved audio manifest format version "' + parsed.formatVersion + '".'
+    );
+  }
+  if (parsed.approvalStatus !== 'teacher-approved') {
+    throw new Error(
+      'Production audio manifest must have approvalStatus "teacher-approved".'
+    );
+  }
+  return parsed;
+}
+
 export function loadYallaFromDirectory(sourceDirectory, modules = DEFAULT_MODULES) {
   const sources = [];
   for (const moduleName of modules) {
@@ -318,7 +544,7 @@ function parseArgs(argv) {
 function runCLI() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.source || !args.output) {
-    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>] [--overrides <file>]');
+    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>] [--overrides <file>] [--audio-manifest <file>] [--audio-resources <directory>]');
   }
 
   const levelMap = args['level-map']
@@ -330,7 +556,14 @@ function runCLI() {
     levelMap
   });
   const overrides = loadApprovedNativeOverrides(args.overrides ?? DEFAULT_OVERRIDE_PATH);
-  const output = applyApprovedNativeOverrides(imported, overrides);
+  const reviewed = applyApprovedNativeOverrides(imported, overrides);
+  const approvedAudio = loadApprovedAudioContent(
+    args['audio-manifest'] ?? DEFAULT_AUDIO_MANIFEST_PATH
+  );
+  const output = applyApprovedAudioContent(reviewed, approvedAudio, {
+    resourceDirectory: args['audio-resources'] ?? DEFAULT_AUDIO_RESOURCE_DIR,
+    verifyFiles: true
+  });
 
   const outputPath = path.resolve(args.output);
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
