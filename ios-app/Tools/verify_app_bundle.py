@@ -13,6 +13,7 @@ assert info['CFBundleIdentifier'] == 'com.centruldearabalibaneza.app'
 assert info['UILaunchStoryboardName'] == 'LaunchScreen'
 assert (app / 'LaunchScreen.storyboardc').is_dir(), 'Launch screen was not compiled/bundled'
 assert (app / 'Assets.car').is_file(), 'Asset catalog was not compiled/bundled'
+assert (app / 'PrivacyInfo.xcprivacy').is_file(), 'Privacy manifest missing from built app'
 for key in ('CFBundleIcons', 'CFBundleIcons~ipad'):
     icon = info[key]['CFBundlePrimaryIcon']
     assert icon['CFBundleIconName'] == 'AppIcon', f'Missing icon metadata: {key}'
