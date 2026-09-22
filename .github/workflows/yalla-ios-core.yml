@@ -27,7 +27,7 @@ jobs:
 
       - name: Preserve Swift diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: swift-core-diagnostics
           path: |
@@ -55,20 +55,18 @@ jobs:
           assert data['expressions'], 'Importer produced no expressions'
           assert data['units'], 'Importer produced no Journey units'
           assert data['lexiconCollections'], 'Importer produced no lexicon collections'
-          Path('/tmp/yalla-native-content.min.json').write_text(
-              json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n'
-          )
           print(
               'Imported',
               len(data['expressions']), 'expressions,',
               len(data['units']), 'Journey units,',
               len(data['lexiconCollections']), 'lexicon collections,',
-              len(data['exercises']), 'explicit exercises'
+              len(data['exercises']), 'explicit exercises,',
+              len(data.get('roots', [])), 'approved roots'
           )
           PY
 
       - name: Verify checked-in native content is reproducible
-        run: cmp /tmp/yalla-native-content.min.json ios-app/App/Resources/yalla-native-content.json
+        run: cmp /tmp/yalla-native-content.json ios-app/App/Resources/yalla-native-content.json
 
   native-app-build:
     runs-on: macos-latest
@@ -102,7 +100,7 @@ jobs:
 
       - name: Preserve Xcode diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: xcode-build-diagnostics
           path: /tmp/yalla-xcodebuild.log
