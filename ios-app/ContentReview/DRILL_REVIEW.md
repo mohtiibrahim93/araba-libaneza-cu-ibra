@@ -743,48 +743,48 @@ Source-context recovery:
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| syn-rule-15-0 | grammar-drill | Completează contrastul: B7ebb el ba7er ___ lazem eshte8el. | bass | |
+| syn-rule-15-0 | grammar-drill | Completează contrastul: B7ebb el ba7er ___ leezem eshte8el. | bass | |
 | syn-rule-15-1 | grammar-drill | Ce condiționează planul în iza ken et ta2es mni7, bnru7 3al ba7er? | vremea bună | |
-| syn-context-syn-684b5024cd28 | dialogue-response | Alege replica pentru: „Îmi place mult să călătoresc, dar trebuie să lucrez.” | B7ebb es safar ktir, bass lazem eshte8el. | |
-| syn-context-syn-4a040b2aec92 | dialogue-response | Alege replica pentru: „Dacă aș avea timp, aș merge la mare în fiecare weekend.” | Law ken 3ande wa2et, kont ru7 3al ba7er kell weekend. | |
-| syn-context-syn-800190fd1721 | dialogue-response | Alege replica pentru: „Am fost la munte anul trecut și a fost minunat.” | Kenet 3al jabal es sene el madye w ken ra2e3. | |
+| syn-context-syn-684b5024cd28 | dialogue-response | Alege replica pentru: „Îmi place mult să călătoresc, dar trebuie să lucrez.” | B7ebb es safar ktiir, bass leezem eshte8el. | |
+| syn-context-syn-4a040b2aec92 | dialogue-response | Alege replica pentru: „Dacă aș avea timp, aș merge la mare în fiecare weekend.” | Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er. | Approved teacher correction. |
+| syn-context-syn-800190fd1721 | dialogue-response | Alege replica pentru: „Am fost la munte anul trecut și a fost minunat.” | Re7et 3al jabal es sene el madye w nbasatet ktiir. | Approved teacher correction. `Tlo3et 3al jabal...` is also approved; `ra2e3` is too formal/MSA-like for the intended Lebanese register. |
 | syn-context-syn-d033db9fe39c | dialogue-response | Alege replica pentru: „E posibil să merg mâine, dacă pot.” | Momken ru7 bukra iza b2dar. | |
-| syn-context-syn-283e3b868968 | dialogue-response | Alege replica pentru: „Îmi place marea, dar trebuie să lucrez.” | B7ebb el ba7er bass lazem eshte8el. | |
+| syn-context-syn-283e3b868968 | dialogue-response | Alege replica pentru: „Îmi place marea, dar trebuie să lucrez.” | B7ebb el ba7er bass leezem eshte8el. | |
 | syn-context-syn-7a096e2f873b | dialogue-response | Alege replica pentru: „Dacă vremea este bună, mergem la mare.” | Iza ken et ta2es mni7, bnru7 3al ba7er. | |
 | syn-context-syn-ba227fc72db9 | dialogue-response | Alege replica pentru: „Am mers la munte și a fost frumos.” | Re7t 3al jabal w ken 7elo. | |
 | syn-context-syn-abc156a9fd67 | dialogue-response | Alege replica pentru: „Pot să vin dacă am timp.” | Momken eje iza ken 3ande wa2et. | |
-| syn-context-syn-7d745a3f1217 | dialogue-response | Alege replica pentru: „Ce zici să mergem săptămâna viitoare? (masculin)” | Shu ra2yak nru7 el esbu3 el jey? | |
+| syn-context-syn-7d745a3f1217 | dialogue-response | Alege replica pentru: „Ce zici să mergem săptămâna viitoare? (masculin)” | Shu ra2yak nru7 el esbuu3 el jey? | |
 | syn-context-syn-8242e10b9aba | dialogue-response | Alege replica pentru: „Dacă vremea este bună, putem merge împreună.” | Iza ken et ta2es mni7, momken nru7 sawa. | |
-| syn-context-syn-4162e36eafea | dialogue-response | Alege replica pentru: „Cred că este mai bun decât muntele.” | Bfakker enno a7san men el jabal. | |
-| syn-context-syn-22a2e0ee0b9b | dialogue-response | Alege replica pentru: „Muntele este frumos iarna.” | El jabal 7elo besh shete. | |
-| syn-context-syn-88dc4e1164a3 | dialogue-response | Alege replica pentru: „Dacă este zăpadă, trebuie să mergem la schi.” | Iza fi talej, lazem nru7 netzallaj. | |
-| syn-context-syn-5004543f44a8 | dialogue-response | Alege replica pentru: „Îmi place foarte mult schiul!” | B7ebb et tazalloj ktir! | |
+| syn-context-syn-4162e36eafea | dialogue-response | Alege replica pentru: „Cred că este mai bun decât muntele.” | B3te2ed enno a7san men el jabal. | Approved teacher correction. `Bfakker enno` is active thinking and is not used for this belief/opinion context; use `b3te2ed` here. |
+| syn-context-syn-22a2e0ee0b9b | dialogue-response | Alege replica pentru: „Muntele este frumos iarna.” | El jabal 7elo besh-shete. | Approved. `El jabal 7elo bel shete.` is also correct. Approved winter variants include `shete / sheti / sheta`; `besh-sheta / b-ish-sheta / bish-sheta`; also `b fasel el sheta`, with `fasel / fasl / fasil` variants. Lebanese pronunciation note: j commonly behaves solar in speech, so `el/il jabal` may surface as `ej-jabal / ij-jabal`. |
+| syn-context-syn-88dc4e1164a3 | dialogue-response | Alege replica pentru: „Dacă este zăpadă, trebuie să mergem la schi.” | Eza fi talej, leezem nruu7 na3mel ski. | Approved preferred modern Lebanese wording. `Eza fi talej, leezem nru7 netzallaj.` is grammatically correct but `ski` has largely replaced `tazalloj` and its conjugated forms in everyday Lebanese. `nruu7 3al ski` is also approved. |
+| syn-context-syn-5004543f44a8 | dialogue-response | Alege replica pentru: „Îmi place foarte mult schiul!” | B7ebb el ski ktiir! | Approved preferred modern Lebanese wording. `B7ebb et tazalloj ktiir!` is correct but less common in Lebanon. |
 | syn-context-syn-b68babae38b9 | dialogue-response | Alege replica pentru: „Am mers anul trecut.” | Re7t es sene el madye. | |
-| syn-context-syn-98cd0f1f701e | dialogue-response | Alege replica pentru: „A fost minunat! Dar erau mulți oameni.” | Ken ra2e3! Bass ken fi nes ktir. | |
-| syn-context-syn-cb52eaa22d77 | dialogue-response | Alege replica pentru: „Data viitoare trebuie să mergem devreme.” | El marra el jayye lazem nru7 badre. | |
-| syn-context-syn-44efc94b1bbc | dialogue-response | Alege replica pentru: „Vorbim săptămâna aceasta. (către o femeie)” | B7akik hal esbu3. | |
+| syn-context-syn-98cd0f1f701e | dialogue-response | Alege replica pentru: „A fost minunat! Dar erau mulți oameni.” | Ken 7elo ktiir! Bass ken fi nes ktiir. | Teacher register correction: avoid `ra2e3` here as too formal/MSA-like. |
+| syn-context-syn-cb52eaa22d77 | dialogue-response | Alege replica pentru: „Data viitoare trebuie să mergem devreme.” | El marra el jayye leezem nru7 badre. | |
+| syn-context-syn-44efc94b1bbc | dialogue-response | Alege replica pentru: „Vorbim săptămâna aceasta. (către o femeie)” | B7akik hal esbuu3. | |
 | syn-context-syn-f01eb79d3430 | dialogue-response | Alege replica pentru: „Dacă pot, vorbim mâine. (către o femeie)” | Iza b2dar, b7akik bukra. | |
-| syn-context-syn-58956d77f442 | dialogue-response | Alege replica pentru: „Salut Karim! Cum a fost weekendul?” | Marhaba Karim! Kif ken el weekend? | |
-| syn-context-syn-f7201a55665e | dialogue-response | Alege replica pentru: „A fost foarte frumos! Am mers la mare cu prietenii.” | Ken 7elo ktir! Re7t 3al ba7er ma3 as7abe. | |
-| syn-context-syn-ecb20906eef6 | dialogue-response | Alege replica pentru: „Uau! Îmi place mult marea. Ce ați făcut?” | Wow! B7ebb el ba7er ktir. Shu 3ameltu? | |
+| syn-context-syn-58956d77f442 | dialogue-response | Alege replica pentru: „Salut Karim! Cum a fost weekendul?” | Mar7aba Karim! Kif ken el weekend? | |
+| syn-context-syn-f7201a55665e | dialogue-response | Alege replica pentru: „A fost foarte frumos! Am mers la mare cu prietenii.” | Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe. | |
+| syn-context-syn-ecb20906eef6 | dialogue-response | Alege replica pentru: „Uau! Îmi place mult marea. Ce ați făcut?” | Wow! B7ebb el ba7er ktiir. Shu 3ameltu? | |
 | syn-context-syn-baf73ff6d377 | dialogue-response | Alege replica pentru: „Am înotat și am mâncat pește. Vremea a fost bună.” | Saba7na w akalna samak. Ken et ta2es mni7. | |
-| syn-context-syn-9bd7a50634f0 | dialogue-response | Alege replica pentru: „Noroc! Eu a trebuit să lucrez ieri.” | 7azzak! Ana ken lazem eshte8el el bere7. | |
-| syn-context-syn-0fecf2ea7211 | dialogue-response | Alege replica pentru: „Of! Nu îmi place să lucrez în weekend.” | Uff! Ma b7ebb esh sho8ol bel weekend. | |
-| syn-context-syn-108a6134db90 | dialogue-response | Alege replica pentru: „Nici mie! Dar a fost necesar.” | Ana kamen! Bass ken daruri. | |
-| syn-context-syn-86fb6aedde17 | dialogue-response | Alege replica pentru: „Ce zici să mergem la mare săptămâna viitoare?” | Shu ra2yik nru7 3al ba7er el esbu3 el jey? | |
+| syn-context-syn-9bd7a50634f0 | dialogue-response | Alege replica pentru: „Ce norocos! Eu a trebuit să lucrez ieri.” | Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7. | Approved teacher correction. Use `mbere7` here. |
+| syn-context-syn-0fecf2ea7211 | dialogue-response | Alege replica pentru: „Of! Nu îmi place să lucrez în weekend.” | Uff! Ma b7ebb eshte8el bel weekend. | Approved teacher correction. |
+| syn-context-syn-108a6134db90 | dialogue-response | Alege replica pentru: „Nici mie! Dar a fost necesar.” | Wala ana! Bass ken leezem. | Approved for the literal prompt. `Wala ana! Bass kenet medtarr.` is also approved when the intended meaning is “Nici eu! Dar a trebuit / am fost obligat.” |
+| syn-context-syn-86fb6aedde17 | dialogue-response | Alege replica pentru: „Ce zici să mergem la mare săptămâna viitoare?” | Shu ra2yik nru7 3al ba7er el esbuu3 el jey? | |
 | syn-context-syn-8c5a03bdaebd | dialogue-response | Alege replica pentru: „Idee bună! Dar dacă vremea e bună.” | Fikra 7elwe! Bass iza ken et ta2es mni7. | |
-| syn-context-syn-123008b3c938 | dialogue-response | Alege replica pentru: „Sigur. Și trebuie să vedem dacă avem timp.” | Akid. W lazem nshuf iza fi wa2et. | |
-| syn-context-syn-37f5816e576d | dialogue-response | Alege replica pentru: „Da, e posibil să am treabă.” | Eh, ana momken ykun 3ande sho8ol. | |
-| syn-context-syn-9c0432d88058 | dialogue-response | Alege replica pentru: „Dacă nu poți, putem merge peste o săptămână.” | Law ma 2derte, momken nru7 ba3ed esbu3. | |
-| syn-context-syn-fceca554f261 | dialogue-response | Alege replica pentru: „Perfect! Marea e locul meu preferat.” | Tamem! El ba7er huwe el makan el mofaddal 3ande. | |
-| syn-context-syn-9b6857d789d3 | dialogue-response | Alege replica pentru: „Și eu! Cred că e mai bun decât muntele.” | Ana kamen! Bfakker enno a7san men el jabal. | |
-| syn-context-syn-ae2e21e89a75 | dialogue-response | Alege replica pentru: „Corect, dar muntele e frumos iarna.” | Sa7, bass el jabal 7elo besh shete. | |
-| syn-context-syn-f155c7142a61 | dialogue-response | Alege replica pentru: „Da, dacă e zăpadă, trebuie să mergem la schi.” | Eh, iza fi talej, lazem nru7 netzallaj. | |
-| syn-context-syn-11cebd862fff | dialogue-response | Alege replica pentru: „Îmi place mult schiul! Am mers anul trecut.” | B7ebb et tazalloj ktir! Re7t es sene el madye. | |
+| syn-context-syn-123008b3c938 | dialogue-response | Alege replica pentru: „Sigur. Și trebuie să vedem dacă avem timp.” | Akid. W leezem nshuf iza fi wa2et. | |
+| syn-context-syn-37f5816e576d | dialogue-response | Alege replica pentru: „Da, e posibil să am treabă.” | Eh, yimken ykun 3ande she8el. | Approved teacher correction. Close local vowel variants of `she8el / shi8el / shu8ol` remain accepted. |
+| syn-context-syn-9c0432d88058 | dialogue-response | Alege replica pentru: „Dacă nu poți, putem merge peste o săptămână.” | Eza ma 2aadra, fiina nru7 ba3ed esbuu3. | Approved teacher correction; feminine addressee. Use real/possible `Eza`, not counterfactual `Law`, and `2aadra` for the feminine form. |
+| syn-context-syn-fceca554f261 | dialogue-response | Alege replica pentru: „Perfect! Marea e locul meu preferat.” | Tameem! El ba7er huwe el makan el mofaddal 3ande. | |
+| syn-context-syn-9b6857d789d3 | dialogue-response | Alege replica pentru: „Și eu! Cred că e mai bun decât muntele.” | Ana kameen! B3te2ed enno a7san men el jabal. | Approved teacher correction; same `b3te2ed` vs `bfakker` distinction as above. |
+| syn-context-syn-ae2e21e89a75 | dialogue-response | Alege replica pentru: „Corect, dar muntele e frumos iarna.” | Sa7, bass el jabal 7elo besh-shete. | Approved; `bel shete` and the established winter variants are also accepted. |
+| syn-context-syn-f155c7142a61 | dialogue-response | Alege replica pentru: „Da, dacă e zăpadă, trebuie să mergem la schi.” | Eh, eza fi talej, leezem nruu7 na3mel ski. | Approved preferred modern Lebanese wording; `netzallaj` remains a correct but less common alternative. |
+| syn-context-syn-11cebd862fff | dialogue-response | Alege replica pentru: „Îmi place mult schiul! Am mers anul trecut.” | B7ebb el ski ktiir! Re7et es sene el madye. | Approved preferred modern Lebanese wording. |
 | syn-context-syn-007bd3cef645 | dialogue-response | Alege replica pentru: „Da, asta e o problemă. Dacă am fi mers devreme...” | Eh, hayda mushkle. Law konna re7na badre... | |
-| syn-context-syn-295e7371a28e | dialogue-response | Alege replica pentru: „Corect! Data viitoare trebuie să mergem devreme.” | Sa7! El marra el jayye lazem nru7 badre. | |
-| syn-context-syn-b8e97100f241 | dialogue-response | Alege replica pentru: „Ok. Hai, vorbim săptămâna asta.” | Meshi. Yalla, b7akik hal esbu3. | |
-| syn-context-syn-bed8262abbde | dialogue-response | Alege replica pentru: „Perfect! Dacă pot, vorbim mâine.” | Tamem! Iza b2dar, b7akik bukra. | |
+| syn-context-syn-295e7371a28e | dialogue-response | Alege replica pentru: „Corect! Data viitoare trebuie să mergem devreme.” | Sa7! El marra el jayye leezem nru7 badre. | |
+| syn-context-syn-b8e97100f241 | dialogue-response | Alege replica pentru: „Ok. Hai, vorbim săptămâna asta.” | Meshi. Yalla, b7akik hal esbuu3. | |
+| syn-context-syn-bed8262abbde | dialogue-response | Alege replica pentru: „Perfect! Dacă pot, vorbim mâine.” | Tameem! Iza b2dar, b7akik bukra. | |
 
 ## b1-conversation — Conversații la muncă
 
