@@ -1,8 +1,8 @@
 # App Store copy — Romanian draft
 
 Status: prepared for owner review; not submitted. Provisional public name approved by the owner: Araba libaneza (changeable before release).
-Based on native branch yalla-app-ios at 27854a33602252d79ae2735d9b9117c3e49e5efb.
-Only features available in the current text-based build are promoted here.
+Updated against the reviewed native branch after production-content and orientation integration.
+Only features available in the current shipping candidate are promoted here.
 
 ## App name
 
@@ -45,13 +45,14 @@ Suggested route: Acasă → recapitulări (if due items exist); Parcurs → firs
 
 A fresh profile may have no due reviews or recordings. These are valid empty states. Completing exercises creates local learning progress.
 
-The current content package does not contain production reference recordings or Listening prompts. Do not advertise these as available learning content. Before submission, decide whether to supply the approved recordings or remove/defer unavailable launch destinations.
+The current content package still does not contain production reference recordings or Listening prompts. Do not advertise Listening / Speak & Compare as launch content until approved recordings are actually bundled and validated. The ingestion/validation path is prepared, but metadata without real audio files does not enable the feature.
 
 ## Before using this copy
 
 - Current approved provisional public name: Araba libaneza. Confirm owner attribution and reconfirm the name before submission; internal project identifiers remain Yalla.
-- Apply teacher corrections to launch content and orientation, then confirm this copy still matches the shipping build.
-- Supply the actual support contact/URL and privacy-policy URL; no address has been invented.
+- Production A1/A2/B1 teacher corrections and the calibrated orientation bank are integrated; reconfirm this copy after the final signed archive.
+- Support contact currently verified on the public site: `marhaba@centruldearabalibaneza.com`, `+40 763 124 514`, homepage `https://centruldearabalibaneza.com/`. Reconfirm at submission time.
+- Publish/verify the final privacy-policy URL before submission; it is intentionally not guessed here.
 - Confirm distribution, pricing and age-rating answers separately in the submission account.
 - Capture real screenshots using Release/SCREENSHOT_PLAN.md.
 - Check submission-field validation in App Store Connect when entering the final copy.
