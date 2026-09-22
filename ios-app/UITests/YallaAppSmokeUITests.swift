@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 final class YallaAppSmokeUITests: XCTestCase {
     private var app: XCUIApplication!
 
