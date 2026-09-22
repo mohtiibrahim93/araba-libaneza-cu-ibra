@@ -39,7 +39,7 @@ struct OrientationView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
-            .navigationTitle("Orientare · pilot")
+            .navigationTitle("Orientare")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -75,7 +75,7 @@ struct OrientationView: View {
             Text("De unde începi?").font(.largeTitle.bold())
             Text("24 de întrebări cu variante de răspuns și expresii scurte în Arabizi.")
             Text("Fără cronometru, indicii sau corectare pe parcurs. Poți alege „Nu știu”.")
-            Text("Bancă pilot: rezultatul sugerează un punct de pornire, nu certifică un nivel CEFR. Ascultarea și vorbirea nu sunt evaluate.")
+            Text("Rezultatul sugerează un punct de pornire, nu certifică un nivel CEFR. Ascultarea și vorbirea nu sunt evaluate.")
                 .foregroundStyle(.secondary)
             if !progressModel.snapshot.attempts.isEmpty {
                 Text("Ai exersat deja în aplicație. Familiaritatea cu materialele poate influența rezultatul.")
