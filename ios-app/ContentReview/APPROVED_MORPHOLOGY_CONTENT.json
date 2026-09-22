@@ -1,0 +1,290 @@
+{
+  "formatVersion": 1,
+  "approvalStatus": "teacher-approved",
+  "supplementalExpressions": [
+    {
+      "id": "rootexpr.nwm.mnawwem",
+      "canonicalArabizi": "mnawwem",
+      "variants": [
+        {
+          "value": "munawwem",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "somnifer / ceva care adoarme"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.l7m.la77am",
+      "canonicalArabizi": "la77am",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "măcelar"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.l7m.tel7iim",
+      "canonicalArabizi": "tel7iim",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "sudură / sudare"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.l7m.ilta7am",
+      "canonicalArabizi": "ilta7am",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "s-a unit / s-a lipit / s-a sudat"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.l7m.yelte7em",
+      "canonicalArabizi": "yelte7em",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "se unește / se lipește / se sudează"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.l7m.mal7ame",
+      "canonicalArabizi": "mal7ame",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "măcelărie"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.3lm.3aleeme",
+      "canonicalArabizi": "3aleeme",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "savant / persoană foarte învățată"
+        }
+      }
+    }
+  ],
+  "roots": [
+    {
+      "id": "root.nwm",
+      "arabiziRadicals": [
+        "n",
+        "w",
+        "m"
+      ],
+      "arabicRadicals": "نوم"
+    },
+    {
+      "id": "root.l7m",
+      "arabiziRadicals": [
+        "l",
+        "7",
+        "m"
+      ],
+      "arabicRadicals": "لحم"
+    },
+    {
+      "id": "root.3lm",
+      "arabiziRadicals": [
+        "3",
+        "l",
+        "m"
+      ],
+      "arabicRadicals": "علم"
+    },
+    {
+      "id": "root.mlk",
+      "arabiziRadicals": [
+        "m",
+        "l",
+        "k"
+      ],
+      "arabicRadicals": "ملك"
+    }
+  ],
+  "morphologicalPatterns": [
+    {
+      "id": "pattern.nwm.sleep",
+      "kind": "verbStem",
+      "label": "a dormi",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.nwm.sleep-inducing",
+      "kind": "adjective",
+      "label": "care adoarme / somnifer",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.l7m.meat",
+      "kind": "noun",
+      "label": "carne",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.l7m.butcher",
+      "kind": "agentNoun",
+      "label": "măcelar",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.l7m.tel7iim",
+      "kind": "verbalNoun",
+      "label": "sudură / sudare",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.l7m.join",
+      "kind": "verbStem",
+      "label": "a se uni / lipi / suda",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.l7m.butcher-shop",
+      "kind": "placeNoun",
+      "label": "măcelărie",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.3lm.teach",
+      "kind": "verbStem",
+      "label": "a preda / a învăța pe cineva",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.3lm.learn",
+      "kind": "verbStem",
+      "label": "a învăța",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.3lm.teacher",
+      "kind": "agentNoun",
+      "label": "profesor",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.3lm.teacher-f",
+      "kind": "agentNoun",
+      "label": "profesoară",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.3lm.scholar",
+      "kind": "agentNoun",
+      "label": "savant / foarte învățat",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.own",
+      "kind": "verbStem",
+      "label": "a deține",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.mlk.angel",
+      "kind": "noun",
+      "label": "înger",
+      "productivity": "lexicalized"
+    }
+  ],
+  "morphologyLinks": [
+    {
+      "expressionID": "ca3479d66d8c5",
+      "rootID": "root.nwm",
+      "patternID": "pattern.nwm.sleep"
+    },
+    {
+      "expressionID": "rootexpr.nwm.mnawwem",
+      "rootID": "root.nwm",
+      "patternID": "pattern.nwm.sleep-inducing"
+    },
+    {
+      "expressionID": "xfddd3104e468",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.meat"
+    },
+    {
+      "expressionID": "rootexpr.l7m.la77am",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.butcher"
+    },
+    {
+      "expressionID": "rootexpr.l7m.tel7iim",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.tel7iim"
+    },
+    {
+      "expressionID": "rootexpr.l7m.ilta7am",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.join"
+    },
+    {
+      "expressionID": "rootexpr.l7m.yelte7em",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.join"
+    },
+    {
+      "expressionID": "rootexpr.l7m.mal7ame",
+      "rootID": "root.l7m",
+      "patternID": "pattern.l7m.butcher-shop"
+    },
+    {
+      "expressionID": "cccbfa5a3abde",
+      "rootID": "root.3lm",
+      "patternID": "pattern.3lm.teach"
+    },
+    {
+      "expressionID": "cb0a8270f564a",
+      "rootID": "root.3lm",
+      "patternID": "pattern.3lm.learn"
+    },
+    {
+      "expressionID": "x7af8d17bb9db",
+      "rootID": "root.3lm",
+      "patternID": "pattern.3lm.teacher"
+    },
+    {
+      "expressionID": "c6d58317e8bdc",
+      "rootID": "root.3lm",
+      "patternID": "pattern.3lm.teacher-f"
+    },
+    {
+      "expressionID": "rootexpr.3lm.3aleeme",
+      "rootID": "root.3lm",
+      "patternID": "pattern.3lm.scholar"
+    },
+    {
+      "expressionID": "c7ff1c6b82f0b",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.own"
+    },
+    {
+      "expressionID": "x46f33585b5ad",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.angel"
+    }
+  ],
+  "inflectionRelations": [
+    {
+      "sourceExpressionID": "x7af8d17bb9db",
+      "targetExpressionID": "c6d58317e8bdc",
+      "kind": "feminine",
+      "patternID": "pattern.3lm.teacher-f"
+    },
+    {
+      "sourceExpressionID": "cccbfa5a3abde",
+      "targetExpressionID": "cb0a8270f564a",
+      "kind": "derivedForm",
+      "patternID": "pattern.3lm.learn"
+    }
+  ]
+}
