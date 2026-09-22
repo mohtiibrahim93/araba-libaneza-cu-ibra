@@ -4,6 +4,9 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const DEFAULT_MODULES = ['content.js', 'romanian.js', 'curriculum.js', 'synthesis.js'];
+const DEFAULT_OVERRIDE_PATH = fileURLToPath(
+  new URL('../../ContentReview/APPROVED_CONTENT_OVERRIDES.json', import.meta.url)
+);
 
 export function evaluateYallaSources(sources) {
   const context = {};
@@ -153,6 +156,71 @@ export function convertYallaToContentPackage(
   };
 }
 
+
+export function applyApprovedNativeOverrides(contentPackage, overrideDocument = {}) {
+  const directives = overrideDocument.exerciseOverrides ?? {};
+  const exercisesByID = new Map(contentPackage.exercises.map((exercise) => [exercise.id, exercise]));
+
+  for (const id of Object.keys(directives)) {
+    if (!exercisesByID.has(id)) {
+      throw new Error(`Approved override references missing exercise "${id}".`);
+    }
+  }
+
+  const expressionIDs = new Set(contentPackage.expressions.map((expression) => expression.id));
+  const exercises = [];
+
+  for (const exercise of contentPackage.exercises) {
+    const directive = directives[exercise.id];
+    if (!directive) {
+      exercises.push(exercise);
+      continue;
+    }
+    if (directive.exclude === true) continue;
+
+    const expressionIDsForExercise = directive.expressionIDs ?? exercise.expressionIDs;
+    for (const expressionID of expressionIDsForExercise) {
+      if (!expressionIDs.has(String(expressionID))) {
+        throw new Error(
+          `Approved override for "${exercise.id}" references missing expression "${expressionID}".`
+        );
+      }
+    }
+
+    let prompt = directive.prompt ?? exercise.prompt;
+    if (typeof directive.context === 'string' && directive.context.trim()) {
+      const context = directive.context.trim();
+      prompt = {
+        ...prompt,
+        ro: /^q(?:5[2-9]|6[01])$/.test(exercise.id)
+          ? `Ce formă verbală recunoști în „${context}”?`
+          : `Completează: ${context}`
+      };
+    }
+
+    exercises.push({
+      ...exercise,
+      ...(directive.answer !== undefined ? { answer: String(directive.answer) } : {}),
+      ...(directive.wrongAnswers !== undefined
+        ? { wrongAnswers: directive.wrongAnswers.map(String) }
+        : {}),
+      expressionIDs: expressionIDsForExercise.map(String),
+      prompt
+    });
+  }
+
+  return { ...contentPackage, exercises };
+}
+
+export function loadApprovedNativeOverrides(overridePath = DEFAULT_OVERRIDE_PATH) {
+  if (!overridePath || !fs.existsSync(overridePath)) return {};
+  const parsed = JSON.parse(fs.readFileSync(overridePath, 'utf8'));
+  if (parsed.formatVersion !== 1) {
+    throw new Error(`Unsupported approved override format version "${parsed.formatVersion}".`);
+  }
+  return parsed;
+}
+
 export function loadYallaFromDirectory(sourceDirectory, modules = DEFAULT_MODULES) {
   const sources = [];
   for (const moduleName of modules) {
@@ -180,17 +248,19 @@ function parseArgs(argv) {
 function runCLI() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.source || !args.output) {
-    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>]');
+    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>] [--overrides <file>]');
   }
 
   const levelMap = args['level-map']
     ? JSON.parse(fs.readFileSync(args['level-map'], 'utf8'))
     : {};
   const yalla = loadYallaFromDirectory(args.source);
-  const output = convertYallaToContentPackage(yalla, {
+  const imported = convertYallaToContentPackage(yalla, {
     contentVersion: args['content-version'] ?? 'imported',
     levelMap
   });
+  const overrides = loadApprovedNativeOverrides(args.overrides ?? DEFAULT_OVERRIDE_PATH);
+  const output = applyApprovedNativeOverrides(imported, overrides);
 
   const outputPath = path.resolve(args.output);
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
