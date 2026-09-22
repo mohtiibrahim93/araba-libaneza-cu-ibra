@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
+import { applyApprovedAudioContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -182,6 +185,104 @@ test('real approved overrides produce the reviewed native course decisions', () 
     result.units.some((unit) => unit.expressionIDs.includes('syn-9a79f6640456')),
     false
   );
+});
+
+test('approved audio content requires bundled files and explicit distractors', () => {
+  const resourceDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'yalla-approved-audio-'));
+  const nested = path.join(resourceDirectory, 'ReferenceAudio');
+  fs.mkdirSync(nested, { recursive: true });
+  fs.writeFileSync(path.join(nested, 'expr.hello.m4a'), 'fixture');
+
+  const contentPackage = {
+    manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
+    expressions: [
+      { id: 'expr.hello', localizations: { ro: { naturalMeaning: 'salut' } } },
+      { id: 'expr.thanks', localizations: { ro: { naturalMeaning: 'mulțumesc' } } },
+      { id: 'expr.please', localizations: { ro: { naturalMeaning: 'te rog' } } }
+    ],
+    units: [],
+    exercises: [],
+    lexiconCollections: []
+  };
+
+  try {
+    const result = applyApprovedAudioContent(
+      contentPackage,
+      {
+        audioAssets: [
+          {
+            id: 'audio.expr.hello',
+            expressionID: 'expr.hello',
+            source: 'ibrahimRecorded',
+            locator: 'expr.hello.m4a'
+          }
+        ],
+        listeningPrompts: [
+          {
+            id: 'listen.expr.hello',
+            audioAssetID: 'audio.expr.hello',
+            expressionID: 'expr.hello',
+            mode: 'multipleChoice',
+            choiceExpressionIDs: ['expr.thanks', 'expr.please'],
+            revealWrittenLebaneseInitially: false
+          }
+        ]
+      },
+      { resourceDirectory }
+    );
+
+    assert.equal(result.audioAssets[0].source, 'ibrahimRecorded');
+    assert.deepEqual(
+      result.listeningPrompts[0].choiceExpressionIDs,
+      ['expr.thanks', 'expr.please']
+    );
+
+    assert.throws(
+      () => applyApprovedAudioContent(
+        contentPackage,
+        {
+          audioAssets: [
+            {
+              id: 'audio.expr.hello',
+              expressionID: 'expr.hello',
+              source: 'ibrahimRecorded',
+              locator: 'missing.m4a'
+            }
+          ]
+        },
+        { resourceDirectory }
+      ),
+      /missing bundled source file/
+    );
+
+    assert.throws(
+      () => applyApprovedAudioContent(
+        contentPackage,
+        {
+          audioAssets: [
+            {
+              id: 'audio.expr.hello',
+              expressionID: 'expr.hello',
+              source: 'ibrahimRecorded',
+              locator: 'expr.hello.m4a'
+            }
+          ],
+          listeningPrompts: [
+            {
+              id: 'listen.expr.hello',
+              audioAssetID: 'audio.expr.hello',
+              expressionID: 'expr.hello',
+              mode: 'multipleChoice'
+            }
+          ]
+        },
+        { resourceDirectory }
+      ),
+      /must list 2-3 unique distractor/
+    );
+  } finally {
+    fs.rmSync(resourceDirectory, { recursive: true, force: true });
+  }
 });
 
 test('converts the cross-level vocabulary track into lexicon collections, not Journey levels', () => {
