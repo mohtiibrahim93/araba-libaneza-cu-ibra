@@ -671,7 +671,7 @@ private struct ProfileView: View {
 
                 Section {
                     Button(action: onOrientation) {
-                        Label("Orientare · pilot", systemImage: "signpost.right")
+                        Label("Orientare", systemImage: "signpost.right")
                     }
                 }
 
