@@ -521,6 +521,9 @@ export function loadApprovedAudioContent(audioManifestPath = DEFAULT_AUDIO_MANIF
 }
 
 export function applyApprovedMorphologyContent(contentPackage, morphologyDocument = {}) {
+  const supplementalExpressions = Array.isArray(morphologyDocument.supplementalExpressions)
+    ? morphologyDocument.supplementalExpressions
+    : [];
   const roots = Array.isArray(morphologyDocument.roots) ? morphologyDocument.roots : [];
   const morphologicalPatterns = Array.isArray(morphologyDocument.morphologicalPatterns)
     ? morphologyDocument.morphologicalPatterns
@@ -533,6 +536,7 @@ export function applyApprovedMorphologyContent(contentPackage, morphologyDocumen
     : [];
 
   if (
+    supplementalExpressions.length === 0 &&
     roots.length === 0 &&
     morphologicalPatterns.length === 0 &&
     morphologyLinks.length === 0 &&
@@ -541,8 +545,68 @@ export function applyApprovedMorphologyContent(contentPackage, morphologyDocumen
     return contentPackage;
   }
 
+  const existingExpressionIDs = new Set(contentPackage.expressions.map((expression) => expression.id));
+  const normalizedSupplementalExpressions = [];
+  const supplementalExpressionIDs = new Set();
+
+  for (const raw of supplementalExpressions) {
+    const id = String(raw.id ?? '').trim();
+    const canonicalArabizi = String(raw.canonicalArabizi ?? '').trim();
+    const naturalMeaning = String(raw.localizations?.ro?.naturalMeaning ?? '').trim();
+
+    if (!id) throw new Error('Approved supplemental morphology expression is missing an id.');
+    if (existingExpressionIDs.has(id) || supplementalExpressionIDs.has(id)) {
+      throw new Error('Duplicate supplemental morphology expression id "' + id + '".');
+    }
+    if (!canonicalArabizi) {
+      throw new Error('Approved supplemental morphology expression "' + id + '" has no Arabizi form.');
+    }
+    if (!naturalMeaning) {
+      throw new Error(
+        'Approved supplemental morphology expression "' + id + '" has no Romanian meaning.'
+      );
+    }
+
+    const variants = (Array.isArray(raw.variants) ? raw.variants : []).map((variant) => {
+      const value = String(variant?.value ?? '').trim();
+      const kind = String(variant?.kind ?? '').trim();
+      if (!value || !['spelling', 'pronunciation'].includes(kind)) {
+        throw new Error(
+          'Approved supplemental morphology expression "' + id +
+          '" has an invalid variant.'
+        );
+      }
+      return { value, kind };
+    });
+
+    normalizedSupplementalExpressions.push({
+      id,
+      canonicalArabizi,
+      ...(raw.arabicScript ? { arabicScript: String(raw.arabicScript) } : {}),
+      variants,
+      levelTags: [],
+      topics: [],
+      localizations: {
+        ro: {
+          naturalMeaning,
+          ...(raw.localizations?.ro?.literalMeaning
+            ? { literalMeaning: String(raw.localizations.ro.literalMeaning) }
+            : {}),
+          ...(raw.localizations?.ro?.pragmaticMeaning
+            ? { pragmaticMeaning: String(raw.localizations.ro.pragmaticMeaning) }
+            : {})
+        }
+      }
+    });
+    supplementalExpressionIDs.add(id);
+  }
+
+  const expressions = [
+    ...contentPackage.expressions,
+    ...normalizedSupplementalExpressions
+  ];
   const expressionsByID = new Map(
-    contentPackage.expressions.map((expression) => [expression.id, expression])
+    expressions.map((expression) => [expression.id, expression])
   );
   const rootIDs = new Set();
   for (const root of roots) {
@@ -660,6 +724,7 @@ export function applyApprovedMorphologyContent(contentPackage, morphologyDocumen
 
   return {
     ...contentPackage,
+    expressions,
     roots,
     morphologicalPatterns,
     morphologyLinks,
