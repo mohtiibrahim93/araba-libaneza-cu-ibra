@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { applyApprovedAudioContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
+import { applyApprovedAudioContent, applyApprovedMorphologyContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -283,6 +283,80 @@ test('approved audio content requires bundled files and explicit distractors', (
   } finally {
     fs.rmSync(resourceDirectory, { recursive: true, force: true });
   }
+});
+
+test('approved morphology content accepts only explicit existing expression links', () => {
+  const contentPackage = {
+    manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
+    expressions: [
+      { id: 'expr.book' },
+      { id: 'expr.books' }
+    ],
+    units: [],
+    exercises: [],
+    lexiconCollections: []
+  };
+
+  const result = applyApprovedMorphologyContent(contentPackage, {
+    roots: [
+      { id: 'root.ktb', arabiziRadicals: ['k', 't', 'b'], arabicRadicals: 'كتب' }
+    ],
+    morphologicalPatterns: [
+      {
+        id: 'pattern.noun',
+        kind: 'noun',
+        label: 'Substantiv',
+        productivity: 'lexicalized'
+      },
+      {
+        id: 'pattern.plural',
+        kind: 'plural',
+        label: 'Plural aprobat',
+        productivity: 'lexicalized'
+      }
+    ],
+    morphologyLinks: [
+      { expressionID: 'expr.book', rootID: 'root.ktb', patternID: 'pattern.noun' },
+      { expressionID: 'expr.books', rootID: 'root.ktb', patternID: 'pattern.plural' }
+    ],
+    inflectionRelations: [
+      {
+        sourceExpressionID: 'expr.book',
+        targetExpressionID: 'expr.books',
+        kind: 'plural',
+        patternID: 'pattern.plural'
+      }
+    ]
+  });
+
+  assert.equal(result.roots[0].id, 'root.ktb');
+  assert.equal(result.morphologyLinks.length, 2);
+  assert.equal(result.inflectionRelations[0].kind, 'plural');
+
+  assert.throws(
+    () => applyApprovedMorphologyContent(contentPackage, {
+      roots: [{ id: 'root.ktb', arabiziRadicals: ['k', 't', 'b'] }],
+      morphologyLinks: [
+        { expressionID: 'expr.missing', rootID: 'root.ktb' }
+      ]
+    }),
+    /missing expression/
+  );
+
+  assert.throws(
+    () => applyApprovedMorphologyContent(contentPackage, {
+      roots: [{ id: 'root.ktb', arabiziRadicals: ['k', 't', 'b'] }],
+      morphologicalPatterns: [
+        {
+          id: 'pattern.bad',
+          kind: 'invented',
+          label: 'Bad',
+          productivity: 'limited'
+        }
+      ]
+    }),
+    /unsupported kind/
+  );
 });
 
 test('converts the cross-level vocabulary track into lexicon collections, not Journey levels', () => {
