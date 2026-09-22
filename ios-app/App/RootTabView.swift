@@ -112,8 +112,8 @@ struct RootTabView: View {
         .sheet(isPresented: $showingOrientation) {
             OrientationView(
                 package: content.package, locale: content.locale, progressModel: progressModel,
-                onStartJourney: { unitID in
-                    journeyPath = [unitID]
+                onStartJourney: { _ in
+                    journeyPath = []
                     selectedTab = .journey
                 },
                 onChooseJourney: {
@@ -671,6 +671,14 @@ private struct ProfileView: View {
                     }
                 }
 
+                Section("Tutor") {
+                    NavigationLink {
+                        TutorContactView()
+                    } label: {
+                        Label("Ibrahim Gabriel", systemImage: "person.crop.circle.badge.checkmark")
+                    }
+                }
+
                 Section {
                     NavigationLink {
                         RecordingLibraryView()
@@ -748,6 +756,44 @@ private struct ProfileView: View {
             }
             .navigationTitle("Eu")
         }
+    }
+}
+
+private struct TutorContactView: View {
+    private let phoneDisplay = "+40 763 124 514"
+    private let phoneURL = URL(string: "tel:+40763124514")!
+    private let whatsappURL = URL(string: "https://wa.me/40763124514")!
+
+    var body: some View {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Ibrahim Gabriel")
+                        .font(.title2.bold())
+                    Text("Profesor de arabă libaneză")
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 4)
+            }
+
+            Section("Contact") {
+                LabeledContent("Telefon", value: phoneDisplay)
+                Link(destination: phoneURL) {
+                    Label("Sună", systemImage: "phone")
+                }
+                Link(destination: whatsappURL) {
+                    Label("WhatsApp", systemImage: "message")
+                }
+            }
+
+            Section("Disponibilitate") {
+                Text("Program flexibil, pe bază de programare.")
+                Text("Pentru o încadrare peste materialul B1 disponibil în aplicație, o conversație scurtă poate verifica și vorbirea și ascultarea.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("Tutor")
     }
 }
 
