@@ -39,7 +39,7 @@ struct M8AudioRepositoryTests {
             {"id":"audio.hello","expressionID":"expr.hello","source":"approvedNative","locator":"hello.m4a"}
           ],
           "listeningPrompts": [
-            {"id":"listen.hello","audioAssetID":"audio.hello","expressionID":"expr.hello","mode":"multipleChoice","revealWrittenLebaneseInitially":false}
+            {"id":"listen.hello","audioAssetID":"audio.hello","expressionID":"expr.hello","mode":"freeWrite","choiceExpressionIDs":[],"revealWrittenLebaneseInitially":false}
           ]
         }
         """#
