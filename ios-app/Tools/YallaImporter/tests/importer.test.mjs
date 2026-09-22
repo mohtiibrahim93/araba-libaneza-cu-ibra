@@ -143,7 +143,7 @@ test('refuses stale approved overrides and missing expression links', () => {
     () => applyApprovedNativeOverrides(imported, {
       exerciseOverrides: { d1: { expressionIDs: ['missing-expression'] } }
     }),
-    /missing expression/
+    /missing or excluded expression/
   );
 });
 
