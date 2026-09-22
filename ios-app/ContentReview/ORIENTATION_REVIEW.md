@@ -241,3 +241,128 @@ Passing a later band does not override a gap in an earlier band. Listening and s
 - Existing source reference: workbook
 - Teacher decision/correction: pending
 
+
+
+---
+
+## Calibration analysis against the reviewed native curriculum
+
+The original 24-question pilot is structurally valid, but its internal A2/B1 bands no longer line up well with the reviewed native Journey. Several pilot items labelled A2/B1 test expressions that now live in A1/A2 production content. For placement, this makes the higher bands too easy and weakens the meaning of the 6/8 threshold.
+
+Do **not** copy this proposal into production until Ibrahim approves the teacher-facing wording/answers. Every Lebanese form below is taken from content already approved in the native production review; this proposal does not invent new Lebanese.
+
+### Settled corrections that follow earlier teacher decisions
+
+- p3: use `Ma3e masaare halla2` (course spelling `masaare`).
+- p8: canonical `Wen?`; remove `wayn` as an accepted standalone variant. Earlier teacher rule reserves `wayn` here for suffixed forms such as `waynak` / `wayno`.
+- Use `leezem` in any newly authored orientation Lebanese text, matching the reviewed production convention.
+- Use `Eza` for real/possible conditions and `Law` for hypothetical/counterfactual conditions, matching the reviewed A2/B1 content.
+- Orientation remains a placement suggestion only. It does not award mastery/SRS credit and is not a CEFR certification.
+
+## Proposed calibrated 24-question bank
+
+### A1 — keep the existing foundation coverage
+
+1. **Meaning:** Ce înseamnă „Shu esmak?”  
+   Answer: **Cum te cheamă?**
+
+2. **Form:** Completează: `Ne7na ___ mayy.`  
+   Answer: **baddna**
+
+3. **Meaning:** „Ma3e masaare halla2” înseamnă:  
+   Answer: **Am bani la mine acum.**
+
+4. **Quantity:** Întrebi câți câini are cineva: `___ kaleb 3andik?`  
+   Answer: **Kam**
+
+5. **Production:** Scrie „Vreau apă”, folosind `badde`.  
+   Answer: **Badde mayy**  
+   Accepted: **badde may**
+
+6. **Gender:** Completează: `Hiyye ___.`  
+   Answer: **mabsuuta**
+
+7. **Dual:** Cum ceri exact două mere?  
+   Answer: **Badde teffe7ten.**
+
+8. **Production:** Scrie întrebarea „Unde?” în Arabizi.  
+   Answer: **Wen?**  
+   Accepted variants: **none** (do not accept standalone `wayn`).
+
+### A2 — replace the old weak A2 block with reviewed A2 material
+
+9. **Past comprehension:** „Shu 3emelt mbere7?” înseamnă:  
+   Answer: **Ce ai făcut ieri?**
+
+10. **Opinion grammar:** Completează „Cred că”: `B3te2ed ___.`  
+    Answer: **enno**
+
+11. **Modality:** Alege „Nu pot să vin.”  
+    Answer: **Ma b2dar eje.**
+
+12. **Possible condition:** Ce cuvânt introduce o condiție reală / posibilă?  
+    Answer: **Eza**
+
+13. **Hypothetical condition:** Ce cuvânt introduce o situație ipotetică / ireală?  
+    Answer: **Law**
+
+14. **Relative clause:** Completează: `Es-sabe ___ 3am yedros huwwe 5ayye.`  
+    Answer: **yalle**
+
+15. **Verb-pattern recognition:** Ce formă verbală recunoști în „5arrab”?  
+    Answer: **II**
+
+16. **Opinion comprehension:** „Ma bye3jebne hal filem.” înseamnă:  
+    Answer: **Nu îmi place acest film.**
+
+### B1 — replace the vocabulary-heavy pilot block with reviewed B1 material
+
+17. **Duration comprehension:** „Addesh sarlak 3am teshte8el huniik?” înseamnă:  
+    Answer: **De cât timp lucrezi acolo?**
+
+18. **Production:** Scrie „Încă învăț.”  
+    Answer: **Ba3dne 3am bet3allam.**  
+    Accepted: **Lessa 3am bt3allam.**
+
+19. **Counterfactual comprehension:** „Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.” înseamnă:  
+    Answer: **Dacă aș avea timp, aș merge la mare în fiecare weekend.**
+
+20. **Opinion production/recognition:** Alege „Cred că este mai bun decât muntele.”  
+    Answer: **B3te2ed enno a7san men el jabal.**
+
+21. **Real condition comprehension:** „Eza ma 2aadra, fiina nru7 ba3ed esbuu3.” înseamnă:  
+    Answer: **Dacă nu poți, putem merge peste o săptămână.**
+
+22. **Conversation comprehension:** „Faade ne7ke ed-dohor?” înseamnă:  
+    Answer: **Ești liber să vorbim la prânz?**
+
+23. **Production:** Scrie „Unde ai vrea să mergem?” (către un bărbat).  
+    Answer: **Wen bte7ebb nru7?**
+
+24. **Duration/work comprehension:** „Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.” înseamnă:  
+    Answer: **Sunt aici de aproape cinci ani. Îmi place mult jobul.**
+
+## Proposed provisional scoring and Journey destinations
+
+Keep the provisional threshold at **6/8 per band** for offline v1. This is intentionally conservative and remains unvalidated empirically.
+
+Band precedence remains sequential: an A1 gap takes priority over later scores; after A1 passes, an A2 gap takes priority over B1. This avoids placing a learner above a foundational gap.
+
+Proposed explicit Journey targets:
+
+| Result | Proposed unit |
+| --- | --- |
+| A1 below 6 | `a1-welcome` |
+| A1 ≥ 6, A2 below 6 | `a2-roots` |
+| A1 ≥ 6, A2 ≥ 6, B1 below 6 | `b1-experiences` |
+| All three ≥ 6 | `b1-conversation` |
+
+Using explicit IDs is preferable to the current implementation's “first unit with this level” lookup. The present unit order happens to give the intended A1/A2/B1 starts, but an ordering change could silently alter placement.
+
+### Teacher approvals still required before production
+
+1. Confirm the proposed A2 eight-question replacement block.
+2. Confirm the proposed B1 eight-question replacement block.
+3. Confirm whether the provisional threshold remains 6/8.
+4. Confirm `b1-conversation` as the all-bands-passed destination (instead of restarting at `b1-experiences`).
+5. Confirm the A1 items p1–p7 as written; p3/p8 already reflect previously established spelling rules.
