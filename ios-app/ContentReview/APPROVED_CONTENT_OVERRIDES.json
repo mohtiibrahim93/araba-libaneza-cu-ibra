@@ -1251,5 +1251,907 @@
     "xqd255b5f8b19a": {
       "answer": "Ma3e masaare halla2."
     }
+  },
+  "expressionOverrides": {
+    "c5987c363bf91": {
+      "canonicalArabizi": "Eza baddak bjiblak mayy."
+    },
+    "ca5fc629f6f5a": {
+      "canonicalArabizi": "L-kteeb yalle 2riito."
+    },
+    "syn-02254b3c9745": {
+      "canonicalArabizi": "ba3mel sho8ol ktiir"
+    },
+    "syn-0228c7130df1": {
+      "canonicalArabizi": "Tameem! Badde shawarma djej."
+    },
+    "syn-038f703a5245": {
+      "canonicalArabizi": "Shu ra7 ta3mol bukra?"
+    },
+    "syn-0596620bdc87": {
+      "canonicalArabizi": "Ktiir! En nes mahdumin w el as3ar mnii7a."
+    },
+    "syn-06b7209814bd": {
+      "canonicalArabizi": "Ma b7ibb el 7arr."
+    },
+    "syn-0756c0993b4c": {
+      "canonicalArabizi": "Shukran, bas ma 3ande masaare."
+    },
+    "syn-07a756c3f996": {
+      "canonicalArabizi": "Shtareet 2amis a7mar."
+    },
+    "syn-0823cb321526": {
+      "canonicalArabizi": "Badde, bas lezem eshte8el es-sabet."
+    },
+    "syn-090b0b874f85": {
+      "canonicalArabizi": "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a."
+    },
+    "syn-0a4165dde490": {
+      "canonicalArabizi": "Ma 3ande i5we"
+    },
+    "syn-0b678b55180b": {
+      "canonicalArabizi": "Tfaddalo, shu baddkon?"
+    },
+    "syn-0c0ae560a960": {
+      "canonicalArabizi": "El a7ad b2dar! Shu baddik na3mel?"
+    },
+    "syn-0d9908b23042": {
+      "canonicalArabizi": "Mne7ke ba3den."
+    },
+    "syn-0e09c58c0d5c": {
+      "canonicalArabizi": "Ra7 be7kiik ba3den."
+    },
+    "syn-0e3c6cbb38b2": {
+      "canonicalArabizi": "Shu no3 el musi2a li bte7bbiya?"
+    },
+    "syn-0efefc312efd": {
+      "canonicalArabizi": "Tameem! Yalla bina."
+    },
+    "syn-0fecf2ea7211": {
+      "canonicalArabizi": "Uff! Ma b7ebb eshte8el bel weekend."
+    },
+    "syn-1002cbd504e7": {
+      "canonicalArabizi": "Ra7 nshufak el esbuu3 el jey."
+    },
+    "syn-108a6134db90": {
+      "canonicalArabizi": "Wala ana! Bass ken leezem."
+    },
+    "syn-10dbc6b30331": {
+      "canonicalArabizi": "Sa7, miyye bel miyye."
+    },
+    "syn-11cebd862fff": {
+      "canonicalArabizi": "B7ebb el ski ktiir! Re7et es sene el madye."
+    },
+    "syn-123008b3c938": {
+      "canonicalArabizi": "Akid. W leezem nshuf iza fi wa2et."
+    },
+    "syn-1236aa690087": {
+      "canonicalArabizi": "Tameem! Lezem nru7 badre?"
+    },
+    "syn-12b6e90ea192": {
+      "canonicalArabizi": "B7ibb el shawarma. W ente?"
+    },
+    "syn-12d184fa6dff": {
+      "canonicalArabizi": "7aader. Shu baddkon teshrabo?"
+    },
+    "syn-12e7553413a9": {
+      "canonicalArabizi": "E5te el zghiire"
+    },
+    "syn-14a76eec3636": {
+      "canonicalArabizi": "Eh, 3ande sho8ol muhemm ktiir."
+    },
+    "syn-151f2794a9e3": {
+      "canonicalArabizi": "Inshallah! Aymta ra7 truu7o?"
+    },
+    "syn-153031cc1de9": {
+      "canonicalArabizi": "B7ibb el shawarma ktiir."
+    },
+    "syn-19ce671ec6e7": {
+      "canonicalArabizi": "Tameem! 3andak i5we?"
+    },
+    "syn-1ae0ed713d37": {
+      "canonicalArabizi": "Eh ktiir! Ken el jaw ra2e3."
+    },
+    "syn-1cb1dbbb7ba8": {
+      "canonicalArabizi": "Tameem, shukran ktiir!"
+    },
+    "syn-1cba62d6df5b": {
+      "canonicalArabizi": "Meeshe, b7akik bukra!"
+    },
+    "syn-1df0b8b69176": {
+      "canonicalArabizi": "Ana kameen. Shu 3emelt mbere7?"
+    },
+    "syn-1ee502ad508d": {
+      "exclude": true
+    },
+    "syn-1f6522c94fb8": {
+      "canonicalArabizi": "Bayye w emme"
+    },
+    "syn-20ca1866edec": {
+      "canonicalArabizi": "3am bfakker ru7 3al ma77al."
+    },
+    "syn-20f887518bcd": {
+      "canonicalArabizi": "Eh, lezem. Bysir fi nes ktiir."
+    },
+    "syn-21d54103c4b4": {
+      "canonicalArabizi": "Ba3den re7na 3as sinema."
+    },
+    "syn-22a2e0ee0b9b": {
+      "canonicalArabizi": "El jabal 7elo besh-shete."
+    },
+    "syn-23c805dae04f": {
+      "canonicalArabizi": "Tayyeb, yemkin el marra el jeye."
+    },
+    "syn-244aff0d3a2b": {
+      "canonicalArabizi": "Akiid sa3eb bass mhemm."
+    },
+    "syn-25afb8239c6a": {
+      "canonicalArabizi": "Ken fi ktiir 3aalam."
+    },
+    "syn-27fce2cc9265": {
+      "canonicalArabizi": "Addesh se3er el 2amis el a7mar?"
+    },
+    "syn-283e3b868968": {
+      "canonicalArabizi": "B7ebb el ba7er bass leezem eshte8el."
+    },
+    "syn-28a55f541d2d": {
+      "canonicalArabizi": "8ale ktiir! Fi solde?"
+    },
+    "syn-28ab1e1ccb01": {
+      "canonicalArabizi": "Min wen ente?"
+    },
+    "syn-28c3aa6353d0": {
+      "canonicalArabizi": "Bru7 3a-sh-sho8ol es subo7."
+    },
+    "syn-295e7371a28e": {
+      "canonicalArabizi": "Sa7! El marra el jayye leezem nru7 badre."
+    },
+    "syn-2a4417a1b291": {
+      "canonicalArabizi": "Yamiin 3and el ishaara, meshe."
+    },
+    "syn-2a46d72d6d83": {
+      "canonicalArabizi": "Beshte8el men el bet."
+    },
+    "syn-2af71f245869": {
+      "canonicalArabizi": "Ma b7ibb el 7arr."
+    },
+    "syn-2bd10c08b32a": {
+      "canonicalArabizi": "Ma leezem tru7."
+    },
+    "syn-2d33d08af2d3": {
+      "canonicalArabizi": "Ma b7ibb abadan."
+    },
+    "syn-2d4cf4b7368b": {
+      "canonicalArabizi": "Mar7aba! Ken sahel, 2ariib men el bank."
+    },
+    "syn-2da83ea30cd8": {
+      "canonicalArabizi": "Ma bye3jebne hal filem."
+    },
+    "syn-2dcea3000b0d": {
+      "canonicalArabizi": "Min wen ente?"
+    },
+    "syn-2de1bb24505c": {
+      "canonicalArabizi": "wara el bineeye"
+    },
+    "syn-2ecb1a5d02fe": {
+      "canonicalArabizi": "Badde shawarma djej law sama7et."
+    },
+    "syn-308bfe869e32": {
+      "canonicalArabizi": "Wen es saydaliyye?"
+    },
+    "syn-326b9a3aaf57": {
+      "canonicalArabizi": "B adde kilo et-tiffe7?"
+    },
+    "syn-34db33b665ce": {
+      "canonicalArabizi": "Mar7aba Karim! 3andak i5we?"
+    },
+    "syn-3678dae1756e": {
+      "canonicalArabizi": "3ayltak kbiire! Ana ju3aan, badde ekol."
+    },
+    "syn-37f5816e576d": {
+      "canonicalArabizi": "Eh, yimken ykun 3ande she8el."
+    },
+    "syn-3878ee6591c3": {
+      "canonicalArabizi": "Faade ne7ke ed-dohor?"
+    },
+    "syn-38bed121a3df": {
+      "canonicalArabizi": "Berja3 3al bet."
+    },
+    "syn-39c4eff33327": {
+      "canonicalArabizi": "Tameem! Ra7 nshufak el tanen?"
+    },
+    "syn-3a47c9354640": {
+      "canonicalArabizi": "El yom lezem eshte8el ktiir."
+    },
+    "syn-3ad4edfc36a5": {
+      "exclude": true
+    },
+    "syn-3b2e75b23131": {
+      "canonicalArabizi": "Fi ma7all mnii7 7add el bank."
+    },
+    "syn-3c84cb20ac2e": {
+      "canonicalArabizi": "Re7t 3a el su2 mbeere7 w shtareet fweke."
+    },
+    "syn-3cca63b48e1b": {
+      "canonicalArabizi": "Mar7aba Karim! Shu ra7 te3mel bel weekend?"
+    },
+    "syn-3ce7c2d5e0fb": {
+      "canonicalArabizi": "Mar7aba! Ana muhandis. W ente?"
+    },
+    "syn-3d588cf04d62": {
+      "exclude": true
+    },
+    "syn-3f49fb7cf434": {
+      "canonicalArabizi": "Mar7aba Karim! Baddak totla3 ma3e bel weekend?"
+    },
+    "syn-40bd9f448119": {
+      "canonicalArabizi": "Shu esmo 5ayyak?"
+    },
+    "syn-411064057d02": {
+      "canonicalArabizi": "Tameem, baddik kiis?"
+    },
+    "syn-4115e328aa78": {
+      "canonicalArabizi": "Wen es saydaliyye?"
+    },
+    "syn-4162e36eafea": {
+      "canonicalArabizi": "B3te2ed enno a7san men el jabal."
+    },
+    "syn-4207b8188210": {
+      "canonicalArabizi": "Tameem, w ba3den?"
+    },
+    "syn-43f299eb3f2f": {
+      "canonicalArabizi": "Yemkin nru7 3al ba7er?"
+    },
+    "syn-44dc337fa782": {
+      "canonicalArabizi": "Ana kameen, bye3jebne sawta!"
+    },
+    "syn-44e07d592b08": {
+      "exclude": true
+    },
+    "syn-44efc94b1bbc": {
+      "canonicalArabizi": "B7akik hal esbuu3."
+    },
+    "syn-453551f079e4": {
+      "canonicalArabizi": "Ra7 nru7 es-sabet w narja3 el a7ad."
+    },
+    "syn-45447086e1f3": {
+      "canonicalArabizi": "3ande 5ayy waa7ad w e5et we7de"
+    },
+    "syn-4556ba25ad37": {
+      "canonicalArabizi": "Wen es saydaliyye?"
+    },
+    "syn-467b88df0637": {
+      "canonicalArabizi": "Shu 3am ta3mol halla2?"
+    },
+    "syn-46f7d751827e": {
+      "canonicalArabizi": "Akiid ra7 ije."
+    },
+    "syn-48d35def2830": {
+      "canonicalArabizi": "Fairouz a7san m8anniye! B7ebbha ktiir."
+    },
+    "syn-4a040b2aec92": {
+      "canonicalArabizi": "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er."
+    },
+    "syn-4a6501604343": {
+      "exclude": true
+    },
+    "syn-4a8ff27db794": {
+      "canonicalArabizi": "Eh ktiir! B7ibb er riwayat."
+    },
+    "syn-4f8fdb9fd717": {
+      "canonicalArabizi": "B7ibb el aflem, bas mish ktiir."
+    },
+    "syn-5004543f44a8": {
+      "canonicalArabizi": "B7ebb el ski ktiir!"
+    },
+    "syn-508a86acae29": {
+      "canonicalArabizi": "W ana badde bas mayy."
+    },
+    "syn-5225d522b17f": {
+      "canonicalArabizi": "3am be2ra kteb halla2, bas ba3den bru7 3as sinema."
+    },
+    "syn-5537dace2a32": {
+      "canonicalArabizi": "Bedrus b il jeem3a"
+    },
+    "syn-55ba3b3b789e": {
+      "canonicalArabizi": "Ana b7ibb el 7ommos w el tabbule."
+    },
+    "syn-566f9501b408": {
+      "canonicalArabizi": "Shu 3am ta3mol?"
+    },
+    "syn-5722dd3736f9": {
+      "canonicalArabizi": "Ktiir! W ente shu 3melte?"
+    },
+    "syn-58956d77f442": {
+      "canonicalArabizi": "Mar7aba Karim! Kif ken el weekend?"
+    },
+    "syn-594d41a5ff3a": {
+      "canonicalArabizi": "W ana badde falefel w 7ommos."
+    },
+    "syn-59a83c5ab673": {
+      "canonicalArabizi": "Mar7aba, fik tse3edne?"
+    },
+    "syn-59fca2ec3a60": {
+      "canonicalArabizi": "Mar7aba! Esme Maria w ana men Romania."
+    },
+    "syn-5b1e77bc4752": {
+      "canonicalArabizi": "Yeslamo! Yalla, bshufik el a7ad!"
+    },
+    "syn-5d200eaeb574": {
+      "canonicalArabizi": "7elo! Ana kameen jou3an."
+    },
+    "syn-5da1e48191e8": {
+      "canonicalArabizi": "Mar7aba Fadi! Shu 3emelt bel weekend?"
+    },
+    "syn-5e2a3a56f78b": {
+      "canonicalArabizi": "B7ibb el akel el lebnene ktiir."
+    },
+    "syn-614f2e964b79": {
+      "canonicalArabizi": "Ana ju3aan ktiir."
+    },
+    "syn-617cde834078": {
+      "canonicalArabizi": "Meeshe. Iza ma fi matar, akid bnru7."
+    },
+    "syn-6192684b4344": {
+      "canonicalArabizi": "7elo! Wen bteshte8el?"
+    },
+    "syn-6319958fd3cc": {
+      "canonicalArabizi": "ba3ed ed dewwar"
+    },
+    "syn-634f0e423246": {
+      "canonicalArabizi": "Ba3do 8ale. Tletiin?"
+    },
+    "syn-637d9b2bb910": {
+      "canonicalArabizi": "Eh, bass leezem n5attet mni7."
+    },
+    "syn-64b2d9a36853": {
+      "canonicalArabizi": "7deret filem lebnene. Ken ra2e3!"
+    },
+    "syn-64c707c5341b": {
+      "canonicalArabizi": "Ana 3ande 5ay w e5ten."
+    },
+    "syn-661de8fd2ed5": {
+      "canonicalArabizi": "Yalla nruu7 3a es see3a we7de?"
+    },
+    "syn-66e4064dce20": {
+      "canonicalArabizi": "Mjawwaz walla a3zab?"
+    },
+    "syn-67744d20af7b": {
+      "canonicalArabizi": "Meshe, b2dar fii2 bakiir."
+    },
+    "syn-67fecc1d6948": {
+      "canonicalArabizi": "Ana doktora, beshte8el b mustashfa."
+    },
+    "syn-680e0aa51bd4": {
+      "canonicalArabizi": "Jedde w sitte"
+    },
+    "syn-684b5024cd28": {
+      "canonicalArabizi": "B7ebb es safar ktiir, bass leezem eshte8el."
+    },
+    "syn-692cc7ce1a25": {
+      "exclude": true
+    },
+    "syn-695d7c1548a1": {
+      "canonicalArabizi": "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol."
+    },
+    "syn-69b39c5aae51": {
+      "canonicalArabizi": "Ra7 safer 3ala Terkiyya."
+    },
+    "syn-6a5650287491": {
+      "canonicalArabizi": "B7ibb esma3 musi2a lebneniyye w 3arabiyye."
+    },
+    "syn-6b3fa2fd4cd8": {
+      "canonicalArabizi": "Shu 3am bisiir?"
+    },
+    "syn-6bbf34f893f8": {
+      "canonicalArabizi": "B7ibb el falefel w el tabbule."
+    },
+    "syn-6d3f1fdf6fa2": {
+      "canonicalArabizi": "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Sunt aici de aproape cinci ani. Îmi place mult jobul."
+        }
+      }
+    },
+    "syn-6e058c4fbc31": {
+      "exclude": true
+    },
+    "syn-6e7578d08ad2": {
+      "canonicalArabizi": "Ana kameen! Shu bte7ebb tekol?"
+    },
+    "syn-7132b735dd28": {
+      "canonicalArabizi": "El 7seb law sama7et."
+    },
+    "syn-71b1f3365b45": {
+      "canonicalArabizi": "Tameem! Shu 3am ta3mel halla2?"
+    },
+    "syn-7336e33d4bf1": {
+      "canonicalArabizi": "Re7et 3as suu2 w shtareet shwayyet 8raad."
+    },
+    "syn-7423347a28e8": {
+      "canonicalArabizi": "Shukran! Mnshufik ariiban."
+    },
+    "syn-74b2193ccf09": {
+      "canonicalArabizi": "Ana kameen, bas a7yenan bil-lel."
+    },
+    "syn-7526d24d82e1": {
+      "canonicalArabizi": "Ra7 kuun huniik."
+    },
+    "syn-768687f8f55e": {
+      "canonicalArabizi": "Adde el se3er?"
+    },
+    "syn-78449a303eed": {
+      "canonicalArabizi": "Eh, 3ande e5et we7de."
+    },
+    "syn-78792f0caf26": {
+      "canonicalArabizi": "Sa7! Ken filem mthir ktiir."
+    },
+    "syn-7a15e7999c58": {
+      "canonicalArabizi": "Shu 3am ta3mol halla2?"
+    },
+    "syn-7ac35bb401b3": {
+      "canonicalArabizi": "Ma b3ref, yemkin ruu7 3al mat3am."
+    },
+    "syn-7b17306217ad": {
+      "exclude": true
+    },
+    "syn-7b357719f926": {
+      "canonicalArabizi": "Ana kameen. Law ken et ta2es a7san..."
+    },
+    "syn-7b598f353dc1": {
+      "canonicalArabizi": "Eh, Tameem! El 7seb law sama7et."
+    },
+    "syn-7bce2b6efd7e": {
+      "canonicalArabizi": "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!"
+    },
+    "syn-7d745a3f1217": {
+      "canonicalArabizi": "Shu ra2yak nru7 el esbuu3 el jey?"
+    },
+    "syn-7da600df6cad": {
+      "canonicalArabizi": "Tameem! Ana 3am betfarraj 3a film."
+    },
+    "syn-7db567246872": {
+      "canonicalArabizi": "Re7t 3a-s-su2 mbeere7."
+    },
+    "syn-7e27e79d1912": {
+      "canonicalArabizi": "Riweye lebneniyye. Ktiir 7elwe."
+    },
+    "syn-7efd17236224": {
+      "canonicalArabizi": "Tayyeb, arb3iin dollar."
+    },
+    "syn-7f6e456d1333": {
+      "canonicalArabizi": "Ahla, tfaddale. 3annna alween ktiire."
+    },
+    "syn-7fafcb18d749": {
+      "canonicalArabizi": "7elo! Yalla bshufik!"
+    },
+    "syn-800190fd1721": {
+      "canonicalArabizi": "Re7et 3al jabal es sene el madye w nbasatet ktiir."
+    },
+    "syn-827b303652be": {
+      "canonicalArabizi": "La2, ma besiir. 5amsaw w tletiin."
+    },
+    "syn-82e7084bfdb6": {
+      "canonicalArabizi": "Ma b7ibb er riyada."
+    },
+    "syn-83ab4906ec93": {
+      "canonicalArabizi": "Mar7aba! Re7t 3al ba7er ma3 s7aabe."
+    },
+    "syn-843f1405c9f4": {
+      "canonicalArabizi": "Ra7 ousal ba3ed shway."
+    },
+    "syn-86b90d56ddd1": {
+      "canonicalArabizi": "Shu ra7 ta3mol bukra?"
+    },
+    "syn-86ee18423311": {
+      "canonicalArabizi": "Yemkin ra7 ru7."
+    },
+    "syn-86fb6aedde17": {
+      "canonicalArabizi": "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?"
+    },
+    "syn-88dc4e1164a3": {
+      "canonicalArabizi": "Eza fi talej, leezem nruu7 na3mel ski."
+    },
+    "syn-8b5f244bde51": {
+      "canonicalArabizi": "Eh, fine. Ana 3am 7adder sandwishet."
+    },
+    "syn-8b9c4f8c4e07": {
+      "canonicalArabizi": "Mar7aba! Yemkin ra7 ru7 3al jabal."
+    },
+    "syn-8cf16473ae54": {
+      "canonicalArabizi": "Sa7, yalla bshufik!"
+    },
+    "syn-8d04227d0953": {
+      "canonicalArabizi": "Ana kameen! Shu bte7ebb tekol?"
+    },
+    "syn-9011e4684aa6": {
+      "canonicalArabizi": "El akel ken laziz ktiir!"
+    },
+    "syn-9042b3abae0d": {
+      "canonicalArabizi": "Ana beshte8el bel marketing."
+    },
+    "syn-90c127d3a830": {
+      "canonicalArabizi": "Badde sa7en tabbule."
+    },
+    "syn-93a51f3eff2f": {
+      "canonicalArabizi": "Shu esmo 5ayyak?"
+    },
+    "syn-93e672f514f4": {
+      "canonicalArabizi": "Wow! Kam sar lak 3am teshte8el huniik?"
+    },
+    "syn-944c5743499a": {
+      "canonicalArabizi": "Shu 3meltu huniik?"
+    },
+    "syn-948ce2838019": {
+      "canonicalArabizi": "Kill yom el subo7."
+    },
+    "syn-95e2988299c0": {
+      "canonicalArabizi": "Mar7aba, badde shuf el 2omsan."
+    },
+    "syn-9612f959f867": {
+      "canonicalArabizi": "Wen es sinema?"
+    },
+    "syn-967421fb4032": {
+      "canonicalArabizi": "Mar7aba Karim! Shu hwaytak?"
+    },
+    "syn-96d2561806f5": {
+      "canonicalArabizi": "B Bayrut, 2ariib men hon."
+    },
+    "syn-97c560f53b0c": {
+      "canonicalArabizi": "W bt7ebb el-7elo el-libneene?"
+    },
+    "syn-98cd0f1f701e": {
+      "canonicalArabizi": "Ken 7elo ktiir! Bass ken fi nes ktiir."
+    },
+    "syn-99f12673901d": {
+      "canonicalArabizi": "2ret kteb w tfarrajet 3a filem."
+    },
+    "syn-9a79f6640456": {
+      "exclude": true
+    },
+    "syn-9b35dc311667": {
+      "canonicalArabizi": "Azra2. Ken 8ale shway."
+    },
+    "syn-9b6857d789d3": {
+      "canonicalArabizi": "Ana kameen! B3te2ed enno a7san men el jabal."
+    },
+    "syn-9bc369c12ae2": {
+      "canonicalArabizi": "Mar7aba Omar! Shu bte3mel?"
+    },
+    "syn-9bd7a50634f0": {
+      "canonicalArabizi": "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ce norocos! Eu a trebuit să lucrez ieri."
+        }
+      }
+    },
+    "syn-9c0432d88058": {
+      "canonicalArabizi": "Eza ma 2aadra, fiina nru7 ba3ed esbuu3."
+    },
+    "syn-9d3d58a96116": {
+      "canonicalArabizi": "B7ibb el shawarma w el ahwe el lebneniyye."
+    },
+    "syn-9dfc75ef33a2": {
+      "canonicalArabizi": "Tameem! Yalla nru7 sawa."
+    },
+    "syn-9e231be136e9": {
+      "canonicalArabizi": "ra7 safer el esbuu3 el jey"
+    },
+    "syn-9eb06dc111e4": {
+      "canonicalArabizi": "Es saydaliyye 2ariibe men hon."
+    },
+    "syn-9ec2fdddb750": {
+      "canonicalArabizi": "min wen enta?"
+    },
+    "syn-9ee5b8c06414": {
+      "canonicalArabizi": "Sa3eb! Aymta bterja3e 3al bayt?"
+    },
+    "syn-9fff644972b7": {
+      "canonicalArabizi": "7add el bank, fhemet."
+    },
+    "syn-a10fbe73b057": {
+      "canonicalArabizi": "Meshe, yalla nruu7!"
+    },
+    "syn-a1b3d6f86486": {
+      "canonicalArabizi": "Ba3dne 3am bet3allam."
+    },
+    "syn-a2a67de95d37": {
+      "canonicalArabizi": "3mele yamiin 3and el ishaara"
+    },
+    "syn-a324944a1c3d": {
+      "canonicalArabizi": "Shu ra7 ta3mol bel 3otle?"
+    },
+    "syn-a43d04dd1d92": {
+      "canonicalArabizi": "Ana ma b7ibb el 2raye, mamell shway."
+    },
+    "syn-a44710654fd6": {
+      "exclude": true
+    },
+    "syn-a502a0bd98f5": {
+      "canonicalArabizi": "ma leezem tru7"
+    },
+    "syn-a7ea0d46073f": {
+      "canonicalArabizi": "Kam 5ayy 3andak?"
+    },
+    "syn-a9dd2a104368": {
+      "canonicalArabizi": "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?"
+    },
+    "syn-aa02f7a8f200": {
+      "canonicalArabizi": "3ande 5ayy waa7ad"
+    },
+    "syn-abd809fe84db": {
+      "canonicalArabizi": "Eh, ktiir. W ente?"
+    },
+    "syn-ac0802384fa0": {
+      "canonicalArabizi": "Mar7aba Karim! Kif la2ayt el makan?"
+    },
+    "syn-ac9152691c69": {
+      "exclude": true
+    },
+    "syn-ad5a5bdfc426": {
+      "canonicalArabizi": "Ana b7ibb el ahwe el lebneniyye."
+    },
+    "syn-ad82883e3cc4": {
+      "canonicalArabizi": "Wow! Wen el mustashfa?"
+    },
+    "syn-ae1fc12ffb49": {
+      "canonicalArabizi": "Mamnuu3 et tad5iin."
+    },
+    "syn-ae2e21e89a75": {
+      "canonicalArabizi": "Sa7, bass el jabal 7elo besh-shete."
+    },
+    "syn-af56b2b3cf85": {
+      "canonicalArabizi": "3ande 5ay w e5ten"
+    },
+    "syn-b070e7525663": {
+      "canonicalArabizi": "Addesh sarlak 3am teshte8el huniik?"
+    },
+    "syn-b075a2b0e163": {
+      "canonicalArabizi": "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe."
+    },
+    "syn-b08f17a3d9c5": {
+      "canonicalArabizi": "Be23od bel bet."
+    },
+    "syn-b39fd2bf2f63": {
+      "canonicalArabizi": "Wasat law sama7et."
+    },
+    "syn-b5d6565f22dc": {
+      "canonicalArabizi": "Akid. Iza badna nru7, leezem n7jez fondo2."
+    },
+    "syn-b6c2a576ed79": {
+      "canonicalArabizi": "Mni7, shukran. Ana mhandes."
+    },
+    "syn-b71308a4f1b9": {
+      "canonicalArabizi": "B7ibb el akel el lebnene."
+    },
+    "syn-b8e97100f241": {
+      "canonicalArabizi": "Meeshe. Yalla, b7akik hal esbuu3."
+    },
+    "syn-b97376f1db81": {
+      "canonicalArabizi": "Adde el se3er?"
+    },
+    "syn-ba37ac3768b3": {
+      "canonicalArabizi": "Arb3iin dollar. Bas 7elo ktiir."
+    },
+    "syn-bb00a3f9df18": {
+      "canonicalArabizi": "B7ibb el 7elo."
+    },
+    "syn-bccbcf404ee5": {
+      "canonicalArabizi": "Bfakker enno \"Capernaum\" a7san filem lebnene."
+    },
+    "syn-bed8262abbde": {
+      "canonicalArabizi": "Tameem! Iza b2dar, b7akik bukra."
+    },
+    "syn-bf0130fd8b1c": {
+      "canonicalArabizi": "B3ide shway, 5ams d2eeye2 meshe."
+    },
+    "syn-bfe2a71a9de6": {
+      "canonicalArabizi": "Mar7aba! Shu esmak?"
+    },
+    "syn-c3fdd656b15f": {
+      "canonicalArabizi": "Hahaha, tayyeb shu baddik ta3mle ba3den?"
+    },
+    "syn-c53501ed4c95": {
+      "canonicalArabizi": "Tsharrafna! 3ammte kameen 3andha tlet wled."
+    },
+    "syn-c603c327cdbb": {
+      "exclude": true
+    },
+    "syn-c70e6bbdca73": {
+      "canonicalArabizi": "Akiid! El-be2leewe w el-kneefe... yeslamo!"
+    },
+    "syn-cad6862cd3b4": {
+      "exclude": true
+    },
+    "syn-caf819e36cad": {
+      "canonicalArabizi": "Lesh? Ta3e ma3na!"
+    },
+    "syn-cb52eaa22d77": {
+      "canonicalArabizi": "El marra el jayye leezem nru7 badre."
+    },
+    "syn-cb97044da4be": {
+      "canonicalArabizi": "5ayye el kbiir"
+    },
+    "syn-cbb99b6619b3": {
+      "canonicalArabizi": "3ayltak kbiire"
+    },
+    "syn-cbca12375d50": {
+      "canonicalArabizi": "Bye3jebne hal shi."
+    },
+    "syn-cbdd5dd08eae": {
+      "canonicalArabizi": "B7ibb el 7ommos."
+    },
+    "syn-cce5d005ef50": {
+      "canonicalArabizi": "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?"
+    },
+    "syn-cd11a02eda89": {
+      "canonicalArabizi": "Eh, w tfarrajet 3a film kameen."
+    },
+    "syn-ced297d92d16": {
+      "canonicalArabizi": "Ru7e du8re la e5er esh share3."
+    },
+    "syn-cf19b9343c36": {
+      "canonicalArabizi": "Meeshe! bhsufak hon."
+    },
+    "syn-cf8d1f3fcc2c": {
+      "canonicalArabizi": "5ayye el kbiir mjawwaz"
+    },
+    "syn-d0f0fbcc62fc": {
+      "canonicalArabizi": "Badde el kilo?"
+    },
+    "syn-d14c6de1e56f": {
+      "canonicalArabizi": "Bil-lel, ba3ed el sho8ol."
+    },
+    "syn-d280b14f30d3": {
+      "canonicalArabizi": "El hiweye el mofaddale 3ande heyye el musii2a."
+    },
+    "syn-d2b3d581bc81": {
+      "canonicalArabizi": "7elo! 5ayye el-kbiir mjawwaz."
+    },
+    "syn-d3a28ada9a8b": {
+      "canonicalArabizi": "W ana badde falefel w sa7en 7ommos."
+    },
+    "syn-d452f09bda23": {
+      "canonicalArabizi": "Filem amerkene, bass mish ktiir 7elo."
+    },
+    "syn-d45335ca7ecc": {
+      "canonicalArabizi": "Esma Reem. Hiyye il-zghiire."
+    },
+    "syn-d56463eaf234": {
+      "canonicalArabizi": "La2, 2ariib. 3asher d2eeye2 bel sayyara."
+    },
+    "syn-d5a7e5f0f030": {
+      "canonicalArabizi": "7add el mall el kbiir."
+    },
+    "syn-d5eceed41985": {
+      "canonicalArabizi": "Tameem! Btruu7 kill yom 3al sho8ol?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Super! Mergi în fiecare zi la muncă? (masculin)"
+        }
+      }
+    },
+    "syn-d612ea2b1bbe": {
+      "canonicalArabizi": "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey."
+    },
+    "syn-d63c2f6caf95": {
+      "canonicalArabizi": "Badde shawarma djej law sama7et."
+    },
+    "syn-d67ee0404cd3": {
+      "canonicalArabizi": "Mar7aba Nour! 3am be2ra kteb."
+    },
+    "syn-d69397a9546c": {
+      "canonicalArabizi": "Ayya tabe2?"
+    },
+    "syn-db59ff8bc2d1": {
+      "canonicalArabizi": "Eh, 3ando benet we7de."
+    },
+    "syn-db93bca31e7f": {
+      "canonicalArabizi": "Tameem! Shu ra2yik b Fairouz?"
+    },
+    "syn-dc0f4d9bccdb": {
+      "canonicalArabizi": "B7ibb er riyada ktiir, 5asatan koret el 2adam."
+    },
+    "syn-dc55180eafcb": {
+      "canonicalArabizi": "Shukran, bass 3ande sho8ol ktiir."
+    },
+    "syn-dc8056ef1851": {
+      "canonicalArabizi": "B7ibb el musi2a el lebneniyye w el 3arabiyye."
+    },
+    "syn-dc86a43a3870": {
+      "canonicalArabizi": "Es saydaliyye 7add el bank, 2ariibe men hon."
+    },
+    "syn-e01da0d8fbac": {
+      "canonicalArabizi": "La2, mish daruure."
+    },
+    "syn-e15c6fa4e714": {
+      "canonicalArabizi": "7elo! Fike tjiibe akel?"
+    },
+    "syn-e224364dbd8b": {
+      "canonicalArabizi": "Beshte8el tasmiim. Sho8le mnii7 w 7elo."
+    },
+    "syn-e2615110805f": {
+      "canonicalArabizi": "2ariiban ra7 nshuf."
+    },
+    "syn-e393491306c6": {
+      "canonicalArabizi": "Shu el filem?"
+    },
+    "syn-e406da572a85": {
+      "canonicalArabizi": "Fikra mni7a! Badde ahwe kameen."
+    },
+    "syn-e42c007b31a6": {
+      "canonicalArabizi": "Shu fi 3andkon?"
+    },
+    "syn-e43621aef5ac": {
+      "canonicalArabizi": "Mar7aba! Ente jdide hon?"
+    },
+    "syn-e6beff6e554b": {
+      "canonicalArabizi": "Shu el filem el mofaddal 3andak?"
+    },
+    "syn-ecb20906eef6": {
+      "canonicalArabizi": "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?"
+    },
+    "syn-ed917f71ecbf": {
+      "canonicalArabizi": "Mar7aba! Ana ju3aan ktiir."
+    },
+    "syn-ee94fc2d2880": {
+      "canonicalArabizi": "Sbe7na w l3ebna futbol."
+    },
+    "syn-ef24e1ec2dc8": {
+      "canonicalArabizi": "Fikra 7elwe! Masmuu7a es sbee7a?"
+    },
+    "syn-ef64b98836e0": {
+      "canonicalArabizi": "7elo! Ana b7ibb el musi2a."
+    },
+    "syn-f0baae3824b5": {
+      "canonicalArabizi": "Wen bte7ebb nru7?"
+    },
+    "syn-f11eb4e6a3a7": {
+      "canonicalArabizi": "7elo! W ba3den?"
+    },
+    "syn-f12523bc5368": {
+      "canonicalArabizi": "Bte2dar ta3mel hek?"
+    },
+    "syn-f155c7142a61": {
+      "canonicalArabizi": "Eh, eza fi talej, leezem nruu7 na3mel ski."
+    },
+    "syn-f247f7f73317": {
+      "canonicalArabizi": "Eh, masmu7. Bas mamnu3 et tad5in."
+    },
+    "syn-f5475593e2bd": {
+      "canonicalArabizi": "B7ibb er riyada."
+    },
+    "syn-f54fb6fad9d0": {
+      "canonicalArabizi": "B7ibb es safar."
+    },
+    "syn-f69f5a6d5007": {
+      "canonicalArabizi": "Beshte8el doktor b mustashfa."
+    },
+    "syn-f7201a55665e": {
+      "canonicalArabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe."
+    },
+    "syn-f890162ef459": {
+      "canonicalArabizi": "Badde 3asiir berd2en."
+    },
+    "syn-f8c3f7e96290": {
+      "canonicalArabizi": "Eh, badde fostan lal 3eres."
+    },
+    "syn-f8c4dfb99ed9": {
+      "canonicalArabizi": "Shu 3emelt mbere7?"
+    },
+    "syn-fa54b463aca7": {
+      "canonicalArabizi": "Aklon tayyeb ktiir."
+    },
+    "syn-fb87f2fe9e57": {
+      "canonicalArabizi": "Eh law sama7et."
+    },
+    "syn-fc4266bc44d9": {
+      "canonicalArabizi": "Allo Ziad! Shu 3am ta3mel?"
+    },
+    "syn-fceca554f261": {
+      "canonicalArabizi": "Tameem! El ba7er huwe el makan el mofaddal 3ande."
+    }
   }
 }
