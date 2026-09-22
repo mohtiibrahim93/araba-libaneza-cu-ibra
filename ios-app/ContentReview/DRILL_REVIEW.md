@@ -565,25 +565,25 @@ Teacher A2-past notes:
 | --- | --- | --- | --- | --- |
 | syn-rule-9-0 | grammar-drill | Alege sensul lui sheft sa7be. | mi-am văzut prietenul | Teacher note: `Sheft sa7be.` can mean “mi-am văzut prietenul” when the referenced friend is male. Social interpretation depends on speaker and friend gender: for a male speaker, `sa7be` is normally understood as a male friend; for a female speaker, `sa7be` may commonly be understood as boyfriend. Conversely, `sa7ebte` for a male speaker may commonly be understood as girlfriend, while for a female speaker it is normally a female friend. Do not teach these as socially neutral across all speaker/friend gender combinations. |
 | syn-rule-9-1 | grammar-drill | Care cuvânt leagă următorul eveniment? | ba3dayn | Superseded spelling. Apply teacher rule: `ba3den`. |
-| syn-context-syn-979774a1f19c | dialogue-response | Alege replica pentru: „Am mers la mare.” | Re7t 3al ba7er. | |
-| syn-context-syn-af4cc414e93b | dialogue-response | Alege replica pentru: „Ce ai făcut în weekend? (masculin)” | Shu 3emelt bel weekend? | |
+| syn-context-syn-979774a1f19c | dialogue-response | Alege replica pentru: „Am mers la mare.” | Re7t 3al ba7er. | Clean existing form; preserved. |
+| syn-context-syn-af4cc414e93b | dialogue-response | Alege replica pentru: „Ce ai făcut în weekend? (masculin)” | Shu 3emelt bel weekend? | Clean existing form; preserved. |
 | syn-context-syn-4bf9ad383bee | dialogue-response | Alege replica pentru: „Am stat acasă.” | 2a3adt bel bayt. | Apply teacher house spelling: `2a3adt bel bet.` (`bayt` remains accepted). |
 | syn-context-syn-99f12673901d | dialogue-response | Alege replica pentru: „Am citit o carte și m-am uitat la un film.” | 2arayt kteb w tfarrajt 3a film. | Superseded. Teacher-approved: `2ret kteb w tfarrajet 3a filem.` |
 | syn-context-syn-21d54103c4b4 | dialogue-response | Alege replica pentru: „Apoi am mers la cinema.” | Ba3dayn re7na 3as sinema. | Superseded spelling: `Ba3den re7na 3as sinema.` |
 | syn-context-syn-f8c4dfb99ed9 | dialogue-response | Alege replica pentru: „ce ai făcut ieri?” | shu 3emelt embere7? | Apply established spelling: `Shu 3emelt mbere7?` |
-| syn-context-syn-43818ad2dfe6 | dialogue-response | Alege replica pentru: „am mers la restaurant” | re7t 3al mat3am | |
+| syn-context-syn-43818ad2dfe6 | dialogue-response | Alege replica pentru: „am mers la restaurant” | re7t 3al mat3am | Clean existing form; preserved. |
 | syn-context-syn-a50a2472f7c7 | dialogue-response | Alege replica pentru: „nu s-a întâmplat nimic” | ma sar she | Teacher-approved as written: `Ma sar she.` |
 | syn-context-syn-25afb8239c6a | dialogue-response | Alege replica pentru: „erau mulți oameni” | ken fi nes ktir | Superseded word order/lexical choice. Teacher-approved canonical: `Ken fi ktiir 3aalam.` Teacher also accepts an equivalent form with `nees`/people in this context. |
-| syn-context-syn-843d53e9af6f | dialogue-response | Alege replica pentru: „a fost o zi frumoasă” | ken yom 7elo | |
+| syn-context-syn-843d53e9af6f | dialogue-response | Alege replica pentru: „a fost o zi frumoasă” | ken yom 7elo | Clean existing form; preserved. |
 | syn-context-syn-5da1e48191e8 | dialogue-response | Alege replica pentru: „Salut Fadi! Ce ai făcut în weekend?” | Marhaba Fadi! Shu 3emelt bel weekend? | Apply established greeting spelling: `Mar7aba Fadi! Shu 3emelt bel weekend?` |
 | syn-context-syn-83ab4906ec93 | dialogue-response | Alege replica pentru: „Salut! Am mers la mare cu prietenii.” | Marhaba! Re7t 3al ba7er ma3 as7abe. | Apply established forms: `Mar7aba! Re7t 3al ba7er ma3 s7aabe.` (`as7aabe` remains accepted). |
-| syn-context-syn-2a6f5aea8bb0 | dialogue-response | Alege replica pentru: „Uau! A fost frumos?” | Wow! Ken 7elo? | |
-| syn-context-syn-1ae0ed713d37 | dialogue-response | Alege replica pentru: „Da, foarte! Vremea a fost minunată.” | Eh ktir! Ken el jaw ra2e3. | |
+| syn-context-syn-2a6f5aea8bb0 | dialogue-response | Alege replica pentru: „Uau! A fost frumos?” | Wow! Ken 7elo? | Clean existing form; preserved. |
+| syn-context-syn-1ae0ed713d37 | dialogue-response | Alege replica pentru: „Da, foarte! Vremea a fost minunată.” | Eh ktir! Ken el jaw ra2e3. | Clean existing form; preserved; `ktiir` spelling remains accepted. |
 | syn-context-syn-944c5743499a | dialogue-response | Alege replica pentru: „Ce ați făcut acolo?” | Shu 3meltu hunik? | Apply established location spelling: `Shu 3meltu huniik?`; `honiik` also accepted. |
 | syn-context-syn-ee94fc2d2880 | dialogue-response | Alege replica pentru: „Am înotat și ne-am jucat fotbal.” | Saba7na w li3ebna kora. | Superseded. Teacher-approved: `Sbe7na w l3ebna futbol.` |
 | syn-context-syn-f11eb4e6a3a7 | dialogue-response | Alege replica pentru: „Frumos! Și apoi?” | 7elo! W ba3dayn? | Superseded spelling: `7elo! W ba3den?` |
 | syn-context-syn-6b9cc945e444 | dialogue-response | Alege replica pentru: „Am mers la restaurant și am mâncat pește.” | Re7na 3a mat3am w akalna samak. | Teacher-approved: `Re7na 3a mat3am w akalna samak.` |
-| syn-context-syn-3954cf5cbd5c | dialogue-response | Alege replica pentru: „Mmm! A fost gustos?” | Yamm! Ken tayyeb? | |
+| syn-context-syn-3954cf5cbd5c | dialogue-response | Alege replica pentru: „Mmm! A fost gustos?” | Yamm! Ken tayyeb? | Clean existing form; preserved. |
 | syn-context-syn-5722dd3736f9 | dialogue-response | Alege replica pentru: „Foarte! Și tu ce ai făcut?” | Ktir! W ente shu 3melte? | Superseded opening. Teacher-approved to a woman: `7elo! W ente shu 3melte?` |
 | syn-context-syn-9d7e7d73b554 | dialogue-response | Alege replica pentru: „Eu am stat acasă.” | Ana 2a3adt bel bayt. | Apply teacher house spelling: `Ana 2a3adt bel bet.` (`bayt` remains accepted). |
 | syn-context-syn-171dc59264a0 | dialogue-response | Alege replica pentru: „De ce? Erai bolnavă?” | Laysh? Konte marida? | Apply teacher rule: standalone `Lesh?`, so `Lesh? Konte marida?` |
