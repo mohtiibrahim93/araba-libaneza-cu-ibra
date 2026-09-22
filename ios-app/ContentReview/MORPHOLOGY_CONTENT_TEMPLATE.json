@@ -1,0 +1,35 @@
+{
+  "formatVersion": 1,
+  "approvalStatus": "draft",
+  "_instructions": {
+    "productionFile": "APPROVED_MORPHOLOGY_CONTENT.json",
+    "approvalStatusRequired": "teacher-approved",
+    "rule": "Only teacher-approved Lebanese relationships tied to existing expression IDs. Do not infer from MSA/spelling.",
+    "rootFields": [
+      "id",
+      "arabiziRadicals",
+      "arabicRadicals"
+    ],
+    "patternFields": [
+      "id",
+      "kind",
+      "label",
+      "productivity"
+    ],
+    "morphologyLinkFields": [
+      "expressionID",
+      "rootID",
+      "patternID"
+    ],
+    "inflectionRelationFields": [
+      "sourceExpressionID",
+      "targetExpressionID",
+      "kind",
+      "patternID"
+    ]
+  },
+  "roots": [],
+  "morphologicalPatterns": [],
+  "morphologyLinks": [],
+  "inflectionRelations": []
+}
