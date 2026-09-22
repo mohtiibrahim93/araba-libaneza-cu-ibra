@@ -23,6 +23,10 @@ public enum ContentValidationError: Error, Equatable, Sendable {
     case missingAudioExpressionReference(audioAssetID: String, expressionID: String)
     case missingListeningAudioReference(promptID: String, audioAssetID: String)
     case missingListeningExpressionReference(promptID: String, expressionID: String)
+    case mismatchedListeningAudioExpression(promptID: String, audioExpressionID: String?, promptExpressionID: String)
+    case missingListeningChoiceExpressionReference(promptID: String, expressionID: String)
+    case invalidListeningChoiceCount(promptID: String, count: Int)
+    case duplicateListeningChoiceExpression(promptID: String, expressionID: String)
 }
 
 public struct ContentValidator: Sendable {
@@ -144,12 +148,13 @@ public struct ContentValidator: Sendable {
             }
         }
 
+        let audioByID = Dictionary(uniqueKeysWithValues: package.audioAssets.map { ($0.id, $0) })
         var listeningPromptIDs = Set<String>()
         for prompt in package.listeningPrompts {
             guard listeningPromptIDs.insert(prompt.id).inserted else {
                 throw ContentValidationError.duplicateListeningPromptID(prompt.id)
             }
-            guard audioAssetIDs.contains(prompt.audioAssetID) else {
+            guard let audio = audioByID[prompt.audioAssetID] else {
                 throw ContentValidationError.missingListeningAudioReference(
                     promptID: prompt.id,
                     audioAssetID: prompt.audioAssetID
@@ -159,6 +164,49 @@ public struct ContentValidator: Sendable {
                 throw ContentValidationError.missingListeningExpressionReference(
                     promptID: prompt.id,
                     expressionID: prompt.expressionID
+                )
+            }
+            guard audio.expressionID == prompt.expressionID else {
+                throw ContentValidationError.mismatchedListeningAudioExpression(
+                    promptID: prompt.id,
+                    audioExpressionID: audio.expressionID,
+                    promptExpressionID: prompt.expressionID
+                )
+            }
+
+            if prompt.mode == .multipleChoice {
+                guard (2...3).contains(prompt.choiceExpressionIDs.count) else {
+                    throw ContentValidationError.invalidListeningChoiceCount(
+                        promptID: prompt.id,
+                        count: prompt.choiceExpressionIDs.count
+                    )
+                }
+
+                var seenChoiceIDs = Set<String>()
+                for expressionID in prompt.choiceExpressionIDs {
+                    guard expressionID != prompt.expressionID else {
+                        throw ContentValidationError.duplicateListeningChoiceExpression(
+                            promptID: prompt.id,
+                            expressionID: expressionID
+                        )
+                    }
+                    guard seenChoiceIDs.insert(expressionID).inserted else {
+                        throw ContentValidationError.duplicateListeningChoiceExpression(
+                            promptID: prompt.id,
+                            expressionID: expressionID
+                        )
+                    }
+                    guard expressionIDs.contains(expressionID) else {
+                        throw ContentValidationError.missingListeningChoiceExpressionReference(
+                            promptID: prompt.id,
+                            expressionID: expressionID
+                        )
+                    }
+                }
+            } else if !prompt.choiceExpressionIDs.isEmpty {
+                throw ContentValidationError.invalidListeningChoiceCount(
+                    promptID: prompt.id,
+                    count: prompt.choiceExpressionIDs.count
                 )
             }
         }
