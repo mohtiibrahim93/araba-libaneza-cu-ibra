@@ -13,7 +13,7 @@
       "Unde locuiești?",
       "Cât e ceasul?"
     ],
-    "source": "s1"
+    "source": "cc45be2acb040"
   },
   {
     "id": "p2",
@@ -29,14 +29,14 @@
       "baddkon",
       "baddon"
     ],
-    "source": "s1"
+    "source": "c01a22caa2619"
   },
   {
     "id": "p3",
     "ordinal": 3,
     "internalBand": "a1",
     "prompt": {
-      "ro": "„Ma3e masare halla2” înseamnă:"
+      "ro": "„Ma3e masaare halla2” înseamnă:"
     },
     "answer": "Am bani la mine acum.",
     "variants": [],
@@ -45,7 +45,7 @@
       "Ai bani la tine acum.",
       "Nu am bani acum."
     ],
-    "source": "s2"
+    "source": "teacher-approved-a1"
   },
   {
     "id": "p4",
@@ -61,7 +61,7 @@
       "Miin",
       "Wen"
     ],
-    "source": "keys"
+    "source": "c1d861004aa11"
   },
   {
     "id": "p5",
@@ -75,7 +75,7 @@
       "badde may"
     ],
     "choices": [],
-    "source": "keys"
+    "source": "syn-eee8f2ac9ac4"
   },
   {
     "id": "p6",
@@ -91,7 +91,7 @@
       "mabsuut",
       "mabsuutiin"
     ],
-    "source": "keys"
+    "source": "c36df17284ba5"
   },
   {
     "id": "p7",
@@ -107,7 +107,7 @@
       "Badde teffe7a.",
       "Badde tlet teffe7eet."
     ],
-    "source": "march"
+    "source": "xd2d5fb4646c9"
   },
   {
     "id": "p8",
@@ -117,252 +117,258 @@
       "ro": "Scrie întrebarea „Unde?” în Arabizi."
     },
     "answer": "Wen?",
-    "variants": [
-      "wayn"
-    ],
+    "variants": [],
     "choices": [],
-    "source": "s1"
+    "source": "c4f8d65740f93"
   },
   {
     "id": "p9",
     "ordinal": 9,
     "internalBand": "a2",
     "prompt": {
-      "ro": "Completează: Mbere7 ___ badde eshrab mayy."
+      "ro": "„Shu 3emelt mbere7?” înseamnă:"
     },
-    "answer": "ken",
+    "answer": "Ce ai făcut ieri?",
     "variants": [],
     "choices": [
-      "ken",
-      "7a ykun",
-      "bukra"
+      "Ce ai făcut ieri?",
+      "Ce faci mâine?",
+      "Unde ai fost ieri?"
     ],
-    "source": "keys"
+    "source": "syn-f8c4dfb99ed9"
   },
   {
     "id": "p10",
     "ordinal": 10,
     "internalBand": "a2",
     "prompt": {
-      "ro": "„Ma fiyye it-taneen; fik it-taleta l-masa?” — ce propune vorbitorul?"
+      "ro": "Completează „Cred că”: B3te2ed ___."
     },
-    "answer": "Marți seara, fiindcă nu poate luni.",
+    "answer": "enno",
     "variants": [],
     "choices": [
-      "Marți seara, fiindcă nu poate luni.",
-      "Luni dimineața.",
-      "Marți dimineața, fiindcă luni este ocupat."
+      "enno",
+      "Law",
+      "Eza"
     ],
-    "source": "march"
+    "source": "syn-rule-11-0"
   },
   {
     "id": "p11",
     "ordinal": 11,
     "internalBand": "a2",
     "prompt": {
-      "ro": "„Tanjareton” este:"
+      "ro": "Alege „Nu pot să vin.”"
     },
-    "answer": "Oala lor.",
+    "answer": "Ma b2dar eje.",
     "variants": [],
     "choices": [
-      "Oala lor.",
-      "Oala noastră.",
-      "Oala ei."
+      "Ma b2dar eje.",
+      "Ma b2dar se3dak.",
+      "Ma leezem ru7."
     ],
-    "source": "keys"
+    "source": "teacher-approved-a2-modals"
   },
   {
     "id": "p12",
     "ordinal": 12,
     "internalBand": "a2",
     "prompt": {
-      "ro": "„Sab3a illa rebe3 l-masa” indică:"
+      "ro": "Ce cuvânt introduce o condiție reală / posibilă?"
     },
-    "answer": "18:45",
+    "answer": "Eza",
     "variants": [],
     "choices": [
-      "18:45",
-      "19:15",
-      "19:45"
+      "Eza",
+      "Law",
+      "Wen"
     ],
-    "source": "march"
+    "source": "c562610a5dfd5"
   },
   {
     "id": "p13",
     "ordinal": 13,
     "internalBand": "a2",
     "prompt": {
-      "ro": "DRS: scrie „noi am învățat”, cu pronumele ne7na."
+      "ro": "Ce cuvânt introduce o situație ipotetică / ireală?"
     },
-    "answer": "Ne7na darasna",
+    "answer": "Law",
     "variants": [],
-    "choices": [],
-    "source": "workbook"
+    "choices": [
+      "Law",
+      "Eza",
+      "Wen"
+    ],
+    "source": "c6bcfc897332e"
   },
   {
     "id": "p14",
     "ordinal": 14,
     "internalBand": "a2",
     "prompt": {
-      "ro": "Alege „Nu putem deschide ușa”."
+      "ro": "Completează: Es-sabe ___ 3am yedros huwwe 5ayye."
     },
-    "answer": "Ma fiina nefta7 l beeb.",
+    "answer": "yalle",
     "variants": [],
     "choices": [
-      "Ma fiina nefta7 l beeb.",
-      "Fiina nefta7 l beeb.",
-      "Ma fik tefta7 l beeb."
+      "yalle",
+      "Eza",
+      "Law"
     ],
-    "source": "keys"
+    "source": "q43"
   },
   {
     "id": "p15",
     "ordinal": 15,
     "internalBand": "a2",
     "prompt": {
-      "ro": "În „za3len la2inno fi talej barra”, la2inno introduce:"
+      "ro": "Ce formă verbală recunoști în „5arrab”?"
     },
-    "answer": "Motivul stării.",
+    "answer": "II",
     "variants": [],
     "choices": [
-      "Motivul stării.",
-      "O întrebare despre loc.",
-      "O alternativă."
+      "II",
+      "I",
+      "VII"
     ],
-    "source": "march"
+    "source": "q52"
   },
   {
     "id": "p16",
     "ordinal": 16,
     "internalBand": "a2",
     "prompt": {
-      "ro": "Scrie „mâine” în Arabizi."
+      "ro": "„Ma bye3jebne hal filem.” înseamnă:"
     },
-    "answer": "Bukra",
-    "variants": [
-      "bokra"
+    "answer": "Nu îmi place acest film.",
+    "variants": [],
+    "choices": [
+      "Nu îmi place acest film.",
+      "Îmi place acest film.",
+      "Nu pot vedea acest film."
     ],
-    "choices": [],
-    "source": "march"
+    "source": "syn-2da83ea30cd8"
   },
   {
     "id": "p17",
     "ordinal": 17,
     "internalBand": "b1",
     "prompt": {
-      "ro": "Ce cuvânt introduce de obicei o condiție posibilă?"
+      "ro": "„Addesh sarlak 3am teshte8el huniik?” înseamnă:"
     },
-    "answer": "Eza",
+    "answer": "De cât timp lucrezi acolo?",
     "variants": [],
     "choices": [
-      "Eza",
-      "Abel",
-      "Wara"
+      "De cât timp lucrezi acolo?",
+      "Unde lucrezi acum?",
+      "Când începi munca?"
     ],
-    "source": "s7"
+    "source": "syn-b070e7525663"
   },
   {
     "id": "p18",
     "ordinal": 18,
     "internalBand": "b1",
     "prompt": {
-      "ro": "Într-o situație ipotetică / ireală, alegi:"
+      "ro": "Scrie „Încă învăț.” în Arabizi."
     },
-    "answer": "Law",
-    "variants": [],
-    "choices": [
-      "Law",
-      "Wen",
-      "Miin"
+    "answer": "Ba3dne 3am bet3allam.",
+    "variants": [
+      "Lessa 3am bt3allam."
     ],
-    "source": "s7"
+    "choices": [],
+    "source": "syn-a1b3d6f86486"
   },
   {
     "id": "p19",
     "ordinal": 19,
     "internalBand": "b1",
     "prompt": {
-      "ro": "„Ra7 e23od b l-bayt latta erte7” — de ce rămâne acasă?"
+      "ro": "„Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.” înseamnă:"
     },
-    "answer": "Ca să se odihnească.",
+    "answer": "Dacă aș avea timp, aș merge la mare în fiecare weekend.",
     "variants": [],
     "choices": [
-      "Ca să se odihnească.",
-      "Ca să învețe.",
-      "Fiindcă este deja odihnit."
+      "Dacă aș avea timp, aș merge la mare în fiecare weekend.",
+      "Dacă am timp, merg la mare mâine.",
+      "Am avut timp și am mers la mare."
     ],
-    "source": "march"
+    "source": "syn-4a040b2aec92"
   },
   {
     "id": "p20",
     "ordinal": 20,
     "internalBand": "b1",
     "prompt": {
-      "ro": "„Jeyye 3a bele ekol samak” exprimă:"
+      "ro": "Alege „Cred că este mai bun decât muntele.”"
     },
-    "answer": "Pofta de a mânca pește.",
+    "answer": "B3te2ed enno a7san men el jabal.",
     "variants": [],
     "choices": [
-      "Pofta de a mânca pește.",
-      "Faptul că a mâncat deja pește.",
-      "Interdicția de a mânca pește."
+      "B3te2ed enno a7san men el jabal.",
+      "B7ebb el ba7er bass leezem eshte8el.",
+      "El jabal 7elo besh-shete."
     ],
-    "source": "march"
+    "source": "syn-4162e36eafea"
   },
   {
     "id": "p21",
     "ordinal": 21,
     "internalBand": "b1",
     "prompt": {
-      "ro": "Scrie „niciodată” în Arabizi."
+      "ro": "„Eza ma 2aadra, fiina nru7 ba3ed esbuu3.” înseamnă:"
     },
-    "answer": "Abadan",
+    "answer": "Dacă nu poți, putem merge peste o săptămână.",
     "variants": [],
-    "choices": [],
-    "source": "march"
+    "choices": [
+      "Dacă nu poți, putem merge peste o săptămână.",
+      "Dacă ai fi putut, am fi mers ieri.",
+      "Nu putem merge săptămâna viitoare."
+    ],
+    "source": "syn-9c0432d88058"
   },
   {
     "id": "p22",
     "ordinal": 22,
     "internalBand": "b1",
     "prompt": {
-      "ro": "Ce exprimă lezem?"
+      "ro": "„Faade ne7ke ed-dohor?” înseamnă:"
     },
-    "answer": "Necesitate / obligație.",
+    "answer": "Ești liber să vorbim la prânz?",
     "variants": [],
     "choices": [
-      "Necesitate / obligație.",
-      "O simplă alternativă.",
-      "Un loc îndepărtat."
+      "Ești liber să vorbim la prânz?",
+      "Mănânci la prânz?",
+      "Lucrezi până seara?"
     ],
-    "source": "guide"
+    "source": "syn-3878ee6591c3"
   },
   {
     "id": "p23",
     "ordinal": 23,
     "internalBand": "b1",
     "prompt": {
-      "ro": "Alege sensul lui „3adatan”."
+      "ro": "Scrie „Unde ai vrea să mergem?” către un bărbat."
     },
-    "answer": "De obicei.",
+    "answer": "Wen bte7ebb nru7?",
     "variants": [],
-    "choices": [
-      "De obicei.",
-      "Imediat.",
-      "Niciodată."
-    ],
-    "source": "march"
+    "choices": [],
+    "source": "syn-f0baae3824b5"
   },
   {
     "id": "p24",
     "ordinal": 24,
     "internalBand": "b1",
     "prompt": {
-      "ro": "KTB: scrie „bibliotecă / librărie” în Arabizi."
+      "ro": "„Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.” înseamnă:"
     },
-    "answer": "Maktabe",
+    "answer": "Sunt aici de aproape cinci ani. Îmi place mult jobul.",
     "variants": [],
-    "choices": [],
-    "source": "workbook"
+    "choices": [
+      "Sunt aici de aproape cinci ani. Îmi place mult jobul.",
+      "Am lucrat aici cinci zile și plec.",
+      "Sunt nou aici și încă îmi caut de lucru."
+    ],
+    "source": "syn-6d3f1fdf6fa2"
   }
 ]
