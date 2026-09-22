@@ -676,33 +676,34 @@ Teacher A2-modals rules:
 
 ## a2-connections — Condiții și legături între idei
 
-Content integrity finding:
-- q43–q61 are under-specified in the production bundle itself: prompts are only generic `Rezolvă provocarea.` / `Ce formă verbală recunoști?`, while the target sentence or verb is missing.
-- These rows are blocked as content defects, not linguistic approvals. They must be reconstructed/re-written before production linking.
+Source-context recovery:
+- q43–q61 lose their `context` field in the native production bundle, but the original read-only source still contains it.
+- Teacher-approved wording below is authoritative for reconstruction into the native content pipeline.
+- q52–q61 verb-form labels were independently checked against the recovered verbs and the stored I / II / V / VII labels are correct.
 
 
 | Drill ID | Type | Romanian prompt | Stored answer | Teacher decision / approved IDs |
 | --- | --- | --- | --- | --- |
-| q43 | grammar-drill | Rezolvă provocarea. | yalle  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q44 | grammar-drill | Rezolvă provocarea. | fără cuvânt  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q45 | grammar-drill | Rezolvă provocarea. | o  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q46 | grammar-drill | Rezolvă provocarea. | Eza  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q47 | grammar-drill | Rezolvă provocarea. | Law  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q48 | grammar-drill | Rezolvă provocarea. | Eza  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q49 | grammar-drill | Rezolvă provocarea. | 3a  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q50 | grammar-drill | Rezolvă provocarea. | 3and  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q51 | grammar-drill | Rezolvă provocarea. | 3a  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q52 | grammar-drill | Ce formă verbală recunoști? | II  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q53 | grammar-drill | Ce formă verbală recunoști? | V  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q54 | grammar-drill | Ce formă verbală recunoști? | VII  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q55 | grammar-drill | Ce formă verbală recunoști? | I  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q56 | grammar-drill | Ce formă verbală recunoști? | II  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q57 | grammar-drill | Ce formă verbală recunoști? | V  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q58 | grammar-drill | Ce formă verbală recunoști? | VII  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q59 | grammar-drill | Ce formă verbală recunoști? | II  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q60 | grammar-drill | Ce formă verbală recunoști? | V  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q61 | grammar-drill | Ce formă verbală recunoști? | I  Content defect: production bundle omits the sentence/verb/context required to determine this answer. Do not teacher-approve or ship as-is; reconstruct/rewrite the drill with the missing target context first. |
-| q76 | dialogue-response | „Dacă vrei, îți aduc apă.” Condiția este posibilă. | Eza betriid bjiblak may | |
+| q43 | grammar-drill | Rezolvă provocarea. | yalle | Approved: session-only. Reconstruct context as `Es-sabe yalle 3am yedros huwwe 5ayye.` Preferred neutral “boy”; `Esh-shab ...` is also valid but means more teenager/young man. |
+| q44 | grammar-drill | Rezolvă provocarea. | fără cuvânt | Approved: session-only. Reconstruct context as `Fi shab 3am yedros.` No `yalle` after the indefinite noun here. |
+| q45 | grammar-drill | Rezolvă provocarea. | o | Approved: session-only. Reconstruct context as `L-kteeb yalle 2riito.` |
+| q46 | grammar-drill | Rezolvă provocarea. | Eza | Approved: session-only. Reconstruct as `Eza baddak bsee3dak.` |
+| q47 | grammar-drill | Rezolvă provocarea. | Law | Approved: session-only. Reconstruct as `Law ken 3ande wa2et, kenet re7et ma3ak.` |
+| q48 | grammar-drill | Rezolvă provocarea. | Eza | Approved: session-only. Reconstruct as `Eza 5allaset she8lak, ta3a la 3anna.` |
+| q49 | grammar-drill | Rezolvă provocarea. | 3a | Approved: session-only. Reconstruct as `7ott el kteeb 3a t-tawle.` |
+| q50 | grammar-drill | Rezolvă provocarea. | 3and | Approved: session-only. Reconstruct as `Lezem ruu7 3and d-daktor.` |
+| q51 | grammar-drill | Rezolvă provocarea. | 3a | Approved: session-only. Reconstruct as `Ne7na ray7iin 3a Craiova.` |
+| q52 | grammar-drill | Ce formă verbală recunoști? | II | Approved: session-only. Recovered verb: `5arrab`; Form II label verified. |
+| q53 | grammar-drill | Ce formă verbală recunoști? | V | Approved: session-only. Recovered verb: `t5arraj`; Form V label verified. |
+| q54 | grammar-drill | Ce formă verbală recunoști? | VII | Approved: session-only. Recovered verb: `nkasar`; Form VII label verified. |
+| q55 | grammar-drill | Ce formă verbală recunoști? | I | Approved: session-only. Recovered verb: `2ata3`; Form I label verified. |
+| q56 | grammar-drill | Ce formă verbală recunoști? | II | Approved: session-only. Recovered verb: `sallam`; Form II label verified. |
+| q57 | grammar-drill | Ce formă verbală recunoști? | V | Approved: session-only. Recovered verb: `trawwa2`; Form V label verified. |
+| q58 | grammar-drill | Ce formă verbală recunoști? | VII | Approved: session-only. Recovered verb: `nfata7`; Form VII label verified. |
+| q59 | grammar-drill | Ce formă verbală recunoști? | II | Approved: session-only. Recovered verb: `zabbat`; Form II label verified. |
+| q60 | grammar-drill | Ce formă verbală recunoști? | V | Approved: session-only. Recovered verb: `tsharraf`; Form V label verified. |
+| q61 | grammar-drill | Ce formă verbală recunoști? | I | Approved: session-only. Recovered verb: `fata7`; Form I label verified. |
+| q76 | dialogue-response | „Dacă vrei, îți aduc apă.” Condiția este posibilă. | Eza baddak bjiblak mayy. | Approved teacher correction. `Eza betriid, jeble mayy.` means “Te rog / dacă vrei, adu-mi apă” and must not be used for this prompt. |
 | syn-rule-13-0 | grammar-drill | Ce condiție exprimă iza ma fi matar? | dacă nu plouă | |
 | syn-rule-13-1 | grammar-drill | Ce fel de idee exprimă law kont makanak? | o situație ipotetică: în locul tău | |
 | syn-context-syn-a55babccd65d | dialogue-response | Alege replica pentru: „Dacă vrei, mergem. (masculin)” | Iza baddak, mnru7. | |
