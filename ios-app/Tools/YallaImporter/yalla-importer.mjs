@@ -14,6 +14,9 @@ const DEFAULT_AUDIO_MANIFEST_PATH = fileURLToPath(
 const DEFAULT_AUDIO_RESOURCE_DIR = fileURLToPath(
   new URL('../../App/Resources', import.meta.url)
 );
+const DEFAULT_MORPHOLOGY_MANIFEST_PATH = fileURLToPath(
+  new URL('../../ContentReview/APPROVED_MORPHOLOGY_CONTENT.json', import.meta.url)
+);
 const APPROVED_AUDIO_SOURCES = new Set(['approvedNative', 'ibrahimRecorded']);
 const APPROVED_AUDIO_EXTENSIONS = new Set(['.m4a']);
 const LISTENING_MODES = new Set(['multipleChoice', 'freeWrite']);
@@ -517,6 +520,172 @@ export function loadApprovedAudioContent(audioManifestPath = DEFAULT_AUDIO_MANIF
   return parsed;
 }
 
+export function applyApprovedMorphologyContent(contentPackage, morphologyDocument = {}) {
+  const roots = Array.isArray(morphologyDocument.roots) ? morphologyDocument.roots : [];
+  const morphologicalPatterns = Array.isArray(morphologyDocument.morphologicalPatterns)
+    ? morphologyDocument.morphologicalPatterns
+    : [];
+  const morphologyLinks = Array.isArray(morphologyDocument.morphologyLinks)
+    ? morphologyDocument.morphologyLinks
+    : [];
+  const inflectionRelations = Array.isArray(morphologyDocument.inflectionRelations)
+    ? morphologyDocument.inflectionRelations
+    : [];
+
+  if (
+    roots.length === 0 &&
+    morphologicalPatterns.length === 0 &&
+    morphologyLinks.length === 0 &&
+    inflectionRelations.length === 0
+  ) {
+    return contentPackage;
+  }
+
+  const expressionsByID = new Map(
+    contentPackage.expressions.map((expression) => [expression.id, expression])
+  );
+  const rootIDs = new Set();
+  for (const root of roots) {
+    const id = String(root.id ?? '').trim();
+    const radicals = Array.isArray(root.arabiziRadicals)
+      ? root.arabiziRadicals.map((value) => String(value).trim()).filter(Boolean)
+      : [];
+    if (!id) throw new Error('Approved morphology root is missing an id.');
+    if (rootIDs.has(id)) throw new Error('Duplicate approved root id "' + id + '".');
+    if (radicals.length < 2 || radicals.length > 4) {
+      throw new Error(
+        'Approved root "' + id + '" must contain 2-4 explicit Arabizi radicals.'
+      );
+    }
+    rootIDs.add(id);
+  }
+
+  const allowedPatternKinds = new Set([
+    'verbStem', 'verbalNoun', 'participle', 'agentNoun', 'placeNoun',
+    'adjective', 'noun', 'plural', 'other'
+  ]);
+  const allowedProductivity = new Set(['productive', 'limited', 'lexicalized']);
+  const patternIDs = new Set();
+
+  for (const pattern of morphologicalPatterns) {
+    const id = String(pattern.id ?? '').trim();
+    const kind = String(pattern.kind ?? '').trim();
+    const productivity = String(pattern.productivity ?? '').trim();
+    if (!id) throw new Error('Approved morphology pattern is missing an id.');
+    if (patternIDs.has(id)) throw new Error('Duplicate approved morphology pattern id "' + id + '".');
+    if (!allowedPatternKinds.has(kind)) {
+      throw new Error('Approved morphology pattern "' + id + '" has unsupported kind "' + kind + '".');
+    }
+    if (!allowedProductivity.has(productivity)) {
+      throw new Error(
+        'Approved morphology pattern "' + id +
+        '" has unsupported productivity "' + productivity + '".'
+      );
+    }
+    if (!String(pattern.label ?? '').trim()) {
+      throw new Error('Approved morphology pattern "' + id + '" is missing a label.');
+    }
+    patternIDs.add(id);
+  }
+
+  const seenLinks = new Set();
+  for (const link of morphologyLinks) {
+    const expressionID = String(link.expressionID ?? '').trim();
+    const rootID = String(link.rootID ?? '').trim();
+    const patternID = link.patternID == null ? null : String(link.patternID).trim();
+
+    if (!expressionsByID.has(expressionID)) {
+      throw new Error(
+        'Approved morphology link references missing expression "' + expressionID + '".'
+      );
+    }
+    if (!rootIDs.has(rootID)) {
+      throw new Error('Approved morphology link references missing root "' + rootID + '".');
+    }
+    if (patternID && !patternIDs.has(patternID)) {
+      throw new Error(
+        'Approved morphology link references missing pattern "' + patternID + '".'
+      );
+    }
+
+    const key = expressionID + '|' + rootID + '|' + (patternID ?? '');
+    if (seenLinks.has(key)) {
+      throw new Error('Duplicate approved morphology link "' + key + '".');
+    }
+    seenLinks.add(key);
+  }
+
+  const allowedRelationKinds = new Set([
+    'plural', 'feminine', 'dual', 'conjugatedForm', 'derivedForm', 'other'
+  ]);
+  const seenRelations = new Set();
+
+  for (const relation of inflectionRelations) {
+    const sourceExpressionID = String(relation.sourceExpressionID ?? '').trim();
+    const targetExpressionID = String(relation.targetExpressionID ?? '').trim();
+    const kind = String(relation.kind ?? '').trim();
+    const patternID = relation.patternID == null ? null : String(relation.patternID).trim();
+
+    if (!expressionsByID.has(sourceExpressionID)) {
+      throw new Error(
+        'Approved inflection relation references missing source expression "' +
+        sourceExpressionID + '".'
+      );
+    }
+    if (!expressionsByID.has(targetExpressionID)) {
+      throw new Error(
+        'Approved inflection relation references missing target expression "' +
+        targetExpressionID + '".'
+      );
+    }
+    if (sourceExpressionID === targetExpressionID) {
+      throw new Error('Approved inflection relation cannot point an expression to itself.');
+    }
+    if (!allowedRelationKinds.has(kind)) {
+      throw new Error('Approved inflection relation uses unsupported kind "' + kind + '".');
+    }
+    if (patternID && !patternIDs.has(patternID)) {
+      throw new Error(
+        'Approved inflection relation references missing pattern "' + patternID + '".'
+      );
+    }
+
+    const key =
+      sourceExpressionID + '|' + targetExpressionID + '|' + kind + '|' + (patternID ?? '');
+    if (seenRelations.has(key)) {
+      throw new Error('Duplicate approved inflection relation "' + key + '".');
+    }
+    seenRelations.add(key);
+  }
+
+  return {
+    ...contentPackage,
+    roots,
+    morphologicalPatterns,
+    morphologyLinks,
+    inflectionRelations
+  };
+}
+
+export function loadApprovedMorphologyContent(
+  morphologyManifestPath = DEFAULT_MORPHOLOGY_MANIFEST_PATH
+) {
+  if (!morphologyManifestPath || !fs.existsSync(morphologyManifestPath)) return {};
+  const parsed = JSON.parse(fs.readFileSync(morphologyManifestPath, 'utf8'));
+  if (parsed.formatVersion !== 1) {
+    throw new Error(
+      'Unsupported approved morphology manifest format version "' +
+      parsed.formatVersion + '".'
+    );
+  }
+  if (parsed.approvalStatus !== 'teacher-approved') {
+    throw new Error(
+      'Production morphology manifest must have approvalStatus "teacher-approved".'
+    );
+  }
+  return parsed;
+}
+
 export function loadYallaFromDirectory(sourceDirectory, modules = DEFAULT_MODULES) {
   const sources = [];
   for (const moduleName of modules) {
@@ -544,7 +713,7 @@ function parseArgs(argv) {
 function runCLI() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.source || !args.output) {
-    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>] [--overrides <file>] [--audio-manifest <file>] [--audio-resources <directory>]');
+    throw new Error('Usage: node yalla-importer.mjs --source <public/yalla> --output <file> [--level-map <file>] [--content-version <version>] [--overrides <file>] [--audio-manifest <file>] [--audio-resources <directory>] [--morphology-manifest <file>]');
   }
 
   const levelMap = args['level-map']
@@ -560,10 +729,14 @@ function runCLI() {
   const approvedAudio = loadApprovedAudioContent(
     args['audio-manifest'] ?? DEFAULT_AUDIO_MANIFEST_PATH
   );
-  const output = applyApprovedAudioContent(reviewed, approvedAudio, {
+  const audioIntegrated = applyApprovedAudioContent(reviewed, approvedAudio, {
     resourceDirectory: args['audio-resources'] ?? DEFAULT_AUDIO_RESOURCE_DIR,
     verifyFiles: true
   });
+  const approvedMorphology = loadApprovedMorphologyContent(
+    args['morphology-manifest'] ?? DEFAULT_MORPHOLOGY_MANIFEST_PATH
+  );
+  const output = applyApprovedMorphologyContent(audioIntegrated, approvedMorphology);
 
   const outputPath = path.resolve(args.output);
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
