@@ -48,7 +48,7 @@ export const Route = createFileRoute("/api/chat")({
         const result = streamText({
           model: lovable.responses("openai/gpt-6-astra"),
           system: ASK_SYSTEM_PROMPT,
-          messages: convertToModelMessages(messages as UIMessage[]),
+          messages: await convertToModelMessages(messages as UIMessage[]),
           abortSignal: request.signal,
           providerOptions: {
             openai: {
