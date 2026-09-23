@@ -113,10 +113,22 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2) return toast.error(c.errName);
-    if (!isValidEmail(email)) return toast.error(c.errEmail);
-    if (phone.trim() && !isValidPhone(phone)) return toast.error(c.errPhone);
-    if (message.trim().length < 5) return toast.error(c.errMessage);
+    if (name.trim().length < 2) {
+      toast.error(c.errName);
+      return;
+    }
+    if (!isValidEmail(email)) {
+      toast.error(c.errEmail);
+      return;
+    }
+    if (phone.trim() && !isValidPhone(phone)) {
+      toast.error(c.errPhone);
+      return;
+    }
+    if (message.trim().length < 5) {
+      toast.error(c.errMessage);
+      return;
+    }
     if (!gdpr) {
       setGdprError(c.errGdpr);
       return;
