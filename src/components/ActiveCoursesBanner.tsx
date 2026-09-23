@@ -9,7 +9,14 @@ const ActiveCoursesBanner = () => {
   const { t, lang } = useI18n();
   const { cohorts, loading } = useActiveCohorts();
 
-  if (loading || cohorts.length === 0) return null;
+  // Homepage shows only groups you can still join from day one. Already-
+  // running cohorts ("start 2 septembrie" in late September) read as stale
+  // to a first-time visitor; they are listed on /cursuri/grup instead,
+  // where someone comparing levels actually wants the full picture.
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const upcoming = cohorts.filter((c) => c.start_date > todayIso).slice(0, 3);
+
+  if (loading || upcoming.length === 0) return null;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -31,7 +38,7 @@ const ActiveCoursesBanner = () => {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cohorts.map((c) => {
+          {upcoming.map((c) => {
             const start = new Date(c.start_date + "T00:00:00");
             const days = Math.round((start.getTime() - today.getTime()) / dayMs);
             const started = days <= 0;

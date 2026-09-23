@@ -76,8 +76,10 @@ async function fetchActive(): Promise<Cohort[]> {
       const bRun = b.start_date <= today ? 0 : 1;
       if (aRun !== bRun) return aRun - bRun;
       return a.start_date.localeCompare(b.start_date);
-    })
-    .slice(0, 3);
+    });
+  // No slice here: the homepage banner keeps only upcoming cohorts, while the
+  // enrollment note on /cursuri/grup lists running ones too — each consumer
+  // trims the list to what its own copy promises.
 }
 
 /** Group cohorts that are running now or starting soon (homepage highlight). */
