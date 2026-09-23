@@ -43,6 +43,7 @@ import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TrialRouteImport } from './routes/trial'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminNotificationsRouteImport } from './routes/admin/notifications'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogAlfabetulArabPentruIncepatoriRouteImport } from './routes/blog/alfabetul-arab-pentru-incepatori'
 import { Route as BlogArabaLibanezaVsArabaStandardRouteImport } from './routes/blog/araba-libaneza-vs-araba-standard'
@@ -293,6 +294,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
   id: '/admin/notifications',
   path: '/admin/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -770,6 +776,7 @@ export interface FileRoutesByFullPath {
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
+  '/api/chat': typeof ApiChatRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -886,6 +893,7 @@ export interface FileRoutesByTo {
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
+  '/api/chat': typeof ApiChatRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1004,6 +1012,7 @@ export interface FileRoutesById {
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
+  '/api/chat': typeof ApiChatRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1123,6 +1132,7 @@ export interface FileRouteTypes {
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
+    | '/api/chat'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1239,6 +1249,7 @@ export interface FileRouteTypes {
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
+    | '/api/chat'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1356,6 +1367,7 @@ export interface FileRouteTypes {
     | '/thank-you'
     | '/trial'
     | '/admin/notifications'
+    | '/api/chat'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1474,6 +1486,7 @@ export interface RootRouteChildren {
   ThankYouRoute: typeof ThankYouRoute
   TrialRoute: typeof TrialRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
+  ApiChatRoute: typeof ApiChatRoute
   BlogAlfabetulArabPentruIncepatoriRoute: typeof BlogAlfabetulArabPentruIncepatoriRoute
   BlogArabaLibanezaVsArabaStandardRoute: typeof BlogArabaLibanezaVsArabaStandardRoute
   BlogArabaPentruCopiiGhidulParintilorRoute: typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1794,6 +1807,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/notifications'
       fullPath: '/admin/notifications'
       preLoaderRoute: typeof AdminNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -2412,6 +2432,7 @@ const rootRouteChildren: RootRouteChildren = {
   ThankYouRoute: ThankYouRoute,
   TrialRoute: TrialRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
+  ApiChatRoute: ApiChatRoute,
   BlogAlfabetulArabPentruIncepatoriRoute:
     BlogAlfabetulArabPentruIncepatoriRoute,
   BlogArabaLibanezaVsArabaStandardRoute: BlogArabaLibanezaVsArabaStandardRoute,
