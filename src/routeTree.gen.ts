@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CeArabaSaInvetiRouteImport } from './routes/ce-araba-sa-inveti'
 import { Route as CelMaiBunCursDeArabaRouteImport } from './routes/cel-mai-bun-curs-de-araba'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CursArabaCopiiRouteImport } from './routes/curs-araba-copii'
 import { Route as CursuriArabaRouteImport } from './routes/cursuri-araba'
 import { Route as CursuriArabaAdolescentiRouteImport } from './routes/cursuri-araba-adolescenti'
@@ -86,6 +87,7 @@ import { Route as EnArabicForTeenagersRouteImport } from './routes/en/arabic-for
 import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
 import { Route as EnBestArabicCourseRouteImport } from './routes/en/best-arabic-course'
 import { Route as EnBookingRouteImport } from './routes/en/booking'
+import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnFaqRouteImport } from './routes/en/faq'
 import { Route as EnFindYourPageRouteImport } from './routes/en.find-your-page'
 import { Route as EnHowToLearnLebaneseArabicRouteImport } from './routes/en/how-to-learn-lebanese-arabic'
@@ -174,6 +176,11 @@ const CelMaiBunCursDeArabaRoute = CelMaiBunCursDeArabaRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CursArabaCopiiRoute = CursArabaCopiiRouteImport.update({
@@ -534,6 +541,11 @@ const EnBookingRoute = EnBookingRouteImport.update({
   path: '/en/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnContactRoute = EnContactRouteImport.update({
+  id: '/en/contact',
+  path: '/en/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnFaqRoute = EnFaqRouteImport.update({
   id: '/en/faq',
   path: '/en/faq',
@@ -753,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -815,6 +828,7 @@ export interface FileRoutesByFullPath {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -871,6 +885,7 @@ export interface FileRoutesByTo {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -932,6 +947,7 @@ export interface FileRoutesByTo {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -989,6 +1005,7 @@ export interface FileRoutesById {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -1051,6 +1068,7 @@ export interface FileRoutesById {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -1109,6 +1127,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1171,6 +1190,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1227,6 +1247,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1288,6 +1309,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1344,6 +1366,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1406,6 +1429,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1463,6 +1487,7 @@ export interface RootRouteChildren {
   CeArabaSaInvetiRoute: typeof CeArabaSaInvetiRoute
   CelMaiBunCursDeArabaRoute: typeof CelMaiBunCursDeArabaRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
   CursArabaCopiiRoute: typeof CursArabaCopiiRoute
   CursuriArabaRoute: typeof CursuriArabaRoute
   CursuriArabaAdolescentiRoute: typeof CursuriArabaAdolescentiRoute
@@ -1525,6 +1550,7 @@ export interface RootRouteChildren {
   EnArabicTutorRoute: typeof EnArabicTutorRoute
   EnBestArabicCourseRoute: typeof EnBestArabicCourseRoute
   EnBookingRoute: typeof EnBookingRoute
+  EnContactRoute: typeof EnContactRoute
   EnFaqRoute: typeof EnFaqRoute
   EnFindYourPageRoute: typeof EnFindYourPageRoute
   EnHowToLearnLebaneseArabicRoute: typeof EnHowToLearnLebaneseArabicRoute
@@ -1639,6 +1665,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/curs-araba-copii': {
@@ -2110,6 +2143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnBookingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/contact': {
+      id: '/en/contact'
+      path: '/en/contact'
+      fullPath: '/en/contact'
+      preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/faq': {
       id: '/en/faq'
       path: '/en/faq'
@@ -2409,6 +2449,7 @@ const rootRouteChildren: RootRouteChildren = {
   CeArabaSaInvetiRoute: CeArabaSaInvetiRoute,
   CelMaiBunCursDeArabaRoute: CelMaiBunCursDeArabaRoute,
   CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
   CursArabaCopiiRoute: CursArabaCopiiRoute,
   CursuriArabaRoute: CursuriArabaRoute,
   CursuriArabaAdolescentiRoute: CursuriArabaAdolescentiRoute,
@@ -2479,6 +2520,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnArabicTutorRoute: EnArabicTutorRoute,
   EnBestArabicCourseRoute: EnBestArabicCourseRoute,
   EnBookingRoute: EnBookingRoute,
+  EnContactRoute: EnContactRoute,
   EnFaqRoute: EnFaqRoute,
   EnFindYourPageRoute: EnFindYourPageRoute,
   EnHowToLearnLebaneseArabicRoute: EnHowToLearnLebaneseArabicRoute,

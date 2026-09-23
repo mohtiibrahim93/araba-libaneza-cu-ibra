@@ -426,6 +426,42 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          handled_at: string | null
+          id: string
+          language: string
+          message: string
+          name: string
+          phone: string | null
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          handled_at?: string | null
+          id?: string
+          language?: string
+          message: string
+          name: string
+          phone?: string | null
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          handled_at?: string | null
+          id?: string
+          language?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       course_requests: {
         Row: {
           created_at: string
