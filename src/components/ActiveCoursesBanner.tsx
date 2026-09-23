@@ -38,7 +38,7 @@ const ActiveCoursesBanner = () => {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cohorts.map((c) => {
+          {upcoming.map((c) => {
             const start = new Date(c.start_date + "T00:00:00");
             const days = Math.round((start.getTime() - today.getTime()) / dayMs);
             const started = days <= 0;
