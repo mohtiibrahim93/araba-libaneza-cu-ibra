@@ -18,6 +18,7 @@ import { useLocation } from "@/lib/router-compat";
 import { initContactClickTracking } from "@/lib/tracking";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import NotFound from "@/pages/NotFound";
+import AskAssistant from "@/components/AskAssistant";
 import appCss from "../styles.css?url";
 
 const ADOPT_WEBSITE_CODE = "1771d601-0d76-4374-9255-347fecce75e3";
@@ -257,6 +258,7 @@ function RootComponent() {
             <RouteAnalytics />
             <LanguageFromPath />
             <Outlet />
+            <AskAssistant />
           </I18nProvider>
         </TooltipProvider>
       </QueryClientProvider>
