@@ -95,13 +95,23 @@ export function useGroupCohorts(
   useEffect(() => {
     let active = true;
     const load = async () => {
-      const data = await fetchCohorts(formType, level ?? null, format ?? null, teachingLanguage ?? null);
+      // An unreachable backend rejects rather than returning an error object;
+      // treat it as "no cohorts" so the form shows its waiting message.
+      const data = await fetchCohorts(
+        formType,
+        level ?? null,
+        format ?? null,
+        teachingLanguage ?? null,
+      ).catch((err) => {
+        console.error("[useGroupCohorts] unreachable backend", err);
+        return [] as Cohort[];
+      });
       if (active) {
         setCohorts(data);
         setLoading(false);
       }
     };
-    load();
+    void load();
 
     const channel = supabase
       .channel(`cohort-updates-${Math.random().toString(36).slice(2)}`)

@@ -54,13 +54,18 @@ export function useKidsSlots() {
   useEffect(() => {
     let active = true;
     const load = async () => {
-      const data = await fetchSlots();
+      // Unreachable backend → no slots, so the picker shows its empty state
+      // instead of spinning.
+      const data = await fetchSlots().catch((err) => {
+        console.error("[useKidsSlots] unreachable backend", err);
+        return [] as KidsSlot[];
+      });
       if (active) {
         setSlots(data);
         setLoading(false);
       }
     };
-    load();
+    void load();
 
     const channel = supabase
       .channel(`kids-slot-updates-${Math.random().toString(36).slice(2)}`)
