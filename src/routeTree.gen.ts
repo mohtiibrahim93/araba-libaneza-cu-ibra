@@ -87,6 +87,7 @@ import { Route as EnArabicForTeenagersRouteImport } from './routes/en/arabic-for
 import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
 import { Route as EnBestArabicCourseRouteImport } from './routes/en/best-arabic-course'
 import { Route as EnBookingRouteImport } from './routes/en/booking'
+import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnFaqRouteImport } from './routes/en/faq'
 import { Route as EnFindYourPageRouteImport } from './routes/en.find-your-page'
 import { Route as EnHowToLearnLebaneseArabicRouteImport } from './routes/en/how-to-learn-lebanese-arabic'
@@ -540,6 +541,11 @@ const EnBookingRoute = EnBookingRouteImport.update({
   path: '/en/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnContactRoute = EnContactRouteImport.update({
+  id: '/en/contact',
+  path: '/en/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnFaqRoute = EnFaqRouteImport.update({
   id: '/en/faq',
   path: '/en/faq',
@@ -822,6 +828,7 @@ export interface FileRoutesByFullPath {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -940,6 +947,7 @@ export interface FileRoutesByTo {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -1060,6 +1068,7 @@ export interface FileRoutesById {
   '/en/arabic-tutor': typeof EnArabicTutorRoute
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
+  '/en/contact': typeof EnContactRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -1181,6 +1190,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1299,6 +1309,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1418,6 +1429,7 @@ export interface FileRouteTypes {
     | '/en/arabic-tutor'
     | '/en/best-arabic-course'
     | '/en/booking'
+    | '/en/contact'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1538,6 +1550,7 @@ export interface RootRouteChildren {
   EnArabicTutorRoute: typeof EnArabicTutorRoute
   EnBestArabicCourseRoute: typeof EnBestArabicCourseRoute
   EnBookingRoute: typeof EnBookingRoute
+  EnContactRoute: typeof EnContactRoute
   EnFaqRoute: typeof EnFaqRoute
   EnFindYourPageRoute: typeof EnFindYourPageRoute
   EnHowToLearnLebaneseArabicRoute: typeof EnHowToLearnLebaneseArabicRoute
@@ -2130,6 +2143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnBookingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/contact': {
+      id: '/en/contact'
+      path: '/en/contact'
+      fullPath: '/en/contact'
+      preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/faq': {
       id: '/en/faq'
       path: '/en/faq'
@@ -2500,6 +2520,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnArabicTutorRoute: EnArabicTutorRoute,
   EnBestArabicCourseRoute: EnBestArabicCourseRoute,
   EnBookingRoute: EnBookingRoute,
+  EnContactRoute: EnContactRoute,
   EnFaqRoute: EnFaqRoute,
   EnFindYourPageRoute: EnFindYourPageRoute,
   EnHowToLearnLebaneseArabicRoute: EnHowToLearnLebaneseArabicRoute,

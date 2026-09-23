@@ -57,6 +57,10 @@ const STATIC_ROUTES: SeoRoute[] = [
   // recommendations, but a 404 has no URL anyone can link to — this does.
   { path: "/te-ajutam", title: "Te ajutăm să găsești pagina potrivită | Arabă libaneză", description: "Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc." },
   { path: "/en/find-your-page", title: "Find the right page | Lebanese Arabic with Ibra", description: "Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.", lang: "en" },
+  // Contact: a written message form next to the WhatsApp/email/address details,
+  // for visitors who would rather not start on a phone number.
+  { path: "/contact", title: "Contact — Arabă libaneză cu Ibra | București", description: "Scrie-ne despre cursurile de arabă libaneză: orare, niveluri, grupe pentru copii. Formular, WhatsApp, email și adresa centrului din București." },
+  { path: "/en/contact", title: "Contact — Lebanese Arabic with Ibra | Bucharest", description: "Message us about Lebanese Arabic courses: schedules, levels, children's groups. Contact form, WhatsApp, email and our Bucharest address.", lang: "en" },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
