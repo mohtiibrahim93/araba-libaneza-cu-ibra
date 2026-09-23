@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CeArabaSaInvetiRouteImport } from './routes/ce-araba-sa-inveti'
 import { Route as CelMaiBunCursDeArabaRouteImport } from './routes/cel-mai-bun-curs-de-araba'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CursArabaCopiiRouteImport } from './routes/curs-araba-copii'
 import { Route as CursuriArabaRouteImport } from './routes/cursuri-araba'
 import { Route as CursuriArabaAdolescentiRouteImport } from './routes/cursuri-araba-adolescenti'
@@ -174,6 +175,11 @@ const CelMaiBunCursDeArabaRoute = CelMaiBunCursDeArabaRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CursArabaCopiiRoute = CursArabaCopiiRouteImport.update({
@@ -753,6 +759,7 @@ export interface FileRoutesByFullPath {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -871,6 +878,7 @@ export interface FileRoutesByTo {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -989,6 +997,7 @@ export interface FileRoutesById {
   '/ce-araba-sa-inveti': typeof CeArabaSaInvetiRoute
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -1109,6 +1118,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1227,6 +1237,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1344,6 +1355,7 @@ export interface FileRouteTypes {
     | '/ce-araba-sa-inveti'
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
+    | '/contact'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1463,6 +1475,7 @@ export interface RootRouteChildren {
   CeArabaSaInvetiRoute: typeof CeArabaSaInvetiRoute
   CelMaiBunCursDeArabaRoute: typeof CelMaiBunCursDeArabaRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
   CursArabaCopiiRoute: typeof CursArabaCopiiRoute
   CursuriArabaRoute: typeof CursuriArabaRoute
   CursuriArabaAdolescentiRoute: typeof CursuriArabaAdolescentiRoute
@@ -1639,6 +1652,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/curs-araba-copii': {
@@ -2409,6 +2429,7 @@ const rootRouteChildren: RootRouteChildren = {
   CeArabaSaInvetiRoute: CeArabaSaInvetiRoute,
   CelMaiBunCursDeArabaRoute: CelMaiBunCursDeArabaRoute,
   CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
   CursArabaCopiiRoute: CursArabaCopiiRoute,
   CursuriArabaRoute: CursuriArabaRoute,
   CursuriArabaAdolescentiRoute: CursuriArabaAdolescentiRoute,
