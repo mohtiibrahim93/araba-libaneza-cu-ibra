@@ -79,13 +79,18 @@ export function useGroupCapacities() {
   useEffect(() => {
     let active = true;
     const load = async () => {
-      const result = await fetchAll();
+      // Unreachable backend → no capacity rows, which the `get` helpers below
+      // already read as "seat counters unknown" (they return null).
+      const result = await fetchAll().catch((err) => {
+        console.error("[useGroupCapacities] unreachable backend", err);
+        return {} as Record<string, CapacityRow>;
+      });
       if (active) {
         setData(result);
         setLoading(false);
       }
     };
-    load();
+    void load();
 
     const channel = supabase
       .channel(`capacity-updates-${Math.random().toString(36).slice(2)}`)

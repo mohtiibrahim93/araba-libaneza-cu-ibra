@@ -66,12 +66,19 @@ export function useCourses(filters: CourseFilters) {
   useEffect(() => {
     let active = true;
     setLoading(true);
-    fetchCourses(filters).then((d) => {
-      if (active) {
-        setCourses(d);
-        setLoading(false);
-      }
-    });
+    fetchCourses(filters)
+      // An unreachable backend rejects; without this the list stays on its
+      // skeleton for ever instead of showing the "no courses yet" copy.
+      .catch((err) => {
+        console.error("[useCourses] unreachable backend", err);
+        return [] as Course[];
+      })
+      .then((d) => {
+        if (active) {
+          setCourses(d);
+          setLoading(false);
+        }
+      });
     return () => {
       active = false;
     };
@@ -112,7 +119,15 @@ export function useCourseBySlug(slug: string | undefined) {
       const row = rows && rows[0];
       setCourse(row ? withSeats([row as Row], counts)[0] ?? null : null);
       setLoading(false);
-    })();
+    })().catch((err) => {
+      // Unreachable backend: fall through to the page's not-found/fallback
+      // rendering instead of spinning for ever.
+      console.error("[useCourseBySlug] unreachable backend", err);
+      if (active) {
+        setCourse(null);
+        setLoading(false);
+      }
+    });
     return () => {
       active = false;
     };

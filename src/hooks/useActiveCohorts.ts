@@ -28,6 +28,10 @@ async function fetchActive(): Promise<Cohort[]> {
   const to = new Date(now);
   to.setDate(to.getDate() + FUTURE_WINDOW_DAYS);
 
+  // A query error is handled below; an unreachable backend REJECTS instead
+  // (DNS failure while the database is paused), which used to leave the
+  // section stuck on `loading` forever. Treat both as "no cohorts" so the
+  // evergreen copy renders.
   const [{ data, error }, { data: counts }] = await Promise.all([
     supabase
       .from("group_cohorts")
@@ -83,12 +87,17 @@ export function useActiveCohorts() {
 
   useEffect(() => {
     let active = true;
-    fetchActive().then((d) => {
-      if (active) {
-        setCohorts(d);
-        setLoading(false);
-      }
-    });
+    fetchActive()
+      .catch((err) => {
+        console.error("[useActiveCohorts] unreachable backend", err);
+        return [] as Cohort[];
+      })
+      .then((d) => {
+        if (active) {
+          setCohorts(d);
+          setLoading(false);
+        }
+      });
     return () => {
       active = false;
     };
