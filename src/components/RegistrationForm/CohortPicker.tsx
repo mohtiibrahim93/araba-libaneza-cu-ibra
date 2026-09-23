@@ -154,7 +154,7 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                   <Calendar className="w-3.5 h-3.5" />
-                  {t.cohortStartsOn}
+                  {c.start_date <= new Date().toLocaleDateString("sv-SE") ? t.cohortStartedOn : t.cohortStartsOn}
                 </div>
                 <span className={cn("inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium", badge.tone)}>
                   {badge.label}

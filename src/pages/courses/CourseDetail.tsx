@@ -80,7 +80,7 @@ const CourseDetail = () => {
   const facts: { icon: typeof CalendarDays; label: string; value: string | null }[] = [
     { icon: c.format === "online" ? Wifi : MapPin, label: lang === "en" ? "Format" : "Format", value: c.format ? MODALITY_LABELS[c.format][lang === "en" ? "en" : "ro"] : null },
     { icon: GraduationCap, label: lang === "en" ? "Level" : "Nivel", value: c.level ? c.level.toUpperCase() : null },
-    { icon: CalendarDays, label: lang === "en" ? "Starts" : "Începe", value: fmtDate(c.start_date, lang) },
+    { icon: CalendarDays, label: c.start_date <= new Date().toLocaleDateString("sv-SE") ? (lang === "en" ? "Started on" : "A început pe") : (lang === "en" ? "Starts" : "Începe"), value: fmtDate(c.start_date, lang) },
     { icon: CalendarDays, label: lang === "en" ? "Ends" : "Se termină", value: fmtDate(c.end_date, lang) },
     { icon: Clock, label: lang === "en" ? "Schedule" : "Program", value: lang === "en" ? c.schedule_label_en : c.schedule_label_ro },
     { icon: Clock, label: lang === "en" ? "Sessions" : "Ședințe", value: sessionN ? `${sessionN}${hoursN ? ` · ${hoursN}h` : ""}` : null },
