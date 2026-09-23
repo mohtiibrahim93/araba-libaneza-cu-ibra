@@ -61,7 +61,10 @@ const ShimmerComponent = ({
           "--spread": `${dynamicSpread}px`,
           backgroundImage:
             "var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))",
-        } as CSSProperties
+          // This project runs exactly-optional property types, which motion's
+          // stricter style type rejects for a plain CSSProperties object.
+        } as CSSProperties as never
+
       }
       transition={{
         duration,
