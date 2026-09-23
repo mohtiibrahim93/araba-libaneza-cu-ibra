@@ -75,7 +75,9 @@ const CourseCard = ({ course }: { course: Course }) => {
         )}
         <li className="flex items-center gap-2">
           <CalendarDays className="h-4 w-4 text-primary" />
-          {lang === "en" ? "Starts" : "Începe"} {fmtDate(course.start_date, lang)}
+          {course.start_date <= new Date().toLocaleDateString("sv-SE")
+            ? (lang === "en" ? "Started on" : "A început pe")
+            : (lang === "en" ? "Starts" : "Începe")} {fmtDate(course.start_date, lang)}
         </li>
         {schedule && (
           <li className="flex items-center gap-2">
