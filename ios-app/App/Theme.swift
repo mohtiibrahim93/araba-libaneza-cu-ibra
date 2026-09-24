@@ -18,6 +18,8 @@ enum Theme {
     // MARK: Brand
     /// Deep cedar, used for headers and hero cards.
     static let deep = Color(light: 0x1F4A34, dark: 0x1B3A2A)
+    /// Wordmark and emblem: deep cedar on cream, light sage on dark.
+    static let brand = Color(light: 0x1F4A34, dark: 0xA8D5B5)
     /// Cedar green: primary actions, progress and selection.
     static let teal = Color(light: 0x2D6A4A, dark: 0x74B893)
     static let tealShade = Color(light: 0x1F4E36, dark: 0x4F8F6C)
@@ -384,13 +386,13 @@ struct BrandHeader: View {
     var body: some View {
         HStack(spacing: 12) {
             CedarShape()
-                .fill(Theme.deep)
+                .fill(Theme.brand)
                 .frame(width: 40, height: 38)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
                 Text("Araba libaneză")
                     .font(Theme.serif(.title2))
-                    .foregroundStyle(Theme.deep)
+                    .foregroundStyle(Theme.brand)
                 Text(tagline)
                     .font(Theme.font(.caption))
                     .foregroundStyle(Theme.muted)

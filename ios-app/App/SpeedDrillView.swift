@@ -77,6 +77,7 @@ struct SpeedDrillView: View {
                 }
             }
         }
+        .creamList()
         .navigationTitle("Yalla! Două minute")
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: scenePhase) { _, phase in

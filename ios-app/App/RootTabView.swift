@@ -471,16 +471,27 @@ private struct PracticeView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List(modes) { mode in
-                if destination(for: mode) != nil {
-                    NavigationLink(value: mode.id) {
-                        PracticeModeRow(mode: mode, isNavigable: true)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Alege cum vrei să exersezi azi.")
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(Theme.muted)
+                    ForEach(modes) { mode in
+                        if destination(for: mode) != nil {
+                            NavigationLink(value: mode.id) {
+                                PracticeModeRow(mode: mode, isNavigable: true)
+                            }
+                            .buttonStyle(NodeButtonStyle())
+                            .accessibilityIdentifier("practice.\(mode.id)")
+                        } else {
+                            PracticeModeRow(mode: mode, isNavigable: false)
+                        }
                     }
-                } else {
-                    PracticeModeRow(mode: mode, isNavigable: false)
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
             }
-            .creamList()
+            .background(Theme.canvas.ignoresSafeArea())
             .navigationTitle("Practică")
             .navigationDestination(for: String.self) { modeID in
                 if let mode = modes.first(where: { $0.id == modeID }),
@@ -519,32 +530,49 @@ private struct PracticeModeRow: View {
     let isNavigable: Bool
 
     var body: some View {
+        let style = Self.style(for: mode.id)
         HStack(spacing: 14) {
-            Image(systemName: symbol(for: mode.id))
-                .font(.title2)
-                .frame(width: 34)
+            Image(systemName: style.icon)
+                .font(.title2.weight(.semibold))
+                .foregroundStyle(isNavigable ? style.tint : Theme.muted)
+                .frame(width: 52, height: 52)
+                .background(isNavigable ? style.background : Theme.line.opacity(0.5), in: Circle())
             VStack(alignment: .leading, spacing: 4) {
                 Text(mode.title)
-                    .font(.headline)
+                    .font(Theme.serif(.title3))
+                    .foregroundStyle(isNavigable ? Theme.ink : Theme.muted)
                 Text(mode.subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(Theme.font(.subheadline))
+                    .foregroundStyle(Theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(isNavigable ? "Disponibil" : "În curând")
+                    .font(Theme.font(.caption, weight: .semibold))
+                    .foregroundStyle(isNavigable ? Theme.teal : Theme.terracotta)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(isNavigable ? Theme.mint : Theme.blush, in: Capsule())
+                    .padding(.top, 4)
             }
-            Spacer()
-            Text(isNavigable ? "Disponibil" : "În curând")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(isNavigable ? .primary : .secondary)
+            Spacer(minLength: 0)
+            if isNavigable {
+                Image(systemName: "chevron.right")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Theme.muted)
+            }
         }
-        .padding(.vertical, 5)
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardBackground()
+        .opacity(isNavigable ? 1 : 0.85)
     }
 
-    private func symbol(for id: String) -> String {
+    private static func style(for id: String) -> (icon: String, tint: Color, background: Color) {
         switch id {
-        case "smart-session": return "brain.head.profile"
-        case "speed-drill": return "timer"
-        case "listening": return "ear"
-        case "speaking": return "waveform.and.mic"
-        default: return "bolt"
+        case "smart-session": return ("sparkles", Theme.terracotta, Theme.blush)
+        case "speed-drill": return ("bolt.fill", Theme.goldShade, Theme.variantBackground)
+        case "listening": return ("headphones", Theme.teal, Theme.mint)
+        case "speaking": return ("mic.fill", Theme.terracotta, Theme.blush)
+        default: return ("bolt", Theme.teal, Theme.mint)
         }
     }
 }
@@ -777,6 +805,16 @@ private struct ProfileView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    ProfileHeader(
+                        rewards: RewardCalculator().summary(events: progress.xpEvents, at: Date()),
+                        lessons: progress.completedLessonIDs.count,
+                        saved: progress.savedExpressionIDs.count
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
+
                 if let persistenceError {
                     Section("Stocare locală") {
                         Label(
@@ -881,6 +919,68 @@ private struct ProfileView: View {
             .creamList()
             .navigationTitle("Eu")
         }
+    }
+}
+
+private struct ProfileHeader: View {
+    let rewards: RewardSummary
+    let lessons: Int
+    let saved: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 14) {
+                CedarShape()
+                    .fill(.white)
+                    .frame(width: 34, height: 32)
+                    .frame(width: 64, height: 64)
+                    .background(Theme.deep, in: Circle())
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Drumul meu")
+                        .font(Theme.serif(.title2))
+                        .foregroundStyle(Theme.ink)
+                    Label("\(RewardText.days(rewards.streakDays)) la rând", systemImage: "flame.fill")
+                        .font(Theme.font(.subheadline, weight: .semibold))
+                        .foregroundStyle(rewards.isActiveToday ? Theme.streak : Theme.muted)
+                }
+            }
+            HStack(spacing: 10) {
+                ProfileStat(value: "\(rewards.totalXP)", label: "puncte", icon: "star.fill", tint: Theme.terracotta)
+                ProfileStat(value: "\(lessons)", label: "lecții", icon: "book.fill", tint: Theme.teal)
+                ProfileStat(value: "\(saved)", label: "salvate", icon: "bookmark.fill", tint: Theme.goldShade)
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardBackground()
+        .padding(.vertical, 6)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct ProfileStat: View {
+    let value: String
+    let label: String
+    let icon: String
+    let tint: Color
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(tint)
+                .frame(width: 32, height: 32)
+                .background(tint.opacity(0.14), in: Circle())
+            VStack(alignment: .leading, spacing: 0) {
+                Text(value)
+                    .font(Theme.serif(.headline))
+                    .foregroundStyle(Theme.ink)
+                Text(label)
+                    .font(Theme.font(.caption2))
+                    .foregroundStyle(Theme.muted)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

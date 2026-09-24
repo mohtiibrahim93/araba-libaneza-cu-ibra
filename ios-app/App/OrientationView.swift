@@ -39,6 +39,7 @@ struct OrientationView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
+            .creamList()
             .navigationTitle("Orientare")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -164,11 +164,11 @@ private struct LevelHeader: View {
     var body: some View {
         HStack(alignment: .center, spacing: 14) {
             Text(level.rawValue.uppercased())
-                .font(Theme.font(.title, weight: .heavy))
+                .font(Theme.serif(.title, weight: .heavy))
                 .foregroundStyle(Theme.lime)
             VStack(alignment: .leading, spacing: 2) {
                 Text(subtitle)
-                    .font(Theme.font(.headline, weight: .bold))
+                    .font(Theme.serif(.headline))
                     .foregroundStyle(.white)
                 Text("\(completedUnits) din \(totalUnits) unități finalizate")
                     .font(Theme.font(.caption, weight: .semibold))
@@ -268,7 +268,7 @@ struct JourneyUnitDetailView: View {
                 .kerning(0.8)
                 .foregroundStyle(Theme.lime)
             Text(detail.title)
-                .font(Theme.font(.title2, weight: .heavy))
+                .font(Theme.serif(.title2))
                 .foregroundStyle(.white)
             Text(detail.description)
                 .font(Theme.font(.subheadline))

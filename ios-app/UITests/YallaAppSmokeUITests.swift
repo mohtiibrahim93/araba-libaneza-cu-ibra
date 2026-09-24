@@ -21,7 +21,11 @@ final class YallaAppSmokeUITests: XCTestCase {
 
         openTab("Practică")
         XCTAssertTrue(app.navigationBars["Practică"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.staticTexts["Yalla! Două minute"].exists)
+        XCTAssertTrue(
+            app.descendants(matching: .any)
+                .matching(NSPredicate(format: "label CONTAINS %@", "Yalla! Două minute"))
+                .firstMatch.waitForExistence(timeout: 5)
+        )
         XCTAssertTrue(app.staticTexts["În curând"].exists)
         capture("03-practice")
 
@@ -35,7 +39,9 @@ final class YallaAppSmokeUITests: XCTestCase {
 
         openTab("Eu")
         XCTAssertTrue(app.navigationBars["Eu"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.staticTexts["Progres local"].exists)
+        let localProgress = app.staticTexts["Progres local"]
+        if !localProgress.waitForExistence(timeout: 3) { app.swipeUp() }
+        XCTAssertTrue(localProgress.waitForExistence(timeout: 5))
         capture("05-profile")
     }
 

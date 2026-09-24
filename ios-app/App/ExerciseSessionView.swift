@@ -154,7 +154,7 @@ struct ExerciseSessionView: View {
                 .kerning(0.8)
                 .foregroundStyle(Theme.teal)
             Text(prompt(for: exercise))
-                .font(Theme.font(.title2, weight: .bold))
+                .font(Theme.serif(.title2))
                 .foregroundStyle(Theme.ink)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
@@ -734,7 +734,7 @@ private struct SessionSummaryView: View {
                     .accessibilityHidden(true)
 
                     Text("Sesiune terminată")
-                        .font(Theme.font(.largeTitle, weight: .heavy))
+                        .font(Theme.serif(.largeTitle))
                         .foregroundStyle(Theme.ink)
                         .multilineTextAlignment(.center)
                     Text("Ai parcurs toate exercițiile pregătite pentru această sesiune.")

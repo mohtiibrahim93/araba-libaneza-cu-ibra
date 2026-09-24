@@ -63,6 +63,7 @@ struct RecordingLibraryView: View {
                 .padding(.vertical, 4)
             }
         }
+        .creamList()
         .navigationTitle("Înregistrările mele")
         .task { reload() }
         .alert("Ștergi înregistrarea?", isPresented: $confirmingDeletion) {

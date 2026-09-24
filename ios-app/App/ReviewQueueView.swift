@@ -15,6 +15,7 @@ struct ReviewQueueView: View {
                 queueContent(at: context.date)
             }
             .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
+            .creamList()
             .navigationTitle("Recapitulări")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

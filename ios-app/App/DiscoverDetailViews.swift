@@ -202,6 +202,7 @@ struct DictionaryEntryDetailView: View {
                 }
             }
         }
+        .creamList()
         .navigationTitle(entry.arabizi)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -381,6 +382,7 @@ struct RootExplorerView: View {
             }
             .padding()
         }
+        .creamList()
         .navigationTitle(graph.centerLabel)
         .navigationBarTitleDisplayMode(.inline)
     }
