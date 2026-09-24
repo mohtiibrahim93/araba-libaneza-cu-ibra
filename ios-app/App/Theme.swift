@@ -22,6 +22,7 @@ enum Theme {
     static let lime = Color(light: 0xD8EC87, dark: 0xC5DC6E)
     static let gold = Color(light: 0xEDB95E, dark: 0xE9B458)
     static let goldShade = Color(light: 0xC8923A, dark: 0xB5832F)
+    static let streak = Color(light: 0xF2701E, dark: 0xFF8A3D)
 
     // MARK: Feedback
     static let success = teal
@@ -299,5 +300,37 @@ struct FlowLayout: Layout {
             x += size.width + spacing
             lineHeight = max(lineHeight, size.height)
         }
+    }
+}
+
+// MARK: - Rewards
+
+/// Streak flame and XP total, shown on Home and Journey.
+struct RewardBadges: View {
+    let summary: RewardSummary
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Label("\(summary.streakDays)", systemImage: "flame.fill")
+                .foregroundStyle(summary.isActiveToday ? Theme.streak : Theme.muted)
+                .accessibilityLabel("Serie: \(RewardText.days(summary.streakDays))")
+            Label("\(summary.totalXP)", systemImage: "bolt.fill")
+                .foregroundStyle(Theme.gold)
+                .accessibilityLabel("\(summary.totalXP) XP")
+        }
+        .font(Theme.font(.headline, weight: .heavy))
+        .labelStyle(.titleAndIcon)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("rewards.badges")
+    }
+}
+
+enum RewardText {
+    /// Romanian plural: 1 zi, 2–19 zile, 20+ "de zile" (and 100, 200…).
+    static func days(_ count: Int) -> String {
+        if count == 1 { return "1 zi" }
+        let lastTwo = count % 100
+        if count > 0 && (lastTwo == 0 || lastTwo >= 20) { return "\(count) de zile" }
+        return "\(count) zile"
     }
 }

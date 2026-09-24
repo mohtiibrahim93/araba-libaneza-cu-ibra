@@ -59,7 +59,8 @@ struct RootTabView: View {
                 onSpeedDrill: {
                     practicePath = ["speed-drill"]
                     selectedTab = .practice
-                }
+                },
+                rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: context.date)
             )
             }
             .tabItem { Label("Acasă", systemImage: "house") }
@@ -153,6 +154,7 @@ private struct HomeView: View {
     let onContinueJourney: () -> Void
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
+    let rewards: RewardSummary
 
     private var dueCount: Int {
         reviewQueue.dueNowCount
@@ -162,6 +164,7 @@ private struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    RewardBadges(summary: rewards)
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Continuă în libaneză")
                             .font(.largeTitle.bold())

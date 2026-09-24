@@ -20,6 +20,7 @@ struct ExerciseSessionView: View {
     @State private var hintVisible = false
     @State private var exerciseStartedAt = Date()
     @State private var persistedAttemptCount = 0
+    @State private var earnedXP = 0
     @FocusState private var answerFieldFocused: Bool
 
     init(
@@ -52,7 +53,11 @@ struct ExerciseSessionView: View {
         Group {
             if let player {
                 if player.isFinished {
-                    SessionSummaryView(state: player.sessionState)
+                    SessionSummaryView(
+                        state: player.sessionState,
+                        earnedXP: earnedXP,
+                        rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: Date())
+                    )
                 } else if let exercise = player.currentExercise {
                     exerciseBody(exercise: exercise, player: player)
                 } else {
@@ -541,6 +546,22 @@ struct ExerciseSessionView: View {
         }
     }
 
+    private func awardSessionXP(_ state: LearningSessionState) {
+        let amount = XPRewardPolicy().xp(for: state)
+        guard amount > 0 else { return }
+        let now = Date()
+        let event = XPEvent(
+            id: UUID().uuidString,
+            day: LearnerDay().key(for: now),
+            amount: amount,
+            occurredAt: now
+        )
+        earnedXP = amount
+        Task {
+            await progressModel.recordXP(event)
+        }
+    }
+
     private func useHint() {
         guard var player else { return }
         guard player.useHint() else { return }
@@ -560,6 +581,7 @@ struct ExerciseSessionView: View {
         exerciseStartedAt = Date()
         resetInput(for: player.currentExercise)
         if player.isFinished {
+            awardSessionXP(player.sessionState)
             onComplete?()
         }
     }
@@ -681,6 +703,8 @@ private struct FeedbackBanner: View {
 
 private struct SessionSummaryView: View {
     let state: LearningSessionState
+    let earnedXP: Int
+    let rewards: RewardSummary
     @Environment(\.dismiss) private var dismiss
     @State private var appeared = false
 
@@ -717,6 +741,28 @@ private struct SessionSummaryView: View {
                         .font(Theme.font(.body))
                         .foregroundStyle(Theme.muted)
                         .multilineTextAlignment(.center)
+
+                    if earnedXP > 0 {
+                        HStack(spacing: 10) {
+                            Label("+\(earnedXP) XP", systemImage: "bolt.fill")
+                                .foregroundStyle(Theme.goldShade)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 8)
+                                .background(Theme.gold.opacity(0.18), in: Capsule())
+                            if rewards.streakDays > 0 {
+                                Label("Serie: \(RewardText.days(rewards.streakDays))", systemImage: "flame.fill")
+                                    .foregroundStyle(Theme.streak)
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 8)
+                                    .background(Theme.streak.opacity(0.14), in: Capsule())
+                            }
+                        }
+                        .font(Theme.font(.headline, weight: .heavy))
+                        .scaleEffect(appeared ? 1 : 0.6)
+                        .opacity(appeared ? 1 : 0)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("summary.xp")
+                    }
                 }
                 .padding(.top, 12)
 

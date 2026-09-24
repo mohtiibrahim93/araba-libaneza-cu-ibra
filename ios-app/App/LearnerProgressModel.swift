@@ -43,6 +43,10 @@ final class LearnerProgressModel: ObservableObject {
         await perform(.lessonCompleted(lessonID))
     }
 
+    func recordXP(_ event: XPEvent) async {
+        await perform(.xp(event))
+    }
+
     func recordSpeedDrill(_ entry: SpeedDrillHistoryEntry) async {
         await perform(.speedDrill(entry))
     }

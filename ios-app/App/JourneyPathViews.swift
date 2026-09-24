@@ -39,6 +39,18 @@ struct JourneyPathView: View {
             }
             .background(Theme.canvas.ignoresSafeArea())
             .navigationTitle("Parcurs")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    TimelineView(.periodic(from: .now, by: 60)) { context in
+                        RewardBadges(
+                            summary: RewardCalculator().summary(
+                                events: progressModel.snapshot.xpEvents,
+                                at: context.date
+                            )
+                        )
+                    }
+                }
+            }
             .navigationDestination(for: String.self) { unitID in
                 if let detail = detail(for: unitID) {
                     JourneyUnitDetailView(

@@ -148,7 +148,7 @@ struct JourneyLessonTests {
         #expect(reloaded.currentJourneyUnitID == "u")
     }
 
-    @Test("Schema 5 progress migrates to schema 6 without losing learner data")
+    @Test("Schema 5 progress migrates to the current schema without losing learner data")
     func migratesFromSchemaFive() async throws {
         let legacyJSON = """
         {
@@ -169,7 +169,7 @@ struct JourneyLessonTests {
         let store = InMemoryLearnerProgressStore(snapshot: legacy)
         let migrated = try await LearnerProgressRepository(store: store).load()
 
-        #expect(migrated.schemaVersion == 6)
+        #expect(migrated.schemaVersion == LearnerProgressSchema.currentVersion)
         #expect(migrated.currentJourneyUnitID == "a1-welcome")
         #expect(migrated.savedExpressionIDs == ["saved"])
         #expect(migrated.activeMistakeExpressionIDs == ["expr"])
