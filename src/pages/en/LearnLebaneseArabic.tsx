@@ -74,7 +74,7 @@ const LearnLebaneseArabic = () => (
         </div>
         <div className="flex items-center gap-2 text-sm text-foreground/80">
           <ShieldCheck className="w-4 h-4 text-primary" />
-          <span><strong className="text-foreground">Free trial, no card</strong> — 30 minutes</span>
+          <span><strong className="text-foreground">Free trial, 0 LEI</strong> — 30 minutes</span>
         </div>
       </div>
     </div>
@@ -209,7 +209,7 @@ const LearnLebaneseArabic = () => (
 
     <h2>Start learning Lebanese Arabic today</h2>
     <p>
-      Book a free 30-minute trial lesson. No card required — just show up, chat, and see if the method fits you. Online worldwide or in person in Bucharest.
+      Book a free 30-minute trial lesson. Your card securely confirms the spot, but the trial remains 0 LEI. Join, chat, and see if the method fits you — online worldwide or in person in Bucharest.
     </p>
     <div className="flex flex-wrap gap-3 not-prose">
       <Link

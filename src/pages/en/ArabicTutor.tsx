@@ -65,7 +65,7 @@ const ArabicTutor = () => (
         { icon: Star, title: "5.0 rating", desc: "21+ verified reviews across Preply and independent students." },
         { icon: GraduationCap, title: "5+ years teaching", desc: "Adult learners across Europe, N. America and the Gulf." },
         { icon: Globe2, title: "Native Lebanese", desc: "Born and raised speaker — real Levantine, not textbook Arabic." },
-        { icon: ShieldCheck, title: "Free trial, no card", desc: "30 min, no obligation. Book a paid lesson only if it fits." },
+        { icon: ShieldCheck, title: "Free 30-min trial", desc: "Card confirmation secures the spot; the trial remains 0 LEI." },
       ].map(({ icon: Icon, title, desc }) => (
         <div key={title} className="rounded-xl border border-border bg-card p-4">
           <Icon className="w-4 h-4 text-primary mb-2" />
@@ -116,7 +116,7 @@ const ArabicTutor = () => (
     </ul>
 
     <p>
-      <Link to="/trial">Book the free trial</Link> — 30 minutes, no card, no obligation. If it
+      <Link to="/trial">Book the free trial</Link> — 30 minutes, 0 LEI, no obligation. If it
       clicks, we schedule your first paid lesson before you leave the call.
     </p>
   </EnLandingLayout>
