@@ -45,11 +45,8 @@ final class YallaScreenshotTests: XCTestCase {
             captureMatchingFlow()
         }
 
-        openTab("Acasă")
-        let practiceAll = app.buttons["home.practice-all"]
-        scrollTo(practiceAll)
-        if practiceAll.exists {
-            practiceAll.tap()
+        openTab("Practică")
+        if app.navigationBars["Practică"].waitForExistence(timeout: 8) {
             snap("20-practice")
             let ai = app.buttons["practice.ai-conversation"]
             scrollTo(ai)
@@ -74,7 +71,6 @@ final class YallaScreenshotTests: XCTestCase {
                 goBack()
                 goBack()
             }
-            goBack()
         }
 
         openTab("Descoperă")
@@ -93,10 +89,16 @@ final class YallaScreenshotTests: XCTestCase {
             }
         }
 
-        openTab("Progres")
-        snap("25-progress")
-        app.swipeUp()
-        snap("25b-progress-lower")
+        openTab("Acasă")
+        let progressLink = app.buttons["home.progress"]
+        scrollTo(progressLink)
+        if progressLink.exists {
+            progressLink.tap()
+            snap("25-progress")
+            app.swipeUp()
+            snap("25b-progress-lower")
+            goBack()
+        }
 
         openTab("Eu")
         snap("22-profile")

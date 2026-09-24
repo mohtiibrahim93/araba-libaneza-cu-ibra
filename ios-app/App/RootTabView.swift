@@ -10,6 +10,7 @@ struct RootTabView: View {
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
     @State private var homePath: [String] = []
+    @State private var practicePath: [String] = []
     @State private var showingReviews = false
     @State private var showingOrientation = false
     @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
@@ -74,6 +75,38 @@ struct RootTabView: View {
             }
     }
 
+    /// Size of the smart session the Practică tab would start right now.
+    private func smartSessionSize(at date: Date) -> Int {
+        let destination = try? LearningNavigationBuilder().practiceDestination(
+            id: "smart-session",
+            from: content.package,
+            locale: content.locale,
+            learnerContext: progressModel.snapshot.sessionCandidateContext(at: date)
+        )
+        guard case let .smartSession(exercises)? = destination else { return 0 }
+        return exercises.count
+    }
+
+    private func openPractice(_ id: String) {
+        practicePath = [id]
+        selectedTab = .practice
+    }
+
+    private func progressDashboard(at date: Date) -> ProgressDashboardView {
+        ProgressDashboardView(
+            progress: progressModel.snapshot,
+            lessonCounts: lessonCounts,
+            journeyLevel: currentUnitLevel,
+            reviewQueue: progressModel.snapshot.reviewQueueSummary(at: date, expressionIDs: reviewExpressionIDs),
+            rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: date),
+            date: date,
+            onReviews: { showingReviews = true },
+            onSmartPractice: { openPractice("smart-session") },
+            onSpeedDrill: { openPractice("speed-drill") },
+            onContinueJourney: continueJourney
+        )
+    }
+
     private func continueJourney() {
         if let unitID = progressModel.snapshot.currentJourneyUnitID {
             journeyPath = [unitID]
@@ -87,7 +120,6 @@ struct RootTabView: View {
             HomeView(
                 reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
                 progress: progressModel.snapshot,
-                currentUnitTitle: currentUnitTitle,
                 journeyLevel: currentUnitLevel,
                 persistenceError: progressModel.persistenceError,
                 rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: context.date),
@@ -96,16 +128,18 @@ struct RootTabView: View {
                     speedDrillHistory: progressModel.snapshot.speedDrillHistory,
                     at: context.date
                 ),
+                smartSessionSize: smartSessionSize(at: context.date),
+                weakSkills: MasterySkill.allCases.filter { progressModel.snapshot.weakSkills.contains($0) },
                 expressionOfDay: expressionOfDay(at: context.date),
                 savedExpressions: savedPreview,
-                modes: content.shell.practiceModes,
-                package: content.package,
-                locale: content.locale,
+                progressDestination: progressDashboard(at: context.date),
                 progressModel: progressModel,
                 path: $homePath,
                 onReviews: { showingReviews = true },
-                onOrientation: { showingOrientation = true },
                 onContinueJourney: continueJourney,
+                onSmartPractice: { openPractice("smart-session") },
+                onSpeedDrill: { openPractice("speed-drill") },
+                onSpeak: { openPractice("ai-conversation") },
                 onDiscover: { selectedTab = .discover },
                 onProfile: { selectedTab = .profile }
             )
@@ -124,6 +158,30 @@ struct RootTabView: View {
             .tabItem { Label("Parcurs", systemImage: "map") }
             .tag(RootTab.journey)
 
+            NavigationStack(path: $practicePath) {
+                PracticeListView(
+                    modes: content.shell.practiceModes,
+                    package: content.package,
+                    locale: content.locale,
+                    progressModel: progressModel
+                )
+                .navigationDestination(for: String.self) { id in
+                    if id == "ai-conversation" {
+                        AIConversationPreviewView()
+                    } else {
+                        PracticeModeScreen(
+                            modeID: id,
+                            modes: content.shell.practiceModes,
+                            package: content.package,
+                            locale: content.locale,
+                            progressModel: progressModel
+                        )
+                    }
+                }
+            }
+            .tabItem { Label("Practică", systemImage: "bolt") }
+            .tag(RootTab.practice)
+
             DiscoverView(
                 model: content.discover,
                 package: content.package,
@@ -133,36 +191,14 @@ struct RootTabView: View {
                 .tabItem { Label("Descoperă", systemImage: "safari") }
                 .tag(RootTab.discover)
 
-            TimelineView(.periodic(from: .now, by: 60)) { context in
-                ProgressDashboardView(
-                    progress: progressModel.snapshot,
-                    lessonCounts: lessonCounts,
-                    journeyLevel: currentUnitLevel,
-                    reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
-                    rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: context.date),
-                    date: context.date,
-                    onReviews: { showingReviews = true },
-                    onSmartPractice: {
-                        homePath = ["smart-session"]
-                        selectedTab = .home
-                    },
-                    onSpeedDrill: {
-                        homePath = ["speed-drill"]
-                        selectedTab = .home
-                    },
-                    onContinueJourney: continueJourney
-                )
-            }
-            .tabItem { Label("Progres", systemImage: "chart.bar.fill") }
-            .tag(RootTab.progress)
-
             TimelineView(.periodic(from: .now, by: 30)) { context in
             ProfileView(
                 reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
                 progress: progressModel.snapshot,
                 persistenceError: progressModel.persistenceError,
                 onReviews: { showingReviews = true },
-                onOrientation: { showingOrientation = true }
+                onOrientation: { showingOrientation = true },
+                progressDestination: progressDashboard(at: context.date)
             )
             }
                 .tabItem { Label("Eu", systemImage: "person") }
@@ -219,536 +255,12 @@ struct RootTabView: View {
 private enum RootTab: Hashable {
     case home
     case journey
+    case practice
     case discover
-    case progress
     case profile
 }
 
-struct HomeExpression: Identifiable, Equatable {
-    let id: String
-    let arabizi: String
-    let meaning: String
-}
-
-private struct HomeView: View {
-    let reviewQueue: ReviewQueueSummary
-    let progress: LearnerProgressSnapshot
-    let currentUnitTitle: String?
-    let journeyLevel: LevelBand
-    let persistenceError: String?
-    let rewards: RewardSummary
-    let goals: DailyGoalStatus
-    let expressionOfDay: HomeExpression?
-    let savedExpressions: [HomeExpression]
-    let modes: [PracticeModeSummary]
-    let package: ContentPackage
-    let locale: String
-    @ObservedObject var progressModel: LearnerProgressModel
-    @Binding var path: [String]
-    let onReviews: () -> Void
-    let onOrientation: () -> Void
-    let onContinueJourney: () -> Void
-    let onDiscover: () -> Void
-    let onProfile: () -> Void
-
-    @AppStorage("learnerName") private var learnerName = ""
-
-    private var greeting: String {
-        let name = learnerName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return name.isEmpty ? "Mar7aba!" : "Mar7aba, \(name)!"
-    }
-
-    var body: some View {
-        NavigationStack(path: $path) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack(alignment: .center) {
-                        BrandHeader(tagline: "Oameni. Vorbe. O altă perspectivă.")
-                        Spacer(minLength: 8)
-                        Button(action: onProfile) {
-                            LearnerAvatar(name: learnerName, size: 46)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("Profilul meu")
-                    }
-
-                    greetingBlock
-
-                    if persistenceError != nil {
-                        Label(
-                            "Progresul local nu a putut fi încărcat. Datele existente nu au fost șterse.",
-                            systemImage: "exclamationmark.triangle.fill"
-                        )
-                        .font(Theme.font(.subheadline, weight: .semibold))
-                        .foregroundStyle(Theme.danger)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .cardBackground(Theme.dangerBackground)
-                    }
-
-                    statsStrip
-                    heroCard
-                    todayCard
-                    speakBanner
-
-                    HStack(alignment: .top, spacing: 12) {
-                        if let expressionOfDay {
-                            expressionOfDayCard(expressionOfDay)
-                        }
-                        savedCard
-                    }
-
-                    Text("Practică")
-                        .font(Theme.serif(.title3))
-                        .foregroundStyle(Theme.ink)
-                        .accessibilityAddTraits(.isHeader)
-
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                        HomeTile(
-                            title: "Sesiune inteligentă",
-                            subtitle: "\(progress.activeMistakeExpressionIDs.count) greșeli active",
-                            icon: "sparkles",
-                            tint: Theme.terracotta, background: Theme.blush,
-                            action: { path = ["smart-session"] }
-                        )
-                        HomeTile(
-                            title: "Toate modurile",
-                            subtitle: "Speed Drill, ascultare, vorbire",
-                            icon: "square.grid.2x2.fill",
-                            tint: Theme.teal, background: Theme.mint,
-                            action: { path = ["practice-all"] }
-                        )
-                        .accessibilityIdentifier("home.practice-all")
-                    }
-                    HomeRow(
-                        title: "De unde încep?",
-                        subtitle: "Orientare · 24 de întrebări",
-                        icon: "signpost.right.fill",
-                        action: onOrientation
-                    )
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-            }
-            .background(Theme.canvas.ignoresSafeArea())
-            .toolbar(.hidden, for: .navigationBar)
-            .navigationDestination(for: String.self) { id in
-                switch id {
-                case "practice-all":
-                    PracticeListView(modes: modes, package: package, locale: locale, progressModel: progressModel)
-                case "ai-conversation":
-                    AIConversationPreviewView()
-                default:
-                    PracticeModeScreen(modeID: id, modes: modes, package: package, locale: locale, progressModel: progressModel)
-                }
-            }
-        }
-    }
-
-    private var greetingBlock: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(greeting)
-                .font(Theme.serif(.largeTitle))
-                .foregroundStyle(Theme.ink)
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-            Text("Astăzi e o zi bună pentru încă o conversație.")
-                .font(Theme.font(.subheadline))
-                .foregroundStyle(Theme.muted)
-                .fixedSize(horizontal: false, vertical: true)
-            Capsule()
-                .fill(Theme.terracotta)
-                .frame(width: 56, height: 3)
-                .padding(.top, 4)
-                .accessibilityHidden(true)
-        }
-        .padding(.trailing, 110)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .trailing) {
-            Image("illus-raouche")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 150, height: 96)
-                .clipped()
-                .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
-                .offset(x: 20)
-                .accessibilityHidden(true)
-        }
-    }
-
-    private var statsStrip: some View {
-        HStack(spacing: 0) {
-            HomeStat(value: "\(rewards.streakDays)", label: "zile la rând", icon: "flame.fill",
-                     tint: rewards.isActiveToday ? Theme.streak : Theme.muted)
-            Divider().frame(height: 34)
-            HomeStat(value: "\(goals.completedCount)/\(goals.totalCount)", label: "obiective azi", icon: "target", tint: Theme.terracotta)
-            Divider().frame(height: 34)
-            HomeStat(value: journeyLevel.rawValue.uppercased(), label: "nivel parcurs", icon: "chart.bar.fill", tint: Theme.teal)
-            Divider().frame(height: 34)
-            HomeStat(value: "\(rewards.totalXP)", label: "puncte", icon: "star.fill", tint: Theme.terracotta)
-        }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 6)
-        .cardBackground()
-        .accessibilityIdentifier("home.stats")
-    }
-
-    private var heroSubtitle: String {
-        currentUnitTitle == nil
-            ? "Începe cu prima lecție din Parcurs."
-            : "Continuă de unde ai rămas, câte o lecție scurtă."
-    }
-
-    private var heroButtonTitle: String {
-        currentUnitTitle == nil ? "Începe acum" : "Continuă acum"
-    }
-
-    private var heroCard: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 12) {
-                Label("Parcursul tău", systemImage: "sparkle")
-                    .font(Theme.font(.subheadline, weight: .semibold))
-                    .foregroundStyle(Theme.lime)
-                Text(currentUnitTitle ?? "Primele conversații")
-                    .font(Theme.serif(.title))
-                    .foregroundStyle(.white)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(heroSubtitle)
-                    .font(Theme.font(.subheadline))
-                    .foregroundStyle(.white.opacity(0.85))
-                    .fixedSize(horizontal: false, vertical: true)
-                Button(action: onContinueJourney) {
-                    Label(heroButtonTitle, systemImage: "play.fill")
-                        .font(Theme.font(.headline, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(Theme.terracotta, in: Capsule())
-                }
-                .buttonStyle(NodeButtonStyle())
-                .padding(.top, 4)
-                .accessibilityIdentifier("home.continue")
-            }
-            .padding(20)
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            Image("illus-cafe")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 110)
-                .frame(maxHeight: .infinity)
-                .clipped()
-                .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
-                .accessibilityHidden(true)
-        }
-        .background(Theme.deep)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .shadow(color: Theme.deep.opacity(0.25), radius: 14, x: 0, y: 8)
-    }
-
-    private var todayCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("Progresul de azi")
-                    .font(Theme.serif(.headline))
-                    .foregroundStyle(Theme.ink)
-                Spacer()
-                Text("\(goals.completedCount) din \(goals.totalCount) finalizate")
-                    .font(Theme.font(.caption, weight: .semibold))
-                    .foregroundStyle(Theme.muted)
-            }
-            HStack(spacing: 8) {
-                GoalRing(title: "Lecție", icon: "book.fill", done: goals.lessonDone, tint: Theme.teal, action: onContinueJourney)
-                GoalRing(title: "Recapitulare", icon: "arrow.triangle.2.circlepath", done: goals.reviewDone, tint: Theme.terracotta, action: onReviews)
-                GoalRing(title: "Speed Drill", icon: "bolt.fill", done: goals.speedDrillDone, tint: Theme.goldShade, action: { path = ["speed-drill"] })
-            }
-        }
-        .padding(18)
-        .cardBackground()
-        .accessibilityIdentifier("home.goals")
-    }
-
-    private var speakBanner: some View {
-        Button {
-            path = ["ai-conversation"]
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "mic.fill")
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                    .frame(width: 56, height: 56)
-                    .background(Theme.terracotta, in: Circle())
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Vorbește azi")
-                        .font(Theme.serif(.title3))
-                        .foregroundStyle(Theme.terracotta)
-                    Text("Conversație scurtă cu feedback AI · În curând")
-                        .font(Theme.font(.subheadline))
-                        .foregroundStyle(Theme.ink)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
-                Image(systemName: "chevron.right")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(Theme.terracotta)
-                    .frame(width: 36, height: 36)
-                    .background(Theme.surface.opacity(0.8), in: Circle())
-            }
-            .padding(16)
-            .background(alignment: .trailing) {
-                CedarShape()
-                    .fill(Theme.terracotta.opacity(0.1))
-                    .frame(width: 110, height: 100)
-                    .offset(x: -40, y: 10)
-                    .accessibilityHidden(true)
-            }
-            .background(Theme.blush, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        }
-        .buttonStyle(NodeButtonStyle())
-        .accessibilityIdentifier("home.speak")
-    }
-
-    private func expressionOfDayCard(_ expression: HomeExpression) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label("Expresia zilei", systemImage: "quote.opening")
-                .font(Theme.font(.subheadline, weight: .semibold))
-                .foregroundStyle(Theme.terracotta)
-            Text(expression.arabizi)
-                .font(Theme.serif(.title2))
-                .foregroundStyle(Theme.ink)
-                .minimumScaleFactor(0.7)
-            Text(expression.meaning)
-                .font(Theme.font(.subheadline))
-                .foregroundStyle(Theme.muted)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity, minHeight: 170, alignment: .topLeading)
-        .background(alignment: .bottomTrailing) {
-            Image("illus-house")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 70, height: 80)
-                .clipped()
-                .opacity(0.9)
-                .mask(LinearGradient(colors: [.clear, .black], startPoint: .topLeading, endPoint: .bottomTrailing))
-                .accessibilityHidden(true)
-        }
-        .cardBackground()
-        .accessibilityElement(children: .combine)
-    }
-
-    private var savedCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Button(action: onDiscover) {
-                HStack {
-                    Label("Fraze salvate", systemImage: "bookmark.fill")
-                        .font(Theme.font(.subheadline, weight: .semibold))
-                        .foregroundStyle(Theme.deep)
-                    Spacer(minLength: 0)
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Theme.muted)
-                }
-            }
-            .buttonStyle(.plain)
-            if savedExpressions.isEmpty {
-                Text("Salvează expresii din Descoperă ca să le repeți aici.")
-                    .font(Theme.font(.caption))
-                    .foregroundStyle(Theme.muted)
-            } else {
-                ForEach(savedExpressions) { expression in
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(expression.arabizi)
-                            .font(Theme.font(.subheadline, weight: .semibold))
-                            .foregroundStyle(Theme.ink)
-                            .lineLimit(1)
-                        Text(expression.meaning)
-                            .font(Theme.font(.caption2))
-                            .foregroundStyle(Theme.muted)
-                            .lineLimit(1)
-                    }
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .accessibilityElement(children: .combine)
-                }
-            }
-            Spacer(minLength: 0)
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, minHeight: 170, alignment: .topLeading)
-        .background(Theme.mint, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-    }
-}
-
-/// Initials in a cedar circle; the cedar alone when no name is set.
-struct LearnerAvatar: View {
-    let name: String
-    var size: CGFloat = 44
-
-    private var initials: String {
-        name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()
-    }
-
-    var body: some View {
-        ZStack {
-            Circle().fill(Theme.deep)
-            if initials.isEmpty {
-                CedarShape()
-                    .fill(.white)
-                    .frame(width: size * 0.5, height: size * 0.46)
-            } else {
-                Text(initials)
-                    .font(Theme.serif(size > 60 ? .title : .headline))
-                    .foregroundStyle(.white)
-            }
-        }
-        .frame(width: size, height: size)
-        .overlay(Circle().strokeBorder(Theme.lime.opacity(0.7), lineWidth: 2))
-        .accessibilityHidden(true)
-    }
-}
-
-private struct GoalRing: View {
-    let title: String
-    let icon: String
-    let done: Bool
-    let tint: Color
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                ZStack {
-                    Circle().stroke(Theme.line, lineWidth: 6)
-                    Circle()
-                        .trim(from: 0, to: done ? 1 : 0)
-                        .stroke(tint, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                    Image(systemName: done ? "checkmark" : icon)
-                        .font(.title3.weight(.semibold))
-                        .foregroundStyle(done ? tint : Theme.muted)
-                }
-                .frame(width: 62, height: 62)
-                Text(title)
-                    .font(Theme.font(.caption, weight: .semibold))
-                    .foregroundStyle(Theme.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                Text(done ? "1/1" : "0/1")
-                    .font(Theme.font(.caption2))
-                    .foregroundStyle(Theme.muted)
-            }
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(NodeButtonStyle())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
-        .accessibilityValue(done ? "Finalizat azi" : "Nefinalizat azi")
-        .accessibilityAddTraits(.isButton)
-    }
-}
-
-private struct HomeRow: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Theme.deep)
-                    .frame(width: 44, height: 44)
-                    .background(Theme.mint, in: Circle())
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(Theme.font(.headline, weight: .semibold))
-                        .foregroundStyle(Theme.ink)
-                    Text(subtitle)
-                        .font(Theme.font(.caption))
-                        .foregroundStyle(Theme.muted)
-                }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(Theme.muted)
-            }
-            .padding(14)
-            .cardBackground()
-        }
-        .buttonStyle(NodeButtonStyle())
-    }
-}
-
-private struct HomeStat: View {
-    let value: String
-    let label: String
-    let icon: String
-    let tint: Color
-
-    var body: some View {
-        VStack(spacing: 4) {
-            HStack(spacing: 5) {
-                Image(systemName: icon)
-                    .foregroundStyle(tint)
-                Text(value)
-                    .font(Theme.serif(.title3))
-                    .foregroundStyle(Theme.ink)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
-            }
-            Text(label)
-                .font(Theme.font(.caption2))
-                .foregroundStyle(Theme.muted)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-        }
-        .frame(maxWidth: .infinity)
-        .accessibilityElement(children: .combine)
-    }
-}
-
-private struct HomeTile: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let tint: Color
-    let background: Color
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 10) {
-                Image(systemName: icon)
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(tint)
-                    .frame(width: 44, height: 44)
-                    .background(background, in: Circle())
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(Theme.font(.headline, weight: .semibold))
-                        .foregroundStyle(Theme.ink)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text(subtitle)
-                        .font(Theme.font(.caption))
-                        .foregroundStyle(Theme.muted)
-                        .multilineTextAlignment(.leading)
-                }
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, minHeight: 138, alignment: .topLeading)
-            .cardBackground()
-        }
-        .buttonStyle(NodeButtonStyle())
-    }
-}
-
-/// Every practice mode, opened from Home inside its navigation stack.
+/// Every practice mode.
 private struct PracticeListView: View {
     let modes: [PracticeModeSummary]
     let package: ContentPackage
@@ -1192,7 +704,7 @@ private struct DiscoverView: View {
     }
 }
 
-private struct TintedIconLabelStyle: LabelStyle {
+struct TintedIconLabelStyle: LabelStyle {
     let tint: Color
 
     func makeBody(configuration: Configuration) -> some View {
@@ -1362,6 +874,7 @@ private struct ProfileView: View {
     let persistenceError: String?
     let onReviews: () -> Void
     let onOrientation: () -> Void
+    let progressDestination: ProgressDashboardView
 
     private var fluency: SpeedDrillProgressSummary {
         progress.speedDrillProgress
@@ -1425,6 +938,12 @@ private struct ProfileView: View {
                 }
 
                 Section("Progres local") {
+                    NavigationLink {
+                        progressDestination
+                    } label: {
+                        Label("Progresul meu", systemImage: "chart.bar.fill")
+                    }
+                    .accessibilityIdentifier("profile.progress")
                     LabeledContent("Încercări", value: "\(progress.attempts.count)")
                     LabeledContent("Expresii văzute", value: "\(progress.seenExpressionIDs.count)")
                     LabeledContent("De revăzut", value: "\(progress.activeMistakeExpressionIDs.count)")

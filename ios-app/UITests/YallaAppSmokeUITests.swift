@@ -21,14 +21,19 @@ final class YallaAppSmokeUITests: XCTestCase {
         capture("02-journey")
 
         openTab("Acasă")
-        let practiceAll = app.buttons["home.practice-all"]
+        XCTAssertTrue(app.buttons["home.continue"].waitForExistence(timeout: 8), "Missing smart session hero")
+        let progressLink = app.buttons["home.progress"]
         var tries = 0
-        while !(practiceAll.exists && practiceAll.isHittable) && tries < 5 {
+        while !(progressLink.exists && progressLink.isHittable) && tries < 5 {
             app.swipeUp()
             tries += 1
         }
-        XCTAssertTrue(practiceAll.exists, "Missing Home practice entry")
-        practiceAll.tap()
+        XCTAssertTrue(progressLink.exists, "Missing Home progress entry")
+        progressLink.tap()
+        XCTAssertTrue(app.staticTexts["Progresul meu"].waitForExistence(timeout: 8))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        openTab("Practică")
         XCTAssertTrue(app.navigationBars["Practică"].waitForExistence(timeout: 8))
         XCTAssertTrue(
             app.descendants(matching: .any)
@@ -37,10 +42,6 @@ final class YallaAppSmokeUITests: XCTestCase {
         )
         XCTAssertTrue(app.staticTexts["În curând"].exists)
         capture("03-practice")
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-
-        openTab("Progres")
-        XCTAssertTrue(app.staticTexts["Progresul meu"].waitForExistence(timeout: 8))
 
         openTab("Descoperă")
         XCTAssertTrue(app.textFields["discover.search"].waitForExistence(timeout: 8))

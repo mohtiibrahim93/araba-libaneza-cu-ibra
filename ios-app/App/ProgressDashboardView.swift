@@ -33,54 +33,53 @@ struct ProgressDashboardView: View {
 
     var body: some View {
         let summary = builder.summary(snapshot: progress, lessonCounts: lessonCounts, at: date)
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    BrandHeader(tagline: "Mai aproape de oameni. Mai aproape de Liban.")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                BrandHeader(tagline: "Mai aproape de oameni. Mai aproape de Liban.")
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Progresul meu")
-                            .font(Theme.serif(.largeTitle))
-                            .foregroundStyle(Theme.ink)
-                        Text("O călătorie reală, pas cu pas.")
-                            .font(Theme.serif(.subheadline, weight: .regular))
-                            .foregroundStyle(Theme.muted)
-                    }
-                    .padding(.trailing, 120)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(alignment: .trailing) {
-                        Image("illus-progress")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 170, height: 90)
-                            .clipped()
-                            .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
-                            .offset(x: 20)
-                            .accessibilityHidden(true)
-                    }
-                    .accessibilityIdentifier("progress.header")
-
-                    overviewCard(summary)
-                    skillsRow(summary)
-
-                    HStack(alignment: .top, spacing: 12) {
-                        streakCard
-                        activityCard(summary)
-                    }
-
-                    HStack(alignment: .top, spacing: 12) {
-                        reviewsCard
-                        attentionCard(summary)
-                    }
-
-                    closingBanner
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Progresul meu")
+                        .font(Theme.serif(.largeTitle))
+                        .foregroundStyle(Theme.ink)
+                    Text("O călătorie reală, pas cu pas.")
+                        .font(Theme.serif(.subheadline, weight: .regular))
+                        .foregroundStyle(Theme.muted)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .padding(.trailing, 120)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(alignment: .trailing) {
+                    Image("illus-progress")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 170, height: 90)
+                        .clipped()
+                        .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
+                        .offset(x: 20)
+                        .accessibilityHidden(true)
+                }
+                .accessibilityIdentifier("progress.header")
+
+                overviewCard(summary)
+                skillsRow(summary)
+
+                HStack(alignment: .top, spacing: 12) {
+                    streakCard
+                    activityCard(summary)
+                }
+
+                HStack(alignment: .top, spacing: 12) {
+                    reviewsCard
+                    attentionCard(summary)
+                }
+
+                closingBanner
             }
-            .background(Theme.canvas.ignoresSafeArea())
-            .toolbar(.hidden, for: .navigationBar)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         }
+        .background(Theme.canvas.ignoresSafeArea())
+        .navigationTitle("Progres")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func overviewCard(_ summary: ProgressDashboardSummary) -> some View {
