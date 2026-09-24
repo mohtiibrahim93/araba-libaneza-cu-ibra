@@ -426,6 +426,7 @@ struct UnitContentsView: View {
                 }
             }
         }
+        .creamList()
         .navigationTitle(detail.title)
         .navigationBarTitleDisplayMode(.inline)
     }

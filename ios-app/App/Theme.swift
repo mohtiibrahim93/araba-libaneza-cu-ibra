@@ -2,44 +2,58 @@ import SwiftUI
 import UIKit
 import YallaCore
 
-/// Shared visual language, derived from the website game palette
-/// (public/yalla/styles.css) and adapted for light and dark appearance.
+/// Shared visual language: cream paper, cedar green and terracotta, with
+/// serif titles. Every token has a light and a dark variant.
 enum Theme {
     // MARK: Surfaces
-    static let canvas = Color(light: 0xF6F8F7, dark: 0x0C1A1B)
-    static let surface = Color(light: 0xFFFFFF, dark: 0x152829)
-    static let line = Color(light: 0xDAE4E2, dark: 0x2B4446)
-    static let lineStrong = Color(light: 0xC3D3D0, dark: 0x3A5759)
+    static let canvas = Color(light: 0xF5EFE4, dark: 0x171512)
+    static let surface = Color(light: 0xFFFCF6, dark: 0x23201B)
+    static let line = Color(light: 0xE8DFD0, dark: 0x3A352C)
+    static let lineStrong = Color(light: 0xD6C9B4, dark: 0x4B443A)
 
     // MARK: Text
-    static let ink = Color(light: 0x173C40, dark: 0xE6EFEE)
-    static let muted = Color(light: 0x607777, dark: 0x9DB3B2)
+    static let ink = Color(light: 0x2A2621, dark: 0xF1EADF)
+    static let muted = Color(light: 0x7C7265, dark: 0xB3A999)
 
     // MARK: Brand
-    static let deep = Color(light: 0x103E40, dark: 0x0F3B3D)
-    static let teal = Color(light: 0x18746A, dark: 0x3FB3A2)
-    static let tealShade = Color(light: 0x0F544D, dark: 0x2A8577)
-    static let mint = Color(light: 0xE7F2E9, dark: 0x173A33)
-    static let lime = Color(light: 0xD8EC87, dark: 0xC5DC6E)
-    static let gold = Color(light: 0xEDB95E, dark: 0xE9B458)
-    static let goldShade = Color(light: 0xC8923A, dark: 0xB5832F)
-    static let streak = Color(light: 0xF2701E, dark: 0xFF8A3D)
+    /// Deep cedar, used for headers and hero cards.
+    static let deep = Color(light: 0x1F4A34, dark: 0x1B3A2A)
+    /// Cedar green: primary actions, progress and selection.
+    static let teal = Color(light: 0x2D6A4A, dark: 0x74B893)
+    static let tealShade = Color(light: 0x1F4E36, dark: 0x4F8F6C)
+    /// Sage tint behind green elements.
+    static let mint = Color(light: 0xE4EDE3, dark: 0x243A2D)
+    /// Warm highlight on deep-green surfaces.
+    static let lime = Color(light: 0xF1DFAE, dark: 0xF1DFAE)
+    static let terracotta = Color(light: 0xC4613F, dark: 0xE0805E)
+    static let terracottaShade = Color(light: 0x9C4A2F, dark: 0xB4623F)
+    /// Blush tint behind terracotta elements.
+    static let blush = Color(light: 0xF6E4DA, dark: 0x3A2620)
+    static let gold = Color(light: 0xD9A441, dark: 0xE2B45A)
+    static let goldShade = Color(light: 0xA97A26, dark: 0xB88A35)
+    static let streak = Color(light: 0xD2643F, dark: 0xF08A5D)
 
     // MARK: Feedback
     static let success = teal
-    static let successBackground = Color(light: 0xE3F3EA, dark: 0x163A31)
-    static let danger = Color(light: 0xB13A37, dark: 0xFF7B72)
-    static let dangerShade = Color(light: 0x8A2A28, dark: 0xC25750)
-    static let dangerBackground = Color(light: 0xFFF0ED, dark: 0x3A1D1C)
-    static let variant = Color(light: 0x9A6A12, dark: 0xE9B458)
-    static let variantBackground = Color(light: 0xFDF3E1, dark: 0x3A2F1A)
+    static let successBackground = Color(light: 0xE3EEE2, dark: 0x1F3326)
+    static let danger = Color(light: 0xB4413A, dark: 0xFF8A80)
+    static let dangerShade = Color(light: 0x8C302B, dark: 0xC7605A)
+    static let dangerBackground = Color(light: 0xF9E6E1, dark: 0x3A1F1C)
+    static let variant = Color(light: 0x9A6A12, dark: 0xE2B45A)
+    static let variantBackground = Color(light: 0xFBF0DC, dark: 0x3A2F1A)
 
     // MARK: Shape
-    static let cornerRadius: CGFloat = 16
-    static let tileDepth: CGFloat = 4
+    static let cornerRadius: CGFloat = 18
+    static let tileDepth: CGFloat = 3
 
+    /// Body and control text.
     static func font(_ style: Font.TextStyle, weight: Font.Weight = .regular) -> Font {
-        .system(style, design: .rounded).weight(weight)
+        .system(style).weight(weight)
+    }
+
+    /// Titles and the wordmark.
+    static func serif(_ style: Font.TextStyle, weight: Font.Weight = .bold) -> Font {
+        .system(style, design: .serif).weight(weight)
     }
 }
 
@@ -69,6 +83,7 @@ private extension UIColor {
 struct ChunkyButtonStyle: ButtonStyle {
     enum Kind {
         case primary
+        case accent
         case danger
         case secondary
     }
@@ -83,9 +98,7 @@ struct ChunkyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed && isEnabled
         return configuration.label
-            .font(Theme.font(.headline, weight: .bold))
-            .textCase(.uppercase)
-            .kerning(0.6)
+            .font(Theme.font(.headline, weight: .semibold))
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity, minHeight: 50)
             .padding(.horizontal, 16)
@@ -112,6 +125,7 @@ struct ChunkyButtonStyle: ButtonStyle {
         guard isEnabled else { return Theme.line }
         switch kind {
         case .primary: return Theme.teal
+        case .accent: return Theme.terracotta
         case .danger: return Theme.danger
         case .secondary: return Theme.surface
         }
@@ -121,6 +135,7 @@ struct ChunkyButtonStyle: ButtonStyle {
         guard isEnabled else { return Theme.lineStrong }
         switch kind {
         case .primary: return Theme.tealShade
+        case .accent: return Theme.terracottaShade
         case .danger: return Theme.dangerShade
         case .secondary: return Theme.line
         }
@@ -129,7 +144,7 @@ struct ChunkyButtonStyle: ButtonStyle {
     private var foreground: Color {
         guard isEnabled else { return Theme.muted }
         switch kind {
-        case .primary, .danger: return .white
+        case .primary, .accent, .danger: return .white
         case .secondary: return Theme.teal
         }
     }
@@ -250,8 +265,9 @@ struct CardBackground: ViewModifier {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous)
-                    .strokeBorder(Theme.line, lineWidth: 1.5)
+                    .strokeBorder(Theme.line, lineWidth: 1)
             )
+            .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
     }
 }
 
@@ -333,5 +349,69 @@ enum RewardText {
         let lastTwo = count % 100
         if count > 0 && (lastTwo == 0 || lastTwo >= 20) { return "\(count) de zile" }
         return "\(count) zile"
+    }
+}
+
+
+// MARK: - Brand
+
+/// Cedar silhouette from the app icon artwork (Design/AppIcon.svg).
+struct CedarShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        // Source coordinates span x 276...748 and y 266...690.
+        let points: [(CGFloat, CGFloat)] = [
+            (512, 266), (596, 366), (560, 366), (652, 446), (602, 446), (714, 534),
+            (646, 534), (748, 614), (538, 614), (538, 690), (486, 690), (486, 614),
+            (276, 614), (378, 534), (310, 534), (422, 446), (372, 446), (464, 366), (428, 366)
+        ]
+        let scale = min(rect.width / 472, rect.height / 424)
+        let offsetX = rect.minX + (rect.width - 472 * scale) / 2
+        let offsetY = rect.minY + (rect.height - 424 * scale) / 2
+        var path = Path()
+        for (index, point) in points.enumerated() {
+            let mapped = CGPoint(x: offsetX + (point.0 - 276) * scale, y: offsetY + (point.1 - 266) * scale)
+            if index == 0 { path.move(to: mapped) } else { path.addLine(to: mapped) }
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// Cedar emblem, serif wordmark and tagline.
+struct BrandHeader: View {
+    var tagline = "Vorbește. Cunoaște. Trăiește Libanul."
+
+    var body: some View {
+        HStack(spacing: 12) {
+            CedarShape()
+                .fill(Theme.deep)
+                .frame(width: 40, height: 38)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Araba libaneză")
+                    .font(Theme.serif(.title2))
+                    .foregroundStyle(Theme.deep)
+                Text(tagline)
+                    .font(Theme.font(.caption))
+                    .foregroundStyle(Theme.muted)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+}
+
+/// Warm cream background and cards for grouped lists.
+struct CreamListStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .scrollContentBackground(.hidden)
+            .background(Theme.canvas.ignoresSafeArea())
+    }
+}
+
+extension View {
+    func creamList() -> some View {
+        modifier(CreamListStyle())
     }
 }

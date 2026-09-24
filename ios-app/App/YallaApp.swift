@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import YallaCore
 
 @main
@@ -6,6 +7,7 @@ struct YallaApp: App {
     private let launchState: AppLaunchState
 
     init() {
+        Self.configureNavigationTitles()
         do {
             let content = try BundledContentLoader().load()
             let store = try SwiftDataLearnerProgressStore()
@@ -17,6 +19,19 @@ struct YallaApp: App {
             launchState = .ready(content, repository, outbox)
         } catch {
             launchState = .failed(error.localizedDescription)
+        }
+    }
+
+    /// Serif navigation titles to match the wordmark.
+    private static func configureNavigationTitles() {
+        let appearance = UINavigationBar.appearance()
+        if let large = UIFont.preferredFont(forTextStyle: .largeTitle).fontDescriptor
+            .withDesign(.serif)?.withSymbolicTraits(.traitBold) {
+            appearance.largeTitleTextAttributes = [.font: UIFont(descriptor: large, size: 0)]
+        }
+        if let inline = UIFont.preferredFont(forTextStyle: .headline).fontDescriptor
+            .withDesign(.serif)?.withSymbolicTraits(.traitBold) {
+            appearance.titleTextAttributes = [.font: UIFont(descriptor: inline, size: 0)]
         }
     }
 
