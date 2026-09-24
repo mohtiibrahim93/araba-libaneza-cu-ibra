@@ -86,7 +86,9 @@ struct JourneyLessonTests {
 
         let first = JourneyUnit(
             id: "u1", level: .a1,
-            expressionIDs: (0..<26).map { "e\($0)" } + ["blank", "missing", "e3"],
+            // "missing" stays out: units only reference localized expressions,
+            // and building a unit with an unlocalized one throws by design.
+            expressionIDs: (0..<26).map { "e\($0)" } + ["blank", "e3"],
             localizations: ["ro": .init(title: "U1", description: "Unu")]
         )
         // Shares expressions with the first unit.
