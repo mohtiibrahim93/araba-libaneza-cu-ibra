@@ -55,18 +55,27 @@ struct SpeedDrillView: View {
                         }
                 } else if clock.isPaused {
                     VStack(spacing: 18) {
-                        Image(systemName: "pause.circle").font(.largeTitle)
-                        Text("Exercițiu în pauză").font(.title2.bold())
+                        Image(systemName: "pause.circle.fill")
+                            .font(.system(size: 56))
+                            .foregroundStyle(Theme.terracotta)
+                        Text("Exercițiu în pauză")
+                            .font(Theme.serif(.title2))
+                            .foregroundStyle(Theme.ink)
                         Text("Timpul petrecut în pauză nu intră în rezultat.")
-                            .foregroundStyle(.secondary)
+                            .font(Theme.font(.body))
+                            .foregroundStyle(Theme.muted)
+                            .multilineTextAlignment(.center)
                         Button("Reia exercițiul") { clock.resume(at: Date()) }
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(ChunkyButtonStyle(kind: .primary))
                     }
-                    .padding()
+                    .padding(24)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Theme.canvas.ignoresSafeArea())
                 } else if let prompt = player.currentPrompt {
                     drillBody(
                         prompt: prompt,
-                        remainingSeconds: player.remainingSeconds(atElapsed: elapsed)
+                        remainingSeconds: player.remainingSeconds(atElapsed: elapsed),
+                        metrics: player.session.metrics(elapsedSeconds: max(elapsed, 1))
                     )
                 } else {
                     ContentUnavailableView(
@@ -110,102 +119,131 @@ struct SpeedDrillView: View {
 
     private func drillBody(
         prompt: SpeedDrillPrompt,
-        remainingSeconds: Int
+        remainingSeconds: Int,
+        metrics: SpeedDrillMetrics
     ) -> some View {
         ScrollView {
-        VStack(spacing: 24) {
-            VStack(spacing: 8) {
-                Text(timeString(remainingSeconds))
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                    .monospacedDigit()
-                Text("\(player.session.metrics.correct) corecte din \(player.session.metrics.seen)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+            VStack(spacing: 20) {
+                HStack(spacing: 10) {
+                    Image(systemName: "bolt.fill")
+                        .font(.largeTitle)
+                        .foregroundStyle(Theme.terracotta)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Răspunde cât mai repede!")
+                            .font(Theme.serif(.title3))
+                            .foregroundStyle(Theme.ink)
+                        Text("2 minute · Câte poți rezolva?")
+                            .font(Theme.font(.subheadline))
+                            .foregroundStyle(Theme.muted)
+                    }
+                    Spacer(minLength: 0)
+                }
 
-            Spacer()
+                HStack(alignment: .center, spacing: 12) {
+                    DrillStat(
+                        icon: "flame.fill", tint: Theme.streak,
+                        value: "\(metrics.bestCorrectStreak)", label: "corecte la rând"
+                    )
+                    DrillTimerRing(
+                        remaining: remainingSeconds,
+                        total: player.session.durationSeconds,
+                        text: timeString(remainingSeconds)
+                    )
+                    VStack(spacing: 10) {
+                        DrillStat(
+                            icon: "bolt.fill", tint: Theme.gold,
+                            value: String(format: "%.0f", metrics.correctPerMinute), label: "corecte/min"
+                        )
+                        DrillStat(
+                            icon: "target", tint: Theme.terracotta,
+                            value: "\(Int((metrics.accuracy * 100).rounded()))%", label: "acuratețe"
+                        )
+                    }
+                }
 
-            VStack(spacing: 14) {
-                Text(promptLabel)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase)
+                VStack(spacing: 16) {
+                    Label(promptLabel, systemImage: "text.bubble.fill")
+                        .font(Theme.font(.subheadline, weight: .semibold))
+                        .foregroundStyle(Theme.teal)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 7)
+                        .background(Theme.mint, in: Capsule())
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text(prompt.question)
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                    .multilineTextAlignment(.center)
-                    .minimumScaleFactor(0.7)
+                    Text(prompt.question)
+                        .font(Theme.serif(.largeTitle))
+                        .foregroundStyle(Theme.ink)
+                        .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.6)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+
+                    if answerVisible {
+                        VStack(spacing: 6) {
+                            Text("Răspuns")
+                                .font(Theme.font(.caption, weight: .semibold))
+                                .foregroundStyle(Theme.teal)
+                            Text(prompt.answer)
+                                .font(Theme.serif(.title2))
+                                .foregroundStyle(Theme.ink)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Theme.mint, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .transition(.scale(scale: 0.95).combined(with: .opacity))
+                    }
+                }
+                .padding(20)
+                .cardBackground()
 
                 if answerVisible {
-                    VStack(spacing: 7) {
-                        Text("Răspuns")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        Text(prompt.answer)
-                            .font(.title2.bold())
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18))
-                }
-            }
-            .frame(maxWidth: .infinity)
-
-            Spacer()
-
-            if answerVisible {
-                VStack(spacing: 12) {
                     AdaptiveRow(spacing: 12) {
                         Button {
                             record(.wrong)
                         } label: {
                             Label("Greșit", systemImage: "xmark")
-                                .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(ChunkyButtonStyle(kind: .danger))
+                        .accessibilityIdentifier("drill.wrong")
 
                         Button {
                             record(.correct)
                         } label: {
                             Label("Corect", systemImage: "checkmark")
-                                .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(ChunkyButtonStyle(kind: .primary))
+                        .accessibilityIdentifier("drill.correct")
                     }
-
-                    Button {
-                        record(.skipped)
-                    } label: {
-                        Text("Sari peste")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.secondary)
-                }
-            } else {
-                VStack(spacing: 12) {
+                } else {
                     Button {
                         if canAnswer { answerVisible = true }
                     } label: {
                         Text("Arată răspunsul")
-                            .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(ChunkyButtonStyle(kind: .primary))
+                    .accessibilityIdentifier("drill.reveal")
+                }
 
+                HStack {
+                    Text("\(player.session.metrics.correct) corecte din \(player.session.metrics.seen)")
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(Theme.muted)
+                    Spacer()
                     Button {
                         record(.skipped)
                     } label: {
-                        Text("Sari peste")
-                            .frame(maxWidth: .infinity)
+                        Label("Sari peste", systemImage: "arrow.uturn.forward")
+                            .font(Theme.font(.subheadline, weight: .semibold))
+                            .foregroundStyle(Theme.terracotta)
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(.secondary)
                 }
             }
+            .padding(20)
+            .animation(.spring(response: 0.3, dampingFraction: 0.85), value: answerVisible)
         }
-        .padding()
-        }
+        .background(Theme.canvas.ignoresSafeArea())
     }
 
     private var promptLabel: String {
@@ -262,6 +300,66 @@ struct SpeedDrillView: View {
     }
 }
 
+private struct DrillStat: View {
+    let icon: String
+    let tint: Color
+    let value: String
+    let label: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .foregroundStyle(tint)
+                Text(value)
+                    .font(Theme.serif(.title3))
+                    .foregroundStyle(Theme.ink)
+                    .monospacedDigit()
+            }
+            Text(label)
+                .font(Theme.font(.caption2))
+                .foregroundStyle(Theme.muted)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardBackground()
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct DrillTimerRing: View {
+    let remaining: Int
+    let total: Int
+    let text: String
+
+    var body: some View {
+        let fraction = CGFloat(total > 0 ? Double(remaining) / Double(total) : 0)
+        ZStack {
+            Circle()
+                .stroke(Theme.line, lineWidth: 9)
+            Circle()
+                .trim(from: 0, to: fraction)
+                .stroke(Theme.terracotta, style: StrokeStyle(lineWidth: 9, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+                .animation(.linear(duration: 1), value: remaining)
+            VStack(spacing: 0) {
+                Text(text)
+                    .font(Theme.serif(.title))
+                    .foregroundStyle(Theme.ink)
+                    .monospacedDigit()
+                Text("rămas")
+                    .font(Theme.font(.caption))
+                    .foregroundStyle(Theme.muted)
+            }
+        }
+        .frame(width: 120, height: 120)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Timp rămas \(text)")
+    }
+}
+
 private struct SpeedDrillSummaryView: View {
     let metrics: SpeedDrillMetrics
 
@@ -269,58 +367,65 @@ private struct SpeedDrillSummaryView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Image(systemName: "timer")
-                        .font(.system(size: 42))
+                    Image(systemName: "bolt.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(Theme.terracotta)
                     Text("Exercițiu încheiat")
-                        .font(.largeTitle.bold())
+                        .font(Theme.serif(.largeTitle))
+                        .foregroundStyle(Theme.ink)
                     Text("Acesta este un exercițiu de fluență și viteză de reamintire, separat de stăpânirea obișnuită.")
-                        .foregroundStyle(.secondary)
+                        .font(Theme.font(.body))
+                        .foregroundStyle(Theme.muted)
                 }
 
                 AdaptiveRow(spacing: 12) {
-                    SpeedMetric(value: "\(metrics.correct)", label: "corecte")
-                    SpeedMetric(value: "\(metrics.seen)", label: "văzute")
+                    SpeedMetric(value: "\(metrics.correct)", label: "corecte", icon: "checkmark.circle.fill", tint: Theme.teal)
+                    SpeedMetric(value: "\(metrics.seen)", label: "văzute", icon: "eye.fill", tint: Theme.muted)
                 }
 
                 AdaptiveRow(spacing: 12) {
                     SpeedMetric(
                         value: "\(Int((metrics.accuracy * 100).rounded()))%",
-                        label: "acuratețe"
+                        label: "acuratețe", icon: "target", tint: Theme.terracotta
                     )
                     SpeedMetric(
                         value: String(format: "%.1f", metrics.correctPerMinute),
-                        label: "corecte/min"
+                        label: "corecte/min", icon: "bolt.fill", tint: Theme.gold
                     )
                 }
 
                 AdaptiveRow(spacing: 12) {
-                    SpeedMetric(value: "\(metrics.bestCorrectStreak)", label: "serie maximă")
+                    SpeedMetric(value: "\(metrics.bestCorrectStreak)", label: "serie maximă", icon: "flame.fill", tint: Theme.streak)
                     SpeedMetric(
                         value: String(format: "%.1fs", metrics.medianResponseTime),
-                        label: "timp median"
+                        label: "timp median", icon: "clock.fill", tint: Theme.teal
                     )
                 }
             }
-            .padding()
+            .padding(20)
         }
+        .background(Theme.canvas.ignoresSafeArea())
     }
 }
 
 private struct SpeedMetric: View {
     let value: String
     let label: String
+    let icon: String
+    let tint: Color
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(label, systemImage: icon)
+                .font(Theme.font(.caption, weight: .semibold))
+                .foregroundStyle(tint)
             Text(value)
-                .font(.title.bold())
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(Theme.serif(.title))
+                .foregroundStyle(Theme.ink)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(16)
+        .cardBackground()
         .accessibilityElement(children: .combine)
     }
 }

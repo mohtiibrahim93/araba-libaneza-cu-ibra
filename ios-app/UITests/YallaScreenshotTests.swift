@@ -35,6 +35,17 @@ final class YallaScreenshotTests: XCTestCase {
 
         openTab("Practică")
         snap("20-practice")
+        let drill = app.buttons["practice.speed-drill"]
+        if drill.waitForExistence(timeout: 4) {
+            drill.tap()
+            snap("23-speed-drill")
+            let reveal = app.buttons["drill.reveal"]
+            if reveal.waitForExistence(timeout: 3) {
+                reveal.tap()
+                snap("24-speed-drill-answer")
+            }
+            goBack()
+        }
 
         openTab("Descoperă")
         snap("21-discover")
