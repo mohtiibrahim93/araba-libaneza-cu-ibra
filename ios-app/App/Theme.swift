@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import YallaCore
 
 /// Shared visual language, derived from the website game palette
 /// (public/yalla/styles.css) and adapted for light and dark appearance.

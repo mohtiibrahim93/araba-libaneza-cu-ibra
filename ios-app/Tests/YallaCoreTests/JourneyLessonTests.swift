@@ -71,8 +71,8 @@ struct JourneyLessonTests {
 
     @Test("One-pass lesson counts match the lessons built for each unit")
     func lessonCountsMatchUnitDetails() throws {
-        func expression(_ id: String, meaning: String?) -> Expression {
-            Expression(
+        func expression(_ id: String, meaning: String?) -> YallaCore.Expression {
+            YallaCore.Expression(
                 id: id,
                 canonicalArabizi: "form \(id)",
                 levelTags: [.a1],
@@ -119,7 +119,7 @@ struct JourneyLessonTests {
         let builder = LearningNavigationBuilder()
         for unit in package.units {
             let detail = try #require(try builder.journeyUnit(id: unit.id, from: package, locale: "ro"))
-            #expect(counts[unit.id] == planner.lessonCount(exerciseCount: detail.exercises.count), "\(unit.id)")
+            #expect(counts[unit.id] == planner.lessonCount(exerciseCount: detail.exercises.count))
         }
         #expect(counts == ["u1": 3, "u2": 1, "u3": 0])
     }
