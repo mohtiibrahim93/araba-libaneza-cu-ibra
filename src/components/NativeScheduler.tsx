@@ -519,6 +519,42 @@ const NativeScheduler = ({
           </div>
         )}
 
+        {/* Paid private lesson: the slot is held, payment is the final step.
+            Sends the visitor to the existing Stripe checkout page. */}
+        {eventType === "paid" && (
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
+            <div className="flex items-start gap-2">
+              <CreditCard className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {lang === "ro"
+                    ? `Ultimul pas: plătește lecția — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`
+                    : `Last step: pay for the lesson — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {lang === "ro"
+                    ? "Intervalul tău este rezervat. Plata se face securizat prin Stripe (card, Apple Pay sau Google Pay) și îți confirmă definitiv lecția."
+                    : "Your time slot is reserved. Payment is handled securely by Stripe (card, Apple Pay or Google Pay) and confirms the lesson for good."}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {lang === "ro"
+                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție."
+                    : "Cancelling or rescheduling is free at least 24 hours before the lesson."}
+                </p>
+              </div>
+            </div>
+            <Button asChild className="w-full">
+              <Link
+                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+              >
+                <CreditCard className="w-4 h-4 mr-2" />
+                {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
+              </Link>
+            </Button>
+          </div>
+        )}
+
+
         <div className="flex flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={handleIcs} className="flex-1">
             <Download className="w-4 h-4 mr-2" />
