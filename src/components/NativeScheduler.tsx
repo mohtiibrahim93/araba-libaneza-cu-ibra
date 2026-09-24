@@ -12,6 +12,7 @@ import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
+import { ONLINE_PRICES, formatLei, priceFor } from "@/lib/pricing";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -353,8 +354,16 @@ const NativeScheduler = ({
             : "Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (150 lei/lesson), or message us on WhatsApp if you think this is a mistake."}
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
+          <Button asChild className="flex-1">
+            <Link
+              to={`/booking?type=paid${registrationId ? `&registration_id=${encodeURIComponent(registrationId)}` : ""}`}
+            >
+              <Calendar className="w-4 h-4 mr-2" />
+              {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
+            </Link>
+          </Button>
           {registrationId && (
-            <Button asChild className="flex-1">
+            <Button asChild variant="outline" className="flex-1">
               <Link
                 to={`/checkout?courseType=private&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
@@ -500,6 +509,11 @@ const NativeScheduler = ({
                     ? "Nu încasăm absolut nimic — cardul se salvează în siguranță la Stripe doar ca să confirmi serios locul. Nicio plată nu se face vreodată fără acordul tău."
                     : "We charge absolutely nothing — the card is stored securely with Stripe only to firmly confirm your spot. No payment is ever made without your approval."}
                 </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {lang === "ro"
+                    ? "Anularea sau reprogramarea e gratuită dacă o faci cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare."
+                    : "Cancelling or rescheduling is free as long as you do it at least 24 hours before the lesson — use the link in your confirmation email."}
+                </p>
               </div>
             </div>
             <Button onClick={startCardConfirmation} disabled={savingCard} className="w-full">
@@ -512,6 +526,42 @@ const NativeScheduler = ({
             </Button>
           </div>
         )}
+
+        {/* Paid private lesson: the slot is held, payment is the final step.
+            Sends the visitor to the existing Stripe checkout page. */}
+        {eventType === "paid" && (
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
+            <div className="flex items-start gap-2">
+              <CreditCard className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {lang === "ro"
+                    ? `Ultimul pas: plătește lecția — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`
+                    : `Last step: pay for the lesson — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {lang === "ro"
+                    ? "Intervalul tău este rezervat. Plata se face securizat prin Stripe (card, Apple Pay sau Google Pay) și îți confirmă definitiv lecția."
+                    : "Your time slot is reserved. Payment is handled securely by Stripe (card, Apple Pay or Google Pay) and confirms the lesson for good."}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {lang === "ro"
+                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție."
+                    : "Cancelling or rescheduling is free at least 24 hours before the lesson."}
+                </p>
+              </div>
+            </div>
+            <Button asChild className="w-full">
+              <Link
+                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+              >
+                <CreditCard className="w-4 h-4 mr-2" />
+                {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
+              </Link>
+            </Button>
+          </div>
+        )}
+
 
         <div className="flex flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={handleIcs} className="flex-1">
