@@ -28,7 +28,8 @@ struct ReviewQueueView: View {
                     expressions: package.expressions,
                     locale: locale,
                     title: "Recapitulare",
-                    progressModel: progressModel
+                    progressModel: progressModel,
+                    xpSource: .review
                 )
             }
         }

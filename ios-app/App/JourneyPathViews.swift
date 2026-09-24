@@ -537,6 +537,7 @@ struct JourneyUnitDetailView: View {
                         locale: locale,
                         title: "Lecția \(lesson.number)",
                         progressModel: progressModel,
+                        xpSource: .lesson,
                         onComplete: {
                             Task { await model.markLessonCompleted(lessonID) }
                         }

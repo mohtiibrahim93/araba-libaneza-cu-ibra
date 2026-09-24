@@ -9,6 +9,8 @@ struct ExerciseSessionView: View {
     @ObservedObject var progressModel: LearnerProgressModel
     /// Called once when the learner finishes the last exercise.
     private let onComplete: (() -> Void)?
+    /// Which daily goal a finished session counts toward.
+    private let xpSource: XPSource
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
@@ -29,9 +31,11 @@ struct ExerciseSessionView: View {
         locale: String,
         title: String,
         progressModel: LearnerProgressModel,
+        xpSource: XPSource = .practice,
         onComplete: (() -> Void)? = nil
     ) {
         self.onComplete = onComplete
+        self.xpSource = xpSource
         self.locale = locale
         self.title = title
         self.expressions = expressions
@@ -554,7 +558,8 @@ struct ExerciseSessionView: View {
             id: UUID().uuidString,
             day: LearnerDay().key(for: now),
             amount: amount,
-            occurredAt: now
+            occurredAt: now,
+            source: xpSource
         )
         earnedXP = amount
         Task {

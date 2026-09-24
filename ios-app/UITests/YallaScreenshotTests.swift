@@ -13,6 +13,7 @@ final class YallaScreenshotTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = true
         app = XCUIApplication()
+        app.launchArguments += ["-learnerName", "Ibrahim"]
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
     }
@@ -28,6 +29,9 @@ final class YallaScreenshotTests: XCTestCase {
         }
         XCTAssertTrue(app.tabBars.buttons["Acasă"].waitForExistence(timeout: 10))
         snap("01-home")
+        app.swipeUp()
+        snap("01b-home-lower")
+        app.swipeDown()
 
         openTab("Parcurs")
         XCTAssertTrue(app.navigationBars["Parcurs"].waitForExistence(timeout: 8))
@@ -41,21 +45,35 @@ final class YallaScreenshotTests: XCTestCase {
             captureMatchingFlow()
         }
 
-        openTab("Practică")
-        snap("20-practice")
-        let drill = app.buttons["practice.speed-drill"]
-        if drill.waitForExistence(timeout: 4) {
-            drill.tap()
-            snap("23a-speed-drill-start")
-            let start = app.buttons["practice.start"]
-            if start.waitForExistence(timeout: 4) { start.tap() }
-            snap("23-speed-drill")
-            let reveal = app.buttons["drill.reveal"]
-            if reveal.waitForExistence(timeout: 3) {
-                reveal.tap()
-                snap("24-speed-drill-answer")
+        openTab("Acasă")
+        let practiceAll = app.buttons["home.practice-all"]
+        scrollTo(practiceAll)
+        if practiceAll.exists {
+            practiceAll.tap()
+            snap("20-practice")
+            let ai = app.buttons["practice.ai-conversation"]
+            scrollTo(ai)
+            if ai.exists {
+                ai.tap()
+                snap("26-ai-conversation")
+                goBack()
             }
-            goBack()
+            app.swipeDown()
+            let drill = app.buttons["practice.speed-drill"]
+            if drill.waitForExistence(timeout: 4) {
+                drill.tap()
+                snap("23a-speed-drill-start")
+                let start = app.buttons["practice.start"]
+                if start.waitForExistence(timeout: 4) { start.tap() }
+                snap("23-speed-drill")
+                let reveal = app.buttons["drill.reveal"]
+                if reveal.waitForExistence(timeout: 3) {
+                    reveal.tap()
+                    snap("24-speed-drill-answer")
+                }
+                goBack()
+                goBack()
+            }
             goBack()
         }
 
@@ -74,6 +92,11 @@ final class YallaScreenshotTests: XCTestCase {
                 snap("21c-discover-roots")
             }
         }
+
+        openTab("Progres")
+        snap("25-progress")
+        app.swipeUp()
+        snap("25b-progress-lower")
 
         openTab("Eu")
         snap("22-profile")
@@ -162,6 +185,14 @@ final class YallaScreenshotTests: XCTestCase {
         }
         if button.waitForExistence(timeout: 5) {
             button.tap()
+        }
+    }
+
+    private func scrollTo(_ element: XCUIElement) {
+        var tries = 0
+        while !(element.exists && element.isHittable) && tries < 5 {
+            app.swipeUp()
+            tries += 1
         }
     }
 

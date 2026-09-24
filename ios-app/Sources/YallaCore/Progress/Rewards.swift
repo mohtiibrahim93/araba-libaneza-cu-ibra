@@ -1,5 +1,12 @@
 import Foundation
 
+/// What kind of session earned an XP award.
+public enum XPSource: String, Codable, Sendable {
+    case lesson
+    case review
+    case practice
+}
+
 /// XP earned by one finished session. `id` makes recording idempotent.
 public struct XPEvent: Codable, Equatable, Sendable, Identifiable {
     public let id: String
@@ -7,12 +14,15 @@ public struct XPEvent: Codable, Equatable, Sendable, Identifiable {
     public let day: String
     public let amount: Int
     public let occurredAt: Date
+    /// Absent on awards recorded before sources were tracked.
+    public let source: XPSource?
 
-    public init(id: String, day: String, amount: Int, occurredAt: Date) {
+    public init(id: String, day: String, amount: Int, occurredAt: Date, source: XPSource? = nil) {
         self.id = id
         self.day = day
         self.amount = max(amount, 0)
         self.occurredAt = occurredAt
+        self.source = source
     }
 }
 
@@ -90,6 +100,49 @@ public struct RewardCalculator: Sendable {
             todayXP: xpByDay[today] ?? 0,
             streakDays: streak,
             isActiveToday: activeToday
+        )
+    }
+}
+
+/// Today's goals: one Journey lesson, one review session and one Speed Drill.
+public struct DailyGoalStatus: Equatable, Sendable {
+    public let lessonDone: Bool
+    public let reviewDone: Bool
+    public let speedDrillDone: Bool
+
+    public init(lessonDone: Bool, reviewDone: Bool, speedDrillDone: Bool) {
+        self.lessonDone = lessonDone
+        self.reviewDone = reviewDone
+        self.speedDrillDone = speedDrillDone
+    }
+
+    public var completedCount: Int {
+        [lessonDone, reviewDone, speedDrillDone].filter { $0 }.count
+    }
+
+    public var totalCount: Int { 3 }
+}
+
+public struct DailyGoalCalculator: Sendable {
+    private let learnerDay: LearnerDay
+
+    public init(calendar: Calendar = .current) {
+        self.learnerDay = LearnerDay(calendar: calendar)
+    }
+
+    public func status(
+        xpEvents: [XPEvent],
+        speedDrillHistory: [SpeedDrillHistoryEntry],
+        at date: Date
+    ) -> DailyGoalStatus {
+        let today = learnerDay.key(for: date)
+        let todays = xpEvents.filter { $0.day == today }
+        return DailyGoalStatus(
+            lessonDone: todays.contains { $0.source == .lesson },
+            reviewDone: todays.contains { $0.source == .review },
+            speedDrillDone: speedDrillHistory.contains {
+                $0.seen > 0 && learnerDay.key(for: $0.completedAt) == today
+            }
         )
     }
 }

@@ -20,7 +20,15 @@ final class YallaAppSmokeUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Parcurs"].waitForExistence(timeout: 8))
         capture("02-journey")
 
-        openTab("Practică")
+        openTab("Acasă")
+        let practiceAll = app.buttons["home.practice-all"]
+        var tries = 0
+        while !(practiceAll.exists && practiceAll.isHittable) && tries < 5 {
+            app.swipeUp()
+            tries += 1
+        }
+        XCTAssertTrue(practiceAll.exists, "Missing Home practice entry")
+        practiceAll.tap()
         XCTAssertTrue(app.navigationBars["Practică"].waitForExistence(timeout: 8))
         XCTAssertTrue(
             app.descendants(matching: .any)
@@ -29,6 +37,10 @@ final class YallaAppSmokeUITests: XCTestCase {
         )
         XCTAssertTrue(app.staticTexts["În curând"].exists)
         capture("03-practice")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        openTab("Progres")
+        XCTAssertTrue(app.staticTexts["Progresul meu"].waitForExistence(timeout: 8))
 
         openTab("Descoperă")
         XCTAssertTrue(app.textFields["discover.search"].waitForExistence(timeout: 8))

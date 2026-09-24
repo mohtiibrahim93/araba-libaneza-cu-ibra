@@ -119,4 +119,69 @@ struct RewardsTests {
         #expect(decoded.xpEvents.isEmpty)
         #expect(decoded.completedLessonIDs == ["u.lesson.1"])
     }
+
+    private func drill(at date: Date, answered: Bool) -> SpeedDrillHistoryEntry {
+        var session = SpeedDrillSession(direction: .learnerLanguageToLebanese, durationSeconds: 120)
+        if answered {
+            session.record(expressionID: "e", outcome: .correct, responseTime: 1)
+        }
+        return SpeedDrillHistoryEntry(
+            id: "drill-\(date.timeIntervalSince1970)-\(answered)",
+            direction: session.direction,
+            durationSeconds: session.durationSeconds,
+            elapsedSeconds: 30,
+            completedAt: date,
+            metrics: session.metrics(elapsedSeconds: 30)
+        )
+    }
+
+    private func sourced(_ id: String, day: Int, _ source: XPSource?) -> XPEvent {
+        let occurred = date(day)
+        return XPEvent(
+            id: id, day: LearnerDay(calendar: calendar).key(for: occurred),
+            amount: 10, occurredAt: occurred, source: source
+        )
+    }
+
+    @Test("Daily goals count today's lesson, review and Speed Drill separately")
+    func dailyGoals() {
+        let calculator = DailyGoalCalculator(calendar: calendar)
+        let now = date(24, hour: 20)
+
+        let none = calculator.status(xpEvents: [], speedDrillHistory: [], at: now)
+        #expect(none.completedCount == 0)
+        #expect(none.totalCount == 3)
+
+        let partial = calculator.status(
+            xpEvents: [sourced("l", day: 24, .lesson), sourced("p", day: 24, .practice)],
+            speedDrillHistory: [],
+            at: now
+        )
+        #expect(partial == DailyGoalStatus(lessonDone: true, reviewDone: false, speedDrillDone: false))
+
+        let full = calculator.status(
+            xpEvents: [sourced("l", day: 24, .lesson), sourced("r", day: 24, .review)],
+            speedDrillHistory: [drill(at: date(24, hour: 9), answered: true)],
+            at: now
+        )
+        #expect(full.completedCount == 3)
+    }
+
+    @Test("Yesterday's sessions, untagged XP and empty drills do not count for today")
+    func dailyGoalsIgnoreOtherDays() {
+        let status = DailyGoalCalculator(calendar: calendar).status(
+            xpEvents: [sourced("old", day: 23, .lesson), sourced("legacy", day: 24, nil)],
+            speedDrillHistory: [drill(at: date(23), answered: true), drill(at: date(24), answered: false)],
+            at: date(24, hour: 20)
+        )
+        #expect(status.completedCount == 0)
+    }
+
+    @Test("XP events recorded before sources existed still decode")
+    func legacyXPEventDecodes() throws {
+        let json = #"{"id":"a","day":"2026-09-24","amount":12,"occurredAt":0}"#.data(using: .utf8)!
+        let event = try JSONDecoder().decode(XPEvent.self, from: json)
+        #expect(event.source == nil)
+        #expect(event.amount == 12)
+    }
 }

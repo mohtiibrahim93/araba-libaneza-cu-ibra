@@ -68,6 +68,7 @@ struct WelcomeView: View {
     let onPlacement: () -> Void
 
     @AppStorage("learnerGoals") private var storedGoals = ""
+    @AppStorage("learnerName") private var learnerName = ""
     @State private var level: Level = .beginner
     @State private var goals: Set<Goal> = [.conversation]
 
@@ -93,6 +94,20 @@ struct WelcomeView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .accessibilityHidden(true)
                 }
+
+                HStack(spacing: 10) {
+                    Image(systemName: "person.fill")
+                        .foregroundStyle(Theme.terracotta)
+                    TextField("Cum te cheamă? (opțional)", text: $learnerName)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled()
+                        .accessibilityIdentifier("welcome.name")
+                }
+                .font(Theme.font(.body))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 13)
+                .background(Theme.surface, in: Capsule())
+                .overlay(Capsule().strokeBorder(Theme.line, lineWidth: 1))
 
                 stepTitle(number: 1, title: "Care este nivelul tău actual?")
                 HStack(spacing: 10) {
