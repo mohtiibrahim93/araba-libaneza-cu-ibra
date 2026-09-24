@@ -61,6 +61,8 @@ const STATIC_ROUTES: SeoRoute[] = [
   // for visitors who would rather not start on a phone number.
   { path: "/contact", title: "Contact — Arabă libaneză cu Ibra | București", description: "Scrie-ne despre cursurile de arabă libaneză: orare, niveluri, grupe pentru copii. Formular, WhatsApp, email și adresa centrului din București." },
   { path: "/en/contact", title: "Contact — Lebanese Arabic with Ibra | Bucharest", description: "Message us about Lebanese Arabic courses: schedules, levels, children's groups. Contact form, WhatsApp, email and our Bucharest address.", lang: "en" },
+  { path: "/rezervari", title: "Rezervările mele — Arabă Libaneză cu Ibra", description: "Primește pe email un link privat pentru a vedea, anula sau reprograma lecțiile tale de arabă libaneză, online sau în București." },
+  { path: "/en/my-bookings", title: "My bookings — Lebanese Arabic with Ibra", description: "Receive a private email link to view, cancel or reschedule your Lebanese Arabic lessons, online or in Bucharest.", lang: "en" },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
@@ -290,6 +292,7 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/quiz", "/en/quiz"],
   ["/te-ajutam", "/en/find-your-page"],
   ["/contact", "/en/contact"],
+  ["/rezervari", "/en/my-bookings"],
   ["/privacy", "/en/privacy"],
   ["/terms", "/en/terms"],
   ["/cursuri", "/en/courses"],

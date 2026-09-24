@@ -32,6 +32,7 @@ import { template as gdprErasureRequest } from './gdpr-erasure-request'
 import { template as arabiziCheatSheet } from './arabizi-cheat-sheet'
 import { template as expresiiLibaneze } from './expresii-libaneze'
 import { template as plan30Zile } from './plan-30-zile'
+import { template as bookingsAccess } from './bookings-access'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'registration-confirmation': registrationConfirmation,
@@ -49,5 +50,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'arabizi-cheat-sheet': arabiziCheatSheet,
   'expresii-libaneze': expresiiLibaneze,
   'plan-30-zile': plan30Zile,
+  'bookings-access': bookingsAccess,
 }
 

@@ -61,6 +61,7 @@ const Footer = () => {
             <li><Link to="/test-de-nivel" className="hover:text-foreground transition-colors">{lang === "en" ? "Level test" : "Test de nivel"}</Link></li>
             <li><Link to={lang === "en" ? "/en/quiz" : "/quiz"} className="hover:text-foreground transition-colors">{lang === "en" ? "Find your course" : "Găsește cursul potrivit"}</Link></li>
             <li><Link to={lang === "en" ? "/en/contact" : "/contact"} className="hover:text-foreground transition-colors">{lang === "en" ? "Contact" : "Contact"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/my-bookings" : "/rezervari"} className="hover:text-foreground transition-colors">{lang === "en" ? "My bookings" : "Rezervările mele"}</Link></li>
             <li><Link to={lang === "en" ? "/en/find-your-page" : "/te-ajutam"} className="hover:text-foreground transition-colors">{lang === "en" ? "Find your page" : "Te ajutăm să găsești"}</Link></li>
             <li><Link to={lang === "en" ? "/en/trial" : "/trial"} className="hover:text-foreground transition-colors">{lang === "en" ? "Free trial lesson" : "Lecție de probă gratuită"}</Link></li>
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
