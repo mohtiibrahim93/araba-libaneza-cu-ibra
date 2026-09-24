@@ -268,8 +268,8 @@ const HowToLearnLebaneseArabic = () => (
     <p>
       Book a free 30-minute trial lesson with a native Lebanese teacher. You'll learn your first
       five phrases, hear the sound of the dialect, and get a personalised recommendation on where
-      to start based on your goal (family, travel, business, heritage). No obligation, no card
-      required.
+      to start based on your goal (family, travel, business, heritage). The trial remains 0 LEI
+      and carries no obligation; secure card confirmation simply holds the spot.
     </p>
   </EnLandingLayout>
 );

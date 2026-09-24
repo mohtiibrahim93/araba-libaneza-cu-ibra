@@ -38,7 +38,7 @@ const FAQ = [
   },
   {
     q: "Cum știu dacă i se potrivește înainte să plătesc?",
-    a: "Prin lecția de probă gratuită de 30 de minute, online sau fizic. Nu se cere card și nu se face nicio plată la acea etapă; dacă după cele 30 de minute nu vrei să continui, nu urmează nimic.",
+    a: "Prin lecția de probă gratuită de 30 de minute, online sau fizic. Cardul se salvează în siguranță doar pentru confirmarea locului; proba rămâne 0 lei, iar dacă după cele 30 de minute nu vrei să continui, nu urmează nimic.",
   },
 ];
 

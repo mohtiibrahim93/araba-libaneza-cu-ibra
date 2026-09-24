@@ -35,7 +35,7 @@ const Faq = () => (
     <p>
       Write to us and you'll hear back the same day. The quickest way to find out whether a
       course suits you is still the{" "}
-      <Link to="/trial">free 30-minute trial lesson</Link> — no card, no obligation.
+      <Link to="/trial">free 30-minute trial lesson</Link> — 0 LEI and no obligation; secure card confirmation holds the spot.
     </p>
   </EnLandingLayout>
 );

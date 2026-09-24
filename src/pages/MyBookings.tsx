@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "@tanstack/react-router";
+import { Link, useSearchParams } from "@/lib/router-compat";
 import { Calendar, Clock, Loader2, Mail, MapPin, RefreshCw, Video, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -91,8 +91,8 @@ function formatDate(value: string, lang: Lang): string {
 
 const MyBookings = ({ lang }: { lang: Lang }) => {
   const c = COPY[lang];
-  const [params, setParams] = useSearchParams({ strict: false });
-  const token = typeof params.token === "string" ? params.token : "";
+  const [params, setParams] = useSearchParams();
+  const token = params.get("token") ?? "";
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);

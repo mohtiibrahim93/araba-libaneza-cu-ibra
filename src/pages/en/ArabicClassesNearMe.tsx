@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "Is there a free trial?",
-    a: "Yes — a free 30-minute trial lesson with a native teacher. No card, no obligation, no auto-enroll. Book it, show up, decide.",
+    a: "Yes — a free 30-minute trial lesson with a native teacher. A secure card confirmation holds the spot, but the trial remains 0 LEI, with no obligation or auto-enrolment.",
   },
 ];
 

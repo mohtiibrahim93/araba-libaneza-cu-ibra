@@ -224,7 +224,7 @@ const ArabicDialectsGuide = () => (
       suits your timezone. The online beginner group is currently full; leave your details on the{" "}
       <Link to="/cursuri/grup/a1?mod=online">A1 online page</Link> and we'll email you first when the
       next one opens. Either way, the{" "}
-      <Link to="/trial">trial lesson is free</Link> — 30 minutes, no card, no obligation.
+      <Link to="/trial">trial lesson is free</Link> — 30 minutes, 0 LEI, no obligation.
     </p>
   </EnLandingLayout>
 );
