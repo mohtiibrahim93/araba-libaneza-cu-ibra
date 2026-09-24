@@ -12,6 +12,7 @@ struct RootTabView: View {
     @State private var practicePath: [String] = []
     @State private var showingReviews = false
     @State private var showingOrientation = false
+    @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
 
     init(
         content: AppContentSnapshot,
@@ -141,6 +142,27 @@ struct RootTabView: View {
         }
         .tint(Theme.terracotta)
         .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
+        .fullScreenCover(isPresented: Binding(
+            get: { !hasSeenWelcome },
+            set: { presented in if !presented { hasSeenWelcome = true } }
+        )) {
+            WelcomeView(
+                onBeginner: {
+                    hasSeenWelcome = true
+                    if let firstUnit = content.shell.journeySections.first?.units.first?.id {
+                        journeyPath = [firstUnit]
+                    }
+                    selectedTab = .journey
+                },
+                onPlacement: {
+                    hasSeenWelcome = true
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(700))
+                        showingOrientation = true
+                    }
+                }
+            )
+        }
         .sheet(isPresented: $showingReviews) {
             ReviewQueueView(package: content.package, locale: content.locale, progressModel: progressModel)
         }

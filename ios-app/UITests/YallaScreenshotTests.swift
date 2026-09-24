@@ -18,6 +18,14 @@ final class YallaScreenshotTests: XCTestCase {
     }
 
     func testCaptureLearnerScreens() throws {
+        let welcome = app.buttons["welcome.continue"]
+        if welcome.waitForExistence(timeout: 6) {
+            snap("00-welcome")
+            welcome.tap()
+            snap("00b-after-welcome")
+            app.terminate()
+            app.launch()
+        }
         XCTAssertTrue(app.tabBars.buttons["Acasă"].waitForExistence(timeout: 10))
         snap("01-home")
 

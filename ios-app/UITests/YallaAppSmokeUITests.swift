@@ -7,6 +7,7 @@ final class YallaAppSmokeUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
+        app.launchArguments += ["-hasSeenWelcome", "YES"]
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
     }
