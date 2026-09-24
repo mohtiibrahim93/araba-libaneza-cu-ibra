@@ -356,7 +356,7 @@ const NativeScheduler = ({
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">
             <Link
-              to={`/booking?type=paid${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+              to={`/booking?type=paid${registrationId ? `&registration_id=${encodeURIComponent(registrationId)}` : ""}`}
             >
               <Calendar className="w-4 h-4 mr-2" />
               {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
