@@ -501,6 +501,11 @@ const NativeScheduler = ({
                     ? "Nu încasăm absolut nimic — cardul se salvează în siguranță la Stripe doar ca să confirmi serios locul. Nicio plată nu se face vreodată fără acordul tău."
                     : "We charge absolutely nothing — the card is stored securely with Stripe only to firmly confirm your spot. No payment is ever made without your approval."}
                 </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {lang === "ro"
+                    ? "Anularea sau reprogramarea e gratuită dacă o faci cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare."
+                    : "Cancelling or rescheduling is free as long as you do it at least 24 hours before the lesson — use the link in your confirmation email."}
+                </p>
               </div>
             </div>
             <Button onClick={startCardConfirmation} disabled={savingCard} className="w-full">
