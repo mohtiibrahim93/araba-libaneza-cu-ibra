@@ -40,6 +40,7 @@ struct JourneyUnitDetailView: View {
                         Label("Începe exercițiile", systemImage: "play.fill")
                             .font(.headline)
                     }
+                    .accessibilityIdentifier("lesson.start")
                 }
             }
 
@@ -56,6 +57,7 @@ struct JourneyUnitDetailView: View {
                     } label: {
                         Label("Potrivește expresiile", systemImage: "square.grid.2x2")
                     }
+                    .accessibilityIdentifier("lesson.matching")
                     Text("Până la 6 expresii din această unitate.")
                         .font(.caption).foregroundStyle(.secondary)
                 }

@@ -70,6 +70,8 @@ jobs:
 
   native-app-build:
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout branch
         uses: actions/checkout@v6
@@ -125,7 +127,105 @@ jobs:
         run: |
           set -o pipefail
           rm -rf /tmp/yalla-ui-tests.xcresult
-          xcodebuild             -project YallaNative.xcodeproj             -scheme YallaApp             -destination "platform=iOS Simulator,id=$SIMULATOR_UDID"             -derivedDataPath /tmp/yalla-native-derived             -resultBundlePath /tmp/yalla-ui-tests.xcresult             CODE_SIGNING_ALLOWED=NO             test 2>&1 | tee /tmp/yalla-uitest.log
+          xcodebuild             -project YallaNative.xcodeproj             -scheme YallaApp             -destination "platform=iOS Simulator,id=$SIMULATOR_UDID"             -derivedDataPath /tmp/yalla-native-derived             -resultBundlePath /tmp/yalla-ui-tests.xcresult             CODE_SIGNING_ALLOWED=NO             -skip-testing:YallaAppUITests/YallaScreenshotTests             test 2>&1 | tee /tmp/yalla-uitest.log
+
+      - name: Capture light and dark screenshots
+        if: always()
+        continue-on-error: true
+        working-directory: ios-app
+        shell: bash
+        run: |
+          set -o pipefail
+          rm -rf /tmp/yalla-screenshots /tmp/yalla-screens-*.xcresult
+          mkdir -p /tmp/yalla-screenshots
+          xcrun simctl status_bar "$SIMULATOR_UDID" override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3 || true
+          status=0
+          for mode in light dark; do
+            xcrun simctl ui "$SIMULATOR_UDID" appearance "$mode"
+            TEST_RUNNER_SCREENSHOT_DIR=/tmp/yalla-screenshots \
+            TEST_RUNNER_SCREENSHOT_PREFIX="$mode" \
+            xcodebuild \
+              -project YallaNative.xcodeproj \
+              -scheme YallaApp \
+              -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+              -derivedDataPath /tmp/yalla-native-derived \
+              -resultBundlePath "/tmp/yalla-screens-$mode.xcresult" \
+              -only-testing:YallaAppUITests/YallaScreenshotTests \
+              CODE_SIGNING_ALLOWED=NO \
+              test-without-building 2>&1 | tee "/tmp/yalla-screens-$mode.log" || status=1
+          done
+          xcrun simctl ui "$SIMULATOR_UDID" appearance light || true
+          # Fallback: recover PNGs from the result bundles if direct writes were unavailable.
+          if ! ls /tmp/yalla-screenshots/*.png >/dev/null 2>&1; then
+            for mode in light dark; do
+              out="/tmp/yalla-attachments-$mode"
+              rm -rf "$out" && mkdir -p "$out"
+              xcrun xcresulttool export attachments --path "/tmp/yalla-screens-$mode.xcresult" --output-path "$out" || continue
+              python3 - "$out" <<'PY'
+          import json, shutil, sys
+          from pathlib import Path
+          out = Path(sys.argv[1])
+          manifest = json.loads((out / 'manifest.json').read_text())
+          for test in manifest:
+              for item in test.get('attachments', []):
+                  name = item.get('suggestedHumanReadableName', '')
+                  stem = name.split('.png')[0].split('_')[0] if name.count('.png') == 0 else name.split('.png')[0]
+                  if stem:
+                      shutil.copy(out / item['exportedFileName'], Path('/tmp/yalla-screenshots') / f'{stem}.png')
+          PY
+            done
+          fi
+          ls -la /tmp/yalla-screenshots
+          exit $status
+
+      - name: Publish screenshots branch
+        if: always() && github.event_name == 'push'
+        continue-on-error: true
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if ! ls /tmp/yalla-screenshots/*.png >/dev/null 2>&1; then
+            echo "No screenshots to publish."
+            exit 0
+          fi
+          publish="$RUNNER_TEMP/yalla-screenshots-publish"
+          rm -rf "$publish" && mkdir -p "$publish"
+          cp /tmp/yalla-screenshots/*.png "$publish/"
+          cd "$publish"
+          {
+            echo "# Yalla iOS screenshots"
+            echo
+            echo "Source commit: \`${GITHUB_SHA}\` on \`${GITHUB_REF_NAME}\`"
+            echo "CI run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo
+            echo "| Screen | Light | Dark |"
+            echo "| --- | --- | --- |"
+            for light in light-*.png; do
+              [ -e "$light" ] || continue
+              name="${light#light-}"
+              dark="dark-$name"
+              darkcell=""
+              [ -e "$dark" ] && darkcell="<img src=\"$dark\" width=\"260\">"
+              echo "| ${name%.png} | <img src=\"$light\" width=\"260\"> | $darkcell |"
+            done
+          } > README.md
+          echo "$GITHUB_SHA" > SOURCE_COMMIT
+          git init -q -b yalla-app-ios-screenshots
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Screenshots for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:yalla-app-ios-screenshots
+
+      - name: Preserve screenshots
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: yalla-screenshots
+          path: /tmp/yalla-screenshots
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Preserve UI test evidence
         if: always()

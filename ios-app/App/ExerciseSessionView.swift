@@ -106,6 +106,7 @@ struct ExerciseSessionView: View {
                         }
                         .buttonStyle(.bordered)
                         .disabled(hintVisible)
+                        .accessibilityIdentifier("exercise.hint")
 
                         Button {
                             submitAnswer()
@@ -115,6 +116,7 @@ struct ExerciseSessionView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(!canSubmit(exercise))
+                        .accessibilityIdentifier("exercise.check")
                     } else {
                         Button {
                             advance()
@@ -123,6 +125,7 @@ struct ExerciseSessionView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("exercise.continue")
                     }
                 }
             }
@@ -140,6 +143,7 @@ struct ExerciseSessionView: View {
         case .text:
             TextField(exercise.type == .freeProduction ? "Scrie răspunsul în Arabizi" : "Scrie răspunsul", text: $answer)
                 .accessibilityLabel("Răspunsul tău")
+                .accessibilityIdentifier("exercise.answerField")
                 .textFieldStyle(.roundedBorder)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -158,6 +162,7 @@ struct ExerciseSessionView: View {
                     }
                     .buttonStyle(.bordered)
                     .disabled(completed)
+                    .accessibilityIdentifier("exercise.choice")
                     .accessibilityAddTraits(answer == choice ? .isSelected : [])
                 }
             }
