@@ -36,6 +36,7 @@ import { Route as PaymentStatusRouteImport } from './routes/payment-status'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResurseRouteImport } from './routes/resurse'
+import { Route as RezervariRouteImport } from './routes/rezervari'
 import { Route as StergereDateRouteImport } from './routes/stergere-date'
 import { Route as TeAjutamRouteImport } from './routes/te-ajutam'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -95,6 +96,7 @@ import { Route as EnLearnLebaneseArabicRouteImport } from './routes/en/learn-leb
 import { Route as EnLearnLevantineArabicRouteImport } from './routes/en/learn-levantine-arabic'
 import { Route as EnLebaneseArabicVsMsaVsEgyptianRouteImport } from './routes/en/lebanese-arabic-vs-msa-vs-egyptian'
 import { Route as EnLevantineArabicDialectsMapRouteImport } from './routes/en/levantine-arabic-dialects-map'
+import { Route as EnMyBookingsRouteImport } from './routes/en/my-bookings'
 import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
@@ -103,6 +105,7 @@ import { Route as JocIndexRouteImport } from './routes/joc.index'
 import { Route as JocScorRouteImport } from './routes/joc.scor'
 import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id'
 import { Route as AdminPrivateLeadsIdRouteImport } from './routes/admin/private-leads/$id'
+import { Route as ApiPublicBookingsAccessRouteImport } from './routes/api/public/bookings-access'
 import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
 import { Route as CursuriCursSlugRouteImport } from './routes/cursuri/curs/$slug'
 import { Route as CursuriGrupIndexRouteImport } from './routes/cursuri/grup/index'
@@ -261,6 +264,11 @@ const QuizRoute = QuizRouteImport.update({
 const ResurseRoute = ResurseRouteImport.update({
   id: '/resurse',
   path: '/resurse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RezervariRoute = RezervariRouteImport.update({
+  id: '/rezervari',
+  path: '/rezervari',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StergereDateRoute = StergereDateRouteImport.update({
@@ -584,6 +592,11 @@ const EnLevantineArabicDialectsMapRoute =
     path: '/en/levantine-arabic-dialects-map',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EnMyBookingsRoute = EnMyBookingsRouteImport.update({
+  id: '/en/my-bookings',
+  path: '/en/my-bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
   id: '/en/privacy',
   path: '/en/privacy',
@@ -622,6 +635,11 @@ const PrivateStatusIdRoute = PrivateStatusIdRouteImport.update({
 const AdminPrivateLeadsIdRoute = AdminPrivateLeadsIdRouteImport.update({
   id: '/admin/private-leads/$id',
   path: '/admin/private-leads/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicBookingsAccessRoute = ApiPublicBookingsAccessRouteImport.update({
+  id: '/api/public/bookings-access',
+  path: '/api/public/bookings-access',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingManageTokenRoute = BookingManageTokenRouteImport.update({
@@ -782,6 +800,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
+  '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
   '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
@@ -836,6 +855,7 @@ export interface FileRoutesByFullPath {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -849,6 +869,7 @@ export interface FileRoutesByFullPath {
   '/dialecte-arabe/': typeof DialecteArabeIndexRoute
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
+  '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -901,6 +922,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
+  '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
   '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
@@ -955,6 +977,7 @@ export interface FileRoutesByTo {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -968,6 +991,7 @@ export interface FileRoutesByTo {
   '/dialecte-arabe': typeof DialecteArabeIndexRoute
   '/joc': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
+  '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1022,6 +1046,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
+  '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
   '/te-ajutam': typeof TeAjutamRoute
   '/terms': typeof TermsRoute
@@ -1076,6 +1101,7 @@ export interface FileRoutesById {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -1089,6 +1115,7 @@ export interface FileRoutesById {
   '/dialecte-arabe/': typeof DialecteArabeIndexRoute
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
+  '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1144,6 +1171,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/resurse'
+    | '/rezervari'
     | '/stergere-date'
     | '/te-ajutam'
     | '/terms'
@@ -1198,6 +1226,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/my-bookings'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1211,6 +1240,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe/'
     | '/joc/'
     | '/admin/private-leads/$id'
+    | '/api/public/bookings-access'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1263,6 +1293,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/resurse'
+    | '/rezervari'
     | '/stergere-date'
     | '/te-ajutam'
     | '/terms'
@@ -1317,6 +1348,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/my-bookings'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1330,6 +1362,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe'
     | '/joc'
     | '/admin/private-leads/$id'
+    | '/api/public/bookings-access'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1383,6 +1416,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/resurse'
+    | '/rezervari'
     | '/stergere-date'
     | '/te-ajutam'
     | '/terms'
@@ -1437,6 +1471,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/my-bookings'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1450,6 +1485,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe/'
     | '/joc/'
     | '/admin/private-leads/$id'
+    | '/api/public/bookings-access'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1504,6 +1540,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
   ResurseRoute: typeof ResurseRoute
+  RezervariRoute: typeof RezervariRoute
   StergereDateRoute: typeof StergereDateRoute
   TeAjutamRoute: typeof TeAjutamRoute
   TermsRoute: typeof TermsRoute
@@ -1558,6 +1595,7 @@ export interface RootRouteChildren {
   EnLearnLevantineArabicRoute: typeof EnLearnLevantineArabicRoute
   EnLebaneseArabicVsMsaVsEgyptianRoute: typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   EnLevantineArabicDialectsMapRoute: typeof EnLevantineArabicDialectsMapRoute
+  EnMyBookingsRoute: typeof EnMyBookingsRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnQuizRoute: typeof EnQuizRoute
   EnTermsRoute: typeof EnTermsRoute
@@ -1569,6 +1607,7 @@ export interface RootRouteChildren {
   CursuriIndexRoute: typeof CursuriIndexRoute
   DialecteArabeIndexRoute: typeof DialecteArabeIndexRoute
   AdminPrivateLeadsIdRoute: typeof AdminPrivateLeadsIdRoute
+  ApiPublicBookingsAccessRoute: typeof ApiPublicBookingsAccessRoute
   BookingManageTokenRoute: typeof BookingManageTokenRoute
   CursuriCursSlugRoute: typeof CursuriCursSlugRoute
   CursuriGrupLevelRoute: typeof CursuriGrupLevelRoute
@@ -1784,6 +1823,13 @@ declare module '@tanstack/react-router' {
       path: '/resurse'
       fullPath: '/resurse'
       preLoaderRoute: typeof ResurseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rezervari': {
+      id: '/rezervari'
+      path: '/rezervari'
+      fullPath: '/rezervari'
+      preLoaderRoute: typeof RezervariRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stergere-date': {
@@ -2199,6 +2245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnLevantineArabicDialectsMapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/my-bookings': {
+      id: '/en/my-bookings'
+      path: '/en/my-bookings'
+      fullPath: '/en/my-bookings'
+      preLoaderRoute: typeof EnMyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/privacy': {
       id: '/en/privacy'
       path: '/en/privacy'
@@ -2253,6 +2306,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/private-leads/$id'
       fullPath: '/admin/private-leads/$id'
       preLoaderRoute: typeof AdminPrivateLeadsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/bookings-access': {
+      id: '/api/public/bookings-access'
+      path: '/api/public/bookings-access'
+      fullPath: '/api/public/bookings-access'
+      preLoaderRoute: typeof ApiPublicBookingsAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/booking/manage/$token': {
@@ -2466,6 +2526,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
   ResurseRoute: ResurseRoute,
+  RezervariRoute: RezervariRoute,
   StergereDateRoute: StergereDateRoute,
   TeAjutamRoute: TeAjutamRoute,
   TermsRoute: TermsRoute,
@@ -2528,6 +2589,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnLearnLevantineArabicRoute: EnLearnLevantineArabicRoute,
   EnLebaneseArabicVsMsaVsEgyptianRoute: EnLebaneseArabicVsMsaVsEgyptianRoute,
   EnLevantineArabicDialectsMapRoute: EnLevantineArabicDialectsMapRoute,
+  EnMyBookingsRoute: EnMyBookingsRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnQuizRoute: EnQuizRoute,
   EnTermsRoute: EnTermsRoute,
@@ -2539,6 +2601,7 @@ const rootRouteChildren: RootRouteChildren = {
   CursuriIndexRoute: CursuriIndexRoute,
   DialecteArabeIndexRoute: DialecteArabeIndexRoute,
   AdminPrivateLeadsIdRoute: AdminPrivateLeadsIdRoute,
+  ApiPublicBookingsAccessRoute: ApiPublicBookingsAccessRoute,
   BookingManageTokenRoute: BookingManageTokenRoute,
   CursuriCursSlugRoute: CursuriCursSlugRoute,
   CursuriGrupLevelRoute: CursuriGrupLevelRoute,
