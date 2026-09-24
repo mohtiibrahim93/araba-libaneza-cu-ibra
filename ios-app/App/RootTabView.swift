@@ -106,6 +106,8 @@ struct RootTabView: View {
                 .tabItem { Label("Eu", systemImage: "person") }
                 .tag(RootTab.profile)
         }
+        .tint(Theme.teal)
+        .fontDesign(.rounded)
         .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
         .sheet(isPresented: $showingReviews) {
             ReviewQueueView(package: content.package, locale: content.locale, progressModel: progressModel)
