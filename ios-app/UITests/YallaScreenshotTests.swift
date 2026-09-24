@@ -46,12 +46,16 @@ final class YallaScreenshotTests: XCTestCase {
         let drill = app.buttons["practice.speed-drill"]
         if drill.waitForExistence(timeout: 4) {
             drill.tap()
+            snap("23a-speed-drill-start")
+            let start = app.buttons["practice.start"]
+            if start.waitForExistence(timeout: 4) { start.tap() }
             snap("23-speed-drill")
             let reveal = app.buttons["drill.reveal"]
             if reveal.waitForExistence(timeout: 3) {
                 reveal.tap()
                 snap("24-speed-drill-answer")
             }
+            goBack()
             goBack()
         }
 

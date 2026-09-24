@@ -45,45 +45,34 @@ private struct SmartPracticeOverviewView: View {
     @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Sesiune pregătită")
-                        .font(.headline)
-                    Text("\(exercises.count) exerciții selectate din conținutul disponibil.")
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-            }
-
-            if !exercises.isEmpty {
-                Section {
-                    NavigationLink {
-                        ExerciseSessionView(
-                            exercises: exercises,
-                            expressions: expressions,
-                            locale: locale,
-                            title: title,
-                            progressModel: progressModel
-                        )
-                    } label: {
-                        Label("Începe sesiunea", systemImage: "play.fill")
-                            .font(.headline)
-                    }
-                }
-            }
-
-            Section("Exerciții") {
-                if exercises.isEmpty {
-                    Text("Nu există încă exerciții disponibile pentru această sesiune.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(exercises) { exercise in
-                        ExercisePreviewRow(exercise: exercise, locale: locale)
-                    }
-                }
-            }
-        }
+        PracticeLaunchLayout(
+            icon: "sparkles",
+            kicker: "Sesiune inteligentă",
+            title: "Sesiune pregătită",
+            subtitle: "\(exercises.count) exerciții din recapitulări, greșeli, puncte slabe și material nou.",
+            startLabel: "Începe sesiunea",
+            canStart: !exercises.isEmpty,
+            previewTitle: "Exerciții",
+            emptyText: "Nu există încă exerciții disponibile pentru această sesiune.",
+            destination: {
+                ExerciseSessionView(
+                    exercises: exercises,
+                    expressions: expressions,
+                    locale: locale,
+                    title: title,
+                    progressModel: progressModel
+                )
+            },
+            rows: exercises.prefix(8).map { exercise in
+                PracticePreviewRow(
+                    id: exercise.id,
+                    title: exercise.prompt[locale] ?? exercise.prompt["ro"] ?? exercise.prompt.values.first ?? "Exercițiu",
+                    subtitle: nil,
+                    trailing: nil
+                )
+            },
+            remainingCount: max(exercises.count - 8, 0)
+        )
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -95,58 +84,148 @@ private struct SpeedDrillOverviewView: View {
     @ObservedObject var progressModel: LearnerProgressModel
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Set de două minute")
-                        .font(.headline)
-                    Text("\(expressions.count) expresii pregătite pentru reamintire rapidă.")
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-            }
-
-            if !expressions.isEmpty {
-                Section {
-                    NavigationLink {
-                        SpeedDrillView(
-                            expressions: expressions,
-                            progressModel: progressModel
-                        )
-                    } label: {
-                        Label("Pornește cronometrul", systemImage: "timer")
-                            .font(.headline)
-                    }
-                }
-            }
-
-            Section("Expresii") {
-                if expressions.isEmpty {
-                    Text("Nu există încă expresii disponibile pentru acest mod.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(expressions) { expression in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(expression.arabizi)
-                                    .font(.headline)
-                                Text(expression.meaning)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if let arabic = expression.arabicScript {
-                                Text(arabic)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 3)
-                    }
-                }
-            }
-        }
+        PracticeLaunchLayout(
+            icon: "bolt.fill",
+            kicker: "Yalla! Două minute",
+            title: "Răspunde cât mai repede!",
+            subtitle: "\(expressions.count) expresii pregătite pentru reamintire rapidă, în două minute.",
+            startLabel: "Pornește cronometrul",
+            canStart: !expressions.isEmpty,
+            previewTitle: "Expresii",
+            emptyText: "Nu există încă expresii disponibile pentru acest mod.",
+            destination: {
+                SpeedDrillView(
+                    expressions: expressions,
+                    progressModel: progressModel
+                )
+            },
+            rows: expressions.prefix(8).map { expression in
+                PracticePreviewRow(
+                    id: expression.id,
+                    title: expression.arabizi,
+                    subtitle: expression.meaning,
+                    trailing: expression.arabicScript
+                )
+            },
+            remainingCount: max(expressions.count - 8, 0)
+        )
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private struct PracticePreviewRow: Identifiable {
+    let id: String
+    let title: String
+    let subtitle: String?
+    let trailing: String?
+}
+
+/// Start screen shared by practice modes: hero card with a start button,
+/// then a preview of what the session contains.
+private struct PracticeLaunchLayout<Destination: View>: View {
+    let icon: String
+    let kicker: String
+    let title: String
+    let subtitle: String
+    let startLabel: String
+    let canStart: Bool
+    let previewTitle: String
+    let emptyText: String
+    @ViewBuilder let destination: () -> Destination
+    let rows: [PracticePreviewRow]
+    let remainingCount: Int
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label(kicker, systemImage: icon)
+                        .font(Theme.font(.subheadline, weight: .semibold))
+                        .foregroundStyle(Theme.lime)
+                    Text(title)
+                        .font(Theme.serif(.title))
+                        .foregroundStyle(.white)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(subtitle)
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .fixedSize(horizontal: false, vertical: true)
+                    if canStart {
+                        NavigationLink(destination: destination) {
+                            Label(startLabel, systemImage: "play.fill")
+                                .font(Theme.font(.headline, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 22)
+                                .padding(.vertical, 13)
+                                .background(Theme.terracotta, in: Capsule())
+                        }
+                        .buttonStyle(NodeButtonStyle())
+                        .accessibilityIdentifier("practice.start")
+                        .padding(.top, 4)
+                    }
+                }
+                .padding(22)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(alignment: .bottomTrailing) {
+                    CedarShape()
+                        .fill(.white.opacity(0.08))
+                        .frame(width: 140, height: 130)
+                        .offset(x: 18, y: 16)
+                        .accessibilityHidden(true)
+                }
+                .background(Theme.deep)
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .shadow(color: Theme.deep.opacity(0.25), radius: 14, x: 0, y: 8)
+
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(previewTitle)
+                        .font(Theme.serif(.headline))
+                        .foregroundStyle(Theme.ink)
+                        .padding(16)
+                    if rows.isEmpty {
+                        Text(emptyText)
+                            .font(Theme.font(.subheadline))
+                            .foregroundStyle(Theme.muted)
+                            .padding([.horizontal, .bottom], 16)
+                    } else {
+                        ForEach(rows) { row in
+                            Divider().padding(.leading, 16)
+                            HStack(alignment: .firstTextBaseline) {
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(row.title)
+                                        .font(Theme.font(.headline, weight: .semibold))
+                                        .foregroundStyle(Theme.ink)
+                                    if let subtitle = row.subtitle {
+                                        Text(subtitle)
+                                            .font(Theme.font(.subheadline))
+                                            .foregroundStyle(Theme.muted)
+                                    }
+                                }
+                                Spacer()
+                                if let trailing = row.trailing {
+                                    Text(trailing)
+                                        .foregroundStyle(Theme.muted)
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 11)
+                            .accessibilityElement(children: .combine)
+                        }
+                        if remainingCount > 0 {
+                            Divider().padding(.leading, 16)
+                            Text("și încă \(remainingCount)")
+                                .font(Theme.font(.subheadline, weight: .semibold))
+                                .foregroundStyle(Theme.muted)
+                                .padding(16)
+                        }
+                    }
+                }
+                .cardBackground()
+            }
+            .padding(20)
+        }
+        .background(Theme.canvas.ignoresSafeArea())
     }
 }
 

@@ -191,12 +191,14 @@ struct WelcomeView: View {
             if selected { goals.remove(goal) } else { goals.insert(goal) }
         } label: {
             VStack(alignment: .leading, spacing: 8) {
-                Image(goal.image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 78)
+                Color.clear
                     .frame(maxWidth: .infinity)
-                    .clipped()
+                    .frame(height: 78)
+                    .overlay {
+                        Image(goal.image)
+                            .resizable()
+                            .scaledToFill()
+                    }
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .overlay(alignment: .topTrailing) {
                         Image(systemName: selected ? "checkmark.circle.fill" : "circle")
