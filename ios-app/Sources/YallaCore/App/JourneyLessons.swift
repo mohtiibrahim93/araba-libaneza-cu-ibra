@@ -67,6 +67,25 @@ public struct JourneyLessonPlanner: Sendable {
         exerciseCount <= 0 ? 0 : (exerciseCount + lessonSize - 1) / lessonSize
     }
 
+    /// Lesson counts for every unit in one pass, matching the exercises that
+    /// `LearningNavigationBuilder.journeyUnit` would produce for each unit.
+    public func lessonCounts(in package: ContentPackage, locale: String) -> [String: Int] {
+        let recallable = Set(package.expressions.lazy
+            .filter { ExpressionRecallBuilder.supportsRecall($0, locale: locale) }
+            .map(\.id))
+        let exercisesByUnit = Dictionary(grouping: package.exercises, by: \.unitID)
+        var counts: [String: Int] = [:]
+        for unit in package.units where counts[unit.id] == nil {
+            let authored = exercisesByUnit[unit.id] ?? []
+            let covered = ExpressionRecallBuilder.coveredExpressionIDs(authored, locale: locale)
+            let recall = Set(unit.expressionIDs)
+                .filter { recallable.contains($0) && !covered.contains($0) }
+                .count
+            counts[unit.id] = lessonCount(exerciseCount: authored.count + recall)
+        }
+        return counts
+    }
+
     public func lessonID(unitID: String, number: Int) -> String {
         "\(unitID).lesson.\(number)"
     }

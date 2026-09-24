@@ -69,6 +69,61 @@ struct JourneyLessonTests {
         #expect(planner.progress(unitID: "u", lessonCount: 1, completedLessonIDs: ["u.lesson.1"]).isComplete)
     }
 
+    @Test("One-pass lesson counts match the lessons built for each unit")
+    func lessonCountsMatchUnitDetails() throws {
+        func expression(_ id: String, meaning: String?) -> Expression {
+            Expression(
+                id: id,
+                canonicalArabizi: "form \(id)",
+                levelTags: [.a1],
+                localizations: meaning.map { ["ro": ExpressionLocalization(naturalMeaning: $0)] } ?? [:]
+            )
+        }
+        // 30 recallable expressions, one blank meaning, one without a Romanian localization.
+        var expressions = (0..<30).map { expression("e\($0)", meaning: "sens \($0)") }
+        expressions.append(expression("blank", meaning: "  "))
+        expressions.append(expression("missing", meaning: nil))
+
+        let first = JourneyUnit(
+            id: "u1", level: .a1,
+            expressionIDs: (0..<26).map { "e\($0)" } + ["blank", "missing", "e3"],
+            localizations: ["ro": .init(title: "U1", description: "Unu")]
+        )
+        // Shares expressions with the first unit.
+        let second = JourneyUnit(
+            id: "u2", level: .a1,
+            expressionIDs: (20..<30).map { "e\($0)" },
+            localizations: ["ro": .init(title: "U2", description: "Doi")]
+        )
+        let empty = JourneyUnit(
+            id: "u3", level: .a2, expressionIDs: [],
+            localizations: ["ro": .init(title: "U3", description: "Trei")]
+        )
+        let authored = [
+            ExerciseDefinition(id: "a1", type: .multipleChoiceProduction, unitID: "u1", expressionIDs: ["e0"],
+                               prompt: ["ro": "?"], answer: "form e0", wrongAnswers: ["x"]),
+            ExerciseDefinition(id: "a2", type: .dialogueResponse, unitID: "u1", expressionIDs: [],
+                               prompt: ["ro": "?"], answer: "da", wrongAnswers: ["nu"]),
+            ExerciseDefinition(id: "a3", type: .freeProduction, unitID: "u2", expressionIDs: ["e25"],
+                               prompt: ["ro": "?"], answer: "form e25", wrongAnswers: [])
+        ]
+        let package = ContentPackage(
+            manifest: .init(schemaVersion: 3, contentVersion: "lesson-count-test", defaultLearnerLocale: "ro"),
+            expressions: expressions,
+            units: [first, second, empty],
+            exercises: authored
+        )
+
+        let planner = JourneyLessonPlanner()
+        let counts = planner.lessonCounts(in: package, locale: "ro")
+        let builder = LearningNavigationBuilder()
+        for unit in package.units {
+            let detail = try #require(try builder.journeyUnit(id: unit.id, from: package, locale: "ro"))
+            #expect(counts[unit.id] == planner.lessonCount(exerciseCount: detail.exercises.count), "\(unit.id)")
+        }
+        #expect(counts == ["u1": 3, "u2": 1, "u3": 0])
+    }
+
     @Test("Lesson completion persists idempotently and survives other progress updates")
     func completionPersists() async throws {
         let store = InMemoryLearnerProgressStore()

@@ -53,7 +53,7 @@ struct JourneyPathView: View {
             }
             .task {
                 guard lessonCounts.isEmpty else { return }
-                lessonCounts = computeLessonCounts()
+                lessonCounts = planner.lessonCounts(in: package, locale: locale)
             }
         }
     }
@@ -133,14 +133,6 @@ struct JourneyPathView: View {
 
     private func detail(for unitID: String) -> JourneyUnitDetail? {
         try? navigationBuilder.journeyUnit(id: unitID, from: package, locale: locale)
-    }
-
-    private func computeLessonCounts() -> [String: Int] {
-        var counts: [String: Int] = [:]
-        for unit in sections.flatMap(\.units) {
-            counts[unit.id] = planner.lessonCount(exerciseCount: detail(for: unit.id)?.exercises.count ?? 0)
-        }
-        return counts
     }
 }
 

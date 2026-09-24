@@ -142,6 +142,8 @@ jobs:
           status=0
           for mode in light dark; do
             xcrun simctl ui "$SIMULATOR_UDID" appearance "$mode"
+            # Fresh install per appearance so both runs show the same first-launch flow.
+            xcrun simctl uninstall "$SIMULATOR_UDID" com.centruldearabalibaneza.app || true
             TEST_RUNNER_SCREENSHOT_DIR=/tmp/yalla-screenshots \
             TEST_RUNNER_SCREENSHOT_PREFIX="$mode" \
             xcodebuild \
