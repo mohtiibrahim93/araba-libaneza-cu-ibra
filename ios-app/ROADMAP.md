@@ -88,3 +88,10 @@ Native work stays on yalla-app-ios; main is the separate live website.
 - Recording management uses the existing local files, including recordings made before the library UI existed. Only regular m4a files in the Recordings directory can be replayed/deleted; path traversal and symbolic links are rejected. Microphone denial has a Settings recovery action. Device verification remains in the final release pass.
 
 - UI/accessibility code pass: large-text adaptive control/metric rows, scalable/scrollable Speed Drill, keyboard dismissal, listening keyboard submission and selected-choice traits, clearer storage/startup errors, and a linear Root Explorer alternative for VoiceOver/accessibility text sizes. Device/visual acceptance is still required; this is not a completed accessibility audit.
+
+## Lesson-sized Journey (progress schema v6)
+
+- Journey units are split into ordered lessons of up to 12 existing exercises (`JourneyLessonPlanner`); no content is reordered, filtered or generated. Lesson IDs are positional (`<unitID>.lesson.<n>`).
+- Progress schema v6 adds `completedLessonIDs`. Older snapshots migrate with an empty set; every repository update carries the set forward, and `lessonCompleted` operations use the durable, idempotent save outbox.
+- The Journey tab is a path of unit nodes with lesson-progress rings; each unit shows a lesson path (completed lessons replayable, first unfinished lesson current, later lessons locked). Units themselves are not locked, so Orientation can still start a learner anywhere.
+- CI publishes light/dark simulator screenshots of the main learner flow to the `yalla-app-ios-screenshots` branch.

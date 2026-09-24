@@ -65,7 +65,7 @@ struct RootTabView: View {
             .tabItem { Label("Acasă", systemImage: "house") }
             .tag(RootTab.home)
 
-            JourneyView(
+            JourneyPathView(
                 sections: content.shell.journeySections,
                 package: content.package,
                 locale: content.locale,
@@ -223,124 +223,6 @@ private struct HomeView: View {
             }
             .navigationTitle("Acasă")
         }
-    }
-}
-
-private struct JourneyView: View {
-    let sections: [JourneySectionSummary]
-    let package: ContentPackage
-    let locale: String
-    @ObservedObject var progressModel: LearnerProgressModel
-    @Binding var path: [String]
-
-    private let navigationBuilder = LearningNavigationBuilder()
-
-    var body: some View {
-        NavigationStack(path: $path) {
-            List {
-                ForEach(sections) { section in
-                    Section(section.level.rawValue.uppercased()) {
-                        ForEach(section.units) { unit in
-                            if detail(for: unit.id) != nil {
-                                NavigationLink(value: unit.id) {
-                                    JourneyUnitRow(
-                                        unit: unit,
-                                        progress: progress(for: unit.id),
-                                        isCurrent: progressModel.snapshot.currentJourneyUnitID == unit.id
-                                    )
-                                }
-                            } else {
-                                JourneyUnitRow(
-                                    unit: unit,
-                                    progress: progress(for: unit.id),
-                                    isCurrent: progressModel.snapshot.currentJourneyUnitID == unit.id
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Parcurs")
-            .navigationDestination(for: String.self) { unitID in
-                if let detail = detail(for: unitID) {
-                    JourneyUnitDetailView(
-                        detail: detail,
-                        expressions: package.expressions,
-                        locale: locale,
-                        progressModel: progressModel
-                    )
-                } else {
-                    ContentUnavailableView("Unitate indisponibilă", systemImage: "exclamationmark.triangle")
-                }
-            }
-        }
-    }
-
-    private func progress(for unitID: String) -> ExpressionGroupProgress {
-        guard let unit = package.units.first(where: { $0.id == unitID }) else {
-            return ExpressionGroupProgress()
-        }
-
-        return progressModel.snapshot.expressionGroupProgress(
-            expressionIDs: Set(unit.expressionIDs),
-            at: Date()
-        )
-    }
-
-    private func detail(for unitID: String) -> JourneyUnitDetail? {
-        do {
-            return try navigationBuilder.journeyUnit(
-                id: unitID,
-                from: package,
-                locale: locale
-            )
-        } catch {
-            return nil
-        }
-    }
-}
-
-private struct JourneyUnitRow: View {
-    let unit: JourneyUnitSummary
-    let progress: ExpressionGroupProgress
-    let isCurrent: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(unit.title)
-                    .font(.headline)
-                Spacer()
-                if isCurrent {
-                    Text("curentă")
-                        .font(.caption2.weight(.semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(.thinMaterial, in: Capsule())
-                }
-            }
-
-            Text(unit.description)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: 5) {
-                Text("\(progress.practicedCount)/\(progress.totalCount) exersate")
-
-                if progress.dueCount > 0 {
-                    Text("·")
-                    Text("\(progress.dueCount) de repetat")
-                }
-
-                if progress.mistakeCount > 0 {
-                    Text("·")
-                    Text("\(progress.mistakeCount) greșeli")
-                }
-            }
-            .font(.caption)
-            .foregroundStyle(.tertiary)
-        }
-        .padding(.vertical, 4)
     }
 }
 

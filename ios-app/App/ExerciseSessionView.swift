@@ -7,6 +7,8 @@ struct ExerciseSessionView: View {
     let title: String
     let expressions: [YallaCore.Expression]
     @ObservedObject var progressModel: LearnerProgressModel
+    /// Called once when the learner finishes the last exercise.
+    private let onComplete: (() -> Void)?
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
@@ -25,8 +27,10 @@ struct ExerciseSessionView: View {
         expressions: [YallaCore.Expression],
         locale: String,
         title: String,
-        progressModel: LearnerProgressModel
+        progressModel: LearnerProgressModel,
+        onComplete: (() -> Void)? = nil
     ) {
+        self.onComplete = onComplete
         self.locale = locale
         self.title = title
         self.expressions = expressions
@@ -555,6 +559,9 @@ struct ExerciseSessionView: View {
         hintVisible = false
         exerciseStartedAt = Date()
         resetInput(for: player.currentExercise)
+        if player.isFinished {
+            onComplete?()
+        }
     }
 }
 

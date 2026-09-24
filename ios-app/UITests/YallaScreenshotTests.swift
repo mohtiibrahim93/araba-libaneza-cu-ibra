@@ -25,7 +25,7 @@ final class YallaScreenshotTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Parcurs"].waitForExistence(timeout: 8))
         snap("02-journey")
 
-        let firstUnit = app.collectionViews.buttons.firstMatch
+        let firstUnit = app.buttons.matching(identifier: "journey.unit").firstMatch
         if firstUnit.waitForExistence(timeout: 8) {
             firstUnit.tap()
             snap("03-journey-unit")
@@ -51,44 +51,49 @@ final class YallaScreenshotTests: XCTestCase {
         start.tap()
         snap("04-exercise")
 
-        let choices = app.buttons.matching(identifier: "exercise.choice")
-        if choices.firstMatch.waitForExistence(timeout: 3) {
-            // Try each choice until the exercise completes; capture the first
-            // selection, the first feedback and the completed state.
-            let count = min(choices.count, 6)
-            var capturedFeedback = false
-            for index in 0..<count {
-                let choice = choices.element(boundBy: index)
-                guard choice.exists, choice.isEnabled else { continue }
-                choice.tap()
-                if index == 0 { snap("05-exercise-selected") }
-                let check = element(identifier: "exercise.check", label: "Verifică")
-                guard check.waitForExistence(timeout: 2) else { break }
-                check.tap()
-                if !capturedFeedback {
-                    snap("06-exercise-feedback")
-                    capturedFeedback = true
-                }
-                if continueButton.waitForExistence(timeout: 1.5) {
-                    snap("07-exercise-correct")
-                    break
-                }
+        // Work through the first lesson. Choice exercises are solved by trying
+        // options in turn; a free-text exercise cannot be solved generically.
+        for step in 0..<20 {
+            let summaryContinue = app.buttons["summary.continue"]
+            if summaryContinue.waitForExistence(timeout: 1) {
+                snap("09-lesson-summary")
+                summaryContinue.tap()
+                snap("10-unit-after-lesson")
+                return
             }
-        } else {
-            let field = app.textFields.firstMatch
-            if field.waitForExistence(timeout: 3) {
-                field.tap()
-                field.typeText("salut")
-                snap("05-exercise-typed")
-                let check = element(identifier: "exercise.check", label: "Verifică")
-                if check.exists { check.tap() }
-                snap("06-exercise-feedback")
-                let hint = element(identifier: "exercise.hint", label: "Indiciu")
-                if hint.exists, hint.isEnabled {
-                    hint.tap()
-                    snap("07-exercise-hint")
+
+            let choices = app.buttons.matching(identifier: "exercise.choice")
+            if choices.firstMatch.waitForExistence(timeout: 2) {
+                let count = min(choices.count, 6)
+                for index in 0..<count {
+                    let choice = choices.element(boundBy: index)
+                    guard choice.exists, choice.isEnabled else { continue }
+                    choice.tap()
+                    if step == 0 && index == 0 { snap("05-exercise-selected") }
+                    let check = element(identifier: "exercise.check", label: "Verifică")
+                    guard check.waitForExistence(timeout: 2) else { break }
+                    check.tap()
+                    if step == 0 && index == 0 { snap("06-exercise-feedback") }
+                    if continueButton.waitForExistence(timeout: 1.5) {
+                        if step == 0 { snap("07-exercise-correct") }
+                        break
+                    }
                 }
+            } else {
+                let field = app.textFields.firstMatch
+                if field.waitForExistence(timeout: 2) {
+                    field.tap()
+                    field.typeText("salut")
+                    snap("11-exercise-typed")
+                    let check = element(identifier: "exercise.check", label: "Verifică")
+                    if check.exists { check.tap() }
+                    snap("12-exercise-text-feedback")
+                }
+                break
             }
+
+            guard continueButton.waitForExistence(timeout: 2) else { break }
+            continueButton.tap()
         }
 
         goBack()

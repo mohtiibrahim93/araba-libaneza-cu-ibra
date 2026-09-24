@@ -42,9 +42,7 @@ final class YallaAppSmokeUITests: XCTestCase {
     func testJourneyAndRootExplorerSmoke() throws {
         openTab("Parcurs")
 
-        let firstUnitLink = app.collectionViews.buttons.firstMatch.exists
-            ? app.collectionViews.buttons.firstMatch
-            : app.buttons.firstMatch
+        let firstUnitLink = app.buttons.matching(identifier: "journey.unit").firstMatch
 
         XCTAssertTrue(firstUnitLink.waitForExistence(timeout: 8))
         firstUnitLink.tap()

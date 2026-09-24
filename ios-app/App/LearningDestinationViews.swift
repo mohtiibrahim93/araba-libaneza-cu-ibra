@@ -1,106 +1,6 @@
 import SwiftUI
 import YallaCore
 
-struct JourneyUnitDetailView: View {
-    let detail: JourneyUnitDetail
-    let expressions: [YallaCore.Expression]
-    let locale: String
-    @ObservedObject var progressModel: LearnerProgressModel
-
-    var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(detail.level.rawValue.uppercased())
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    Text(detail.description)
-                        .font(.body)
-                    HStack(spacing: 14) {
-                        Label("\(detail.expressions.count) expresii", systemImage: "text.bubble")
-                        Label("\(detail.exercises.count) exerciții", systemImage: "checkmark.circle")
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-            }
-
-            if !detail.exercises.isEmpty {
-                Section {
-                    NavigationLink {
-                        ExerciseSessionView(
-                            exercises: detail.exercises,
-                            expressions: expressions,
-                            locale: locale,
-                            title: detail.title,
-                            progressModel: progressModel
-                        )
-                    } label: {
-                        Label("Începe exercițiile", systemImage: "play.fill")
-                            .font(.headline)
-                    }
-                    .accessibilityIdentifier("lesson.start")
-                }
-            }
-
-            if let matching = MatchingExerciseBuilder().practice(
-                expressionIDs: detail.expressions.map(\.id),
-                expressions: expressions, unitID: detail.id, locale: locale
-            ) {
-                Section {
-                    NavigationLink {
-                        ExerciseSessionView(
-                            exercises: [matching], expressions: expressions, locale: locale,
-                            title: "Potrivește expresiile", progressModel: progressModel
-                        )
-                    } label: {
-                        Label("Potrivește expresiile", systemImage: "square.grid.2x2")
-                    }
-                    .accessibilityIdentifier("lesson.matching")
-                    Text("Până la 6 expresii din această unitate.")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
-            }
-
-            Section("Expresii") {
-                ForEach(detail.expressions) { expression in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(alignment: .firstTextBaseline) {
-                            Text(expression.arabizi)
-                                .font(.headline)
-                            if let arabic = expression.arabicScript {
-                                Text(arabic)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        Text(expression.meaning)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 3)
-                }
-            }
-
-            Section("Exerciții") {
-                if detail.exercises.isEmpty {
-                    Text("Această unitate nu are încă exerciții native asociate.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(detail.exercises) { exercise in
-                        ExercisePreviewRow(exercise: exercise, locale: locale)
-                    }
-                }
-            }
-        }
-        .navigationTitle(detail.title)
-        .navigationBarTitleDisplayMode(.inline)
-        .task(id: detail.id) {
-            await progressModel.setCurrentJourneyUnitID(detail.id)
-        }
-    }
-}
-
 struct PracticeDestinationView: View {
     let destination: PracticeDestination
     let expressions: [YallaCore.Expression]
@@ -250,7 +150,7 @@ private struct SpeedDrillOverviewView: View {
     }
 }
 
-private struct ExercisePreviewRow: View {
+struct ExercisePreviewRow: View {
     let exercise: ExerciseDefinition
     let locale: String
 

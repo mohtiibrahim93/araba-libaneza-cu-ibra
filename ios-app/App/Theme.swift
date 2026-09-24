@@ -21,6 +21,7 @@ enum Theme {
     static let mint = Color(light: 0xE7F2E9, dark: 0x173A33)
     static let lime = Color(light: 0xD8EC87, dark: 0xC5DC6E)
     static let gold = Color(light: 0xEDB95E, dark: 0xE9B458)
+    static let goldShade = Color(light: 0xC8923A, dark: 0xB5832F)
 
     // MARK: Feedback
     static let success = teal

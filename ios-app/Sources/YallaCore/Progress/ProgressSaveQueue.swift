@@ -7,6 +7,7 @@ public enum ProgressSaveOperation: Codable, Equatable, Sendable {
     case speedDrill(SpeedDrillHistoryEntry)
     case journeyUnit(String?)
     case savedExpression(String, Bool)
+    case lessonCompleted(String)
 
     fileprivate var isDurable: Bool {
         if case .reload = self { return false }
@@ -157,6 +158,8 @@ public final class ProgressSaveQueue {
                     saved = try await repository.setCurrentJourneyUnitID(id)
                 case let .savedExpression(id, value):
                     saved = try await repository.setExpressionSaved(id, saved: value)
+                case let .lessonCompleted(id):
+                    saved = try await repository.markLessonCompleted(id)
                 }
 
                 self.latestSnapshot = saved

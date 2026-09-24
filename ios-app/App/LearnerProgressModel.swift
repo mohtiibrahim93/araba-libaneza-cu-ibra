@@ -39,6 +39,10 @@ final class LearnerProgressModel: ObservableObject {
         await perform(.savedExpression(expressionID, desired))
     }
 
+    func markLessonCompleted(_ lessonID: String) async {
+        await perform(.lessonCompleted(lessonID))
+    }
+
     func recordSpeedDrill(_ entry: SpeedDrillHistoryEntry) async {
         await perform(.speedDrill(entry))
     }
