@@ -38,6 +38,19 @@ final class YallaScreenshotTests: XCTestCase {
 
         openTab("Descoperă")
         snap("21-discover")
+        let search = app.textFields["discover.search"]
+        if search.waitForExistence(timeout: 4) {
+            search.tap()
+            search.typeText("mar7aba")
+            snap("21b-discover-search")
+            let rootsChip = app.buttons["Rădăcini"]
+            if rootsChip.exists {
+                let clear = app.buttons["Șterge căutarea"]
+                if clear.exists { clear.tap() }
+                rootsChip.tap()
+                snap("21c-discover-roots")
+            }
+        }
 
         openTab("Eu")
         snap("22-profile")

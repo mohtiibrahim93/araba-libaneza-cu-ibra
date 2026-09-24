@@ -30,11 +30,7 @@ final class YallaAppSmokeUITests: XCTestCase {
         capture("03-practice")
 
         openTab("Descoperă")
-        XCTAssertTrue(app.navigationBars["Descoperă"].waitForExistence(timeout: 8))
-        XCTAssertTrue(
-            app.searchFields.firstMatch.waitForExistence(timeout: 8) ||
-            app.textFields.firstMatch.waitForExistence(timeout: 2)
-        )
+        XCTAssertTrue(app.textFields["discover.search"].waitForExistence(timeout: 8))
         capture("04-discover")
 
         openTab("Eu")
@@ -60,6 +56,8 @@ final class YallaAppSmokeUITests: XCTestCase {
         capture("06-journey-unit")
 
         openTab("Descoperă")
+        let rootsChip = app.buttons["Rădăcini"]
+        if rootsChip.waitForExistence(timeout: 5) { rootsChip.tap() }
         let rootButton = app.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] %@", "L7M")
         ).firstMatch

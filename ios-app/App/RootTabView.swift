@@ -577,13 +577,23 @@ private struct PracticeModeRow: View {
     }
 }
 
+private enum DiscoverFilter: String, CaseIterable, Identifiable {
+    case words = "Cuvinte"
+    case expressions = "Expresii"
+    case saved = "Salvate"
+    case roots = "Rădăcini"
+
+    var id: String { rawValue }
+}
+
 private struct DiscoverView: View {
     let model: DiscoverModel
     let package: ContentPackage
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
     @State private var query = ""
-    @State private var showSavedOnly = false
+    @State private var filter: DiscoverFilter = .words
+    @FocusState private var searchFocused: Bool
 
     private var savedExpressionIDs: Set<String> {
         progressModel.snapshot.savedExpressionIDs
@@ -601,193 +611,439 @@ private struct DiscoverView: View {
         model.search(query)
     }
 
-    private var filteredRoots: [RootSummary] {
-        let roots = searchResults.compactMap { result -> RootSummary? in
+    private var roots: [RootSummary] {
+        searchResults.compactMap { result -> RootSummary? in
             guard case let .root(root) = result else { return nil }
             return root
         }
-
-        guard showSavedOnly else { return roots }
-
-        return roots.filter { root in
-            guard let graph = model.rootGraph(rootID: root.id) else { return false }
-            return graph.members.contains { savedExpressionIDs.contains($0.id) }
-        }
     }
 
-    private var filteredEntries: [DictionaryEntrySummary] {
-        let entries = searchResults.compactMap { result -> DictionaryEntrySummary? in
+    /// Single words vs. multi-word expressions, by their written form.
+    private var entries: [DictionaryEntrySummary] {
+        let all = searchResults.compactMap { result -> DictionaryEntrySummary? in
             guard case let .entry(entry) = result else { return nil }
             return entry
         }
-
-        guard showSavedOnly else { return entries }
-        return entries.filter { savedExpressionIDs.contains($0.id) }
+        switch filter {
+        case .words: return all.filter { !$0.arabizi.contains(" ") }
+        case .expressions: return all.filter { $0.arabizi.contains(" ") }
+        case .saved: return all.filter { savedExpressionIDs.contains($0.id) }
+        case .roots: return []
+        }
     }
 
     var body: some View {
         NavigationStack {
-            List {
-                if !savedExpressionIDs.isEmpty {
-                    Section("Salvate") {
-                        HStack {
-                            Label(
-                                "\(savedExpressionIDs.count) expresii salvate",
-                                systemImage: "bookmark.fill"
-                            )
-                            Spacer()
-                            if showSavedOnly {
-                                Text("filtru activ")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 18) {
+                    header
+                    searchField
+                    chips
 
-                        if !savedPracticeExercises.isEmpty {
-                            NavigationLink {
-                                ExerciseSessionView(
-                                    exercises: savedPracticeExercises,
-                                    expressions: package.expressions,
-                                    locale: locale,
-                                    title: "Practică expresiile salvate",
-                                    progressModel: progressModel
-                                )
-                            } label: {
-                                Label(
-                                    "Practică expresiile salvate",
-                                    systemImage: "bolt.fill"
-                                )
-                            }
-                        } else {
-                            Text("Expresiile salvate nu au încă exerciții native aprobate asociate.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
+                    switch filter {
+                    case .roots:
+                        rootsGrid
+                    default:
+                        entrySections
                     }
                 }
-
-                if !filteredRoots.isEmpty {
-                    Section("Rădăcini") {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
-                                ForEach(filteredRoots) { root in
-                                    if let graph = model.rootGraph(rootID: root.id) {
-                                        NavigationLink {
-                                            RootExplorerView(
-                                                graph: graph,
-                                                model: model,
-                                                package: package,
-                                                locale: locale,
-                                                progressModel: progressModel
-                                            )
-                                        } label: {
-                                            VStack(spacing: 4) {
-                                                Text(root.displayKey)
-                                                    .font(.headline)
-                                                if let arabic = root.arabicRadicals {
-                                                    Text(arabic)
-                                                        .font(.subheadline)
-                                                }
-                                                Text("\(root.memberCount) forme")
-                                                    .font(.caption2)
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .padding(.horizontal, 16)
-                                            .padding(.vertical, 10)
-                                            .background(.thinMaterial, in: Capsule())
-                                        }
-                                        .buttonStyle(.plain)
-                                    }
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                }
-
-                if !filteredEntries.isEmpty {
-                    Section("Dicționar") {
-                        ForEach(filteredEntries) { entry in
-                            NavigationLink {
-                                DictionaryEntryDetailView(
-                                    entry: entry,
-                                    model: model,
-                                    package: package,
-                                    locale: locale,
-                                    progressModel: progressModel
-                                )
-                            } label: {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    HStack {
-                                        Text(entry.arabizi)
-                                            .font(.headline)
-                                        if let arabic = entry.arabicScript {
-                                            Text(arabic)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        Spacer()
-                                        if progressModel.snapshot.savedExpressionIDs.contains(entry.id) {
-                                            Image(systemName: "bookmark.fill")
-                                                .foregroundStyle(.secondary)
-                                                .accessibilityLabel("Salvat")
-                                        }
-                                        if let rootID = entry.rootID,
-                                           let root = model.roots.first(where: { $0.id == rootID }) {
-                                            Text(root.displayKey)
-                                                .font(.caption.bold())
-                                                .padding(.horizontal, 8)
-                                                .padding(.vertical, 4)
-                                                .background(.thinMaterial, in: Capsule())
-                                        }
-                                    }
-                                    Text(entry.meaning)
-                                        .foregroundStyle(.secondary)
-                                    if !entry.topics.isEmpty {
-                                        Text(entry.topics.joined(separator: " · "))
-                                            .font(.caption)
-                                            .foregroundStyle(.tertiary)
-                                    }
-                                }
-                                .padding(.vertical, 3)
-                            }
-                        }
-                    }
-                }
-
-                if filteredRoots.isEmpty && filteredEntries.isEmpty {
-                    if showSavedOnly && savedExpressionIDs.isEmpty {
-                        ContentUnavailableView(
-                            "Nicio expresie salvată",
-                            systemImage: "bookmark",
-                            description: Text("Salvează expresii din dicționar ca să le găsești aici.")
-                        )
-                    } else if showSavedOnly {
-                        ContentUnavailableView(
-                            "Niciun rezultat salvat",
-                            systemImage: "bookmark.slash",
-                            description: Text("Nu există expresii salvate care să corespundă căutării curente.")
-                        )
-                    } else {
-                        ContentUnavailableView.search(text: query)
-                    }
-                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
             }
-            .searchable(text: $query, prompt: "Caută Arabizi, arabă sau română")
-            .creamList()
-            .navigationTitle("Descoperă")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+            .scrollDismissesKeyboard(.interactively)
+            .background(Theme.canvas.ignoresSafeArea())
+            .toolbar(.hidden, for: .navigationBar)
+        }
+    }
+
+    private var header: some View {
+        HStack(alignment: .bottom, spacing: 0) {
+            Image("illus-dict-left")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 70, height: 96)
+                .clipped()
+                .mask(LinearGradient(colors: [.black, .clear], startPoint: .leading, endPoint: .trailing))
+                .accessibilityHidden(true)
+            VStack(spacing: 4) {
+                CedarShape()
+                    .fill(Theme.brand)
+                    .frame(width: 30, height: 28)
+                    .accessibilityHidden(true)
+                Text("Araba libaneză")
+                    .font(Theme.serif(.title2))
+                    .foregroundStyle(Theme.brand)
+                Text("Dicționar și ghid de expresii")
+                    .font(Theme.font(.subheadline, weight: .medium))
+                    .foregroundStyle(Theme.ink)
+                Text("Caută. Învață. Folosește în viața reală.")
+                    .font(Theme.font(.caption))
+                    .foregroundStyle(Theme.muted)
+            }
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isHeader)
+            Image("illus-dict-right")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 70, height: 96)
+                .clipped()
+                .mask(LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing))
+                .accessibilityHidden(true)
+        }
+        .padding(.top, 8)
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(Theme.muted)
+            TextField("Caută Arabizi, arabă sau română", text: $query)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused($searchFocused)
+                .submitLabel(.search)
+                .accessibilityIdentifier("discover.search")
+            if !query.isEmpty {
+                Button {
+                    query = ""
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(Theme.muted)
+                }
+                .accessibilityLabel("Șterge căutarea")
+            }
+        }
+        .font(Theme.font(.body))
+        .padding(.horizontal, 16)
+        .padding(.vertical, 13)
+        .background(Theme.surface, in: Capsule())
+        .overlay(Capsule().strokeBorder(Theme.line, lineWidth: 1))
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 3)
+    }
+
+    private var chips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(DiscoverFilter.allCases) { option in
                     Button {
-                        showSavedOnly.toggle()
+                        filter = option
                     } label: {
-                        Image(systemName: showSavedOnly ? "bookmark.fill" : "bookmark")
+                        Text(option.rawValue)
+                            .font(Theme.font(.subheadline, weight: .semibold))
+                            .foregroundStyle(filter == option ? Color.white : Theme.ink)
+                            .padding(.horizontal, 18)
+                            .padding(.vertical, 9)
+                            .background(filter == option ? Theme.deep : Theme.surface, in: Capsule())
+                            .overlay(Capsule().strokeBorder(filter == option ? Color.clear : Theme.line, lineWidth: 1))
                     }
-                    .accessibilityLabel(
-                        showSavedOnly ? "Arată toate expresiile" : "Arată doar expresiile salvate"
-                    )
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(filter == option ? .isSelected : [])
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private var entrySections: some View {
+        let list = entries
+        if filter == .saved && !savedPracticeExercises.isEmpty {
+            NavigationLink {
+                ExerciseSessionView(
+                    exercises: savedPracticeExercises,
+                    expressions: package.expressions,
+                    locale: locale,
+                    title: "Practică expresiile salvate",
+                    progressModel: progressModel
+                )
+            } label: {
+                Label("Practică expresiile salvate", systemImage: "bolt.fill")
+                    .font(Theme.font(.headline, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Theme.terracotta, in: Capsule())
+            }
+            .buttonStyle(NodeButtonStyle())
+        }
+
+        if list.isEmpty {
+            emptyState
+        } else {
+            if !query.isEmpty, let featured = list.first {
+                FeaturedEntryCard(
+                    entry: featured,
+                    root: featured.rootID.flatMap { id in model.roots.first { $0.id == id } },
+                    isSaved: savedExpressionIDs.contains(featured.id),
+                    onToggleSaved: { toggleSaved(featured.id) },
+                    destination: detail(for: featured)
+                )
+            }
+
+            let rest = query.isEmpty ? Array(list.prefix(200)) : Array(list.dropFirst().prefix(200))
+            if !rest.isEmpty {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack {
+                        Label(listTitle, systemImage: "lightbulb.max.fill")
+                            .font(Theme.serif(.headline))
+                            .foregroundStyle(Theme.ink)
+                            .labelStyle(TintedIconLabelStyle(tint: Theme.gold))
+                        Spacer()
+                        Text("\(list.count)")
+                            .font(Theme.font(.caption, weight: .semibold))
+                            .foregroundStyle(Theme.muted)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 14)
+
+                    ForEach(rest) { entry in
+                        Divider().padding(.leading, 16)
+                        EntryRow(
+                            entry: entry,
+                            isSaved: savedExpressionIDs.contains(entry.id),
+                            onToggleSaved: { toggleSaved(entry.id) },
+                            destination: detail(for: entry)
+                        )
+                    }
+                }
+                .cardBackground()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var emptyState: some View {
+        if filter == .saved && savedExpressionIDs.isEmpty {
+            ContentUnavailableView(
+                "Nicio expresie salvată",
+                systemImage: "bookmark",
+                description: Text("Salvează expresii din dicționar ca să le găsești aici.")
+            )
+        } else if filter == .saved {
+            ContentUnavailableView(
+                "Niciun rezultat salvat",
+                systemImage: "bookmark.slash",
+                description: Text("Nu există expresii salvate care să corespundă căutării curente.")
+            )
+        } else {
+            ContentUnavailableView.search(text: query)
+        }
+    }
+
+    @ViewBuilder
+    private var rootsGrid: some View {
+        if roots.isEmpty {
+            ContentUnavailableView(
+                "Nicio rădăcină",
+                systemImage: "leaf",
+                description: Text("Rădăcinile apar aici pe măsură ce sunt aprobate de profesor.")
+            )
+        } else {
+            Text("Descoperă cum dintr-o singură rădăcină se nasc mai multe cuvinte în araba libaneză.")
+                .font(Theme.font(.subheadline))
+                .foregroundStyle(Theme.muted)
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)], spacing: 14) {
+                ForEach(roots) { root in
+                    if let graph = model.rootGraph(rootID: root.id) {
+                        NavigationLink {
+                            RootExplorerView(
+                                graph: graph,
+                                model: model,
+                                package: package,
+                                locale: locale,
+                                progressModel: progressModel
+                            )
+                        } label: {
+                            RootCircle(root: root)
+                        }
+                        .buttonStyle(NodeButtonStyle())
+                    }
+                }
+            }
+        }
+    }
+
+    private func detail(for entry: DictionaryEntrySummary) -> DictionaryEntryDetailView {
+        DictionaryEntryDetailView(
+            entry: entry,
+            model: model,
+            package: package,
+            locale: locale,
+            progressModel: progressModel
+        )
+    }
+
+    private var listTitle: String {
+        query.isEmpty ? "Dicționar" : "Expresii similare"
+    }
+
+    private func toggleSaved(_ id: String) {
+        Task { await progressModel.toggleSavedExpressionID(id) }
+    }
+}
+
+private struct TintedIconLabelStyle: LabelStyle {
+    let tint: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 8) {
+            configuration.icon.foregroundStyle(tint)
+            configuration.title
+        }
+    }
+}
+
+private struct FeaturedEntryCard: View {
+    let entry: DictionaryEntrySummary
+    let root: RootSummary?
+    let isSaved: Bool
+    let onToggleSaved: () -> Void
+    let destination: DictionaryEntryDetailView
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Text(entry.arabizi)
+                            .font(Theme.serif(.largeTitle))
+                            .foregroundStyle(Theme.ink)
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(2)
+                        if let level = entry.levels.first {
+                            Text(level.rawValue.uppercased())
+                                .font(Theme.font(.caption, weight: .semibold))
+                                .foregroundStyle(Theme.terracotta)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Theme.blush, in: Capsule())
+                        }
+                    }
+                    if let arabic = entry.arabicScript {
+                        Text(arabic)
+                            .font(.title2)
+                            .foregroundStyle(Theme.ink)
+                    }
+                }
+                Spacer()
+                Button(action: onToggleSaved) {
+                    Image(systemName: isSaved ? "heart.fill" : "heart")
+                        .font(.title3)
+                        .foregroundStyle(Theme.terracotta)
+                        .frame(width: 44, height: 44)
+                        .background(Theme.blush, in: Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează expresia")
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Sens")
+                    .font(Theme.serif(.subheadline))
+                    .foregroundStyle(Theme.terracotta)
+                Text(entry.meaning)
+                    .font(Theme.font(.body))
+                    .foregroundStyle(Theme.ink)
+                if let pragmatic = entry.pragmaticMeaning {
+                    Text(pragmatic)
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(Theme.muted)
+                }
+            }
+
+            if let root {
+                Label("Rădăcina \(root.displayKey)", systemImage: "leaf.fill")
+                    .font(Theme.font(.subheadline, weight: .semibold))
+                    .foregroundStyle(Theme.teal)
+            }
+
+            NavigationLink {
+                destination
+            } label: {
+                HStack {
+                    Text("Vezi detalii și practică")
+                    Image(systemName: "arrow.right")
+                }
+                .font(Theme.font(.subheadline, weight: .semibold))
+                .foregroundStyle(Theme.teal)
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardBackground()
+    }
+}
+
+private struct EntryRow: View {
+    let entry: DictionaryEntrySummary
+    let isSaved: Bool
+    let onToggleSaved: () -> Void
+    let destination: DictionaryEntryDetailView
+
+    var body: some View {
+        HStack(spacing: 12) {
+            NavigationLink {
+                destination
+            } label: {
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 8) {
+                        Text(entry.arabizi)
+                            .font(Theme.font(.headline, weight: .semibold))
+                            .foregroundStyle(Theme.ink)
+                        if let arabic = entry.arabicScript {
+                            Text(arabic)
+                                .foregroundStyle(Theme.muted)
+                        }
+                    }
+                    Text(entry.meaning)
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(Theme.muted)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            Button(action: onToggleSaved) {
+                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(isSaved ? Theme.terracotta : Theme.muted)
+                    .frame(width: 40, height: 40)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează")
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+    }
+}
+
+private struct RootCircle: View {
+    let root: RootSummary
+
+    var body: some View {
+        VStack(spacing: 6) {
+            if let arabic = root.arabicRadicals {
+                Text(arabic)
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(.white)
+            }
+            Text(root.displayKey)
+                .font(Theme.serif(.title3))
+                .foregroundStyle(.white)
+            Text("\(root.memberCount) forme")
+                .font(Theme.font(.caption))
+                .foregroundStyle(.white.opacity(0.85))
+        }
+        .frame(width: 140, height: 140)
+        .background(Theme.terracotta, in: Circle())
+        .overlay(Circle().strokeBorder(Theme.blush, lineWidth: 6))
+        .shadow(color: Theme.terracotta.opacity(0.3), radius: 10, x: 0, y: 6)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Deschide familia rădăcinii")
     }
 }
 
