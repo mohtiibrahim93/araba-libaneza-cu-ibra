@@ -354,8 +354,16 @@ const NativeScheduler = ({
             : "Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (150 lei/lesson), or message us on WhatsApp if you think this is a mistake."}
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
+          <Button asChild className="flex-1">
+            <Link
+              to={`/booking?type=paid${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+            >
+              <Calendar className="w-4 h-4 mr-2" />
+              {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
+            </Link>
+          </Button>
           {registrationId && (
-            <Button asChild className="flex-1">
+            <Button asChild variant="outline" className="flex-1">
               <Link
                 to={`/checkout?courseType=private&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
