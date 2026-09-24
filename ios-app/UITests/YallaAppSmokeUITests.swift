@@ -43,6 +43,10 @@ final class YallaAppSmokeUITests: XCTestCase {
         openTab("Parcurs")
 
         let firstUnitLink = app.buttons.matching(identifier: "journey.unit").firstMatch
+        XCTAssertTrue(firstUnitLink.waitForExistence(timeout: 8))
+        let unitProgress = firstUnitLink.value as? String ?? ""
+        XCTAssertTrue(unitProgress.contains("lecții"), "Unit progress missing: \(unitProgress)")
+        XCTAssertFalse(unitProgress.contains("din 0 lecții"), "Unit has no lessons: \(unitProgress)")
 
         XCTAssertTrue(firstUnitLink.waitForExistence(timeout: 8))
         firstUnitLink.tap()

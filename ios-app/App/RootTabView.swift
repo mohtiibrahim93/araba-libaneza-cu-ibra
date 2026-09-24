@@ -5,6 +5,7 @@ import YallaCore
 struct RootTabView: View {
     let content: AppContentSnapshot
     private let reviewExpressionIDs: Set<String>
+    private let lessonCounts: [String: Int]
     @StateObject private var progressModel: LearnerProgressModel
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
@@ -19,6 +20,7 @@ struct RootTabView: View {
     ) {
         self.content = content
         self.reviewExpressionIDs = Set(content.package.expressions.map(\.id))
+        self.lessonCounts = JourneyLessonPlanner().lessonCounts(in: content.package, locale: content.locale)
         _progressModel = StateObject(
             wrappedValue: LearnerProgressModel(
                 repository: progressRepository,
@@ -71,7 +73,8 @@ struct RootTabView: View {
                 package: content.package,
                 locale: content.locale,
                 progressModel: progressModel,
-                path: $journeyPath
+                path: $journeyPath,
+                lessonCounts: lessonCounts
             )
             .tabItem { Label("Parcurs", systemImage: "map") }
             .tag(RootTab.journey)

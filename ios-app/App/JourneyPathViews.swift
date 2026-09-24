@@ -10,8 +10,9 @@ struct JourneyPathView: View {
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
     @Binding var path: [String]
+    /// Lessons per unit, computed once at launch.
+    let lessonCounts: [String: Int]
 
-    @State private var lessonCounts: [String: Int] = [:]
     private let navigationBuilder = LearningNavigationBuilder()
     private let planner = JourneyLessonPlanner()
 
@@ -63,10 +64,6 @@ struct JourneyPathView: View {
                     ContentUnavailableView("Unitate indisponibilă", systemImage: "exclamationmark.triangle")
                 }
             }
-            .task {
-                guard lessonCounts.isEmpty else { return }
-                lessonCounts = planner.lessonCounts(in: package, locale: locale)
-            }
         }
     }
 
@@ -79,7 +76,7 @@ struct JourneyPathView: View {
     private func unitNode(_ unit: JourneyUnitSummary, index: Int) -> some View {
         let progress = progress(for: unit.id)
         let isHighlighted = unit.id == highlightedUnitID
-        let available = lessonCounts.isEmpty || (lessonCounts[unit.id] ?? 0) > 0
+        let available = (lessonCounts[unit.id] ?? 0) > 0
         let style: PathNode.Style = !available ? .locked
             : progress.isComplete ? .done
             : isHighlighted ? .active
