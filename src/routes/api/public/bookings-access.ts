@@ -14,46 +14,38 @@ interface AccessPayload {
   exp: number;
 }
 
-function encode(value: string): string {
-  return Buffer.from(value, "utf8").toString("base64url");
-}
-
-function decode(value: string): string {
-  return Buffer.from(value, "base64url").toString("utf8");
-}
-
-async function signingKey(secret: string) {
+async function encryptionKey(secret: string) {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(secret));
   return crypto.subtle.importKey(
     "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
+    bytes,
+    { name: "AES-GCM" },
     false,
-    ["sign", "verify"],
+    ["encrypt", "decrypt"],
   );
 }
 
 async function createAccessToken(payload: AccessPayload, secret: string): Promise<string> {
-  const encodedPayload = encode(JSON.stringify(payload));
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    await signingKey(secret),
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    await encryptionKey(secret),
     new TextEncoder().encode(encodedPayload),
   );
-  return `${encodedPayload}.${Buffer.from(signature).toString("base64url")}`;
+  return Buffer.concat([Buffer.from(iv), Buffer.from(ciphertext)]).toString("base64url");
 }
 
 async function readAccessToken(token: string, secret: string): Promise<AccessPayload | null> {
-  const [payloadPart, signaturePart, extra] = token.split(".");
-  if (!payloadPart || !signaturePart || extra) return null;
+  if (token.length < 40 || token.length > 4096) return null;
   try {
-    const valid = await crypto.subtle.verify(
-      "HMAC",
-      await signingKey(secret),
-      Buffer.from(signaturePart, "base64url"),
-      new TextEncoder().encode(payloadPart),
+    const packed = Buffer.from(token, "base64url");
+    if (packed.length <= 28) return null;
+    const plaintext = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: packed.subarray(0, 12) },
+      await encryptionKey(secret),
+      packed.subarray(12),
     );
-    if (!valid) return null;
-    const payload = JSON.parse(decode(payloadPart)) as Partial<AccessPayload>;
+    const payload = JSON.parse(new TextDecoder().decode(plaintext)) as Partial<AccessPayload>;
     if (typeof payload.email !== "string" || typeof payload.exp !== "number") return null;
     if (payload.exp <= Math.floor(Date.now() / 1000)) return null;
     return { email: payload.email, exp: payload.exp };
@@ -65,6 +57,10 @@ async function readAccessToken(token: string, secret: string): Promise<AccessPay
 async function digest(value: string): Promise<string> {
   const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
   return Buffer.from(bytes).toString("hex");
+}
+
+function escapeIlike(value: string): string {
+  return value.replace(/([%_\\])/g, "\\$1");
 }
 
 const genericMessage = {
@@ -99,7 +95,7 @@ export const Route = createFileRoute("/api/public/bookings-access")({
         const { data: booking } = await supabaseAdmin
           .from("bookings")
           .select("id")
-          .ilike("student_email", email)
+          .ilike("student_email", escapeIlike(email))
           .limit(1)
           .maybeSingle();
 
@@ -114,7 +110,6 @@ export const Route = createFileRoute("/api/public/bookings-access")({
           try {
             await sendTemplateEmail("bookings-access", email, {
               templateData: { accessUrl, lang: parsed.data.lang },
-              idempotencyKey: `bookings-access-${await digest(`${email}:${Math.floor(Date.now() / 300000)}`)}`,
             });
           } catch (error) {
             console.error("[bookings-access] email failed", error);
@@ -135,7 +130,7 @@ export const Route = createFileRoute("/api/public/bookings-access")({
         const { data, error } = await supabaseAdmin
           .from("bookings")
           .select("id,event_type_slug,start_at,end_at,status,format,meet_link,manage_token,booking_event_types(name_ro,name_en,duration_min)")
-          .ilike("student_email", access.email)
+          .ilike("student_email", escapeIlike(access.email))
           .order("start_at", { ascending: false });
         if (error) {
           console.error("[bookings-access] booking lookup failed", error);
