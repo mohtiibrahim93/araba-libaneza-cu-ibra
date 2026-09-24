@@ -152,7 +152,9 @@ private struct PracticeLaunchLayout<Destination: View>: View {
                         .foregroundStyle(.white.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
                     if canStart {
-                        NavigationLink(destination: destination) {
+                        NavigationLink {
+                            destination()
+                        } label: {
                             Label(startLabel, systemImage: "play.fill")
                                 .font(Theme.font(.headline, weight: .semibold))
                                 .foregroundStyle(.white)
