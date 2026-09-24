@@ -30,7 +30,7 @@ async function createAccessToken(payload: AccessPayload, secret: string): Promis
   const ciphertext = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     await encryptionKey(secret),
-    new TextEncoder().encode(encodedPayload),
+    new TextEncoder().encode(JSON.stringify(payload)),
   );
   return Buffer.concat([Buffer.from(iv), Buffer.from(ciphertext)]).toString("base64url");
 }
