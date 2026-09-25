@@ -17,7 +17,10 @@ struct JourneyLessonComposerTests {
         let expressions = (0..<count).map { index -> YallaCore.Expression in
             // Every third phrase has three words so it can be reordered.
             let form = index % 3 == 0 ? "ana w enta \(index)" : "kilme\(index)"
-            return expression("e\(index)", form, "sens \(index)")
+            // Distinct words per meaning, so no two meanings overlap.
+            let letters = Array("bcdfghjklmnprstvwxyz")
+            let word = "sens" + String(letters[index % letters.count]) + String(letters[index / letters.count])
+            return expression("e\(index)", form, word)
         }
         let unit = JourneyUnit(
             id: "u", level: .a1,
