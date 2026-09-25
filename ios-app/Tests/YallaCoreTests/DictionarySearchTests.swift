@@ -93,4 +93,15 @@ struct DictionarySearchTests {
         let house = try #require(model.entries.first { $0.id == "w1" })
         #expect(model.similar(to: house).map(\.id) == ["w2", "w3"])
     }
+
+    @Test func repeatedCardsUseTheirFirstUnitForSimilarWords() throws {
+        let model = try model([
+            expression("g1", "Mar7aba", "Salut"),
+            expression("g2", "Ahlan", "Bun venit"),
+            expression("g3", "Mar7aba", "Salut"),
+            expression("s1", "Fatbol", "Fotbal")
+        ], units: [["g1", "g2"], ["s1", "g3"]])
+        let hello = try #require(model.entries.first { $0.arabizi == "Mar7aba" })
+        #expect(model.similar(to: hello).map(\.id) == ["g2"])
+    }
 }

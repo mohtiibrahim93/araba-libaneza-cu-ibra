@@ -230,7 +230,13 @@ public struct DiscoverModel: Equatable, Sendable {
             var seen = Set<Int>()
             let members = expressionIDs.compactMap { indexByExpressionID[$0] }.filter { seen.insert($0).inserted }
             guard !members.isEmpty else { continue }
-            for member in members { groupsByEntry[member].append(groups.count) }
+            // An entry belongs to a group only through its primary expression,
+            // so a card repeated in many units keeps the topic where it first
+            // appears in the course.
+            for expressionID in Set(expressionIDs) {
+                guard let member = indexByExpressionID[expressionID], entries[member].id == expressionID else { continue }
+                groupsByEntry[member].append(groups.count)
+            }
             groups.append(members)
         }
         self.topicGroups = groups
