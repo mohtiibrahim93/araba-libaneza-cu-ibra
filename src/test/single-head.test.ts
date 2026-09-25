@@ -39,10 +39,14 @@ const SERVED = [
   'name="twitter:description"',
   'property="article:published_time"',
   'property="article:author"',
+  // Served for a blog article that has a cover, and by the root route otherwise.
+  'property="og:image"',
+  'property="og:image:alt"',
+  'name="twitter:image"',
 ];
 
 // A line that carries one of those tags has to say why it is allowed to.
-const GUARDS = ["!served", "Override ?", "{cover &&"];
+const GUARDS = ["!served", "Override ?"];
 
 /**
  * Two pages have no served head to duplicate, so they write their own:

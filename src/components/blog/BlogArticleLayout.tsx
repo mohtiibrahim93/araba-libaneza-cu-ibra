@@ -226,11 +226,12 @@ const BlogArticleLayout = ({
         {!served ? <meta property="og:type" content="article" /> : null}
         {!served ? <meta property="og:url" content={url} /> : null}
         {!served ? <meta property="article:published_time" content={published} /> : null}
-        {/* The article's own cover, when it has one. Without a cover these would
-            only restate the site-wide card the root route already sends. */}
-        {cover && <meta property="og:image" content={socialImage} />}
-        {cover && <meta property="og:image:alt" content={L(cover.alt, lang)} />}
-        {cover && <meta name="twitter:image" content={socialImage} />}
+        {/* The cover is served by the route too (src/lib/seoHead.ts), which is
+            what a link-preview scraper reads. These are the fallback for an
+            article the registry does not list. */}
+        {!served && cover ? <meta property="og:image" content={socialImage} /> : null}
+        {!served && cover ? <meta property="og:image:alt" content={L(cover.alt, lang)} /> : null}
+        {!served && cover ? <meta name="twitter:image" content={socialImage} /> : null}
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}

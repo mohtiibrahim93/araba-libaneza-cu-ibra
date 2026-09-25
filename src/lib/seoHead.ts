@@ -22,6 +22,7 @@
  * else; src/test/single-head.test.ts keeps it that way.
  */
 import { BLOG_POSTS } from "@/lib/blogPosts";
+import { getBlogCover } from "@/lib/blogCovers";
 import { getCurriculum } from "@/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN, LEVEL_A1_DESCRIPTION } from "@/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
@@ -409,6 +410,19 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   const canonicalHref =
     (route.canonical ? BASE + route.canonical : url) + (opts?.canonicalSearch ?? "");
 
+  // A blog article's own cover photo is its link-preview image, and it has to
+  // be served from here. The site-wide card in src/routes/__root.tsx is emitted
+  // first, and a second og:image rendered by the component afterwards is never
+  // the one a scraper reads — Facebook, WhatsApp and X take the first. Served
+  // from the route it replaces the site-wide one instead of queueing behind it.
+  const coverSlug = route.path.startsWith("/blog/")
+    ? route.path.slice("/blog/".length)
+    : route.path.startsWith("/en/blog/")
+      ? route.path.slice("/en/blog/".length)
+      : "";
+  const cover = coverSlug ? getBlogCover(coverSlug) : undefined;
+  const socialImage = cover ? BASE + cover.src : `${BASE}/og-image.png`;
+
   const meta: Record<string, string>[] = [
     { ...RH, title },
     { ...RH, name: "description", content: description },
@@ -420,6 +434,11 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
     { ...RH, name: "twitter:title", content: title },
     { ...RH, name: "twitter:description", content: description },
   ];
+  if (cover) {
+    meta.push({ ...RH, property: "og:image", content: socialImage });
+    meta.push({ ...RH, property: "og:image:alt", content: lang === "en" ? cover.alt.en : cover.alt.ro });
+    meta.push({ ...RH, name: "twitter:image", content: socialImage });
+  }
   if (route.noindex) meta.push({ ...RH, name: "robots", content: "noindex,follow" });
 
   const links: Record<string, string>[] = [{ ...RH, rel: "canonical", href: canonicalHref }];
@@ -466,7 +485,7 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
         dateModified: route.published,
         inLanguage: lang,
         mainEntityOfPage: canonicalHref,
-        image: `${BASE}/og-image.png`,
+        image: socialImage,
         author: { "@type": "Person", name: "Ibra — Centrul de Arabă Libaneză" },
         publisher: {
           "@type": "Organization",
