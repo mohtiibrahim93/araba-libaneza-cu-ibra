@@ -255,7 +255,6 @@ struct OrientationView: View {
                 }
                 .padding(.vertical, Theme.Spacing.xs)
             }
-            .accessibilityIdentifier("orientation.result")
             if unit == nil {
                 Text("Nu există încă o unitate disponibilă pentru recomandare. Poți alege din Călătorie.")
                     .font(Theme.font(.subheadline))

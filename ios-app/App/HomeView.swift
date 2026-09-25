@@ -80,7 +80,6 @@ struct HomeView: View {
                             secondaryMeta: smartSessionSize > 0 ? "\(smartSessionSize) exerciții" : nil,
                             action: onSmartPractice
                         )
-                        .accessibilityIdentifier("home.hero")
                         DailyProgressCard(
                             items: dailyItems,
                             onOpen: { path.append("progress") }
@@ -666,7 +665,6 @@ struct DailyExpressionCard: View {
             }
         }
         .cardBackground()
-        .accessibilityIdentifier("home.expression")
     }
 }
 
@@ -725,7 +723,6 @@ struct SavedPhrasesCard: View {
         .padding(Theme.Spacing.md)
         .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
         .cardBackground(Theme.mint)
-        .accessibilityIdentifier("home.saved")
     }
 }
 
