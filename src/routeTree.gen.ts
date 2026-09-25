@@ -106,6 +106,7 @@ import { Route as JocScorRouteImport } from './routes/joc.scor'
 import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id'
 import { Route as AdminPrivateLeadsIdRouteImport } from './routes/admin/private-leads/$id'
 import { Route as ApiPublicBookingsAccessRouteImport } from './routes/api/public/bookings-access'
+import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
 import { Route as CursuriCursSlugRouteImport } from './routes/cursuri/curs/$slug'
 import { Route as CursuriGrupIndexRouteImport } from './routes/cursuri/grup/index'
@@ -642,6 +643,11 @@ const ApiPublicBookingsAccessRoute = ApiPublicBookingsAccessRouteImport.update({
   path: '/api/public/bookings-access',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
+  id: '/api/public/contact',
+  path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BookingManageTokenRoute = BookingManageTokenRouteImport.update({
   id: '/booking/manage/$token',
   path: '/booking/manage/$token',
@@ -870,6 +876,7 @@ export interface FileRoutesByFullPath {
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -992,6 +999,7 @@ export interface FileRoutesByTo {
   '/joc': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1116,6 +1124,7 @@ export interface FileRoutesById {
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1241,6 +1250,7 @@ export interface FileRouteTypes {
     | '/joc/'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
+    | '/api/public/contact'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1363,6 +1373,7 @@ export interface FileRouteTypes {
     | '/joc'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
+    | '/api/public/contact'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1486,6 +1497,7 @@ export interface FileRouteTypes {
     | '/joc/'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
+    | '/api/public/contact'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1608,6 +1620,7 @@ export interface RootRouteChildren {
   DialecteArabeIndexRoute: typeof DialecteArabeIndexRoute
   AdminPrivateLeadsIdRoute: typeof AdminPrivateLeadsIdRoute
   ApiPublicBookingsAccessRoute: typeof ApiPublicBookingsAccessRoute
+  ApiPublicContactRoute: typeof ApiPublicContactRoute
   BookingManageTokenRoute: typeof BookingManageTokenRoute
   CursuriCursSlugRoute: typeof CursuriCursSlugRoute
   CursuriGrupLevelRoute: typeof CursuriGrupLevelRoute
@@ -2315,6 +2328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBookingsAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/contact': {
+      id: '/api/public/contact'
+      path: '/api/public/contact'
+      fullPath: '/api/public/contact'
+      preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/booking/manage/$token': {
       id: '/booking/manage/$token'
       path: '/booking/manage/$token'
@@ -2602,6 +2622,7 @@ const rootRouteChildren: RootRouteChildren = {
   DialecteArabeIndexRoute: DialecteArabeIndexRoute,
   AdminPrivateLeadsIdRoute: AdminPrivateLeadsIdRoute,
   ApiPublicBookingsAccessRoute: ApiPublicBookingsAccessRoute,
+  ApiPublicContactRoute: ApiPublicContactRoute,
   BookingManageTokenRoute: BookingManageTokenRoute,
   CursuriCursSlugRoute: CursuriCursSlugRoute,
   CursuriGrupLevelRoute: CursuriGrupLevelRoute,

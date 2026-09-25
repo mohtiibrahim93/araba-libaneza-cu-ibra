@@ -136,19 +136,25 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
     setGdprError(undefined);
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("contact_messages").insert({
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim() || null,
-        message: message.trim(),
-        language: lang,
-        source: "contact_page", // required by the anon INSERT policy
+      // The server route records the message and emails the centre's inbox
+      // with the visitor's address as Reply-To.
+      const response = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim() || undefined,
+          message: message.trim(),
+          language: lang,
+          gdpr: true,
+        }),
       });
-      if (error) throw error;
+      if (!response.ok) throw new Error(`contact endpoint returned ${response.status}`);
       trackGenerateLead("contact_form", { context: "contact_page" });
       setSent(true);
     } catch (err) {
-      console.error("[contact] insert failed", err);
+      console.error("[contact] send failed", err);
       toast.error(c.errSend);
     } finally {
       setSubmitting(false);
