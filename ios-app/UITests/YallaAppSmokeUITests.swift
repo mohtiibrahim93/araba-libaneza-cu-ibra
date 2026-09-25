@@ -54,7 +54,7 @@ final class YallaAppSmokeUITests: XCTestCase {
         XCTAssertTrue(settings.waitForExistence(timeout: 5))
         capture("05-profile")
         settings.tap()
-        XCTAssertTrue(app.staticTexts["Contact"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["settings.name"].waitForExistence(timeout: 5))
     }
 
     func testJourneyAndRootExplorerSmoke() throws {
