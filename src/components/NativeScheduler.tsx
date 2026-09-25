@@ -564,7 +564,7 @@ const NativeScheduler = ({
             </div>
             <Button asChild className="w-full">
               <Link
-                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(effectiveRegistrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private${effectiveRegistrationId ? `&registrationId=${encodeURIComponent(effectiveRegistrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
