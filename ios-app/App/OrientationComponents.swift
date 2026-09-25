@@ -179,10 +179,9 @@ struct RecommendationCard<Extra: View>: View {
                     .font(Theme.font(.subheadline, weight: .semibold))
                     .foregroundStyle(Theme.deep)
                     .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: Theme.Spacing.xs)
-                if let badge {
-                    RecommendationBadge(title: badge)
-                }
+            }
+            if let badge {
+                RecommendationBadge(title: badge)
             }
             Text(title)
                 .font(.system(.title2, design: .serif).weight(.bold))

@@ -394,10 +394,10 @@ struct FeatureHeroCard: View {
                 LinearGradient(
                     stops: [
                         .init(color: Theme.cedarDeep, location: 0.00),
-                        .init(color: Theme.deep.opacity(0.98), location: 0.34),
-                        .init(color: Theme.deep.opacity(0.80), location: 0.58),
-                        .init(color: Theme.deep.opacity(0.25), location: 0.82),
-                        .init(color: .clear, location: 1.00)
+                        .init(color: Theme.deep.opacity(0.98), location: 0.40),
+                        .init(color: Theme.deep.opacity(0.70), location: 0.56),
+                        .init(color: Theme.deep.opacity(0.20), location: 0.72),
+                        .init(color: .clear, location: 0.86)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
@@ -606,8 +606,8 @@ struct DailyExpressionCard: View {
                 Text("Expresia zilei")
                     .font(Theme.serif(.subheadline, weight: .semibold))
                     .foregroundStyle(Theme.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                 Spacer(minLength: 0)
                 CircularIconButton(
                     icon: .system(isFavorite ? "heart.fill" : "heart"),
@@ -618,6 +618,7 @@ struct DailyExpressionCard: View {
                     action: onFavorite
                 )
                 .padding(.vertical, -8)
+                .padding(.trailing, -8)
             }
             Button(action: onOpen) {
                 VStack(alignment: .leading, spacing: 2) {
