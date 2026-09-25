@@ -7,6 +7,8 @@ struct ProfileView: View {
     let reviewQueue: ReviewQueueSummary
     let progress: LearnerProgressSnapshot
     let level: LevelBand
+    /// Saved dictionary entries (merged copies counted once).
+    let savedCount: Int
     let recordingCount: Int
     let persistenceError: String?
     let onReviews: () -> Void
@@ -59,7 +61,7 @@ struct ProfileView: View {
                     )
 
                     ProfileMetricsRow(metrics: [
-                        ProfileMetric(icon: "bookmark.fill", value: progress.savedExpressionIDs.count, label: "expresii salvate"),
+                        ProfileMetric(icon: "bookmark.fill", value: savedCount, label: "expresii salvate"),
                         ProfileMetric(icon: "book.fill", value: progress.completedLessonIDs.count, label: "lecții terminate"),
                         ProfileMetric(icon: "waveform", value: recordingCount, label: "înregistrări")
                     ])

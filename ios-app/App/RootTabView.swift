@@ -91,16 +91,24 @@ struct RootTabView: View {
         return nil
     }
 
-    private var savedPreview: [HomeExpression] {
+    /// Saved dictionary entries: a word saved from Discover saves all its
+    /// merged copies, so entries (not raw expression IDs) are counted once.
+    private var savedEntries: [DictionaryEntrySummary] {
         let saved = progressModel.snapshot.savedExpressionIDs
         guard !saved.isEmpty else { return [] }
-        return content.package.expressions
-            .filter { saved.contains($0.id) }
-            .prefix(3)
-            .compactMap { expression in
-                guard let meaning = expression.localizations[content.locale]?.naturalMeaning else { return nil }
-                return homeExpression(expression, meaning: meaning)
-            }
+        return content.discover.entries.filter { $0.expressionIDs.contains(where: saved.contains) }
+    }
+
+    private var savedPreview: [HomeExpression] {
+        savedEntries.prefix(3).map { entry in
+            HomeExpression(
+                id: entry.id,
+                arabizi: entry.arabizi,
+                meaning: entry.meaning,
+                arabic: entry.arabicScript,
+                audio: entry.preferredAudioAsset
+            )
+        }
     }
 
     private func homeExpression(_ expression: YallaCore.Expression, meaning: String) -> HomeExpression {
@@ -244,6 +252,7 @@ struct RootTabView: View {
                 reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
                 progress: progressModel.snapshot,
                 level: currentUnitLevel,
+                savedCount: savedEntries.count,
                 recordingCount: recordingDates.count,
                 persistenceError: progressModel.persistenceError,
                 onReviews: { showingReviews = true },
