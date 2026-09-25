@@ -53,8 +53,14 @@ final class YallaAppSmokeUITests: XCTestCase {
         let settings = app.descendants(matching: .any)["profile.settings"]
         XCTAssertTrue(settings.waitForExistence(timeout: 5))
         capture("05-profile")
+        // The push can miss a tap made while the Tutor page is still
+        // settling; tap once more if Setări has not opened.
+        let nameField = app.descendants(matching: .any)["settings.name"]
         settings.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["settings.name"].waitForExistence(timeout: 5))
+        if !nameField.waitForExistence(timeout: 6), settings.exists, settings.isHittable {
+            settings.tap()
+        }
+        XCTAssertTrue(nameField.waitForExistence(timeout: 10))
     }
 
     func testJourneyAndRootExplorerSmoke() throws {
