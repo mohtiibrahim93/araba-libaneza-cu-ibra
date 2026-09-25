@@ -45,7 +45,7 @@ struct AIConversationPreviewView: View {
         .background(Theme.canvas.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             ConversationControlBar()
-                .background(Theme.canvas.opacity(0.96).ignoresSafeArea(edges: .bottom))
+                .background(Theme.canvas.ignoresSafeArea(edges: .bottom))
         }
         .navigationTitle("Conversație AI")
         .navigationBarTitleDisplayMode(.inline)

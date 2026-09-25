@@ -91,6 +91,8 @@ final class YallaScreenshotTests: XCTestCase {
                 rootsChip.tap()
                 snap("21c-discover-roots")
             }
+            // The keyboard covers the tab bar; dismiss it before switching tabs.
+            if app.keyboards.count > 0 { app.typeText("\n") }
         }
 
         openTab("Progres")

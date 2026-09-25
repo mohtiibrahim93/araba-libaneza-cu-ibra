@@ -254,19 +254,19 @@ struct HomeSmartSessionHero: View {
                     .font(Theme.font(.subheadline))
                     .foregroundStyle(.white.opacity(0.88))
                     .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: Theme.Spacing.s) {
-                    Button(action: action) {
-                        Label("Continuă acum", systemImage: "play.fill")
-                    }
-                    .buttonStyle(PillButtonStyle())
-                    .accessibilityIdentifier("home.continue")
-                    if exerciseCount > 0 {
-                        Text("\(exerciseCount) exerciții")
-                            .font(Theme.font(.caption, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.85))
-                    }
+                Button(action: action) {
+                    Label("Continuă acum", systemImage: "play.fill")
+                        .lineLimit(1)
+                        .fixedSize()
                 }
+                .buttonStyle(PillButtonStyle())
+                .accessibilityIdentifier("home.continue")
                 .padding(.top, Theme.Spacing.xxs)
+                if exerciseCount > 0 {
+                    Text("\(exerciseCount) exerciții")
+                        .font(Theme.font(.caption, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.85))
+                }
             }
             .padding(Theme.Spacing.l)
             .frame(maxWidth: .infinity, alignment: .leading)
