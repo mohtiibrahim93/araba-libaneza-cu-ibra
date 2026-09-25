@@ -33,8 +33,8 @@ final class YallaScreenshotTests: XCTestCase {
         snap("01b-home-lower")
         app.swipeDown()
 
-        openTab("Parcurs")
-        XCTAssertTrue(app.navigationBars["Parcurs"].waitForExistence(timeout: 8))
+        openTab("Călătorie")
+        XCTAssertTrue(app.navigationBars["Călătorie"].waitForExistence(timeout: 8))
         snap("02-journey")
 
         let firstUnit = app.buttons.matching(identifier: "journey.unit").firstMatch
@@ -45,11 +45,8 @@ final class YallaScreenshotTests: XCTestCase {
             captureMatchingFlow()
         }
 
-        openTab("Acasă")
-        let practiceAll = app.buttons["home.practice-all"]
-        scrollTo(practiceAll)
-        if practiceAll.exists {
-            practiceAll.tap()
+        openTab("Exersează")
+        if app.navigationBars["Exersează"].waitForExistence(timeout: 8) {
             snap("20-practice")
             let ai = app.buttons["practice.ai-conversation"]
             scrollTo(ai)
@@ -74,7 +71,6 @@ final class YallaScreenshotTests: XCTestCase {
                 goBack()
                 goBack()
             }
-            goBack()
         }
 
         openTab("Descoperă")
@@ -95,12 +91,18 @@ final class YallaScreenshotTests: XCTestCase {
             if app.keyboards.count > 0 { app.typeText("\n") }
         }
 
-        openTab("Progres")
-        snap("25-progress")
-        app.swipeUp()
-        snap("25b-progress-lower")
+        openTab("Acasă")
+        let progressLink = app.buttons["home.progress"]
+        scrollTo(progressLink)
+        if progressLink.exists {
+            progressLink.tap()
+            snap("25-progress")
+            app.swipeUp()
+            snap("25b-progress-lower")
+            goBack()
+        }
 
-        openTab("Eu")
+        openTab("Tutor")
         snap("22-profile")
     }
 

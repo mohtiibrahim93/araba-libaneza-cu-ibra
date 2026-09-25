@@ -5,7 +5,7 @@ import SwiftUI
 struct AIConversationPreviewView: View {
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Theme.Spacing.l) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
                 ConversationScenarioCard(
                     icon: "fork.knife",
                     title: "Scenarii de conversație",
@@ -13,7 +13,7 @@ struct AIConversationPreviewView: View {
                     image: "illus-restaurant"
                 )
 
-                HStack(spacing: Theme.Spacing.s) {
+                HStack(spacing: Theme.Spacing.md) {
                     IconBadge(systemName: "hourglass", tint: Theme.terracotta, background: Theme.blush, size: 40)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("În curând")
@@ -25,12 +25,12 @@ struct AIConversationPreviewView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
-                .padding(Theme.Spacing.m)
+                .padding(Theme.Spacing.lg)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Theme.blush, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
                 .accessibilityElement(children: .combine)
 
-                VStack(spacing: Theme.Spacing.m) {
+                VStack(spacing: Theme.Spacing.lg) {
                     ConversationBubblePlaceholder(speaker: .tutor, lines: [0.55, 0.8])
                     ConversationBubblePlaceholder(speaker: .learner, lines: [0.7, 0.5])
                     ConversationBubblePlaceholder(speaker: .tutor, lines: [0.65, 0.4])
@@ -40,7 +40,7 @@ struct AIConversationPreviewView: View {
                 SuggestedRepliesPlaceholder()
             }
             .padding(.horizontal, Theme.Spacing.screen)
-            .padding(.vertical, Theme.Spacing.s)
+            .padding(.vertical, Theme.Spacing.md)
         }
         .background(Theme.canvas.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {

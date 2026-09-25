@@ -256,6 +256,15 @@ final class NativeAudioController: ObservableObject {
         microphonePermissionDenied = AVAudioSession.sharedInstance().recordPermission == .denied
     }
 
+    /// Dates of the learner's local recordings, without creating a controller.
+    nonisolated static func localRecordingDates() -> [Date] {
+        guard let support = try? FileManager.default.url(
+            for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false
+        ) else { return [] }
+        let directory = support.appendingPathComponent("Recordings", isDirectory: true)
+        return ((try? LocalRecordingLibrary(directory: directory).recordings()) ?? []).map(\.recordedAt)
+    }
+
     func localRecordings() throws -> [LocalRecordingSummary] {
         try LocalRecordingLibrary(directory: recordingsDirectory()).recordings()
     }

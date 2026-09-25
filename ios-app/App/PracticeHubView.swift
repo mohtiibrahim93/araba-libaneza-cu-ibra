@@ -43,7 +43,7 @@ struct PracticeListView: View {
             .padding(.vertical, 12)
         }
         .background(Theme.canvas.ignoresSafeArea())
-        .navigationTitle("Practică")
+        .navigationTitle("Exersează")
     }
 }
 

@@ -6,37 +6,51 @@ import YallaCore
 /// serif titles. Every token has a light and a dark variant.
 enum Theme {
     // MARK: Surfaces
-    static let canvas = Color(light: 0xF5EFE4, dark: 0x171512)
-    static let surface = Color(light: 0xFFFCF6, dark: 0x23201B)
-    static let line = Color(light: 0xE8DFD0, dark: 0x3A352C)
+    // Light values follow the Home reference specification.
+    static let canvas = Color(light: 0xF4EEE3, dark: 0x171512)
+    static let surface = Color(light: 0xFAF6EE, dark: 0x23201B)
+    /// Hairlines, dividers and progress-ring tracks.
+    static let line = Color(light: 0xE5E0D7, dark: 0x3A352C)
     static let lineStrong = Color(light: 0xD6C9B4, dark: 0x4B443A)
+    static let ringTrack = line
+    /// Soft card outline (black at 4% in light mode).
+    static let cardStroke = Color(light: 0x000000, dark: 0xFFFFFF).opacity(0.05)
 
     // MARK: Text
-    static let ink = Color(light: 0x2A2621, dark: 0xF1EADF)
-    static let muted = Color(light: 0x7C7265, dark: 0xB3A999)
+    static let ink = Color(light: 0x1A261B, dark: 0xF1EADF)
+    /// Secondary text.
+    static let muted = Color(light: 0x606557, dark: 0xB3A999)
+    /// Tertiary labels.
+    static let faint = Color(light: 0x8F9188, dark: 0x8E867A)
 
     // MARK: Brand
     /// Deep cedar, used for headers and hero cards.
-    static let deep = Color(light: 0x1F4A34, dark: 0x1B3A2A)
+    static let deep = Color(light: 0x1F4638, dark: 0x1B3A2A)
+    /// Darkest cedar, the leading edge of hero gradients.
+    static let cedarDeep = Color(light: 0x173A2F, dark: 0x132E22)
     /// Wordmark and emblem: deep cedar on cream, light sage on dark.
-    static let brand = Color(light: 0x1F4A34, dark: 0xA8D5B5)
-    /// Cedar green: primary actions, progress and selection.
-    static let teal = Color(light: 0x2D6A4A, dark: 0x74B893)
-    static let tealShade = Color(light: 0x1F4E36, dark: 0x4F8F6C)
-    /// Sage tint behind green elements.
-    static let mint = Color(light: 0xE4EDE3, dark: 0x243A2D)
+    static let brand = Color(light: 0x1F4638, dark: 0xA8D5B5)
+    /// Secondary cedar green: progress and selection.
+    static let teal = Color(light: 0x2A5545, dark: 0x74B893)
+    static let tealShade = Color(light: 0x173A2F, dark: 0x4F8F6C)
+    /// Sage surface behind green elements.
+    static let mint = Color(light: 0xE5ECE3, dark: 0x243A2D)
     /// Warm highlight on deep-green surfaces.
     static let lime = Color(light: 0xF1DFAE, dark: 0xF1DFAE)
-    static let terracotta = Color(light: 0xC4613F, dark: 0xE0805E)
-    static let terracottaShade = Color(light: 0x9C4A2F, dark: 0xB4623F)
-    /// Blush tint behind terracotta elements.
-    static let blush = Color(light: 0xF6E4DA, dark: 0x3A2620)
-    static let gold = Color(light: 0xD9A441, dark: 0xE2B45A)
+    static let terracotta = Color(light: 0xCC674F, dark: 0xE0805E)
+    static let terracottaShade = Color(light: 0xAA503D, dark: 0xB4623F)
+    /// Warm surface behind terracotta elements.
+    static let blush = Color(light: 0xF3E4D8, dark: 0x3A2620)
+    /// Stronger blush for action banners.
+    static let blushStrong = Color(light: 0xF0D5C8, dark: 0x442A22)
+    static let coralSoft = Color(light: 0xD7AF98, dark: 0x9C6F58)
+    /// Stars and points.
+    static let gold = Color(light: 0xD99555, dark: 0xE2B45A)
     static let goldShade = Color(light: 0xA97A26, dark: 0xB88A35)
     static let streak = Color(light: 0xD2643F, dark: 0xF08A5D)
 
     // MARK: Feedback
-    static let success = teal
+    static let success = Color(light: 0x2F7A61, dark: 0x74B893)
     static let successBackground = Color(light: 0xE3EEE2, dark: 0x1F3326)
     static let danger = Color(light: 0xB4413A, dark: 0xFF8A80)
     static let dangerShade = Color(light: 0x8C302B, dark: 0xC7605A)
@@ -51,29 +65,81 @@ enum Theme {
     /// Spacing scale shared by every screen.
     enum Spacing {
         static let xxs: CGFloat = 4
-        static let xs: CGFloat = 8
-        static let s: CGFloat = 12
-        static let m: CGFloat = 16
-        static let l: CGFloat = 20
-        static let xl: CGFloat = 24
-        static let xxl: CGFloat = 32
-        /// Horizontal screen margin.
-        static let screen: CGFloat = 20
+        static let xs: CGFloat = 6
+        static let sm: CGFloat = 8
+        static let md: CGFloat = 12
+        static let lg: CGFloat = 16
+        static let xl: CGFloat = 20
+        static let xxl: CGFloat = 24
+        /// Horizontal screen margin (16 pt on compact widths, see `screenMargin`).
+        static let screen: CGFloat = 18
+        /// Gap between major sections.
+        static let section: CGFloat = 14
+        /// Widest readable content column.
+        static let maxContentWidth: CGFloat = 520
     }
 
-    /// Corner radii shared by cards, tiles and hero panels.
+    /// Corner radii: compact chips, controls, cards and feature panels.
     enum Radius {
-        static let small: CGFloat = 12
-        static let medium: CGFloat = 16
+        static let compact: CGFloat = 10
+        static let control: CGFloat = 14
         static let card: CGFloat = 18
-        static let large: CGFloat = 22
-        static let hero: CGFloat = 24
+        static let feature: CGFloat = 22
     }
 
     enum Elevation {
         case card
         case raised
         case hero(Color)
+    }
+
+    /// Named text roles from the Home specification. Sizes are the values at
+    /// the default text size and scale with Dynamic Type (see `yallaFont`).
+    enum TextRole {
+        case brand, greeting, hero, section, phrase, metric
+        case body, bodyStrong, caption, captionStrong, tab
+
+        var size: CGFloat {
+            switch self {
+            case .brand: return 25
+            case .greeting: return 32
+            case .hero: return 30
+            case .section: return 18
+            case .phrase: return 22
+            case .metric: return 21
+            case .body, .bodyStrong: return 16
+            case .caption, .captionStrong: return 12
+            case .tab: return 11
+            }
+        }
+
+        var weight: Font.Weight {
+            switch self {
+            case .greeting, .hero, .metric: return .bold
+            case .brand, .section, .bodyStrong, .captionStrong: return .semibold
+            case .phrase, .tab: return .medium
+            case .body, .caption: return .regular
+            }
+        }
+
+        var design: Font.Design {
+            switch self {
+            case .brand, .greeting, .hero, .section, .phrase, .metric: return .serif
+            default: return .default
+            }
+        }
+
+        /// Text style whose Dynamic Type curve this role follows.
+        var relativeTo: Font.TextStyle {
+            switch self {
+            case .greeting, .hero: return .largeTitle
+            case .brand, .phrase: return .title2
+            case .metric: return .title3
+            case .section: return .headline
+            case .body, .bodyStrong: return .body
+            case .caption, .captionStrong, .tab: return .caption
+            }
+        }
     }
 
     /// Body and control text.
@@ -84,6 +150,27 @@ enum Theme {
     /// Titles and the wordmark.
     static func serif(_ style: Font.TextStyle, weight: Font.Weight = .bold) -> Font {
         .system(style, design: .serif).weight(weight)
+    }
+}
+
+/// Applies a `Theme.TextRole` at its specified size, scaled with Dynamic Type.
+private struct TextRoleModifier: ViewModifier {
+    let role: Theme.TextRole
+    @ScaledMetric private var size: CGFloat
+
+    init(role: Theme.TextRole) {
+        self.role = role
+        _size = ScaledMetric(wrappedValue: role.size, relativeTo: role.relativeTo)
+    }
+
+    func body(content: Content) -> some View {
+        content.font(.system(size: size, weight: role.weight, design: role.design))
+    }
+}
+
+extension View {
+    func yallaFont(_ role: Theme.TextRole) -> some View {
+        modifier(TextRoleModifier(role: role))
     }
 }
 
@@ -284,26 +371,29 @@ struct LessonProgressBar: View {
 }
 
 /// Card surface used across the redesigned screens.
+/// The one card surface every screen uses: continuous corners, a hairline
+/// outline and a soft shadow.
 struct CardBackground: ViewModifier {
     var fill: Color = Theme.surface
+    var radius: CGFloat = Theme.Radius.card
 
     func body(content: Content) -> some View {
         content
             .background(
-                RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .fill(fill)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous)
-                    .strokeBorder(Theme.line, lineWidth: 1)
+                RoundedRectangle(cornerRadius: radius, style: .continuous)
+                    .strokeBorder(Theme.cardStroke, lineWidth: 0.75)
             )
             .elevation(.card)
     }
 }
 
 extension View {
-    func cardBackground(_ fill: Color = Theme.surface) -> some View {
-        modifier(CardBackground(fill: fill))
+    func cardBackground(_ fill: Color = Theme.surface, radius: CGFloat = Theme.Radius.card) -> some View {
+        modifier(CardBackground(fill: fill, radius: radius))
     }
 }
 
@@ -414,18 +504,22 @@ struct BrandHeader: View {
     var twoTone = false
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             CedarShape()
                 .fill(Theme.brand)
-                .frame(width: 40, height: 38)
+                .frame(width: 36, height: 40)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
                 (Text("Araba ").foregroundStyle(Theme.brand)
                     + Text("libaneză").foregroundStyle(twoTone ? Theme.terracotta : Theme.brand))
-                    .font(Theme.serif(.title2))
+                    .yallaFont(.brand)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                 Text(tagline)
-                    .font(Theme.font(.caption))
+                    .yallaFont(.caption)
                     .foregroundStyle(Theme.muted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
         }
         .accessibilityElement(children: .combine)

@@ -9,11 +9,11 @@ extension View {
     func elevation(_ level: Theme.Elevation) -> some View {
         switch level {
         case .card:
-            shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
+            shadow(color: Color.black.opacity(0.055), radius: 10, x: 0, y: 4)
         case .raised:
             shadow(color: Color.black.opacity(0.10), radius: 12, x: 0, y: 6)
         case let .hero(tint):
-            shadow(color: tint.opacity(0.25), radius: 14, x: 0, y: 8)
+            shadow(color: tint.opacity(0.10), radius: 14, x: 0, y: 6)
         }
     }
 }
@@ -39,9 +39,11 @@ struct IconBadge: View {
 struct ProgressRing<Center: View>: View {
     let fraction: Double
     var tint: Color = Theme.teal
-    var track: Color = Theme.line
-    var lineWidth: CGFloat = 6
+    var track: Color = Theme.ringTrack
+    var lineWidth: CGFloat = 5
     @ViewBuilder var center: () -> Center
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -50,33 +52,133 @@ struct ProgressRing<Center: View>: View {
                 .trim(from: 0, to: CGFloat(min(max(fraction, 0), 1)))
                 .stroke(tint, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-                .animation(.easeOut(duration: 0.4), value: fraction)
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.35), value: fraction)
             center()
         }
     }
 }
 
 extension ProgressRing where Center == EmptyView {
-    init(fraction: Double, tint: Color = Theme.teal, track: Color = Theme.line, lineWidth: CGFloat = 6) {
+    init(fraction: Double, tint: Color = Theme.teal, track: Color = Theme.ringTrack, lineWidth: CGFloat = 5) {
         self.init(fraction: fraction, tint: tint, track: track, lineWidth: lineWidth) { EmptyView() }
     }
 }
 
-/// Capsule call-to-action with an optional trailing note.
+/// Terracotta capsule call-to-action, at least 50 pt tall.
 struct PillButtonStyle: ButtonStyle {
     var fill: Color = Theme.terracotta
+    var pressedFill: Color = Theme.terracottaShade
     var foreground: Color = .white
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Theme.font(.headline, weight: .semibold))
+            .yallaFont(.bodyStrong)
             .foregroundStyle(foreground)
-            .padding(.horizontal, Theme.Spacing.l)
-            .padding(.vertical, Theme.Spacing.s)
-            .background(fill, in: Capsule())
-            .opacity(configuration.isPressed ? 0.85 : 1)
-            .scaleEffect(configuration.isPressed ? 0.98 : 1)
-            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+            .padding(.horizontal, Theme.Spacing.xl)
+            .frame(minHeight: 50)
+            .background(configuration.isPressed ? pressedFill : fill, in: Capsule())
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+/// SF Symbol or asset-catalog icon behind one type, so components can take
+/// either without changing their API.
+enum YallaIcon: Hashable, Sendable {
+    case system(String)
+    case asset(String)
+}
+
+struct YallaIconView: View {
+    let icon: YallaIcon
+
+    init(_ icon: YallaIcon) {
+        self.icon = icon
+    }
+
+    var body: some View {
+        switch icon {
+        case let .system(name):
+            Image(systemName: name)
+        case let .asset(name):
+            Image(name)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+        }
+    }
+}
+
+/// Small round icon control with a 44 pt hit area.
+struct CircularIconButton: View {
+    let icon: YallaIcon
+    let accessibilityLabel: String
+    var tint: Color = Theme.terracotta
+    var fill: Color = Theme.surface.opacity(0.85)
+    var diameter: CGFloat = 36
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            YallaIconView(icon)
+                .font(.system(size: diameter * 0.42, weight: .semibold))
+                .foregroundStyle(tint)
+                .frame(width: diameter, height: diameter)
+                .background(fill, in: Circle())
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel)
+    }
+}
+
+/// Terracotta brush stroke under headings.
+struct HandDrawnUnderline: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY + 1))
+        path.addCurve(
+            to: CGPoint(x: rect.maxX, y: rect.midY - 1),
+            control1: CGPoint(x: rect.width * 0.30, y: rect.midY - 4),
+            control2: CGPoint(x: rect.width * 0.72, y: rect.midY + 3)
+        )
+        return path
+    }
+}
+
+/// Compact phrase: bold Arabizi, meaning underneath, optional speaker.
+struct PhraseRow: View {
+    let primary: String
+    let secondary: String
+    var onSpeak: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.sm) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(primary)
+                    .font(Theme.font(.subheadline, weight: .semibold))
+                    .foregroundStyle(Theme.ink)
+                    .lineLimit(1)
+                Text(secondary)
+                    .yallaFont(.caption)
+                    .foregroundStyle(Theme.muted)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 0)
+            if let onSpeak {
+                CircularIconButton(
+                    icon: .system("speaker.wave.2"),
+                    accessibilityLabel: "Redă pronunția",
+                    tint: Theme.teal,
+                    fill: .clear,
+                    diameter: 28,
+                    action: onSpeak
+                )
+            }
+        }
+        .frame(minHeight: 40)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -88,7 +190,7 @@ struct StatItem: View {
     let tint: Color
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.xs) {
+        HStack(spacing: Theme.Spacing.sm) {
             Image(systemName: icon)
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(tint)
@@ -118,12 +220,12 @@ struct SectionHeader: View {
     var showsChevron = false
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.xs) {
+        HStack(spacing: Theme.Spacing.sm) {
             Text(title)
                 .font(Theme.serif(.headline))
                 .foregroundStyle(Theme.ink)
                 .accessibilityAddTraits(.isHeader)
-            Spacer(minLength: Theme.Spacing.xs)
+            Spacer(minLength: Theme.Spacing.sm)
             if let trailing {
                 Text(trailing)
                     .font(Theme.font(.caption, weight: .semibold))

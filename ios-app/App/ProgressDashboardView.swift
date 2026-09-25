@@ -13,7 +13,6 @@ struct ProgressDashboardView: View {
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
     let onContinueJourney: () -> Void
-    let onSettings: () -> Void
 
     private let builder = ProgressDashboardBuilder()
 
@@ -35,19 +34,8 @@ struct ProgressDashboardView: View {
     var body: some View {
         let summary = builder.summary(snapshot: progress, lessonCounts: lessonCounts, at: date)
         ScrollView {
-            VStack(alignment: .leading, spacing: Theme.Spacing.l) {
-                HStack(alignment: .center) {
-                    BrandHeader(tagline: "Mai aproape de oameni. Mai aproape de Liban.")
-                    Spacer(minLength: Theme.Spacing.xs)
-                    Button(action: onSettings) {
-                        Image(systemName: "gearshape")
-                            .font(.title3.weight(.medium))
-                            .foregroundStyle(Theme.ink)
-                            .frame(width: 44, height: 44)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Setări și profil")
-                }
+            VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
+                BrandHeader(tagline: "Mai aproape de oameni. Mai aproape de Liban.")
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
                     Text("Progresul meu")
@@ -59,7 +47,7 @@ struct ProgressDashboardView: View {
                         .font(Theme.serif(.subheadline, weight: .regular))
                         .foregroundStyle(Theme.muted)
                 }
-                .padding(.vertical, Theme.Spacing.s)
+                .padding(.vertical, Theme.Spacing.md)
                 .padding(.trailing, 80)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(alignment: .trailing) {
@@ -70,7 +58,7 @@ struct ProgressDashboardView: View {
 
                 ProgressOverviewCard(summary: summary, level: journeyLevel)
 
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Theme.Spacing.xs), count: 4), spacing: Theme.Spacing.xs) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Theme.Spacing.sm), count: 4), spacing: Theme.Spacing.sm) {
                     ForEach(skillCards, id: \.skill) { card in
                         SkillProgressCard(
                             title: card.title,
@@ -82,7 +70,7 @@ struct ProgressDashboardView: View {
                     }
                 }
 
-                HStack(alignment: .top, spacing: Theme.Spacing.s) {
+                HStack(alignment: .top, spacing: Theme.Spacing.md) {
                     StreakCard(rewards: rewards)
                     ActivityHeatmapCard(
                         days: builder.recentDays(weeks: 8, endingAt: date),
@@ -91,7 +79,7 @@ struct ProgressDashboardView: View {
                     )
                 }
 
-                VStack(alignment: .leading, spacing: Theme.Spacing.l) {
+                VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
                     ProgressListCard(title: "Repetiții programate", icon: "calendar", onSeeAll: onReviews) {
                         ScheduledReviewRow(icon: "arrow.triangle.2.circlepath", title: "De repetat acum",
                                            detail: "\(reviewQueue.dueNowCount) expresii", action: "Revizuiește", onTap: onReviews)
@@ -123,10 +111,11 @@ struct ProgressDashboardView: View {
                 JourneyEncouragementBanner(action: onContinueJourney)
             }
             .padding(.horizontal, Theme.Spacing.screen)
-            .padding(.vertical, Theme.Spacing.s)
+            .padding(.vertical, Theme.Spacing.md)
         }
         .background(Theme.canvas.ignoresSafeArea())
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationTitle("Progres")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     /// Practised skills under 80% first-try accuracy, weakest first.

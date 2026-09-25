@@ -16,7 +16,7 @@ struct ProgressOverviewCard: View {
     }
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.l) {
+        HStack(spacing: Theme.Spacing.xl) {
             ProgressRing(fraction: summary.journeyFraction, tint: Theme.deep, lineWidth: 11) {
                 VStack(spacing: 0) {
                     Text("\(Int((summary.journeyFraction * 100).rounded()))%")
@@ -52,7 +52,7 @@ struct ProgressOverviewCard: View {
             }
             Spacer(minLength: 0)
         }
-        .padding(Theme.Spacing.l)
+        .padding(Theme.Spacing.xl)
         .cardBackground()
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("progress.overview")
@@ -86,7 +86,7 @@ struct SkillProgressCard: View {
     let skill: SkillSummary
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             IconBadge(systemName: icon, tint: foreground, background: foreground.opacity(0.16), size: 34)
             Text(title)
                 .font(Theme.serif(.subheadline))
@@ -111,9 +111,9 @@ struct SkillProgressCard: View {
             }
             Spacer(minLength: 0)
         }
-        .padding(Theme.Spacing.s - 2)
+        .padding(Theme.Spacing.md - 2)
         .frame(maxWidth: .infinity, minHeight: 168, alignment: .topLeading)
-        .background(fill, in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        .background(fill, in: RoundedRectangle(cornerRadius: Theme.Radius.control, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 }
@@ -122,12 +122,12 @@ struct StreakCard: View {
     let rewards: RewardSummary
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             Text("Seria ta actuală")
                 .font(Theme.serif(.subheadline))
                 .foregroundStyle(Theme.ink)
             Spacer(minLength: 0)
-            HStack(spacing: Theme.Spacing.xs) {
+            HStack(spacing: Theme.Spacing.sm) {
                 Image(systemName: "flame.fill")
                     .font(.system(size: 38))
                     .foregroundStyle(rewards.isActiveToday ? Theme.streak : Theme.muted)
@@ -144,7 +144,7 @@ struct StreakCard: View {
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
-        .padding(Theme.Spacing.m - 2)
+        .padding(Theme.Spacing.lg - 2)
         .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
         .cardBackground()
         .accessibilityElement(children: .combine)
@@ -171,7 +171,7 @@ struct ActivityHeatmapCard: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             Text("Activitatea ta de învățare")
                 .font(Theme.serif(.subheadline))
                 .foregroundStyle(Theme.ink)
@@ -198,7 +198,7 @@ struct ActivityHeatmapCard: View {
                 .font(Theme.font(.caption2, weight: .semibold))
                 .foregroundStyle(Theme.muted)
         }
-        .padding(Theme.Spacing.m - 2)
+        .padding(Theme.Spacing.lg - 2)
         .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
         .cardBackground()
         .accessibilityElement(children: .combine)
@@ -222,8 +222,8 @@ struct ProgressListCard<Content: View>: View {
     @ViewBuilder var content: () -> Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            HStack(spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+            HStack(spacing: Theme.Spacing.sm) {
                 Image(systemName: icon)
                     .foregroundStyle(Theme.ink)
                     .accessibilityHidden(true)
@@ -247,7 +247,7 @@ struct ProgressListCard<Content: View>: View {
             }
             content()
         }
-        .padding(Theme.Spacing.m - 2)
+        .padding(Theme.Spacing.lg - 2)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .cardBackground()
     }
@@ -262,7 +262,7 @@ struct ScheduledReviewRow: View {
     let onTap: () -> Void
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.xs) {
+        HStack(spacing: Theme.Spacing.sm) {
             IconBadge(systemName: icon, tint: Theme.terracotta, background: Theme.blush, size: 32)
             VStack(alignment: .leading, spacing: 0) {
                 Text(title)
@@ -279,7 +279,7 @@ struct ScheduledReviewRow: View {
                 Text(action)
                     .font(Theme.font(.caption2, weight: .semibold))
                     .foregroundStyle(Theme.terracotta)
-                    .padding(.horizontal, Theme.Spacing.xs)
+                    .padding(.horizontal, Theme.Spacing.sm)
                     .padding(.vertical, 5)
                     .background(Theme.blush, in: Capsule())
             }
@@ -297,7 +297,7 @@ struct AttentionAreaRow: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: Theme.Spacing.xs) {
+            HStack(spacing: Theme.Spacing.sm) {
                 IconBadge(systemName: icon, tint: Theme.terracotta, background: Theme.blush, size: 32)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
@@ -334,7 +334,7 @@ struct JourneyEncouragementBanner: View {
             DecorativeImage(name: "illus-sunset", width: 150)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-            VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
                 Text("Ești pe drumul cel bun!")
                     .font(Theme.serif(.headline))
                     .foregroundStyle(.white)
@@ -353,8 +353,8 @@ struct JourneyEncouragementBanner: View {
                 .padding(.top, Theme.Spacing.xxs)
                 .accessibilityIdentifier("progress.continue")
             }
-            .padding(Theme.Spacing.m)
-            .padding(.leading, Theme.Spacing.s)
+            .padding(Theme.Spacing.lg)
+            .padding(.leading, Theme.Spacing.md)
             .frame(maxHeight: .infinity)
             .frame(width: 262, alignment: .leading)
             .background(
@@ -365,12 +365,12 @@ struct JourneyEncouragementBanner: View {
                 CedarShape()
                     .fill(.white.opacity(0.14))
                     .frame(width: 34, height: 32)
-                    .padding(Theme.Spacing.s)
+                    .padding(Theme.Spacing.md)
                     .accessibilityHidden(true)
             }
         }
         .frame(minHeight: 164)
         .background(Theme.deep)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.large, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.feature, style: .continuous))
     }
 }

@@ -10,6 +10,10 @@ struct RootTabView: View {
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
     @State private var homePath: [String] = []
+    @State private var practicePath: [String] = []
+    /// Dates of local Speak & Compare recordings, for the "Vorbește" goal.
+    @State private var recordingDates: [Date] = []
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showingReviews = false
     @State private var showingOrientation = false
     @AppStorage("hasSeenWelcome") private var hasSeenWelcome = false
@@ -56,7 +60,7 @@ struct RootTabView: View {
             let expression = candidates[(day + offset) % candidates.count]
             if let meaning = expression.localizations[content.locale]?.naturalMeaning,
                !meaning.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                return HomeExpression(id: expression.id, arabizi: expression.canonicalArabizi, meaning: meaning)
+                return homeExpression(expression, meaning: meaning)
             }
         }
         return nil
@@ -70,8 +74,18 @@ struct RootTabView: View {
             .prefix(3)
             .compactMap { expression in
                 guard let meaning = expression.localizations[content.locale]?.naturalMeaning else { return nil }
-                return HomeExpression(id: expression.id, arabizi: expression.canonicalArabizi, meaning: meaning)
+                return homeExpression(expression, meaning: meaning)
             }
+    }
+
+    private func homeExpression(_ expression: YallaCore.Expression, meaning: String) -> HomeExpression {
+        HomeExpression(
+            id: expression.id,
+            arabizi: expression.canonicalArabizi,
+            meaning: meaning,
+            arabic: expression.arabicScript,
+            audio: AudioAssetResolver().bestAsset(for: expression.id, from: content.package.audioAssets)
+        )
     }
 
     /// Size of the smart session the Practică tab would start right now.
@@ -86,10 +100,9 @@ struct RootTabView: View {
         return exercises.count
     }
 
-    /// Practice screens are pages in the Home stack.
     private func openPractice(_ id: String) {
-        homePath = [id]
-        selectedTab = .home
+        practicePath = [id]
+        selectedTab = .practice
     }
 
     private func progressDashboard(at date: Date) -> ProgressDashboardView {
@@ -103,8 +116,7 @@ struct RootTabView: View {
             onReviews: { showingReviews = true },
             onSmartPractice: { openPractice("smart-session") },
             onSpeedDrill: { openPractice("speed-drill") },
-            onContinueJourney: continueJourney,
-            onSettings: { selectedTab = .profile }
+            onContinueJourney: continueJourney
         )
     }
 
@@ -126,26 +138,25 @@ struct RootTabView: View {
                 rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: context.date),
                 goals: DailyGoalCalculator().status(
                     xpEvents: progressModel.snapshot.xpEvents,
-                    speedDrillHistory: progressModel.snapshot.speedDrillHistory,
+                    attempts: progressModel.snapshot.attempts,
+                    recordingDates: recordingDates,
                     at: context.date
                 ),
                 smartSessionSize: smartSessionSize(at: context.date),
                 weakSkills: MasterySkill.allCases.filter { progressModel.snapshot.weakSkills.contains($0) },
                 expressionOfDay: expressionOfDay(at: context.date),
                 savedExpressions: savedPreview,
-                modes: content.shell.practiceModes,
-                package: content.package,
-                locale: content.locale,
+                progressDestination: progressDashboard(at: context.date),
                 progressModel: progressModel,
                 path: $homePath,
                 onReviews: { showingReviews = true },
                 onContinueJourney: continueJourney,
                 onSmartPractice: { openPractice("smart-session") },
-                onSpeedDrill: { openPractice("speed-drill") },
+                onListening: { openPractice("listening") },
+                onSpeaking: { openPractice("speaking") },
                 onSpeak: { openPractice("ai-conversation") },
-                onProgress: { selectedTab = .progress },
                 onDiscover: { selectedTab = .discover },
-                onProfile: { selectedTab = .profile }
+                onProfile: { selectedTab = .tutor }
             )
             }
             .tabItem { Label("Acasă", systemImage: "house") }
@@ -159,8 +170,32 @@ struct RootTabView: View {
                 path: $journeyPath,
                 lessonCounts: lessonCounts
             )
-            .tabItem { Label("Parcurs", systemImage: "map") }
+            .tabItem { Label("Călătorie", systemImage: "map") }
             .tag(RootTab.journey)
+
+            NavigationStack(path: $practicePath) {
+                PracticeListView(
+                    modes: content.shell.practiceModes,
+                    package: content.package,
+                    locale: content.locale,
+                    progressModel: progressModel
+                )
+                .navigationDestination(for: String.self) { id in
+                    if id == "ai-conversation" {
+                        AIConversationPreviewView()
+                    } else {
+                        PracticeModeScreen(
+                            modeID: id,
+                            modes: content.shell.practiceModes,
+                            package: content.package,
+                            locale: content.locale,
+                            progressModel: progressModel
+                        )
+                    }
+                }
+            }
+            .tabItem { Label("Exersează", systemImage: "bubble.left.and.bubble.right") }
+            .tag(RootTab.practice)
 
             DiscoverView(
                 model: content.discover,
@@ -171,14 +206,6 @@ struct RootTabView: View {
                 .tabItem { Label("Descoperă", systemImage: "safari") }
                 .tag(RootTab.discover)
 
-            TimelineView(.periodic(from: .now, by: 60)) { context in
-                NavigationStack {
-                    progressDashboard(at: context.date)
-                }
-            }
-            .tabItem { Label("Progres", systemImage: "chart.bar") }
-            .tag(RootTab.progress)
-
             TimelineView(.periodic(from: .now, by: 30)) { context in
             ProfileView(
                 reviewQueue: progressModel.snapshot.reviewQueueSummary(at: context.date, expressionIDs: reviewExpressionIDs),
@@ -188,10 +215,14 @@ struct RootTabView: View {
                 onOrientation: { showingOrientation = true }
             )
             }
-                .tabItem { Label("Eu", systemImage: "person") }
-                .tag(RootTab.profile)
+                .tabItem { Label("Tutor", systemImage: "person.crop.circle") }
+                .tag(RootTab.tutor)
         }
-        .tint(Theme.terracotta)
+        .tint(Theme.deep)
+        .onChange(of: selectedTab) { _, _ in refreshRecordingDates() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { refreshRecordingDates() }
+        }
         .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
         .fullScreenCover(isPresented: Binding(
             get: { !hasSeenWelcome },
@@ -229,22 +260,27 @@ struct RootTabView: View {
                     selectedTab = .journey
                 },
                 onOpenTutor: {
-                    selectedTab = .profile
+                    selectedTab = .tutor
                 }
             )
         }
         .task {
             await progressModel.load()
+            refreshRecordingDates()
         }
+    }
+
+    private func refreshRecordingDates() {
+        recordingDates = NativeAudioController.localRecordingDates()
     }
 }
 
 private enum RootTab: Hashable {
     case home
     case journey
+    case practice
     case discover
-    case progress
-    case profile
+    case tutor
 }
 
 private enum DiscoverFilter: String, CaseIterable, Identifiable {
@@ -733,6 +769,26 @@ private struct ProfileView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section("Tutorele tău") {
+                    NavigationLink {
+                        TutorContactView()
+                    } label: {
+                        HStack(spacing: Theme.Spacing.md) {
+                            IconBadge(systemName: "person.fill", tint: .white, background: Theme.deep, size: 48)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Ibrahim Gabriel")
+                                    .font(Theme.serif(.headline))
+                                    .foregroundStyle(Theme.ink)
+                                Text("Profesor de arabă libaneză · WhatsApp și telefon")
+                                    .font(Theme.font(.caption))
+                                    .foregroundStyle(Theme.muted)
+                            }
+                        }
+                        .padding(.vertical, Theme.Spacing.xxs)
+                    }
+                    .accessibilityIdentifier("tutor.contact")
+                }
+
                 Section {
                     ProfileHeader(
                         rewards: RewardCalculator().summary(events: progress.xpEvents, at: Date()),
@@ -766,14 +822,6 @@ private struct ProfileView: View {
                     }
                     Button(action: onOrientation) {
                         Label("Orientare", systemImage: "signpost.right")
-                    }
-                }
-
-                Section("Tutor") {
-                    NavigationLink {
-                        TutorContactView()
-                    } label: {
-                        Label("Ibrahim Gabriel", systemImage: "person.crop.circle.badge.checkmark")
                     }
                 }
 
@@ -853,7 +901,7 @@ private struct ProfileView: View {
                 }
             }
             .creamList()
-            .navigationTitle("Eu")
+            .navigationTitle("Tutor")
         }
     }
 }

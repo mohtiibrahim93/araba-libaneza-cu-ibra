@@ -12,7 +12,7 @@ struct ConversationScenarioCard: View {
     let image: String
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.s) {
+        HStack(spacing: Theme.Spacing.md) {
             IconBadge(systemName: icon, tint: .white, background: Theme.terracotta, size: 52)
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
@@ -26,9 +26,9 @@ struct ConversationScenarioCard: View {
             }
             Spacer(minLength: 0)
             DecorativeImage(name: image, width: 110, height: 92)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.control, style: .continuous))
         }
-        .padding(Theme.Spacing.s)
+        .padding(Theme.Spacing.md)
         .cardBackground()
         .accessibilityElement(children: .combine)
     }
@@ -45,7 +45,7 @@ struct ConversationBubblePlaceholder: View {
     private var isLearner: Bool { speaker == .learner }
 
     var body: some View {
-        HStack(alignment: .top, spacing: Theme.Spacing.xs) {
+        HStack(alignment: .top, spacing: Theme.Spacing.sm) {
             if isLearner { Spacer(minLength: 56) } else { avatar }
             VStack(alignment: .leading, spacing: 7) {
                 ForEach(Array(lines.enumerated()), id: \.offset) { index, width in
@@ -54,14 +54,14 @@ struct ConversationBubblePlaceholder: View {
                         .frame(width: 180 * width, height: index == 0 ? 12 : 9)
                 }
             }
-            .padding(Theme.Spacing.m)
+            .padding(Theme.Spacing.lg)
             .background(
                 isLearner ? Theme.mint : Theme.surface,
                 in: UnevenRoundedRectangle(
-                    topLeadingRadius: isLearner ? Theme.Radius.large : 6,
-                    bottomLeadingRadius: Theme.Radius.large,
-                    bottomTrailingRadius: Theme.Radius.large,
-                    topTrailingRadius: isLearner ? 6 : Theme.Radius.large,
+                    topLeadingRadius: isLearner ? Theme.Radius.feature : 6,
+                    bottomLeadingRadius: Theme.Radius.feature,
+                    bottomTrailingRadius: Theme.Radius.feature,
+                    topTrailingRadius: isLearner ? 6 : Theme.Radius.feature,
                     style: .continuous
                 )
             )
@@ -84,7 +84,7 @@ struct ConversationBubblePlaceholder: View {
 /// Where pronunciation feedback will appear; shows no score until it exists.
 struct PronunciationFeedbackPlaceholder: View {
     var body: some View {
-        HStack(spacing: Theme.Spacing.m) {
+        HStack(spacing: Theme.Spacing.lg) {
             ProgressRing(fraction: 0, tint: Theme.teal, lineWidth: 7) {
                 Image(systemName: "waveform")
                     .font(.title3)
@@ -103,7 +103,7 @@ struct PronunciationFeedbackPlaceholder: View {
             }
             Spacer(minLength: 0)
         }
-        .padding(Theme.Spacing.m)
+        .padding(Theme.Spacing.lg)
         .cardBackground()
         .accessibilityElement(children: .combine)
     }
@@ -112,11 +112,11 @@ struct PronunciationFeedbackPlaceholder: View {
 /// Empty two-by-two grid where suggested replies will appear.
 struct SuggestedRepliesPlaceholder: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             Text("Alege un răspuns sau vorbește:")
                 .font(Theme.font(.subheadline, weight: .semibold))
                 .foregroundStyle(Theme.ink)
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: Theme.Spacing.xs), GridItem(.flexible(), spacing: Theme.Spacing.xs)], spacing: Theme.Spacing.xs) {
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: Theme.Spacing.sm), GridItem(.flexible(), spacing: Theme.Spacing.sm)], spacing: Theme.Spacing.sm) {
                 ForEach(0..<4, id: \.self) { index in
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
@@ -128,9 +128,9 @@ struct SuggestedRepliesPlaceholder: View {
                             .font(.caption.weight(.bold))
                             .foregroundStyle(Theme.lineStrong)
                     }
-                    .padding(Theme.Spacing.s)
-                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous).strokeBorder(Theme.line, lineWidth: 1))
+                    .padding(Theme.Spacing.md)
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: Theme.Radius.compact, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: Theme.Radius.compact, style: .continuous).strokeBorder(Theme.line, lineWidth: 1))
                     .accessibilityHidden(true)
                 }
             }
@@ -141,14 +141,14 @@ struct SuggestedRepliesPlaceholder: View {
 /// Keyboard, microphone and translation controls, shown disabled.
 struct ConversationControlBar: View {
     var body: some View {
-        HStack(spacing: Theme.Spacing.xl + 4) {
+        HStack(spacing: Theme.Spacing.xxl + 4) {
             control(icon: "keyboard", size: 56, fill: Theme.surface, tint: Theme.muted)
             control(icon: "mic.fill", size: 82, fill: Theme.terracotta.opacity(0.45), tint: .white)
                 .background(Circle().fill(Theme.terracotta.opacity(0.10)).padding(-10))
             control(icon: "translate", size: 56, fill: Theme.surface, tint: Theme.muted)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, Theme.Spacing.s)
+        .padding(.vertical, Theme.Spacing.md)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Controalele de conversație nu sunt încă disponibile")
     }

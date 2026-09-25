@@ -69,7 +69,7 @@ struct JourneyPathView: View {
                 .padding(.bottom, 32)
             }
             .background(Theme.canvas.ignoresSafeArea())
-            .navigationTitle("Parcurs")
+            .navigationTitle("Călătorie")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

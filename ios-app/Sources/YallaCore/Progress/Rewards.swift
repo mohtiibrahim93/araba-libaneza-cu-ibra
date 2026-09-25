@@ -104,23 +104,26 @@ public struct RewardCalculator: Sendable {
     }
 }
 
-/// Today's goals: one Journey lesson, one review session and one Speed Drill.
+/// Today's goals: one Journey lesson, one review session, one correct
+/// listening answer and one Speak & Compare recording.
 public struct DailyGoalStatus: Equatable, Sendable {
     public let lessonDone: Bool
     public let reviewDone: Bool
-    public let speedDrillDone: Bool
+    public let listeningDone: Bool
+    public let speakingDone: Bool
 
-    public init(lessonDone: Bool, reviewDone: Bool, speedDrillDone: Bool) {
+    public init(lessonDone: Bool, reviewDone: Bool, listeningDone: Bool, speakingDone: Bool) {
         self.lessonDone = lessonDone
         self.reviewDone = reviewDone
-        self.speedDrillDone = speedDrillDone
+        self.listeningDone = listeningDone
+        self.speakingDone = speakingDone
     }
 
     public var completedCount: Int {
-        [lessonDone, reviewDone, speedDrillDone].filter { $0 }.count
+        [lessonDone, reviewDone, listeningDone, speakingDone].filter { $0 }.count
     }
 
-    public var totalCount: Int { 3 }
+    public var totalCount: Int { 4 }
 }
 
 public struct DailyGoalCalculator: Sendable {
@@ -130,9 +133,12 @@ public struct DailyGoalCalculator: Sendable {
         self.learnerDay = LearnerDay(calendar: calendar)
     }
 
+    /// Everything is read from stored progress: XP events tagged with their
+    /// source, recorded attempts, and the dates of local learner recordings.
     public func status(
         xpEvents: [XPEvent],
-        speedDrillHistory: [SpeedDrillHistoryEntry],
+        attempts: [LearningAttempt],
+        recordingDates: [Date],
         at date: Date
     ) -> DailyGoalStatus {
         let today = learnerDay.key(for: date)
@@ -140,9 +146,11 @@ public struct DailyGoalCalculator: Sendable {
         return DailyGoalStatus(
             lessonDone: todays.contains { $0.source == .lesson },
             reviewDone: todays.contains { $0.source == .review },
-            speedDrillDone: speedDrillHistory.contains {
-                $0.seen > 0 && learnerDay.key(for: $0.completedAt) == today
-            }
+            listeningDone: attempts.contains {
+                $0.completedCorrectly && $0.skills.contains(.listening)
+                    && learnerDay.key(for: $0.occurredAt) == today
+            },
+            speakingDone: recordingDates.contains { learnerDay.key(for: $0) == today }
         )
     }
 }
