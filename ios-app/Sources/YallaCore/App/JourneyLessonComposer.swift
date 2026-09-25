@@ -94,11 +94,15 @@ public struct JourneyLessonComposer: Sendable {
     }
 
     /// Up to three other expressions of the unit whose form and meaning both
-    /// differ from the target, taken in unit order after the target.
+    /// differ from the target, taken in unit order after the target. A
+    /// candidate whose meaning shares a content word with the target's (for
+    /// example two greetings both glossed "salut") is skipped, so only one
+    /// option can be read as correct.
     private func distractors(for expression: Expression, among candidates: [Expression], locale: String) -> [Expression] {
         guard let start = candidates.firstIndex(where: { $0.id == expression.id }) else { return [] }
         let targetForm = AnswerNormalizer.normalize(expression.canonicalArabizi)
         let targetMeaning = AnswerNormalizer.normalize(expression.localizations[locale]?.naturalMeaning ?? "")
+        let targetWords = Self.meaningWords(expression.localizations[locale]?.naturalMeaning ?? "")
         var forms: Set<String> = [targetForm]
         var meanings: Set<String> = [targetMeaning]
         var result: [Expression] = []
@@ -106,13 +110,21 @@ public struct JourneyLessonComposer: Sendable {
             let candidate = candidates[(start + offset) % candidates.count]
             let form = AnswerNormalizer.normalize(candidate.canonicalArabizi)
             let meaning = AnswerNormalizer.normalize(candidate.localizations[locale]?.naturalMeaning ?? "")
-            guard !form.isEmpty, !meaning.isEmpty, !forms.contains(form), !meanings.contains(meaning) else { continue }
+            guard !form.isEmpty, !meaning.isEmpty, !forms.contains(form), !meanings.contains(meaning),
+                  Self.meaningWords(candidate.localizations[locale]?.naturalMeaning ?? "").isDisjoint(with: targetWords)
+            else { continue }
             forms.insert(form)
             meanings.insert(meaning)
             result.append(candidate)
             if result.count == 3 { break }
         }
         return result
+    }
+
+    /// Content words of a meaning (three letters or more, accents folded).
+    static func meaningWords(_ meaning: String) -> Set<String> {
+        let folded = meaning.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "ro_RO"))
+        return Set(folded.split { !$0.isLetter }.map(String.init).filter { $0.count >= 3 })
     }
 
     // MARK: Sequencing

@@ -55,6 +55,26 @@ struct JourneyLessonComposerTests {
         }
     }
 
+    @Test("Distractors never share a content word with the answer's meaning")
+    func distractorsAreUnambiguous() {
+        let greetings = [
+            expression("g1", "Mar7aba", "Bună! / Salut!"),
+            expression("g2", "Mar7abten", "Salut! (răspuns)"),
+            expression("g3", "Ahlan", "Salut! / Bun venit!"),
+            expression("o1", "Beet", "casă"),
+            expression("o2", "Kalb", "câine"),
+            expression("o3", "2alam", "pix")
+        ]
+        let unit = JourneyUnit(id: "u", level: .a1, expressionIDs: greetings.map(\.id),
+                               localizations: ["ro": .init(title: "U", description: "")])
+        let byID = Dictionary(uniqueKeysWithValues: greetings.map { ($0.id, $0) })
+        let exercises = JourneyLessonComposer().exercises(for: unit, authored: [], expressionsByID: byID, locale: "ro")
+        let first = exercises.first { $0.expressionIDs == ["g1"] && $0.type == .multipleChoiceMeaning }
+        #expect(first?.wrongAnswers.contains("Salut! (răspuns)") == false)
+        #expect(first?.wrongAnswers.contains("Salut! / Bun venit!") == false)
+        #expect(first?.wrongAnswers.isEmpty == false)
+    }
+
     @Test("Every full lesson ends with a matching board and boundaries stay aligned")
     func lessonsEndWithMatching() {
         let (unit, byID) = fixture()
