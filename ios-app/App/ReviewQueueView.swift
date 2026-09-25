@@ -91,7 +91,7 @@ struct ReviewQueueView: View {
                     }
                 }
                 if items.isEmpty {
-                    Text("Recapitulările apar după ce exersezi în Parcurs sau Practică.")
+                    Text("Recapitulările apar după ce exersezi în Călătorie sau Exersează.")
                         .foregroundStyle(.secondary)
                 }
             }

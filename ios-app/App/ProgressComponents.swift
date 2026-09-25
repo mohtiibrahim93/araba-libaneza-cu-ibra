@@ -22,7 +22,7 @@ struct ProgressOverviewCard: View {
                     Text("\(Int((summary.journeyFraction * 100).rounded()))%")
                         .font(Theme.serif(.title))
                         .foregroundStyle(Theme.ink)
-                    Text("din Parcurs")
+                    Text("din Călătorie")
                         .font(Theme.font(.caption2))
                         .foregroundStyle(Theme.muted)
                 }
