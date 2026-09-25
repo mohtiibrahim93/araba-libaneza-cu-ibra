@@ -116,3 +116,77 @@ describe("the homepage's critical path", () => {
   });
 });
 
+/**
+ * The course assistant's chat must stay off the first-load path too.
+ *
+ * src/routes/__root.tsx renders the assistant on every page, and the chat body
+ * brings streamdown, shiki, mermaid and the AI SDK with it. Imported normally,
+ * that is about 2 MB of JavaScript the browser downloads before first paint —
+ * and, worse, part of the module graph the Cloudflare worker parses before it
+ * can render any page at all, which is what made a cold first byte take
+ * seconds. A page carried 2,816 KB of JavaScript; with the chat behind
+ * lazy(), 882 KB.
+ *
+ * Only the launcher button belongs on every page. The chat loads when someone
+ * opens it — src/components/AskAssistant.tsx — and the shared text lives in
+ * src/components/ask/copy.ts precisely so importing it pulls nothing heavy.
+ */
+describe("the chat assistant loads only when it is opened", () => {
+  const HEAVY = [
+    "streamdown",
+    "@streamdown/",
+    "@ai-sdk/",
+    "@/components/ai-elements/",
+    "motion/react",
+  ];
+
+  const importsOf = (source: string) =>
+    [...source.matchAll(/^\s*import\s[^;]*?from\s+"([^"]+)"/gm)].map((m) => m[1]!);
+
+  const resolveModule = (spec: string) => {
+    if (!spec.startsWith("@/")) return undefined;
+    const base = `src/${spec.slice(2)}`;
+    for (const candidate of [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`]) {
+      if (existsSync(resolve(process.cwd(), candidate))) return candidate;
+    }
+    return undefined;
+  };
+
+  it("keeps the AI SDK and the markdown renderer off every page's import graph", () => {
+    const seen = new Set<string>();
+    const queue = ["src/routes/__root.tsx", "src/routes/index.tsx"];
+    const offenders: string[] = [];
+    while (queue.length) {
+      const file = queue.shift()!;
+      if (seen.has(file)) continue;
+      seen.add(file);
+      const source = read(file);
+      // A type-only import is erased at build time and costs nothing.
+      const values = importsOf(source).filter(
+        (spec) => !new RegExp(`import\\s+type[^;]*"${spec.replace(/[.*+?^\${}()|[\]\\]/g, "\\$&")}"`).test(source),
+      );
+      for (const spec of values) {
+        if (HEAVY.some((h) => spec.startsWith(h))) {
+          offenders.push(`${file} -> ${spec}`);
+          continue;
+        }
+        const next = resolveModule(spec);
+        if (next) queue.push(next);
+      }
+    }
+    expect(seen.size).toBeGreaterThan(20);
+    expect(offenders, offenders.join("\n")).toEqual([]);
+  });
+
+  it("loads the chat through lazy(), and shares its text through a light module", () => {
+    const launcher = read("src/components/AskAssistant.tsx");
+    expect(launcher).toContain('lazy(() => import("@/components/ask/AskChat"))');
+    expect(launcher).toContain("<Suspense");
+    // The copy module is what both halves import; anything heavy in it would
+    // travel straight back into every page.
+    const copy = read("src/components/ask/copy.ts");
+    for (const heavy of HEAVY) {
+      expect(copy, `copy.ts must not import ${heavy}`).not.toContain(`from "${heavy}`);
+    }
+  });
+});

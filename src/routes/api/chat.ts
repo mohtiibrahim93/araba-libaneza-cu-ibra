@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createOpenAI } from "@ai-sdk/openai";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import type { UIMessage } from "ai";
 
 import {
   createLovableAiGatewayRunIdFetch,
@@ -35,6 +34,17 @@ export const Route = createFileRoute("/api/chat")({
         if (!key) {
           return new Response("Missing LOVABLE_API_KEY", { status: 500 });
         }
+
+        // The SDK is loaded here rather than at the top of the file. Imported
+        // normally, the provider and the AI SDK sat in the module graph the
+        // worker parses before it can render *any* page — and a cold start
+        // spent on this handler's dependencies is the first byte of a page that
+        // never calls it. Warm requests already serve HTML as fast as a static
+        // file; the slow ones are the isolate booting.
+        const [{ createOpenAI }, { convertToModelMessages, streamText }] = await Promise.all([
+          import("@ai-sdk/openai"),
+          import("ai"),
+        ]);
 
         const initialRunId = getLovableAiGatewayRunId(request);
         const runIdFetch = createLovableAiGatewayRunIdFetch(initialRunId);
