@@ -6,11 +6,20 @@
  * same-day recrawling on the engines that do support it, instead of waiting for
  * them to come round on their own schedule.
  *
- * Only changed pages are submitted. IndexNow asks that you send URLs when they
- * actually change, and submitting the whole site on every build is the quickest
- * way to have the submissions ignored. The generated sitemap carries a real
- * <lastmod> per URL (from git), so the comparison is against the previous run's
- * record in scripts/.indexnow-state.json.
+ * IndexNow asks that you send URLs when they actually change, and submitting the
+ * whole site on every build is the quickest way to have the submissions ignored.
+ * So a plain run sends only what is new.
+ *
+ * "New" is the honest limit of what this can detect on its own. The sitemap
+ * carries no <lastmod> — see src/lib/sitemap.ts: a per-page content timestamp
+ * would have to come from git, which makes the committed file depend on commit
+ * dates, and a build date stamped on all 119 URLs is the kind of bogus lastmod
+ * Google ignores. So the comparison against scripts/.indexnow-state.json only
+ * ever finds URLs the sitemap did not have last time.
+ *
+ * After a change that rewrites pages already listed — a head, a layout, a
+ * price — pass --all. That is the deliberate call: someone decides the site
+ * changed enough to be worth recrawling, rather than a build guessing.
  *
  *   npx vite-node scripts/submitIndexNow.ts            # changed URLs only
  *   npx vite-node scripts/submitIndexNow.ts --all      # every indexable URL
@@ -72,7 +81,13 @@ const changed = submitAll
   : [...entries].filter(([url, lastmod]) => seen[url] !== lastmod).map(([url]) => url);
 
 if (changed.length === 0) {
-  console.log("[indexnow] nothing changed since the last submission");
+  // Not the same as "nothing to submit": a rewritten page cannot be seen from
+  // here, so say what this did and did not check.
+  console.log(
+    "[indexnow] no URLs new to the sitemap since the last run.\n" +
+      "           Existing pages are not compared (the sitemap has no <lastmod>) —\n" +
+      "           after a change to pages already listed, rerun with --all.",
+  );
   process.exit(0);
 }
 if (changed.length > MAX_URLS) {
