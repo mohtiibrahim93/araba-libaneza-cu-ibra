@@ -147,6 +147,39 @@ const NativeScheduler = ({
   const [trialUsed, setTrialUsed] = useState(false);
   // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
   const [savingCard, setSavingCard] = useState(false);
+  // The registration this booking ended up attached to. On /trial the row is
+  // created at confirm time, so without keeping it here the card-confirmation
+  // step never rendered (the prop is undefined for a fresh visitor).
+  const [bookedRegistrationId, setBookedRegistrationId] = useState<string | null>(null);
+  // Either the one handed in by the page, or the one created at confirm time.
+  const effectiveRegistrationId = registrationId ?? bookedRegistrationId;
+
+  // The no-show rule, stated before anyone picks a time rather than only in the
+  // Stripe panel at the end. A held slot that nobody turns up for costs the
+  // same as a private lesson, so the visitor is told that upfront.
+  const policyNotice =
+    eventType === "trial" ? (
+      <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+        {lang === "ro" ? (
+          <>
+            <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la final îți confirmi locul
+            cu cardul prin Stripe (nu se încasează nimic acum). Poți anula sau reprograma gratuit cu
+            cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
+            reține <strong>150 lei</strong>, cât o lecție privată.
+          </>
+        ) : (
+          <>
+            <strong>Before you pick a time:</strong> the trial costs 0 lei, but at the end you
+            confirm your spot with your card through Stripe (nothing is charged now). You can cancel
+            or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel
+            later than 24 hours, <strong>150 lei</strong> is charged — the price of a private lesson.
+          </>
+        )}
+      </div>
+    ) : null;
+
+
+
 
   // Form fields
   const [name, setName] = useState(prefill?.name ?? "");
@@ -250,6 +283,8 @@ const NativeScheduler = ({
         setSubmitting(false);
         return;
       }
+      setBookedRegistrationId(resolvedRegistrationId);
+
       const res = await supabase.functions.invoke("booking-create", {
         body: {
           registration_id: resolvedRegistrationId,
@@ -322,12 +357,13 @@ const NativeScheduler = ({
   // Trial-only 0-lei card confirmation: opens a Stripe setup-mode page that
   // saves the card without charging (commitment step against no-shows).
   const startCardConfirmation = async () => {
-    if (!registrationId) return;
+    if (!effectiveRegistrationId) return;
     setSavingCard(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-        body: { registrationId, setup: true },
+        body: { registrationId: effectiveRegistrationId, setup: true },
       });
+
       if (fnError) throw fnError;
       if (!data?.url) throw new Error("missing url");
       window.location.href = data.url;
@@ -356,16 +392,16 @@ const NativeScheduler = ({
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">
             <Link
-              to={`/booking?type=paid${registrationId ? `&registration_id=${encodeURIComponent(registrationId)}` : ""}`}
+              to={`/booking?type=paid${effectiveRegistrationId ? `&registration_id=${encodeURIComponent(effectiveRegistrationId)}` : ""}`}
             >
               <Calendar className="w-4 h-4 mr-2" />
               {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
             </Link>
           </Button>
-          {registrationId && (
+          {effectiveRegistrationId && (
             <Button asChild variant="outline" className="flex-1">
               <Link
-                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(effectiveRegistrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
@@ -494,7 +530,7 @@ const NativeScheduler = ({
 
         {/* Free trial: 0-lei card-on-file confirmation. Saves the card via a
             Stripe setup session — nothing is charged — to firm up the spot. */}
-        {eventType === "trial" && registrationId && (
+        {eventType === "trial" && effectiveRegistrationId && (
           <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -511,8 +547,9 @@ const NativeScheduler = ({
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
                   {lang === "ro"
-                    ? "Anularea sau reprogramarea e gratuită dacă o faci cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare."
-                    : "Cancelling or rescheduling is free as long as you do it at least 24 hours before the lesson — use the link in your confirmation email."}
+                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare. La neprezentare sau anulare mai târzie se reține 150 lei, cât o lecție privată."
+                    : "Cancelling or rescheduling is free at least 24 hours before the lesson — use the link in your confirmation email. A no-show or a later cancellation is charged 150 lei, the price of a private lesson."}
+
                 </p>
               </div>
             </div>
@@ -553,7 +590,7 @@ const NativeScheduler = ({
             </div>
             <Button asChild className="w-full">
               <Link
-                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private${effectiveRegistrationId ? `&registrationId=${encodeURIComponent(effectiveRegistrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
@@ -693,6 +730,8 @@ const NativeScheduler = ({
           className="w-full px-3 py-2 rounded-md border border-input text-sm resize-none"
         />
         <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+        {policyNotice}
+
         <button
           onClick={handleConfirm}
           disabled={submitting || !gdpr}
@@ -714,7 +753,9 @@ const NativeScheduler = ({
         </h3>
         <span className="text-xs text-muted-foreground">{TZ}</span>
       </div>
+      {policyNotice}
       <LocalTimezoneToggle />
+
       <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-5">
         <div className="flex justify-center md:justify-start">
           <CalendarPicker
