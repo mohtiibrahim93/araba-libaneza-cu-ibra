@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
@@ -8,7 +7,6 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
-import { TEST_NIVEL_META } from "@/lib/pageMeta";
 
 /**
  * /test-de-nivel — the placement test, on a page that actually is the test.
@@ -86,22 +84,9 @@ const TestDeNivel = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Head from pageMeta, same object seoHead reads, so the server-rendered
-          head and the runtime one cannot drift apart — the arrangement /joc and
-          the homepage use. Self-canonical: this page is the test, and nothing
-          else should claim the query. */}
-      <Helmet>
-        <title>{TEST_NIVEL_META.title}</title>
-        <meta name="description" content={TEST_NIVEL_META.description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/test-de-nivel" />
-        <meta name="robots" content="index,follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={TEST_NIVEL_META.title} />
-        <meta property="og:description" content={TEST_NIVEL_META.description} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/test-de-nivel" />
-        <meta property="og:locale" content="ro_RO" />
-      </Helmet>
-
+      {/* The head is the route's alone (src/lib/seoHead.ts, from
+          TEST_NIVEL_META): self-canonical, because this page is the test and
+          nothing else should claim the query. */}
       <Navbar />
 
       <main id="main-content" className="flex-1 pt-16">

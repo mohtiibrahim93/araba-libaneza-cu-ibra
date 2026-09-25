@@ -1,9 +1,6 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
-import { QUIZ_META } from "@/lib/pageMeta";
 import { Link } from "@/lib/router-compat";
-import { canonicalPath } from "@/lib/languageRoutes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FindYourTrackQuiz from "@/components/FindYourTrackQuiz";
@@ -15,22 +12,13 @@ const Quiz = () => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Deliberately NOT "test de nivel": /test-de-nivel is the page that runs the
-  // real 24-question test, and this one recommends a course in 30 seconds.
-  // Titling both for the same query made them compete while neither served it.
-  // From QUIZ_META, which src/lib/seoHead.ts reads too: this head used to be
-  // written here and again there, and the two had already drifted — the
-  // server-rendered one still promised a two-minute level test.
-  const meta = QUIZ_META[lang];
+  // The head is the route's (src/lib/seoHead.ts, from QUIZ_META). Deliberately
+  // NOT titled "test de nivel": /test-de-nivel is the page that runs the real
+  // 24-question test, and this one recommends a course in 30 seconds. Titling
+  // both for the same query made them compete while neither served it.
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Helmet>
-        <title>{meta.title}</title>
-        <meta name="description" content={meta.description} />
-        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/quiz", lang)}`} />
-        <meta name="robots" content="index,follow" />
-      </Helmet>
       <Navbar />
       <main id="main-content" className="flex-1 pt-20">
         <FindYourTrackQuiz />

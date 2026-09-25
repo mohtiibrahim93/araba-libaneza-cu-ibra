@@ -12,11 +12,14 @@
  * rewritten in the move. src/test/route-heads.test.ts compares this module
  * against the script's own `allRoutes()` on every run, so the two cannot drift.
  *
- * Every tag carries data-rh="true", the attribute react-helmet-async uses to
- * mark tags it owns. The pages still render their heads through Helmet after
- * hydration; without the stamp Helmet would append a second <title>,
- * description and canonical next to the server-rendered ones instead of
- * replacing them — exactly what the old script's RH stamp prevented.
+ * Every tag carries data-rh="true", the attribute react-helmet-async marks its
+ * own tags with, and the same stamp scripts/seoPrerender.ts writes — which is
+ * why it stays. It does not dedupe anything: under React 19 Helmet renders
+ * through React rather than patching the head itself, so a component that
+ * renders a <title> adds one next to the served one instead of replacing it,
+ * on the server as well as in the browser. That is where the duplicate titles
+ * and descriptions came from. The head is served from here and from nowhere
+ * else; src/test/single-head.test.ts keeps it that way.
  */
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { getCurriculum } from "@/data/curriculum";

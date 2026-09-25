@@ -93,8 +93,19 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
   // the fallback for a page not in the table. An owner's edit still wins over
   // both — that one is deliberate, and the server cannot know about it.
   const routeMeta = seoMeta(`/${slug}`);
-  const metaTitle = override?.meta_title?.trim() || routeMeta?.title || metaTitleProp;
-  const description = override?.meta_description?.trim() || routeMeta?.description || descriptionProp;
+  const titleOverride = override?.meta_title?.trim() || "";
+  const descriptionOverride = override?.meta_description?.trim() || "";
+  const metaTitle = titleOverride || routeMeta?.title || metaTitleProp;
+  const description = descriptionOverride || routeMeta?.description || descriptionProp;
+  /**
+   * True when the route table already served this page's head, which is the
+   * case for every page in it. Rendering the same head again here is what put
+   * two titles, two descriptions and two canonicals into the same HTML — the
+   * duplicate the crawl reported. So the tags below are only what the served
+   * HTML cannot contain: the fallback head for a page the table does not know,
+   * and the owner's edit, which arrives in the browser after the page does.
+   */
+  const served = Boolean(routeMeta);
   const lead = override?.lead?.trim() || leadProp;
   const faq = override?.faq?.length ? override.faq : faqProp;
   const bodyMd = override?.body_md?.trim() || "";
@@ -145,22 +156,22 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={canonical} />
-        {hreflang ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
-        {hreflang ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        {!served || titleOverride ? <title>{metaTitle}</title> : null}
+        {!served || descriptionOverride ? <meta name="description" content={description} /> : null}
+        {!served || titleOverride ? <meta property="og:title" content={metaTitle} /> : null}
+        {!served || descriptionOverride ? (
+          <meta property="og:description" content={description} />
+        ) : null}
+        {!served ? <link rel="canonical" href={canonical} /> : null}
+        {!served && hreflang ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
+        {!served && hreflang ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
         {/* Only /cursuri-araba has a German sibling. A cluster is honoured only
             when every member names every other, so this closes the group. */}
-        {hreflang && deHref ? <link rel="alternate" hrefLang="de" href={`${BASE}${deHref}`} /> : null}
-        {hreflang ? <link rel="alternate" hrefLang="x-default" href={url} /> : null}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={canonical} />
-        <meta property="og:image" content={`${BASE}/og-image.png`} />
-        <meta property="og:locale" content="ro_RO" />
-        <meta name="twitter:card" content="summary_large_image" />
+        {!served && hreflang && deHref ? (
+          <link rel="alternate" hrefLang="de" href={`${BASE}${deHref}`} />
+        ) : null}
+        {!served && hreflang ? <link rel="alternate" hrefLang="x-default" href={url} /> : null}
+        {!served ? <meta property="og:url" content={canonical} /> : null}
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
           {/* Skipped when the route head already carries it: a JSON-LD script

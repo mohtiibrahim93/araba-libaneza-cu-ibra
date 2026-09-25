@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { seoMeta } from "@/lib/seoHead";
-import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,10 +49,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DataDeletion = () => {
   const { lang } = useI18n();
   const page = content[lang];
-  // From the route table, like every other head on the site: written here as
-  // well, the two said different things — this one still carried the old
-  // lowercase, diacritic-less brand name.
-  const meta = seoMeta("/stergere-date");
+  // The head — title, description and the noindex — is served by the route
+  // from src/lib/seoHead.ts; writing it here as well put two of each in the
+  // HTML, which is what the crawl reported.
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
@@ -87,11 +84,6 @@ const DataDeletion = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{meta?.title ?? page.seoTitle}</title>
-        <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/stergere-date" />
-      </Helmet>
       <Navbar />
       <main id="main-content" className="max-w-xl mx-auto px-gutter py-16">
         <div className="flex items-center gap-3 mb-4">

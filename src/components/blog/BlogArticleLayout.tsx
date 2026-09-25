@@ -121,12 +121,19 @@ const BlogArticleLayout = ({
   // runs JavaScript and another to one that does not, several of them well
   // past the length a result ever shows. An owner edit still wins over both:
   // that one is deliberate, and the server cannot know about it anyway.
+  const titleOverride = (override && ov(override.title_en, override.title_ro)) || "";
+  const descriptionOverride =
+    (override && ov(override.description_en, override.description_ro)) || "";
   const resolvedMetaTitle =
-    (override && ov(override.title_en, override.title_ro)) ||
-    (registryPost ? pick(registryPost.title, lang) : tTitle);
+    titleOverride || (registryPost ? pick(registryPost.title, lang) : tTitle);
   const resolvedMetaDescription =
-    (override && ov(override.description_en, override.description_ro)) ||
-    (registryPost ? pick(registryPost.description, lang) : tDesc);
+    descriptionOverride || (registryPost ? pick(registryPost.description, lang) : tDesc);
+  // An article in the registry had its whole head served by the route already
+  // (src/lib/seoHead.ts reads the same registry), so the tags below are only
+  // what that HTML cannot hold: the fallback for an article the registry does
+  // not list, and the owner's edit, which is fetched in the browser. Rendering
+  // the rest a second time is what put two titles on every article.
+  const served = Boolean(registryPost);
   const tLead = (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
   const overrideBody = override ? ov(override.body_en, override.body_ro) : "";
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
@@ -205,20 +212,25 @@ const BlogArticleLayout = ({
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{resolvedMetaTitle}</title>
-        <meta name="description" content={resolvedMetaDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={resolvedMetaTitle} />
-        <meta property="og:description" content={resolvedMetaDescription} />
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content={socialImage} />
+        {!served || titleOverride ? <title>{resolvedMetaTitle}</title> : null}
+        {!served || descriptionOverride ? (
+          <meta name="description" content={resolvedMetaDescription} />
+        ) : null}
+        {!served || titleOverride ? (
+          <meta property="og:title" content={resolvedMetaTitle} />
+        ) : null}
+        {!served || descriptionOverride ? (
+          <meta property="og:description" content={resolvedMetaDescription} />
+        ) : null}
+        {!served ? <link rel="canonical" href={canonicalUrl} /> : null}
+        {!served ? <meta property="og:type" content="article" /> : null}
+        {!served ? <meta property="og:url" content={url} /> : null}
+        {!served ? <meta property="article:published_time" content={published} /> : null}
+        {/* The article's own cover, when it has one. Without a cover these would
+            only restate the site-wide card the root route already sends. */}
+        {cover && <meta property="og:image" content={socialImage} />}
         {cover && <meta property="og:image:alt" content={L(cover.alt, lang)} />}
-        <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
-        <meta property="article:published_time" content={published} />
-        <meta property="article:author" content="Ibra — Centrul de Arabă Libaneză" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={socialImage} />
+        {cover && <meta name="twitter:image" content={socialImage} />}
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}

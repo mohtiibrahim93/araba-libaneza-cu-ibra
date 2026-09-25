@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderRoute, currentPath } from "./helpers/appRouter";
 import { routeFiles, redirectsTo } from "./helpers/routes";
+import { seoHead } from "@/lib/seoHead";
 
 /**
  * Smoke test for every publicly reachable content route.
@@ -169,18 +170,19 @@ describe("structured data links the business to the organisation", () => {
 });
 
 describe("retired URLs that render instead of redirecting", () => {
+  // The canonical is served by the route, not painted by the component: pages
+  // used to render their own copy through <Helmet> and the HTML ended up with
+  // two of every head tag. So the page is checked for content here and the
+  // canonical is read from the head the route serves.
   it.each(CANONICALISED_ALIASES)("%s serves content but canonicalises away", async (from, canonical) => {
     window.localStorage.setItem("site-language", "ro");
-    const { container } = renderRoute(from);
+    renderRoute(from);
     const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
     expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
 
-    const link = await waitFor(() => {
-      const el = document.querySelector('link[rel="canonical"]');
-      expect(el).toBeTruthy();
-      return el!;
-    });
-    expect(link.getAttribute("href")).toBe(canonical);
+    const served = seoHead(from).links?.find((l) => l["rel"] === "canonical");
+    expect(served, `${from} serves no canonical`).toBeTruthy();
+    expect(served?.["href"]).toBe(canonical);
   });
 });
 

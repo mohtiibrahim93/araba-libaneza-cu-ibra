@@ -105,10 +105,9 @@ const PageContent = () => {
   }, []);
 
   // From the route table, which is what the route's head() serves. HOME_META
-  // feeds that table; reading it here too is what keeps the homepage from
-  // sending two different titles to two kinds of crawler.
+  // feeds that table; the description is read back here for the Course
+  // JSON-LD below, so the markup and the served head say the same thing.
   const homeMeta = seoMeta("/");
-  const homeTitle = homeMeta?.title ?? t.homeSeoTitle;
   const homeDescription = homeMeta?.description ?? t.homeSeoDescription;
 
   // FAQPage JSON-LD comes from FAQSection (generated from the rendered FAQ
@@ -187,22 +186,15 @@ const PageContent = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Title, description, canonical and Open Graph come from the route
+          (src/routes/index.tsx → src/lib/seoHead.ts). Repeating them here sent
+          a second copy of each into the same <head>, which is what the crawl
+          reported. What stays is what the route does not say: the homepage is
+          one URL for both languages (client-side toggle), so it announces the
+          other language as an alternate locale rather than through hreflang —
+          hreflang needs a URL per language. The three-language cluster lives on
+          /cursuri-araba; see src/lib/hreflangCluster.ts. */}
       <Helmet>
-        <title>{homeTitle}</title>
-        <meta name="description" content={homeDescription} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/" />
-        {/* No hreflang. The homepage has no translation: /en/learn-lebanese-arabic
-            is the English twin of /cursuri-araba, and names that page back. The
-            homepage used to claim it anyway, which made the annotation one-way
-            and left the whole group invalid. The three-language cluster lives on
-            /cursuri-araba — see src/lib/hreflangCluster.ts. */}
-        <meta property="og:title" content={homeTitle} />
-        <meta property="og:description" content={homeDescription} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/" />
-        {/* One-URL bilingual site (client-side toggle): hreflang needs
-            per-language URLs, so it doesn't apply here. og:locale plus the
-            dynamic <html lang> (set in i18n.tsx) are the correct signals. */}
-        <meta property="og:locale" content={lang === "en" ? "en_US" : "ro_RO"} />
         <meta property="og:locale:alternate" content={lang === "en" ? "ro_RO" : "en_US"} />
         <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>

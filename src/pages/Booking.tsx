@@ -1,11 +1,8 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "@/lib/router-compat";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
-import { canonicalPath } from "@/lib/languageRoutes";
-import { seoMeta } from "@/lib/seoHead";
 import { ONLINE_PRICES, formatLei, physicalPrice } from "@/lib/pricing";
 
 const BookingInner = () => {
@@ -16,10 +13,11 @@ const BookingInner = () => {
   const hasValidRegistration =
     !!registrationId && /^[0-9a-f-]{36}$/i.test(registrationId);
 
+  // Only the tab title, set by the effect below. The head itself — for the
+  // indexable /booking entry point — is served by the route from
+  // src/lib/seoHead.ts; this page wrote a second copy of it, which is how the
+  // HTML ended up with two titles and two descriptions.
   const title = `${type === "paid" ? t.bookingPageSeoTitlePaid : t.bookingPageSeoTitleTrial} — ${t.siteTitle}`;
-  const description = type === "paid" ? t.bookingPaidDesc : t.bookingTrialSeoDesc;
-
-  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
 
   // Keep this hook before the early return so hook order stays stable across
   // renders — otherwise a re-render without a valid registration id throws
@@ -33,17 +31,8 @@ const BookingInner = () => {
   // that routes to the right starting step instead of bouncing to the homepage.
   if (!hasValidRegistration) {
     const en = lang === "en";
-    // This is the indexable /booking entry point, so its head comes from the
-    // route table rather than from strings written here: the two said
-    // different things, and only the table is length-checked.
-    const landingMeta = seoMeta(canonicalPath("/booking", lang));
     return (
       <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
-        <Helmet>
-          <title>{landingMeta?.title ?? (en ? "Book a lesson" : "Rezervă o lecție") + " — " + t.siteTitle}</title>
-          <meta name="description" content={landingMeta?.description ?? (en ? "Book a free trial or enroll in a Lebanese Arabic course — online or in Bucharest." : "Rezervă o lecție de probă gratuită sau înscrie-te la un curs de arabă libaneză — online sau în București.")} />
-          <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/booking", lang)}`} />
-        </Helmet>
         <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="w-4 h-4" /> {t.navHome}
@@ -122,16 +111,6 @@ const BookingInner = () => {
 
   return (
     <main className="min-h-screen bg-background py-12 px-gutter">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/booking", lang)}`} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={`https://centruldearabalibaneza.com/booking`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content={ogImage} />
-      </Helmet>
       <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link
           to="/"

@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import { LEARN_CLUSTER, LEARN_X_DEFAULT } from "@/lib/hreflangCluster";
 
 const BASE = "https://centruldearabalibaneza.com";
 const URL = `${BASE}/de/arabisch-lernen`;
@@ -75,28 +74,12 @@ const faqJsonLd = {
 
 const ArabischLernen = () => (
   <div className="min-h-screen bg-background" lang="de">
+    {/* The head is the route's (src/lib/seoHead.ts): title, description,
+        canonical, the three-language hreflang cluster and Open Graph. Written
+        here as well, each of them appeared twice in the same HTML. The link
+        preview card comes from the root route, like every other page's. */}
     <Helmet>
       <html lang="de" />
-      <title>Arabisch lernen online — Libanesisch mit Muttersprachler</title>
-      <meta
-        name="description"
-        content="Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde."
-      />
-      <link rel="canonical" href={URL} />
-      <link rel="alternate" hrefLang="de" href={URL} />
-      <link rel="alternate" hrefLang="en" href={`${BASE}/en/learn-lebanese-arabic`} />
-      <link rel="alternate" hrefLang="ro" href={`${BASE}${LEARN_CLUSTER.ro}`} />
-      <link rel="alternate" hrefLang="x-default" href={`${BASE}${LEARN_X_DEFAULT}`} />
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="Arabisch lernen online — mit Muttersprachler" />
-      <meta
-        property="og:description"
-        content="Libanesisches Arabisch online lernen. Sprich ab Lektion eins. Kostenlose Probestunde."
-      />
-      <meta property="og:url" content={URL} />
-      <meta property="og:image" content={`${BASE}/og-image.png`} />
-      <meta property="og:locale" content="de_DE" />
-      <meta name="twitter:card" content="summary_large_image" />
       <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
       <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>

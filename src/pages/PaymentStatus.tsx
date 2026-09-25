@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -140,10 +139,6 @@ const PaymentStatus = () => {
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-gutter">
-      <Helmet>
-        <title>Status plată — Centrul de Arabă Libaneză</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
       <div className="max-w-xl mx-auto">
         <Card>
           <CardContent className="p-8 text-center space-y-4">

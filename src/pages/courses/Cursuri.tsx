@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "@/lib/router-compat";
 import { ChevronRight, GraduationCap, User, Baby, Wifi, MapPin, Users, UserRound, Loader2, Sparkles, Building2, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -9,8 +8,6 @@ import CourseCard from "@/components/courses/CourseCard";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import { useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
-import { canonicalPath } from "@/lib/languageRoutes";
-import { seoMeta } from "@/lib/seoHead";
 import { AGE_LABELS, MODALITY_LABELS, type AgeCategory, type Modality } from "@/lib/courses";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
@@ -35,12 +32,8 @@ const TYPES: Choice[] = [
 const Cursuri = () => {
   const { t, lang } = useI18n();
   const [params, setParams] = useSearchParams();
-  const canonical = `${BASE_URL}${canonicalPath("/cursuri", lang)}`;
-  // From the route table, for the same reason as everywhere else: written in
-  // two places, the server head and this one had drifted on /en/courses.
-  const routeMeta = seoMeta(canonicalPath("/cursuri", lang));
-  const metaTitle = routeMeta?.title ?? t.cursuriMetaTitle;
-  const metaDesc = routeMeta?.description ?? t.cursuriMetaDesc;
+  // Head served by the route (src/lib/seoHead.ts). Written here as well, it
+  // put a second title and description in the same HTML.
   const L = (o: { ro: string; en: string }) => (lang === "en" ? o.en : o.ro);
 
   const age = params.get("varsta");
@@ -60,14 +53,6 @@ const Cursuri = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDesc} />
-        <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDesc} />
-        <meta property="og:url" content={canonical} />
-      </Helmet>
       <Navbar />
 
       <main id="main-content" className="pt-16">

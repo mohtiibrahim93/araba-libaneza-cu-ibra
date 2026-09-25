@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2, Mail, Video, Calendar, Share2, Loader2, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -37,6 +36,13 @@ const ThankYou = () => {
   const [errored, setErrored] = useState(false);
   /** Guards against a second send if the effect re-runs. */
   const purchaseSent = useRef(false);
+
+  // The route serves the Romanian title (see src/routes/thank-you.tsx); this
+  // keeps the tab in the visitor's language without adding a second <title> to
+  // the document, which is how the duplicate titles got there in the first place.
+  useEffect(() => {
+    document.title = t.thankYouSeoTitle;
+  }, [t.thankYouSeoTitle]);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -145,13 +151,6 @@ const ThankYou = () => {
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-gutter">
-      <Helmet>
-        <title>{t.thankYouSeoTitle}</title>
-        <meta name="description" content={t.thankYouSeoDescription} />
-        <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/thank-you" />
-      </Helmet>
-
       <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <div className="flex flex-col items-center text-center mb-8">
           <div className="relative mb-6">

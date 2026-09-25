@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
 import { useSearchParams } from "@/lib/router-compat";
@@ -10,7 +9,6 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
-import { JOACA_META } from "@/lib/pageMeta";
 
 /**
  * /joc — free practice, and the one page on the site that asks for nothing.
@@ -114,17 +112,6 @@ const Joaca = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Helmet>
-        <title>{JOACA_META.title}</title>
-        <meta name="description" content={JOACA_META.description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/joc" />
-        <meta name="robots" content="index,follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={JOACA_META.title} />
-        <meta property="og:description" content={JOACA_META.description} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/joc" />
-        <meta property="og:locale" content="ro_RO" />
-      </Helmet>
 
       <Navbar />
 

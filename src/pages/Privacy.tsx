@@ -1,7 +1,4 @@
 import { useI18n } from "@/lib/i18n";
-import { canonicalPath } from "@/lib/languageRoutes";
-import { seoMeta } from "@/lib/seoHead";
-import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -36,30 +33,15 @@ const content = {
 } as const;
 
 const PrivacyContent = () => {
-  const { lang, t } = useI18n();
+  const { lang } = useI18n();
   const page = content[lang];
 
-  // Title and description come from the route table in src/lib/seoHead.ts —
-  // the same one the route's head() serves and the one meta-length.test.ts
-  // keeps inside the truncation limits. Written here as well, the two drifted.
-  const meta = seoMeta(canonicalPath("/privacy", lang));
-  const title = meta?.title ?? t.privacySeoTitle;
-  const description = meta?.description ?? t.privacySeoDescription;
-
-  const ogImage = "https://centruldearabalibaneza.com/og-image.png";
+  // No <head> here: the title, description and canonical are served by the
+  // route (src/lib/seoHead.ts), which is also what meta-length.test.ts
+  // length-checks. A second copy in the component put two of each in the HTML.
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/privacy", lang)}`} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/privacy" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content={ogImage} />
-      </Helmet>
       <Navbar />
       <main id="main-content" className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>

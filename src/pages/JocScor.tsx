@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
-import { JOC_SCOR_META } from "@/lib/pageMeta";
 import {
   readYallaProgress,
   summarizeYalla,
@@ -120,17 +118,6 @@ const JocScor = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Helmet>
-        <title>{JOC_SCOR_META.title}</title>
-        <meta name="description" content={JOC_SCOR_META.description} />
-        <link rel="canonical" href="https://centruldearabalibaneza.com/joc/scor" />
-        <meta name="robots" content="index,follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={JOC_SCOR_META.title} />
-        <meta property="og:description" content={JOC_SCOR_META.description} />
-        <meta property="og:url" content="https://centruldearabalibaneza.com/joc/scor" />
-        <meta property="og:locale" content="ro_RO" />
-      </Helmet>
 
       <Navbar />
 

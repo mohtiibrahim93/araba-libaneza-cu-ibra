@@ -1,11 +1,8 @@
 import { useRef } from "react";
-import { Helmet } from "react-helmet-async";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
-import { canonicalPath } from "@/lib/languageRoutes";
-import { seoMeta } from "@/lib/seoHead";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -58,22 +55,12 @@ const TrialPage = () => {
     return id;
   };
 
-  // From the route table in src/lib/seoHead.ts — the same one the route's
-  // head() serves, and the one meta-length.test.ts holds inside the truncation
-  // limits. Written here as well, the two heads drifted.
-  const meta = seoMeta(canonicalPath("/trial", lang));
-  const title = meta?.title ?? t.trialPageSeoTitle;
-  const description = meta?.description ?? t.trialPageSeoDesc;
+  // No <head> written here: the route serves the title, description and
+  // canonical from src/lib/seoHead.ts. A second copy in the component is how
+  // every page ended up with two titles and two descriptions.
 
   return (
     <main id="main-content" className="min-h-screen bg-background py-12 px-gutter">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={`https://centruldearabalibaneza.com${canonicalPath("/trial", lang)}`} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-      </Helmet>
       <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
         <Link
           to="/"

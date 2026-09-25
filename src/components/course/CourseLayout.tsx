@@ -73,6 +73,10 @@ const CourseLayout = ({
   const routeMeta = seoMeta(canonicalPath(path, lang));
   const resolvedMetaTitle = routeMeta?.title ?? metaTitle;
   const resolvedMetaDescription = routeMeta?.description ?? metaDescription;
+  // The route already put that head in the HTML, so this component adds it only
+  // for a page the table does not know. Rendering it either way is what left
+  // every page with two titles and two descriptions.
+  const served = Boolean(routeMeta);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -103,13 +107,12 @@ const CourseLayout = ({
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{resolvedMetaTitle}</title>
-        <meta name="description" content={resolvedMetaDescription} />
-        <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={resolvedMetaTitle} />
-        <meta property="og:description" content={resolvedMetaDescription} />
-        <meta property="og:url" content={canonical} />
-        <meta property="og:type" content="website" />
+        {!served ? <title>{resolvedMetaTitle}</title> : null}
+        {!served ? <meta name="description" content={resolvedMetaDescription} /> : null}
+        {!served ? <link rel="canonical" href={canonical} /> : null}
+        {!served ? <meta property="og:title" content={resolvedMetaTitle} /> : null}
+        {!served ? <meta property="og:description" content={resolvedMetaDescription} /> : null}
+        {!served ? <meta property="og:url" content={canonical} /> : null}
         {/* No hreflang here on purpose. These four course pages exist only in
             Romanian — the /en/ pages are separate landing pages, not
             translations of them. Announcing ro, en and x-default all pointing

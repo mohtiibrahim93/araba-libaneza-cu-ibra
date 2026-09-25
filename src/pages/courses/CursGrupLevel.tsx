@@ -15,8 +15,6 @@ import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
-import { seoMeta } from "@/lib/seoHead";
-import { levelTitle } from "@/lib/levelMeta";
 
 // Cohort posters per level — only A1/A2 have announced cohorts.
 // `started` marks a cohort that is already running: enrolment is closed, so the
@@ -86,20 +84,12 @@ const CursGrupLevel = () => {
     setSearchParams(next, { replace: true });
   };
 
+  // Still needed below, for the breadcrumb's last step.
   const canonical = `${BASE_URL}${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${slug}`;
-  // A1 is the highest-intent SERP entry point ("curs araba incepatori
-  // bucuresti"). Give it a keyword-optimised meta title/description; other
-  // levels keep the generic pattern.
-  // One shared table with the prerender (src/lib/levelMeta.ts). The old inline
-  // ladder only special-cased A1, B1 and B2; A2, C1 and C2 fell through to
-  // `${curriculum.title} — ${t.courseGrupH1}`, which ran to 76 characters on
-  // C2 and disagreed with the title the static head already carried.
-  // Straight from the route table, which is what the route's head() serves.
-  // Both halves used to be rebuilt here and the English A1 description had
-  // drifted from the one the server sends.
-  const routeMeta = seoMeta(canonical.replace(BASE_URL, ""));
-  const metaTitle = routeMeta?.title ?? levelTitle(slug, lang);
-  const metaDesc = routeMeta?.description ?? curriculum.objective.slice(0, 155);
+  // The head — including A1's keyword-optimised title, the one that carries
+  // "curs araba incepatori bucuresti" — comes from the route table alone
+  // (src/lib/seoHead.ts, via src/lib/levelMeta.ts). It used to be rebuilt here
+  // too, and the English A1 description had already drifted from the served one.
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -118,12 +108,6 @@ const CursGrupLevel = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDesc} />
-        <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDesc} />
-        <meta property="og:url" content={canonical} />
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
       <Navbar />

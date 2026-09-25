@@ -83,8 +83,16 @@ const EnLandingLayout = ({
   // Same rule as the Romanian LandingLayout: the route table decides the head,
   // the props are the fallback, an owner's edit still wins over both.
   const routeMeta = seoMeta(`/en/${slug}`);
-  const metaTitle = override?.meta_title?.trim() || routeMeta?.title || metaTitleProp;
-  const description = override?.meta_description?.trim() || routeMeta?.description || descriptionProp;
+  const titleOverride = override?.meta_title?.trim() || "";
+  const descriptionOverride = override?.meta_description?.trim() || "";
+  const metaTitle = titleOverride || routeMeta?.title || metaTitleProp;
+  const description = descriptionOverride || routeMeta?.description || descriptionProp;
+  // Same rule as the Romanian LandingLayout: the route already served this
+  // page's head, so what follows is only what that HTML cannot hold — the
+  // fallback for a page missing from the table, and the owner's edit, which is
+  // fetched in the browser. Rendering the rest again gave every page two
+  // titles, two descriptions and two canonicals.
+  const served = Boolean(routeMeta);
   const lead = override?.lead?.trim() || leadProp;
   const faq = override?.faq?.length ? override.faq : faqProp;
   const bodyMd = override?.body_md?.trim() || "";
@@ -136,23 +144,21 @@ const EnLandingLayout = ({
     <div className="min-h-screen bg-background" lang="en">
       <Helmet>
         <html lang="en" />
-        <title>{metaTitle}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={url} />
-        {roAlt ? <link rel="alternate" hrefLang="ro" href={roAlt} /> : null}
-        {roAlt ? <link rel="alternate" hrefLang="en" href={url} /> : null}
+        {!served || titleOverride ? <title>{metaTitle}</title> : null}
+        {!served || descriptionOverride ? <meta name="description" content={description} /> : null}
+        {!served || titleOverride ? <meta property="og:title" content={metaTitle} /> : null}
+        {!served || descriptionOverride ? (
+          <meta property="og:description" content={description} />
+        ) : null}
+        {!served ? <link rel="canonical" href={url} /> : null}
+        {!served && roAlt ? <link rel="alternate" hrefLang="ro" href={roAlt} /> : null}
+        {!served && roAlt ? <link rel="alternate" hrefLang="en" href={url} /> : null}
         {/* Only the /en/learn-lebanese-arabic page has a German sibling, and
             the cluster is only honoured if every member names every other. */}
-        {roAlt && deAlt ? <link rel="alternate" hrefLang="de" href={deAlt} /> : null}
-        {roAlt ? <link rel="alternate" hrefLang="x-default" href={roAlt} /> : null}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content={`${BASE}/og-image.png`} />
-        <meta property="og:locale" content="en_US" />
+        {!served && roAlt && deAlt ? <link rel="alternate" hrefLang="de" href={deAlt} /> : null}
+        {!served && roAlt ? <link rel="alternate" hrefLang="x-default" href={roAlt} /> : null}
+        {!served ? <meta property="og:url" content={url} /> : null}
         <meta property="og:locale:alternate" content="ro_RO" />
-        <meta name="twitter:card" content="summary_large_image" />
         {courseJsonLd && <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>}
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
           {/* Skipped when the route head already carries it: a JSON-LD script

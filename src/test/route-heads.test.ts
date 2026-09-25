@@ -81,10 +81,12 @@ describe("per-page heads", () => {
     expect(seoHead("/nu-exista")).toEqual({ meta: [], links: [], scripts: [] });
   });
 
-  it("stamps every tag so Helmet replaces it instead of duplicating it", () => {
-    // The pages still render their own head through react-helmet-async after
-    // hydration. Without data-rh, Helmet appends a second title, description
-    // and canonical next to the server-rendered ones.
+  it("stamps every tag the way the prerender script did", () => {
+    // data-rh marks the served head as react-helmet-async's own, exactly as
+    // scripts/seoPrerender.ts wrote it. It is a marker, not a de-duplicator:
+    // under React 19 Helmet renders through React and cannot replace a served
+    // tag, which is why no component renders one any more — see
+    // src/test/single-head.test.ts.
     const head = seoHead("/joc");
     for (const tag of [...head.meta, ...head.links]) {
       expect(tag["data-rh"]).toBe("true");
