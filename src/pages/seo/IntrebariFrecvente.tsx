@@ -39,8 +39,9 @@ const IntrebariFrecvente = () => (
     <p>
       Scrie-ne și îți răspundem în aceeași zi. Cel mai simplu mod de a afla dacă un curs ți
       se potrivește rămâne{" "}
-      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link> — cardul confirmă locul,
-      dar proba rămâne 0 lei și fără obligații.
+      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link> — proba rămâne 0 lei, iar
+      locul se confirmă cu cardul; anulezi gratuit cu 24 de ore înainte, altfel se reține 150 lei.
+
     </p>
   </LandingLayout>
 );
