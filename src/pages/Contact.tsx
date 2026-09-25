@@ -24,7 +24,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 import { trackGenerateLead } from "@/lib/tracking";
