@@ -38,7 +38,7 @@ public enum NativeExerciseInput: Equatable, Sendable {
             let tokens = WordOrderState(canonicalAnswer: exercise.answer).tokens
             self = .wordOrder(WordOrderState(
                 canonicalAnswer: exercise.answer,
-                presentedTokenOrder: Array(tokens.map(\.id).reversed())
+                presentedTokenOrder: WordOrderState.scrambledOrder(count: tokens.count, seed: exercise.id)
             ))
         default:
             self = .unavailable

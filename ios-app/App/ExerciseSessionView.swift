@@ -178,13 +178,7 @@ struct ExerciseSessionView: View {
                 }
                 Spacer(minLength: 0)
                 if let savedID {
-                    CircularIconButton(
-                        icon: .system(isSaved ? "heart.fill" : "heart"),
-                        accessibilityLabel: isSaved ? "Elimină din salvate" : "Salvează expresia",
-                        tint: Theme.terracotta,
-                        fill: .clear,
-                        diameter: 30
-                    ) {
+                    CedarSaveButton(isSaved: isSaved, itemLabel: "expresia", filledBackground: false) {
                         Task { await progressModel.toggleSavedExpressionID(savedID) }
                     }
                     .padding(.top, -8)

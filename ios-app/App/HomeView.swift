@@ -609,12 +609,10 @@ struct DailyExpressionCard: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .layoutPriority(1)
                 Spacer(minLength: 0)
-                CircularIconButton(
-                    icon: .system(isFavorite ? "heart.fill" : "heart"),
-                    accessibilityLabel: isFavorite ? "Elimină din salvate" : "Salvează expresia",
-                    tint: Theme.terracotta,
-                    fill: .clear,
-                    diameter: 28,
+                CedarSaveButton(
+                    isSaved: isFavorite,
+                    itemLabel: expression.arabizi,
+                    filledBackground: false,
                     action: onFavorite
                 )
                 .padding(.vertical, -8)

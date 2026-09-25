@@ -253,7 +253,7 @@ struct RootTabView: View {
                 .tabItem { Label("Tutor", systemImage: "person.crop.circle") }
                 .tag(RootTab.tutor)
         }
-        .tint(Theme.deep)
+        .tint(Theme.brand)
         .onChange(of: selectedTab) { _, _ in refreshRecordingDates() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { refreshRecordingDates() }

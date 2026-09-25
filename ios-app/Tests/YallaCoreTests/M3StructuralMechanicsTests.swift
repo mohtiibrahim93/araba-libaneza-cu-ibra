@@ -21,6 +21,21 @@ struct WordOrderMechanicsTests {
         #expect(state.isCorrect)
     }
 
+    @Test("Word order tiles are scrambled, stable, and never the answer or its reverse")
+    func scrambleIsStableAndNotTrivial() {
+        for count in 3...12 {
+            for seed in ["a", "generated.wordOrder.1", "x-42", "unit.lesson.7"] {
+                let order = WordOrderState.scrambledOrder(count: count, seed: seed)
+                #expect(Set(order) == Set(0..<count))
+                #expect(order != Array(0..<count))
+                #expect(order != Array((0..<count).reversed()))
+                #expect(order == WordOrderState.scrambledOrder(count: count, seed: seed))
+            }
+        }
+        #expect(WordOrderState.scrambledOrder(count: 2, seed: "s") == [1, 0])
+        #expect(WordOrderState.scrambledOrder(count: 1, seed: "s") == [0])
+    }
+
     @Test("Word order can undo the last selected tile")
     func undoRestoresTile() {
         var state = WordOrderState(canonicalAnswer: "baddi mayy")
