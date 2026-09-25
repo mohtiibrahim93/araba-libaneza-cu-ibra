@@ -92,7 +92,7 @@ struct SkillProgressCard: View {
                 .font(Theme.serif(.subheadline))
                 .foregroundStyle(foreground)
                 .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .minimumScaleFactor(0.45)
             if let rate = skill.cleanRate {
                 Text("\(Int((rate * 100).rounded()))%")
                     .font(Theme.serif(.headline))
@@ -177,21 +177,19 @@ struct ActivityHeatmapCard: View {
                 .foregroundStyle(Theme.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 3), count: weeks)
-            LazyVGrid(columns: columns, spacing: 3) {
+            HStack(alignment: .top, spacing: 3) {
                 ForEach(0..<weeks, id: \.self) { week in
-                    Text(monthLabel(week: week))
-                        .font(Theme.font(.caption2))
-                        .foregroundStyle(Theme.muted)
-                        .lineLimit(1)
-                        .fixedSize()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                ForEach(0..<7, id: \.self) { weekday in
-                    ForEach(0..<weeks, id: \.self) { week in
-                        RoundedRectangle(cornerRadius: 2, style: .continuous)
-                            .fill(color(for: xpByDay[days[week * 7 + weekday]] ?? 0))
-                            .aspectRatio(1, contentMode: .fit)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(monthLabel(week: week))
+                            .font(Theme.font(.caption2))
+                            .foregroundStyle(Theme.muted)
+                            .fixedSize()
+                            .frame(width: 13, height: 14, alignment: .leading)
+                        ForEach(0..<7, id: \.self) { weekday in
+                            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                                .fill(color(for: xpByDay[days[week * 7 + weekday]] ?? 0))
+                                .frame(width: 13, height: 13)
+                        }
                     }
                 }
             }
@@ -333,7 +331,7 @@ struct JourneyEncouragementBanner: View {
 
     var body: some View {
         ZStack(alignment: .trailing) {
-            DecorativeImage(name: "illus-sunset", width: 170)
+            DecorativeImage(name: "illus-sunset", width: 150)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
             VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
@@ -348,6 +346,8 @@ struct JourneyEncouragementBanner: View {
                     Label("Continuă călătoria", systemImage: "arrow.right")
                         .labelStyle(TrailingIconLabelStyle())
                         .font(Theme.font(.subheadline, weight: .semibold))
+                        .lineLimit(1)
+                        .fixedSize()
                 }
                 .buttonStyle(PillButtonStyle())
                 .padding(.top, Theme.Spacing.xxs)
@@ -356,7 +356,7 @@ struct JourneyEncouragementBanner: View {
             .padding(Theme.Spacing.m)
             .padding(.leading, Theme.Spacing.s)
             .frame(maxHeight: .infinity)
-            .frame(width: 236, alignment: .leading)
+            .frame(width: 262, alignment: .leading)
             .background(
                 Theme.deep,
                 in: UnevenRoundedRectangle(topLeadingRadius: 70, bottomLeadingRadius: 0, style: .continuous)

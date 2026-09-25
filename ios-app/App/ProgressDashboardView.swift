@@ -53,12 +53,14 @@ struct ProgressDashboardView: View {
                     Text("Progresul meu")
                         .font(Theme.serif(.largeTitle))
                         .foregroundStyle(Theme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     Text("O călătorie reală, pas cu pas.")
                         .font(Theme.serif(.subheadline, weight: .regular))
                         .foregroundStyle(Theme.muted)
                 }
                 .padding(.vertical, Theme.Spacing.s)
-                .padding(.trailing, 120)
+                .padding(.trailing, 80)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(alignment: .trailing) {
                     DecorativeImage(name: "illus-progress", width: 190, height: 104, fadeTowards: .leading)
@@ -89,7 +91,7 @@ struct ProgressDashboardView: View {
                     )
                 }
 
-                HStack(alignment: .top, spacing: Theme.Spacing.s) {
+                VStack(alignment: .leading, spacing: Theme.Spacing.l) {
                     ProgressListCard(title: "Repetiții programate", icon: "calendar", onSeeAll: onReviews) {
                         ScheduledReviewRow(icon: "arrow.triangle.2.circlepath", title: "De repetat acum",
                                            detail: "\(reviewQueue.dueNowCount) expresii", action: "Revizuiește", onTap: onReviews)
