@@ -246,11 +246,10 @@ struct RootWordNode: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(NodeButtonStyle())
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(member.label)
         .accessibilityValue(accessibilityValue)
         .accessibilityHint("Selectează pentru detalii")
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : [.isButton])
         .accessibilityIdentifier("root.node")
     }
 
@@ -507,8 +506,6 @@ struct RootWordDetailCard<Actions: View>: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 19, style: .continuous))
         .cardBackground(radius: 19)
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("root.detail")
     }
 
     /// Word-type panel standing in for per-word artwork.

@@ -123,7 +123,7 @@ final class YallaScreenshotTests: XCTestCase {
                     ktb.tap()
                     if app.descendants(matching: .any)["root.core"].waitForExistence(timeout: 6) {
                         snap("21d-root-explorer")
-                        let detail = app.descendants(matching: .any)["root.detail"]
+                        let detail = app.buttons["root.detail.save"]
                         scrollTo(detail)
                         snap("21e-root-detail")
                         let places = app.buttons.matching(identifier: "root.filter")
