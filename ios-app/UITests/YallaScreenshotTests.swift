@@ -58,6 +58,15 @@ final class YallaScreenshotTests: XCTestCase {
         if firstUnit.waitForExistence(timeout: 8) {
             firstUnit.tap()
             snap("03-journey-unit")
+            for (tab, name) in [("dialog", "03b-unit-dialog"), ("vocabulary", "03c-unit-vocabulary"), ("culture", "03d-unit-culture")] {
+                let button = app.buttons["unit.tab.\(tab)"]
+                if button.waitForExistence(timeout: 3) {
+                    button.tap()
+                    snap(name)
+                }
+            }
+            let exercisesTab = app.buttons["unit.tab.exercises"]
+            if exercisesTab.waitForExistence(timeout: 3) { exercisesTab.tap() }
             captureExerciseFlow()
             captureMatchingFlow()
         }

@@ -11,6 +11,8 @@ struct ExerciseSessionView: View {
     private let onComplete: (() -> Void)?
     /// Which daily goal a finished session counts toward.
     private let xpSource: XPSource
+    /// Unit framing shown above the exercises when opened from the Journey.
+    private let context: LessonContext?
 
     @State private var player: ExerciseSessionPlayer?
     @State private var answer = ""
@@ -32,9 +34,11 @@ struct ExerciseSessionView: View {
         title: String,
         progressModel: LearnerProgressModel,
         xpSource: XPSource = .practice,
+        context: LessonContext? = nil,
         onComplete: (() -> Void)? = nil
     ) {
         self.onComplete = onComplete
+        self.context = context
         self.xpSource = xpSource
         self.locale = locale
         self.title = title
@@ -93,10 +97,14 @@ struct ExerciseSessionView: View {
     ) -> some View {
         let input = NativeExerciseInput(exercise: exercise, expressions: expressions, locale: locale)
         return ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.section) {
                 progressHeader(player: player)
 
-                promptCard(exercise: exercise, input: input)
+                if let context {
+                    LessonIdentityHeader(context: context)
+                }
+
+                phraseCard(exercise: exercise, input: input, player: player)
 
                 if hintVisible {
                     Label {
@@ -113,11 +121,19 @@ struct ExerciseSessionView: View {
                     .transition(.scale(scale: 0.96).combined(with: .opacity))
                 }
 
+                let kind = kindLabel(exercise: exercise, input: input)
+                ExercisePromptHeader(icon: kind.icon, title: "Cum răspunzi?", helper: kind.title + ".")
+
                 answerControls(exercise: exercise, input: input, completed: player.isCurrentExerciseCompleted)
+
+                ScriptModeControls()
+                    .padding(.top, Theme.Spacing.xs)
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
+            .padding(.horizontal, Theme.Spacing.screen)
+            .padding(.top, Theme.Spacing.md)
             .padding(.bottom, 28)
+            .frame(maxWidth: Theme.Spacing.maxContentWidth)
+            .frame(maxWidth: .infinity)
         }
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -136,34 +152,80 @@ struct ExerciseSessionView: View {
 
     private func progressHeader(player: ExerciseSessionPlayer) -> some View {
         let state = player.sessionState
-        return HStack(spacing: 12) {
-            LessonProgressBar(
-                value: Double(state.completedCount) / Double(max(state.targetCount, 1))
-            )
-            Label("\(state.cleanFirstTryCount)", systemImage: "bolt.fill")
-                .font(Theme.font(.subheadline, weight: .bold))
-                .foregroundStyle(Theme.gold)
-                .accessibilityLabel("\(state.cleanFirstTryCount) din prima")
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(state.completedCount) din \(state.targetCount) răspunsuri completate, \(state.cleanFirstTryCount) din prima")
+        let label = context?.lessonLabel ?? "Exercițiul \(min(state.completedCount + 1, state.targetCount)) din \(state.targetCount)"
+        return LessonProgressHeader(
+            label: label,
+            progress: Double(state.completedCount) / Double(max(state.targetCount, 1)),
+            cleanFirstTries: state.cleanFirstTryCount
+        )
+        .accessibilityLabel("\(label). \(state.completedCount) din \(state.targetCount) răspunsuri completate, \(state.cleanFirstTryCount) din prima")
     }
 
-    private func promptCard(exercise: ExerciseDefinition, input: NativeExerciseInput) -> some View {
-        let kind = kindLabel(exercise: exercise, input: input)
-        return VStack(alignment: .leading, spacing: 12) {
-            Label(kind.title, systemImage: kind.icon)
-                .font(Theme.font(.caption, weight: .bold))
-                .textCase(.uppercase)
-                .kerning(0.8)
-                .foregroundStyle(Theme.teal)
-            Text(prompt(for: exercise))
-                .font(Theme.serif(.title2))
-                .foregroundStyle(Theme.ink)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
+    /// Speaker, prompt, save, audio slot and the hint / retry / result row.
+    private func phraseCard(exercise: ExerciseDefinition, input: NativeExerciseInput, player: ExerciseSessionPlayer) -> some View {
+        let savedID = exercise.expressionIDs.first
+        let isSaved = savedID.map { progressModel.snapshot.savedExpressionIDs.contains($0) } ?? false
+        let completed = player.isCurrentExerciseCompleted
+        return VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+            HStack(alignment: .top, spacing: Theme.Spacing.md) {
+                IconBadge(systemName: "person.fill", tint: Theme.terracotta, background: Theme.blush, size: 46)
+                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                    Text(prompt(for: exercise))
+                        .font(Theme.serif(.title3, weight: .semibold))
+                        .foregroundStyle(Theme.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                }
+                Spacer(minLength: 0)
+                if let savedID {
+                    CircularIconButton(
+                        icon: .system(isSaved ? "heart.fill" : "heart"),
+                        accessibilityLabel: isSaved ? "Elimină din salvate" : "Salvează expresia",
+                        tint: Theme.terracotta,
+                        fill: .clear,
+                        diameter: 30
+                    ) {
+                        Task { await progressModel.toggleSavedExpressionID(savedID) }
+                    }
+                    .padding(.top, -8)
+                    .padding(.trailing, -8)
+                }
+            }
+
+            AudioComingSoonRow()
+
+            HStack(spacing: Theme.Spacing.sm) {
+                if !completed {
+                    Button {
+                        useHint()
+                    } label: {
+                        Label("Indiciu", systemImage: "lightbulb")
+                    }
+                    .buttonStyle(LessonSoftButtonStyle())
+                    .disabled(hintVisible)
+                    .accessibilityIdentifier("exercise.hint")
+
+                    Button {
+                        latestResolution = nil
+                        resetInput(for: exercise)
+                    } label: {
+                        Label("Încearcă din nou", systemImage: "arrow.clockwise")
+                    }
+                    .buttonStyle(LessonSoftButtonStyle())
+                    .disabled(answer.isEmpty && selectedLeftID == nil && latestResolution == nil)
+                    .accessibilityHint("Șterge răspunsul curent")
+                }
+                Spacer(minLength: 0)
+                if let latestResolution, player.currentMatchingState == nil || completed {
+                    FeedbackStatusPill(
+                        title: FeedbackTone(resolution: latestResolution).shortTitle,
+                        tone: FeedbackTone(resolution: latestResolution).pillTone
+                    )
+                }
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Theme.Spacing.lg)
+        .cardBackground()
     }
 
     private func kindLabel(exercise: ExerciseDefinition, input: NativeExerciseInput) -> (title: String, icon: String) {
@@ -233,41 +295,41 @@ struct ExerciseSessionView: View {
     }
 
     private func choiceControls(choices: [String], completed: Bool) -> some View {
-        VStack(spacing: 12) {
-            ForEach(Array(choices.enumerated()), id: \.element) { index, choice in
+        VStack(spacing: Theme.Spacing.sm) {
+            ForEach(choices, id: \.self) { choice in
+                let state = choiceState(choice, completed: completed)
                 Button {
                     answer = choice
                 } label: {
-                    HStack(spacing: 14) {
-                        Text("\(index + 1)")
-                            .font(Theme.font(.caption, weight: .bold))
-                            .frame(width: 26, height: 26)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 7, style: .continuous)
-                                    .strokeBorder(Theme.line, lineWidth: 1.5)
-                            )
-                            .accessibilityHidden(true)
-                        Text(choice)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                    AnswerOptionCard(title: choice, state: state)
                 }
-                .buttonStyle(TileButtonStyle(state: choiceLook(choice, completed: completed)))
+                .buttonStyle(NodeButtonStyle())
                 .disabled(completed)
                 .accessibilityIdentifier("exercise.choice")
+                .accessibilityValue(choiceAccessibilityValue(state))
                 .accessibilityAddTraits(answer == choice ? .isSelected : [])
             }
         }
     }
 
-    private func choiceLook(_ choice: String, completed: Bool) -> TileButtonStyle.Look {
+    private func choiceState(_ choice: String, completed: Bool) -> AnswerOptionState {
         if completed {
             return answer == choice ? .correct : .muted
         }
         if answer == choice { return .selected }
         if let latestResolution, latestResolution.needsCorrection, latestResolution.submittedAnswer == choice {
-            return .wrong
+            return .incorrect
         }
-        return .normal
+        return .idle
+    }
+
+    private func choiceAccessibilityValue(_ state: AnswerOptionState) -> String {
+        switch state {
+        case .correct: return "Răspuns corect"
+        case .incorrect: return "Răspuns selectat, incorect"
+        case .selected: return "Selectat"
+        case .idle, .muted: return "Neselectat"
+        }
     }
 
     private func wordOrderControls(state: WordOrderState, completed: Bool) -> some View {
@@ -414,17 +476,6 @@ struct ExerciseSessionView: View {
 
             AdaptiveRow(spacing: 12) {
                 if !completed {
-                    Button {
-                        useHint()
-                    } label: {
-                        Image(systemName: "lightbulb.fill")
-                            .accessibilityLabel("Indiciu")
-                    }
-                    .buttonStyle(ChunkyButtonStyle(kind: .secondary))
-                    .frame(maxWidth: isMatching ? CGFloat.infinity : 76)
-                    .disabled(hintVisible)
-                    .accessibilityIdentifier("exercise.hint")
-
                     if !isMatching {
                         Button {
                             submitAnswer()
@@ -633,6 +684,22 @@ private enum FeedbackTone {
         case .success: return "checkmark"
         case .variant: return "checkmark"
         case .retry: return "arrow.counterclockwise"
+        }
+    }
+
+    var shortTitle: String {
+        switch self {
+        case .success: return "Corect!"
+        case .variant: return "Acceptat"
+        case .retry: return "Mai încearcă"
+        }
+    }
+
+    var pillTone: FeedbackStatusPill.Tone {
+        switch self {
+        case .success: return .correct
+        case .variant: return .variant
+        case .retry: return .retry
         }
     }
 }

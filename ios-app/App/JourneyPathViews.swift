@@ -337,6 +337,24 @@ struct JourneyUnitDetailView: View {
     @ObservedObject var progressModel: LearnerProgressModel
 
     private let planner = JourneyLessonPlanner()
+    @State private var tab = "exercises"
+
+    private static let tabs = [
+        LessonModeTab(id: "dialog", title: "Dialog", icon: "bubble.left"),
+        LessonModeTab(id: "vocabulary", title: "Vocabular", icon: "book"),
+        LessonModeTab(id: "exercises", title: "Exerciții", icon: "dumbbell"),
+        LessonModeTab(id: "culture", title: "Cultură", icon: "tree")
+    ]
+
+    private func context(lessonNumber: Int, of total: Int) -> LessonContext {
+        LessonContext(
+            title: detail.title,
+            subtitle: detail.description,
+            icon: JourneyUnitArt.icon(for: detail.id),
+            sceneImage: JourneyUnitArt.scene(for: detail.id),
+            lessonLabel: "Lecția \(lessonNumber) din \(total)"
+        )
+    }
 
     var body: some View {
         let lessons = planner.lessons(unitID: detail.id, exercises: detail.exercises)
@@ -351,42 +369,16 @@ struct JourneyUnitDetailView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     unitHeader(completed: completedCount, total: lessons.count)
-
-                    AdaptiveRow(spacing: 12) {
-                        if let matching {
-                            NavigationLink {
-                                ExerciseSessionView(
-                                    exercises: [matching], expressions: expressions, locale: locale,
-                                    title: "Potrivește expresiile", progressModel: progressModel
-                                )
-                            } label: {
-                                ShortcutCard(title: "Potrivește", subtitle: "Până la 6 expresii", icon: "square.grid.2x2.fill")
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("lesson.matching")
-                        }
-                        NavigationLink {
-                            UnitContentsView(detail: detail, locale: locale)
-                        } label: {
-                            ShortcutCard(title: "Expresii", subtitle: "\(detail.expressions.count) în unitate", icon: "text.bubble.fill")
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityIdentifier("unit.contents")
-                    }
-
-                    if lessons.isEmpty {
-                        Text("Această unitate nu are încă exerciții native asociate.")
-                            .font(Theme.font(.subheadline))
-                            .foregroundStyle(Theme.muted)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        VStack(spacing: 22) {
-                            ForEach(Array(zip(lessons, statuses)), id: \.0.id) { lesson, status in
-                                lessonNode(lesson, status: status)
-                                    .id(lesson.id)
-                            }
-                        }
-                        .padding(.top, 8)
+                    LessonModeTabs(items: Self.tabs, selectedID: $tab)
+                    switch tab {
+                    case "dialog":
+                        dialogTab
+                    case "vocabulary":
+                        vocabularyTab
+                    case "culture":
+                        cultureTab
+                    default:
+                        exercisesTab(lessons: lessons, statuses: statuses, matching: matching)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -404,6 +396,152 @@ struct JourneyUnitDetailView: View {
         .task(id: detail.id) {
             await progressModel.setCurrentJourneyUnitID(detail.id)
         }
+    }
+
+    // MARK: Tabs
+
+    @ViewBuilder
+    private func exercisesTab(lessons: [JourneyLesson], statuses: [JourneyLessonStatus], matching: ExerciseDefinition?) -> some View {
+        VStack(spacing: 20) {
+
+                AdaptiveRow(spacing: 12) {
+                    if let matching {
+                        NavigationLink {
+                            ExerciseSessionView(
+                                exercises: [matching], expressions: expressions, locale: locale,
+                                title: "Potrivește expresiile", progressModel: progressModel
+                            )
+                        } label: {
+                            ShortcutCard(title: "Potrivește", subtitle: "Până la 6 expresii", icon: "square.grid.2x2.fill")
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("lesson.matching")
+                    }
+                    NavigationLink {
+                        UnitContentsView(detail: detail, locale: locale)
+                    } label: {
+                        ShortcutCard(title: "Expresii", subtitle: "\(detail.expressions.count) în unitate", icon: "text.bubble.fill")
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("unit.contents")
+                }
+
+                if lessons.isEmpty {
+                    Text("Această unitate nu are încă exerciții native asociate.")
+                        .font(Theme.font(.subheadline))
+                        .foregroundStyle(Theme.muted)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    VStack(spacing: 22) {
+                        ForEach(Array(zip(lessons, statuses)), id: \.0.id) { lesson, status in
+                            lessonNode(lesson, status: status, lessonTotal: lessons.count)
+                                .id(lesson.id)
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+        }
+    }
+
+    private var dialogues: [ExerciseDefinition] {
+        detail.exercises.filter { $0.type == .dialogueResponse }
+    }
+
+    @ViewBuilder
+    private var dialogTab: some View {
+        if dialogues.isEmpty {
+            tabNotice(icon: "bubble.left", text: "Dialogurile acestei unități vin în curând. Între timp, exersează în Exerciții.")
+        } else {
+            VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                NavigationLink {
+                    ExerciseSessionView(
+                        exercises: dialogues,
+                        expressions: expressions,
+                        locale: locale,
+                        title: "Dialog",
+                        progressModel: progressModel,
+                        context: LessonContext(
+                            title: detail.title,
+                            subtitle: "Răspunde ca într-o conversație reală.",
+                            icon: JourneyUnitArt.icon(for: detail.id),
+                            sceneImage: JourneyUnitArt.scene(for: detail.id),
+                            lessonLabel: "Dialog · \(dialogues.count) replici"
+                        )
+                    )
+                } label: {
+                    Label("Exersează dialogul · \(dialogues.count) replici", systemImage: "play.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(PillButtonStyle(fill: Theme.cedarDeep, pressedFill: Theme.deep, minHeight: 54))
+                .accessibilityIdentifier("unit.dialog.start")
+
+                ForEach(dialogues.prefix(8)) { exercise in
+                    HStack(alignment: .top, spacing: Theme.Spacing.md) {
+                        IconBadge(systemName: "person.fill", tint: Theme.terracotta, background: Theme.blush, size: 36)
+                        Text(exercise.prompt[locale] ?? exercise.prompt["ro"] ?? "")
+                            .font(Theme.font(.subheadline))
+                            .foregroundStyle(Theme.ink)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: 0)
+                    }
+                    .padding(Theme.Spacing.md)
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .accessibilityElement(children: .combine)
+                }
+                if dialogues.count > 8 {
+                    Text("și încă \(dialogues.count - 8) replici în sesiune")
+                        .font(Theme.font(.footnote))
+                        .foregroundStyle(Theme.muted)
+                }
+            }
+        }
+    }
+
+    private var vocabularyTab: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(Array(detail.expressions.enumerated()), id: \.element.id) { index, expression in
+                if index > 0 {
+                    Rectangle().fill(Theme.cardStroke).frame(height: 0.5)
+                }
+                PhraseRow(primary: expression.arabizi, secondary: expression.meaning)
+                    .padding(.vertical, 2)
+            }
+        }
+        .padding(.horizontal, Theme.Spacing.lg)
+        .padding(.vertical, Theme.Spacing.sm)
+        .cardBackground()
+        .accessibilityIdentifier("unit.vocabulary")
+    }
+
+    @ViewBuilder
+    private var cultureTab: some View {
+        let slugs = JourneyUnitArt.cultureSlugs(for: detail.id)
+        let posts = slugs.compactMap { slug in CulturePost.all.first { $0.slug == slug } }
+        if posts.isEmpty {
+            tabNotice(icon: "tree", text: "Materialele culturale pentru această unitate vin în curând.")
+        } else {
+            VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                Text("Din blogul Centrului de Arabă Libaneză")
+                    .font(Theme.serif(.headline, weight: .semibold))
+                    .foregroundStyle(Theme.ink)
+                ForEach(posts) { post in
+                    CulturePostCard(post: post)
+                }
+            }
+        }
+    }
+
+    private func tabNotice(icon: String, text: String) -> some View {
+        HStack(spacing: Theme.Spacing.md) {
+            IconBadge(systemName: icon, tint: Theme.terracotta, background: Theme.blush, size: 40)
+            Text(text)
+                .font(Theme.font(.subheadline))
+                .foregroundStyle(Theme.muted)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(Theme.Spacing.lg)
+        .cardBackground()
     }
 
     private func unitHeader(completed: Int, total: Int) -> some View {
@@ -442,7 +580,7 @@ struct JourneyUnitDetailView: View {
     }
 
     @ViewBuilder
-    private func lessonNode(_ lesson: JourneyLesson, status: JourneyLessonStatus) -> some View {
+    private func lessonNode(_ lesson: JourneyLesson, status: JourneyLessonStatus, lessonTotal: Int) -> some View {
         let style = lessonStyle(status)
         let symbol = lessonSymbol(status)
         let valueText: String = status == .completed ? "Finalizată, o poți relua" : "Următoarea lecție"
@@ -466,6 +604,7 @@ struct JourneyUnitDetailView: View {
                         title: "Lecția \(lesson.number)",
                         progressModel: progressModel,
                         xpSource: .lesson,
+                        context: context(lessonNumber: lesson.number, of: lessonTotal),
                         onComplete: {
                             Task { await model.markLessonCompleted(lessonID) }
                         }
