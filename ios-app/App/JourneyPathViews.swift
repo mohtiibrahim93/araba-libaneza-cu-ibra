@@ -103,6 +103,7 @@ struct JourneyPathView: View {
                     JourneyUnitDetailView(
                         detail: detail,
                         expressions: package.expressions,
+                        audioAssets: package.audioAssets,
                         locale: locale,
                         progressModel: progressModel
                     )
@@ -333,6 +334,7 @@ struct JourneyPathView: View {
 struct JourneyUnitDetailView: View {
     let detail: JourneyUnitDetail
     let expressions: [YallaCore.Expression]
+    var audioAssets: [AudioAsset] = []
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
 
@@ -454,19 +456,12 @@ struct JourneyUnitDetailView: View {
         } else {
             VStack(alignment: .leading, spacing: Theme.Spacing.md) {
                 NavigationLink {
-                    ExerciseSessionView(
-                        exercises: dialogues,
+                    GuidedConversationView(
+                        scenario: GuidedScenario(unitID: detail.id, title: detail.title, dialogues: dialogues),
                         expressions: expressions,
+                        audioAssets: audioAssets,
                         locale: locale,
-                        title: "Dialog",
-                        progressModel: progressModel,
-                        context: LessonContext(
-                            title: detail.title,
-                            subtitle: "Răspunde ca într-o conversație reală.",
-                            icon: JourneyUnitArt.icon(for: detail.id),
-                            sceneImage: JourneyUnitArt.scene(for: detail.id),
-                            lessonLabel: "Dialog · \(dialogues.count) replici"
-                        )
+                        progressModel: progressModel
                     )
                 } label: {
                     Label("Exersează dialogul · \(dialogues.count) replici", systemImage: "play.fill")

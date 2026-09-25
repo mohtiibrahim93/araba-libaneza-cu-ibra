@@ -163,7 +163,7 @@ struct RootTabView: View {
                 onSmartPractice: { openPractice("smart-session") },
                 onListening: { openPractice("listening") },
                 onSpeaking: { openPractice("speaking") },
-                onSpeak: { openPractice("ai-conversation") },
+                onSpeak: { openPractice("guided-conversation") },
                 onDiscover: { selectedTab = .discover },
                 onProfile: { selectedTab = .tutor }
             )
@@ -195,6 +195,8 @@ struct RootTabView: View {
                 .navigationDestination(for: String.self) { id in
                     if id == "ai-conversation" {
                         AIConversationPreviewView()
+                    } else if id == "guided-conversation" {
+                        GuidedConversationListView(package: content.package, locale: content.locale, progressModel: progressModel)
                     } else {
                         PracticeModeScreen(
                             modeID: id,

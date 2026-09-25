@@ -87,7 +87,7 @@ struct HomeView: View {
                         ActionBanner(
                             icon: .system("mic.fill"),
                             title: "Vorbește azi",
-                            subtitle: "Conversație scurtă, cu feedback AI · În curând",
+                            subtitle: "Conversație ghidată: alegi replica și îți înregistrezi vocea.",
                             tint: Theme.terracotta,
                             background: Theme.blushStrong,
                             action: onSpeak

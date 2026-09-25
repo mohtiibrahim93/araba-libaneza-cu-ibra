@@ -34,7 +34,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
         INFOPLIST_KEY_CFBundleDisplayName: "Araba libaneza"
-        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Microfonul este folosit doar când alegi să te înregistrezi pentru Spune și compară."
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Microfonul este folosit doar când alegi să te înregistrezi, în Spune și compară sau în Conversație ghidată. Înregistrările rămân pe telefon."
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: NO
 

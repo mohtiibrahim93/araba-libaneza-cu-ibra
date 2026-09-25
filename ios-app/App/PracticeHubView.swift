@@ -25,6 +25,19 @@ struct PracticeListView: View {
                         PracticeModeRow(mode: mode, isNavigable: false)
                     }
                 }
+                NavigationLink(value: "guided-conversation") {
+                    PracticeModeRow(
+                        mode: PracticeModeSummary(
+                            id: "guided-conversation",
+                            title: "Conversație ghidată",
+                            subtitle: "Dialoguri din lecții: alegi replica și îți înregistrezi vocea.",
+                            isAvailable: true
+                        ),
+                        isNavigable: true
+                    )
+                }
+                .buttonStyle(NodeButtonStyle())
+                .accessibilityIdentifier("practice.guided-conversation")
                 NavigationLink(value: "ai-conversation") {
                     PracticeModeRow(
                         mode: PracticeModeSummary(
@@ -133,6 +146,7 @@ struct PracticeModeRow: View {
         case "speed-drill": return ("bolt.fill", Theme.goldShade, Theme.variantBackground)
         case "listening": return ("headphones", Theme.teal, Theme.mint)
         case "speaking": return ("mic.fill", Theme.terracotta, Theme.blush)
+        case "guided-conversation": return ("person.2.wave.2.fill", Theme.terracotta, Theme.blush)
         case "ai-conversation": return ("bubble.left.and.bubble.right.fill", Theme.deep, Theme.mint)
         default: return ("bolt", Theme.teal, Theme.mint)
         }
