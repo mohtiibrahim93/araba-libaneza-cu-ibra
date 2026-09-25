@@ -48,8 +48,8 @@ final class YallaAppSmokeUITests: XCTestCase {
         capture("04-discover")
 
         openTab("Tutor")
-        XCTAssertTrue(app.navigationBars["Tutor"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.buttons["tutor.contact"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["tutor.book"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.descendants(matching: .any)["profile.editName"].exists)
         let localProgress = app.staticTexts["Progres local"]
         if !localProgress.waitForExistence(timeout: 3) { app.swipeUp() }
         XCTAssertTrue(localProgress.waitForExistence(timeout: 5))

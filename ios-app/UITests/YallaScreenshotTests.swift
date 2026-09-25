@@ -169,6 +169,10 @@ final class YallaScreenshotTests: XCTestCase {
 
         openTab("Tutor")
         snap("22-profile")
+        app.swipeUp()
+        snap("22b-profile-tutor")
+        app.swipeUp()
+        snap("22c-profile-lower")
     }
 
     // MARK: - Flows
