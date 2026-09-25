@@ -173,6 +173,12 @@ final class YallaScreenshotTests: XCTestCase {
         snap("22b-profile-tutor")
         app.swipeUp()
         snap("22c-profile-lower")
+        app.swipeDown(); app.swipeDown(); app.swipeDown()
+        let settings = app.descendants(matching: .any)["profile.settings"]
+        if settings.waitForExistence(timeout: 3) {
+            settings.tap()
+            snap("22d-settings")
+        }
     }
 
     // MARK: - Flows

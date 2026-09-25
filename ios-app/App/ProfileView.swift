@@ -29,8 +29,26 @@ struct ProfileView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: Theme.Spacing.section) {
-                    BrandHeader()
-                        .padding(.top, Theme.Spacing.sm)
+                    HStack {
+                        BrandHeader()
+                        Spacer(minLength: Theme.Spacing.sm)
+                        NavigationLink {
+                            SettingsView(
+                                learnerName: $learnerName,
+                                storedGoals: $storedGoals,
+                                onOrientation: onOrientation
+                            )
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(Theme.ink)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .accessibilityLabel("Setări")
+                        .accessibilityIdentifier("profile.settings")
+                    }
+                    .padding(.top, Theme.Spacing.sm)
 
                     LearnerProfileCard(
                         name: learnerName,
@@ -61,9 +79,6 @@ struct ProfileView: View {
                         .foregroundStyle(Theme.terracottaShade)
                     }
 
-                    Text("Progresul este păstrat local pe dispozitiv și funcționează fără cont.")
-                        .yallaFont(.caption)
-                        .foregroundStyle(Theme.muted)
                 }
                 .padding(.horizontal, Theme.Spacing.screen)
                 .padding(.bottom, Theme.Spacing.xxl)
@@ -262,11 +277,11 @@ struct ProfileMetricsRow: View {
 
 // MARK: - Tutor
 
-/// Ibra's card. Booking and voice notes open WhatsApp: the app has no booking
+/// Ibrahim Gabriel's (Ibra) card. Booking and voice notes open WhatsApp: the app has no booking
 /// calendar or upload of its own, so nothing is simulated.
 struct TutorModule: View {
     private static let whatsappNumber = "40763124514"
-    private static let bookingMessage = "Bună, Ibra! Aș vrea să programez o sesiune de arabă libaneză."
+    private static let bookingMessage = "Bună, Ibra! Aș vrea să programez o lecție de arabă libaneză."
 
     private var bookingURL: URL {
         let text = Self.bookingMessage.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -284,7 +299,7 @@ struct TutorModule: View {
                     identity
                 }
                 VStack(alignment: .leading, spacing: Theme.Spacing.md) {
-                    portrait.frame(height: 190)
+                    portrait.frame(height: 260)
                     identity
                 }
             }
@@ -301,7 +316,7 @@ struct TutorModule: View {
             }
 
             VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
-                Text("Disponibilitate pentru sesiuni live")
+                Text("Disponibilitate pentru lecții live")
                     .yallaFont(.section)
                     .foregroundStyle(Theme.ink)
                 Text("Program flexibil, pe bază de programare.")
@@ -337,7 +352,7 @@ struct TutorModule: View {
             .scaledToFill()
             .frame(maxWidth: .infinity)
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
-            .accessibilityLabel("Fotografia lui Ibra")
+            .accessibilityLabel("Fotografia lui Ibrahim Gabriel")
     }
 
     private var identity: some View {
@@ -348,9 +363,10 @@ struct TutorModule: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(Theme.mint, in: Capsule())
-            Text("Ibra")
-                .yallaFont(.hero)
-                .foregroundStyle(Theme.ink)
+            (Text("Ibrahim Gabriel ").foregroundStyle(Theme.ink)
+                + Text("(Ibra)").foregroundStyle(Theme.muted))
+                .yallaFont(.section)
+                .fixedSize(horizontal: false, vertical: true)
             Text("Vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani.")
                 .yallaFont(.caption)
                 .foregroundStyle(Theme.muted)
@@ -385,7 +401,7 @@ struct TutorModule: View {
 
     private var bookButton: some View {
         Link(destination: bookingURL) {
-            Label("Programează o sesiune", systemImage: "video.fill")
+            Label("Programează o lecție", systemImage: "video.fill")
                 .yallaFont(.bodyStrong)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, minHeight: 56)
@@ -546,5 +562,88 @@ private struct GoalEditor: View {
         .onAppear {
             goals = Set(storedGoals.split(separator: ",").compactMap { WelcomeView.Goal(rawValue: String($0)) })
         }
+    }
+}
+
+// MARK: - Settings
+
+/// Menu behind the gear: profile, learning, contact, community and about.
+/// Everything listed works today; community is marked as coming soon.
+struct SettingsView: View {
+    @Binding var learnerName: String
+    @Binding var storedGoals: String
+    let onOrientation: () -> Void
+    @State private var editingGoals = false
+
+    private var appVersion: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "–"
+        let build = info?["CFBundleVersion"] as? String ?? "–"
+        return "\(version) (\(build))"
+    }
+
+    var body: some View {
+        List {
+            Section("Profil") {
+                HStack {
+                    Label("Numele tău", systemImage: "person.fill")
+                    TextField("Opțional", text: $learnerName)
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled()
+                        .accessibilityIdentifier("settings.name")
+                }
+                Button { editingGoals = true } label: {
+                    Label("Obiectivele mele", systemImage: "scope")
+                }
+            }
+
+            Section("Învățare") {
+                Button(action: onOrientation) {
+                    Label("Refă orientarea (test de nivel)", systemImage: "signpost.right")
+                }
+            }
+
+            Section("Contact") {
+                Link(destination: URL(string: "https://wa.me/40763124514")!) {
+                    Label("WhatsApp", systemImage: "message.fill")
+                }
+                Link(destination: URL(string: "tel:+40763124514")!) {
+                    Label("+40 763 124 514", systemImage: "phone.fill")
+                }
+                Link(destination: URL(string: "mailto:marhaba@centruldearabalibaneza.com")!) {
+                    Label("marhaba@centruldearabalibaneza.com", systemImage: "envelope.fill")
+                }
+                Link(destination: URL(string: "https://www.centruldearabalibaneza.com")!) {
+                    Label("centruldearabalibaneza.com", systemImage: "globe")
+                }
+                Link(destination: URL(string: "https://preply.com/en/tutor/471612")!) {
+                    Label("Profil Preply", systemImage: "star.fill")
+                }
+            }
+
+            Section("Comunitate") {
+                HStack {
+                    Label("Provocări și grupuri de practică", systemImage: "person.3.fill")
+                    Spacer()
+                    Text("În curând")
+                        .yallaFont(.captionStrong)
+                        .foregroundStyle(Theme.terracottaShade)
+                }
+                .foregroundStyle(Theme.muted)
+            }
+
+            Section("Despre") {
+                Text("Progresul este păstrat local pe dispozitiv și funcționează fără cont.")
+                    .foregroundStyle(Theme.muted)
+                LabeledContent("Versiune", value: appVersion)
+            }
+        }
+        .creamList()
+        .tint(Theme.brand)
+        .navigationTitle("Setări")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
+        .sheet(isPresented: $editingGoals) { GoalEditor(storedGoals: $storedGoals) }
     }
 }
