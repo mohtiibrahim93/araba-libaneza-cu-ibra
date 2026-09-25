@@ -201,10 +201,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  // English pages live under /en/; everything else is Romanian. The i18n
-  // effect keeps this in sync client-side after language toggles.
+  // English pages live under /en/, the one German landing under /de/;
+  // everything else is Romanian. The i18n effect keeps this in sync
+  // client-side after language toggles.
+  //
+  // /de/ used to fall through to "ro", so the German page declared
+  // <html lang="ro"> while serving German text and a de hreflang — the
+  // document contradicted its own annotation, which is what an audit flags.
   const { pathname } = useLocation();
-  const shellLang = pathname.startsWith("/en/") || pathname === "/en" ? "en" : "ro";
+  const shellLang =
+    pathname.startsWith("/de/") || pathname === "/de"
+      ? "de"
+      : pathname.startsWith("/en/") || pathname === "/en"
+        ? "en"
+        : "ro";
   return (
     <html lang={shellLang} suppressHydrationWarning>
       <head>

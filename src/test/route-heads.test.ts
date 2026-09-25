@@ -173,3 +173,23 @@ describe("per-page heads", () => {
     }
   });
 });
+
+/**
+ * The document's own language has to match the language it is written in.
+ *
+ * /de/arabisch-lernen served German text under <html lang="ro"> because the
+ * root shell only knew about /en/. The page contradicted its own hreflang, and
+ * an audit flagged it.
+ */
+describe("the html lang attribute follows the URL", () => {
+  const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
+
+  it("recognises the German landing", () => {
+    expect(root).toMatch(/pathname\.startsWith\("\/de\/"\)/);
+  });
+
+  it("still recognises English, and falls back to Romanian", () => {
+    expect(root).toMatch(/pathname\.startsWith\("\/en\/"\)/);
+    expect(root).toMatch(/:\s*"ro";/);
+  });
+});
