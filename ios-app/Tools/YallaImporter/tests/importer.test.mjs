@@ -114,6 +114,42 @@ test('applies approved native overrides without modifying legacy source data', (
   assert.deepEqual(result.exercises[0].expressionIDs, ['card-hello']);
 });
 
+test('adds approved teacher expressions to an existing Journey unit', () => {
+  const imported = convertYallaToContentPackage({
+    cards: [{ id: 'old', unit: 'a1-body', ar: 'Mar7aba', ro: 'Salut' }],
+    units: [{ id: 'a1-body', title: 'Corpul', desc: '', group: 'A1' }],
+    drills: []
+  }, { contentVersion: 'test' });
+  const result = applyApprovedNativeOverrides(imported, {
+    expressionOverrides: { old: { exclude: true } },
+    unitExpressionAdditions: [
+      {
+        id: 'teacher.body.eyes',
+        unitID: 'a1-body',
+        canonicalArabizi: '3youn',
+        localizations: { ro: { naturalMeaning: 'ochi' } }
+      }
+    ]
+  });
+
+  assert.deepEqual(result.units[0].expressionIDs, ['teacher.body.eyes']);
+  const added = result.expressions.find((expression) => expression.id === 'teacher.body.eyes');
+  assert.equal(added.canonicalArabizi, '3youn');
+  assert.deepEqual(added.levelTags, ['a1']);
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      unitExpressionAdditions: [{ id: 'x', unitID: 'missing', canonicalArabizi: 'a', localizations: { ro: { naturalMeaning: 'b' } } }]
+    }),
+    /missing unit/
+  );
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      unitExpressionAdditions: [{ id: 'x', unitID: 'a1-body', canonicalArabizi: 'a', localizations: { ro: {} } }]
+    }),
+    /no Romanian meaning/
+  );
+});
+
 test('refuses stale approved overrides and missing expression links', () => {
   const imported = {
     manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
@@ -420,6 +456,15 @@ test('real approved morphology keeps Ibrahim root-family decisions exact', () =>
   const roots = new Map(result.roots.map((root) => [root.id, root]));
   assert.deepEqual(roots.get('root.3lm').arabiziRadicals, ['3', 'l', 'm']);
   assert.deepEqual(roots.get('root.mlk').arabiziRadicals, ['m', 'l', 'k']);
+  assert.equal(roots.get('root.ktb').arabicRadicals, 'كتب');
+
+  const membersOf = (rootID) => result.morphologyLinks
+    .filter((link) => link.rootID === rootID)
+    .map((link) => expressions.get(link.expressionID)?.canonicalArabizi);
+  assert.deepEqual(membersOf('root.ktb'), ['KaTaB', 'KuTuB', 'MaKTuB', 'KeeTeB', 'MaKTaB', 'MaKTaBe']);
+  for (const expected of ['malak', 'maleek', 'MaLiK', 'MaMLaKe', 'MeLeK', 'MaLiKe', 'MaMLuK']) {
+    assert.ok(membersOf('root.mlk').includes(expected), 'Missing MLK member ' + expected);
+  }
 });
 
 // Keep the separate pilot resource reproducible from its legacy source.

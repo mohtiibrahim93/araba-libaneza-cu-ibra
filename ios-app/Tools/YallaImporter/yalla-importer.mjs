@@ -216,10 +216,41 @@ export function applyApprovedNativeOverrides(contentPackage, overrideDocument = 
     }];
   });
 
+  const unitsByID = new Map(contentPackage.units.map((unit) => [unit.id, unit]));
+  const supplementalIDsByUnit = new Map();
+  for (const raw of overrideDocument.unitExpressionAdditions ?? []) {
+    const id = String(raw.id ?? '').trim();
+    const unitID = String(raw.unitID ?? '').trim();
+    const arabizi = String(raw.canonicalArabizi ?? '').trim();
+    const meaning = String(raw.localizations?.ro?.naturalMeaning ?? '').trim();
+    const unit = unitsByID.get(unitID);
+    if (!id) throw new Error('Approved unit expression addition is missing an id.');
+    if (expressionsByID.has(id) || expressions.some((expression) => expression.id === id)) {
+      throw new Error(`Duplicate approved unit expression id "${id}".`);
+    }
+    if (!unit) throw new Error(`Approved unit expression "${id}" references missing unit "${unitID}".`);
+    if (!arabizi) throw new Error(`Approved unit expression "${id}" has no Arabizi form.`);
+    if (!meaning) throw new Error(`Approved unit expression "${id}" has no Romanian meaning.`);
+    expressions.push({
+      id,
+      canonicalArabizi: arabizi,
+      variants: Array.isArray(raw.variants) ? raw.variants : [],
+      levelTags: [unit.level],
+      topics: [],
+      localizations: raw.localizations
+    });
+    const ids = supplementalIDsByUnit.get(unitID) ?? [];
+    ids.push(id);
+    supplementalIDsByUnit.set(unitID, ids);
+  }
+
   const availableExpressionIDs = new Set(expressions.map((expression) => expression.id));
   const units = contentPackage.units.map((unit) => ({
     ...unit,
-    expressionIDs: unit.expressionIDs.filter((id) => availableExpressionIDs.has(id))
+    expressionIDs: [
+      ...unit.expressionIDs.filter((id) => availableExpressionIDs.has(id)),
+      ...(supplementalIDsByUnit.get(unit.id) ?? [])
+    ]
   }));
   const lexiconCollections = contentPackage.lexiconCollections.map((collection) => ({
     ...collection,

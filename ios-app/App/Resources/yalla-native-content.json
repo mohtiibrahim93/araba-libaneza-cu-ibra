@@ -45713,174 +45713,6 @@
       }
     },
     {
-      "id": "x14b1a856968b",
-      "canonicalArabizi": "Mar7aba",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună! / Salut!"
-        }
-      }
-    },
-    {
-      "id": "xca3250a0a7ab",
-      "canonicalArabizi": "Ahlan",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Salut! / Bun venit!"
-        }
-      }
-    },
-    {
-      "id": "xab5cf8bf096c",
-      "canonicalArabizi": "Mar7abten",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Salut! (răspuns)"
-        }
-      }
-    },
-    {
-      "id": "x1fe2b520fa1d",
-      "canonicalArabizi": "Sabaa7o",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Neața!"
-        }
-      }
-    },
-    {
-      "id": "x9eecc3a95f43",
-      "canonicalArabizi": "Sabaa7 el 5er",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună dimineața!"
-        }
-      }
-    },
-    {
-      "id": "xf935708d5790",
-      "canonicalArabizi": "Sabaa7 el nuur",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună dimineața! (răspuns)"
-        }
-      }
-    },
-    {
-      "id": "x33130c894581",
-      "canonicalArabizi": "Shu esmak?",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Cum te cheamă? (către un băiat)"
-        }
-      }
-    },
-    {
-      "id": "x84c9bdaf7d73",
-      "canonicalArabizi": "Shu esmik?",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Cum te cheamă? (către o fată)"
-        }
-      }
-    },
-    {
-      "id": "xcadfd7b5fb9b",
-      "canonicalArabizi": "Esme George",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele meu este George."
-        }
-      }
-    },
-    {
-      "id": "x4e7f91942c33",
-      "canonicalArabizi": "Ana George",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Eu sunt George."
-        }
-      }
-    },
-    {
-      "id": "x8527bae3917d",
-      "canonicalArabizi": "Esemkon",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele vostru"
-        }
-      }
-    },
-    {
-      "id": "x2c0efe7af772",
-      "canonicalArabizi": "Asemiikon",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele voastre"
-        }
-      }
-    },
-    {
       "id": "x460ce021a312",
       "canonicalArabizi": "Addesh el sa3a?",
       "variants": [],
@@ -46783,174 +46615,6 @@
     },
     {
       "id": "x90fe29006f26",
-      "canonicalArabizi": "Asemiikon",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele voastre"
-        }
-      }
-    },
-    {
-      "id": "x5ca938020163",
-      "canonicalArabizi": "Mar7aba",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună! / Salut!"
-        }
-      }
-    },
-    {
-      "id": "xf49dae9e96d3",
-      "canonicalArabizi": "Ahlan",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Salut! / Bun venit!"
-        }
-      }
-    },
-    {
-      "id": "x73d5a4a3b8cf",
-      "canonicalArabizi": "Mar7abten",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Salut! (răspuns)"
-        }
-      }
-    },
-    {
-      "id": "xbe518f3c13ad",
-      "canonicalArabizi": "Sabaa7o",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Neața!"
-        }
-      }
-    },
-    {
-      "id": "xc983ed3f130e",
-      "canonicalArabizi": "Sabaa7 el 5er",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună dimineața!"
-        }
-      }
-    },
-    {
-      "id": "x5365584c7dfb",
-      "canonicalArabizi": "Sabaa7 el nuur",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Bună dimineața! (răspuns)"
-        }
-      }
-    },
-    {
-      "id": "xf132f06318b1",
-      "canonicalArabizi": "Shu esmak?",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Cum te cheamă? (către un băiat)"
-        }
-      }
-    },
-    {
-      "id": "x3fe74c01fb36",
-      "canonicalArabizi": "Shu esmik?",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Cum te cheamă? (către o fată)"
-        }
-      }
-    },
-    {
-      "id": "x1c2bc0811da4",
-      "canonicalArabizi": "Esme George",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele meu este George."
-        }
-      }
-    },
-    {
-      "id": "xa62763580f02",
-      "canonicalArabizi": "Ana George",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Eu sunt George."
-        }
-      }
-    },
-    {
-      "id": "x41e7e01536b6",
-      "canonicalArabizi": "Esemkon",
-      "variants": [],
-      "levelTags": [
-        "a1"
-      ],
-      "topics": [],
-      "localizations": {
-        "ro": {
-          "naturalMeaning": "Numele vostru"
-        }
-      }
-    },
-    {
-      "id": "xc3f24f0fd04e",
       "canonicalArabizi": "Asemiikon",
       "variants": [],
       "levelTags": [
@@ -59344,6 +59008,174 @@
       }
     },
     {
+      "id": "teacher.a1-health.keef-sa77tak",
+      "canonicalArabizi": "Keef sa77tak?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Cum e sănătatea ta? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.keef-el-sa77a",
+      "canonicalArabizi": "Keef el sa77a?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Cum e sănătatea?"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.metdeeya2",
+      "canonicalArabizi": "Metdeeya2?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Te simți rău? / Ești indispus? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mariid",
+      "canonicalArabizi": "Mariid?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ești bolnav? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.tal3a-7araartak",
+      "canonicalArabizi": "Tal3a 7araartak?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ți-a crescut temperatura? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.3lek-7araara",
+      "canonicalArabizi": "3lek 7araara?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ai febră? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mrashha7",
+      "canonicalArabizi": "Mrashha7?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ești răcit? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mgarrab",
+      "canonicalArabizi": "Mgarrab?",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ai gripă? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.daynen",
+      "canonicalArabizi": "daynen",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "urechi"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.3youn",
+      "canonicalArabizi": "3youn",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "ochi"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.ijren",
+      "canonicalArabizi": "ijren",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "picioare"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.t2uum-bil-saleeme",
+      "canonicalArabizi": "T2uum bil saleeme",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Să te faci bine! (către un bărbat)"
+        }
+      }
+    },
+    {
       "id": "rootexpr.nwm.mnawwem",
       "canonicalArabizi": "mnawwem",
       "variants": [
@@ -61583,30 +61415,18 @@
       "id": "a1-health",
       "level": "a1",
       "expressionIDs": [
-        "x14b1a856968b",
-        "xca3250a0a7ab",
-        "xab5cf8bf096c",
-        "x1fe2b520fa1d",
-        "x9eecc3a95f43",
-        "xf935708d5790",
-        "x33130c894581",
-        "x84c9bdaf7d73",
-        "xcadfd7b5fb9b",
-        "x4e7f91942c33",
-        "x8527bae3917d",
-        "x2c0efe7af772",
-        "x5ca938020163",
-        "xf49dae9e96d3",
-        "x73d5a4a3b8cf",
-        "xbe518f3c13ad",
-        "xc983ed3f130e",
-        "x5365584c7dfb",
-        "xf132f06318b1",
-        "x3fe74c01fb36",
-        "x1c2bc0811da4",
-        "xa62763580f02",
-        "x41e7e01536b6",
-        "xc3f24f0fd04e"
+        "teacher.a1-health.keef-sa77tak",
+        "teacher.a1-health.keef-el-sa77a",
+        "teacher.a1-health.metdeeya2",
+        "teacher.a1-health.mariid",
+        "teacher.a1-health.tal3a-7araartak",
+        "teacher.a1-health.3lek-7araara",
+        "teacher.a1-health.mrashha7",
+        "teacher.a1-health.mgarrab",
+        "teacher.a1-health.daynen",
+        "teacher.a1-health.3youn",
+        "teacher.a1-health.ijren",
+        "teacher.a1-health.t2uum-bil-saleeme"
       ],
       "localizations": {
         "ro": {
@@ -72476,6 +72296,15 @@
         "k"
       ],
       "arabicRadicals": "ملك"
+    },
+    {
+      "id": "root.ktb",
+      "arabiziRadicals": [
+        "k",
+        "t",
+        "b"
+      ],
+      "arabicRadicals": "كتب"
     }
   ],
   "morphologicalPatterns": [
@@ -72562,6 +72391,72 @@
       "kind": "noun",
       "label": "înger",
       "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.ktb.wrote",
+      "kind": "verbStem",
+      "label": "a scris",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.books",
+      "kind": "plural",
+      "label": "cărți",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.ktb.written",
+      "kind": "participle",
+      "label": "scris / destin / scrisoare",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.writer",
+      "kind": "participle",
+      "label": "scriitor / a scris deja",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.office",
+      "kind": "placeNoun",
+      "label": "birou",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.library",
+      "kind": "placeNoun",
+      "label": "librărie / bibliotecă",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.mlk.king",
+      "kind": "noun",
+      "label": "rege",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.kingdom",
+      "kind": "placeNoun",
+      "label": "regat",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.mlk.wealth",
+      "kind": "noun",
+      "label": "avere",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.queen",
+      "kind": "noun",
+      "label": "regină",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.owned",
+      "kind": "participle",
+      "label": "deținut / sclav",
+      "productivity": "limited"
     }
   ],
   "morphologyLinks": [
@@ -72639,6 +72534,61 @@
       "expressionID": "x46f33585b5ad",
       "rootID": "root.mlk",
       "patternID": "pattern.mlk.angel"
+    },
+    {
+      "expressionID": "x4f7c243c88ee",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.wrote"
+    },
+    {
+      "expressionID": "xc230c3b32945",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.books"
+    },
+    {
+      "expressionID": "xc5716cad9a38",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.written"
+    },
+    {
+      "expressionID": "x55d0716ac6e1",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.writer"
+    },
+    {
+      "expressionID": "x215e8f65b385",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.office"
+    },
+    {
+      "expressionID": "x4d7adad5ac1b",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.library"
+    },
+    {
+      "expressionID": "x5ef429d91b2d",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.king"
+    },
+    {
+      "expressionID": "x6b2803991932",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.kingdom"
+    },
+    {
+      "expressionID": "xefb7f6d5269c",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.wealth"
+    },
+    {
+      "expressionID": "x9c12dc7308cd",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.queen"
+    },
+    {
+      "expressionID": "x9f4ce957c2a0",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.owned"
     }
   ],
   "inflectionRelations": [

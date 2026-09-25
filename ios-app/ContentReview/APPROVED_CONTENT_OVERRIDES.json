@@ -2163,6 +2163,224 @@
           "naturalMeaning": "înger"
         }
       }
+    },
+    "x14b1a856968b": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xca3250a0a7ab": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xab5cf8bf096c": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x1fe2b520fa1d": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x9eecc3a95f43": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xf935708d5790": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x33130c894581": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x84c9bdaf7d73": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xcadfd7b5fb9b": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x4e7f91942c33": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x8527bae3917d": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x2c0efe7af772": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x5ca938020163": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xf49dae9e96d3": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x73d5a4a3b8cf": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xbe518f3c13ad": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xc983ed3f130e": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x5365584c7dfb": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xf132f06318b1": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x3fe74c01fb36": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x1c2bc0811da4": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xa62763580f02": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "x41e7e01536b6": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "xc3f24f0fd04e": {
+      "exclude": true,
+      "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
     }
-  }
+  },
+  "unitExpressionAdditions": [
+    {
+      "id": "teacher.a1-health.keef-sa77tak",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Keef sa77tak?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Cum e sănătatea ta? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.keef-el-sa77a",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Keef el sa77a?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Cum e sănătatea?"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.metdeeya2",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Metdeeya2?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Te simți rău? / Ești indispus? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mariid",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Mariid?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ești bolnav? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.tal3a-7araartak",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Tal3a 7araartak?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ți-a crescut temperatura? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.3lek-7araara",
+      "unitID": "a1-health",
+      "canonicalArabizi": "3lek 7araara?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ai febră? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mrashha7",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Mrashha7?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ești răcit? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.mgarrab",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Mgarrab?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ai gripă? (către un bărbat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.daynen",
+      "unitID": "a1-health",
+      "canonicalArabizi": "daynen",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "urechi"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.3youn",
+      "unitID": "a1-health",
+      "canonicalArabizi": "3youn",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "ochi"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.ijren",
+      "unitID": "a1-health",
+      "canonicalArabizi": "ijren",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "picioare"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.t2uum-bil-saleeme",
+      "unitID": "a1-health",
+      "canonicalArabizi": "T2uum bil saleeme",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Să te faci bine! (către un bărbat)"
+        }
+      }
+    }
+  ]
 }

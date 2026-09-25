@@ -108,6 +108,15 @@
         "k"
       ],
       "arabicRadicals": "ملك"
+    },
+    {
+      "id": "root.ktb",
+      "arabiziRadicals": [
+        "k",
+        "t",
+        "b"
+      ],
+      "arabicRadicals": "كتب"
     }
   ],
   "morphologicalPatterns": [
@@ -194,6 +203,72 @@
       "kind": "noun",
       "label": "înger",
       "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.ktb.wrote",
+      "kind": "verbStem",
+      "label": "a scris",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.books",
+      "kind": "plural",
+      "label": "cărți",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.ktb.written",
+      "kind": "participle",
+      "label": "scris / destin / scrisoare",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.writer",
+      "kind": "participle",
+      "label": "scriitor / a scris deja",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.office",
+      "kind": "placeNoun",
+      "label": "birou",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.ktb.library",
+      "kind": "placeNoun",
+      "label": "librărie / bibliotecă",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.mlk.king",
+      "kind": "noun",
+      "label": "rege",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.kingdom",
+      "kind": "placeNoun",
+      "label": "regat",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.mlk.wealth",
+      "kind": "noun",
+      "label": "avere",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.queen",
+      "kind": "noun",
+      "label": "regină",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.mlk.owned",
+      "kind": "participle",
+      "label": "deținut / sclav",
+      "productivity": "limited"
     }
   ],
   "morphologyLinks": [
@@ -271,6 +346,61 @@
       "expressionID": "x46f33585b5ad",
       "rootID": "root.mlk",
       "patternID": "pattern.mlk.angel"
+    },
+    {
+      "expressionID": "x4f7c243c88ee",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.wrote"
+    },
+    {
+      "expressionID": "xc230c3b32945",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.books"
+    },
+    {
+      "expressionID": "xc5716cad9a38",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.written"
+    },
+    {
+      "expressionID": "x55d0716ac6e1",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.writer"
+    },
+    {
+      "expressionID": "x215e8f65b385",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.office"
+    },
+    {
+      "expressionID": "x4d7adad5ac1b",
+      "rootID": "root.ktb",
+      "patternID": "pattern.ktb.library"
+    },
+    {
+      "expressionID": "x5ef429d91b2d",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.king"
+    },
+    {
+      "expressionID": "x6b2803991932",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.kingdom"
+    },
+    {
+      "expressionID": "xefb7f6d5269c",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.wealth"
+    },
+    {
+      "expressionID": "x9c12dc7308cd",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.queen"
+    },
+    {
+      "expressionID": "x9f4ce957c2a0",
+      "rootID": "root.mlk",
+      "patternID": "pattern.mlk.owned"
     }
   ],
   "inflectionRelations": [
