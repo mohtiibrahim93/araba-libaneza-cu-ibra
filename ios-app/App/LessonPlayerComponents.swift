@@ -56,26 +56,6 @@ enum JourneyUnitArt {
         default: return "illus-raouche"
         }
     }
-
-    /// Blog posts that fit the unit, most specific first.
-    static func cultureSlugs(for unitID: String) -> [String] {
-        let key = unitID.split(separator: "-").dropFirst().joined(separator: "-")
-        var slugs: [String]
-        switch key {
-        case "welcome", "meeting", "polite": slugs = ["cum-saluti-in-libaneza", "primele-20-de-expresii-libaneze"]
-        case "family": slugs = ["lebanese-family-vocabulary"]
-        case "numbers", "frequency": slugs = ["numere-in-araba-libaneza"]
-        case "restaurant", "shopping": slugs = ["cultura-libaneza-obiceiuri-mancare-traditii"]
-        case "daily", "questions", "conversation": slugs = ["lebanese-arabic-phrases"]
-        case "roots", "verbs", "weak", "past", "modals": slugs = ["gramatica-arabei-libaneze"]
-        default: slugs = []
-        }
-        for general in ["cultura-libaneza-obiceiuri-mancare-traditii", "limbile-vorbite-in-liban", "ce-este-arabizi"]
-        where !slugs.contains(general) {
-            slugs.append(general)
-        }
-        return slugs
-    }
 }
 
 /// "Lecția 2 din 6" (or the session name), progress bar and percentage.
@@ -408,64 +388,75 @@ struct LessonModeTabs: View {
 
 // MARK: - Culture
 
-struct CulturePost: Decodable, Identifiable {
-    let slug: String
-    let title: String
-    let description: String
-    let readingMinutes: Int
+struct CultureNote: Decodable, Identifiable {
+    let id: String
     let tag: String
+    let text: String
+    let sourceSlug: String
+    let unitTopics: [String]
+    let general: Bool
 
-    var id: String { slug }
-    var url: URL? { URL(string: "https://centruldearabalibaneza.com/blog/\(slug)") }
+    var sourceURL: URL? { URL(string: "https://centruldearabalibaneza.com/blog/\(sourceSlug)") }
 
-    /// Index of the posts on centruldearabalibaneza.com, bundled with the app.
-    static let all: [CulturePost] = {
-        struct File: Decodable { let posts: [CulturePost] }
-        guard let url = Bundle.main.url(forResource: "culture-posts", withExtension: "json"),
+    /// Fun facts and cultural notes taken from the posts on
+    /// centruldearabalibaneza.com, bundled with the app.
+    static let all: [CultureNote] = {
+        struct File: Decodable { let notes: [CultureNote] }
+        guard let url = Bundle.main.url(forResource: "culture-notes", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let file = try? JSONDecoder().decode(File.self, from: data) else { return [] }
-        return file.posts
+        return file.notes
     }()
+
+    /// Notes about the unit's topic first, then general ones (a different
+    /// selection per unit) until `limit` is reached.
+    static func notes(for unitID: String, limit: Int = 4) -> [CultureNote] {
+        let topic = unitID.split(separator: "-").dropFirst().joined(separator: "-")
+        let specific = all.filter { $0.unitTopics.contains(topic) }
+        let specificIDs = Set(specific.map(\.id))
+        let general = all.filter { note in note.general && !specificIDs.contains(note.id) }
+        var picked = Array(specific.prefix(limit))
+        guard !general.isEmpty, picked.count < limit else { return picked }
+        let offset = Int(unitID.unicodeScalars.reduce(UInt32(0)) { $0 &* 31 &+ $1.value } % UInt32(general.count))
+        for index in 0..<general.count where picked.count < limit {
+            picked.append(general[(offset + index) % general.count])
+        }
+        return picked
+    }
 }
 
-/// Blog post card that opens the full article on the website.
-struct CulturePostCard: View {
-    let post: CulturePost
+/// "Știai că?" card: one short note with a link to the blog post it comes from.
+struct CultureNoteCard: View {
+    let note: CultureNote
 
     var body: some View {
-        let card = VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             HStack(spacing: Theme.Spacing.sm) {
-                Text(post.tag.uppercased())
+                Image(systemName: "lightbulb.fill")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Theme.gold)
+                    .accessibilityHidden(true)
+                Text(note.tag.uppercased())
                     .font(Theme.font(.caption2, weight: .bold))
                     .kerning(0.6)
                     .foregroundStyle(Theme.terracotta)
-                Text("· \(post.readingMinutes) min")
-                    .font(Theme.font(.caption2))
-                    .foregroundStyle(Theme.muted)
-                Spacer(minLength: 0)
-                Image(systemName: "arrow.up.right")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(Theme.muted)
             }
-            Text(post.title)
-                .font(Theme.serif(.headline, weight: .semibold))
+            Text(note.text)
+                .font(Theme.font(.subheadline))
                 .foregroundStyle(Theme.ink)
                 .fixedSize(horizontal: false, vertical: true)
-            Text(post.description)
-                .font(Theme.font(.footnote))
-                .foregroundStyle(Theme.muted)
-                .lineLimit(3)
+            if let url = note.sourceURL {
+                Link(destination: url) {
+                    Label("Citește pe blog", systemImage: "arrow.up.right")
+                        .font(Theme.font(.footnote, weight: .semibold))
+                        .foregroundStyle(Theme.brand)
+                }
+                .accessibilityHint("Deschide articolul pe centruldearabalibaneza.com")
+            }
         }
         .padding(Theme.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
         .cardBackground()
-
-        if let url = post.url {
-            Link(destination: url) { card }
-                .buttonStyle(.plain)
-                .accessibilityHint("Deschide articolul pe centruldearabalibaneza.com")
-        } else {
-            card
-        }
+        .accessibilityIdentifier("culture.note")
     }
 }

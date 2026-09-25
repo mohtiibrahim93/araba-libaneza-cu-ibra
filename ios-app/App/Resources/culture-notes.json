@@ -1,0 +1,254 @@
+{
+ "source": "https://centruldearabalibaneza.com/blog/",
+ "notes": [
+  {
+   "id": "hospitality",
+   "tag": "Ospitalitate",
+   "text": "În Liban, oaspetele este sacru. Vei fi întâmpinat mereu cu „Ahla w sahla” (bine ai venit) și, aproape sigur, cu o cafea sau ceva de mâncare. A refuza e aproape imposibil — și nici nu vei vrea.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "welcome",
+    "meeting",
+    "polite",
+    "home"
+   ],
+   "general": true
+  },
+  {
+   "id": "mezze",
+   "tag": "Mâncare",
+   "text": "Bucătăria libaneză este renumită în toată lumea. Masa începe cu mezze — o mulțime de farfurii mici pe care le împarți cu toată lumea.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "restaurant",
+    "needs",
+    "shopping"
+   ],
+   "general": true
+  },
+  {
+   "id": "mezze-dishes",
+   "tag": "Mâncare",
+   "text": "Hummus și moutabbal — pastă de năut, respectiv de vinete. Tabbouleh — salată proaspătă de pătrunjel, roșii și bulgur. Kibbeh — chiftele de bulgur cu carne, simbol național.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "restaurant",
+    "shopping"
+   ],
+   "general": false
+  },
+  {
+   "id": "together",
+   "tag": "Mâncare",
+   "text": "Mâncarea nu e doar hrană — e un mod de a fi împreună. Multe expresii pe care le înveți la curs apar exact la masă, în jurul mezze-urilor.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "restaurant",
+    "family",
+    "home"
+   ],
+   "general": false
+  },
+  {
+   "id": "fairuz",
+   "tag": "Muzică",
+   "text": "Muzica libaneză merge de la marea Fairuz (vocea dimineților libaneze) până la pop-ul modern de la Beirut.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "leisure",
+    "time",
+    "plans"
+   ],
+   "general": true
+  },
+  {
+   "id": "code-mixing",
+   "tag": "Limbă",
+   "text": "Libanezii amestecă adesea în aceeași propoziție arabă, franceză și engleză — „Hi, kifak? Ça va?”. E o reflexie a istoriei cosmopolite a țării.",
+   "sourceSlug": "cultura-libaneza-obiceiuri-mancare-traditii",
+   "unitTopics": [
+    "welcome",
+    "conversation",
+    "daily",
+    "questions"
+   ],
+   "general": true
+  },
+  {
+   "id": "gender-endings",
+   "tag": "Limbă",
+   "text": "„Kifak?” vs „Kifik?”: în libaneză, când te adresezi cuiva, forma se schimbă după genul persoanei: -ak pentru bărbați, -ik pentru femei. E o regulă simplă care apare peste tot și pe care o prinzi repede vorbind.",
+   "sourceSlug": "cum-saluti-in-libaneza",
+   "unitTopics": [
+    "welcome",
+    "meeting",
+    "questions",
+    "polite",
+    "health"
+   ],
+   "general": false
+  },
+  {
+   "id": "sounds",
+   "tag": "Pronunție",
+   "text": "În „saba7” și „el kheir” apar sunete guturale specifice arabei. Cifra 7 este un „h” puternic din gât, iar „kh” seamănă cu „ch” din germana „Bach”.",
+   "sourceSlug": "cum-saluti-in-libaneza",
+   "unitTopics": [
+    "welcome",
+    "time",
+    "meeting"
+   ],
+   "general": false
+  },
+  {
+   "id": "arabizi-digits",
+   "tag": "Arabizi",
+   "text": "Araba are câteva sunete care nu există în română și nu au o literă latină potrivită. Soluția ingenioasă a vorbitorilor: folosesc cifre a căror formă seamănă cu litera arabă corespunzătoare.",
+   "sourceSlug": "ce-este-arabizi",
+   "unitTopics": [
+    "numbers"
+   ],
+   "general": true
+  },
+  {
+   "id": "arabizi-real",
+   "tag": "Arabizi",
+   "text": "Arabizi este modul real în care libanezii comunică zi de zi în scris.",
+   "sourceSlug": "ce-este-arabizi",
+   "unitTopics": [
+    "daily",
+    "conversation"
+   ],
+   "general": true
+  },
+  {
+   "id": "numbers-order",
+   "tag": "Numere",
+   "text": "Între 21 și 99, în libaneză spui întâi unitatea, apoi zecea: 21 e „wa7ad w 3eshrin” (unu-și-douăzeci), 35 e „khamse w tletin” (cinci-și-treizeci). Micul „w” înseamnă „și”.",
+   "sourceSlug": "numere-in-araba-libaneza",
+   "unitTopics": [
+    "numbers",
+    "time",
+    "frequency",
+    "shopping"
+   ],
+   "general": false
+  },
+  {
+   "id": "phone-numbers",
+   "tag": "Numere",
+   "text": "Numerele de telefon se citesc cifră cu cifră — înșiri pur și simplu lista de la 0 la 10.",
+   "sourceSlug": "numere-in-araba-libaneza",
+   "unitTopics": [
+    "numbers"
+   ],
+   "general": false
+  },
+  {
+   "id": "age",
+   "tag": "Numere",
+   "text": "„Vârsta” e 3omr — „3omri tletin” înseamnă „am treizeci de ani”.",
+   "sourceSlug": "numere-in-araba-libaneza",
+   "unitTopics": [
+    "numbers",
+    "description",
+    "family"
+   ],
+   "general": false
+  },
+  {
+   "id": "latin-italian",
+   "tag": "Dialect",
+   "text": "Diferența dintre libaneză și araba standard nu este ca între „română literară” și „română vorbită”: este mai apropiată de diferența între latină și italiană — două registre înrudite, dar cu vocabular, gramatică și pronunție distincte.",
+   "sourceSlug": "araba-libaneza-vs-araba-standard",
+   "unitTopics": [
+    "roots",
+    "opinions"
+   ],
+   "general": true
+  },
+  {
+   "id": "fusha-native",
+   "tag": "Dialect",
+   "text": "Araba standard modernă (MSA, sau „Fusha” în arabă) este o limbă învățată — nimeni nu o vorbește nativ acasă.",
+   "sourceSlug": "araba-libaneza-vs-araba-standard",
+   "unitTopics": [],
+   "general": true
+  },
+  {
+   "id": "levantine",
+   "tag": "Dialect",
+   "text": "Araba libaneză face parte din familia dialectelor levantine (împreună cu araba siriană, palestiniană și iordaniană), care sunt în mare parte inteligibile reciproc.",
+   "sourceSlug": "cum-inveti-araba-libaneza",
+   "unitTopics": [
+    "conversation",
+    "experiences",
+    "city"
+   ],
+   "general": true
+  },
+  {
+   "id": "influences",
+   "tag": "Limbă",
+   "text": "Libaneza modernă poartă influențe puternice din franceză, engleză, aramaică și turcă.",
+   "sourceSlug": "araba-libaneza-vs-araba-standard",
+   "unitTopics": [
+    "city"
+   ],
+   "general": true
+  },
+  {
+   "id": "understood",
+   "tag": "Dialect",
+   "text": "Dialectul libanez este înțeles pe scară largă în întreaga regiune, chiar și de vorbitori de arabă egipteană sau din Golf.",
+   "sourceSlug": "araba-libaneza-vs-araba-standard",
+   "unitTopics": [
+    "leisure",
+    "experiences"
+   ],
+   "general": true
+  },
+  {
+   "id": "simpler-grammar",
+   "tag": "Gramatică",
+   "text": "Araba libaneză este un dialect mai simplu decât Fusha: conjugările sunt mai regulate, cazurile gramaticale nu se folosesc, iar vocabularul de zi cu zi este limitat și repetitiv.",
+   "sourceSlug": "cum-inveti-araba-libaneza",
+   "unitTopics": [
+    "roots",
+    "verbs",
+    "weak",
+    "past",
+    "modals",
+    "actions",
+    "connections",
+    "review"
+   ],
+   "general": false
+  },
+  {
+   "id": "ta2burni",
+   "tag": "Expresii",
+   "text": "Ta2burni — „Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză.",
+   "sourceSlug": "primele-20-de-expresii-libaneze",
+   "unitTopics": [
+    "family",
+    "home",
+    "description"
+   ],
+   "general": true
+  },
+  {
+   "id": "ya3ni",
+   "tag": "Expresii",
+   "text": "Ya3ni — Adică / Cam așa (umplutură universală).",
+   "sourceSlug": "primele-20-de-expresii-libaneze",
+   "unitTopics": [
+    "opinions",
+    "conversation",
+    "daily",
+    "connections"
+   ],
+   "general": false
+  }
+ ]
+}

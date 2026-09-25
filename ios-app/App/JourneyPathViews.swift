@@ -510,17 +510,21 @@ struct JourneyUnitDetailView: View {
 
     @ViewBuilder
     private var cultureTab: some View {
-        let slugs = JourneyUnitArt.cultureSlugs(for: detail.id)
-        let posts = slugs.compactMap { slug in CulturePost.all.first { $0.slug == slug } }
-        if posts.isEmpty {
+        let notes = CultureNote.notes(for: detail.id)
+        if notes.isEmpty {
             tabNotice(icon: "tree", text: "Materialele culturale pentru această unitate vin în curând.")
         } else {
             VStack(alignment: .leading, spacing: Theme.Spacing.md) {
-                Text("Din blogul Centrului de Arabă Libaneză")
-                    .font(Theme.serif(.headline, weight: .semibold))
-                    .foregroundStyle(Theme.ink)
-                ForEach(posts) { post in
-                    CulturePostCard(post: post)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Știai că?")
+                        .font(Theme.serif(.title3, weight: .semibold))
+                        .foregroundStyle(Theme.ink)
+                    Text("Note culturale din blogul Centrului de Arabă Libaneză")
+                        .font(Theme.font(.footnote))
+                        .foregroundStyle(Theme.muted)
+                }
+                ForEach(notes) { note in
+                    CultureNoteCard(note: note)
                 }
             }
         }
