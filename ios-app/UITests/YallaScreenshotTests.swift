@@ -22,8 +22,25 @@ final class YallaScreenshotTests: XCTestCase {
         let welcome = app.buttons["welcome.continue"]
         if welcome.waitForExistence(timeout: 6) {
             snap("00-welcome")
-            welcome.tap()
-            snap("00b-after-welcome")
+            app.swipeUp()
+            snap("00a-welcome-lower")
+            app.swipeDown()
+            let studied = app.buttons["Am mai studiat"]
+            if studied.waitForExistence(timeout: 3) {
+                // Choosing a level above beginner adds the placement test stage.
+                studied.tap()
+                snap("00b-welcome-studied")
+                welcome.tap()
+                let start = app.buttons["orientation.start"]
+                if start.waitForExistence(timeout: 6) {
+                    snap("00c-orientation-intro")
+                    start.tap()
+                    snap("00d-orientation-question")
+                }
+            } else {
+                welcome.tap()
+                snap("00b-after-welcome")
+            }
             app.terminate()
             app.launch()
         }

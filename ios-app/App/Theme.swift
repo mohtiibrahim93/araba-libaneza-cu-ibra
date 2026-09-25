@@ -49,6 +49,15 @@ enum Theme {
     static let goldShade = Color(light: 0xA97A26, dark: 0xB88A35)
     static let streak = Color(light: 0xD2643F, dark: 0xF08A5D)
 
+    // MARK: Selection and recommendation
+    /// Pale warm fill behind a selected choice.
+    static let selectionFill = Color(light: 0xFBF0E8, dark: 0x3A2A22)
+    /// Pale sage gradient of recommendation panels.
+    static let recommendationSurface = Color(light: 0xE8EFE2, dark: 0x22362A)
+    static let recommendationSurfaceEnd = Color(light: 0xDDE9D3, dark: 0x1D3024)
+    /// Remaining steps in progress indicators.
+    static let progressInactive = Color(light: 0xDDD9D0, dark: 0x3A352C)
+
     // MARK: Feedback
     static let success = Color(light: 0x2F7A61, dark: 0x74B893)
     static let successBackground = Color(light: 0xE3EEE2, dark: 0x1F3326)

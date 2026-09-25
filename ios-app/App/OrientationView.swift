@@ -22,7 +22,15 @@ struct OrientationView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 18) {
+                    OrientationProgressHeader(
+                        current: progressCurrent,
+                        total: progressTotal,
+                        label: progressLabel,
+                        leadingIcon: .system("xmark"),
+                        leadingLabel: "Închide",
+                        onLeading: close
+                    )
                     if let failure {
                         ContentUnavailableView(
                             "Orientare indisponibilă", systemImage: "exclamationmark.triangle",
@@ -34,26 +42,16 @@ struct OrientationView: View {
                         sessionContent(session)
                     }
                 }
-                .padding()
+                .padding(.horizontal, Theme.Spacing.screen)
+                .padding(.vertical, Theme.Spacing.md)
+                .frame(maxWidth: Theme.Spacing.maxContentWidth)
+                .frame(maxWidth: .infinity)
                 .disabled(saving)
             }
             .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .bottom) { ProgressSaveStatusView(progressModel: progressModel) }
-            .creamList()
-            .navigationTitle("Orientare")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Închide") {
-                        if started && session?.isFinished == false {
-                            confirmingExit = true
-                        } else {
-                            dismiss()
-                        }
-                    }
-                    .disabled(saving)
-                }
-            }
+            .background(Theme.canvas.ignoresSafeArea())
+            .toolbar(.hidden, for: .navigationBar)
             .confirmationDialog("Închizi orientarea?", isPresented: $confirmingExit, titleVisibility: .visible) {
                 Button("Închide și reia mai târziu") { dismiss() }
                 Button("Continuă testul", role: .cancel) {}
@@ -71,31 +69,76 @@ struct OrientationView: View {
         }
     }
 
+    // MARK: Progress
+
+    /// The test is the second stage after the Welcome screen.
+    private var progressTotal: Int { session?.checkpoint.items.count ?? 24 }
+
+    private var progressCurrent: Int { session?.checkpoint.answers.count ?? 0 }
+
+    private var progressLabel: String {
+        guard started, let session else { return "Pasul 2 din 2" }
+        if session.isFinished { return "Pasul 2 din 2 · gata" }
+        return "Pasul 2 din 2 · \(min(progressCurrent + 1, progressTotal))/\(progressTotal)"
+    }
+
+    private var startTitle: String {
+        if session?.isFinished == true { return "Vezi rezultatul salvat" }
+        if session?.checkpoint.answers.isEmpty == false { return "Reia orientarea" }
+        return "Începe orientarea"
+    }
+
+    private func close() {
+        guard !saving else { return }
+        if started && session?.isFinished == false {
+            confirmingExit = true
+        } else {
+            dismiss()
+        }
+    }
+
+    // MARK: Screens
+
     private var introduction: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("De unde începi?").font(.largeTitle.bold())
-            Text("24 de întrebări cu variante de răspuns și expresii scurte în Arabizi.")
-            Text("Fără cronometru, indicii sau corectare pe parcurs. Poți alege „Nu știu”.")
-            Text("Rezultatul sugerează un punct de pornire, nu certifică un nivel CEFR. Ascultarea și vorbirea nu sunt evaluate.")
-                .foregroundStyle(.secondary)
-            if !progressModel.snapshot.attempts.isEmpty {
-                Text("Ai exersat deja în aplicație. Familiaritatea cu materialele poate influența rezultatul.")
-                    .font(.callout).foregroundStyle(.secondary)
+            OrientationIntro(
+                title: "De unde începi?",
+                subtitle: "24 de întrebări cu variante de răspuns și expresii scurte în Arabizi.",
+                artwork: "illus-onb-town"
+            )
+            VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                Label("Fără cronometru, indicii sau corectare pe parcurs. Poți alege „Nu știu”.", systemImage: "clock.badge.checkmark")
+                Label("Rezultatul sugerează un punct de pornire, nu certifică un nivel CEFR. Ascultarea și vorbirea nu sunt evaluate.", systemImage: "info.circle")
+                if !progressModel.snapshot.attempts.isEmpty {
+                    Label("Ai exersat deja în aplicație. Familiaritatea cu materialele poate influența rezultatul.", systemImage: "lightbulb")
+                }
+                if let resumeNotice {
+                    Label(resumeNotice, systemImage: "arrow.clockwise")
+                }
             }
-            if let resumeNotice {
-                Text(resumeNotice).font(.callout).foregroundStyle(.secondary)
-            }
-            Button(session?.isFinished == true ? "Vezi rezultatul salvat" :
-                   session?.checkpoint.answers.isEmpty == false ? "Reia orientarea" : "Începe orientarea") {
+            .font(Theme.font(.subheadline))
+            .foregroundStyle(Theme.muted)
+            .labelStyle(TintedIconLabelStyle(tint: Theme.teal))
+            .padding(Theme.Spacing.lg)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .cardBackground()
+
+            Button {
                 started = true
+            } label: {
+                Label(startTitle, systemImage: "arrow.right")
+                .labelStyle(TrailingIconLabelStyle())
+                .frame(maxWidth: .infinity)
             }
-                .buttonStyle(.borderedProminent)
-                .disabled(session == nil)
+            .buttonStyle(PillButtonStyle(fill: Theme.cedarDeep, pressedFill: Theme.deep, minHeight: 54))
+            .accessibilityIdentifier("orientation.start")
+            .disabled(session == nil)
             if session?.checkpoint.answers.isEmpty == false {
                 Button("Reîncepe orientarea") { confirmingRestart = true }
+                    .buttonStyle(OutlinePillButtonStyle())
             }
-            Button("Aleg singur din Parcurs") { onChooseJourney(); dismiss() }
-                .buttonStyle(.bordered)
+            Button("Aleg singur din Călătorie") { onChooseJourney(); dismiss() }
+                .buttonStyle(OutlinePillButtonStyle())
         }
     }
 
@@ -119,82 +162,132 @@ struct OrientationView: View {
     }
 
     private func questionContent(_ step: OrientationStepPresentation) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("Întrebarea \(step.question.questionNumber) din \(step.question.totalQuestions)")
-                .font(.caption).foregroundStyle(.secondary)
-            ProgressView(value: Double(step.question.questionNumber - 1), total: Double(step.question.totalQuestions))
-            Text(step.question.prompt).font(.title2.bold())
+        VStack(alignment: .leading, spacing: 18) {
+            QuestionSectionHeader(
+                number: step.question.questionNumber,
+                title: step.question.prompt,
+                helper: "Fiecare răspuns contează o singură dată."
+            )
             if step.choices.isEmpty {
-                TextField("Răspuns în Arabizi", text: $answer)
-                    .accessibilityLabel("Răspuns în Arabizi")
-                    .textFieldStyle(.roundedBorder)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .submitLabel(.done)
-                    .onSubmit { submit(answer, questionID: step.id) }
-                Button("Înregistrează răspunsul") { submit(answer, questionID: step.id) }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                HStack(spacing: 10) {
+                    Image(systemName: "character.cursor.ibeam")
+                        .foregroundStyle(Theme.terracotta)
+                    TextField("Răspuns în Arabizi", text: $answer)
+                        .accessibilityLabel("Răspuns în Arabizi")
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .submitLabel(.done)
+                        .onSubmit { submit(answer, questionID: step.id) }
+                }
+                .font(Theme.font(.body))
+                .padding(.horizontal, 16)
+                .frame(minHeight: 50)
+                .background(Theme.surface, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 15, style: .continuous).strokeBorder(Theme.cardStroke, lineWidth: 0.75))
+                Button {
+                    submit(answer, questionID: step.id)
+                } label: {
+                    Label("Înregistrează răspunsul", systemImage: "arrow.right")
+                        .labelStyle(TrailingIconLabelStyle())
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(PillButtonStyle(fill: Theme.cedarDeep, pressedFill: Theme.deep, minHeight: 54))
+                .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             } else {
-                ForEach(step.choices, id: \.self) { choice in
-                    Button { submit(choice, questionID: step.id) } label: {
-                        Text(choice).frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: Theme.Spacing.sm) {
+                    ForEach(step.choices, id: \.self) { choice in
+                        SingleSelectOptionCard(
+                            title: choice,
+                            isSelected: false,
+                            layout: .row,
+                            action: { submit(choice, questionID: step.id) }
+                        )
+                        .accessibilityIdentifier("orientation.choice")
                     }
-                    .buttonStyle(.bordered)
                 }
             }
             Button("Nu știu") { submit(nil, questionID: step.id) }
-            Text("Fiecare răspuns contează o singură dată.")
-                .font(.caption).foregroundStyle(.secondary)
+                .buttonStyle(OutlinePillButtonStyle())
         }
         .id(step.id)
     }
 
     private func resultContent(_ result: OrientationResult) -> some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text("Punctul tău de pornire").font(.largeTitle.bold())
-            Text(recommendation(result.startingPoint)).font(.title2)
-            ForEach([LevelBand.a1, .a2, .b1], id: \.self) { band in
-                LabeledContent(band.rawValue.uppercased() + " · orientativ", value: "\(result.bandScores[band, default: 0])/8")
-            }
-            if result.startingPoint == .reviewAndEnrichment {
-                Text("Ai trecut banca de orientare pentru materialul B1 disponibil în aplicație. Asta nu este o certificare B2; poți recapitula B1 sau cere o evaluare cu tutorul pentru următorul pas.")
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("Prag provizoriu: 6/8 pe fiecare bandă. Rezultatul sugerează un punct de pornire și nu certifică un nivel CEFR. Ascultarea și vorbirea nu au fost evaluate.")
-                    .foregroundStyle(.secondary)
-            }
-            if let unit = result.startingJourneyUnit(in: package.units) {
-                Button(result.startingPoint == .reviewAndEnrichment ? "Recapitulează B1 în Parcurs" : "Mergi la Parcurs") {
-                    saving = true
-                    Task {
-                        await progressModel.setCurrentJourneyUnitID(unit.id)
-                        saving = false
-                        if progressModel.persistenceError == nil {
-                            onStartJourney(unit.id)
-                            dismiss()
+        let unit = result.startingJourneyUnit(in: package.units)
+        let passedB1 = result.startingPoint == .reviewAndEnrichment
+        let actionTitle: String? = unit == nil ? nil : (passedB1 ? "Recapitulează B1 în Călătorie" : "Mergi la Călătorie")
+        var action: (() -> Void)?
+        if let unit { action = { startJourney(at: unit) } }
+        let description: String = passedB1
+            ? "Ai trecut banca de orientare pentru materialul B1 disponibil în aplicație. Asta nu este o certificare B2; poți recapitula B1 sau cere o evaluare cu tutorul pentru următorul pas."
+            : "Prag provizoriu: 6/8 pe fiecare bandă. Rezultatul sugerează un punct de pornire și nu certifică un nivel CEFR. Ascultarea și vorbirea nu au fost evaluate."
+        return VStack(alignment: .leading, spacing: 18) {
+            OrientationIntro(
+                title: "Punctul tău de pornire",
+                subtitle: "Pe baza celor \(progressTotal) de răspunsuri din test."
+            )
+            RecommendationCard(
+                eyebrow: "Recomandarea noastră pentru tine",
+                badge: "Personalizat",
+                title: recommendation(result.startingPoint),
+                description: description,
+                actionTitle: actionTitle,
+                onAction: action
+            ) {
+                VStack(spacing: Theme.Spacing.sm) {
+                    ForEach([LevelBand.a1, .a2, .b1], id: \.self) { band in
+                        let score = result.bandScores[band, default: 0]
+                        HStack(spacing: Theme.Spacing.sm) {
+                            Text(band.rawValue.uppercased())
+                                .font(Theme.font(.caption, weight: .bold))
+                                .foregroundStyle(Theme.deep)
+                                .frame(width: 26, alignment: .leading)
+                            MeterBar(fraction: Double(score) / 8, tint: Theme.deep, track: Theme.surface.opacity(0.8), height: 6)
+                            Text("\(score)/8")
+                                .font(Theme.font(.caption, weight: .semibold))
+                                .monospacedDigit()
+                                .foregroundStyle(Theme.ink)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("\(band.rawValue.uppercased()) orientativ")
+                        .accessibilityValue("\(score) din 8")
                     }
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(saving)
-            } else {
-                Text("Nu există încă o unitate disponibilă pentru recomandare. Poți alege din Parcurs.")
+                .padding(.vertical, Theme.Spacing.xs)
             }
-            if result.startingPoint == .reviewAndEnrichment {
+            .accessibilityIdentifier("orientation.result")
+            if unit == nil {
+                Text("Nu există încă o unitate disponibilă pentru recomandare. Poți alege din Călătorie.")
+                    .font(Theme.font(.subheadline))
+                    .foregroundStyle(Theme.muted)
+            }
+            if passedB1 {
                 Button("Vezi tutorul") {
                     onOpenTutor()
                     dismiss()
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(OutlinePillButtonStyle())
                 .disabled(saving)
             }
             if let error = progressModel.persistenceError {
                 Text("Punctul de pornire nu a putut fi salvat: " + error)
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.caption).foregroundStyle(Theme.muted)
             }
-            Button("Aleg singur din Parcurs") { onChooseJourney(); dismiss() }
+            Button("Aleg singur din Călătorie") { onChooseJourney(); dismiss() }
+                .buttonStyle(OutlinePillButtonStyle())
                 .disabled(saving)
+        }
+    }
+
+    private func startJourney(at unit: JourneyUnit) {
+        saving = true
+        Task {
+            await progressModel.setCurrentJourneyUnitID(unit.id)
+            saving = false
+            if progressModel.persistenceError == nil {
+                onStartJourney(unit.id)
+                dismiss()
+            }
         }
     }
 

@@ -30,6 +30,10 @@ struct WelcomeView: View {
             case .advanced: return "graduationcap.fill"
             }
         }
+
+        var tint: Color {
+            self == .beginner ? Theme.teal : Theme.terracotta
+        }
     }
 
     enum Goal: String, CaseIterable, Identifiable {
@@ -72,28 +76,18 @@ struct WelcomeView: View {
     @State private var level: Level = .beginner
     @State private var goals: Set<Goal> = [.conversation]
 
+    /// Beginners finish here; everyone else continues with the placement test.
+    private var stageTotal: Int { level == .beginner ? 1 : 2 }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        BrandHeader(tagline: "Limbă · Oameni · Cultură")
-                        Text("Să te cunoaștem mai bine")
-                            .font(Theme.serif(.title))
-                            .foregroundStyle(Theme.ink)
-                            .padding(.top, 8)
-                        Text("Alege de unde pornești. Obiectivele te ajută să rămâi motivat.")
-                            .font(Theme.font(.subheadline))
-                            .foregroundStyle(Theme.muted)
-                    }
-                    Spacer(minLength: 0)
-                    Image("illus-onb-town")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 96)
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .accessibilityHidden(true)
-                }
+            VStack(alignment: .leading, spacing: 18) {
+                OrientationProgressHeader(current: 1, total: stageTotal, label: "Pasul 1 din \(stageTotal)")
+                OrientationIntro(
+                    title: "Să te cunoaștem mai bine",
+                    subtitle: "Alege de unde pornești. Obiectivele te ajută să rămâi motivat.",
+                    artwork: "illus-onb-town"
+                )
 
                 HStack(spacing: 10) {
                     Image(systemName: "person.fill")
@@ -105,168 +99,80 @@ struct WelcomeView: View {
                 }
                 .font(Theme.font(.body))
                 .padding(.horizontal, 16)
-                .padding(.vertical, 13)
+                .frame(minHeight: 48)
                 .background(Theme.surface, in: Capsule())
-                .overlay(Capsule().strokeBorder(Theme.line, lineWidth: 1))
+                .overlay(Capsule().strokeBorder(Theme.cardStroke, lineWidth: 0.75))
 
-                stepTitle(number: 1, title: "Care este nivelul tău actual?")
-                HStack(spacing: 10) {
-                    ForEach(Level.allCases) { option in
-                        levelCard(option)
+                VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                    QuestionSectionHeader(number: 1, title: "Care este nivelul tău actual?")
+                    AdaptiveChoiceGrid(preferredColumns: 3, minimumCardWidth: 100, spacing: Theme.Spacing.sm) {
+                        ForEach(Level.allCases) { option in
+                            SingleSelectOptionCard(
+                                icon: .system(option.icon),
+                                iconTint: option.tint,
+                                title: option.title,
+                                subtitle: option.subtitle,
+                                isSelected: level == option,
+                                action: { level = option }
+                            )
+                        }
                     }
                 }
 
-                stepTitle(number: 2, title: "Care sunt obiectivele tale principale?", hint: "Poți alege mai multe variante.")
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                    ForEach(Goal.allCases) { goal in
-                        goalCard(goal)
+                VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                    QuestionSectionHeader(
+                        number: 2,
+                        title: "Care sunt obiectivele tale principale?",
+                        helper: "Poți alege mai multe variante."
+                    )
+                    AdaptiveChoiceGrid(preferredColumns: 2, minimumCardWidth: 150, spacing: 10) {
+                        ForEach(Goal.allCases) { goal in
+                            MultiSelectIllustratedCard(
+                                imageName: goal.image,
+                                title: goal.title,
+                                subtitle: goal.subtitle,
+                                isSelected: goals.contains(goal),
+                                action: {
+                                    if goals.contains(goal) { goals.remove(goal) } else { goals.insert(goal) }
+                                }
+                            )
+                        }
                     }
                 }
 
-                recommendation
+                RecommendationCard(
+                    eyebrow: "Recomandarea noastră pentru tine",
+                    badge: "Pe baza nivelului ales",
+                    title: recommendationTitle,
+                    description: recommendationDetail
+                )
             }
-            .padding(20)
+            .padding(.horizontal, Theme.Spacing.screen)
+            .padding(.vertical, Theme.Spacing.md)
+            .frame(maxWidth: Theme.Spacing.maxContentWidth)
+            .frame(maxWidth: .infinity)
         }
         .background(Theme.canvas.ignoresSafeArea())
+        .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button {
+            OrientationBottomAction(
+                title: level == .beginner ? "Continuă" : "Continuă cu testul",
+                identifier: "welcome.continue"
+            ) {
                 storedGoals = goals.map(\.rawValue).sorted().joined(separator: ",")
                 if level == .beginner { onBeginner() } else { onPlacement() }
-            } label: {
-                Label("Continuă", systemImage: "arrow.right")
-                    .labelStyle(TrailingIconLabelStyle())
             }
-            .buttonStyle(ChunkyButtonStyle(kind: .primary))
-            .accessibilityIdentifier("welcome.continue")
-            .padding(.horizontal, 20)
-            .padding(.vertical, 12)
-            .background(Theme.canvas.ignoresSafeArea(edges: .bottom))
         }
     }
 
-    private func stepTitle(number: Int, title: String, hint: String? = nil) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Text("\(number)")
-                .font(Theme.font(.subheadline, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(Theme.terracotta, in: Circle())
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(Theme.serif(.headline))
-                    .foregroundStyle(Theme.ink)
-                if let hint {
-                    Text(hint)
-                        .font(Theme.font(.caption))
-                        .foregroundStyle(Theme.muted)
-                }
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isHeader)
+    private var recommendationTitle: String {
+        level == .beginner ? "A1 – conversații de bază" : "Testul „De unde încep?”"
     }
 
-    private func levelCard(_ option: Level) -> some View {
-        let selected = level == option
-        return Button {
-            level = option
-        } label: {
-            VStack(spacing: 8) {
-                Image(systemName: option.icon)
-                    .font(.title3)
-                    .foregroundStyle(selected ? Theme.terracotta : Theme.teal)
-                Text(option.title)
-                    .font(Theme.serif(.subheadline))
-                    .foregroundStyle(Theme.ink)
-                    .multilineTextAlignment(.center)
-                Text(option.subtitle)
-                    .font(Theme.font(.caption2))
-                    .foregroundStyle(Theme.muted)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 0)
-                Image(systemName: selected ? "largecircle.fill.circle" : "circle")
-                    .foregroundStyle(selected ? Theme.terracotta : Theme.lineStrong)
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity, minHeight: 170)
-            .background(selected ? Theme.blush : Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(selected ? Theme.terracotta : Theme.line, lineWidth: selected ? 2 : 1)
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(selected ? .isSelected : [])
-    }
-
-    private func goalCard(_ goal: Goal) -> some View {
-        let selected = goals.contains(goal)
-        return Button {
-            if selected { goals.remove(goal) } else { goals.insert(goal) }
-        } label: {
-            VStack(alignment: .leading, spacing: 8) {
-                Color.clear
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 78)
-                    .overlay {
-                        Image(goal.image)
-                            .resizable()
-                            .scaledToFill()
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(alignment: .topTrailing) {
-                        Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                            .font(.title3)
-                            .foregroundStyle(selected ? Theme.terracotta : .white)
-                            .background(Circle().fill(selected ? .white : Color.black.opacity(0.15)))
-                            .padding(6)
-                    }
-                    .accessibilityHidden(true)
-                Text(goal.title)
-                    .font(Theme.serif(.subheadline))
-                    .foregroundStyle(Theme.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(goal.subtitle)
-                    .font(Theme.font(.caption))
-                    .foregroundStyle(Theme.muted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(10)
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(selected ? Theme.blush : Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(selected ? Theme.terracotta : Theme.line, lineWidth: selected ? 2 : 1)
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(selected ? .isSelected : [])
-    }
-
-    private var recommendation: some View {
-        let beginner = level == .beginner
-        let title: String = beginner ? "A1 – conversații de bază" : "Testul „De unde încep?”"
-        let detail: String = beginner
+    private var recommendationDetail: String {
+        level == .beginner
             ? "Începi cu lecții scurte și practice, utile în situații reale."
-            : "24 de întrebări fără cronometru îți recomandă unitatea potrivită din Parcurs."
-        return VStack(alignment: .leading, spacing: 8) {
-            Label("Recomandarea noastră pentru tine", systemImage: "sparkle")
-                .font(Theme.font(.subheadline, weight: .semibold))
-                .foregroundStyle(Theme.teal)
-            Text(title)
-                .font(Theme.serif(.title2))
-                .foregroundStyle(Theme.ink)
-            Text(detail)
-                .font(Theme.font(.subheadline))
-                .foregroundStyle(Theme.muted)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.mint, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .accessibilityElement(children: .combine)
+            : "24 de întrebări fără cronometru îți recomandă unitatea potrivită din Călătorie."
     }
 }
 

@@ -69,13 +69,14 @@ struct PillButtonStyle: ButtonStyle {
     var fill: Color = Theme.terracotta
     var pressedFill: Color = Theme.terracottaShade
     var foreground: Color = .white
+    var minHeight: CGFloat = 50
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .yallaFont(.bodyStrong)
             .foregroundStyle(foreground)
             .padding(.horizontal, Theme.Spacing.xl)
-            .frame(minHeight: 50)
+            .frame(minHeight: minHeight)
             .background(configuration.isPressed ? pressedFill : fill, in: Capsule())
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
