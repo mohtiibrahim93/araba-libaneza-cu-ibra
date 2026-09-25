@@ -1,6 +1,8 @@
 import { Link } from "@/components/LocalizedLink";
 import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen, Star, ShieldCheck } from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
+import DirectAnswer from "@/components/seo/DirectAnswer";
+import { ONLINE_PRICES, PHYSICAL_MULTIPLIER } from "@/lib/pricing";
 
 const FAQ = [
   {
@@ -58,6 +60,24 @@ const LearnLebaneseArabic = () => (
     roHref="/cursuri-limba-araba"
     deHref="/de/arabisch-lernen"
   >
+    <DirectAnswer question="How do you learn Lebanese Arabic?">
+      <p>
+        You learn Lebanese Arabic by speaking it from the first lesson with someone who
+        grew up in it, rather than by working through Modern Standard Arabic first. At
+        Centrul de Arabă Libaneză the teacher is <strong>Ibrahim Gabriel Moaty</strong> (Ibra),
+        a native Lebanese teacher in Bucharest, and lessons are live — online worldwide,
+        or in person at Strada Icoanei 80. Courses run the full CEFR ladder, A1 to C2:
+        small groups of up to six online (ten in the classroom) meet twice a week for 90
+        minutes, from {ONLINE_PRICES.groupMonthly.A1} RON a month, and private 1-on-1
+        lessons are {ONLINE_PRICES.privateLesson} RON for 60 minutes. In-person courses
+        cost {Math.round((PHYSICAL_MULTIPLIER - 1) * 100)}% more than online. The first
+        30-minute trial lesson is free.
+      </p>
+      <p>
+        Reading and writing the Arabic script is optional and comes later: beginners start
+        in Latin letters (arabizi), which is how Lebanese people text each other anyway.
+      </p>
+    </DirectAnswer>
     <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">
       <div className="flex flex-wrap items-center gap-4 md:gap-6">
         <div className="flex items-center gap-2">

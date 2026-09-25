@@ -1,6 +1,13 @@
 import { Link } from "@/components/LocalizedLink";
 import { Star, GraduationCap, Globe2, ShieldCheck } from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
+import DirectAnswer from "@/components/seo/DirectAnswer";
+import {
+  ONLINE_PRICES,
+  PRIVATE_PACKAGE_DISCOUNT,
+  PRIVATE_PACKAGE_SIZE,
+  privateDiscountFor,
+} from "@/lib/pricing";
 
 const FAQ = [
   {
@@ -60,6 +67,24 @@ const ArabicTutor = () => (
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}
   >
+    <DirectAnswer question="What does a private Arabic tutor cost, and who teaches?">
+      <p>
+        A private Arabic lesson here is {ONLINE_PRICES.privateLesson} RON for 60 minutes
+        one-to-one, with {Math.round(privateDiscountFor(10) * 100)}% off from ten lessons
+        and {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}% off from{" "}
+        {PRIVATE_PACKAGE_SIZE} — no subscription, no minimum term. The tutor is{" "}
+        <strong>Ibrahim Gabriel Moaty</strong> (Ibra), a native Lebanese speaker teaching
+        from Bucharest for more than five years, live over video anywhere in the world or
+        in person at Strada Icoanei 80. Lessons cover CEFR A1 to C2 in Lebanese Arabic —
+        the Levantine dialect of Lebanon, Syria, Jordan and Palestine — and you speak in
+        the first one, with the Arabic script kept optional.
+      </p>
+      <p>
+        The first 30-minute lesson is free: a card confirms the slot, and nothing is
+        charged for it.
+      </p>
+    </DirectAnswer>
+
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 not-prose my-6">
       {[
         { icon: Star, title: "5.0 rating", desc: "21+ verified reviews across Preply and independent students." },

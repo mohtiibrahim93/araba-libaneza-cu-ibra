@@ -17,6 +17,7 @@ import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import { useLocation } from "@/lib/router-compat";
 import { initContactClickTracking } from "@/lib/tracking";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
+import { COURSE_INSTRUCTOR } from "@/lib/courseSchema";
 import NotFound from "@/pages/NotFound";
 import AskAssistant from "@/components/AskAssistant";
 import appCss from "../styles.css?url";
@@ -112,6 +113,12 @@ const organizationJsonLd = JSON.stringify({
       },
       email: "marhaba@centruldearabalibaneza.com",
       telephone: "+40 763 124 514",
+      // The same node every course names as its instructor
+      // (src/lib/courseSchema.ts). Declared here so the person exists on every
+      // page, not only on the ones that describe a course: that is what lets
+      // Google and the answer engines read the site, the Preply reviews and the
+      // Superprof listing as one teacher.
+      founder: { "@id": COURSE_INSTRUCTOR["@id"] },
       address: {
         "@type": "PostalAddress",
         streetAddress: "Strada Icoanei 80",
@@ -119,6 +126,7 @@ const organizationJsonLd = JSON.stringify({
         addressCountry: "RO",
       },
     },
+    COURSE_INSTRUCTOR,
     {
       "@type": "WebSite",
       "@id": "https://centruldearabalibaneza.com/#website",

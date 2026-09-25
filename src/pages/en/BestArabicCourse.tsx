@@ -1,5 +1,7 @@
 import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
+import DirectAnswer from "@/components/seo/DirectAnswer";
+import { ONLINE_PRICES } from "@/lib/pricing";
 
 const FAQ = [
   {
@@ -35,6 +37,28 @@ const BestArabicCourse = () => (
     lead="There is no single best Arabic course — only the best course for your goal. This guide compares Lebanese Arabic against Modern Standard Arabic, groups against private lessons, and courses against apps, so you don't lose a year on the wrong choice."
     faq={FAQ}
   >
+    <DirectAnswer question="Which Arabic course is the best one?">
+      <p>
+        The best Arabic course is the one that matches your goal, and for almost everyone
+        who wants to <em>talk</em> to people, that means a spoken dialect rather than
+        Modern Standard Arabic. MSA is the written language of news and officialdom;
+        nobody speaks it at home, which is why a year of it often ends with no
+        conversation. If the people you want to talk to are Lebanese, Syrian, Jordanian or
+        Palestinian, learn <strong>Lebanese Arabic (Levantine)</strong> — one dialect,
+        four countries, about 30–35 million speakers.
+      </p>
+      <p>
+        Then pick the format by what you need: a small group for motivation and the
+        cheapest hour ({ONLINE_PRICES.groupMonthly.A1} RON a month here, two 90-minute
+        lessons a week), private 1-on-1 for speed and a specific goal
+        ({ONLINE_PRICES.privateLesson} RON per 60 minutes, with package discounts), an app
+        for vocabulary drilling and nothing else. Whatever you choose, judge it on three
+        things: a native teacher, speaking in the first lesson, and public prices. Ours are
+        taught by <strong>Ibrahim Gabriel Moaty</strong> (Ibra), online worldwide or in
+        person in Bucharest, and the first 30-minute lesson is free.
+      </p>
+    </DirectAnswer>
+
     <p>
       The most common regret among Arabic learners: a full year of{" "}
       <strong>Modern Standard Arabic</strong> (MSA / Fusha) and still no ability to hold a simple

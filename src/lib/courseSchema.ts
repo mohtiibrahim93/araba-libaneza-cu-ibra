@@ -14,6 +14,9 @@
  * schedule the site does not offer.
  */
 
+import { ONLINE_PRICES, physicalPrice } from "@/lib/pricing";
+import type { LevelType } from "@/components/RegistrationForm/types";
+
 const BASE_URL = "https://centruldearabalibaneza.com";
 
 export type CourseMode = "onsite" | "online";
@@ -44,6 +47,35 @@ export const ORGANIZATION_SAME_AS: readonly string[] = [
   "https://www.tiktok.com/@lebanesewithibra",
   "https://www.facebook.com/share/1FKpnqyggC/",
 ] as const;
+
+/**
+ * The teacher, as one identifiable person rather than a first name.
+ *
+ * "Ibra" is what the site calls him and what visitors search for, so it stays
+ * as alternateName — but a Person node with only a nickname cannot be matched
+ * to anything. The full name plus his own tutor profiles let Google and the
+ * answer engines read the courses, the Preply reviews and the Superprof listing
+ * as one teacher instead of three unrelated pages.
+ *
+ * The @id is the same node the Organization's founder points at in
+ * src/routes/__root.tsx, so both blocks on a page describe one person.
+ */
+export const INSTRUCTOR_ID = `${BASE_URL}/#ibra`;
+
+export const COURSE_INSTRUCTOR = {
+  "@type": "Person",
+  "@id": INSTRUCTOR_ID,
+  name: "Ibrahim Gabriel Moaty",
+  alternateName: "Ibra",
+  jobTitle: "Profesor de arabă libaneză",
+  description: "Profesor nativ de arabă libaneză",
+  sameAs: [
+    "https://preply.com/en/tutor/471612",
+    "https://www.superprof.com.ro/vorbitor-nativ-araba-libaneza-experiente-peste-ani-predarea-dialectul-libanez.html",
+    "https://meditatii.ro/meditatii/limba-araba-ibrahim-gabriel-moaty-26623",
+    "https://anunturi-meditatii.ro/araba/meditator-ibrahim-gabriel_52392",
+  ],
+} as const;
 
 export const COURSE_PROVIDER = {
   "@type": "Organization",
@@ -114,10 +146,37 @@ export function courseInstances({
     ...(workload ? { courseWorkload: workload } : {}),
     ...schedule,
     ...(mode === "onsite" ? { location: ONSITE_LOCATION } : {}),
-    instructor: {
-      "@type": "Person",
-      name: "Ibra",
-      description: "Profesor nativ de arabă libaneză",
+    instructor: COURSE_INSTRUCTOR,
+  }));
+}
+
+/**
+ * The group course's monthly fee, as offers Google can read.
+ *
+ * Both numbers come from src/lib/pricing.ts — the same module the page prints
+ * them from — so a price change cannot leave the markup quoting last term's
+ * fee. It is a fee per month, not a total, and UnitPriceSpecification is what
+ * says so: a bare `price` would read as the whole course.
+ */
+export function groupMonthlyOffers(level: LevelType, url: string): Record<string, unknown>[] {
+  const online = ONLINE_PRICES.groupMonthly[level];
+  return (
+    [
+      { mode: "online" as const, price: online },
+      { mode: "onsite" as const, price: physicalPrice(online) },
+    ] satisfies { mode: CourseMode; price: number }[]
+  ).map(({ mode, price }) => ({
+    "@type": "Offer",
+    name: mode === "online" ? "Online" : "Fizic, în București",
+    category: mode,
+    url,
+    availability: "https://schema.org/InStock",
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price,
+      priceCurrency: "RON",
+      billingDuration: "P1M",
+      referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" },
     },
   }));
 }

@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { screen } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+import { renderRoute } from "./helpers/appRouter";
 import { seoHead } from "@/lib/seoHead";
+import { COURSE_INSTRUCTOR } from "@/lib/courseSchema";
+import { ONLINE_PRICES, physicalPrice } from "@/lib/pricing";
 
 /**
  * Structured data has to reach the HTML the server sends.
@@ -70,20 +76,91 @@ describe("Organization sameAs", () => {
     }
   });
 
+  /**
+   * Just the array literal. It used to be "everything up to COURSE_PROVIDER",
+   * which swept in whatever was declared in between — the teacher's Person node
+   * sits there now, and its @id is built from BASE_URL, so the check failed on a
+   * list that was perfectly fine.
+   */
+  const sameAsList = () => {
+    const start = schema.indexOf("ORGANIZATION_SAME_AS");
+    // "= [", not the first "[" — that one belongs to `readonly string[]`.
+    const open = schema.indexOf("= [", start) + 2;
+    return schema.slice(open, schema.indexOf("]", open) + 1);
+  };
+
   it("never lists this site as its own sameAs", () => {
-    const block = schema.slice(
-      schema.indexOf("ORGANIZATION_SAME_AS"),
-      schema.indexOf("COURSE_PROVIDER"),
-    );
-    expect(block).not.toContain("BASE_URL");
-    expect(block).not.toContain("centruldearabalibaneza.com");
+    expect(sameAsList()).not.toContain("BASE_URL");
+    expect(sameAsList()).not.toContain("centruldearabalibaneza.com");
   });
 
   it("lists at least one real external profile", () => {
-    const block = schema.slice(
-      schema.indexOf("ORGANIZATION_SAME_AS"),
-      schema.indexOf("COURSE_PROVIDER"),
+    expect(sameAsList()).toMatch(/https:\/\/[a-z0-9.-]+\.[a-z]{2,}/);
+  });
+});
+
+/**
+ * The teacher is one person, named, and the levels are courses with a price.
+ *
+ * An answer engine asked "who teaches Lebanese Arabic in Bucharest, and what
+ * does it cost" reads exactly this. It used to find an instructor called "Ibra"
+ * with nothing to match him to, and — on the six level pages, the ones those
+ * questions actually land on — no Course markup at all, only a breadcrumb.
+ */
+describe("the teacher and the levels are identifiable", () => {
+  afterEach(cleanup);
+
+  it("names the instructor in full, keeping Ibra as the alternate", () => {
+    expect(COURSE_INSTRUCTOR.name).toBe("Ibrahim Gabriel Moaty");
+    expect(COURSE_INSTRUCTOR.alternateName).toBe("Ibra");
+    // Profiles that carry his own name, so the person can be matched.
+    expect(COURSE_INSTRUCTOR.sameAs.length).toBeGreaterThan(1);
+    for (const url of COURSE_INSTRUCTOR.sameAs) {
+      expect(url, `${url} should be an external profile`).not.toContain(
+        "centruldearabalibaneza.com",
+      );
+    }
+  });
+
+  it("declares him site-wide as the organisation's founder", () => {
+    // Same @id in both blocks, or they describe two different people.
+    const root = read("src/routes/__root.tsx");
+    expect(root).toContain('founder: { "@id": COURSE_INSTRUCTOR["@id"] }');
+    expect(root).toContain("COURSE_INSTRUCTOR,");
+  });
+
+  it("marks up a level page as a Course, priced from the pricing module", async () => {
+    window.localStorage.setItem("site-language", "ro");
+    renderRoute("/cursuri/grup/a1");
+    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+
+    const course = [...document.querySelectorAll('script[type="application/ld+json"]')]
+      .map((el) => {
+        try {
+          return JSON.parse(el.textContent || "{}") as Record<string, unknown>;
+        } catch {
+          return {};
+        }
+      })
+      .find((json) => json["@type"] === "Course");
+
+    expect(course, "/cursuri/grup/a1 should carry Course markup").toBeTruthy();
+    expect(course!["educationalLevel"]).toBe("CEFR A1");
+
+    const instructor = (course!["hasCourseInstance"] as Record<string, unknown>[])[0]![
+      "instructor"
+    ] as Record<string, unknown>;
+    expect(instructor["name"]).toBe("Ibrahim Gabriel Moaty");
+
+    // The numbers are the page's own, not a second copy that can go stale.
+    const online = ONLINE_PRICES.groupMonthly.A1;
+    const prices = (course!["offers"] as Record<string, unknown>[]).map(
+      (offer) => (offer["priceSpecification"] as Record<string, unknown>)["price"],
     );
-    expect(block).toMatch(/https:\/\/[a-z0-9.-]+\.[a-z]{2,}/);
+    expect(prices).toEqual([online, physicalPrice(online)]);
+    // A monthly fee has to say so, or it reads as the price of the whole course.
+    for (const offer of course!["offers"] as Record<string, unknown>[]) {
+      expect((offer["priceSpecification"] as Record<string, unknown>)["billingDuration"]).toBe("P1M");
+    }
   });
 });

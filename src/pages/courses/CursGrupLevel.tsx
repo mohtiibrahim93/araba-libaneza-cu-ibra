@@ -11,6 +11,12 @@ import NotifyMeForm from "@/components/NotifyMeForm";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
+import {
+  COURSE_PROVIDER,
+  GROUP_WEEKLY_WORKLOAD,
+  courseInstances,
+  groupMonthlyOffers,
+} from "@/lib/courseSchema";
 import type { LevelType } from "@/components/RegistrationForm/types";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
@@ -105,9 +111,39 @@ const CursGrupLevel = () => {
     ],
   };
 
+  /**
+   * The level itself, as a Course.
+   *
+   * These six pages are the ones a search or an AI answer lands on for "curs
+   * arabă A1 București", and they were the only course pages with no Course
+   * markup at all — only a breadcrumb. Everything here is read from what the
+   * page already shows: the curriculum module for the title, aim and workload,
+   * and src/lib/pricing.ts for the monthly fee, so the markup cannot claim a
+   * level or a price the page does not.
+   */
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: curriculum.title,
+    description: curriculum.objective,
+    url: canonical,
+    inLanguage: lang === "en" ? "en" : "ro",
+    educationalLevel: `CEFR ${upperLevel}`,
+    teaches: "Arabă libaneză (dialect levantin)",
+    timeRequired: `PT${curriculum.hours}H`,
+    numberOfCredits: curriculum.lessons,
+    provider: COURSE_PROVIDER,
+    offers: groupMonthlyOffers(upperLevel, canonical),
+    hasCourseInstance: courseInstances({
+      workload: GROUP_WEEKLY_WORKLOAD,
+      repeatFrequency: "Weekly",
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
+        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
       <Navbar />
