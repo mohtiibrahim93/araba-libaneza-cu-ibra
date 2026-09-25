@@ -58,6 +58,10 @@ enum Theme {
     /// Remaining steps in progress indicators.
     static let progressInactive = Color(light: 0xDDD9D0, dark: 0x3A352C)
 
+    // MARK: Journey
+    /// Dashed ochre path across the Journey map.
+    static let journeyPath = Color(light: 0xD4A261, dark: 0xB88A4E)
+
     // MARK: Feedback
     static let success = Color(light: 0x2F7A61, dark: 0x74B893)
     static let successBackground = Color(light: 0xE3EEE2, dark: 0x1F3326)

@@ -6,6 +6,8 @@ struct RootTabView: View {
     let content: AppContentSnapshot
     private let reviewExpressionIDs: Set<String>
     private let lessonCounts: [String: Int]
+    /// First approved phrase of each Journey unit, for the map signboards.
+    private let signboards: [String: String]
     @StateObject private var progressModel: LearnerProgressModel
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
@@ -26,6 +28,13 @@ struct RootTabView: View {
         self.content = content
         self.reviewExpressionIDs = Set(content.package.expressions.map(\.id))
         self.lessonCounts = JourneyLessonPlanner().lessonCounts(in: content.package, locale: content.locale)
+        let arabiziByID = Dictionary(
+            content.package.expressions.map { ($0.id, $0.canonicalArabizi) },
+            uniquingKeysWith: { first, _ in first }
+        )
+        self.signboards = content.package.units.reduce(into: [:]) { result, unit in
+            if let id = unit.expressionIDs.first, let phrase = arabiziByID[id] { result[unit.id] = phrase }
+        }
         _progressModel = StateObject(
             wrappedValue: LearnerProgressModel(
                 repository: progressRepository,
@@ -168,7 +177,10 @@ struct RootTabView: View {
                 locale: content.locale,
                 progressModel: progressModel,
                 path: $journeyPath,
-                lessonCounts: lessonCounts
+                lessonCounts: lessonCounts,
+                signboards: signboards,
+                onProfile: { selectedTab = .tutor },
+                onLevel: { showingOrientation = true }
             )
             .tabItem { Label("Călătorie", systemImage: "map") }
             .tag(RootTab.journey)

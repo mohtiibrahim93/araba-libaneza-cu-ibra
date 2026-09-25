@@ -12,74 +12,89 @@ struct JourneyPathView: View {
     @Binding var path: [String]
     /// Lessons per unit, computed once at launch.
     let lessonCounts: [String: Int]
+    /// First approved phrase of each unit, shown on its signboard.
+    var signboards: [String: String] = [:]
+    var onProfile: () -> Void = {}
+    var onLevel: () -> Void = {}
+
+    @AppStorage("learnerName") private var learnerName = ""
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var didRevealCurrent = false
 
     private let navigationBuilder = LearningNavigationBuilder()
     private let planner = JourneyLessonPlanner()
 
-    /// Temporary scenes (cropped from the design mockups) shown beside each stop.
-    private static let scenes = [
-        "illus-house", "illus-cafe", "illus-restaurant", "illus-raouche", "illus-coast",
-        "illus-book", "illus-onb-culture", "illus-sunset", "illus-onb-travel", "illus-progress"
+    /// Temporary scenery per level, cropped from the design mockups, until the
+    /// Journey scenery strips exist.
+    private static let scenesByLevel: [LevelBand: [String]] = [
+        .a1: ["illus-house", "illus-onb-town", "illus-cafe", "illus-book", "illus-onb-conv"],
+        .a2: ["illus-restaurant", "illus-onb-culture", "illus-cafe"],
+        .b1: ["illus-raouche", "illus-coast"],
+        .b2: ["illus-onb-travel"],
+        .c1: ["illus-progress"],
+        .c2: ["illus-sunset"]
     ]
 
-    private struct Stop: Identifiable {
+    private struct Stop {
         let unit: JourneyUnitSummary
         let level: LevelBand
         let number: Int
-        var id: String { unit.id }
+        let indexInLevel: Int
     }
 
-    private var stops: [Stop] {
-        var number = 0
-        return sections.flatMap { section in
-            section.units.map { unit in
-                number += 1
-                return Stop(unit: unit, level: section.level, number: number)
+    private enum Node: Identifiable {
+        case milestone(LevelBand, completed: Int, total: Int)
+        case unit(Stop)
+
+        var id: String {
+            switch self {
+            case let .milestone(level, _, _): return "level-" + level.rawValue
+            case let .unit(stop): return stop.unit.id
             }
         }
     }
 
+    /// Every CEFR band in order; bands without units become "În curând".
+    private var nodes: [Node] {
+        var result: [Node] = []
+        var number = 0
+        for level in LevelBand.allCases {
+            let units = sections.first { $0.level == level }?.units ?? []
+            let completed = units.filter { progress(for: $0.id).isComplete }.count
+            result.append(.milestone(level, completed: completed, total: units.count))
+            for (index, unit) in units.enumerated() {
+                number += 1
+                result.append(.unit(Stop(unit: unit, level: level, number: number, indexInLevel: index)))
+            }
+        }
+        return result
+    }
+
+    private var isLargeText: Bool { dynamicTypeSize.isAccessibilitySize }
+
     var body: some View {
         NavigationStack(path: $path) {
-            ScrollView {
-                let allStops = stops
-                VStack(spacing: 0) {
-                    header(currentLevel: allStops.first(where: { $0.unit.id == highlightedUnitID })?.level ?? .a1)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                        .padding(.bottom, 16)
-
-                    ForEach(Array(allStops.enumerated()), id: \.element.id) { index, stop in
-                        if index == 0 || allStops[index - 1].level != stop.level {
-                            LevelHeader(
-                                level: stop.level,
-                                completedUnits: allStops.filter { $0.level == stop.level && progress(for: $0.unit.id).isComplete }.count,
-                                totalUnits: allStops.filter { $0.level == stop.level }.count
-                            )
-                            .padding(.vertical, 10)
-                        }
-                        mapRow(
-                            stop,
-                            side: index.isMultiple(of: 2) ? .left : .right,
-                            hasPrevious: index > 0 && allStops[index - 1].level == stop.level,
-                            hasNext: index + 1 < allStops.count && allStops[index + 1].level == stop.level
-                        )
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
+                        header
+                        titleBar
+                        map
                     }
+                    .padding(.top, Theme.Spacing.xxs)
+                    .padding(.bottom, Theme.Spacing.xxl)
+                    .frame(maxWidth: Theme.Spacing.maxContentWidth)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.bottom, 32)
-            }
-            .background(Theme.canvas.ignoresSafeArea())
-            .navigationTitle("Călătorie")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    TimelineView(.periodic(from: .now, by: 60)) { context in
-                        RewardBadges(
-                            summary: RewardCalculator().summary(
-                                events: progressModel.snapshot.xpEvents,
-                                at: context.date
-                            )
-                        )
+                .background(Theme.canvas.ignoresSafeArea())
+                .toolbar(.hidden, for: .navigationBar)
+                .onAppear {
+                    // Reveal the current unit once; later visits keep the scroll position.
+                    guard !didRevealCurrent else { return }
+                    didRevealCurrent = true
+                    guard let current = highlightedUnitID, current != sections.first?.units.first?.id else { return }
+                    Task { @MainActor in
+                        proxy.scrollTo(current, anchor: UnitPoint(x: 0.5, y: 0.45))
                     }
                 }
             }
@@ -98,79 +113,206 @@ struct JourneyPathView: View {
         }
     }
 
-    private func header(currentLevel: LevelBand) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Parcursul tău de învățare")
-                    .font(Theme.serif(.title2))
-                    .foregroundStyle(Theme.ink)
-                Text("De la primele cuvinte la conversații reale, pas cu pas, în ritmul tău.")
-                    .font(Theme.font(.subheadline))
-                    .foregroundStyle(Theme.muted)
-                    .fixedSize(horizontal: false, vertical: true)
+    // MARK: Header
+
+    private var header: some View {
+        HStack(spacing: Theme.Spacing.sm) {
+            BrandHeader(tagline: "O limbă. O cultură. Mai aproape de oameni.")
+            Spacer(minLength: Theme.Spacing.sm)
+            Button(action: onProfile) {
+                LearnerAvatar(name: learnerName, size: 40)
+                    .frame(width: 44, height: 44)
             }
-            Spacer(minLength: 0)
-            HStack(spacing: 8) {
-                Image(systemName: "chart.bar.fill")
-                    .foregroundStyle(Theme.teal)
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Nivelul tău")
-                        .font(Theme.font(.caption2))
-                        .foregroundStyle(Theme.muted)
-                    Text(currentLevel.rawValue.uppercased())
-                        .font(Theme.serif(.title3))
-                        .foregroundStyle(Theme.ink)
-                }
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(Theme.surface, in: Capsule())
-            .overlay(Capsule().strokeBorder(Theme.line, lineWidth: 1))
-            .accessibilityElement(children: .combine)
+            .buttonStyle(.plain)
+            .accessibilityLabel("Profil și tutor")
         }
-        .accessibilityElement(children: .contain)
+        .padding(.horizontal, Theme.Spacing.screen)
     }
 
-    private var highlightedUnitID: String? {
-        if let current = progressModel.snapshot.currentJourneyUnitID { return current }
-        return sections.flatMap(\.units).first { !progress(for: $0.id).isComplete }?.id
+    private var titleBar: some View {
+        let level = currentLevel.rawValue.uppercased()
+        let titleBlock = VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+            Text("Parcursul tău de învățare")
+                .font(.system(.title2, design: .serif).weight(.bold))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityIdentifier("journey.title")
+            Text("De la primele cuvinte la conversații reale, pas cu pas, în ritmul tău.")
+                .font(Theme.font(.subheadline))
+                .foregroundStyle(Theme.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        return ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: Theme.Spacing.md) {
+                titleBlock
+                    .frame(maxWidth: 230, alignment: .leading)
+                Spacer(minLength: 0)
+                CurrentLevelPill(level: level, onTap: onLevel)
+            }
+            VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                titleBlock
+                CurrentLevelPill(level: level, onTap: onLevel)
+            }
+        }
+        .padding(.horizontal, Theme.Spacing.screen)
+    }
+
+    // MARK: Map
+
+    private var map: some View {
+        let allNodes = nodes
+        return VStack(spacing: 0) {
+            ForEach(Array(allNodes.enumerated()), id: \.element.id) { index, node in
+                switch node {
+                case let .milestone(level, completed, total):
+                    milestoneRow(level: level, completed: completed, total: total)
+                case let .unit(stop):
+                    unitRow(stop, leading: index.isMultiple(of: 2))
+                }
+            }
+        }
+        .overlayPreferenceValue(JourneyAnchorKey.self) { anchors in
+            GeometryReader { proxy in
+                let segments: [(CGPoint, CGPoint)] = zip(allNodes, allNodes.dropFirst()).compactMap { pair in
+                    guard let start = anchors[pair.0.id + ".bottom"], let end = anchors[pair.1.id + ".top"] else { return nil }
+                    return (proxy[start], proxy[end])
+                }
+                JourneyPathShape(segments: segments)
+                    .stroke(
+                        Theme.journeyPath,
+                        style: StrokeStyle(lineWidth: 3.5, lineCap: .round, lineJoin: .round, dash: [8, 8])
+                    )
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+        }
+    }
+
+    private func milestoneRow(level: LevelBand, completed: Int, total: Int) -> some View {
+        let state = milestoneState(level: level, completed: completed, total: total)
+        let status: String = total == 0 ? "În curând" : "\(completed) din \(total) unități"
+        return VStack(spacing: Theme.Spacing.xs) {
+            JourneyMilestoneBadge(level: level.rawValue.uppercased(), state: state)
+            Text(Self.levelSubtitle(level))
+                .font(Theme.serif(.subheadline, weight: .semibold))
+                .foregroundStyle(total == 0 ? Theme.muted : Theme.ink)
+            Text(status)
+                .font(Theme.font(.caption, weight: .medium))
+                .foregroundStyle(Theme.muted)
+                .padding(.horizontal, Theme.Spacing.sm)
+                .padding(.vertical, 3)
+                .background(Theme.surface.opacity(0.9), in: Capsule())
+        }
+        .padding(.vertical, Theme.Spacing.xs)
+        .journeyAnchor("level-" + level.rawValue)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Theme.Spacing.md)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Nivel \(level.rawValue.uppercased()), \(Self.levelSubtitle(level))")
+        .accessibilityValue(status)
+        .accessibilityAddTraits(.isHeader)
     }
 
     @ViewBuilder
-    private func mapRow(_ stop: Stop, side: MapSide, hasPrevious: Bool, hasNext: Bool) -> some View {
+    private func unitRow(_ stop: Stop, leading: Bool) -> some View {
         let unit = stop.unit
         let progress = progress(for: unit.id)
-        let available = (lessonCounts[unit.id] ?? 0) > 0
-        let isCurrent = unit.id == highlightedUnitID && available
+        let state = unitState(unit.id, progress: progress)
+        let available = state != .preparing
         let valueText: String = available
             ? "\(progress.completedCount) din \(progress.totalCount) lecții"
-            : "Fără exerciții încă"
-        let row = MapStopRow(
+            : "În pregătire, fără exerciții încă"
+        let card = JourneyLessonCard(
             number: stop.number,
             title: unit.title,
-            description: unit.description,
-            level: stop.level,
-            progress: progress,
-            isCurrent: isCurrent,
-            available: available,
-            side: side,
-            scene: Self.scenes[(stop.number - 1) % Self.scenes.count]
+            subtitle: unit.description,
+            completed: progress.completedCount,
+            total: progress.totalCount,
+            state: state
         )
+        .frame(width: isLargeText ? nil : CGFloat(state == .current ? 232 : 196))
+        .frame(maxWidth: isLargeText ? CGFloat.infinity : nil)
+        .journeyAnchor(unit.id)
 
-        Group {
+        let link = Group {
             if available {
-                NavigationLink(value: unit.id) { row }
+                NavigationLink(value: unit.id) { card }
                     .buttonStyle(NodeButtonStyle())
             } else {
-                row
+                card
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(stop.number). \(unit.title)")
         .accessibilityValue(valueText)
+        .accessibilityHint(available ? "Deschide unitatea" : "")
         .accessibilityAddTraits(available ? .isButton : [])
         .accessibilityIdentifier("journey.unit")
-        .background(MapRoad(side: side, hasPrevious: hasPrevious, hasNext: hasNext))
+
+        HStack(alignment: .center, spacing: Theme.Spacing.sm) {
+            if isLargeText {
+                link
+            } else if leading {
+                link
+                scenery(for: stop, state: state, tilt: 2)
+            } else {
+                scenery(for: stop, state: state, tilt: -2)
+                link
+            }
+        }
+        .padding(.horizontal, Theme.Spacing.lg)
+        .padding(.vertical, Theme.Spacing.lg)
+        .id(unit.id)
+    }
+
+    private func scenery(for stop: Stop, state: JourneyUnitState, tilt: Double) -> some View {
+        let scenes = Self.scenesByLevel[stop.level] ?? ["illus-house"]
+        return ZStack(alignment: .bottom) {
+            JourneyScenery(imageName: scenes[stop.indexInLevel % scenes.count], faded: state == .preparing)
+                .frame(height: 132)
+            if let phrase = signboards[stop.unit.id] {
+                JourneyScenicLabel(arabizi: phrase, tilt: tilt)
+                    .offset(y: 6)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityHidden(true)
+    }
+
+    // MARK: State
+
+    private var highlightedUnitID: String? {
+        if let current = progressModel.snapshot.currentJourneyUnitID { return current }
+        return sections.flatMap(\.units).first { (lessonCounts[$0.id] ?? 0) > 0 && !progress(for: $0.id).isComplete }?.id
+    }
+
+    private var currentLevel: LevelBand {
+        guard let id = highlightedUnitID else { return .a1 }
+        return sections.first { $0.units.contains { $0.id == id } }?.level ?? .a1
+    }
+
+    private func unitState(_ unitID: String, progress: JourneyUnitLessonProgress) -> JourneyUnitState {
+        guard (lessonCounts[unitID] ?? 0) > 0 else { return .preparing }
+        if unitID == highlightedUnitID { return .current }
+        return progress.isComplete ? .completed : .available
+    }
+
+    private func milestoneState(level: LevelBand, completed: Int, total: Int) -> JourneyMilestoneState {
+        if total == 0 { return .comingSoon }
+        if level == currentLevel { return .current }
+        return completed == total ? .completed : .available
+    }
+
+    private static func levelSubtitle(_ level: LevelBand) -> String {
+        switch level {
+        case .a1: return "Primele conversații"
+        case .a2: return "Mai multă independență"
+        case .b1: return "Explică și argumentează"
+        case .b2: return "Conversează cu nuanță"
+        case .c1: return "Înțelege dincolo de cuvinte"
+        case .c2: return "Exprimă-te cu precizie"
+        }
     }
 
     private func progress(for unitID: String) -> JourneyUnitLessonProgress {
@@ -183,220 +325,6 @@ struct JourneyPathView: View {
 
     private func detail(for unitID: String) -> JourneyUnitDetail? {
         try? navigationBuilder.journeyUnit(id: unitID, from: package, locale: locale)
-    }
-}
-
-enum MapSide {
-    case left, right
-}
-
-/// Horizontal centre of the scene on each side, measured from the edge.
-private let mapSceneInset: CGFloat = 16 + 62
-
-/// Dashed road through the scene centres of consecutive stops.
-private struct MapRoad: View {
-    let side: MapSide
-    let hasPrevious: Bool
-    let hasNext: Bool
-
-    var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            let height = geometry.size.height
-            let current = side == .left ? mapSceneInset : width - mapSceneInset
-            let other = side == .left ? width - mapSceneInset : mapSceneInset
-            let topX = hasPrevious ? (current + other) / 2 : current
-            let bottomX = hasNext ? (current + other) / 2 : current
-            Path { path in
-                path.move(to: CGPoint(x: topX, y: hasPrevious ? 0 : height / 2))
-                path.addQuadCurve(
-                    to: CGPoint(x: current, y: height / 2),
-                    control: CGPoint(x: current, y: height * 0.1)
-                )
-                path.addQuadCurve(
-                    to: CGPoint(x: bottomX, y: hasNext ? height : height / 2),
-                    control: CGPoint(x: current, y: height * 0.9)
-                )
-            }
-            .stroke(Theme.gold.opacity(0.7), style: StrokeStyle(lineWidth: 3.5, lineCap: .round, dash: [9, 9]))
-        }
-        .accessibilityHidden(true)
-    }
-}
-
-private struct MapStopRow: View {
-    let number: Int
-    let title: String
-    let description: String
-    let level: LevelBand
-    let progress: JourneyUnitLessonProgress
-    let isCurrent: Bool
-    let available: Bool
-    let side: MapSide
-    let scene: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            if side == .left {
-                sceneView
-                card
-            } else {
-                card
-                sceneView
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-    }
-
-    private var sceneView: some View {
-        ZStack(alignment: side == .left ? .topTrailing : .topLeading) {
-            Image(scene)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 124, height: 108)
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .strokeBorder(Theme.surface, lineWidth: 3)
-                )
-                .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
-                .saturation(available ? 1 : 0.3)
-            LevelBadge(level: level, completed: progress.isComplete, locked: !available)
-                .offset(x: side == .left ? 10 : -10, y: -10)
-        }
-        .frame(width: 124, height: 108)
-    }
-
-    private var card: some View {
-        let foreground: Color = isCurrent ? .white : Theme.ink
-        let secondary: Color = isCurrent ? .white.opacity(0.85) : Theme.muted
-        return VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("\(number). \(title)")
-                    .font(Theme.serif(.headline))
-                    .foregroundStyle(foreground)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 4)
-                if isCurrent {
-                    Image(systemName: "chevron.right")
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(.white)
-                }
-            }
-            Text(description)
-                .font(Theme.font(.caption))
-                .foregroundStyle(secondary)
-                .lineLimit(2)
-            if available {
-                HStack(spacing: 8) {
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            Capsule().fill(isCurrent ? Color.white.opacity(0.3) : Theme.line)
-                            Capsule()
-                                .fill(isCurrent ? Color.white : Theme.teal)
-                                .frame(width: geometry.size.width * CGFloat(progress.fraction))
-                        }
-                    }
-                    .frame(height: 5)
-                    if progress.isComplete {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(isCurrent ? .white : Theme.teal)
-                    }
-                    Text("\(progress.completedCount)/\(progress.totalCount)")
-                        .font(Theme.font(.caption2, weight: .semibold))
-                        .foregroundStyle(secondary)
-                        .monospacedDigit()
-                }
-            } else {
-                Text("În pregătire")
-                    .font(Theme.font(.caption2, weight: .semibold))
-                    .foregroundStyle(Theme.muted)
-            }
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(isCurrent ? Theme.terracotta : Theme.surface)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .strokeBorder(isCurrent ? Theme.lime.opacity(0.6) : Theme.line, lineWidth: isCurrent ? 2 : 1)
-        )
-        .shadow(color: (isCurrent ? Theme.terracotta : Color.black).opacity(isCurrent ? 0.3 : 0.06), radius: 10, x: 0, y: 5)
-    }
-}
-
-private struct LevelBadge: View {
-    let level: LevelBand
-    let completed: Bool
-    let locked: Bool
-
-    private var fill: Color {
-        if locked { return Theme.lineStrong }
-        switch level {
-        case .a1: return Theme.teal
-        case .a2: return Theme.terracotta
-        case .b1: return Theme.deep
-        default: return Theme.goldShade
-        }
-    }
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(fill)
-                .frame(width: 40, height: 40)
-                .overlay(Circle().strokeBorder(Theme.surface, lineWidth: 3))
-                .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
-            if completed {
-                Image(systemName: "checkmark")
-                    .font(.subheadline.weight(.heavy))
-                    .foregroundStyle(.white)
-            } else {
-                Text(level.rawValue.uppercased())
-                    .font(Theme.serif(.subheadline))
-                    .foregroundStyle(.white)
-            }
-        }
-    }
-}
-
-private struct LevelHeader: View {
-    let level: LevelBand
-    let completedUnits: Int
-    let totalUnits: Int
-
-    private var subtitle: String {
-        switch level {
-        case .a1: return "Primele conversații"
-        case .a2: return "Mai multă independență"
-        case .b1: return "Explică și argumentează"
-        case .b2: return "Conversează cu nuanță"
-        case .c1: return "Înțelege dincolo de cuvinte"
-        case .c2: return "Exprimă-te cu precizie"
-        }
-    }
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Text(level.rawValue.uppercased())
-                .font(Theme.serif(.headline, weight: .heavy))
-                .foregroundStyle(Theme.lime)
-            Text(subtitle)
-                .font(Theme.serif(.subheadline))
-                .foregroundStyle(.white)
-            Text("\(completedUnits)/\(totalUnits)")
-                .font(Theme.font(.caption, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.75))
-        }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 10)
-        .background(Theme.deep, in: Capsule())
-        .shadow(color: Theme.deep.opacity(0.25), radius: 8, x: 0, y: 4)
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isHeader)
     }
 }
 

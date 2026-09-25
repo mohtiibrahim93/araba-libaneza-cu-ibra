@@ -51,7 +51,7 @@ final class YallaScreenshotTests: XCTestCase {
         app.swipeDown()
 
         openTab("Călătorie")
-        XCTAssertTrue(app.navigationBars["Călătorie"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["journey.title"].waitForExistence(timeout: 8))
         snap("02-journey")
 
         let firstUnit = app.buttons.matching(identifier: "journey.unit").firstMatch

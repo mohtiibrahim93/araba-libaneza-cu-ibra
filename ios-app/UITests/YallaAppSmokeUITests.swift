@@ -17,7 +17,7 @@ final class YallaAppSmokeUITests: XCTestCase {
         capture("01-home")
 
         openTab("Călătorie")
-        XCTAssertTrue(app.navigationBars["Călătorie"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["journey.title"].waitForExistence(timeout: 8))
         capture("02-journey")
 
         openTab("Acasă")
