@@ -579,9 +579,16 @@ struct RootWordDetailCard<Actions: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    private var saveTitle: String {
+        isSaved ? "Salvat" : "Salvează"
+    }
+
     private var saveButton: some View {
         Button(action: onToggleSaved) {
-            Label(isSaved ? "Salvat" : "Salvează", systemImage: isSaved ? "bookmark.fill" : "bookmark")
+            HStack(spacing: Theme.Spacing.sm) {
+                CedarBookmark(isSaved: isSaved, height: 18)
+                Text(saveTitle)
+            }
                 .yallaFont(.captionStrong)
                 .foregroundStyle(Theme.brand)
                 .padding(.horizontal, 14)

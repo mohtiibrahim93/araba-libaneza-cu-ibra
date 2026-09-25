@@ -345,9 +345,9 @@ private struct DiscoverView: View {
             return entry
         }
         switch filter {
-        case .words: return all.filter { !$0.arabizi.contains(" ") }
-        case .expressions: return all.filter { $0.arabizi.contains(" ") }
-        case .saved: return all.filter { savedExpressionIDs.contains($0.id) }
+        case .words: return all.filter(\.isSingleWord)
+        case .expressions: return all.filter { !$0.isSingleWord }
+        case .saved: return all.filter(isSaved)
         case .roots: return []
         }
     }
@@ -474,11 +474,11 @@ private struct DiscoverView: View {
                     exercises: savedPracticeExercises,
                     expressions: package.expressions,
                     locale: locale,
-                    title: "Practică expresiile salvate",
+                    title: "Exersează expresiile salvate",
                     progressModel: progressModel
                 )
             } label: {
-                Label("Practică expresiile salvate", systemImage: "bolt.fill")
+                Label("Exersează expresiile salvate", systemImage: "bolt.fill")
                     .font(Theme.font(.headline, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -492,42 +492,52 @@ private struct DiscoverView: View {
             emptyState
         } else {
             if !query.isEmpty, let featured = list.first {
-                FeaturedEntryCard(
+                DictionaryEntryCard(
                     entry: featured,
-                    root: featured.rootID.flatMap { id in model.roots.first { $0.id == id } },
-                    isSaved: savedExpressionIDs.contains(featured.id),
-                    onToggleSaved: { toggleSaved(featured.id) },
-                    destination: detail(for: featured)
-                )
+                    examples: model.examples(for: featured),
+                    isSaved: isSaved(featured),
+                    isPlaying: false,
+                    onToggleSaved: { toggleSaved(featured) },
+                    onPlayAudio: nil
+                ) {
+                    NavigationLink {
+                        detail(for: featured)
+                    } label: {
+                        HStack(spacing: Theme.Spacing.xs) {
+                            Text("Vezi detalii")
+                            Image(systemName: "arrow.right")
+                        }
+                        .yallaFont(.captionStrong)
+                        .foregroundStyle(Theme.brand)
+                        .frame(minHeight: 44)
+                    }
+                    .accessibilityIdentifier("dictionary.open")
+                }
+
+                let similar = model.similar(to: featured)
+                if !similar.isEmpty {
+                    DictionaryListCard(
+                        title: featured.isSingleWord ? "Din aceeași temă" : "Expresii similare",
+                        icon: "lightbulb.max.fill",
+                        entries: similar,
+                        isSaved: isSaved,
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
+                }
             }
 
             let rest = query.isEmpty ? Array(list.prefix(200)) : Array(list.dropFirst().prefix(200))
             if !rest.isEmpty {
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack {
-                        Label(listTitle, systemImage: "lightbulb.max.fill")
-                            .font(Theme.serif(.headline))
-                            .foregroundStyle(Theme.ink)
-                            .labelStyle(TintedIconLabelStyle(tint: Theme.gold))
-                        Spacer()
-                        Text("\(list.count)")
-                            .font(Theme.font(.caption, weight: .semibold))
-                            .foregroundStyle(Theme.muted)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
-
-                    ForEach(rest) { entry in
-                        Divider().padding(.leading, 16)
-                        EntryRow(
-                            entry: entry,
-                            isSaved: savedExpressionIDs.contains(entry.id),
-                            onToggleSaved: { toggleSaved(entry.id) },
-                            destination: detail(for: entry)
-                        )
-                    }
-                }
-                .cardBackground()
+                DictionaryListCard(
+                    title: listTitle,
+                    icon: query.isEmpty ? "book.closed.fill" : "list.bullet",
+                    count: query.isEmpty ? list.count : list.count - 1,
+                    entries: rest,
+                    isSaved: isSaved,
+                    onToggleSaved: toggleSaved,
+                    destination: detail(for:)
+                )
             }
         }
     }
@@ -599,11 +609,23 @@ private struct DiscoverView: View {
     }
 
     private var listTitle: String {
-        query.isEmpty ? "Dicționar" : "Expresii similare"
+        if !query.isEmpty { return "Alte rezultate" }
+        return filter == .expressions ? "Expresii" : "Dicționar"
     }
 
-    private func toggleSaved(_ id: String) {
-        Task { await progressModel.toggleSavedExpressionID(id) }
+    /// An entry counts as saved when any of its merged expressions is saved.
+    private func isSaved(_ entry: DictionaryEntrySummary) -> Bool {
+        entry.expressionIDs.contains(where: savedExpressionIDs.contains)
+    }
+
+    /// Saving or removing applies to every merged copy of the entry.
+    private func toggleSaved(_ entry: DictionaryEntrySummary) {
+        let saved = !isSaved(entry)
+        Task {
+            for id in entry.expressionIDs {
+                await progressModel.setExpressionSaved(id, saved: saved)
+            }
+        }
     }
 }
 
@@ -615,132 +637,6 @@ struct TintedIconLabelStyle: LabelStyle {
             configuration.icon.foregroundStyle(tint)
             configuration.title
         }
-    }
-}
-
-private struct FeaturedEntryCard: View {
-    let entry: DictionaryEntrySummary
-    let root: RootSummary?
-    let isSaved: Bool
-    let onToggleSaved: () -> Void
-    let destination: DictionaryEntryDetailView
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 8) {
-                        Text(entry.arabizi)
-                            .font(Theme.serif(.largeTitle))
-                            .foregroundStyle(Theme.ink)
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(2)
-                        if let level = entry.levels.first {
-                            Text(level.rawValue.uppercased())
-                                .font(Theme.font(.caption, weight: .semibold))
-                                .foregroundStyle(Theme.terracotta)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(Theme.blush, in: Capsule())
-                        }
-                    }
-                    if let arabic = entry.arabicScript {
-                        Text(arabic)
-                            .font(.title2)
-                            .foregroundStyle(Theme.ink)
-                    }
-                }
-                Spacer()
-                Button(action: onToggleSaved) {
-                    Image(systemName: isSaved ? "heart.fill" : "heart")
-                        .font(.title3)
-                        .foregroundStyle(Theme.terracotta)
-                        .frame(width: 44, height: 44)
-                        .background(Theme.blush, in: Circle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează expresia")
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Sens")
-                    .font(Theme.serif(.subheadline))
-                    .foregroundStyle(Theme.terracotta)
-                Text(entry.meaning)
-                    .font(Theme.font(.body))
-                    .foregroundStyle(Theme.ink)
-                if let pragmatic = entry.pragmaticMeaning {
-                    Text(pragmatic)
-                        .font(Theme.font(.subheadline))
-                        .foregroundStyle(Theme.muted)
-                }
-            }
-
-            if let root {
-                Label("Rădăcina \(root.displayKey)", systemImage: "leaf.fill")
-                    .font(Theme.font(.subheadline, weight: .semibold))
-                    .foregroundStyle(Theme.teal)
-            }
-
-            NavigationLink {
-                destination
-            } label: {
-                HStack {
-                    Text("Vezi detalii și practică")
-                    Image(systemName: "arrow.right")
-                }
-                .font(Theme.font(.subheadline, weight: .semibold))
-                .foregroundStyle(Theme.teal)
-            }
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardBackground()
-    }
-}
-
-private struct EntryRow: View {
-    let entry: DictionaryEntrySummary
-    let isSaved: Bool
-    let onToggleSaved: () -> Void
-    let destination: DictionaryEntryDetailView
-
-    var body: some View {
-        HStack(spacing: 12) {
-            NavigationLink {
-                destination
-            } label: {
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 8) {
-                        Text(entry.arabizi)
-                            .font(Theme.font(.headline, weight: .semibold))
-                            .foregroundStyle(Theme.ink)
-                        if let arabic = entry.arabicScript {
-                            Text(arabic)
-                                .foregroundStyle(Theme.muted)
-                        }
-                    }
-                    Text(entry.meaning)
-                        .font(Theme.font(.subheadline))
-                        .foregroundStyle(Theme.muted)
-                        .lineLimit(2)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            Button(action: onToggleSaved) {
-                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(isSaved ? Theme.terracotta : Theme.muted)
-                    .frame(width: 40, height: 40)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează")
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
     }
 }
 

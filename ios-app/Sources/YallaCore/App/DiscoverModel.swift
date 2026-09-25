@@ -59,6 +59,14 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
     public let rootID: String?
     public let preferredAudioAsset: AudioAsset?
     public let inflectionRelations: [DictionaryInflectionRelationSummary]
+    /// Every content expression shown by this entry. Identical Arabizi +
+    /// meaning pairs imported by several units appear once in the dictionary.
+    public let expressionIDs: [String]
+
+    /// Single words (no space in the Arabizi) versus multi-word expressions.
+    public var isSingleWord: Bool {
+        !arabizi.trimmingCharacters(in: .whitespaces).contains(" ")
+    }
 
     public init(
         id: String,
@@ -73,7 +81,8 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         topics: [String],
         rootID: String?,
         preferredAudioAsset: AudioAsset? = nil,
-        inflectionRelations: [DictionaryInflectionRelationSummary] = []
+        inflectionRelations: [DictionaryInflectionRelationSummary] = [],
+        expressionIDs: [String]? = nil
     ) {
         self.id = id
         self.arabizi = arabizi
@@ -88,6 +97,7 @@ public struct DictionaryEntrySummary: Identifiable, Equatable, Sendable {
         self.rootID = rootID
         self.preferredAudioAsset = preferredAudioAsset
         self.inflectionRelations = inflectionRelations
+        self.expressionIDs = expressionIDs ?? [id]
     }
 }
 
@@ -174,21 +184,71 @@ public struct DiscoverModel: Equatable, Sendable {
     public let entries: [DictionaryEntrySummary]
     public let roots: [RootSummary]
     private let graphsByRootID: [String: RootExplorerSummary]
+    private let entryIndexByExpressionID: [String: Int]
+    private let searchKeys: [DiscoverSearchKey]
+    private let tokensByEntry: [Set<String>]
+    private let phraseIndexesByToken: [String: [Int]]
+    /// Topic groups (Journey units, vocabulary collections) as entry indexes
+    /// in content order.
+    private let topicGroups: [[Int]]
+    private let topicGroupIndexesByEntry: [[Int]]
 
+    /// - Parameter topicGroups: expression IDs per unit or vocabulary
+    ///   collection, in content order; used for similar expressions.
     public init(
         entries: [DictionaryEntrySummary],
         roots: [RootSummary],
-        graphsByRootID: [String: RootExplorerSummary]
+        graphsByRootID: [String: RootExplorerSummary],
+        topicGroups: [[String]] = []
     ) {
         self.entries = entries
         self.roots = roots
         self.graphsByRootID = graphsByRootID
+
+        var indexByExpressionID: [String: Int] = [:]
+        for (index, entry) in entries.enumerated() {
+            for expressionID in entry.expressionIDs where indexByExpressionID[expressionID] == nil {
+                indexByExpressionID[expressionID] = index
+            }
+        }
+        self.entryIndexByExpressionID = indexByExpressionID
+        self.searchKeys = entries.map(DiscoverSearchKey.init)
+
+        let tokens = entries.map { DiscoverText.tokens($0.arabizi) }
+        self.tokensByEntry = tokens
+        var phraseIndexes: [String: [Int]] = [:]
+        for (index, entry) in entries.enumerated() where !entry.isSingleWord {
+            for token in tokens[index] {
+                phraseIndexes[token, default: []].append(index)
+            }
+        }
+        self.phraseIndexesByToken = phraseIndexes
+
+        var groups: [[Int]] = []
+        var groupsByEntry = Array(repeating: [Int](), count: entries.count)
+        for expressionIDs in topicGroups {
+            var seen = Set<Int>()
+            let members = expressionIDs.compactMap { indexByExpressionID[$0] }.filter { seen.insert($0).inserted }
+            guard !members.isEmpty else { continue }
+            for member in members { groupsByEntry[member].append(groups.count) }
+            groups.append(members)
+        }
+        self.topicGroups = groups
+        self.topicGroupIndexesByEntry = groupsByEntry
     }
 
     public func rootGraph(rootID: String) -> RootExplorerSummary? {
         graphsByRootID[rootID]
     }
 
+    /// The dictionary entry that shows this content expression.
+    public func entry(forExpressionID expressionID: String) -> DictionaryEntrySummary? {
+        entryIndexByExpressionID[expressionID].map { entries[$0] }
+    }
+
+    /// Roots first, then entries ranked: exact Arabizi or variant, Arabizi
+    /// prefix, Arabizi contains, whole Romanian word, Romanian word prefix,
+    /// Romanian contains. Alphabetical within each rank.
     public func search(_ query: String) -> [DiscoverSearchResult] {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -196,34 +256,127 @@ public struct DiscoverModel: Equatable, Sendable {
                 + entries.map(DiscoverSearchResult.entry)
         }
 
-        let needle = normalized(trimmed)
+        let needle = DiscoverText.key(trimmed)
+        guard !needle.isEmpty else { return [] }
 
         let rootResults = roots.filter { root in
             let candidates = [root.displayKey, root.arabicRadicals ?? ""] + root.searchTerms
-            return candidates.contains { normalized($0).contains(needle) }
+            return candidates.contains { DiscoverText.key($0).contains(needle) }
         }
 
-        let entryResults = entries.filter { entry in
-            let candidates = [
-                entry.arabizi,
-                entry.arabicScript ?? "",
-                entry.meaning,
-                entry.literalMeaning ?? "",
-                entry.pragmaticMeaning ?? ""
-            ] + entry.spellingVariants + entry.pronunciationVariants + entry.topics
-            return candidates.contains { normalized($0).contains(needle) }
+        var ranked = Array(repeating: [DictionaryEntrySummary](), count: DiscoverSearchKey.rankCount)
+        for (index, key) in searchKeys.enumerated() {
+            if let rank = key.rank(for: needle) {
+                ranked[rank].append(entries[index])
+            }
         }
 
         return rootResults.map(DiscoverSearchResult.root)
-            + entryResults.map(DiscoverSearchResult.entry)
+            + ranked.joined().map(DiscoverSearchResult.entry)
     }
 
-    private func normalized(_ value: String) -> String {
+    /// Up to `limit` approved multi-word expressions that contain this single
+    /// word as a whole word, shortest first.
+    public func examples(for entry: DictionaryEntrySummary, limit: Int = 2) -> [DictionaryEntrySummary] {
+        guard entry.isSingleWord,
+              let token = DiscoverText.tokens(entry.arabizi).first,
+              let indexes = phraseIndexesByToken[token]
+        else { return [] }
+        return indexes
+            .map { entries[$0] }
+            .sorted { lhs, rhs in
+                lhs.arabizi.count == rhs.arabizi.count
+                    ? lhs.arabizi < rhs.arabizi
+                    : lhs.arabizi.count < rhs.arabizi.count
+            }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    /// Entries of the same kind from the same unit or vocabulary collection.
+    /// Expressions must share at least one word of three or more letters
+    /// (e.g. "baddak tekol" and "baddak teshrab"); words are ordered by how
+    /// close they sit in the lesson.
+    public func similar(to entry: DictionaryEntrySummary, limit: Int = 4) -> [DictionaryEntrySummary] {
+        guard let index = entryIndexByExpressionID[entry.id] else { return [] }
+        let ownTokens = tokensByEntry[index].filter { $0.count >= 3 }
+        var best: [Int: (shared: Int, distance: Int)] = [:]
+
+        for groupIndex in topicGroupIndexesByEntry[index] {
+            let group = topicGroups[groupIndex]
+            guard let position = group.firstIndex(of: index) else { continue }
+            for (offset, candidate) in group.enumerated() where candidate != index {
+                guard entries[candidate].isSingleWord == entry.isSingleWord else { continue }
+                let shared = entry.isSingleWord
+                    ? 0
+                    : ownTokens.intersection(tokensByEntry[candidate]).count
+                if !entry.isSingleWord && shared == 0 { continue }
+                let score = (shared: shared, distance: abs(offset - position))
+                if let current = best[candidate],
+                   (current.shared, -current.distance) >= (score.shared, -score.distance) {
+                    continue
+                }
+                best[candidate] = score
+            }
+        }
+
+        return best
+            .sorted { lhs, rhs in
+                if lhs.value.shared != rhs.value.shared { return lhs.value.shared > rhs.value.shared }
+                if lhs.value.distance != rhs.value.distance { return lhs.value.distance < rhs.value.distance }
+                return lhs.key < rhs.key
+            }
+            .prefix(limit)
+            .map { entries[$0.key] }
+    }
+}
+
+/// Text normalisation shared by search, examples and similarity. Display
+/// strings are never changed; only comparison keys are.
+enum DiscoverText {
+    /// Lowercased, diacritic-insensitive letters and digits only.
+    static func key(_ value: String) -> String {
+        let folded = value.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+        return String(String.UnicodeScalarView(folded.unicodeScalars.filter(CharacterSet.alphanumerics.contains)))
+    }
+
+    /// Whole words (letters and digits) of an Arabizi or Romanian string.
+    static func tokens(_ value: String) -> Set<String> {
+        Set(words(value))
+    }
+
+    static func words(_ value: String) -> [String] {
         value
-            .lowercased()
-            .replacingOccurrences(of: "-", with: "")
-            .replacingOccurrences(of: " ", with: "")
-            .replacingOccurrences(of: "_", with: "")
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .filter { !$0.isEmpty }
+    }
+}
+
+struct DiscoverSearchKey: Equatable, Sendable {
+    static let rankCount = 6
+
+    let forms: [String]
+    let meaningWords: Set<String>
+    let meaningText: String
+
+    init(_ entry: DictionaryEntrySummary) {
+        forms = ([entry.arabizi, entry.arabicScript ?? ""] + entry.spellingVariants + entry.pronunciationVariants)
+            .map(DiscoverText.key)
+            .filter { !$0.isEmpty }
+        let meanings = [entry.meaning, entry.literalMeaning ?? "", entry.pragmaticMeaning ?? ""] + entry.topics
+        meaningWords = Set(meanings.flatMap(DiscoverText.words))
+        meaningText = meanings.map(DiscoverText.key).joined(separator: "|")
+    }
+
+    func rank(for needle: String) -> Int? {
+        if forms.contains(needle) { return 0 }
+        if forms.contains(where: { $0.hasPrefix(needle) }) { return 1 }
+        if forms.contains(where: { $0.contains(needle) }) { return 2 }
+        if meaningWords.contains(needle) { return 3 }
+        if meaningWords.contains(where: { $0.hasPrefix(needle) }) { return 4 }
+        if meaningText.contains(needle) { return 5 }
+        return nil
     }
 }
 
@@ -280,7 +433,7 @@ public struct DiscoverModelBuilder: Sendable {
             }
         }
 
-        let entries = try package.expressions.map { expression in
+        let rawEntries = try package.expressions.map { expression in
             let localization = try expression.localization(for: locale)
             return DictionaryEntrySummary(
                 id: expression.id,
@@ -305,7 +458,8 @@ public struct DiscoverModelBuilder: Sendable {
                 inflectionRelations: inflectionsByExpressionID[expression.id] ?? []
             )
         }
-        .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
+        let entries = mergedDuplicates(rawEntries)
+            .sorted { caseInsensitiveLess($0.arabizi, $1.arabizi) }
 
         let linksByRootID = Dictionary(grouping: package.morphologyLinks, by: \.rootID)
 
@@ -361,7 +515,59 @@ public struct DiscoverModelBuilder: Sendable {
 
         roots.sort { $0.displayKey < $1.displayKey }
 
-        return DiscoverModel(entries: entries, roots: roots, graphsByRootID: graphs)
+        return DiscoverModel(
+            entries: entries,
+            roots: roots,
+            graphsByRootID: graphs,
+            topicGroups: package.units.map(\.expressionIDs)
+                + package.lexiconCollections.map(\.expressionIDs)
+        )
+    }
+
+    /// Entries with the same Arabizi and the same meaning (several units
+    /// importing the same card) become one entry that keeps every expression
+    /// ID. Different meanings stay separate.
+    private func mergedDuplicates(_ entries: [DictionaryEntrySummary]) -> [DictionaryEntrySummary] {
+        var order: [String] = []
+        var groups: [String: [DictionaryEntrySummary]] = [:]
+        for entry in entries {
+            let key = DiscoverText.key(entry.arabizi) + "|" + DiscoverText.key(entry.meaning)
+            if groups[key] == nil { order.append(key) }
+            groups[key, default: []].append(entry)
+        }
+
+        return order.compactMap { key -> DictionaryEntrySummary? in
+            guard let group = groups[key], let first = group.first else { return nil }
+            guard group.count > 1 else { return first }
+            let primary = group.first { $0.rootID != nil }
+                ?? group.first { $0.preferredAudioAsset != nil }
+                ?? first
+
+            func unique<T: Hashable>(_ values: [T]) -> [T] {
+                var seen = Set<T>()
+                return values.filter { seen.insert($0).inserted }
+            }
+
+            var relationIDs = Set<String>()
+            let relations = group.flatMap(\.inflectionRelations).filter { relationIDs.insert($0.id).inserted }
+
+            return DictionaryEntrySummary(
+                id: primary.id,
+                arabizi: primary.arabizi,
+                arabicScript: primary.arabicScript ?? group.compactMap(\.arabicScript).first,
+                meaning: primary.meaning,
+                literalMeaning: primary.literalMeaning ?? group.compactMap(\.literalMeaning).first,
+                pragmaticMeaning: primary.pragmaticMeaning ?? group.compactMap(\.pragmaticMeaning).first,
+                spellingVariants: unique(group.flatMap(\.spellingVariants)),
+                pronunciationVariants: unique(group.flatMap(\.pronunciationVariants)),
+                levels: unique(group.flatMap(\.levels)),
+                topics: unique(group.flatMap(\.topics)),
+                rootID: primary.rootID,
+                preferredAudioAsset: primary.preferredAudioAsset ?? group.compactMap(\.preferredAudioAsset).first,
+                inflectionRelations: relations,
+                expressionIDs: [primary.id] + group.map(\.id).filter { $0 != primary.id }
+            )
+        }
     }
 
     private func caseInsensitiveLess(_ lhs: String, _ rhs: String) -> Bool {

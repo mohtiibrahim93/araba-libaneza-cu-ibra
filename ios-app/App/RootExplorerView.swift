@@ -45,11 +45,11 @@ struct RootExplorerView: View {
         let presentation = RootExplorerPresentation(members: graph.members)
         self.presentation = presentation
         self.root = model.roots.first { $0.id == graph.rootID }
-        let memberIDs = Set(graph.members.map(\.id))
-        self.entriesByID = Dictionary(
-            model.entries.filter { memberIDs.contains($0.id) }.map { ($0.id, $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
+        var entriesByID: [String: DictionaryEntrySummary] = [:]
+        for member in graph.members {
+            entriesByID[member.id] = model.entry(forExpressionID: member.id)
+        }
+        self.entriesByID = entriesByID
         _selectedID = State(initialValue: presentation.resolvedSelection(selectedWordID, for: .all))
     }
 

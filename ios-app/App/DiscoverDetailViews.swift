@@ -1,6 +1,8 @@
 import SwiftUI
 import YallaCore
 
+/// Dictionary word page: the entry card, lesson examples, related forms,
+/// root family, similar entries and practice for this word.
 struct DictionaryEntryDetailView: View {
     let entry: DictionaryEntrySummary
     let model: DiscoverModel
@@ -10,216 +12,242 @@ struct DictionaryEntryDetailView: View {
 
     @StateObject private var audio = NativeAudioController()
 
+    private var savedIDs: Set<String> {
+        progressModel.snapshot.savedExpressionIDs
+    }
+
     private var isSaved: Bool {
-        progressModel.snapshot.savedExpressionIDs.contains(entry.id)
+        entry.expressionIDs.contains(where: savedIDs.contains)
     }
 
     private var targetedExercises: [ExerciseDefinition] {
         LearningNavigationBuilder().targetedPractice(
-            expressionIDs: [entry.id],
+            expressionIDs: Set(entry.expressionIDs),
             from: package,
             count: 12
         )
     }
 
     private var wasPracticed: Bool {
-        progressModel.snapshot.seenExpressionIDs.contains(entry.id)
+        entry.expressionIDs.contains(where: progressModel.snapshot.seenExpressionIDs.contains)
     }
 
     private var needsReview: Bool {
-        progressModel.snapshot.activeMistakeExpressionIDs.contains(entry.id)
+        entry.expressionIDs.contains(where: progressModel.snapshot.activeMistakeExpressionIDs.contains)
+    }
+
+    private var root: RootSummary? {
+        entry.rootID.flatMap { id in model.roots.first { $0.id == id } }
     }
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    AdaptiveRow(spacing: 10) {
-                        Text(entry.arabizi)
-                            .font(.largeTitle.bold())
-                        if let arabicScript = entry.arabicScript {
-                            Text(arabicScript)
-                                .font(.title2)
-                                .foregroundStyle(.secondary)
-                        }
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: Theme.Spacing.section) {
+                DictionaryEntryCard(
+                    entry: entry,
+                    examples: model.examples(for: entry),
+                    isSaved: isSaved,
+                    isPlaying: audio.isPlaying,
+                    onToggleSaved: { toggleSaved(entry) },
+                    onPlayAudio: playAudio
+                ) {
+                    if !entry.spellingVariants.isEmpty || !entry.pronunciationVariants.isEmpty {
+                        Divider().overlay(Theme.line)
+                        variants
                     }
-
-                    Text(entry.meaning)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 6)
-            }
-
-            if entry.literalMeaning != nil || entry.pragmaticMeaning != nil {
-                Section("Sens și folosire") {
-                    if let literalMeaning = entry.literalMeaning {
-                        LabeledContent("Literal", value: literalMeaning)
+                    if wasPracticed || needsReview {
+                        progressNotes
                     }
-                    if let pragmaticMeaning = entry.pragmaticMeaning {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("În context")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(.secondary)
-                            Text(pragmaticMeaning)
-                        }
-                        .padding(.vertical, 2)
+                    if let errorMessage = audio.errorMessage {
+                        Text(errorMessage)
+                            .yallaFont(.caption)
+                            .foregroundStyle(Theme.muted)
                     }
                 }
-            }
 
-            if !entry.spellingVariants.isEmpty || !entry.pronunciationVariants.isEmpty {
-                Section("Variante") {
-                    if !entry.spellingVariants.isEmpty {
-                        LabeledContent(
-                            "Scriere",
-                            value: entry.spellingVariants.joined(separator: " · ")
-                        )
-                    }
-                    if !entry.pronunciationVariants.isEmpty {
-                        LabeledContent(
-                            "Pronunție",
-                            value: entry.pronunciationVariants.joined(separator: " · ")
-                        )
-                    }
-                }
-            }
-
-            if wasPracticed || needsReview {
-                Section("Progres") {
-                    if wasPracticed {
-                        Label("Ai exersat această expresie", systemImage: "checkmark.circle.fill")
-                    }
-                    if needsReview {
-                        Label("Are o greșeală activă de revăzut", systemImage: "arrow.counterclockwise.circle.fill")
-                    }
-                }
-            }
-
-            if !targetedExercises.isEmpty {
-                Section("Practică") {
+                if !targetedExercises.isEmpty {
                     NavigationLink {
                         ExerciseSessionView(
                             exercises: targetedExercises,
                             expressions: package.expressions,
                             locale: locale,
-                            title: "Practică: \(entry.arabizi)",
+                            title: "Exersează: \(entry.arabizi)",
                             progressModel: progressModel
                         )
                     } label: {
-                        Label("Practică acest cuvânt", systemImage: "bolt.fill")
+                        Label(practiceTitle, systemImage: "bolt.fill")
+                        .frame(maxWidth: .infinity)
                     }
+                    .buttonStyle(PillButtonStyle())
+                    .accessibilityIdentifier("dictionary.practice")
+                }
+
+                if let root, let graph = model.rootGraph(rootID: root.id) {
+                    rootCard(root: root, graph: graph)
+                }
+
+                if !entry.inflectionRelations.isEmpty {
+                    relatedForms
+                }
+
+                let similar = model.similar(to: entry)
+                if !similar.isEmpty {
+                    DictionaryListCard(
+                        title: entry.isSingleWord ? "Din aceeași temă" : "Expresii similare",
+                        icon: "lightbulb.max.fill",
+                        entries: similar,
+                        isSaved: { $0.expressionIDs.contains(where: savedIDs.contains) },
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
                 }
             }
-
-            if let audioAsset = entry.preferredAudioAsset {
-                Section("Audio") {
-                    Button {
-                        if audio.isPlaying {
-                            audio.stopPlayback()
-                        } else {
-                            audio.playReference(audioAsset)
-                        }
-                    } label: {
-                        Label(
-                            audio.isPlaying ? "Oprește redarea" : "Ascultă pronunția",
-                            systemImage: audio.isPlaying ? "stop.fill" : "speaker.wave.2.fill"
-                        )
-                    }
-
-                    if let errorMessage = audio.errorMessage {
-                        Text(errorMessage)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-
-            if let rootID = entry.rootID,
-               let root = model.roots.first(where: { $0.id == rootID }),
-               let graph = model.rootGraph(rootID: rootID) {
-                Section("Rădăcină") {
-                    NavigationLink {
-                        RootExplorerView(
-                            graph: graph,
-                            model: model,
-                            package: package,
-                            locale: locale,
-                            progressModel: progressModel,
-                            selectedWordID: entry.id
-                        )
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(root.displayKey)
-                                    .font(.headline)
-                                if let arabicRadicals = root.arabicRadicals {
-                                    Text(arabicRadicals)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            Spacer()
-                            Text("\(root.memberCount) forme")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            }
-
-            if !entry.inflectionRelations.isEmpty {
-                Section("Forme și relații aprobate") {
-                    ForEach(entry.inflectionRelations) { relation in
-                        if let relatedEntry = model.entries.first(where: { $0.id == relation.relatedExpressionID }) {
-                            NavigationLink {
-                                DictionaryEntryDetailView(
-                                    entry: relatedEntry,
-                                    model: model,
-                                    package: package,
-                                    locale: locale,
-                                    progressModel: progressModel
-                                )
-                            } label: {
-                                InflectionRelationRow(relation: relation)
-                            }
-                        } else {
-                            InflectionRelationRow(relation: relation)
-                        }
-                    }
-                }
-            }
-
-            if !entry.levels.isEmpty || !entry.topics.isEmpty {
-                Section("Etichete") {
-                    if !entry.levels.isEmpty {
-                        LabeledContent(
-                            "Nivel",
-                            value: entry.levels.map { $0.rawValue.uppercased() }.joined(separator: " · ")
-                        )
-                    }
-                    if !entry.topics.isEmpty {
-                        LabeledContent("Teme", value: entry.topics.joined(separator: " · "))
-                    }
-                }
-            }
+            .padding(.horizontal, Theme.Spacing.screen)
+            .padding(.vertical, Theme.Spacing.md)
+            .frame(maxWidth: Theme.Spacing.maxContentWidth)
+            .frame(maxWidth: .infinity)
         }
-        .creamList()
+        .background(Theme.canvas.ignoresSafeArea())
         .navigationTitle(entry.arabizi)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    Task {
-                        await progressModel.toggleSavedExpressionID(entry.id)
-                    }
-                } label: {
-                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                }
-                .accessibilityLabel(isSaved ? "Elimină din salvate" : "Salvează expresia")
-            }
-        }
         .onDisappear {
             audio.stopPlayback()
+        }
+    }
+
+    private var practiceTitle: String {
+        entry.isSingleWord ? "Exersează acest cuvânt" : "Exersează această expresie"
+    }
+
+    private var playAudio: (() -> Void)? {
+        guard let asset = entry.preferredAudioAsset else { return nil }
+        return {
+            if audio.isPlaying { audio.stopPlayback() } else { audio.playReference(asset) }
+        }
+    }
+
+    private var variants: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+            Text("Variante acceptate")
+                .yallaFont(.captionStrong)
+                .foregroundStyle(Theme.terracottaShade)
+            if !entry.spellingVariants.isEmpty {
+                Text(entry.spellingVariants.joined(separator: " · "))
+                    .yallaFont(.body)
+                    .foregroundStyle(Theme.ink)
+            }
+            if !entry.pronunciationVariants.isEmpty {
+                Text("Pronunție: " + entry.pronunciationVariants.joined(separator: " · "))
+                    .yallaFont(.caption)
+                    .foregroundStyle(Theme.muted)
+            }
+        }
+    }
+
+    private var progressNotes: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+            if wasPracticed {
+                Label("Ai exersat acest cuvânt", systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(Theme.success)
+            }
+            if needsReview {
+                Label("Are o greșeală de revăzut", systemImage: "arrow.counterclockwise.circle.fill")
+                    .foregroundStyle(Theme.terracottaShade)
+            }
+        }
+        .yallaFont(.captionStrong)
+    }
+
+    private func rootCard(root: RootSummary, graph: RootExplorerSummary) -> some View {
+        NavigationLink {
+            RootExplorerView(
+                graph: graph,
+                model: model,
+                package: package,
+                locale: locale,
+                progressModel: progressModel,
+                selectedWordID: entry.id
+            )
+        } label: {
+            HStack(spacing: Theme.Spacing.md) {
+                VStack(spacing: 0) {
+                    if let arabic = root.arabicRadicals {
+                        Text(arabic)
+                            .font(.headline)
+                    }
+                    Text(root.displayKey)
+                        .font(.system(.caption, design: .serif).weight(.bold))
+                }
+                .foregroundStyle(.white)
+                .frame(width: 58, height: 58)
+                .background(Theme.rootCore, in: Circle())
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Rădăcina \(root.displayKey)")
+                        .yallaFont(.bodyStrong)
+                        .foregroundStyle(Theme.ink)
+                    Text("\(root.memberCount) cuvinte din aceeași familie")
+                        .yallaFont(.caption)
+                        .foregroundStyle(Theme.muted)
+                }
+                Spacer(minLength: 0)
+                Text("Vezi familia")
+                    .yallaFont(.captionStrong)
+                    .foregroundStyle(Theme.brand)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(Theme.muted)
+            }
+            .padding(Theme.Spacing.lg)
+            .cardBackground()
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("dictionary.root")
+    }
+
+    private var relatedForms: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Forme înrudite")
+                .yallaFont(.section)
+                .foregroundStyle(Theme.ink)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.horizontal, Theme.Spacing.lg)
+                .padding(.vertical, Theme.Spacing.md)
+            ForEach(entry.inflectionRelations) { relation in
+                Divider().padding(.leading, Theme.Spacing.lg)
+                Group {
+                    if let related = model.entry(forExpressionID: relation.relatedExpressionID) {
+                        NavigationLink {
+                            detail(for: related)
+                        } label: {
+                            InflectionRelationRow(relation: relation)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        InflectionRelationRow(relation: relation)
+                    }
+                }
+                .padding(.horizontal, Theme.Spacing.lg)
+                .padding(.vertical, Theme.Spacing.sm)
+            }
+        }
+        .cardBackground()
+    }
+
+    private func detail(for related: DictionaryEntrySummary) -> DictionaryEntryDetailView {
+        DictionaryEntryDetailView(
+            entry: related,
+            model: model,
+            package: package,
+            locale: locale,
+            progressModel: progressModel
+        )
+    }
+
+    private func toggleSaved(_ target: DictionaryEntrySummary) {
+        let saved = !target.expressionIDs.contains(where: savedIDs.contains)
+        Task {
+            for id in target.expressionIDs {
+                await progressModel.setExpressionSaved(id, saved: saved)
+            }
         }
     }
 }

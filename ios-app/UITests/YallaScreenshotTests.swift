@@ -111,6 +111,13 @@ final class YallaScreenshotTests: XCTestCase {
             search.tap()
             search.typeText("mar7aba")
             snap("21b-discover-search")
+            if app.keyboards.count > 0 { app.typeText("\n") }
+            let openEntry = app.buttons["dictionary.open"]
+            if openEntry.waitForExistence(timeout: 3) {
+                openEntry.tap()
+                snap("21h-dictionary-entry")
+                goBack()
+            }
             let rootsChip = app.buttons["Rădăcini"]
             if rootsChip.exists {
                 let clear = app.buttons["Șterge căutarea"]
