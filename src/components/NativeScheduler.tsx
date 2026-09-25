@@ -154,6 +154,31 @@ const NativeScheduler = ({
   // Either the one handed in by the page, or the one created at confirm time.
   const effectiveRegistrationId = registrationId ?? bookedRegistrationId;
 
+  // The no-show rule, stated before anyone picks a time rather than only in the
+  // Stripe panel at the end. A held slot that nobody turns up for costs the
+  // same as a private lesson, so the visitor is told that upfront.
+  const policyNotice =
+    eventType === "trial" ? (
+      <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+        {lang === "ro" ? (
+          <>
+            <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la final îți confirmi locul
+            cu cardul prin Stripe (nu se încasează nimic acum). Poți anula sau reprograma gratuit cu
+            cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
+            reține <strong>150 lei</strong>, cât o lecție privată.
+          </>
+        ) : (
+          <>
+            <strong>Before you pick a time:</strong> the trial costs 0 lei, but at the end you
+            confirm your spot with your card through Stripe (nothing is charged now). You can cancel
+            or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel
+            later than 24 hours, <strong>150 lei</strong> is charged — the price of a private lesson.
+          </>
+        )}
+      </div>
+    ) : null;
+
+
 
 
   // Form fields
