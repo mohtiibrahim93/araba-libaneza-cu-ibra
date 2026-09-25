@@ -216,7 +216,7 @@ struct RootExplorerView: View {
                     HStack(spacing: Theme.Spacing.md) {
                         YallaIconView(member.kindIcon)
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(Theme.deep)
+                            .foregroundStyle(Theme.brand)
                             .frame(width: 36, height: 36)
                             .background(Theme.rootNodeIcon, in: Circle())
                             .accessibilityHidden(true)
@@ -278,6 +278,7 @@ struct RootExplorerView: View {
                 } label: {
                     Label("Exersează familia", systemImage: "point.3.connected.trianglepath.dotted")
                         .yallaFont(.captionStrong)
+                        .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(PillButtonStyle(minHeight: 44))
                 .accessibilityIdentifier("root.detail.practice")

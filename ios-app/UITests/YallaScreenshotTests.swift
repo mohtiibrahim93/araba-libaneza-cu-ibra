@@ -133,7 +133,7 @@ final class YallaScreenshotTests: XCTestCase {
                             snap("21f-root-filter")
                         }
                         let help = app.buttons["root.help"]
-                        app.swipeDown()
+                        for _ in 0..<4 where !(help.exists && help.isHittable) { app.swipeDown() }
                         if help.waitForExistence(timeout: 3) {
                             help.tap()
                             snap("21g-root-help")

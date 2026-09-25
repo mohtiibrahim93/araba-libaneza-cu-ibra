@@ -230,13 +230,13 @@ struct RootWordNode: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(isSelected ? Theme.deep : Theme.lineStrong, lineWidth: isSelected ? 1.5 : 0.75)
+                    .strokeBorder(isSelected ? Theme.brand : Theme.lineStrong, lineWidth: isSelected ? 1.5 : 0.75)
             )
             .shadow(color: .black.opacity(isSelected ? 0.08 : 0.04), radius: isSelected ? 10 : 6, x: 0, y: 3)
             .overlay(alignment: .top) {
                 YallaIconView(member.kindIcon)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Theme.deep)
+                    .foregroundStyle(Theme.brand)
                     .frame(width: Self.iconDiameter, height: Self.iconDiameter)
                     .background(Theme.rootNodeIcon, in: Circle())
                     .overlay(Circle().strokeBorder(Theme.surface, lineWidth: 2))
@@ -493,16 +493,22 @@ struct RootWordDetailCard<Actions: View>: View {
     let onPlayAudio: (() -> Void)?
     @ViewBuilder var actions: () -> Actions
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            content
-                .padding(.leading, 128)
-                .background(alignment: .leading) {
-                    artwork.frame(width: 128)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 0) {
+                    artwork.frame(height: 110)
+                    content
                 }
-            VStack(alignment: .leading, spacing: 0) {
-                artwork.frame(height: 110)
+            } else {
+                // The panel takes the card's full height beside the content.
                 content
+                    .padding(.leading, 112)
+                    .background(alignment: .leading) {
+                        artwork.frame(width: 112)
+                    }
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 19, style: .continuous))
@@ -523,7 +529,7 @@ struct RootWordDetailCard<Actions: View>: View {
                 .offset(x: 24, y: 30)
             YallaIconView(member.kindIcon)
                 .font(.system(size: 38, weight: .regular))
-                .foregroundStyle(Theme.deep)
+                .foregroundStyle(Theme.brand)
         }
         .accessibilityHidden(true)
     }
@@ -564,9 +570,9 @@ struct RootWordDetailCard<Actions: View>: View {
                 }
             }
 
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: Theme.Spacing.sm) { saveButton; actions() }
-                VStack(alignment: .leading, spacing: Theme.Spacing.sm) { saveButton; actions() }
+            VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
+                saveButton
+                actions()
             }
         }
         .padding(Theme.Spacing.lg)
@@ -579,7 +585,7 @@ struct RootWordDetailCard<Actions: View>: View {
                 .yallaFont(.captionStrong)
                 .foregroundStyle(Theme.deep)
                 .padding(.horizontal, 14)
-                .frame(minHeight: 44)
+                .frame(maxWidth: .infinity, minHeight: 44)
                 .background(Theme.surface, in: Capsule())
                 .overlay(Capsule().strokeBorder(Theme.lineStrong, lineWidth: 1))
         }
