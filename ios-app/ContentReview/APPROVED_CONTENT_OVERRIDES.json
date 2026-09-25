@@ -1012,7 +1012,7 @@
       "answer": "Bye3jebne hal shi."
     },
     "syn-context-syn-cbdd5dd08eae": {
-      "answer": "B7ibb el 7ommos."
+      "answer": "B7ebb el 7ommos."
     },
     "syn-context-syn-cce5d005ef50": {
       "answer": "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?"
@@ -2268,7 +2268,7 @@
       "canonicalArabizi": "Keef sa77tak?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Cum e sănătatea ta? (către un bărbat)"
+          "naturalMeaning": "Cum e sănătatea ta? (către un băiat)"
         }
       }
     },
@@ -2288,7 +2288,7 @@
       "canonicalArabizi": "Metdeeya2?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Te simți rău? / Ești indispus? (către un bărbat)"
+          "naturalMeaning": "Te simți rău? / Ești deranjat? (către un băiat)"
         }
       }
     },
@@ -2298,7 +2298,7 @@
       "canonicalArabizi": "Mariid?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Ești bolnav? (către un bărbat)"
+          "naturalMeaning": "Ești bolnav? (către un băiat)"
         }
       }
     },
@@ -2308,7 +2308,7 @@
       "canonicalArabizi": "Tal3a 7araartak?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Ți-a crescut temperatura? (către un bărbat)"
+          "naturalMeaning": "Ai febră? / Ai temperatura ridicată? (către un băiat)"
         }
       }
     },
@@ -2318,7 +2318,7 @@
       "canonicalArabizi": "3lek 7araara?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Ai febră? (către un bărbat)"
+          "naturalMeaning": "Ai temperatură? / Ai febră? (către un băiat)"
         }
       }
     },
@@ -2328,7 +2328,7 @@
       "canonicalArabizi": "Mrashha7?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Ești răcit? (către un bărbat)"
+          "naturalMeaning": "Ești răcit? (către un băiat)"
         }
       }
     },
@@ -2338,7 +2338,7 @@
       "canonicalArabizi": "Mgarrab?",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Ai gripă? (către un bărbat)"
+          "naturalMeaning": "Ai gripă? (către un băiat)"
         }
       }
     },
@@ -2378,7 +2378,57 @@
       "canonicalArabizi": "T2uum bil saleeme",
       "localizations": {
         "ro": {
-          "naturalMeaning": "Să te faci bine! (către un bărbat)"
+          "naturalMeaning": "Să te faci bine! (către un băiat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.t2uume-bil-saleeme",
+      "unitID": "a1-health",
+      "canonicalArabizi": "T2uume bil saleeme",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Să te faci bine! (către o fată)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.t2uumo-bil-saleeme",
+      "unitID": "a1-health",
+      "canonicalArabizi": "T2uumo bil saleeme",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Să vă faceți bine! (către mai mulți)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.alla-ysalmak",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Alla ysalmak",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Mulțumesc pentru urarea de sănătate. (răspuns, către un băiat)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.alla-ysalmik",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Alla ysalmik",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Mulțumesc pentru urarea de sănătate. (răspuns, către o fată)"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-health.alla-ysallemkon",
+      "unitID": "a1-health",
+      "canonicalArabizi": "Alla ysallemkon",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Mulțumesc pentru urarea de sănătate. (răspuns, către mai mulți)"
         }
       }
     }

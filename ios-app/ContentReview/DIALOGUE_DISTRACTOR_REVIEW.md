@@ -67,7 +67,7 @@ How to review: mark any row you want changed (write your own wrong answers, or c
 
 | # | ID | Prompt | Correct answer | Proposed wrong answers |
 |---|---|---|---|---|
-| 1 | `syn-context-syn-cbdd5dd08eae` | Alege replica pentru: „Îmi place humusul.” | B7ibb el 7ommos. | shu bte7ebb tekol? · Ana kameen! Shu bte7ebb tekol? · 7aader. Shu baddkon teshrabo? |
+| 1 | `syn-context-syn-cbdd5dd08eae` | Alege replica pentru: „Îmi place humusul.” | B7ebb el 7ommos. | shu bte7ebb tekol? · Ana kameen! Shu bte7ebb tekol? · 7aader. Shu baddkon teshrabo? |
 | 2 | `syn-context-syn-2af71f245869` | Alege replica pentru: „Nu îmi place mâncarea picantă.” | Ma b7ibb el 7arr. | Ana ju3aan ktiir. · B7ibb el shawarma. W ente? · Badde 3asiir berd2en. |
 | 3 | `syn-context-syn-95f3fb3e584b` | Alege replica pentru: „Nu vreau ceai.” | Ma badde shay. | el akel tayyeb · B7ibb el falefel w el tabbule. · W ana badde bas mayy. |
 | 4 | `syn-context-syn-70272593e58a` | Alege replica pentru: „Ce aveți?” | Shu fi 3andkon? | B7ibb el 7elo. · Tameem! Badde shawarma djej. · El akel ken laziz ktiir! |
