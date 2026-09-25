@@ -2,6 +2,58 @@
   "approvalStatus": "teacher-approved",
   "scripts": [
     {
+      "unitID": "a1-welcome",
+      "scenes": [
+        {
+          "title": "Cu un coleg",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Sabaa7 el 5er!",
+                "ro": "Bună dimineața!"
+              },
+              "exerciseID": "q63",
+              "learnerRo": "Bună dimineața! (răspuns)"
+            },
+            {
+              "partner": {
+                "arabizi": "Ahla w sahla! Shu esmak?",
+                "ro": "Bine ai venit! Cum te cheamă?"
+              },
+              "exerciseID": "q62",
+              "learnerRo": "Numele meu este George."
+            },
+            {
+              "partner": {
+                "arabizi": "Tsharrafna!",
+                "ro": "Încântat de cunoștință!"
+              },
+              "exerciseID": "syn-context-syn-9ec2fdddb750"
+            }
+          ]
+        },
+        {
+          "title": "Cu o colegă nouă",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba! Tsharrafna.",
+                "ro": "Salut! Încântată de cunoștință."
+              },
+              "exerciseID": "syn-context-syn-2dcea3000b0d"
+            },
+            {
+              "partner": {
+                "arabizi": "Ana men lebnen. Yalla, bshufak!",
+                "ro": "Sunt din Liban. Hai, ne vedem!"
+              },
+              "exerciseID": "syn-context-syn-adbe51b60572"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "unitID": "a1-restaurant",
       "scenes": [
         {
