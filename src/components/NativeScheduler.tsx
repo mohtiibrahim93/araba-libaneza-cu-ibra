@@ -255,6 +255,8 @@ const NativeScheduler = ({
         setSubmitting(false);
         return;
       }
+      setBookedRegistrationId(resolvedRegistrationId);
+
       const res = await supabase.functions.invoke("booking-create", {
         body: {
           registration_id: resolvedRegistrationId,
