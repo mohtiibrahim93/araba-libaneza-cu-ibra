@@ -45,7 +45,7 @@ const CatCostaCursurile = () => {
           { ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.", en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room." },
           { ro: "Lecțiile private sunt 150 lei/lecție de 60 de minute, cu reduceri de la 5, 10 și 20 de lecții.", en: "Private lessons are 150 lei per 60-minute lesson, with discounts from 5, 10 and 20 lessons." },
           { ro: "Plata integrală a unui nivel aduce 10% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 10% discount, but monthly payment stays available." },
-          { ro: "Prima lecție de probă este gratuită; cardul se salvează doar pentru confirmarea locului.", en: "The first trial lesson is free; the card is stored only to confirm the spot." },
+          { ro: "Prima lecție de probă este 0 lei; locul se confirmă cu cardul, iar la neprezentare se reține 150 lei.", en: "The first trial lesson is 0 lei; the spot is confirmed with a card, and a no-show is charged 150 lei." },
         ]}
       />
       <p>
