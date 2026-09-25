@@ -144,10 +144,11 @@ final class YallaScreenshotTests: XCTestCase {
                         if help.waitForExistence(timeout: 3) {
                             help.tap()
                             snap("21g-root-help")
-                            app.swipeDown()
+                            let done = app.buttons["Am înțeles"]
+                            if done.waitForExistence(timeout: 3) { done.tap() }
                         }
                         let back = app.buttons["root.back"]
-                        if back.waitForExistence(timeout: 3) { back.tap() }
+                        if back.waitForExistence(timeout: 3), back.isHittable { back.tap() }
                     }
                 }
             }
