@@ -367,16 +367,16 @@ const NativeScheduler = ({
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">
             <Link
-              to={`/booking?type=paid${registrationId ? `&registration_id=${encodeURIComponent(registrationId)}` : ""}`}
+              to={`/booking?type=paid${effectiveRegistrationId ? `&registration_id=${encodeURIComponent(effectiveRegistrationId)}` : ""}`}
             >
               <Calendar className="w-4 h-4 mr-2" />
               {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
             </Link>
           </Button>
-          {registrationId && (
+          {effectiveRegistrationId && (
             <Button asChild variant="outline" className="flex-1">
               <Link
-                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(effectiveRegistrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
@@ -505,7 +505,7 @@ const NativeScheduler = ({
 
         {/* Free trial: 0-lei card-on-file confirmation. Saves the card via a
             Stripe setup session — nothing is charged — to firm up the spot. */}
-        {eventType === "trial" && registrationId && (
+        {eventType === "trial" && effectiveRegistrationId && (
           <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -564,7 +564,7 @@ const NativeScheduler = ({
             </div>
             <Button asChild className="w-full">
               <Link
-                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(registrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private${registrationId ? `&registrationId=${encodeURIComponent(effectiveRegistrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
