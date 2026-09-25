@@ -147,6 +147,11 @@ const NativeScheduler = ({
   const [trialUsed, setTrialUsed] = useState(false);
   // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
   const [savingCard, setSavingCard] = useState(false);
+  // The registration this booking ended up attached to. On /trial the row is
+  // created at confirm time, so without keeping it here the card-confirmation
+  // step never rendered (the prop is undefined for a fresh visitor).
+  const [bookedRegistrationId, setBookedRegistrationId] = useState<string | null>(null);
+
 
   // Form fields
   const [name, setName] = useState(prefill?.name ?? "");
