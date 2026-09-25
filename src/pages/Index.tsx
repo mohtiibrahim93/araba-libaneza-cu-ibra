@@ -140,6 +140,29 @@ const PageContent = () => {
     // Free-text hint, taken from the prices this site publishes: 500 LEI a
     // month online, 700 in person. Deliberately not a made-up number.
     priceRange: "500–700 RON",
+    // Same coordinates, service area and teaching hours as the Bucharest
+    // landing page (src/pages/seo/CursuriArabaBucuresti.tsx). The homepage is
+    // the page an assistant or a map surface reaches first, and without these
+    // it described a local business with no location and no hours.
+    geo: { "@type": "GeoCoordinates", latitude: 44.446, longitude: 26.1053 },
+    areaServed: [
+      { "@type": "City", name: "București" },
+      { "@type": "AdministrativeArea", name: "Ilfov" },
+    ],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Wednesday"],
+        opens: "19:00",
+        closes: "20:30",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "Saturday",
+        opens: "10:00",
+        closes: "12:00",
+      },
+    ],
     // No aggregateRating here. The 5.0 / 21 reviews are real but they live on
     // Preply, and Google's review-snippet guidelines say not to aggregate
     // ratings from another site into your own — the markup must describe
