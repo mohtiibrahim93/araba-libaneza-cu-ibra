@@ -46,6 +46,7 @@ struct ConversationScriptTests {
     func quotedRomanian() {
         #expect(DialoguePromptText.quotedRomanian(in: "Alege replica pentru: „Îmi place humusul.”") == "Îmi place humusul.")
         #expect(DialoguePromptText.quotedRomanian(in: "Spune că familia voastră este mare.") == nil)
+        #expect(DialoguePromptText.quotedRomanian(in: "Cineva te întreabă „Shu esmak?”. Spune că te cheamă George.") == nil)
     }
 
     @Test("Hints give the first letter and the word count, never the answer")
