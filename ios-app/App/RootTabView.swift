@@ -557,7 +557,21 @@ private struct DiscoverView: View {
                     )
                 }
 
-                let similar = model.similar(to: featured).filter { candidate in !family.contains(candidate) }
+                let relatedByMeaning = featured.isSingleWord ? model.relatedByMeaning(of: featured) : []
+                if !relatedByMeaning.isEmpty {
+                    DictionaryListCard(
+                        title: "Înrudite ca sens",
+                        icon: "arrow.triangle.branch",
+                        entries: Array(relatedByMeaning.prefix(4)),
+                        isSaved: isSaved,
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
+                }
+
+                let similar = model.similar(to: featured).filter { candidate in
+                    !family.contains(candidate) && !relatedByMeaning.contains(candidate)
+                }
                 if !similar.isEmpty {
                     DictionaryListCard(
                         title: featured.isSingleWord ? "Din aceeași temă" : "Expresii similare",

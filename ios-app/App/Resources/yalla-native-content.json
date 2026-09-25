@@ -59448,6 +59448,54 @@
           "naturalMeaning": "savant / persoană foarte învățată"
         }
       }
+    },
+    {
+      "id": "rootexpr.q3d.23oud",
+      "canonicalArabizi": "23oud",
+      "variants": [],
+      "levelTags": [],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "statul jos / ședere"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.q3d.ma23ad",
+      "canonicalArabizi": "ma23ad",
+      "variants": [],
+      "levelTags": [],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "scaun / loc de stat"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.w2f.w2uuf",
+      "canonicalArabizi": "w2uuf",
+      "variants": [],
+      "levelTags": [],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "statul în picioare / oprire"
+        }
+      }
+    },
+    {
+      "id": "rootexpr.w2f.wa2fe",
+      "canonicalArabizi": "wa2fe",
+      "variants": [],
+      "levelTags": [],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "oprire / stat în picioare (o dată)"
+        }
+      }
     }
   ],
   "units": [
@@ -72503,7 +72551,10 @@
         "3",
         "d"
       ],
-      "arabicRadicals": "قعد"
+      "arabicRadicals": "قعد",
+      "relatedRootIDs": [
+        "root.w2f"
+      ]
     },
     {
       "id": "root.w2f",
@@ -72512,7 +72563,10 @@
         "2",
         "f"
       ],
-      "arabicRadicals": "وقف"
+      "arabicRadicals": "وقف",
+      "relatedRootIDs": [
+        "root.q3d"
+      ]
     }
   ],
   "morphologicalPatterns": [
@@ -72701,6 +72755,30 @@
       "kind": "placeNoun",
       "label": "parcare, stație",
       "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.q3d.sitting",
+      "kind": "verbalNoun",
+      "label": "statul jos / ședere",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.q3d.seat",
+      "kind": "placeNoun",
+      "label": "scaun / loc de stat",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.w2f.standing",
+      "kind": "verbalNoun",
+      "label": "statul în picioare / oprire",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.w2f.halt",
+      "kind": "noun",
+      "label": "oprire / stat în picioare (o dată)",
+      "productivity": "lexicalized"
     }
   ],
   "morphologyLinks": [
@@ -72863,6 +72941,26 @@
       "expressionID": "x4b7efa0db389",
       "rootID": "root.w2f",
       "patternID": "pattern.w2f.stop"
+    },
+    {
+      "expressionID": "rootexpr.q3d.23oud",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.sitting"
+    },
+    {
+      "expressionID": "rootexpr.q3d.ma23ad",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.seat"
+    },
+    {
+      "expressionID": "rootexpr.w2f.w2uuf",
+      "rootID": "root.w2f",
+      "patternID": "pattern.w2f.standing"
+    },
+    {
+      "expressionID": "rootexpr.w2f.wa2fe",
+      "rootID": "root.w2f",
+      "patternID": "pattern.w2f.halt"
     }
   ],
   "inflectionRelations": [

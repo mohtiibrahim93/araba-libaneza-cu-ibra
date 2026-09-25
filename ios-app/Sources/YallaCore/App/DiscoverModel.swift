@@ -192,6 +192,7 @@ public struct DiscoverModel: Equatable, Sendable {
     /// in content order.
     private let topicGroups: [[Int]]
     private let topicGroupIndexesByEntry: [[Int]]
+    private let relatedRootIDsByRootID: [String: [String]]
 
     /// - Parameter topicGroups: expression IDs per unit or vocabulary
     ///   collection, in content order; used for similar expressions.
@@ -199,9 +200,19 @@ public struct DiscoverModel: Equatable, Sendable {
         entries: [DictionaryEntrySummary],
         roots: [RootSummary],
         graphsByRootID: [String: RootExplorerSummary],
-        topicGroups: [[String]] = []
+        topicGroups: [[String]] = [],
+        relatedRootIDs: [String: [String]] = [:]
     ) {
         self.entries = entries
+        // Relations work both ways even when only one side lists them.
+        var related: [String: [String]] = [:]
+        for (rootID, others) in relatedRootIDs {
+            for other in others where other != rootID {
+                if !(related[rootID] ?? []).contains(other) { related[rootID, default: []].append(other) }
+                if !(related[other] ?? []).contains(rootID) { related[other, default: []].append(rootID) }
+            }
+        }
+        self.relatedRootIDsByRootID = related
         self.roots = roots
         self.graphsByRootID = graphsByRootID
 
@@ -308,6 +319,21 @@ public struct DiscoverModel: Equatable, Sendable {
             let candidate = entries[index]
             return seen.insert(candidate.id).inserted ? candidate : nil
         }
+    }
+
+    /// Entries from the root families related in meaning to the entry's
+    /// root (e.g. we2ef, maw2af for 2a3ad).
+    public func relatedByMeaning(of entry: DictionaryEntrySummary) -> [DictionaryEntrySummary] {
+        guard let rootID = entry.rootID else { return [] }
+        var seen: Set<String> = [entry.id]
+        var result: [DictionaryEntrySummary] = []
+        for relatedID in relatedRootIDsByRootID[rootID] ?? [] {
+            for member in graphsByRootID[relatedID]?.members ?? [] {
+                guard let index = entryIndexByExpressionID[member.id] else { continue }
+                if seen.insert(entries[index].id).inserted { result.append(entries[index]) }
+            }
+        }
+        return result
     }
 
     /// Entries of the same kind from the same unit or vocabulary collection.
@@ -538,7 +564,11 @@ public struct DiscoverModelBuilder: Sendable {
             roots: roots,
             graphsByRootID: graphs,
             topicGroups: package.units.map(\.expressionIDs)
-                + package.lexiconCollections.filter(\.isTheme).map(\.expressionIDs)
+                + package.lexiconCollections.filter(\.isTheme).map(\.expressionIDs),
+            relatedRootIDs: Dictionary(
+                package.roots.map { ($0.id, $0.relatedRootIDs ?? []) },
+                uniquingKeysWith: { first, _ in first }
+            )
         )
     }
 

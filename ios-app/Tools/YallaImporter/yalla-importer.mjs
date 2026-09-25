@@ -654,6 +654,13 @@ export function applyApprovedMorphologyContent(contentPackage, morphologyDocumen
     }
     rootIDs.add(id);
   }
+  for (const root of roots) {
+    for (const relatedID of Array.isArray(root.relatedRootIDs) ? root.relatedRootIDs : []) {
+      if (!rootIDs.has(String(relatedID)) || String(relatedID) === String(root.id)) {
+        throw new Error('Approved root "' + root.id + '" has an invalid related root "' + relatedID + '".');
+      }
+    }
+  }
 
   const allowedPatternKinds = new Set([
     'verbStem', 'verbalNoun', 'participle', 'agentNoun', 'placeNoun',

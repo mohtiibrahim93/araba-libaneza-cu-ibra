@@ -102,7 +102,21 @@ struct DictionaryEntryDetailView: View {
                     )
                 }
 
-                let similar = model.similar(to: entry).filter { candidate in !family.contains(candidate) }
+                let relatedByMeaning = entry.isSingleWord ? model.relatedByMeaning(of: entry) : []
+                if !relatedByMeaning.isEmpty {
+                    DictionaryListCard(
+                        title: "Înrudite ca sens",
+                        icon: "arrow.triangle.branch",
+                        entries: Array(relatedByMeaning.prefix(4)),
+                        isSaved: { $0.expressionIDs.contains(where: savedIDs.contains) },
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
+                }
+
+                let similar = model.similar(to: entry).filter { candidate in
+                    !family.contains(candidate) && !relatedByMeaning.contains(candidate)
+                }
                 if !similar.isEmpty {
                     DictionaryListCard(
                         title: entry.isSingleWord ? "Din aceeași temă" : "Expresii similare",

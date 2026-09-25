@@ -148,4 +148,25 @@ struct DictionarySearchTests {
         #expect(model.rootFamily(of: sit).map(\.arabizi) == ["2ee3ed", "2a3de"])
         #expect(model.rootFamily(of: hit).isEmpty)
     }
+
+    @Test func relatedRootsShowTheirFamilyBothWays() throws {
+        let model = try model([
+            expression("sit", "2a3ad", "a se așeza"),
+            expression("seat", "ma23ad", "scaun"),
+            expression("stand", "we2ef", "a sta în picioare"),
+            expression("stop", "maw2af", "parcare, stație")
+        ], roots: [
+            Root(id: "root.q3d", arabiziRadicals: ["2", "3", "d"], relatedRootIDs: ["root.w2f"]),
+            Root(id: "root.w2f", arabiziRadicals: ["w", "2", "f"])
+        ], links: [
+            MorphologyLink(expressionID: "sit", rootID: "root.q3d"),
+            MorphologyLink(expressionID: "seat", rootID: "root.q3d"),
+            MorphologyLink(expressionID: "stand", rootID: "root.w2f"),
+            MorphologyLink(expressionID: "stop", rootID: "root.w2f")
+        ])
+        let sit = try #require(model.entries.first { $0.arabizi == "2a3ad" })
+        let stand = try #require(model.entries.first { $0.arabizi == "we2ef" })
+        #expect(model.relatedByMeaning(of: sit).map(\.arabizi) == ["we2ef", "maw2af"])
+        #expect(model.relatedByMeaning(of: stand).map(\.arabizi) == ["2a3ad", "ma23ad"])
+    }
 }

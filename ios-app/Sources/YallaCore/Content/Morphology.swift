@@ -2,11 +2,20 @@ public struct Root: Codable, Equatable, Sendable, Identifiable {
     public let id: String
     public let arabiziRadicals: [String]
     public let arabicRadicals: String?
+    /// Roots the teacher marked as related in meaning (e.g. 2-3-d "to sit"
+    /// and w-2-f "to stand").
+    public let relatedRootIDs: [String]?
 
-    public init(id: String, arabiziRadicals: [String], arabicRadicals: String? = nil) {
+    public init(
+        id: String,
+        arabiziRadicals: [String],
+        arabicRadicals: String? = nil,
+        relatedRootIDs: [String]? = nil
+    ) {
         self.id = id
         self.arabiziRadicals = arabiziRadicals
         self.arabicRadicals = arabicRadicals
+        self.relatedRootIDs = relatedRootIDs
     }
 
     public var displayKey: String {
