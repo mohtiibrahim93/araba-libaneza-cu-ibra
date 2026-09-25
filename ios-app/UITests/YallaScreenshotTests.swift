@@ -89,8 +89,13 @@ final class YallaScreenshotTests: XCTestCase {
                 let start = app.buttons["practice.start"]
                 if start.waitForExistence(timeout: 4) { start.tap() }
                 snap("23-speed-drill")
+                let choice = app.buttons.matching(identifier: "drill.choice").firstMatch
                 let reveal = app.buttons["drill.reveal"]
-                if reveal.waitForExistence(timeout: 3) {
+                if choice.waitForExistence(timeout: 3) {
+                    choice.tap()
+                    Thread.sleep(forTimeInterval: 0.1)
+                    snap("24-speed-drill-answer")
+                } else if reveal.waitForExistence(timeout: 3) {
                     reveal.tap()
                     snap("24-speed-drill-answer")
                 }

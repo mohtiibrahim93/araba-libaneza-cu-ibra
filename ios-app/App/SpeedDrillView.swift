@@ -4,6 +4,7 @@ import YallaCore
 
 struct SpeedDrillView: View {
     @ObservedObject var progressModel: LearnerProgressModel
+    let mode: SpeedDrillMode
 
     @State private var player: SpeedDrillPlayer
     @Environment(\.scenePhase) private var scenePhase
@@ -14,13 +15,24 @@ struct SpeedDrillView: View {
     @State private var endedAtElapsedSeconds: Int?
     @State private var didPersistResult = false
     @State private var historyID = UUID().uuidString
+    /// Choice or typed answer being shown as feedback before the next card.
+    @State private var feedback: Feedback?
+    @State private var typed = ""
+    @FocusState private var fieldFocused: Bool
+
+    private struct Feedback: Equatable {
+        let chosen: String
+        let correct: Bool
+    }
 
     init(
         expressions: [JourneyExpressionSummary],
         progressModel: LearnerProgressModel,
-        direction: SpeedDrillDirection = .learnerLanguageToLebanese
+        direction: SpeedDrillDirection = .learnerLanguageToLebanese,
+        mode: SpeedDrillMode = .memory
     ) {
         self.progressModel = progressModel
+        self.mode = mode
         let cards = expressions.map {
             SpeedDrillCard(
                 id: $0.id,
@@ -31,7 +43,8 @@ struct SpeedDrillView: View {
         _player = State(
             initialValue: SpeedDrillPlayer(
                 cards: cards,
-                direction: direction
+                // Typed answers are checked as Arabizi.
+                direction: mode == .write ? .learnerLanguageToLebanese : direction
             )
         )
     }
@@ -67,6 +80,7 @@ struct SpeedDrillView: View {
                             .multilineTextAlignment(.center)
                         Button("Reia exercițiul") { clock.resume(at: Date()) }
                             .buttonStyle(ChunkyButtonStyle(kind: .primary))
+                            .accessibilityIdentifier("drill.resume")
                     }
                     .padding(24)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -87,8 +101,9 @@ struct SpeedDrillView: View {
             }
         }
         .creamList()
-        .navigationTitle("Yalla! Două minute")
+        .navigationTitle("Speed Drill")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
         .onChange(of: scenePhase) { _, phase in
             if phase != .active { clock.pause(at: Date()) }
         }
@@ -101,11 +116,6 @@ struct SpeedDrillView: View {
             Task { await persistResultIfNeeded(elapsedSeconds: elapsed, metrics: metrics) }
         }
         .toolbar {
-            if !endedManually && !clock.isPaused && !player.isExpired(atElapsed: elapsedSeconds(at: Date())) {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Pauză") { clock.pause(at: Date()) }
-                }
-            }
             if !endedManually && !player.session.attempts.isEmpty {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Încheie") {
@@ -117,116 +127,20 @@ struct SpeedDrillView: View {
         }
     }
 
+    // MARK: Layout
+
     private func drillBody(
         prompt: SpeedDrillPrompt,
         remainingSeconds: Int,
         metrics: SpeedDrillMetrics
     ) -> some View {
         ScrollView {
-            VStack(spacing: 20) {
-                HStack(spacing: 10) {
-                    Image(systemName: "bolt.fill")
-                        .font(.largeTitle)
-                        .foregroundStyle(Theme.terracotta)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Răspunde cât mai repede!")
-                            .font(Theme.serif(.title3))
-                            .foregroundStyle(Theme.ink)
-                        Text("2 minute · Câte poți rezolva?")
-                            .font(Theme.font(.subheadline))
-                            .foregroundStyle(Theme.muted)
-                    }
-                    Spacer(minLength: 0)
-                }
-
-                HStack(alignment: .center, spacing: 12) {
-                    DrillStat(
-                        icon: "flame.fill", tint: Theme.streak,
-                        value: "\(metrics.bestCorrectStreak)", label: "corecte la rând"
-                    )
-                    DrillTimerRing(
-                        remaining: remainingSeconds,
-                        total: player.session.durationSeconds,
-                        text: timeString(remainingSeconds)
-                    )
-                    VStack(spacing: 10) {
-                        DrillStat(
-                            icon: "bolt.fill", tint: Theme.gold,
-                            value: String(format: "%.0f", metrics.correctPerMinute), label: "corecte/min"
-                        )
-                        DrillStat(
-                            icon: "target", tint: Theme.terracotta,
-                            value: "\(Int((metrics.accuracy * 100).rounded()))%", label: "acuratețe"
-                        )
-                    }
-                }
-
-                VStack(spacing: 16) {
-                    Label(promptLabel, systemImage: "text.bubble.fill")
-                        .font(Theme.font(.subheadline, weight: .semibold))
-                        .foregroundStyle(Theme.teal)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 7)
-                        .background(Theme.mint, in: Capsule())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Text(prompt.question)
-                        .font(Theme.serif(.largeTitle))
-                        .foregroundStyle(Theme.ink)
-                        .multilineTextAlignment(.center)
-                        .minimumScaleFactor(0.6)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-
-                    if answerVisible {
-                        VStack(spacing: 6) {
-                            Text("Răspuns")
-                                .font(Theme.font(.caption, weight: .semibold))
-                                .foregroundStyle(Theme.teal)
-                            Text(prompt.answer)
-                                .font(Theme.serif(.title2))
-                                .foregroundStyle(Theme.ink)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.mint, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .transition(.scale(scale: 0.95).combined(with: .opacity))
-                    }
-                }
-                .padding(20)
-                .cardBackground()
-
-                if answerVisible {
-                    AdaptiveRow(spacing: 12) {
-                        Button {
-                            record(.wrong)
-                        } label: {
-                            Label("Greșit", systemImage: "xmark")
-                        }
-                        .buttonStyle(ChunkyButtonStyle(kind: .danger))
-                        .accessibilityIdentifier("drill.wrong")
-
-                        Button {
-                            record(.correct)
-                        } label: {
-                            Label("Corect", systemImage: "checkmark")
-                        }
-                        .buttonStyle(ChunkyButtonStyle(kind: .primary))
-                        .accessibilityIdentifier("drill.correct")
-                    }
-                } else {
-                    Button {
-                        if canAnswer { answerVisible = true }
-                    } label: {
-                        Text("Arată răspunsul")
-                    }
-                    .buttonStyle(ChunkyButtonStyle(kind: .primary))
-                    .accessibilityIdentifier("drill.reveal")
-                }
-
+            VStack(alignment: .leading, spacing: Theme.Spacing.section) {
+                header
+                liveStats(remainingSeconds: remainingSeconds, metrics: metrics)
+                questionCard(prompt: prompt)
                 HStack {
-                    Text("\(player.session.metrics.correct) corecte din \(player.session.metrics.seen)")
+                    Text("\(metrics.correct) corecte din \(metrics.seen)")
                         .font(Theme.font(.subheadline))
                         .foregroundStyle(Theme.muted)
                     Spacer()
@@ -236,20 +150,269 @@ struct SpeedDrillView: View {
                         Label("Sari peste", systemImage: "arrow.uturn.forward")
                             .font(Theme.font(.subheadline, weight: .semibold))
                             .foregroundStyle(Theme.terracotta)
+                            .frame(minHeight: 44)
                     }
                     .buttonStyle(.plain)
+                    .disabled(feedback != nil)
+                    .accessibilityIdentifier("drill.skip")
                 }
             }
-            .padding(20)
-            .animation(.spring(response: 0.3, dampingFraction: 0.85), value: answerVisible)
+            .padding(.horizontal, Theme.Spacing.screen)
+            .padding(.vertical, Theme.Spacing.md)
+            .frame(maxWidth: Theme.Spacing.maxContentWidth)
+            .frame(maxWidth: .infinity)
         }
+        .scrollDismissesKeyboard(.interactively)
         .background(Theme.canvas.ignoresSafeArea())
+    }
+
+    private var header: some View {
+        HStack(alignment: .top, spacing: Theme.Spacing.md) {
+            Image(systemName: "bolt.fill")
+                .font(.system(size: 36, weight: .bold))
+                .foregroundStyle(Theme.terracotta)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Speed Drill")
+                    .font(.system(.largeTitle, design: .default).weight(.bold))
+                    .foregroundStyle(Theme.ink)
+                Text("Răspunde cât mai repede!")
+                    .font(Theme.font(.title3, weight: .semibold))
+                    .foregroundStyle(Theme.ink)
+                Text("\(player.session.durationSeconds / 60) minute · \(mode.title)")
+                    .font(Theme.font(.subheadline))
+                    .foregroundStyle(Theme.muted)
+            }
+            Spacer(minLength: 0)
+            CircularIconButton(
+                icon: .system("pause.fill"),
+                accessibilityLabel: "Pauză Speed Drill",
+                tint: Theme.ink,
+                fill: Theme.surface,
+                diameter: 44
+            ) {
+                clock.pause(at: Date())
+            }
+            .accessibilityIdentifier("drill.pause")
+        }
+        .background(alignment: .topTrailing) {
+            DecorativeImage(name: "illus-raouche", width: 170, height: 96, fadeTowards: .leading)
+                .opacity(0.35)
+                .offset(x: Theme.Spacing.screen, y: -8)
+        }
+    }
+
+    private func liveStats(remainingSeconds: Int, metrics: SpeedDrillMetrics) -> some View {
+        HStack(alignment: .center, spacing: Theme.Spacing.sm) {
+            VStack(spacing: Theme.Spacing.sm) {
+                DrillStat(icon: "flame.fill", tint: Theme.streak,
+                          value: "\(metrics.currentCorrectStreak)", label: "corecte la rând")
+                DrillStat(icon: "speedometer", tint: Theme.teal,
+                          value: String(format: "%.0f", metrics.answeredPerMinute), label: "cuvinte/min")
+            }
+            DrillTimerRing(
+                remaining: remainingSeconds,
+                total: player.session.durationSeconds,
+                text: timeString(remainingSeconds)
+            )
+            .overlay(alignment: .leading) { SpeedLinesDecoration().offset(x: -22) }
+            VStack(spacing: Theme.Spacing.sm) {
+                DrillStat(icon: "bolt.fill", tint: Theme.gold,
+                          value: String(format: "%.0f", metrics.correctPerMinute), label: "corecte/min")
+                DrillStat(icon: "target", tint: Theme.terracotta,
+                          value: "\(Int((metrics.accuracy * 100).rounded()))%", label: "acuratețe")
+            }
+        }
+    }
+
+    private func questionCard(prompt: SpeedDrillPrompt) -> some View {
+        VStack(spacing: Theme.Spacing.lg) {
+            HStack {
+                SpeedPromptModeBadge(icon: badgeIcon, title: promptLabel)
+                Spacer(minLength: Theme.Spacing.sm)
+                Text("Cardul \(player.session.attempts.count + 1)")
+                    .font(Theme.font(.caption, weight: .semibold))
+                    .foregroundStyle(Theme.muted)
+                    .monospacedDigit()
+                    .accessibilityIdentifier("drill.counter")
+            }
+
+            Text(prompt.question)
+                .font(Theme.serif(.largeTitle, weight: .semibold))
+                .foregroundStyle(Theme.deep)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.6)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Theme.Spacing.sm)
+                .accessibilityAddTraits(.isHeader)
+
+            switch mode {
+            case .choice:
+                choiceGrid(prompt: prompt)
+            case .memory:
+                memoryControls(prompt: prompt)
+            case .write:
+                writeControls(prompt: prompt)
+            }
+        }
+        .padding(Theme.Spacing.lg + 2)
+        .background(alignment: .topTrailing) {
+            DecorativeImage(name: "illus-house", width: 130, height: 110, fadeTowards: .bottom)
+                .opacity(0.22)
+        }
+        .cardBackground(radius: 23)
+        .animation(.easeOut(duration: 0.2), value: answerVisible)
+    }
+
+    // MARK: Modes
+
+    private func choiceGrid(prompt: SpeedDrillPrompt) -> some View {
+        let options = player.choices(count: 4)
+        return AdaptiveChoiceGrid(preferredColumns: 2, minimumCardWidth: 140, spacing: 10) {
+            ForEach(options, id: \.self) { option in
+                SpeedAnswerCard(title: option, state: choiceState(option, answer: prompt.answer)) {
+                    answer(option, correct: AnswerNormalizer.normalize(option) == AnswerNormalizer.normalize(prompt.answer))
+                }
+            }
+        }
+    }
+
+    private func choiceState(_ option: String, answer: String) -> SpeedAnswerState {
+        guard let feedback else { return .idle }
+        if option == feedback.chosen { return feedback.correct ? .correct : .incorrect }
+        if !feedback.correct && AnswerNormalizer.normalize(option) == AnswerNormalizer.normalize(answer) {
+            return .revealedCorrect
+        }
+        return .disabled
+    }
+
+    @ViewBuilder
+    private func memoryControls(prompt: SpeedDrillPrompt) -> some View {
+        if answerVisible {
+            VStack(spacing: 6) {
+                Text("Răspuns")
+                    .font(Theme.font(.caption, weight: .semibold))
+                    .foregroundStyle(Theme.teal)
+                Text(prompt.answer)
+                    .font(Theme.serif(.title2))
+                    .foregroundStyle(Theme.ink)
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Theme.mint, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .transition(.scale(scale: 0.95).combined(with: .opacity))
+
+            AdaptiveRow(spacing: 12) {
+                Button {
+                    record(.wrong)
+                } label: {
+                    Label("Greșit", systemImage: "xmark")
+                }
+                .buttonStyle(ChunkyButtonStyle(kind: .danger))
+                .accessibilityIdentifier("drill.wrong")
+
+                Button {
+                    record(.correct)
+                } label: {
+                    Label("Corect", systemImage: "checkmark")
+                }
+                .buttonStyle(ChunkyButtonStyle(kind: .primary))
+                .accessibilityIdentifier("drill.correct")
+            }
+        } else {
+            Button {
+                if canAnswer { answerVisible = true }
+            } label: {
+                Label("Arată răspunsul", systemImage: "eye")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(PillButtonStyle(fill: Theme.cedarDeep, pressedFill: Theme.deep, minHeight: 56))
+            .accessibilityIdentifier("drill.reveal")
+        }
+    }
+
+    @ViewBuilder
+    private func writeControls(prompt: SpeedDrillPrompt) -> some View {
+        HStack(spacing: Theme.Spacing.sm) {
+            TextField("Scrie în Arabizi", text: $typed)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused($fieldFocused)
+                .submitLabel(.done)
+                .onSubmit { checkTyped(prompt) }
+                .disabled(feedback != nil)
+                .padding(.horizontal, Theme.Spacing.lg)
+                .frame(minHeight: 52)
+                .background(Theme.surface, in: Capsule())
+                .overlay(Capsule().strokeBorder(writeBorder, lineWidth: feedback == nil ? 0.75 : 1.5))
+                .accessibilityIdentifier("drill.field")
+            Button {
+                checkTyped(prompt)
+            } label: {
+                Image(systemName: "arrow.right")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(width: 52, height: 52)
+                    .background(Theme.cedarDeep, in: Circle())
+            }
+            .buttonStyle(.plain)
+            .disabled(typed.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || feedback != nil)
+            .accessibilityLabel("Verifică")
+            .accessibilityIdentifier("drill.check")
+        }
+        if let feedback {
+            let message: String = feedback.correct ? "Corect" : "Corect era: \(prompt.answer)"
+            let icon: String = feedback.correct ? "checkmark.circle.fill" : "xmark.circle.fill"
+            Label(message, systemImage: icon)
+            .font(Theme.font(.subheadline, weight: .semibold))
+            .foregroundStyle(feedback.correct ? Theme.success : Theme.terracottaShade)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private var writeBorder: Color {
+        guard let feedback else { return Theme.cardStroke }
+        return feedback.correct ? Theme.success : Theme.terracotta
+    }
+
+    private func checkTyped(_ prompt: SpeedDrillPrompt) {
+        let text = typed.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        let result = AnswerEvaluator().evaluate(answer: text, canonical: prompt.answer, spellingVariants: [], pronunciationVariants: [])
+        answer(text, correct: result != .incorrect)
+    }
+
+    // MARK: Actions
+
+    /// Shows the result briefly, then records it. The response time is taken
+    /// at the tap, so the feedback pause does not count toward it.
+    private func answer(_ chosen: String, correct: Bool) {
+        guard canAnswer, feedback == nil else { return }
+        let responseTime = max(clock.elapsed(at: Date()) - promptStartedAtElapsed, 0)
+        feedback = Feedback(chosen: chosen, correct: correct)
+        let delay: Duration = correct ? .milliseconds(450) : .milliseconds(1_100)
+        Task { @MainActor in
+            try? await Task.sleep(for: delay)
+            record(correct ? .correct : .wrong, responseTime: responseTime)
+            feedback = nil
+            typed = ""
+            if mode == .write { fieldFocused = true }
+        }
+    }
+
+    private var badgeIcon: String {
+        switch mode {
+        case .choice: return "hand.tap"
+        case .memory: return "brain.head.profile"
+        case .write: return "keyboard"
+        }
     }
 
     private var promptLabel: String {
         switch player.session.direction {
         case .learnerLanguageToLebanese:
-            return "Spune în libaneză"
+            return mode == .write ? "Scrie în libaneză" : "Spune în libaneză"
         case .lebaneseToLearnerLanguage:
             return "Ce înseamnă?"
         case .audioToLearnerLanguage:
@@ -257,11 +420,11 @@ struct SpeedDrillView: View {
         }
     }
 
-    private func record(_ outcome: SpeedDrillOutcome) {
-        guard canAnswer else { return }
+    private func record(_ outcome: SpeedDrillOutcome, responseTime: TimeInterval? = nil) {
+        guard !endedManually, !player.isExpired(atElapsed: elapsedSeconds(at: Date())) else { return }
         var updated = player
-        let responseTime = max(clock.elapsed(at: Date()) - promptStartedAtElapsed, 0)
-        guard updated.record(outcome, responseTime: responseTime) else { return }
+        let time = responseTime ?? max(clock.elapsed(at: Date()) - promptStartedAtElapsed, 0)
+        guard updated.record(outcome, responseTime: time) else { return }
 
         player = updated
         answerVisible = false
@@ -296,7 +459,7 @@ struct SpeedDrillView: View {
     }
 
     private func timeString(_ seconds: Int) -> String {
-        String(format: "%d:%02d", seconds / 60, seconds % 60)
+        String(format: "%02d:%02d", seconds / 60, seconds % 60)
     }
 }
 
@@ -392,6 +555,14 @@ private struct SpeedDrillSummaryView: View {
                         value: String(format: "%.1f", metrics.correctPerMinute),
                         label: "corecte/min", icon: "bolt.fill", tint: Theme.gold
                     )
+                }
+
+                AdaptiveRow(spacing: 12) {
+                    SpeedMetric(
+                        value: String(format: "%.1f", metrics.answeredPerMinute),
+                        label: "cuvinte/min", icon: "speedometer", tint: Theme.teal
+                    )
+                    SpeedMetric(value: "\(metrics.skipped)", label: "sărite", icon: "arrow.uturn.forward", tint: Theme.muted)
                 }
 
                 AdaptiveRow(spacing: 12) {

@@ -94,4 +94,39 @@ struct SpeedDrillPlayerTests {
         #expect(player.remainingSeconds(atElapsed: 119) == 1)
         #expect(player.isExpired(atElapsed: 120))
     }
+
+    @Test("Multiple choice offers four distinct answers, one right, none overlapping in meaning")
+    func choices() {
+        let deck = [
+            SpeedDrillCard(id: "a", lebanese: "Mar7aba", learnerMeaning: "Bună! / Salut!"),
+            SpeedDrillCard(id: "b", lebanese: "Mar7abten", learnerMeaning: "Salut! (răspuns)"),
+            SpeedDrillCard(id: "c", lebanese: "Beet", learnerMeaning: "casă"),
+            SpeedDrillCard(id: "d", lebanese: "Kalb", learnerMeaning: "câine"),
+            SpeedDrillCard(id: "e", lebanese: "Khebez", learnerMeaning: "pâine"),
+            SpeedDrillCard(id: "f", lebanese: "Sayyara", learnerMeaning: "mașină")
+        ]
+        let player = SpeedDrillPlayer(cards: deck, direction: .lebaneseToLearnerLanguage)
+        let options = player.choices()
+        #expect(options.count == 4)
+        #expect(options.contains("Bună! / Salut!"))
+        #expect(!options.contains("Salut! (răspuns)"))
+        #expect(Set(options).count == 4)
+    }
+
+    @Test("Current streak and speed rate follow the recorded outcomes")
+    func streakAndSpeed() {
+        var session = SpeedDrillSession(direction: .learnerLanguageToLebanese, durationSeconds: 120)
+        session.record(expressionID: "a", outcome: .correct, responseTime: 1)
+        session.record(expressionID: "b", outcome: .wrong, responseTime: 1)
+        session.record(expressionID: "c", outcome: .correct, responseTime: 1)
+        session.record(expressionID: "d", outcome: .correct, responseTime: 1)
+        session.record(expressionID: "e", outcome: .skipped, responseTime: 1)
+        session.record(expressionID: "f", outcome: .correct, responseTime: 1)
+        let metrics = session.metrics(elapsedSeconds: 60)
+        #expect(metrics.currentCorrectStreak == 1)
+        #expect(metrics.bestCorrectStreak == 2)
+        // Five answered (four correct, one wrong) in one minute; the skip does not count.
+        #expect(metrics.answeredPerMinute == 5)
+        #expect(metrics.correctPerMinute == 4)
+    }
 }

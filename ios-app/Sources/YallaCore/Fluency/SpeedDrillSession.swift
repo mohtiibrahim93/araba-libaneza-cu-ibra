@@ -73,6 +73,10 @@ public struct SpeedDrillMetrics: Equatable, Sendable {
     public let medianResponseTime: Double
     public let bestCorrectStreak: Int
     public let masteryAttempts: [Attempt]
+    /// Correct answers in a row at the end of the attempts so far.
+    public var currentCorrectStreak: Int = 0
+    /// Answered (correct or wrong, not skipped) items per minute: the speed rate.
+    public var answeredPerMinute: Double = 0
 }
 
 public struct SpeedDrillSession: Equatable, Sendable {
@@ -125,7 +129,9 @@ public struct SpeedDrillSession: Equatable, Sendable {
             correctPerMinute: correctPerMinute,
             medianResponseTime: Self.median(attempts.map(\.responseTime)),
             bestCorrectStreak: Self.bestStreak(in: attempts),
-            masteryAttempts: []
+            masteryAttempts: [],
+            currentCorrectStreak: attempts.reversed().prefix { $0.outcome == .correct }.count,
+            answeredPerMinute: minutes > 0 ? Double(correct + wrong) / minutes : 0
         )
     }
 

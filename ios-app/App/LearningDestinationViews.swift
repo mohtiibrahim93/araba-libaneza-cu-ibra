@@ -83,12 +83,15 @@ private struct SpeedDrillOverviewView: View {
     let title: String
     @ObservedObject var progressModel: LearnerProgressModel
 
+    @State private var mode: SpeedDrillMode = .choice
+    @State private var direction: SpeedDrillDirection = .lebaneseToLearnerLanguage
+
     var body: some View {
         PracticeLaunchLayout(
             icon: "bolt.fill",
-            kicker: "Yalla! Două minute",
+            kicker: "Speed Drill · două minute",
             title: "Răspunde cât mai repede!",
-            subtitle: "\(expressions.count) expresii pregătite pentru reamintire rapidă, în două minute.",
+            subtitle: "\(expressions.count) expresii pregătite. Alege cum răspunzi și în ce direcție.",
             startLabel: "Pornește cronometrul",
             canStart: !expressions.isEmpty,
             previewTitle: "Expresii",
@@ -96,7 +99,9 @@ private struct SpeedDrillOverviewView: View {
             destination: {
                 SpeedDrillView(
                     expressions: expressions,
-                    progressModel: progressModel
+                    progressModel: progressModel,
+                    direction: direction,
+                    mode: mode
                 )
             },
             rows: expressions.prefix(8).map { expression in
@@ -107,10 +112,53 @@ private struct SpeedDrillOverviewView: View {
                     trailing: expression.arabicScript
                 )
             },
-            remainingCount: max(expressions.count - 8, 0)
+            remainingCount: max(expressions.count - 8, 0),
+            options: AnyView(settings)
         )
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var settings: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+            QuestionSectionHeader(number: 1, title: "Cum răspunzi?")
+            AdaptiveChoiceGrid(preferredColumns: 3, minimumCardWidth: 100, spacing: Theme.Spacing.sm) {
+                ForEach(SpeedDrillMode.allCases) { option in
+                    SingleSelectOptionCard(
+                        icon: .system(option.icon),
+                        iconTint: option == .choice ? Theme.terracotta : Theme.teal,
+                        title: option.title,
+                        subtitle: option.subtitle,
+                        isSelected: mode == option,
+                        action: { mode = option }
+                    )
+                }
+            }
+
+            QuestionSectionHeader(number: 2, title: "În ce direcție?")
+            if mode == .write {
+                Text("În modul „Scrie” răspunzi mereu în libaneză, cu Arabizi.")
+                    .font(Theme.font(.footnote))
+                    .foregroundStyle(Theme.muted)
+            } else {
+                VStack(spacing: Theme.Spacing.sm) {
+                    SingleSelectOptionCard(
+                        title: "Libaneză → Română",
+                        subtitle: "Vezi expresia, alegi sensul.",
+                        isSelected: direction == .lebaneseToLearnerLanguage,
+                        layout: .row,
+                        action: { direction = .lebaneseToLearnerLanguage }
+                    )
+                    SingleSelectOptionCard(
+                        title: "Română → Libaneză",
+                        subtitle: "Vezi sensul, răspunzi în libaneză.",
+                        isSelected: direction == .learnerLanguageToLebanese,
+                        layout: .row,
+                        action: { direction = .learnerLanguageToLebanese }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -135,6 +183,8 @@ private struct PracticeLaunchLayout<Destination: View>: View {
     @ViewBuilder let destination: () -> Destination
     let rows: [PracticePreviewRow]
     let remainingCount: Int
+    /// Settings shown between the start card and the preview.
+    var options: AnyView? = nil
 
     var body: some View {
         ScrollView {
@@ -179,6 +229,10 @@ private struct PracticeLaunchLayout<Destination: View>: View {
                 .background(Theme.deep)
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                 .shadow(color: Theme.deep.opacity(0.25), radius: 14, x: 0, y: 8)
+
+                if let options {
+                    options
+                }
 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(previewTitle)
