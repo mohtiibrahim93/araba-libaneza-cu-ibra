@@ -151,6 +151,9 @@ const NativeScheduler = ({
   // created at confirm time, so without keeping it here the card-confirmation
   // step never rendered (the prop is undefined for a fresh visitor).
   const [bookedRegistrationId, setBookedRegistrationId] = useState<string | null>(null);
+  // Either the one handed in by the page, or the one created at confirm time.
+  const effectiveRegistrationId = registrationId ?? bookedRegistrationId;
+
 
 
   // Form fields
