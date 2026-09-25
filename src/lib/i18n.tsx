@@ -365,9 +365,12 @@ export const translations = {
     bookingIntroTitle: "Ultimul pas: rezervă-ți sesiunea gratuită de probă",
     bookingIntroDesc: "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
     trialPageTitle: "Lecție gratuită de probă",
-    trialPageSubtitle: "30 de minute, fără obligații. Online oricând, sau fizic în București sâmbăta și duminica.",
+    // "Fără obligații" stopped being the whole truth when the scheduler grew a
+    // Stripe card confirmation: the visitor met the card only after clicking
+    // through, which is the worst place to learn about it. Say it up front.
+    trialPageSubtitle: "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București sâmbăta și duminica.",
     trialPageSeoTitle: "Lecție gratuită de arabă libaneză | Ibra",
-    trialPageSeoDesc: "Rezervă o lecție gratuită de 30 de minute cu Ibra. Fără plată, fără obligații.",
+    trialPageSeoDesc: "Rezervă o lecție gratuită de 30 de minute cu Ibra. Proba costă 0 lei; locul se confirmă cu cardul, fără plată.",
     // Explanatory copy below the form. /trial was 67 words of visible text —
     // thin enough that Google can decline to index it — while being one of the
     // pages we most want indexed. Every claim here is already stated elsewhere
@@ -485,7 +488,7 @@ export const translations = {
     bookingPageSeoTitleTrial: "Lecție gratuită de probă",
     bookingPageSubtitlePaid: "Alege un slot disponibil. Vei primi confirmarea pe email.",
     bookingPageSubtitleTrial: "30 de minute, gratuit. Vei primi confirmarea pe email.",
-    bookingTrialSeoDesc: "Programează o lecție gratuită de 30 de minute de arabă libaneză. Fără obligații, confirmare pe email.",
+    bookingTrialSeoDesc: "Programează o lecție gratuită de 30 de minute de arabă libaneză. 0 lei; locul se confirmă cu cardul, confirmare pe email.",
     // NativeScheduler
     schedulerNameRequired: "Completează numele și emailul",
     schedulerSlotTaken: "Slotul tocmai a fost rezervat. Alege altul.",
@@ -1148,9 +1151,9 @@ export const translations = {
     bookingIntroTitle: "Last step: book your free trial session",
     bookingIntroDesc: "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
     trialPageTitle: "Free trial lesson",
-    trialPageSubtitle: "30 minutes, no commitment. Online any day, or in person in Bucharest at weekends.",
+    trialPageSubtitle: "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
     trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
-    trialPageSeoDesc: "Book a free 30-minute lesson with Ibra. No payment, no commitment.",
+    trialPageSeoDesc: "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
     schedulerPhysicalTrialWeekend: "In-person trials at the Bucharest centre are, for now, only on Saturdays and Sundays. For any other day, choose online.",
     quizWhatH2: "What the quiz does",
     quizWhatP: "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
@@ -1260,7 +1263,7 @@ export const translations = {
     bookingPageSeoTitleTrial: "Free Trial Lesson",
     bookingPageSubtitlePaid: "Pick an available slot. You'll receive a confirmation email.",
     bookingPageSubtitleTrial: "30 minutes, free. You'll receive a confirmation email.",
-    bookingTrialSeoDesc: "Schedule a free 30-minute Lebanese Arabic lesson. No obligations, email confirmation provided.",
+    bookingTrialSeoDesc: "Schedule a free 30-minute Lebanese Arabic lesson. 0 lei; your card confirms the spot, email confirmation provided.",
     // NativeScheduler
     schedulerNameRequired: "Fill in name and email",
     schedulerSlotTaken: "Slot just got taken. Pick another.",

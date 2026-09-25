@@ -224,3 +224,38 @@
     scroll-margin-top: calc(var(--nav-h) + 12px);
   }
 }
+
+/*
+ * Adopt's consent banner (#cookie-banner, injected by tag.goadopt.io with
+ * position:fixed and z-index 2147483647). Left where the vendor puts it, it
+ * floats over the middle-left of the viewport: on /trial that is exactly the
+ * booking calendar, so the one screen that earns money was the one screen it
+ * covered. Pinning it to a corner is the only lever available here — the markup
+ * is the vendor's and re-renders on every load — hence the !important.
+ *
+ * The id is what the injector sets; the adopt-c-* class beside it is a hashed
+ * build artefact and would break on their next release, so it is not used.
+ */
+#cookie-banner {
+  top: auto !important;
+  bottom: max(1rem, env(safe-area-inset-bottom)) !important;
+  left: 1rem !important;
+  right: auto !important;
+  /* A long policy text must scroll inside the banner rather than grow it back
+     over the page. */
+  max-height: min(70vh, 32rem) !important;
+  overflow-y: auto !important;
+}
+
+@media (max-width: 767px) {
+  /* Full width, and lifted clear of the sticky enrol bar at the bottom edge so
+     the two do not overlap each other instead of the page. */
+  #cookie-banner {
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    width: auto !important;
+    max-width: none !important;
+    bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
+    max-height: 60vh !important;
+  }
+}
