@@ -8,6 +8,9 @@ struct RootTabView: View {
     private let lessonCounts: [String: Int]
     /// First approved phrase of each Journey unit, for the map signboards.
     private let signboards: [String: String]
+    /// Expressions without a space in their Arabizi (the word dictionary).
+    private let singleWordExpressionIDs: Set<String>
+    private let topicUnits: [ProgressTopicUnit]
     @StateObject private var progressModel: LearnerProgressModel
     @State private var selectedTab: RootTab = .home
     @State private var journeyPath: [String] = []
@@ -34,6 +37,19 @@ struct RootTabView: View {
         )
         self.signboards = content.package.units.reduce(into: [:]) { result, unit in
             if let id = unit.expressionIDs.first, let phrase = arabiziByID[id] { result[unit.id] = phrase }
+        }
+        self.singleWordExpressionIDs = Set(
+            content.package.expressions
+                .filter { !$0.canonicalArabizi.trimmingCharacters(in: .whitespaces).contains(" ") }
+                .map(\.id)
+        )
+        let locale = content.locale
+        self.topicUnits = content.package.units.map { unit in
+            ProgressTopicUnit(
+                id: unit.id,
+                title: unit.localizations[locale]?.title ?? unit.id,
+                expressionIDs: unit.expressionIDs
+            )
         }
         _progressModel = StateObject(
             wrappedValue: LearnerProgressModel(
@@ -121,10 +137,13 @@ struct RootTabView: View {
             journeyLevel: currentUnitLevel,
             reviewQueue: progressModel.snapshot.reviewQueueSummary(at: date, expressionIDs: reviewExpressionIDs),
             rewards: RewardCalculator().summary(events: progressModel.snapshot.xpEvents, at: date),
+            singleWordExpressionIDs: singleWordExpressionIDs,
+            topicUnits: topicUnits,
+            reviewExpressionIDs: reviewExpressionIDs,
+            recordingCount: recordingDates.count,
             date: date,
             onReviews: { showingReviews = true },
             onSmartPractice: { openPractice("smart-session") },
-            onSpeedDrill: { openPractice("speed-drill") },
             onContinueJourney: continueJourney
         )
     }

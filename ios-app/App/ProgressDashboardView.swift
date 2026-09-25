@@ -8,31 +8,29 @@ struct ProgressDashboardView: View {
     let journeyLevel: LevelBand
     let reviewQueue: ReviewQueueSummary
     let rewards: RewardSummary
+    /// Single-word expressions, Journey units and review scope for insights.
+    let singleWordExpressionIDs: Set<String>
+    let topicUnits: [ProgressTopicUnit]
+    let reviewExpressionIDs: Set<String>
+    /// The learner's own Speak & Compare recordings on this device.
+    let recordingCount: Int
     let date: Date
     let onReviews: () -> Void
     let onSmartPractice: () -> Void
-    let onSpeedDrill: () -> Void
     let onContinueJourney: () -> Void
 
     private let builder = ProgressDashboardBuilder()
 
-    private struct SkillCard {
-        let skill: MasterySkill
-        let title: String
-        let icon: String
-        let fill: Color
-        let foreground: Color
-    }
-
-    private let skillCards: [SkillCard] = [
-        SkillCard(skill: .recognition, title: "Recunoaștere", icon: "eye.fill", fill: Theme.deep, foreground: .white),
-        SkillCard(skill: .production, title: "Producție", icon: "text.bubble.fill", fill: Theme.terracotta, foreground: .white),
-        SkillCard(skill: .listening, title: "Ascultare", icon: "headphones", fill: Theme.variantBackground, foreground: Theme.ink),
-        SkillCard(skill: .speaking, title: "Pronunție", icon: "mic.fill", fill: Theme.mint, foreground: Theme.ink)
-    ]
-
     var body: some View {
         let summary = builder.summary(snapshot: progress, lessonCounts: lessonCounts, at: date)
+        let insights = ProgressInsightsBuilder().insights(
+            snapshot: progress,
+            singleWordExpressionIDs: singleWordExpressionIDs,
+            units: topicUnits,
+            reviewExpressionIDs: reviewExpressionIDs,
+            lessonsLast30Days: summary.lessonsLast30Days,
+            at: date
+        )
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
                 BrandHeader(tagline: "Mai aproape de oameni. Mai aproape de Liban.")
@@ -59,15 +57,31 @@ struct ProgressDashboardView: View {
                 ProgressOverviewCard(summary: summary, level: journeyLevel)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Theme.Spacing.sm), count: 4), spacing: Theme.Spacing.sm) {
-                    ForEach(skillCards, id: \.skill) { card in
-                        SkillProgressCard(
-                            title: card.title,
-                            icon: card.icon,
-                            fill: card.fill,
-                            foreground: card.foreground,
-                            skill: summary.skill(card.skill)
-                        )
-                    }
+                    SkillProgressCard(
+                        title: "Conversație", icon: "bubble.left.and.bubble.right.fill",
+                        fill: Theme.deep, foreground: .white,
+                        fraction: insights.conversation.rate,
+                        detail: accuracyDetail(insights.conversation, unit: "replici")
+                    )
+                    SkillProgressCard(
+                        title: "Vocabular", icon: "book.fill",
+                        fill: Theme.terracotta, foreground: .white,
+                        fraction: insights.vocabulary.rate,
+                        detail: vocabularyDetail(insights)
+                    )
+                    SkillProgressCard(
+                        title: "Ascultare", icon: "headphones",
+                        fill: Theme.variantBackground, foreground: Theme.ink,
+                        fraction: insights.listening.rate,
+                        detail: accuracyDetail(insights.listening, unit: "răspunsuri")
+                    )
+                    SkillProgressCard(
+                        title: "Pronunție", icon: "mic.fill",
+                        fill: Theme.mint, foreground: Theme.ink,
+                        fraction: nil,
+                        countValue: recordingCount > 0 ? recordingCount : nil,
+                        detail: recordingCount > 0 ? "înregistrări ale tale" : "Fără înregistrări încă"
+                    )
                 }
 
                 HStack(alignment: .top, spacing: Theme.Spacing.md) {
@@ -75,32 +89,43 @@ struct ProgressDashboardView: View {
                     ActivityHeatmapCard(
                         days: builder.recentDays(weeks: 8, endingAt: date),
                         xpByDay: summary.xpByDay,
-                        lessonsLast30Days: summary.lessonsLast30Days
+                        lessonsLast30Days: summary.lessonsLast30Days,
+                        trendPercent: insights.lessonTrendPercent
                     )
                 }
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
                     ProgressListCard(title: "Repetiții programate", icon: "calendar", onSeeAll: onReviews) {
-                        ScheduledReviewRow(icon: "arrow.triangle.2.circlepath", title: "De repetat acum",
-                                           detail: "\(reviewQueue.dueNowCount) expresii", action: "Revizuiește", onTap: onReviews)
-                        ScheduledReviewRow(icon: "exclamationmark.bubble", title: "Greșeli active",
-                                           detail: "\(progress.activeMistakeExpressionIDs.count) expresii", action: "Exersează", onTap: onSmartPractice)
-                        ScheduledReviewRow(icon: "bolt", title: "Speed Drill",
-                                           detail: "\(progress.speedDrillProgress.sessionCount) sesiuni", action: "Începe", onTap: onSpeedDrill)
+                        if insights.dueWords + insights.duePhrases + progress.activeMistakeExpressionIDs.count == 0 {
+                            Text("Ești la zi cu repetițiile.")
+                                .font(Theme.font(.caption))
+                                .foregroundStyle(Theme.muted)
+                        }
+                        if insights.dueWords > 0 {
+                            ScheduledReviewRow(icon: "character.book.closed", title: "Cuvinte de revizuit",
+                                               detail: "\(insights.dueWords) cuvinte", action: "Revizuiește", onTap: onReviews)
+                        }
+                        if insights.duePhrases > 0 {
+                            ScheduledReviewRow(icon: "text.bubble", title: "Expresii de revizuit",
+                                               detail: "\(insights.duePhrases) expresii", action: "Revizuiește", onTap: onReviews)
+                        }
+                        if !progress.activeMistakeExpressionIDs.isEmpty {
+                            ScheduledReviewRow(icon: "exclamationmark.bubble", title: "Greșeli active",
+                                               detail: "\(progress.activeMistakeExpressionIDs.count) expresii", action: "Exersează", onTap: onSmartPractice)
+                        }
                     }
                     ProgressListCard(title: "Zone care au nevoie de atenție", icon: "chart.bar.xaxis") {
-                        let weak = weakSkills(summary)
-                        if weak.isEmpty {
-                            Text("Nicio zonă slabă încă. Exersează ca să vezi unde poți crește.")
+                        if insights.attentionUnits.isEmpty {
+                            Text(attentionEmptyText)
                                 .font(Theme.font(.caption))
                                 .foregroundStyle(Theme.muted)
                                 .fixedSize(horizontal: false, vertical: true)
                         } else {
-                            ForEach(weak, id: \.skill) { skill in
+                            ForEach(insights.attentionUnits) { unit in
                                 AttentionAreaRow(
-                                    icon: Self.skillIcon(skill.skill),
-                                    title: Self.skillName(skill.skill),
-                                    fraction: skill.cleanRate ?? 0,
+                                    icon: "book.closed",
+                                    title: unit.title,
+                                    fraction: unit.accuracy.rate ?? 0,
                                     onTap: onSmartPractice
                                 )
                             }
@@ -118,14 +143,16 @@ struct ProgressDashboardView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    /// Practised skills under 80% first-try accuracy, weakest first.
-    private func weakSkills(_ summary: ProgressDashboardSummary) -> [SkillSummary] {
-        Array(
-            summary.skills.values
-                .filter { ($0.cleanRate ?? 1) < 0.8 }
-                .sorted { ($0.cleanRate ?? 0) < ($1.cleanRate ?? 0) }
-                .prefix(3)
-        )
+    private var attentionEmptyText: String {
+        "Încă nu sunt destule răspunsuri. O lecție apare aici după cel puțin \(ProgressInsightsBuilder.minimumUnitAttempts) răspunsuri, dacă ai sub 80% corecte din prima."
+    }
+
+    private func vocabularyDetail(_ insights: ProgressInsights) -> String {
+        insights.wordsPractised > 0 ? "\(insights.wordsPractised) cuvinte exersate" : "Fără date încă"
+    }
+
+    private func accuracyDetail(_ accuracy: AccuracySummary, unit: String) -> String {
+        accuracy.attempts > 0 ? "corecte din prima · \(accuracy.attempts) \(unit)" : "Fără date încă"
     }
 
     static func skillIcon(_ skill: MasterySkill) -> String {

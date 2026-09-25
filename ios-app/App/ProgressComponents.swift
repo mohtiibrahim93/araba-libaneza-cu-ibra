@@ -77,43 +77,46 @@ struct LevelBars: View {
     }
 }
 
-/// Coloured tile with a skill's first-try accuracy.
+/// Coloured tile for one learning area. Shows first-try accuracy when there
+/// is data, a real count when that is the only measure, or "Fără date încă".
 struct SkillProgressCard: View {
     let title: String
     let icon: String
     let fill: Color
     let foreground: Color
-    let skill: SkillSummary
+    /// 0...1 first-try accuracy, or nil.
+    let fraction: Double?
+    /// Big value when there is no percentage (e.g. a count).
+    var countValue: Int? = nil
+    let detail: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-            IconBadge(systemName: icon, tint: foreground, background: foreground.opacity(0.16), size: 34)
+            IconBadge(systemName: icon, tint: foreground, background: foreground.opacity(0.16), size: 36)
             Text(title)
                 .font(Theme.serif(.subheadline))
                 .foregroundStyle(foreground)
                 .lineLimit(1)
                 .minimumScaleFactor(0.45)
-            if let rate = skill.cleanRate {
-                Text("\(Int((rate * 100).rounded()))%")
-                    .font(Theme.serif(.headline))
+            if let fraction {
+                Text("\(Int((fraction * 100).rounded()))%")
+                    .font(Theme.serif(.title3))
                     .foregroundStyle(foreground)
-                MeterBar(fraction: rate, tint: foreground, track: foreground.opacity(0.25), height: 4)
-                Text("\(skill.attempts) încercări")
-                    .font(Theme.font(.caption2))
-                    .foregroundStyle(foreground.opacity(0.85))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            } else {
-                Text("Fără date încă")
-                    .font(Theme.font(.caption2, weight: .semibold))
-                    .foregroundStyle(foreground.opacity(0.85))
-                    .fixedSize(horizontal: false, vertical: true)
+                MeterBar(fraction: fraction, tint: foreground, track: foreground.opacity(0.25), height: 5)
+            } else if let countValue {
+                Text("\(countValue)")
+                    .font(Theme.serif(.title3))
+                    .foregroundStyle(foreground)
             }
+            Text(detail)
+                .font(Theme.font(.caption2))
+                .foregroundStyle(foreground.opacity(0.88))
+                .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .padding(Theme.Spacing.md - 2)
-        .frame(maxWidth: .infinity, minHeight: 168, alignment: .topLeading)
-        .background(fill, in: RoundedRectangle(cornerRadius: Theme.Radius.control, style: .continuous))
+        .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
+        .background(fill, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 }
@@ -157,6 +160,8 @@ struct ActivityHeatmapCard: View {
     let days: [String]
     let xpByDay: [String: Int]
     let lessonsLast30Days: Int
+    /// Change against the previous 30 days, when that period had lessons.
+    var trendPercent: Int? = nil
 
     private static let monthNames = ["ian", "feb", "mar", "apr", "mai", "iun", "iul", "aug", "sep", "oct", "nov", "dec"]
 
@@ -194,14 +199,27 @@ struct ActivityHeatmapCard: View {
                 }
             }
             .accessibilityHidden(true)
-            Text("\(lessonsLast30Days) lecții în ultima lună")
-                .font(Theme.font(.caption2, weight: .semibold))
-                .foregroundStyle(Theme.muted)
+            HStack(spacing: Theme.Spacing.xs) {
+                Text("\(lessonsLast30Days) lecții în ultima lună")
+                    .font(Theme.font(.caption2, weight: .semibold))
+                    .foregroundStyle(Theme.muted)
+                if let trendPercent {
+                    Spacer(minLength: 0)
+                    Label(trendText(trendPercent), systemImage: trendPercent >= 0 ? "arrow.up" : "arrow.down")
+                        .font(Theme.font(.caption2, weight: .semibold))
+                        .foregroundStyle(trendPercent >= 0 ? Theme.success : Theme.terracottaShade)
+                        .accessibilityLabel(trendText(trendPercent) + " față de luna trecută")
+                }
+            }
         }
         .padding(Theme.Spacing.lg - 2)
         .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
         .cardBackground()
         .accessibilityElement(children: .combine)
+    }
+
+    private func trendText(_ percent: Int) -> String {
+        percent >= 0 ? "+\(percent)%" : "\(percent)%"
     }
 
     private func color(for xp: Int) -> Color {
@@ -321,7 +339,7 @@ struct AttentionAreaRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
-        .accessibilityHint("Pornește o sesiune inteligentă")
+        .accessibilityHint("Pornește o sesiune de exersare")
     }
 }
 
@@ -331,7 +349,7 @@ struct JourneyEncouragementBanner: View {
 
     var body: some View {
         ZStack(alignment: .trailing) {
-            DecorativeImage(name: "illus-sunset", width: 150)
+            DecorativeImage(name: "illus-raouche", width: 150)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
             VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
