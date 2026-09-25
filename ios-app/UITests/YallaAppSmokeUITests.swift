@@ -50,10 +50,11 @@ final class YallaAppSmokeUITests: XCTestCase {
         openTab("Tutor")
         XCTAssertTrue(app.descendants(matching: .any)["tutor.book"].waitForExistence(timeout: 8))
         XCTAssertTrue(app.descendants(matching: .any)["profile.editName"].exists)
-        let localProgress = app.staticTexts["Progres local"]
-        if !localProgress.waitForExistence(timeout: 3) { app.swipeUp() }
-        XCTAssertTrue(localProgress.waitForExistence(timeout: 5))
+        let settings = app.descendants(matching: .any)["profile.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 5))
         capture("05-profile")
+        settings.tap()
+        XCTAssertTrue(app.staticTexts["Contact"].waitForExistence(timeout: 5))
     }
 
     func testJourneyAndRootExplorerSmoke() throws {
