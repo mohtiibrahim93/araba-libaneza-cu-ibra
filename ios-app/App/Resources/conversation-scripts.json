@@ -1,0 +1,137 @@
+{
+  "approvalStatus": "teacher-approved",
+  "scripts": [
+    {
+      "unitID": "a1-restaurant",
+      "scenes": [
+        {
+          "title": "Cu un prieten",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba!",
+                "ro": "Bună!"
+              },
+              "exerciseID": "syn-context-syn-ed917f71ecbf"
+            },
+            {
+              "partner": {
+                "arabizi": "Ana kameen! Shu bte7ebb tekol?",
+                "ro": "Eu la fel! Ce îți place să mănânci?"
+              },
+              "exerciseID": "syn-context-syn-12b6e90ea192"
+            },
+            {
+              "partner": {
+                "arabizi": "B7ebb el falefel w el tabbule.",
+                "ro": "Îmi place falafel și tabouleh."
+              },
+              "exerciseID": "syn-context-syn-b71308a4f1b9"
+            },
+            {
+              "partner": {
+                "arabizi": "W shu ma bte7ebb?",
+                "ro": "Și ce nu-ți place?"
+              },
+              "exerciseID": "syn-context-syn-2af71f245869"
+            },
+            {
+              "partner": {
+                "arabizi": "W el 7elo?",
+                "ro": "Și dulcele?"
+              },
+              "exerciseID": "syn-context-syn-bb00a3f9df18"
+            }
+          ]
+        },
+        {
+          "title": "Cu ospătarul",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Ahla w sahla! Tfaddalo, shu baddkon?",
+                "ro": "Bine ați venit! Poftiți, ce doriți?"
+              },
+              "exerciseID": "syn-context-syn-70272593e58a"
+            },
+            {
+              "partner": {
+                "arabizi": "3anna shawarma, falefel, 7ommos w tabbule.",
+                "ro": "Avem shawarma, falafel, humus și tabbouleh."
+              },
+              "exerciseID": "syn-context-syn-2ecb1a5d02fe"
+            },
+            {
+              "partner": {
+                "arabizi": "Shi tene?",
+                "ro": "Altceva?"
+              },
+              "exerciseID": "syn-context-syn-90c127d3a830"
+            },
+            {
+              "partner": {
+                "arabizi": "7aader. Shu baddkon teshrabo?",
+                "ro": "Gata. Ce doriți să beți?"
+              },
+              "exerciseID": "syn-context-syn-f890162ef459"
+            },
+            {
+              "partner": {
+                "arabizi": "Shay?",
+                "ro": "Ceai?"
+              },
+              "exerciseID": "syn-context-syn-95f3fb3e584b"
+            },
+            {
+              "partner": {
+                "arabizi": "Shu kamen?",
+                "ro": "Ce altceva?"
+              },
+              "exerciseID": "syn-context-syn-508a86acae29"
+            },
+            {
+              "partner": {
+                "arabizi": "Kif ken el akel?",
+                "ro": "Cum a fost mâncarea?"
+              },
+              "exerciseID": "syn-context-syn-9011e4684aa6"
+            },
+            {
+              "partner": {
+                "arabizi": "Kil shi ken mnii7?",
+                "ro": "A fost totul bine?"
+              },
+              "exerciseID": "syn-context-syn-7b598f353dc1"
+            }
+          ]
+        },
+        {
+          "title": "Tu ești gazda",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Ana 3atshan.",
+                "ro": "Mi-e sete."
+              },
+              "exerciseID": "syn-context-syn-a5eef057cb53"
+            },
+            {
+              "partner": {
+                "arabizi": "Ana ju3aan ktiir.",
+                "ro": "Sunt foarte flămând."
+              },
+              "exerciseID": "syn-context-syn-a0ac2538ecff"
+            },
+            {
+              "partner": {
+                "arabizi": "B7ebb el shawarma. W ente?",
+                "ro": "Îmi place shawarma. Și ție?"
+              },
+              "exerciseID": "syn-context-syn-cbdd5dd08eae"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

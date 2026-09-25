@@ -6,7 +6,32 @@ struct GuidedScenario: Identifiable {
     let unitID: String
     let title: String
     let dialogues: [ExerciseDefinition]
+    /// The teacher's script for the unit, when there is one: the other
+    /// person's lines and the order of the learner's replies.
+    let script: ConversationScript?
     var id: String { unitID }
+
+    init(unitID: String, title: String, dialogues: [ExerciseDefinition]) {
+        self.unitID = unitID
+        self.title = title
+        if let script = ConversationScripts.script(for: unitID) {
+            let byID = Dictionary(dialogues.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            let scripted = script.turns.compactMap { byID[$0.exerciseID] }
+            if scripted.count == script.turns.count {
+                self.dialogues = scripted
+                self.script = script
+                return
+            }
+        }
+        self.dialogues = dialogues
+        self.script = nil
+    }
+
+    /// The other person's line before turn `index`, when the unit is scripted.
+    func partnerLine(at index: Int) -> ConversationScript.Line? {
+        guard let turns = script?.turns, turns.indices.contains(index) else { return nil }
+        return turns[index].partner
+    }
 
     /// Units that have dialogue drills, in Journey order.
     static func all(in package: ContentPackage, locale: String) -> [GuidedScenario] {
@@ -17,6 +42,18 @@ struct GuidedScenario: Identifiable {
             return GuidedScenario(unitID: unit.id, title: title, dialogues: dialogues)
         }
     }
+}
+
+/// The teacher-approved conversation scripts bundled with the app.
+enum ConversationScripts {
+    private static let byUnitID: [String: ConversationScript] = {
+        guard let url = Bundle.main.url(forResource: "conversation-scripts", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let file = try? JSONDecoder().decode(ConversationScriptFile.self, from: data) else { return [:] }
+        return Dictionary(file.scripts.map { ($0.unitID, $0) }, uniquingKeysWith: { first, _ in first })
+    }()
+
+    static func script(for unitID: String) -> ConversationScript? { byUnitID[unitID] }
 }
 
 /// Scenario picker: one card per unit with dialogue drills.
@@ -78,7 +115,10 @@ struct GuidedConversationView: View {
     private struct DoneTurn: Identifiable {
         let id: String
         let prompt: String
+        let promptCaption: String?
         let reply: String
+        let replyCaption: String?
+        let sceneTitle: String?
         let recording: LearnerRecording?
     }
 
@@ -133,8 +173,11 @@ struct GuidedConversationView: View {
                     )
 
                     ForEach(turns) { turn in
-                        ConversationBubble(speaker: .partner, text: turn.prompt)
-                        ConversationBubble(speaker: .learner, text: turn.reply) {
+                        if let sceneTitle = turn.sceneTitle {
+                            SceneDivider(title: sceneTitle)
+                        }
+                        ConversationBubble(speaker: .partner, text: turn.prompt, caption: turn.promptCaption)
+                        ConversationBubble(speaker: .learner, text: turn.reply, caption: turn.replyCaption) {
                             if let recording = turn.recording {
                                 Button {
                                     toggle(recording)
@@ -197,13 +240,30 @@ struct GuidedConversationView: View {
 
     private var isCurrentCompleted: Bool { player?.isCurrentExerciseCompleted == true }
 
+    /// The other person's line (Arabizi with Romanian) when the unit has a
+    /// script; otherwise the exercise's Romanian situation.
+    private func partnerBubble(for exercise: ExerciseDefinition) -> (text: String, caption: String?) {
+        if let line = scenario.partnerLine(at: turns.count) {
+            return (line.arabizi, line.ro)
+        }
+        return (exercise.prompt[locale] ?? exercise.prompt["ro"] ?? "", nil)
+    }
+
+    /// The Romanian of the learner's reply, shown only once it is answered.
+    private func replyCaption(for exercise: ExerciseDefinition) -> String? {
+        DialoguePromptText.quotedRomanian(in: exercise.prompt[locale] ?? exercise.prompt["ro"] ?? "")
+    }
+
     @ViewBuilder
     private func current(exercise: ExerciseDefinition) -> some View {
-        let prompt = exercise.prompt[locale] ?? exercise.prompt["ro"] ?? ""
-        ConversationBubble(speaker: .partner, text: prompt)
+        let partner = partnerBubble(for: exercise)
+        if let sceneTitle = scenario.script?.sceneTitle(beforeTurn: turns.count) {
+            SceneDivider(title: sceneTitle)
+        }
+        ConversationBubble(speaker: .partner, text: partner.text, caption: partner.caption)
 
         if isCurrentCompleted, let reply = chosenReply {
-            ConversationBubble(speaker: .learner, text: reply)
+            ConversationBubble(speaker: .learner, text: reply, caption: replyCaption(for: exercise))
             PronunciationCompareCard(
                 phrase: reply,
                 hasLearnerRecording: currentRecording != nil,
@@ -213,7 +273,7 @@ struct GuidedConversationView: View {
                 onPlayTeacher: { if let asset = teacherAudio(for: reply) { audio.stopPlayback(); audio.playReference(asset) } }
             )
             Button {
-                advance(prompt: prompt, reply: reply)
+                advance(exercise: exercise, partner: partner, reply: reply)
             } label: {
                 Label(isLastTurn ? "Termină conversația" : "Următoarea replică", systemImage: "arrow.right")
                     .labelStyle(TrailingIconLabelStyle())
@@ -328,10 +388,18 @@ struct GuidedConversationView: View {
         Task { await progressModel.record(attempt) }
     }
 
-    private func advance(prompt: String, reply: String) {
+    private func advance(exercise: ExerciseDefinition, partner: (text: String, caption: String?), reply: String) {
         guard var player else { return }
         audio.stopPlayback()
-        turns.append(DoneTurn(id: player.currentExercise?.id ?? UUID().uuidString, prompt: prompt, reply: reply, recording: currentRecording))
+        turns.append(DoneTurn(
+            id: exercise.id,
+            prompt: partner.text,
+            promptCaption: partner.caption,
+            reply: reply,
+            replyCaption: replyCaption(for: exercise),
+            sceneTitle: scenario.script?.sceneTitle(beforeTurn: turns.count),
+            recording: currentRecording
+        ))
         guard player.advance() else { return }
         self.player = player
         chosenReply = nil
@@ -371,5 +439,22 @@ struct GuidedConversationView: View {
             return nil
         }
         return AudioAssetResolver().bestAsset(for: expression.id, from: audioAssets)
+    }
+}
+
+/// "Scena 2 · Cu ospătarul" between the parts of a scripted conversation.
+private struct SceneDivider: View {
+    let title: String
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.sm) {
+            Rectangle().fill(Theme.cardStroke).frame(height: 1)
+            Text(title)
+                .font(Theme.font(.caption, weight: .semibold))
+                .foregroundStyle(Theme.muted)
+                .fixedSize()
+            Rectangle().fill(Theme.cardStroke).frame(height: 1)
+        }
+        .accessibilityAddTraits(.isHeader)
     }
 }

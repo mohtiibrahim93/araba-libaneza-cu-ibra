@@ -75,7 +75,7 @@ struct ConversationBubble<Accessory: View>: View {
             if isLearner { avatar } else { Spacer(minLength: 40) }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel((isLearner ? "Tu: " : "Situația: ") + text)
+        .accessibilityLabel((isLearner ? "Tu: " : "Situația: ") + text + (caption.map { ", \($0)" } ?? ""))
     }
 
     private var avatar: some View {

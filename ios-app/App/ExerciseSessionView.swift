@@ -391,10 +391,10 @@ struct ExerciseSessionView: View {
 
     private func hint(for exercise: ExerciseDefinition) -> String {
         if let state = player?.currentMatchingState {
-            return state.pairs.filter { !state.matchedPairIDs.contains($0.id) }
-                .map { "\($0.left) → \($0.right)" }.joined(separator: "\n")
+            guard let pair = state.pairs.first(where: { !state.matchedPairIDs.contains($0.id) }) else { return "" }
+            return AnswerHint.matchingClue(left: pair.left, right: pair.right)
         }
-        return exercise.answer
+        return AnswerHint.clue(for: exercise.answer)
     }
 
     private func matchingControls(_ state: MatchingState) -> some View {
