@@ -413,7 +413,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Is there a trial lesson?",
             featured: true,
-            a: "Yes — we offer a free 30-minute trial lesson so you can meet the instructor, test the method, and see whether the format suits you before enrolling.",
+            a: "Yes — a free 30-minute trial lesson so you can meet the instructor, test the method, and see whether the format suits you before enrolling. The trial costs 0 lei, but the spot is confirmed with your card through Stripe (nothing is charged then). You can cancel or reschedule free of charge at least 24 hours ahead; a no-show or a later cancellation is charged 150 lei, the price of a private lesson.",
           },
           {
             q: "What CEFR level will I reach after the course?",
