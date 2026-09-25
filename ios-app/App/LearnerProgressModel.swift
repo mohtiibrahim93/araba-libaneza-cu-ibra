@@ -55,6 +55,10 @@ final class LearnerProgressModel: ObservableObject {
         await perform(.attempt(attempt))
     }
 
+    func recordExerciseResult(_ result: ExerciseResult) async {
+        await perform(.exerciseResult(result))
+    }
+
     func retryPendingSaves() async {
         isSaving = true
         do {

@@ -18,6 +18,10 @@ public struct AccuracySummary: Equatable, Sendable {
     static func of(_ attempts: [LearningAttempt]) -> AccuracySummary {
         AccuracySummary(attempts: attempts.count, firstTryCorrect: attempts.filter(\.firstTryCorrect).count)
     }
+
+    static func of(_ results: [ExerciseResult]) -> AccuracySummary {
+        AccuracySummary(attempts: results.count, firstTryCorrect: results.filter(\.firstTryCorrect).count)
+    }
 }
 
 /// A Journey unit with enough answers to judge, and its first-try accuracy.
@@ -49,7 +53,7 @@ public struct ProgressTopicUnit: Equatable, Sendable {
 /// Figures for the Progress screen beyond the dashboard summary. Read-only:
 /// derived from stored attempts, reviews and XP events; nothing is written.
 public struct ProgressInsights: Equatable, Sendable {
-    /// Dialogue answers (attempts that exercise transfer).
+    /// Dialogue exercises ("Alege replica", guided conversation).
     public let conversation: AccuracySummary
     /// Answers about single words.
     public let vocabulary: AccuracySummary
@@ -84,7 +88,10 @@ public struct ProgressInsightsBuilder: Sendable {
         at date: Date
     ) -> ProgressInsights {
         let attempts = snapshot.attempts
-        let conversation = AccuracySummary.of(attempts.filter { $0.skills.contains(.transfer) })
+        let results = snapshot.exerciseResults
+        let conversation = AccuracySummary.of(
+            results.filter { $0.exerciseType == ExerciseDefinitionType.dialogueResponse.rawValue }
+        )
         let vocabulary = AccuracySummary.of(attempts.filter { singleWordExpressionIDs.contains($0.expressionID) })
         let listening = AccuracySummary.of(attempts.filter { $0.skills.contains(.listening) })
         let wordsPractised = snapshot.seenExpressionIDs.intersection(singleWordExpressionIDs).count
@@ -92,18 +99,11 @@ public struct ProgressInsightsBuilder: Sendable {
         let due = snapshot.dueExpressionIDs(at: date).intersection(reviewExpressionIDs)
         let dueWords = due.intersection(singleWordExpressionIDs).count
 
-        var unitIDsByExpression: [String: [Int]] = [:]
-        for (index, unit) in units.enumerated() {
-            for expressionID in Set(unit.expressionIDs) {
-                unitIDsByExpression[expressionID, default: []].append(index)
-            }
-        }
-        var totals = Array(repeating: (attempts: 0, clean: 0), count: units.count)
-        for attempt in attempts {
-            for index in unitIDsByExpression[attempt.expressionID] ?? [] {
-                totals[index].attempts += 1
-                if attempt.firstTryCorrect { totals[index].clean += 1 }
-            }
+        // Units are judged by completed exercises, which carry their unit.
+        let resultsByUnit = Dictionary(grouping: results, by: \.unitID)
+        let totals = units.map { unit -> (attempts: Int, clean: Int) in
+            let unitResults = resultsByUnit[unit.id] ?? []
+            return (unitResults.count, unitResults.filter(\.firstTryCorrect).count)
         }
         let weakUnits = units.indices
             .map { UnitAttention(id: units[$0].id, title: units[$0].title, accuracy: AccuracySummary(attempts: totals[$0].attempts, firstTryCorrect: totals[$0].clean)) }

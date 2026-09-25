@@ -588,6 +588,10 @@ struct ExerciseSessionView: View {
         guard player.attempts.count > persistedAttemptCount else { return }
         persistedAttemptCount = player.attempts.count
 
+        if let result = player.exerciseResult(id: UUID().uuidString, resolution: resolution, occurredAt: Date()) {
+            Task { await progressModel.recordExerciseResult(result) }
+        }
+
         guard let durableAttempt = player.learningAttempt(
             id: UUID().uuidString,
             resolution: resolution,

@@ -34,7 +34,8 @@ public struct LearnerProgressMigrator: Sendable {
             speedDrillHistory: snapshot.speedDrillHistory,
             orientationCheckpoint: snapshot.orientationCheckpoint,
             completedLessonIDs: snapshot.completedLessonIDs,
-            xpEvents: snapshot.xpEvents
+            xpEvents: snapshot.xpEvents,
+            exerciseResults: snapshot.exerciseResults
         )
     }
 }
@@ -117,6 +118,8 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let completedLessonIDs: Set<String>
     /// XP awards, one per finished session; streaks are derived from their days.
     public let xpEvents: [XPEvent]
+    /// Every completed exercise (see `ExerciseResult`); Progress only.
+    public let exerciseResults: [ExerciseResult]
 
     public init(
         schemaVersion: Int = LearnerProgressSchema.currentVersion,
@@ -130,7 +133,8 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         speedDrillHistory: [SpeedDrillHistoryEntry] = [],
         orientationCheckpoint: OrientationCheckpoint? = nil,
         completedLessonIDs: Set<String> = [],
-        xpEvents: [XPEvent] = []
+        xpEvents: [XPEvent] = [],
+        exerciseResults: [ExerciseResult] = []
     ) {
         self.schemaVersion = schemaVersion
         self.attempts = attempts
@@ -144,6 +148,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         self.orientationCheckpoint = orientationCheckpoint
         self.completedLessonIDs = completedLessonIDs
         self.xpEvents = xpEvents
+        self.exerciseResults = exerciseResults
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -159,6 +164,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         case orientationCheckpoint
         case completedLessonIDs
         case xpEvents
+        case exerciseResults
     }
 
     public init(from decoder: Decoder) throws {
@@ -199,6 +205,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
             forKey: .completedLessonIDs
         ) ?? []
         xpEvents = try container.decodeIfPresent([XPEvent].self, forKey: .xpEvents) ?? []
+        exerciseResults = try container.decodeIfPresent([ExerciseResult].self, forKey: .exerciseResults) ?? []
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -215,6 +222,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         try container.encodeIfPresent(orientationCheckpoint, forKey: .orientationCheckpoint)
         try container.encode(completedLessonIDs, forKey: .completedLessonIDs)
         try container.encode(xpEvents, forKey: .xpEvents)
+        try container.encode(exerciseResults, forKey: .exerciseResults)
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -402,7 +410,8 @@ public struct LearnerProgressUpdater: Sendable {
             speedDrillHistory: snapshot.speedDrillHistory,
             orientationCheckpoint: snapshot.orientationCheckpoint,
             completedLessonIDs: snapshot.completedLessonIDs,
-            xpEvents: snapshot.xpEvents
+            xpEvents: snapshot.xpEvents,
+            exerciseResults: snapshot.exerciseResults
         )
     }
 }
@@ -462,7 +471,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -494,7 +504,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -522,7 +533,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -549,7 +561,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory + [entry],
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -578,7 +591,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: checkpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -601,7 +615,8 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs.union([lessonID]),
-            xpEvents: current.xpEvents
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults
         )
         try await store.save(updated)
         return updated
@@ -624,7 +639,32 @@ public actor LearnerProgressRepository {
             speedDrillHistory: current.speedDrillHistory,
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
-            xpEvents: current.xpEvents + [event]
+            xpEvents: current.xpEvents + [event],
+            exerciseResults: current.exerciseResults
+        )
+        try await store.save(updated)
+        return updated
+    }
+
+    /// Idempotent by result ID, so a replayed save never counts twice.
+    @discardableResult
+    public func recordExerciseResult(_ result: ExerciseResult) async throws -> LearnerProgressSnapshot {
+        let current = try await loadMigrated()
+        guard !current.exerciseResults.contains(where: { $0.id == result.id }) else { return current }
+        let updated = LearnerProgressSnapshot(
+            schemaVersion: current.schemaVersion,
+            attempts: current.attempts,
+            masteryByExpressionID: current.masteryByExpressionID,
+            reviewByExpressionID: current.reviewByExpressionID,
+            activeMistakeExpressionIDs: current.activeMistakeExpressionIDs,
+            reinforcementExpressionIDs: current.reinforcementExpressionIDs,
+            currentJourneyUnitID: current.currentJourneyUnitID,
+            savedExpressionIDs: current.savedExpressionIDs,
+            speedDrillHistory: current.speedDrillHistory,
+            orientationCheckpoint: current.orientationCheckpoint,
+            completedLessonIDs: current.completedLessonIDs,
+            xpEvents: current.xpEvents,
+            exerciseResults: current.exerciseResults + [result]
         )
         try await store.save(updated)
         return updated

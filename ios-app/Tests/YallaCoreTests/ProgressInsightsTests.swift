@@ -38,33 +38,41 @@ struct ProgressInsightsTests {
         )
     }
 
-    @Test("Conversation, vocabulary and listening come from their own attempts")
+    private func result(_ id: String, unit: String, type: ExerciseDefinitionType = .dialogueResponse, clean: Bool) -> ExerciseResult {
+        ExerciseResult(id: id, exerciseID: "x-\(id)", unitID: unit, exerciseType: type.rawValue, firstTryCorrect: clean, occurredAt: date(20))
+    }
+
+    @Test("Conversation comes from dialogue exercise results; vocabulary from word attempts")
     func categories() {
-        let snapshot = LearnerProgressSnapshot(attempts: [
-            attempt("d1", expression: "p1", skills: [.production, .transfer], clean: true),
-            attempt("d2", expression: "p1", skills: [.production, .transfer], clean: false),
-            attempt("v1", expression: "w1", skills: [.meaning], clean: true)
-        ])
-        let result = insights(snapshot)
-        #expect(result.conversation.rate == 0.5)
-        #expect(result.vocabulary.attempts == 1)
-        #expect(result.vocabulary.rate == 1)
-        #expect(result.listening.rate == nil)
+        let snapshot = LearnerProgressSnapshot(
+            attempts: [attempt("v1", expression: "w1", skills: [.meaning], clean: true)],
+            exerciseResults: [
+                result("d1", unit: "u", clean: true),
+                result("d2", unit: "u", clean: false),
+                result("g1", unit: "u", type: .grammarDrill, clean: false)
+            ]
+        )
+        let found = insights(snapshot)
+        #expect(found.conversation.rate == 0.5)
+        #expect(found.conversation.attempts == 2)
+        #expect(found.vocabulary.attempts == 1)
+        #expect(found.vocabulary.rate == 1)
+        #expect(found.listening.rate == nil)
     }
 
     @Test("A unit needs ten answers before it is called weak")
     func attentionNeedsEvidence() {
         let units = [
-            ProgressTopicUnit(id: "few", title: "Puține", expressionIDs: ["a"]),
-            ProgressTopicUnit(id: "weak", title: "Slabă", expressionIDs: ["b"]),
-            ProgressTopicUnit(id: "strong", title: "Bună", expressionIDs: ["c"])
+            ProgressTopicUnit(id: "few", title: "Puține", expressionIDs: []),
+            ProgressTopicUnit(id: "weak", title: "Slabă", expressionIDs: []),
+            ProgressTopicUnit(id: "strong", title: "Bună", expressionIDs: [])
         ]
-        var attempts = (0..<3).map { attempt("a\($0)", expression: "a", clean: false) }
-        attempts += (0..<10).map { attempt("b\($0)", expression: "b", clean: $0 < 5) }
-        attempts += (0..<10).map { attempt("c\($0)", expression: "c", clean: $0 < 9) }
-        let result = insights(LearnerProgressSnapshot(attempts: attempts), units: units)
-        #expect(result.attentionUnits.map(\.id) == ["weak"])
-        #expect(result.attentionUnits.first?.accuracy.rate == 0.5)
+        var results = (0..<3).map { result("a\($0)", unit: "few", clean: false) }
+        results += (0..<10).map { result("b\($0)", unit: "weak", type: .grammarDrill, clean: $0 < 5) }
+        results += (0..<10).map { result("c\($0)", unit: "strong", clean: $0 < 9) }
+        let found = insights(LearnerProgressSnapshot(exerciseResults: results), units: units)
+        #expect(found.attentionUnits.map(\.id) == ["weak"])
+        #expect(found.attentionUnits.first?.accuracy.rate == 0.5)
     }
 
     @Test("Lesson trend compares with the previous 30 days only when it had lessons")
@@ -72,5 +80,19 @@ struct ProgressInsightsTests {
         let withPrevious = LearnerProgressSnapshot(xpEvents: [lesson("old1", day: 10, month: 8), lesson("old2", day: 12, month: 8)])
         #expect(insights(withPrevious, lessons: 3).lessonTrendPercent == 50)
         #expect(insights(LearnerProgressSnapshot(), lessons: 3).lessonTrendPercent == nil)
+    }
+
+    @Test("Exercise results persist, survive other updates and are recorded once")
+    func exerciseResultsPersist() async throws {
+        let repository = LearnerProgressRepository(store: InMemoryLearnerProgressStore())
+        let first = result("r1", unit: "u", clean: true)
+        _ = try await repository.recordExerciseResult(first)
+        _ = try await repository.recordExerciseResult(first)
+        let afterXP = try await repository.recordXP(lesson("l1", day: 20))
+        #expect(afterXP.exerciseResults == [first])
+
+        let data = try JSONEncoder().encode(afterXP)
+        let decoded = try JSONDecoder().decode(LearnerProgressSnapshot.self, from: data)
+        #expect(decoded.exerciseResults == [first])
     }
 }

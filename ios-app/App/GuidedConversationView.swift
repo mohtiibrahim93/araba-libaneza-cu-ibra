@@ -321,6 +321,9 @@ struct GuidedConversationView: View {
     private func persist(_ resolution: ExerciseResolution, player: ExerciseSessionPlayer) {
         guard player.attempts.count > persistedAttemptCount else { return }
         persistedAttemptCount = player.attempts.count
+        if let result = player.exerciseResult(id: UUID().uuidString, resolution: resolution, occurredAt: Date()) {
+            Task { await progressModel.recordExerciseResult(result) }
+        }
         guard let attempt = player.learningAttempt(id: UUID().uuidString, resolution: resolution, occurredAt: Date()) else { return }
         Task { await progressModel.record(attempt) }
     }
