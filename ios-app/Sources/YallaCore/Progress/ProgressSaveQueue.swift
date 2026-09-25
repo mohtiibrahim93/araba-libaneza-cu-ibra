@@ -10,6 +10,7 @@ public enum ProgressSaveOperation: Codable, Equatable, Sendable {
     case lessonCompleted(String)
     case xp(XPEvent)
     case exerciseResult(ExerciseResult)
+    case lessonCompletedWithFingerprint(String, String)
 
     fileprivate var isDurable: Bool {
         if case .reload = self { return false }
@@ -166,6 +167,8 @@ public final class ProgressSaveQueue {
                     saved = try await repository.recordXP(event)
                 case let .exerciseResult(result):
                     saved = try await repository.recordExerciseResult(result)
+                case let .lessonCompletedWithFingerprint(id, fingerprint):
+                    saved = try await repository.markLessonCompleted(id, fingerprint: fingerprint)
                 }
 
                 self.latestSnapshot = saved

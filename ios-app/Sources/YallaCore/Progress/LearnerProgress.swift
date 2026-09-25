@@ -35,7 +35,8 @@ public struct LearnerProgressMigrator: Sendable {
             orientationCheckpoint: snapshot.orientationCheckpoint,
             completedLessonIDs: snapshot.completedLessonIDs,
             xpEvents: snapshot.xpEvents,
-            exerciseResults: snapshot.exerciseResults
+            exerciseResults: snapshot.exerciseResults,
+            lessonFingerprints: snapshot.lessonFingerprints
         )
     }
 }
@@ -120,6 +121,9 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
     public let xpEvents: [XPEvent]
     /// Every completed exercise (see `ExerciseResult`); Progress only.
     public let exerciseResults: [ExerciseResult]
+    /// Lesson ID → fingerprint of the exercises it had when last finished,
+    /// so a lesson changed by a content update can be flagged.
+    public let lessonFingerprints: [String: String]
 
     public init(
         schemaVersion: Int = LearnerProgressSchema.currentVersion,
@@ -134,7 +138,8 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         orientationCheckpoint: OrientationCheckpoint? = nil,
         completedLessonIDs: Set<String> = [],
         xpEvents: [XPEvent] = [],
-        exerciseResults: [ExerciseResult] = []
+        exerciseResults: [ExerciseResult] = [],
+        lessonFingerprints: [String: String] = [:]
     ) {
         self.schemaVersion = schemaVersion
         self.attempts = attempts
@@ -149,6 +154,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         self.completedLessonIDs = completedLessonIDs
         self.xpEvents = xpEvents
         self.exerciseResults = exerciseResults
+        self.lessonFingerprints = lessonFingerprints
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -165,6 +171,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         case completedLessonIDs
         case xpEvents
         case exerciseResults
+        case lessonFingerprints
     }
 
     public init(from decoder: Decoder) throws {
@@ -206,6 +213,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         ) ?? []
         xpEvents = try container.decodeIfPresent([XPEvent].self, forKey: .xpEvents) ?? []
         exerciseResults = try container.decodeIfPresent([ExerciseResult].self, forKey: .exerciseResults) ?? []
+        lessonFingerprints = try container.decodeIfPresent([String: String].self, forKey: .lessonFingerprints) ?? [:]
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -223,6 +231,7 @@ public struct LearnerProgressSnapshot: Codable, Equatable, Sendable {
         try container.encode(completedLessonIDs, forKey: .completedLessonIDs)
         try container.encode(xpEvents, forKey: .xpEvents)
         try container.encode(exerciseResults, forKey: .exerciseResults)
+        try container.encode(lessonFingerprints, forKey: .lessonFingerprints)
     }
 
     public var seenExpressionIDs: Set<String> {
@@ -411,7 +420,8 @@ public struct LearnerProgressUpdater: Sendable {
             orientationCheckpoint: snapshot.orientationCheckpoint,
             completedLessonIDs: snapshot.completedLessonIDs,
             xpEvents: snapshot.xpEvents,
-            exerciseResults: snapshot.exerciseResults
+            exerciseResults: snapshot.exerciseResults,
+            lessonFingerprints: snapshot.lessonFingerprints
         )
     }
 }
@@ -472,7 +482,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
@@ -505,7 +516,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
@@ -534,7 +546,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
@@ -562,7 +575,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
@@ -592,17 +606,22 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: checkpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
     }
 
     /// Idempotent, so a replayed save never duplicates or removes completion.
+    /// A replay with a new fingerprint (the lesson's content changed) updates it.
     @discardableResult
-    public func markLessonCompleted(_ lessonID: String) async throws -> LearnerProgressSnapshot {
+    public func markLessonCompleted(_ lessonID: String, fingerprint: String? = nil) async throws -> LearnerProgressSnapshot {
         let current = try await loadMigrated()
-        guard !current.completedLessonIDs.contains(lessonID) else { return current }
+        let fingerprintUnchanged = fingerprint == nil || current.lessonFingerprints[lessonID] == fingerprint
+        guard !current.completedLessonIDs.contains(lessonID) || !fingerprintUnchanged else { return current }
+        var fingerprints = current.lessonFingerprints
+        if let fingerprint { fingerprints[lessonID] = fingerprint }
         let updated = LearnerProgressSnapshot(
             schemaVersion: current.schemaVersion,
             attempts: current.attempts,
@@ -616,7 +635,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs.union([lessonID]),
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: fingerprints
         )
         try await store.save(updated)
         return updated
@@ -640,7 +660,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents + [event],
-            exerciseResults: current.exerciseResults
+            exerciseResults: current.exerciseResults,
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated
@@ -664,7 +685,8 @@ public actor LearnerProgressRepository {
             orientationCheckpoint: current.orientationCheckpoint,
             completedLessonIDs: current.completedLessonIDs,
             xpEvents: current.xpEvents,
-            exerciseResults: current.exerciseResults + [result]
+            exerciseResults: current.exerciseResults + [result],
+            lessonFingerprints: current.lessonFingerprints
         )
         try await store.save(updated)
         return updated

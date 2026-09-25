@@ -156,7 +156,7 @@ struct HomeView: View {
     }
 
     private var dailyItems: [DailyProgressItem] {
-        [
+        let items = [
             DailyProgressItem(id: "listening", title: "Ascultă", completed: goals.listeningDone ? 1 : 0, total: 1,
                               icon: .system("ear"), tint: Theme.teal, action: onListening),
             DailyProgressItem(id: "speaking", title: "Vorbește", completed: goals.speakingDone ? 1 : 0, total: 1,
@@ -166,6 +166,7 @@ struct HomeView: View {
             DailyProgressItem(id: "review", title: "Repetă", completed: goals.reviewDone ? 1 : 0, total: 1,
                               icon: .system("arrow.triangle.2.circlepath"), tint: Theme.terracotta, action: onReviews)
         ]
+        return goals.listeningAvailable ? items : items.filter { $0.id != "listening" }
     }
 
     /// Built from the learner's actual review queue, mistakes and weak skills.

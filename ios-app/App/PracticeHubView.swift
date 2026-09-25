@@ -15,7 +15,9 @@ struct PracticeListView: View {
                     .font(Theme.font(.subheadline))
                     .foregroundStyle(Theme.muted)
                 ForEach(modes) { mode in
-                    if PracticeModeScreen.destination(for: mode, package: package, locale: locale, progress: progressModel.snapshot) != nil {
+                    // Availability comes from the content; sessions are built
+                    // only when a mode is opened.
+                    if mode.isAvailable {
                         NavigationLink(value: mode.id) {
                             PracticeModeRow(mode: mode, isNavigable: true)
                         }
@@ -68,18 +70,39 @@ struct PracticeModeScreen: View {
     let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
 
+    /// Built once when the screen opens, so answers recorded during the
+    /// session do not rebuild the plan behind it.
+    @State private var resolved: PracticeDestination?
+    @State private var didResolve = false
+
+    private var mode: PracticeModeSummary? {
+        modes.first { $0.id == modeID }
+    }
+
     var body: some View {
-        if let mode = modes.first(where: { $0.id == modeID }),
-           let destination = Self.destination(for: mode, package: package, locale: locale, progress: progressModel.snapshot) {
-            PracticeDestinationView(
-                destination: destination,
-                expressions: package.expressions,
-                locale: locale,
-                title: mode.title,
-                progressModel: progressModel
-            )
-        } else {
-            ContentUnavailableView("Mod indisponibil", systemImage: "exclamationmark.triangle")
+        Group {
+            if let mode, let resolved {
+                PracticeDestinationView(
+                    destination: resolved,
+                    expressions: package.expressions,
+                    locale: locale,
+                    title: mode.title,
+                    progressModel: progressModel
+                )
+            } else if didResolve {
+                ContentUnavailableView("Mod indisponibil", systemImage: "exclamationmark.triangle")
+            } else {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Theme.canvas.ignoresSafeArea())
+            }
+        }
+        .onAppear {
+            guard !didResolve else { return }
+            resolved = mode.flatMap {
+                Self.destination(for: $0, package: package, locale: locale, progress: progressModel.snapshot)
+            }
+            didResolve = true
         }
     }
 

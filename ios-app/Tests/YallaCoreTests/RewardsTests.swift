@@ -169,6 +169,22 @@ struct RewardsTests {
         #expect(full.completedCount == 4)
     }
 
+    @Test("Without listening content the listening goal is left out")
+    func dailyGoalsWithoutListening() {
+        let calculator = DailyGoalCalculator(calendar: calendar)
+        let now = date(24, hour: 20)
+        let status = calculator.status(
+            xpEvents: [sourced("l", day: 24, .lesson), sourced("r", day: 24, .review)],
+            attempts: [attempt("a", at: date(24, hour: 9), skill: .listening)],
+            recordingDates: [date(24, hour: 10)],
+            listeningAvailable: false,
+            at: now
+        )
+        #expect(status.totalCount == 3)
+        #expect(status.completedCount == 3)
+        #expect(!status.listeningDone)
+    }
+
     @Test("Other days, untagged XP, unfinished listening answers and old recordings do not count")
     func dailyGoalsIgnoreOtherDays() {
         let status = DailyGoalCalculator(calendar: calendar).status(

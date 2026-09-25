@@ -176,6 +176,7 @@ struct RootTabView: View {
                     xpEvents: progressModel.snapshot.xpEvents,
                     attempts: progressModel.snapshot.attempts,
                     recordingDates: recordingDates,
+                    listeningAvailable: !content.package.listeningPrompts.isEmpty,
                     at: context.date
                 ),
                 smartSessionSize: smartSessionSize(at: context.date),

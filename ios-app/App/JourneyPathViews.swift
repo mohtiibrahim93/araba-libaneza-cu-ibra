@@ -578,9 +578,14 @@ struct JourneyUnitDetailView: View {
     private func lessonNode(_ lesson: JourneyLesson, status: JourneyLessonStatus, lessonTotal: Int) -> some View {
         let style = lessonStyle(status)
         let symbol = lessonSymbol(status)
-        let valueText: String = status == .completed ? "Finalizată, o poți relua" : "Următoarea lecție"
+        let updated = status == .completed
+            && planner.isUpdatedSinceCompletion(lesson, fingerprints: progressModel.snapshot.lessonFingerprints)
+        let valueText: String = status == .completed
+            ? (updated ? "Finalizată; conținutul a fost actualizat, o poți relua" : "Finalizată, o poți relua")
+            : "Următoarea lecție"
         let model = progressModel
         let lessonID = lesson.id
+        let fingerprint = planner.fingerprint(for: lesson)
 
         VStack(spacing: 8) {
             if status == .current {
@@ -601,7 +606,7 @@ struct JourneyUnitDetailView: View {
                         xpSource: .lesson,
                         context: context(lessonNumber: lesson.number, of: lessonTotal),
                         onComplete: {
-                            Task { await model.markLessonCompleted(lessonID) }
+                            Task { await model.markLessonCompleted(lessonID, fingerprint: fingerprint) }
                         }
                     )
                 } label: {
@@ -618,6 +623,15 @@ struct JourneyUnitDetailView: View {
                 .font(Theme.font(.caption, weight: .semibold))
                 .foregroundStyle(status == .locked ? Theme.muted.opacity(0.7) : Theme.muted)
                 .accessibilityHidden(true)
+            if updated {
+                Label("Actualizată", systemImage: "arrow.triangle.2.circlepath")
+                    .font(Theme.font(.caption2, weight: .semibold))
+                    .foregroundStyle(Theme.terracottaShade)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(Theme.blush, in: Capsule())
+                    .accessibilityHidden(true)
+            }
         }
         .frame(maxWidth: .infinity)
         .offset(x: PathNode.zigzagOffset(lesson.number - 1))

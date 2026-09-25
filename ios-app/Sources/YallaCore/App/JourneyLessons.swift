@@ -86,6 +86,23 @@ public struct JourneyLessonPlanner: Sendable {
         return counts
     }
 
+    /// Stable fingerprint of a lesson's exercises (FNV-1a over their IDs).
+    public func fingerprint(for lesson: JourneyLesson) -> String {
+        var hash: UInt64 = 0xcbf29ce484222325
+        for byte in lesson.exercises.map(\.id).joined(separator: "|").utf8 {
+            hash ^= UInt64(byte)
+            hash = hash &* 0x100000001b3
+        }
+        return String(hash, radix: 16)
+    }
+
+    /// A finished lesson whose exercises changed since it was finished.
+    /// Lessons finished before fingerprints were stored are never flagged.
+    public func isUpdatedSinceCompletion(_ lesson: JourneyLesson, fingerprints: [String: String]) -> Bool {
+        guard let stored = fingerprints[lesson.id] else { return false }
+        return stored != fingerprint(for: lesson)
+    }
+
     public func lessonID(unitID: String, number: Int) -> String {
         "\(unitID).lesson.\(number)"
     }

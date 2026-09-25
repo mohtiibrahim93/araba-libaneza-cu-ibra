@@ -105,25 +105,35 @@ public struct RewardCalculator: Sendable {
 }
 
 /// Today's goals: one Journey lesson, one review session, one correct
-/// listening answer and one Speak & Compare recording.
+/// listening answer and one Speak & Compare recording. The listening goal is
+/// left out while the content has no listening material, so a day can still
+/// be completed.
 public struct DailyGoalStatus: Equatable, Sendable {
     public let lessonDone: Bool
     public let reviewDone: Bool
     public let listeningDone: Bool
     public let speakingDone: Bool
+    public let listeningAvailable: Bool
 
-    public init(lessonDone: Bool, reviewDone: Bool, listeningDone: Bool, speakingDone: Bool) {
+    public init(
+        lessonDone: Bool,
+        reviewDone: Bool,
+        listeningDone: Bool,
+        speakingDone: Bool,
+        listeningAvailable: Bool = true
+    ) {
         self.lessonDone = lessonDone
         self.reviewDone = reviewDone
-        self.listeningDone = listeningDone
+        self.listeningDone = listeningAvailable && listeningDone
         self.speakingDone = speakingDone
+        self.listeningAvailable = listeningAvailable
     }
 
     public var completedCount: Int {
         [lessonDone, reviewDone, listeningDone, speakingDone].filter { $0 }.count
     }
 
-    public var totalCount: Int { 4 }
+    public var totalCount: Int { listeningAvailable ? 4 : 3 }
 }
 
 public struct DailyGoalCalculator: Sendable {
@@ -139,6 +149,7 @@ public struct DailyGoalCalculator: Sendable {
         xpEvents: [XPEvent],
         attempts: [LearningAttempt],
         recordingDates: [Date],
+        listeningAvailable: Bool = true,
         at date: Date
     ) -> DailyGoalStatus {
         let today = learnerDay.key(for: date)
@@ -150,7 +161,8 @@ public struct DailyGoalCalculator: Sendable {
                 $0.completedCorrectly && $0.skills.contains(.listening)
                     && learnerDay.key(for: $0.occurredAt) == today
             },
-            speakingDone: recordingDates.contains { learnerDay.key(for: $0) == today }
+            speakingDone: recordingDates.contains { learnerDay.key(for: $0) == today },
+            listeningAvailable: listeningAvailable
         )
     }
 }

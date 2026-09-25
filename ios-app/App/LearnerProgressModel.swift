@@ -39,8 +39,8 @@ final class LearnerProgressModel: ObservableObject {
         await perform(.savedExpression(expressionID, desired))
     }
 
-    func markLessonCompleted(_ lessonID: String) async {
-        await perform(.lessonCompleted(lessonID))
+    func markLessonCompleted(_ lessonID: String, fingerprint: String) async {
+        await perform(.lessonCompletedWithFingerprint(lessonID, fingerprint))
     }
 
     func recordXP(_ event: XPEvent) async {
