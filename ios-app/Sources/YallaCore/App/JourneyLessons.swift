@@ -40,7 +40,7 @@ public struct JourneyUnitLessonProgress: Equatable, Sendable {
     }
 }
 
-/// Splits a unit into lessons without reordering, filtering or generating content.
+/// Splits a unit's composed exercise sequence (see `JourneyLessonComposer`) into lessons.
 /// Lesson IDs are positional (`<unitID>.lesson.<n>`), so completion survives
 /// content updates that keep the unit's lesson count.
 public struct JourneyLessonPlanner: Sendable {
@@ -70,18 +70,18 @@ public struct JourneyLessonPlanner: Sendable {
     /// Lesson counts for every unit in one pass, matching the exercises that
     /// `LearningNavigationBuilder.journeyUnit` would produce for each unit.
     public func lessonCounts(in package: ContentPackage, locale: String) -> [String: Int] {
-        let recallable = Set(package.expressions.lazy
-            .filter { ExpressionRecallBuilder.supportsRecall($0, locale: locale) }
-            .map(\.id))
+        let expressionsByID = Dictionary(package.expressions.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let exercisesByUnit = Dictionary(grouping: package.exercises, by: \.unitID)
+        let composer = JourneyLessonComposer(lessonSize: lessonSize)
         var counts: [String: Int] = [:]
         for unit in package.units where counts[unit.id] == nil {
-            let authored = exercisesByUnit[unit.id] ?? []
-            let covered = ExpressionRecallBuilder.coveredExpressionIDs(authored, locale: locale)
-            let recall = Set(unit.expressionIDs)
-                .filter { recallable.contains($0) && !covered.contains($0) }
-                .count
-            counts[unit.id] = lessonCount(exerciseCount: authored.count + recall)
+            let exercises = composer.exercises(
+                for: unit,
+                authored: exercisesByUnit[unit.id] ?? [],
+                expressionsByID: expressionsByID,
+                locale: locale
+            )
+            counts[unit.id] = lessonCount(exerciseCount: exercises.count)
         }
         return counts
     }

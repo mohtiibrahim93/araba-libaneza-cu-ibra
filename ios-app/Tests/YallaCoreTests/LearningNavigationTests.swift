@@ -88,7 +88,8 @@ struct LearningNavigationTests {
         #expect(detail.title == "Primele replici")
         #expect(detail.expressions.map(\.arabizi) == ["mar7aba", "merci"])
         #expect(detail.expressions.map(\.meaning) == ["salut", "mulțumesc"])
-        #expect(detail.exercises.map(\.id) == ["ex.choice", "ex.write"])
+        // Authored drills first, then the lesson's closing matching board.
+        #expect(detail.exercises.map(\.id) == ["ex.choice", "ex.write", "generated.matching.unit.welcome.1"])
     }
 
     @Test("Targeted practice uses only existing exercises tied to selected expressions")

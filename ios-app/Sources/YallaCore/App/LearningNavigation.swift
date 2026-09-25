@@ -117,9 +117,11 @@ public struct LearningNavigationBuilder: Sendable {
                 meaning: try expression.localization(for: locale).naturalMeaning
             )
         }
-        let exercises = ExpressionRecallBuilder().supplement(
-            package.exercises.filter { $0.unitID == unit.id },
-            from: package, expressionIDs: Set(unit.expressionIDs), locale: locale
+        let exercises = JourneyLessonComposer().exercises(
+            for: unit,
+            authored: package.exercises.filter { $0.unitID == unit.id },
+            expressionsByID: expressionsByID,
+            locale: locale
         )
 
         return JourneyUnitDetail(
