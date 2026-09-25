@@ -92,42 +92,27 @@ struct DictionarySearchTests {
         #expect(model.similar(to: eat).map(\.id) == ["e2"])
     }
 
-    @Test func similarWordsAreNeighboursInTheLesson() throws {
+    @Test func singleWordsGetNoSimilarList() throws {
         let model = try model([
             expression("w1", "bayt", "casă"),
             expression("w2", "ouda", "cameră"),
-            expression("w3", "matbakh", "bucătărie"),
             expression("p1", "Baytna kbiir.", "Casa noastră e mare.")
-        ], units: [["w1", "w2", "p1", "w3"]])
+        ], units: [["w1", "w2", "p1"]])
         let house = try #require(model.entries.first { $0.id == "w1" })
-        #expect(model.similar(to: house).map(\.id) == ["w2", "w3"])
-    }
-
-    @Test func repeatedCardsUseTheirFirstUnitForSimilarWords() throws {
-        let model = try model([
-            expression("g1", "Mar7aba", "Salut"),
-            expression("g2", "Ahlan", "Bun venit"),
-            expression("g3", "Mar7aba", "Salut"),
-            expression("s1", "Fatbol", "Fotbal")
-        ], units: [["g1", "g2"], ["s1", "g3"]])
-        let hello = try #require(model.entries.first { $0.arabizi == "Mar7aba" })
-        #expect(model.similar(to: hello).map(\.id) == ["g2"])
+        #expect(model.similar(to: house).isEmpty)
     }
 
     @Test func numberedWordListsAreNotThemes() throws {
         let model = try model([
-            expression("sit", "2a3ad", "a se așeza"),
-            expression("hit", "darab", "a lovi"),
-            expression("sea", "ba7r", "mare"),
-            expression("sky", "sama", "cer")
+            expression("a", "Baddak tekol?", "Vrei să mănânci?"),
+            expression("b", "Baddak tnaam?", "Vrei să dormi?"),
+            expression("c", "Baddak teshrab?", "Vrei să bei?")
         ], collections: [
-            LexiconCollection(id: "v-index-35", expressionIDs: ["sit", "hit"], localizations: [:]),
-            LexiconCollection(id: "v-nature", expressionIDs: ["sea", "sky"], localizations: [:])
+            LexiconCollection(id: "v-index-35", expressionIDs: ["a", "b"], localizations: [:]),
+            LexiconCollection(id: "v-food", expressionIDs: ["a", "c"], localizations: [:])
         ])
-        let sit = try #require(model.entries.first { $0.arabizi == "2a3ad" })
-        let sea = try #require(model.entries.first { $0.arabizi == "ba7r" })
-        #expect(model.similar(to: sit).isEmpty)
-        #expect(model.similar(to: sea).map(\.id) == ["sky"])
+        let eat = try #require(model.entries.first { $0.id == "a" })
+        #expect(model.similar(to: eat).map(\.id) == ["c"])
     }
 
     @Test func rootFamilyListsTheOtherMembers() throws {

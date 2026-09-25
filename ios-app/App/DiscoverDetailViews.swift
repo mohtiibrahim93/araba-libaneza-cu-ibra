@@ -119,7 +119,7 @@ struct DictionaryEntryDetailView: View {
                 }
                 if !similar.isEmpty {
                     DictionaryListCard(
-                        title: entry.isSingleWord ? "Din aceeași temă" : "Expresii similare",
+                        title: "Expresii similare",
                         icon: "lightbulb.max.fill",
                         entries: similar,
                         isSaved: { $0.expressionIDs.contains(where: savedIDs.contains) },

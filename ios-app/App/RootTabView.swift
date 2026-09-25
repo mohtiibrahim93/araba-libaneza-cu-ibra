@@ -574,7 +574,7 @@ private struct DiscoverView: View {
                 }
                 if !similar.isEmpty {
                     DictionaryListCard(
-                        title: featured.isSingleWord ? "Din aceeași temă" : "Expresii similare",
+                        title: "Expresii similare",
                         icon: "lightbulb.max.fill",
                         entries: similar,
                         isSaved: isSaved,

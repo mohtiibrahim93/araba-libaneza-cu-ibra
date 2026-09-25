@@ -336,12 +336,12 @@ public struct DiscoverModel: Equatable, Sendable {
         return result
     }
 
-    /// Entries of the same kind from the same unit or vocabulary collection.
-    /// Expressions must share at least one word of three or more letters
-    /// (e.g. "baddak tekol" and "baddak teshrab"); words are ordered by how
-    /// close they sit in the lesson.
+    /// Phrases from the same unit or vocabulary collection that share at
+    /// least one word of three or more letters (e.g. "baddak tekol" and
+    /// "baddak teshrab"). Single words get none: their related words come
+    /// only from approved root families (`rootFamily`, `relatedByMeaning`).
     public func similar(to entry: DictionaryEntrySummary, limit: Int = 4) -> [DictionaryEntrySummary] {
-        guard let index = entryIndexByExpressionID[entry.id] else { return [] }
+        guard !entry.isSingleWord, let index = entryIndexByExpressionID[entry.id] else { return [] }
         let ownTokens = tokensByEntry[index].filter { $0.count >= 3 }
         var best: [Int: (shared: Int, distance: Int)] = [:]
 
@@ -349,11 +349,9 @@ public struct DiscoverModel: Equatable, Sendable {
             let group = topicGroups[groupIndex]
             guard let position = group.firstIndex(of: index) else { continue }
             for (offset, candidate) in group.enumerated() where candidate != index {
-                guard entries[candidate].isSingleWord == entry.isSingleWord else { continue }
-                let shared = entry.isSingleWord
-                    ? 0
-                    : ownTokens.intersection(tokensByEntry[candidate]).count
-                if !entry.isSingleWord && shared == 0 { continue }
+                guard !entries[candidate].isSingleWord else { continue }
+                let shared = ownTokens.intersection(tokensByEntry[candidate]).count
+                if shared == 0 { continue }
                 let distance = abs(offset - position)
                 if let current = best[candidate] {
                     let currentIsBetter = current.shared > shared
