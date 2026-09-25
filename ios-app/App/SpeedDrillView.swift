@@ -19,20 +19,30 @@ struct SpeedDrillView: View {
     @State private var feedback: Feedback?
     @State private var typed = ""
     @FocusState private var fieldFocused: Bool
+    /// Approved expressions of this drill's cards, with their spelling variants.
+    private let expressionsByID: [String: YallaCore.Expression]
 
     private struct Feedback: Equatable {
         let chosen: String
         let correct: Bool
+        /// Shown under a typed answer: variant accepted, ending hint, or the right form.
+        var note: String? = nil
     }
 
     init(
         expressions: [JourneyExpressionSummary],
+        lexicon: [YallaCore.Expression] = [],
         progressModel: LearnerProgressModel,
         direction: SpeedDrillDirection = .learnerLanguageToLebanese,
         mode: SpeedDrillMode = .memory
     ) {
         self.progressModel = progressModel
         self.mode = mode
+        let ids = Set(expressions.map(\.id))
+        self.expressionsByID = Dictionary(
+            lexicon.filter { ids.contains($0.id) }.map { ($0.id, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
         let cards = expressions.map {
             SpeedDrillCard(
                 id: $0.id,
@@ -362,7 +372,7 @@ struct SpeedDrillView: View {
             .accessibilityIdentifier("drill.check")
         }
         if let feedback {
-            let message: String = feedback.correct ? "Corect" : "Corect era: \(prompt.answer)"
+            let message: String = feedback.note ?? (feedback.correct ? "Corect" : "Corect era: \(prompt.answer)")
             let icon: String = feedback.correct ? "checkmark.circle.fill" : "xmark.circle.fill"
             Label(message, systemImage: icon)
             .font(Theme.font(.subheadline, weight: .semibold))
@@ -379,19 +389,35 @@ struct SpeedDrillView: View {
     private func checkTyped(_ prompt: SpeedDrillPrompt) {
         let text = typed.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
-        let result = AnswerEvaluator().evaluate(answer: text, canonical: prompt.answer, spellingVariants: [], pronunciationVariants: [])
-        answer(text, correct: result != .incorrect)
+        guard let expression = expressionsByID[prompt.expressionID] else {
+            let result = AnswerEvaluator().evaluate(answer: text, canonical: prompt.answer, spellingVariants: [], pronunciationVariants: [])
+            answer(text, correct: result != .incorrect)
+            return
+        }
+        // Same rules as the lessons: the canonical form or an approved spelling variant.
+        let evaluation = LebaneseAnswerEvaluator().evaluate(text, for: expression)
+        switch evaluation.kind {
+        case .canonical:
+            answer(text, correct: true)
+        case .acceptedVariant:
+            answer(text, correct: true, note: "Variantă acceptată · forma de referință: \(evaluation.canonicalAnswer)")
+        case .endingMismatch:
+            answer(text, correct: false, note: "Verifică terminația. Corect era: \(evaluation.canonicalAnswer)")
+        case .incorrect:
+            answer(text, correct: false)
+        }
     }
 
     // MARK: Actions
 
     /// Shows the result briefly, then records it. The response time is taken
     /// at the tap, so the feedback pause does not count toward it.
-    private func answer(_ chosen: String, correct: Bool) {
+    private func answer(_ chosen: String, correct: Bool, note: String? = nil) {
         guard canAnswer, feedback == nil else { return }
         let responseTime = max(clock.elapsed(at: Date()) - promptStartedAtElapsed, 0)
-        feedback = Feedback(chosen: chosen, correct: correct)
-        let delay: Duration = correct ? .milliseconds(450) : .milliseconds(1_100)
+        feedback = Feedback(chosen: chosen, correct: correct, note: note)
+        // Notes need a moment longer to read.
+        let delay: Duration = note != nil ? .milliseconds(1_500) : (correct ? .milliseconds(450) : .milliseconds(1_100))
         Task { @MainActor in
             try? await Task.sleep(for: delay)
             record(correct ? .correct : .wrong, responseTime: responseTime)

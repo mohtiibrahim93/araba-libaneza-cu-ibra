@@ -19,9 +19,10 @@ struct PracticeDestinationView: View {
                 title: title,
                 progressModel: progressModel
             )
-        case let .speedDrill(expressions):
+        case let .speedDrill(summaries):
             SpeedDrillOverviewView(
-                expressions: expressions,
+                expressions: summaries,
+                lexicon: expressions,
                 title: title,
                 progressModel: progressModel
             )
@@ -80,6 +81,8 @@ private struct SmartPracticeOverviewView: View {
 
 private struct SpeedDrillOverviewView: View {
     let expressions: [JourneyExpressionSummary]
+    /// Full expressions, for the approved spelling variants typed answers may use.
+    let lexicon: [YallaCore.Expression]
     let title: String
     @ObservedObject var progressModel: LearnerProgressModel
 
@@ -99,6 +102,7 @@ private struct SpeedDrillOverviewView: View {
             destination: {
                 SpeedDrillView(
                     expressions: expressions,
+                    lexicon: lexicon,
                     progressModel: progressModel,
                     direction: direction,
                     mode: mode
