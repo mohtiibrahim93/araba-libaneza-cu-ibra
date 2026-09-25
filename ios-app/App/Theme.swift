@@ -58,6 +58,15 @@ enum Theme {
     /// Remaining steps in progress indicators.
     static let progressInactive = Color(light: 0xDDD9D0, dark: 0x3A352C)
 
+    // MARK: Root Explorer
+    /// Terracotta medallion at the centre of a root family.
+    static let rootCore = Color(light: 0xB65436, dark: 0xC8684A)
+    static let rootCoreDark = Color(light: 0x93422F, dark: 0xA0503A)
+    /// Lines from the root to its family words.
+    static let rootConnector = Color(light: 0xA85A3D, dark: 0xC67C5E)
+    static let rootNodeSurface = Color(light: 0xFAF5EC, dark: 0x262219)
+    static let rootNodeIcon = Color(light: 0xDDE7D2, dark: 0x2A4032)
+
     // MARK: Journey
     /// Dashed ochre path across the Journey map.
     static let journeyPath = Color(light: 0xD4A261, dark: 0xB88A4E)

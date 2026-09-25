@@ -120,6 +120,8 @@ public struct RootExplorerMember: Identifiable, Equatable, Sendable {
     public let patternLabel: String?
     public let patternKind: MorphologicalPatternKind?
     public let patternProductivity: PatternProductivity?
+    public let meaning: String?
+    public let arabicScript: String?
 
     public init(
         id: String,
@@ -127,7 +129,9 @@ public struct RootExplorerMember: Identifiable, Equatable, Sendable {
         patternID: String?,
         patternLabel: String? = nil,
         patternKind: MorphologicalPatternKind? = nil,
-        patternProductivity: PatternProductivity? = nil
+        patternProductivity: PatternProductivity? = nil,
+        meaning: String? = nil,
+        arabicScript: String? = nil
     ) {
         self.id = id
         self.label = label
@@ -135,6 +139,8 @@ public struct RootExplorerMember: Identifiable, Equatable, Sendable {
         self.patternLabel = patternLabel
         self.patternKind = patternKind
         self.patternProductivity = patternProductivity
+        self.meaning = meaning
+        self.arabicScript = arabicScript
     }
 }
 
@@ -318,10 +324,12 @@ public struct DiscoverModelBuilder: Sendable {
                     patternID: link.patternID,
                     patternLabel: pattern?.label,
                     patternKind: pattern?.kind,
-                    patternProductivity: pattern?.productivity
+                    patternProductivity: pattern?.productivity,
+                    meaning: (try? expression.localization(for: locale))?.naturalMeaning,
+                    arabicScript: expression.arabicScript
                 )
             }
-            .sorted { caseInsensitiveLess($0.label, $1.label) }
+            // Members keep the order of the teacher-approved morphology file.
 
             var searchTerms = [root.displayKey]
             if let arabicRadicals = root.arabicRadicals {

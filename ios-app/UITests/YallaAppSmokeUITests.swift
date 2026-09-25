@@ -79,8 +79,14 @@ final class YallaAppSmokeUITests: XCTestCase {
 
         if rootButton.waitForExistence(timeout: 5) {
             rootButton.tap()
-            XCTAssertTrue(app.navigationBars.firstMatch.waitForExistence(timeout: 8))
+            XCTAssertTrue(app.descendants(matching: .any)["root.core"].waitForExistence(timeout: 8))
+            let node = app.buttons.matching(identifier: "root.node").element(boundBy: 1)
+            XCTAssertTrue(node.waitForExistence(timeout: 5))
+            node.tap()
+            XCTAssertTrue(app.buttons["root.detail.save"].waitForExistence(timeout: 5))
             capture("07-root-l7m")
+            app.buttons["root.back"].tap()
+            XCTAssertTrue(app.buttons["Rădăcini"].waitForExistence(timeout: 5))
         }
     }
 

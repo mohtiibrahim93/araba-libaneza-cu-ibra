@@ -572,7 +572,11 @@ private struct DiscoverView: View {
                                 model: model,
                                 package: package,
                                 locale: locale,
-                                progressModel: progressModel
+                                progressModel: progressModel,
+                                onSearch: {
+                                    filter = .words
+                                    searchFocused = true
+                                }
                             )
                         } label: {
                             RootCircle(root: root)

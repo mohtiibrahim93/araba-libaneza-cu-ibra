@@ -117,6 +117,32 @@ final class YallaScreenshotTests: XCTestCase {
                 if clear.exists { clear.tap() }
                 rootsChip.tap()
                 snap("21c-discover-roots")
+                if app.keyboards.count > 0 { app.typeText("\n") }
+                let ktb = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "KTB")).firstMatch
+                if ktb.waitForExistence(timeout: 4) {
+                    ktb.tap()
+                    if app.descendants(matching: .any)["root.core"].waitForExistence(timeout: 6) {
+                        snap("21d-root-explorer")
+                        let detail = app.descendants(matching: .any)["root.detail"]
+                        scrollTo(detail)
+                        snap("21e-root-detail")
+                        let places = app.buttons.matching(identifier: "root.filter")
+                            .matching(NSPredicate(format: "label CONTAINS[c] %@", "Locuri")).firstMatch
+                        if places.exists {
+                            places.tap()
+                            snap("21f-root-filter")
+                        }
+                        let help = app.buttons["root.help"]
+                        app.swipeDown()
+                        if help.waitForExistence(timeout: 3) {
+                            help.tap()
+                            snap("21g-root-help")
+                            app.swipeDown()
+                        }
+                        let back = app.buttons["root.back"]
+                        if back.waitForExistence(timeout: 3) { back.tap() }
+                    }
+                }
             }
             // The keyboard covers the tab bar; dismiss it before switching tabs.
             if app.keyboards.count > 0 { app.typeText("\n") }
