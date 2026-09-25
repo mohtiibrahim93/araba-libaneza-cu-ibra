@@ -1,20 +1,27 @@
 import * as React from 'react'
-import { render } from '@react-email/render'
 import { createFileRoute } from '@tanstack/react-router'
-import { SignupEmail } from '@/lib/email-templates/signup'
-import { InviteEmail } from '@/lib/email-templates/invite'
-import { MagicLinkEmail } from '@/lib/email-templates/magic-link'
-import { RecoveryEmail } from '@/lib/email-templates/recovery'
-import { EmailChangeEmail } from '@/lib/email-templates/email-change'
-import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
-const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
-  signup: SignupEmail,
-  invite: InviteEmail,
-  magiclink: MagicLinkEmail,
-  recovery: RecoveryEmail,
-  email_change: EmailChangeEmail,
-  reauthentication: ReauthenticationEmail,
+// Loaded when a preview is asked for, not when the worker starts: the six
+// templates and @react-email/render are around 520 KB, and statically imported
+// they sat in the module graph parsed before any page could be rendered. This
+// endpoint is called by Lovable's API only.
+const emailTemplates = async (): Promise<Record<string, React.ComponentType<any>>> => {
+  const [signup, invite, magiclink, recovery, emailChange, reauthentication] = await Promise.all([
+    import('@/lib/email-templates/signup'),
+    import('@/lib/email-templates/invite'),
+    import('@/lib/email-templates/magic-link'),
+    import('@/lib/email-templates/recovery'),
+    import('@/lib/email-templates/email-change'),
+    import('@/lib/email-templates/reauthentication'),
+  ])
+  return {
+    signup: signup.SignupEmail,
+    invite: invite.InviteEmail,
+    magiclink: magiclink.MagicLinkEmail,
+    recovery: recovery.RecoveryEmail,
+    email_change: emailChange.EmailChangeEmail,
+    reauthentication: reauthentication.ReauthenticationEmail,
+  }
 }
 
 // Configuration
@@ -90,7 +97,7 @@ export const Route = createFileRoute("/lovable/email/auth/preview")({
           )
         }
 
-        const EmailTemplate = EMAIL_TEMPLATES[type]
+        const EmailTemplate = (await emailTemplates())[type]
 
         if (!EmailTemplate) {
           return Response.json(
@@ -100,6 +107,7 @@ export const Route = createFileRoute("/lovable/email/auth/preview")({
         }
 
         const sampleData = SAMPLE_DATA[type] || {}
+        const { render } = await import('@react-email/render')
         const html = await render(React.createElement(EmailTemplate, sampleData))
 
         return new Response(html, {

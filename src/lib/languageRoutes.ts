@@ -61,6 +61,11 @@ const EN_FOR_RO: Record<string, string> = {
   "/cursuri/grup/b2": "/en/courses/group/b2",
   "/cursuri/grup/c1": "/en/courses/group/c1",
   "/cursuri/grup/c2": "/en/courses/group/c2",
+  // The FAQ pair was declared for hreflang in src/lib/seoHead.ts but never
+  // here, so every link to it — the footer's, on all 119 pages — sent English
+  // readers to the Romanian page and left /en/faq with almost nothing pointing
+  // at it. src/test/english-twins.test.ts now holds the two tables together.
+  "/intrebari-frecvente": "/en/faq",
   // Blog: every article has an exact English twin at the same slug.
   "/blog": "/en/blog",
   "/blog/lebanese-arabic-learning-resources": "/en/blog/lebanese-arabic-learning-resources",
@@ -87,6 +92,7 @@ const EN_FOR_RO: Record<string, string> = {
 };
 
 const RO_FOR_EN: Record<string, string> = {
+  "/en/faq": "/intrebari-frecvente",
   "/en/arabic-tutor": "/meditatii-araba",
   "/en/best-arabic-course": "/cel-mai-bun-curs-de-araba",
   "/en/arabic-for-teenagers": "/cursuri-araba-adolescenti",

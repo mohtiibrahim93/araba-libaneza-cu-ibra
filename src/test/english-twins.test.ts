@@ -106,3 +106,40 @@ describe("English twins", () => {
     expect(root).toContain("<html lang={shellLang}");
   });
 });
+
+/**
+ * A page announced as having an English twin must be *linked* to it.
+ *
+ * Two tables describe the same pairs: src/lib/seoHead.ts emits the hreflang
+ * annotation, and src/lib/languageRoutes.ts is what the language toggle and
+ * every navigation link read. They drifted by one entry — /intrebari-frecvente
+ * ↔ /en/faq was in the first and not the second — and the consequence was not
+ * subtle: the footer is on all 119 pages, so every link to the FAQ sent an
+ * English reader to the Romanian page, and /en/faq was left with almost nothing
+ * pointing at it. Google had indexed six English articles and /en/courses/private
+ * as "Discovered, currently not indexed", which is what a page with no internal
+ * links looks like from the outside.
+ */
+describe("the hreflang pairs and the link table agree", () => {
+  const declaredPairs = [...prerender.matchAll(/\["(\/[^"]+)", "(\/en\/[^"]+)"\]/g)].map(
+    (m) => [m[1]!, m[2]!] as [string, string],
+  );
+
+  it("finds the pairs declared for hreflang", () => {
+    expect(declaredPairs.length).toBeGreaterThan(20);
+  });
+
+  it("can navigate to the English half of every announced pair", () => {
+    const unnavigable = declaredPairs
+      .filter(([ro, en]) => languageCounterpart(ro, "en") !== en)
+      .map(([ro, en]) => `${ro} announces ${en} but links to ${languageCounterpart(ro, "en") ?? "nothing"}`);
+    expect(unnavigable, unnavigable.join("\n")).toEqual([]);
+  });
+
+  it("can navigate back to the Romanian half", () => {
+    const oneWay = declaredPairs
+      .filter(([ro, en]) => languageCounterpart(en, "ro") !== ro)
+      .map(([ro, en]) => `${en} does not link back to ${ro}`);
+    expect(oneWay, oneWay.join("\n")).toEqual([]);
+  });
+});

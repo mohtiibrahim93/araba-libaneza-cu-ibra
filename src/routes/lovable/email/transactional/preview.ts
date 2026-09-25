@@ -1,7 +1,9 @@
 import * as React from 'react'
-import { render } from '@react-email/render'
 import { createFileRoute } from '@tanstack/react-router'
-import { TEMPLATES } from '@/lib/email-templates/registry'
+
+// The registry imports every transactional template, and the renderer brings
+// @react-email with it — about 520 KB that a page render has no use for. Both
+// are loaded inside the handler, which Lovable's API is the only caller of.
 
 // Renders all registered templates with their previewData.
 // Gated by LOVABLE_API_KEY — only the Go API calls this.
@@ -24,6 +26,11 @@ export const Route = createFileRoute("/lovable/email/transactional/preview")({
         if (token !== apiKey) {
           return Response.json({ error: 'Unauthorized' }, { status: 401 })
         }
+
+        const [{ TEMPLATES }, { render }] = await Promise.all([
+          import('@/lib/email-templates/registry'),
+          import('@react-email/render'),
+        ])
 
         const templateNames = Object.keys(TEMPLATES)
         const results: Array<{

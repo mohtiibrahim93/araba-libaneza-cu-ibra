@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Link, useLocation } from "@/lib/router-compat";
+import { useLocation } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import type { NavLink } from "@/lib/siteNav";
 import { cn } from "@/lib/utils";
 

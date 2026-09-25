@@ -14,6 +14,21 @@
  * footer render the same structure as real anchors in the static HTML, so
  * humans and crawlers get one navigation, not two.
  */
+/**
+ * Navigation links follow the reader's language.
+ *
+ * This file used to import Link from router-compat, so every entry pointed at
+ * the Romanian URL it was written as — on all 119 pages, English readers
+ * included. src/components/LocalizedLink.tsx swaps in the counterpart when the
+ * reader is in English and one exists, and leaves the path alone when it does
+ * not (a Romanian-only page such as /joc stays reachable).
+ *
+ * It also starved the English half of the site of internal links: the nav and
+ * the footer are on every page, so the Romanian pages collected ~96 links each
+ * while their English twins collected one or two. Google had indexed neither
+ * /en/courses/private nor six of the English articles — "Discovered, currently
+ * not indexed", the state a page gets when nothing much points at it.
+ */
 export interface NavLink {
   to: string;
   label: string;
