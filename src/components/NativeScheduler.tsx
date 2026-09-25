@@ -547,8 +547,9 @@ const NativeScheduler = ({
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
                   {lang === "ro"
-                    ? "Anularea sau reprogramarea e gratuită dacă o faci cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare."
-                    : "Cancelling or rescheduling is free as long as you do it at least 24 hours before the lesson — use the link in your confirmation email."}
+                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare. La neprezentare sau anulare mai târzie se reține 150 lei, cât o lecție privată."
+                    : "Cancelling or rescheduling is free at least 24 hours before the lesson — use the link in your confirmation email. A no-show or a later cancellation is charged 150 lei, the price of a private lesson."}
+
                 </p>
               </div>
             </div>
