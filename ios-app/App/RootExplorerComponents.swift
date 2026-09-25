@@ -583,7 +583,7 @@ struct RootWordDetailCard<Actions: View>: View {
         Button(action: onToggleSaved) {
             Label(isSaved ? "Salvat" : "Salvează", systemImage: isSaved ? "bookmark.fill" : "bookmark")
                 .yallaFont(.captionStrong)
-                .foregroundStyle(Theme.deep)
+                .foregroundStyle(Theme.brand)
                 .padding(.horizontal, 14)
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .background(Theme.surface, in: Capsule())
@@ -636,6 +636,7 @@ struct RootHowItWorksSheet: View {
                 }
             }
         }
+        .tint(Theme.brand)
         .presentationDetents([.medium, .large])
     }
 }

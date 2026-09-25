@@ -200,7 +200,7 @@ struct RootExplorerView: View {
                 systemImage: showsAllMembers ? "chevron.up" : "list.bullet"
             )
             .yallaFont(.captionStrong)
-            .foregroundStyle(Theme.deep)
+            .foregroundStyle(Theme.brand)
             .frame(minHeight: 44)
         }
         .buttonStyle(.plain)
@@ -233,7 +233,7 @@ struct RootExplorerView: View {
                         Spacer(minLength: 0)
                         if member.id == selectedID {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(Theme.deep)
+                                .foregroundStyle(Theme.brand)
                                 .accessibilityHidden(true)
                         }
                     }
@@ -359,7 +359,7 @@ struct RootExplorerView: View {
                 .yallaFont(.section)
                 .foregroundStyle(Theme.ink)
         }
-        .tint(Theme.deep)
+        .tint(Theme.brand)
         .padding(Theme.Spacing.lg)
         .cardBackground()
     }
