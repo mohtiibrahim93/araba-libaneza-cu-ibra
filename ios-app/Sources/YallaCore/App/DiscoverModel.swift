@@ -282,15 +282,14 @@ public struct DiscoverModel: Equatable, Sendable {
               let token = DiscoverText.tokens(entry.arabizi).first,
               let indexes = phraseIndexesByToken[token]
         else { return [] }
-        return indexes
-            .map { entries[$0] }
-            .sorted { lhs, rhs in
-                lhs.arabizi.count == rhs.arabizi.count
-                    ? lhs.arabizi < rhs.arabizi
-                    : lhs.arabizi.count < rhs.arabizi.count
-            }
-            .prefix(limit)
-            .map { $0 }
+        let phrases: [DictionaryEntrySummary] = indexes.map { entries[$0] }
+        let shortestFirst = phrases.sorted { (lhs: DictionaryEntrySummary, rhs: DictionaryEntrySummary) -> Bool in
+            let left = lhs.arabizi.count
+            let right = rhs.arabizi.count
+            if left != right { return left < right }
+            return lhs.arabizi < rhs.arabizi
+        }
+        return Array(shortestFirst.prefix(limit))
     }
 
     /// Entries of the same kind from the same unit or vocabulary collection.
@@ -311,23 +310,24 @@ public struct DiscoverModel: Equatable, Sendable {
                     ? 0
                     : ownTokens.intersection(tokensByEntry[candidate]).count
                 if !entry.isSingleWord && shared == 0 { continue }
-                let score = (shared: shared, distance: abs(offset - position))
-                if let current = best[candidate],
-                   (current.shared, -current.distance) >= (score.shared, -score.distance) {
-                    continue
+                let distance = abs(offset - position)
+                if let current = best[candidate] {
+                    let currentIsBetter = current.shared > shared
+                        || (current.shared == shared && current.distance <= distance)
+                    if currentIsBetter { continue }
                 }
-                best[candidate] = score
+                best[candidate] = (shared: shared, distance: distance)
             }
         }
 
-        return best
-            .sorted { lhs, rhs in
-                if lhs.value.shared != rhs.value.shared { return lhs.value.shared > rhs.value.shared }
-                if lhs.value.distance != rhs.value.distance { return lhs.value.distance < rhs.value.distance }
-                return lhs.key < rhs.key
-            }
-            .prefix(limit)
-            .map { entries[$0.key] }
+        let ranked: [Int] = best.keys.sorted { (lhs: Int, rhs: Int) -> Bool in
+            let left = best[lhs]!
+            let right = best[rhs]!
+            if left.shared != right.shared { return left.shared > right.shared }
+            if left.distance != right.distance { return left.distance < right.distance }
+            return lhs < rhs
+        }
+        return ranked.prefix(limit).map { entries[$0] }
     }
 }
 
