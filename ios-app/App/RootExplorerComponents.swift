@@ -264,7 +264,8 @@ struct RootWordNode: View {
 /// Positions of the root and its family around it for a given width. Shared
 /// by the node layout and the connector canvas so both always agree.
 struct RootGraphGeometry {
-    static let iconOverlap = RootWordNode.iconDiameter / 2
+    /// Half of `RootWordNode.iconDiameter`; the icon circle sits above the card.
+    static let iconOverlap: CGFloat = 20
 
     let rootDiameter: CGFloat
     let nodeSize: CGSize
