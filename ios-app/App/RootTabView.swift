@@ -545,7 +545,19 @@ private struct DiscoverView: View {
                     .accessibilityIdentifier("dictionary.open")
                 }
 
-                let similar = model.similar(to: featured)
+                let family = featured.isSingleWord ? model.rootFamily(of: featured) : []
+                if !family.isEmpty {
+                    DictionaryListCard(
+                        title: "Din aceeași rădăcină",
+                        icon: "leaf.fill",
+                        entries: Array(family.prefix(4)),
+                        isSaved: isSaved,
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
+                }
+
+                let similar = model.similar(to: featured).filter { candidate in !family.contains(candidate) }
                 if !similar.isEmpty {
                     DictionaryListCard(
                         title: featured.isSingleWord ? "Din aceeași temă" : "Expresii similare",

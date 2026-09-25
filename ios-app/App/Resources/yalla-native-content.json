@@ -72495,6 +72495,24 @@
         "b"
       ],
       "arabicRadicals": "كتب"
+    },
+    {
+      "id": "root.q3d",
+      "arabiziRadicals": [
+        "2",
+        "3",
+        "d"
+      ],
+      "arabicRadicals": "قعد"
+    },
+    {
+      "id": "root.w2f",
+      "arabiziRadicals": [
+        "w",
+        "2",
+        "f"
+      ],
+      "arabicRadicals": "وقف"
     }
   ],
   "morphologicalPatterns": [
@@ -72647,6 +72665,42 @@
       "kind": "participle",
       "label": "deținut / sclav",
       "productivity": "limited"
+    },
+    {
+      "id": "pattern.q3d.sit",
+      "kind": "verbStem",
+      "label": "a se așeza",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.q3d.stay",
+      "kind": "verbStem",
+      "label": "stau, rămân",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.q3d.seated",
+      "kind": "participle",
+      "label": "așezat",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.q3d.rule",
+      "kind": "noun",
+      "label": "regulă",
+      "productivity": "lexicalized"
+    },
+    {
+      "id": "pattern.w2f.stand",
+      "kind": "verbStem",
+      "label": "a sta în picioare",
+      "productivity": "limited"
+    },
+    {
+      "id": "pattern.w2f.stop",
+      "kind": "placeNoun",
+      "label": "parcare, stație",
+      "productivity": "lexicalized"
     }
   ],
   "morphologyLinks": [
@@ -72779,6 +72833,36 @@
       "expressionID": "x9f4ce957c2a0",
       "rootID": "root.mlk",
       "patternID": "pattern.mlk.owned"
+    },
+    {
+      "expressionID": "c5afd17118f3a",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.sit"
+    },
+    {
+      "expressionID": "xeece627edeaf",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.stay"
+    },
+    {
+      "expressionID": "c18a7df927c99",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.seated"
+    },
+    {
+      "expressionID": "x197078213c48",
+      "rootID": "root.q3d",
+      "patternID": "pattern.q3d.rule"
+    },
+    {
+      "expressionID": "c1082019b0d3f",
+      "rootID": "root.w2f",
+      "patternID": "pattern.w2f.stand"
+    },
+    {
+      "expressionID": "x4b7efa0db389",
+      "rootID": "root.w2f",
+      "patternID": "pattern.w2f.stop"
     }
   ],
   "inflectionRelations": [

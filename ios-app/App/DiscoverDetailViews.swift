@@ -90,7 +90,19 @@ struct DictionaryEntryDetailView: View {
                     relatedForms
                 }
 
-                let similar = model.similar(to: entry)
+                let family = entry.isSingleWord ? model.rootFamily(of: entry) : []
+                if !family.isEmpty {
+                    DictionaryListCard(
+                        title: "Din aceeași rădăcină",
+                        icon: "leaf.fill",
+                        entries: Array(family.prefix(4)),
+                        isSaved: { $0.expressionIDs.contains(where: savedIDs.contains) },
+                        onToggleSaved: toggleSaved,
+                        destination: detail(for:)
+                    )
+                }
+
+                let similar = model.similar(to: entry).filter { candidate in !family.contains(candidate) }
                 if !similar.isEmpty {
                     DictionaryListCard(
                         title: entry.isSingleWord ? "Din aceeași temă" : "Expresii similare",

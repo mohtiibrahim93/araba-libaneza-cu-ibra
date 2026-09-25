@@ -298,6 +298,18 @@ public struct DiscoverModel: Equatable, Sendable {
         return Array(shortestFirst.prefix(limit))
     }
 
+    /// Other dictionary entries from the entry's root family, in the order
+    /// the approved family lists them.
+    public func rootFamily(of entry: DictionaryEntrySummary) -> [DictionaryEntrySummary] {
+        guard let rootID = entry.rootID, let graph = graphsByRootID[rootID] else { return [] }
+        var seen: Set<String> = [entry.id]
+        return graph.members.compactMap { member in
+            guard let index = entryIndexByExpressionID[member.id] else { return nil }
+            let candidate = entries[index]
+            return seen.insert(candidate.id).inserted ? candidate : nil
+        }
+    }
+
     /// Entries of the same kind from the same unit or vocabulary collection.
     /// Expressions must share at least one word of three or more letters
     /// (e.g. "baddak tekol" and "baddak teshrab"); words are ordered by how
@@ -526,7 +538,7 @@ public struct DiscoverModelBuilder: Sendable {
             roots: roots,
             graphsByRootID: graphs,
             topicGroups: package.units.map(\.expressionIDs)
-                + package.lexiconCollections.map(\.expressionIDs)
+                + package.lexiconCollections.filter(\.isTheme).map(\.expressionIDs)
         )
     }
 

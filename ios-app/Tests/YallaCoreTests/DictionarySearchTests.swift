@@ -6,13 +6,22 @@ struct DictionarySearchTests {
         Expression(id: id, canonicalArabizi: arabizi, levelTags: [.a1], topics: [], localizations: ["ro": .init(naturalMeaning: meaning)])
     }
 
-    private func model(_ expressions: [Expression], units: [[String]] = []) throws -> DiscoverModel {
+    private func model(
+        _ expressions: [Expression],
+        units: [[String]] = [],
+        collections: [LexiconCollection] = [],
+        roots: [Root] = [],
+        links: [MorphologyLink] = []
+    ) throws -> DiscoverModel {
         let package = ContentPackage(
             manifest: .init(schemaVersion: 3, contentVersion: "test", defaultLearnerLocale: "ro"),
             expressions: expressions,
             units: units.enumerated().map { index, ids in
                 JourneyUnit(id: "unit\(index)", level: .a1, expressionIDs: ids, localizations: ["ro": .init(title: "U\(index)", description: "")])
-            }
+            },
+            lexiconCollections: collections,
+            roots: roots,
+            morphologyLinks: links
         )
         return try DiscoverModelBuilder().build(from: package, locale: "ro")
     }
@@ -103,5 +112,40 @@ struct DictionarySearchTests {
         ], units: [["g1", "g2"], ["s1", "g3"]])
         let hello = try #require(model.entries.first { $0.arabizi == "Mar7aba" })
         #expect(model.similar(to: hello).map(\.id) == ["g2"])
+    }
+
+    @Test func numberedWordListsAreNotThemes() throws {
+        let model = try model([
+            expression("sit", "2a3ad", "a se așeza"),
+            expression("hit", "darab", "a lovi"),
+            expression("sea", "ba7r", "mare"),
+            expression("sky", "sama", "cer")
+        ], collections: [
+            LexiconCollection(id: "v-index-35", expressionIDs: ["sit", "hit"], localizations: [:]),
+            LexiconCollection(id: "v-nature", expressionIDs: ["sea", "sky"], localizations: [:])
+        ])
+        let sit = try #require(model.entries.first { $0.arabizi == "2a3ad" })
+        let sea = try #require(model.entries.first { $0.arabizi == "ba7r" })
+        #expect(model.similar(to: sit).isEmpty)
+        #expect(model.similar(to: sea).map(\.id) == ["sky"])
+    }
+
+    @Test func rootFamilyListsTheOtherMembers() throws {
+        let model = try model([
+            expression("sit", "2a3ad", "a se așeza"),
+            expression("seated", "2ee3ed", "așezat"),
+            expression("rule", "2a3de", "regulă"),
+            expression("hit", "darab", "a lovi")
+        ], roots: [
+            Root(id: "root.q3d", arabiziRadicals: ["2", "3", "d"], arabicRadicals: "قعد")
+        ], links: [
+            MorphologyLink(expressionID: "sit", rootID: "root.q3d", patternID: nil),
+            MorphologyLink(expressionID: "seated", rootID: "root.q3d", patternID: nil),
+            MorphologyLink(expressionID: "rule", rootID: "root.q3d", patternID: nil)
+        ])
+        let sit = try #require(model.entries.first { $0.arabizi == "2a3ad" })
+        let hit = try #require(model.entries.first { $0.arabizi == "darab" })
+        #expect(model.rootFamily(of: sit).map(\.arabizi) == ["2ee3ed", "2a3de"])
+        #expect(model.rootFamily(of: hit).isEmpty)
     }
 }

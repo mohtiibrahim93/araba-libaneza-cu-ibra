@@ -29,4 +29,9 @@ public struct LexiconCollection: Codable, Equatable, Sendable, Identifiable {
         }
         return localization
     }
+
+    /// False for the numbered general word lists ("Cuvinte și acțiuni · N",
+    /// `v-index-*`), which split one big vocabulary list into parts rather
+    /// than grouping words by topic.
+    public var isTheme: Bool { !id.hasPrefix("v-index-") }
 }
