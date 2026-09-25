@@ -332,12 +332,13 @@ const NativeScheduler = ({
   // Trial-only 0-lei card confirmation: opens a Stripe setup-mode page that
   // saves the card without charging (commitment step against no-shows).
   const startCardConfirmation = async () => {
-    if (!registrationId) return;
+    if (!effectiveRegistrationId) return;
     setSavingCard(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-        body: { registrationId, setup: true },
+        body: { registrationId: effectiveRegistrationId, setup: true },
       });
+
       if (fnError) throw fnError;
       if (!data?.url) throw new Error("missing url");
       window.location.href = data.url;
