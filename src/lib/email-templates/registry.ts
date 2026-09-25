@@ -28,6 +28,7 @@ import { template as bookingRescheduled } from './booking-rescheduled'
 import { template as trialFollowup } from './trial-followup'
 import { template as adminNewRegistration } from './admin-new-registration'
 import { template as adminBooking } from './admin-booking'
+import { template as adminContactMessage } from './admin-contact-message'
 import { template as gdprErasureRequest } from './gdpr-erasure-request'
 import { template as arabiziCheatSheet } from './arabizi-cheat-sheet'
 import { template as expresiiLibaneze } from './expresii-libaneze'
@@ -46,6 +47,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'trial-followup': trialFollowup,
   'admin-new-registration': adminNewRegistration,
   'admin-booking': adminBooking,
+  'admin-contact-message': adminContactMessage,
   'gdpr-erasure-request': gdprErasureRequest,
   'arabizi-cheat-sheet': arabiziCheatSheet,
   'expresii-libaneze': expresiiLibaneze,
