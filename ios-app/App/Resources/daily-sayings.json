@@ -1,0 +1,29 @@
+{
+  "approvalStatus": "teacher-provided",
+  "note": "Lebanese sayings given by the teacher. One per screen is shown each day, rotating through the screen's list. Unit sayings are keyed by unit ID.",
+  "screens": {
+    "home": [
+      { "text": "Kill yom shi jdeed", "meaning": "În fiecare zi, ceva nou." },
+      {
+        "text": "Men ba3d 7maare ma yenbot 7ashish",
+        "literal": "După măgarul meu, să nu mai crească iarbă.",
+        "meaning": "Se spune despre omul egoist: după ce măgarul lui moare, nu-i mai pasă dacă mai crește iarbă."
+      }
+    ],
+    "progress": [
+      { "text": "Kill yom a7la men li 2ablo", "meaning": "Fiecare zi, mai frumoasă decât cea dinainte." },
+      {
+        "text": "Baddak tekol 3enab aw te2tol el natuur?",
+        "literal": "Vrei să mănânci struguri sau să-l omori pe paznic?",
+        "meaning": "Vrei o soluție sau vrei să te pierzi în detalii?"
+      }
+    ],
+    "journey": [
+      { "text": "7addak b kill 5atwe", "meaning": "Împreună, la fiecare pas." },
+      { "text": "Re7let el alf miil btballesh b 5otwe", "meaning": "Călătoria de o mie de mile începe cu un pas." }
+    ]
+  },
+  "units": {
+    "a1-restaurant": { "text": "Sa7teen!", "meaning": "Poftă bună!" }
+  }
+}

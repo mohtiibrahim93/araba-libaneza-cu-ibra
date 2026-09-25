@@ -80,6 +80,11 @@ struct JourneyPathView: View {
                         header
                         titleBar
                         map
+                        if let saying = DailySayings.today(for: .journey) {
+                            SayingLine(saying: saying)
+                                .padding(.horizontal, Theme.Spacing.screen)
+                                .padding(.top, Theme.Spacing.md)
+                        }
                     }
                     .padding(.top, Theme.Spacing.xxs)
                     .padding(.bottom, Theme.Spacing.xxl)
@@ -556,6 +561,9 @@ struct JourneyUnitDetailView: View {
                 .font(Theme.font(.subheadline))
                 .foregroundStyle(.white.opacity(0.8))
                 .fixedSize(horizontal: false, vertical: true)
+            if let saying = DailySayings.unit(detail.id) {
+                SayingLine(saying: saying, textColor: Theme.lime, meaningColor: .white.opacity(0.8))
+            }
             HStack(spacing: 10) {
                 GeometryReader { geometry in
                     let fraction = CGFloat(total > 0 ? Double(completed) / Double(total) : 0)

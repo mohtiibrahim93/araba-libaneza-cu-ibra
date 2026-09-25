@@ -54,6 +54,10 @@ struct ProgressDashboardView: View {
                 }
                 .accessibilityIdentifier("progress.header")
 
+                if let saying = DailySayings.today(for: .progress) {
+                    SayingLine(saying: saying)
+                }
+
                 ProgressOverviewCard(summary: summary, level: journeyLevel)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Theme.Spacing.sm), count: 4), spacing: Theme.Spacing.sm) {

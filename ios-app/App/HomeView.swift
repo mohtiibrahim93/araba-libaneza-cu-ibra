@@ -56,6 +56,9 @@ struct HomeView: View {
                             artwork: "illus-raouche",
                             isCompact: compact
                         )
+                        if let saying = DailySayings.today(for: .home) {
+                            SayingLine(saying: saying)
+                        }
 
                         if persistenceError != nil {
                             Label(
