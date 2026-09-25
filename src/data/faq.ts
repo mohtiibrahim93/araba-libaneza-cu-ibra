@@ -194,7 +194,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Există lecție de probă?",
             featured: true,
-            a: "Da — oferim o lecție de probă gratuită de 30 de minute, ca să cunoști instructorul, să testezi metoda și să vezi dacă formatul ți se potrivește înainte de înscriere.",
+            a: "Da — o lecție de probă gratuită de 30 de minute, ca să cunoști instructorul, să testezi metoda și să vezi dacă formatul ți se potrivește înainte de înscriere. Proba costă 0 lei, dar locul se confirmă cu cardul prin Stripe (nu se încasează nimic atunci). Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte; la neprezentare sau anulare mai târzie se reține 150 lei, cât o lecție privată.",
           },
           {
             q: "Ce nivel CEFR voi atinge după curs?",
