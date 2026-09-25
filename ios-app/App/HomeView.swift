@@ -19,7 +19,9 @@ struct HomeView: View {
     let weakSkills: [MasterySkill]
     let expressionOfDay: HomeExpression?
     let savedExpressions: [HomeExpression]
-    let progressDestination: ProgressDashboardView
+    let modes: [PracticeModeSummary]
+    let package: ContentPackage
+    let locale: String
     @ObservedObject var progressModel: LearnerProgressModel
     @Binding var path: [String]
     let onReviews: () -> Void
@@ -27,6 +29,7 @@ struct HomeView: View {
     let onSmartPractice: () -> Void
     let onSpeedDrill: () -> Void
     let onSpeak: () -> Void
+    let onProgress: () -> Void
     let onDiscover: () -> Void
     let onProfile: () -> Void
 
@@ -66,9 +69,19 @@ struct HomeView: View {
                         goals: goals,
                         onLesson: onContinueJourney,
                         onReview: onReviews,
-                        onSpeedDrill: onSpeedDrill
+                        onSpeedDrill: onSpeedDrill,
+                        onProgress: onProgress
                     )
                     HomeSpeakBanner(action: onSpeak)
+                    NavigationLink(value: "practice") {
+                        HomeLinkRow(
+                            icon: "bolt.fill",
+                            title: "Toate modurile de practică",
+                            detail: "Sesiune inteligentă, Speed Drill, ascultare și pronunție"
+                        )
+                    }
+                    .buttonStyle(NodeButtonStyle())
+                    .accessibilityIdentifier("home.practice-all")
 
                     HStack(alignment: .top, spacing: Theme.Spacing.s) {
                         if let expressionOfDay {
@@ -89,8 +102,13 @@ struct HomeView: View {
             .background(Theme.canvas.ignoresSafeArea())
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: String.self) { id in
-                if id == "progress" {
-                    progressDestination
+                switch id {
+                case "practice":
+                    PracticeListView(modes: modes, package: package, locale: locale, progressModel: progressModel)
+                case "ai-conversation":
+                    AIConversationPreviewView()
+                default:
+                    PracticeModeScreen(modeID: id, modes: modes, package: package, locale: locale, progressModel: progressModel)
                 }
             }
         }
@@ -266,11 +284,12 @@ struct HomeDailyProgressCard: View {
     let onLesson: () -> Void
     let onReview: () -> Void
     let onSpeedDrill: () -> Void
+    let onProgress: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            // Opens the full Progres dashboard; the rings below start each goal.
-            NavigationLink(value: "progress") {
+            // Opens the Progres tab; the rings below start each goal.
+            Button(action: onProgress) {
                 SectionHeader(
                     title: "Progresul de azi",
                     trailing: "\(goals.completedCount) din \(goals.totalCount) finalizate",
@@ -323,6 +342,36 @@ struct DailyGoalRing: View {
         .accessibilityLabel(title)
         .accessibilityValue(done ? "Finalizat azi" : "Nefinalizat azi")
         .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// Plain card row that leads to another screen.
+struct HomeLinkRow: View {
+    let icon: String
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.m) {
+            IconBadge(systemName: icon, tint: Theme.goldShade, background: Theme.variantBackground, size: 46)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(Theme.serif(.headline))
+                    .foregroundStyle(Theme.ink)
+                Text(detail)
+                    .font(Theme.font(.caption))
+                    .foregroundStyle(Theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+            Image(systemName: "chevron.right")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.muted)
+                .accessibilityHidden(true)
+        }
+        .padding(Theme.Spacing.m)
+        .cardBackground()
+        .accessibilityElement(children: .combine)
     }
 }
 

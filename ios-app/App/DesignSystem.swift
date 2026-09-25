@@ -174,3 +174,23 @@ struct DecorativeImage: View {
         }
     }
 }
+
+/// Thin horizontal meter, e.g. a skill's first-try accuracy.
+struct MeterBar: View {
+    let fraction: Double
+    var tint: Color = Theme.teal
+    var track: Color = Theme.line
+    var height: CGFloat = 5
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule().fill(track)
+                Capsule().fill(tint)
+                    .frame(width: geometry.size.width * CGFloat(min(max(fraction, 0), 1)))
+            }
+        }
+        .frame(height: height)
+        .accessibilityHidden(true)
+    }
+}
