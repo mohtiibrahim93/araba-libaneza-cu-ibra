@@ -729,6 +729,8 @@ const NativeScheduler = ({
           className="w-full px-3 py-2 rounded-md border border-input text-sm resize-none"
         />
         <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
+        {policyNotice}
+
         <button
           onClick={handleConfirm}
           disabled={submitting || !gdpr}
