@@ -28,6 +28,12 @@ export interface CohortNoteStrings {
   inPerson: string;
   /** "{n} locuri rămase" */
   spotsLeft: string;
+  /** "în română" — the language the group is taught in */
+  taughtRo: string;
+  /** "în engleză" */
+  taughtEn: string;
+  /** "{left} din {max} locuri libere" */
+  seatsOf: string;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -62,14 +68,15 @@ export function cohortNoteLine(
   const level = (c.level || "A1").toUpperCase();
   const format = c.format === "online" ? s.online : c.format === "fizic" ? s.inPerson : "";
   const head = format ? `${level} ${format}` : level;
+  // The Romanian and the English class are separate groups with separate
+  // seats, so each line names its language and counts its own places.
+  const taught = c.teaching_language === "en" ? s.taughtEn : s.taughtRo;
 
-  // Seats are only worth saying when they are running out; "10 locuri rămase"
-  // on a fresh cohort reads as an empty room.
-  const seats = !c.full && c.seatsLeft > 0 && c.seatsLeft <= 4
-    ? ` · ${s.spotsLeft.replace("{n}", String(c.seatsLeft))}`
-    : "";
+  const seats = c.full
+    ? ""
+    : ` · ${s.seatsOf.replace("{left}", String(c.seatsLeft)).replace("{max}", String(c.max_seats))}`;
 
-  return `${head} · ${when}${seats}`;
+  return `${head} · ${taught} · ${when}${seats}`;
 }
 
 export function cohortNoteLines(

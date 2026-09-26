@@ -36,7 +36,7 @@ async function fetchActive(): Promise<Cohort[]> {
     supabase
       .from("group_cohorts")
       .select(
-        "id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status",
+        "id, form_type, level, format, start_date, schedule_label_ro, schedule_label_en, max_seats, sort_order, status, teaching_language",
       )
       .eq("form_type", "group")
       .eq("is_active", true)
@@ -65,6 +65,7 @@ async function fetchActive(): Promise<Cohort[]> {
         ...c,
         form_type: c.form_type as "group" | "kids",
         status: (c.status as CohortStatus) ?? "forming",
+        teaching_language: (c.teaching_language as "ro" | "en") ?? "ro",
         taken,
         seatsLeft: Math.max(0, c.max_seats - taken),
         full: taken >= c.max_seats,

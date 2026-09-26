@@ -20,6 +20,9 @@ const RO: CohortNoteStrings = {
   online: "online",
   inPerson: "fizic",
   spotsLeft: "{n} locuri rămase",
+  taughtRo: "în română",
+  taughtEn: "în engleză",
+  seatsOf: "{left} din {max} locuri libere",
 };
 
 const cohort = (over: Partial<Cohort> = {}): Cohort =>
@@ -49,12 +52,12 @@ const NOW = new Date("2026-09-21T10:00:00");
 
 describe("the enrolment note follows the cohort data", () => {
   it("says a started course is running, with the date it began", () => {
-    expect(cohortNoteLine(cohort(), RO, "ro", NOW)).toBe("A1 fizic · în desfășurare din 2 septembrie");
+    expect(cohortNoteLine(cohort(), RO, "ro", NOW)).toBe("A1 fizic · în română · în desfășurare din 2 septembrie · 8 din 10 locuri libere");
   });
 
   it("says when a future course starts", () => {
     const line = cohortNoteLine(cohort({ start_date: "2026-10-05" }), RO, "ro", NOW);
-    expect(line).toBe("A1 fizic · începe pe 5 octombrie");
+    expect(line).toBe("A1 fizic · în română · începe pe 5 octombrie · 8 din 10 locuri libere");
   });
 
   it("calls today today", () => {
@@ -63,18 +66,22 @@ describe("the enrolment note follows the cohort data", () => {
 
   it("offers the waiting list instead of a date when the group is full", () => {
     const line = cohortNoteLine(cohort({ full: true, seatsLeft: 0 }), RO, "ro", NOW);
-    expect(line).toBe("A1 fizic · Listă de așteptare");
+    expect(line).toBe("A1 fizic · în română · Listă de așteptare");
     expect(line).not.toMatch(/septembrie|octombrie/);
   });
 
-  it("mentions seats only when they are nearly gone", () => {
-    expect(cohortNoteLine(cohort({ seatsLeft: 8 }), RO, "ro", NOW)).not.toContain("locuri rămase");
-    expect(cohortNoteLine(cohort({ seatsLeft: 2 }), RO, "ro", NOW)).toContain("2 locuri rămase");
+  it("counts each group's own seats and names its language", () => {
+    const ro = cohortNoteLine(cohort({ start_date: "2026-10-17", max_seats: 6, seatsLeft: 6, taken: 0 }), RO, "ro", NOW);
+    const en = cohortNoteLine(cohort({ start_date: "2026-10-31", max_seats: 6, seatsLeft: 4, taken: 2, teaching_language: "en" }), RO, "ro", NOW);
+    expect(ro).toContain("în română");
+    expect(ro).toContain("6 din 6 locuri libere");
+    expect(en).toContain("în engleză");
+    expect(en).toContain("4 din 6 locuri libere");
   });
 
   it("uses the reader's language for the month", () => {
-    expect(cohortNoteLine(cohort(), { ...RO, runningSince: "running since {date}", inPerson: "in person" }, "en", NOW))
-      .toBe("A1 in person · running since 2 September");
+    expect(cohortNoteLine(cohort(), { ...RO, runningSince: "running since {date}", inPerson: "in person", taughtRo: "taught in Romanian", seatsOf: "{left} of {max} places free" }, "en", NOW))
+      .toBe("A1 in person · taught in Romanian · running since 2 September · 8 of 10 places free");
   });
 });
 

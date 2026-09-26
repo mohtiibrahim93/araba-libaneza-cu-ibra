@@ -1,6 +1,7 @@
 import { Users } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useGroupCapacities, type CapacityInfo } from "@/hooks/useGroupCapacity";
+import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 
 interface SpotsBadgeProps {
   formType: "group" | "kids";
@@ -12,9 +13,13 @@ interface SpotsBadgeProps {
 
 const SpotsBadge = ({ formType, level, compact = false, className = "" }: SpotsBadgeProps) => {
   const { t } = useI18n();
-  const { get, getFormats, loading } = useGroupCapacities();
+  const { get, loading } = useGroupCapacities();
+  // Groups count the seats of the groups still open to join. The level-wide
+  // capacity row also counted groups that are already running, so a full
+  // August class made the October ones read "full" while every seat was free.
+  const { cohorts, loading: cohortsLoading } = useGroupCohorts("group", level ?? null, null, null);
 
-  if (loading) return null;
+  if (formType === "kids" ? loading : cohortsLoading) return null;
 
   // Kids: single row, no format split.
   if (formType === "kids") {
@@ -24,7 +29,8 @@ const SpotsBadge = ({ formType, level, compact = false, className = "" }: SpotsB
   }
 
   // Group: fizic and online tracked apart — never summed into one number.
-  const { fizic, online } = getFormats(level);
+  const fizic = seatsOf(cohorts.filter((c) => c.format !== "online"));
+  const online = seatsOf(cohorts.filter((c) => c.format === "online"));
   const present = [
     { info: fizic, label: t.spotsFizic },
     { info: online, label: t.spotsOnline },
@@ -42,6 +48,20 @@ const SpotsBadge = ({ formType, level, compact = false, className = "" }: SpotsB
 
   return renderBadge(label, allFull, anyUrgent);
 
+  function seatsOf(list: Cohort[]): CapacityInfo | null {
+    if (list.length === 0) return null;
+    const max = list.reduce((n, c) => n + c.max_seats, 0);
+    const taken = list.reduce((n, c) => n + c.taken, 0);
+    return {
+      taken,
+      max,
+      min: 0,
+      seatsLeft: Math.max(0, max - taken),
+      needToStart: 0,
+      belowMin: false,
+      full: taken >= max,
+    };
+  }
   function seatsLabel(info: CapacityInfo) {
     return info.seatsLeft === 1
       ? t.spotsSeatShortOne

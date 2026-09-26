@@ -682,6 +682,9 @@ export const translations = {
     // had begun.
     cohortNoteRunningSince: "în desfășurare din {date}",
     cohortNoteStartsOn: "începe pe {date}",
+    cohortNoteTaughtRo: "în română",
+    cohortNoteTaughtEn: "în engleză",
+    cohortNoteSeatsOf: "{left} din {max} locuri libere",
     cohortNoteFallback: "Grupele A1–C2 pornesc periodic. Scrie-ne și îți spunem exact când începe următoarea.",
     activeNowCta: "Vezi cursul și înscrie-te",
 
@@ -1450,6 +1453,9 @@ export const translations = {
     activeNowFull: "Waiting list",
     cohortNoteRunningSince: "running since {date}",
     cohortNoteStartsOn: "starts on {date}",
+    cohortNoteTaughtRo: "taught in Romanian",
+    cohortNoteTaughtEn: "taught in English",
+    cohortNoteSeatsOf: "{left} of {max} places free",
     cohortNoteFallback: "A1–C2 groups start regularly. Get in touch and we'll tell you exactly when the next one begins.",
     activeNowCta: "See the course and enroll",
 

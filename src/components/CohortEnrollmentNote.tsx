@@ -34,6 +34,9 @@ const CohortEnrollmentNote = ({ className = "" }: { className?: string }) => {
           online: t.spotsOnline,
           inPerson: t.spotsFizic,
           spotsLeft: t.capSpotsLeft,
+          taughtRo: t.cohortNoteTaughtRo,
+          taughtEn: t.cohortNoteTaughtEn,
+          seatsOf: t.cohortNoteSeatsOf,
         },
         lang,
       );
