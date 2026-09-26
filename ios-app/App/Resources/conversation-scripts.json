@@ -54,6 +54,61 @@
       ]
     },
     {
+      "unitID": "a1-questions",
+      "scenes": [
+        {
+          "title": "Cu un prieten",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Men wen enta?",
+                "ro": "De unde ești?"
+              },
+              "exerciseID": "q64",
+              "learnerRo": "Sunt din România."
+            },
+            {
+              "partner": {
+                "arabizi": "Shu baddak?",
+                "ro": "Ce vrei?"
+              },
+              "exerciseID": "q65",
+              "learnerRo": "Vreau o cafea."
+            },
+            {
+              "partner": {
+                "arabizi": "Kifak?",
+                "ro": "Ce mai faci?"
+              },
+              "exerciseID": "q66",
+              "learnerRo": "Sunt obosit."
+            }
+          ]
+        },
+        {
+          "title": "La piață",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba!",
+                "ro": "Salut!"
+              },
+              "exerciseID": "q67",
+              "learnerRo": "Ce faci? (către o fată)"
+            },
+            {
+              "partner": {
+                "arabizi": "Badde 5oo5.",
+                "ro": "Vreau prune."
+              },
+              "exerciseID": "q68",
+              "learnerRo": "Câte kilograme vrei? (către un bărbat)"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "unitID": "a1-restaurant",
       "scenes": [
         {
