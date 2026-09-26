@@ -1,5 +1,5 @@
 import * as React from 'npm:react@18.3.1'
-import { Body, Button, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
+import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
@@ -57,7 +57,7 @@ const Email = ({ name, whenLabel, durationMin, format, meetLink, manageUrl, lang
       <Preview>{t.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Section style={headerSection}><Text style={logo}>🌳 {SITE_NAME}</Text></Section>
+          <Section style={headerSection}><Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text></Section>
           <Heading style={h1}>{t.hi(name)}</Heading>
           <Text style={text}>{t.confirmed}</Text>
           <Section style={detailsBox}>
@@ -102,3 +102,4 @@ const ctaSection = { textAlign: 'center' as const, margin: '28px 0' }
 const button = { backgroundColor: '#dc2626', color: '#ffffff', padding: '14px 28px', borderRadius: '8px', fontSize: '15px', fontWeight: '600' as const, textDecoration: 'none', display: 'inline-block' }
 const hr = { borderColor: '#e5e5e5', margin: '28px 0 20px' }
 const footer = { fontSize: '14px', color: '#666', margin: '0 0 4px' }
+const logoMark = { display: 'inline-block', verticalAlign: 'middle', borderRadius: '5px', marginRight: '8px' }

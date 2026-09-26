@@ -1,7 +1,5 @@
 import * as React from 'npm:react@18.3.1'
-import {
-  Body, Container, Head, Heading, Html, Preview, Text, Button, Hr, Section, Link,
-} from 'npm:@react-email/components@0.0.22'
+import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
 const SITE_NAME = "Arabă Libaneză cu Ibra"
@@ -36,7 +34,7 @@ const RegistrationConfirmationEmail = ({ name, formType, level, format, message,
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
-          <Text style={logo}>🌳 {SITE_NAME}</Text>
+          <Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text>
         </Section>
 
         <Heading style={h1}>
@@ -130,3 +128,4 @@ const button = {
 const hr = { borderColor: '#e5e5e5', margin: '28px 0 20px' }
 const footer = { fontSize: '14px', color: '#666', margin: '0 0 4px' }
 const footerSmall = { fontSize: '12px', color: '#999', margin: '0' }
+const logoMark = { display: 'inline-block', verticalAlign: 'middle', borderRadius: '5px', marginRight: '8px' }

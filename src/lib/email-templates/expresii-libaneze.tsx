@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Body, Button, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
+import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
@@ -21,7 +21,7 @@ const Email = ({
     <Preview>100 de expresii libaneze esențiale — PDF-ul tău e aici</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Section style={headerSection}><Text style={logo}>🌳 {SITE_NAME}</Text></Section>
+        <Section style={headerSection}><Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text></Section>
         <Heading style={h1}>{name ? `Salut, ${name}!` : 'Salut!'}</Heading>
         <Text style={text}>
           Mai jos ai pachetul de start: 100 de expresii libaneze esențiale, grupate pe situații
@@ -71,3 +71,4 @@ const buttonGhost: React.CSSProperties = { backgroundColor: '#111827', color: '#
 const link: React.CSSProperties = { color: '#b91c1c' }
 const hr: React.CSSProperties = { borderColor: '#e5e7eb', margin: '20px 0' }
 const footer: React.CSSProperties = { fontSize: '13px', color: '#6b7280' }
+const logoMark = { display: 'inline-block', verticalAlign: 'middle', borderRadius: '5px', marginRight: '8px' }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Body, Button, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from "@react-email/components";
+import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from "@react-email/components";
 import type { TemplateEntry } from "./registry";
 
 interface Props {
@@ -34,7 +34,7 @@ const BookingsAccessEmail = ({ accessUrl, lang = "ro" }: Props) => {
       <Preview>{c.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Text style={brand}>🌳 Arabă Libaneză cu Ibra</Text>
+          <Text style={brand}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />Arabă Libaneză cu Ibra</Text>
           <Heading style={heading}>{c.title}</Heading>
           <Text style={text}>{c.body}</Text>
           {accessUrl && (
@@ -70,3 +70,4 @@ const link = { color: "#dc2626", textDecoration: "underline" };
 const notice = { backgroundColor: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px", color: "#4a4a5a", fontSize: "13px", lineHeight: "1.5", padding: "14px" };
 const small = { color: "#777777", fontSize: "12px", lineHeight: "1.5", wordBreak: "break-all" as const };
 const hr = { borderColor: "#e5e5e5", margin: "28px 0 20px" };
+const logoMark = { display: "inline-block", verticalAlign: "middle", borderRadius: "5px", marginRight: "8px" };
