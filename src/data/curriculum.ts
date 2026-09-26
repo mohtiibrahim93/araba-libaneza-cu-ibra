@@ -51,8 +51,8 @@ const RO: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic (Grupa 2): luni și miercuri 19:00–20:30 · 32 de lecții · Strada Icoanei 80",
-      "Online: grupa în desfășurare, locurile sunt ocupate — lasă-ți datele pentru următoarea grupă",
+      "Fizic: grupa de luni și miercuri 19:00–20:30 (Strada Icoanei 80) e în desfășurare",
+      "Online: grupe noi, în română și în engleză — datele și locurile libere le vezi la înscriere",
       "Examen final inclus",
     ],
     intro: [
@@ -110,7 +110,7 @@ const RO: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: marți și joi 19:00–20:30 · 54 de lecții · Strada Icoanei 80",
+      "Fizic: grupa de marți și joi 19:00–20:30 (Strada Icoanei 80) e în desfășurare · 54 de lecții",
       "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
@@ -501,8 +501,8 @@ const EN: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Spoken",
     schedule: [
-      "In person (Group 2): Mondays & Wednesdays 19:00–20:30 · 32 lessons · Strada Icoanei 80",
-      "Online: group in progress and full — leave your details for the next one",
+      "In person: the Monday & Wednesday 19:00–20:30 group (Strada Icoanei 80) is in progress",
+      "Online: new groups, taught in Romanian and in English — dates and free places are shown when you sign up",
       "Final exam included",
     ],
     intro: [
@@ -560,7 +560,7 @@ const EN: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Spoken",
     schedule: [
-      "In person: Tuesdays & Thursdays 19:00–20:30 · 54 lessons · Strada Icoanei 80",
+      "In person: the Tuesday & Thursday 19:00–20:30 group (Strada Icoanei 80) is in progress · 54 lessons",
       "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
     ],

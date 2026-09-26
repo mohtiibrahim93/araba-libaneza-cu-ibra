@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import NotifyMeForm from "@/components/NotifyMeForm";
+import { useGroupCohorts } from "@/hooks/useGroupCohorts";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -22,20 +23,21 @@ import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA1Online from "@/assets/poster-a1-online.webp.asset.json";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
 
-// Cohort posters per level — only A1/A2 have announced cohorts.
-// `started` marks a cohort that is already running: enrolment is closed, so the
-// page collects interest for the next one instead of taking sign-ups, and the
-// poster is hidden because it advertises a start date that has passed.
+// Posters of the groups already running at each level. `started` marks a group
+// that can no longer be joined: its poster stays on the page under "în
+// desfășurare" rather than advertising a start date that has passed. Whether a
+// format can be joined is read from the open cohorts in the database, not from
+// this list.
 type PosterFormat = "online" | "fizic";
 const LEVEL_POSTERS: Partial<
   Record<string, { src: string; alt: string; format: PosterFormat; started?: boolean }[]>
 > = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80", format: "fizic", started: true },
     { src: posterA1Online.url, alt: "Poster A1 online — sâmbătă 12:00–13:30 și duminică 17:30–19:00", format: "online", started: true },
   ],
   a2: [
-    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80", format: "fizic" },
+    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80", format: "fizic", started: true },
   ],
 };
 
@@ -61,6 +63,13 @@ const CursGrupLevel = () => {
     () => getCurriculum(lang).find((l) => l.id === slug),
     [lang, slug],
   );
+  // Groups at this level still open to join, in every teaching language.
+  const { cohorts: openCohorts, loading: cohortsLoading } = useGroupCohorts(
+    "group",
+    slug.toUpperCase(),
+    null,
+    null,
+  );
 
   if (!VALID.includes(slug as (typeof VALID)[number]) || !curriculum) {
     return <Navigate to="/cursuri/grup" replace />;
@@ -70,19 +79,26 @@ const CursGrupLevel = () => {
   const fizic = physicalPrice(online);
   const available = isAvailable(upperLevel);
 
-  // Format toggle: exactly one cohort/poster is shown at a time. Defaults to
-  // ?mod= when present, otherwise "fizic" (both A1 and A2 have a fizic cohort).
-  const availableFormats: PosterFormat[] = (LEVEL_POSTERS[slug] || []).map((p) => p.format);
+  // Format toggle. A format is offered when it has a poster (a running group)
+  // or an open cohort; the default is the first format someone can join.
+  const posters = LEVEL_POSTERS[slug] || [];
+  const openIn = (fmt: PosterFormat) =>
+    openCohorts.some((c) => !c.format || c.format === fmt);
+  const openFormats = (["online", "fizic"] as PosterFormat[]).filter(openIn);
+  const availableFormats: PosterFormat[] = Array.from(
+    new Set([...posters.map((p) => p.format), ...openFormats]),
+  );
   const selectedFormat: PosterFormat =
     paramFormat && availableFormats.includes(paramFormat)
       ? paramFormat
-      : availableFormats[0] ?? "fizic";
-  // A cohort that has already started cannot be joined, even though the level
-  // itself is "available" (A1 still has an open in-person group).
-  const cohortStarted = Boolean(
-    LEVEL_POSTERS[slug]?.find((p) => p.format === selectedFormat)?.started,
-  );
-  const canEnrol = available && !cohortStarted;
+      : openFormats[0] ?? availableFormats[0] ?? "fizic";
+  const poster = posters.find((p) => p.format === selectedFormat);
+  // Joinable when an open cohort exists in this format. Until the cohorts
+  // load (and on the server render, which has none) fall back to the poster:
+  // a running group means no.
+  const hasOpenGroup = cohortsLoading ? !poster?.started : openIn(selectedFormat);
+  const cohortStarted = !hasOpenGroup && Boolean(poster?.started);
+  const canEnrol = available && hasOpenGroup;
 
   const pickFormat = (fmt: PosterFormat) => {
     const next = new URLSearchParams(searchParams);
@@ -353,12 +369,13 @@ const CursGrupLevel = () => {
                       );
                     })}
                   </div>
-                  {(() => {
-                    const poster = LEVEL_POSTERS[slug]!.find((p) => p.format === selectedFormat);
-                    // A started cohort's poster still advertises its old start
-                    // date, so showing it would contradict the notice below.
-                    if (!poster || poster.started) return null;
-                    return (
+                  {poster && (
+                    <figure className="max-w-md">
+                      {poster.started && (
+                        <figcaption className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          {lang === "en" ? "In progress" : "În desfășurare"}
+                        </figcaption>
+                      )}
                       <img
                         src={poster.src}
                         alt={poster.alt}
@@ -366,10 +383,10 @@ const CursGrupLevel = () => {
                         height={800}
                         loading="lazy"
                         decoding="async"
-                        className="w-full max-w-md rounded-2xl border border-border shadow-xs"
+                        className={`w-full rounded-2xl border border-border shadow-xs ${poster.started ? "opacity-80" : ""}`}
                       />
-                    );
-                  })()}
+                    </figure>
+                  )}
                 </div>
               )}
             </div>
@@ -390,8 +407,8 @@ const CursGrupLevel = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {cohortStarted
                       ? lang === "en"
-                        ? "All 10 seats are taken and the lessons are under way, so it can no longer be joined. Leave your details and we'll email you first when the next online group opens — we start one as soon as enough people are waiting. You can also begin right away with private 1:1 lessons."
-                        : "Toate cele 10 locuri sunt ocupate, iar lecțiile sunt deja în desfășurare, așa că nu se mai poate intra în ea. Lasă-ți datele și te anunțăm primul pe email când deschidem următoarea grupă online — pornim una imediat ce sunt suficienți înscriși. Poți începe oricând și cu lecții private 1:1."
+                        ? "The lessons are under way, so this group can no longer be joined. Leave your details and we'll email you first when the next group in this format opens — we start one as soon as enough people are waiting. You can also begin right away with private 1:1 lessons."
+                        : "Lecțiile sunt deja în desfășurare, așa că nu se mai poate intra în grupă. Lasă-ți datele și te anunțăm primul pe email când deschidem următoarea grupă în acest format — pornim una imediat ce sunt suficienți înscriși. Poți începe oricând și cu lecții private 1:1."
                       : available
                         ? t.levelPageRegisterDesc
                         : t.levelPageInPrepDesc}

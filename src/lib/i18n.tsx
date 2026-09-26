@@ -448,6 +448,7 @@ export const translations = {
     // Thank you page
     thankYouTitle: "Mulțumim pentru înregistrare!",
     thankYouSubtitle: "Plata ta a fost confirmată. Abia așteptăm să te avem alături!",
+    thankYouSubtitleUnconfirmed: "Confirmarea plății și pașii următori îți vin pe email.",
     thankYouSeoTitle: "Mulțumim! — Înregistrare confirmată",
     thankYouSeoDescription: "Înregistrarea ta a fost confirmată. Verifică-ți emailul pentru detalii despre cursul de arabă libaneză.",
     thankYouOrderSummary: "Sumar comandă",
@@ -1228,6 +1229,7 @@ export const translations = {
     // Thank you page
     thankYouTitle: "Thank you for registering!",
     thankYouSubtitle: "Your payment is confirmed. We can't wait to have you with us!",
+    thankYouSubtitleUnconfirmed: "Your payment confirmation and next steps will arrive by email.",
     thankYouSeoTitle: "Thank you! — Registration confirmed",
     thankYouSeoDescription: "Your registration is confirmed. Check your email for details about your Lebanese Arabic course.",
     thankYouOrderSummary: "Order summary",
