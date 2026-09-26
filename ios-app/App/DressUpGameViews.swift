@@ -540,7 +540,8 @@ struct GameCharacterView: View {
                 placeholder
             }
         }
-        .frame(width: 160, height: 260)
+        .frame(width: 160, height: 260, alignment: .top)
+        .clipped()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Personajul tău")
         .accessibilityIdentifier("game.character")
@@ -583,6 +584,8 @@ struct GameCharacterView: View {
                 Circle().fill(Color(hex: accessory.placeholderColor)).frame(width: 18, height: 18).offset(x: 26, y: 80)
             }
         }
+        // Offsets are measured from the top of the 160×260 canvas.
+        .frame(width: 160, height: 260, alignment: .top)
     }
 }
 
