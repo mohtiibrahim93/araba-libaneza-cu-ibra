@@ -81,6 +81,30 @@ final class YallaScreenshotTests: XCTestCase {
                 snap("26-ai-conversation")
                 goBack()
             }
+            let game = app.buttons["practice.dress-up-game"]
+            scrollTo(game)
+            if game.exists {
+                game.tap()
+                snap("27-game")
+                let scene = app.buttons.matching(identifier: "game.scene").firstMatch
+                if scene.waitForExistence(timeout: 4) {
+                    scene.tap()
+                    snap("27b-game-scene")
+                    let option = app.buttons.matching(identifier: "game.option").firstMatch
+                    if option.waitForExistence(timeout: 3) {
+                        option.tap()
+                        snap("27c-game-answer")
+                    }
+                    goBack()
+                }
+                let wardrobe = app.buttons["game.wardrobe"]
+                if wardrobe.waitForExistence(timeout: 4) {
+                    wardrobe.tap()
+                    snap("27d-game-wardrobe")
+                    goBack()
+                }
+                goBack()
+            }
             app.swipeDown()
             let drill = app.buttons["practice.speed-drill"]
             if drill.waitForExistence(timeout: 4) {

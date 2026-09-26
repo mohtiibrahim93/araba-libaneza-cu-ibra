@@ -40,6 +40,19 @@ struct PracticeListView: View {
                 }
                 .buttonStyle(NodeButtonStyle())
                 .accessibilityIdentifier("practice.guided-conversation")
+                NavigationLink(value: "dress-up-game") {
+                    PracticeModeRow(
+                        mode: PracticeModeSummary(
+                            id: "dress-up-game",
+                            title: "Îmbracă-l pe Ibra",
+                            subtitle: "Joc: răspunzi în libaneză, câștigi monede și alegi hainele personajului.",
+                            isAvailable: true
+                        ),
+                        isNavigable: true
+                    )
+                }
+                .buttonStyle(NodeButtonStyle())
+                .accessibilityIdentifier("practice.dress-up-game")
                 NavigationLink(value: "ai-conversation") {
                     PracticeModeRow(
                         mode: PracticeModeSummary(
@@ -170,6 +183,7 @@ struct PracticeModeRow: View {
         case "listening": return ("headphones", Theme.teal, Theme.mint)
         case "speaking": return ("mic.fill", Theme.terracotta, Theme.blush)
         case "guided-conversation": return ("person.2.wave.2.fill", Theme.terracotta, Theme.blush)
+        case "dress-up-game": return ("tshirt.fill", Theme.goldShade, Theme.variantBackground)
         case "ai-conversation": return ("bubble.left.and.bubble.right.fill", Theme.deep, Theme.mint)
         default: return ("bolt", Theme.teal, Theme.mint)
         }

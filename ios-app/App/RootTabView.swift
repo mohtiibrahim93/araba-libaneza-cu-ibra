@@ -223,6 +223,8 @@ struct RootTabView: View {
                 .navigationDestination(for: String.self) { id in
                     if id == "ai-conversation" {
                         AIConversationPreviewView()
+                    } else if id == "dress-up-game" {
+                        DressUpGameView(package: content.package, locale: content.locale, progressModel: progressModel)
                     } else if id == "guided-conversation" {
                         GuidedConversationListView(package: content.package, locale: content.locale, progressModel: progressModel)
                     } else {

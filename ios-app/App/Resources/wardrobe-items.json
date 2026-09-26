@@ -1,0 +1,17 @@
+{
+  "note": "Placeholder wardrobe for the prototype. imageName is the transparent artwork layer (same canvas as the character); until it exists the app draws a simple shape in placeholderColor.",
+  "items": [
+    { "id": "cap", "slot": "head", "name": "Șapcă", "price": 5, "placeholderColor": "#C0392B" },
+    { "id": "sunglasses", "slot": "head", "name": "Ochelari de soare", "price": 8, "placeholderColor": "#2C3E50" },
+    { "id": "white-shirt", "slot": "top", "name": "Cămașă albă", "price": 6, "placeholderColor": "#F4F1EA" },
+    { "id": "leather-jacket", "slot": "top", "name": "Geacă de piele", "price": 12, "placeholderColor": "#6E4B3A" },
+    { "id": "chef-apron", "slot": "top", "name": "Șorț de bucătar", "price": 0, "unlockUnitID": "a1-restaurant", "placeholderColor": "#FFFFFF" },
+    { "id": "jeans", "slot": "bottom", "name": "Blugi", "price": 6, "placeholderColor": "#34568B" },
+    { "id": "shorts", "slot": "bottom", "name": "Pantaloni scurți", "price": 4, "placeholderColor": "#C2B280" },
+    { "id": "sneakers", "slot": "shoes", "name": "Teniși", "price": 5, "placeholderColor": "#EDEDED" },
+    { "id": "formal-shoes", "slot": "shoes", "name": "Pantofi eleganți", "price": 9, "placeholderColor": "#3B2F2F" },
+    { "id": "keffiyeh", "slot": "accessory", "name": "Keffiyeh", "price": 8, "placeholderColor": "#B03A2E" },
+    { "id": "watch", "slot": "accessory", "name": "Ceas", "price": 7, "placeholderColor": "#D4AF37" },
+    { "id": "cedar-pin", "slot": "accessory", "name": "Insignă cu cedru", "price": 0, "unlockUnitID": "a1-welcome", "placeholderColor": "#2E7D4F" }
+  ]
+}
