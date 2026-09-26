@@ -1,5 +1,5 @@
 import * as React from 'npm:react@18.3.1'
-import { Body, Button, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
+import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
@@ -24,7 +24,7 @@ const PrivateRegistrationConfirmationEmail = ({ name, format, message, statusUrl
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
-          <Text style={logo}>🌳 {SITE_NAME}</Text>
+          <Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text>
           <Text style={tagline}>{SITE_TAGLINE}</Text>
         </Section>
         <Heading style={h1}>{name ? `Mulțumim, ${name}!` : 'Mulțumim!'}</Heading>
@@ -62,7 +62,7 @@ const PrivateRegistrationConfirmationEmail = ({ name, format, message, statusUrl
           )}
         </Section>
         <Hr style={hr} />
-        <Section style={footerBrand}><Text style={footerLogo}>🌳 {senderName || SITE_NAME}</Text></Section>
+        <Section style={footerBrand}><Text style={footerLogo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{senderName || SITE_NAME}</Text></Section>
         <Text style={footer}>Cu drag, echipa noastră</Text>
         <Text style={footerSmall}>📍 București, România · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
       </Container>
@@ -100,3 +100,4 @@ const footerBrand = { textAlign: 'center' as const, margin: '0 0 8px' }
 const footerLogo = { fontSize: '14px', fontWeight: '700' as const, color: '#1a1a2e', margin: '0' }
 const footer = { fontSize: '14px', color: '#666', margin: '0 0 4px' }
 const footerSmall = { fontSize: '12px', color: '#999', margin: '0' }
+const logoMark = { display: 'inline-block', verticalAlign: 'middle', borderRadius: '5px', marginRight: '8px' }
