@@ -270,12 +270,7 @@ const RegistrationFormSection = ({
     setRetryingDeposit(false);
   };
 
-  const capacity =
-    courseType === "group"
-      ? getCapacity("group", level || null, (format as "fizic" | "online") || null)
-      : courseType === "kids"
-        ? getCapacity("kids", null)
-        : null;
+  const capacity = courseType === "kids" ? getCapacity("kids", null) : null;
 
   /** Note the first real interaction, so the funnel has a real starting point. */
   const noteStart = () => {
@@ -683,11 +678,11 @@ const RegistrationFormSection = ({
             </div>
           )}
 
-          {/* Capacity banner: kids (single) + group (per selected format) */}
-          {capacity &&
-            (courseType === "kids" || (courseType === "group" && !!format)) && (
-              <CapacityBanner capacity={capacity} />
-            )}
+          {/* Capacity banner: kids only. A group's seats are counted per
+              cohort in the cohort picker — a level-wide total mixed the
+              running groups with the ones still open and read "full" while
+              the new groups had every seat free. */}
+          {capacity && courseType === "kids" && <CapacityBanner capacity={capacity} />}
 
           {/* Kids: child fields + (conditional) waitlist deposit */}
           {courseType === "kids" && (

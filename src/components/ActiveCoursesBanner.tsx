@@ -1,5 +1,5 @@
 import { Link } from "@/lib/router-compat";
-import { CalendarClock, MapPin, Monitor, ChevronRight, Flame } from "lucide-react";
+import { CalendarClock, MapPin, Monitor, ChevronRight, Flame, Users } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useActiveCohorts } from "@/hooks/useActiveCohorts";
 
@@ -90,11 +90,21 @@ const ActiveCoursesBanner = () => {
                   {lang === "en" ? c.schedule_label_en : c.schedule_label_ro}
                 </p>
 
-                {!c.full && c.seatsLeft <= 4 && (
-                  <p className="text-xs font-medium text-amber-600 dark:text-amber-500 mb-3">
-                    {t.capSpotsLeft.replace("{n}", String(c.seatsLeft))}
-                  </p>
-                )}
+                {/* Each group counts its own seats — the Romanian and the
+                    English class are separate groups, never one shared total. */}
+                <p className="flex items-center gap-1.5 text-xs font-medium text-foreground mb-3">
+                  <Users className="w-3.5 h-3.5 shrink-0 text-primary" aria-hidden="true" />
+                  <span>
+                    {lang === "en" ? "Taught in " : "Predare în "}
+                    {c.teaching_language === "en"
+                      ? lang === "en" ? "English" : "engleză"
+                      : lang === "en" ? "Romanian" : "română"}
+                    {" · "}
+                    <span className={c.full || c.seatsLeft <= 2 ? "text-amber-600 dark:text-amber-500" : undefined}>
+                      {c.taken} / {c.max_seats} {t.capSeatsLabel}
+                    </span>
+                  </span>
+                </p>
 
                 <span className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-primary">
                   {t.activeNowCta}
