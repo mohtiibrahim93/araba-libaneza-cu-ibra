@@ -4,7 +4,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "De la ce vârstă poate începe un copil să învețe araba?",
-    a: "Cursul nostru este pentru 6–10 ani, când copilul citește deja fluent în română și poate sta concentrat 60 min cu pauze. Pentru copii mai mici (3–5 ani) recomandăm expunere acasă (cântece, desene animate în arabă), nu curs structurat.",
+    a: "Cursul nostru este pentru 6–11 ani, când copilul citește deja fluent în română și poate sta concentrat 60 min cu pauze. Pentru copii mai mici (3–5 ani) recomandăm expunere acasă (cântece, desene animate în arabă), nu curs structurat.",
   },
   {
     q: "Cum arată o lecție de arabă pentru copii?",
@@ -24,21 +24,21 @@ const CursArabaCopii = () => (
   <LandingLayout
     slug="curs-araba-copii"
     enHref={null}
-    title="Curs de arabă libaneză pentru copii — București, 6–10 ani, învățare prin joc"
-    metaTitle="Curs de Arabă pentru Copii în București | 6–10 ani"
-    description="Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez."
+    title="Curs de arabă libaneză pentru copii — București, 6–11 ani, învățare prin joc"
+    metaTitle="Curs de Arabă pentru Copii în București | 6–11 ani"
+    description="Curs de arabă libaneză pentru copii de 6–11 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez."
     crumb="Curs arabă libaneză copii"
-    lead="Curs de arabă libaneză pentru copii 6–10 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
+    lead="Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
     faq={FAQ}
   >
     <p>
       Vrei ca al tău copil să învețe <strong>araba de mic</strong>, ca să comunice cu bunicii, cu
       familia sau pur și simplu ca să crească bilingv? La{" "}
-      <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> avem un curs dedicat copiilor 6–10 ani,
+      <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> avem un curs dedicat copiilor 6–11 ani,
       fizic în București, prin joc și povești — fără caiete de gramatică.
     </p>
 
-    <h2>De ce arabă de la 6–10 ani</h2>
+    <h2>De ce arabă de la 6–11 ani</h2>
     <p>
       La această vârstă copilul învață o limbă nouă natural, prin ureche și imitație, cu accent
       aproape nativ. Creierul e încă în fereastra sensibilă pentru achiziția lingvistică (aprox.

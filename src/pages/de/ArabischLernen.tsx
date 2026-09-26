@@ -20,15 +20,15 @@ const FAQ = [
   },
   {
     q: "Wie lange dauert es, Arabisch zu lernen?",
-    a: "Mit zwei 90-Minuten-Lektionen pro Woche plus etwas Übung erreichen die meisten Lernenden in 3–6 Monaten das Niveau A2 (Alltagsgespräche). Für B1/B2 (fließende Konversation) rechnen wir mit 1,5–2 Jahren konsequenter Praxis.",
+    a: "Mit zwei 90-Minuten-Lektionen pro Woche plus etwas Übung erreichst du nach etwa 4 Monaten (32 Lektionen) das Niveau A1 mit einfachen Alltagsgesprächen, nach etwa 10 Monaten das Niveau A2. Für B1/B2 (fließende Konversation) rechnen wir mit 1,5–2 Jahren konsequenter Praxis.",
   },
   {
     q: "Muss ich zuerst das arabische Alphabet lernen?",
-    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). Die arabische Schrift kommt nach 2–3 Monaten dazu, sobald dein Gehör und deine Aussprache sitzen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
+    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). Bis einschließlich B1 arbeiten wir nur mündlich; ab B2 kannst du optional auch das Schreiben in arabischer Schrift dazunehmen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
   },
   {
     q: "Sind die Kurse online oder in Präsenz?",
-    a: "Beides. Online-Kurse laufen über Zoom und funktionieren aus jeder Zeitzone, die sich mit Bukarest (MESZ +1 h) überschneidet — für Deutschland, Österreich und die Schweiz ideal (gleiche Zeitzone). Präsenzkurse finden in Bukarest statt.",
+    a: "Beides. Online-Kurse laufen über Zoom und funktionieren aus jeder Zeitzone. Bukarest ist Deutschland, Österreich und der Schweiz eine Stunde voraus — eine Lektion um 19:00 in Bukarest beginnt bei euch um 18:00. Präsenzkurse finden in Bukarest statt.",
   },
   {
     q: "Wer ist der Lehrer?",
@@ -36,7 +36,7 @@ const FAQ = [
   },
   {
     q: "Was kosten die Kurse?",
-    a: "Gruppenkurse ab 500 LEI / Monat (~100 €) online. Privatstunden 1:1 kosten 150 LEI (~30 €) pro 90-Minuten-Lektion. Die erste 30-Minuten-Probestunde ist gratis.",
+    a: "Gruppenkurse ab 500 LEI / Monat (~100 €) online. Privatstunden 1:1 kosten 150 LEI (~30 €) online bzw. 210 LEI vor Ort pro 60-Minuten-Lektion. Die erste 30-Minuten-Probestunde ist gratis.",
   },
 ];
 
@@ -108,7 +108,7 @@ const ArabischLernen = () => (
 
         <div className="grid sm:grid-cols-3 gap-4 my-8">
           {[
-            { icon: Globe, title: "Online weltweit", desc: "Zoom-Kurse aus D/A/CH — gleiche Zeitzone wie Bukarest." },
+            { icon: Globe, title: "Online weltweit", desc: "Zoom-Kurse aus D/A/CH — nur eine Stunde Zeitunterschied zu Bukarest." },
             { icon: Users, title: "Einzeln oder in Gruppen", desc: "1:1-Unterricht nach deinen Zielen oder Kleingruppen: max. 6 online, 10 vor Ort." },
             { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Sechs Niveaus, vom Überleben bis zur vollen Flüssigkeit." },
           ].map(({ icon: Icon, title, desc }) => (
@@ -130,7 +130,7 @@ const ArabischLernen = () => (
           </p>
           <ul>
             <li><strong>Sprechen ab Lektion eins:</strong> kein Alphabet als Hürde — du startest mit Arabizi (lateinische Umschrift).</li>
-            <li><strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf, Wegbeschreibung, Smalltalk in 3–6 Monaten.</li>
+            <li><strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf, Wegbeschreibung, Smalltalk — A1 in etwa 4 Monaten, A2 nach etwa 10.</li>
             <li><strong>Verstehe libanesische Medien:</strong> Musik, Serien, YouTube — im Original.</li>
             <li><strong>Reisen und Familie:</strong> mit libanesischsprachigen Menschen im Libanon und der Diaspora sprechen.</li>
             <li><strong>Tor zum Levant:</strong> libanesisch ist gegenseitig verständlich mit syrisch, jordanisch und palästinensisch.</li>
@@ -170,7 +170,7 @@ const ArabischLernen = () => (
 
           <h2>Wie wir unterrichten</h2>
           <ul>
-            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. Die arabische Schrift kommt nach 2–3 Monaten.</li>
+            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. Bis B1 nur mündlich, ab B2 optional mit arabischer Schrift.</li>
             <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
             <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
             <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>
@@ -194,7 +194,7 @@ const ArabischLernen = () => (
           </h2>
           <p className="text-muted-foreground">
             30 Minuten mit einem Muttersprachler — online weltweit oder in Präsenz in Bukarest.
-            Keine Karte nötig, keine Verpflichtung.
+            Kostenlos: Zur Reservierung hinterlegst du eine Karte, die nur bei Nichterscheinen oder einer Absage unter 24 Stunden mit 150 LEI belastet wird.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

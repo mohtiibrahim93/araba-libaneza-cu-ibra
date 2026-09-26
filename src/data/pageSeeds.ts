@@ -42,10 +42,10 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/curs-araba-copii",
-    "meta_title": "Curs Arabă Libaneză pentru Copii (6–10 ani) | București, prin Joc",
-    "meta_description": "Curs de arabă libaneză pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața.",
-    "h1": "Curs de arabă libaneză pentru copii — București, 6–10 ani, învățare prin joc",
-    "lead": "Curs de arabă libaneză pentru copii 6–10 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
+    "meta_title": "Curs Arabă Libaneză pentru Copii (6–11 ani) | București, prin Joc",
+    "meta_description": "Curs de arabă libaneză pentru copii 6–11 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața.",
+    "h1": "Curs de arabă libaneză pentru copii — București, 6–11 ani, învățare prin joc",
+    "lead": "Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
   },
   {
     "path": "/cursuri-araba",

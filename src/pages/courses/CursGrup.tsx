@@ -69,9 +69,9 @@ const CursGrup = () => {
             it, with the anchor those searches actually use. */}
         <p className="text-sm text-muted-foreground mb-6 max-w-2xl">
           {lang === "en" ? (
-            <>Under 18? See <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">Arabic courses for teenagers (11–17)</Link> or <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">courses for children (6–10)</Link>.</>
+            <>Under 18? See <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">Arabic courses for teenagers (12–17)</Link> or <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">courses for children (6–11)</Link>.</>
           ) : (
-            <>Ai sub 18 ani? Vezi <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">cursurile de arabă pentru adolescenți (11–17 ani)</Link> sau <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">cursul pentru copii (6–10 ani)</Link>.</>
+            <>Ai sub 18 ani? Vezi <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">cursurile de arabă pentru adolescenți (12–17 ani)</Link> sau <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">cursul pentru copii (6–11 ani)</Link>.</>
           )}
         </p>
 

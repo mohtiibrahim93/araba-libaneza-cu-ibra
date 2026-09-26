@@ -24,11 +24,11 @@ const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Cente
 
 // Keep in sync with the site (i18n programGroupDuration / curriculum.ts).
 const durationByLevel: Record<string, string> = {
-  A1: 'aproximativ 3 luni · 32 de lecții',
+  A1: 'aproximativ 4 luni · 32 de lecții',
   A2: 'aproximativ 6 luni · 54 de lecții',
 }
 const durationLabel = (level?: string) =>
-  durationByLevel[(level || '').trim().toUpperCase()] || 'A1: ~3 luni (32 de lecții) · A2: ~6 luni (54 de lecții)'
+  durationByLevel[(level || '').trim().toUpperCase()] || 'A1: ~4 luni (32 de lecții) · A2: ~6 luni (54 de lecții)'
 
 const GroupRegistrationConfirmationEmail = ({ name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => (
   <Html lang="ro" dir="ltr">

@@ -8,7 +8,7 @@ import { useI18n } from "@/lib/i18n";
 const FAQ = [
   {
     q: { ro: "Ce vârstă are grupa de copii și ce urmează după?", en: "What age is the kids group, and what comes after it?" },
-    a: { ro: "Cursul pentru copii este gândit pentru 6–10 ani, fizic în București. De la 11 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–10, in person in Bucharest. From 11 there is the teen group, with a different approach: conversation, music and social-media language." },
+    a: { ro: "Cursul pentru copii este gândit pentru 6–11 ani, fizic în București. De la 12 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–11, in person in Bucharest. From 12 there is the teen group, with a different approach: conversation, music and social-media language." },
   },
   {
     q: { ro: "Trebuie să știu și eu arabă ca să-mi ajut copilul?", en: "Do I need to know Arabic myself to support my child?" },
@@ -42,7 +42,7 @@ const ArabaPentruCopii = () => {
     >
       <Tldr
         points={[
-          { ro: "Cursul pentru copii acoperă 6–10 ani, fizic în București; de la 11 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–10 in Bucharest; from 11 the teen group follows." },
+          { ro: "Cursul pentru copii acoperă 6–11 ani, fizic în București; de la 12 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–11 in Bucharest; from 12 the teen group follows." },
           { ro: "Se învață prin joc, cântece și povești, nu prin gramatică și caiete.", en: "Learning happens through play, songs and stories, not grammar and workbooks." },
           { ro: "Copiii prind sunetele noi mai ușor decât adulții — e vârsta potrivită pentru pronunție.", en: "Children pick up new sounds more easily than adults — it is the right age for pronunciation." },
           { ro: "Nu trebuie să știi arabă ca părinte; expunerea acasă contează mai mult.", en: "You do not need to know Arabic as a parent; exposure at home matters more." },
@@ -59,7 +59,7 @@ const ArabaPentruCopii = () => {
         {en ? "At the Lebanese Arabic Center, the " : "La Centrul de Arabă Libaneză, "}
         <Link to="/cursuri/copii">{en ? "kids course" : "cursul pentru copii"}</Link>
         {en ? " is designed for ages " : " este gândit pentru "}
-        <strong>{en ? "6–10" : "6–10 ani"}</strong>{en ? ", in person in Bucharest. From age " : ", fizic în București. De la "}
+        <strong>{en ? "6–11" : "6–11 ani"}</strong>{en ? ", in person in Bucharest. From age " : ", fizic în București. De la "}
         <strong>{en ? "10" : "10 ani"}</strong>{en ? ", children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course." : ", copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat."}
       </p>
 
@@ -93,8 +93,8 @@ const ArabaPentruCopii = () => {
       <InlineCta
         title={{ ro: "Cursul pentru copii, în detaliu", en: "The kids course, in detail" }}
         text={{
-          ro: "6–10 ani, prin joc, poveste și activitate — nu prin gramatică. Grupă mică, fizic în București.",
-          en: "Ages 6–10, through play, story and activity — not grammar. Small group, in person in Bucharest.",
+          ro: "6–11 ani, prin joc, poveste și activitate — nu prin gramatică. Grupă mică, fizic în București.",
+          en: "Ages 6–11, through play, story and activity — not grammar. Small group, in person in Bucharest.",
         }}
         href="/cursuri/copii"
         label={{ ro: "Vezi cursul pentru copii", en: "See the kids course" }}

@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "How much do the classes cost?",
-    a: "Group courses: 500 LEI / month online, 700 LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: 150 LEI / 90 min (~€30). First 30-minute trial lesson is free.",
+    a: "Group courses: 500 LEI / month online, 700 LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: 150 LEI online / 210 LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free.",
   },
   {
     q: "When do the classes run?",
@@ -60,21 +60,21 @@ const ArabicClassesNearMe = () => (
       <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link> — a variety of{" "}
       <Link to="/en/arabic-dialects-guide">Levantine Arabic</Link> understood across Lebanon,
       Syria, Jordan and Palestine. Oral-first: you speak from lesson one, using arabizi (Latin
-      transliteration), with the Arabic script layered on after 2–3 months. CEFR levels A1 → C2.
+      transliteration), spoken only up to B1, with optional Arabic script from B2. CEFR levels A1 → C2.
     </p>
 
     <h2>Class formats</h2>
     <ul>
-      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 4 lessons of 90 min per month, max 10 students.</li>
-      <li><strong>Group course, online:</strong> 500 LEI / month, 4 lessons of 90 min per month, max 6 students.</li>
-      <li><strong>Private 1-on-1:</strong> 150 LEI / 90 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
-      <li><strong>Kids (7–14):</strong> in-person only, small groups, playful method.</li>
+      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2 lessons of 90 min per week, max 10 students.</li>
+      <li><strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
+      <li><strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per 60 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
+      <li><strong>Kids (6–11):</strong> in-person only, small groups, playful method.</li>
     </ul>
 
     <h2>Bucharest location</h2>
     <p>
-      Strada Icoanei 80, sector 2, Bucharest — a 5-minute walk from Piața Rosetti, close to Metro
-      Universitate and multiple bus lines. Free WhatsApp support to plan your first visit.
+      Strada Icoanei 80, sector 2, Bucharest — the closest metro stations are Piața Romană (M2)
+      and Ștefan cel Mare (M1). Free WhatsApp support to plan your first visit.
     </p>
 
     <p>

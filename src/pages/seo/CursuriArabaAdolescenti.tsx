@@ -6,7 +6,7 @@ import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 const FAQ = [
   {
     q: "De la ce vârstă poate un adolescent să înceapă cursul de arabă?",
-    a: "Grupele pentru adolescenți sunt pentru 11–17 ani. De la 16 ani, adolescenții pot intra direct în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–10 ani avem cursul separat pentru copii, prin joc.",
+    a: "Grupele pentru adolescenți sunt pentru 12–17 ani. De la 16 ani, adolescenții pot intra direct în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani avem cursul separat pentru copii, prin joc.",
   },
   {
     q: "Ce fel de arabă învață adolescenții?",
@@ -47,16 +47,16 @@ const CursuriArabaAdolescenti = () => (
     slug="cursuri-araba-adolescenti"
     enHref="/en/arabic-for-teenagers"
     courseInstances={courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" })}
-    title="Cursuri de arabă libaneză pentru adolescenți (11–17 ani) — București și online"
-    metaTitle="Arabă Libaneză pentru Adolescenți | Curs 11–17 ani"
-    description="Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită."
+    title="Cursuri de arabă libaneză pentru adolescenți (12–17 ani) — București și online"
+    metaTitle="Arabă Libaneză pentru Adolescenți | Curs 12–17 ani"
+    description="Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită."
     crumb="Cursuri arabă adolescenți"
-    lead="Grupe de arabă libaneză gândite pentru adolescenți 11–17 ani: conversație, muzică și limbaj real de social media — nu gramatică tocită. Profesor nativ libanez, fizic în București sau online."
+    lead="Grupe de arabă libaneză gândite pentru adolescenți 12–17 ani: conversație, muzică și limbaj real de social media — nu gramatică tocită. Profesor nativ libanez, fizic în București sau online."
     faq={FAQ}
   >
     <p>
       Adolescenții învață o limbă când o pot folosi imediat. De asta grupele noastre de{" "}
-      <strong>arabă libaneză pentru adolescenți</strong> (11–17 ani) pornesc de la limba vie —
+      <strong>arabă libaneză pentru adolescenți</strong> (12–17 ani) pornesc de la limba vie —
       dialectul levantin vorbit în Liban, Siria, Iordania și Palestina — și nu de la araba standard
       din manuale, pe care nimeni nu o folosește în conversație.
     </p>
@@ -67,7 +67,7 @@ const CursuriArabaAdolescenti = () => (
         the trial, answered immediately. */}
     <div className="not-prose rounded-xl border border-border bg-muted/40 p-5 md:p-6">
       <ul className="space-y-1.5 text-sm md:text-base">
-        <li><strong>Vârsta:</strong> 11–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
+        <li><strong>Vârsta:</strong> 12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
         <li><strong>Format:</strong> fizic în București, Strada Icoanei 80, sau online pe Zoom</li>
         <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 online, 10 fizic)</li>
         <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție de 60 min</li>
@@ -114,12 +114,12 @@ const CursuriArabaAdolescenti = () => (
         </thead>
         <tbody>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">6–10 ani</td>
+            <td className="py-2 pr-3 font-semibold">6–11 ani</td>
             <td className="py-2 px-3"><Link to="/curs-araba-copii">Curs pentru copii, prin joc</Link></td>
             <td className="py-2 pl-3">Fizic, București</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">11–15 ani</td>
+            <td className="py-2 pr-3 font-semibold">12–15 ani</td>
             <td className="py-2 px-3">Grupă de adolescenți (în formare) sau meditații 1:1</td>
             <td className="py-2 pl-3">Fizic sau online</td>
           </tr>
@@ -132,7 +132,7 @@ const CursuriArabaAdolescenti = () => (
       </table>
     </div>
     <p>
-      Grupele dedicate 11–15 ani se formează pe măsură ce se strâng 4–8 înscrieri. Îți poți rezerva
+      Grupele dedicate 12–15 ani se formează pe măsură ce se strâng 4–8 înscrieri. Îți poți rezerva
       locul mai jos — te anunțăm imediat ce
       pornește grupa, iar până atunci poți începe cu{" "}
       <Link to="/meditatii-araba">meditații 1:1</Link>.
@@ -186,11 +186,11 @@ const CursuriArabaAdolescenti = () => (
     </p>
     <h2 id="lista-asteptare">Anunță-mă când pornește grupa</h2>
     <p>
-      Grupele dedicate adolescenților (11–17 ani) sunt în formare: pornim o cohortă imediat ce avem
+      Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o cohortă imediat ce avem
       suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
       poți începe oricând cu <Link to="/meditatii-araba">meditații de arabă 1:1</Link>.
     </p>
-    <NotifyMeForm context="Grupă adolescenți 11–17" className="not-prose my-6" />
+    <NotifyMeForm context="Grupă adolescenți 12–17" className="not-prose my-6" />
   </LandingLayout>
 );
 

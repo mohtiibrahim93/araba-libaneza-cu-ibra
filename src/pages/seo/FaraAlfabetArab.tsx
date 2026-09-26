@@ -5,7 +5,7 @@ import ArabiziCheatSheetForm from "@/components/ArabiziCheatSheetForm";
 const FAQ = [
   {
     q: "Pot învăța araba fără alfabet?",
-    a: "Da. Poți învăța să vorbești araba libaneză folosind arabizi (scrierea cu litere latine și cifre). Alfabetul arab e necesar pentru citit și scris, nu pentru conversație — la noi vine mai târziu, la cerere.",
+    a: "Da. Poți învăța să vorbești araba libaneză folosind arabizi (scrierea cu litere latine și cifre). Alfabetul arab e necesar pentru citit și scris, nu pentru conversație — la noi e opțional, de la nivelul B2; până la B1 inclusiv cursul e doar oral.",
   },
   {
     q: "E greu de învățat araba?",
@@ -21,7 +21,7 @@ const FAQ = [
   },
   {
     q: "Când introduceți alfabetul arab?",
-    a: "Când ceri tu, de obicei după nivelul A1, sau mai devreme dacă ai un motiv clar (citit, studiu academic, texte religioase). Se predă în paralel cu conversația, fără să o oprească.",
+    a: "De la nivelul B2, dacă alegi tu. Până la B1 inclusiv cursul e doar oral. Scrisul se predă în paralel cu conversația, fără să o oprească.",
   },
 ];
 
@@ -74,7 +74,7 @@ const FaraAlfabetArab = () => (
       <li><strong>Vorbești în prima lecție.</strong> Nu aștepți „să știi destul” — repeți, greșești, ești corectat imediat.</li>
       <li><strong>Notezi în arabizi.</strong> Notițele tale sunt lizibile de la început.</li>
       <li><strong>Gramatica vine după uz.</strong> Explicația apare abia după ce ai folosit forma de câteva ori.</li>
-      <li><strong>Alfabetul, la cerere.</strong> Se adaugă când ai deja o bază orală și nu te mai poate descuraja.</li>
+      <li><strong>Alfabetul, opțional de la B2.</strong> Se adaugă când ai deja o bază orală solidă și nu te mai poate descuraja.</li>
     </ul>
 
     <h2>Primele patru săptămâni, fără nicio literă arabă</h2>

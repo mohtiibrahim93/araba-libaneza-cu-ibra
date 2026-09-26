@@ -17,8 +17,8 @@ type Choice = { value: string; icon: typeof GraduationCap; ro: string; en: strin
 
 const AGES: Choice[] = [
   { value: "adulti", icon: GraduationCap, ro: "Adulți", en: "Adults", note: { ro: "18+ ani", en: "18+" } },
-  { value: "adolescenti", icon: User, ro: "Adolescenți", en: "Teens", note: { ro: "11–17 ani", en: "Ages 11–17" } },
-  { value: "copii", icon: Baby, ro: "Copii", en: "Kids", note: { ro: "6–10 ani", en: "Ages 6–10" } },
+  { value: "adolescenti", icon: User, ro: "Adolescenți", en: "Teens", note: { ro: "12–17 ani", en: "Ages 12–17" } },
+  { value: "copii", icon: Baby, ro: "Copii", en: "Kids", note: { ro: "6–11 ani", en: "Ages 6–11" } },
 ];
 const MODES: Choice[] = [
   { value: "online", icon: Wifi, ro: "Online", en: "Online", note: { ro: "Live pe Zoom, de oriunde", en: "Live on Zoom, anywhere" } },

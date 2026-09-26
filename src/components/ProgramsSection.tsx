@@ -611,10 +611,10 @@ const ProgramsSection = () => {
           <TabsContent value="tineri">
             <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-xs">
               <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {lang === "en" ? "Teens · 11–17" : "Adolescenți · 11–17 ani"}
+                {lang === "en" ? "Teens · 12–17" : "Adolescenți · 12–17 ani"}
               </span>
               <h3 className="mb-2 text-xl font-bold text-foreground">
-                {lang === "en" ? "Lebanese Arabic for teens (11–17)" : "Arabă libaneză pentru adolescenți (11–17 ani)"}
+                {lang === "en" ? "Lebanese Arabic for teens (12–17)" : "Arabă libaneză pentru adolescenți (12–17 ani)"}
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
                 {lang === "en"

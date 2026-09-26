@@ -51,7 +51,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce metodă de predare folosiți și cum adaptați lecțiile la nivelul meu?",
-            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi la început și trecere treptată la alfabetul arab. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
+            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi; până la B1 inclusiv lucrăm doar oral, iar de la B2 poți adăuga, opțional, scrisul cu alfabet arab. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
           },
           {
             q: "Cât durează lecțiile, cât de des sunt și în ce format (online sau fizic)?",
@@ -59,11 +59,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Cât costă, ce politică de anulare aveți și există o lecție de probă?",
-            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 10% reducere). Abonamentele se pot anula oricând, cu rambursare proporțională în primele 5 zile. Prima lecție este o probă gratuită de 30 de minute.",
+            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 10% reducere). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%. Prima lecție este o probă gratuită de 30 de minute.",
           },
           {
             q: "Aveți recenzii de la cursanți și cât de repede se văd rezultatele?",
-            a: "Da — recenzii reale verificate (5.0★ pe Preply). Vorbești de la prima lecție, iar pentru conversații simple majoritatea cursanților ajung acolo în 3–6 luni (nivel A1–A2), în funcție de ritm.",
+            a: "Da — recenzii reale verificate (5.0★ pe Preply). Vorbești de la prima lecție, iar la finalul A1 (~4 luni, 32 de lecții) porți deja conversații simple de zi cu zi.",
           },
           {
             q: "La ce semnale de alarmă să fiu atent când aleg un profesor de arabă?",
@@ -104,11 +104,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cât durează până devin conversațional?",
             featured: true,
-            a: "În general, 3–6 luni de studiu constant (echivalent A1–A2) sunt suficiente pentru conversații simple: prezentări, cumpărături, întâlniri cu familia. Cursul nostru A1 durează ~3 luni, cu 2 lecții de 90 de minute pe săptămână.",
+            a: "Pentru conversații simple — prezentări, cumpărături, întâlniri cu familia — ajunge nivelul A1. Cursul nostru A1 durează ~4 luni: 32 de lecții, 2 lecții de 90 de minute pe săptămână.",
           },
           {
             q: "Cât durează până ajung la fluență?",
-            a: "Fluența reală (B2–C1) cere de obicei 1,5–3 ani de practică susținută, în funcție de cât de des vorbești în afara clasei. Un ritm realist: A1 în 3 luni, A2 în încă 6, B1–B2 în 1–2 ani.",
+            a: "Fluența reală (B2–C1) cere de obicei 1,5–3 ani de practică susținută, în funcție de cât de des vorbești în afara clasei. Un ritm realist: A1 în ~4 luni, A2 în încă ~6, B1–B2 în 1–2 ani.",
           },
           {
             q: "Libaneza este mai ușoară decât Fusha?",
@@ -133,7 +133,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Trebuie să învăț alfabetul arab de la început?",
-            a: "Nu obligatoriu. Începem cu transliterare latină pentru a te concentra pe vorbire, iar alfabetul îl introducem treptat — pentru cei care vor să citească și să scrie. Poți vorbi libaneză fluent fără să citești în arabă.",
+            a: "Nu obligatoriu. Începem cu transliterare latină (arabizi) ca să te concentrezi pe vorbire. Până la B1 inclusiv cursul e doar oral; de la B2, cine vrea să citească și să scrie poate alege și alfabetul arab. Poți vorbi libaneză fluent fără să citești în arabă.",
           },
           {
             q: "Pot învăța araba singur, fără profesor?",
@@ -175,7 +175,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Predați adulților, adolescenților și copiilor?",
-            a: "Tuturor. Avem cursuri de grup și private pentru adulți și adolescenți (11–17 ani), toate nivelurile CEFR, plus un program dedicat copiilor de 6–10 ani, cu activități potrivite vârstei.",
+            a: "Tuturor. Avem cursuri de grup și private pentru adulți și adolescenți (12–17 ani), toate nivelurile CEFR, plus un program dedicat copiilor de 6–11 ani, cu activități potrivite vârstei.",
           },
           {
             q: "Cursurile sunt online sau fizice în București?",
@@ -198,7 +198,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce nivel CEFR voi atinge după curs?",
-            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~3 luni), A2 la A2 (~6 luni), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
+            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~6 luni), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
           },
         ],
       },
@@ -274,7 +274,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What teaching method do you use, and how do you adapt lessons to my level?",
-            a: "We use the Oral First method: you speak from the very first lessons, starting with Arabizi and moving gradually to the Arabic alphabet. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
+            a: "We use the Oral First method: you speak from the very first lessons, using Arabizi; up to and including B1 it's spoken only, and from B2 you can optionally add writing in Arabic script. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
           },
           {
             q: "How long and how often are lessons, and in what format (online or in person)?",
@@ -282,11 +282,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How much does it cost, what's the cancellation policy, and is there a trial lesson?",
-            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 10% discount). Subscriptions can be cancelled anytime, with a prorated refund in the first 5 days. The first lesson is a free 30-minute trial.",
+            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 10% discount). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee. The first lesson is a free 30-minute trial.",
           },
           {
             q: "Do you have student reviews, and how quickly will I see results?",
-            a: "Yes — real verified reviews (5.0★ on Preply). You speak from the first lesson, and most students reach simple conversations within 3–6 months (A1–A2), depending on pace.",
+            a: "Yes — real verified reviews (5.0★ on Preply). You speak from the first lesson, and by the end of A1 (~4 months, 32 lessons) you already hold simple everyday conversations.",
           },
           {
             q: "What red flags should I watch for when choosing an Arabic tutor?",
@@ -327,11 +327,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "How long does it take to become conversational?",
             featured: true,
-            a: "Typically 3–6 months of consistent study (A1–A2) are enough for simple conversations: introductions, shopping, family chats. Our A1 course runs ~3 months, with two 90-minute lessons per week.",
+            a: "Level A1 is enough for simple conversations: introductions, shopping, family chats. Our A1 course runs ~4 months: 32 lessons, two 90-minute lessons per week.",
           },
           {
             q: "How long until I'm fluent?",
-            a: "Real fluency (B2–C1) usually takes 1.5–3 years of sustained practice, depending on how much you speak outside class. A realistic pace: A1 in 3 months, A2 in another 6, B1–B2 within 1–2 years.",
+            a: "Real fluency (B2–C1) usually takes 1.5–3 years of sustained practice, depending on how much you speak outside class. A realistic pace: A1 in ~4 months, A2 in another ~6, B1–B2 within 1–2 years.",
           },
           {
             q: "Is Lebanese easier than Fusha?",
@@ -394,7 +394,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Do you teach adults, teens and kids?",
-            a: "All three. We offer group and private courses for adults and teens (11–17), all CEFR levels, plus a dedicated program for children aged 6–10 with age-appropriate activities.",
+            a: "All three. We offer group and private courses for adults and teens (12–17), all CEFR levels, plus a dedicated program for children aged 6–11 with age-appropriate activities.",
           },
           {
             q: "Are classes online or in-person in Bucharest?",
@@ -417,7 +417,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What CEFR level will I reach after the course?",
-            a: "It depends on your starting point. The A1 course takes you to full A1 (~3 months), A2 to A2 (~6 months), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
+            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~6 months), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
           },
         ],
       },

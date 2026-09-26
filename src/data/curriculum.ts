@@ -300,7 +300,7 @@ const RO: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Vorbit",
+    trackLabel: "Vorbit · scris opțional",
     schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
   },
   {
@@ -750,7 +750,7 @@ const EN: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Spoken",
+    trackLabel: "Spoken · optional writing",
     schedule: ["~8–9 months · opens after B1 — future enrollment"],
   },
   {

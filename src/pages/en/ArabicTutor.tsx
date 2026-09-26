@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "What is your teaching methodology?",
-    a: "Oral-first, communicative, CEFR-aligned. You speak from lesson one using arabizi (Latin transliteration), the Arabic script is introduced after 2–3 months, and every lesson is 70% real conversation / role-play, 30% new material. Grammar is taught through examples in context, not drilled from tables.",
+    a: "Oral-first, communicative, CEFR-aligned. You speak from lesson one using arabizi (Latin transliteration), the course is spoken only up to B1 with optional Arabic script from B2, and every lesson is 70% real conversation / role-play, 30% new material. Grammar is taught through examples in context, not drilled from tables.",
   },
   {
     q: "How do you personalise lessons to my level and goals?",
@@ -112,14 +112,14 @@ const ArabicTutor = () => (
       <li><strong>100% attention:</strong> every minute is you speaking, being corrected, and moving forward — not waiting for other students.</li>
       <li><strong>Your goal, not a curriculum:</strong> travel, family, work, exam, kids, religion — the material bends to fit.</li>
       <li><strong>Flexible schedule:</strong> reschedule any lesson up to 24h before. No lock-in.</li>
-      <li><strong>Faster progress:</strong> most 1-on-1 students hit A2 in 3–5 months vs 6–10 in a group.</li>
+      <li><strong>Faster progress:</strong> most 1-on-1 students hit A2 in 3–5 months vs about 10 in a group.</li>
     </ul>
 
     <h2>How lessons work</h2>
     <p>
-      Each lesson is 90 minutes, structured: 10 min recap of the previous lesson, 25 min new
-      material (vocabulary + grammar via examples), 40 min applied conversation and role-play, 10
-      min feedback + homework, 5 min close. You leave the lesson tired in a good way — not from
+      Each private lesson is 60 minutes, structured: a short recap of the previous lesson, new
+      material (vocabulary + grammar via examples), applied conversation and role-play — the
+      largest part — and feedback + homework. You leave the lesson tired in a good way — not from
       grammar drills, but from having actually spoken Arabic for an hour.
     </p>
 

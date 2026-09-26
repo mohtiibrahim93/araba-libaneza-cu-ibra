@@ -14,7 +14,7 @@ import {
 
 interface NotifyMeFormProps {
   /** What the person is asking to be notified about — stored so the admin
-   *  knows which group/level the request is for (e.g. "Grupă tineri 11–17"). */
+   *  knows which group/level the request is for (e.g. "Grupă tineri 12–17"). */
   context: string;
   /** Optional level hint stored on the request row (A1…C2). */
   level?: string;

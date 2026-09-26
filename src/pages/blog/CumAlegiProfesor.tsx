@@ -75,7 +75,7 @@ const CumAlegiProfesor = () => {
           <strong>{en ? "How are lessons structured?" : "Cum sunt structurate lecțiile?"}</strong>{" "}
           {en ? "With the Oral First method — you speak from the first lessons, with " : "Prin metoda Oral First — vorbești din primele lecții, cu "}
           <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>
-          {en ? " at first and a gradual move to the Arabic alphabet." : " la început și trecere treptată la alfabetul arab."}
+          {en ? ": spoken only up to B1, with optional Arabic script from B2." : ": doar oral până la B1, cu alfabet arab opțional de la B2."}
         </li>
         <li>
           <strong>{en ? "How do you adapt lessons to my level?" : "Cum adaptezi lecțiile la nivelul meu?"}</strong>{" "}
@@ -97,7 +97,7 @@ const CumAlegiProfesor = () => {
           <strong>{en ? "How much, and what's the cancellation policy?" : "Cât costă și care e politica de anulare?"}</strong>{" "}
           {en ? "Transparent, no hidden fees — see the " : "Transparent, fără costuri ascunse — vezi "}
           <Link to="/blog/cat-costa-cursurile-de-araba-libaneza">{en ? "pricing details" : "detaliile de preț"}</Link>.
-          {en ? " Subscriptions can be cancelled anytime, with a prorated refund in the first 5 days." : " Abonamentele se pot anula oricând, cu rambursare proporțională în primele 5 zile."}
+          {en ? " Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee." : " Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%."}
         </li>
         <li>
           <strong>{en ? "Do you offer a trial lesson?" : "Oferi o lecție de probă?"}</strong>{" "}

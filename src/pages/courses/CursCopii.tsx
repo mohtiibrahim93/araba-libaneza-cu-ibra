@@ -22,7 +22,7 @@ const CursCopii = () => {
     name: t.courseCopiiH1,
     description: t.courseCopiiMetaDesc,
     hasCourseInstance: courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" }),
-    educationalLevel: "Beginner — Kids ages 6–10",
+    educationalLevel: "Beginner — Kids ages 6–11",
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Children" },
   };
 
@@ -146,7 +146,7 @@ const CursCopii = () => {
         </p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
           {track === "group" ? (
-            <NotifyMeForm context="Grupă copii (6–10 ani)" />
+            <NotifyMeForm context="Grupă copii (6–11 ani)" />
           ) : (
             <RegistrationFormSection
               key={track}

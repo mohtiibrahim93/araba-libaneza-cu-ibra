@@ -43,7 +43,7 @@ const CatCostaCursurile = () => {
       <Tldr
         points={[
           { ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.", en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room." },
-          { ro: "Lecțiile private sunt 150 lei/lecție de 60 de minute, cu reduceri de la 5, 10 și 20 de lecții.", en: "Private lessons are 150 lei per 60-minute lesson, with discounts from 5, 10 and 20 lessons." },
+          { ro: "Lecțiile private sunt 150 lei online și 210 lei fizic, pentru 60 de minute, cu −10% la 10 lecții și −20% la 20 de lecții plătite în avans.", en: "Private lessons are 150 lei online and 210 lei in person per 60-minute lesson, with −10% for 10 lessons and −20% for 20 lessons paid in advance." },
           { ro: "Plata integrală a unui nivel aduce 10% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 10% discount, but monthly payment stays available." },
           { ro: "Prima lecție de probă este 0 lei; locul se confirmă cu cardul, iar la neprezentare se reține 150 lei.", en: "The first trial lesson is 0 lei; the spot is confirmed with a card, and a no-show is charged 150 lei." },
         ]}
@@ -85,14 +85,14 @@ const CatCostaCursurile = () => {
         {en
           ? "If you want a personalized pace or a flexible schedule, private lessons cost "
           : "Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă "}
-        <strong>{en ? "150 lei / lesson" : "150 lei / lecție"}</strong>
-        {en ? " (60 minutes), in any format — online or in person. Packs of " : " (60 de minute), în orice format — online sau fizic. La pachetele de "}
-        <strong>{en ? "20 lessons or more get 20% off" : "20 de lecții sau mai multe primești 20% reducere"}</strong>
+        <strong>{en ? "150 lei / lesson online, 210 lei in person" : "150 lei / lecție online, 210 lei fizic"}</strong>
+        {en ? " (60 minutes). Paid in advance, " : " (60 de minute). Plătite în avans, "}
+        <strong>{en ? "10 lessons get 10% off and 20 lessons get 20% off" : "10 lecții au 10% reducere, iar 20 de lecții au 20% reducere"}</strong>
         {en ? ". Details on the " : ". Detalii pe pagina de "}
         <Link to="/cursuri/private">{en ? "private lessons" : "lecții private"}</Link>{en ? " page." : "."}
       </p>
 
-      <h2>{en ? "Kids course (ages 6–10)" : "Curs pentru copii (6–10 ani)"}</h2>
+      <h2>{en ? "Kids course (ages 6–11)" : "Curs pentru copii (6–11 ani)"}</h2>
       <p>
         {en
           ? "The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 500 lei/month online (700 lei/month in person) for the program's duration. See the "
@@ -123,8 +123,8 @@ const CatCostaCursurile = () => {
       <h2>{en ? "Are there hidden costs?" : "Există costuri ascunse?"}</h2>
       <p>
         {en
-          ? "No. Audio materials and support are included. Payments are made securely via Stripe, and for monthly subscriptions you can cancel anytime — if you cancel within the first 5 days of an already-paid month, you get a prorated refund. The remaining months simply aren't billed."
-          : "Nu. Materialele audio și suportul sunt incluse. Plățile se fac securizat prin Stripe, iar pentru abonamentele lunare poți anula oricând — dacă anulezi în primele 5 zile ale unei luni deja plătite, primești banii înapoi proporțional. Restul lunilor pur și simplu nu se mai facturează."}
+          ? "No. Audio materials and support are included. Payments are made securely via Stripe. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee."
+          : "Nu. Materialele audio și suportul sunt incluse. Plățile se fac securizat prin Stripe. Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%."}
       </p>
     </BlogArticleLayout>
   );

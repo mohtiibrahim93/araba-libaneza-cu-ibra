@@ -4,7 +4,7 @@ import EnLandingLayout from "./EnLandingLayout";
 const FAQ = [
   {
     q: "What age are the teen Arabic classes for?",
-    a: "Ages 11–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–10 we run a separate play-based kids course in Bucharest.",
+    a: "Ages 12–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–11 we run a separate play-based kids course in Bucharest.",
   },
   {
     q: "Which Arabic do teenagers learn here?",
@@ -28,16 +28,16 @@ const ArabicForTeenagers = () => (
   <EnLandingLayout
     slug="arabic-for-teenagers"
     roHref="/cursuri-araba-adolescenti"
-    title="Lebanese Arabic for teenagers (11–17) — Bucharest and online"
+    title="Lebanese Arabic for teenagers (12–17) — Bucharest and online"
     metaTitle="Lebanese Arabic Classes for Teenagers | Bucharest & Online"
-    description="Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial."
+    description="Lebanese Arabic classes for ages 12–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial."
     crumb="Arabic for teenagers"
-    lead="Lebanese Arabic groups designed for 11–17 year olds: conversation, music and real social-media language instead of grammar drills. Native Lebanese teacher, in person in Bucharest or online."
+    lead="Lebanese Arabic groups designed for 12–17 year olds: conversation, music and real social-media language instead of grammar drills. Native Lebanese teacher, in person in Bucharest or online."
     faq={FAQ}
   >
     <p>
       Teenagers learn a language when they can use it immediately. That's why our{" "}
-      <strong>Lebanese Arabic classes for teenagers</strong> (11–17) start from the living language —
+      <strong>Lebanese Arabic classes for teenagers</strong> (12–17) start from the living language —
       the Levantine dialect spoken in Lebanon, Syria, Jordan and Palestine — rather than the Modern
       Standard Arabic of textbooks that nobody speaks in conversation.
     </p>
@@ -70,12 +70,12 @@ const ArabicForTeenagers = () => (
         </thead>
         <tbody>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">6–10</td>
+            <td className="py-2 pr-3 font-semibold">6–11</td>
             <td className="py-2 px-3">Play-based kids course</td>
             <td className="py-2 pl-3">In person, Bucharest</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">11–15</td>
+            <td className="py-2 pr-3 font-semibold">12–15</td>
             <td className="py-2 px-3">Teen group (forming) or private 1-on-1</td>
             <td className="py-2 pl-3">In person or online</td>
           </tr>
@@ -88,7 +88,7 @@ const ArabicForTeenagers = () => (
       </table>
     </div>
     <p>
-      Dedicated 11–15 groups open once 4–8 students have registered interest. You can reserve a place
+      Dedicated 12–15 groups open once 4–8 students have registered interest. You can reserve a place
       below — we'll notify you the moment a group
       starts, and in the meantime{" "}
       <Link to="/en/arabic-tutor">private lessons</Link> are available immediately.

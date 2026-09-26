@@ -39,7 +39,7 @@ const FAQ = [
   },
   {
     q: "How long does it take to speak Levantine Arabic?",
-    a: "With 2 lessons of 90 minutes per week plus modest practice, learners typically reach basic everyday conversation (A2) in 3–6 months, and comfortable fluency (B1/B2) in 1.5–2 years. Starting with arabizi before the Arabic script accelerates the first months substantially.",
+    a: "With 2 lessons of 90 minutes per week plus modest practice, you reach basic everyday conversation at A1 in about 4 months (32 lessons) and A2 after about 10, and comfortable fluency (B1/B2) in 1.5–2 years. Starting with arabizi before the Arabic script accelerates the first months substantially.",
   },
   {
     q: "What language are lessons taught in?",
@@ -119,7 +119,7 @@ const LearnLebaneseArabic = () => (
     </p>
     <ul>
       <li><strong>Speak from lesson one:</strong> no alphabet gatekeeping; you start with arabizi transliteration.</li>
-      <li><strong>Real conversations at A2:</strong> handle introductions, shopping, directions and small talk in 3–6 months.</li>
+      <li><strong>Real conversations at A2:</strong> handle introductions, shopping, directions and small talk — A1 in about 4 months, A2 after about 10.</li>
       <li><strong>Understand Lebanese media:</strong> songs, series, YouTube and social content in the original dialect.</li>
       <li><strong>Travel and family:</strong> connect with Lebanese speakers in Lebanon and the diaspora.</li>
       <li><strong>Gateway to the Levant:</strong> Lebanese is mutually intelligible with Syrian and widely understood in Jordan and Palestine.</li>
@@ -179,7 +179,7 @@ const LearnLebaneseArabic = () => (
 
     <h2>How we teach</h2>
     <ul>
-      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). The Arabic script is introduced after 2–3 months, once your ear is tuned.</li>
+      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). Up to and including B1 it's spoken only; from B2 you can optionally add the Arabic script.</li>
       <li><strong>Native teacher:</strong> Ibra is a native Lebanese speaker with 5+ years of teaching experience.</li>
       <li><strong>CEFR structure:</strong> six levels A1 → C2, from survival to full fluency.</li>
       <li><strong>Real conversations:</strong> every lesson builds toward something you can actually say in daily life.</li>
@@ -252,7 +252,7 @@ const LearnLebaneseArabic = () => (
     <ul className="grid sm:grid-cols-2 gap-2 text-sm text-foreground/80 not-prose mt-8">
       {[
         "Speak from lesson one — no alphabet gatekeeping",
-        "Real conversations at A2 in 3–6 months",
+        "Real everyday conversations from A1, in about 4 months",
         "Native pronunciation and cultural context",
         "Understand Lebanese music, cinema and series",
         "Works across Lebanon, Syria, Jordan and Palestine",

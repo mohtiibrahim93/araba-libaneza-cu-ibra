@@ -72,7 +72,7 @@ const InvataArabaOnline = () => {
           ? " method. The teacher shares the screen for words and phrases, you practise with "
           : ". Profesorul împarte ecranul pentru cuvinte și expresii, exersezi cu "}
         <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>
-        {en ? " and move gradually to the Arabic script, and you leave each lesson able to say something new." : " și treci treptat la scrierea arabă, iar din fiecare lecție pleci putând spune ceva nou."}
+        {en ? " (spoken only up to B1, optional Arabic script from B2), and you leave each lesson able to say something new." : " (doar oral până la B1, scris cu alfabet arab opțional de la B2), iar din fiecare lecție pleci putând spune ceva nou."}
       </p>
 
       <h2>{en ? "Is online as good as in person?" : "E online la fel de bun ca fizic?"}</h2>
@@ -109,8 +109,8 @@ const InvataArabaOnline = () => {
       <h2>{en ? "The online cohort — and the next one" : "Cohorta online — și următoarea"}</h2>
       <p>
         {en
-          ? "The A1 online group (complete beginners) is already running and all 10 seats are taken. We open a new online cohort as soon as enough people are waiting, so leave your details and we'll email you first. In the meantime you can start straight away with online private lessons, or join a higher level online."
-          : "Grupa A1 online (începători compleți) este deja în desfășurare și toate cele 10 locuri sunt ocupate. Deschidem o grupă nouă imediat ce sunt suficienți înscriși, așa că lasă-ți datele și te anunțăm primul pe email. Între timp poți începe oricând cu lecții private online sau te poți alătura online la un nivel mai avansat."}
+          ? "The A1 online group that has already started is full, but registration is open for the new A1 online groups (complete beginners) — one taught in Romanian and one in English, with at most 6 students each. The dates and free places are on the A1 course page. You can also start any time with online private lessons."
+          : "Grupa A1 online deja începută e completă, dar sunt deschise înscrierile la grupele A1 online noi (începători compleți) — una predată în română și una în engleză, cu maximum 6 cursanți fiecare. Datele și locurile libere le vezi pe pagina cursului A1. Poți începe oricând și cu lecții private online."}
       </p>
       <p>
         {en ? "Not sure where you'd start? Take the " : "Nu știi de unde ai porni? Fă "}

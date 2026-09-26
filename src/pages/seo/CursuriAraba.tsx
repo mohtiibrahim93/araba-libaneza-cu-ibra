@@ -13,7 +13,7 @@ const FAQ = [
   },
   {
     q: "Pot începe de la zero, fără să știu nimic?",
-    a: "Da — nivelul A1 este gândit exact pentru începători compleți. Vorbești din prima lecție prin metoda Oral First, folosind arabizi (scriere cu litere latine), iar alfabetul arab vine treptat, fără să te blocheze.",
+    a: "Da — nivelul A1 este gândit exact pentru începători compleți. Vorbești din prima lecție prin metoda Oral First, folosind arabizi (scriere cu litere latine), iar alfabetul arab nu te blochează: până la B1 inclusiv lucrăm doar oral, iar de la B2 îl poți adăuga, opțional.",
   },
   {
     q: "Cursurile sunt în București sau online?",
@@ -63,7 +63,7 @@ const CursuriAraba = () => (
         program flexibil, 150 lei/lecție (60 min), fizic sau online.
       </li>
       <li>
-        <strong><Link to="/cursuri/copii">Curs pentru copii (6–10 ani)</Link></strong> — învățare
+        <strong><Link to="/cursuri/copii">Curs pentru copii (6–11 ani)</Link></strong> — învățare
         prin joc, cântece și povești, fizic în București.
       </li>
     </ul>
@@ -130,8 +130,8 @@ const CursuriAraba = () => (
 
     <h2>Cursuri de arabă pe vârste</h2>
     <ul>
-      <li><strong><Link to="/curs-araba-copii">Copii 6–10 ani</Link></strong> — prin joc, cântece și povești, fizic în București.</li>
-      <li><strong><Link to="/cursuri-araba-adolescenti">Adolescenți 11–17 ani</Link></strong> — conversație, muzică și limbaj de social media, fizic sau online.</li>
+      <li><strong><Link to="/curs-araba-copii">Copii 6–11 ani</Link></strong> — prin joc, cântece și povești, fizic în București.</li>
+      <li><strong><Link to="/cursuri-araba-adolescenti">Adolescenți 12–17 ani</Link></strong> — conversație, muzică și limbaj de social media, fizic sau online.</li>
       <li><strong><Link to="/cursuri/grup">Adulți A1–C2</Link></strong> — grupe mici pe niveluri, fizic sau online.</li>
     </ul>
 

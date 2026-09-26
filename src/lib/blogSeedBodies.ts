@@ -93,9 +93,9 @@ Fiecare nivel durează un număr fix de luni (A1 patru luni, A2 șapte luni etc.
 
 ## Lecții private (1:1)
 
-Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție** (60 de minute), în orice format — online sau fizic. Reduceri automate la pachet: **−10% de la 10 lecții și −20% de la 20**. Detalii pe pagina de [lecții private](/cursuri/private).
+Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție online** și **210 lei / lecție fizic** (60 de minute). Reduceri automate la pachet: **−10% de la 10 lecții și −20% de la 20**. Detalii pe pagina de [lecții private](/cursuri/private).
 
-## Curs pentru copii (6–10 ani)
+## Curs pentru copii (6–11 ani)
 
 Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Prețul este 500 lei/lună online (700 lei/lună fizic) pe durata programului. Vezi [cursul pentru copii](/cursuri/copii).
 
@@ -105,7 +105,7 @@ Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gra
 
 ## Există costuri ascunse?
 
-Nu. Materialele audio și suportul sunt incluse. Plățile se fac securizat prin Stripe, iar pentru abonamentele lunare poți anula oricând — dacă anulezi în primele 5 zile ale unei luni deja plătite, primești banii înapoi proporțional. Restul lunilor pur și simplu nu se mai facturează.`,
+Nu. Materialele audio și suportul sunt incluse. Plățile se fac securizat prin Stripe. Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
     en: `One of the first natural questions when you want to learn a new language is 'how much?'. At the Lebanese Arabic Center prices are transparent and depend on one thing: the format you choose. Here are all the options.
 
 ## Group courses (adults, A1–C2)
@@ -119,9 +119,9 @@ Each level lasts a fixed number of months (A1 four months, A2 seven, etc.), so y
 
 ## Private lessons (1:1)
 
-If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson** (60 minutes), in any format — online or in person. Automatic package discounts: **−10% from 10 lessons and −20% from 20**. Details on the [private lessons](/cursuri/private) page.
+If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson online** and **210 lei / lesson in person** (60 minutes). Automatic package discounts: **−10% from 10 lessons and −20% from 20**. Details on the [private lessons](/cursuri/private) page.
 
-## Kids course (ages 6–10)
+## Kids course (ages 6–11)
 
 The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). The price is 500 lei/month online (700 lei/month in person) for the program's duration. See the [kids course](/cursuri/copii).
 
@@ -131,7 +131,7 @@ You don't have to pay anything to start. The first lesson is a [free trial](/tri
 
 ## Are there hidden costs?
 
-No. Audio materials and support are included. Payments are made securely via Stripe, and for monthly subscriptions you can cancel anytime — if you cancel within the first 5 days of an already-paid month, you get a prorated refund. The remaining months simply aren't billed.`,
+No. Audio materials and support are included. Payments are made securely via Stripe. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
   },
 
   "cum-alegi-profesor-de-araba": {
@@ -147,7 +147,7 @@ No. Audio materials and support are included. Payments are made securely via Str
 
 ## Despre metodă
 
-- **Cum sunt structurate lecțiile?** Prin metoda Oral First — vorbești din primele lecții, cu [arabizi](/blog/ce-este-arabizi) la început și trecere treptată la alfabetul arab.
+- **Cum sunt structurate lecțiile?** Prin metoda Oral First — vorbești din primele lecții, cu [arabizi](/blog/ce-este-arabizi); până la B1 inclusiv doar oral, iar de la B2 poți adăuga, opțional, alfabetul arab.
 - **Cum adaptezi lecțiile la nivelul meu?** Grupe mici și feedback constant; pentru obiective specifice, [lecții private 1:1](/cursuri/private).
 - **Incluzi și cultura?** Da — limba vine împreună cu [obiceiurile și contextul cultural](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 
@@ -155,7 +155,7 @@ No. Audio materials and support are included. Payments are made securely via Str
 
 - **Cât durează și cât de des?** 90 de minute, de 2 ori pe săptămână la grup; flexibil la privat.
 - **Online sau fizic?** Ambele — fizic în București sau online prin Zoom.
-- **Cât costă și care e politica de anulare?** Transparent, fără costuri ascunse — vezi [detaliile de preț](/blog/cat-costa-cursurile-de-araba-libaneza). Abonamentele se pot anula oricând, cu rambursare proporțională în primele 5 zile.
+- **Cât costă și care e politica de anulare?** Transparent, fără costuri ascunse — vezi [detaliile de preț](/blog/cat-costa-cursurile-de-araba-libaneza). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.
 - **Oferi o lecție de probă?** Da — prima lecție e [gratuită, fără obligații](/trial).
 
 ## Despre potrivire și rezultate
@@ -181,7 +181,7 @@ Cel mai simplu test? O [lecție de probă gratuită](/trial) — vezi direct met
 
 ## About the method
 
-- **How are lessons structured?** With the Oral First method — you speak from the first lessons, with [Arabizi](/blog/ce-este-arabizi) at first and a gradual move to the Arabic alphabet.
+- **How are lessons structured?** With the Oral First method — you speak from the first lessons, with [Arabizi](/blog/ce-este-arabizi); spoken only up to and including B1, with optional Arabic script from B2.
 - **How do you adapt lessons to my level?** Small groups and constant feedback; for specific goals, [1:1 private lessons](/cursuri/private).
 - **Do you include culture?** Yes — the language comes with the [customs and cultural context](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 
@@ -189,7 +189,7 @@ Cel mai simplu test? O [lecție de probă gratuită](/trial) — vezi direct met
 
 - **How long and how often?** 90 minutes, twice a week for groups; flexible for private.
 - **Online or in person?** Both — in person in Bucharest or online via Zoom.
-- **How much, and what's the cancellation policy?** Transparent, no hidden fees — see the [pricing details](/blog/cat-costa-cursurile-de-araba-libaneza). Subscriptions can be cancelled anytime, with a prorated refund in the first 5 days.
+- **How much, and what's the cancellation policy?** Transparent, no hidden fees — see the [pricing details](/blog/cat-costa-cursurile-de-araba-libaneza). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee.
 - **Do you offer a trial lesson?** Yes — the first lesson is [free, with no obligation](/trial).
 
 ## About fit and results
@@ -314,7 +314,7 @@ O particularitate importantă: în arabă, vocalele scurte (a, i, u) se marcheaz
 
 ## Trebuie să știi alfabetul ca să vorbești?
 
-Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **Oral First**: începi vorbind, cu ajutorul [arabizi](/blog/ce-este-arabizi) (araba scrisă cu litere latine), și treci treptat la alfabetul arab, fără să te blochezi. Poți purta conversații întregi în libaneză înainte să scrii prima literă.
+Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **Oral First**: începi vorbind, cu ajutorul [arabizi](/blog/ce-este-arabizi) (araba scrisă cu litere latine), fără să te blochezi la alfabet: până la B1 inclusiv cursul e doar oral, iar de la B2 poți alege, opțional, și scrisul cu litere arabe. Poți purta conversații întregi în libaneză înainte să scrii prima literă.
 
 ## Cum înveți alfabetul mai ușor
 
@@ -367,7 +367,7 @@ An important quirk: in Arabic, short vowels (a, i, u) are marked with small sign
 
 ## Do you need the alphabet to speak?
 
-No — and that's the good news. At the Lebanese Arabic Center we use the **Oral First** method: you start by speaking, with the help of [Arabizi](/blog/ce-este-arabizi) (Arabic written in Latin letters), and move gradually to the Arabic alphabet without getting stuck. You can hold whole conversations in Lebanese before writing your first letter.
+No — and that's the good news. At the Lebanese Arabic Center we use the **Oral First** method: you start by speaking, with the help of [Arabizi](/blog/ce-este-arabizi) (Arabic written in Latin letters), without getting stuck on the alphabet: up to and including B1 the course is spoken only, and from B2 you can optionally add writing in Arabic letters. You can hold whole conversations in Lebanese before writing your first letter.
 
 ## How to learn the alphabet more easily
 
@@ -401,7 +401,7 @@ Vezi mai multe în articolul cu [primele 20 de expresii libaneze](/blog/primele-
 
 ## E „barează” să înveți cu arabizi?
 
-Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs folosim arabizi la început și trecem treptat la alfabetul arab, în ritmul tău, prin metoda **Oral First**.`,
+Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs folosim arabizi, prin metoda **Oral First**: până la B1 inclusiv lucrăm doar oral, iar de la B2 poți adăuga, opțional, alfabetul arab.`,
     en: `**Arabizi** (also called 'arabish' or 'franco-arab') is how millions of Arabs write their dialect on their phones and on social media: **in Latin letters and a few numbers**. Instead of learning the [Arabic alphabet](/blog/alfabetul-arab-pentru-incepatori) first, you can read and write Lebanese right away, using letters you already know.
 
 ## Why numbers?
@@ -488,7 +488,7 @@ Curious? Start with a [free trial lesson](/trial) or see [all the courses](/curs
 
 ## De la ce vârstă?
 
-La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–10 ani**, fizic în București. De la **10 ani**, copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
+La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, fizic în București. De la **10 ani**, copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
 
 ## Cum arată o lecție
 
@@ -516,7 +516,7 @@ Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilulu
 
 ## From what age?
 
-At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–10**, in person in Bucharest. From age **10**, children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
+At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, in person in Bucharest. From age **10**, children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
 
 ## What a lesson looks like
 
@@ -945,7 +945,7 @@ Toate nivelurile noastre au o variantă online. Poți intra într-un [curs de gr
 
 ## Cohorta online — și următoarea
 
-Grupa A1 online (începători compleți) este deja în desfășurare și toate cele 10 locuri sunt ocupate. Deschidem o grupă nouă imediat ce sunt suficienți înscriși, așa că lasă-ți datele și te anunțăm primul pe email. Între timp poți începe oricând cu lecții private online sau te poți alătura online la un nivel mai avansat.
+Grupa A1 online deja începută e completă, dar sunt deschise înscrierile la grupele A1 online noi (începători compleți) — una predată în română și una în engleză, cu maximum 6 cursanți fiecare. Datele și locurile libere le vezi pe pagina cursului A1. Poți începe oricând și cu lecții private online.
 
 Nu știi de unde ai porni? Fă [testul de nivel gratuit](/quiz) (2 minute), sau vezi [cât durează fiecare nivel](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
     en: `You don't have to live in Bucharest — or even in Romania — to learn Lebanese Arabic with a native teacher. Our online courses run over Zoom, with the same method and the same teacher as the in-person ones. If you're part of the Lebanese diaspora, have Lebanese family, or simply want the living dialect from wherever you are, online is made for you.
@@ -971,7 +971,7 @@ All our levels have an online variant. You can join an online [group course](/cu
 
 ## The online cohort — and the next one
 
-The A1 online group (complete beginners) is already running and all 10 seats are taken. We open a new online cohort as soon as enough people are waiting, so leave your details and we'll email you first. In the meantime you can start straight away with online private lessons, or join a higher level online.
+The A1 online group that has already started is full, but registration is open for the new A1 online groups (complete beginners) — one taught in Romanian and one in English, with at most 6 students each. The dates and free places are on the A1 course page. You can also start any time with online private lessons.
 
 Not sure where you'd start? Take the [free level test](/quiz) (2 minutes), or see [how long each level takes](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
   },

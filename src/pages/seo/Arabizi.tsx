@@ -27,7 +27,7 @@ const FAQ = [
   },
   {
     q: "Pot învăța araba libaneză doar cu arabizi, fără alfabetul arab?",
-    a: "Da. La cursurile noastre predăm implicit în arabizi, ca să vorbești din prima lecție; alfabetul arab îl introducem la cerere, treptat, când ai deja o bază orală.",
+    a: "Da. La cursurile noastre predăm implicit în arabizi, ca să vorbești din prima lecție; până la B1 inclusiv cursul e doar oral, iar de la B2 poți adăuga, opțional, alfabetul arab.",
   },
 ];
 
@@ -143,7 +143,7 @@ const Arabizi = () => (
     <p>
       Da — și e cea mai rapidă cale spre conversație. Alfabetul arab este motivul principal pentru
       care oamenii se apucă de arabă și renunță în prima lună. Noi predăm implicit în arabizi, iar
-      alfabetul îl introducem la cerere, după ce ai deja o bază orală. Detalii despre metodă:{" "}
+      alfabetul arab e opțional, de la nivelul B2. Detalii despre metodă:{" "}
       <Link to="/fara-alfabet-arab">nu ai nevoie de alfabetul arab ca să începi să vorbești</Link>.
       Iar dacă vrei totuși alfabetul, îl explicăm pas cu pas în{" "}
       <Link to="/blog/alfabetul-arab-pentru-incepatori">ghidul alfabetului arab</Link>.
