@@ -47,9 +47,12 @@ public struct WardrobeItem: Codable, Equatable, Identifiable, Sendable {
     }
 }
 
-/// Coins earned in the game. Coins are separate from XP and cannot be
-/// bought for now.
+/// Coins earned in the game, up to a daily limit. Coins are separate from
+/// XP and cannot be bought for now.
 public enum GameRewards {
+    /// Most coins the game gives in one day.
+    public static let dailyLimit = 30
+
     public static let firstTry = 3
     public static let secondTry = 1
     public static let firstCompletion = 10
@@ -72,21 +75,57 @@ public struct DressUpGameState: Codable, Equatable, Sendable {
     public private(set) var equipped: [WardrobeSlot: String]
     /// How many times each conversation unit was finished.
     public private(set) var completions: [String: Int]
+    /// Coins earned on `earnedDay` (a LearnerDay key), for the daily limit.
+    public private(set) var earnedToday: Int
+    public private(set) var earnedDay: String
 
     public init(
         coins: Int = 0,
         ownedItemIDs: Set<String> = [],
         equipped: [WardrobeSlot: String] = [:],
-        completions: [String: Int] = [:]
+        completions: [String: Int] = [:],
+        earnedToday: Int = 0,
+        earnedDay: String = ""
     ) {
         self.coins = coins
         self.ownedItemIDs = ownedItemIDs
         self.equipped = equipped
         self.completions = completions
+        self.earnedToday = earnedToday
+        self.earnedDay = earnedDay
     }
 
-    public mutating func earn(_ amount: Int) {
-        coins += max(amount, 0)
+    private enum CodingKeys: String, CodingKey {
+        case coins, ownedItemIDs, equipped, completions, earnedToday, earnedDay
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        coins = try container.decode(Int.self, forKey: .coins)
+        ownedItemIDs = try container.decode(Set<String>.self, forKey: .ownedItemIDs)
+        equipped = try container.decode([WardrobeSlot: String].self, forKey: .equipped)
+        completions = try container.decode([String: Int].self, forKey: .completions)
+        earnedToday = try container.decodeIfPresent(Int.self, forKey: .earnedToday) ?? 0
+        earnedDay = try container.decodeIfPresent(String.self, forKey: .earnedDay) ?? ""
+    }
+
+    /// Coins already earned on `day`.
+    public func earned(on day: String) -> Int {
+        earnedDay == day ? earnedToday : 0
+    }
+
+    /// Adds coins up to what is left of the day's limit and returns how many
+    /// were actually added.
+    @discardableResult
+    public mutating func earn(_ amount: Int, day: String) -> Int {
+        if earnedDay != day {
+            earnedDay = day
+            earnedToday = 0
+        }
+        let granted = min(max(amount, 0), max(GameRewards.dailyLimit - earnedToday, 0))
+        earnedToday += granted
+        coins += granted
+        return granted
     }
 
     /// Pays coins (e.g. to reveal a translation). Returns false when there are not enough.
@@ -97,13 +136,13 @@ public struct DressUpGameState: Codable, Equatable, Sendable {
         return true
     }
 
-    /// Records a finished scene and returns the bonus it earned.
+    /// Records a finished scene and returns the bonus actually earned
+    /// (within the day's limit).
     @discardableResult
-    public mutating func completeScene(unitID: String) -> Int {
+    public mutating func completeScene(unitID: String, day: String) -> Int {
         let bonus = completions[unitID, default: 0] == 0 ? GameRewards.firstCompletion : GameRewards.replayCompletion
         completions[unitID, default: 0] += 1
-        coins += bonus
-        return bonus
+        return earn(bonus, day: day)
     }
 
     public func isUnlocked(_ item: WardrobeItem) -> Bool {

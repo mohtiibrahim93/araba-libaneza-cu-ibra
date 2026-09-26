@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import YallaCore
 
@@ -12,8 +13,8 @@ struct DressUpGameTests {
         #expect(GameRewards.coins(wrongAttempts: 1) == 1)
         #expect(GameRewards.coins(wrongAttempts: 2) == 0)
         var state = DressUpGameState()
-        #expect(state.completeScene(unitID: "u") == 10)
-        #expect(state.completeScene(unitID: "u") == 2)
+        #expect(state.completeScene(unitID: "u", day: "d") == 10)
+        #expect(state.completeScene(unitID: "u", day: "d") == 2)
         #expect(state.coins == 12)
     }
 
@@ -21,7 +22,7 @@ struct DressUpGameTests {
     func buying() {
         var state = DressUpGameState(coins: 4)
         #expect(!state.buy(hat))
-        state.earn(1)
+        state.earn(1, day: "d")
         #expect(state.buy(hat))
         #expect(state.coins == 0)
         #expect(state.equipped[.head] == "hat")
@@ -29,7 +30,7 @@ struct DressUpGameTests {
         state.toggleWearing(hat)
         #expect(state.equipped[.head] == nil)
         #expect(!state.spend(1))
-        state.earn(2)
+        state.earn(2, day: "d")
         #expect(state.spend(1))
         #expect(state.coins == 1)
     }
@@ -39,7 +40,7 @@ struct DressUpGameTests {
         var state = DressUpGameState(coins: 10)
         #expect(!state.isUnlocked(apron))
         #expect(!state.buy(apron))
-        state.completeScene(unitID: "a1-restaurant")
+        state.completeScene(unitID: "a1-restaurant", day: "d")
         #expect(state.buy(apron))
     }
 
@@ -65,5 +66,26 @@ struct DressUpGameTests {
         #expect(gloss.romanian(for: "b7ebb el 7ommos") == "Îmi place humusul.")
         #expect(gloss.romanian(for: "Badde ahwe") == "Vreau cafea")
         #expect(gloss.romanian(for: "necunoscut") == nil)
+    }
+
+    @Test("Earning stops at the daily limit and starts again the next day")
+    func dailyLimit() {
+        var state = DressUpGameState()
+        #expect(state.earn(25, day: "d1") == 25)
+        #expect(state.earn(10, day: "d1") == 5)
+        #expect(state.earn(3, day: "d1") == 0)
+        #expect(state.completeScene(unitID: "u", day: "d1") == 0)
+        #expect(state.earned(on: "d1") == 30)
+        #expect(state.earn(3, day: "d2") == 3)
+        #expect(state.coins == 33)
+        #expect(state.earned(on: "d2") == 3)
+    }
+
+    @Test("Game saved before the daily limit still loads")
+    func decodesOldSave() throws {
+        let json = #"{"coins":7,"ownedItemIDs":[],"equipped":[],"completions":{}}"#
+        let state = try JSONDecoder().decode(DressUpGameState.self, from: Data(json.utf8))
+        #expect(state.coins == 7)
+        #expect(state.earnedToday == 0)
     }
 }

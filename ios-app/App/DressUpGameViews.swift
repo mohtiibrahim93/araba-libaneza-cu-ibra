@@ -39,6 +39,9 @@ final class DressUpGameStore: ObservableObject {
         try? data.write(to: fileURL, options: .atomic)
     }
 
+    /// Today's key, for the daily coin limit.
+    var today: String { LearnerDay().key(for: Date()) }
+
     var equippedItems: [WardrobeSlot: WardrobeItem] {
         var result: [WardrobeSlot: WardrobeItem] = [:]
         for (slot, id) in state.equipped {
@@ -77,6 +80,7 @@ struct DressUpGameView: View {
                     Spacer(minLength: Theme.Spacing.sm)
                     CoinBadge(coins: store.state.coins)
                 }
+                DailyCoinLimitRow(earned: store.state.earned(on: store.today))
 
                 GameCharacterView(equipped: store.equippedItems)
                     .frame(maxWidth: .infinity)
@@ -118,7 +122,7 @@ struct DressUpGameView: View {
                     .buttonStyle(NodeButtonStyle())
                     .accessibilityIdentifier("game.scene")
                 }
-                Text("Monedele nu se pot cumpăra deocamdată. Le câștigi doar răspunzând.")
+                Text("Monedele nu se pot cumpăra deocamdată. Le câștigi răspunzând, până la \(GameRewards.dailyLimit) pe zi.")
                     .font(Theme.font(.footnote))
                     .foregroundStyle(Theme.muted)
             }
@@ -130,6 +134,23 @@ struct DressUpGameView: View {
         .background(Theme.canvas.ignoresSafeArea())
         .navigationTitle("Joc")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// "Azi: 12 / 30 monede" with a small bar.
+struct DailyCoinLimitRow: View {
+    let earned: Int
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.sm) {
+            MeterBar(fraction: Double(earned) / Double(GameRewards.dailyLimit), tint: Theme.gold, track: Theme.ringTrack, height: 6)
+            Text("Azi: \(earned) / \(GameRewards.dailyLimit) monede")
+                .font(Theme.font(.caption, weight: .semibold))
+                .monospacedDigit()
+                .foregroundStyle(Theme.muted)
+                .fixedSize()
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -173,6 +194,7 @@ struct DressUpSceneView: View {
     @State private var wrong: Set<String> = []
     @State private var answered: String?
     @State private var lastReward = 0
+    @State private var hitDailyLimit = false
     @State private var earnedInScene = 0
     @State private var revealedTurns: Set<Int> = []
     @State private var finishedBonus: Int?
@@ -254,6 +276,12 @@ struct DressUpSceneView: View {
                     .font(Theme.font(.subheadline, weight: .bold))
                     .foregroundStyle(Theme.goldShade)
             }
+            if hitDailyLimit {
+                Text("Ai atins limita de \(GameRewards.dailyLimit) monede pe azi. Poți juca în continuare; monedele revin mâine.")
+                    .font(Theme.font(.footnote))
+                    .foregroundStyle(Theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             Button {
                 advance(exercise: exercise, index: index, reply: reply, line: line)
             } label: {
@@ -301,7 +329,7 @@ struct DressUpSceneView: View {
             Label("Scenă terminată", systemImage: "checkmark.seal.fill")
                 .font(Theme.serif(.title3, weight: .semibold))
                 .foregroundStyle(Theme.success)
-            Text("Ai câștigat \(earnedInScene + bonus) monede (\(bonus) bonus pentru final).")
+            Text("Ai câștigat \(earnedInScene + bonus) monede în această scenă" + (bonus > 0 ? " (\(bonus) bonus pentru final)." : "."))
                 .font(Theme.font(.subheadline))
                 .foregroundStyle(Theme.ink)
             NavigationLink {
@@ -324,9 +352,12 @@ struct DressUpSceneView: View {
         self.player = player
         if resolution.completed {
             let reward = GameRewards.coins(wrongAttempts: wrong.count)
-            lastReward = reward
-            earnedInScene += reward
-            store.update { $0.earn(reward) }
+            var granted = 0
+            let day = store.today
+            store.update { granted = $0.earn(reward, day: day) }
+            lastReward = granted
+            hitDailyLimit = granted < reward
+            earnedInScene += granted
             answered = player.currentExercise?.answer ?? choice
             persist(resolution, player: player)
         } else {
@@ -348,10 +379,12 @@ struct DressUpSceneView: View {
         answered = nil
         wrong = []
         lastReward = 0
+        hitDailyLimit = false
         startedAt = Date()
         if player.isFinished {
             var bonus = 0
-            store.update { bonus = $0.completeScene(unitID: scenario.unitID) }
+            let day = store.today
+            store.update { bonus = $0.completeScene(unitID: scenario.unitID, day: day) }
             finishedBonus = bonus
         }
     }
