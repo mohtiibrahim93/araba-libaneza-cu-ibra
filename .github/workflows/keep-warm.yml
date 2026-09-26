@@ -1,0 +1,49 @@
+# Pings the site every five minutes.
+#
+# Two reasons. It is an uptime check: a response that is not 200 fails the run,
+# and GitHub emails the owner. And it keeps a Cloudflare worker isolate awake, so
+# some visitors land on a warm one — measured on this site, a cold page answers
+# in 1.4–2.6s and a warm one in about 0.4s, and the difference is entirely the
+# isolate booting.
+#
+# Two honest limits:
+#   - The runner is wherever GitHub puts it, which is not Romania. Cloudflare
+#     warms the colo that receives the request, so this mostly helps visitors
+#     near the runner. For visitors in Bucharest, a pinger with European check
+#     locations (any free uptime monitor) does the job properly.
+#   - Five minutes is GitHub's minimum, scheduled runs are often delayed under
+#     load, and an idle isolate can be evicted sooner than that. So this makes
+#     cold starts less frequent; it does not remove them.
+#
+# GitHub pauses scheduled workflows on a repository with no activity for 60 days.
+name: keep-warm
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+# Nothing in the repository is read, so the token needs no access at all.
+permissions: {}
+
+concurrency:
+  group: keep-warm
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping the health endpoint
+        run: |
+          set -euo pipefail
+          # --max-time 30, and one retry, so a single dropped connection does not
+          # page the owner at three in the morning.
+          code=$(curl -sS -o /tmp/health.json -w '%{http_code}' \
+            --max-time 30 --retry 1 --retry-delay 5 \
+            https://centruldearabalibaneza.com/api/health)
+          echo "status $code"
+          cat /tmp/health.json || true
+          echo
+          test "$code" = "200"

@@ -46,6 +46,7 @@ import { Route as TrialRouteImport } from './routes/trial'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminNotificationsRouteImport } from './routes/admin/notifications'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogAlfabetulArabPentruIncepatoriRouteImport } from './routes/blog/alfabetul-arab-pentru-incepatori'
 import { Route as BlogArabaLibanezaVsArabaStandardRouteImport } from './routes/blog/araba-libaneza-vs-araba-standard'
@@ -315,6 +316,11 @@ const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -815,6 +821,7 @@ export interface FileRoutesByFullPath {
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -938,6 +945,7 @@ export interface FileRoutesByTo {
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1063,6 +1071,7 @@ export interface FileRoutesById {
   '/trial': typeof TrialRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/health': typeof ApiHealthRoute
   '/blog/alfabetul-arab-pentru-incepatori': typeof BlogAlfabetulArabPentruIncepatoriRoute
   '/blog/araba-libaneza-vs-araba-standard': typeof BlogArabaLibanezaVsArabaStandardRoute
   '/blog/araba-pentru-copii-ghidul-parintilor': typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1189,6 +1198,7 @@ export interface FileRouteTypes {
     | '/trial'
     | '/admin/notifications'
     | '/api/chat'
+    | '/api/health'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1312,6 +1322,7 @@ export interface FileRouteTypes {
     | '/trial'
     | '/admin/notifications'
     | '/api/chat'
+    | '/api/health'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1436,6 +1447,7 @@ export interface FileRouteTypes {
     | '/trial'
     | '/admin/notifications'
     | '/api/chat'
+    | '/api/health'
     | '/blog/alfabetul-arab-pentru-incepatori'
     | '/blog/araba-libaneza-vs-araba-standard'
     | '/blog/araba-pentru-copii-ghidul-parintilor'
@@ -1561,6 +1573,7 @@ export interface RootRouteChildren {
   TrialRoute: typeof TrialRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   BlogAlfabetulArabPentruIncepatoriRoute: typeof BlogAlfabetulArabPentruIncepatoriRoute
   BlogArabaLibanezaVsArabaStandardRoute: typeof BlogArabaLibanezaVsArabaStandardRoute
   BlogArabaPentruCopiiGhidulParintilorRoute: typeof BlogArabaPentruCopiiGhidulParintilorRoute
@@ -1906,6 +1919,13 @@ declare module '@tanstack/react-router' {
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -2555,6 +2575,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrialRoute: TrialRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiHealthRoute: ApiHealthRoute,
   BlogAlfabetulArabPentruIncepatoriRoute:
     BlogAlfabetulArabPentruIncepatoriRoute,
   BlogArabaLibanezaVsArabaStandardRoute: BlogArabaLibanezaVsArabaStandardRoute,
