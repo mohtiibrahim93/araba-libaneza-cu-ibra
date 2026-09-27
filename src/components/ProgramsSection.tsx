@@ -4,7 +4,6 @@ import { useI18n } from "@/lib/i18n";
 import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
 import RegistrationFormSection, { STORAGE_KEY } from "@/components/RegistrationFormSection";
-import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ONLINE_PRICES,
@@ -68,8 +67,6 @@ const ProgramsSection = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { get: getCapacity } = useGroupCapacities();
-  const kidsCap = getCapacity("kids", null);
 
   const isAvailable = (level: Level) => level === "A1" || level === "A2";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
@@ -418,35 +415,11 @@ const ProgramsSection = () => {
                           {t.programsSeeFullPage}
                         </Link>
 
-                        {kidsCap && (
-                          <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
-                            {kidsCap.taken === 0 ? (
-                              <span className="text-primary font-medium">
-                                {t.capForming.replace("{n}", String(kidsCap.needToStart || 4))}
-                              </span>
-                            ) : (
-                              <>
-                                <span className="font-semibold text-foreground">
-                                  {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
-                                </span>
-                                <span className="text-muted-foreground">·</span>
-                                <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                                  {kidsCap.full
-                                    ? t.capFull
-                                    : kidsCap.belowMin
-                                      ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
-                                      : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        )}
-
                         {/* Kids group isn't open yet — notify instead of enroll */}
                         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
                           {lang === "en"
-                            ? "Kids' group courses aren't open yet — leave your details on the kids page and we'll tell you when one starts. Private lessons for kids are available now."
-                            : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele pe pagina pentru copii și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum."}
+                            ? "We don't have kids' groups at the moment — leave your details and we'll let you know. Private lessons for kids are available now."
+                            : "Momentan nu avem grupe pentru copii — lasă-ți datele și te anunțăm. Lecțiile private pentru copii sunt disponibile acum."}
                         </div>
 
                         {/* Details */}

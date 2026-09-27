@@ -140,8 +140,8 @@ const CursCopii = () => {
         <p className="text-sm text-muted-foreground mb-6">
           {track === "group"
             ? (lang === "en"
-                ? "Kids' group courses aren't open yet — leave your details and we'll tell you when one starts. Private lessons for kids are available now (switch above)."
-                : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum (schimbă mai sus).")
+                ? "We don't have kids' groups at the moment — leave your details and we'll let you know. Private lessons for kids are available now (switch above)."
+                : "Momentan nu avem grupe pentru copii — lasă-ți datele și te anunțăm. Lecțiile private pentru copii sunt disponibile acum (schimbă mai sus).")
             : t.coursePageRegisterDesc}
         </p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">

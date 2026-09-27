@@ -31,6 +31,11 @@ const CursArabaCopii = () => (
     lead="Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
     faq={FAQ}
   >
+    <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+      <strong>Momentan nu avem grupe pentru copii — lasă-ți datele și te anunțăm.</strong>{" "}
+      <Link to="/cursuri/copii">Formularul e pe pagina cursului pentru copii</Link>.
+    </p>
+
     <p>
       Vrei ca al tău copil să învețe <strong>araba de mic</strong>, ca să comunice cu bunicii, cu
       familia sau pur și simplu ca să crească bilingv? La{" "}
@@ -65,9 +70,8 @@ const CursArabaCopii = () => (
 
     <h2>Preț și înscriere</h2>
     <p>
-      500 lei/lună (4 lecții). Lecția de probă (30 min) este gratuită — vii cu copilul, vede cum e,
-      decideți împreună. <Link to="/cursuri/copii">Vezi pagina cursului</Link> pentru detalii de
-      înscriere sau <Link to="/trial">rezervă proba gratuită</Link>.
+      Momentan nu avem grupe pentru copii — lasă-ți datele și te anunțăm. Când pornește o grupă, prețul este 500 lei/lună (4 lecții).{" "}
+      <Link to="/cursuri/copii">Lasă-ți datele pe pagina cursului</Link>.
     </p>
   </LandingLayout>
 );
