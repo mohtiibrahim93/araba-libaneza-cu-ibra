@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "What is your teaching methodology?",
-    a: "Oral-first, communicative, CEFR-aligned. You speak from lesson one using arabizi (Latin transliteration), A1–A2 are spoken only and the Arabic script can be added from B1 or B2 if you want it, and every lesson is 70% real conversation / role-play, 30% new material. Grammar is taught through examples in context, not drilled from tables.",
+    a: "Oral-first, communicative, CEFR-aligned. You speak from lesson one using arabizi (Latin transliteration), the Arabic script is added on request, usually once you've started speaking (from the start if you insist, though early on it can confuse pronunciation — and it's only the script, not standard Arabic), and every lesson is 70% real conversation / role-play, 30% new material. Grammar is taught through examples in context, not drilled from tables.",
   },
   {
     q: "How do you personalise lessons to my level and goals?",

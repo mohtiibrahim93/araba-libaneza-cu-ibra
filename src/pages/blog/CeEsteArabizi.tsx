@@ -111,7 +111,7 @@ const CeEsteArabizi = () => {
       <p>
         {en
           ? "Not at all. Arabizi is the real way Lebanese people write to each other every day. For a beginner, it's the fastest route to conversation — you don't get stuck on writing while you learn to speak. In class we use Arabizi at first and move gradually to the Arabic alphabet, at your pace, through the "
-          : "Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs, la A1 și A2 lucrăm doar oral, cu arabizi, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă cursanții vor — prin metoda "}
+          : "Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs, la A1 și A2 lucrăm doar oral, cu arabizi, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, doar dacă toți cursanții vor — prin metoda "}
         <strong>Oral First</strong>{en ? " method." : "."}
       </p>
       <p>

@@ -72,7 +72,7 @@ const InvataArabaOnline = () => {
           ? " method. The teacher shares the screen for words and phrases, you practise with "
           : ". Profesorul împarte ecranul pentru cuvinte și expresii, exersezi cu "}
         <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>
-        {en ? " (A1–A2 spoken only; from B1 or B2 the Arabic script if the group wants it), and you leave each lesson able to say something new." : " (A1–A2 doar oral; de la B1 sau B2 alfabet arab, dacă grupa vrea), iar din fiecare lecție pleci putând spune ceva nou."}
+        {en ? " (A1–A2 spoken only; from B1 or B2 the Arabic script if the whole group wants it), and you leave each lesson able to say something new." : " (A1–A2 doar oral; de la B1 sau B2 alfabet arab, dacă toată grupa vrea), iar din fiecare lecție pleci putând spune ceva nou."}
       </p>
 
       <h2>{en ? "Is online as good as in person?" : "E online la fel de bun ca fizic?"}</h2>

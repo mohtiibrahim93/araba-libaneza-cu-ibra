@@ -418,8 +418,8 @@ const ProgramsSection = () => {
                         {/* Kids group isn't open yet — notify instead of enroll */}
                         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
                           {lang === "en"
-                            ? "We don't have kids' groups at the moment — leave your details and we'll let you know. Private lessons for kids are available now."
-                            : "Momentan nu avem grupe pentru copii — lasă-ți datele și te anunțăm. Lecțiile private pentru copii sunt disponibile acum."}
+                            ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know."
+                            : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
                         </div>
 
                         {/* Details */}
@@ -501,7 +501,7 @@ const ProgramsSection = () => {
                       <img src={privateImg} alt={t.kidsPrivateCardTitle} className="w-full h-52 object-cover" />
                       <div className="p-6 flex flex-col flex-1">
                         <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-                          {t.kidsPrivateBadge}
+                          {lang === "en" ? "Coming soon" : "În curând"}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
@@ -517,6 +517,10 @@ const ProgramsSection = () => {
                           </div>
                         </div>
                         <p className="text-xs font-medium text-primary mb-3">{t.kidsPrivatePriceDiscountNote}</p>
+                        {/* Kids private lessons aren't offered right now either. */}
+                        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+                          {lang === "en" ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know." : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
+                        </div>
                         <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
@@ -556,13 +560,12 @@ const ProgramsSection = () => {
 
                         {/* CTA */}
                         <div className="mt-auto">
-                          <button
-                            type="button"
-                            onClick={() => setInlineForm("kids-private")}
+                          <Link
+                            to="/cursuri/copii#register"
                             className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                           >
-                            {t.kidsPrivateRegister}
-                          </button>
+                            {lang === "en" ? "Notify me" : "Anunță-mă"}
+                          </Link>
                           <a
                             href={WA_KIDS}
                             target="_blank"

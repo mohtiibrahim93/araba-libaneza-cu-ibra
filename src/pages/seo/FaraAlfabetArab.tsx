@@ -5,7 +5,7 @@ import ArabiziCheatSheetForm from "@/components/ArabiziCheatSheetForm";
 const FAQ = [
   {
     q: "Pot învăța araba fără alfabet?",
-    a: "Da. Poți învăța să vorbești araba libaneză folosind arabizi (scrierea cu litere latine și cifre). Alfabetul arab e necesar pentru citit și scris, nu pentru conversație — la noi e opțional, de la B1 sau B2, la cererea grupei; la A1 și A2 cursul e doar oral.",
+    a: "Da. Poți învăța să vorbești araba libaneză folosind arabizi (scrierea cu litere latine și cifre). Alfabetul arab e necesar pentru citit și scris, nu pentru conversație — la noi e opțional, de la B1 sau B2, dacă toată grupa vrea; la A1 și A2 cursul e doar oral.",
   },
   {
     q: "E greu de învățat araba?",
@@ -21,7 +21,7 @@ const FAQ = [
   },
   {
     q: "Când introduceți alfabetul arab?",
-    a: "De la B1 sau B2, dacă grupa vrea — nu e impus nimănui. La A1 și A2 cursul e doar oral. Scrisul se predă în paralel cu conversația, fără să o oprească.",
+    a: "De la B1 sau B2, dacă toată grupa vrea — nu e impus nimănui. La A1 și A2 cursul e doar oral. Scrisul se predă în paralel cu conversația, fără să o oprească. La lecțiile private, alfabetul se adaugă la cerere — de obicei după ce ai început să vorbești. Îl poți avea și de la început, dar atunci poate încurca pronunția. Și atenție: alfabetul nu te învață araba standard (presă, cărți) — e doar scrierea; limba rămâne libaneza.",
   },
 ];
 

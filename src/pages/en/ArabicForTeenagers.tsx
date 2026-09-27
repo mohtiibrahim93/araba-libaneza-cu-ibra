@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "My teenager doesn't know the Arabic alphabet. Is that a problem?",
-    a: "No. We start orally with Arabizi (Arabic written in Latin letters and numbers) — exactly how young Lebanese people text. A1 and A2 are spoken only; from B1 or B2 a group can add the Arabic script if its students want it.",
+    a: "No. We start orally with Arabizi (Arabic written in Latin letters and numbers) — exactly how young Lebanese people text. A1 and A2 are spoken only; from B1 or B2 a group can add the Arabic script only if all its students want it.",
   },
   {
     q: "How much do teen Arabic classes cost?",

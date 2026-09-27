@@ -147,7 +147,7 @@ No. Audio materials and support are included. Payments are made securely via Str
 
 ## Despre metodă
 
-- **Cum sunt structurate lecțiile?** Prin metoda Oral First — vorbești din primele lecții, cu [arabizi](/blog/ce-este-arabizi); la A1 și A2 doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă cursanții vor.
+- **Cum sunt structurate lecțiile?** Prin metoda Oral First — vorbești din primele lecții, cu [arabizi](/blog/ce-este-arabizi); la A1 și A2 doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, doar dacă toți cursanții vor.
 - **Cum adaptezi lecțiile la nivelul meu?** Grupe mici și feedback constant; pentru obiective specifice, [lecții private 1:1](/cursuri/private).
 - **Incluzi și cultura?** Da — limba vine împreună cu [obiceiurile și contextul cultural](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 
@@ -181,7 +181,7 @@ Cel mai simplu test? O [lecție de probă gratuită](/trial) — vezi direct met
 
 ## About the method
 
-- **How are lessons structured?** With the Oral First method — you speak from the first lessons, with [Arabizi](/blog/ce-este-arabizi); A1 and A2 are spoken only, and from B1 or B2 a group can add the Arabic script if its students want it.
+- **How are lessons structured?** With the Oral First method — you speak from the first lessons, with [Arabizi](/blog/ce-este-arabizi); A1 and A2 are spoken only, and from B1 or B2 a group can add the Arabic script only if all its students want it.
 - **How do you adapt lessons to my level?** Small groups and constant feedback; for specific goals, [1:1 private lessons](/cursuri/private).
 - **Do you include culture?** Yes — the language comes with the [customs and cultural context](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 
@@ -314,7 +314,7 @@ O particularitate importantă: în arabă, vocalele scurte (a, i, u) se marcheaz
 
 ## Trebuie să știi alfabetul ca să vorbești?
 
-Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **Oral First**: începi vorbind, cu ajutorul [arabizi](/blog/ce-este-arabizi) (araba scrisă cu litere latine), fără să te blochezi la alfabet: la A1 și A2 cursul e doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu litere arabe, dacă cursanții vor. Poți purta conversații întregi în libaneză înainte să scrii prima literă.
+Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **Oral First**: începi vorbind, cu ajutorul [arabizi](/blog/ce-este-arabizi) (araba scrisă cu litere latine), fără să te blochezi la alfabet: la A1 și A2 cursul e doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu litere arabe, doar dacă toți cursanții vor. Poți purta conversații întregi în libaneză înainte să scrii prima literă.
 
 ## Cum înveți alfabetul mai ușor
 
@@ -367,7 +367,7 @@ An important quirk: in Arabic, short vowels (a, i, u) are marked with small sign
 
 ## Do you need the alphabet to speak?
 
-No — and that's the good news. At the Lebanese Arabic Center we use the **Oral First** method: you start by speaking, with the help of [Arabizi](/blog/ce-este-arabizi) (Arabic written in Latin letters), without getting stuck on the alphabet: A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic letters if its students want it. You can hold whole conversations in Lebanese before writing your first letter.
+No — and that's the good news. At the Lebanese Arabic Center we use the **Oral First** method: you start by speaking, with the help of [Arabizi](/blog/ce-este-arabizi) (Arabic written in Latin letters), without getting stuck on the alphabet: A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic letters only if all its students want it. You can hold whole conversations in Lebanese before writing your first letter.
 
 ## How to learn the alphabet more easily
 
@@ -401,7 +401,7 @@ Vezi mai multe în articolul cu [primele 20 de expresii libaneze](/blog/primele-
 
 ## E „barează” să înveți cu arabizi?
 
-Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs folosim arabizi, prin metoda **Oral First**: la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă cursanții vor.`,
+Deloc. Arabizi este modul real în care libanezii comunică zi de zi în scris. Pentru un începător, e cea mai rapidă cale spre conversație — nu te blochezi la scris cât timp înveți să vorbești. La curs folosim arabizi, prin metoda **Oral First**: la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, doar dacă toți cursanții vor.`,
     en: `**Arabizi** (also called 'arabish' or 'franco-arab') is how millions of Arabs write their dialect on their phones and on social media: **in Latin letters and a few numbers**. Instead of learning the [Arabic alphabet](/blog/alfabetul-arab-pentru-incepatori) first, you can read and write Lebanese right away, using letters you already know.
 
 ## Why numbers?

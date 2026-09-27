@@ -18,7 +18,7 @@ const FAQ = [
   },
   {
     q: "Adolescentul meu nu știe alfabetul arab. E o problemă?",
-    a: "Nu. Începem oral, cu arabizi (arabă scrisă cu litere latine și cifre) — exact cum scriu tinerii libanezi pe telefon. La A1 și A2 cursul e doar oral; de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă cursanții vor.",
+    a: "Nu. Începem oral, cu arabizi (arabă scrisă cu litere latine și cifre) — exact cum scriu tinerii libanezi pe telefon. La A1 și A2 cursul e doar oral; de la B1 sau B2 grupa poate adăuga alfabetul arab, doar dacă toți cursanții vor.",
   },
   {
     q: "Cât costă cursul de arabă pentru adolescenți?",
@@ -172,7 +172,7 @@ const CursuriArabaAdolescenti = () => (
       <li><strong>Cât de mare e grupa?</strong> Între 4 și 10 cursanți, ca fiecare să apuce să vorbească în fiecare lecție.</li>
       <li><strong>Unde?</strong> Fizic la Raduga Creative Center, Strada Icoanei 80, sector 2, sau online pe Zoom. Formatul se alege la înscriere.</li>
       <li><strong>Ce temă are acasă?</strong> Scurtă și audio — ascultare și repetare, nu liste de memorat. Progresul se vede în conversație, la lecția următoare.</li>
-      <li><strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral; alfabetul arab e opțional, de la B1 sau B2, dacă grupa vrea.</li>
+      <li><strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral; alfabetul arab e opțional, de la B1 sau B2, dacă toată grupa vrea.</li>
       <li><strong>Cum verific dacă i se potrivește?</strong> Cu <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>, înainte de orice plată. Dacă nu i se potrivește, nu urmează nimic.</li>
     </ul>
 

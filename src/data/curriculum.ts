@@ -235,7 +235,7 @@ const RO: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Vorbit · scris opțional (dacă grupa vrea)",
+    trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
     schedule: ["~8 luni · se deschide după finalizarea A2 (dată în curând)"],
   },
   {
@@ -300,14 +300,14 @@ const RO: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Vorbit · scris opțional (dacă grupa vrea)",
+    trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
     schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
   },
   {
     id: "c1",
     title: "Nivel C1 — Avansat (Două Trackuri)",
     objective:
-      "Utilizator avansat. Scrisul rămâne opțional — o grupă îl poate adăuga de la B1 sau B2, dacă vrea. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTAN, în paralel). Scrisul privește araba libaneză în litere arabe — nu fuṣḥā.",
+      "Utilizator avansat. Scrisul rămâne opțional — o grupă îl poate adăuga de la B1 sau B2, dacă toți cursanții vor. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTAN, în paralel). Scrisul privește araba libaneză în litere arabe — nu fuṣḥā.",
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit / Vorbit + Scris (simultan)",
@@ -685,7 +685,7 @@ const EN: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Spoken · optional writing (if the group wants it)",
+    trackLabel: "Spoken · optional writing (if the whole group wants it)",
     schedule: ["~8 months · opens after A2 finishes (date coming soon)"],
   },
   {
@@ -750,14 +750,14 @@ const EN: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Spoken · optional writing (if the group wants it)",
+    trackLabel: "Spoken · optional writing (if the whole group wants it)",
     schedule: ["~8–9 months · opens after B1 — future enrollment"],
   },
   {
     id: "c1",
     title: "Level C1 — Advanced (Two Tracks)",
     objective:
-      "Advanced user. Writing stays optional — a group can add it from B1 or B2 if it wants. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULTANEOUSLY in the same lessons). Writing covers Lebanese Arabic in Arabic letters — not fuṣḥā.",
+      "Advanced user. Writing stays optional — a group can add it from B1 or B2 if all its students want it. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULTANEOUSLY in the same lessons). Writing covers Lebanese Arabic in Arabic letters — not fuṣḥā.",
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken / Spoken + Written (simultaneous)",

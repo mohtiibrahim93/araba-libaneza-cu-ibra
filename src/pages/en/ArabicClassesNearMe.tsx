@@ -60,7 +60,7 @@ const ArabicClassesNearMe = () => (
       <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link> — a variety of{" "}
       <Link to="/en/arabic-dialects-guide">Levantine Arabic</Link> understood across Lebanon,
       Syria, Jordan and Palestine. Oral-first: you speak from lesson one, using arabizi (Latin
-      transliteration), A1–A2 spoken only, with the Arabic script added from B1 or B2 if the group wants it. CEFR levels A1 → C2.
+      transliteration), A1–A2 spoken only, with the Arabic script added from B1 or B2 if the whole group wants it. CEFR levels A1 → C2.
     </p>
 
     <h2>Class formats</h2>

@@ -24,7 +24,7 @@ const FAQ = [
   },
   {
     q: "Muss ich zuerst das arabische Alphabet lernen?",
-    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). A1 und A2 sind rein mündlich; ab B1 oder B2 kann eine Gruppe das Schreiben in arabischer Schrift dazunehmen, wenn die Teilnehmenden es wollen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
+    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). A1 und A2 sind rein mündlich; ab B1 oder B2 kann eine Gruppe das Schreiben in arabischer Schrift dazunehmen, wenn alle Teilnehmenden es wollen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
   },
   {
     q: "Sind die Kurse online oder in Präsenz?",
@@ -170,7 +170,7 @@ const ArabischLernen = () => (
 
           <h2>Wie wir unterrichten</h2>
           <ul>
-            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. A1–A2 rein mündlich, ab B1 oder B2 auf Wunsch der Gruppe mit arabischer Schrift.</li>
+            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. A1–A2 rein mündlich, ab B1 oder B2 wenn die ganze Gruppe es will mit arabischer Schrift.</li>
             <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
             <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
             <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>

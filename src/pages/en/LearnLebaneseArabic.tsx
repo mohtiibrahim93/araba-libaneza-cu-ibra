@@ -179,7 +179,7 @@ const LearnLebaneseArabic = () => (
 
     <h2>How we teach</h2>
     <ul>
-      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). A1 and A2 are spoken only; from B1 or B2 a group can add the Arabic script if its students want it.</li>
+      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). A1 and A2 are spoken only; from B1 or B2 a group can add the Arabic script only if all its students want it.</li>
       <li><strong>Native teacher:</strong> Ibra is a native Lebanese speaker with 5+ years of teaching experience.</li>
       <li><strong>CEFR structure:</strong> six levels A1 → C2, from survival to full fluency.</li>
       <li><strong>Real conversations:</strong> every lesson builds toward something you can actually say in daily life.</li>

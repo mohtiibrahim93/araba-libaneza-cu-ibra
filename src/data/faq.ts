@@ -51,7 +51,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce metodă de predare folosiți și cum adaptați lecțiile la nivelul meu?",
-            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi; la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu alfabet arab, dacă cursanții vor. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
+            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi; la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu alfabet arab, doar dacă toți cursanții vor. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
           },
           {
             q: "Cât durează lecțiile, cât de des sunt și în ce format (online sau fizic)?",
@@ -133,7 +133,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Trebuie să învăț alfabetul arab de la început?",
-            a: "Nu obligatoriu. Începem cu transliterare latină (arabizi) ca să te concentrezi pe vorbire. La A1 și A2 cursul e doar oral; de la B1 sau B2, grupele care vor să citească și să scrie pot adăuga alfabetul arab — doar la cererea cursanților. Poți vorbi libaneză fluent fără să citești în arabă.",
+            a: "Nu obligatoriu. Începem cu transliterare latină (arabizi) ca să te concentrezi pe vorbire. La A1 și A2 cursul e doar oral; de la B1 sau B2, grupele care vor să citească și să scrie pot adăuga alfabetul arab — doar dacă toți cursanții o cer. La lecțiile private, alfabetul se adaugă la cerere — de obicei după ce ai început să vorbești. Îl poți avea și de la început, dar atunci poate încurca pronunția. Și atenție: alfabetul nu te învață araba standard (presă, cărți) — e doar scrierea; limba rămâne libaneza. Poți vorbi libaneză fluent fără să citești în arabă.",
           },
           {
             q: "Pot învăța araba singur, fără profesor?",
@@ -274,7 +274,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What teaching method do you use, and how do you adapt lessons to my level?",
-            a: "We use the Oral First method: you speak from the very first lessons, using Arabizi; A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic script if its students want it. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
+            a: "We use the Oral First method: you speak from the very first lessons, using Arabizi; A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic script only if all its students want it. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
           },
           {
             q: "How long and how often are lessons, and in what format (online or in person)?",
