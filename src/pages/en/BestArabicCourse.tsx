@@ -10,7 +10,7 @@ const FAQ = [
   },
   {
     q: "How do I recognise a good Arabic course?",
-    a: "Five signals: the teacher is a native speaker of the dialect taught; you speak from lesson one instead of drilling the alphabet for three months; groups are capped at 8 students; the syllabus is CEFR-aligned (A1–C2) with real assessments; and the price is published openly with a trial lesson available.",
+    a: "Five signals: the teacher is a native speaker of the dialect taught; you speak from lesson one instead of drilling the alphabet for three months; groups are capped at 6 students online and 10 in person; the syllabus is CEFR-aligned (A1–C2) with real assessments; and the price is published openly with a trial lesson available.",
   },
   {
     q: "Group classes or private 1-on-1 lessons?",

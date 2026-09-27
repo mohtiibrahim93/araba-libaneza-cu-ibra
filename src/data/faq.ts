@@ -385,7 +385,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Can I take online lessons from outside Romania?",
-            a: "Yes — online lessons work from anywhere, as long as the schedule fits Bucharest time (EET). We teach students across the diaspora and beyond, and lessons can be held in English, French or Arabic.",
+            a: "Yes — online lessons work from anywhere, as long as the schedule fits Bucharest time (EET). We teach students across the diaspora and beyond, and lessons can be held in English, French, Arabic or Romanian.",
           },
         ],
       },
