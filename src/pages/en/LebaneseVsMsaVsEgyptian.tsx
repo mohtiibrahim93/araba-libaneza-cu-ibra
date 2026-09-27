@@ -81,7 +81,7 @@ const LebaneseVsMsaVsEgyptian = () => (
         satellite TV, and Levantine business.
       </li>
       <li>
-        <strong>Egyptian Arabic</strong> — the dialect of Egypt (~110 million speakers), spread
+        <strong>Egyptian Arabic</strong> — the dialect of Egypt (over 100 million speakers), spread
         globally through decades of cinema and classic television. The most widely understood
         spoken dialect in the Arab world.
       </li>
@@ -103,7 +103,7 @@ const LebaneseVsMsaVsEgyptian = () => (
             feature="Where it's spoken"
             msa="Nowhere natively — used in writing and formal speech across all 22 Arab states."
             lebanese="Lebanon; mutually intelligible with Syria, Palestine and Jordan."
-            egyptian="Egypt (~110M speakers); widely understood everywhere else."
+            egyptian="Egypt (over 100M speakers); widely understood everywhere else."
           />
           <Row
             feature="Everyday use"

@@ -32,8 +32,8 @@ const DeCeInvatamAraba2026 = () => {
         en: "Why learning Arabic in 2026 matters — and why the dialect, not MSA",
       }}
       description={{
-        ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.",
-        en: "Arabic is one of the world's most spoken languages, demand for speakers is rising, and in 2026 dialects have overtaken MSA in online searches. Clear reasons for beginners.",
+        ro: "Araba e printre cele mai vorbite limbi din lume, iar pentru conversația reală dialectul, nu araba standard, e alegerea potrivită.",
+        en: "Arabic is one of the world's most spoken languages, and for real conversation the dialect, not standard Arabic, is the right choice. Clear reasons for beginners.",
       }}
       published="2026-07-24"
       readingMinutes={6}
@@ -54,17 +54,17 @@ const DeCeInvatamAraba2026 = () => {
       />
       <h2>{en ? "1. The numbers behind Arabic" : "1. Cifrele din spatele limbii arabe"}</h2>
       <ul>
-        <li>{en ? "~420 million native speakers across 22 Arab countries." : "~420 milioane de vorbitori nativi, în 22 de țări arabe."}</li>
-        <li>{en ? "5th most spoken language in the world, ahead of Portuguese and Russian." : "A 5-a limbă din lume ca număr de vorbitori, înaintea portughezei și a rusei."}</li>
+        <li>{en ? "Over 400 million native speakers of all its varieties." : "Peste 400 de milioane de vorbitori nativi, în toate variantele ei."}</li>
+        <li>{en ? "Among the five most spoken languages in the world (Ethnologue places it fifth)." : "Printre primele cinci limbi din lume ca număr de vorbitori (Ethnologue o plasează pe locul 5)."}</li>
         <li>{en ? "Official language in 22 countries, plus a working language of the UN, African Union and Arab League." : "Limbă oficială în 22 de țări, plus limbă de lucru la ONU, Uniunea Africană și Liga Arabă."}</li>
-        <li>{en ? "The Arabic-speaking economy (GCC + Egypt + Levant) is roughly $3.5 trillion GDP combined." : "Economia lumii arabe (Golf + Egipt + Levant) însumează aproximativ 3,5 trilioane USD PIB."}</li>
+        <li>{en ? "The Arab region's combined GDP was about $3.6 trillion in 2024." : "PIB-ul cumulat al regiunii arabe a fost de aproximativ 3,6 trilioane USD în 2024."}</li>
       </ul>
 
-      <h2>{en ? "2. Dialects are winning online (2026)" : "2. Dialectele câștigă online (2026)"}</h2>
+      <h2>{en ? "2. Why learners pick the dialect" : "2. De ce cursanții aleg dialectul"}</h2>
       <p>
         {en
-          ? "Public search data from 2025–2026 shows the trend clearly: searches for \"Levantine Arabic\" (~1,900/mo) and \"Lebanese Arabic\" (~880/mo) have grown while \"Modern Standard Arabic course\" is flat. Learners increasingly want to speak with people, not read newspapers — and they've noticed that MSA doesn't get you there."
-          : "Datele publice de căutare 2025–2026 arată tendința clar: căutările pentru „Levantine Arabic” (~1.900/lună) și „Lebanese Arabic” (~880/lună) au crescut, în timp ce „curs de arabă standard” stagnează. Cursanții vor din ce în ce mai mult să vorbească cu oameni, nu să citească ziare — și au observat că MSA nu îi duce acolo."}
+          ? "Learners increasingly want to speak with people, not read newspapers — and they've noticed that MSA doesn't get you there."
+          : "Cursanții vor din ce în ce mai mult să vorbească cu oameni, nu să citească ziare — și au observat că MSA nu îi duce acolo."}
       </p>
 
       <h2>{en ? "3. AI translation didn't kill demand — it clarified it" : "3. Traducerea AI nu a ucis cererea — a clarificat-o"}</h2>

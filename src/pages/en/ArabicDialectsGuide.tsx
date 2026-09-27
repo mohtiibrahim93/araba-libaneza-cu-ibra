@@ -90,7 +90,7 @@ const ArabicDialectsGuide = () => (
 
     <h3>The Levantine map at a glance</h3>
     <ul>
-      <li><strong>North Levantine</strong> — Lebanon and Syria (Beirut, Tripoli, Damascus, Aleppo, Homs, Latakia). Nearly identical grammar, ~95% mutual intelligibility.</li>
+      <li><strong>North Levantine</strong> — Lebanon and Syria (Beirut, Tripoli, Damascus, Aleppo, Homs, Latakia). Nearly identical grammar, very high mutual intelligibility.</li>
       <li><strong>South Levantine</strong> — Palestine and Jordan (Jerusalem, Ramallah, Gaza, Amman, Irbid). Same family, small shifts in vocabulary and a few sounds.</li>
       <li><strong>Edges</strong> — Hatay in southern Turkey, the Bekaa toward the Syrian desert, and large diaspora communities in Brazil, France, the US, Germany and the Gulf.</li>
     </ul>

@@ -106,7 +106,7 @@ const DialecteArabe = () => (
     />
 
     <ul>
-      <li><strong>Levantina de nord</strong> — Liban și Siria (Beirut, Tripoli, Damasc, Alep, Homs, Latakia). Gramatică aproape identică, înțelegere reciprocă ~95%.</li>
+      <li><strong>Levantina de nord</strong> — Liban și Siria (Beirut, Tripoli, Damasc, Alep, Homs, Latakia). Gramatică aproape identică, înțelegere reciprocă foarte mare.</li>
       <li><strong>Levantina de sud</strong> — Palestina și Iordania (Ierusalim, Ramallah, Gaza, Amman, Irbid). Aceeași familie, mici diferențe de vocabular și câteva sunete.</li>
       <li><strong>Margini</strong> — Hatay în sudul Turciei, valea Bekaa spre deșertul sirian și comunitățile mari din diaspora: Brazilia, Franța, SUA, Germania și Golf.</li>
     </ul>

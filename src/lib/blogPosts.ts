@@ -63,8 +63,8 @@ export const BLOG_POSTS: BlogPostMeta[] = [
       en: "Why learn Arabic in 2026 — and why the dialect, not MSA",
     },
     description: {
-      ro: "Arabă e printre cele mai vorbite limbi din lume, cererea pentru vorbitori crește, iar în 2026 dialectele au depășit MSA la căutări online.",
-      en: "Arabic is one of the world's most spoken languages, demand is rising, and in 2026 dialects have overtaken MSA in online searches.",
+      ro: "Araba e printre cele mai vorbite limbi din lume, iar pentru conversația reală dialectul, nu araba standard, e alegerea potrivită.",
+      en: "Arabic is one of the world's most spoken languages, and for real conversation the dialect, not standard Arabic, is the right choice.",
     },
     published: "2026-07-24",
     readingMinutes: 6,

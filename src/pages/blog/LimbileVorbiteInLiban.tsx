@@ -54,8 +54,8 @@ const LimbileVorbiteInLiban = () => {
       <h2>{en ? "1. Lebanese Arabic — the everyday language" : "1. Araba libaneză — limba de zi cu zi"}</h2>
       <p>
         {en
-          ? "Lebanese Arabic (لهجة لبنانية, lahje libnēniyye) is the spoken dialect of ~5.5 million people in Lebanon plus a global diaspora of 8–14 million. It's the language of the home, the street, WhatsApp voice notes, Fairuz songs, Lebanese cinema and TV. It belongs to the Levantine Arabic family and is mutually intelligible with Syrian, Palestinian and Jordanian."
-          : "Araba libaneză (لهجة لبنانية, lahje libnēniyye) e dialectul vorbit de ~5,5 milioane de oameni din Liban plus o diasporă globală de 8–14 milioane. E limba casei, a străzii, a mesajelor vocale de pe WhatsApp, a melodiilor lui Fairuz, a cinematografiei și televiziunii libaneze. Face parte din familia levantină și e reciproc inteligibilă cu siriana, palestiniana și iordaniana."}
+          ? "Lebanese Arabic (لهجة لبنانية, lahje libnēniyye) is the spoken dialect of Lebanon (about 5.8 million inhabitants) and of a diaspora whose size estimates range widely, from about 4 to over 14 million people of Lebanese origin. It's the language of the home, the street, WhatsApp voice notes, Fairuz songs, Lebanese cinema and TV. It belongs to the Levantine Arabic family and is mutually intelligible with Syrian, Palestinian and Jordanian."
+          : "Araba libaneză (لهجة لبنانية, lahje libnēniyye) e dialectul vorbit în Liban (circa 5,8 milioane de locuitori) și într-o diasporă estimată, după sursă, între circa 4 și peste 14 milioane de oameni de origine libaneză. E limba casei, a străzii, a mesajelor vocale de pe WhatsApp, a melodiilor lui Fairuz, a cinematografiei și televiziunii libaneze. Face parte din familia levantină și e reciproc inteligibilă cu siriana, palestiniana și iordaniana."}
       </p>
       <p>
         {en ? (
@@ -82,15 +82,15 @@ const LimbileVorbiteInLiban = () => {
       <h2>{en ? "4. English — the rising third language" : "4. Engleza — a treia limbă în ascensiune"}</h2>
       <p>
         {en
-          ? "Since the 1990s, English has overtaken French among younger generations, especially in business, tech and universities like AUB and LAU. Around 30–40% of Lebanese speak English fluently. Bilingual (English/Arabic) or trilingual (English/French/Arabic) schooling is now the norm in major cities."
-          : "Din anii '90 încoace, engleza a depășit franceza în rândul generațiilor tinere, mai ales în business, tech și universități ca AUB și LAU. Aproximativ 30–40% dintre libanezi vorbesc engleză fluent. Școlarizarea bilingvă (engleză/arabă) sau trilingvă (engleză/franceză/arabă) e acum norma în orașele mari."}
+          ? "Since the 1990s, English has overtaken French among younger generations, especially in business, tech and universities like AUB and LAU. Estimates put English speakers at around 30–40% of Lebanese. Bilingual (English/Arabic) or trilingual (English/French/Arabic) schooling is now the norm in major cities."
+          : "Din anii '90 încoace, engleza a depășit franceza în rândul generațiilor tinere, mai ales în business, tech și universități ca AUB și LAU. Estimările pun numărul vorbitorilor de engleză la circa 30–40% dintre libanezi. Școlarizarea bilingvă (engleză/arabă) sau trilingvă (engleză/franceză/arabă) e acum norma în orașele mari."}
       </p>
 
       <h2>{en ? "5. Armenian, Kurdish and other communities" : "5. Armeana, kurda și alte comunități"}</h2>
       <p>
         {en
-          ? "Lebanon hosts long-established Armenian (~4% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
-          : "Libanul găzduiește comunități armene bine stabilite (~4% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
+          ? "Lebanon hosts long-established Armenian (estimated at around 3% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
+          : "Libanul găzduiește comunități armene bine stabilite (estimate de circa 3% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
       </p>
 
       <InlineCta

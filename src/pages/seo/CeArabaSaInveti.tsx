@@ -65,7 +65,7 @@ const CeArabaSaInveti = () => (
         prin satelit.
       </li>
       <li>
-        <strong>Arabă egipteană</strong> — dialectul Egiptului (~110 milioane de vorbitori), răspândit
+        <strong>Arabă egipteană</strong> — dialectul Egiptului (peste 100 de milioane de vorbitori), răspândit
         global prin decenii de cinema și televiziune. Cel mai larg înțeles dialect vorbit din lumea
         arabă.
       </li>

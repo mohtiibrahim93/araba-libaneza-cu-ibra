@@ -103,8 +103,8 @@ const LebaneseArabicLearningResources = () => {
       />
       <p>
         {en
-          ? "The problem with searching ‘Arabic learning resources’ is that 95% of what comes back — Duolingo, most textbooks, most YouTube channels — teaches Modern Standard Arabic (MSA / Fusha). MSA is the language of news and books; nobody speaks it at home in Beirut. If your goal is to talk with Lebanese friends, family, or clients, you need dialect-specific resources."
-          : "Problema când cauți „resurse arabă” este că 95% din rezultate — Duolingo, majoritatea manualelor, majoritatea canalelor YouTube — predau araba standard (MSA / Fusha). MSA e limba știrilor și a cărților; nimeni nu o vorbește acasă în Beirut. Dacă vrei să vorbești cu prieteni, familie sau clienți libanezi, ai nevoie de resurse pe dialect."}{" "}
+          ? "The problem with searching ‘Arabic learning resources’ is that most of what comes back — Duolingo, most textbooks, most YouTube channels — teaches Modern Standard Arabic (MSA / Fusha). MSA is the language of news and books; nobody speaks it at home in Beirut. If your goal is to talk with Lebanese friends, family, or clients, you need dialect-specific resources."
+          : "Problema când cauți „resurse arabă” este că majoritatea rezultatelor — Duolingo, majoritatea manualelor, majoritatea canalelor YouTube — predau araba standard (MSA / Fusha). MSA e limba știrilor și a cărților; nimeni nu o vorbește acasă în Beirut. Dacă vrei să vorbești cu prieteni, familie sau clienți libanezi, ai nevoie de resurse pe dialect."}{" "}
         <Link to="/blog/araba-libaneza-vs-araba-standard">
           {en ? "More on Lebanese vs MSA." : "Mai multe despre libaneză vs MSA."}
         </Link>
