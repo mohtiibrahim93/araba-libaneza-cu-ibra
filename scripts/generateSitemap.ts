@@ -9,8 +9,16 @@
  * shared layouts: a date that moves on all 121 URLs at once whenever a layout
  * changes is the kind of blanket lastmod a crawler learns to ignore.
  *
- * A file with no git history, or no git at all (a shallow checkout, an export),
- * yields no date for that URL rather than a guess.
+ * A file with no git history, or no git at all, yields no date for that URL
+ * rather than a guess.
+ *
+ * And the dates already in public/sitemap.xml are kept whenever git cannot do
+ * better. That is not belt-and-braces: the deploy build checks the repository
+ * out in a way that gives every file the same commit date, so computing there
+ * produced one identical timestamp on all 121 URLs — a blanket lastmod, which is
+ * the version a crawler learns to ignore. Real per-file dates come from a normal
+ * checkout, so they are computed here, committed, and the deploy build reuses
+ * them instead of flattening them.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -66,6 +74,20 @@ function routeSources(): Map<string, string[]> {
   return byPath;
 }
 
+/** The dates already committed in public/sitemap.xml, keyed by path. */
+function committedLastmods(): Map<string, string> {
+  const file = resolve(root, "public/sitemap.xml");
+  const out = new Map<string, string>();
+  if (!existsSync(file)) return out;
+  const xml = readFileSync(file, "utf8");
+  for (const block of xml.split("<url>").slice(1)) {
+    const loc = /<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/.exec(block)?.[1];
+    const mod = /<lastmod>([^<]*)<\/lastmod>/.exec(block)?.[1];
+    if (loc !== undefined && mod) out.set(loc.replace(/&amp;/g, "&") || "/", mod);
+  }
+  return out;
+}
+
 const sources = routeSources();
 const lastmods = new Map<string, string>();
 
@@ -81,7 +103,21 @@ for (const route of allSeoRoutes().filter(belongsInSitemap)) {
 const blogDate = lastCommit(["src/lib/blogPosts.ts", "src/pages/blog/BlogIndex.tsx"]);
 if (blogDate) for (const path of blogIndexPages()) lastmods.set(path, blogDate);
 
-const xml = buildSitemap(lastmods);
+/**
+ * One date for everything is not a date. When git gives fewer than a handful of
+ * distinct values — which is what a deploy-time checkout does — keep whatever
+ * was committed by a run that had real history.
+ */
+const distinct = new Set(lastmods.values()).size;
+const committed = committedLastmods();
+const dates = distinct >= 3 ? lastmods : committed;
+if (dates !== lastmods) {
+  console.log(
+    `[sitemap] git gave ${distinct} distinct date(s) here, so keeping the ${committed.size} committed one(s)`,
+  );
+}
+
+const xml = buildSitemap(dates);
 writeFileSync(resolve(root, "public/sitemap.xml"), xml, "utf8");
 const dated = (xml.match(/^ {4}<lastmod>/gm) || []).length;
 console.log(
