@@ -17,8 +17,8 @@ type Choice = { value: string; icon: typeof GraduationCap; ro: string; en: strin
 
 const AGES: Choice[] = [
   { value: "adulti", icon: GraduationCap, ro: "Adulți", en: "Adults", note: { ro: "18+ ani", en: "18+" } },
-  { value: "adolescenti", icon: User, ro: "Adolescenți", en: "Teens", note: { ro: "11–17 ani", en: "Ages 11–17" } },
-  { value: "copii", icon: Baby, ro: "Copii", en: "Kids", note: { ro: "6–10 ani", en: "Ages 6–10" } },
+  { value: "adolescenti", icon: User, ro: "Adolescenți", en: "Teens", note: { ro: "12–17 ani", en: "Ages 12–17" } },
+  { value: "copii", icon: Baby, ro: "Copii", en: "Kids", note: { ro: "6–11 ani", en: "Ages 6–11" } },
 ];
 const MODES: Choice[] = [
   { value: "online", icon: Wifi, ro: "Online", en: "Online", note: { ro: "Live pe Zoom, de oriunde", en: "Live on Zoom, anywhere" } },
@@ -88,8 +88,10 @@ const Cursuri = () => {
           {step === 1 && <StepGrid title={lang === "en" ? "Who is the course for?" : "Pentru cine este cursul?"} choices={AGES} onPick={(v) => set({ varsta: v })} L={L} />}
           {step === 2 && <StepGrid title={lang === "en" ? "How would you like to attend?" : "Cum vrei să participi?"} choices={MODES} onPick={(v) => set({ mod: v })} L={L} />}
           {step === 3 && <StepGrid title={lang === "en" ? "What type of course?" : "Ce tip de curs cauți?"} choices={TYPES} onPick={(v) => set({ tip: v })} L={L} />}
-          {step === 4 && type === "privat" && <PrivateCta age={age!} mode={mode!} lang={lang} />}
-          {step === 4 && type === "grup" && age === "copii" && <KidsGroupNotice mode={mode!} lang={lang} />}
+          {/* No kids' courses right now — private or group, the kids path ends
+              at the notify form. */}
+          {step === 4 && age === "copii" && <KidsGroupNotice mode={mode!} lang={lang} />}
+          {step === 4 && type === "privat" && age !== "copii" && <PrivateCta age={age!} mode={mode!} lang={lang} />}
           {step === 4 && type === "grup" && age !== "copii" && <GroupResults age={age!} mode={mode!} lang={lang} />}
         </section>
 
@@ -196,21 +198,16 @@ const KidsGroupNotice = ({ mode, lang }: { mode: string; lang: "ro" | "en" }) =>
   <div className="mx-auto max-w-xl rounded-2xl border border-dashed border-border bg-muted/20 p-8 text-center">
     <Baby className="mx-auto mb-3 h-10 w-10 text-primary" />
     <h2 className="mb-2 text-xl font-bold text-foreground">
-      {lang === "en" ? "Kids' group courses aren't open yet" : "Cursurile de grup pentru copii nu sunt încă disponibile"}
+      {lang === "en" ? "Kids' courses aren't available right now" : "Cursurile pentru copii sunt momentan indisponibile"}
     </h2>
     <p className="mb-4 text-sm text-muted-foreground">
       {lang === "en"
-        ? "We open kids' groups when there's enough interest. Private lessons for children are available now — or leave your details and we'll tell you when a group opens."
-        : "Deschidem grupe pentru copii când sunt suficienți cursanți. Lecțiile private pentru copii sunt disponibile acum — sau lasă-ne datele și îți spunem când se deschide o grupă."}
+        ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know."
+        : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
     </p>
-    <div className="mb-6">
-      <Link to={`/cursuri/privat?varsta=copii&mod=${mode}`} className="inline-flex items-center gap-1 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-        {lang === "en" ? "See private lessons for kids" : "Vezi lecțiile private pentru copii"} <ChevronRight className="h-4 w-4" />
-      </Link>
-    </div>
     <div className="border-t border-border pt-5 text-left">
       <p className="mb-3 text-center text-sm font-semibold text-foreground">
-        {lang === "en" ? "Notify me when a kids' group opens" : "Anunță-mă când se deschide o grupă pentru copii"}
+        {lang === "en" ? "Notify me when kids' courses open" : "Anunță-mă când pornesc cursurile pentru copii"}
       </p>
       <NotifyMeForm context="kids_group" />
     </div>

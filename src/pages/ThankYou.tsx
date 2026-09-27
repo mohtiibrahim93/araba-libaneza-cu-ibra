@@ -34,6 +34,9 @@ const ThankYou = () => {
     registrationId: params.get("registration_id"),
   });
   const [errored, setErrored] = useState(false);
+  /** True only once Stripe has said this session is paid. Opening the page
+   *  directly used to announce "your payment is confirmed" for no payment. */
+  const [paid, setPaid] = useState(false);
   /** Guards against a second send if the effect re-runs. */
   const purchaseSent = useRef(false);
 
@@ -71,6 +74,7 @@ const ThankYou = () => {
         // fire on mount, so simply opening or reloading /thank-you recorded a
         // sale that may never have completed. transaction_id is the Stripe
         // session id, which lets GA4 discard the duplicate on a reload.
+        if (data.paymentStatus === "paid") setPaid(true);
         if (data.paymentStatus === "paid" && !purchaseSent.current) {
           purchaseSent.current = true;
           trackPurchase({
@@ -162,7 +166,9 @@ const ThankYou = () => {
           <h1 className="text-display-lg font-bold text-foreground mb-3">
             {t.thankYouTitle}
           </h1>
-          <p className="text-muted-foreground max-w-md">{t.thankYouSubtitle}</p>
+          <p className="text-muted-foreground max-w-md">
+            {paid ? t.thankYouSubtitle : t.thankYouSubtitleUnconfirmed}
+          </p>
         </div>
 
         {loading ? (

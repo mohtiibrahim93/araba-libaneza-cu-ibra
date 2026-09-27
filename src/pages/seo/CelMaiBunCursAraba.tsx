@@ -112,7 +112,7 @@ const CelMaiBunCursAraba = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/cursuri-limba-araba">Online (Zoom)</Link></td>
             <td className="py-2 px-3">Cursanți din alte orașe sau din diasporă</td>
-            <td className="py-2 px-3">Același preț ca fizic</td>
+            <td className="py-2 px-3">Mai ieftin decât fizic (500 față de 700 lei / lună la A1)</td>
             <td className="py-2 pl-3">Necesită autodisciplină</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
@@ -149,8 +149,8 @@ const CelMaiBunCursAraba = () => (
       libaneză (levantină)</strong>, cu profesor nativ libanez, fizic în București (Strada Icoanei
       80) și online. Formate: <Link to="/cursuri/grup">grupe A1–C2</Link>,{" "}
       <Link to="/cursuri/private">lecții private 1:1</Link>,{" "}
-      <Link to="/curs-araba-copii">curs pentru copii 6–10 ani</Link> și{" "}
-      <Link to="/cursuri-araba-adolescenti">grupe pentru adolescenți 11–17 ani</Link>. Nu suntem cea
+      <Link to="/curs-araba-copii">curs pentru copii 6–11 ani</Link> și{" "}
+      <Link to="/cursuri-araba-adolescenti">grupe pentru adolescenți 12–17 ani</Link>. Nu suntem cea
       mai bună alegere dacă ai nevoie strict de arabă standard pentru un examen academic — în acest
       caz îți spunem direct la proba gratuită.
     </p>

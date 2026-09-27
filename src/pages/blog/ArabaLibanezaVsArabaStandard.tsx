@@ -204,7 +204,7 @@ const ArabaLibanezaVsArabaStandard = () => {
         <p>
           {en ? "At the " : "La "}
           <strong>{en ? "Lebanese Arabic Center with Ibra" : "Centrul de Arabă Libaneză cu Ibra"}</strong>{en ? " we teach the Lebanese dialect " : " predăm "}
-          <em>{en ? "directly" : "direct"}</em>{en ? ", with a native teacher, for adults and children — in person in Bucharest or online. We integrate Fusha gradually from level B1, when it's truly useful." : " dialectul libanez, cu profesor nativ, pentru adulți și copii — fizic în București sau online. Fusha o integrăm treptat de la nivelul B1, când e cu adevărat utilă."}
+          <em>{en ? "directly" : "direct"}</em>{en ? ", with a native teacher, for adults and children — in person in Bucharest or online. We usually add Fusha later, and only if the whole group wants it — or the student, in private lessons." : " dialectul libanez, cu profesor nativ, pentru adulți și copii — fizic în București sau online. Fusha o adăugăm de obicei mai târziu, doar dacă o vor toți cursanții grupei — sau cursantul, la lecțiile private."}
         </p>
         <p>{en ? "Concrete steps:" : "Pași concreți:"}</p>
         <ul>

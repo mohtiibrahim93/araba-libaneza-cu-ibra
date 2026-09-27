@@ -158,6 +158,18 @@ const Checkout = () => {
       setPhase("ready");
       return;
     }
+    // Opened directly, or from a stale link: there is no registration to
+    // charge. Say so in plain words instead of passing the server's
+    // "registrationId is required" through to the visitor.
+    if (!registrationId) {
+      setError(
+        window.location.pathname.startsWith("/en")
+          ? "We couldn't find your registration. Please start again from the course sign-up form."
+          : "Nu am găsit înscrierea ta. Te rugăm să pornești din nou de la formularul de înscriere al cursului.",
+      );
+      setPhase("error");
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {

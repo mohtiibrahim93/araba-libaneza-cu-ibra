@@ -4,7 +4,6 @@ import { useI18n } from "@/lib/i18n";
 import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
 import RegistrationFormSection, { STORAGE_KEY } from "@/components/RegistrationFormSection";
-import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ONLINE_PRICES,
@@ -68,8 +67,6 @@ const ProgramsSection = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { get: getCapacity } = useGroupCapacities();
-  const kidsCap = getCapacity("kids", null);
 
   const isAvailable = (level: Level) => level === "A1" || level === "A2";
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
@@ -418,35 +415,11 @@ const ProgramsSection = () => {
                           {t.programsSeeFullPage}
                         </Link>
 
-                        {kidsCap && (
-                          <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs rounded-lg border border-border bg-muted/40 px-3 py-2">
-                            {kidsCap.taken === 0 ? (
-                              <span className="text-primary font-medium">
-                                {t.capForming.replace("{n}", String(kidsCap.needToStart || 4))}
-                              </span>
-                            ) : (
-                              <>
-                                <span className="font-semibold text-foreground">
-                                  {kidsCap.taken}/{kidsCap.max} {t.capSeatsLabel}
-                                </span>
-                                <span className="text-muted-foreground">·</span>
-                                <span className={kidsCap.belowMin ? "text-amber-600 dark:text-amber-500 font-medium" : "text-muted-foreground"}>
-                                  {kidsCap.full
-                                    ? t.capFull
-                                    : kidsCap.belowMin
-                                      ? t.capNeedToStart.replace("{n}", String(kidsCap.needToStart))
-                                      : t.capSpotsLeft.replace("{n}", String(kidsCap.seatsLeft))}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        )}
-
                         {/* Kids group isn't open yet — notify instead of enroll */}
                         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
                           {lang === "en"
-                            ? "Kids' group courses aren't open yet — leave your details on the kids page and we'll tell you when one starts. Private lessons for kids are available now."
-                            : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele pe pagina pentru copii și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum."}
+                            ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know."
+                            : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
                         </div>
 
                         {/* Details */}
@@ -528,7 +501,7 @@ const ProgramsSection = () => {
                       <img src={privateImg} alt={t.kidsPrivateCardTitle} className="w-full h-52 object-cover" />
                       <div className="p-6 flex flex-col flex-1">
                         <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-                          {t.kidsPrivateBadge}
+                          {lang === "en" ? "Coming soon" : "În curând"}
                         </span>
                         <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
@@ -544,6 +517,10 @@ const ProgramsSection = () => {
                           </div>
                         </div>
                         <p className="text-xs font-medium text-primary mb-3">{t.kidsPrivatePriceDiscountNote}</p>
+                        {/* Kids private lessons aren't offered right now either. */}
+                        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+                          {lang === "en" ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know." : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
+                        </div>
                         <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
@@ -583,13 +560,12 @@ const ProgramsSection = () => {
 
                         {/* CTA */}
                         <div className="mt-auto">
-                          <button
-                            type="button"
-                            onClick={() => setInlineForm("kids-private")}
+                          <Link
+                            to="/cursuri/copii#register"
                             className="block w-full text-center py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                           >
-                            {t.kidsPrivateRegister}
-                          </button>
+                            {lang === "en" ? "Notify me" : "Anunță-mă"}
+                          </Link>
                           <a
                             href={WA_KIDS}
                             target="_blank"
@@ -611,10 +587,10 @@ const ProgramsSection = () => {
           <TabsContent value="tineri">
             <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-xs">
               <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {lang === "en" ? "Teens · 11–17" : "Adolescenți · 11–17 ani"}
+                {lang === "en" ? "Teens · 12–17" : "Adolescenți · 12–17 ani"}
               </span>
               <h3 className="mb-2 text-xl font-bold text-foreground">
-                {lang === "en" ? "Lebanese Arabic for teens (11–17)" : "Arabă libaneză pentru adolescenți (11–17 ani)"}
+                {lang === "en" ? "Lebanese Arabic for teens (12–17)" : "Arabă libaneză pentru adolescenți (12–17 ani)"}
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
                 {lang === "en"

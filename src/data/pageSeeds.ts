@@ -42,10 +42,10 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     "path": "/curs-araba-copii",
-    "meta_title": "Curs Arabă Libaneză pentru Copii (6–10 ani) | București, prin Joc",
-    "meta_description": "Curs de arabă libaneză pentru copii 6–10 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața.",
-    "h1": "Curs de arabă libaneză pentru copii — București, 6–10 ani, învățare prin joc",
-    "lead": "Curs de arabă libaneză pentru copii 6–10 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
+    "meta_title": "Curs Arabă Libaneză pentru Copii (6–11 ani) | București, prin Joc",
+    "meta_description": "Curs de arabă libaneză pentru copii 6–11 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața.",
+    "h1": "Curs de arabă libaneză pentru copii — București, 6–11 ani, învățare prin joc",
+    "lead": "Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
   },
   {
     "path": "/cursuri-araba",
@@ -94,7 +94,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     "meta_title": "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)",
     "meta_description": "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.",
     "h1": "How to learn Lebanese Arabic — recommended learning path & lesson structure",
-    "lead": "A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught hundreds of students."
+    "lead": "A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught dozens of students."
   },
   {
     "path": "/en/learn-lebanese-arabic",

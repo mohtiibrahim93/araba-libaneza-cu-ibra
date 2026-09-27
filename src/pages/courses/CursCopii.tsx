@@ -1,5 +1,4 @@
 import CourseLayout from "@/components/course/CourseLayout";
-import RegistrationFormSection from "@/components/RegistrationFormSection";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import { useI18n } from "@/lib/i18n";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -10,8 +9,8 @@ import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const CursCopii = () => {
   const { t, lang } = useI18n();
-  // Kids private lessons are available; kids GROUP courses are not open yet
-  // (notify-only), so default to the available option.
+  // No kids' courses are offered at the moment — neither groups nor private
+  // lessons — so both tracks collect interest (see the register section).
   const [track, setTrack] = useState<"private" | "group">("private");
   const privOnline = ONLINE_PRICES.kidsPrivateLesson;
   const privFizic = physicalPrice(privOnline);
@@ -22,7 +21,7 @@ const CursCopii = () => {
     name: t.courseCopiiH1,
     description: t.courseCopiiMetaDesc,
     hasCourseInstance: courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" }),
-    educationalLevel: "Beginner — Kids ages 6–10",
+    educationalLevel: "Beginner — Kids ages 6–11",
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Children" },
   };
 
@@ -133,29 +132,17 @@ const CursCopii = () => {
 
       <section id="register" className="scroll-mt-24 mt-4">
         <h2 className="text-2xl font-bold text-foreground mb-2">
-          {track === "group"
-            ? (lang === "en" ? "Kids' group — not open yet" : "Grupă copii — încă indisponibilă")
-            : t.coursePageRegisterTitle}
+          {lang === "en" ? "Kids' courses — not available right now" : "Cursuri pentru copii — momentan indisponibile"}
         </h2>
         <p className="text-sm text-muted-foreground mb-6">
-          {track === "group"
-            ? (lang === "en"
-                ? "Kids' group courses aren't open yet — leave your details and we'll tell you when one starts. Private lessons for kids are available now (switch above)."
-                : "Grupele pentru copii nu sunt încă deschise — lasă-ne datele și îți spunem când pornește una. Lecțiile private pentru copii sunt disponibile acum (schimbă mai sus).")
-            : t.coursePageRegisterDesc}
+          {lang === "en" ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know." : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
         </p>
         <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
-          {track === "group" ? (
-            <NotifyMeForm context="Grupă copii (6–10 ani)" />
-          ) : (
-            <RegistrationFormSection
-              key={track}
-              defaultCourseType="kids"
-              lessonType={track}
-              lockSelection
-              embedded
-            />
-          )}
+          {/* Neither kids' groups nor kids' private lessons are offered at the
+              moment, so both tracks collect interest instead of sign-ups. */}
+          <NotifyMeForm
+            context={track === "group" ? "Grupă copii (6–11 ani)" : "Lecții private copii (6–11 ani)"}
+          />
         </div>
       </section>
     </CourseLayout>

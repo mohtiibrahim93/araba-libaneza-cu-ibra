@@ -92,8 +92,8 @@ const MeditatiiAraba = () => (
     <h2>Meditații de arabă în București — unde și când</h2>
     <p>
       Dacă cauți <strong>meditații de arabă în București</strong>, lecțiile fizice au loc la Raduga
-      Creative Center, Strada Icoanei 80 (sector 2), la 5 minute de Piața Rosetti și aproape de
-      Universitate și Piața Romană. Orarul se stabilește împreună: dimineața (09:00–12:00), la prânz
+      Creative Center, Strada Icoanei 80 (sector 2), aproape de
+      metroul Piața Romană (M2) și Ștefan cel Mare (M1). Orarul se stabilește împreună: dimineața (09:00–12:00), la prânz
       sau seara (18:00–21:00), inclusiv sâmbătă. Dacă stai în alt sector sau în alt oraș, varianta
       online pe Zoom are exact același conținut și preț.
     </p>
@@ -149,13 +149,13 @@ const MeditatiiAraba = () => (
       <Link to="/cursuri/grup">curs de grup A1–C2</Link> (de la 500 lei/lună) e mai potrivit.
       Comparația completă a formatelor e în{" "}
       <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>. Pentru
-      adolescenți 11–17 ani avem <Link to="/cursuri-araba-adolescenti">grupe dedicate</Link>.
+      adolescenți 12–17 ani avem <Link to="/cursuri-araba-adolescenti">grupe dedicate</Link>.
     </p>
 
     <h2>Meditații fizic în București sau online pe Zoom</h2>
     <p>
       Poți alege lecții fizice la Raduga Creative Center (Strada Icoanei 80, sector 2) sau online, de
-      oriunde. Ambele formate au același profesor nativ, aceeași metodă și același preț. Dacă locuiești
+      oriunde. Ambele formate au același profesor nativ și aceeași metodă; o lecție costă 150 lei online și 210 lei fizic. Dacă locuiești
       în București și vrei flexibilitate maximă, <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> oferă și variante de grup.
     </p>
   </LandingLayout>

@@ -48,8 +48,8 @@ export const courseMenu = (lang: "ro" | "en"): NavLink[] =>
         // pages existed only in the sitemap.
         { to: "/en/courses/group", label: "Group course (A1–C2)" },
         { to: "/en/courses/private", label: "Private lessons" },
-        { to: "/en/courses/children", label: "Kids (6–10)" },
-        { to: "/en/arabic-for-teenagers", label: "Teens (11–17)" },
+        { to: "/en/courses/children", label: "Kids (6–11)" },
+        { to: "/en/arabic-for-teenagers", label: "Teens (12–17)" },
         { to: "/en/courses/adults", label: "Adults" },
         { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
         { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
@@ -57,8 +57,8 @@ export const courseMenu = (lang: "ro" | "en"): NavLink[] =>
     : [
         { to: "/cursuri/grup", label: "Curs de grup (A1–C2)" },
         { to: "/cursuri/private", label: "Lecții private" },
-        { to: "/cursuri/copii", label: "Copii (6–10)" },
-        { to: "/cursuri-araba-adolescenti", label: "Adolescenți (11–17)" },
+        { to: "/cursuri/copii", label: "Copii (6–11)" },
+        { to: "/cursuri-araba-adolescenti", label: "Adolescenți (12–17)" },
         { to: "/cursuri/adulti", label: "Adulți" },
         { to: "/cursuri-araba-bucuresti", label: "Cursuri în București" },
         { to: "/meditatii-araba", label: "Meditații 1:1" },

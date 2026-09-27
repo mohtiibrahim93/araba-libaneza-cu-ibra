@@ -159,12 +159,12 @@ export const COURSE_PICKS: Recommendation[] = [
   },
   {
     to: "/cursuri/copii",
-    label: { ro: "Copii (6–10 ani)", en: "Kids (6–10)" },
+    label: { ro: "Copii (6–11 ani)", en: "Kids (6–11)" },
     note: { ro: "Doar fizic, prin joc și povești", en: "In person only, through play and stories" },
   },
   {
     to: "/cursuri-araba-adolescenti",
-    label: { ro: "Adolescenți (11–17 ani)", en: "Teens (11–17)" },
+    label: { ro: "Adolescenți (12–17 ani)", en: "Teens (12–17)" },
     note: { ro: "Ritm adaptat vârstei", en: "Pace adapted to their age" },
   },
   {

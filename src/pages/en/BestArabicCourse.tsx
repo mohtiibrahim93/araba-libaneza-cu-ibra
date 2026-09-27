@@ -136,7 +136,7 @@ const BestArabicCourse = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/en/learn-lebanese-arabic">Online over Zoom</Link></td>
             <td className="py-2 px-3">Learners outside Bucharest, diaspora, any time zone</td>
-            <td className="py-2 px-3">Same price as in person</td>
+            <td className="py-2 px-3">Cheaper than in person (500 vs 700 LEI / month at A1)</td>
             <td className="py-2 pl-3">Requires self-discipline</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
@@ -163,8 +163,8 @@ const BestArabicCourse = () => (
       At <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> we teach{" "}
       <strong>Lebanese Arabic (Levantine) only</strong>, with a native Lebanese teacher, in person in
       Bucharest (Strada Icoanei 80) and online worldwide. Formats: group levels A1–C2,{" "}
-      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course (ages 6–10) and{" "}
-      <Link to="/en/arabic-for-teenagers">teen groups (11–17)</Link>. We're not the right fit if you
+      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course (ages 6–11) and{" "}
+      <Link to="/en/arabic-for-teenagers">teen groups (12–17)</Link>. We're not the right fit if you
       need strictly Modern Standard Arabic for an academic exam — we'll tell you that plainly during
       the free trial.
     </p>

@@ -5,7 +5,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Unde se țin cursurile de arabă în București?",
-    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — zona Universitate/Piața Rosetti, cu acces ușor cu metroul (M2 Piața Romană / M1 Piața Universității) și tramvai. Sala e mică și liniștită, cu maxim 10 studenți per grupă.",
+    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — cu acces ușor cu metroul (M2 Piața Romană / M1 Ștefan cel Mare) și tramvai. Sala e mică și liniștită, cu maxim 10 studenți per grupă.",
   },
   {
     q: "Sunt cursuri de arabă în București pentru începători?",
@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
-    a: "Da, avem un curs dedicat pentru copii 6–10 ani, fizic în București, cu învățare prin joc, cântece și povești. Detalii pe pagina de curs pentru copii.",
+    a: "Da, avem un curs dedicat pentru copii 6–11 ani, fizic în București, cu învățare prin joc, cântece și povești. Detalii pe pagina de curs pentru copii.",
   },
 ];
 
@@ -85,13 +85,13 @@ const CursuriArabaBucuresti = () => (
     <p>
       Cauți un curs de arabă <strong>în București</strong>, cu profesor nativ și grupă mică, într-o
       locație accesibilă? La <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> predăm fizic la{" "}
-      <strong>Raduga Creative Center, Strada Icoanei 80</strong> — zona Piața Rosetti, la 5 min de
-      metroul Piața Romană.
+      <strong>Raduga Creative Center, Strada Icoanei 80</strong> — aproape de
+      metroul Piața Romană (M2) și Ștefan cel Mare (M1).
     </p>
 
     <h2>Zone din București din care ne vin studenți</h2>
     <p>
-      Sala e în <strong>sectorul 2</strong>, la mijloc între Piața Romană și Piața Universității,
+      Sala e în <strong>sectorul 2</strong>, aproape de stațiile de metrou Piața Romană (M2) și Ștefan cel Mare (M1),
       așa că e ușor accesibilă din aproape orice zonă a orașului:
     </p>
     <ul>
@@ -128,7 +128,7 @@ const CursuriArabaBucuresti = () => (
         flexibil, la sală sau la tine acasă (în funcție de zonă).
       </li>
       <li>
-        <strong><Link to="/cursuri/copii">Curs pentru copii 6–10 ani</Link></strong> — sâmbătă
+        <strong><Link to="/cursuri/copii">Curs pentru copii 6–11 ani</Link></strong> — sâmbătă
         dimineața, prin joc și povești, fizic în București.
       </li>
     </ul>
@@ -137,7 +137,7 @@ const CursuriArabaBucuresti = () => (
     <p>
       <strong>Adresă:</strong> Raduga Creative Center, Strada Icoanei 80, sector 2, București.
       <br />
-      <strong>Metrou:</strong> M2 Piața Romană (5 min pe jos) sau M1/M3 Piața Universității (8 min).
+      <strong>Metrou:</strong> M2 Piața Romană (5 min pe jos) sau M1 Ștefan cel Mare.
       <br />
       <strong>Tramvai:</strong> stații pe Bd. Carol I și Bd. Dacia.
       <br />

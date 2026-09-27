@@ -51,8 +51,8 @@ const RO: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic (Grupa 2): luni și miercuri 19:00–20:30 · 32 de lecții · Strada Icoanei 80",
-      "Online: grupa în desfășurare, locurile sunt ocupate — lasă-ți datele pentru următoarea grupă",
+      "Fizic: grupa de luni și miercuri 19:00–20:30 (Strada Icoanei 80) e în desfășurare",
+      "Online: grupe noi, în română și în engleză — datele și locurile libere le vezi la înscriere",
       "Examen final inclus",
     ],
     intro: [
@@ -110,7 +110,7 @@ const RO: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: marți și joi 19:00–20:30 · 54 de lecții · Strada Icoanei 80",
+      "Fizic: grupa de marți și joi 19:00–20:30 (Strada Icoanei 80) e în desfășurare · 54 de lecții",
       "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
@@ -235,7 +235,7 @@ const RO: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Vorbit",
+    trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
     schedule: ["~8 luni · se deschide după finalizarea A2 (dată în curând)"],
   },
   {
@@ -300,14 +300,14 @@ const RO: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Vorbit",
+    trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
     schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
   },
   {
     id: "c1",
     title: "Nivel C1 — Avansat (Două Trackuri)",
     objective:
-      "Utilizator avansat. Aici începe opțiunea de scriere. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTAN, în paralel). Scrisul privește araba libaneză în litere arabe — nu fuṣḥā.",
+      "Utilizator avansat. Scrisul rămâne opțional — o grupă îl poate adăuga de la B1 sau B2, dacă toți cursanții vor. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTAN, în paralel). Scrisul privește araba libaneză în litere arabe — nu fuṣḥā.",
     lessons: 70,
     hours: 105,
     trackLabel: "Vorbit / Vorbit + Scris (simultan)",
@@ -315,7 +315,7 @@ const RO: CurriculumLevel[] = [
     intro: [
       "La C1 corectitudinea nu mai e subiectul. Subiectul e ce se spune fără să fie spus: sensul implicit, cititul printre rânduri, ironia și sarcasmul, umorul cu timing și jocuri de cuvinte, idiomurile avansate și proverbele așa cum se folosesc de fapt. Este nivelul la care începi să înțelegi gluma din camera în care ești, nu după ce ți se explică.",
       "Aici intră și harta socială a limbii: variația regională între Beirut și Muntele Liban, apoi Sud, Nord și Bekaa; sociolingvistica — cine vorbește cum, după clasă, vârstă și comunitate; code-switching-ul libaneză ↔ franceză ↔ engleză; și frazarea elevată, elementele cu aromă fuṣḥā care apar firesc în vorbirea educată. Plus măiestria povestirii, dezbaterea, persuasiunea, negocierea și exprimarea nuanței — atenuare, îndoială, certitudine.",
-      "Partea culturală nu e decor: Fairuz pentru limbă și imagistică, Ziad Rahbani pentru ironie și registru, zajal-ul și tradiția poeziei orale, teatrul și monologul, cinematograful și autenticitatea dialectală, religia, politica și referințele istorice așa cum apar în vorbirea de zi cu zi. C1 este și nivelul la care se deschide scrisul: poți alege trackul vorbit sau vorbit + scris, cu alfabetul arab rulând simultan, în paralel — și e vorba de araba libaneză în litere arabe, nu de fuṣḥā.",
+      "Partea culturală nu e decor: Fairuz pentru limbă și imagistică, Ziad Rahbani pentru ironie și registru, zajal-ul și tradiția poeziei orale, teatrul și monologul, cinematograful și autenticitatea dialectală, religia, politica și referințele istorice așa cum apar în vorbirea de zi cu zi. Și la C1 scrisul e opțional: grupa poate alege trackul vorbit sau vorbit + scris, cu alfabetul arab rulând simultan, în paralel — și e vorba de araba libaneză în litere arabe, nu de fuṣḥā.",
     ],
     outcomes: [
       "Prinzi ironia, sarcasmul și gluma în timp real, nu după explicație",
@@ -501,8 +501,8 @@ const EN: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Spoken",
     schedule: [
-      "In person (Group 2): Mondays & Wednesdays 19:00–20:30 · 32 lessons · Strada Icoanei 80",
-      "Online: group in progress and full — leave your details for the next one",
+      "In person: the Monday & Wednesday 19:00–20:30 group (Strada Icoanei 80) is in progress",
+      "Online: new groups, taught in Romanian and in English — dates and free places are shown when you sign up",
       "Final exam included",
     ],
     intro: [
@@ -560,7 +560,7 @@ const EN: CurriculumLevel[] = [
     hours: 81,
     trackLabel: "Spoken",
     schedule: [
-      "In person: Tuesdays & Thursdays 19:00–20:30 · 54 lessons · Strada Icoanei 80",
+      "In person: the Tuesday & Thursday 19:00–20:30 group (Strada Icoanei 80) is in progress · 54 lessons",
       "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
     ],
@@ -685,7 +685,7 @@ const EN: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Spoken",
+    trackLabel: "Spoken · optional writing (if the whole group wants it)",
     schedule: ["~8 months · opens after A2 finishes (date coming soon)"],
   },
   {
@@ -750,14 +750,14 @@ const EN: CurriculumLevel[] = [
     ],
     lessons: 70,
     hours: 105,
-    trackLabel: "Spoken",
+    trackLabel: "Spoken · optional writing (if the whole group wants it)",
     schedule: ["~8–9 months · opens after B1 — future enrollment"],
   },
   {
     id: "c1",
     title: "Level C1 — Advanced (Two Tracks)",
     objective:
-      "Advanced user. The writing option begins here. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULTANEOUSLY in the same lessons). Writing covers Lebanese Arabic in Arabic letters — not fuṣḥā.",
+      "Advanced user. Writing stays optional — a group can add it from B1 or B2 if all its students want it. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULTANEOUSLY in the same lessons). Writing covers Lebanese Arabic in Arabic letters — not fuṣḥā.",
     lessons: 70,
     hours: 105,
     trackLabel: "Spoken / Spoken + Written (simultaneous)",
@@ -765,7 +765,7 @@ const EN: CurriculumLevel[] = [
     intro: [
       "At C1 correctness is no longer the subject. The subject is what gets said without being said: implied meaning, reading between the lines, irony and sarcasm, humour with timing and wordplay, advanced idioms and proverbs as they are actually used. This is the level where you catch the joke in the room you are in, rather than after someone explains it.",
       "It also covers the social map of the language: regional variation between Beirut and Mount Lebanon, then the South, the North and the Bekaa; sociolinguistics — who speaks how, by class, age and community; code-switching between Lebanese, French and English; and elevated phrasing, the fuṣḥā-flavoured elements that turn up naturally in educated speech. Plus storytelling mastery, debate, persuasion, negotiation, and expressing nuance — hedging, doubt, certainty.",
-      "The cultural material is not decoration: Fairuz for language and imagery, Ziad Rahbani for irony and register, zajal and the oral poetry tradition, theatre and monologue, cinema and dialect authenticity, and religion, politics and historical reference as they appear in ordinary speech. C1 is also where writing opens up: you choose the spoken track or spoken + written, with the Arabic alphabet running simultaneously alongside it — and that means Lebanese Arabic in Arabic letters, not fuṣḥā.",
+      "The cultural material is not decoration: Fairuz for language and imagery, Ziad Rahbani for irony and register, zajal and the oral poetry tradition, theatre and monologue, cinema and dialect authenticity, and religion, politics and historical reference as they appear in ordinary speech. At C1 writing is optional too: the group can choose the spoken track or spoken + written, with the Arabic alphabet running simultaneously alongside it — and that means Lebanese Arabic in Arabic letters, not fuṣḥā.",
     ],
     outcomes: [
       "Catch irony, sarcasm and the joke in real time rather than after the explanation",

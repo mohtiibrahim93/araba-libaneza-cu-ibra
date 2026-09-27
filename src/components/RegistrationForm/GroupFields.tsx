@@ -41,7 +41,7 @@ const GroupFields = ({
   locked = false,
   levelError = false,
 }: Props) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -124,8 +124,8 @@ const GroupFields = ({
           {
             plan: "monthly",
             title: t.groupPlanMonthly,
-            big: `${formatLei(monthly)} LEI / lună`,
-            sub: `× ${months} luni`,
+            big: `${formatLei(monthly)} LEI / ${lang === "en" ? "month" : "lună"}`,
+            sub: `× ${months} ${lang === "en" ? "months" : "luni"}`,
           },
           {
             plan: "full",
@@ -162,7 +162,7 @@ const GroupFields = ({
                     </div>
                     <p className="mt-1 text-base font-bold text-foreground">{o.big}</p>
                     {o.plan === "full" && (
-                      <p className="text-[11px] text-muted-foreground line-through">{o.sub} LEI</p>
+                      <p className="text-[11px] text-muted-foreground line-through">{o.sub}</p>
                     )}
                     {o.plan === "monthly" && (
                       <p className="text-[11px] text-muted-foreground">{o.sub}</p>
