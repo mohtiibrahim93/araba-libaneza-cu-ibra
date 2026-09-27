@@ -10,16 +10,16 @@
  * whole site on every build is the quickest way to have the submissions ignored.
  * So a plain run sends only what is new.
  *
- * "New" is the honest limit of what this can detect on its own. The sitemap
- * carries no <lastmod> — see src/lib/sitemap.ts: a per-page content timestamp
- * would have to come from git, which makes the committed file depend on commit
- * dates, and a build date stamped on all 119 URLs is the kind of bogus lastmod
- * Google ignores. So the comparison against scripts/.indexnow-state.json only
- * ever finds URLs the sitemap did not have last time.
+ * The sitemap now carries a real <lastmod> per URL — the last commit that
+ * touched that page's own files, written by scripts/generateSitemap.ts at build
+ * time — so the comparison against scripts/.indexnow-state.json finds both URLs
+ * that are new and pages whose own files changed.
  *
- * After a change that rewrites pages already listed — a head, a layout, a
- * price — pass --all. That is the deliberate call: someone decides the site
- * changed enough to be worth recrawling, rather than a build guessing.
+ * What it still cannot see is a change that came from a shared layout, since
+ * those deliberately do not move a page's date: one date moving on all 121 URLs
+ * at once is the kind of blanket lastmod a crawler ignores. After that sort of
+ * change — a head, a layout, a price — pass --all. That is the deliberate call:
+ * someone decides the site changed enough to be worth recrawling.
  *
  *   npx vite-node scripts/submitIndexNow.ts            # changed URLs only
  *   npx vite-node scripts/submitIndexNow.ts --all      # every indexable URL
@@ -84,9 +84,9 @@ if (changed.length === 0) {
   // Not the same as "nothing to submit": a rewritten page cannot be seen from
   // here, so say what this did and did not check.
   console.log(
-    "[indexnow] no URLs new to the sitemap since the last run.\n" +
-      "           Existing pages are not compared (the sitemap has no <lastmod>) —\n" +
-      "           after a change to pages already listed, rerun with --all.",
+    "[indexnow] nothing new and no page's own files changed since the last run.\n" +
+      "           A change that came from a shared layout does not move a page's\n" +
+      "           lastmod — after one of those, rerun with --all.",
   );
   process.exit(0);
 }

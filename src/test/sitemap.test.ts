@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { allSeoRoutes } from "@/lib/seoHead";
-import { buildSitemap, belongsInSitemap } from "@/lib/sitemap";
+import { buildSitemap, belongsInSitemap, blogIndexPages } from "@/lib/sitemap";
 
 /**
  * The sitemap is generated from the route registry, not maintained by hand.
@@ -18,9 +18,33 @@ const locs = (xml: string) =>
   [...xml.matchAll(/<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/g)].map((m) => m[1] ?? "");
 
 describe("sitemap", () => {
+  /**
+   * Compared without <lastmod>. The dates come from git, which only
+   * scripts/generateSitemap.ts can read, so the pure builder cannot reproduce
+   * them — and a committed date is stale the moment someone edits a page
+   * without regenerating the file. The deployed sitemap is always fresh anyway:
+   * the build regenerates it before every deploy. Structure is what this holds.
+   */
+  const withoutDates = (xml: string) => xml.replace(/^ {4}<lastmod>[^<]*<\/lastmod>\n/gm, "");
+
   it("matches what the generator produces", () => {
     // Fails when a page was added without running the build. Run `bun run sitemap`.
-    expect(committed()).toBe(buildSitemap());
+    expect(withoutDates(committed())).toBe(withoutDates(buildSitemap()));
+  });
+
+  it("dates the pages it lists, and dates them differently", () => {
+    // A lastmod on every URL with the same value is what a crawler ignores.
+    const dates = [...committed().matchAll(/^ {4}<lastmod>([^<]*)<\/lastmod>$/gm)].map((m) => m[1]!);
+    expect(dates.length).toBeGreaterThan(100);
+    expect(new Set(dates).size).toBeGreaterThan(10);
+    for (const d of dates) expect(d).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  });
+
+  it("lists the blog index beyond page one", () => {
+    // Nine of the twenty articles are listed together only there.
+    for (const path of ["/blog?page=2", "/en/blog?page=2"]) {
+      expect(locs(committed()), `${path} missing`).toContain(path);
+    }
   });
 
   it("lists every indexable route", () => {
@@ -39,6 +63,10 @@ describe("sitemap", () => {
 
   it("lists nothing that is not a route", () => {
     const paths = new Set(allSeoRoutes().map((r) => r.path));
+    // The paginated blog index is not a route of its own — /blog and ?page= are
+    // one route — but each page is self-canonical and lists articles nothing
+    // else lists together, so it is listed deliberately.
+    for (const extra of blogIndexPages()) paths.add(extra);
     expect(locs(committed()).filter((p) => !paths.has(p))).toEqual([]);
   });
 });
