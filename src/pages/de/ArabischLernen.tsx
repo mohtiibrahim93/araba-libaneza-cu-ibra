@@ -20,11 +20,11 @@ const FAQ = [
   },
   {
     q: "Wie lange dauert es, Arabisch zu lernen?",
-    a: "Mit zwei 90-Minuten-Lektionen pro Woche plus etwas Übung erreichst du nach etwa 4 Monaten (32 Lektionen) das Niveau A1 mit einfachen Alltagsgesprächen, nach etwa 10 Monaten das Niveau A2. Für B1/B2 (fließende Konversation) rechnen wir mit 1,5–2 Jahren konsequenter Praxis.",
+    a: "Mit zwei 90-Minuten-Lektionen pro Woche plus etwas Übung erreichst du nach etwa 4 Monaten (32 Lektionen) das Niveau A1 mit einfachen Alltagsgesprächen, nach etwa 11 Monaten das Niveau A2. Für B1/B2 (fließende Konversation) rechnen wir mit 1,5–2 Jahren konsequenter Praxis.",
   },
   {
     q: "Muss ich zuerst das arabische Alphabet lernen?",
-    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). Bis einschließlich B1 arbeiten wir nur mündlich; ab B2 kannst du optional auch das Schreiben in arabischer Schrift dazunehmen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
+    a: "Nein. Wir arbeiten oral-first: Du sprichst ab der ersten Lektion mit Arabizi (arabische Wörter in lateinischen Buchstaben und Zahlen). A1 und A2 sind rein mündlich; ab B1 oder B2 kann eine Gruppe das Schreiben in arabischer Schrift dazunehmen, wenn die Teilnehmenden es wollen. So gibt es keine Alphabet-Hürde vor dem ersten echten Gespräch.",
   },
   {
     q: "Sind die Kurse online oder in Präsenz?",
@@ -130,7 +130,7 @@ const ArabischLernen = () => (
           </p>
           <ul>
             <li><strong>Sprechen ab Lektion eins:</strong> kein Alphabet als Hürde — du startest mit Arabizi (lateinische Umschrift).</li>
-            <li><strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf, Wegbeschreibung, Smalltalk — A1 in etwa 4 Monaten, A2 nach etwa 10.</li>
+            <li><strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf, Wegbeschreibung, Smalltalk — A1 in etwa 4 Monaten, A2 nach etwa 11.</li>
             <li><strong>Verstehe libanesische Medien:</strong> Musik, Serien, YouTube — im Original.</li>
             <li><strong>Reisen und Familie:</strong> mit libanesischsprachigen Menschen im Libanon und der Diaspora sprechen.</li>
             <li><strong>Tor zum Levant:</strong> libanesisch ist gegenseitig verständlich mit syrisch, jordanisch und palästinensisch.</li>
@@ -170,7 +170,7 @@ const ArabischLernen = () => (
 
           <h2>Wie wir unterrichten</h2>
           <ul>
-            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. Bis B1 nur mündlich, ab B2 optional mit arabischer Schrift.</li>
+            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. A1–A2 rein mündlich, ab B1 oder B2 auf Wunsch der Gruppe mit arabischer Schrift.</li>
             <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
             <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
             <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>

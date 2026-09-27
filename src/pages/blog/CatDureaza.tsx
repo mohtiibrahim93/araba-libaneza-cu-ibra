@@ -6,7 +6,7 @@ import { useI18n } from "@/lib/i18n";
 // [level-ro, level-en, duration, can-do-ro, can-do-en]
 const LEVELS: [string, string, string, string, string][] = [
   ["A1 — Începător", "A1 — Beginner", "~4 luni / ~4 months", "Te descurci în situații simple de zi cu zi: saluturi, cumpărături, prezentări.", "You manage simple everyday situations: greetings, shopping, introductions."],
-  ["A2 — Elementar", "A2 — Elementary", "~6–7 luni / months", "Conversații despre subiecte familiare, trecut și viitor, opinii simple.", "Conversations on familiar topics, past and future, simple opinions."],
+  ["A2 — Elementar", "A2 — Elementary", "~7 luni / months", "Conversații despre subiecte familiare, trecut și viitor, opinii simple.", "Conversations on familiar topics, past and future, simple opinions."],
   ["B1 — Intermediar", "B1 — Intermediate", "~8–9 luni / months", "Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale.", "You speak freely about experiences, plans, stories; you follow normal discussions."],
   ["B2 — Intermediar avansat", "B2 — Upper-intermediate", "~9 luni / months", "Comunicare naturală, nuanțe culturale, subiecte abstracte.", "Natural communication, cultural nuance, abstract topics."],
   ["C1–C2 — Avansat", "C1–C2 — Advanced", "~10 luni fiecare / each", "Fluență apropiată de nativ, umor, registre diferite.", "Near-native fluency, humour, different registers."],

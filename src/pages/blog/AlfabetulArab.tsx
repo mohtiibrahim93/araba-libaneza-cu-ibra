@@ -139,8 +139,8 @@ const AlfabetulArab = () => {
         <strong>Oral First</strong>{en ? " method: you start by speaking, with the help of " : ": începi vorbind, cu ajutorul "}
         <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>{" "}
         {en
-          ? "(Arabic written in Latin letters), without getting stuck on the alphabet: up to and including B1 the course is spoken only, and from B2 you can optionally add writing in Arabic letters. You can hold whole conversations in Lebanese before writing your first letter."
-          : "(araba scrisă cu litere latine), fără să te blochezi la alfabet: până la B1 inclusiv cursul e doar oral, iar de la B2 poți alege, opțional, și scrisul cu litere arabe. Poți purta conversații întregi în libaneză înainte să scrii prima literă."}
+          ? "(Arabic written in Latin letters), without getting stuck on the alphabet: A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic letters if its students want it. You can hold whole conversations in Lebanese before writing your first letter."
+          : "(araba scrisă cu litere latine), fără să te blochezi la alfabet: la A1 și A2 cursul e doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu litere arabe, dacă cursanții vor. Poți purta conversații întregi în libaneză înainte să scrii prima literă."}
       </p>
 
       <h2>{en ? "When you actually need the alphabet" : "Când chiar ai nevoie de alfabet"}</h2>
@@ -152,7 +152,7 @@ const AlfabetulArab = () => {
         <Link to="/fara-alfabet-arab">{en ? "learning Arabic without the alphabet" : "cum înveți araba fără alfabet"}</Link>
         {en ? ", and the full " : " și "}
         <Link to="/arabizi">{en ? "Arabizi decoding guide" : "ghidul complet Arabizi"}</Link>
-        {en ? ". The alphabet is an option from B2, alongside speaking." : ". Alfabetul e opțional de la B2, în paralel cu vorbirea."}
+        {en ? ". From B1 or B2 the alphabet is an option for groups that want it, alongside speaking." : ". De la B1 sau B2, alfabetul e o opțiune pentru grupele care îl vor, în paralel cu vorbirea."}
       </p>
 
       <InlineCta

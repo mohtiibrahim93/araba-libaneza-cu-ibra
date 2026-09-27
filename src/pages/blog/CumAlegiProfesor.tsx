@@ -75,7 +75,7 @@ const CumAlegiProfesor = () => {
           <strong>{en ? "How are lessons structured?" : "Cum sunt structurate lecțiile?"}</strong>{" "}
           {en ? "With the Oral First method — you speak from the first lessons, with " : "Prin metoda Oral First — vorbești din primele lecții, cu "}
           <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>
-          {en ? ": spoken only up to B1, with optional Arabic script from B2." : ": doar oral până la B1, cu alfabet arab opțional de la B2."}
+          {en ? ": A1–A2 spoken only, with the Arabic script from B1 or B2 if the group wants it." : ": A1–A2 doar oral, cu alfabet arab de la B1 sau B2, dacă grupa vrea."}
         </li>
         <li>
           <strong>{en ? "How do you adapt lessons to my level?" : "Cum adaptezi lecțiile la nivelul meu?"}</strong>{" "}

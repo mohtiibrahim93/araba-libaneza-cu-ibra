@@ -4,7 +4,7 @@ import EnLandingLayout from "./EnLandingLayout";
 const FAQ = [
   {
     q: "How long does it take to learn Lebanese Arabic?",
-    a: "With two 90-minute lessons per week plus 15–20 minutes of daily practice, you reach A1 (basic conversations) in ~4 months (32 lessons), A2 about 6 months later, and B1 in roughly 18–20 months. Fluent B2–C1 typically takes 1.5–3 years of consistent practice.",
+    a: "With two 90-minute lessons per week plus 15–20 minutes of daily practice, you reach A1 (basic conversations) in ~4 months (32 lessons), A2 about 7 months later, and B1 in roughly 20 months. Fluent B2–C1 typically takes 1.5–3 years of consistent practice.",
   },
   {
     q: "Can I learn Lebanese Arabic on my own?",
@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "Do I need to learn the Arabic alphabet first?",
-    a: "No. We start with Arabizi (Arabic written in Latin letters with numbers for missing sounds — e.g. 3ayn for ع) so you can speak from lesson one. Up to and including B1 the course is spoken only; from B2, students who also want to read and write can optionally add the Arabic alphabet.",
+    a: "No. We start with Arabizi (Arabic written in Latin letters with numbers for missing sounds — e.g. 3ayn for ع) so you can speak from lesson one. A1 and A2 are spoken only; from B1 or B2, a group whose students also want to read and write can add the Arabic alphabet.",
   },
   {
     q: "Should I learn MSA (Fusha) before Lebanese?",
@@ -159,13 +159,13 @@ const HowToLearnLebaneseArabic = () => (
       />
       <Milestone
         level="A2 · Elementary"
-        months="+6 months (~10 total)"
+        months="+~7 months (~11 total)"
         weekly="2×90 min + daily practice"
         can="Hold simple conversations, describe your day, understand slow native speech, read and write short WhatsApp messages in Arabizi."
       />
       <Milestone
         level="B1 · Intermediate"
-        months="+~9 months (~19 total)"
+        months="+~9 months (~20 total)"
         weekly="2×90 min + daily practice + native input"
         can="Discuss opinions, follow most Lebanese TV series with occasional pauses, hold 30-minute conversations with native speakers."
       />

@@ -13,7 +13,7 @@ const FAQ = [
   },
   {
     q: "Pot începe de la zero, fără să știu nimic?",
-    a: "Da — nivelul A1 este gândit exact pentru începători compleți. Vorbești din prima lecție prin metoda Oral First, folosind arabizi (scriere cu litere latine), iar alfabetul arab nu te blochează: până la B1 inclusiv lucrăm doar oral, iar de la B2 îl poți adăuga, opțional.",
+    a: "Da — nivelul A1 este gândit exact pentru începători compleți. Vorbești din prima lecție prin metoda Oral First, folosind arabizi (scriere cu litere latine), iar alfabetul arab nu te blochează: la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa îl poate adăuga, dacă vrea.",
   },
   {
     q: "Cursurile sunt în București sau online?",

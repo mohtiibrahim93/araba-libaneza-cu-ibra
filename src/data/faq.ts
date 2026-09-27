@@ -51,7 +51,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce metodă de predare folosiți și cum adaptați lecțiile la nivelul meu?",
-            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi; până la B1 inclusiv lucrăm doar oral, iar de la B2 poți adăuga, opțional, scrisul cu alfabet arab. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
+            a: "Folosim metoda Oral First: vorbești din primele lecții, cu arabizi; la A1 și A2 lucrăm doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu alfabet arab, dacă cursanții vor. Grupele sunt mici, cu feedback constant; pentru obiective specifice există lecții private 1:1 adaptate ritmului tău.",
           },
           {
             q: "Cât durează lecțiile, cât de des sunt și în ce format (online sau fizic)?",
@@ -108,7 +108,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Cât durează până ajung la fluență?",
-            a: "Fluența reală (B2–C1) cere de obicei 1,5–3 ani de practică susținută, în funcție de cât de des vorbești în afara clasei. Un ritm realist: A1 în ~4 luni, A2 în încă ~6, B1–B2 în 1–2 ani.",
+            a: "Fluența reală (B2–C1) cere de obicei 1,5–3 ani de practică susținută, în funcție de cât de des vorbești în afara clasei. Un ritm realist: A1 în ~4 luni, A2 în încă ~7, B1–B2 în 1–2 ani.",
           },
           {
             q: "Libaneza este mai ușoară decât Fusha?",
@@ -133,7 +133,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Trebuie să învăț alfabetul arab de la început?",
-            a: "Nu obligatoriu. Începem cu transliterare latină (arabizi) ca să te concentrezi pe vorbire. Până la B1 inclusiv cursul e doar oral; de la B2, cine vrea să citească și să scrie poate alege și alfabetul arab. Poți vorbi libaneză fluent fără să citești în arabă.",
+            a: "Nu obligatoriu. Începem cu transliterare latină (arabizi) ca să te concentrezi pe vorbire. La A1 și A2 cursul e doar oral; de la B1 sau B2, grupele care vor să citească și să scrie pot adăuga alfabetul arab — doar la cererea cursanților. Poți vorbi libaneză fluent fără să citești în arabă.",
           },
           {
             q: "Pot învăța araba singur, fără profesor?",
@@ -198,7 +198,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce nivel CEFR voi atinge după curs?",
-            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~6 luni), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
+            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~7 luni, 54 de lecții), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
           },
         ],
       },
@@ -274,7 +274,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What teaching method do you use, and how do you adapt lessons to my level?",
-            a: "We use the Oral First method: you speak from the very first lessons, using Arabizi; up to and including B1 it's spoken only, and from B2 you can optionally add writing in Arabic script. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
+            a: "We use the Oral First method: you speak from the very first lessons, using Arabizi; A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic script if its students want it. Groups are small with constant feedback; for specific goals there are private 1:1 lessons tailored to your pace.",
           },
           {
             q: "How long and how often are lessons, and in what format (online or in person)?",
@@ -331,7 +331,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How long until I'm fluent?",
-            a: "Real fluency (B2–C1) usually takes 1.5–3 years of sustained practice, depending on how much you speak outside class. A realistic pace: A1 in ~4 months, A2 in another ~6, B1–B2 within 1–2 years.",
+            a: "Real fluency (B2–C1) usually takes 1.5–3 years of sustained practice, depending on how much you speak outside class. A realistic pace: A1 in ~4 months, A2 in another ~7, B1–B2 within 1–2 years.",
           },
           {
             q: "Is Lebanese easier than Fusha?",
@@ -417,7 +417,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What CEFR level will I reach after the course?",
-            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~6 months), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
+            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~7 months, 54 lessons), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
           },
         ],
       },
