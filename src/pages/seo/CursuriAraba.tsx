@@ -130,7 +130,7 @@ const CursuriAraba = () => (
 
     <h2>Cursuri de arabă pe vârste</h2>
     <ul>
-      <li><strong><Link to="/curs-araba-copii">Copii 6–11 ani</Link></strong> — prin joc, cântece și povești, fizic în București.</li>
+      <li><strong><Link to="/curs-araba-copii">Copii 6–11 ani</Link></strong> — prin joc, cântece și povești, fizic în București (momentan nu avem cursuri pentru copii).</li>
       <li><strong><Link to="/cursuri-araba-adolescenti">Adolescenți 12–17 ani</Link></strong> — conversație, muzică și limbaj de social media, fizic sau online.</li>
       <li><strong><Link to="/cursuri/grup">Adulți A1–C2</Link></strong> — grupe mici pe niveluri, fizic sau online.</li>
     </ul>

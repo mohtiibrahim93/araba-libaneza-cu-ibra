@@ -4,7 +4,7 @@ import EnLandingLayout from "./EnLandingLayout";
 const FAQ = [
   {
     q: "What age are the teen Arabic classes for?",
-    a: "Ages 12–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–11 we run a separate play-based kids course in Bucharest.",
+    a: "Ages 12–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–11 there is a separate play-based kids course in Bucharest, though it isn't running at the moment.",
   },
   {
     q: "Which Arabic do teenagers learn here?",
@@ -71,7 +71,7 @@ const ArabicForTeenagers = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">6–11</td>
-            <td className="py-2 px-3">Play-based kids course</td>
+            <td className="py-2 px-3">Play-based kids course (not running at the moment)</td>
             <td className="py-2 pl-3">In person, Bucharest</td>
           </tr>
           <tr className="border-b border-border/60 align-top">

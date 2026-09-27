@@ -96,8 +96,8 @@ const LimbileVorbiteInLiban = () => {
       <InlineCta
         title={{ ro: "Ai decis pe care o înveți?", en: "Decided which one to learn?" }}
         text={{
-          ro: "Predăm dialectul libanez — limba vorbită zilnic. Grupe A1–C2, lecții 1:1 sau curs pentru copii.",
-          en: "We teach the Lebanese dialect — the language spoken daily. Groups A1–C2, 1-on-1 or the kids course.",
+          ro: "Predăm dialectul libanez — limba vorbită zilnic. Grupe A1–C2 și lecții 1:1.",
+          en: "We teach the Lebanese dialect — the language spoken daily. Groups A1–C2 and 1-on-1 lessons.",
         }}
         href="/cursuri-limba-araba"
         label={{ ro: "Vezi cursurile", en: "See the courses" }}
@@ -115,7 +115,7 @@ const LimbileVorbiteInLiban = () => {
         {en
           ? "If the answer is Lebanese Arabic, that is the only thing we teach — "
           : "Dacă răspunsul e araba libaneză, e singurul lucru pe care îl predăm — "}
-        <Link to="/cursuri-limba-araba">{en ? "groups, private lessons and a kids course" : "grupe, lecții private și curs pentru copii"}</Link>
+        <Link to="/cursuri-limba-araba">{en ? "groups and private lessons" : "grupe și lecții private"}</Link>
         {en ? ", all with a native teacher." : ", toate cu profesor nativ."}
       </p>
 

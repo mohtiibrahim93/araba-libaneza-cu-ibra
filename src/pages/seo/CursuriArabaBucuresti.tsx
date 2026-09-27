@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
-    a: "Da, avem un curs dedicat pentru copii 6–11 ani, fizic în București, cu învățare prin joc, cântece și povești. Detalii pe pagina de curs pentru copii.",
+    a: "Avem un program pentru copii 6–11 ani, fizic în București, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
   },
 ];
 
@@ -128,8 +128,8 @@ const CursuriArabaBucuresti = () => (
         flexibil, la sală sau la tine acasă (în funcție de zonă).
       </li>
       <li>
-        <strong><Link to="/cursuri/copii">Curs pentru copii 6–11 ani</Link></strong> — sâmbătă
-        dimineața, prin joc și povești, fizic în București.
+        <strong><Link to="/cursuri/copii">Curs pentru copii 6–11 ani</Link></strong> — momentan
+        nu avem grupe pentru copii; lasă-ți datele și te anunțăm.
       </li>
     </ul>
 

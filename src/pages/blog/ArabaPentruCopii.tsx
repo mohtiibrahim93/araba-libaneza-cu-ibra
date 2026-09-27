@@ -60,7 +60,7 @@ const ArabaPentruCopii = () => {
         <Link to="/cursuri/copii">{en ? "kids course" : "cursul pentru copii"}</Link>
         {en ? " is designed for ages " : " este gândit pentru "}
         <strong>{en ? "6–11" : "6–11 ani"}</strong>{en ? ", in person in Bucharest. From age " : ", fizic în București. De la "}
-        <strong>{en ? "10" : "10 ani"}</strong>{en ? ", children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course." : ", copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat."}
+        <strong>{en ? "10" : "10 ani"}</strong>{en ? ", children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course. We don't have kids' courses at the moment — leave your details and we'll let you know." : ", copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm."}
       </p>
 
       <h2>{en ? "What a lesson looks like" : "Cum arată o lecție"}</h2>

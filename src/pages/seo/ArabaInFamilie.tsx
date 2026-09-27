@@ -60,7 +60,7 @@ const ArabaInFamilie = () => (
 
     <h2>De unde începe fiecare</h2>
     <ul>
-      <li><strong>Copii 4–10 ani</strong> — <Link to="/curs-araba-copii">curs prin joc, fizic în București</Link>, cântece, povești, jocuri de rol.</li>
+      <li><strong>Copii 6–11 ani</strong> — <Link to="/curs-araba-copii">curs prin joc, fizic în București</Link>, cântece, povești, jocuri de rol (momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm).</li>
       <li><strong>Copii 12–17 ani</strong> — <Link to="/cursuri-araba-adolescenti">cursuri de arabă pentru adolescenți</Link>, cu accent pe conversație și cultură.</li>
       <li><strong>Părinți</strong> — <Link to="/cursuri/grup">grupa A1 de adulți</Link> sau <Link to="/meditatii-araba">meditații de arabă 1:1</Link>; dacă e vorba de socri și relație, vezi <Link to="/araba-pentru-partener">araba pentru partener</Link>.</li>
       <li><strong>Familii în afara Bucureștiului</strong> — <Link to="/cursuri-limba-araba">varianta online</Link>, live pe Zoom.</li>

@@ -115,7 +115,7 @@ const CursuriArabaAdolescenti = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">6–11 ani</td>
-            <td className="py-2 px-3"><Link to="/curs-araba-copii">Curs pentru copii, prin joc</Link></td>
+            <td className="py-2 px-3"><Link to="/curs-araba-copii">Curs pentru copii, prin joc</Link> (momentan fără grupe)</td>
             <td className="py-2 pl-3">Fizic, București</td>
           </tr>
           <tr className="border-b border-border/60 align-top">

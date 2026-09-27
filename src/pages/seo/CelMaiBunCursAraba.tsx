@@ -149,7 +149,7 @@ const CelMaiBunCursAraba = () => (
       libaneză (levantină)</strong>, cu profesor nativ libanez, fizic în București (Strada Icoanei
       80) și online. Formate: <Link to="/cursuri/grup">grupe A1–C2</Link>,{" "}
       <Link to="/cursuri/private">lecții private 1:1</Link>,{" "}
-      <Link to="/curs-araba-copii">curs pentru copii 6–11 ani</Link> și{" "}
+      <Link to="/curs-araba-copii">curs pentru copii 6–11 ani</Link> (momentan fără grupe) și{" "}
       <Link to="/cursuri-araba-adolescenti">grupe pentru adolescenți 12–17 ani</Link>. Nu suntem cea
       mai bună alegere dacă ai nevoie strict de arabă standard pentru un examen academic — în acest
       caz îți spunem direct la proba gratuită.

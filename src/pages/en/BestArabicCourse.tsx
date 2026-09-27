@@ -163,7 +163,7 @@ const BestArabicCourse = () => (
       At <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> we teach{" "}
       <strong>Lebanese Arabic (Levantine) only</strong>, with a native Lebanese teacher, in person in
       Bucharest (Strada Icoanei 80) and online worldwide. Formats: group levels A1–C2,{" "}
-      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course (ages 6–11) and{" "}
+      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course (ages 6–11, not running at the moment) and{" "}
       <Link to="/en/arabic-for-teenagers">teen groups (12–17)</Link>. We're not the right fit if you
       need strictly Modern Standard Arabic for an academic exam — we'll tell you that plainly during
       the free trial.
