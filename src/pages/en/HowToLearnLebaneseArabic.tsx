@@ -59,7 +59,7 @@ const HowToLearnLebaneseArabic = () => (
     metaTitle="How to Learn Lebanese Arabic — Step-by-Step Guide (2026)"
     description="Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra."
     crumb="How to learn Lebanese Arabic"
-    lead="A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught hundreds of students."
+    lead="A step-by-step path from complete beginner to fluent conversation, including the exact weekly lesson structure and daily routine that gets you there — written by a native Lebanese teacher who has taught dozens of students."
     courseSchema={false}
     roHref="/blog/cum-inveti-araba-libaneza"
     faq={FAQ}

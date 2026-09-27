@@ -77,7 +77,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Ar trebui să învăț mai întâi Araba Standard Modernă (Fusha) sau direct libaneza?",
             featured: true,
-            a: "Dacă scopul tău este să vorbești cu familia, să călătorești în Liban sau să înțelegi filme și muzică, poți începe direct cu araba libaneză — este dialectul vorbit zilnic. Fusha este utilă mai ales pentru citit știri, texte religioase sau contexte formale. La cursurile noastre plecăm de la libaneză și introducem elemente de Fusha doar cât e nevoie.",
+            a: "Dacă scopul tău este să vorbești cu familia, să călătorești în Liban sau să înțelegi filme și muzică, poți începe direct cu araba libaneză — este dialectul vorbit zilnic. Fusha este utilă mai ales pentru citit știri, texte religioase sau contexte formale. La cursurile noastre plecăm de la libaneză; fusha o adăugăm de obicei mai târziu, doar dacă o vor toți cursanții grupei — sau cursantul, la lecțiile private.",
           },
           {
             q: "Care este diferența dintre araba libaneză și cea levantină, egipteană sau din Golf?",
@@ -300,7 +300,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Should I learn Modern Standard Arabic (Fusha) first, or go straight to Lebanese Arabic?",
             featured: true,
-            a: "If your goal is to talk to family, travel in Lebanon, or understand movies and music, start directly with Lebanese Arabic — it's the everyday spoken dialect. Fusha is mainly useful for reading news, religious texts, or formal contexts. Our courses lead with Lebanese and introduce Fusha only where it helps.",
+            a: "If your goal is to talk to family, travel in Lebanon, or understand movies and music, start directly with Lebanese Arabic — it's the everyday spoken dialect. Fusha is mainly useful for reading news, religious texts, or formal contexts. Our courses lead with Lebanese; we usually add Fusha later, and only if the whole group wants it — or the student, in private lessons.",
           },
           {
             q: "What's the difference between Lebanese and Levantine / Egyptian / Gulf Arabic?",

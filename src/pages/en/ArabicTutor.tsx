@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Which variety of Arabic do you teach?",
-    a: "Primarily Lebanese Arabic (Levantine), the spoken dialect used across Lebanon, Syria, Jordan and Palestine. For students who need Modern Standard Arabic (MSA / Fusha) for reading, exams or professional writing, we layer that on top after the oral foundation.",
+    a: "Primarily Lebanese Arabic (Levantine), the spoken dialect used across Lebanon, Syria, Jordan and Palestine. For students who need Modern Standard Arabic (MSA / Fusha) for reading, exams or professional writing, we usually add it later, after the oral foundation — if you want it.",
   },
   {
     q: "What is your teaching methodology?",

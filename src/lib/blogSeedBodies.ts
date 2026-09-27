@@ -710,7 +710,7 @@ Regula practică pentru adulții din România care vor să învețe arabă:
 - **Vrei să citești și să scrii** — pentru studii academice, Coran, ziare, contexte oficiale → începe cu **Fusha (MSA)**.
 - **Vrei ambele** — începe cu libaneza (rezultate rapide, motivație), și adaugă Fusha după 6–12 luni când baza fonetică și de vocabular este deja formată.
 
-La **Centrul de Arabă Libaneză cu Ibra** predăm *direct* dialectul libanez, cu profesor nativ, pentru adulți și copii — fizic în București sau online. Fusha o integrăm treptat de la nivelul B1, când e cu adevărat utilă.
+La **Centrul de Arabă Libaneză cu Ibra** predăm *direct* dialectul libanez, cu profesor nativ, pentru adulți și copii — fizic în București sau online. Fusha o adăugăm de obicei mai târziu, doar dacă o vor toți cursanții grupei — sau cursantul, la lecțiile private.
 
 Pași concreți:
 
@@ -782,7 +782,7 @@ A practical rule for adults who want to learn Arabic:
 - **You want to read and write** — for academic study, the Quran, newspapers, official contexts → start with **Fusha (MSA)**.
 - **You want both** — start with Lebanese (fast results, motivation), and add Fusha after 6–12 months once the phonetic and vocabulary base is formed.
 
-At the **Lebanese Arabic Center with Ibra** we teach the Lebanese dialect *directly*, with a native teacher, for adults and children — in person in Bucharest or online. We integrate Fusha gradually from level B1, when it's truly useful.
+At the **Lebanese Arabic Center with Ibra** we teach the Lebanese dialect *directly*, with a native teacher, for adults and children — in person in Bucharest or online. We usually add Fusha later, and only if the whole group wants it — or the student, in private lessons.
 
 Concrete steps:
 
