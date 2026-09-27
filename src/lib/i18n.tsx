@@ -627,7 +627,7 @@ export const translations = {
     trustStudents: "21 recenzii Preply · 5.0★",
     trustNative: "Profesor nativ",
     trustRefund: "Rambursare integrală cu 7 zile înainte de start",
-    trustReviews: "4.9/5 recenzii",
+    trustReviews: "5.0/5 recenzii",
     // Cohorts (group)
     cohortPickerLabel: "Alege cohorta",
     cohortPickerHelp: "Selectează data de start care ți se potrivește.",
@@ -1406,7 +1406,7 @@ export const translations = {
     trustStudents: "21 Preply reviews · 5.0★",
     trustNative: "Native teacher",
     trustRefund: "Full refund 7 days before start",
-    trustReviews: "4.9/5 reviews",
+    trustReviews: "5.0/5 reviews",
     cohortPickerLabel: "Choose a cohort",
     cohortPickerHelp: "Pick the start date that works for you.",
     cohortPickerLoading: "Loading cohorts…",

@@ -123,8 +123,8 @@ const CatCostaCursurile = () => {
       <h2>{en ? "Are there hidden costs?" : "Există costuri ascunse?"}</h2>
       <p>
         {en
-          ? "No. Audio materials and support are included. Payments are made securely via Stripe. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee."
-          : "Nu. Materialele audio și suportul sunt incluse. Plățile se fac securizat prin Stripe. Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%."}
+          ? "No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei or euros. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee."
+          : "Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei sau euro. Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%."}
       </p>
     </BlogArticleLayout>
   );
