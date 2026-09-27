@@ -18,6 +18,9 @@ interface NotifyMeFormProps {
   context: string;
   /** Optional level hint stored on the request row (A1…C2). */
   level?: string;
+  /** What the visitor sees under the heading, in their language. Defaults to
+   *  `context`, which stays in Romanian for the admin. */
+  label?: string | undefined;
   className?: string;
 }
 
@@ -26,7 +29,7 @@ interface NotifyMeFormProps {
  * scheduled yet. Writes to public.course_requests (anon INSERT policy,
  * status='new'), so requests land in the admin instead of a WhatsApp thread.
  */
-const NotifyMeForm = ({ context, level, className }: NotifyMeFormProps) => {
+const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) => {
   const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -107,7 +110,7 @@ const NotifyMeForm = ({ context, level, className }: NotifyMeFormProps) => {
           <h3 className="font-display text-lg font-bold text-foreground">
             {lang === "en" ? "Notify me when it starts" : "Anunță-mă când pornește"}
           </h3>
-          <p className="text-sm text-muted-foreground">{context}</p>
+          <p className="text-sm text-muted-foreground">{label ?? context}</p>
         </div>
       </div>
 

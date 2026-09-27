@@ -4,7 +4,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Cât costă o meditație de arabă?",
-    a: "150 lei/lecție (60 min) pentru meditații 1:1, cu reduceri automate la pachet: −10% de la 10 lecții și −20% de la 20. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
+    a: "150 lei/lecție online și 210 lei fizic (60 min) pentru meditații 1:1, cu reduceri automate la pachet: −10% de la 10 lecții și −20% de la 20. Prima lecție de probă (30 min) este gratuită, ca să vezi cum lucrăm înainte să te decizi.",
   },
   {
     q: "Meditațiile sunt fizic sau online?",
@@ -25,8 +25,8 @@ const MeditatiiAraba = () => (
     slug="meditatii-araba"
     enHref="/en/arabic-tutor"
     title="Meditații de arabă libaneză 1:1 — București și online"
-    metaTitle="Meditații Arabă 1:1 București & Online | 150 lei/oră"
-    description="Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită."
+    metaTitle="Meditații Arabă 1:1 București & Online | de la 150 lei/oră"
+    description="Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită."
     crumb="Meditații arabă libaneză"
     lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil, preț transparent."
     faq={FAQ}
@@ -60,7 +60,7 @@ const MeditatiiAraba = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Lecție individuală (60 min)</td>
-            <td className="py-2 px-3">150 lei</td>
+            <td className="py-2 px-3">150 lei online · 210 lei fizic</td>
             <td className="py-2 pl-3">—</td>
           </tr>
           <tr className="border-b border-border/60 align-top">

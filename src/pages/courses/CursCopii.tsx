@@ -142,6 +142,11 @@ const CursCopii = () => {
               moment, so both tracks collect interest instead of sign-ups. */}
           <NotifyMeForm
             context={track === "group" ? "Grupă copii (6–11 ani)" : "Lecții private copii (6–11 ani)"}
+            label={
+              lang === "en"
+                ? track === "group" ? "Kids' group (ages 6–11)" : "Private lessons for kids (ages 6–11)"
+                : undefined
+            }
           />
         </div>
       </section>

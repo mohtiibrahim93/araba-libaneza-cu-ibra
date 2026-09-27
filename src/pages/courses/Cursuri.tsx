@@ -209,7 +209,7 @@ const KidsGroupNotice = ({ mode, lang }: { mode: string; lang: "ro" | "en" }) =>
       <p className="mb-3 text-center text-sm font-semibold text-foreground">
         {lang === "en" ? "Notify me when kids' courses open" : "Anunță-mă când pornesc cursurile pentru copii"}
       </p>
-      <NotifyMeForm context="kids_group" />
+      <NotifyMeForm context="kids_group" label={lang === "en" ? "Kids' courses (ages 6–11)" : "Cursuri pentru copii (6–11 ani)"} />
     </div>
   </div>
 );

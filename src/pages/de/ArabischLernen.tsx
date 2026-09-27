@@ -164,7 +164,7 @@ const ArabischLernen = () => (
                 1:1-Unterricht nach deinen Zielen und deinem Tempo. Flexibler Zeitplan. Online
                 weltweit oder Präsenz in Bukarest.
               </p>
-              <p className="text-sm font-medium text-foreground mt-3">150 LEI / Lektion (~30 €)</p>
+              <p className="text-sm font-medium text-foreground mt-3">150 LEI online · 210 LEI vor Ort / Lektion</p>
             </div>
           </div>
 

@@ -431,6 +431,13 @@ const CursGrupLevel = () => {
                           ? `Grupă ${upperLevel} ${selectedFormat} — următoarea serie`
                           : `Grupă ${upperLevel}`
                       }
+                      label={
+                        lang === "en"
+                          ? cohortStarted
+                            ? `${upperLevel} ${selectedFormat === "fizic" ? "in-person" : "online"} group — next intake`
+                            : `${upperLevel} group`
+                          : undefined
+                      }
                       level={upperLevel}
                     />
                   )}
