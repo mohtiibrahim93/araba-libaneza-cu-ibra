@@ -10,7 +10,7 @@ import Checkout from "@/pages/Checkout";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Finalizează plata — centrul de araba libaneza" },
+      { title: "Finalizează plata — Centrul de Arabă Libaneză" },
       {
         name: "description",
         content:

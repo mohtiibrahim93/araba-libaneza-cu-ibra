@@ -539,10 +539,10 @@ export const translations = {
     manageCurrentSlotBadge: "Programarea ta actuală",
     manageConfirmCta: "Confirmă",
     // Legal pages SEO
-    termsSeoTitle: "Termeni și Condiții — centrul de araba libaneza",
-    termsSeoDescription: "Termenii și condițiile de utilizare a serviciilor educaționale oferite de centrul de araba libaneza.",
-    privacySeoTitle: "Politica de Confidențialitate — centrul de araba libaneza",
-    privacySeoDescription: "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la centrul de araba libaneza.",
+    termsSeoTitle: "Termeni și Condiții — Centrul de Arabă Libaneză",
+    termsSeoDescription: "Termenii și condițiile de utilizare a serviciilor educaționale oferite de Centrul de Arabă Libaneză.",
+    privacySeoTitle: "Politica de Confidențialitate — Centrul de Arabă Libaneză",
+    privacySeoDescription: "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la Centrul de Arabă Libaneză.",
     // Find your track quiz
     quizBadge: "Găsește cursul potrivit",
     programsQuizLink: "Nu ești sigur? Fă quiz-ul →",
@@ -1318,10 +1318,10 @@ export const translations = {
     manageCurrentSlotBadge: "Your current booking",
     manageConfirmCta: "Confirm",
     // Legal pages SEO
-    termsSeoTitle: "Terms & Conditions — lebanese arabic center",
-    termsSeoDescription: "Terms and conditions for using the educational services provided by the lebanese arabic center.",
-    privacySeoTitle: "Privacy Policy — lebanese arabic center",
-    privacySeoDescription: "How we collect, use, and protect your personal data under GDPR at the lebanese arabic center.",
+    termsSeoTitle: "Terms & Conditions — Lebanese Arabic with Ibra",
+    termsSeoDescription: "Terms and conditions for using the educational services provided by Lebanese Arabic with Ibra.",
+    privacySeoTitle: "Privacy Policy — Lebanese Arabic with Ibra",
+    privacySeoDescription: "How we collect, use, and protect your personal data under GDPR at Lebanese Arabic with Ibra.",
     // Find your track quiz
     quizBadge: "Find your track",
     programsQuizLink: "Not sure? Take the quiz →",

@@ -6,28 +6,31 @@ const content = {
   ro: {
     title: "Politica de Confidențialitate",
     updated: "Ultima actualizare:",
+    updatedValue: "Septembrie 2026",
     sections: [
-      ["1. Cine suntem", "„centrul de araba libaneza” este un proiect educațional care oferă cursuri de limbă arabă libaneză în București și online. Datele de contact: marhaba@centruldearabalibaneza.com."],
-      ["2. Ce date colectăm", "Colectăm doar datele pe care ni le furnizați voluntar prin formularele de pe site: nume, număr de telefon, adresă de email, centrul/locația preferată și formatul dorit al cursului. În cazul cursurilor pentru copii, colectăm și vârsta copilului."],
-      ["3. Scopul colectării", "Datele dumneavoastră sunt utilizate exclusiv pentru a vă contacta în legătură cu cursurile solicitate, a vă înscrie la cursuri și a vă transmite informații relevante despre programul educațional."],
-      ["4. Stocarea datelor", "Datele sunt stocate în mod securizat pe servere protejate și sunt păstrate atât timp cât este necesar pentru scopurile menționate. Nu partajăm datele cu terți, cu excepția furnizorilor de servicii tehnice necesare funcționării platformei."],
-      ["5. Drepturile dumneavoastră", "Conform GDPR, aveți dreptul de a accesa, rectifica, șterge sau restricționa prelucrarea datelor dumneavoastră personale. Pentru orice solicitare, contactați-ne la marhaba@centruldearabalibaneza.com."],
-      ["6. Cookie-uri", "Acest site nu utilizează cookie-uri de marketing sau tracking fără consimțământ. Consimțământul este gestionat prin platforma Adopt, iar preferințele pot fi modificate oricând din linkul „Setări cookies” din subsolul site-ului. Se pot folosi cookie-uri tehnice esențiale pentru funcționarea normală a site-ului."],
-      ["7. Contact", "Pentru întrebări legate de protecția datelor, ne puteți contacta la: marhaba@centruldearabalibaneza.com sau pe WhatsApp la +40 763 124 514."],
+      ["1. Cine suntem", "Centrul de Arabă Libaneză (Arabă Libaneză cu Ibra) oferă cursuri de arabă libaneză în București și online. Pentru orice întrebare despre datele tale: marhaba@centruldearabalibaneza.com."],
+      ["2. Ce date colectăm", "Doar ce ne dai tu: la formularele de înscriere și „anunță-mă” — nume, telefon, email, formatul și nivelul dorit (iar pentru cursurile de copii, vârsta copilului); la programarea lecției de probă — nume, email, telefon, data și ora aleasă; la descărcarea unui PDF — prenumele și emailul; mesajele pe care ni le trimiți (formular de contact, WhatsApp sau asistentul „Întreabă despre cursuri”); iar dacă îți faci cont, emailul (sau contul Google cu care te conectezi). La plăți nu vedem și nu păstrăm datele cardului — le prelucrează Stripe; noi primim doar confirmarea plății și suma. Statistici de vizitare colectăm doar dacă accepți cookie-urile de analiză."],
+      ["3. De ce le folosim", "Ca să te contactăm despre cursul cerut, să te înscriem, să îți confirmăm programările și plățile, să îți trimitem materialele cerute și, dacă ai bifat acordul, informații despre cursuri. Statisticile (doar cu acordul tău) ne arată ce pagini sunt folosite."],
+      ["4. Cine ne ajută să le prelucrăm", "Folosim furnizori care prelucrează date în numele nostru: Supabase (baza de date și conturile), Lovable (găzduirea site-ului, trimiterea emailurilor și asistentul AI de pe site), Stripe (plăți și păstrarea cardului pentru lecția de probă), Google (reCAPTCHA pentru protecția formularelor, Google Analytics doar cu acordul tău, Google Calendar pentru programări și conectarea cu Google), Zoom (lecțiile online), WhatsApp (dacă ne scrii acolo) și Adopt (gestionarea acordului pentru cookie-uri). Unii dintre ei pot prelucra date în afara Spațiului Economic European; fiecare are propria politică de confidențialitate. Nu vindem și nu închiriem datele tale."],
+      ["5. Cât timp le păstrăm", "Cât timp e nevoie pentru scopurile de mai sus — de exemplu, cât durează cursul și relația cu noi — și cât ne obligă legea (de exemplu, documentele de plată). Poți cere oricând ștergerea datelor care nu trebuie păstrate legal."],
+      ["6. Drepturile tale", "Conform GDPR, poți cere acces la datele tale, corectarea, ștergerea sau restricționarea lor, te poți opune prelucrării, poți cere portarea lor și îți poți retrage oricând acordul (de exemplu, pentru emailuri sau cookie-uri). Scrie-ne la marhaba@centruldearabalibaneza.com. Ai și dreptul să depui plângere la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP)."],
+      ["7. Cookie-uri", "Folosim cookie-uri tehnice necesare funcționării site-ului și, doar dacă accepți, cookie-uri de analiză (Google Analytics). Acordul e gestionat prin Adopt și îl poți schimba oricând din linkul „Setări cookies” din subsolul site-ului. Formularele folosesc Google reCAPTCHA ca să oprească spamul."],
+      ["8. Contact", "Pentru întrebări despre datele tale: marhaba@centruldearabalibaneza.com sau WhatsApp la +40 763 124 514."],
     ],
   },
   en: {
     title: "Privacy Policy",
     updated: "Last updated:",
-    updatedValue: "March 2026",
+    updatedValue: "September 2026",
     sections: [
-      ["1. Who we are", "“lebanese arabic center” is an educational project offering Lebanese Arabic language courses in Bucharest and online. Contact details: marhaba@centruldearabalibaneza.com."],
-      ["2. What data we collect", "We collect only the data you voluntarily provide through the website forms: name, phone number, email address, preferred center/location, and desired course format. For kids courses, we also collect the child’s age."],
-      ["3. Purpose of collection", "Your data is used exclusively to contact you about the requested courses, register you for courses, and send relevant information about the educational program."],
-      ["4. Data storage", "Data is stored securely on protected servers and retained only as long as necessary for the purposes described. We do not share data with third parties, except technical service providers required for the platform to function."],
-      ["5. Your rights", "Under GDPR, you have the right to access, correct, delete, or restrict the processing of your personal data. For any request, contact us at marhaba@centruldearabalibaneza.com."],
-      ["6. Cookies", "This site does not use marketing or tracking cookies without consent. Consent is managed through the Adopt consent platform, and you can change your preferences at any time via the “Cookie settings” link in the site footer. Essential technical cookies may be used for normal site functionality."],
-      ["7. Contact", "For questions about data protection, you can contact us at marhaba@centruldearabalibaneza.com or on WhatsApp at +40 763 124 514."],
+      ["1. Who we are", "Centrul de Arabă Libaneză (Lebanese Arabic with Ibra) offers Lebanese Arabic courses in Bucharest and online. For any question about your data: marhaba@centruldearabalibaneza.com."],
+      ["2. What data we collect", "Only what you give us: on the sign-up and notify-me forms — name, phone, email, the format and level you want (and, for kids' courses, the child's age); when you book the trial lesson — name, email, phone and the date and time you choose; when you download a PDF — your first name and email; the messages you send us (contact form, WhatsApp or the “Ask about courses” assistant); and, if you create an account, your email (or the Google account you sign in with). For payments we never see or keep your card details — Stripe processes them; we only receive the payment confirmation and the amount. We collect visit statistics only if you accept analytics cookies."],
+      ["3. Why we use it", "To contact you about the course you asked for, register you, confirm your bookings and payments, send you the materials you requested and, if you ticked the box, information about courses. Statistics (only with your consent) show us which pages are used."],
+      ["4. Who helps us process it", "We use providers that process data on our behalf: Supabase (database and accounts), Lovable (website hosting, sending emails and the AI assistant on the site), Stripe (payments and holding the card for the trial lesson), Google (reCAPTCHA to protect the forms, Google Analytics only with your consent, Google Calendar for bookings, and Google sign-in), Zoom (online lessons), WhatsApp (if you message us there) and Adopt (managing cookie consent). Some of them may process data outside the European Economic Area; each has its own privacy policy. We do not sell or rent your data."],
+      ["5. How long we keep it", "As long as needed for the purposes above — for example, for the length of your course and our relationship — and as long as the law requires (for example, payment records). You can ask us at any time to delete data we are not legally required to keep."],
+      ["6. Your rights", "Under GDPR you can ask to access, correct, delete or restrict your data, object to its processing, ask for it to be ported, and withdraw your consent at any time (for example, for emails or cookies). Write to marhaba@centruldearabalibaneza.com. You also have the right to complain to the Romanian data protection authority (ANSPDCP)."],
+      ["7. Cookies", "We use technical cookies the site needs to work and, only if you accept, analytics cookies (Google Analytics). Consent is managed through Adopt and you can change it at any time via the “Cookie settings” link in the site footer. The forms use Google reCAPTCHA to stop spam."],
+      ["8. Contact", "For questions about your data: marhaba@centruldearabalibaneza.com or WhatsApp at +40 763 124 514."],
     ],
   },
 } as const;
@@ -46,7 +49,7 @@ const PrivacyContent = () => {
       <main id="main-content" className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter py-28">
         <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
         <div className="prose prose-sm text-muted-foreground space-y-6">
-          <p><strong>{page.updated}</strong> {"updatedValue" in page ? page.updatedValue : "Martie 2026"}</p>
+          <p><strong>{page.updated}</strong> {page.updatedValue}</p>
           {page.sections.map(([title, body]) => (
             <section key={title} className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">{title}</h2>

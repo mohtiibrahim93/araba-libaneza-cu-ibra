@@ -151,7 +151,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
       },
-      { name: "author", content: "centrul de araba libaneza" },
+      { name: "author", content: "Centrul de Arabă Libaneză" },
       { name: "adopt-website-id", content: ADOPT_WEBSITE_CODE },
       { name: "google-site-verification", content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU" },
       { "data-rh": "true", property: "og:type", content: "website" },

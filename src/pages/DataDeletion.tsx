@@ -12,7 +12,7 @@ import { CheckCircle2, Loader2, Trash2 } from "lucide-react";
 const content = {
   ro: {
     title: "Ștergerea datelor personale",
-    seoTitle: "Ștergerea datelor (GDPR) — centrul de araba libaneza",
+    seoTitle: "Ștergerea datelor (GDPR) — Centrul de Arabă Libaneză",
     intro:
       "Conform GDPR, ai dreptul să ceri ștergerea datelor tale personale (nume, telefon, email, înscrieri). Completează formularul de mai jos și rezolvăm cererea în cel mult 30 de zile — de regulă mult mai repede. Vei primi confirmarea pe email.",
     emailLabel: "Emailul folosit la înscriere",
@@ -28,7 +28,7 @@ const content = {
   },
   en: {
     title: "Delete my personal data",
-    seoTitle: "Data deletion (GDPR) — lebanese arabic center",
+    seoTitle: "Data deletion (GDPR) — Lebanese Arabic with Ibra",
     intro:
       "Under GDPR you have the right to request deletion of your personal data (name, phone, email, registrations). Fill in the form below and we will resolve the request within 30 days — usually much faster. You will receive a confirmation by email.",
     emailLabel: "The email you registered with",
