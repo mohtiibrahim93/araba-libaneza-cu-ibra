@@ -59,7 +59,7 @@ const InvataArabaGratis = () => (
     <ul>
       <li><strong>mar7aba</strong> — bună / salut</li>
       <li><strong>kifak?</strong> (către un bărbat) / <strong>kifik?</strong> (către o femeie) — ce faci?</li>
-      <li><strong>mni7, shukran</strong> — bine, mulțumesc</li>
+      <li><strong>mnee7, shukran</strong> — bine, mulțumesc</li>
       <li><strong>shu ismak?</strong> — cum te cheamă?</li>
       <li><strong>ana ismi…</strong> — pe mine mă cheamă…</li>
       <li><strong>eh / la2</strong> — da / nu</li>

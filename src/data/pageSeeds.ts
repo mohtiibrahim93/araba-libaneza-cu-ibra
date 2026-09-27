@@ -45,7 +45,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     "meta_title": "Curs Arabă Libaneză pentru Copii (6–11 ani) | București, prin Joc",
     "meta_description": "Curs de arabă libaneză pentru copii 6–11 ani în București: învățare prin joc, cântece și povești, cu profesor nativ libanez. Grupă mică, sâmbătă dimineața.",
     "h1": "Curs de arabă libaneză pentru copii — București, 6–11 ani, învățare prin joc",
-    "lead": "Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
+    "lead": "Curs de arabă libaneză pentru copii 6–11 ani, online. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
   },
   {
     "path": "/cursuri-araba",
@@ -73,7 +73,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     "meta_title": "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
     "meta_description": "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month.",
     "h1": "Arabic classes near me — Bucharest & online worldwide",
-    "lead": "In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 online, 10 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
+    "lead": "In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students, online or in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   },
   {
     "path": "/en/arabic-dialects-guide",

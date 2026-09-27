@@ -8,7 +8,7 @@ const FAQ = [
   },
   {
     q: "Do you offer Arabic classes near me if I'm outside Bucharest?",
-    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 6 online), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
+    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 6 students), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
   },
   {
     q: "How much do the classes cost?",
@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "When do the classes run?",
-    a: "Group courses run on fixed weekly schedules — in-person Mondays and Wednesdays 19:00–20:30, online Saturdays 12:00–13:30 and Sundays 17:30–19:00. Private lessons are scheduled around your calendar.",
+    a: "Group courses run on a fixed schedule, two 90-minute lessons a week; each group's days and times are shown when you sign up. The in-person groups running now meet Monday & Wednesday (A1) and Tuesday & Thursday (A2), 19:00–20:30. Private lessons are scheduled around your calendar.",
   },
   {
     q: "Which dialect do you teach?",
@@ -36,15 +36,15 @@ const ArabicClassesNearMe = () => (
     metaTitle="Arabic Classes Near Me — Bucharest & Online | Native Teacher"
     description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month."
     crumb="Arabic classes near me"
-    lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 online, 10 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
+    lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students, online or in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
     <p>
       Looking for <strong>Arabic classes near you</strong>? Two options, same native teacher, same
       method:
     </p>
     <ul>
-      <li><strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 — Mondays and Wednesdays 19:00–20:30.</li>
-      <li><strong>Live online, worldwide:</strong> Saturdays 12:00–13:30 and Sundays 17:30–19:00 (EET) over Zoom — same small-group experience, no travel.</li>
+      <li><strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 — the groups running now meet Monday & Wednesday (A1) and Tuesday & Thursday (A2), 19:00–20:30.</li>
+      <li><strong>Live online, worldwide:</strong> over Zoom, two 90-minute lessons a week (Bucharest time); new A1 groups taught in Romanian and in English are open — dates and times on the <Link to="/en/courses/group/a1">A1 page</Link>.</li>
     </ul>
 
     <h2>Why "near me" often means online</h2>
@@ -65,10 +65,10 @@ const ArabicClassesNearMe = () => (
 
     <h2>Class formats</h2>
     <ul>
-      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2 lessons of 90 min per week, max 10 students.</li>
+      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
       <li><strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
       <li><strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per 60 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
-      <li><strong>Kids (6–11):</strong> in-person only, small groups, playful method.</li>
+      <li><strong>Kids (6–11):</strong> online, small groups, playful method — not running at the moment.</li>
     </ul>
 
     <h2>Bucharest location</h2>

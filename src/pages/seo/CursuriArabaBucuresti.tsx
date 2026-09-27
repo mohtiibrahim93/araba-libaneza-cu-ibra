@@ -5,11 +5,11 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Unde se țin cursurile de arabă în București?",
-    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — cu acces ușor cu metroul (M2 Piața Romană / M1 Ștefan cel Mare) și tramvai. Sala e mică și liniștită, cu maxim 10 studenți per grupă.",
+    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — cu acces ușor cu metroul (M2 Piața Romană / M1 Ștefan cel Mare) și tramvai. Sala e mică și liniștită, cu maximum 6 cursanți per grupă.",
   },
   {
     q: "Sunt cursuri de arabă în București pentru începători?",
-    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Cohorta fizică curentă începe luni și miercuri, 19:00–20:30. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
+    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Grupa A1 fizică în desfășurare are lecții luni și miercuri, 19:00–20:30 (grupa A2: marți și joi, la aceeași oră); noile grupe A1 online sunt deschise — datele le vezi pe pagina A1. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
   },
   {
     q: "Cât costă un curs de arabă în București?",
@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
-    a: "Avem un program pentru copii 6–11 ani, fizic în București, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
+    a: "Avem un program pentru copii 6–11 ani, online, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
   },
 ];
 
@@ -121,11 +121,11 @@ const CursuriArabaBucuresti = () => (
     <ul>
       <li>
         <strong><Link to="/cursuri/grup">Curs de grup adulți A1–C2</Link></strong> — 2 lecții/săpt.,
-        seara (19:00–20:30), grupe de max 10. De la 700 lei/lună fizic.
+        seara (19:00–20:30), grupe de max. 6. De la 700 lei/lună fizic.
       </li>
       <li>
         <strong><Link to="/meditatii-araba">Meditații de arabă 1:1</Link></strong> — 150 lei/lecție online, 210 lei fizic, program
-        flexibil, la sală sau la tine acasă (în funcție de zonă).
+        flexibil, la centru (Raduga Creative Center) sau online.
       </li>
       <li>
         <strong><Link to="/cursuri/copii">Curs pentru copii 6–11 ani</Link></strong> — momentan

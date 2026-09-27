@@ -32,13 +32,13 @@ function* sourceFiles(dir: string): Generator<string> {
 }
 
 describe("group-size copy", () => {
-  it("caps online at 6 and in person at 10", () => {
+  it("caps every group at 6, online and in person", () => {
     expect(MAX_GROUP_SIZE.online).toBe(6);
-    expect(MAX_GROUP_SIZE.fizic).toBe(10);
+    expect(MAX_GROUP_SIZE.fizic).toBe(6);
     expect(MAX_KIDS_GROUP_SIZE).toBe(MAX_GROUP_SIZE.fizic);
     expect(MIN_GROUP_SIZE).toBe(4);
-    expect(groupSizeLabel("ro")).toBe("max. 6 online, 10 fizic");
-    expect(groupSizeLabel("en")).toBe("max 6 online, 10 in person");
+    expect(groupSizeLabel("ro")).toBe("max. 6 cursanți, online sau fizic");
+    expect(groupSizeLabel("en")).toBe("max 6 students, online or in person");
   });
 
   it("states no class size the constants contradict", () => {

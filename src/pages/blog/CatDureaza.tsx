@@ -7,8 +7,8 @@ import { useI18n } from "@/lib/i18n";
 const LEVELS: [string, string, string, string, string][] = [
   ["A1 — Începător", "A1 — Beginner", "~4 luni / ~4 months", "Te descurci în situații simple de zi cu zi: saluturi, cumpărături, prezentări.", "You manage simple everyday situations: greetings, shopping, introductions."],
   ["A2 — Elementar", "A2 — Elementary", "~7 luni / ~7 months", "Conversații despre subiecte familiare, trecut și viitor, opinii simple.", "Conversations on familiar topics, past and future, simple opinions."],
-  ["B1 — Intermediar", "B1 — Intermediate", "~8–9 luni / ~8–9 months", "Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale.", "You speak freely about experiences, plans, stories; you follow normal discussions."],
-  ["B2 — Intermediar avansat", "B2 — Upper-intermediate", "~9 luni / ~9 months", "Comunicare naturală, nuanțe culturale, subiecte abstracte.", "Natural communication, cultural nuance, abstract topics."],
+  ["B1 — Intermediar", "B1 — Intermediate", "~8 luni / ~8 months", "Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale.", "You speak freely about experiences, plans, stories; you follow normal discussions."],
+  ["B2 — Intermediar avansat", "B2 — Upper-intermediate", "~8–9 luni / ~8–9 months", "Comunicare naturală, nuanțe culturale, subiecte abstracte.", "Natural communication, cultural nuance, abstract topics."],
   ["C1–C2 — Avansat", "C1–C2 — Advanced", "~10 luni fiecare / ~10 months each", "Fluență apropiată de nativ, umor, registre diferite.", "Near-native fluency, humour, different registers."],
 ];
 
@@ -54,7 +54,7 @@ const CatDureaza = () => {
           { ro: "A1 durează ~4 luni (32 de lecții), cu două ședințe de 90 de minute pe săptămână.", en: "A1 takes about 4 months (32 lessons), at two 90-minute sessions a week." },
           { ro: "Pentru „mă descurc în vacanță” sunt suficiente A1–A2, adică sub un an.", en: "For \"I can manage on holiday\", A1–A2 is enough — under a year." },
           { ro: "Ritmul depinde mai mult de expunerea dintre lecții decât de talent.", en: "Your pace depends more on exposure between lessons than on talent." },
-          { ro: "Testul de nivel îți spune în 2 minute de unde pornești.", en: "The level test tells you where you start in 2 minutes." },
+          { ro: "Testul de nivel (24 de întrebări, ~15 minute) îți spune de unde pornești.", en: "The level test (24 questions, ~15 minutes) tells you where you start." },
         ]}
       />
       <p>
@@ -127,7 +127,7 @@ const CatDureaza = () => {
       <p>
         {en ? "If you already know a few words, you can skip A1. Take the " : "Dacă știi deja câteva cuvinte, poți sări peste A1. Fă "}
         <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
-        {en ? " (2 minutes) or a " : " (2 minute) sau o "}
+        {en ? " (~15 minutes) or a " : " (~15 minute) sau o "}
         <Link to="/trial">{en ? "free trial lesson" : "lecție de probă gratuită"}</Link>
         {en ? " — the teacher tells you exactly where it's best to start." : " — profesorul îți spune exact de unde e cel mai bine să începi."}
       </p>

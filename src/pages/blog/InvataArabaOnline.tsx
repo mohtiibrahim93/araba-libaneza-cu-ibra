@@ -115,7 +115,7 @@ const InvataArabaOnline = () => {
       <p>
         {en ? "Not sure where you'd start? Take the " : "Nu știi de unde ai porni? Fă "}
         <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
-        {en ? " (2 minutes), or see " : " (2 minute), sau vezi "}
+        {en ? " (~15 minutes), or see " : " (~15 minute), sau vezi "}
         <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">{en ? "how long each level takes" : "cât durează fiecare nivel"}</Link>.
       </p>
     </BlogArticleLayout>

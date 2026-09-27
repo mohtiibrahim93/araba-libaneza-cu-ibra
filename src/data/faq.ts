@@ -180,7 +180,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cursurile sunt online sau fizice în București?",
             featured: true,
-            a: "Ambele. Cursurile de grup pentru adulți sunt fizice la Raduga Creative Center și online pe Zoom. Cursurile pentru copii sunt doar fizice (până la 10 ani) sau fizic/online (de la 10 ani). Lecțiile private sunt flexibile: fizice sau online.",
+            a: "Ambele. Cursurile de grup pentru adulți sunt fizice la Raduga Creative Center și online pe Zoom. Cursurile pentru copii vor fi online (momentan nu avem cursuri pentru copii). Lecțiile private sunt flexibile: fizice sau online.",
           },
           {
             q: "Ce opțiuni de orar sunt pentru oameni care lucrează?",
@@ -198,7 +198,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce nivel CEFR voi atinge după curs?",
-            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~7 luni, 54 de lecții), iar B1–C2 durează între 8 și 10 luni fiecare. La final primești o evaluare a nivelului atins.",
+            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~7 luni, 54 de lecții), B1 ~8 luni, B2 ~8–9, iar C1 și C2 ~10 luni fiecare. La final primești o evaluare a nivelului atins.",
           },
         ],
       },
@@ -215,7 +215,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Care sunt cele mai utile cuvinte de întrebare și fraze pentru început?",
-            a: "Câteva de care ai nevoie din prima zi: shu? (ce?), wein? (unde?), meen? (cine?), kif? (cum?), addesh? (cât?), aymta? (când?), plus marhaba (salut), kifak/kifik (ce mai faci — m/f), shukran (mulțumesc), yalla (haide).",
+            a: "Câteva de care ai nevoie din prima zi: shu? (ce?), wein? (unde?), meen? (cine?), kif? (cum?), addesh? (cât?), aymta? (când?), plus mar7aba (salut), kifak/kifik (ce mai faci — m/f), shukran (mulțumesc), yalla (haide).",
           },
         ],
       },
@@ -228,7 +228,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Cum se conjugă verbele la trecut cu pronume atașate (katabt-ha, katab-lak)?",
-            a: "În libaneză conjugi verbul la trecut apoi lipești pronumele obiect la sfârșit. Exemplu de la katab (a scris): katabt = am scris, katabt-a = am scris-o (fem.), katabt-o = am scris-l (masc.), katab-lak = ți-a scris (ție, m.), katab-lek = ți-a scris (ție, f.), katabna-hon = le-am scris (lor). Pronumele -lak, -lek, -lo, -la, -lna, -lkon, -lhon indică beneficiarul („pentru / către cineva”), iar -a, -o, -hon indică obiectul direct.",
+            a: "În libaneză conjugi verbul la trecut apoi lipești pronumele obiect la sfârșit. Exemplu de la katab (a scris): katabt = am scris, katabt-a = am scris-o (fem.), katabt-o = l-am scris (masc.), katab-lak = ți-a scris (ție, m.), katab-lek = ți-a scris (ție, f.), katabne-hon = le-am / i-am scris (pe ele / pe ei). Pronumele -lak, -lek, -lo, -la, -lna, -lkon, -lhon indică beneficiarul („pentru / către cineva”), iar -a, -o, -hon indică obiectul direct.",
           },
           {
             q: "Care sunt pronumele personale și posesive în araba libaneză?",
@@ -399,7 +399,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Are classes online or in-person in Bucharest?",
             featured: true,
-            a: "Both. Adult group classes run in person at Raduga Creative Center and online via Zoom. Kids classes are in-person only up to age 10, and either format from age 10. Private lessons are fully flexible — in person or online.",
+            a: "Both. Adult group classes run in person at Raduga Creative Center and online via Zoom. Kids' classes will be online (we don't have kids' courses at the moment). Private lessons are fully flexible — in person or online.",
           },
           {
             q: "What schedule options exist for working people?",
@@ -417,7 +417,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What CEFR level will I reach after the course?",
-            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~7 months, 54 lessons), and B1–C2 each take 8–10 months. At the end you get an assessment of the level you've reached.",
+            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~7 months, 54 lessons), B1 ~8 months, B2 ~8–9, and C1 and C2 ~10 months each. At the end you get an assessment of the level you've reached.",
           },
         ],
       },
@@ -434,7 +434,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What are the most useful question words and everyday phrases to start with?",
-            a: "Ones you'll need from day one: shu? (what?), wein? (where?), meen? (who?), kif? (how?), addesh? (how much?), aymta? (when?), plus marhaba (hi), kifak/kifik (how are you — m/f), shukran (thanks), yalla (let's go).",
+            a: "Ones you'll need from day one: shu? (what?), wein? (where?), meen? (who?), kif? (how?), addesh? (how much?), aymta? (when?), plus mar7aba (hi), kifak/kifik (how are you — m/f), shukran (thanks), yalla (let's go).",
           },
         ],
       },
@@ -447,7 +447,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How are past-tense verbs conjugated with attached pronouns (katabt-ha, katab-lak)?",
-            a: "In Lebanese you conjugate the verb in the past, then stick object pronouns onto the end. Example from katab (he wrote): katabt = I wrote, katabt-a = I wrote it (fem.), katabt-o = I wrote it (masc.), katab-lak = he wrote to you (m.), katab-lek = he wrote to you (f.), katabna-hon = we wrote to them. The suffixes -lak, -lek, -lo, -la, -lna, -lkon, -lhon mark the beneficiary (\"for/to someone\"), while -a, -o, -hon mark the direct object.",
+            a: "In Lebanese you conjugate the verb in the past, then stick object pronouns onto the end. Example from katab (he wrote): katabt = I wrote, katabt-a = I wrote it (fem.), katabt-o = I wrote it / him (masc.), katab-lak = he wrote to you (m.), katab-lek = he wrote to you (f.), katabne-hon = we wrote them. The suffixes -lak, -lek, -lo, -la, -lna, -lkon, -lhon mark the beneficiary (\"for/to someone\"), while -a, -o, -hon mark the direct object.",
           },
           {
             q: "What are the personal and possessive pronouns in Lebanese Arabic?",

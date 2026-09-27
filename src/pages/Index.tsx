@@ -182,8 +182,8 @@ const PageContent = () => {
         ? { url: "/cursuri/private", name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
         : { url: "/cursuri/private", name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
       lang === "en"
-        ? { url: "/cursuri/copii", name: "Kids courses — Lebanese Arabic", desc: "Interactive courses for children, in person in Bucharest (online from age 10)." }
-        : { url: "/cursuri/copii", name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic în București (online de la 10 ani)." },
+        ? { url: "/cursuri/copii", name: "Kids courses — Lebanese Arabic", desc: "Interactive online courses for children (not running at the moment)." }
+        : { url: "/cursuri/copii", name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive online pentru copii (momentan nu avem grupe)." },
     ].map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,

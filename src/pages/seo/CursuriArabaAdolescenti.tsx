@@ -26,7 +26,7 @@ const FAQ = [
   },
   {
     q: "Cât de mare este grupa?",
-    a: "Între 4 și 10 cursanți. E limita peste care nu mai apucă fiecare să vorbească în fiecare lecție, iar la adolescenți asta contează mai mult decât la adulți: dacă stau o oră fără să deschidă gura, se pierd.",
+    a: "Între 4 și 6 cursanți. E limita peste care nu mai apucă fiecare să vorbească în fiecare lecție, iar la adolescenți asta contează mai mult decât la adulți: dacă stau o oră fără să deschidă gura, se pierd.",
   },
   {
     q: "Ce vorbește copilul meu după prima lună?",
@@ -69,7 +69,7 @@ const CursuriArabaAdolescenti = () => (
       <ul className="space-y-1.5 text-sm md:text-base">
         <li><strong>Vârsta:</strong> 12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
         <li><strong>Format:</strong> fizic în București, Strada Icoanei 80, sau online pe Zoom</li>
-        <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 online, 10 fizic)</li>
+        <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 cursanți, online sau fizic)</li>
         <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min</li>
         <li><strong>Nivel de start:</strong> de la zero, fără alfabet arab — se începe oral, cu arabizi</li>
       </ul>
@@ -169,7 +169,7 @@ const CursuriArabaAdolescenti = () => (
     </p>
     <ul>
       <li><strong>Cât durează și când?</strong> Două ședințe de 90 de minute pe săptămână. Zilele și orele exacte ale grupei active sunt pe <Link to="/cursuri/grup">pagina cursului de grup</Link> — le ținem acolo ca să fie mereu la zi.</li>
-      <li><strong>Cât de mare e grupa?</strong> Între 4 și 10 cursanți, ca fiecare să apuce să vorbească în fiecare lecție.</li>
+      <li><strong>Cât de mare e grupa?</strong> Între 4 și 6 cursanți, ca fiecare să apuce să vorbească în fiecare lecție.</li>
       <li><strong>Unde?</strong> Fizic la Raduga Creative Center, Strada Icoanei 80, sector 2, sau online pe Zoom. Formatul se alege la înscriere.</li>
       <li><strong>Ce temă are acasă?</strong> Scurtă și audio — ascultare și repetare, nu liste de memorat. Progresul se vede în conversație, la lecția următoare.</li>
       <li><strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral; alfabetul arab e opțional, de la B1 sau B2, dacă toată grupa vrea.</li>

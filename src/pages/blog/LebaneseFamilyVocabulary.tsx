@@ -11,8 +11,8 @@ const CORE: Row[] = [
   { arabizi: "em / mama", arabic: "إم / ماما", en: "mother / mum", ro: "mamă / mama" },
   { arabizi: "akh", arabic: "أخ", en: "brother", ro: "frate" },
   { arabizi: "ekht", arabic: "أخت", en: "sister", ro: "soră" },
-  { arabizi: "jeddi", arabic: "جدّي", en: "my grandfather", ro: "bunicul meu" },
-  { arabizi: "sitto / teta", arabic: "ستّو / تيتا", en: "grandmother", ro: "bunica" },
+  { arabizi: "jeddi / jiddo", arabic: "جدّي / جدّو", en: "my grandfather / grandpa! (when you call him)", ro: "bunicul meu / bunicule! (când îl strigi)" },
+  { arabizi: "teta / sitte", arabic: "تيتا / ستّي", en: "grandma / my grandmother (lit. \"my lady\")", ro: "bunica / bunica mea (mot-a-mot „doamna mea”)" },
   { arabizi: "3ammi", arabic: "عمّي", en: "my paternal uncle", ro: "unchiul meu (din partea tatălui)" },
   { arabizi: "3ammti", arabic: "عمّتي", en: "my paternal aunt", ro: "mătușa mea (din partea tatălui)" },
   { arabizi: "5ali", arabic: "خالي", en: "my maternal uncle", ro: "unchiul meu (din partea mamei)" },
@@ -28,7 +28,7 @@ const INLAWS: Row[] = [
   { arabizi: "sihri", arabic: "صهري", en: "my brother-in-law", ro: "cumnatul meu" },
   { arabizi: "silfeti", arabic: "سلفتي", en: "my sister-in-law", ro: "cumnata mea" },
   { arabizi: "ibni / binti", arabic: "ابني / بنتي", en: "my son / daughter", ro: "fiul / fiica mea" },
-  { arabizi: "jaddi / stiddi", arabic: "جدّي / ستّي", en: "my grandpa / grandma", ro: "bunicul / bunica mea" },
+  { arabizi: "jeddi / sitte", arabic: "جدّي / ستّي", en: "my grandpa / grandma", ro: "bunicul / bunica mea" },
   { arabizi: "7afeed / 7afeede", arabic: "حفيد / حفيدة", en: "grandson / granddaughter", ro: "nepot / nepoată" },
 ];
 
@@ -46,7 +46,7 @@ const PHRASES = [
   { en: "This is my mother — hayde emmi.", ro: "Aceasta e mama mea — hayde emmi.", ar: "هيدي إمّي" },
   { en: "My brother lives in Beirut — akhi 3aayesh bi Bayrout.", ro: "Fratele meu locuiește la Beirut — akhi 3aayesh bi Bayrout.", ar: "أخي عايش ببيروت" },
   { en: "I have two sisters — 3andi ekhtayn.", ro: "Am două surori — 3andi ekhtayn.", ar: "عندي أختين" },
-  { en: "My grandma is Lebanese — sitti Lebnaniyye.", ro: "Bunica mea e libaneză — sitti Lebnaniyye.", ar: "ستّي لبنانية" },
+  { en: "My grandma is Lebanese — sitte Lebnaniyye.", ro: "Bunica mea e libaneză — sitte Lebnaniyye.", ar: "ستّي لبنانية" },
   { en: "Say hi to your family — sallem 3a eyltak.", ro: "Salută familia ta — sallem 3a eyltak.", ar: "سلّم ع عيلتك" },
 ];
 

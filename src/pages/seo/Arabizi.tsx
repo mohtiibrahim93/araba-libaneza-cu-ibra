@@ -11,11 +11,11 @@ const FAQ = [
   },
   {
     q: "Ce înseamnă 3 în arabă?",
-    a: "Cifra 3 înlocuiește litera ع (ʿayn) — un sunet gutural adânc din gât, fără echivalent în română. Exemple: 3afwan (cu plăcere), ya3ni (adică), 3anjad (serios).",
+    a: "Cifra 3 înlocuiește litera ع (ʿayn) — un sunet gutural adânc din gât, fără echivalent în română. Exemple: 3afwan (cu plăcere), ya3ne (adică), 3anjad (serios).",
   },
   {
     q: "Ce înseamnă 7 în arabă?",
-    a: "Cifra 7 înlocuiește litera ح (ḥāʾ) — un h puternic, produs din gât. Exemple: mar7aba (salut), 7abibi (dragul meu), sa7tein (poftă bună).",
+    a: "Cifra 7 înlocuiește litera ح (ḥāʾ) — un h puternic, produs din gât. Exemple: mar7aba (salut), 7abibi (dragul meu), sa77tein (poftă bună).",
   },
   {
     q: "Ce înseamnă 5 și 2 în arabă?",
@@ -90,14 +90,14 @@ const Arabizi = () => (
 
     <h2>Cum citești un mesaj real, cuvânt cu cuvânt</h2>
     <p className="font-semibold text-foreground">
-      „mar7aba 7abibi, kifak? 3anjad ktir mnih, yalla ba3dein”
+      „mar7aba 7abibi, kifak? 3anjad ktir mnee7, yalla ba3dein”
     </p>
     <ul>
       <li><strong>mar7aba</strong> → mar<em>h</em>aba (ح) — salut</li>
       <li><strong>7abibi</strong> → <em>h</em>abibi — dragul meu</li>
       <li><strong>kifak?</strong> — ce faci? (către un bărbat; „kifik?” către o femeie)</li>
       <li><strong>3anjad</strong> → sunetul ع — serios, pe bune</li>
-      <li><strong>ktir mnih</strong> — foarte bine</li>
+      <li><strong>ktir mnee7</strong> — foarte bine</li>
       <li><strong>yalla ba3dein</strong> — hai, pe mai târziu</li>
     </ul>
     <p>

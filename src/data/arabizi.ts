@@ -51,7 +51,7 @@ export const ARABIZI_DIGITS: ArabiziDigit[] = [
       ro: "sunet gutural adânc din gât, specific arab",
       en: "deep guttural sound from the throat, specific to Arabic",
     },
-    examples: { ro: "3afwan, ya3ni, 3anjad", en: "3afwan, ya3ni, 3anjad" },
+    examples: { ro: "3afwan, ya3ne, 3anjad", en: "3afwan, ya3ne, 3anjad" },
   },
   {
     digit: "5",

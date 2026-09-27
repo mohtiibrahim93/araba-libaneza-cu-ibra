@@ -47,6 +47,16 @@ const Footer = () => {
             {lang === "en" ? "Open groups" : "Grupe deschise"}
           </p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <li><Link to={lang === "en" ? "/en/courses/group/a1" : "/cursuri/grup/a1"} className="hover:text-foreground transition-colors">{lang === "en" ? "Group A1" : "Grupă A1"}</Link></li>
+            <li><Link to={lang === "en" ? "/en/courses/group/a2" : "/cursuri/grup/a2"} className="hover:text-foreground transition-colors">{lang === "en" ? "Group A2" : "Grupă A2"}</Link></li>
+          </ul>
+
+          {/* B1–C2 are not open yet; their pages stay linked so they remain
+              crawlable, under a heading that says so. */}
+          <p className="text-sm font-semibold text-foreground mt-8 mb-4">
+            {lang === "en" ? "Coming next" : "În curând"}
+          </p>
+          <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to={lang === "en" ? "/en/courses/group/b1" : "/cursuri/grup/b1"} className="hover:text-foreground transition-colors">{lang === "en" ? "Group B1" : "Grupă B1"}</Link></li>
             <li><Link to={lang === "en" ? "/en/courses/group/b2" : "/cursuri/grup/b2"} className="hover:text-foreground transition-colors">{lang === "en" ? "Group B2" : "Grupă B2"}</Link></li>
             <li><Link to={lang === "en" ? "/en/courses/group/c1" : "/cursuri/grup/c1"} className="hover:text-foreground transition-colors">{lang === "en" ? "Group C1" : "Grupă C1"}</Link></li>

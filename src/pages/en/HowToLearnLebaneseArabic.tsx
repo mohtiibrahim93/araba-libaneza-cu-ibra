@@ -4,7 +4,7 @@ import EnLandingLayout from "./EnLandingLayout";
 const FAQ = [
   {
     q: "How long does it take to learn Lebanese Arabic?",
-    a: "With two 90-minute lessons per week plus 15–20 minutes of daily practice, you reach A1 (basic conversations) in ~4 months (32 lessons), A2 about 7 months later, and B1 in roughly 20 months. Fluent B2–C1 typically takes 1.5–3 years of consistent practice.",
+    a: "With two 90-minute lessons per week plus 15–20 minutes of daily practice, you reach A1 (basic conversations) in ~4 months (32 lessons), A2 about 7 months later, and B1 in roughly 19 months. Fluent B2–C1 typically takes 1.5–3 years of consistent practice.",
   },
   {
     q: "Can I learn Lebanese Arabic on my own?",
@@ -165,13 +165,13 @@ const HowToLearnLebaneseArabic = () => (
       />
       <Milestone
         level="B1 · Intermediate"
-        months="+~9 months (~20 total)"
+        months="+~8 months (~19 total)"
         weekly="2×90 min + daily practice + native input"
         can="Discuss opinions, follow most Lebanese TV series with occasional pauses, hold 30-minute conversations with native speakers."
       />
       <Milestone
         level="B2 · Upper intermediate"
-        months="+8–10 months (~2–2.5 years)"
+        months="+~8–9 months (~2.3 years)"
         weekly="1×90 min + heavy native input"
         can="Understand fast native speech, argue and negotiate, follow Lebanese news and pop culture without effort."
       />
@@ -189,7 +189,7 @@ const HowToLearnLebaneseArabic = () => (
     </p>
     <ul>
       <li>
-        <strong>Week 1:</strong> the alphabet in Arabizi form, greetings (marhaba, kifak/kifik,
+        <strong>Week 1:</strong> the alphabet in Arabizi form, greetings (mar7aba, kifak/kifik,
         shu akhbarak), numbers 1–20, personal pronouns.
       </li>
       <li>

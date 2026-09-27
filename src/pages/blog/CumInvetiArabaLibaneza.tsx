@@ -5,9 +5,9 @@ import { useI18n } from "@/lib/i18n";
 
 // [arabizi/phrase, ro-meaning, en-meaning]
 const PHRASES: [string, string, string][] = [
-  ["Marhaba", "Bună", "Hello"],
+  ["Mar7aba", "Bună", "Hello"],
   ["Kifak? / Kifik?", "Ce faci? (către bărbat / femeie)", "How are you? (to a man / woman)"],
-  ["Mnih, shukran", "Bine, mulțumesc", "Good, thanks"],
+  ["Mnee7, shukran", "Bine, mulțumesc", "Good, thanks"],
   ["Shu ismak? / ismik?", "Cum te cheamă?", "What's your name?"],
   ["Ana ismi…", "Numele meu este…", "My name is…"],
   ["Ana mn Rumania", "Sunt din România", "I'm from Romania"],
@@ -150,9 +150,9 @@ const CumInvetiArabaLibaneza = () => {
           <strong>{en ? "simpler than Fusha" : "mai simplu decât Fusha"}</strong>{en ? ": conjugations are more regular, grammatical cases aren't used, and everyday vocabulary is limited and repetitive." : ": conjugările sunt mai regulate, cazurile gramaticale nu se folosesc, iar vocabularul de zi cu zi este limitat și repetitiv."}
         </p>
         <ul>
-          <li><strong>{en ? "1–3 months:" : "1–3 luni:"}</strong>{en ? " introduce yourself, order at a restaurant, ask for directions." : " te prezinți, comanzi la restaurant, întrebi indicații."}</li>
-          <li><strong>{en ? "6 months:" : "6 luni:"}</strong>{en ? " simple conversations on familiar topics." : " conversații simple pe teme familiare."}</li>
-          <li><strong>{en ? "12–18 months:" : "12–18 luni:"}</strong>{en ? " fluent conversation with regular practice (2–3 hours/week)." : " conversație fluentă cu practică regulată (2–3 ore/săptămână)."}</li>
+          <li><strong>{en ? "~4 months (A1):" : "~4 luni (A1):"}</strong>{en ? " introduce yourself, order at a restaurant, ask for directions." : " te prezinți, comanzi la restaurant, întrebi indicații."}</li>
+          <li><strong>{en ? "~11 months (A2):" : "~11 luni (A2):"}</strong>{en ? " simple conversations on familiar topics." : " conversații simple pe teme familiare."}</li>
+          <li><strong>{en ? "~19 months (B1):" : "~19 luni (B1):"}</strong>{en ? " fluent conversation with regular practice (2–3 hours/week)." : " conversație fluentă cu practică regulată (2–3 ore/săptămână)."}</li>
         </ul>
         <p>
           {en ? "The deciding factor isn't talent, but " : "Factorul decisiv nu este talentul, ci "}

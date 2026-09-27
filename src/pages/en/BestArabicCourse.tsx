@@ -10,7 +10,7 @@ const FAQ = [
   },
   {
     q: "How do I recognise a good Arabic course?",
-    a: "Five signals: the teacher is a native speaker of the dialect taught; you speak from lesson one instead of drilling the alphabet for three months; groups are capped at 6 students online and 10 in person; the syllabus is CEFR-aligned (A1–C2) with real assessments; and the price is published openly with a trial lesson available.",
+    a: "Five signals: the teacher is a native speaker of the dialect taught; you speak from lesson one instead of drilling the alphabet for three months; groups are capped at 6 students, online or in person; the syllabus is CEFR-aligned (A1–C2) with real assessments; and the price is published openly with a trial lesson available.",
   },
   {
     q: "Group classes or private 1-on-1 lessons?",
@@ -153,7 +153,7 @@ const BestArabicCourse = () => (
     <ul>
       <li><strong>Native speaker of the dialect taught.</strong> For Lebanese, a native Lebanese teacher — living pronunciation and idiom don't come from textbooks.</li>
       <li><strong>You speak from lesson one.</strong> If the first months are alphabet drills and grammar tables, you'll quit before you speak.</li>
-      <li><strong>Small groups (max 6 online, 10 in person).</strong> Past that, your own speaking time drops below five minutes per lesson.</li>
+      <li><strong>Small groups (max 6 students, online or in person).</strong> Past that, your own speaking time drops below five minutes per lesson.</li>
       <li><strong>CEFR structure (A1–C2)</strong> with an assessment every 8–10 lessons, so your level is an objective fact.</li>
       <li><strong>Public pricing and a trial lesson.</strong> A good course has no reason to hide either.</li>
     </ul>

@@ -130,11 +130,11 @@ const GramaticaArabaLibaneza = () => {
           </thead>
           <tbody className="divide-y divide-border">
             <tr><td className="p-3"><strong>katabt</strong></td><td className="p-3 text-muted-foreground">{en ? "I wrote" : "am scris"}</td></tr>
-            <tr><td className="p-3"><strong>katabt-o</strong></td><td className="p-3 text-muted-foreground">{en ? "I wrote it (masc.)" : "am scris-l (masc.)"}</td></tr>
+            <tr><td className="p-3"><strong>katabt-o</strong></td><td className="p-3 text-muted-foreground">{en ? "I wrote it / him (masc.)" : "l-am scris (masc.)"}</td></tr>
             <tr><td className="p-3"><strong>katabt-a</strong></td><td className="p-3 text-muted-foreground">{en ? "I wrote it (fem.)" : "am scris-o (fem.)"}</td></tr>
             <tr><td className="p-3"><strong>katab-lak</strong></td><td className="p-3 text-muted-foreground">{en ? "he wrote to you (m.)" : "ți-a scris (ție, m.)"}</td></tr>
             <tr><td className="p-3"><strong>katab-lek</strong></td><td className="p-3 text-muted-foreground">{en ? "he wrote to you (f.)" : "ți-a scris (ție, f.)"}</td></tr>
-            <tr><td className="p-3"><strong>katabna-hon</strong></td><td className="p-3 text-muted-foreground">{en ? "we wrote to them" : "le-am scris (lor)"}</td></tr>
+            <tr><td className="p-3"><strong>katabne-hon</strong></td><td className="p-3 text-muted-foreground">{en ? "we wrote them" : "le-am / i-am scris (pe ele / pe ei)"}</td></tr>
           </tbody>
         </table>
         <p>

@@ -8,9 +8,9 @@
  * cohorts in the database were all created with 10 seats. When online groups
  * were capped at 6 there was no one place to change.
  *
- * Online is capped at 6 so everyone still gets speaking time over Zoom;
- * in-person keeps 10, which is what the room holds. A cohort starts only once
- * MIN_GROUP_SIZE people have confirmed.
+ * Every group is capped at 6, online and in person, so everyone gets
+ * speaking time (the owner's rule; in-person groups used to allow 10). A
+ * cohort starts only once MIN_GROUP_SIZE people have confirmed.
  *
  * group-size-copy.test.ts greps the source for class-size claims that
  * contradict these numbers, so a stale "4–10" cannot come back unnoticed.
@@ -19,14 +19,14 @@ export const MIN_GROUP_SIZE = 4;
 
 export const MAX_GROUP_SIZE = {
   online: 6,
-  fizic: 10,
+  fizic: 6,
 } as const;
 
-/** Kids run in person only, so they take the in-person cap. */
+/** Kids take the same cap as every other group. */
 export const MAX_KIDS_GROUP_SIZE = MAX_GROUP_SIZE.fizic;
 
-/** e.g. "max. 6 online, 10 fizic" — for prose that covers both formats. */
+/** e.g. "max. 6 cursanți" — for prose that covers both formats. */
 export const groupSizeLabel = (lang: "ro" | "en" = "ro"): string =>
   lang === "en"
-    ? `max ${MAX_GROUP_SIZE.online} online, ${MAX_GROUP_SIZE.fizic} in person`
-    : `max. ${MAX_GROUP_SIZE.online} online, ${MAX_GROUP_SIZE.fizic} fizic`;
+    ? `max ${MAX_GROUP_SIZE.online} students, online or in person`
+    : `max. ${MAX_GROUP_SIZE.online} cursanți, online sau fizic`;

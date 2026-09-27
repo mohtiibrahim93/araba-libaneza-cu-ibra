@@ -114,7 +114,7 @@ const DeCeInvatamAraba2026 = () => {
       <h2>{en ? "6. Realistic timelines for 2026" : "6. Estimări realiste pentru 2026"}</h2>
       <ul>
         <li>{en ? "~4 months of 2 lessons/week → A1 (everyday basics); ~11 months → A2 (basic daily conversation)." : "~4 luni cu 2 lecții/săpt → A1 (bazele de zi cu zi); ~11 luni → A2 (conversație zilnică de bază)."}</li>
-        <li>{en ? "~20 months → B1 (comfortable travel, opinions, past experiences)." : "~20 de luni → B1 (călătorii confortabile, opinii, experiențe trecute)."}</li>
+        <li>{en ? "~19 months → B1 (comfortable travel, opinions, past experiences)." : "~19 luni → B1 (călătorii confortabile, opinii, experiențe trecute)."}</li>
         <li>{en ? "~2.5–3 years → B2/C1 (understand movies, work in Arabic)." : "~2,5–3 ani → B2/C1 (înțelegi filme, poți lucra în arabă)."}</li>
       </ul>
 

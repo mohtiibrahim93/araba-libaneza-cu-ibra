@@ -97,7 +97,7 @@ Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă *
 
 ## Curs pentru copii (6–11 ani)
 
-Cursul pentru copii este un program interactiv, bazat pe joc, fizic în București (online de la 10 ani). Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
+Cursul pentru copii este un program interactiv, bazat pe joc, online. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
 
 ## Proba este gratuită
 
@@ -123,7 +123,7 @@ If you want a personalized pace or a flexible schedule, private lessons cost **1
 
 ## Kids course (ages 6–11)
 
-The kids course is an interactive, game-based program, in person in Bucharest (online from age 10). We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
+The kids course is an interactive, game-based program, online. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
 
 ## The trial is free
 
@@ -220,8 +220,8 @@ La Centrul de Arabă Libaneză, cursurile de grup au 2 lecții pe săptămână 
 | --- | --- | --- |
 | A1 — Începător | ~4 luni | Te descurci în situații simple de zi cu zi: saluturi, cumpărături, prezentări. |
 | A2 — Elementar | ~7 luni | Conversații despre subiecte familiare, trecut și viitor, opinii simple. |
-| B1 — Intermediar | ~8–9 luni | Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale. |
-| B2 — Intermediar avansat | ~9 luni | Comunicare naturală, nuanțe culturale, subiecte abstracte. |
+| B1 — Intermediar | ~8 luni | Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale. |
+| B2 — Intermediar avansat | ~8–9 luni | Comunicare naturală, nuanțe culturale, subiecte abstracte. |
 | C1–C2 — Avansat | ~10 luni fiecare | Fluență apropiată de nativ, umor, registre diferite. |
 
 ## Ce influențează ritmul
@@ -237,7 +237,7 @@ Pentru a te descurca într-o călătorie în Liban — saluturi, restaurant, tax
 
 ## Cum afli de unde pornești
 
-Dacă știi deja câteva cuvinte, poți sări peste A1. Fă [testul de nivel gratuit](/quiz) (2 minute) sau o [lecție de probă gratuită](/trial) — profesorul îți spune exact de unde e cel mai bine să începi.`,
+Dacă știi deja câteva cuvinte, poți sări peste A1. Fă [testul de nivel gratuit](/test-de-nivel) (~15 minute) sau o [lecție de probă gratuită](/trial) — profesorul îți spune exact de unde e cel mai bine să începi.`,
     en: `'How long?' is the question everyone wants a simple answer to. The honest truth: it depends on how far you want to go and how often you practise. The good news for Lebanese is that, being a spoken dialect, you start communicating from the first lessons — you don't wait months to say something useful.
 
 ## Duration per level
@@ -248,8 +248,8 @@ At the Lebanese Arabic Center, group courses have 2 lessons per week (90 minutes
 | --- | --- | --- |
 | A1 — Beginner | ~4 months | You manage simple everyday situations: greetings, shopping, introductions. |
 | A2 — Elementary | ~7 months | Conversations on familiar topics, past and future, simple opinions. |
-| B1 — Intermediate | ~8–9 months | You speak freely about experiences, plans, stories; you follow normal discussions. |
-| B2 — Upper-intermediate | ~9 months | Natural communication, cultural nuance, abstract topics. |
+| B1 — Intermediate | ~8 months | You speak freely about experiences, plans, stories; you follow normal discussions. |
+| B2 — Upper-intermediate | ~8–9 months | Natural communication, cultural nuance, abstract topics. |
 | C1–C2 — Advanced | ~10 months each | Near-native fluency, humour, different registers. |
 
 ## What affects your pace
@@ -265,7 +265,7 @@ To get by on a trip to Lebanon — greetings, restaurant, taxi, shopping — lev
 
 ## How to find your starting point
 
-If you already know a few words, you can skip A1. Take the [free level test](/quiz) (2 minutes) or a [free trial lesson](/trial) — the teacher tells you exactly where it's best to start.`,
+If you already know a few words, you can skip A1. Take the [free level test](/test-de-nivel) (~15 minutes) or a [free trial lesson](/trial) — the teacher tells you exactly where it's best to start.`,
   },
 
   "alfabetul-arab-pentru-incepatori": {
@@ -323,7 +323,7 @@ Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda **
 - Asociază fiecare literă cu un cuvânt pe care deja îl știi din vorbire.
 - Exersează cu un profesor care îți corectează pronunția sunetelor guturale (ع، ح، ق) — exact asta faci la [meditații de arabă](/meditatii-araba) 1:1, unde fiecare sunet e corectat pe loc.
 
-Vrei să vezi de unde pornești? Fă [testul de nivel gratuit](/quiz) sau citește [ghidul complet pentru începători](/blog/cum-inveti-araba-libaneza).`,
+Vrei să vezi de unde pornești? Fă [testul de nivel gratuit](/test-de-nivel) sau citește [ghidul complet pentru începători](/blog/cum-inveti-araba-libaneza).`,
     en: `The Arabic alphabet looks intimidating at first, but it has a simple logic. It has **28 letters**, is written **right to left**, and letters change shape slightly depending on their position in the word (start, middle, end). There are no upper- and lower-case letters.
 
 ## The complete letter table
@@ -376,7 +376,7 @@ No — and that's the good news. At the Lebanese Arabic Center we use the **Oral
 - Associate each letter with a word you already know from speaking.
 - Practise with a teacher who corrects the guttural sounds (ع، ح، ق).
 
-Want to see where you start? Take the [free level test](/quiz) or read the [complete beginner's guide](/blog/cum-inveti-araba-libaneza).`,
+Want to see where you start? Take the [free level test](/test-de-nivel) or read the [complete beginner's guide](/blog/cum-inveti-araba-libaneza).`,
   },
 
   "ce-este-arabizi": {
@@ -488,7 +488,7 @@ Curious? Start with a [free trial lesson](/trial) or see [all the courses](/curs
 
 ## De la ce vârstă?
 
-La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, fizic în București. De la **10 ani**, copiii pot participa și online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
+La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
 
 ## Cum arată o lecție
 
@@ -516,7 +516,7 @@ Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilulu
 
 ## From what age?
 
-At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, in person in Bucharest. From age **10**, children can also join online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
+At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
 
 ## What a lesson looks like
 
@@ -584,7 +584,7 @@ The simplest way is a short chat so we can gauge your child's level and interest
 
 | Arabizi | Arabă | Română |
 | --- | --- | --- |
-| Ya3ni | يعني | Adică / Cam așa (umplutură universală) |
+| Ya3ne | يعني | Adică / Cam așa (umplutură universală) |
 | Ta2burni | تقبرني | „Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză |
 
 ## De unde continui
@@ -592,7 +592,7 @@ The simplest way is a short chat so we can gauge your child's level and interest
 Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui în context — cum se leagă, cum răspunzi, cum porți o conversație scurtă. Asta facem la curs din prima lecție.
 
 - Vezi diferența dintre dialect și araba clasică în [araba libaneză vs araba standard](/blog/araba-libaneza-vs-araba-standard).
-- Nu știi de unde pornești? Fă [testul de nivel gratuit](/quiz).`,
+- Nu știi de unde pornești? Fă [testul de nivel gratuit](/test-de-nivel).`,
     en: `**How to read the table:** '3' is pronounced like a guttural 'a' (the letter ع), '7' like a harsh 'h' from the throat (ح), and '2' marks a short catch in the voice (ء). Don't worry — in class you hear and repeat them naturally, our method is *Oral First*.
 
 ## Greetings and politeness
@@ -632,7 +632,7 @@ Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui �
 
 | Arabizi | Arabic | Meaning |
 | --- | --- | --- |
-| Ya3ni | يعني | I mean / sort of (universal filler) |
+| Ya3ne | يعني | I mean / sort of (universal filler) |
 | Ta2burni | تقبرني | 'I love you dearly' (literally: may you bury me) — typically Lebanese affection |
 
 ## Where to go next
@@ -640,7 +640,7 @@ Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui �
 If you liked the phrases above, the natural next step is to put them in context — how they connect, how you reply, how you hold a short conversation. That's what we do in class from the first lesson.
 
 - See the difference between dialect and Classical Arabic in [Lebanese Arabic vs Standard Arabic](/blog/araba-libaneza-vs-araba-standard).
-- Not sure where to start? Take the [free level test](/quiz).`,
+- Not sure where to start? Take the [free level test](/test-de-nivel).`,
   },
 
   "araba-libaneza-vs-araba-standard": {
@@ -714,9 +714,9 @@ La **Centrul de Arabă Libaneză cu Ibra** predăm *direct* dialectul libanez, c
 
 Pași concreți:
 
-- Fă [testul de nivel gratuit](/quiz) ca să afli de unde pornești.
+- Fă [testul de nivel gratuit](/test-de-nivel) ca să afli de unde pornești.
 - Vezi [cursurile de grup](/cursuri/grup) (structurate pe niveluri CEFR A1–C2) sau [lecțiile private](/cursuri/private) (ritm personalizat).
-- Pentru copii, avem un [program dedicat](/cursuri/copii) fizic în București.
+- Pentru copii, avem un [program dedicat](/cursuri/copii), online (momentan fără grupe).
 - Vezi și articolul [Cum înveți araba libaneză în 2026](/blog/cum-inveti-araba-libaneza) pentru un ghid pas cu pas.`,
     en: `## 1. What Standard Arabic (MSA / Fusha) is and what Lebanese is
 
@@ -786,9 +786,9 @@ At the **Lebanese Arabic Center with Ibra** we teach the Lebanese dialect *direc
 
 Concrete steps:
 
-- Take the [free level test](/quiz) to find where you start.
+- Take the [free level test](/test-de-nivel) to find where you start.
 - See the [group courses](/cursuri/grup) (structured on CEFR levels A1–C2) or [private lessons](/cursuri/private) (personalised pace).
-- For kids, we have a [dedicated programme](/cursuri/copii) in person in Bucharest.
+- For kids, we have a [dedicated programme](/cursuri/copii), online (not running at the moment).
 - See also the article [How to learn Lebanese Arabic in 2026](/blog/cum-inveti-araba-libaneza) for a step-by-step guide.`,
   },
 
@@ -811,9 +811,9 @@ Dacă vrei să comunici cu familia, să călătorești în Liban, să înțelegi
 
 Pentru un vorbitor de română, araba libaneză are câteva sunete noi (ع, ح, ق) și o structură gramaticală diferită, dar este un dialect **mai simplu decât Fusha**: conjugările sunt mai regulate, cazurile gramaticale nu se folosesc, iar vocabularul de zi cu zi este limitat și repetitiv.
 
-- **1–3 luni:** te prezinți, comanzi la restaurant, întrebi indicații.
-- **6 luni:** conversații simple pe teme familiare.
-- **12–18 luni:** conversație fluentă cu practică regulată (2–3 ore/săptămână).
+- **~4 luni (A1):** te prezinți, comanzi la restaurant, întrebi indicații.
+- **~11 luni (A2):** conversații simple pe teme familiare.
+- **~19 luni (B1):** conversație fluentă cu practică regulată (2–3 ore/săptămână).
 
 Factorul decisiv nu este talentul, ci **consecvența** și cât de mult vorbești, nu doar citești sau asculți.
 
@@ -838,9 +838,9 @@ Poți învăța [online sau fizic în București](/cursuri) — ambele funcțion
 
 ## 6. Primele 10 fraze utile în araba libaneză
 
-- **Marhaba** — Bună
+- **Mar7aba** — Bună
 - **Kifak? / Kifik?** — Ce faci? (către bărbat / femeie)
-- **Mnih, shukran** — Bine, mulțumesc
+- **Mnee7, shukran** — Bine, mulțumesc
 - **Shu ismak? / ismik?** — Cum te cheamă?
 - **Ana ismi…** — Numele meu este…
 - **Ana mn Rumania** — Sunt din România
@@ -853,9 +853,9 @@ Poți învăța [online sau fizic în București](/cursuri) — ambele funcțion
 
 Cel mai important pas este să începi să vorbești cu cineva săptămâna aceasta — nu peste o lună, când „vei fi gata”. Poți:
 
-- Vezi [testul de nivel gratuit](/quiz) ca să afli de unde pornești.
+- Vezi [testul de nivel gratuit](/test-de-nivel) ca să afli de unde pornești.
 - Alege un [curs de grup](/cursuri/grup) (mai accesibil, mai motivant) sau [lecții private](/cursuri/private) (ritm personalizat).
-- Pentru copii, avem un [program dedicat](/cursuri/copii) fizic în București.`,
+- Pentru copii, avem un [program dedicat](/cursuri/copii), online (momentan fără grupe).`,
     en: `## 1. What Lebanese Arabic is and how it differs from other dialects
 
 Lebanese Arabic is part of the Levantine dialect family (together with Syrian, Palestinian and Jordanian Arabic), which are largely mutually intelligible. It differs from Egyptian and Gulf Arabic in pronunciation, vocabulary and intonation, and also in its strong influences from French, English, Aramaic and Turkish.
@@ -872,9 +872,9 @@ If you want to communicate with family, travel to Lebanon, understand music and 
 
 For an English speaker, Lebanese Arabic has a few new sounds (ع, ح, ق) and a different grammatical structure, but it's a dialect **simpler than Fusha**: conjugations are more regular, grammatical cases aren't used, and everyday vocabulary is limited and repetitive.
 
-- **1–3 months:** introduce yourself, order at a restaurant, ask for directions.
-- **6 months:** simple conversations on familiar topics.
-- **12–18 months:** fluent conversation with regular practice (2–3 hours/week).
+- **~4 months (A1):** introduce yourself, order at a restaurant, ask for directions.
+- **~11 months (A2):** simple conversations on familiar topics.
+- **~19 months (B1):** fluent conversation with regular practice (2–3 hours/week).
 
 The deciding factor isn't talent, but **consistency** and how much you speak, not just read or listen.
 
@@ -899,9 +899,9 @@ You can learn [online or in person in Bucharest](/cursuri) — both work, if you
 
 ## 6. The first 10 useful phrases in Lebanese Arabic
 
-- **Marhaba** — Hello
+- **Mar7aba** — Hello
 - **Kifak? / Kifik?** — How are you? (to a man / woman)
-- **Mnih, shukran** — Good, thanks
+- **Mnee7, shukran** — Good, thanks
 - **Shu ismak? / ismik?** — What's your name?
 - **Ana ismi…** — My name is…
 - **Ana mn Rumania** — I'm from Romania
@@ -914,9 +914,9 @@ You can learn [online or in person in Bucharest](/cursuri) — both work, if you
 
 The most important step is to start speaking with someone this week — not in a month, when you'll 'be ready'. You can:
 
-- Take the [free level test](/quiz) to find where you start.
+- Take the [free level test](/test-de-nivel) to find where you start.
 - Choose a [group course](/cursuri/grup) (more affordable, more motivating) or [private lessons](/cursuri/private) (personalised pace).
-- For kids, we have a [dedicated programme](/cursuri/copii) in person in Bucharest.`,
+- For kids, we have a [dedicated programme](/cursuri/copii), online (not running at the moment).`,
   },
 
   "invata-araba-libaneza-online": {
@@ -947,7 +947,7 @@ Toate nivelurile noastre au o variantă online. Poți intra într-un [curs de gr
 
 Grupa A1 online deja începută e completă, dar sunt deschise înscrierile la grupele A1 online noi (începători compleți) — una predată în română și una în engleză, cu maximum 6 cursanți fiecare. Datele și locurile libere le vezi pe pagina cursului A1. Poți începe oricând și cu lecții private online.
 
-Nu știi de unde ai porni? Fă [testul de nivel gratuit](/quiz) (2 minute), sau vezi [cât durează fiecare nivel](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
+Nu știi de unde ai porni? Fă [testul de nivel gratuit](/test-de-nivel) (~15 minute), sau vezi [cât durează fiecare nivel](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
     en: `You don't have to live in Bucharest — or even in Romania — to learn Lebanese Arabic with a native teacher. Our online courses run over Zoom, with the same method and the same teacher as the in-person ones. If you're part of the Lebanese diaspora, have Lebanese family, or simply want the living dialect from wherever you are, online is made for you.
 
 ## What you need
@@ -973,7 +973,7 @@ All our levels have an online variant. You can join an online [group course](/cu
 
 The A1 online group that has already started is full, but registration is open for the new A1 online groups (complete beginners) — one taught in Romanian and one in English, with at most 6 students each. The dates and free places are on the A1 course page. You can also start any time with online private lessons.
 
-Not sure where you'd start? Take the [free level test](/quiz) (2 minutes), or see [how long each level takes](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
+Not sure where you'd start? Take the [free level test](/test-de-nivel) (~15 minutes), or see [how long each level takes](/blog/cat-dureaza-sa-inveti-araba-libaneza).`,
   },
 
   "numere-in-araba-libaneza": {
