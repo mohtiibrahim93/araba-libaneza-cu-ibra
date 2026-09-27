@@ -494,7 +494,7 @@ La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gând
 
 - Grupe mici, ca fiecare copil să fie implicat activ.
 - Metoda **Oral First** — copiii vorbesc de la început, fără presiunea scrisului.
-- [Arabizi](/blog/ce-este-arabizi) la început, apoi litere arabe treptat, ca un joc.
+- [Arabizi](/blog/ce-este-arabizi) sau alfabetul arab (libaneza scrisă cu litere arabe, nu araba standard) — alegerea e a părinților, iar celălalt sistem se poate adăuga mai târziu.
 - Cântece, jocuri de rol și cuvinte legate de viața lor: familie, animale, mâncare, culori.
 - Cultură libaneză adaptată vârstei — [obiceiuri și mâncare](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 
@@ -522,7 +522,7 @@ At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for
 
 - Small groups, so every child is actively involved.
 - The **Oral First** method — kids speak from the start, with no pressure to write.
-- [Arabizi](/blog/ce-este-arabizi) at first, then Arabic letters gradually, like a game.
+- [Arabizi](/blog/ce-este-arabizi) or the Arabic alphabet (Lebanese written in Arabic letters, not standard Arabic) — the parents choose, and the other one can be added later.
 - Songs, role-play and words tied to their world: family, animals, food, colours.
 - Age-appropriate Lebanese culture — [customs and food](/blog/cultura-libaneza-obiceiuri-mancare-traditii).
 

@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "Ce dialect învață copiii — libanez sau standard?",
-    a: "Libanez, ca dialect vorbit — ca să poată comunica cu bunicii, familia sau prietenii. La această vârstă araba standard (MSA) e prea abstractă. Alfabetul arab îl introducem treptat, după ce copilul are deja vocabular oral.",
+    a: "Libanez, ca dialect vorbit — ca să poată comunica cu bunicii, familia sau prietenii. La această vârstă araba standard (MSA) e prea abstractă. Pentru scris, părinții aleg traseul: alfabetul arab de la început (araba libaneză scrisă cu litere arabe, nu araba standard) sau arabizi. Celălalt sistem se poate adăuga oricând mai târziu.",
   },
 ];
 

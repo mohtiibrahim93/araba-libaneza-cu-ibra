@@ -791,7 +791,7 @@ export const translations = {
     copiiCurriculumItemMusic: "Cântece și ritmuri în arabă libaneză",
     copiiCurriculumItemVocab: "Vocabular tematic (animale, culori, familie, zi de zi)",
     copiiCurriculumItemStories: "Povești și scenete simple",
-    copiiCurriculumItemWriting: "Introducere în scris (litere, cuvinte simple)",
+    copiiCurriculumItemWriting: "Scris în alfabet arab sau în arabizi, la alegerea părinților",
     copiiCurriculumItemCulture: "Elemente de cultură libaneză adaptate vârstei",
 
     // /cursuri overview
@@ -1558,7 +1558,7 @@ export const translations = {
     copiiCurriculumItemMusic: "Songs and rhythms in Lebanese Arabic",
     copiiCurriculumItemVocab: "Thematic vocabulary (animals, colors, family, daily life)",
     copiiCurriculumItemStories: "Simple stories and role-play skits",
-    copiiCurriculumItemWriting: "Introduction to writing (letters, simple words)",
+    copiiCurriculumItemWriting: "Writing in the Arabic alphabet or in Arabizi, as the parents choose",
     copiiCurriculumItemCulture: "Age-appropriate Lebanese culture elements",
 
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",

@@ -67,7 +67,7 @@ const ArabaPentruCopii = () => {
       <ul>
         <li>{en ? "Small groups, so every child is actively involved." : "Grupe mici, ca fiecare copil să fie implicat activ."}</li>
         <li>{en ? "The " : "Metoda "}<strong>Oral First</strong>{en ? " method — kids speak from the start, with no pressure to write." : " — copiii vorbesc de la început, fără presiunea scrisului."}</li>
-        <li><Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "Arabizi"}</Link>{en ? " at first, then Arabic letters gradually, like a game." : " la început, apoi litere arabe treptat, ca un joc."}</li>
+        <li><Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "Arabizi"}</Link>{en ? " or the Arabic alphabet (Lebanese written in Arabic letters, not standard Arabic) — the parents choose, and the other one can be added later." : " sau alfabetul arab (libaneza scrisă cu litere arabe, nu araba standard) — alegerea e a părinților, iar celălalt sistem se poate adăuga mai târziu."}</li>
         <li>{en ? "Songs, role-play and words tied to their world: family, animals, food, colours." : "Cântece, jocuri de rol și cuvinte legate de viața lor: familie, animale, mâncare, culori."}</li>
         <li>{en ? "Age-appropriate Lebanese culture — " : "Cultură libaneză adaptată vârstei — "}<Link to="/blog/cultura-libaneza-obiceiuri-mancare-traditii">{en ? "customs and food" : "obiceiuri și mâncare"}</Link>.</li>
       </ul>
