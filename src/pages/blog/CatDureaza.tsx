@@ -6,10 +6,10 @@ import { useI18n } from "@/lib/i18n";
 // [level-ro, level-en, duration, can-do-ro, can-do-en]
 const LEVELS: [string, string, string, string, string][] = [
   ["A1 — Începător", "A1 — Beginner", "~4 luni / ~4 months", "Te descurci în situații simple de zi cu zi: saluturi, cumpărături, prezentări.", "You manage simple everyday situations: greetings, shopping, introductions."],
-  ["A2 — Elementar", "A2 — Elementary", "~7 luni / months", "Conversații despre subiecte familiare, trecut și viitor, opinii simple.", "Conversations on familiar topics, past and future, simple opinions."],
-  ["B1 — Intermediar", "B1 — Intermediate", "~8–9 luni / months", "Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale.", "You speak freely about experiences, plans, stories; you follow normal discussions."],
-  ["B2 — Intermediar avansat", "B2 — Upper-intermediate", "~9 luni / months", "Comunicare naturală, nuanțe culturale, subiecte abstracte.", "Natural communication, cultural nuance, abstract topics."],
-  ["C1–C2 — Avansat", "C1–C2 — Advanced", "~10 luni fiecare / each", "Fluență apropiată de nativ, umor, registre diferite.", "Near-native fluency, humour, different registers."],
+  ["A2 — Elementar", "A2 — Elementary", "~7 luni / ~7 months", "Conversații despre subiecte familiare, trecut și viitor, opinii simple.", "Conversations on familiar topics, past and future, simple opinions."],
+  ["B1 — Intermediar", "B1 — Intermediate", "~8–9 luni / ~8–9 months", "Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale.", "You speak freely about experiences, plans, stories; you follow normal discussions."],
+  ["B2 — Intermediar avansat", "B2 — Upper-intermediate", "~9 luni / ~9 months", "Comunicare naturală, nuanțe culturale, subiecte abstracte.", "Natural communication, cultural nuance, abstract topics."],
+  ["C1–C2 — Avansat", "C1–C2 — Advanced", "~10 luni fiecare / ~10 months each", "Fluență apropiată de nativ, umor, registre diferite.", "Near-native fluency, humour, different registers."],
 ];
 
 // Questions specific to this article; anything answered elsewhere on the
@@ -82,7 +82,7 @@ const CatDureaza = () => {
             {LEVELS.map(([lvlRo, lvlEn, dur, canRo, canEn]) => (
               <tr key={lvlEn} className="border-b border-border/60 align-top">
                 <td className="py-2.5 pr-3 font-semibold text-foreground whitespace-nowrap">{en ? lvlEn : lvlRo}</td>
-                <td className="py-2.5 px-3 text-brand-green font-medium whitespace-nowrap">{dur.split(" / ")[0]}</td>
+                <td className="py-2.5 px-3 text-brand-green font-medium whitespace-nowrap">{dur.split(" / ")[en ? 1 : 0]}</td>
                 <td className="py-2.5 pl-3 text-foreground/80">{en ? canEn : canRo}</td>
               </tr>
             ))}

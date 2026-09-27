@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "Cât costă cursul de arabă pentru adolescenți?",
-    a: "Aceleași prețuri ca la grupele de adulți: de la 500 lei/lună pentru grup (2 lecții de 90 min/săptămână), sau 150 lei/lecție de 60 min pentru meditații 1:1, cu reduceri la pachet. Prima lecție de probă de 30 de minute este gratuită.",
+    a: "Aceleași prețuri ca la grupele de adulți: de la 500 lei/lună pentru grup (2 lecții de 90 min/săptămână), sau 150 lei/lecție online sau 210 lei fizic, de 60 min pentru meditații 1:1, cu reduceri la pachet. Prima lecție de probă de 30 de minute este gratuită.",
   },
   {
     q: "Cât de mare este grupa?",
@@ -70,7 +70,7 @@ const CursuriArabaAdolescenti = () => (
         <li><strong>Vârsta:</strong> 12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
         <li><strong>Format:</strong> fizic în București, Strada Icoanei 80, sau online pe Zoom</li>
         <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 online, 10 fizic)</li>
-        <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție de 60 min</li>
+        <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min</li>
         <li><strong>Nivel de start:</strong> de la zero, fără alfabet arab — se începe oral, cu arabizi</li>
       </ul>
       <div className="mt-5">
@@ -141,7 +141,7 @@ const CursuriArabaAdolescenti = () => (
     <h2>Prețuri</h2>
     <ul>
       <li><strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90 min/săptămână), cu 10% reducere la plata integrală a nivelului.</li>
-      <li><strong>Meditații 1:1:</strong> 150 lei/lecție de 60 min, cu −10% de la 10 lecții și −20% de la 20.</li>
+      <li><strong>Meditații 1:1:</strong> 150 lei/lecție online sau 210 lei fizic, de 60 min, cu −10% de la 10 lecții și −20% de la 20.</li>
       <li><strong>Lecție de probă (30 min):</strong> gratuită, cu părintele prezent dacă dorește.</li>
     </ul>
 

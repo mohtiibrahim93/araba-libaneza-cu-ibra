@@ -14,7 +14,7 @@ const FAQ = [
   },
   {
     q: "Group classes or private 1-on-1 lessons?",
-    a: "Groups win on motivation, peer conversation and cost (from 500 LEI / month). Private lessons win on speed and specific goals (150 LEI per 60-minute lesson, with package discounts). The most effective mix for most learners is a group plus one or two private lessons a month for weak spots.",
+    a: "Groups win on motivation, peer conversation and cost (from 500 LEI / month). Private lessons win on speed and specific goals (150 LEI online / 210 LEI in person per 60-minute lesson, with package discounts). The most effective mix for most learners is a group plus one or two private lessons a month for weak spots.",
   },
   {
     q: "Can Duolingo replace an Arabic course?",
@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "How much should a good Arabic course cost?",
-    a: "In Bucharest a serious group course runs 450–600 LEI per month and a private lesson 130–200 LEI per hour. Ours: 500 LEI / month for groups (2 × 90 min per week) and 150 LEI per 60-minute private lesson, with discounts up to 20% on packages. The first 30-minute trial lesson is free.",
+    a: "In Bucharest a serious group course runs 450–600 LEI per month and a private lesson 130–200 LEI per hour. Ours: 500 LEI / month for groups (2 × 90 min per week) and 150 LEI online / 210 LEI in person per 60-minute private lesson, with discounts up to 20% on packages. The first 30-minute trial lesson is free.",
   },
 ];
 
@@ -130,7 +130,7 @@ const BestArabicCourse = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/en/arabic-tutor">Private 1-on-1</Link></td>
             <td className="py-2 px-3">Specific goals, fastest progress, flexible hours</td>
-            <td className="py-2 px-3">150 LEI / 60 min (−10% / −20% packages)</td>
+            <td className="py-2 px-3">150 LEI online / 210 LEI in person, 60 min (−10% / −20% packages)</td>
             <td className="py-2 pl-3">Higher hourly cost</td>
           </tr>
           <tr className="border-b border-border/60 align-top">

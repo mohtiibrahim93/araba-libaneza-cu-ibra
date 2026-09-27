@@ -32,7 +32,7 @@ const FAQ = [
   },
   {
     q: "How much does 1-on-1 tutoring cost?",
-    a: "150 LEI per 60-minute lesson (~€30), with automatic package discounts: 10% from 10 lessons and 20% from 20. The first 30-minute trial lesson is free. No subscription, no lock-in.",
+    a: "150 LEI online / 210 LEI in person per 60-minute lesson (~€30 / €42), with automatic package discounts: 10% from 10 lessons and 20% from 20. The first 30-minute trial lesson is free. No subscription, no lock-in.",
   },
   {
     q: "What is your cancellation and rescheduling policy?",
@@ -62,7 +62,7 @@ const ArabicTutor = () => (
     roHref="/meditatii-araba"
     title="Arabic tutor online — private 1-on-1 lessons with a native teacher"
     metaTitle="Arabic Tutor Online — 1-on-1 Lessons | Native Teacher"
-    description="Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min."
+    description="Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min."
     crumb="Arabic tutor"
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}
@@ -134,7 +134,7 @@ const ArabicTutor = () => (
 
     <h2>Pricing</h2>
     <ul>
-      <li><strong>Single lesson:</strong> 150 LEI / 60 min (~€30)</li>
+      <li><strong>Single lesson:</strong> 150 LEI online / 210 LEI in person, 60 min (~€30 / €42)</li>
       <li><strong>Package of 10:</strong> 1,350 LEI (10% off)</li>
       <li><strong>Package of 20:</strong> 2,400 LEI (20% off)</li>
       <li><strong>Trial lesson:</strong> free, 30 min</li>
