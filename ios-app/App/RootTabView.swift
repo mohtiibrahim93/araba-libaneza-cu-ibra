@@ -404,8 +404,8 @@ private struct DiscoverView: View {
                 .padding(.bottom, 24)
             }
             .scrollDismissesKeyboard(.interactively)
+            .clippedBelowStatusBar()
             .background(Theme.canvas.ignoresSafeArea())
-            .statusBarBackground()
             .toolbar(.hidden, for: .navigationBar)
         }
     }

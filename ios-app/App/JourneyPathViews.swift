@@ -91,8 +91,8 @@ struct JourneyPathView: View {
                     .frame(maxWidth: Theme.Spacing.maxContentWidth)
                     .frame(maxWidth: .infinity)
                 }
+                .clippedBelowStatusBar()
                 .background(Theme.canvas.ignoresSafeArea())
-                .statusBarBackground()
                 .toolbar(.hidden, for: .navigationBar)
                 .onAppear {
                     // Reveal the current unit once; later visits keep the scroll position.

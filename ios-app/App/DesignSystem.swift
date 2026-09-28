@@ -299,22 +299,10 @@ struct MeterBar: View {
 }
 
 extension View {
-    /// Covers the status-bar area with the canvas colour, so content that
-    /// scrolls up on screens without a navigation bar does not run under
-    /// the clock and battery.
-    func statusBarBackground(_ color: Color = Theme.canvas) -> some View {
-        overlay(alignment: .top) {
-            // Scroll views extend under the status bar by themselves, so the
-            // cover measures the status-bar height instead of relying on the
-            // safe-area edge.
-            GeometryReader { proxy in
-                color
-                    .frame(height: proxy.safeAreaInsets.top)
-                    .frame(maxWidth: .infinity, alignment: .top)
-            }
-            .ignoresSafeArea(edges: .top)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
-        }
+    /// Clips scrolled content at the top of the safe area, so on screens
+    /// without a navigation bar it does not run under the clock and battery.
+    /// Apply it to the scroll view, before the full-screen background.
+    func clippedBelowStatusBar() -> some View {
+        clipped()
     }
 }

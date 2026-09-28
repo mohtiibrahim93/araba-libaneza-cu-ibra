@@ -124,8 +124,8 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
+            .clippedBelowStatusBar()
             .background(Theme.canvas.ignoresSafeArea())
-            .statusBarBackground()
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: String.self) { id in
                 if id == "progress" {
