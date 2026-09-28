@@ -323,6 +323,37 @@ export function applyApprovedNativeOverrides(contentPackage, overrideDocument = 
     });
   }
 
+  // New teacher-approved exercises (e.g. a dialogue reply for a scripted conversation).
+  const exerciseIDs = new Set(exercises.map((exercise) => exercise.id));
+  const allowedAdditionTypes = new Set(['dialogue-response', 'grammar-drill']);
+  for (const raw of overrideDocument.exerciseAdditions ?? []) {
+    const id = String(raw.id ?? '').trim();
+    const unitID = String(raw.unitID ?? '').trim();
+    const answer = String(raw.answer ?? '').trim();
+    const prompt = String(raw.prompt?.ro ?? '').trim();
+    if (!id) throw new Error('Approved exercise addition is missing an id.');
+    if (exerciseIDs.has(id)) throw new Error(`Duplicate approved exercise id "${id}".`);
+    if (!unitsByID.has(unitID)) throw new Error(`Approved exercise "${id}" references missing unit "${unitID}".`);
+    if (!allowedAdditionTypes.has(raw.type)) throw new Error(`Approved exercise "${id}" has unsupported type "${raw.type}".`);
+    if (!answer || !prompt) throw new Error(`Approved exercise "${id}" needs a Romanian prompt and an answer.`);
+    const expressionIDsForAddition = (raw.expressionIDs ?? []).map(String);
+    for (const expressionID of expressionIDsForAddition) {
+      if (!availableExpressionIDs.has(expressionID)) {
+        throw new Error(`Approved exercise "${id}" references missing or excluded expression "${expressionID}".`);
+      }
+    }
+    exercises.push({
+      id,
+      type: raw.type,
+      unitID,
+      expressionIDs: expressionIDsForAddition,
+      prompt: { ro: prompt },
+      answer,
+      wrongAnswers: (raw.wrongAnswers ?? []).map(String)
+    });
+    exerciseIDs.add(id);
+  }
+
   return { ...contentPackage, expressions, units, exercises, lexiconCollections };
 }
 

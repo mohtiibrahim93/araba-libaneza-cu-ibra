@@ -150,6 +150,41 @@ test('adds approved teacher expressions to an existing Journey unit', () => {
   );
 });
 
+test('adds teacher-approved exercises to a unit', () => {
+  const imported = {
+    manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
+    expressions: [],
+    units: [{ id: 'a1-questions', level: 'a1', expressionIDs: [], localizations: { ro: { title: 'Q', description: '' } } }],
+    exercises: [],
+    lexiconCollections: []
+  };
+  const result = applyApprovedNativeOverrides(imported, {
+    exerciseAdditions: [{
+      id: 'teacher.q.whats-up',
+      type: 'dialogue-response',
+      unitID: 'a1-questions',
+      prompt: { ro: 'Alege replica pentru: „Salut! Ce mai zici?”' },
+      answer: 'Mar7aba! Shu 3aamle?!',
+      wrongAnswers: ['Ana ta3been']
+    }]
+  });
+  const added = result.exercises.find((exercise) => exercise.id === 'teacher.q.whats-up');
+  assert.equal(added.answer, 'Mar7aba! Shu 3aamle?!');
+  assert.deepEqual(added.wrongAnswers, ['Ana ta3been']);
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      exerciseAdditions: [{ id: 'x', type: 'dialogue-response', unitID: 'missing', prompt: { ro: 'p' }, answer: 'a' }]
+    }),
+    /missing unit/
+  );
+  assert.throws(
+    () => applyApprovedNativeOverrides(imported, {
+      exerciseAdditions: [{ id: 'x', type: 'matching', unitID: 'a1-questions', prompt: { ro: 'p' }, answer: 'a' }]
+    }),
+    /unsupported type/
+  );
+});
+
 test('refuses stale approved overrides and missing expression links', () => {
   const imported = {
     manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
@@ -193,7 +228,8 @@ test('real approved overrides produce the reviewed native course decisions', () 
   const result = applyApprovedNativeOverrides(imported, loadApprovedNativeOverrides());
   const exercises = new Map(result.exercises.map((exercise) => [exercise.id, exercise]));
 
-  assert.equal(result.exercises.length, imported.exercises.length - 16);
+  // 16 excluded drills, 1 teacher-added exercise (Shu 3aamle?!).
+  assert.equal(result.exercises.length, imported.exercises.length - 16 + 1);
   assert.equal(exercises.get('q76').answer, 'Eza baddak bjiblak mayy.');
   assert.equal(
     exercises.get('q43').prompt.ro,

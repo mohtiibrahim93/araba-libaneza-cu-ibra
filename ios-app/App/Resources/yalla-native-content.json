@@ -59361,6 +59361,20 @@
       }
     },
     {
+      "id": "teacher.a1-questions.shu-3aamle",
+      "canonicalArabizi": "Shu 3aamle?!",
+      "variants": [],
+      "levelTags": [
+        "a1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ce mai zici? / Ce faci? (către o fată, informal)"
+        }
+      }
+    },
+    {
       "id": "rootexpr.nwm.mnawwem",
       "canonicalArabizi": "mnawwem",
       "variants": [
@@ -60087,7 +60101,8 @@
         "x1b118b24709e",
         "x7cd6de783603",
         "x99970fce739d",
-        "x503cf4a7c270"
+        "x503cf4a7c270",
+        "teacher.a1-questions.shu-3aamle"
       ],
       "localizations": {
         "ro": {
@@ -71589,6 +71604,23 @@
         "Shu 3melte embere7?",
         "Faade ne7ke ed-dohor?",
         "Eh, ana men romania. Esme Maya."
+      ]
+    },
+    {
+      "id": "teacher.a1-questions.whats-up",
+      "type": "dialogue-response",
+      "unitID": "a1-questions",
+      "expressionIDs": [
+        "teacher.a1-questions.shu-3aamle"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Salut! Ce mai zici? (către o fată)”"
+      },
+      "answer": "Mar7aba! Shu 3aamle?!",
+      "wrongAnswers": [
+        "Ana ta3been",
+        "Kam kilo baddak?",
+        "Ana men Rumania"
       ]
     }
   ],

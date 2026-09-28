@@ -93,6 +93,14 @@
                 "arabizi": "Mar7aba!",
                 "ro": "Salut!"
               },
+              "exerciseID": "teacher.a1-questions.whats-up",
+              "learnerRo": "Salut! Ce mai zici? (către o fată)"
+            },
+            {
+              "partner": {
+                "arabizi": "Mnii7a!",
+                "ro": "Bine!"
+              },
               "exerciseID": "q67",
               "learnerRo": "Ce faci? (către o fată)"
             },

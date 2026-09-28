@@ -4951,6 +4951,35 @@
           "naturalMeaning": "Mulțumesc pentru urarea de sănătate. (răspuns, către mai mulți)"
         }
       }
+    },
+    {
+      "id": "teacher.a1-questions.shu-3aamle",
+      "unitID": "a1-questions",
+      "canonicalArabizi": "Shu 3aamle?!",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ce mai zici? / Ce faci? (către o fată, informal)"
+        }
+      }
+    }
+  ],
+  "exerciseAdditions": [
+    {
+      "id": "teacher.a1-questions.whats-up",
+      "type": "dialogue-response",
+      "unitID": "a1-questions",
+      "expressionIDs": [
+        "teacher.a1-questions.shu-3aamle"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Salut! Ce mai zici? (către o fată)”"
+      },
+      "answer": "Mar7aba! Shu 3aamle?!",
+      "wrongAnswers": [
+        "Ana ta3been",
+        "Kam kilo baddak?",
+        "Ana men Rumania"
+      ]
     }
   ]
 }
