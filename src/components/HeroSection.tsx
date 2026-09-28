@@ -1,8 +1,9 @@
 import { useI18n } from "@/lib/i18n";
-import { GraduationCap, BookOpen, Star, Tag, CheckCircle2, MessageCircle } from "lucide-react";
+import { GraduationCap, BookOpen, Star, Tag, MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 import heroImgWebp from "@/assets/hero-lebanon-cedar.webp";
 import AnchorLink from "@/components/AnchorLink";
+import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
@@ -14,8 +15,6 @@ const imgPriorityProps: Record<string, string> = { fetchPriority: "high" };
 
 const HeroSection = () => {
   const { t } = useI18n();
-
-  const checks = [t.heroCheck1, t.heroCheck2, t.heroCheck3, t.heroCheck4];
 
   return (
     <section className="pt-28 pb-16 px-gutter bg-cream">
@@ -32,33 +31,26 @@ const HeroSection = () => {
             <span className="text-primary">{t.heroTitle2}</span>
           </h1>
 
-          <p className="text-lg text-muted-foreground max-w-lg mb-6 leading-relaxed">
+          <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
             {t.heroDesc}
           </p>
 
-          {/* Verified benefit checks (Ref A) */}
-          <div className="mb-8 grid grid-cols-2 gap-x-6 gap-y-2 max-w-md text-sm text-foreground">
-            {checks.map((c) => (
-              <span key={c} className="inline-flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0" />
-                {c}
-              </span>
-            ))}
-          </div>
-
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
-            <AnchorLink
-              to="#programs"
+            {/* The free trial is the step a new visitor should take, so it is
+                the primary button; the courses are the secondary route for
+                those who want to compare levels and prices first. */}
+            <Link
+              to="/trial"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg shadow-xs transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
-            </AnchorLink>
-            <a
-              href="/trial"
+            </Link>
+            <AnchorLink
+              to="#programs"
               className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold border border-primary/40 text-primary rounded-lg transition-colors hover:bg-primary/5"
             >
-              {t.heroTrialCta} →
-            </a>
+              {t.heroTrialCta}
+            </AnchorLink>
           </div>
 
           <a

@@ -67,7 +67,7 @@ const LearnLebaneseArabic = () => (
         Centrul de Arabă Libaneză the teacher is <strong>Ibrahim Gabriel Moaty</strong> (Ibra),
         a native Lebanese teacher in Bucharest, and lessons are live — online worldwide,
         or in person at Strada Icoanei 80. Courses run the full CEFR ladder, A1 to C2:
-        small groups of up to six online (ten in the classroom) meet twice a week for 90
+        small groups of up to six students, online or in the classroom, meet twice a week for 90
         minutes, from {ONLINE_PRICES.groupMonthly.A1} RON a month, and private 1-on-1
         lessons are {ONLINE_PRICES.privateLesson} RON for 60 minutes. In-person courses
         cost {Math.round((PHYSICAL_MULTIPLIER - 1) * 100)}% more than online. The first
