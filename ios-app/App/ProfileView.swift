@@ -88,6 +88,7 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity)
             }
             .background(Theme.canvas.ignoresSafeArea())
+            .statusBarBackground()
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $editingName) { NameEditor(name: $learnerName) }
             .sheet(isPresented: $editingGoals) { GoalEditor(storedGoals: $storedGoals) }

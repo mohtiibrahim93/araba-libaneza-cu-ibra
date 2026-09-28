@@ -297,3 +297,17 @@ struct MeterBar: View {
         .accessibilityHidden(true)
     }
 }
+
+extension View {
+    /// Covers the status-bar area with the canvas colour, so content that
+    /// scrolls up on screens without a navigation bar does not run under
+    /// the clock and battery.
+    func statusBarBackground(_ color: Color = Theme.canvas) -> some View {
+        overlay(alignment: .top) {
+            color
+                .frame(height: 0)
+                .ignoresSafeArea(edges: .top)
+                .accessibilityHidden(true)
+        }
+    }
+}
