@@ -46,7 +46,7 @@ export const Route = createFileRoute("/api/chat")({
               .map((p) => ({ type: "text" as const, text: (p as { text: string }).text.slice(0, 4000) })),
           }))
           .filter((m) => m.parts.length > 0) as UIMessage[];
-        if (sanitizedMessages.length === 0 || sanitizedMessages[sanitizedMessages.length - 1].role !== "user") {
+        if (sanitizedMessages.at(-1)?.role !== "user") {
           return new Response("Invalid messages", { status: 400 });
         }
 
