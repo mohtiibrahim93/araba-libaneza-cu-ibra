@@ -21,6 +21,9 @@ const robots = read("public/robots.txt");
 
 /** Exactly what public/yalla/index.html loads, in the order it loads it. */
 const MODULES = [
+  // i18n.js first: app.js resolves every converted string through the T()
+  // helper it defines, so a tag after app.js is a TypeError at start-up.
+  "i18n.js",
   "content.js",
   "romanian.js",
   "curriculum.js",
@@ -40,7 +43,8 @@ describe("Yalla game assets", () => {
   });
 
   it("loads the modules in dependency order", () => {
-    // content → romanian → curriculum → synthesis → engine → plus → academy →
+    // i18n → content → romanian → curriculum → synthesis → engine → plus →
+    // academy →
     // transfer → app. Each module reads globals the previous one defined, so a
     // reordered tag is a TypeError at start-up, not a subtle bug.
     const html = read("public/yalla/index.html");
