@@ -1,8 +1,10 @@
 import { useI18n } from "@/lib/i18n";
-import { GraduationCap, BookOpen, Star, Tag, CheckCircle2, MessageCircle } from "lucide-react";
+import { BookOpen, MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 import heroImgWebp from "@/assets/hero-lebanon-cedar.webp";
 import AnchorLink from "@/components/AnchorLink";
+import HeroConversation from "@/components/HeroConversation";
+import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
@@ -15,71 +17,62 @@ const imgPriorityProps: Record<string, string> = { fetchPriority: "high" };
 const HeroSection = () => {
   const { t } = useI18n();
 
-  const checks = [t.heroCheck1, t.heroCheck2, t.heroCheck3, t.heroCheck4];
-
   return (
     <section className="pt-28 pb-16 px-gutter bg-cream">
-      <div className="w-full max-w-content mx-auto grid lg:grid-cols-2 gap-12 items-center">
+      {/* Three columns from xl: text, photo, then the two-phone card. On
+          phones the card comes straight after the text, before the photo;
+          between lg and xl it sits under text and photo, centred. */}
+      <div className="w-full max-w-content mx-auto grid gap-10 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,26rem)] xl:gap-8 items-center">
         {/* Left: Text */}
-        <div>
+        <div className="order-1">
           <span className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
             ⭐ {t.heroBadge}
           </span>
 
-          <h1 className="font-display text-display-xl lg:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
+          <h1 className="font-display text-display-xl lg:text-[3.4rem] xl:text-[2.9rem] 2xl:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
             {t.heroTitle1}
             <br />
             <span className="text-primary">{t.heroTitle2}</span>
           </h1>
 
-          <p className="text-lg text-muted-foreground max-w-lg mb-6 leading-relaxed">
+          <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
             {t.heroDesc}
           </p>
 
-          {/* Verified benefit checks (Ref A) */}
-          <div className="mb-8 grid grid-cols-2 gap-x-6 gap-y-2 max-w-md text-sm text-foreground">
-            {checks.map((c) => (
-              <span key={c} className="inline-flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0" />
-                {c}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
-            <AnchorLink
-              to="#programs"
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-4">
+            {/* The free trial is the step a new visitor should take, so it is
+                the primary button; the courses are the secondary route for
+                those who want to compare levels and prices first. */}
+            <Link
+              to="/trial"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg shadow-xs transition-all hover:bg-primary/90"
             >
               {t.heroCta} →
-            </AnchorLink>
-            <a
-              href="/trial"
+            </Link>
+            <AnchorLink
+              to="#programs"
               className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold border border-primary/40 text-primary rounded-lg transition-colors hover:bg-primary/5"
             >
-              {t.heroTrialCta} →
-            </a>
+              {t.heroTrialCta}
+            </AnchorLink>
           </div>
 
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-[#25D366]" />
             {t.heroExplore}
           </a>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground border-t border-border/60 pt-5">
-            <span className="flex items-center gap-2"><Star className="w-4 h-4 fill-primary text-primary" /> {t.heroStat1}</span>
-            <span className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-primary" /> {t.heroStat2}</span>
-            <span className="flex items-center gap-2"><Tag className="w-4 h-4 text-primary" /> {t.heroTrustStudents}</span>
-          </div>
         </div>
 
-        {/* Right: Ibra above Beirut — real Lebanese photography + the teacher */}
-        <div className="relative">
+        <HeroConversation className="order-2 w-full max-w-md mx-auto lg:order-3 lg:col-span-2 xl:col-span-1 xl:max-w-none" />
+
+        {/* Ibra above Beirut — real Lebanese photography + the teacher */}
+        <div className="relative order-3 lg:order-2">
           <div className="w-full max-h-[34rem] xl:max-h-[38rem] mx-auto rounded-[2rem] overflow-hidden shadow-xl aspect-square lg:aspect-[4/4.4]">
             <picture>
               <source srcSet={heroImgWebp} type="image/webp" />
