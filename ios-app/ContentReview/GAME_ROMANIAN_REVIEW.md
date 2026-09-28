@@ -25,27 +25,27 @@ La nivelul A1, sub fiecare variantă de răspuns apare traducerea de mai jos, lu
 
 | Variantă | Traducere afișată | |
 |---|---|---|
-| 3ande a5 wa7ad w e5t wa7de. | — |  |
-| A5e el kbir metzawwaj. | — |  |
-| Ma 3ande a5wet. | Nu am surori. |  |
+| Kifak? | Cum ești? (către un băiat) |  |
+| Shu esmak? | Cum te cheamă? (către un băiat) |  |
+| Tamem, shukran. | Super, mulțumesc. |  |
 | min wen enta? | de unde ești? | ✓ corect |
 
 **4. Mar7aba! Tsharrafna.** — Salut! Încântată de cunoștință.
 
 | Variantă | Traducere afișată | |
 |---|---|---|
-| 3ande a5 wa7ad w e5t wa7de. | — |  |
-| A5e el kbir metzawwaj. | — |  |
-| Ma 3ande a5wet. | Nu am surori. |  |
+| Kifik? | Cum ești? (către o fată) |  |
 | Min wen ente? | De unde ești? (feminin) | ✓ corect |
+| Shu esmik? | Cum te cheamă? (către o fată) |  |
+| min wen enta? | de unde ești? |  |
 
 **5. Ana men lebnen. Yalla, bshufak!** — Sunt din Liban. Hai, ne vedem!
 
 | Variantă | Traducere afișată | |
 |---|---|---|
-| 3ande a5 wa7ad w e5t wa7de. | — |  |
-| A5e el kbir metzawwaj. | — |  |
-| Ma 3ande a5wet. | Nu am surori. |  |
+| Mar7aba | Bună! / Salut! |  |
+| Sabaa7 el 5er | Bună dimineața! |  |
+| Tsharrafna! | Încântați de cunoștință! |  |
 | ma3 el saleme | la revedere | ✓ corect |
 
 ## Întreabă și spune ce vrei (a1-questions)
@@ -78,9 +78,11 @@ La nivelul A1, sub fiecare variantă de răspuns apare traducerea de mai jos, lu
 
 | Variantă | Traducere afișată | |
 |---|---|---|
-| Shu 3am ta3mel? | Ce faci acum? (către un băiat) |  |
+| Ana men Rumania | Eu sunt din România. |  |
+| Ana ta3been | — |  |
+| Kam kilo baddak? | Câte kilograme vrei? (către un băiat) |  |
+| Mar7aba! Shu 3aamle?! | — | ✓ corect |
 | Shu 3am ta3mle? | Ce faci acum? (către o fată) | ✓ corect |
-| Shu esmak? | Cum te cheamă? (către un băiat) |  |
 
 **5. Badde 5oo5.** — Vreau prune.
 

@@ -708,7 +708,12 @@
       ]
     },
     "syn-context-syn-2dcea3000b0d": {
-      "answer": "Min wen ente?"
+      "answer": "Min wen ente?",
+      "wrongAnswers": [
+        "min wen enta?",
+        "Shu esmik?",
+        "Kifik?"
+      ]
     },
     "syn-context-syn-2de1bb24505c": {
       "answer": "wara el bineeye",
@@ -1814,7 +1819,12 @@
       ]
     },
     "syn-context-syn-9ec2fdddb750": {
-      "answer": "min wen enta?"
+      "answer": "min wen enta?",
+      "wrongAnswers": [
+        "Shu esmak?",
+        "Kifak?",
+        "Tamem, shukran."
+      ]
     },
     "syn-context-syn-9ee5b8c06414": {
       "answer": "Sa3eb! Aymta bterja3e 3al bayt?",
@@ -3631,6 +3641,13 @@
         "Ana jdide hon, esme Maya.",
         "Wayn re7te embere7?",
         "Wen bte7ebb nru7?"
+      ]
+    },
+    "syn-context-syn-adbe51b60572": {
+      "wrongAnswers": [
+        "Mar7aba",
+        "Sabaa7 el 5er",
+        "Tsharrafna!"
       ]
     }
   },

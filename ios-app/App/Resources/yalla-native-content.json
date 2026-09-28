@@ -65206,9 +65206,9 @@
       },
       "answer": "Min wen ente?",
       "wrongAnswers": [
-        "Ma 3ande a5wet.",
-        "3ande a5 wa7ad w e5t wa7de.",
-        "A5e el kbir metzawwaj."
+        "min wen enta?",
+        "Shu esmik?",
+        "Kifik?"
       ]
     },
     {
@@ -65221,9 +65221,9 @@
       },
       "answer": "min wen enta?",
       "wrongAnswers": [
-        "Ma 3ande a5wet.",
-        "3ande a5 wa7ad w e5t wa7de.",
-        "A5e el kbir metzawwaj."
+        "Shu esmak?",
+        "Kifak?",
+        "Tamem, shukran."
       ]
     },
     {
@@ -65236,9 +65236,9 @@
       },
       "answer": "ma3 el saleme",
       "wrongAnswers": [
-        "Ma 3ande a5wet.",
-        "3ande a5 wa7ad w e5t wa7de.",
-        "A5e el kbir metzawwaj."
+        "Mar7aba",
+        "Sabaa7 el 5er",
+        "Tsharrafna!"
       ]
     },
     {
