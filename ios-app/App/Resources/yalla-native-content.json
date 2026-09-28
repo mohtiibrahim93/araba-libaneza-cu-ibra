@@ -63542,7 +63542,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Mar_aba”?"
       },
       "answer": "7",
       "wrongAnswers": [
@@ -63558,7 +63558,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Ba_ra”?"
       },
       "answer": "2",
       "wrongAnswers": [
@@ -63574,7 +63574,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „_all”?"
       },
       "answer": "5",
       "wrongAnswers": [
@@ -63590,7 +63590,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „_aale”?"
       },
       "answer": "8",
       "wrongAnswers": [
@@ -63606,7 +63606,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Ma_”?"
       },
       "answer": "3",
       "wrongAnswers": [
@@ -63622,7 +63622,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Ma_zan”?"
       },
       "answer": "5",
       "wrongAnswers": [
@@ -63638,7 +63638,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Su_aal”?"
       },
       "answer": "2",
       "wrongAnswers": [
@@ -63654,7 +63654,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „_odra”?"
       },
       "answer": "5",
       "wrongAnswers": [
@@ -63670,7 +63670,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „Sabaa_o”?"
       },
       "answer": "7",
       "wrongAnswers": [
@@ -63686,7 +63686,7 @@
       "unitID": "a1-welcome",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Ce cifră lipsește?"
+        "ro": "Ce cifră lipsește în „_aabe”?"
       },
       "answer": "8",
       "wrongAnswers": [
@@ -63704,7 +63704,7 @@
         "xd5dd28b0ba0c"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Ana ___"
       },
       "answer": "badde",
       "wrongAnswers": [
@@ -63722,7 +63722,7 @@
         "x9e1dbafa6078"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Enta ___"
       },
       "answer": "baddak",
       "wrongAnswers": [
@@ -63740,7 +63740,7 @@
         "xbe873681e734"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Ente ___"
       },
       "answer": "baddik",
       "wrongAnswers": [
@@ -63758,7 +63758,7 @@
         "x81943bbf0d41"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Huwwe ___"
       },
       "answer": "baddo",
       "wrongAnswers": [
@@ -63776,7 +63776,7 @@
         "xe8d412f10949"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Heyye ___"
       },
       "answer": "badda",
       "wrongAnswers": [
@@ -63794,7 +63794,7 @@
         "x6cdc0f155514"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Ne7na ___"
       },
       "answer": "baddna",
       "wrongAnswers": [
@@ -63812,7 +63812,7 @@
         "x6876105ec819"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Ento ___"
       },
       "answer": "baddkon",
       "wrongAnswers": [
@@ -63830,7 +63830,7 @@
         "x4b1f67e5453e"
       ],
       "prompt": {
-        "ro": "Completează forma „a vrea”."
+        "ro": "Completează forma „a vrea”: Henne ___"
       },
       "answer": "baddon",
       "wrongAnswers": [
@@ -63848,7 +63848,7 @@
         "c1d861004aa11"
       ],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ walad 3andak?"
       },
       "answer": "Kam",
       "wrongAnswers": [
@@ -63864,7 +63864,7 @@
         "x5fa2a582420c"
       ],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ 3omrak?"
       },
       "answer": "Addesh",
       "wrongAnswers": [
@@ -63878,7 +63878,7 @@
       "unitID": "a1-questions",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ kilo baddak?"
       },
       "answer": "Kam",
       "wrongAnswers": [
@@ -63894,7 +63894,7 @@
         "x56dc620b49f3"
       ],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ baddak? — Pe cine vrei?"
       },
       "answer": "Miin",
       "wrongAnswers": [
@@ -63919,7 +63919,7 @@
       "unitID": "a1-questions",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ wen enta?"
       },
       "answer": "Men",
       "wrongAnswers": [
@@ -63935,7 +63935,7 @@
         "cac93b2e1ff73"
       ],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ masare. — Am bani la mine."
       },
       "answer": "Ma3e",
       "wrongAnswers": [
@@ -63951,7 +63951,7 @@
         "c02511bf38d1a"
       ],
       "prompt": {
-        "ro": "Completează expresia."
+        "ro": "Completează expresia: ___ masare. — Am bani în general."
       },
       "answer": "3ande",
       "wrongAnswers": [
@@ -63967,7 +63967,7 @@
         "cb3804386fe50"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Sayyarte ___ ."
       },
       "answer": "kbiire",
       "wrongAnswers": [
@@ -63983,7 +63983,7 @@
         "c59a8a7c3ab38"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Bayto ___ ."
       },
       "answer": "z8iir",
       "wrongAnswers": [
@@ -63997,7 +63997,7 @@
       "unitID": "a1-family",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Ana ___ . — spus de o fată"
       },
       "answer": "mariida",
       "wrongAnswers": [
@@ -64029,7 +64029,7 @@
         "xa31ba0fecd7b"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Beebak ___ ."
       },
       "answer": "jdiid",
       "wrongAnswers": [
@@ -64045,7 +64045,7 @@
         "c43c298fdc426"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: el + tawle → ___"
       },
       "answer": "et-tawle",
       "wrongAnswers": [
@@ -64059,7 +64059,7 @@
       "unitID": "a1-family",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: el + 2amar → ___"
       },
       "answer": "el-2amar",
       "wrongAnswers": [
@@ -64075,7 +64075,7 @@
         "c338991da9563"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Două familii → ___"
       },
       "answer": "3aylten",
       "wrongAnswers": [
@@ -64091,7 +64091,7 @@
         "c2876bdbd1048"
       ],
       "prompt": {
-        "ro": "Alege forma potrivită."
+        "ro": "Alege forma potrivită: Doi ochi → ___"
       },
       "answer": "3aynten",
       "wrongAnswers": [
@@ -64107,7 +64107,7 @@
         "c88f551c69f16"
       ],
       "prompt": {
-        "ro": "Completează propoziția."
+        "ro": "Completează propoziția: Ne7na ___ . — Noi putem."
       },
       "answer": "fiina",
       "wrongAnswers": [
@@ -64123,7 +64123,7 @@
         "c6dcbdf1d5fbb"
       ],
       "prompt": {
-        "ro": "Completează propoziția."
+        "ro": "Completează propoziția: Ento ___ . — Voi aveți."
       },
       "answer": "3andkon",
       "wrongAnswers": [
@@ -64139,7 +64139,7 @@
         "ca2abb7883652"
       ],
       "prompt": {
-        "ro": "Completează propoziția."
+        "ro": "Completează propoziția: ___ baddna. — Noi voiam."
       },
       "answer": "Ken",
       "wrongAnswers": [
@@ -64153,7 +64153,7 @@
       "unitID": "a1-needs",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Completează propoziția."
+        "ro": "Completează propoziția: ___ badde eshrab ahwe. — Nu vreau cafea."
       },
       "answer": "Ma",
       "wrongAnswers": [
@@ -64167,7 +64167,7 @@
       "unitID": "a1-needs",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Completează propoziția."
+        "ro": "Completează propoziția: Killon ___ enta. — Toți în afară de tine."
       },
       "answer": "illa",
       "wrongAnswers": [
@@ -66270,21 +66270,6 @@
       ]
     },
     {
-      "id": "syn-context-syn-e42c007b31a6",
-      "type": "dialogue-response",
-      "unitID": "a1-restaurant",
-      "expressionIDs": [],
-      "prompt": {
-        "ro": "Alege replica pentru: „ce aveți?”"
-      },
-      "answer": "Shu fi 3andkon?",
-      "wrongAnswers": [
-        "B7ebb el 7elo.",
-        "Tameem! Badde shawarma djej.",
-        "El akel ken laziz ktiir!"
-      ]
-    },
-    {
       "id": "syn-context-syn-ed917f71ecbf",
       "type": "dialogue-response",
       "unitID": "a1-restaurant",
@@ -66893,21 +66878,6 @@
       ]
     },
     {
-      "id": "syn-context-syn-4115e328aa78",
-      "type": "dialogue-response",
-      "unitID": "a1-city",
-      "expressionIDs": [],
-      "prompt": {
-        "ro": "Alege replica pentru: „unde e farmacia?”"
-      },
-      "answer": "Wen es saydaliyye?",
-      "wrongAnswers": [
-        "wara el beneeye",
-        "Es saydaliyye 2ariibe men hon.",
-        "B3ide shway, 5ams d2eeye2 meshe."
-      ]
-    },
-    {
       "id": "syn-context-syn-eff045c3ad41",
       "type": "dialogue-response",
       "unitID": "a1-city",
@@ -67400,21 +67370,6 @@
       ]
     },
     {
-      "id": "syn-context-syn-3130b69313ba",
-      "type": "dialogue-response",
-      "unitID": "a1-shopping",
-      "expressionIDs": [],
-      "prompt": {
-        "ro": "Alege replica pentru: „Ce mărime?”"
-      },
-      "answer": "Shu el 7ajem?",
-      "wrongAnswers": [
-        "8ale ktiir! Fi solde?",
-        "B adde kilo et-tiffe7?",
-        "Mar7aba, badde shuf el 2omsan."
-      ]
-    },
-    {
       "id": "syn-context-syn-b39fd2bf2f63",
       "type": "dialogue-response",
       "unitID": "a1-shopping",
@@ -67442,21 +67397,6 @@
         "Badde el a7mar.",
         "Badde el kilo?",
         "Tayyeb, arb3iin dollar."
-      ]
-    },
-    {
-      "id": "syn-context-syn-b97376f1db81",
-      "type": "dialogue-response",
-      "unitID": "a1-shopping",
-      "expressionIDs": [],
-      "prompt": {
-        "ro": "Alege replica pentru: „Cât costă?”"
-      },
-      "answer": "Adde el se3er?",
-      "wrongAnswers": [
-        "7elo! Badde el a7mar.",
-        "Tameem, baddik kiis?",
-        "shu el lon?"
       ]
     },
     {

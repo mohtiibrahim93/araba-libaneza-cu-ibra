@@ -908,12 +908,7 @@
       ]
     },
     "syn-context-syn-4115e328aa78": {
-      "answer": "Wen es saydaliyye?",
-      "wrongAnswers": [
-        "wara el beneeye",
-        "Es saydaliyye 2ariibe men hon.",
-        "B3ide shway, 5ams d2eeye2 meshe."
-      ]
+      "exclude": true
     },
     "syn-context-syn-4162e36eafea": {
       "answer": "B3te2ed enno a7san men el jabal.",
@@ -2073,12 +2068,7 @@
       ]
     },
     "syn-context-syn-b97376f1db81": {
-      "answer": "Adde el se3er?",
-      "wrongAnswers": [
-        "7elo! Badde el a7mar.",
-        "Tameem, baddik kiis?",
-        "shu el lon?"
-      ]
+      "exclude": true
     },
     "syn-context-syn-ba37ac3768b3": {
       "answer": "Arb3iin dollar. Bas 7elo ktiir.",
@@ -2453,12 +2443,7 @@
       ]
     },
     "syn-context-syn-e42c007b31a6": {
-      "answer": "Shu fi 3andkon?",
-      "wrongAnswers": [
-        "B7ebb el 7elo.",
-        "Tameem! Badde shawarma djej.",
-        "El akel ken laziz ktiir!"
-      ]
+      "exclude": true
     },
     "syn-context-syn-e43621aef5ac": {
       "answer": "Mar7aba! Ente jdide hon?",
@@ -3064,11 +3049,7 @@
       ]
     },
     "syn-context-syn-3130b69313ba": {
-      "wrongAnswers": [
-        "8ale ktiir! Fi solde?",
-        "B adde kilo et-tiffe7?",
-        "Mar7aba, badde shuf el 2omsan."
-      ]
+      "exclude": true
     },
     "syn-context-syn-4b2aa7dc7862": {
       "wrongAnswers": [

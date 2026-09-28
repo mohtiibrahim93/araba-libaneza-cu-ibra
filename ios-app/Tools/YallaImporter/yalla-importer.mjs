@@ -72,6 +72,19 @@ function localizationForCard(card) {
   return localizations;
 }
 
+/**
+ * Grammar drills keep the word or sentence they are about in `context`
+ * ("Mar_aba", "___ walad 3andak?"); without it the question cannot be
+ * answered. Dialogue drills use `context` only as a scene title.
+ */
+export function promptWithContext(drill) {
+  const prompt = String(drill.prompt ?? '').trim();
+  const context = typeof drill.context === 'string' ? drill.context.trim() : '';
+  if (drill.dialog || !context) return prompt;
+  if (prompt.endsWith('?')) return `${prompt.slice(0, -1)} în „${context}”?`;
+  return `${prompt.replace(/[.:]$/, '')}: ${context}`;
+}
+
 export function convertYallaToContentPackage(
   yalla,
   { contentVersion = 'imported', defaultLearnerLocale = 'ro', levelMap = {} } = {}
@@ -150,7 +163,7 @@ export function convertYallaToContentPackage(
       type: drill.dialog ? 'dialogue-response' : 'grammar-drill',
       unitID,
       expressionIDs: Array.isArray(drill.expressionIDs) ? drill.expressionIDs.map(String) : [],
-      prompt: { ro: String(drill.prompt ?? '') },
+      prompt: { ro: promptWithContext(drill) },
       answer: String(drill.answer ?? ''),
       wrongAnswers: (Array.isArray(drill.wrong) ? drill.wrong : []).map(String)
     };

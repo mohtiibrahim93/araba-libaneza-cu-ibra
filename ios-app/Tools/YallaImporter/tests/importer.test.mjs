@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { applyApprovedAudioContent, applyApprovedMorphologyContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedMorphologyContent, loadApprovedNativeOverrides, loadYallaFromDirectory } from '../yalla-importer.mjs';
+import { applyApprovedAudioContent, applyApprovedMorphologyContent, applyApprovedNativeOverrides, convertYallaToContentPackage, evaluateYallaSources, loadApprovedMorphologyContent, loadApprovedNativeOverrides, loadYallaFromDirectory, promptWithContext } from '../yalla-importer.mjs';
 
 test('evaluates Yalla data modules in a read-only isolated window context', () => {
   const data = evaluateYallaSources([
@@ -150,6 +150,13 @@ test('adds approved teacher expressions to an existing Journey unit', () => {
   );
 });
 
+test('grammar drills keep their word or sentence in the prompt', () => {
+  assert.equal(promptWithContext({ prompt: 'Ce cifră lipsește?', context: 'Mar_aba' }), 'Ce cifră lipsește în „Mar_aba”?');
+  assert.equal(promptWithContext({ prompt: 'Completează expresia.', context: '___ walad 3andak?' }), 'Completează expresia: ___ walad 3andak?');
+  assert.equal(promptWithContext({ prompt: 'Spune că familia voastră este mare.', context: 'Vorbești despre familie', dialog: true }), 'Spune că familia voastră este mare.');
+  assert.equal(promptWithContext({ prompt: 'Completează expresia.' }), 'Completează expresia.');
+});
+
 test('adds teacher-approved exercises to a unit', () => {
   const imported = {
     manifest: { schemaVersion: 3, contentVersion: 'test', defaultLearnerLocale: 'ro' },
@@ -231,10 +238,14 @@ test('real approved overrides produce the reviewed native course decisions', () 
   const result = applyApprovedNativeOverrides(imported, overrides);
   const exercises = new Map(result.exercises.map((exercise) => [exercise.id, exercise]));
 
-  // 16 excluded drills, plus the teacher-added exercises.
+  // Excluded drills (reviewed defects and duplicates) out, teacher-added exercises in.
+  const importedIDs = new Set(imported.exercises.map((exercise) => exercise.id));
+  const excluded = Object.entries(overrides.exerciseOverrides ?? {})
+    .filter(([id, directive]) => directive.exclude === true && importedIDs.has(id)).length;
+  assert.ok(excluded >= 16);
   assert.equal(
     result.exercises.length,
-    imported.exercises.length - 16 + (overrides.exerciseAdditions ?? []).length
+    imported.exercises.length - excluded + (overrides.exerciseAdditions ?? []).length
   );
   assert.equal(exercises.get('q76').answer, 'Eza baddak bjiblak mayy.');
   assert.equal(
