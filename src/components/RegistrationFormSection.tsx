@@ -444,7 +444,7 @@ const RegistrationFormSection = ({
       if (error) throw error;
 
       void supabase.functions.invoke("notify-registration", {
-        body: { registrationId: id },
+        body: { registrationId: id, email: email || "" },
       });
 
       trackGenerateLead(formTypeLabel);

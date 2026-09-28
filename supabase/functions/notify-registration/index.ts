@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { callerOwnsRegistration, signRegistrationId } from "../_shared/registration-access.ts";
 
 
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
@@ -25,7 +26,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { registrationId } = await req.json();
+    const { registrationId, email: callerEmail } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(JSON.stringify({ error: "registrationId is required" }), {
         status: 400,
@@ -41,11 +42,16 @@ Deno.serve(async (req) => {
     // spoofing arbitrary recipient emails — we only send to what is in DB.
     const { data: reg, error: regErr } = await supabase
       .from("registrations")
-      .select("id, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age")
+      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age")
       .eq("id", registrationId)
       .maybeSingle();
 
-    if (regErr || !reg) {
+    // Only the visitor who just submitted may trigger the confirmation:
+    // the registration must be fresh (30 min) and the caller must supply
+    // the same email when one is stored.
+    const createdMs = reg?.created_at ? Date.parse(reg.created_at) : NaN;
+    const fresh = Number.isFinite(createdMs) && Date.now() - createdMs < 30 * 60 * 1000;
+    if (regErr || !reg || !fresh || !(await callerOwnsRegistration(reg, { email: callerEmail }))) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -69,7 +75,7 @@ Deno.serve(async (req) => {
 
     const formTypeLabel = FORM_TYPE_LABEL[reg.form_type] ?? reg.form_type;
     const zoomLink = Deno.env.get("ZOOM_MEETING_URL") || "";
-    const icsUrl = `${supabaseUrl}/functions/v1/registration-ics?id=${reg.id}`;
+    const icsUrl = `${supabaseUrl}/functions/v1/registration-ics?id=${reg.id}&sig=${await signRegistrationId(reg.id)}`;
     const manageBase = `${SITE_URL}`; // general management/info entry point
 
     // Pull schedule context where available
