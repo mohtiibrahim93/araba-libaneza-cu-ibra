@@ -1,12 +1,13 @@
 /**
- * Dumps every Yalla card to CSV so the content can be proofread outside the game.
+ * Dumps the game's card bank back to CSV, in the same shape as
+ * content/yalla-cards.csv — so a round trip is export, edit, rebuild:
  *
- * The game is a standalone app under public/yalla/: content.js holds the cards,
- * romanian.js overlays Romanian meanings onto the 722 that were authored in
- * English (keeping the English in `sourceGloss`). Loading both in order is the
- * only way to see what a player actually reads.
+ *   node scripts/exportGameContent.mjs > content/yalla-cards.csv
+ *   node scripts/buildYallaContent.mjs
  *
- * Usage: node scripts/exportGameContent.mjs > yalla-content.csv
+ * The columns are the owner's: level and topic in place of where the material
+ * came from, and both meanings. Reads content.js alone — the deck overlay is a
+ * per-reader view, not part of the bank.
  */
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
@@ -14,27 +15,17 @@ const require = createRequire(import.meta.url);
 globalThis.window = globalThis;
 globalThis.root = globalThis;
 require("../public/yalla/content.js");
-require("../public/yalla/romanian.js");
 
-const { cards, sources } = globalThis.YALLA;
-const titleOf = new Map(sources.map((s) => [s.id, s.title]));
+const { cards, topics } = globalThis.YALLA;
+const titleOf = new Map((topics ?? []).map((t) => [t.id, t.title]));
 
 const cell = (v) => {
   const s = String(v ?? "");
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
-const rows = [["sursa", "lectie", "unitate", "arabizi", "sens_ro", "gloss_en", "are_engleza", "id"]];
+const rows = [["nivel", "tema_curriculum", "arabizi", "sens_ro", "gloss_en", "are_engleza", "id"]];
 for (const c of cards) {
-  rows.push([
-    c.source,
-    titleOf.get(c.source) ?? "",
-    c.unit ?? "",
-    c.ar,
-    c.ro,
-    c.sourceGloss ?? "",
-    c.sourceGloss ? "da" : "NU",
-    c.id,
-  ]);
+  rows.push([c.level ?? "", titleOf.get(c.topic) ?? c.topic ?? "", c.ar, c.ro, c.en ?? "", c.en ? "da" : "NU", c.id]);
 }
 process.stdout.write("﻿" + rows.map((r) => r.map(cell).join(",")).join("\n") + "\n");
