@@ -227,11 +227,15 @@ test('real approved overrides produce the reviewed native course decisions', () 
     loadYallaFromDirectory(sourceDirectory),
     { contentVersion: 'test' }
   );
-  const result = applyApprovedNativeOverrides(imported, loadApprovedNativeOverrides());
+  const overrides = loadApprovedNativeOverrides();
+  const result = applyApprovedNativeOverrides(imported, overrides);
   const exercises = new Map(result.exercises.map((exercise) => [exercise.id, exercise]));
 
-  // 16 excluded drills, 1 teacher-added exercise (Shu 3aamle?!).
-  assert.equal(result.exercises.length, imported.exercises.length - 16 + 1);
+  // 16 excluded drills, plus the teacher-added exercises.
+  assert.equal(
+    result.exercises.length,
+    imported.exercises.length - 16 + (overrides.exerciseAdditions ?? []).length
+  );
   assert.equal(exercises.get('q76').answer, 'Eza baddak bjiblak mayy.');
   assert.equal(
     exercises.get('q43').prompt.ro,

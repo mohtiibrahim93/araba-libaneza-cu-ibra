@@ -318,6 +318,9 @@ export function applyApprovedNativeOverrides(contentPackage, overrideDocument = 
       ...(directive?.wrongAnswers !== undefined
         ? { wrongAnswers: directive.wrongAnswers.map(String) }
         : {}),
+      ...(Array.isArray(directive?.acceptedAnswers) && directive.acceptedAnswers.length
+        ? { acceptedAnswers: directive.acceptedAnswers.map(String) }
+        : {}),
       expressionIDs: expressionIDsForExercise,
       prompt
     });

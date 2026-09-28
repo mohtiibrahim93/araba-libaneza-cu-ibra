@@ -112,6 +112,182 @@
       ]
     },
     {
+      "unitID": "a1-family",
+      "scenes": [
+        {
+          "title": "Cu Karim",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba!",
+                "ro": "Bună!"
+              },
+              "exerciseID": "syn-context-syn-34db33b665ce"
+            },
+            {
+              "partner": {
+                "arabizi": "3ande 5ay w e5ten.",
+                "ro": "Am un frate și două surori."
+              },
+              "exerciseID": "syn-context-syn-cbb99b6619b3"
+            },
+            {
+              "partner": {
+                "arabizi": "Eh, ktiir. W ente?",
+                "ro": "Da, foarte. Și tu?"
+              },
+              "exerciseID": "syn-context-syn-e31c29942d77"
+            },
+            {
+              "partner": {
+                "arabizi": "Shu esma?",
+                "ro": "Cum o cheamă?"
+              },
+              "exerciseID": "syn-context-syn-d45335ca7ecc"
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba Karim! 3andak i5we?",
+                "ro": "Salut Karim! Ai frați?"
+              },
+              "exerciseID": "syn-context-syn-af56b2b3cf85"
+            },
+            {
+              "partner": {
+                "arabizi": "3ayltak kbiire!",
+                "ro": "Familia ta e mare!"
+              },
+              "exerciseID": "syn-context-syn-abd809fe84db"
+            },
+            {
+              "partner": {
+                "arabizi": "Ana 3ande e5t wa7de bass. Esma Reem.",
+                "ro": "Eu am doar o soră. O cheamă Reem."
+              },
+              "exerciseID": "teacher.a1-family.kbeere"
+            },
+            {
+              "partner": {
+                "arabizi": "eh 3omra 20 sene",
+                "ro": "Da, are 20 de ani."
+              },
+              "exerciseID": "teacher.a1-family.mjawwaze"
+            },
+            {
+              "partner": {
+                "arabizi": "Eh w 3anda waladen.",
+                "ro": "Da, și are doi copii."
+              },
+              "exerciseID": "teacher.a1-family.5ayye-kameen"
+            },
+            {
+              "partner": {
+                "arabizi": "3ando wled?",
+                "ro": "Are copii?"
+              },
+              "exerciseID": "syn-context-syn-db59ff8bc2d1"
+            }
+          ]
+        },
+        {
+          "title": "Albumul de familie",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Miin hayda?",
+                "ro": "Cine e acesta?"
+              },
+              "exerciseID": "syn-context-syn-cb97044da4be"
+            },
+            {
+              "partner": {
+                "arabizi": "W hayde?",
+                "ro": "Și aceasta?"
+              },
+              "exerciseID": "syn-context-syn-12e7553413a9"
+            },
+            {
+              "partner": {
+                "arabizi": "Miin henne?",
+                "ro": "Cine sunt ei?"
+              },
+              "exerciseID": "syn-context-syn-1f6522c94fb8"
+            },
+            {
+              "partner": {
+                "arabizi": "W henne?",
+                "ro": "Și ei?"
+              },
+              "exerciseID": "syn-context-syn-680e0aa51bd4",
+              "learnerRoByAnswer": {
+                "Jedde w sitte": "bunicul și bunica mea",
+                "Jiddo w teta": "bunicul și bunica"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Cu o colegă nouă",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "3andak e5we?",
+                "ro": "Ai frați?"
+              },
+              "exerciseID": "syn-context-syn-45447086e1f3"
+            },
+            {
+              "partner": {
+                "arabizi": "3andak wled?",
+                "ro": "Ai copii?"
+              },
+              "exerciseID": "syn-context-syn-7bd069a08aeb"
+            },
+            {
+              "partner": {
+                "arabizi": "3aylte z8ire. W 3ayletkon?",
+                "ro": "Familia mea e mică. Și familia voastră?"
+              },
+              "exerciseID": "q69",
+              "learnerRo": "Familia noastră e mare."
+            }
+          ]
+        },
+        {
+          "title": "Cu un prieten",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Ya3ne... meshe l 7al.",
+                "ro": "Adică... merge."
+              },
+              "exerciseID": "q70",
+              "learnerRo": "Ce ai? (către un băiat)"
+            },
+            {
+              "partner": {
+                "arabizi": "yom sa3eb.",
+                "ro": "O zi grea."
+              },
+              "exerciseID": "teacher.a1-family.lesh-shu-sar"
+            },
+            {
+              "partner": {
+                "arabizi": "nfa5at duleeb es-sayyaara",
+                "ro": "Mi s-a spart roata la mașină."
+              },
+              "exerciseID": "teacher.a1-family.basita"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "unitID": "a1-restaurant",
       "scenes": [
         {

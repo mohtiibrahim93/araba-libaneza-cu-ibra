@@ -1257,6 +1257,9 @@
         "Ana 3ande e5t wa7de bass.",
         "5ayye el kbiir mjawwaz",
         "Bayye w emme"
+      ],
+      "acceptedAnswers": [
+        "Jiddo w teta"
       ]
     },
     "syn-context-syn-684b5024cd28": {
@@ -5020,6 +5023,76 @@
       ],
       "acceptedAnswers": [
         "Shu 3am ta3mle?"
+      ]
+    },
+    {
+      "id": "teacher.a1-family.kbeere",
+      "type": "dialogue-response",
+      "unitID": "a1-family",
+      "prompt": {
+        "ro": "Alege replica pentru: „Frumos! E mare?”"
+      },
+      "answer": "7elo! kbeere ?",
+      "wrongAnswers": [
+        "Shu bek?",
+        "Kam 5ayy 3andak?",
+        "Jedde w sitte"
+      ]
+    },
+    {
+      "id": "teacher.a1-family.mjawwaze",
+      "type": "dialogue-response",
+      "unitID": "a1-family",
+      "prompt": {
+        "ro": "Alege replica pentru: „Frumos! E căsătorită?”"
+      },
+      "answer": "7elo! mjawwaze ?",
+      "wrongAnswers": [
+        "Shu esmo 5ayyak?",
+        "ma 3ande wled",
+        "E5te el zghiire"
+      ]
+    },
+    {
+      "id": "teacher.a1-family.5ayye-kameen",
+      "type": "dialogue-response",
+      "unitID": "a1-family",
+      "prompt": {
+        "ro": "Alege replica pentru: „Frumos! Și fratele meu e căsătorit.”"
+      },
+      "answer": "7elo! 5ayye kameen mjawwaz",
+      "wrongAnswers": [
+        "Bayye w emme",
+        "3ayletna kbiire",
+        "Ma 3ande i5we"
+      ]
+    },
+    {
+      "id": "teacher.a1-family.lesh-shu-sar",
+      "type": "dialogue-response",
+      "unitID": "a1-family",
+      "prompt": {
+        "ro": "Alege replica pentru: „De ce, ce s-a întâmplat?”"
+      },
+      "answer": "lesh shu sar ?",
+      "wrongAnswers": [
+        "Kam 5ayy 3andak?",
+        "3ayletna kbiire",
+        "Jedde w sitte"
+      ]
+    },
+    {
+      "id": "teacher.a1-family.basita",
+      "type": "dialogue-response",
+      "unitID": "a1-family",
+      "prompt": {
+        "ro": "Alege replica pentru: „Nu-i nimic! E ușor de rezolvat!”"
+      },
+      "answer": "basita! hayne!",
+      "wrongAnswers": [
+        "Shu esmo 5ayyak?",
+        "ma 3ande wled",
+        "Bayye w emme"
       ]
     }
   ]
