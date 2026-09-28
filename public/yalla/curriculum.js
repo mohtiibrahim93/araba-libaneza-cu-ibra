@@ -2,57 +2,62 @@
    Source units remain in sourceUnits; card/drill IDs never change. */
 (function(root){
 'use strict';
+ /* Interface language: public/yalla/i18n.js, which loads before this file.
+    app.js defines its own T for the same reason — it loads later, so this
+    cannot borrow one. `Vocabular` is left alone on purpose: it is a lesson
+    group compared by value elsewhere, not display text. */
+ const T=(ro,en)=>window.YallaI18n?window.YallaI18n.t(ro,en):ro;
 const D=root.YALLA,sourceUnits=D.units.map(u=>({...u})),map={},units=[];
 function lesson(id,group,title,desc,icon,origins,tips=[]){
  const ids=origins.split(' ');
  for(const old of ids){if(map[old]||!sourceUnits.some(u=>u.id===old))throw Error('Invalid curriculum mapping: '+old);map[old]=id;}
- units.push({id,group,title,desc,icon,origins:ids,tips:tips.length?tips:['Descoperă expresiile, apoi verifică ce îți amintești fără ajutor.','Spune o propoziție proprie folosind cuvintele din lecție.']});
+ units.push({id,group,title,desc,icon,origins:ids,tips:tips.length?tips:[T('Descoperă expresiile, apoi verifică ce îți amintești fără ajutor.','Discover the phrases, then check what you remember without help.'),T('Spune o propoziție proprie folosind cuvintele din lecție.','Say a sentence of your own using the words from the lesson.')]});
 }
-lesson('a1-welcome','A1','Salută și prezintă-te','Începe o conversație, spune-ți numele și descifrează Arabizi.','sun','l1 m1 w-sounds w-greetings guide-1 plan-1',['2, 3, 5, 7 și 8 reprezintă sunete. 5 poate apărea și ca kh, iar 8 ca gh.','Alege formula potrivită pentru salut, prezentare și rămas-bun.']);
-lesson('a1-questions','A1','Întreabă și spune ce vrei','Cine, ce, unde și cum? Vorbește despre tine și interlocutor.','chat','l2 m2 w-pronouns w-want plan-15');
-lesson('a1-family','A1','Familia și lucrurile mele','Prezintă familia și spune cui îi aparține un lucru.','home','l3 m3 w-dual guide-2 plan-3');
-lesson('a1-home','A1','Acasă','Descrie camerele, mobilierul și obiectele din jur.','home','m5 d4 d5 d6 d7 plan-6');
-lesson('a1-description','A1','Culori și descrieri','Descrie persoane și obiecte folosind articolul și acordul.','palette','w-article d14 m11 plan-16');
-lesson('a1-numbers','A1','Numără și cere','Folosește numere, cantități și numere de telefon.','tag','m6 w-numbers plan-2');
-lesson('a1-time','A1','Zile, ore și date','Spune când se întâmplă ceva și citește ora.','sun','m7 w-days w-time plan-14');
-lesson('a1-meeting','A1','Stabilește o întâlnire','Propune o zi și o oră, acceptă sau schimbă planul.','chat','m8 m9');
-lesson('a1-weather','A1','Vremea și anotimpurile','Vorbește despre vreme, luni și schimbările din natură.','leaf','m10 m12 plan-11');
-lesson('a1-needs','A1','Am, vreau, pot','Spune ce ai, ce poți face și de ce ai nevoie.','spark','l4 m4');
-lesson('a1-actions','A1','Ce faci acum?','Începe să folosești verbele la prezent și trecut în propoziții scurte.','bolt','m13 guide-8 plan-5');
-lesson('a1-restaurant','A1','La restaurant','Cere o masă, comandă mâncare și răspunde chelnerului.','cup','m14 m15 guide-4 plan-4 plan-18');
-lesson('a1-city','A1','Găsește drumul','Cere direcții, recunoaște locurile și folosește transportul.','map','guide-6 d20 d22 d23 plan-8 plan-22');
-lesson('a1-shopping','A1','La cumpărături','Întreabă prețul și cere fructe, legume sau alte produse.','bag','guide-7 d12 d13 plan-7 plan-21');
-lesson('a1-clothes','A1','Haine și aspect','Alege haine și descrie cum arată cineva.','tag','d8 plan-12');
-lesson('a1-health','A1','Corpul și sănătatea','Numește părțile corpului și spune cum te simți.','drop','plan-13 plan-20');
-lesson('a1-work','A1','Munca și studiile','Spune cu ce te ocupi și vorbește despre o zi de lucru.','bag','m19 guide-3 d26 plan-9');
-lesson('a1-leisure','A1','Timpul liber','Vorbește despre hobby-uri, sport și muzică.','music','d15 d16 d24 d25 plan-10 plan-23');
-lesson('a1-plans','A1','Planuri și sărbători','Spune ce vei face, pregătește o ieșire și urează cuiva de bine.','gift','m17 d17 guide-14 plan-17 plan-19');
-lesson('a1-daily','A1','Ziua mea','Leagă activitățile zilnice de nevoi, locuri și momente.','sun','m18 m20 w-words');
-lesson('a1-polite','A1','Cere politicos','Alege o formulă de politețe potrivită situației.','chat','m21');
-lesson('a1-frequency','A1','Relații, ordine și frecvență','Vorbește despre rude și spune cât de des faci ceva.','layers','m23');
-lesson('a1-review','A1','Pune totul împreună','Aplică întrebările, posesivele și expresiile în situații de zi cu zi.','trophy','practice mrev1 mrev2 plan-24');
-lesson('a2-roots','A2','De la rădăcină la expresie','Recunoaște familiile de cuvinte și folosește-le în întrebări.','leaf','w-roots m16');
-lesson('a2-verbs','A2','Verbe pentru fiecare persoană','Consolidează formele verbale la prezent, trecut și viitor.','bolt','conj-akl conj-drs conj-3rf conj-3ml conj-sht8l conj-swe conj-tlfn');
-lesson('a2-weak','A2','Verbe cu forme speciale','Exersează a vorbi, a da și a spune la toate persoanele.','pen','conj-7ki/7ke conj-3ti conj-2el/2ul');
-lesson('a2-past','A2','Ce s-a întâmplat?','Reia trecutul și participiile pentru a vorbi despre acțiuni și stări.','compass','guide-9 w-participles');
-lesson('a2-opinions','A2','Preferințe și opinii','Spune ce preferi, compară și formulează o opinie simplă.','chat','guide-11');
-lesson('a2-modals','A2','Obligații și posibilități','Spune ce trebuie, ce este permis și ce se poate face.','flag','guide-12');
-lesson('a2-connections','A2','Condiții și legături între idei','Exersează relativele, condițiile și ipotezele, cu recapitulări de acord.','layers','extra guide-13',['Yalle leagă o relativă de un substantiv hotărât.','Eza introduce o condiție posibilă; law poate introduce o ipoteză. Formele complexe se aprofundează ulterior.']);
-lesson('v-nature','Vocabular','Natura și viețuitoarele','Extinde vocabularul despre animale, insecte și mare.','leaf','d9 d10 d11');
-lesson('v-school','Vocabular','La școală','Obiecte și locuri pentru învățare și viața în clasă.','book','d18 d19');
-lesson('v-port','Vocabular','În port','Explorează vocabularul legat de port.','anchor','d21');
-for(let n=27;n<=37;n++){const u=sourceUnits.find(u=>u.id==='v'+n);lesson('v-index-'+n,'Vocabular','Cuvinte și acțiuni · '+(n-26),'Descoperă sensul în română și exersează expresia în Arabizi.','book',u.id);}
+lesson('a1-welcome','A1',T('Salută și prezintă-te','Greet someone and introduce yourself'),T('Începe o conversație, spune-ți numele și descifrează Arabizi.','Start a conversation, give your name and decipher Arabizi.'),'sun','l1 m1 w-sounds w-greetings guide-1 plan-1',[T('2, 3, 5, 7 și 8 reprezintă sunete. 5 poate apărea și ca kh, iar 8 ca gh.','2, 3, 5, 7 and 8 stand for sounds. 5 can also appear as kh, and 8 as gh.'),T('Alege formula potrivită pentru salut, prezentare și rămas-bun.','Pick the right phrase for greeting, introducing yourself and saying goodbye.')]);
+lesson('a1-questions','A1',T('Întreabă și spune ce vrei','Ask, and say what you want'),T('Cine, ce, unde și cum? Vorbește despre tine și interlocutor.','Who, what, where and how? Talk about yourself and the person you\'re with.'),'chat','l2 m2 w-pronouns w-want plan-15');
+lesson('a1-family','A1',T('Familia și lucrurile mele','My family and my things'),T('Prezintă familia și spune cui îi aparține un lucru.','Introduce your family and say who something belongs to.'),'home','l3 m3 w-dual guide-2 plan-3');
+lesson('a1-home','A1',T('Acasă','At home'),T('Descrie camerele, mobilierul și obiectele din jur.','Describe the rooms, the furniture and the things around you.'),'home','m5 d4 d5 d6 d7 plan-6');
+lesson('a1-description','A1',T('Culori și descrieri','Colours and descriptions'),T('Descrie persoane și obiecte folosind articolul și acordul.','Describe people and things using the article and agreement.'),'palette','w-article d14 m11 plan-16');
+lesson('a1-numbers','A1',T('Numără și cere','Count and ask for things'),T('Folosește numere, cantități și numere de telefon.','Use numbers, quantities and phone numbers.'),'tag','m6 w-numbers plan-2');
+lesson('a1-time','A1',T('Zile, ore și date','Days, times and dates'),T('Spune când se întâmplă ceva și citește ora.','Say when something happens and tell the time.'),'sun','m7 w-days w-time plan-14');
+lesson('a1-meeting','A1',T('Stabilește o întâlnire','Arrange to meet'),T('Propune o zi și o oră, acceptă sau schimbă planul.','Suggest a day and a time, accept the plan or change it.'),'chat','m8 m9');
+lesson('a1-weather','A1',T('Vremea și anotimpurile','Weather and seasons'),T('Vorbește despre vreme, luni și schimbările din natură.','Talk about the weather, the months and how nature changes.'),'leaf','m10 m12 plan-11');
+lesson('a1-needs','A1',T('Am, vreau, pot','I have, I want, I can'),T('Spune ce ai, ce poți face și de ce ai nevoie.','Say what you have, what you can do and what you need.'),'spark','l4 m4');
+lesson('a1-actions','A1',T('Ce faci acum?','What are you doing?'),T('Începe să folosești verbele la prezent și trecut în propoziții scurte.','Start using present and past verbs in short sentences.'),'bolt','m13 guide-8 plan-5');
+lesson('a1-restaurant','A1',T('La restaurant','At the restaurant'),T('Cere o masă, comandă mâncare și răspunde chelnerului.','Ask for a table, order food and answer the waiter.'),'cup','m14 m15 guide-4 plan-4 plan-18');
+lesson('a1-city','A1',T('Găsește drumul','Find your way'),T('Cere direcții, recunoaște locurile și folosește transportul.','Ask for directions, recognise places and use transport.'),'map','guide-6 d20 d22 d23 plan-8 plan-22');
+lesson('a1-shopping','A1',T('La cumpărături','Shopping'),T('Întreabă prețul și cere fructe, legume sau alte produse.','Ask the price and ask for fruit, vegetables or anything else.'),'bag','guide-7 d12 d13 plan-7 plan-21');
+lesson('a1-clothes','A1',T('Haine și aspect','Clothes and appearance'),T('Alege haine și descrie cum arată cineva.','Choose clothes and describe how someone looks.'),'tag','d8 plan-12');
+lesson('a1-health','A1',T('Corpul și sănătatea','The body and health'),T('Numește părțile corpului și spune cum te simți.','Name the parts of the body and say how you feel.'),'drop','plan-13 plan-20');
+lesson('a1-work','A1',T('Munca și studiile','Work and studies'),T('Spune cu ce te ocupi și vorbește despre o zi de lucru.','Say what you do and talk about a working day.'),'bag','m19 guide-3 d26 plan-9');
+lesson('a1-leisure','A1',T('Timpul liber','Free time'),T('Vorbește despre hobby-uri, sport și muzică.','Talk about hobbies, sport and music.'),'music','d15 d16 d24 d25 plan-10 plan-23');
+lesson('a1-plans','A1',T('Planuri și sărbători','Plans and celebrations'),T('Spune ce vei face, pregătește o ieșire și urează cuiva de bine.','Say what you will do, plan an outing and wish someone well.'),'gift','m17 d17 guide-14 plan-17 plan-19');
+lesson('a1-daily','A1',T('Ziua mea','My day'),T('Leagă activitățile zilnice de nevoi, locuri și momente.','Tie daily activities to needs, places and times of day.'),'sun','m18 m20 w-words');
+lesson('a1-polite','A1',T('Cere politicos','Ask politely'),T('Alege o formulă de politețe potrivită situației.','Choose a polite phrase that fits the situation.'),'chat','m21');
+lesson('a1-frequency','A1',T('Relații, ordine și frecvență','Relatives, order and how often'),T('Vorbește despre rude și spune cât de des faci ceva.','Talk about relatives and say how often you do something.'),'layers','m23');
+lesson('a1-review','A1',T('Pune totul împreună','Put it all together'),T('Aplică întrebările, posesivele și expresiile în situații de zi cu zi.','Use the questions, possessives and phrases in everyday situations.'),'trophy','practice mrev1 mrev2 plan-24');
+lesson('a2-roots','A2',T('De la rădăcină la expresie','From the root to the phrase'),T('Recunoaște familiile de cuvinte și folosește-le în întrebări.','Recognise word families and use them in questions.'),'leaf','w-roots m16');
+lesson('a2-verbs','A2',T('Verbe pentru fiecare persoană','Verbs for every person'),T('Consolidează formele verbale la prezent, trecut și viitor.','Consolidate the present, past and future verb forms.'),'bolt','conj-akl conj-drs conj-3rf conj-3ml conj-sht8l conj-swe conj-tlfn');
+lesson('a2-weak','A2',T('Verbe cu forme speciale','Verbs with special forms'),T('Exersează a vorbi, a da și a spune la toate persoanele.','Practise to speak, to give and to say in every person.'),'pen','conj-7ki/7ke conj-3ti conj-2el/2ul');
+lesson('a2-past','A2',T('Ce s-a întâmplat?','What happened?'),T('Reia trecutul și participiile pentru a vorbi despre acțiuni și stări.','Revisit the past and participles to talk about actions and states.'),'compass','guide-9 w-participles');
+lesson('a2-opinions','A2',T('Preferințe și opinii','Preferences and opinions'),T('Spune ce preferi, compară și formulează o opinie simplă.','Say what you prefer, compare, and give a simple opinion.'),'chat','guide-11');
+lesson('a2-modals','A2',T('Obligații și posibilități','Obligations and possibilities'),T('Spune ce trebuie, ce este permis și ce se poate face.','Say what must be done, what is allowed and what is possible.'),'flag','guide-12');
+lesson('a2-connections','A2',T('Condiții și legături între idei','Conditions and links between ideas'),T('Exersează relativele, condițiile și ipotezele, cu recapitulări de acord.','Practise relative clauses, conditions and hypotheses, with agreement revision.'),'layers','extra guide-13',[T('Yalle leagă o relativă de un substantiv hotărât.','Yalle links a relative clause to a definite noun.'),T('Eza introduce o condiție posibilă; law poate introduce o ipoteză. Formele complexe se aprofundează ulterior.','Eza introduces a possible condition; law can introduce a hypothesis. The complex forms come later.')]);
+lesson('v-nature','Vocabular',T('Natura și viețuitoarele','Nature and living things'),T('Extinde vocabularul despre animale, insecte și mare.','Widen your vocabulary for animals, insects and the sea.'),'leaf','d9 d10 d11');
+lesson('v-school','Vocabular',T('La școală','At school'),T('Obiecte și locuri pentru învățare și viața în clasă.','Objects and places for learning and classroom life.'),'book','d18 d19');
+lesson('v-port','Vocabular',T('În port','At the port'),T('Explorează vocabularul legat de port.','Explore the vocabulary of the port.'),'anchor','d21');
+for(let n=27;n<=37;n++){const u=sourceUnits.find(u=>u.id==='v'+n);lesson('v-index-'+n,'Vocabular',T('Cuvinte și acțiuni · ','Words and actions · ')+(n-26),T('Descoperă sensul în română și exersează expresia în Arabizi.','Discover the meaning and practise the phrase in Arabizi.'),'book',u.id);}
 if(sourceUnits.some(u=>!map[u.id]))throw Error('Some source units have no curriculum destination');
 for(const c of [...D.cards,...D.drills]){c.sourceUnit=c.unit;c.unit=map[c.unit];}
 D.sourceUnits=sourceUnits;D.units=units;
 const levels=[
- {id:'A1',title:'Primele conversații',status:'Jocuri disponibile',desc:'De la primul salut la situațiile de zi cu zi.'},
- {id:'A2',title:'Mai multă independență',status:'Consolidare disponibilă',desc:'Verbe, experiențe, opinii și idei legate între ele. Jocurile acoperă o parte din acest nivel.'},
- {id:'B1',title:'Explică și argumentează',status:'Practică disponibilă',desc:'Conversații mai lungi și exprimarea ideilor. Cardurile de B1 se pot exersa deja; obiectivele de mai jos rămân în pregătire.',topics:['Forme verbale derivate și vorbire indirectă','Condiții și subordonate complexe','Argumente, rezumate și conversații de 3–5 minute']},
- {id:'B2',title:'Conversează cu nuanță',status:'În pregătire',desc:'Adaptează-ți exprimarea la situație și interlocutor.',topics:['Registru, nuanțe și conectori','Negociere și discurs spontan','Media, cultură și variație regională']},
- {id:'C1',title:'Înțelege dincolo de cuvinte',status:'În pregătire',desc:'Explorează sensul implicit, umorul și exprimarea avansată.',topics:['Ironie, idiomuri și referințe culturale','Retorică, media și conversație profesională','Opțional: trecerea de la Arabizi la scrierea arabă']},
- {id:'C2',title:'Exprimă-te cu precizie',status:'În pregătire',desc:'Aprofundează domeniile și registrele care te interesează.',topics:['Specializări: economie, drept, sănătate și tehnologie','Analiză, dezbatere și sinteză','Proiecte personale și discurs interdisciplinar']},
- {id:'Vocabular',title:'Explorează cuvinte',status:'Practică suplimentară',desc:'O colecție deschisă tuturor nivelurilor; nu stabilește dificultatea CEFR.'}
+ {id:'A1',title:T('Primele conversații','Your first conversations'),status:T('Jocuri disponibile','Games available'),desc:T('De la primul salut la situațiile de zi cu zi.','From your first hello to everyday situations.')},
+ {id:'A2',title:T('Mai multă independență','More independence'),status:T('Consolidare disponibilă','Consolidation available'),desc:T('Verbe, experiențe, opinii și idei legate între ele. Jocurile acoperă o parte din acest nivel.','Verbs, experiences, opinions and ideas joined together. The games cover part of this level.')},
+ {id:'B1',title:T('Explică și argumentează','Explain and argue'),status:T('Practică disponibilă','Practice available'),desc:T('Conversații mai lungi și exprimarea ideilor. Cardurile de B1 se pot exersa deja; obiectivele de mai jos rămân în pregătire.','Longer conversations and expressing ideas. The B1 cards can be practised already; the objectives below are still in preparation.'),topics:[T('Forme verbale derivate și vorbire indirectă','Derived verb forms and indirect speech'),T('Condiții și subordonate complexe','Conditions and complex subordinate clauses'),T('Argumente, rezumate și conversații de 3–5 minute','Arguments, summaries and 3–5 minute conversations')]},
+ {id:'B2',title:T('Conversează cu nuanță','Converse with nuance'),status:T('În pregătire','In preparation'),desc:T('Adaptează-ți exprimarea la situație și interlocutor.','Adapt how you speak to the situation and the person.'),topics:[T('Registru, nuanțe și conectori','Register, nuance and connectors'),T('Negociere și discurs spontan','Negotiation and spontaneous speech'),T('Media, cultură și variație regională','Media, culture and regional variation')]},
+ {id:'C1',title:T('Înțelege dincolo de cuvinte','Understand beyond the words'),status:T('În pregătire','In preparation'),desc:T('Explorează sensul implicit, umorul și exprimarea avansată.','Explore implied meaning, humour and advanced expression.'),topics:[T('Ironie, idiomuri și referințe culturale','Irony, idioms and cultural references'),T('Retorică, media și conversație profesională','Rhetoric, media and professional conversation'),T('Opțional: trecerea de la Arabizi la scrierea arabă','Optional: moving from Arabizi to Arabic script')]},
+ {id:'C2',title:T('Exprimă-te cu precizie','Express yourself precisely'),status:T('În pregătire','In preparation'),desc:T('Aprofundează domeniile și registrele care te interesează.','Go deeper into the fields and registers that interest you.'),topics:[T('Specializări: economie, drept, sănătate și tehnologie','Specialisms: economics, law, health and technology'),T('Analiză, dezbatere și sinteză','Analysis, debate and synthesis'),T('Proiecte personale și discurs interdisciplinar','Personal projects and interdisciplinary discourse')]},
+ {id:'Vocabular',title:T('Explorează cuvinte','Explore words'),status:T('Practică suplimentară','Extra practice'),desc:T('O colecție deschisă tuturor nivelurilor; nu stabilește dificultatea CEFR.','An open collection for every level; it does not set CEFR difficulty.')}
 ];
 function resolve(id){return map[id]||id;}
 function migrate(state){state.lastUnit=resolve(state.lastUnit||'l1');if(state.assignment?.units)state.assignment.units=[...new Set(state.assignment.units.map(resolve))];if(state.placementResult?.unit)state.placementResult.unit=resolve(state.placementResult.unit);if(!levels.some(l=>l.id===state.learningTrack)){const old=sourceUnits.find(u=>u.group===state.learningTrack);state.learningTrack=units.find(u=>u.id===resolve(old?.id))?.group||'A1';}}
