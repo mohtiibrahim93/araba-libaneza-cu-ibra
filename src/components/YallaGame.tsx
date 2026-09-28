@@ -38,7 +38,13 @@ const TITLES: Record<NonNullable<YallaGameProps["mode"]>, string> = {
 };
 
 const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
-  const src = `/yalla/index.html?view=${mode}`;
+  // The frame follows the language the visitor is reading the site in:
+  // public/yalla/i18n.js reads ?lang= and switches the game's interface.
+  // Card meanings stay Romanian until the drafted English glosses have been
+  // through teacher review, so an English player gets English chrome over a
+  // Romanian deck — which is what the "in Romanian" note on the CTAs still
+  // warns about. Remove that note when the deck itself is bilingual.
+  const src = `/yalla/index.html?view=${mode}&lang=${lang}`;
   const c = COPY[lang];
 
   // The frame gets its src only after mount, and this is not a micro-
