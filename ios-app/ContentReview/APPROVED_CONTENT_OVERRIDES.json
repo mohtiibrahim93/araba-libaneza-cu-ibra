@@ -3709,6 +3709,10 @@
         {
           "value": "Ma 3ande i5we",
           "kind": "spelling"
+        },
+        {
+          "value": "Ma 3ande u5we",
+          "kind": "spelling"
         }
       ]
     },
@@ -3786,6 +3790,10 @@
       "variants": [
         {
           "value": "Tameem! 3andak i5we?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Tameem! 3andak u5we?",
           "kind": "spelling"
         }
       ]
@@ -3900,6 +3908,10 @@
       "variants": [
         {
           "value": "Mar7aba Karim! 3andak i5we?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba Karim! 3andak u5we?",
           "kind": "spelling"
         }
       ]
@@ -4855,7 +4867,11 @@
       "canonicalArabizi": "3andak e5we?",
       "variants": [
         {
-          "value": "3andak a5we?",
+          "value": "3andak i5we?",
+          "kind": "spelling"
+        },
+        {
+          "value": "3andak u5we?",
           "kind": "spelling"
         }
       ]
