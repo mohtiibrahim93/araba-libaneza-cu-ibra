@@ -42,7 +42,7 @@
  function editForm(c){
   return `<form class="inline-edit" data-edit-form="${c.id}"><label>Arabizi<input name="ar" dir="ltr" required maxlength="500" value="${h(c.ar)}"></label><label>Sens<input name="ro" required maxlength="1000" value="${h(c.ro)}"></label><label>Variante acceptate — separate prin virgulă<input name="variants" value="${h((c.variants||[]).join(', '))}"></label><div class="inline-edit-actions"><button class="btn primary" type="submit">Salvează</button><button class="btn secondary" type="button" data-cancel-edit>Renunță</button></div></form>`;
  }
- let view='journey',group='A1',trainingGroup='A1',session=null,chosenUnit='l1',mode='mix',lexPage=0,lexQuery='',lexUnit='all',toastTimer;
+ let view='journey',group='A1',trainingLevel='A1',session=null,chosenUnit='l1',mode='mix',lexPage=0,lexQuery='',lexUnit='all',toastTimer;
  const icons={
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>',
   chat:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-3 2V11.5A8.5 8.5 0 0 1 9.5 3h3A8.5 8.5 0 0 1 21 11.5Z"/><path d="M7 9h8M7 13h5"/>',
@@ -83,6 +83,24 @@
  const day=()=>new Date().toLocaleDateString('en-CA');
  const save=()=>{try{localStorage.setItem(key,JSON.stringify(state));saveFailed=false;}catch{saveFailed=true;}};
  const allItems=[...D.cards,...D.drills];
+ /* synthesis.js appends ~845 generated cards at runtime, built from the source
+    material rather than from the reviewed CSV, so they carry no level. The
+    ceiling filter below only keeps a card whose level it recognises, so without
+    this they would vanish from every training pool — the old pool included them,
+    because it filtered by their lesson's group. Each inherits the level of the
+    first levelled card in its own lesson, falling back to the lesson's group
+    when that names a level (A1/A2/B1), and to the highest level otherwise. */
+ (function levelTheSynthesised(){
+  const known=new Set((D.levels||[]).map(l=>l.id)),top=(D.levels||[]).map(l=>l.id).pop();
+  const byUnit={};
+  for(const c of D.cards) if(c.level&&!byUnit[c.unit]) byUnit[c.unit]=c.level;
+  for(const c of D.cards){
+   if(c.level) continue;
+   const u=D.units.find(x=>x.id===c.unit);
+   c.level=byUnit[c.unit]||(u&&known.has(u.group)?u.group:top);
+  }
+ })();
+
  const unitItems=id=>allItems.filter(c=>c.unit===id);
  const learned=id=>unitItems(id).filter(c=>(state.progress[c.id]?.streak||0)>=3).length;
  const reviewed=()=>allItems.filter(c=>state.progress[c.id]?.wrong);
@@ -122,8 +140,8 @@
  function unitScreen(id){id=window.YallaCurriculum.resolve(id);chosenUnit=id;const u=D.units.find(x=>x.id===id);const cnt=unitItems(id).length;const dialogCount=D.drills.filter(q=>q.unit===id&&q.dialog).length;
   shell(`<button class="back-link" data-nav="missions">${icon('back')} Toate misiunile</button><section class="unit-intro"><div class="unit-symbol">${icon(u.icon)}</div><div class="eyebrow">${h(u.group)} · ${cnt} provocări</div><h1>${h(u.title)}</h1><p>${h(u.desc)}</p><div class="unit-tips">${u.tips.map(t=>`<p>${icon('check')}<span>${h(t)}</span></p>`).join('')}</div>${u.learningNotes?.length?`<div class="teacher-panel"><h2>Înainte să începi</h2>${u.learningNotes.map(l=>`<details><summary>${h(l.title)}</summary><ul>${l.points.map(p=>`<li>${h(p)}</li>`).join('')}</ul><p><b>Spune cu voce tare:</b> ${h(l.speaking)}</p></details>`).join('')}</div>`:''}<h2>Cum vrei să joci?</h2><div class="mode-grid">${modeCards(id,dialogCount)}</div><p class="muted">Fiecare rundă are 20 de provocări. Temele mici sunt completate cu recapitulare din același nivel. Greșelile se reiau separat.</p></section>`);
  }
- function modeCards(id,dialogCount){return [['mix','bolt',T('Misiune mixtă','Mixed mission'),T('Alege, traduce și reconstruiește.','Choose, translate and rebuild.')],['cards','layers',T('Descoperă','Discover'),T('Învață sensul și spune-l cu voce tare.','Learn the meaning and say it out loud.')],['pairs','link',T('Găsește perechile','Find the pairs'),T('Unește cuvintele cu sensurile lor.','Match the words to their meanings.')],['write','keyboard',T('Fără variante','No options'),T('Scrie răspunsul în Arabizi.','Type your answer in Arabizi.')],['order','pen',T('Construiește','Build'),T('Pune cuvintele în ordinea potrivită.','Put the words in the right order.')],...(dialogCount?[['dialog','chat',T('În conversație','In conversation'),T('Alege replica potrivită situației.','Pick the right reply for the situation.')]]:[])].filter(([m])=>{const g=D.units.find(u=>u.id===id)?.group||trainingGroup;return E.unique(D.units.filter(u=>u.group===g).flatMap(u=>eligible(u.id,m)),E.roundKey).length>=20;}).map(([m,i,t,d])=>`<button class="mode-card" data-play-unit="${id}" data-mode="${m}">${icon(i==='link'?'layers':i)}<strong>${t}</strong><span>${d}</span>${m==='mix'?'<small>RECOMANDAT</small>':''}</button>`).join('');}
- function training(){const rs=reviewed();shell(`<div class="page-heading"><div><div class="eyebrow">UN PIC MAI BINE, LA FIECARE RUNDĂ</div><h1>Antrenamentul tău</h1><p>Alege un traseu și combină lecțiile lui într-o rundă.</p></div></div><div class="training-highlight"><div>${icon('refresh')}<h2>Greșelile de ieri, reușitele de azi.</h2><p>${rs.length?rs.length+T(' provocări au nevoie de încă o încercare.',' challenges need another try.'):T('Încă nu ai provocări de reluat. Joacă o misiune ca să începi.','No challenges to redo yet. Play a mission to get started.')}</p></div><button class="btn primary" data-review>Reia greșelile ${icon('arrow')}</button></div><label class="filter-label training-filter"><span>Traseu de exersat</span><select id="training-group">${[...new Set(D.units.map(u=>u.group))].map(g=>`<option value="${h(g)}" ${trainingGroup===g?'selected':''}>${h(g)}</option>`).join('')}</select></label><div class="mode-grid training-modes">${modeCards('core',D.drills.filter(q=>q.dialog).length)}</div><div class="coach-note">${icon('info')}<p>La scriere acceptăm majuscule, semne de punctuație, vocale prelungite și variantele kh/5, gh/8. Sufixele de persoană și consoanele duble contează.</p></div>`);}
+ function modeCards(id,dialogCount){return [['mix','bolt',T('Misiune mixtă','Mixed mission'),T('Alege, traduce și reconstruiește.','Choose, translate and rebuild.')],['cards','layers',T('Descoperă','Discover'),T('Învață sensul și spune-l cu voce tare.','Learn the meaning and say it out loud.')],['pairs','link',T('Găsește perechile','Find the pairs'),T('Unește cuvintele cu sensurile lor.','Match the words to their meanings.')],['write','keyboard',T('Fără variante','No options'),T('Scrie răspunsul în Arabizi.','Type your answer in Arabizi.')],['order','pen',T('Construiește','Build'),T('Pune cuvintele în ordinea potrivită.','Put the words in the right order.')],...(dialogCount?[['dialog','chat',T('În conversație','In conversation'),T('Alege replica potrivită situației.','Pick the right reply for the situation.')]]:[])].filter(([m])=>{if(id==='core')return E.unique(eligible('core',m),E.roundKey).length>=20;const g=D.units.find(u=>u.id===id)?.group;return E.unique(D.units.filter(u=>u.group===g).flatMap(u=>eligible(u.id,m)),E.roundKey).length>=20;}).map(([m,i,t,d])=>`<button class="mode-card" data-play-unit="${id}" data-mode="${m}">${icon(i==='link'?'layers':i)}<strong>${t}</strong><span>${d}</span>${m==='mix'?'<small>RECOMANDAT</small>':''}</button>`).join('');}
+ function training(){const rs=reviewed();shell(`<div class="page-heading"><div><div class="eyebrow">UN PIC MAI BINE, LA FIECARE RUNDĂ</div><h1>Antrenamentul tău</h1><p>Alege un traseu și combină lecțiile lui într-o rundă.</p></div></div><div class="training-highlight"><div>${icon('refresh')}<h2>Greșelile de ieri, reușitele de azi.</h2><p>${rs.length?rs.length+T(' provocări au nevoie de încă o încercare.',' challenges need another try.'):T('Încă nu ai provocări de reluat. Joacă o misiune ca să începi.','No challenges to redo yet. Play a mission to get started.')}</p></div><button class="btn primary" data-review>Reia greșelile ${icon('arrow')}</button></div><label class="filter-label training-filter"><span>Traseu de exersat</span><select id="training-group">${(D.levels||[]).map(l=>`<option value="${h(l.id)}" ${trainingLevel===l.id?'selected':''}>${h(l.id)} · ${D.cards.filter(upToLevel(l.id)).length} ${T('carduri','cards')}</option>`).join('')}</select></label><div class="mode-grid training-modes">${modeCards('core',D.drills.filter(q=>q.dialog).length)}</div><div class="coach-note">${icon('info')}<p>La scriere acceptăm majuscule, semne de punctuație, vocale prelungite și variantele kh/5, gh/8. Sufixele de persoană și consoanele duble contează.</p></div>`);}
  function collection(){const items=D.cards.filter(c=>(lexUnit==='all'||c.unit===lexUnit)&&(!lexQuery||[c.ar,c.ro,c.en,...(c.variants||[])].some(s=>E.norm(s).includes(E.norm(lexQuery)))));const pages=Math.max(1,Math.ceil(items.length/30));lexPage=Math.min(lexPage,pages-1);const current=items.slice(lexPage*30,lexPage*30+30);
  shell(`<div class="page-heading"><div><div class="eyebrow">CAIETUL TĂU DE BUZUNAR</div><h1>Cuvinte & expresii</h1><p>${D.cards.length.toLocaleString('ro-RO')} carduri. Caută un cuvânt, o expresie sau un sens.</p></div></div><div class="collection-tools"><label class="search-field">${icon('search')}<input id="word-search" type="search" value="${h(lexQuery)}" placeholder="Caută: mar7aba, cafea, familie…" aria-label="Caută în vocabular"></label><label class="filter-label"><span>Misiune</span><select id="unit-filter"><option value="all">Toate misiunile</option>${D.units.map(u=>`<option value="${u.id}" ${u.id===lexUnit?'selected':''}>${h(u.title)}</option>`).join('')}</select></label></div><div class="collection-count">${items.length} rezultate <span>Consolidat = 3 răspunsuri corecte fără indiciu</span></div><div class="vocab-grid">${current.length?current.map(c=>`<article class="vocab-card"><div class="vocab-top"><span>${h(D.units.find(u=>u.id===c.unit)?.title)}</span>${(state.progress[c.id]?.streak||0)>=3?`<span class="master-check" title="Consolidat">${icon('check')}</span>`:state.progress[c.id]?.wrong?`<span class="retry-label">De reluat</span>`:''}</div><h2 dir="ltr">${h(c.ar)}</h2><p>${c.lang==='en'?'<span class="en-tag">EN</span> ':''}${h(c.ro)}</p>${c.variants?`<p class="variants">Și: ${c.variants.map(h).join(' / ')}</p>`:''}${c.note?`<details><summary>Notă de învățare</summary><p>${h(c.note)}</p></details>`:''}<small>${h(sourceLine(c))}</small>${canEdit()?(editingCard===c.id?editForm(c):`<button class="btn secondary inline-edit-open" data-start-edit="${c.id}">Corectează</button>`):''}</article>`).join(''):'<div class="empty-state">Nu am găsit acest cuvânt. Încearcă un alt termen sau o altă misiune.</div>'}</div><div class="pagination"><button class="btn secondary" data-page="${lexPage-1}" ${lexPage===0?'disabled':''}>${icon('back')} Înapoi</button><span>Pagina ${lexPage+1} din ${pages}</span><button class="btn secondary" data-page="${lexPage+1}" ${lexPage>=pages-1?'disabled':''}>Înainte ${icon('arrow')}</button></div>`);
  }
@@ -134,10 +152,18 @@
 
  function setView(v){window.YallaAcademy?.leave();clearTimeout(searchTimer);if(session&&!session.done){showLeave(v);return;}session=null;view=v;render();window.scrollTo({top:0});}
  function render(){if(['journey','teacher','exports','speaking'].includes(view)&&!session){window.YallaAcademy.render(view);return;}if(session){renderGame();return;}if(['adventure','placement'].includes(view)){window.YallaPlus.render(view);return;}if(view==='missions')missions();else if(view==='practice')training();else if(view==='collection')collection();else if(view==='progress')passport();else about();}
- function poolFor(id){return id==='core'?D.cards.filter(c=>D.units.find(u=>u.id===c.unit)?.group===trainingGroup):D.cards.filter(c=>c.unit===id);}
+ /* A training round draws everything up to the chosen level, not only that
+    level: a conversation at A2 still needs its A1 words, which is how the owner
+    classified the bank. The old pool filtered by the LESSON's group, and those
+    groups mislabel difficulty badly — group "A1" held 288 A2 cards and 11 B1
+    ones, group "A2" held 223 A1 cards — so the level on the card is the honest
+    filter. */
+ const levelOrder=()=>(D.levels||[]).map(l=>l.id);
+ const upToLevel=lvl=>{const o=levelOrder(),top=o.indexOf(lvl);return c=>{const i=o.indexOf(c.level);return i>=0&&(top<0||i<=top);};};
+ function poolFor(id){return id==='core'?D.cards.filter(upToLevel(trainingLevel)):D.cards.filter(c=>c.unit===id);}
  const recentRounds={};
  function eligible(id,selectedMode){
-  let cards=poolFor(id),drills=D.drills.filter(c=>id==='core'?D.units.find(u=>u.id===c.unit)?.group===trainingGroup:c.unit===id);
+  let cards=poolFor(id),drills=D.drills.filter(c=>{if(id!=='core')return c.unit===id;const ok=upToLevel(trainingLevel);return D.cards.some(x=>x.unit===c.unit&&ok(x));});
   if(selectedMode==='dialog')return drills.filter(d=>d.dialog);
   if(selectedMode==='order')return cards.filter(c=>c.ar.trim().split(/\s+/).length>=3&&c.ar.trim().split(/\s+/).length<=12);
   if(['cards','pairs','write'].includes(selectedMode))return cards;
@@ -148,8 +174,8 @@
   const previous=session;
   if(id==='review'){review=true;id=previous?.unit&&previous.unit!=='review'?previous.unit:state.lastUnit||'a1-welcome';}
   window.YallaAcademy?.leave();clearTimeout(searchTimer);mode=selectedMode;
-  const u=D.units.find(u=>u.id===id),scope=u?.group||trainingGroup;
-  const base=eligible(id,mode),siblings=D.units.filter(x=>x.group===scope&&x.id!==id).flatMap(x=>eligible(x.id,mode));
+  const u=D.units.find(u=>u.id===id),scope=u?.group||null;
+  const base=eligible(id,mode),siblings=(scope?D.units.filter(x=>x.group===scope&&x.id!==id):[]).flatMap(x=>eligible(x.id,mode));
   let primary=scheduled?E.due([...D.cards,...D.drills],state.progress):review?[...D.cards,...D.drills].filter(c=>state.progress[c.id]?.wrong):base;
   if(review&&mode!=='mix')primary=primary.filter(c=>[...base,...siblings].some(x=>x.id===c.id));
   if((review||scheduled)&&!primary.length){toast(scheduled?T('Nu ai recapitulări programate pentru azi. Începe un set nou!','No reviews scheduled for today. Start a new set!'):T('Nicio greșeală de reluat. Începe un set nou!','No mistakes to redo. Start a new set!'));return;}
@@ -160,7 +186,7 @@
 
   const questions=mode==='mix'&&!review&&!scheduled?E.mixed(selected,D.cards):selected.map((c,i)=>c.prompt?{id:c.id,type:'drill',drill:c,answer:c.answer,options:E.shuffle([c.answer,...E.shuffle(c.wrong).slice(0,3)])}:E.makeQuestion(c,D.cards,mode,i));
   recentRounds[key]=questions.map(q=>E.roundKey(q.card||q.drill));
-  session={unit:id,title:scheduled?T('Recapitularea de azi','Today\'s review'):review?T('Reia greșelile · cu recapitulare','Redo mistakes · with review'):u?.title||T('Antrenament · ','Training · ')+trainingGroup,mode,questions,index:0,initial:20,correct:0,streak:0,xp:0,misses:[],answered:false,hinted:false,result:null,selectedTokens:[],revealed:false,done:false,review,learned:0};
+  session={unit:id,title:scheduled?T('Recapitularea de azi','Today\'s review'):review?T('Reia greșelile · cu recapitulare','Redo mistakes · with review'):u?.title||T('Antrenament · ','Training · ')+trainingLevel,mode,questions,index:0,initial:20,correct:0,streak:0,xp:0,misses:[],answered:false,hinted:false,result:null,selectedTokens:[],revealed:false,done:false,review,learned:0};
   if(mode==='pairs'){Object.assign(session,{pairCards:selected,boardOffset:0,pairCompleted:0,pairWrong:new Set()});nextPairBoard();}
   if(u){state.lastUnit=u.id;save();}renderGame();window.scrollTo({top:0});
  }
@@ -264,7 +290,7 @@
    if(ev.target.id==='fix-form'){ev.preventDefault();const val=$('#fix-answer').value.trim();if(val)tryFix(val);else toast(T('Scrie răspunsul corect ca să exersezi.','Type the correct answer to practise it.'));}});
  let searchTimer;
  document.addEventListener('input',ev=>{if(ev.target.id==='word-search'){lexQuery=ev.target.value;lexPage=0;clearTimeout(searchTimer);searchTimer=setTimeout(()=>{const pos=$('#word-search')?.selectionStart;collection();const input=$('#word-search');input?.focus({preventScroll:true});try{input?.setSelectionRange(pos,pos);}catch{}},220);}});
- document.addEventListener('change',ev=>{if(ev.target.id==='training-group'){trainingGroup=ev.target.value;training();return;}if(ev.target.id==='unit-filter'){lexUnit=ev.target.value;lexPage=0;collection();}});
+ document.addEventListener('change',ev=>{if(ev.target.id==='training-group'){trainingLevel=ev.target.value;training();return;}if(ev.target.id==='unit-filter'){lexUnit=ev.target.value;lexPage=0;collection();}});
  document.addEventListener('keydown',ev=>{if(!session||session.done||document.querySelector('dialog[open]'))return;if(['INPUT','TEXTAREA','SELECT','BUTTON','A'].includes(ev.target.tagName))return;
   if(session.answered&&ev.key==='Enter'){ev.preventDefault();next();return;}
   const q=session.questions?.[session.index];if(!session.answered&&q?.options&&/^[1-4]$/.test(ev.key)){const opt=q.options[Number(ev.key)-1];if(opt){ev.preventDefault();answer(opt);}}
