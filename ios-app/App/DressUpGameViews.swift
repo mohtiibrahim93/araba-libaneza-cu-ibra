@@ -53,7 +53,7 @@ final class DressUpGameStore: ObservableObject {
 
 // MARK: - Hub
 
-/// "Îmbracă-l pe Ibra": play approved conversations, earn coins, dress the character.
+/// "O zi cu Ibra": play approved conversations, earn coins, dress the character.
 struct DressUpGameView: View {
     let package: ContentPackage
     let locale: String
@@ -69,7 +69,7 @@ struct DressUpGameView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                        Text("Îmbracă-l pe Ibra")
+                        Text("O zi cu Ibra")
                             .font(Theme.serif(.title2))
                             .foregroundStyle(Theme.ink)
                         Text("Răspunde în libaneză, câștigă monede și alege-i hainele.")

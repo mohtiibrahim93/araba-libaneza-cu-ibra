@@ -44,7 +44,7 @@ struct PracticeListView: View {
                     PracticeModeRow(
                         mode: PracticeModeSummary(
                             id: "dress-up-game",
-                            title: "Îmbracă-l pe Ibra",
+                            title: "O zi cu Ibra",
                             subtitle: "Joc: răspunzi în libaneză, câștigi monede și alegi hainele personajului.",
                             isAvailable: true
                         ),

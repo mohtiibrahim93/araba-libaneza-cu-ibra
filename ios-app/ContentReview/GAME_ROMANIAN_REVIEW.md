@@ -1,4 +1,4 @@
-# Jocul „Îmbracă-l pe Ibra” — traducerile românești de sub variante
+# Jocul „O zi cu Ibra” — traducerile românești de sub variante
 
 La nivelul A1, sub fiecare variantă de răspuns apare traducerea de mai jos, luată din conținutul deja aprobat
 (din exercițiile „Alege replica…” sau din sensul expresiei). Corectează orice rând; „—” înseamnă că nu există traducere și nu apare nimic.
