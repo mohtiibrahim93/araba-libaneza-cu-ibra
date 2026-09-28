@@ -405,6 +405,7 @@ private struct DiscoverView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.canvas.ignoresSafeArea())
+            .statusBarBackground()
             .toolbar(.hidden, for: .navigationBar)
         }
     }
