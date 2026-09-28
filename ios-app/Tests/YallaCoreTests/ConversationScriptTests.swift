@@ -24,7 +24,9 @@ struct ConversationScriptTests {
                 let exercise = try #require(exercises[turn.exerciseID], "missing \(turn.exerciseID)")
                 #expect(exercise.type == .dialogueResponse)
                 #expect(exercise.unitID == script.unitID)
-                #expect(!turn.partner.arabizi.isEmpty && !turn.partner.ro.isEmpty)
+                if let partner = turn.partner {
+                    #expect(!partner.arabizi.isEmpty && !partner.ro.isEmpty)
+                }
             }
         }
     }

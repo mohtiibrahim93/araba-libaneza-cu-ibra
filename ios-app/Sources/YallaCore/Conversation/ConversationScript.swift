@@ -10,7 +10,8 @@ public struct ConversationScript: Codable, Equatable, Sendable {
     }
 
     public struct Turn: Codable, Equatable, Sendable {
-        public let partner: Line
+        /// Nil when the learner speaks first (the scene opens with their line).
+        public let partner: Line?
         public let exerciseID: String
         /// The Romanian of the learner's reply, for exercises whose prompt
         /// does not quote it (e.g. „Shu esmak?” — spune că te cheamă George).

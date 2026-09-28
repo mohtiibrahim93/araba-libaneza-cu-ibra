@@ -50890,8 +50890,13 @@
     },
     {
       "id": "syn-b29debf6c0fd",
-      "canonicalArabizi": "Janb el bank.",
-      "variants": [],
+      "canonicalArabizi": "7add el bank.",
+      "variants": [
+        {
+          "value": "Janb el bank.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -50904,8 +50909,13 @@
     },
     {
       "id": "syn-699742dbef60",
-      "canonicalArabizi": "El supermarket janb el bank.",
-      "variants": [],
+      "canonicalArabizi": "El supermarket 7add el bank.",
+      "variants": [
+        {
+          "value": "El supermarket janb el bank.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -50918,8 +50928,13 @@
     },
     {
       "id": "syn-a6c33e787f68",
-      "canonicalArabizi": "Bayti 2arib men el mat3am.",
-      "variants": [],
+      "canonicalArabizi": "Bayte 2ariib men el mat3am.",
+      "variants": [
+        {
+          "value": "Bayti 2arib men el mat3am.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53388,8 +53403,13 @@
     },
     {
       "id": "syn-ff71588eb3c9",
-      "canonicalArabizi": "janb el mat3am",
-      "variants": [],
+      "canonicalArabizi": "7add el mat3am",
+      "variants": [
+        {
+          "value": "janb el mat3am",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53402,8 +53422,13 @@
     },
     {
       "id": "syn-398ba3ec0744",
-      "canonicalArabizi": "2oddem el bank",
-      "variants": [],
+      "canonicalArabizi": "2eddeem el bank",
+      "variants": [
+        {
+          "value": "2oddem el bank",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53416,8 +53441,13 @@
     },
     {
       "id": "syn-2de1bb24505c",
-      "canonicalArabizi": "wara el bineeye",
-      "variants": [],
+      "canonicalArabizi": "wara el beneeye",
+      "variants": [
+        {
+          "value": "wara el bineeye",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53430,8 +53460,13 @@
     },
     {
       "id": "syn-66399b553a14",
-      "canonicalArabizi": "kif bwassal?",
-      "variants": [],
+      "canonicalArabizi": "Kif buusal?",
+      "variants": [
+        {
+          "value": "kif bwassal?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53444,8 +53479,13 @@
     },
     {
       "id": "syn-3768afc84acb",
-      "canonicalArabizi": "bte3ref et tari2?",
-      "variants": [],
+      "canonicalArabizi": "bta3ref et tari2?",
+      "variants": [
+        {
+          "value": "bte3ref et tari2?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -53514,8 +53554,13 @@
     },
     {
       "id": "syn-6319958fd3cc",
-      "canonicalArabizi": "ba3ed ed dewwar",
-      "variants": [],
+      "canonicalArabizi": "ba3ed ed duwwar",
+      "variants": [
+        {
+          "value": "ba3ed ed dewwar",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -56498,8 +56543,13 @@
     },
     {
       "id": "syn-f64b2dc47294",
-      "canonicalArabizi": "Kif bwassal?",
-      "variants": [],
+      "canonicalArabizi": "Kif buusal?",
+      "variants": [
+        {
+          "value": "Kif bwassal?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -56568,8 +56618,13 @@
     },
     {
       "id": "syn-fcf9ddfdfe8f",
-      "canonicalArabizi": "Es saydaliyye janb el bank.",
-      "variants": [],
+      "canonicalArabizi": "Es saydaliyye 7add el bank.",
+      "variants": [
+        {
+          "value": "Es saydaliyye janb el bank.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -66781,7 +66836,7 @@
       },
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -66790,13 +66845,15 @@
       "id": "syn-context-syn-b29debf6c0fd",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-b29debf6c0fd"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Lângă bancă.”"
       },
-      "answer": "Janb el bank.",
+      "answer": "7add el bank.",
       "wrongAnswers": [
-        "bte3ref et tari2?",
+        "bta3ref et tari2?",
         "Ru7e du8re la e5er esh share3.",
         "Tameem, shukran ktiir!"
       ]
@@ -66805,11 +66862,13 @@
       "id": "syn-context-syn-699742dbef60",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-699742dbef60"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Supermarketul este lângă bancă.”"
       },
-      "answer": "El supermarket janb el bank.",
+      "answer": "El supermarket 7add el bank.",
       "wrongAnswers": [
         "3and el ishara",
         "Tameem, w ba3den?",
@@ -66820,15 +66879,17 @@
       "id": "syn-context-syn-a6c33e787f68",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-a6c33e787f68"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Casa mea este aproape de restaurant.”"
       },
-      "answer": "Bayti 2arib men el mat3am.",
+      "answer": "Bayte 2ariib men el mat3am.",
       "wrongAnswers": [
-        "ba3ed ed dewwar",
+        "ba3ed ed duwwar",
         "3mele yamiin 3and el ishaara",
-        "Janb el bank."
+        "7add el bank."
       ]
     },
     {
@@ -66841,7 +66902,7 @@
       },
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -66858,33 +66919,37 @@
       "wrongAnswers": [
         "Ayya tabe2?",
         "Yamiin 3and el ishaara, meshe.",
-        "El supermarket janb el bank."
+        "El supermarket 7add el bank."
       ]
     },
     {
       "id": "syn-context-syn-ff71588eb3c9",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-ff71588eb3c9"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „lângă restaurant”"
       },
-      "answer": "janb el mat3am",
+      "answer": "7add el mat3am",
       "wrongAnswers": [
         "Mar7aba, fik tse3edne?",
-        "Es saydaliyye janb el bank.",
-        "Bayti 2arib men el mat3am."
+        "Es saydaliyye 7add el bank.",
+        "Bayte 2ariib men el mat3am."
       ]
     },
     {
       "id": "syn-context-syn-398ba3ec0744",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-398ba3ec0744"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „în fața băncii”"
       },
-      "answer": "2oddem el bank",
+      "answer": "2eddeem el bank",
       "wrongAnswers": [
         "Akid, shu baddik?",
         "7add el bank, fhemet.",
@@ -66895,30 +66960,34 @@
       "id": "syn-context-syn-2de1bb24505c",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-2de1bb24505c"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „în spatele clădirii”"
       },
-      "answer": "wara el bineeye",
+      "answer": "wara el beneeye",
       "wrongAnswers": [
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe.",
-        "janb el mat3am"
+        "7add el mat3am"
       ]
     },
     {
       "id": "syn-context-syn-3768afc84acb",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-3768afc84acb"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „știi drumul?”"
       },
-      "answer": "bte3ref et tari2?",
+      "answer": "bta3ref et tari2?",
       "wrongAnswers": [
         "Ru7e du8re la e5er esh share3.",
         "Tameem, shukran ktiir!",
-        "2oddem el bank"
+        "2eddeem el bank"
       ]
     },
     {
@@ -66933,22 +67002,24 @@
       "wrongAnswers": [
         "Tameem, w ba3den?",
         "Wen es saydaliyye?",
-        "wara el bineeye"
+        "wara el beneeye"
       ]
     },
     {
       "id": "syn-context-syn-6319958fd3cc",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-6319958fd3cc"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „după sensul giratoriu”"
       },
-      "answer": "ba3ed ed dewwar",
+      "answer": "ba3ed ed duwwar",
       "wrongAnswers": [
         "3mele yamiin 3and el ishaara",
-        "Janb el bank.",
-        "bte3ref et tari2?"
+        "7add el bank.",
+        "bta3ref et tari2?"
       ]
     },
     {
@@ -66962,7 +67033,7 @@
       "answer": "Ayya tabe2?",
       "wrongAnswers": [
         "Yamiin 3and el ishaara, meshe.",
-        "El supermarket janb el bank.",
+        "El supermarket 7add el bank.",
         "3and el ishara"
       ]
     },
@@ -66976,9 +67047,9 @@
       },
       "answer": "Mar7aba, fik tse3edne?",
       "wrongAnswers": [
-        "Es saydaliyye janb el bank.",
-        "Bayti 2arib men el mat3am.",
-        "ba3ed ed dewwar"
+        "Es saydaliyye 7add el bank.",
+        "Bayte 2ariib men el mat3am.",
+        "ba3ed ed duwwar"
       ]
     },
     {
@@ -67006,7 +67077,7 @@
       },
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -67022,7 +67093,7 @@
       "answer": "Es saydaliyye 2ariibe men hon.",
       "wrongAnswers": [
         "B3ide shway, 5ams d2eeye2 meshe.",
-        "janb el mat3am",
+        "7add el mat3am",
         "Mar7aba, fik tse3edne?"
       ]
     },
@@ -67037,7 +67108,7 @@
       "answer": "Ru7e du8re la e5er esh share3.",
       "wrongAnswers": [
         "Tameem, shukran ktiir!",
-        "2oddem el bank",
+        "2eddeem el bank",
         "Akid, shu baddik?"
       ]
     },
@@ -67052,7 +67123,7 @@
       "answer": "Tameem, w ba3den?",
       "wrongAnswers": [
         "Wen es saydaliyye?",
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon."
       ]
     },
@@ -67066,8 +67137,8 @@
       },
       "answer": "3mele yamiin 3and el ishaara",
       "wrongAnswers": [
-        "Janb el bank.",
-        "bte3ref et tari2?",
+        "7add el bank.",
+        "bta3ref et tari2?",
         "Ru7e du8re la e5er esh share3."
       ]
     },
@@ -67081,7 +67152,7 @@
       },
       "answer": "Yamiin 3and el ishaara, meshe.",
       "wrongAnswers": [
-        "El supermarket janb el bank.",
+        "El supermarket 7add el bank.",
         "3and el ishara",
         "Tameem, w ba3den?"
       ]
@@ -67090,14 +67161,16 @@
       "id": "syn-context-syn-fcf9ddfdfe8f",
       "type": "dialogue-response",
       "unitID": "a1-city",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-fcf9ddfdfe8f"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Farmacia e lângă bancă.”"
       },
-      "answer": "Es saydaliyye janb el bank.",
+      "answer": "Es saydaliyye 7add el bank.",
       "wrongAnswers": [
-        "Bayti 2arib men el mat3am.",
-        "ba3ed ed dewwar",
+        "Bayte 2ariib men el mat3am.",
+        "ba3ed ed duwwar",
         "3mele yamiin 3and el ishaara"
       ]
     },
@@ -67126,9 +67199,9 @@
       },
       "answer": "B3ide shway, 5ams d2eeye2 meshe.",
       "wrongAnswers": [
-        "janb el mat3am",
+        "7add el mat3am",
         "Mar7aba, fik tse3edne?",
-        "Es saydaliyye janb el bank."
+        "Es saydaliyye 7add el bank."
       ]
     },
     {
@@ -67141,7 +67214,7 @@
       },
       "answer": "Tameem, shukran ktiir!",
       "wrongAnswers": [
-        "2oddem el bank",
+        "2eddeem el bank",
         "Akid, shu baddik?",
         "7add el bank, fhemet."
       ]

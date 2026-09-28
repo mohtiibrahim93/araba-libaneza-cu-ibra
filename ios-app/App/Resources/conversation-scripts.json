@@ -586,6 +586,188 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a1-city",
+      "scenes": [
+        {
+          "title": "Te-ai rătăcit",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-59a83c5ab673"
+            },
+            {
+              "exerciseID": "syn-context-syn-4556ba25ad37",
+              "partner": {
+                "arabizi": "Akid, shu btriide?",
+                "ro": "Sigur, ce vrei?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4207b8188210",
+              "partner": {
+                "arabizi": "Es saydaliyye 2ariibe men hon. Ru7e du8re la e5er esh share3.",
+                "ro": "Farmacia e aproape de aici. Mergi drept până la capătul străzii."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-2a4417a1b291",
+              "partner": {
+                "arabizi": "3mele yamiin 3and el ishaara.",
+                "ro": "Cotești la dreapta la semafor."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9fff644972b7",
+              "partner": {
+                "arabizi": "Es saydaliyye 7add el bank.",
+                "ro": "Farmacia e lângă bancă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1cb1dbbb7ba8",
+              "partner": {
+                "arabizi": "Mesh b3iide wala shway, 5ams d2eeye2 meshe.",
+                "ro": "Nu e departe deloc, cinci minute pe jos."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Același drum, tu ești trecătorul",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-eaf06eb2e0ba",
+              "partner": {
+                "arabizi": "Mar7aba, fik tse3edne?",
+                "ro": "Salut, poți să mă ajuți?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9eb06dc111e4",
+              "partner": {
+                "arabizi": "Wen es saydaliyye?",
+                "ro": "Unde e farmacia?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ced297d92d16",
+              "partner": {
+                "arabizi": "Kif buusal?",
+                "ro": "Cum ajung?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a2a67de95d37",
+              "partner": {
+                "arabizi": "Tameem, w ba3den?",
+                "ro": "Bine, și apoi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-fcf9ddfdfe8f",
+              "partner": {
+                "arabizi": "Yamiin 3and el ishaara, meshe.",
+                "ro": "La dreapta la semafor, bine."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-bf0130fd8b1c",
+              "partner": {
+                "arabizi": "7add el bank, fhemet.",
+                "ro": "Lângă bancă, am înțeles."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Un turist te întreabă unde e totul",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-699742dbef60",
+              "partner": {
+                "arabizi": "Wen el supermarket?",
+                "ro": "Unde e supermarketul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b29debf6c0fd",
+              "partner": {
+                "arabizi": "Wen es saydaliyye?",
+                "ro": "Unde e farmacia?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6319958fd3cc",
+              "partner": {
+                "arabizi": "Wen el hotel?",
+                "ro": "Unde e hotelul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ff71588eb3c9",
+              "partner": {
+                "arabizi": "Wen el ma7al?",
+                "ro": "Unde e magazinul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-398ba3ec0744",
+              "partner": {
+                "arabizi": "Wen el taxi?",
+                "ro": "Unde e taxiul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-2de1bb24505c",
+              "partner": {
+                "arabizi": "Wen el maw2af?",
+                "ro": "Unde e parcarea?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-20526a1decb2",
+              "partner": {
+                "arabizi": "Wen el ma7atta?",
+                "ro": "Unde e stația?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-eff045c3ad41",
+              "partner": {
+                "arabizi": "Wen el mat3am?",
+                "ro": "Unde e restaurantul?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Cu un prieten",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-a6c33e787f68",
+              "partner": {
+                "arabizi": "Wen baytak?",
+                "ro": "Unde e casa ta?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3768afc84acb",
+              "partner": {
+                "arabizi": "Yalla nru7 3al otel!",
+                "ro": "Hai să mergem la hotel!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d69397a9546c",
+              "partner": {
+                "arabizi": "El maktab b hal binaye.",
+                "ro": "Biroul e în clădirea asta."
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

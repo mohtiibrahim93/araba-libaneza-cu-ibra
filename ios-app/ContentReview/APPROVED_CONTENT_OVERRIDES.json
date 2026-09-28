@@ -511,7 +511,7 @@
     "syn-context-syn-1cb1dbbb7ba8": {
       "answer": "Tameem, shukran ktiir!",
       "wrongAnswers": [
-        "2oddem el bank",
+        "2eddeem el bank",
         "Akid, shu baddik?",
         "7add el bank, fhemet."
       ]
@@ -660,7 +660,7 @@
     "syn-context-syn-2a4417a1b291": {
       "answer": "Yamiin 3and el ishaara, meshe.",
       "wrongAnswers": [
-        "El supermarket janb el bank.",
+        "El supermarket 7add el bank.",
         "3and el ishara",
         "Tameem, w ba3den?"
       ]
@@ -722,11 +722,14 @@
       ]
     },
     "syn-context-syn-2de1bb24505c": {
-      "answer": "wara el bineeye",
+      "answer": "wara el beneeye",
       "wrongAnswers": [
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe.",
-        "janb el mat3am"
+        "7add el mat3am"
+      ],
+      "expressionIDs": [
+        "syn-2de1bb24505c"
       ]
     },
     "syn-context-syn-2ecb1a5d02fe": {
@@ -740,7 +743,7 @@
     "syn-context-syn-308bfe869e32": {
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -907,7 +910,7 @@
     "syn-context-syn-4115e328aa78": {
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -924,7 +927,7 @@
       "answer": "Tameem, w ba3den?",
       "wrongAnswers": [
         "Wen es saydaliyye?",
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon."
       ]
     },
@@ -975,7 +978,7 @@
     "syn-context-syn-4556ba25ad37": {
       "answer": "Wen es saydaliyye?",
       "wrongAnswers": [
-        "wara el bineeye",
+        "wara el beneeye",
         "Es saydaliyye 2ariibe men hon.",
         "B3ide shway, 5ams d2eeye2 meshe."
       ]
@@ -1106,9 +1109,9 @@
     "syn-context-syn-59a83c5ab673": {
       "answer": "Mar7aba, fik tse3edne?",
       "wrongAnswers": [
-        "Es saydaliyye janb el bank.",
-        "Bayti 2arib men el mat3am.",
-        "ba3ed ed dewwar"
+        "Es saydaliyye 7add el bank.",
+        "Bayte 2ariib men el mat3am.",
+        "ba3ed ed duwwar"
       ]
     },
     "syn-context-syn-59fca2ec3a60": {
@@ -1189,11 +1192,14 @@
       ]
     },
     "syn-context-syn-6319958fd3cc": {
-      "answer": "ba3ed ed dewwar",
+      "answer": "ba3ed ed duwwar",
       "wrongAnswers": [
         "3mele yamiin 3and el ishaara",
-        "Janb el bank.",
-        "bte3ref et tari2?"
+        "7add el bank.",
+        "bta3ref et tari2?"
+      ],
+      "expressionIDs": [
+        "syn-6319958fd3cc"
       ]
     },
     "syn-context-syn-634f0e423246": {
@@ -1830,7 +1836,7 @@
       "answer": "Es saydaliyye 2ariibe men hon.",
       "wrongAnswers": [
         "B3ide shway, 5ams d2eeye2 meshe.",
-        "janb el mat3am",
+        "7add el mat3am",
         "Mar7aba, fik tse3edne?"
       ]
     },
@@ -1877,8 +1883,8 @@
     "syn-context-syn-a2a67de95d37": {
       "answer": "3mele yamiin 3and el ishaara",
       "wrongAnswers": [
-        "Janb el bank.",
-        "bte3ref et tari2?",
+        "7add el bank.",
+        "bta3ref et tari2?",
         "Ru7e du8re la e5er esh share3."
       ]
     },
@@ -2109,9 +2115,9 @@
     "syn-context-syn-bf0130fd8b1c": {
       "answer": "B3ide shway, 5ams d2eeye2 meshe.",
       "wrongAnswers": [
-        "janb el mat3am",
+        "7add el mat3am",
         "Mar7aba, fik tse3edne?",
-        "Es saydaliyye janb el bank."
+        "Es saydaliyye 7add el bank."
       ]
     },
     "syn-context-syn-bfe2a71a9de6": {
@@ -2215,7 +2221,7 @@
       "answer": "Ru7e du8re la e5er esh share3.",
       "wrongAnswers": [
         "Tameem, shukran ktiir!",
-        "2oddem el bank",
+        "2eddeem el bank",
         "Akid, shu baddik?"
       ]
     },
@@ -2346,7 +2352,7 @@
       "answer": "Ayya tabe2?",
       "wrongAnswers": [
         "Yamiin 3and el ishaara, meshe.",
-        "El supermarket janb el bank.",
+        "El supermarket 7add el bank.",
         "3and el ishara"
       ]
     },
@@ -2912,9 +2918,13 @@
     },
     "syn-context-syn-b29debf6c0fd": {
       "wrongAnswers": [
-        "bte3ref et tari2?",
+        "bta3ref et tari2?",
         "Ru7e du8re la e5er esh share3.",
         "Tameem, shukran ktiir!"
+      ],
+      "answer": "7add el bank.",
+      "expressionIDs": [
+        "syn-b29debf6c0fd"
       ]
     },
     "syn-context-syn-699742dbef60": {
@@ -2922,27 +2932,39 @@
         "3and el ishara",
         "Tameem, w ba3den?",
         "Wen es saydaliyye?"
+      ],
+      "answer": "El supermarket 7add el bank.",
+      "expressionIDs": [
+        "syn-699742dbef60"
       ]
     },
     "syn-context-syn-a6c33e787f68": {
       "wrongAnswers": [
-        "ba3ed ed dewwar",
+        "ba3ed ed duwwar",
         "3mele yamiin 3and el ishaara",
-        "Janb el bank."
+        "7add el bank."
+      ],
+      "answer": "Bayte 2ariib men el mat3am.",
+      "expressionIDs": [
+        "syn-a6c33e787f68"
       ]
     },
     "syn-context-syn-eff045c3ad41": {
       "wrongAnswers": [
         "Ayya tabe2?",
         "Yamiin 3and el ishaara, meshe.",
-        "El supermarket janb el bank."
+        "El supermarket 7add el bank."
       ]
     },
     "syn-context-syn-ff71588eb3c9": {
       "wrongAnswers": [
         "Mar7aba, fik tse3edne?",
-        "Es saydaliyye janb el bank.",
-        "Bayti 2arib men el mat3am."
+        "Es saydaliyye 7add el bank.",
+        "Bayte 2ariib men el mat3am."
+      ],
+      "answer": "7add el mat3am",
+      "expressionIDs": [
+        "syn-ff71588eb3c9"
       ]
     },
     "syn-context-syn-398ba3ec0744": {
@@ -2950,20 +2972,28 @@
         "Akid, shu baddik?",
         "7add el bank, fhemet.",
         "2arib men hon"
+      ],
+      "answer": "2eddeem el bank",
+      "expressionIDs": [
+        "syn-398ba3ec0744"
       ]
     },
     "syn-context-syn-3768afc84acb": {
       "wrongAnswers": [
         "Ru7e du8re la e5er esh share3.",
         "Tameem, shukran ktiir!",
-        "2oddem el bank"
+        "2eddeem el bank"
+      ],
+      "answer": "bta3ref et tari2?",
+      "expressionIDs": [
+        "syn-3768afc84acb"
       ]
     },
     "syn-context-syn-20526a1decb2": {
       "wrongAnswers": [
         "Tameem, w ba3den?",
         "Wen es saydaliyye?",
-        "wara el bineeye"
+        "wara el beneeye"
       ]
     },
     "syn-context-syn-eaf06eb2e0ba": {
@@ -2975,9 +3005,13 @@
     },
     "syn-context-syn-fcf9ddfdfe8f": {
       "wrongAnswers": [
-        "Bayti 2arib men el mat3am.",
-        "ba3ed ed dewwar",
+        "Bayte 2ariib men el mat3am.",
+        "ba3ed ed duwwar",
         "3mele yamiin 3and el ishaara"
+      ],
+      "answer": "Es saydaliyye 7add el bank.",
+      "expressionIDs": [
+        "syn-fcf9ddfdfe8f"
       ]
     },
     "syn-context-syn-684e1e71f91e": {
@@ -3896,7 +3930,13 @@
       "canonicalArabizi": "Min wen ente?"
     },
     "syn-2de1bb24505c": {
-      "canonicalArabizi": "wara el bineeye"
+      "canonicalArabizi": "wara el beneeye",
+      "variants": [
+        {
+          "value": "wara el bineeye",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-2ecb1a5d02fe": {
       "canonicalArabizi": "Badde shawarma djej law sama7et."
@@ -4095,7 +4135,13 @@
       "canonicalArabizi": "7elo! Wen bteshte8el?"
     },
     "syn-6319958fd3cc": {
-      "canonicalArabizi": "ba3ed ed dewwar"
+      "canonicalArabizi": "ba3ed ed duwwar",
+      "variants": [
+        {
+          "value": "ba3ed ed dewwar",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-634f0e423246": {
       "canonicalArabizi": "Ba3do 8ale. Tletiin?"
@@ -4887,6 +4933,87 @@
     },
     "syn-7c91d20121d3": {
       "canonicalArabizi": "ma 3am ba3mel shi"
+    },
+    "syn-b29debf6c0fd": {
+      "canonicalArabizi": "7add el bank.",
+      "variants": [
+        {
+          "value": "Janb el bank.",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-699742dbef60": {
+      "canonicalArabizi": "El supermarket 7add el bank.",
+      "variants": [
+        {
+          "value": "El supermarket janb el bank.",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-a6c33e787f68": {
+      "canonicalArabizi": "Bayte 2ariib men el mat3am.",
+      "variants": [
+        {
+          "value": "Bayti 2arib men el mat3am.",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-ff71588eb3c9": {
+      "canonicalArabizi": "7add el mat3am",
+      "variants": [
+        {
+          "value": "janb el mat3am",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-398ba3ec0744": {
+      "canonicalArabizi": "2eddeem el bank",
+      "variants": [
+        {
+          "value": "2oddem el bank",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-66399b553a14": {
+      "canonicalArabizi": "Kif buusal?",
+      "variants": [
+        {
+          "value": "kif bwassal?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-3768afc84acb": {
+      "canonicalArabizi": "bta3ref et tari2?",
+      "variants": [
+        {
+          "value": "bte3ref et tari2?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-f64b2dc47294": {
+      "canonicalArabizi": "Kif buusal?",
+      "variants": [
+        {
+          "value": "Kif bwassal?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-fcf9ddfdfe8f": {
+      "canonicalArabizi": "Es saydaliyye 7add el bank.",
+      "variants": [
+        {
+          "value": "Es saydaliyye janb el bank.",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [

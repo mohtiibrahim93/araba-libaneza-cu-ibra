@@ -222,7 +222,9 @@ struct DressUpSceneView: View {
                         CoinBadge(coins: store.state.coins)
                     }
                     ForEach(done) { turn in
-                        ConversationBubble(speaker: .partner, text: turn.partner, caption: turn.partnerRo)
+                        if !turn.partner.isEmpty {
+                            ConversationBubble(speaker: .partner, text: turn.partner, caption: turn.partnerRo)
+                        }
                         ConversationBubble(speaker: .learner, text: turn.reply, caption: turn.replyRo)
                     }
                     if let bonus = finishedBonus {
@@ -255,7 +257,9 @@ struct DressUpSceneView: View {
                 .font(Theme.font(.caption, weight: .semibold))
                 .foregroundStyle(Theme.muted)
         }
-        ConversationBubble(speaker: .partner, text: line?.arabizi ?? "", caption: partnerCaption(line: line, index: index))
+        if let line {
+            ConversationBubble(speaker: .partner, text: line.arabizi, caption: partnerCaption(line: line, index: index))
+        }
         if policy.partnerLine == .tapToReveal, line != nil, !revealedTurns.contains(index) {
             Button {
                 var paid = false

@@ -176,7 +176,9 @@ struct GuidedConversationView: View {
                         if let sceneTitle = turn.sceneTitle {
                             SceneDivider(title: sceneTitle)
                         }
-                        ConversationBubble(speaker: .partner, text: turn.prompt, caption: turn.promptCaption)
+                        if !turn.prompt.isEmpty {
+                            ConversationBubble(speaker: .partner, text: turn.prompt, caption: turn.promptCaption)
+                        }
                         ConversationBubble(speaker: .learner, text: turn.reply, caption: turn.replyCaption) {
                             if let recording = turn.recording {
                                 Button {
@@ -242,10 +244,12 @@ struct GuidedConversationView: View {
 
     /// The other person's line (Arabizi with Romanian) when the unit has a
     /// script; otherwise the exercise's Romanian situation.
+    /// Empty when the scripted scene opens with the learner's own line.
     private func partnerBubble(for exercise: ExerciseDefinition) -> (text: String, caption: String?) {
         if let line = scenario.partnerLine(at: turns.count) {
             return (line.arabizi, line.ro)
         }
+        if scenario.script != nil { return ("", nil) }
         return (exercise.prompt[locale] ?? exercise.prompt["ro"] ?? "", nil)
     }
 
@@ -261,7 +265,9 @@ struct GuidedConversationView: View {
         if let sceneTitle = scenario.script?.sceneTitle(beforeTurn: turns.count) {
             SceneDivider(title: sceneTitle)
         }
-        ConversationBubble(speaker: .partner, text: partner.text, caption: partner.caption)
+        if !partner.text.isEmpty {
+            ConversationBubble(speaker: .partner, text: partner.text, caption: partner.caption)
+        }
 
         if isCurrentCompleted, let reply = chosenReply {
             ConversationBubble(speaker: .learner, text: reply, caption: replyCaption(for: exercise))
