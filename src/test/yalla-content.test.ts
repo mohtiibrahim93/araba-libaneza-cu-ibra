@@ -21,7 +21,7 @@ beforeAll(() => {
   const src = readFileSync(resolve(process.cwd(), "public/yalla/content.js"), "utf8");
   const win = {} as Record<string, unknown>;
   new Function("window", src)(win);
-  Y = win.YALLA as typeof Y;
+  Y = win["YALLA"] as typeof Y;
 });
 
 describe("the generated card bank", () => {
