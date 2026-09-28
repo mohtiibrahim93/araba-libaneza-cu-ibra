@@ -152,10 +152,12 @@ describe("displayed prices match what is charged", () => {
     expect(kidsDepositUnitAmount("online")).toBe(KIDS_GROUP_MONTHLY * KIDS_DEPOSIT_SHARE * 100);
     expect(kidsDepositUnitAmount("online")).toBe(12500); // 125 LEI
     expect(kidsDepositUnitAmount("fizic")).toBe(17500); // 25% of 700
-    // The copy quotes the online deposit and remainder; both follow the fee.
+    // Kids courses start in person, so the copy quotes the in-person deposit
+    // and remainder (700 - 175); both follow the fee.
     const i18n = read("src/lib/i18n.tsx");
-    expect(i18n).toContain("125 LEI");
-    expect(i18n).toContain("375 LEI");
+    expect(i18n).toContain(`${kidsDepositUnitAmount("fizic") / 100} LEI`);
+    expect(i18n).toContain(`${kidsGroupMonthlyUnitAmount("fizic") / 100 - kidsDepositUnitAmount("fizic") / 100} LEI`);
+    expect(i18n).not.toMatch(/\b125 LEI|\b375 LEI/);
   });
 
   it("derives in-centre prices at +40% rounded to 10", () => {
