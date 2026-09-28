@@ -11,11 +11,9 @@ import {
   formatLei,
   privatePackageFull,
   privatePackageDiscounted,
+  PRIVATE_DISCOUNT_TIERS,
 } from "@/lib/pricing";
 import { getCurriculum } from "@/data/curriculum";
-import groupImg from "@/assets/group-course.jpg";
-import privateImg from "@/assets/private-course.jpg";
-import kidsImg from "@/assets/kids-course.jpg";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
@@ -37,6 +35,20 @@ const wa = (msg: string) =>
 const WA_GROUP = wa("Salut! Vreau să mă înscriu la cursul de grup de arabă libaneză.");
 const WA_PRIVATE = wa("Salut! Sunt interesat(ă) de lecții private de arabă libaneză.");
 const WA_KIDS = wa("Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru copii.");
+
+// Card look shared by every tab: white card on the cream band, green label,
+// serif title, prices as big numbers (the "Ibra, sharpened" design).
+const CARD = "bg-card rounded-3xl border border-[#E7E1D6] dark:border-border overflow-hidden flex flex-col";
+const BADGE = "inline-block self-start text-xs font-semibold text-brand-green bg-brand-green/10 px-3 py-1 rounded-full mb-3";
+const CARD_TITLE = "font-display text-2xl sm:text-[1.75rem] font-bold leading-tight text-foreground mb-2";
+
+/** One big number with its unit under it. */
+const Stat = ({ value, label }: { value: string; label: string }) => (
+  <div className="flex flex-col">
+    <span className="text-3xl sm:text-4xl font-bold leading-none tracking-tight text-foreground">{value}</span>
+    <span className="mt-1 text-sm text-muted-foreground">{label}</span>
+  </div>
+);
 
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 type Level = (typeof LEVELS)[number];
@@ -79,33 +91,28 @@ const ProgramsSection = () => {
   const activeFizic = activeLevel ? physicalPrice(activeOnline) : 0;
 
   return (
-    <section id="programs" className="py-section px-gutter bg-muted/50 scroll-mt-20">
+    <section id="programs" className="py-section px-gutter bg-cream scroll-mt-20">
       <div className="w-full max-w-content mx-auto">
-        <div className="text-center mb-12">
-          <span className="text-sm font-medium text-primary mb-2 block">{t.programsBadge}</span>
-          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">{t.programsDesc}</p>
-          <a
-            href="/quiz"
-            className="inline-block mt-3 text-sm font-medium text-primary hover:underline underline-offset-4"
-          >
-            {t.programsQuizLink}
-          </a>
-        </div>
-
         <Tabs defaultValue="adults" className="w-full">
-          <TabsList className="mx-auto mb-8 grid w-full max-w-md grid-cols-3">
+          <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.programsBadge}</span>
+              <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
+              <p className="text-muted-foreground max-w-xl">{t.programsDesc}</p>
+            </div>
+          <TabsList className="grid w-full max-w-md shrink-0 grid-cols-3 lg:w-auto">
             <TabsTrigger value="adults">{t.tabAdults}</TabsTrigger>
             <TabsTrigger value="tineri">{lang === "en" ? "Teens" : "Adolescenți"}</TabsTrigger>
             <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
           </TabsList>
+          </div>
 
           <TabsContent value="adults">
             <div className="grid md:grid-cols-2 gap-8">
               {(inlineForm === null || inlineForm === "group") && (
           <div
             id="group-levels"
-            className={`scroll-mt-24 bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
+            className={`scroll-mt-24 ${CARD} ${
               inlineForm === "group" ? "md:col-span-3" : ""
             }`}
           >
@@ -120,24 +127,19 @@ const ProgramsSection = () => {
               </div>
             ) : (
             <>
-            <img src={groupImg} alt={t.groupCardTitle} className="w-full h-52 object-cover" />
-            <div className="p-6 flex flex-col flex-1">
-              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+            <div className="p-6 sm:p-9 flex flex-col flex-1">
+              <span className={BADGE}>
                 {t.groupBadge}
               </span>
-              <h3 className="text-xl font-bold text-foreground mb-2">{t.groupCardTitle}</h3>
+              <h3 className={CARD_TITLE}>{t.groupCardTitle}</h3>
               <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.groupCardDesc}</p>
 
-              {/* Dual price line */}
-              <div className="mb-4">
-                <div className="flex items-baseline flex-wrap gap-x-2">
-                  <span className="text-xs uppercase font-semibold text-muted-foreground">{t.priceFromLabel}</span>
-                  <span className="text-2xl font-extrabold text-foreground leading-none">{formatLei(a1Online)}</span>
-                  <span className="text-sm text-muted-foreground">{t.priceOnlineShort}</span>
-                  <span className="text-muted-foreground">·</span>
-                  <span className="text-2xl font-extrabold text-foreground leading-none">{formatLei(a1Fizic)}</span>
-                  <span className="text-sm text-muted-foreground">{t.priceFizicShort}</span>
-                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+              {/* Dual price: "from", because A1 is the cheapest level */}
+              <div className="mb-5">
+                <span className="mb-1.5 block text-xs font-semibold uppercase text-muted-foreground">{t.priceFromLabel}</span>
+                <div className="flex flex-wrap gap-x-10 gap-y-3">
+                  <Stat value={formatLei(a1Online)} label={`${t.priceLeiPerMonth} · ${t.priceOnlineShort.toLowerCase()}`} />
+                  <Stat value={formatLei(a1Fizic)} label={`${t.priceLeiPerMonth} · ${t.priceFizicShort.toLowerCase()}`} />
                 </div>
               </div>
               <CohortEnrollmentNote className="text-xs font-medium text-primary mb-4" />
@@ -146,7 +148,7 @@ const ProgramsSection = () => {
               <ul className="space-y-2 mb-5">
                 {[t.groupFeat1, t.groupFeat2, t.groupFeat3].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                    <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -292,13 +294,12 @@ const ProgramsSection = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col">
-                  <img src={privateImg} alt={t.privateCardTitle} className="w-full h-52 object-cover" />
-                  <div className="p-6 flex flex-col flex-1">
-                    <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                <div className={CARD}>
+                  <div className="p-6 sm:p-9 flex flex-col flex-1">
+                    <span className={BADGE}>
                       {t.privateBadge}
                     </span>
-                    <h3 className="text-xl font-bold text-foreground mb-2">{t.privateCardTitle}</h3>
+                    <h3 className={CARD_TITLE}>{t.privateCardTitle}</h3>
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
                     <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-1 inline-block">
                       {t.programsSeeFullPage}
@@ -313,44 +314,27 @@ const ProgramsSection = () => {
                         : "Meditații arabă 1:1 — cum funcționează"}
                     </Link>
 
-                    {/* Price */}
-                    <div className="mb-3">
-                      <div className="flex items-baseline flex-wrap gap-x-2">
-                        <span className="text-2xl font-extrabold text-foreground leading-none">150</span>
-                        <span className="text-sm font-semibold text-muted-foreground">{t.privatePricePerLesson}</span>
-                      </div>
-                    </div>
-                    <p className="text-xs font-medium text-primary mb-3">{t.privatePriceDiscountNote}</p>
-                    <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-                      <div className="flex items-baseline justify-between gap-2">
-                        <span className="text-muted-foreground">{t.privatePrice20Label}</span>
-                        <span>
-                          <span className="line-through text-muted-foreground">{formatLei(privatePackageFull())} LEI</span>
-                          <span className="ml-2 font-bold text-primary">{formatLei(privatePackageDiscounted())} LEI</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Details */}
-                    <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
-                      {[
-                        { label: t.programFormatLabel, value: t.privateFormat },
-                        { label: t.programDurationLabel, value: t.privateDurationV2 },
-                        { label: t.programScheduleLabel, value: t.privateSchedule },
-                        { label: t.programConditionsLabel, value: t.privateConditionsV2 },
-                      ].map((item) => (
-                        <div key={item.label}>
-                          <dt className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</dt>
-                          <dd className="text-sm font-medium text-foreground">{item.value}</dd>
-                        </div>
+                    {/* Price and the two volume discounts, as big numbers */}
+                    <div className="mb-5 mt-2 grid grid-cols-3 gap-4 sm:flex sm:flex-wrap sm:gap-x-10 sm:gap-y-3">
+                      <Stat value={formatLei(ONLINE_PRICES.privateLesson)} label={t.privatePricePerLesson} />
+                      {[...PRIVATE_DISCOUNT_TIERS].reverse().map((tier) => (
+                        <Stat
+                          key={tier.from}
+                          value={`−${Math.round(tier.rate * 100)}%`}
+                          label={lang === "en" ? `for ${tier.from} lessons` : `la ${tier.from} lecții`}
+                        />
                       ))}
-                    </dl>
+                    </div>
 
                     {/* Features */}
                     <ul className="space-y-2 mb-6">
-                      {[t.privateFeat1v2, t.privateFeat2v2, t.privateFeat3v2, t.privateFeat4v2, t.privateFeat5v2].map((f, i) => (
+                      {[
+                        t.privateFeat1v2,
+                        t.privateFeat2v2,
+                        lang === "en" ? "Online or in person (at the centre)" : "Online sau fizic (la centru)",
+                      ].map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                          <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                          <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                           {f}
                         </li>
                       ))}
@@ -388,7 +372,7 @@ const ProgramsSection = () => {
               {(inlineForm === null || inlineForm === "kids") && (
                 <div
                   id="kids-group"
-                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
+                  className={`${CARD} ${
                     inlineForm === "kids" ? "md:col-span-2" : ""
                   }`}
                 >
@@ -404,12 +388,11 @@ const ProgramsSection = () => {
                     </div>
                   ) : (
                     <>
-                      <img src={kidsImg} alt={t.kidsGroupCardTitle} className="w-full h-52 object-cover" />
-                      <div className="p-6 flex flex-col flex-1">
-                        <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                      <div className="p-6 sm:p-9 flex flex-col flex-1">
+                        <span className={BADGE}>
                           {lang === "en" ? "Coming soon" : "În curând"}
                         </span>
-                        <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsGroupCardTitle}</h3>
+                        <h3 className={CARD_TITLE}>{t.kidsGroupCardTitle}</h3>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsGroupCardSubtitle}</p>
                         <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
@@ -447,7 +430,7 @@ const ProgramsSection = () => {
                         <ul className="space-y-2 mb-6">
                           {[t.kidsGroupFeat1, t.kidsGroupFeat2, t.kidsGroupFeat3, t.kidsGroupFeat4].map((f, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                              <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                               {f}
                             </li>
                           ))}
@@ -481,7 +464,7 @@ const ProgramsSection = () => {
               {(inlineForm === null || inlineForm === "kids-private") && (
                 <div
                   id="kids-private"
-                  className={`bg-background rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col ${
+                  className={`${CARD} ${
                     inlineForm === "kids-private" ? "md:col-span-2" : ""
                   }`}
                 >
@@ -498,12 +481,11 @@ const ProgramsSection = () => {
                     </div>
                   ) : (
                     <>
-                      <img src={privateImg} alt={t.kidsPrivateCardTitle} className="w-full h-52 object-cover" />
-                      <div className="p-6 flex flex-col flex-1">
-                        <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+                      <div className="p-6 sm:p-9 flex flex-col flex-1">
+                        <span className={BADGE}>
                           {lang === "en" ? "Coming soon" : "În curând"}
                         </span>
-                        <h3 className="text-xl font-bold text-foreground mb-2">{t.kidsPrivateCardTitle}</h3>
+                        <h3 className={CARD_TITLE}>{t.kidsPrivateCardTitle}</h3>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.kidsPrivateCardSubtitle}</p>
                         <Link to="/cursuri/copii" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-3 inline-block">
                           {t.programsSeeFullPage}
@@ -512,8 +494,8 @@ const ProgramsSection = () => {
                         {/* Price */}
                         <div className="mb-3">
                           <div className="flex items-baseline flex-wrap gap-x-2">
-                            <span className="text-2xl font-extrabold text-foreground leading-none">150</span>
-                            <span className="text-sm font-semibold text-muted-foreground">{t.kidsPrivatePricePerLesson}</span>
+                            <span className="text-4xl font-bold leading-none tracking-tight text-foreground">150</span>
+                            <span className="text-sm text-muted-foreground">{t.kidsPrivatePricePerLesson}</span>
                           </div>
                         </div>
                         <p className="text-xs font-medium text-primary mb-3">{t.kidsPrivatePriceDiscountNote}</p>
@@ -552,7 +534,7 @@ const ProgramsSection = () => {
                         <ul className="space-y-2 mb-6">
                           {[t.kidsPrivateFeat1, t.kidsPrivateFeat2, t.kidsPrivateFeat3, t.kidsPrivateFeat4].map((f, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                              <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                               {f}
                             </li>
                           ))}
@@ -585,11 +567,11 @@ const ProgramsSection = () => {
           </TabsContent>
 
           <TabsContent value="tineri">
-            <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center shadow-xs">
-              <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            <div className={`${CARD} mx-auto max-w-2xl items-center p-8 sm:p-9 text-center`}>
+              <span className="mb-3 inline-block rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
                 {lang === "en" ? "Teens · 12–17" : "Adolescenți · 12–17 ani"}
               </span>
-              <h3 className="mb-2 text-xl font-bold text-foreground">
+              <h3 className={CARD_TITLE}>
                 {lang === "en" ? "Lebanese Arabic for teens (12–17)" : "Arabă libaneză pentru adolescenți (12–17 ani)"}
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
@@ -608,6 +590,15 @@ const ProgramsSection = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        <div className="mt-8 text-center">
+          <a
+            href="/quiz"
+            className="text-sm font-semibold text-brand-green underline underline-offset-4 hover:opacity-80"
+          >
+            {t.programsQuizLink}
+          </a>
+        </div>
       </div>
     </section>
   );
