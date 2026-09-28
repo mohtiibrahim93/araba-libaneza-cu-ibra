@@ -361,7 +361,7 @@ const NativeScheduler = ({
     setSavingCard(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-        body: { registrationId: effectiveRegistrationId, setup: true },
+        body: { registrationId: effectiveRegistrationId, setup: true, email },
       });
 
       if (fnError) throw fnError;

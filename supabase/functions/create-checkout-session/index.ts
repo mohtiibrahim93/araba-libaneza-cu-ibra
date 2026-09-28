@@ -13,6 +13,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
+import { callerOwnsRegistration, signRegistrationId } from "../_shared/registration-access.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -31,7 +32,7 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan, setup } = await req.json();
+    const { registrationId, plan, setup, email: callerEmail, sig } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       throw new Error("registrationId is required");
     }
@@ -49,12 +50,13 @@ serve(async (req) => {
     const { data: reg } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, form_type, payment_status, email, name, quantity, level, format, stripe_session_id",
+        "id, created_at, form_type, payment_status, email, name, quantity, level, format, stripe_session_id",
       )
       .eq("id", registrationId)
       .maybeSingle();
 
-    if (!reg) {
+    // Only the registrant (matching email, or a server-signed link) may act.
+    if (!reg || !(await callerOwnsRegistration(reg, { email: callerEmail, sig }))) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -76,7 +78,8 @@ serve(async (req) => {
     const origin = resolveReturnOrigin(req);
     // NB: /payment-status reads `registration_id` (snake_case) — it polls the
     // DB with it; the camelCase param would leave the page "pending" forever.
-    const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
+    const regSig = await signRegistrationId(registrationId);
+    const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${regSig}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}&fallback=1`;
 
     // Best-effort reuse: if we already created a session and it's still open,

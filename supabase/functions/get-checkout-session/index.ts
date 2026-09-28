@@ -2,6 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
+function maskEmail(e: string | null): string | null {
+  if (!e || !e.includes("@")) return null;
+  const [user, domain] = e.split("@");
+  return `${user.slice(0, 1)}***@${domain}`;
+}
+
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
@@ -27,12 +33,11 @@ serve(async (req) => {
       paymentStatus: session.payment_status,
       amountTotal: session.amount_total,
       currency: session.currency,
-      customerEmail:
+      // Masked and minimal: the session id alone must not reveal who paid.
+      customerEmail: maskEmail(
         session.customer_details?.email || session.customer_email || null,
-      customerName: session.customer_details?.name || null,
+      ),
       courseType: session.metadata?.course_type || null,
-      studentName: session.metadata?.student_name || null,
-      registrationId: session.metadata?.registration_id || null,
       lineItems:
         session.line_items?.data.map((li: { description: string | null; quantity: number | null; amount_total: number }) => ({
           description: li.description,

@@ -72,7 +72,7 @@ const PrivateStatus = () => {
               <p className="mb-2 text-sm font-medium text-primary">Lecții private</p>
               <h1 className="text-3xl font-bold text-foreground">Statusul cererii tale</h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                Cerere trimisă de {lead.name} pe {new Date(lead.created_at).toLocaleDateString("ro-RO")}
+                Cerere trimisă pe {new Date(lead.created_at).toLocaleDateString("ro-RO")}
               </p>
 
               <div className="mt-8 space-y-4">
@@ -97,7 +97,7 @@ const PrivateStatus = () => {
               </div>
 
               <Button asChild className="mt-8 w-full">
-                <a href={`/booking?type=paid&registration_id=${lead.id}`}>
+                <a href={`/booking?type=paid&registration_id=${id}`}>
                   <Calendar className="h-4 w-4" /> Programează lecția
                 </a>
               </Button>

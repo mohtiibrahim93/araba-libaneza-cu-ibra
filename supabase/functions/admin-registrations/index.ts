@@ -125,7 +125,8 @@ Deno.serve(async (req) => {
 
       const { data: registration, error: registrationError } = await supabase
         .from("registrations")
-        .select("id, created_at, name, format, lead_status")
+        // No personal data here: this branch is public (status page link).
+        .select("created_at, format, lead_status")
         .eq("id", id)
         .eq("form_type", "private")
         .single();

@@ -12,7 +12,16 @@ import {
 
 function downloadCsv(filename: string, headers: string[], rows: (string | number)[][]) {
   const csv = [headers, ...rows]
-    .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+    .map((row) =>
+      row
+        .map((cell) => {
+          let s = String(cell);
+          // Neutralise spreadsheet formulas (CSV/formula injection).
+          if (typeof cell === "string" && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+          return `"${s.replace(/"/g, '""')}"`;
+        })
+        .join(","),
+    )
     .join("\n");
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);

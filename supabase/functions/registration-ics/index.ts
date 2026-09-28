@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
 const SITE_URL = "https://centruldearabalibaneza.com";
 const TZ_OFFSET_HINT = "Europe/Bucharest";
@@ -72,6 +73,11 @@ Deno.serve(async (req) => {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
       return new Response("invalid id", { status: 400, headers: corsHeaders });
+    }
+    // Links are minted server-side (notify-registration) with an HMAC
+    // signature; without it the ID alone does not reveal a schedule.
+    if (!(await verifyRegistrationSignature(id, url.searchParams.get("sig")))) {
+      return new Response("not found", { status: 404, headers: corsHeaders });
     }
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
