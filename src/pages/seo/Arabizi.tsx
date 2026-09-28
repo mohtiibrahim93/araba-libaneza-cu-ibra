@@ -11,7 +11,7 @@ const FAQ = [
   },
   {
     q: "Ce înseamnă 3 în arabă?",
-    a: "Cifra 3 înlocuiește litera ع (ʿayn) — un sunet gutural adânc din gât, fără echivalent în română. Exemple: 3afwan (cu plăcere), ya3ni (adică), 3anjad (serios).",
+    a: "Cifra 3 înlocuiește litera ع (ʿayn) — un sunet gutural adânc din gât, fără echivalent în română. Exemple: 3afwan (cu plăcere), ya3ne (adică), 3anjad (serios).",
   },
   {
     q: "Ce înseamnă 7 în arabă?",
@@ -19,7 +19,7 @@ const FAQ = [
   },
   {
     q: "Ce înseamnă 5 și 2 în arabă?",
-    a: "5 înlocuiește خ (kh), un h aspru ca în germanul „Bach” — 5alas (destul). 2 înlocuiește hamza ء, o oprire glotală scurtă — 2ana (eu), ta2burni.",
+    a: "5 înlocuiește خ (kh), un h aspru ca în germanul „Bach” — 5alas (destul). 2 înlocuiește hamza ء, o oprire glotală scurtă — 2ana (eu), to2borne.",
   },
   {
     q: "De ce scriu arabii cu cifre?",

@@ -35,7 +35,7 @@ const PHRASES = [
   ["3afwan", "Cu plăcere / Scuze"],
   ["Yalla", "Hai! / Să mergem"],
   ["5alas", "Destul / S-a terminat"],
-  ["Ya3ni", "Adică"],
+  ["Ya3ne", "Adică"],
   ["3anjad?", "Serios?"],
   ["7abibi / 7abibti", "Dragul meu / draga mea"],
   ["Ktir", "Foarte / mult"],
