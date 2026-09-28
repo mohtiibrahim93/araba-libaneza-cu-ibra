@@ -43,12 +43,14 @@ const PaymentForm = ({
   courseType,
   registrationId,
   monthsTotal,
+  email,
 }: {
   amount: number;
   currency: string;
   courseType: CourseType;
   registrationId: string;
   monthsTotal: number;
+  email: string;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -63,6 +65,7 @@ const PaymentForm = ({
     returnUrl.searchParams.set("amount", String(amount));
     returnUrl.searchParams.set("currency", currency);
     if (registrationId) returnUrl.searchParams.set("registration_id", registrationId);
+    if (email) returnUrl.searchParams.set("email", email);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -277,6 +280,7 @@ const Checkout = () => {
         {
           body: {
             registrationId,
+            email,
             plan: (courseType === "group" || courseType === "kids") && groupPlan === "full" ? "full" : "monthly",
           },
         },
@@ -405,6 +409,7 @@ const Checkout = () => {
                 courseType={courseType as CourseType}
                 registrationId={registrationId}
                 monthsTotal={monthsTotal}
+                email={email}
               />
             </Elements>
           )}

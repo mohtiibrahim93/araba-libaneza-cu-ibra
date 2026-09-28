@@ -61,7 +61,7 @@ const PaymentStatus = () => {
           const base = import.meta.env["VITE_SUPABASE_URL"] as string;
           const anon = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string;
           const res = await fetch(
-            `${base}/functions/v1/get-payment-status?registration_id=${encodeURIComponent(registrationId)}`,
+            `${base}/functions/v1/get-payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${encodeURIComponent(params.get("sig") || "")}&email=${encodeURIComponent(params.get("email") || "")}`,
             {
               headers: { apikey: anon, Authorization: `Bearer ${anon}` },
             },
