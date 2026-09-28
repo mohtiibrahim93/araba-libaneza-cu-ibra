@@ -5,6 +5,7 @@ import { seoMeta } from "@/lib/seoHead";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofStrip from "@/components/SocialProofStrip";
+import ArabiziShowcase from "@/components/ArabiziShowcase";
 import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
 import CulturalValueSection from "@/components/CulturalValueSection";
@@ -229,6 +230,7 @@ const PageContent = () => {
           <ActiveCoursesBanner />
         </Suspense>
         <SocialProofStrip />
+        <ArabiziShowcase />
         <StepsSection />
         <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
           <ProgramsSection />
