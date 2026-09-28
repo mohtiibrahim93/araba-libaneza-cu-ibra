@@ -4,12 +4,31 @@ import { blogPostsNewestFirst, L } from "@/lib/blogPosts";
 import { useI18n } from "@/lib/i18n";
 
 /**
- * "Citește și" — up to 3 other posts, for internal linking + engagement.
+ * "Citește și" — 3 other posts, for internal linking + engagement.
  * Reads the shared registry so it always reflects the live post list.
+ *
+ * The three are the next three in publication order, wrapping round at the
+ * end, so every post is linked from exactly three others. It used to take the
+ * three newest for every article, which meant those three collected a link
+ * from all nineteen while the rest were left with one — the blog index — and
+ * a page with one internal link is the "Discovered, currently not indexed"
+ * shape Search Console reports. A ring also keeps the choice deterministic,
+ * so the server and the browser render the same block.
+ *
+ * Relevance is barely affected: the whole blog is one subject. If that stops
+ * being true, sort candidates by shared tag *within* the ring rather than
+ * going back to a global slice, or the older posts lose their links again.
  */
 const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
   const { lang } = useI18n();
-  const posts = blogPostsNewestFirst.filter((p) => p.slug !== currentSlug).slice(0, 3);
+  const all = blogPostsNewestFirst;
+  const here = all.findIndex((p) => p.slug === currentSlug);
+  // An unknown slug (a draft, or a post pulled from the registry) still gets a
+  // block rather than a blank: fall back to the front of the list.
+  const start = here === -1 ? 0 : here + 1;
+  const posts = Array.from({ length: Math.min(3, Math.max(all.length - 1, 0)) }, (_, i) =>
+    all[(start + i) % all.length]!,
+  ).filter((p) => p.slug !== currentSlug);
   if (posts.length === 0) return null;
 
   return (

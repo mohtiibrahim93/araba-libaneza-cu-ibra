@@ -2,6 +2,7 @@ import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "../EnLandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS_EN } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -93,6 +94,8 @@ const LebaneseVsSyrian = () => (
       <li><strong>You want one specific accent</strong> → that is what <Link to="/en/arabic-tutor">1-on-1 lessons</Link> are for; the teacher tunes the pronunciation to your target.</li>
       <li><strong>You want the wider picture</strong> → see <Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic</Link> and <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link>.</li>
     </ul>
+    <DialectSiblings current="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic" />
+
   </EnLandingLayout>
 );
 
