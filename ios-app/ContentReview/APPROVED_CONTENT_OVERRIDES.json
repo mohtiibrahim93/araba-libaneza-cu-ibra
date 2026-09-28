@@ -327,11 +327,14 @@
       ]
     },
     "syn-context-syn-0a4165dde490": {
-      "answer": "Ma 3ande i5we",
+      "answer": "Ma 3ande e5we",
       "wrongAnswers": [
         "ma 3ande wled",
         "7elo! 5ayye el-kbiir mjawwaz.",
         "3ande 5ayy waa7ad"
+      ],
+      "expressionIDs": [
+        "syn-0a4165dde490"
       ]
     },
     "syn-context-syn-0b678b55180b": {
@@ -487,11 +490,14 @@
       ]
     },
     "syn-context-syn-19ce671ec6e7": {
-      "answer": "Tameem! 3andak i5we?",
+      "answer": "Tameem! 3andak e5we?",
       "wrongAnswers": [
         "Yalla nru7 3al mat3am!",
         "Re7t 3a el su2 mbeere7 w shtareet fweke.",
         "Re7t 3as su2 w eshtarayt 2amis."
+      ],
+      "expressionIDs": [
+        "syn-19ce671ec6e7"
       ]
     },
     "syn-context-syn-1ae0ed713d37": {
@@ -748,11 +754,14 @@
       ]
     },
     "syn-context-syn-34db33b665ce": {
-      "answer": "Mar7aba Karim! 3andak i5we?",
+      "answer": "Mar7aba Karim! 3andak e5we?",
       "wrongAnswers": [
         "Eh, 3ando benet we7de.",
-        "Ma 3ande i5we",
+        "Ma 3ande e5we",
         "ma 3ande wled"
+      ],
+      "expressionIDs": [
+        "syn-34db33b665ce"
       ]
     },
     "syn-context-syn-3678dae1756e": {
@@ -1689,7 +1698,7 @@
       "wrongAnswers": [
         "Eh, badde fostan lal 3eres.",
         "Esme Tarek. W ente?",
-        "Tameem! 3andak i5we?"
+        "Tameem! 3andak e5we?"
       ]
     },
     "syn-context-syn-967421fb4032": {
@@ -1899,9 +1908,9 @@
     "syn-context-syn-a7ea0d46073f": {
       "answer": "Kam 5ayy 3andak?",
       "wrongAnswers": [
-        "Mar7aba Karim! 3andak i5we?",
+        "Mar7aba Karim! 3andak e5we?",
         "Eh, 3ando benet we7de.",
-        "Ma 3ande i5we"
+        "Ma 3ande e5we"
       ]
     },
     "syn-context-syn-a9dd2a104368": {
@@ -1986,7 +1995,7 @@
       "wrongAnswers": [
         "Tsharrafna! 3ammte kameen 3andha tlet wled.",
         "Kam 5ayy 3andak?",
-        "Mar7aba Karim! 3andak i5we?"
+        "Mar7aba Karim! 3andak e5we?"
       ]
     },
     "syn-context-syn-b070e7525663": {
@@ -2116,7 +2125,7 @@
       "answer": "Tsharrafna! 3ammte kameen 3andha tlet wled.",
       "wrongAnswers": [
         "Kam 5ayy 3andak?",
-        "Mar7aba Karim! 3andak i5we?",
+        "Mar7aba Karim! 3andak e5we?",
         "Eh, 3ando benet we7de."
       ]
     },
@@ -2340,7 +2349,7 @@
     "syn-context-syn-db59ff8bc2d1": {
       "answer": "Eh, 3ando benet we7de.",
       "wrongAnswers": [
-        "Ma 3ande i5we",
+        "Ma 3ande e5we",
         "ma 3ande wled",
         "7elo! 5ayye el-kbiir mjawwaz."
       ]
@@ -2581,7 +2590,7 @@
       "answer": "Eh, badde fostan lal 3eres.",
       "wrongAnswers": [
         "Esme Tarek. W ente?",
-        "Tameem! 3andak i5we?",
+        "Tameem! 3andak e5we?",
         "Yalla nru7 3al mat3am!"
       ]
     },
@@ -2808,7 +2817,7 @@
     },
     "syn-context-syn-0e47aeab4edf": {
       "wrongAnswers": [
-        "Tameem! 3andak i5we?",
+        "Tameem! 3andak e5we?",
         "Yalla nru7 3al mat3am!",
         "Re7t 3a el su2 mbeere7 w shtareet fweke."
       ]
@@ -3695,7 +3704,13 @@
       "canonicalArabizi": "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a."
     },
     "syn-0a4165dde490": {
-      "canonicalArabizi": "Ma 3ande i5we"
+      "canonicalArabizi": "Ma 3ande e5we",
+      "variants": [
+        {
+          "value": "Ma 3ande i5we",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-0b678b55180b": {
       "canonicalArabizi": "Tfaddalo, shu baddkon?"
@@ -3767,7 +3782,13 @@
       ]
     },
     "syn-19ce671ec6e7": {
-      "canonicalArabizi": "Tameem! 3andak i5we?"
+      "canonicalArabizi": "Tameem! 3andak e5we?",
+      "variants": [
+        {
+          "value": "Tameem! 3andak i5we?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-1ae0ed713d37": {
       "canonicalArabizi": "Eh ktiir! Ken el jaw ra2e3."
@@ -3875,7 +3896,13 @@
       "canonicalArabizi": "B adde kilo et-tiffe7?"
     },
     "syn-34db33b665ce": {
-      "canonicalArabizi": "Mar7aba Karim! 3andak i5we?"
+      "canonicalArabizi": "Mar7aba Karim! 3andak e5we?",
+      "variants": [
+        {
+          "value": "Mar7aba Karim! 3andak i5we?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-3678dae1756e": {
       "canonicalArabizi": "3ayltak kbiire! Ana ju3aan, badde ekol."
@@ -4823,6 +4850,15 @@
     },
     "syn-b61c1642dcc7": {
       "canonicalArabizi": "Shu esma?"
+    },
+    "syn-6edf444fd65d": {
+      "canonicalArabizi": "3andak e5we?",
+      "variants": [
+        {
+          "value": "3andak a5we?",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [
@@ -5067,7 +5103,7 @@
       "wrongAnswers": [
         "Bayye w emme",
         "3ayletna kbiire",
-        "Ma 3ande i5we"
+        "Ma 3ande e5we"
       ]
     },
     {
