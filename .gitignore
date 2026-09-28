@@ -47,3 +47,6 @@ scripts/.indexnow-state.json
 # Nitro build output (bun run build) — regenerated, never committed.
 .output
 .wrangler
+
+# Regenerated on demand by scripts/exportGameContent.mjs for proofreading.
+yalla-content-audit.csv

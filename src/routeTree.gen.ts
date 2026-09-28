@@ -90,6 +90,7 @@ import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
 import { Route as EnBestArabicCourseRouteImport } from './routes/en/best-arabic-course'
 import { Route as EnBookingRouteImport } from './routes/en/booking'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as EnDataDeletionRouteImport } from './routes/en/data-deletion'
 import { Route as EnFaqRouteImport } from './routes/en/faq'
 import { Route as EnFindYourPageRouteImport } from './routes/en.find-your-page'
 import { Route as EnHowToLearnLebaneseArabicRouteImport } from './routes/en/how-to-learn-lebanese-arabic'
@@ -561,6 +562,11 @@ const EnContactRoute = EnContactRouteImport.update({
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnDataDeletionRoute = EnDataDeletionRouteImport.update({
+  id: '/en/data-deletion',
+  path: '/en/data-deletion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnFaqRoute = EnFaqRouteImport.update({
   id: '/en/faq',
   path: '/en/faq',
@@ -861,6 +867,7 @@ export interface FileRoutesByFullPath {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/contact': typeof EnContactRoute
+  '/en/data-deletion': typeof EnDataDeletionRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -985,6 +992,7 @@ export interface FileRoutesByTo {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/contact': typeof EnContactRoute
+  '/en/data-deletion': typeof EnDataDeletionRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -1111,6 +1119,7 @@ export interface FileRoutesById {
   '/en/best-arabic-course': typeof EnBestArabicCourseRoute
   '/en/booking': typeof EnBookingRoute
   '/en/contact': typeof EnContactRoute
+  '/en/data-deletion': typeof EnDataDeletionRoute
   '/en/faq': typeof EnFaqRoute
   '/en/find-your-page': typeof EnFindYourPageRoute
   '/en/how-to-learn-lebanese-arabic': typeof EnHowToLearnLebaneseArabicRoute
@@ -1238,6 +1247,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/contact'
+    | '/en/data-deletion'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1362,6 +1372,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/contact'
+    | '/en/data-deletion'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1487,6 +1498,7 @@ export interface FileRouteTypes {
     | '/en/best-arabic-course'
     | '/en/booking'
     | '/en/contact'
+    | '/en/data-deletion'
     | '/en/faq'
     | '/en/find-your-page'
     | '/en/how-to-learn-lebanese-arabic'
@@ -1613,6 +1625,7 @@ export interface RootRouteChildren {
   EnBestArabicCourseRoute: typeof EnBestArabicCourseRoute
   EnBookingRoute: typeof EnBookingRoute
   EnContactRoute: typeof EnContactRoute
+  EnDataDeletionRoute: typeof EnDataDeletionRoute
   EnFaqRoute: typeof EnFaqRoute
   EnFindYourPageRoute: typeof EnFindYourPageRoute
   EnHowToLearnLebaneseArabicRoute: typeof EnHowToLearnLebaneseArabicRoute
@@ -2229,6 +2242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/data-deletion': {
+      id: '/en/data-deletion'
+      path: '/en/data-deletion'
+      fullPath: '/en/data-deletion'
+      preLoaderRoute: typeof EnDataDeletionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/faq': {
       id: '/en/faq'
       path: '/en/faq'
@@ -2623,6 +2643,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnBestArabicCourseRoute: EnBestArabicCourseRoute,
   EnBookingRoute: EnBookingRoute,
   EnContactRoute: EnContactRoute,
+  EnDataDeletionRoute: EnDataDeletionRoute,
   EnFaqRoute: EnFaqRoute,
   EnFindYourPageRoute: EnFindYourPageRoute,
   EnHowToLearnLebaneseArabicRoute: EnHowToLearnLebaneseArabicRoute,
