@@ -2,6 +2,7 @@ import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "../EnLandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS_EN } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -100,6 +101,8 @@ const LevantineVsPeninsular = () => (
       The overview, with maps, is in the{" "}
       <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
+    <DialectSiblings current="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic" />
+
   </EnLandingLayout>
 );
 

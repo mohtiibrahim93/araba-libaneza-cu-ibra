@@ -2,6 +2,7 @@ import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -109,6 +110,8 @@ const LibanezaVsEgipteana = () => (
       <Link to="/quiz">chestionarul de orientare</Link> sau începe cu o{" "}
       <Link to="/trial">lecție de probă gratuită</Link>.
     </p>
+    <DialectSiblings current="/dialecte-arabe/libaneza-vs-egipteana" />
+
   </LandingLayout>
 );
 

@@ -2,6 +2,7 @@ import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -101,6 +102,8 @@ const LevantinaVsIrakiana = () => (
       <li><strong>Vrei comparația cu vecinii de sud</strong> → <Link to="/dialecte-arabe/levantina-vs-golf">levantina vs. araba din Golf</Link>.</li>
       <li><strong>Nu știi de unde începi</strong> → <Link to="/trial">lecția de probă gratuită</Link> clarifică în 30 de minute.</li>
     </ul>
+    <DialectSiblings current="/dialecte-arabe/levantina-vs-irakiana" />
+
   </LandingLayout>
 );
 

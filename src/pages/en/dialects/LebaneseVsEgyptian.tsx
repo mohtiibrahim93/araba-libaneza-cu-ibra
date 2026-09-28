@@ -2,6 +2,7 @@ import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "../EnLandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS_EN } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -107,6 +108,8 @@ const LebaneseVsEgyptian = () => (
       <Link to="/en/quiz">course finder</Link> takes a minute, and the{" "}
       <Link to="/en/trial">trial lesson is free</Link>.
     </p>
+    <DialectSiblings current="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic" />
+
   </EnLandingLayout>
 );
 

@@ -2,6 +2,7 @@ import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "../EnLandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS_EN } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -103,6 +104,8 @@ const LevantineVsMaghrebi = () => (
       the closest pair of all,{" "}
       <Link to="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic">Lebanese vs Egyptian</Link>.
     </p>
+    <DialectSiblings current="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic" />
+
   </EnLandingLayout>
 );
 

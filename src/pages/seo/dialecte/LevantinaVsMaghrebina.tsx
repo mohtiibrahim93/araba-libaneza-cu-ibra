@@ -2,6 +2,7 @@ import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -103,6 +104,8 @@ const LevantinaVsMaghrebina = () => (
       perechea cea mai apropiată,{" "}
       <Link to="/dialecte-arabe/libaneza-vs-egipteana">libaneza vs. egipteana</Link>.
     </p>
+    <DialectSiblings current="/dialecte-arabe/levantina-vs-maghrebina" />
+
   </LandingLayout>
 );
 

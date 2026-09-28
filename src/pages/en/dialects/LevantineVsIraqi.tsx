@@ -2,6 +2,7 @@ import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "../EnLandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS_EN } from "./parents";
+import DialectSiblings from "@/components/seo/DialectSiblings";
 
 const FAQ = [
   {
@@ -94,6 +95,8 @@ const LevantineVsIraqi = () => (
       <li><strong>You want the southern neighbour</strong> → <Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic</Link>.</li>
       <li><strong>You don't know where to start</strong> → the <Link to="/en/trial">free trial lesson</Link> settles it in 30 minutes.</li>
     </ul>
+    <DialectSiblings current="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic" />
+
   </EnLandingLayout>
 );
 
