@@ -43,12 +43,14 @@ const PaymentForm = ({
   courseType,
   registrationId,
   monthsTotal,
+  email,
 }: {
   amount: number;
   currency: string;
   courseType: CourseType;
   registrationId: string;
   monthsTotal: number;
+  email: string;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -407,6 +409,7 @@ const Checkout = () => {
                 courseType={courseType as CourseType}
                 registrationId={registrationId}
                 monthsTotal={monthsTotal}
+                email={email}
               />
             </Elements>
           )}
