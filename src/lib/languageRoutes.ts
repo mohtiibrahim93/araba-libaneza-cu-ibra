@@ -48,6 +48,7 @@ const EN_FOR_RO: Record<string, string> = {
   "/contact": "/en/contact",
   "/rezervari": "/en/my-bookings",
   "/privacy": "/en/privacy",
+  "/stergere-date": "/en/data-deletion",
   "/terms": "/en/terms",
   // Course pages: same bilingual component, one URL per language.
   "/cursuri": "/en/courses",
@@ -115,6 +116,7 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/contact": "/contact",
   "/en/my-bookings": "/rezervari",
   "/en/privacy": "/privacy",
+  "/en/data-deletion": "/stergere-date",
   "/en/terms": "/terms",
   // Course pages, the other way round.
   "/en/courses": "/cursuri",

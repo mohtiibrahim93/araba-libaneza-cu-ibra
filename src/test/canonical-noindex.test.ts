@@ -39,7 +39,7 @@ describe("canonical and noindex are never combined", () => {
       .filter((l) => l.includes("noindex: true"))
       .map((l) => l.match(/path: "([^"]+)"/)?.[1] ?? "?");
     // Private pages only — never a duplicate that should consolidate elsewhere.
-    expect(noindexed).toEqual(["/stergere-date"]);
+    expect(noindexed).toEqual(["/en/data-deletion", "/stergere-date"]);
   });
 
   it("still gives every retired alias a canonical", () => {
