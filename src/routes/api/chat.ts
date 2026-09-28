@@ -30,6 +30,26 @@ export const Route = createFileRoute("/api/chat")({
           return new Response("Conversation too long", { status: 400 });
         }
 
+        // Never trust caller-supplied roles or part types: only plain-text
+        // user/assistant turns reach the model, so a visitor cannot inject
+        // "system" instructions or tool results into the conversation.
+        const sanitizedMessages = (messages as UIMessage[])
+          .filter(
+            (m) =>
+              m && typeof m === "object" && (m.role === "user" || m.role === "assistant"),
+          )
+          .map((m) => ({
+            id: typeof m.id === "string" ? m.id.slice(0, 100) : "",
+            role: m.role,
+            parts: (Array.isArray(m.parts) ? m.parts : [])
+              .filter((p) => p && p.type === "text" && typeof p.text === "string")
+              .map((p) => ({ type: "text" as const, text: (p as { text: string }).text.slice(0, 4000) })),
+          }))
+          .filter((m) => m.parts.length > 0) as UIMessage[];
+        if (sanitizedMessages.length === 0 || sanitizedMessages[sanitizedMessages.length - 1].role !== "user") {
+          return new Response("Invalid messages", { status: 400 });
+        }
+
         const key = process.env["LOVABLE_API_KEY"];
         if (!key) {
           return new Response("Missing LOVABLE_API_KEY", { status: 500 });
@@ -58,7 +78,7 @@ export const Route = createFileRoute("/api/chat")({
         const result = streamText({
           model: lovable.responses("openai/gpt-6-astra"),
           system: ASK_SYSTEM_PROMPT,
-          messages: await convertToModelMessages(messages as UIMessage[]),
+          messages: await convertToModelMessages(sanitizedMessages),
           abortSignal: request.signal,
           providerOptions: {
             openai: {
