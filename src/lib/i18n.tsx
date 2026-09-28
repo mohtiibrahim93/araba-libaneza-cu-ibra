@@ -104,8 +104,8 @@ export const translations = {
     privateRegisterV2: "Înscriere lecții private",
     kidsGroupCardTitle: "Cursuri de Grup pentru Copii",
     kidsGroupCardSubtitle: "Cursuri adaptate pe grupe de vârstă, într-un mediu prietenos.",
-    kidsGroupFormat: "Fizic",
-    kidsGroupFormatNote: "Online",
+    kidsGroupFormat: "Fizic, la centru",
+    kidsGroupFormatNote: "Varianta online o vom adăuga mai târziu, ca opțiune",
     kidsGroupDuration: "90 minute / lecție",
     kidsGroupConditions: "Minim 4 copii per grupă",
     kidsGroupAgeGroupsLabel: "Grupe pe vârstă",
@@ -117,8 +117,8 @@ export const translations = {
     kidsPrivateBadge: "Lecții individuale pentru copii",
     kidsPrivateCardTitle: "Lecții Individuale pentru Copii",
     kidsPrivateCardSubtitle: "Atenție dedicată, conținut adaptat vârstei și nivelului copilului.",
-    kidsPrivateFormat: "Online sau fizic",
-    kidsPrivateFormatNote: "Online",
+    kidsPrivateFormat: "Fizic, la centru",
+    kidsPrivateFormatNote: "Varianta online o vom adăuga mai târziu, ca opțiune",
     kidsPrivateDuration: "60 minute / lecție",
     kidsPrivateConditions: "1-la-1 cu profesorul",
     kidsPrivatePricePerLesson: "LEI / lecție (60 minute)",
@@ -127,7 +127,7 @@ export const translations = {
     kidsPrivateFeat1: "Lecții 1-la-1 adaptate copilului",
     kidsPrivateFeat2: "Orar flexibil",
     kidsPrivateFeat3: "Conținut adaptat vârstei",
-    kidsPrivateFeat4: "Online",
+    kidsPrivateFeat4: "Fizic, la centru",
     kidsPrivateRegister: "Înscriere lecții individuale",
 
     // Levels
@@ -226,7 +226,7 @@ export const translations = {
     mainLeadError: "A apărut o eroare. Încearcă din nou.",
     mainLeadErrorCourseType: "Alege un tip de curs valid (Grup, Privat sau Copii).",
     mainLeadErrorFormat: "Alege un format: față în față sau online.",
-    mainLeadErrorKidsFormat: "Cursul pentru copii este disponibil doar online.",
+    mainLeadErrorKidsFormat: "Alege un format. Cursul pentru copii pornește fizic, la centru; varianta online o vom adăuga mai târziu.",
     mainLeadErrorLevel: "Selectează nivelul tău (A1–B2) pentru cursul de grup.",
     mainLeadCallbackNote: "Acesta este un formular de contact: după trimitere, te apelăm pentru confirmarea detaliilor.",
     mainLeadLocationLabel: "Locație",
@@ -262,7 +262,7 @@ export const translations = {
     kidsChildNamePlaceholder: "ex: Maria",
     kidsChildAge: "Vârsta copilului",
     kidsChildAgePlaceholder: "ex: 8 ani",
-    kidsFormatNote: "Online (varianta fizică va fi adăugată mai târziu, ca opțiune). Orarul îl stabilim când pornește grupa.",
+    kidsFormatNote: "Fizic, la centru (varianta online o vom adăuga mai târziu, ca opțiune). Orarul îl stabilim când pornește grupa.",
 
     // Center select
 
@@ -605,7 +605,7 @@ export const translations = {
     compareKidsFlexibility: "Fix (în funcție de grupă)",
     compareGroupFormat: "Online & Fizic",
     comparePrivateFormat: "Online & Fizic",
-    compareKidsFormat: "Online",
+    compareKidsFormat: "Fizic",
     compareGroupBestFor: "Învățare socială, buget redus",
     comparePrivateBestFor: "Obiective specifice, ritm personalizat",
     compareKidsBestFor: "Copii 5–12 ani, învățare prin joc",
@@ -712,9 +712,9 @@ export const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Cursuri de Arabă Libaneză pentru Copii — București",
-    courseCopiiMetaDesc: "Cursuri de arabă libaneză pentru copii 6–11 ani, online. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
+    courseCopiiMetaDesc: "Cursuri de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
     courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
-    courseCopiiIntro: "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Format online.",
+    courseCopiiIntro: "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Fizic, la centru; varianta online o vom adăuga mai târziu.",
     courseCopiiFeat1: "Vârste 6–11 ani, grupe pe categorii de vârstă",
     courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
     courseCopiiFeat3: "Online",
@@ -777,9 +777,9 @@ export const translations = {
     // /cursuri/copii — format cards
     copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
     copiiFormatPrivateTitle: "Privat 1:1 (orice vârstă)",
-    copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Online.",
+    copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic, la centru.",
     copiiFormatGroupTitle: "Grup (minim 4 copii)",
-    copiiFormatGroupDesc: "Activități prin joc într-o grupă mică, online.",
+    copiiFormatGroupDesc: "Activități prin joc într-o grupă mică, fizic, la centru.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "Ce învață copilul tău",
@@ -907,8 +907,8 @@ export const translations = {
     privateRegisterV2: "Register for private lessons",
     kidsGroupCardTitle: "Group Classes for Kids",
     kidsGroupCardSubtitle: "Age-adapted courses in a friendly environment.",
-    kidsGroupFormat: "In person",
-    kidsGroupFormatNote: "Online",
+    kidsGroupFormat: "In person, at the centre",
+    kidsGroupFormatNote: "An online option will be added later",
     kidsGroupDuration: "90 minutes / lesson",
     kidsGroupConditions: "Minimum 4 children per group",
     kidsGroupAgeGroupsLabel: "Age groups",
@@ -920,8 +920,8 @@ export const translations = {
     kidsPrivateBadge: "Private lessons for kids",
     kidsPrivateCardTitle: "Private Lessons for Kids",
     kidsPrivateCardSubtitle: "Dedicated attention, content adapted to the child's age and level.",
-    kidsPrivateFormat: "Online or in person",
-    kidsPrivateFormatNote: "Online",
+    kidsPrivateFormat: "In person, at the centre",
+    kidsPrivateFormatNote: "An online option will be added later",
     kidsPrivateDuration: "60 minutes / lesson",
     kidsPrivateConditions: "1-on-1 with the teacher",
     kidsPrivatePricePerLesson: "LEI / lesson (60 minutes)",
@@ -930,7 +930,7 @@ export const translations = {
     kidsPrivateFeat1: "1-on-1 lessons adapted to the child",
     kidsPrivateFeat2: "Flexible schedule",
     kidsPrivateFeat3: "Age-adapted content",
-    kidsPrivateFeat4: "Online",
+    kidsPrivateFeat4: "In person, at the centre",
     kidsPrivateRegister: "Register for private lessons",
 
     // Levels
@@ -1024,7 +1024,7 @@ export const translations = {
     mainLeadError: "Something went wrong. Please try again.",
     mainLeadErrorCourseType: "Choose a valid course type (Group, Private or Kids).",
     mainLeadErrorFormat: "Choose a format: in person or online.",
-    mainLeadErrorKidsFormat: "The kids course is available online only.",
+    mainLeadErrorKidsFormat: "Choose a format. The kids course starts in person, at the centre; an online option will be added later.",
     mainLeadErrorLevel: "Select your level (A1–B2) for the group course.",
     mainLeadCallbackNote: "This is a contact form: after submitting, we’ll call you to confirm the details.",
     mainLeadLocationLabel: "Location",
@@ -1058,7 +1058,7 @@ export const translations = {
     kidsChildNamePlaceholder: "e.g.: Maya",
     kidsChildAge: "Child's Age",
     kidsChildAgePlaceholder: "e.g.: 8 years",
-    kidsFormatNote: "Online (an in-person option will be added later). The schedule is set when the group starts.",
+    kidsFormatNote: "In person, at the centre (an online option will be added later). The schedule is set when the group starts.",
 
 
     // GDPR
@@ -1384,7 +1384,7 @@ export const translations = {
     compareKidsFlexibility: "Fixed (depends on group)",
     compareGroupFormat: "Online & In-person",
     comparePrivateFormat: "Online & In-person",
-    compareKidsFormat: "Online",
+    compareKidsFormat: "In person",
     compareGroupBestFor: "Social learning, lower budget",
     comparePrivateBestFor: "Specific goals, custom pace",
     compareKidsBestFor: "Children 5–12, learning through play",
@@ -1484,9 +1484,9 @@ export const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Lebanese Arabic Courses for Kids — Bucharest",
-    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 6–11), online. Activities, games and stories in Lebanese Arabic.",
+    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 6–11), in person in Bucharest. Activities, games and stories in Lebanese Arabic.",
     courseCopiiH1: "Lebanese Arabic Courses for Kids",
-    courseCopiiIntro: "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. Online format.",
+    courseCopiiIntro: "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. In person, at the centre; an online option will be added later.",
     courseCopiiFeat1: "Ages 6–11, grouped by age",
     courseCopiiFeat2: "Play-based, interactive lessons",
     courseCopiiFeat3: "Online",
@@ -1544,9 +1544,9 @@ export const translations = {
 
     copiiFormatChoiceTitle: "Two formats, depending on age",
     copiiFormatPrivateTitle: "Private 1:1 (any age)",
-    copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. Online.",
+    copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person, at the centre.",
     copiiFormatGroupTitle: "Group (minimum 4 kids)",
-    copiiFormatGroupDesc: "Play-based activities in a small group, online.",
+    copiiFormatGroupDesc: "Play-based activities in a small group, in person at the centre.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "What your child will learn",

@@ -8,7 +8,7 @@ import { useI18n } from "@/lib/i18n";
 const FAQ = [
   {
     q: { ro: "Ce vârstă are grupa de copii și ce urmează după?", en: "What age is the kids group, and what comes after it?" },
-    a: { ro: "Cursul pentru copii este gândit pentru 6–11 ani, online. De la 12 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–11, online. From 12 there is the teen group, with a different approach: conversation, music and social-media language." },
+    a: { ro: "Cursul pentru copii este gândit pentru 6–11 ani, fizic, la centru. De la 12 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–11, in person at the centre. From 12 there is the teen group, with a different approach: conversation, music and social-media language." },
   },
   {
     q: { ro: "Trebuie să știu și eu arabă ca să-mi ajut copilul?", en: "Do I need to know Arabic myself to support my child?" },
@@ -42,7 +42,7 @@ const ArabaPentruCopii = () => {
     >
       <Tldr
         points={[
-          { ro: "Cursul pentru copii acoperă 6–11 ani, online; de la 12 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–11, online; from 12 the teen group follows." },
+          { ro: "Cursul pentru copii acoperă 6–11 ani, fizic, la centru; de la 12 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–11, in person at the centre; from 12 the teen group follows." },
           { ro: "Se învață prin joc, cântece și povești, nu prin gramatică și caiete.", en: "Learning happens through play, songs and stories, not grammar and workbooks." },
           { ro: "Copiii prind sunetele noi mai ușor decât adulții — e vârsta potrivită pentru pronunție.", en: "Children pick up new sounds more easily than adults — it is the right age for pronunciation." },
           { ro: "Nu trebuie să știi arabă ca părinte; expunerea acasă contează mai mult.", en: "You do not need to know Arabic as a parent; exposure at home matters more." },

@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
-    a: "Avem un program pentru copii 6–11 ani, online, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
+    a: "Avem un program pentru copii 6–11 ani, fizic, la centru, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
   },
 ];
 

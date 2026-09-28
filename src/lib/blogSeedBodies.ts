@@ -97,7 +97,7 @@ Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă *
 
 ## Curs pentru copii (6–11 ani)
 
-Cursul pentru copii este un program interactiv, bazat pe joc, online. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
+Cursul pentru copii este un program interactiv, bazat pe joc, fizic, la centru. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
 
 ## Proba este gratuită
 
@@ -123,7 +123,7 @@ If you want a personalized pace or a flexible schedule, private lessons cost **1
 
 ## Kids course (ages 6–11)
 
-The kids course is an interactive, game-based program, online. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
+The kids course is an interactive, game-based program, in person at the centre. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
 
 ## The trial is free
 
@@ -488,7 +488,7 @@ Curious? Start with a [free trial lesson](/trial) or see [all the courses](/curs
 
 ## De la ce vârstă?
 
-La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
+La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, fizic, la centru. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
 
 ## Cum arată o lecție
 
@@ -516,7 +516,7 @@ Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilulu
 
 ## From what age?
 
-At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
+At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, in person at the centre. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
 
 ## What a lesson looks like
 
@@ -716,7 +716,7 @@ Pași concreți:
 
 - Fă [testul de nivel gratuit](/test-de-nivel) ca să afli de unde pornești.
 - Vezi [cursurile de grup](/cursuri/grup) (structurate pe niveluri CEFR A1–C2) sau [lecțiile private](/cursuri/private) (ritm personalizat).
-- Pentru copii, avem un [program dedicat](/cursuri/copii), online (momentan fără grupe).
+- Pentru copii, avem un [program dedicat](/cursuri/copii), fizic, la centru (momentan fără grupe).
 - Vezi și articolul [Cum înveți araba libaneză în 2026](/blog/cum-inveti-araba-libaneza) pentru un ghid pas cu pas.`,
     en: `## 1. What Standard Arabic (MSA / Fusha) is and what Lebanese is
 
@@ -788,7 +788,7 @@ Concrete steps:
 
 - Take the [free level test](/test-de-nivel) to find where you start.
 - See the [group courses](/cursuri/grup) (structured on CEFR levels A1–C2) or [private lessons](/cursuri/private) (personalised pace).
-- For kids, we have a [dedicated programme](/cursuri/copii), online (not running at the moment).
+- For kids, we have a [dedicated programme](/cursuri/copii), in person at the centre (not running at the moment).
 - See also the article [How to learn Lebanese Arabic in 2026](/blog/cum-inveti-araba-libaneza) for a step-by-step guide.`,
   },
 

@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "Cursul de arabă pentru copii e online sau fizic?",
-    a: "Online. Momentan nu avem cursuri pentru copii; când pornim, pornim online, iar varianta fizică o vom adăuga mai târziu, ca opțiune. Lasă-ți datele și te anunțăm.",
+    a: "Fizic. Momentan nu avem cursuri pentru copii; când pornim, pornim fizic, la centru, iar varianta online o vom adăuga mai târziu, ca opțiune. Lasă-ți datele și te anunțăm.",
   },
   {
     q: "Ce dialect învață copiii — libanez sau standard?",
@@ -28,7 +28,7 @@ const CursArabaCopii = () => (
     metaTitle="Curs de Arabă pentru Copii în București | 6–11 ani"
     description="Curs de arabă libaneză pentru copii de 6–11 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez."
     crumb="Curs arabă libaneză copii"
-    lead="Curs de arabă libaneză pentru copii 6–11 ani, online. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
+    lead="Curs de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin joc, cântece și povești — cu profesor nativ libanez, fără presiune, fără teme obositoare."
     faq={FAQ}
   >
     <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
@@ -40,7 +40,7 @@ const CursArabaCopii = () => (
       Vrei ca al tău copil să învețe <strong>araba de mic</strong>, ca să comunice cu bunicii, cu
       familia sau pur și simplu ca să crească bilingv? La{" "}
       <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> avem un curs dedicat copiilor 6–11 ani,
-      online, prin joc și povești — fără caiete de gramatică.
+      fizic, la centru, prin joc și povești — fără caiete de gramatică.
     </p>
 
     <h2>De ce arabă de la 6–11 ani</h2>
@@ -54,7 +54,7 @@ const CursArabaCopii = () => (
 
     <h2>Cum arată cursul</h2>
     <ul>
-      <li><strong>Format:</strong> online (orarul îl stabilim când pornește grupa)</li>
+      <li><strong>Format:</strong> fizic, la centru; varianta online o vom adăuga mai târziu (orarul îl stabilim când pornește grupa)</li>
       <li><strong>Durată:</strong> 60 min/lecție, o lecție/săptămână</li>
       <li><strong>Grupă:</strong> maxim 6 copii, aceeași vârstă apropiată</li>
       <li><strong>Metodă:</strong> joc, cântece, povești, obiecte, mișcare — zero caiete</li>

@@ -180,7 +180,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cursurile sunt online sau fizice în București?",
             featured: true,
-            a: "Ambele. Cursurile de grup pentru adulți sunt fizice la Raduga Creative Center și online pe Zoom. Cursurile pentru copii vor fi online (momentan nu avem cursuri pentru copii). Lecțiile private sunt flexibile: fizice sau online.",
+            a: "Ambele. Cursurile de grup pentru adulți sunt fizice la Raduga Creative Center și online pe Zoom. Cursurile pentru copii vor porni fizic, la centru; varianta online o vom adăuga mai târziu (momentan nu avem cursuri pentru copii). Lecțiile private sunt flexibile: fizice sau online.",
           },
           {
             q: "Ce opțiuni de orar sunt pentru oameni care lucrează?",
@@ -399,7 +399,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Are classes online or in-person in Bucharest?",
             featured: true,
-            a: "Both. Adult group classes run in person at Raduga Creative Center and online via Zoom. Kids' classes will be online (we don't have kids' courses at the moment). Private lessons are fully flexible — in person or online.",
+            a: "Both. Adult group classes run in person at Raduga Creative Center and online via Zoom. Kids' classes will start in person, at the centre; an online option will be added later (we don't have kids' courses at the moment). Private lessons are fully flexible — in person or online.",
           },
           {
             q: "What schedule options exist for working people?",
