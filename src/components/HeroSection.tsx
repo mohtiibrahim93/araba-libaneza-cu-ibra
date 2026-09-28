@@ -1,8 +1,9 @@
 import { useI18n } from "@/lib/i18n";
-import { GraduationCap, BookOpen, Star, Tag, MessageCircle } from "lucide-react";
+import { BookOpen, MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 import heroImgWebp from "@/assets/hero-lebanon-cedar.webp";
 import AnchorLink from "@/components/AnchorLink";
+import HeroConversation from "@/components/HeroConversation";
 import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL =
@@ -18,14 +19,17 @@ const HeroSection = () => {
 
   return (
     <section className="pt-28 pb-16 px-gutter bg-cream">
-      <div className="w-full max-w-content mx-auto grid lg:grid-cols-2 gap-12 items-center">
+      {/* Three columns from xl: text, photo, then the two-phone card. On
+          phones the card comes straight after the text, before the photo;
+          between lg and xl it sits under text and photo, centred. */}
+      <div className="w-full max-w-content mx-auto grid gap-10 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,26rem)] xl:gap-8 items-center">
         {/* Left: Text */}
-        <div>
+        <div className="order-1">
           <span className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
             ⭐ {t.heroBadge}
           </span>
 
-          <h1 className="font-display text-display-xl lg:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
+          <h1 className="font-display text-display-xl lg:text-[3.4rem] xl:text-[2.9rem] 2xl:text-[3.4rem] font-bold leading-[1.12] tracking-tight text-foreground mb-6">
             {t.heroTitle1}
             <br />
             <span className="text-primary">{t.heroTitle2}</span>
@@ -35,7 +39,7 @@ const HeroSection = () => {
             {t.heroDesc}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-4">
             {/* The free trial is the step a new visitor should take, so it is
                 the primary button; the courses are the secondary route for
                 those who want to compare levels and prices first. */}
@@ -57,21 +61,18 @@ const HeroSection = () => {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-[#25D366]" />
             {t.heroExplore}
           </a>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground border-t border-border/60 pt-5">
-            <span className="flex items-center gap-2"><Star className="w-4 h-4 fill-primary text-primary" /> {t.heroStat1}</span>
-            <span className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-primary" /> {t.heroStat2}</span>
-            <span className="flex items-center gap-2"><Tag className="w-4 h-4 text-primary" /> {t.heroTrustStudents}</span>
-          </div>
         </div>
 
-        {/* Right: Ibra above Beirut — real Lebanese photography + the teacher */}
-        <div className="relative">
+        <HeroConversation className="order-2 w-full max-w-md mx-auto lg:order-3 lg:col-span-2 xl:col-span-1 xl:max-w-none" />
+
+        {/* Ibra above Beirut — real Lebanese photography + the teacher */}
+        <div className="relative order-3 lg:order-2">
           <div className="w-full max-h-[34rem] xl:max-h-[38rem] mx-auto rounded-[2rem] overflow-hidden shadow-xl aspect-square lg:aspect-[4/4.4]">
             <picture>
               <source srcSet={heroImgWebp} type="image/webp" />
