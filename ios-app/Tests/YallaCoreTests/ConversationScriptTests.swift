@@ -56,4 +56,35 @@ struct ConversationScriptTests {
         #expect(AnswerHint.clue(for: "Mar7aba! Shu esmak?").contains("esmak") == false)
         #expect(AnswerHint.matchingClue(left: "mayy", right: "apă") == "„mayy” → începe cu „a”")
     }
+
+    @Test("An exercise can accept a second correct reply")
+    func acceptedAnswers() throws {
+        let exercise = ExerciseDefinition(
+            id: "x", type: .dialogueResponse, unitID: "u", prompt: ["ro": "p"],
+            answer: "Mar7aba! Shu 3aamle?!", wrongAnswers: ["Ana ta3been"],
+            acceptedAnswers: ["Shu 3am ta3mle?"]
+        )
+        var runner = ExerciseRunner(exercise: exercise, skill: .production)
+        let resolution = runner.submit("shu 3am ta3mle", responseTime: 1)
+        #expect(resolution.completed)
+        #expect(exercise.correctAnswer(matching: "shu 3am ta3mle") == "Shu 3am ta3mle?")
+        #expect(exercise.correctAnswer(matching: "Mar7aba! Shu 3aamle?!") == "Mar7aba! Shu 3aamle?!")
+        guard case let .choices(choices) = NativeExerciseInput(exercise: exercise) else {
+            Issue.record("expected choices"); return
+        }
+        #expect(choices.contains("Shu 3am ta3mle?"))
+        #expect(choices.count == 3)
+    }
+
+    @Test("A turn can give the Romanian per accepted reply")
+    func learnerRoPerAnswer() throws {
+        let json = """
+        {"unitID":"u","scenes":[{"title":"A","turns":[{"partner":{"arabizi":"Mar7aba!","ro":"Salut!"},"exerciseID":"1",
+          "learnerRoByAnswer":{"Mar7aba! Shu 3aamle?!":"Salut! Ce mai zici?","Shu 3am ta3mle?":"Ce faci?"}}]}]}
+        """
+        let script = try JSONDecoder().decode(ConversationScript.self, from: Data(json.utf8))
+        #expect(script.learnerRo(at: 0, answer: "shu 3am ta3mle?") == "Ce faci?")
+        #expect(script.learnerRo(at: 0, answer: "Mar7aba! Shu 3aamle?!") == "Salut! Ce mai zici?")
+        #expect(script.learnerRo(at: 0) == nil)
+    }
 }

@@ -165,12 +165,14 @@ test('adds teacher-approved exercises to a unit', () => {
       unitID: 'a1-questions',
       prompt: { ro: 'Alege replica pentru: „Salut! Ce mai zici?”' },
       answer: 'Mar7aba! Shu 3aamle?!',
+      acceptedAnswers: ['Shu 3am ta3mle?'],
       wrongAnswers: ['Ana ta3been']
     }]
   });
   const added = result.exercises.find((exercise) => exercise.id === 'teacher.q.whats-up');
   assert.equal(added.answer, 'Mar7aba! Shu 3aamle?!');
   assert.deepEqual(added.wrongAnswers, ['Ana ta3been']);
+  assert.deepEqual(added.acceptedAnswers, ['Shu 3am ta3mle?']);
   assert.throws(
     () => applyApprovedNativeOverrides(imported, {
       exerciseAdditions: [{ id: 'x', type: 'dialogue-response', unitID: 'missing', prompt: { ro: 'p' }, answer: 'a' }]

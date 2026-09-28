@@ -23,7 +23,7 @@ public enum NativeExerciseInput: Equatable, Sendable {
             return
         }
         var seen = Set<String>()
-        let choices = ([exercise.answer] + exercise.wrongAnswers).filter {
+        let choices = ([exercise.answer] + (exercise.acceptedAnswers ?? []) + exercise.wrongAnswers).filter {
             let normalized = AnswerNormalizer.normalize($0)
             return !normalized.isEmpty && seen.insert(normalized).inserted
         }.sorted()

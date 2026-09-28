@@ -71614,13 +71614,16 @@
         "teacher.a1-questions.shu-3aamle"
       ],
       "prompt": {
-        "ro": "Alege replica pentru: „Salut! Ce mai zici? (către o fată)”"
+        "ro": "O fată îți spune „Mar7aba!”. Răspunde-i și întreab-o ce mai face."
       },
       "answer": "Mar7aba! Shu 3aamle?!",
       "wrongAnswers": [
         "Ana ta3been",
         "Kam kilo baddak?",
         "Ana men Rumania"
+      ],
+      "acceptedAnswers": [
+        "Shu 3am ta3mle?"
       ]
     }
   ],

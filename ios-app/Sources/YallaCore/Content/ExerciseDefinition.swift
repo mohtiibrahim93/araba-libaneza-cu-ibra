@@ -60,6 +60,9 @@ public struct ExerciseDefinition: Codable, Equatable, Sendable, Identifiable {
     public let prompt: [String: String]
     public let answer: String
     public let wrongAnswers: [String]
+    /// Other replies the teacher accepts as fully correct (e.g. "Shu 3am
+    /// ta3mle?" as well as "Mar7aba! Shu 3aamle?!").
+    public let acceptedAnswers: [String]?
 
     public init(
         id: String,
@@ -68,7 +71,8 @@ public struct ExerciseDefinition: Codable, Equatable, Sendable, Identifiable {
         expressionIDs: [String] = [],
         prompt: [String: String],
         answer: String,
-        wrongAnswers: [String]
+        wrongAnswers: [String],
+        acceptedAnswers: [String]? = nil
     ) {
         self.id = id
         self.type = type
@@ -77,5 +81,13 @@ public struct ExerciseDefinition: Codable, Equatable, Sendable, Identifiable {
         self.prompt = prompt
         self.answer = answer
         self.wrongAnswers = wrongAnswers
+        self.acceptedAnswers = acceptedAnswers
+    }
+
+    /// The correct reply the learner gave: the accepted alternative it
+    /// matches, or the main answer.
+    public func correctAnswer(matching submitted: String) -> String {
+        let key = AnswerNormalizer.normalize(submitted)
+        return (acceptedAnswers ?? []).first { AnswerNormalizer.normalize($0) == key } ?? answer
     }
 }

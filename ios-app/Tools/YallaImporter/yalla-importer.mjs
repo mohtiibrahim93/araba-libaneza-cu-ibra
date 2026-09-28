@@ -349,7 +349,10 @@ export function applyApprovedNativeOverrides(contentPackage, overrideDocument = 
       expressionIDs: expressionIDsForAddition,
       prompt: { ro: prompt },
       answer,
-      wrongAnswers: (raw.wrongAnswers ?? []).map(String)
+      wrongAnswers: (raw.wrongAnswers ?? []).map(String),
+      ...(Array.isArray(raw.acceptedAnswers) && raw.acceptedAnswers.length
+        ? { acceptedAnswers: raw.acceptedAnswers.map(String) }
+        : {})
     });
     exerciseIDs.add(id);
   }

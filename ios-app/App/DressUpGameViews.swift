@@ -320,7 +320,7 @@ struct DressUpSceneView: View {
 
     private func replyRomanian(for exercise: ExerciseDefinition, index: Int) -> String? {
         guard policy.partnerLine != .hidden else { return nil }
-        return scenario.script?.learnerRo(at: index)
+        return scenario.script?.learnerRo(at: index, answer: answered)
             ?? DialoguePromptText.quotedRomanian(in: exercise.prompt[locale] ?? "")
     }
 
@@ -358,7 +358,7 @@ struct DressUpSceneView: View {
             lastReward = granted
             hitDailyLimit = granted < reward
             earnedInScene += granted
-            answered = player.currentExercise?.answer ?? choice
+            answered = player.currentExercise?.correctAnswer(matching: choice) ?? choice
             persist(resolution, player: player)
         } else {
             wrong.insert(choice)

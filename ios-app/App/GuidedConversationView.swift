@@ -251,7 +251,7 @@ struct GuidedConversationView: View {
 
     /// The Romanian of the learner's reply, shown only once it is answered.
     private func replyCaption(for exercise: ExerciseDefinition) -> String? {
-        scenario.script?.learnerRo(at: turns.count)
+        scenario.script?.learnerRo(at: turns.count, answer: chosenReply)
             ?? DialoguePromptText.quotedRomanian(in: exercise.prompt[locale] ?? exercise.prompt["ro"] ?? "")
     }
 
@@ -370,7 +370,7 @@ struct GuidedConversationView: View {
         guard let resolution = player.submit(reply, responseTime: elapsed) else { return }
         self.player = player
         if resolution.completed {
-            chosenReply = player.currentExercise?.answer ?? reply
+            chosenReply = player.currentExercise?.correctAnswer(matching: reply) ?? reply
             fieldFocused = false
             persist(resolution, player: player)
         } else {

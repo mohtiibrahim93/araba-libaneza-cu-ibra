@@ -94,15 +94,10 @@
                 "ro": "Salut!"
               },
               "exerciseID": "teacher.a1-questions.whats-up",
-              "learnerRo": "Salut! Ce mai zici? (către o fată)"
-            },
-            {
-              "partner": {
-                "arabizi": "Mnii7a!",
-                "ro": "Bine!"
-              },
-              "exerciseID": "q67",
-              "learnerRo": "Ce faci? (către o fată)"
+              "learnerRoByAnswer": {
+                "Mar7aba! Shu 3aamle?!": "Salut! Ce mai zici? (către o fată)",
+                "Shu 3am ta3mle?": "Ce faci? (către o fată)"
+              }
             },
             {
               "partner": {

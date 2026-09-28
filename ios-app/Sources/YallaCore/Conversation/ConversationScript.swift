@@ -15,6 +15,8 @@ public struct ConversationScript: Codable, Equatable, Sendable {
         /// The Romanian of the learner's reply, for exercises whose prompt
         /// does not quote it (e.g. „Shu esmak?” — spune că te cheamă George).
         public let learnerRo: String?
+        /// The Romanian per reply, when the exercise accepts several.
+        public let learnerRoByAnswer: [String: String]?
     }
 
     public struct Scene: Codable, Equatable, Sendable {
@@ -27,10 +29,19 @@ public struct ConversationScript: Codable, Equatable, Sendable {
 
     public var turns: [Turn] { scenes.flatMap(\.turns) }
 
-    /// The learner's Romanian for turn `index`, when the script gives it.
-    public func learnerRo(at index: Int) -> String? {
+    /// The learner's Romanian for turn `index`, when the script gives it;
+    /// per reply when the turn accepts several.
+    public func learnerRo(at index: Int, answer: String? = nil) -> String? {
         let all = turns
-        return all.indices.contains(index) ? all[index].learnerRo : nil
+        guard all.indices.contains(index) else { return nil }
+        let turn = all[index]
+        if let answer, let byAnswer = turn.learnerRoByAnswer {
+            let key = AnswerNormalizer.normalize(answer)
+            if let match = byAnswer.first(where: { AnswerNormalizer.normalize($0.key) == key }) {
+                return match.value
+            }
+        }
+        return turn.learnerRo
     }
 
     /// The scene title to show before the turn, when a new scene starts there.

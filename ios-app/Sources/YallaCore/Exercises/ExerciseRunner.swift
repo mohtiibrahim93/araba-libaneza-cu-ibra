@@ -74,12 +74,16 @@ public struct ExerciseRunner: Sendable {
     }
 
     public mutating func submit(_ answer: String, responseTime: Double) -> ExerciseResolution {
-        let evaluation = evaluator.evaluate(
+        var evaluation = evaluator.evaluate(
             answer: answer,
             canonical: exercise.answer,
             spellingVariants: spellingVariants,
             pronunciationVariants: pronunciationVariants
         )
+        if evaluation == .incorrect,
+           (exercise.acceptedAnswers ?? []).contains(where: { AnswerNormalizer.normalize($0) == AnswerNormalizer.normalize(answer) }) {
+            evaluation = .exact
+        }
 
         if firstResponseTime == nil {
             firstResponseTime = responseTime
