@@ -45,8 +45,8 @@ const GROUPS: { titleRo: string; titleEn: string; rows: [string, string, string,
     titleRo: "Expresii libaneze de suflet",
     titleEn: "Heartfelt Lebanese expressions",
     rows: [
-      ["Ya3ni", "يعني", "Adică / Cam așa (umplutură universală)", "I mean / sort of (universal filler)"],
-      ["Ta2burni", "تقبرني", "„Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză", "'I love you dearly' (literally: may you bury me) — typically Lebanese affection"],
+      ["Ya3ne", "يعني", "Adică / Cam așa (umplutură universală)", "I mean / sort of (universal filler)"],
+      ["To2borne", "تقبرني", "„Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză", "'I love you dearly' (literally: may you bury me) — typically Lebanese affection"],
     ],
   },
 ];

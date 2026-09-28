@@ -89,7 +89,7 @@ const CeEsteArabizi = () => {
         <li><strong>Mar7aba</strong> (مرحبا) — {en ? "'hi' — the number 7 is the ح sound from the throat." : "„salut” — cifra 7 e sunetul ح din gât."}</li>
         <li><strong>3afwan</strong> (عفواً) — {en ? "'you're welcome' — the number 3 is the ع sound." : "„cu plăcere” — cifra 3 e sunetul ع."}</li>
         <li><strong>Kifak?</strong> (كيفك؟) — {en ? "'how are you?' — no numbers, read as written." : "„ce faci?” — fără cifre, se citește direct."}</li>
-        <li><strong>Ta2burni</strong> (تقبرني) — {en ? "a term of affection — the number 2 is a short stop." : "expresie de afecțiune — cifra 2 e o oprire scurtă."}</li>
+        <li><strong>To2borne</strong> (تقبرني) — {en ? "a term of affection — the number 2 is a short stop." : "expresie de afecțiune — cifra 2 e o oprire scurtă."}</li>
       </ul>
       <p>
         {en ? "See more in the article on the " : "Vezi mai multe în articolul cu "}

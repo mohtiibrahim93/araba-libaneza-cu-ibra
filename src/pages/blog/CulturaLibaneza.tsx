@@ -58,7 +58,7 @@ const CulturaLibaneza = () => {
       <p>
         {en ? "In Lebanon, the guest is sacred. You'll always be welcomed with " : "În Liban, oaspetele este sacru. Vei fi întâmpinat mereu cu "}
         „<strong>Ahla w sahla</strong>” {en ? "(welcome) and, almost certainly, a coffee or something to eat. Refusing is nearly impossible — and you won't want to. That warmth is felt directly in the language, full of terms of affection (remember " : "(bine ai venit) și, aproape sigur, cu o cafea sau ceva de mâncare. A refuza e aproape imposibil — și nici nu vei vrea. Această căldură se simte direct în limbă, plină de expresii de afecțiune (îți amintești de "}
-        <Link to="/blog/primele-20-de-expresii-libaneze">„ta2burni”</Link>{en ? "?)." : "?)."}
+        <Link to="/blog/primele-20-de-expresii-libaneze">„to2borne”</Link>{en ? "?)." : "?)."}
       </p>
 
       <h2>{en ? "The food: mezze and much more" : "Mâncarea: mezze și mult mai mult"}</h2>

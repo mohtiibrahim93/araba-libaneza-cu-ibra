@@ -395,7 +395,7 @@ ${arabiziMarkdownTable("ro")}
 - **Mar7aba** (مرحبا) — „salut” — cifra 7 e sunetul ح din gât.
 - **3afwan** (عفواً) — „cu plăcere” — cifra 3 e sunetul ع.
 - **Kifak?** (كيفك؟) — „ce faci?” — fără cifre, se citește direct.
-- **Ta2burni** (تقبرني) — expresie de afecțiune — cifra 2 e o oprire scurtă.
+- **To2borne** (تقبرني) — expresie de afecțiune — cifra 2 e o oprire scurtă.
 
 Vezi mai multe în articolul cu [primele 20 de expresii libaneze](/blog/primele-20-de-expresii-libaneze).
 
@@ -415,7 +415,7 @@ ${arabiziMarkdownTable("en")}
 - **Mar7aba** (مرحبا) — 'hi' — the number 7 is the ح sound from the throat.
 - **3afwan** (عفواً) — 'you're welcome' — the number 3 is the ع sound.
 - **Kifak?** (كيفك؟) — 'how are you?' — no numbers, read as written.
-- **Ta2burni** (تقبرني) — a term of affection — the number 2 is a short stop.
+- **To2borne** (تقبرني) — a term of affection — the number 2 is a short stop.
 
 See more in the article on the [first 20 Lebanese phrases](/blog/primele-20-de-expresii-libaneze).
 
@@ -431,7 +431,7 @@ Not at all. Arabizi is the real way Lebanese people write to each other every da
 
 ## Ospitalitatea, mai presus de toate
 
-În Liban, oaspetele este sacru. Vei fi întâmpinat mereu cu „**Ahla w sahla**” (bine ai venit) și, aproape sigur, cu o cafea sau ceva de mâncare. A refuza e aproape imposibil — și nici nu vei vrea. Această căldură se simte direct în limbă, plină de expresii de afecțiune (îți amintești de [„ta2burni”](/blog/primele-20-de-expresii-libaneze)?).
+În Liban, oaspetele este sacru. Vei fi întâmpinat mereu cu „**Ahla w sahla**” (bine ai venit) și, aproape sigur, cu o cafea sau ceva de mâncare. A refuza e aproape imposibil — și nici nu vei vrea. Această căldură se simte direct în limbă, plină de expresii de afecțiune (îți amintești de [„to2borne”](/blog/primele-20-de-expresii-libaneze)?).
 
 ## Mâncarea: mezze și mult mai mult
 
@@ -457,7 +457,7 @@ Curios? Începe cu o [lecție de probă gratuită](/trial) sau vezi [toate cursu
 
 ## Hospitality, above all
 
-In Lebanon, the guest is sacred. You'll always be welcomed with '**Ahla w sahla**' (welcome) and, almost certainly, a coffee or something to eat. Refusing is nearly impossible — and you won't want to. That warmth is felt directly in the language, full of terms of affection (remember ['ta2burni'](/blog/primele-20-de-expresii-libaneze)?).
+In Lebanon, the guest is sacred. You'll always be welcomed with '**Ahla w sahla**' (welcome) and, almost certainly, a coffee or something to eat. Refusing is nearly impossible — and you won't want to. That warmth is felt directly in the language, full of terms of affection (remember ['to2borne'](/blog/primele-20-de-expresii-libaneze)?).
 
 ## The food: mezze and much more
 
@@ -584,8 +584,8 @@ The simplest way is a short chat so we can gauge your child's level and interest
 
 | Arabizi | Arabă | Română |
 | --- | --- | --- |
-| Ya3ni | يعني | Adică / Cam așa (umplutură universală) |
-| Ta2burni | تقبرني | „Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză |
+| Ya3ne | يعني | Adică / Cam așa (umplutură universală) |
+| To2borne | تقبرني | „Te iubesc enorm” (literal: să mă îngropi tu) — afecțiune tipic libaneză |
 
 ## De unde continui
 
@@ -632,8 +632,8 @@ Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui �
 
 | Arabizi | Arabic | Meaning |
 | --- | --- | --- |
-| Ya3ni | يعني | I mean / sort of (universal filler) |
-| Ta2burni | تقبرني | 'I love you dearly' (literally: may you bury me) — typically Lebanese affection |
+| Ya3ne | يعني | I mean / sort of (universal filler) |
+| To2borne | تقبرني | 'I love you dearly' (literally: may you bury me) — typically Lebanese affection |
 
 ## Where to go next
 
