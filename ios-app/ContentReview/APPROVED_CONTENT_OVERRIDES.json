@@ -250,7 +250,7 @@
       ],
       "wrongAnswers": [
         "Mar7aba Nour! 3am be2ra kteb.",
-        "Ma b3ref, yemkin ruu7 3al mat3am.",
+        "Ma b3ref, yemkin ruu7 3a shi mat3am.",
         "Shu 3am ta3mol?"
       ]
     },
@@ -580,7 +580,7 @@
         "syn-22dbac28b402"
       ],
       "wrongAnswers": [
-        "ma 3am ba3mel she",
+        "ma 3am ba3mel shi",
         "Filem amerkene, bass mish ktiir 7elo.",
         "3am betfarraj 3a film."
       ]
@@ -1311,7 +1311,7 @@
       "wrongAnswers": [
         "Shu el filem?",
         "Shu 3am ta3mol halla2?",
-        "ma 3am ba3mel she"
+        "ma 3am ba3mel shi"
       ]
     },
     "syn-context-syn-6bbf34f893f8": {
@@ -1425,12 +1425,15 @@
       ]
     },
     "syn-context-syn-7ac35bb401b3": {
-      "answer": "Ma b3ref, yemkin ruu7 3al mat3am.",
+      "answer": "Ma b3ref, yemkin ruu7 3a shi mat3am.",
       "wrongAnswers": [
         "3am besma3 musi2a.",
         "Mar7aba Nour! 3am be2ra kteb.",
         "7elo! Ana kameen jou3an."
-      ]
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Nu știu, poate merg la un restaurant.”"
+      }
     },
     "syn-context-syn-7b17306217ad": {
       "exclude": true
@@ -1467,7 +1470,8 @@
         "Filem amerkene, bass mish ktiir 7elo.",
         "3am be2ra kteb.",
         "Allo Ziad! Shu 3am ta3mel?"
-      ]
+      ],
+      "answer": "ma 3am ba3mel shi"
     },
     "syn-context-syn-7d745a3f1217": {
       "answer": "Shu ra2yak nru7 el esbuu3 el jey?",
@@ -1818,7 +1822,7 @@
       ],
       "wrongAnswers": [
         "Mar7aba Nour! 3am be2ra kteb.",
-        "Ma b3ref, yemkin ruu7 3al mat3am.",
+        "Ma b3ref, yemkin ruu7 3a shi mat3am.",
         "Shu 3am ta3mol?"
       ]
     },
@@ -2118,7 +2122,7 @@
       "wrongAnswers": [
         "3am betfarraj 3a film.",
         "Allo Ziad! Shu 3am ta3mel?",
-        "Ma b3ref, yemkin ruu7 3al mat3am."
+        "Ma b3ref, yemkin ruu7 3a shi mat3am."
       ]
     },
     "syn-context-syn-c53501ed4c95": {
@@ -2275,7 +2279,7 @@
       "answer": "Filem amerkene, bass mish ktiir 7elo.",
       "wrongAnswers": [
         "3am be2ra kteb.",
-        "ma 3am ba3mel she",
+        "ma 3am ba3mel shi",
         "Hahaha, tayyeb shu baddik ta3mle ba3den?"
       ]
     },
@@ -2333,7 +2337,7 @@
     "syn-context-syn-d67ee0404cd3": {
       "answer": "Mar7aba Nour! 3am be2ra kteb.",
       "wrongAnswers": [
-        "Ma b3ref, yemkin ruu7 3al mat3am.",
+        "Ma b3ref, yemkin ruu7 3a shi mat3am.",
         "3am besma3 musi2a.",
         "7elo! Shu el kteb?"
       ]
@@ -4198,7 +4202,12 @@
       "canonicalArabizi": "Shu 3am ta3mol halla2?"
     },
     "syn-7ac35bb401b3": {
-      "canonicalArabizi": "Ma b3ref, yemkin ruu7 3al mat3am."
+      "canonicalArabizi": "Ma b3ref, yemkin ruu7 3a shi mat3am.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Nu știu, poate merg la un restaurant."
+        }
+      }
     },
     "syn-7b17306217ad": {
       "exclude": true
@@ -4875,6 +4884,9 @@
           "kind": "spelling"
         }
       ]
+    },
+    "syn-7c91d20121d3": {
+      "canonicalArabizi": "ma 3am ba3mel shi"
     }
   },
   "unitExpressionAdditions": [
@@ -5148,6 +5160,62 @@
         "Shu esmo 5ayyak?",
         "ma 3ande wled",
         "Bayye w emme"
+      ]
+    },
+    {
+      "id": "teacher.a1-needs.la2-mayy",
+      "type": "dialogue-response",
+      "unitID": "a1-needs",
+      "prompt": {
+        "ro": "Alege replica pentru: „Nu, vreau să beau apă.”"
+      },
+      "answer": "la2, badde eshrab mayy",
+      "wrongAnswers": [
+        "Shu ya3ne tawle bir romaane?",
+        "5amse illa rebe3",
+        "Killon illa enta"
+      ]
+    },
+    {
+      "id": "teacher.a1-actions.bde2ellak",
+      "type": "dialogue-response",
+      "unitID": "a1-actions",
+      "prompt": {
+        "ro": "Alege replica pentru: „Bine. Te sun când plec și îți spun unde și cum.”"
+      },
+      "answer": "Tayyeb. Bde2ellak bass fell, w bi2ellak wen w kif.",
+      "wrongAnswers": [
+        "Shu el filem?",
+        "3am besma3 musi2a.",
+        "Riweye lebneniyye. Ktiir 7elwe."
+      ]
+    },
+    {
+      "id": "teacher.a1-actions.bsewe-akel",
+      "type": "dialogue-response",
+      "unitID": "a1-actions",
+      "prompt": {
+        "ro": "Alege replica pentru: „Fac mâncare.”"
+      },
+      "answer": "3am bsewe akel",
+      "wrongAnswers": [
+        "Shu el kteb?",
+        "Mne7ke ba3den.",
+        "Yalla ta3a ma3e!"
+      ]
+    },
+    {
+      "id": "teacher.a1-actions.be7ke-haha",
+      "type": "dialogue-response",
+      "unitID": "a1-actions",
+      "prompt": {
+        "ro": "Alege replica pentru: „Vorbesc cu tine, haha.”"
+      },
+      "answer": "3am be7ke ma3ak haha",
+      "wrongAnswers": [
+        "Shu el filem?",
+        "Yalla ta3a ma3e!",
+        "Mne7ke ba3den."
       ]
     }
   ]

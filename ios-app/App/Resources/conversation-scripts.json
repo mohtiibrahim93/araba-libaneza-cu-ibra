@@ -288,6 +288,174 @@
       ]
     },
     {
+      "unitID": "a1-needs",
+      "scenes": [
+        {
+          "title": "Cu un prieten",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Baddak ahwe?",
+                "ro": "Vrei cafea?"
+              },
+              "exerciseID": "teacher.a1-needs.la2-mayy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitID": "a1-actions",
+      "scenes": [
+        {
+          "title": "La telefon cu Ziad (tu ești Nour)",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Allo?",
+                "ro": "Alo?"
+              },
+              "exerciseID": "syn-context-syn-fc4266bc44d9"
+            },
+            {
+              "partner": {
+                "arabizi": "Mar7aba Nour! 3am be2ra kteb.",
+                "ro": "Salut Nour! Citesc o carte."
+              },
+              "exerciseID": "syn-context-syn-749b80ac0fd0"
+            },
+            {
+              "partner": {
+                "arabizi": "Riweye lebneniyye. Ktiir 7elwe.",
+                "ro": "Un roman libanez. Foarte frumos."
+              },
+              "exerciseID": "syn-context-syn-7da600df6cad"
+            },
+            {
+              "partner": {
+                "arabizi": "Shu el filem?",
+                "ro": "Ce film?"
+              },
+              "exerciseID": "syn-context-syn-d452f09bda23"
+            },
+            {
+              "partner": {
+                "arabizi": "Hahaha, tayyeb shu baddik ta3mle ba3den?",
+                "ro": "Haha, bine, ce vrei să faci mai târziu?"
+              },
+              "exerciseID": "syn-context-syn-7ac35bb401b3"
+            },
+            {
+              "partner": {
+                "arabizi": "7elo! Ana kameen jou3an.",
+                "ro": "Frumos! Și eu sunt flămând."
+              },
+              "exerciseID": "syn-context-syn-5d78249e7425"
+            },
+            {
+              "partner": {
+                "arabizi": "meshe, i'm in.",
+                "ro": "Bine, vin și eu!"
+              },
+              "exerciseID": "teacher.a1-actions.bde2ellak"
+            }
+          ]
+        },
+        {
+          "title": "Același telefon, tu ești Ziad",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Allo Ziad! Shu 3am ta3mel?",
+                "ro": "Alo Ziad! Ce faci?"
+              },
+              "exerciseID": "syn-context-syn-d67ee0404cd3"
+            },
+            {
+              "partner": {
+                "arabizi": "7elo! Shu el kteb?",
+                "ro": "Frumos! Ce carte?"
+              },
+              "exerciseID": "syn-context-syn-7e27e79d1912"
+            },
+            {
+              "partner": {
+                "arabizi": "Tameem! Ana 3am betfarraj 3a film.",
+                "ro": "Super! Eu mă uit la un film."
+              },
+              "exerciseID": "syn-context-syn-e393491306c6"
+            },
+            {
+              "partner": {
+                "arabizi": "Filem amerkene, bass mish ktiir 7elo.",
+                "ro": "Un film american, dar nu e prea frumos."
+              },
+              "exerciseID": "syn-context-syn-c3fdd656b15f"
+            },
+            {
+              "partner": {
+                "arabizi": "Ma b3ref, yemkin ruu7 3a mat3am.",
+                "ro": "Nu știu, poate merg la restaurant."
+              },
+              "exerciseID": "syn-context-syn-5d200eaeb574"
+            }
+          ]
+        },
+        {
+          "title": "Toți te sună să te întrebe ce faci",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Shu 3am ta3mol halla2?",
+                "ro": "Ce faci acum?"
+              },
+              "exerciseID": "teacher.a1-actions.bsewe-akel"
+            },
+            {
+              "partner": {
+                "arabizi": "Shu 3am ta3mol?",
+                "ro": "Ce faci?"
+              },
+              "exerciseID": "syn-context-syn-014a5703fa52"
+            },
+            {
+              "partner": {
+                "arabizi": "Mash8ul halla2?",
+                "ro": "Ești ocupat acum?"
+              },
+              "exerciseID": "syn-context-syn-7c91d20121d3"
+            },
+            {
+              "partner": {
+                "arabizi": "Shu 3am ta3mol halla2?",
+                "ro": "Ce faci acum?"
+              },
+              "exerciseID": "syn-context-syn-3d21dc0b5e71"
+            }
+          ]
+        },
+        {
+          "title": "Tu întrebi",
+          "turns": [
+            {
+              "partner": {
+                "arabizi": "Mar7aba!",
+                "ro": "Bună!"
+              },
+              "exerciseID": "syn-context-syn-7a15e7999c58"
+            },
+            {
+              "partner": {
+                "arabizi": "Ma 3am ba3mel shi. W enta?",
+                "ro": "Nu fac nimic. Și tu?"
+              },
+              "exerciseID": "teacher.a1-actions.be7ke-haha"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "unitID": "a1-restaurant",
       "scenes": [
         {
