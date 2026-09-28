@@ -4796,6 +4796,27 @@
     "xc3f24f0fd04e": {
       "exclude": true,
       "reason": "Greeting placeholder imported into a1-health; replaced by Ibrahim's health phrases."
+    },
+    "syn-e1368cefdcad": {
+      "canonicalArabizi": "Yalla, bshufik!"
+    },
+    "syn-deb6001dcada": {
+      "canonicalArabizi": "bshufak"
+    },
+    "syn-3dfb67c4f345": {
+      "canonicalArabizi": "Yalla, bshufak!"
+    },
+    "syn-ccdbdad254ca": {
+      "canonicalArabizi": "Yalla, bshufik!"
+    },
+    "syn-892994d73bb8": {
+      "canonicalArabizi": "Yalla, bshufik!"
+    },
+    "syn-f58d8c90d844": {
+      "canonicalArabizi": "Bshufik ba3dayn!"
+    },
+    "syn-6d04c68c3acc": {
+      "canonicalArabizi": "Yalla, bshufik!"
     }
   },
   "unitExpressionAdditions": [
