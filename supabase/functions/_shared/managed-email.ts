@@ -4,7 +4,7 @@
 // registered template and hands the email to Lovable's managed email API,
 // which owns delivery, retries, rate limits, suppression and unsubscribe.
 // There is no queue, no cron dispatcher and no suppression table to consult.
-import * as React from 'npm:react@18.3.1'
+import * as React from 'npm:react@19.3.0'
 import { renderAsync } from 'npm:@react-email/components@1.0.12'
 import { EmailAPIError, sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
