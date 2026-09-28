@@ -174,7 +174,7 @@ const RO: CurriculumLevel[] = [
     objective:
       "B1 este nivelul la care araba libaneză încetează să mai fie un set de fraze și devine o limbă în care gândești. Cursantul susține conversații pe teme variate, își argumentează poziția și înțelege media uzuală — știri, interviuri, discuții obișnuite. Sistemul verbal se închide complet: toate timpurile, verbele slabe și cele dublate, condiționalul real și ireal, pasivul, subjonctivul și vorbirea indirectă. Exclusiv vorbit — fără alfabet arab.",
     intro: [
-      "La A2 puteai purta o conversație dacă interlocutorul te ajuta puțin. La B1 nu mai ai nevoie de ajutorul acela. Cele 70 de lecții pornesc de la o recapitulare A2 cu diagnostic — ca să știm exact ce s-a așezat și ce nu — și se termină cu discurs extins și dezbatere.",
+      "La A2 puteai purta o conversație dacă interlocutorul te ajuta puțin. La B1 nu mai ai nevoie de ajutorul acela. Cele 72 de lecții pornesc de la o recapitulare A2 cu diagnostic — ca să știm exact ce s-a așezat și ce nu — și se termină cu discurs extins și dezbatere.",
       "Cea mai mare parte a nivelului o ocupă gramatica pe care A1 și A2 au ocolit-o deliberat: consolidarea întregului sistem verbal, pronumele avansate și grupurile de clitice, condiționalul complet, pasivul și participiile, contextele de subjonctiv, modalele complexe, vorbirea indirectă și subordonarea. Nu sunt tabele de memorat — fiecare structură intră prin conversație, în contextul în care o vei folosi.",
       "În paralel se deschid temele abstracte — politică, economie, societate, la nivel introductiv — plus cultura, istoria și regiunile Libanului, idiomurile, proverbele și umorul. Sunt ~8 luni, două lecții de 90 de minute pe săptămână, iar nivelul se deschide după finalizarea A2.",
     ],
@@ -233,10 +233,10 @@ const RO: CurriculumLevel[] = [
         ],
       },
     ],
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
-    schedule: ["~8 luni · se deschide după finalizarea A2 (dată în curând)"],
+    schedule: ["~9 luni · se deschide după finalizarea A2 (dată în curând)"],
   },
   {
     id: "b2",
@@ -245,7 +245,7 @@ const RO: CurriculumLevel[] = [
       "B2 este nivelul la care nu mai vorbești doar corect, ci potrivit. Cursantul comută între registre — de la limbajul de stradă la cel formal — negociază, analizează media și se exprimă spontan pe teme complexe, inclusiv profesionale: drept, afaceri, medicină, tehnologie. Exclusiv vorbit.",
     intro: [
       "Diferența dintre B1 și B2 nu este cât știi, ci cât de bine alegi. La B2 aceeași idee se spune în trei feluri, iar tu îl alegi pe cel potrivit situației — cu un prieten, cu un client, într-o dezbatere. Aici intră registrul stilistic, code-switching-ul și conectorii nuanțați care fac diferența între cineva care vorbește araba și cineva care sună a libanez.",
-      "Cele 70 de lecții pornesc de la o recapitulare B1 cu diagnostic și adaugă vocabular abstract și profesional, persuasiune, negociere și dezbatere, narațiune și descriere complexă. Partea de media urcă de la înțelegerea știrilor la analiză: filme, melodii, talk-show-uri.",
+      "Cele 72 de lecții pornesc de la o recapitulare B1 cu diagnostic și adaugă vocabular abstract și profesional, persuasiune, negociere și dezbatere, narațiune și descriere complexă. Partea de media urcă de la înțelegerea știrilor la analiză: filme, melodii, talk-show-uri.",
       "Ultima parte a nivelului intră în profunzime culturală — religie, politică, variațiile dialectale dintre regiunile Libanului — și se încheie cu discurs extins spontan. Sunt ~8–9 luni, două lecții de 90 de minute pe săptămână, iar nivelul se deschide după B1.",
     ],
     outcomes: [
@@ -298,20 +298,20 @@ const RO: CurriculumLevel[] = [
         ],
       },
     ],
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Vorbit · scris opțional (dacă toată grupa vrea)",
-    schedule: ["~8–9 luni · se deschide după B1 — înscrieri viitoare"],
+    schedule: ["~9 luni · se deschide după B1 — înscrieri viitoare"],
   },
   {
     id: "c1",
     title: "Nivel C1 — Avansat (Două Trackuri)",
     objective:
       "Utilizator avansat. Scrisul rămâne opțional — o grupă îl poate adăuga de la B1 sau B2, dacă toți cursanții vor. Alegi între trackul vorbit (nucleul conversațional) sau vorbit + scris (alfabetul arab rulează SIMULTAN, în paralel). Scrisul privește araba libaneză în litere arabe — nu fuṣḥā.",
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Vorbit / Vorbit + Scris (simultan)",
-    schedule: ["~10 luni · se deschide după B2 — înscrieri viitoare"],
+    schedule: ["~9 luni · se deschide după B2 — înscrieri viitoare"],
     intro: [
       "La C1 corectitudinea nu mai e subiectul. Subiectul e ce se spune fără să fie spus: sensul implicit, cititul printre rânduri, ironia și sarcasmul, umorul cu timing și jocuri de cuvinte, idiomurile avansate și proverbele așa cum se folosesc de fapt. Este nivelul la care începi să înțelegi gluma din camera în care ești, nu după ce ți se explică.",
       "Aici intră și harta socială a limbii: variația regională între Beirut și Muntele Liban, apoi Sud, Nord și Bekaa; sociolingvistica — cine vorbește cum, după clasă, vârstă și comunitate; code-switching-ul libaneză ↔ franceză ↔ engleză; și frazarea elevată, elementele cu aromă fuṣḥā care apar firesc în vorbirea educată. Plus măiestria povestirii, dezbaterea, persuasiunea, negocierea și exprimarea nuanței — atenuare, îndoială, certitudine.",
@@ -400,13 +400,13 @@ const RO: CurriculumLevel[] = [
     title: "Nivel C2 — Academic & Specializat (Modular)",
     objective:
       "Araba libaneză la nivel academic și specializat. FĂRĂ gramatică fuṣḥā completă — fără cazuri, fără declinări. Doar registrul educat și terminologia pe care profesioniștii și scriitorii libanezi le folosesc efectiv. Blocurile sunt modulare — îți poți prioritiza domeniul (ex. medicină, jurnalism).",
-    lessons: 80,
-    hours: 120,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Vorbit / Scris integrat",
-    schedule: ["~10 luni · se deschide după C1 — înscrieri viitoare"],
+    schedule: ["~9 luni · se deschide după C1 — înscrieri viitoare"],
     intro: [
       "C2 este araba libaneză la nivel academic și specializat — dar fără gramatica fuṣḥā completă. Fără cazuri, fără declinări. Doar registrul educat și terminologia pe care profesioniștii și scriitorii libanezi le folosesc efectiv, în meseriile lor.",
-      "Cele 80 de lecții sunt organizate în blocuri modulare, ceea ce înseamnă că îți poți prioritiza domeniul: politică și actualitate, afaceri și economie, drept, sănătate și guvernanță, tehnologie și știință, media și jurnalism, arte, literatură și viață intelectuală. Dacă ești medic, blocul medical contează mai mult decât cel juridic — și programul se poate așeza în consecință.",
+      "Cele 72 de lecții sunt organizate în blocuri modulare, ceea ce înseamnă că îți poți prioritiza domeniul: politică și actualitate, afaceri și economie, drept, sănătate și guvernanță, tehnologie și știință, media și jurnalism, arte, literatură și viață intelectuală. Dacă ești medic, blocul medical contează mai mult decât cel juridic — și programul se poate așeza în consecință.",
       "Primul bloc rămâne comun tuturor: registrul educat față de cel de stradă, adresarea formală, vocabularul elevat și frazarea selectivă „cu aromă fuṣḥā”, polisarea retorică, nuanțele de ton și intenție, plus textele de opinie și eseul cultural — citite și produse. Este nivelul la care limba încetează să fie un obiectiv și devine un instrument de lucru.",
     ],
     outcomes: [
@@ -624,7 +624,7 @@ const EN: CurriculumLevel[] = [
     objective:
       "B1 is where Lebanese Arabic stops being a set of phrases and becomes a language you think in. You sustain conversations on varied topics, argue a position and follow everyday media — news, interviews, ordinary discussion. The verb system closes completely here: all tenses, weak and doubled verbs, the real and unreal conditional, the passive, the subjunctive and reported speech. Spoken only — no Arabic alphabet.",
     intro: [
-      "At A2 you could hold a conversation if the other person met you halfway. At B1 you no longer need them to. The 70 lessons open with an A2 review and diagnostic — so we know exactly what has settled and what has not — and close with extended discourse and debate.",
+      "At A2 you could hold a conversation if the other person met you halfway. At B1 you no longer need them to. The 72 lessons open with an A2 review and diagnostic — so we know exactly what has settled and what has not — and close with extended discourse and debate.",
       "Most of the level is the grammar A1 and A2 deliberately stepped around: consolidating the whole verb system, advanced pronouns and clitic clusters, the full conditional, the passive and participles, subjunctive contexts, complex modals, reported speech and subordination. None of it arrives as a table to memorise — every structure comes in through conversation, in the context where you will actually use it.",
       "Running alongside that, the abstract topics open up — politics, economy and society at an introductory level — plus Lebanese culture, history and regions, idioms, proverbs and humour. Around 8 months, two 90-minute lessons a week, opening once A2 finishes.",
     ],
@@ -683,10 +683,10 @@ const EN: CurriculumLevel[] = [
         ],
       },
     ],
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Spoken · optional writing (if the whole group wants it)",
-    schedule: ["~8 months · opens after A2 finishes (date coming soon)"],
+    schedule: ["~9 months · opens after A2 finishes (date coming soon)"],
   },
   {
     id: "b2",
@@ -695,7 +695,7 @@ const EN: CurriculumLevel[] = [
       "B2 is where you stop merely speaking correctly and start speaking appropriately. You switch between registers — street language to formal — negotiate, analyse media and express yourself spontaneously on complex topics, including professional ones: law, business, medicine, technology. Spoken only.",
     intro: [
       "The difference between B1 and B2 is not how much you know but how well you choose. At B2 the same idea can be said three ways and you pick the one that fits — with a friend, with a client, in an argument. That is what stylistic register, code-switching and nuanced connectors are for: they are the difference between someone who speaks Arabic and someone who sounds Lebanese.",
-      "The 70 lessons open with a B1 review and diagnostic, then add abstract and professional vocabulary, persuasion, negotiation and debate, and complex narration and description. The media work steps up from understanding the news to analysing it: films, songs, talk shows.",
+      "The 72 lessons open with a B1 review and diagnostic, then add abstract and professional vocabulary, persuasion, negotiation and debate, and complex narration and description. The media work steps up from understanding the news to analysing it: films, songs, talk shows.",
       "The last stretch goes into cultural depth — religion, politics, and the dialect variation between Lebanese regions — and finishes on spontaneous extended discourse. Around 8–9 months, two 90-minute lessons a week, opening after B1.",
     ],
     outcomes: [
@@ -748,20 +748,20 @@ const EN: CurriculumLevel[] = [
         ],
       },
     ],
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Spoken · optional writing (if the whole group wants it)",
-    schedule: ["~8–9 months · opens after B1 — future enrollment"],
+    schedule: ["~9 months · opens after B1 — future enrollment"],
   },
   {
     id: "c1",
     title: "Level C1 — Advanced (Two Tracks)",
     objective:
       "Advanced user. Writing stays optional — a group can add it from B1 or B2 if all its students want it. Pick the spoken track (conversational core only) or spoken + written (the Arabic alphabet strand runs SIMULTANEOUSLY in the same lessons). Writing covers Lebanese Arabic in Arabic letters — not fuṣḥā.",
-    lessons: 70,
-    hours: 105,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Spoken / Spoken + Written (simultaneous)",
-    schedule: ["~10 months · opens after B2 — future enrollment"],
+    schedule: ["~9 months · opens after B2 — future enrollment"],
     intro: [
       "At C1 correctness is no longer the subject. The subject is what gets said without being said: implied meaning, reading between the lines, irony and sarcasm, humour with timing and wordplay, advanced idioms and proverbs as they are actually used. This is the level where you catch the joke in the room you are in, rather than after someone explains it.",
       "It also covers the social map of the language: regional variation between Beirut and Mount Lebanon, then the South, the North and the Bekaa; sociolinguistics — who speaks how, by class, age and community; code-switching between Lebanese, French and English; and elevated phrasing, the fuṣḥā-flavoured elements that turn up naturally in educated speech. Plus storytelling mastery, debate, persuasion, negotiation, and expressing nuance — hedging, doubt, certainty.",
@@ -850,13 +850,13 @@ const EN: CurriculumLevel[] = [
     title: "Level C2 — Academic & Specialized (Modular)",
     objective:
       "Lebanese Arabic at an academic & specialized level. NO full fuṣḥā grammar — no cases, no declensions. Only the educated register and specialized terminology Lebanese professionals and writers actually use. Blocks are modular — prioritize your domain (e.g. medicine, journalism).",
-    lessons: 80,
-    hours: 120,
+    lessons: 72,
+    hours: 108,
     trackLabel: "Spoken / Written integrated",
-    schedule: ["~10 months · opens after C1 — future enrollment"],
+    schedule: ["~9 months · opens after C1 — future enrollment"],
     intro: [
       "C2 is Lebanese Arabic at an academic and specialist level — but without full fuṣḥā grammar. No case endings, no declensions. Just the educated register and the terminology Lebanese professionals and writers actually use in their own work.",
-      "The 80 lessons are arranged in modular blocks, which means you can prioritise your own field: politics and current affairs, business and economics, law, health and governance, technology and science, media and journalism, arts, literature and intellectual life. If you are a doctor, the medical block matters more than the legal one — and the schedule can be arranged that way.",
+      "The 72 lessons are arranged in modular blocks, which means you can prioritise your own field: politics and current affairs, business and economics, law, health and governance, technology and science, media and journalism, arts, literature and intellectual life. If you are a doctor, the medical block matters more than the legal one — and the schedule can be arranged that way.",
       "The first block stays common to everyone: educated versus street register, formal address, elevated vocabulary and the selective fuṣḥā-flavoured phrasing of educated speech, rhetorical polish, shades of tone and intent, plus opinion pieces and the cultural essay, both read and produced. This is the level at which the language stops being the goal and becomes a tool you work with.",
     ],
     outcomes: [

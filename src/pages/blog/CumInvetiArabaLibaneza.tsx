@@ -152,7 +152,7 @@ const CumInvetiArabaLibaneza = () => {
         <ul>
           <li><strong>{en ? "~4 months (A1):" : "~4 luni (A1):"}</strong>{en ? " introduce yourself, order at a restaurant, ask for directions." : " te prezinți, comanzi la restaurant, întrebi indicații."}</li>
           <li><strong>{en ? "~11 months (A2):" : "~11 luni (A2):"}</strong>{en ? " simple conversations on familiar topics." : " conversații simple pe teme familiare."}</li>
-          <li><strong>{en ? "~19 months (B1):" : "~19 luni (B1):"}</strong>{en ? " fluent conversation with regular practice (2–3 hours/week)." : " conversație fluentă cu practică regulată (2–3 ore/săptămână)."}</li>
+          <li><strong>{en ? "~20 months (B1):" : "~20 de luni (B1):"}</strong>{en ? " fluent conversation with regular practice (2–3 hours/week)." : " conversație fluentă cu practică regulată (2–3 ore/săptămână)."}</li>
         </ul>
         <p>
           {en ? "The deciding factor isn't talent, but " : "Factorul decisiv nu este talentul, ci "}

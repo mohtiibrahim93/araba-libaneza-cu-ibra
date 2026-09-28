@@ -8,7 +8,7 @@ const content = {
     updated: "Ultima actualizare:",
     sections: [
       ["1. Descriere generală", "Acești termeni și condiții reglementează utilizarea site-ului web și a serviciilor educaționale oferite de Centrul de Arabă Libaneză."],
-      ["2. Servicii oferite", "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt online (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2)."],
+      ["2. Servicii oferite", "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt online, iar varianta fizică se va adăuga mai târziu ca opțiune (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2)."],
       ["3. Înscriere și plăți", "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Plata se efectuează conform instrucțiunilor primite după confirmare. Acceptăm plata în LEI, EUR sau USD."],
       ["4. Anulare și rambursare", "Anularea înscrierii se poate face cu cel puțin 7 zile înainte de începerea cursului pentru o rambursare completă. După începerea cursului, rambursările se fac proporțional cu lecțiile rămase, minus o taxă administrativă de 10%."],
       ["5. Obligațiile cursantului", "Cursanții se obligă să participe activ la lecții, să respecte programul stabilit și să mențină un comportament adecvat în cadrul grupului. În cazul lecțiilor online, este necesară o conexiune stabilă la internet."],
@@ -23,7 +23,7 @@ const content = {
     updatedValue: "September 2026",
     sections: [
       ["1. Overview", "These terms and conditions govern the use of the website and educational services provided by Centrul de Arabă Libaneză (Lebanese Arabic with Ibra)."],
-      ["2. Services", "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses, when they run, are online (there are none at the moment). Courses cover all CEFR levels (A1–C2)."],
+      ["2. Services", "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses, when they run, are online, with an in-person option to be added later (there are none at the moment). Courses cover all CEFR levels (A1–C2)."],
       ["3. Registration and payments", "Registration is completed through the forms on the website or via WhatsApp. Payment is made according to the instructions received after confirmation. We accept payment in LEI, EUR, or USD."],
       ["4. Cancellation and refund", "Registration can be cancelled at least 7 days before the course start date for a full refund. After the course starts, refunds are calculated proportionally based on remaining lessons, minus a 10% administrative fee."],
       ["5. Student responsibilities", "Students agree to participate actively, respect the agreed schedule, and maintain appropriate conduct in the group. For online lessons, a stable internet connection is required."],

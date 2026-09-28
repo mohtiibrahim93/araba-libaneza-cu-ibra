@@ -82,7 +82,7 @@ export const translations = {
     groupCardTitle: "Cursuri de Grup",
     groupCardDesc: "Învață alături de alții într-un mediu distractiv și interactiv. Perfect pentru a-ți face prieteni noi în timp ce înveți araba libaneză.",
     groupFeat1: "Grupuri mici (max. 6 cursanți, online sau fizic)",
-    groupFeat2: "26–80 de lecții per nivel (90 min, de 2 ori pe săptămână)",
+    groupFeat2: "32–72 de lecții pe nivel (90 min, de 2 ori pe săptămână)",
     groupFeat3: "Activități interactive de grup",
     groupRegister: "Înscrie-te la cursul de grup",
     privateBadge: "Lecții individuale",
@@ -262,7 +262,7 @@ export const translations = {
     kidsChildNamePlaceholder: "ex: Maria",
     kidsChildAge: "Vârsta copilului",
     kidsChildAgePlaceholder: "ex: 8 ani",
-    kidsFormatNote: "Online. Orarul îl stabilim când pornește grupa.",
+    kidsFormatNote: "Online (varianta fizică va fi adăugată mai târziu, ca opțiune). Orarul îl stabilim când pornește grupa.",
 
     // Center select
 
@@ -885,7 +885,7 @@ export const translations = {
     groupCardTitle: "Group Classes",
     groupCardDesc: "Learn with others in a fun, interactive environment. Perfect for making new friends while learning Lebanese Arabic together.",
     groupFeat1: "Small groups (max 6 students, online or in person)",
-    groupFeat2: "26–80 lessons per level (90 min, twice a week)",
+    groupFeat2: "32–72 lessons per level (90 min, twice a week)",
     groupFeat3: "Interactive group activities",
     groupRegister: "Register for Group Classes",
     privateBadge: "One-on-One",
@@ -1058,7 +1058,7 @@ export const translations = {
     kidsChildNamePlaceholder: "e.g.: Maya",
     kidsChildAge: "Child's Age",
     kidsChildAgePlaceholder: "e.g.: 8 years",
-    kidsFormatNote: "Online. The schedule is set when the group starts.",
+    kidsFormatNote: "Online (an in-person option will be added later). The schedule is set when the group starts.",
 
 
     // GDPR

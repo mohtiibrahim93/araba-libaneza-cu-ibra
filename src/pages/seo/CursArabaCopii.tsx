@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: "Cursul de arabă pentru copii e online sau fizic?",
-    a: "Online. Momentan nu avem cursuri pentru copii; când pornim, pornim online — lasă-ți datele și te anunțăm.",
+    a: "Online. Momentan nu avem cursuri pentru copii; când pornim, pornim online, iar varianta fizică o vom adăuga mai târziu, ca opțiune. Lasă-ți datele și te anunțăm.",
   },
   {
     q: "Ce dialect învață copiii — libanez sau standard?",

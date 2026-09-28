@@ -176,8 +176,8 @@ const PageContent = () => {
     "@type": "ItemList",
     itemListElement: [
       lang === "en"
-        ? { url: "/cursuri/grup", name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 26–80 lessons per level (90 min, twice a week), in person in Bucharest or online." }
-        : { url: "/cursuri/grup", name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 26–80 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
+        ? { url: "/cursuri/grup", name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 32–72 lessons per level (90 min, twice a week), in person in Bucharest or online." }
+        : { url: "/cursuri/grup", name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 32–72 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
       lang === "en"
         ? { url: "/cursuri/private", name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
         : { url: "/cursuri/private", name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },

@@ -59,7 +59,7 @@ describe("server-side Stripe price table (supabase/functions/_shared/prices.ts)"
     }
     expect(GROUP_MONTHS.A1).toBe(4);
     expect(GROUP_MONTHS.A2).toBe(7);
-    expect(GROUP_MONTHS.C2).toBe(10);
+    expect(GROUP_MONTHS.C2).toBe(9);
   });
 
   it("prices the group pay-in-full option as whole course minus 10%", () => {
@@ -67,9 +67,9 @@ describe("server-side Stripe price table (supabase/functions/_shared/prices.ts)"
     expect(groupFullCourseUnitAmount("A2", "online")).toBe(378000);
     // A2 in-center: 840/mo × 7 × 0.9 = 5292 RON.
     expect(groupFullCourseUnitAmount("A2", "fizic")).toBe(529200);
-    // A1 online: 500 × 4 × 0.9 = 1800 RON; C2 online: 1000 × 10 × 0.9 = 9000 RON.
+    // A1 online: 500 × 4 × 0.9 = 1800 RON; C2 online: 1000 × 9 × 0.9 = 8100 RON.
     expect(groupFullCourseUnitAmount("A1", "online")).toBe(180000);
-    expect(groupFullCourseUnitAmount("C2", "online")).toBe(900000);
+    expect(groupFullCourseUnitAmount("C2", "online")).toBe(810000);
     // Always cheaper than paying month-by-month for the same course.
     expect(groupFullCourseUnitAmount("A2", "online")).toBeLessThan(
       groupMonthlyUnitAmount("A2", "online") * groupMonthsFor("A2"),
@@ -78,7 +78,7 @@ describe("server-side Stripe price table (supabase/functions/_shared/prices.ts)"
 
   it("groupMonthsFor is case-insensitive and falls back to the shortest course", () => {
     expect(groupMonthsFor("A2")).toBe(7);
-    expect(groupMonthsFor("c2")).toBe(10);
+    expect(groupMonthsFor("c2")).toBe(9);
     expect(groupMonthsFor(null)).toBe(4);
     expect(groupMonthsFor(undefined)).toBe(4);
     expect(groupMonthsFor("Z9")).toBe(4);

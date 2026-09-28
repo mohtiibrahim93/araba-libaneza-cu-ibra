@@ -105,7 +105,7 @@ Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gra
 
 ## Există costuri ascunse?
 
-Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei sau euro. Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
+Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei, euro sau dolari (USD). Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
     en: `One of the first natural questions when you want to learn a new language is 'how much?'. At the Lebanese Arabic Center prices are transparent and depend on one thing: the format you choose. Here are all the options.
 
 ## Group courses (adults, A1–C2)
@@ -131,7 +131,7 @@ You don't have to pay anything to start. The first lesson is a [free trial](/tri
 
 ## Are there hidden costs?
 
-No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei or euros. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
+No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei, euros or US dollars. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
   },
 
   "cum-alegi-profesor-de-araba": {
@@ -220,9 +220,9 @@ La Centrul de Arabă Libaneză, cursurile de grup au 2 lecții pe săptămână 
 | --- | --- | --- |
 | A1 — Începător | ~4 luni | Te descurci în situații simple de zi cu zi: saluturi, cumpărături, prezentări. |
 | A2 — Elementar | ~7 luni | Conversații despre subiecte familiare, trecut și viitor, opinii simple. |
-| B1 — Intermediar | ~8 luni | Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale. |
-| B2 — Intermediar avansat | ~8–9 luni | Comunicare naturală, nuanțe culturale, subiecte abstracte. |
-| C1–C2 — Avansat | ~10 luni fiecare | Fluență apropiată de nativ, umor, registre diferite. |
+| B1 — Intermediar | ~9 luni | Vorbești liber despre experiențe, planuri, povești; înțelegi discuții normale. |
+| B2 — Intermediar avansat | ~9 luni | Comunicare naturală, nuanțe culturale, subiecte abstracte. |
+| C1–C2 — Avansat | ~9 luni fiecare | Fluență apropiată de nativ, umor, registre diferite. |
 
 ## Ce influențează ritmul
 
@@ -248,9 +248,9 @@ At the Lebanese Arabic Center, group courses have 2 lessons per week (90 minutes
 | --- | --- | --- |
 | A1 — Beginner | ~4 months | You manage simple everyday situations: greetings, shopping, introductions. |
 | A2 — Elementary | ~7 months | Conversations on familiar topics, past and future, simple opinions. |
-| B1 — Intermediate | ~8 months | You speak freely about experiences, plans, stories; you follow normal discussions. |
-| B2 — Upper-intermediate | ~8–9 months | Natural communication, cultural nuance, abstract topics. |
-| C1–C2 — Advanced | ~10 months each | Near-native fluency, humour, different registers. |
+| B1 — Intermediate | ~9 months | You speak freely about experiences, plans, stories; you follow normal discussions. |
+| B2 — Upper-intermediate | ~9 months | Natural communication, cultural nuance, abstract topics. |
+| C1–C2 — Advanced | ~9 months each | Near-native fluency, humour, different registers. |
 
 ## What affects your pace
 
@@ -813,7 +813,7 @@ Pentru un vorbitor de română, araba libaneză are câteva sunete noi (ع, ح, 
 
 - **~4 luni (A1):** te prezinți, comanzi la restaurant, întrebi indicații.
 - **~11 luni (A2):** conversații simple pe teme familiare.
-- **~19 luni (B1):** conversație fluentă cu practică regulată (2–3 ore/săptămână).
+- **~20 de luni (B1):** conversație fluentă cu practică regulată (2–3 ore/săptămână).
 
 Factorul decisiv nu este talentul, ci **consecvența** și cât de mult vorbești, nu doar citești sau asculți.
 
@@ -874,7 +874,7 @@ For an English speaker, Lebanese Arabic has a few new sounds (ع, ح, ق) and a 
 
 - **~4 months (A1):** introduce yourself, order at a restaurant, ask for directions.
 - **~11 months (A2):** simple conversations on familiar topics.
-- **~19 months (B1):** fluent conversation with regular practice (2–3 hours/week).
+- **~20 months (B1):** fluent conversation with regular practice (2–3 hours/week).
 
 The deciding factor isn't talent, but **consistency** and how much you speak, not just read or listen.
 

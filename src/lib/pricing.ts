@@ -51,7 +51,7 @@ export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
   B1: 9,
   B2: 9,
   C1: 9,
-  C2: 10,
+  C2: 9,
 };
 
 /**

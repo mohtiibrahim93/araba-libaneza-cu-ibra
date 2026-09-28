@@ -31,7 +31,7 @@ Lecție privată: online ${ONLINE_PRICES.privateLesson} LEI, fizic ${physicalPri
 Copii: lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup online ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, fizic ${physicalPrice(ONLINE_PRICES.kidsGroupMonthly)} LEI/lună/copil (minimum 4 copii).
 
 NIVELURI (CEFR)
-A1 — 32 lecții, 48 h, vorbit. A2 — 54 lecții, 81 h. B1 — 70 lecții, 105 h. B2 — 70 lecții, 105 h. C1 — 70 lecții, 105 h, vorbit + scris. C2 — 80 lecții, 120 h, module tematice.
+A1 — 32 lecții, 48 h, vorbit. A2 — 54 lecții, 81 h. B1 — 72 lecții, 108 h. B2 — 72 lecții, 108 h. C1 — 72 lecții, 108 h, vorbit + scris. C2 — 72 lecții, 108 h, module tematice.
 B1–C2 se deschid după încheierea nivelului anterior.
 
 PAGINI UTILE (folosește exact aceste adrese când recomanzi o pagină)
