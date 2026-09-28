@@ -1,5 +1,6 @@
 import { Link } from "@/lib/router-compat";
-import { CalendarClock, MapPin, Monitor, ChevronRight, Flame, Users } from "lucide-react";
+import { MapPin, Monitor, ChevronRight, Flame, Users } from "lucide-react";
+import { getCurriculum } from "@/data/curriculum";
 import { useI18n } from "@/lib/i18n";
 import { useActiveCohorts } from "@/hooks/useActiveCohorts";
 
@@ -21,20 +22,27 @@ const ActiveCoursesBanner = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const fmtDate = (d: string) =>
-    new Date(d + "T00:00:00").toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
-      day: "numeric",
-      month: "long",
-    });
+  const monthShort = (d: string) =>
+    new Date(d + "T00:00:00")
+      .toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", { month: "short" })
+      .replace(".", "")
+      .toUpperCase();
+  const dayOfMonth = (d: string) => new Date(d + "T00:00:00").getDate();
+  const curriculum = getCurriculum(lang === "en" ? "en" : "ro");
 
   return (
     <section className="px-gutter py-section-sm bg-background border-y border-border">
       <div className="w-full max-w-content mx-auto">
-        <div className="flex items-center gap-2 mb-4">
-          <Flame className="w-4 h-4 text-primary" />
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
-            {t.activeNowTitle}
-          </h2>
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="flex items-center gap-2">
+            <Flame className="w-4 h-4 text-primary" />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
+              {t.activeNowTitle}
+            </h2>
+          </div>
+          <Link to="/cursuri/grup" className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary hover:underline underline-offset-4">
+            {lang === "en" ? "All groups →" : "Toate grupele →"}
+          </Link>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -54,62 +62,76 @@ const ActiveCoursesBanner = () => {
 
             const level = (c.level || "A1").toUpperCase();
             const href = `/cursuri/grup/${level.toLowerCase()}${c.format ? `?mod=${c.format}` : ""}`;
+            const lessons = curriculum.find((l) => l.id === level.toLowerCase())?.lessons;
+            // The admin label repeats the date, lesson count and group size
+            // after the times ("… · start sâmbătă, 17 octombrie · 32 de
+            // lecții · maximum 6 cursanți"); the card shows those itself, so
+            // only the days and times are kept.
+            const label = (lang === "en" ? c.schedule_label_en : c.schedule_label_ro) || "";
+            const times = label.split(" · ")[0];
 
             return (
               <Link
                 key={c.id}
                 to={href}
-                className="group flex flex-col rounded-xl border border-primary/30 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
+                className="group flex gap-4 rounded-xl border border-primary/30 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
               >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
-                    {level}
-                    <span className="text-muted-foreground">·</span>
-                    {online ? (
-                      <span className="inline-flex items-center gap-1 font-medium">
-                        <Monitor className="w-3.5 h-3.5 text-primary" />
-                        {t.spotsOnline}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
-                        {t.spotsFizic}
-                      </span>
-                    )}
-                  </span>
-                  <span className="text-[11px] font-semibold rounded-full bg-primary text-primary-foreground px-2 py-0.5 whitespace-nowrap">
-                    {urgency}
-                  </span>
+                {/* Calendar tile: the start date at a glance. */}
+                <div className="flex h-16 w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-background" aria-hidden="true">
+                  <span className="text-[11px] font-bold tracking-wide text-primary">{monthShort(c.start_date)}</span>
+                  <span className="font-display text-2xl font-bold leading-none text-foreground">{dayOfMonth(c.start_date)}</span>
                 </div>
 
-                <p className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-                  <CalendarClock className="w-3.5 h-3.5 shrink-0" />
-                  {t.activeNowStartLabel} {fmtDate(c.start_date)}
-                </p>
-                <p className="text-xs text-muted-foreground mb-3">
-                  {lang === "en" ? c.schedule_label_en : c.schedule_label_ro}
-                </p>
-
-                {/* Each group counts its own seats — the Romanian and the
-                    English class are separate groups, never one shared total. */}
-                <p className="flex items-center gap-1.5 text-xs font-medium text-foreground mb-3">
-                  <Users className="w-3.5 h-3.5 shrink-0 text-primary" aria-hidden="true" />
-                  <span>
-                    {lang === "en" ? "Taught in " : "Predare în "}
-                    {c.teaching_language === "en"
-                      ? lang === "en" ? "English" : "engleză"
-                      : lang === "en" ? "Romanian" : "română"}
-                    {" · "}
-                    <span className={c.full || c.seatsLeft <= 2 ? "text-amber-600 dark:text-amber-500" : undefined}>
-                      {c.taken} / {c.max_seats} {t.capSeatsLabel}
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <span className="inline-flex flex-wrap items-center gap-x-1.5 text-sm font-bold text-foreground">
+                      {level}
+                      <span className="text-muted-foreground">·</span>
+                      {online ? (
+                        <span className="inline-flex items-center gap-1 font-medium">
+                          <Monitor className="w-3.5 h-3.5 text-primary" />
+                          {t.spotsOnline}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-primary" />
+                          {t.spotsFizic}
+                        </span>
+                      )}
+                      {lessons && (
+                        <span className="font-normal text-muted-foreground">
+                          · {lessons} {lang === "en" ? "lessons" : "de lecții"}
+                        </span>
+                      )}
                     </span>
-                  </span>
-                </p>
+                    <span className="text-[11px] font-semibold rounded-full bg-primary text-primary-foreground px-2 py-0.5 whitespace-nowrap">
+                      {urgency}
+                    </span>
+                  </div>
 
-                <span className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                  {t.activeNowCta}
-                  <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </span>
+                  {times && <p className="text-xs text-muted-foreground mb-2">{times}</p>}
+
+                  {/* Each group counts its own seats — the Romanian and the
+                      English class are separate groups, never one shared total. */}
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-foreground mb-3">
+                    <Users className="w-3.5 h-3.5 shrink-0 text-primary" aria-hidden="true" />
+                    <span>
+                      {lang === "en" ? "Taught in " : "Predare în "}
+                      {c.teaching_language === "en"
+                        ? lang === "en" ? "English" : "engleză"
+                        : lang === "en" ? "Romanian" : "română"}
+                      {" · "}
+                      <span className={c.full || c.seatsLeft <= 2 ? "text-amber-600 dark:text-amber-500" : undefined}>
+                        {c.taken} / {c.max_seats} {t.capSeatsLabel}
+                      </span>
+                    </span>
+                  </p>
+
+                  <span className="mt-auto inline-flex self-start items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-primary/90">
+                    {lang === "en" ? "Enroll" : "Înscrie-te"}
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
               </Link>
             );
           })}
