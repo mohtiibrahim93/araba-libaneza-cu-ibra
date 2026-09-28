@@ -304,10 +304,17 @@ extension View {
     /// the clock and battery.
     func statusBarBackground(_ color: Color = Theme.canvas) -> some View {
         overlay(alignment: .top) {
-            color
-                .frame(height: 0)
-                .ignoresSafeArea(edges: .top)
-                .accessibilityHidden(true)
+            // Scroll views extend under the status bar by themselves, so the
+            // cover measures the status-bar height instead of relying on the
+            // safe-area edge.
+            GeometryReader { proxy in
+                color
+                    .frame(height: proxy.safeAreaInsets.top)
+                    .frame(maxWidth: .infinity, alignment: .top)
+            }
+            .ignoresSafeArea(edges: .top)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
         }
     }
 }
