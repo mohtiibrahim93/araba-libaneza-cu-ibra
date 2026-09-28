@@ -305,7 +305,6 @@ const ProgramsSection = () => {
                       {t.privateBadge}
                     </span>
                     <h3 className={CARD_TITLE}>{t.privateCardTitle}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{t.privateCardSubtitle}</p>
                     <Link to="/cursuri/private" className="text-sm font-medium text-primary hover:underline underline-offset-4 mb-1 inline-block">
                       {t.programsSeeFullPage}
                     </Link>
@@ -373,6 +372,12 @@ const ProgramsSection = () => {
           </TabsContent>
 
           <TabsContent value="kids">
+            {/* One notice for both kids cards (it used to repeat on each). */}
+            <div className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+              {lang === "en"
+                ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know."
+                : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
+            </div>
             <div className="grid md:grid-cols-2 gap-8">
               {(inlineForm === null || inlineForm === "kids") && (
                 <div
@@ -404,13 +409,7 @@ const ProgramsSection = () => {
                           {t.programsSeeFullPage}
                         </Link>
 
-                        {/* Kids group isn't open yet — notify instead of enroll */}
-                        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
-                          {lang === "en"
-                            ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know."
-                            : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
-                        </div>
-
+                        
                         {/* Details */}
                         <dl className="space-y-3 rounded-lg border border-border bg-muted/40 p-4 mb-5">
                           <div>
@@ -422,19 +421,11 @@ const ProgramsSection = () => {
                             <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programDurationLabel}</dt>
                             <dd className="text-sm font-medium text-foreground">{t.kidsGroupDuration}</dd>
                           </div>
-                          <div>
-                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programConditionsLabel}</dt>
-                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupConditions}</dd>
-                          </div>
-                          <div>
-                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.kidsGroupAgeGroupsLabel}</dt>
-                            <dd className="text-sm font-medium text-foreground">{t.kidsGroupAgeGroupsValue}</dd>
-                          </div>
                         </dl>
 
                         {/* Features */}
                         <ul className="space-y-2 mb-6">
-                          {[t.kidsGroupFeat1, t.kidsGroupFeat2, t.kidsGroupFeat3, t.kidsGroupFeat4].map((f, i) => (
+                          {[t.kidsGroupFeat1, t.kidsGroupFeat3, t.kidsGroupFeat4].map((f, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-foreground">
                               <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                               {f}
@@ -506,11 +497,6 @@ const ProgramsSection = () => {
                             <span className="text-sm text-muted-foreground">{t.kidsPrivatePricePerLesson}</span>
                           </div>
                         </div>
-                        <p className="text-xs font-medium text-primary mb-3">{t.kidsPrivatePriceDiscountNote}</p>
-                        {/* Kids private lessons aren't offered right now either. */}
-                        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
-                          {lang === "en" ? "We don't have kids' courses at the moment — neither groups nor private lessons. Leave your details and we'll let you know." : "Momentan nu avem cursuri pentru copii — nici grupe, nici lecții private. Lasă-ți datele și te anunțăm."}
-                        </div>
                         <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
@@ -532,15 +518,11 @@ const ProgramsSection = () => {
                             <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programDurationLabel}</dt>
                             <dd className="text-sm font-medium text-foreground">{t.kidsPrivateDuration}</dd>
                           </div>
-                          <div>
-                            <dt className="text-xs font-semibold uppercase text-muted-foreground">{t.programConditionsLabel}</dt>
-                            <dd className="text-sm font-medium text-foreground">{t.kidsPrivateConditions}</dd>
-                          </div>
                         </dl>
 
                         {/* Features */}
                         <ul className="space-y-2 mb-6">
-                          {[t.kidsPrivateFeat1, t.kidsPrivateFeat2, t.kidsPrivateFeat3, t.kidsPrivateFeat4].map((f, i) => (
+                          {[t.kidsPrivateFeat1, t.kidsPrivateFeat2].map((f, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-foreground">
                               <Check className="w-4 h-4 text-brand-green flex-shrink-0" />
                               {f}
@@ -576,9 +558,6 @@ const ProgramsSection = () => {
 
           <TabsContent value="tineri">
             <div className={`${CARD} mx-auto max-w-2xl items-center p-8 sm:p-9 text-center`}>
-              <span className="mb-3 inline-block rounded-full bg-brand-green/10 px-3 py-1 text-xs font-semibold text-brand-green">
-                {lang === "en" ? "Teens · 12–17" : "Adolescenți · 12–17 ani"}
-              </span>
               <h3 className={CARD_TITLE}>
                 {lang === "en" ? "Lebanese Arabic for teens (12–17)" : "Arabă libaneză pentru adolescenți (12–17 ani)"}
               </h3>
