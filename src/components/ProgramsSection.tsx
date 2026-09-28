@@ -16,6 +16,9 @@ import {
 import { getCurriculum } from "@/data/curriculum";
 import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
 import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
+import groupImg from "@/assets/group-course.jpg";
+import privateImg from "@/assets/private-course.jpg";
+import kidsImg from "@/assets/kids-course.jpg";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
@@ -36,7 +39,7 @@ const WA_GROUP = wa("Salut! Vreau să mă înscriu la cursul de grup de arabă l
 const WA_PRIVATE = wa("Salut! Sunt interesat(ă) de lecții private de arabă libaneză.");
 const WA_KIDS = wa("Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru copii.");
 
-// Card look shared by every tab: white card on the cream band, green label,
+// Card look shared by every tab: white card (photo kept) on the cream band, green label,
 // serif title, prices as big numbers (the "Ibra, sharpened" design).
 const CARD = "bg-card rounded-3xl border border-[#E7E1D6] dark:border-border overflow-hidden flex flex-col";
 const BADGE = "inline-block self-start text-xs font-semibold text-brand-green bg-brand-green/10 px-3 py-1 rounded-full mb-3";
@@ -127,6 +130,7 @@ const ProgramsSection = () => {
               </div>
             ) : (
             <>
+            <img src={groupImg} alt={t.groupCardTitle} className="w-full h-52 object-cover" />
             <div className="p-6 sm:p-9 flex flex-col flex-1">
               <span className={BADGE}>
                 {t.groupBadge}
@@ -295,6 +299,7 @@ const ProgramsSection = () => {
                 </div>
               ) : (
                 <div className={CARD}>
+                  <img src={privateImg} alt={t.privateCardTitle} className="w-full h-52 object-cover" />
                   <div className="p-6 sm:p-9 flex flex-col flex-1">
                     <span className={BADGE}>
                       {t.privateBadge}
@@ -388,6 +393,7 @@ const ProgramsSection = () => {
                     </div>
                   ) : (
                     <>
+                      <img src={kidsImg} alt={t.kidsGroupCardTitle} className="w-full h-52 object-cover" />
                       <div className="p-6 sm:p-9 flex flex-col flex-1">
                         <span className={BADGE}>
                           {lang === "en" ? "Coming soon" : "În curând"}
@@ -481,6 +487,7 @@ const ProgramsSection = () => {
                     </div>
                   ) : (
                     <>
+                      <img src={privateImg} alt={t.kidsPrivateCardTitle} className="w-full h-52 object-cover" />
                       <div className="p-6 sm:p-9 flex flex-col flex-1">
                         <span className={BADGE}>
                           {lang === "en" ? "Coming soon" : "În curând"}
