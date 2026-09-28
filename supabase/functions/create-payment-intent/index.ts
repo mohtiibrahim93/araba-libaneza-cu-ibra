@@ -77,7 +77,7 @@ serve(async (req) => {
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
     // Group + kids reaching this function are the PAY-IN-FULL path (monthly
     // subscriptions live in create-subscription): the whole course billed at
-    // once with a 10% upfront discount. Private: 20% off at 20+ lessons.
+    // once with the 15% upfront discount. Private: 15% off from 20 lessons.
     const groupMonths = courseType === "group"
       ? groupMonthsFor(regRow.level)
       : courseType === "kids"
@@ -121,8 +121,8 @@ serve(async (req) => {
       }
     }
 
-    // Group / kids pay-in-full: whole course (monthly × months) −10%.
-    // Private: unit × lesson quantity, −10% from 10 lessons and −20% from 20.
+    // Group / kids pay-in-full: whole course (monthly × months) −15%.
+    // Private: unit × lesson quantity, −15% from 20 lessons.
     // All from the server price table, so display and charge cannot drift.
     const finalAmount =
       courseType === "group"

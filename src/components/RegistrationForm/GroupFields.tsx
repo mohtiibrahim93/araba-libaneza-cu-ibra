@@ -12,7 +12,7 @@ import LevelAssessmentModal from "@/components/LevelAssessmentModal";
 import type { LevelType, FormatType } from "./types";
 import CohortPicker from "./CohortPicker";
 import type { Cohort } from "@/lib/cohortTypes";
-import { ONLINE_PRICES, GROUP_COURSE_MONTHS, priceFor, formatLei } from "@/lib/pricing";
+import { ONLINE_PRICES, GROUP_COURSE_MONTHS, GROUP_FULL_COURSE_DISCOUNT, discountLabel, priceFor, formatLei } from "@/lib/pricing";
 
 export type GroupPlan = "monthly" | "full";
 
@@ -119,7 +119,7 @@ const GroupFields = ({
           format || "online",
         );
         const fullBase = monthly * months;
-        const fullDiscounted = Math.round(fullBase * 0.9);
+        const fullDiscounted = Math.round(fullBase * (1 - GROUP_FULL_COURSE_DISCOUNT));
         const options: { plan: GroupPlan; title: string; big: string; sub?: string; badge?: string }[] = [
           {
             plan: "monthly",
@@ -132,7 +132,7 @@ const GroupFields = ({
             title: t.groupPlanFull,
             big: `${formatLei(fullDiscounted)} LEI`,
             sub: `${formatLei(fullBase)} LEI`,
-            badge: "−10%",
+            badge: discountLabel(GROUP_FULL_COURSE_DISCOUNT),
           },
         ];
         return (

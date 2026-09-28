@@ -27,7 +27,7 @@ FORMATE
 PREȚURI (LEI; prețul fizic e cu 40% peste cel online)
 Grup, abonament lunar:
 ${(["A1", "A2", "B1", "B2", "C1", "C2"] as const).map((l) => `- ${groupLine(l)}`).join("\n")}
-Lecție privată: online ${ONLINE_PRICES.privateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.privateLesson)} LEI per lecție. Reduceri la pachet: -10% de la 10 lecții, -20% de la 20 de lecții.
+Lecție privată: online ${ONLINE_PRICES.privateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.privateLesson)} LEI per lecție. Reducere la pachet: -15% de la 20 de lecții (singura reducere la lecțiile private). Grup: -15% la plata integrală a cursului (online sau fizic).
 Copii: lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup online ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, fizic ${physicalPrice(ONLINE_PRICES.kidsGroupMonthly)} LEI/lună/copil (minimum 4 copii).
 
 NIVELURI (CEFR)

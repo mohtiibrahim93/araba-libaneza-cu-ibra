@@ -8,7 +8,7 @@ const FAQ = [
   },
   {
     q: "De la ce vârstă poate începe un copil?",
-    a: "De la 6 ani, online, prin joc, cântece și povești (momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm).",
+    a: "De la 6 ani, fizic, la centru, prin joc, cântece și povești (momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm).",
   },
   {
     q: "Copilul amestecă limbile — e o problemă?",

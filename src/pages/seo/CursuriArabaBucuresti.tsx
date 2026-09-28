@@ -13,11 +13,11 @@ const FAQ = [
   },
   {
     q: "Cât costă un curs de arabă în București?",
-    a: "500 lei/lună online sau 700 lei/lună fizic (2 lecții de 90 min pe săptămână). Cu 10% reducere la plata integrală a nivelului. Meditațiile 1:1 costă 150 lei/lecție online și 210 lei fizic. Prima lecție de probă este gratuită.",
+    a: "500 lei/lună online sau 700 lei/lună fizic (2 lecții de 90 min pe săptămână). Cu 15% reducere la plata integrală a nivelului. Meditațiile 1:1 costă 150 lei/lecție online și 210 lei fizic. Prima lecție de probă este gratuită.",
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
-    a: "Avem un program pentru copii 6–11 ani, online, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
+    a: "Avem un program pentru copii 6–11 ani, fizic, la centru, prin joc, cântece și povești — dar momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Formularul e pe pagina cursului pentru copii.",
   },
 ];
 

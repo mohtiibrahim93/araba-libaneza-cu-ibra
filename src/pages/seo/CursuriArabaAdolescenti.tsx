@@ -140,8 +140,8 @@ const CursuriArabaAdolescenti = () => (
 
     <h2>Prețuri</h2>
     <ul>
-      <li><strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90 min/săptămână), cu 10% reducere la plata integrală a nivelului.</li>
-      <li><strong>Meditații 1:1:</strong> 150 lei/lecție online sau 210 lei fizic, de 60 min, cu −10% de la 10 lecții și −20% de la 20.</li>
+      <li><strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90 min/săptămână), cu 15% reducere la plata integrală a nivelului.</li>
+      <li><strong>Meditații 1:1:</strong> 150 lei/lecție online sau 210 lei fizic, de 60 min, cu −15% de la 20 de lecții.</li>
       <li><strong>Lecție de probă (30 min):</strong> gratuită, cu părintele prezent dacă dorește.</li>
     </ul>
 

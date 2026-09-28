@@ -5,6 +5,8 @@ import { ChevronRight, MessageCircle, Sparkles, Building2 } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
 import {
   GROUP_COURSE_MONTHS,
+  GROUP_FULL_COURSE_DISCOUNT,
+  discountLabel,
   ONLINE_PRICES,
   formatLei,
   physicalPrice,
@@ -110,7 +112,7 @@ const CursGrup = () => {
                 <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Length" : "Durată"}</th>
                 <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Per month" : "Pe lună"}</th>
                 <th scope="col" className="py-2.5 px-3 font-semibold">
-                  {lang === "en" ? "Whole level, paid upfront (−10%)" : "Tot nivelul, plătit integral (−10%)"}
+                  {lang === "en" ? `Whole level, paid upfront (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})` : `Tot nivelul, plătit integral (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})`}
                 </th>
                 <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Enrolment" : "Înscrieri"}</th>
               </tr>
@@ -122,9 +124,9 @@ const CursGrup = () => {
                 const fizic = physicalPrice(online);
                 const months = GROUP_COURSE_MONTHS[lvl];
                 // The pay-in-full price the checkout actually charges:
-                // monthly x months, less the 10% upfront discount.
-                const fullOnline = Math.round(online * months * 0.9);
-                const fullFizic = Math.round(fizic * months * 0.9);
+                // monthly x months, less the upfront discount.
+                const fullOnline = Math.round(online * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
+                const fullFizic = Math.round(fizic * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
                 const available = isAvailable(lvl);
                 return (
                   <tr key={lvl} className="border-b border-border/60 last:border-0 align-top">
@@ -170,8 +172,8 @@ const CursGrup = () => {
         </div>
         <p className="text-xs text-muted-foreground mb-8 max-w-2xl">
           {lang === "en"
-            ? "All prices are per person. Two 90-minute lessons a week. Monthly payment stops automatically at the end of the level; paying the whole level upfront takes 10% off. The first 30-minute trial lesson is free."
-            : "Prețurile sunt de persoană. Două lecții de 90 de minute pe săptămână. Plata lunară se oprește automat la finalul nivelului; plata integrală a nivelului are 10% reducere. Prima lecție de probă, de 30 de minute, este gratuită."}
+            ? "All prices are per person. Two 90-minute lessons a week. Monthly payment stops automatically at the end of the level; paying the whole level upfront takes 15% off. The first 30-minute trial lesson is free."
+            : "Prețurile sunt de persoană. Două lecții de 90 de minute pe săptămână. Plata lunară se oprește automat la finalul nivelului; plata integrală a nivelului are 15% reducere. Prima lecție de probă, de 30 de minute, este gratuită."}
         </p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

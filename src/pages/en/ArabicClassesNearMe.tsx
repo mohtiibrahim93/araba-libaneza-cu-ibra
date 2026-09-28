@@ -68,7 +68,7 @@ const ArabicClassesNearMe = () => (
       <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
       <li><strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
       <li><strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per 60 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
-      <li><strong>Kids (6–11):</strong> online, small groups, playful method — not running at the moment.</li>
+      <li><strong>Kids (6–11):</strong> in person at the centre, small groups, playful method — not running at the moment.</li>
     </ul>
 
     <h2>Bucharest location</h2>

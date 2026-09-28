@@ -57,22 +57,29 @@ export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
 /**
  * Private-lesson volume discount — the whole ladder, in one place.
  *
- * There are exactly two tiers: 10 lessons and 20 lessons. A -5% tier at 5
- * lessons used to be advertised in fourteen places across the site, the form,
- * the blog and the seeded article bodies; it was never a real offer and has
- * been removed. Ordered highest-first so `find` returns the best tier.
+ * One tier only: -15% from 20 lessons. Earlier ladders (-5% at 5, then -10% at
+ * 10 and -20% at 20) have been retired by the owner. Ordered highest-first so
+ * `find` returns the best tier.
  *
  * The server mirrors this in supabase/functions/_shared/prices.ts, and
  * pricing-display.test.ts asserts the two ladders stay identical — the site
- * quoting a discount the checkout does not apply is a billing bug, and it was
- * a live one: 10 lessons displayed 1.350 and Stripe charged 1.500.
+ * quoting a discount the checkout does not apply is a billing bug.
  */
 export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
-  { from: 20, rate: 0.2 },
-  { from: 10, rate: 0.1 },
+  { from: 20, rate: 0.15 },
 ];
 
-/** Discount fraction for a lesson count: 0 below 10, .1 from 10, .2 from 20. */
+/**
+ * Discount for paying a whole group course upfront (adults and kids, online or
+ * in person) — the only group discount. Mirrors GROUP_FULL_COURSE_DISCOUNT in
+ * supabase/functions/_shared/prices.ts.
+ */
+export const GROUP_FULL_COURSE_DISCOUNT = 0.15;
+
+/** A discount rate as a label, e.g. 0.15 -> "−15%". */
+export const discountLabel = (rate: number): string => `−${Math.round(rate * 100)}%`;
+
+/** Discount fraction for a lesson count: 0 below 20, .15 from 20. */
 export const privateDiscountFor = (quantity: number): number =>
   PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0;
 

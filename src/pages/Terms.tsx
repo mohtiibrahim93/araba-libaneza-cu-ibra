@@ -8,7 +8,7 @@ const content = {
     updated: "Ultima actualizare:",
     sections: [
       ["1. Descriere generală", "Acești termeni și condiții reglementează utilizarea site-ului web și a serviciilor educaționale oferite de Centrul de Arabă Libaneză."],
-      ["2. Servicii oferite", "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt online, iar varianta fizică se va adăuga mai târziu ca opțiune (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2)."],
+      ["2. Servicii oferite", "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt fizice, la centru, iar varianta online se va adăuga mai târziu ca opțiune (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2)."],
       ["3. Înscriere și plăți", "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Plata se efectuează conform instrucțiunilor primite după confirmare. Acceptăm plata în LEI, EUR sau USD."],
       ["4. Anulare și rambursare", "Anularea înscrierii se poate face cu cel puțin 7 zile înainte de începerea cursului pentru o rambursare completă. După începerea cursului, rambursările se fac proporțional cu lecțiile rămase, minus o taxă administrativă de 10%."],
       ["5. Obligațiile cursantului", "Cursanții se obligă să participe activ la lecții, să respecte programul stabilit și să mențină un comportament adecvat în cadrul grupului. În cazul lecțiilor online, este necesară o conexiune stabilă la internet."],

@@ -37,20 +37,26 @@ export const GROUP_MONTHS: Record<GroupLevel, number> = {
 export const PRIVATE_LESSON = 150;
 
 /**
- * Private-lesson volume discount. Exactly two tiers: 10 lessons and 20.
+ * Private-lesson volume discount. One tier only: -15% from 20 lessons.
  *
  * Mirrors PRIVATE_DISCOUNT_TIERS in src/lib/pricing.ts, which is what the site
- * DISPLAYS. They were out of step: the form quoted -10% from 10 lessons while
- * this side only discounted from 20, so a 10-lesson buyer saw 1.350 and was
- * charged 1.500. pricing-display.test.ts now asserts the two agree.
+ * DISPLAYS; pricing-display.test.ts asserts the two agree, so the site can never
+ * quote a discount the checkout does not apply. (There used to be a -10% tier
+ * at 10 and -20% at 20; the owner replaced both with this one.)
  * Ordered highest-first so `find` returns the best applicable tier.
  */
 export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
-  { from: 20, rate: 0.2 },
-  { from: 10, rate: 0.1 },
+  { from: 20, rate: 0.15 },
 ];
 
-/** Discount fraction for a lesson count: 0 below 10, .1 from 10, .2 from 20. */
+/**
+ * Discount for paying a whole group course upfront (adult or kids, online or
+ * in person). The only group discount there is. Mirrors
+ * GROUP_FULL_COURSE_DISCOUNT in src/lib/pricing.ts.
+ */
+export const GROUP_FULL_COURSE_DISCOUNT = 0.15;
+
+/** Discount fraction for a lesson count: 0 below 20, .15 from 20. */
 export function privateDiscountFor(quantity: number): number {
   return PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0;
 }
@@ -94,14 +100,14 @@ export function privateLessonUnitAmount(format?: string | null): number {
 /**
  * Full-course amount in bani for a group registration that pays upfront in one
  * charge instead of the monthly subscription: the whole course (monthly ×
- * course-months) with a 10% upfront discount. Level+format come from the row.
+ * course-months) less GROUP_FULL_COURSE_DISCOUNT. Level+format come from the row.
  */
 export function groupFullCourseUnitAmount(
   level: string | null | undefined,
   format: string | null | undefined,
 ): number {
   const monthly = groupMonthlyUnitAmount(level, format);
-  return Math.round(monthly * groupMonthsFor(level) * 0.9);
+  return Math.round(monthly * groupMonthsFor(level) * (1 - GROUP_FULL_COURSE_DISCOUNT));
 }
 
 /**
@@ -123,8 +129,8 @@ export function groupMonthsFor(level: string | null | undefined): number {
 // usual +40% in person. The group is not open yet; this is the shape it takes
 // when it is.
 // No CEFR level, no online/fizic split, no volume discount. Mirrors the price
-// card displayed on the site (500 / month online, 1.500 total, 1.350 LEI with
-// the -10% upfront discount).
+// card displayed on the site (500 / month online, 1.500 total, 1.275 LEI with
+// the -15% upfront discount).
 // ---------------------------------------------------------------------------
 
 /** Kids group course — monthly fee per child, whole RON. */
@@ -149,10 +155,10 @@ export function kidsGroupMonthlyUnitAmount(format?: string | null): number {
 
 /**
  * Kids group full-course amount in bani for the pay-in-full path: the whole
- * course (monthly × months) with a 10% upfront discount.
+ * course (monthly × months) less GROUP_FULL_COURSE_DISCOUNT.
  */
 export function kidsGroupFullCourseUnitAmount(format?: string | null): number {
-  return Math.round(kidsGroupMonthlyUnitAmount(format) * KIDS_GROUP_MONTHS * 0.9);
+  return Math.round(kidsGroupMonthlyUnitAmount(format) * KIDS_GROUP_MONTHS * (1 - GROUP_FULL_COURSE_DISCOUNT));
 }
 
 /** Share of one month held as a refundable deposit to reserve a kids seat. */

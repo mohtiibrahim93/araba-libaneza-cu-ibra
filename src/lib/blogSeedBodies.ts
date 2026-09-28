@@ -87,17 +87,17 @@ Greetings are learned best by saying them, not reading them. In a [free trial le
 Cursurile de grup sunt cea mai accesibilă și mai motivantă opțiune — înveți alături de colegi de nivelul tău, cu 2 lecții pe săptămână. Poți plăti în două feluri:
 
 - **Abonament lunar** — plătești lună de lună, iar abonamentul se oprește automat când se termină cursul. Prețul pe lună pornește de la 500 lei pentru nivelul A1 online și crește pe niveluri; formatul fizic în București are un tarif ușor mai mare.
-- **Plată integrală în avans** — dacă plătești tot cursul o dată, primești **10% reducere** la total.
+- **Plată integrală în avans** — dacă plătești tot cursul o dată, primești **15% reducere** la total.
 
 Fiecare nivel durează un număr fix de luni (A1 patru luni, A2 șapte luni etc.), așa că știi din start cât plătești în total. Vezi cifrele exacte pe nivel în pagina de [cursuri de grup](/cursuri/grup).
 
 ## Lecții private (1:1)
 
-Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție online** și **210 lei / lecție fizic** (60 de minute). Reduceri automate la pachet: **−10% de la 10 lecții și −20% de la 20**. Detalii pe pagina de [lecții private](/cursuri/private).
+Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție online** și **210 lei / lecție fizic** (60 de minute). Reducere automată la pachet: **−15% de la 20 de lecții**. Detalii pe pagina de [lecții private](/cursuri/private).
 
 ## Curs pentru copii (6–11 ani)
 
-Cursul pentru copii este un program interactiv, bazat pe joc, online. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
+Cursul pentru copii este un program interactiv, bazat pe joc, fizic, la centru. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
 
 ## Proba este gratuită
 
@@ -113,17 +113,17 @@ Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat
 Group courses are the most affordable and motivating option — you learn alongside peers at your level, with 2 lessons a week. You can pay in two ways:
 
 - **Monthly subscription** — you pay month by month, and the subscription stops automatically when the course ends. The monthly price starts from 500 lei for A1 online and rises by level; the in-person format in Bucharest has a slightly higher rate.
-- **Pay in full up front** — if you pay for the whole course at once, you get a **10% discount** on the total.
+- **Pay in full up front** — if you pay for the whole course at once, you get a **15% discount** on the total.
 
 Each level lasts a fixed number of months (A1 four months, A2 seven, etc.), so you know your total from the start. See the exact figures per level on the [group courses](/cursuri/grup) page.
 
 ## Private lessons (1:1)
 
-If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson online** and **210 lei / lesson in person** (60 minutes). Automatic package discounts: **−10% from 10 lessons and −20% from 20**. Details on the [private lessons](/cursuri/private) page.
+If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson online** and **210 lei / lesson in person** (60 minutes). Automatic package discount: **−15% from 20 lessons**. Details on the [private lessons](/cursuri/private) page.
 
 ## Kids course (ages 6–11)
 
-The kids course is an interactive, game-based program, online. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
+The kids course is an interactive, game-based program, in person at the centre. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
 
 ## The trial is free
 
@@ -488,7 +488,7 @@ Curious? Start with a [free trial lesson](/trial) or see [all the courses](/curs
 
 ## De la ce vârstă?
 
-La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, online. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
+La Centrul de Arabă Libaneză, [cursul pentru copii](/cursuri/copii) este gândit pentru **6–11 ani**, fizic, la centru. Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat.
 
 ## Cum arată o lecție
 
@@ -516,7 +516,7 @@ Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilulu
 
 ## From what age?
 
-At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, online. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
+At the Lebanese Arabic Center, the [kids course](/cursuri/copii) is designed for ages **6–11**, in person at the centre. Under 6, we recommend exposure at home (songs, cartoons) before a structured course.
 
 ## What a lesson looks like
 
@@ -716,7 +716,7 @@ Pași concreți:
 
 - Fă [testul de nivel gratuit](/test-de-nivel) ca să afli de unde pornești.
 - Vezi [cursurile de grup](/cursuri/grup) (structurate pe niveluri CEFR A1–C2) sau [lecțiile private](/cursuri/private) (ritm personalizat).
-- Pentru copii, avem un [program dedicat](/cursuri/copii), online (momentan fără grupe).
+- Pentru copii, avem un [program dedicat](/cursuri/copii), fizic, la centru (momentan fără grupe).
 - Vezi și articolul [Cum înveți araba libaneză în 2026](/blog/cum-inveti-araba-libaneza) pentru un ghid pas cu pas.`,
     en: `## 1. What Standard Arabic (MSA / Fusha) is and what Lebanese is
 
@@ -788,7 +788,7 @@ Concrete steps:
 
 - Take the [free level test](/test-de-nivel) to find where you start.
 - See the [group courses](/cursuri/grup) (structured on CEFR levels A1–C2) or [private lessons](/cursuri/private) (personalised pace).
-- For kids, we have a [dedicated programme](/cursuri/copii), online (not running at the moment).
+- For kids, we have a [dedicated programme](/cursuri/copii), in person at the centre (not running at the moment).
 - See also the article [How to learn Lebanese Arabic in 2026](/blog/cum-inveti-araba-libaneza) for a step-by-step guide.`,
   },
 
