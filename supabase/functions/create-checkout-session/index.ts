@@ -167,8 +167,9 @@ serve(async (req) => {
         courseType === "kids"
           ? kidsGroupMonthlyUnitAmount(reg.format)
           : groupMonthlyUnitAmount(reg.level, reg.format);
-      const discountApplied = courseType !== "kids" && quantity >= 3;
-      const unitAmount = discountApplied ? Math.round(monthly * 0.9) : monthly;
+      // No volume discount on the monthly plan: the only group discount is for
+      // paying the whole course upfront (create-payment-intent).
+      const unitAmount = monthly;
       const monthsTotal =
         courseType === "kids" ? KIDS_GROUP_MONTHS : groupMonthsFor(reg.level);
       const productName =

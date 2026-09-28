@@ -9,7 +9,7 @@ const FAQ = [
   },
   {
     q: "Cât costă un curs de arabă?",
-    a: "Cursurile de grup pornesc de la 500 lei/lună (2 lecții de 90 de minute pe săptămână), cu 10% reducere la plata integrală a nivelului. Lecțiile private costă 150 lei/lecție online și 210 lei fizic (60 min), cu reduceri automate: −10% de la 10 lecții și −20% de la 20. Prima lecție de probă este gratuită.",
+    a: "Cursurile de grup pornesc de la 500 lei/lună (2 lecții de 90 de minute pe săptămână), cu 15% reducere la plata integrală a nivelului. Lecțiile private costă 150 lei/lecție online și 210 lei fizic (60 min), cu reducere automată: −15% de la 20 de lecții. Prima lecție de probă este gratuită.",
   },
   {
     q: "Pot începe de la zero, fără să știu nimic?",

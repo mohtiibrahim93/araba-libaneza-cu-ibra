@@ -87,13 +87,13 @@ Greetings are learned best by saying them, not reading them. In a [free trial le
 Cursurile de grup sunt cea mai accesibilă și mai motivantă opțiune — înveți alături de colegi de nivelul tău, cu 2 lecții pe săptămână. Poți plăti în două feluri:
 
 - **Abonament lunar** — plătești lună de lună, iar abonamentul se oprește automat când se termină cursul. Prețul pe lună pornește de la 500 lei pentru nivelul A1 online și crește pe niveluri; formatul fizic în București are un tarif ușor mai mare.
-- **Plată integrală în avans** — dacă plătești tot cursul o dată, primești **10% reducere** la total.
+- **Plată integrală în avans** — dacă plătești tot cursul o dată, primești **15% reducere** la total.
 
 Fiecare nivel durează un număr fix de luni (A1 patru luni, A2 șapte luni etc.), așa că știi din start cât plătești în total. Vezi cifrele exacte pe nivel în pagina de [cursuri de grup](/cursuri/grup).
 
 ## Lecții private (1:1)
 
-Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție online** și **210 lei / lecție fizic** (60 de minute). Reduceri automate la pachet: **−10% de la 10 lecții și −20% de la 20**. Detalii pe pagina de [lecții private](/cursuri/private).
+Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă **150 lei / lecție online** și **210 lei / lecție fizic** (60 de minute). Reducere automată la pachet: **−15% de la 20 de lecții**. Detalii pe pagina de [lecții private](/cursuri/private).
 
 ## Curs pentru copii (6–11 ani)
 
@@ -113,13 +113,13 @@ Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat
 Group courses are the most affordable and motivating option — you learn alongside peers at your level, with 2 lessons a week. You can pay in two ways:
 
 - **Monthly subscription** — you pay month by month, and the subscription stops automatically when the course ends. The monthly price starts from 500 lei for A1 online and rises by level; the in-person format in Bucharest has a slightly higher rate.
-- **Pay in full up front** — if you pay for the whole course at once, you get a **10% discount** on the total.
+- **Pay in full up front** — if you pay for the whole course at once, you get a **15% discount** on the total.
 
 Each level lasts a fixed number of months (A1 four months, A2 seven, etc.), so you know your total from the start. See the exact figures per level on the [group courses](/cursuri/grup) page.
 
 ## Private lessons (1:1)
 
-If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson online** and **210 lei / lesson in person** (60 minutes). Automatic package discounts: **−10% from 10 lessons and −20% from 20**. Details on the [private lessons](/cursuri/private) page.
+If you want a personalized pace or a flexible schedule, private lessons cost **150 lei / lesson online** and **210 lei / lesson in person** (60 minutes). Automatic package discount: **−15% from 20 lessons**. Details on the [private lessons](/cursuri/private) page.
 
 ## Kids course (ages 6–11)
 

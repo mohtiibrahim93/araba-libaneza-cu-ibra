@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Cât ar trebui să coste un curs de arabă bun?",
-    a: "În București, un curs de grup serios costă 450–600 lei/lună, iar o lecție privată 130–200 lei/oră. La noi: 500 lei/lună la grup (2 × 90 min/săptămână) și 150 lei/lecție online sau 210 lei fizic, de 60 min la privat, cu reduceri de până la −20% pe pachet. Prima lecție de probă e gratuită — cel mai bun mod de a compara înainte să plătești.",
+    a: "În București, un curs de grup serios costă 450–600 lei/lună, iar o lecție privată 130–200 lei/oră. La noi: 500 lei/lună la grup (2 × 90 min/săptămână) și 150 lei/lecție online sau 210 lei fizic, de 60 min la privat, cu −15% la pachetul de 20 de lecții. Prima lecție de probă e gratuită — cel mai bun mod de a compara înainte să plătești.",
   },
 ];
 
@@ -106,7 +106,7 @@ const CelMaiBunCursAraba = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold"><Link to="/meditatii-araba">Meditații 1:1</Link></td>
             <td className="py-2 px-3">Obiective precise, progres rapid, program flexibil</td>
-            <td className="py-2 px-3">150 lei online / 210 lei fizic, 60 min (−10% / −20% pe pachet)</td>
+            <td className="py-2 px-3">150 lei online / 210 lei fizic, 60 min (−15% la 20 de lecții)</td>
             <td className="py-2 pl-3">Cost mai mare pe oră</td>
           </tr>
           <tr className="border-b border-border/60 align-top">

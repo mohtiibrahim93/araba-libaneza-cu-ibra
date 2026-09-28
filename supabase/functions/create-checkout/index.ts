@@ -109,7 +109,7 @@ serve(async (req) => {
     // Group/private amounts come from the server-side price table keyed by
     // the level + format on the registration row — the old fixed Stripe
     // price ID charged every group level the A1 rate. Private lessons take the
-    // volume ladder from _shared/prices.ts (-10% at 10, -20% at 20).
+    // volume discount from _shared/prices.ts (-15% from 20 lessons).
     let lineItems;
     if (courseType === "kids_deposit") {
       // The deposit is a share of the month the family will actually be billed,
@@ -133,7 +133,7 @@ serve(async (req) => {
       const unitAmount = courseType === "group"
         ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
         : privateLessonUnitAmount(existingReg?.format);
-      // Only private lessons have a volume ladder (10 -> -10%, 20 -> -20%).
+      // Only private lessons have a volume discount (20 -> -15%).
       // A `group && quantity >= 3 -> 0.9` branch used to live here, left over
       // from when a group "quantity" meant months; groups now always submit
       // quantity 1 and their upfront discount is groupFullCourseUnitAmount.

@@ -12,11 +12,11 @@ const FAQ = [
   },
   {
     q: { ro: "Pot plăti lunar sau trebuie tot nivelul odată?", en: "Can I pay monthly, or must I pay for the whole level at once?" },
-    a: { ro: "Poți plăti lunar. Plata integrală a nivelului este opțională și vine cu 10% reducere — util dacă știi sigur că duci nivelul până la capăt.", en: "You can pay monthly. Paying for the full level up front is optional and comes with a 10% discount — useful if you are confident you will finish the level." },
+    a: { ro: "Poți plăti lunar. Plata integrală a nivelului este opțională și vine cu 15% reducere — util dacă știi sigur că duci nivelul până la capăt.", en: "You can pay monthly. Paying for the full level up front is optional and comes with a 15% discount — useful if you are confident you will finish the level." },
   },
   {
     q: { ro: "Lecțiile private se ieftinesc dacă iau mai multe?", en: "Do private lessons get cheaper if I book more?" },
-    a: { ro: "Da, reducerea se aplică automat după numărul de lecții: −10% de la 10 lecții și −20% de la 20. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, the discount applies automatically by lesson count: −10% from 10 lessons and −20% from 20. The starting price is 150 lei for a 60-minute lesson." },
+    a: { ro: "Da, la pachetul de 20 de lecții reducerea de −15% se aplică automat. Alte reduceri la lecțiile private nu există. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, a package of 20 lessons gets −15% automatically. There are no other private-lesson discounts. The starting price is 150 lei for a 60-minute lesson." },
   },
 ];
 
@@ -43,8 +43,8 @@ const CatCostaCursurile = () => {
       <Tldr
         points={[
           { ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.", en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room." },
-          { ro: "Lecțiile private sunt 150 lei online și 210 lei fizic, pentru 60 de minute, cu −10% la 10 lecții și −20% la 20 de lecții plătite în avans.", en: "Private lessons are 150 lei online and 210 lei in person per 60-minute lesson, with −10% for 10 lessons and −20% for 20 lessons paid in advance." },
-          { ro: "Plata integrală a unui nivel aduce 10% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 10% discount, but monthly payment stays available." },
+          { ro: "Lecțiile private sunt 150 lei online și 210 lei fizic, pentru 60 de minute, cu −15% la 20 de lecții plătite în avans.", en: "Private lessons are 150 lei online and 210 lei in person per 60-minute lesson, with −15% for 20 lessons paid in advance." },
+          { ro: "Plata integrală a unui nivel aduce 15% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 15% discount, but monthly payment stays available." },
           { ro: "Prima lecție de probă este 0 lei; locul se confirmă cu cardul, iar la neprezentare se reține 150 lei.", en: "The first trial lesson is 0 lei; the spot is confirmed with a card, and a no-show is charged 150 lei." },
         ]}
       />
@@ -70,7 +70,7 @@ const CatCostaCursurile = () => {
         <li>
           <strong>{en ? "Pay in full up front" : "Plată integrală în avans"}</strong>
           {en ? " — if you pay for the whole course at once, you get a " : " — dacă plătești tot cursul o dată, primești "}
-          <strong>{en ? "10% discount" : "10% reducere"}</strong>{en ? " on the total." : " la total."}
+          <strong>{en ? "15% discount" : "15% reducere"}</strong>{en ? " on the total." : " la total."}
         </li>
       </ul>
       <p>
@@ -87,7 +87,7 @@ const CatCostaCursurile = () => {
           : "Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă "}
         <strong>{en ? "150 lei / lesson online, 210 lei in person" : "150 lei / lecție online, 210 lei fizic"}</strong>
         {en ? " (60 minutes). Paid in advance, " : " (60 de minute). Plătite în avans, "}
-        <strong>{en ? "10 lessons get 10% off and 20 lessons get 20% off" : "10 lecții au 10% reducere, iar 20 de lecții au 20% reducere"}</strong>
+        <strong>{en ? "20 lessons get 15% off" : "20 de lecții au 15% reducere"}</strong>
         {en ? ". Details on the " : ". Detalii pe pagina de "}
         <Link to="/cursuri/private">{en ? "private lessons" : "lecții private"}</Link>{en ? " page." : "."}
       </p>

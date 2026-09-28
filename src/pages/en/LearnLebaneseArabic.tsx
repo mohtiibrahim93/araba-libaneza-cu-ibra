@@ -23,7 +23,7 @@ const FAQ = [
   },
   {
     q: "How much do Lebanese Arabic courses cost?",
-    a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (10% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson online (≈ €30) and 210 LEI in person. A 30-minute trial lesson is free.",
+    a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (15% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson online (≈ €30) and 210 LEI in person. A 30-minute trial lesson is free.",
   },
   {
     q: "Is Levantine Arabic the same as Lebanese Arabic?",

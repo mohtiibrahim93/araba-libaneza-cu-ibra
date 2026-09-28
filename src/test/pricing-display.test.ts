@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
+  GROUP_FULL_COURSE_DISCOUNT,
   ONLINE_PRICES,
   PRIVATE_DISCOUNT_TIERS,
   PRIVATE_PACKAGE_DISCOUNT,
@@ -13,6 +14,7 @@ import {
   privatePackageFull,
 } from "@/lib/pricing";
 import {
+  GROUP_FULL_COURSE_DISCOUNT as SERVER_GROUP_FULL_COURSE_DISCOUNT,
   KIDS_DEPOSIT_SHARE,
   KIDS_GROUP_MONTHLY,
   PRIVATE_DISCOUNT_TIERS as SERVER_TIERS,
@@ -42,19 +44,52 @@ describe("displayed prices match what is charged", () => {
     }
   });
 
-  it("has exactly two tiers — 10 and 20, no 5", () => {
-    expect(PRIVATE_DISCOUNT_TIERS.map((t) => t.from).sort((a, b) => a - b)).toEqual([10, 20]);
+  it("has exactly one tier — -15% from 20 lessons", () => {
+    expect(PRIVATE_DISCOUNT_TIERS.map((t) => t.from)).toEqual([20]);
     expect(privateDiscountFor(5)).toBe(0);
-    expect(privateDiscountFor(9)).toBe(0);
-    expect(privateDiscountFor(10)).toBe(0.1);
-    expect(privateDiscountFor(19)).toBe(0.1);
-    expect(privateDiscountFor(20)).toBe(0.2);
+    expect(privateDiscountFor(10)).toBe(0);
+    expect(privateDiscountFor(19)).toBe(0);
+    expect(privateDiscountFor(20)).toBe(0.15);
   });
 
-  it("points at the next real tier, never at a 5-lesson one", () => {
-    expect(nextPrivateTier(1)).toEqual({ needed: 9, pct: 10 });
-    expect(nextPrivateTier(10)).toEqual({ needed: 10, pct: 20 });
+  it("points at the one real tier", () => {
+    expect(nextPrivateTier(1)).toEqual({ needed: 19, pct: 15 });
+    expect(nextPrivateTier(10)).toEqual({ needed: 10, pct: 15 });
     expect(nextPrivateTier(20)).toBeNull();
+  });
+
+  it("states no retired private discount (-10% at 10, -20% at 20) anywhere", () => {
+    const files = [
+      "src/lib/i18n.tsx",
+      "src/lib/blogSeedBodies.ts",
+      "src/lib/askKnowledge.server.ts",
+      "src/data/faq.ts",
+      "src/pages/seo/MeditatiiAraba.tsx",
+      "src/pages/seo/CursuriAraba.tsx",
+      "src/pages/seo/CursuriArabaAdolescenti.tsx",
+      "src/pages/seo/CelMaiBunCursAraba.tsx",
+      "src/pages/blog/CatCostaCursurile.tsx",
+      "src/pages/en/ArabicTutor.tsx",
+      "src/pages/en/ArabicForTeenagers.tsx",
+      "src/pages/en/BestArabicCourse.tsx",
+      "src/components/RegistrationForm/PostSubmitView.tsx",
+    ];
+    for (const f of files) {
+      const src = read(f).replace(/^\s*(\/\/|\*|\/\*).*$/gm, "");
+      expect(src, f).not.toMatch(/[−-]20\s?%|[−-]10\s?%\s*(la|de la|for|from) 10|10 lecții au 10%|1\.350|1,350/);
+    }
+  });
+
+  it("gives groups -15% for paying the whole course, and nothing else", () => {
+    expect(GROUP_FULL_COURSE_DISCOUNT).toBe(0.15);
+    expect(GROUP_FULL_COURSE_DISCOUNT).toBe(SERVER_GROUP_FULL_COURSE_DISCOUNT);
+    for (const f of [
+      "supabase/functions/create-subscription/index.ts",
+      "supabase/functions/create-checkout-session/index.ts",
+    ]) {
+      // The hidden -10% for 3+ people on the monthly plan is gone.
+      expect(read(f), f).not.toMatch(/quantity >= 3|\* 0\.9\b/);
+    }
   });
 
   it("states no 5-lesson discount anywhere in the source", () => {
@@ -93,7 +128,7 @@ describe("displayed prices match what is charged", () => {
       Math.round(privatePackageFull() * (1 - PRIVATE_PACKAGE_DISCOUNT)),
     );
     expect(privatePackageFull()).toBe(3000);
-    expect(privatePackageDiscounted()).toBe(2400);
+    expect(privatePackageDiscounted()).toBe(2550);
   });
 
   it("keeps the display and server per-lesson price equal, in both formats", () => {

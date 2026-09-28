@@ -100,11 +100,9 @@ serve(async (req) => {
       : groupMonthlyUnitAmount(regRow.level, regRow.format);
     const monthsTotal = isKids ? KIDS_GROUP_MONTHS : groupMonthsFor(regRow.level);
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
-    // Same 3+ volume discount the one-time flow applied, folded into the monthly
-    // unit amount so it repeats every cycle. Kids uses per-child fee (no volume
-    // discount — quantity here is always 1 child per registration).
-    const discountApplied = !isKids && quantity >= 3;
-    const monthlyUnit = discountApplied ? Math.round(monthlyUnitAmount * 0.9) : monthlyUnitAmount;
+    // No discount on the monthly plan. The only group discount is for paying
+    // the whole course upfront, which goes through create-payment-intent.
+    const monthlyUnit = monthlyUnitAmount;
     const currency = "ron";
 
     const groupProductId = Deno.env.get("STRIPE_GROUP_PRODUCT_ID") || "";

@@ -62,14 +62,14 @@ describe("server-side Stripe price table (supabase/functions/_shared/prices.ts)"
     expect(GROUP_MONTHS.C2).toBe(9);
   });
 
-  it("prices the group pay-in-full option as whole course minus 10%", () => {
-    // A2 online: 600/mo × 7 months × 0.9 = 3780 RON.
-    expect(groupFullCourseUnitAmount("A2", "online")).toBe(378000);
-    // A2 in-center: 840/mo × 7 × 0.9 = 5292 RON.
-    expect(groupFullCourseUnitAmount("A2", "fizic")).toBe(529200);
-    // A1 online: 500 × 4 × 0.9 = 1800 RON; C2 online: 1000 × 9 × 0.9 = 8100 RON.
-    expect(groupFullCourseUnitAmount("A1", "online")).toBe(180000);
-    expect(groupFullCourseUnitAmount("C2", "online")).toBe(810000);
+  it("prices the group pay-in-full option as whole course minus 15%", () => {
+    // A2 online: 600/mo × 7 months × 0.85 = 3570 RON.
+    expect(groupFullCourseUnitAmount("A2", "online")).toBe(357000);
+    // A2 in-center: 840/mo × 7 × 0.85 = 4998 RON.
+    expect(groupFullCourseUnitAmount("A2", "fizic")).toBe(499800);
+    // A1 online: 500 × 4 × 0.85 = 1700 RON; C2 online: 1000 × 9 × 0.85 = 7650 RON.
+    expect(groupFullCourseUnitAmount("A1", "online")).toBe(170000);
+    expect(groupFullCourseUnitAmount("C2", "online")).toBe(765000);
     // Always cheaper than paying month-by-month for the same course.
     expect(groupFullCourseUnitAmount("A2", "online")).toBeLessThan(
       groupMonthlyUnitAmount("A2", "online") * groupMonthsFor("A2"),
