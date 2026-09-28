@@ -78,7 +78,8 @@ serve(async (req) => {
     const origin = resolveReturnOrigin(req);
     // NB: /payment-status reads `registration_id` (snake_case) — it polls the
     // DB with it; the camelCase param would leave the page "pending" forever.
-    const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
+    const regSig = await signRegistrationId(registrationId);
+    const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${regSig}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}&fallback=1`;
 
     // Best-effort reuse: if we already created a session and it's still open,
