@@ -8,7 +8,8 @@ import { cn } from "@/lib/utils";
  * sample question you can answer on the spot.
  *
  * The sample is a taste, not the game: it lives here, answers once, then points
- * to /joc. The game itself is in Romanian only, so the English copy says so.
+ * to /joc. The game's menus follow the site language, but most card meanings
+ * are still Romanian only, so the English copy says so.
  */
 
 const ANSWERS: { arabizi: string; arabic: string; correct: boolean }[] = [
@@ -36,7 +37,7 @@ const YallaGameBand = () => {
           </h2>
           <p className="text-[17px] leading-relaxed text-[#CFE0D6]">
             {en
-              ? "Scheduled reviews, so you don't forget what you've learned. Two minutes a day is enough. The game is in Romanian."
+              ? "Scheduled reviews, so you don't forget what you've learned. Two minutes a day is enough. The meanings on the cards are still in Romanian."
               : "Recapitulări programate, ca să nu uiți ce ai învățat. Două minute pe zi sunt suficiente."}
           </p>
           <div className="flex flex-wrap gap-3">
