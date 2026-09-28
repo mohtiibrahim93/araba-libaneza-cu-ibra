@@ -501,7 +501,8 @@ const ProgramsSection = () => {
                         {/* Price */}
                         <div className="mb-3">
                           <div className="flex items-baseline flex-wrap gap-x-2">
-                            <span className="text-4xl font-bold leading-none tracking-tight text-foreground">150</span>
+                            {/* Kids courses start in person, so the card quotes the in-person price. */}
+                            <span className="text-4xl font-bold leading-none tracking-tight text-foreground">{formatLei(physicalPrice(ONLINE_PRICES.kidsPrivateLesson))}</span>
                             <span className="text-sm text-muted-foreground">{t.kidsPrivatePricePerLesson}</span>
                           </div>
                         </div>
@@ -514,8 +515,8 @@ const ProgramsSection = () => {
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="text-muted-foreground">{t.kidsPrivatePrice20Label}</span>
                             <span>
-                              <span className="line-through text-muted-foreground">{formatLei(privatePackageFull())} LEI</span>
-                              <span className="ml-2 font-bold text-primary">{formatLei(privatePackageDiscounted())} LEI</span>
+                              <span className="line-through text-muted-foreground">{formatLei(physicalPrice(privatePackageFull()))} LEI</span>
+                              <span className="ml-2 font-bold text-primary">{formatLei(physicalPrice(privatePackageDiscounted()))} LEI</span>
                             </span>
                           </div>
                         </div>
