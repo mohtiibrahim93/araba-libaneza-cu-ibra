@@ -48,7 +48,7 @@ D.sourceUnits=sourceUnits;D.units=units;
 const levels=[
  {id:'A1',title:'Primele conversații',status:'Jocuri disponibile',desc:'De la primul salut la situațiile de zi cu zi.'},
  {id:'A2',title:'Mai multă independență',status:'Consolidare disponibilă',desc:'Verbe, experiențe, opinii și idei legate între ele. Jocurile acoperă o parte din acest nivel.'},
- {id:'B1',title:'Explică și argumentează',status:'În pregătire',desc:'Următorul pas: conversații mai lungi și exprimarea ideilor.',topics:['Forme verbale derivate și vorbire indirectă','Condiții și subordonate complexe','Argumente, rezumate și conversații de 3–5 minute']},
+ {id:'B1',title:'Explică și argumentează',status:'Practică disponibilă',desc:'Conversații mai lungi și exprimarea ideilor. Cardurile de B1 se pot exersa deja; obiectivele de mai jos rămân în pregătire.',topics:['Forme verbale derivate și vorbire indirectă','Condiții și subordonate complexe','Argumente, rezumate și conversații de 3–5 minute']},
  {id:'B2',title:'Conversează cu nuanță',status:'În pregătire',desc:'Adaptează-ți exprimarea la situație și interlocutor.',topics:['Registru, nuanțe și conectori','Negociere și discurs spontan','Media, cultură și variație regională']},
  {id:'C1',title:'Înțelege dincolo de cuvinte',status:'În pregătire',desc:'Explorează sensul implicit, umorul și exprimarea avansată.',topics:['Ironie, idiomuri și referințe culturale','Retorică, media și conversație profesională','Opțional: trecerea de la Arabizi la scrierea arabă']},
  {id:'C2',title:'Exprimă-te cu precizie',status:'În pregătire',desc:'Aprofundează domeniile și registrele care te interesează.',topics:['Specializări: economie, drept, sănătate și tehnologie','Analiză, dezbatere și sinteză','Proiecte personale și discurs interdisciplinar']},

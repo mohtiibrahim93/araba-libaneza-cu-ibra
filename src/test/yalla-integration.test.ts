@@ -25,7 +25,7 @@ const MODULES = [
   // helper it defines, so a tag after app.js is a TypeError at start-up.
   "i18n.js",
   "content.js",
-  "romanian.js",
+  "deck-language.js",
   "curriculum.js",
   "synthesis.js",
   "engine.js",
@@ -43,7 +43,8 @@ describe("Yalla game assets", () => {
   });
 
   it("loads the modules in dependency order", () => {
-    // i18n → content → romanian → curriculum → synthesis → engine → plus →
+    // i18n → content → deck-language → curriculum → synthesis → engine →
+    // plus →
     // academy →
     // transfer → app. Each module reads globals the previous one defined, so a
     // reordered tag is a TypeError at start-up, not a subtle bug.

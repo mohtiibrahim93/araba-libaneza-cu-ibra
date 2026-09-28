@@ -52,3 +52,24 @@ describe("the game follows the site's language", () => {
     expect(i18n).not.toContain("YALLA.cards");
   });
 });
+
+describe("training draws by level, not by lesson group", () => {
+  const app = read("public/yalla/app.js");
+
+  it("filters the training pool on the card's level", () => {
+    // The lesson groups mislabelled difficulty: group "A1" held 288 A2 cards and
+    // 11 B1 ones, group "A2" held 223 A1 cards. Selecting on the level the owner
+    // gave each card is the honest filter, and it must stay a ceiling — an A2
+    // round includes A1 cards, because an A2 conversation needs A1 words.
+    expect(app).toContain("D.cards.filter(upToLevel(trainingLevel))");
+    expect(app).toContain("i<=top");
+    expect(app).not.toContain("trainingGroup");
+  });
+
+  it("gives the runtime-generated cards a level so they stay in the pool", () => {
+    // synthesis.js appends ~845 cards with no level. The ceiling only keeps a
+    // level it recognises, so without inheritance they would silently drop out
+    // of practice — the old group-based pool included them.
+    expect(app).toContain("levelTheSynthesised");
+  });
+});
