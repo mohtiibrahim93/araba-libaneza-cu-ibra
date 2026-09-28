@@ -768,6 +768,172 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a1-shopping",
+      "scenes": [
+        {
+          "title": "La magazinul de haine",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-95e2988299c0"
+            },
+            {
+              "exerciseID": "syn-context-syn-701cf540f24d",
+              "partner": {
+                "arabizi": "Ahla w sahla, tfaddale. 3anna alween w ashkeel ktiire.",
+                "ro": "Bine ai venit, poftim. Avem multe culori și forme."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b39fd2bf2f63",
+              "partner": {
+                "arabizi": "Shu el 7ajem?",
+                "ro": "Ce mărime?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a1-shopping.3amliin-sold-reply",
+              "partner": {
+                "arabizi": "Tfaddale, hay wasat. 5amsin dollar.",
+                "ro": "Poftim, asta e mediu. Cincizeci de dolari."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-634f0e423246",
+              "partner": {
+                "arabizi": "Tayyeb, arb3iin dollar.",
+                "ro": "Bine, patruzeci de dolari."
+              }
+            },
+            {
+              "exerciseID": "teacher.a1-shopping.meshi-beshtere",
+              "partner": {
+                "arabizi": "La2, ma besiir. 5amsaw w tletiin.",
+                "ro": "Nu, nu se poate. Treizeci și cinci."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-fb87f2fe9e57",
+              "partner": {
+                "arabizi": "Tameem, baddik kiis?",
+                "ro": "Perfect, vrei pungă?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Același magazin, tu ești vânzătorul",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-7f6e456d1333",
+              "partner": {
+                "arabizi": "Mar7aba, badde shuf el 2omsaan.",
+                "ro": "Salut, vreau să văd cămășile."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-df943e0720e0",
+              "partner": {
+                "arabizi": "7elo! Badde el a7mar.",
+                "ro": "Frumos! Vreau pe cel roșu."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4b2aa7dc7862",
+              "partner": {
+                "arabizi": "Wasat law sama7et.",
+                "ro": "Mediu, te rog."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7efd17236224",
+              "partner": {
+                "arabizi": "8ale ktiir! Fi solde?",
+                "ro": "Foarte scump! E reducere?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-827b303652be",
+              "partner": {
+                "arabizi": "Ba3do 8ale. Tletiin?",
+                "ro": "Tot scump. Treizeci?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-411064057d02",
+              "partner": {
+                "arabizi": "Meshi, beshtere.",
+                "ro": "Bine, cumpăr."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Negociezi",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-768687f8f55e",
+              "partner": {
+                "arabizi": "Ahla! Tfaddal.",
+                "ro": "Bine ai venit! Poftim."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ae2f974e33e5",
+              "partner": {
+                "arabizi": "5amsin dollar.",
+                "ro": "Cincizeci de dolari."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-684e1e71f91e",
+              "partner": {
+                "arabizi": "La2, ma besiir. Shu el lon?",
+                "ro": "Nu, nu se poate. Ce culoare?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "La piață",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-326b9a3aaf57",
+              "partner": {
+                "arabizi": "Shu baddak?",
+                "ro": "Ce vrei?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-c0f42ddb93f4",
+              "partner": {
+                "arabizi": "Ayya lon?",
+                "ro": "Care culoare?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a1-shopping.badde-el-medium",
+              "partner": {
+                "arabizi": "Hayda el a7mar.",
+                "ro": "Iată-le pe cele roșii."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Cu o prietenă",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-5db6dcd019cf",
+              "partner": {
+                "arabizi": "7elo! Addeesh dafa3et?",
+                "ro": "Frumos! Cât ai plătit?"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

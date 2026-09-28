@@ -628,8 +628,8 @@
     "syn-context-syn-28a55f541d2d": {
       "answer": "8ale ktiir! Fi solde?",
       "wrongAnswers": [
-        "B adde kilo et-tiffe7?",
-        "Mar7aba, badde shuf el 2omsan.",
+        "B2adde kilo et-tiffe7?",
+        "Mar7aba, badde shuf el 2emsaan.",
         "Ba3do 8ale. Tletiin?"
       ]
     },
@@ -749,11 +749,14 @@
       ]
     },
     "syn-context-syn-326b9a3aaf57": {
-      "answer": "B adde kilo et-tiffe7?",
+      "answer": "B2adde kilo et-tiffe7?",
       "wrongAnswers": [
-        "Mar7aba, badde shuf el 2omsan.",
+        "Mar7aba, badde shuf el 2emsaan.",
         "Ba3do 8ale. Tletiin?",
         "Adde el se3er?"
+      ],
+      "expressionIDs": [
+        "syn-326b9a3aaf57"
       ]
     },
     "syn-context-syn-34db33b665ce": {
@@ -1509,17 +1512,20 @@
     "syn-context-syn-7efd17236224": {
       "answer": "Tayyeb, arb3iin dollar.",
       "wrongAnswers": [
-        "Dafa3t tlatin dollar.",
-        "Ahla, tfaddale. 3annna alween ktiire.",
+        "Dafa3et tletiin dolar.",
+        "Ahla w sahla, tfaddale. 3anna alween ktiire.",
         "La2, ma besiir. 5amsaw w tletiin."
       ]
     },
     "syn-context-syn-7f6e456d1333": {
-      "answer": "Ahla, tfaddale. 3annna alween ktiire.",
+      "answer": "Ahla w sahla, tfaddale. 3anna alween ktiire.",
       "wrongAnswers": [
         "La2, ma besiir. 5amsaw w tletiin.",
         "bte2dar tnazzil el se3er?",
         "Wasat law sama7et."
+      ],
+      "expressionIDs": [
+        "syn-7f6e456d1333"
       ]
     },
     "syn-context-syn-7fafcb18d749": {
@@ -1691,11 +1697,14 @@
       ]
     },
     "syn-context-syn-95e2988299c0": {
-      "answer": "Mar7aba, badde shuf el 2omsan.",
+      "answer": "Mar7aba, badde shuf el 2emsaan.",
       "wrongAnswers": [
         "Ba3do 8ale. Tletiin?",
         "Adde el se3er?",
         "7elo! Badde el a7mar."
+      ],
+      "expressionIDs": [
+        "syn-95e2988299c0"
       ]
     },
     "syn-context-syn-9612f959f867": {
@@ -2033,6 +2042,9 @@
         "Eh law sama7et.",
         "shu el 7ajem?",
         "8ale ktiir! Fi solde?"
+      ],
+      "expressionIDs": [
+        "syn-b39fd2bf2f63"
       ]
     },
     "syn-context-syn-b5d6565f22dc": {
@@ -2232,11 +2244,14 @@
       ]
     },
     "syn-context-syn-d0f0fbcc62fc": {
-      "answer": "Badde el kilo?",
+      "answer": "B2adde el kilo?",
       "wrongAnswers": [
         "Tayyeb, arb3iin dollar.",
-        "Dafa3t tlatin dollar.",
-        "Ahla, tfaddale. 3annna alween ktiire."
+        "Dafa3et tletiin dolar.",
+        "Ahla w sahla, tfaddale. 3anna alween ktiire."
+      ],
+      "expressionIDs": [
+        "syn-d0f0fbcc62fc"
       ]
     },
     "syn-context-syn-d14c6de1e56f": {
@@ -2610,7 +2625,7 @@
       "wrongAnswers": [
         "shu el 7ajem?",
         "8ale ktiir! Fi solde?",
-        "B adde kilo et-tiffe7?"
+        "B2adde kilo et-tiffe7?"
       ]
     },
     "syn-context-syn-fc4266bc44d9": {
@@ -3001,16 +3016,20 @@
     },
     "syn-context-syn-684e1e71f91e": {
       "wrongAnswers": [
-        "Badde el kilo?",
+        "B2adde el kilo?",
         "Tayyeb, arb3iin dollar.",
-        "Dafa3t tlatin dollar."
+        "Dafa3et tletiin dolar."
       ]
     },
     "syn-context-syn-5db6dcd019cf": {
       "wrongAnswers": [
-        "Ahla, tfaddale. 3annna alween ktiire.",
+        "Ahla w sahla, tfaddale. 3anna alween ktiire.",
         "La2, ma besiir. 5amsaw w tletiin.",
         "bte2dar tnazzil el se3er?"
+      ],
+      "answer": "Dafa3et tletiin dolar.",
+      "expressionIDs": [
+        "syn-5db6dcd019cf"
       ]
     },
     "syn-context-syn-ae2f974e33e5": {
@@ -3024,21 +3043,24 @@
       "wrongAnswers": [
         "Tfaddale, hay wasat.",
         "Badde el a7mar.",
-        "Badde el kilo?"
+        "B2adde el kilo?"
+      ],
+      "expressionIDs": [
+        "syn-b430400434e0"
       ]
     },
     "syn-context-syn-c0f42ddb93f4": {
       "wrongAnswers": [
-        "Badde el kilo?",
+        "B2adde el kilo?",
         "Tayyeb, arb3iin dollar.",
-        "Dafa3t tlatin dollar."
+        "Dafa3et tletiin dolar."
       ]
     },
     "syn-context-syn-df943e0720e0": {
       "wrongAnswers": [
         "8ale ktiir! Fi solde?",
-        "B adde kilo et-tiffe7?",
-        "Mar7aba, badde shuf el 2omsan."
+        "B2adde kilo et-tiffe7?",
+        "Mar7aba, badde shuf el 2emsaan."
       ]
     },
     "syn-context-syn-701cf540f24d": {
@@ -3054,7 +3076,7 @@
     "syn-context-syn-4b2aa7dc7862": {
       "wrongAnswers": [
         "Badde el a7mar.",
-        "Badde el kilo?",
+        "B2adde el kilo?",
         "Tayyeb, arb3iin dollar."
       ]
     },
@@ -3926,7 +3948,13 @@
       "canonicalArabizi": "Wen es saydaliyye?"
     },
     "syn-326b9a3aaf57": {
-      "canonicalArabizi": "B adde kilo et-tiffe7?"
+      "canonicalArabizi": "B2adde kilo et-tiffe7?",
+      "variants": [
+        {
+          "value": "B adde kilo et-tiffe7?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-34db33b665ce": {
       "canonicalArabizi": "Mar7aba Karim! 3andak e5we?",
@@ -4264,7 +4292,13 @@
       "canonicalArabizi": "Tayyeb, arb3iin dollar."
     },
     "syn-7f6e456d1333": {
-      "canonicalArabizi": "Ahla, tfaddale. 3annna alween ktiire."
+      "canonicalArabizi": "Ahla w sahla, tfaddale. 3anna alween ktiire.",
+      "variants": [
+        {
+          "value": "Ahla, tfaddale. 3annna alween ktiire.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-7fafcb18d749": {
       "canonicalArabizi": "7elo! Yalla bshufik!"
@@ -4336,7 +4370,17 @@
       "canonicalArabizi": "Kill yom el subo7."
     },
     "syn-95e2988299c0": {
-      "canonicalArabizi": "Mar7aba, badde shuf el 2omsan."
+      "canonicalArabizi": "Mar7aba, badde shuf el 2emsaan.",
+      "variants": [
+        {
+          "value": "Mar7aba, badde shuf el 2omsan.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba, badde shuf el 2omsaan.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-9612f959f867": {
       "canonicalArabizi": "Wen es sinema?"
@@ -4482,7 +4526,13 @@
       "canonicalArabizi": "Be23od bel bet."
     },
     "syn-b39fd2bf2f63": {
-      "canonicalArabizi": "Wasat law sama7et."
+      "canonicalArabizi": "Wasat law sama7et.",
+      "variants": [
+        {
+          "value": "Medium law sama7et.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-b5d6565f22dc": {
       "canonicalArabizi": "Akid. Iza badna nru7, leezem n7jez fondo2."
@@ -4584,7 +4634,8 @@
       "canonicalArabizi": "5ayye el kbiir mjawwaz"
     },
     "syn-d0f0fbcc62fc": {
-      "canonicalArabizi": "Badde el kilo?"
+      "canonicalArabizi": "B2adde el kilo?",
+      "variants": []
     },
     "syn-d14c6de1e56f": {
       "canonicalArabizi": "Bil-lel, ba3ed el sho8ol."
@@ -4995,6 +5046,24 @@
           "kind": "spelling"
         }
       ]
+    },
+    "syn-5db6dcd019cf": {
+      "canonicalArabizi": "Dafa3et tletiin dolar.",
+      "variants": [
+        {
+          "value": "Dafa3t tlatin dollar.",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-b430400434e0": {
+      "canonicalArabizi": "shu el lon?",
+      "variants": [
+        {
+          "value": "ayya lon?",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [
@@ -5177,6 +5246,32 @@
           "naturalMeaning": "Ce mai zici? / Ce faci? (către o fată, informal)"
         }
       }
+    },
+    {
+      "id": "teacher.a1-shopping.3amliin-sold",
+      "unitID": "a1-shopping",
+      "canonicalArabizi": "8aale ktiir! 3amliin sold?",
+      "variants": [
+        {
+          "value": "Ktiir 8aale! 3amliin sold?",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Foarte scump! Aveți reduceri?"
+        }
+      }
+    },
+    {
+      "id": "teacher.a1-shopping.badde-el-medium",
+      "unitID": "a1-shopping",
+      "canonicalArabizi": "Badde el medium",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Vreau mărimea medie."
+        }
+      }
     }
   ],
   "exerciseAdditions": [
@@ -5324,6 +5419,57 @@
         "Shu el filem?",
         "Yalla ta3a ma3e!",
         "Mne7ke ba3den."
+      ]
+    },
+    {
+      "id": "teacher.a1-shopping.3amliin-sold-reply",
+      "type": "dialogue-response",
+      "unitID": "a1-shopping",
+      "expressionIDs": [
+        "teacher.a1-shopping.3amliin-sold"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Foarte scump! Aveți reduceri?”"
+      },
+      "answer": "8aale ktiir! 3amliin sold?",
+      "wrongAnswers": [
+        "Tameem, baddik kiis?",
+        "Wasat law sama7et.",
+        "shu el lon?"
+      ]
+    },
+    {
+      "id": "teacher.a1-shopping.meshi-beshtere",
+      "type": "dialogue-response",
+      "unitID": "a1-shopping",
+      "expressionIDs": [
+        "syn-18b65d5d3134"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Bine, cumpăr.”"
+      },
+      "answer": "Meshi, beshtere.",
+      "wrongAnswers": [
+        "Ba3do 8ale. Tletiin?",
+        "Tfaddale, hay wasat.",
+        "shu el 7ajem?"
+      ]
+    },
+    {
+      "id": "teacher.a1-shopping.badde-el-medium",
+      "type": "dialogue-response",
+      "unitID": "a1-shopping",
+      "expressionIDs": [
+        "teacher.a1-shopping.badde-el-medium"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Vreau mărimea medie.”"
+      },
+      "answer": "Badde el medium",
+      "wrongAnswers": [
+        "Adde el se3er?",
+        "Eh law sama7et.",
+        "Tameem, baddik kiis?"
       ]
     }
   ]
