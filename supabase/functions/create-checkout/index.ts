@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { buildCorsHeaders } from "../_shared/cors.ts";
+import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
+import { callerOwnsRegistration } from "../_shared/registration-access.ts";
 import {
   KIDS_DEPOSIT_SHARE,
   groupMonthlyUnitAmount,
@@ -54,10 +55,17 @@ serve(async (req) => {
       );
       const { data: regRow } = await adminClient
         .from("registrations")
-        .select("payment_status, stripe_session_id, form_type, level, format, quantity")
+        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, format, quantity")
         .eq("id", registrationId)
         .maybeSingle();
       if (!regRow) {
+        return new Response(JSON.stringify({ error: "Registration not found" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      // Only the registrant (matching email) may start checkout for it.
+      if (!(await callerOwnsRegistration(regRow, { email }))) {
         return new Response(JSON.stringify({ error: "Registration not found" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 404,
@@ -150,8 +158,8 @@ serve(async (req) => {
         customer_email: customerId ? undefined : email || undefined,
         line_items: lineItems,
         mode: "payment",
-        success_url: `${req.headers.get("origin")}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.get("origin")}/?payment=canceled`,
+        success_url: `${resolveReturnOrigin(req)}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${resolveReturnOrigin(req)}/?payment=canceled`,
         metadata: {
           course_type: courseType,
           student_name: name || "",
