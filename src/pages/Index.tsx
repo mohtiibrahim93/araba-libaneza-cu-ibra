@@ -231,17 +231,19 @@ const PageContent = () => {
           <ActiveCoursesBanner />
         </Suspense>
         <SocialProofStrip />
+        {/* Order agreed with the owner: who Ibra is, how you learn, the
+            price, then proof, resources, questions and contact. */}
+        <InstructorSection />
         <ArabiziShowcase />
         <StepsSection />
+        <WhySection />
+        <CulturalValueSection />
         <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
           <ProgramsSection />
         </Suspense>
         <YallaGameBand />
-        <WhySection />
-        <CulturalValueSection />
-        <ResourcesTeaser />
         <TestimonialsSection />
-        <InstructorSection />
+        <ResourcesTeaser />
         <FAQSection />
         <CTASection />
       </main>
