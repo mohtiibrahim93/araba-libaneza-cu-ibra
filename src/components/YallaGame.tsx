@@ -209,12 +209,19 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
       </div>
-      {/* `key` forces a remount when the mode changes: the game reads its view
-          from the query string once, at start-up, so swapping the src alone
-          would leave the previous view rendered. */}
+      {/* `key` forces a remount when the mode OR the language changes: the game
+          reads both from the query string once, at start-up, so swapping the src
+          alone would leave the previous frame rendered.
+
+          The language half matters more than the mode half. An English visitor
+          reaching /joc is served Romanian first — the path is not under /en/, so
+          the server cannot know better — and the saved language is adopted just
+          after hydration. Keying on the mode alone meant that switch changed the
+          src and nothing else: the game stayed Romanian for every English
+          visitor, and for anyone who used the language toggle here. */}
       <iframe
         ref={frameRef}
-        key={mode}
+        key={`${mode}-${lang}`}
         src={mounted ? src : undefined}
         title={TITLES[mode]}
         allow="microphone 'self'"
