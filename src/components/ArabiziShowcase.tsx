@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+import { Play, Pause } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/components/LocalizedLink";
 
@@ -10,20 +12,40 @@ import { Link } from "@/components/LocalizedLink";
  * alphabet (optional, from B1 or B2) — the paragraph says so, so the page does
  * not promise script in every lesson.
  *
- * Spellings are the owner's (mnee7, not mni7/mnih). Audio buttons come when
- * the owner's recordings do.
+ * Spellings are the owner's (mnee7, not mni7/mnih). The recordings are the
+ * owner's own voice, in public/audio.
  */
 
-const PHRASES: { arabizi: string; arabic: string; ro: string; en: string }[] = [
-  { arabizi: "Yalla!", arabic: "يلّا!", ro: "Hai! / Să mergem!", en: "Come on! / Let's go!" },
-  { arabizi: "Mnee7, merci", arabic: "منيح، مرسي", ro: "Bine, mulțumesc", en: "Good, thanks" },
-  { arabizi: "Ahla w sahla", arabic: "أهلا وسهلا", ro: "Bine ai venit", en: "Welcome" },
-  { arabizi: "Shu esmak?", arabic: "شو اسمك؟", ro: "Cum te cheamă?", en: "What's your name?" },
+const PHRASES: { arabizi: string; arabic: string; ro: string; en: string; audio: string }[] = [
+  { arabizi: "Yalla!", arabic: "يلّا!", ro: "Hai! / Să mergem!", en: "Come on! / Let's go!", audio: "/audio/yalla.m4a" },
+  { arabizi: "Mnee7, merci", arabic: "منيح، مرسي", ro: "Bine, mulțumesc", en: "Good, thanks", audio: "/audio/mnee7-merci.m4a" },
+  { arabizi: "Ahla w sahla", arabic: "أهلا وسهلا", ro: "Bine ai venit", en: "Welcome", audio: "/audio/ahla-w-sahla.m4a" },
+  { arabizi: "Shu esmak?", arabic: "شو اسمك؟", ro: "Cum te cheamă?", en: "What's your name?", audio: "/audio/shu-esmak.m4a" },
 ];
 
 const ArabiziShowcase = () => {
   const { lang } = useI18n();
   const en = lang === "en";
+  // One player for the whole grid, so starting a phrase stops the previous one.
+  const player = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState<string | null>(null);
+
+  const toggle = (src: string) => {
+    if (typeof Audio === "undefined") return;
+    const current = player.current;
+    if (current && playing === src) {
+      current.pause();
+      setPlaying(null);
+      return;
+    }
+    current?.pause();
+    const next = new Audio(src);
+    next.onended = () => setPlaying(null);
+    next.onerror = () => setPlaying(null);
+    player.current = next;
+    setPlaying(src);
+    void next.play().catch(() => setPlaying(null));
+  };
 
   return (
     <section className="py-section px-gutter bg-background">
@@ -58,7 +80,18 @@ const ArabiziShowcase = () => {
         <ul className="grid grid-cols-2 gap-3 sm:gap-4">
           {PHRASES.map((p) => (
             <li key={p.arabizi} className="rounded-2xl border border-border bg-card p-4 sm:p-5 flex flex-col gap-1.5">
-              <span lang="apc-Latn" className="text-lg sm:text-2xl font-bold text-foreground">{p.arabizi}</span>
+              <div className="flex items-start justify-between gap-2">
+                <span lang="apc-Latn" className="text-lg sm:text-2xl font-bold text-foreground">{p.arabizi}</span>
+                <button
+                  type="button"
+                  onClick={() => toggle(p.audio)}
+                  aria-label={`${en ? "Listen" : "Ascultă"}: ${p.arabizi}`}
+                  aria-pressed={playing === p.audio}
+                  className="inline-flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full border border-border bg-cream text-brand-green transition-colors hover:border-brand-green"
+                >
+                  {playing === p.audio ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 translate-x-px" />}
+                </button>
+              </div>
               <span dir="rtl" lang="ar" className="font-arabic text-xl sm:text-2xl text-muted-foreground text-left">
                 {p.arabic}
               </span>
