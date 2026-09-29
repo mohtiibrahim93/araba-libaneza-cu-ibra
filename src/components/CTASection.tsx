@@ -2,21 +2,53 @@ import { useI18n } from "@/lib/i18n";
 import { CalendarDays, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import SocialLinks from "@/components/SocialLinks";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
+import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const PHONE_URL = "tel:+40763124514";
 const EMAIL = "marhaba@centruldearabalibaneza.com";
 
 const CTASection = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const en = lang === "en";
 
   return (
-    <section id="contact" className="py-section px-6 bg-muted/50 scroll-mt-20">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <span className="text-sm font-medium text-primary mb-2 block">{t.ctaBadge}</span>
-          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.ctaTitle}</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">{t.ctaDesc}</p>
+    <section id="contact" className="py-section px-gutter bg-cream scroll-mt-20">
+      <div className="max-w-content mx-auto">
+        {/* The closing invitation, as in the design: a greeting, the free
+            trial, and the two ways to act on it. */}
+        <div className="mb-14 flex flex-col gap-8 rounded-[28px] border border-[#E7E1D6] bg-card px-6 py-10 sm:px-12 md:flex-row md:items-center md:justify-between md:gap-10 lg:px-16 lg:py-14 dark:border-border">
+          <div className="flex flex-col gap-2.5">
+            <span className="text-lg sm:text-xl font-bold text-brand-green">
+              <span lang="apc-Latn">Ahla w sahla!</span>{" "}
+              <span dir="rtl" lang="ar" className="font-arabic font-medium text-muted-foreground">أهلا وسهلا</span>
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight tracking-tight text-foreground">
+              {en ? "The first trial lesson is free." : "Prima lecție de probă e gratuită."}
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3 md:shrink-0">
+            <Link
+              to="/trial"
+              className="inline-flex h-14 items-center rounded-xl bg-primary px-7 text-[17px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              {en ? "Book now →" : "Rezervă acum →"}
+            </Link>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-14 items-center gap-2 rounded-xl border-[1.5px] border-brand-green px-6 text-[17px] font-semibold text-brand-green transition-colors hover:bg-brand-green/5"
+            >
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground block">{t.ctaBadge}</span>
         </div>
 
         <div className="grid gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -69,18 +101,7 @@ const CTASection = () => {
         </div>
 
         {/* Official social channels — renders only the configured ones. */}
-        <SocialLinks variant="cards" className="mb-10" />
-
-        <div className="text-center">
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <MessageCircle className="w-4 h-4" />
-            {t.ctaButton}
-          </a>
+        <SocialLinks variant="cards" />
         </div>
       </div>
     </section>

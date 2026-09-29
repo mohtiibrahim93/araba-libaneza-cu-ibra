@@ -203,7 +203,7 @@ export const translations = {
     ctaSchedulePrivateLabel: "Private individuale",
     ctaSchedulePrivateValue: "Program flexibil · sesiuni de 60 minute · online sau fizic",
     ctaScheduleKidsLabel: "Curs copii",
-    ctaScheduleKidsValue: "Fizic · activități adaptate vârstei · locuri limitate",
+    ctaScheduleKidsValue: "Momentan nu avem cursuri pentru copii. Când pornesc, vor fi fizic, la centru.",
 
     // Group Form
     groupSubmitting: "Se trimite...",
@@ -1002,7 +1002,7 @@ export const translations = {
     ctaSchedulePrivateLabel: "Individual private lessons",
     ctaSchedulePrivateValue: "Flexible schedule · 60-minute sessions · online or in person",
     ctaScheduleKidsLabel: "Kids course",
-    ctaScheduleKidsValue: "In person · age-adapted activities · limited spots",
+    ctaScheduleKidsValue: "We don't have kids' courses at the moment. When they start, they will be in person, at the centre.",
 
     groupSubmitting: "Submitting...",
     mainLeadTitle: "Choose your course and we’ll call you",
