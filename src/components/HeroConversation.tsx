@@ -34,7 +34,7 @@ const CINEMA: Bubble[] = [
   { text: "3am fakker ruu7 e7dar filem bi-s-cinema , enta ?", tone: "green", side: "right" },
   { text: "ma shi, ma 3ande msheeri3..", tone: "red", side: "left" },
   { text: "baddak teje ma3e ne7dar shi?", tone: "green", side: "right" },
-  { text: "shu fi?", tone: "gold", side: "left" },
+  { text: "shu?", tone: "gold", side: "left" },
   { text: "Nezel filem spiderman L-jdeed, kent 3am fakker e7daro", tone: "green", side: "right" },
   { text: "yalla, I m in", tone: "red", side: "left" },
 ];
