@@ -32,11 +32,11 @@ export const FULL_REFUND_DAYS = 7;
  */
 export const COURSE_LESSONS: Record<string, number> = {
   A1: 32,
-  A2: 54,
-  B1: 70,
-  B2: 70,
-  C1: 70,
-  C2: 80,
+  A2: 56,
+  B1: 72,
+  B2: 72,
+  C1: 72,
+  C2: 72,
 };
 
 export type RefundTier = "full" | "fee-only" | "pro-rata";
