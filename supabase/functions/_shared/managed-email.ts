@@ -5,7 +5,7 @@
 // which owns delivery, retries, rate limits, suppression and unsubscribe.
 // There is no queue, no cron dispatcher and no suppression table to consult.
 import * as React from 'npm:react@19.3.0'
-import { renderAsync } from 'npm:@react-email/components@1.0.12'
+import { render } from 'npm:@react-email/components@1.0.12'
 import { EmailAPIError, sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { TEMPLATES } from './transactional-email-templates/registry.ts'
@@ -116,8 +116,8 @@ export async function sendTemplateEmail(
   }
 
   const element = React.createElement(template.component, templateData)
-  const html = await renderAsync(element)
-  const text = await renderAsync(element, { plainText: true })
+  const html = await render(element)
+  const text = await render(element, { plainText: true })
   const subject = typeof template.subject === 'function'
     ? template.subject(templateData)
     : template.subject
