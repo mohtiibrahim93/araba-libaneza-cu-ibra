@@ -131,7 +131,7 @@ async function handlePreview(req: Request): Promise<Response> {
   }
 
   const sampleData = SAMPLE_DATA[type] || {}
-  const html = await renderAsync(React.createElement(EmailTemplate, sampleData))
+  const html = await render(React.createElement(EmailTemplate, sampleData))
 
   return new Response(html, {
     status: 200,
@@ -240,8 +240,8 @@ async function handleWebhook(req: Request): Promise<Response> {
   }
 
   // Render React Email to HTML and plain text
-  const html = await renderAsync(React.createElement(EmailTemplate, templateProps))
-  const text = await renderAsync(React.createElement(EmailTemplate, templateProps), {
+  const html = await render(React.createElement(EmailTemplate, templateProps))
+  const text = await render(React.createElement(EmailTemplate, templateProps), {
     plainText: true,
   })
 
