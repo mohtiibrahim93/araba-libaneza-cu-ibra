@@ -37,6 +37,7 @@ const require = createRequire(import.meta.url);
 const CSV = "content/yalla-cards.csv";
 const OUT = "public/yalla/content.js";
 const SOURCE = "content/yalla-source-bank.js";
+const EN = "content/yalla-content-en.json";
 
 /** Cards the owner dropped by accident — their siblings are in the same topic. */
 const RESTORED = [
@@ -127,8 +128,57 @@ for (const c of cards) cardsPerUnit[c.unit] = (cardsPerUnit[c.unit] ?? 0) + 1;
 const units = bank.units.map((u) => (cardsPerUnit[u.id] ? u : { ...u, empty: true }));
 const emptied = units.filter((u) => u.empty);
 
-const out = { ...bank, version: 3, levels, topics, cards, units };
+// English for the prose the CSV does not carry: a card's learning note, the
+// drills' prompts, notes and fill-in contexts, the source labels and the
+// teacher's review notes. Those are the game's content, not its interface, and
+// no English existed for any of it — an English player met Romanian the moment
+// they opened a card or played a grammar round. They repeat heavily (1,180
+// cards share 36 notes), so the file is keyed by the Romanian string.
+const en = JSON.parse(readFileSync(EN, "utf8"));
+const missing = new Set();
+const say = (romanian) => {
+  if (!romanian) return undefined;
+  const hit = en[romanian];
+  // Only report what is actually Romanian. The Arabizi fill-in contexts
+  // ("Ana ___", "Lezem ruu7 ___ d-daktor") and the one English source title
+  // need no translation, and a report full of those is a report nobody reads.
+  const romanianLooking =
+    /[ăâîșțĂÂÎȘȚ]/.test(romanian) ||
+    /\b(este|sunt|care|pentru|folose\w+|spune|alege|vrei|acum|fără|dacă)\b/i.test(romanian);
+  if (!hit && romanianLooking) missing.add(romanian);
+  return hit;
+};
+for (const c of cards) { const t = say(c.note); if (t) c.noteEn = t; }
+const drills = bank.drills.map((d) => {
+  const out = { ...d };
+  const p = say(d.prompt); if (p) out.promptEn = p;
+  const n = say(d.note); if (n) out.noteEn = n;
+  const x = say(d.context); if (x) out.contextEn = x;
+  return out;
+});
+const sources = bank.sources.map((s2) => {
+  const out = { ...s2 };
+  const t = say(s2.title); if (t) out.titleEn = t;
+  const d = say(s2.detail); if (d) out.detailEn = d;
+  return out;
+});
+const notes = bank.notes.map((n) => {
+  const out = { ...n };
+  const r = say(n.reason); if (r) out.reasonEn = r;
+  return out;
+});
+
+const out = { ...bank, version: 3, levels, topics, cards, units, drills, sources, notes };
 writeFileSync(OUT, "window.YALLA_PACKAGED = true;\nwindow.YALLA = " + JSON.stringify(out) + ";\n");
+
+// The same English prose, as a lookup the game can use at runtime. synthesis.js
+// generates several hundred more cards and drills in the browser, after this
+// bank is loaded, so their notes and prompts cannot be translated here — the
+// overlay needs the table itself.
+writeFileSync(
+  "public/yalla/content-en.js",
+  "window.YALLA_EN = " + JSON.stringify(en) + ";\n",
+);
 
 const dropped = [...before.keys()].filter((id) => !seen.has(id));
 console.log(`cards: ${before.size} in the bank -> ${cards.length} written`);
@@ -136,4 +186,9 @@ console.log(`  matched from the CSV: ${seen.size} | restored by hand: ${RESTORED
 console.log(`levels: ${levels.map((l) => `${l.id} (${l.topics} topics, ${l.cards} cards)`).join(" · ")}`);
 console.log(`topics: ${topics.length} | units: ${units.length} (${emptied.length} flagged empty) | drills: ${out.drills.length} | notes: ${out.notes.length}`);
 if (emptied.length) console.log("  flagged empty:", emptied.map((u) => u.title).join(", "));
+console.log(`english for content prose: ${cards.filter((c) => c.noteEn).length} card notes, ${drills.filter((d) => d.promptEn).length}/${drills.length} drill prompts, ${sources.filter((s2) => s2.titleEn).length}/${sources.length} sources, ${notes.filter((n) => n.reasonEn).length}/${notes.length} review notes`);
+if (missing.size) {
+  console.log(`NOT TRANSLATED (${missing.size}) — add them to ${EN}:`);
+  for (const m of [...missing].slice(0, 20)) console.log("  " + m);
+}
 if (unknown.length) console.log(`CSV rows with an id the bank does not have: ${unknown.length}`, unknown.slice(0, 5));

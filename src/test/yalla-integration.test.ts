@@ -25,9 +25,14 @@ const MODULES = [
   // helper it defines, so a tag after app.js is a TypeError at start-up.
   "i18n.js",
   "content.js",
-  "deck-language.js",
   "curriculum.js",
   "synthesis.js",
+  // The English overlay runs LAST of the data files, and that order is the
+  // point: synthesis.js generates several hundred more cards and drills in the
+  // browser, so an overlay before it left every generated note and prompt in
+  // Romanian for English readers. content-en.js is the lookup it reads.
+  "content-en.js",
+  "deck-language.js",
   "engine.js",
   "plus.js",
   "academy.js",
