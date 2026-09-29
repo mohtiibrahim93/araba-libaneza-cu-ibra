@@ -1,5 +1,6 @@
 (function(root){
   'use strict';
+  const T=(ro,en)=>root.YallaI18n?root.YallaI18n.t(ro,en):ro;
   const exact = s => String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
   const norm = s => String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/kh/g,'5').replace(/gh/g,'8').replace(/([aeiou])\1+/g,'$1').replace(/[^a-z0-9]/g,'');
   const shuffle = (a,rng=Math.random) => { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
@@ -8,10 +9,10 @@
   const spelling=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/kh/g,'5').replace(/gh/g,'8').replace(/[’‘']/g,'').replace(/-/g,'').replace(/[^a-z0-9\s]/g,'').trim().replace(/\s+/g,' ');
   const accepts=(c,text)=>[c.ar,...(c.variants||[])].some(v=>spelling(v)===spelling(text));
   function feedback(c,text){
-    if(accepts(c,text))return spelling(c.ar)!==spelling(text)?'Variantă acceptată. Sensul și forma cerută sunt păstrate.':'Corect: '+c.ar+' — '+c.ro;
+    if(accepts(c,text))return spelling(c.ar)!==spelling(text)?T('Variantă acceptată. Sensul și forma cerută sunt păstrate.','An accepted variant. The meaning and the required form are kept.'):T('Corect: ','Correct: ')+c.ar+' — '+c.ro;
     const a=spelling(c.ar).split(' '),b=spelling(text).split(' ');
-    if(a.length===b.length&&a.some((w,i)=>w!==b[i]&&w.slice(0,-2)===b[i]?.slice(0,-2)&&w.length>3))return 'Verifică terminația: persoana, genul sau timpul cerut pot schimba răspunsul. Model: '+c.ar;
-    return 'Compară răspunsul tău cu „'+c.ar+'”. Sunt acceptate grafiile și alternativele înregistrate pentru această expresie; o formă apropiată nu este validată automat.';
+    if(a.length===b.length&&a.some((w,i)=>w!==b[i]&&w.slice(0,-2)===b[i]?.slice(0,-2)&&w.length>3))return T('Verifică terminația: persoana, genul sau timpul cerut pot schimba răspunsul. Model: ','Check the ending: the person, the gender or the tense required can change the answer. Model: ')+c.ar;
+    return T('Compară răspunsul tău cu „','Compare your answer with \u201c')+c.ar+T('”. Sunt acceptate grafiile și alternativele înregistrate pentru această expresie; o formă apropiată nu este validată automat.','\u201d. The spellings and alternatives recorded for this phrase are accepted; a form that is merely close is not marked right automatically.');
   }
   const DAY=86400000,intervals=[1,3,7,14,30];
   const dueAt=p=>Number.isFinite(p?.dueAt)?p.dueAt:p?.last&&p?.seen?p.last+DAY:null;

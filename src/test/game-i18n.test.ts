@@ -12,9 +12,11 @@ import { resolve } from "node:path";
  * a dropped query parameter renders a Romanian game to an English reader and
  * nothing fails.
  *
- * What this cannot check is translation coverage: strings are converted in
- * batches, and an unconverted one deliberately stays Romanian rather than
- * rendering blank. Coverage is verified by loading the game in a browser.
+ * This file guards the mechanism. Coverage of the game's CONTENT — cards,
+ * drills, lessons, topics — is asserted in game-english-coverage.test.ts, which
+ * runs the whole content pipeline. Coverage of the interface is still batch
+ * work: an unconverted T() call site deliberately stays Romanian rather than
+ * rendering blank, and is found by crawling the views in a browser.
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
@@ -45,11 +47,13 @@ describe("the game follows the site's language", () => {
     expect((app.match(/T\('/g) ?? []).length).toBeGreaterThan(100);
   });
 
-  it("leaves card meanings out of it", () => {
-    // The deck stays Romanian until the drafted English glosses are reviewed;
-    // i18n.js must not start switching card text behind that decision.
+  it("leaves the content to deck-language.js", () => {
+    // i18n.js is the interface only. Card meanings, drills, lessons and topics
+    // are switched by deck-language.js, after synthesis.js has generated its
+    // share of them — coverage is asserted in game-english-coverage.test.ts.
     const i18n = read("public/yalla/i18n.js");
     expect(i18n).not.toContain("YALLA.cards");
+    expect(read("public/yalla/deck-language.js")).toContain("root.YALLA.cards");
   });
 });
 
