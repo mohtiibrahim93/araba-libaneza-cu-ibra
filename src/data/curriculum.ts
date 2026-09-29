@@ -106,18 +106,18 @@ const RO: CurriculumLevel[] = [
     title: "Nivel A2 — Elementar",
     objective:
       "Cursantul descurcă majoritatea situațiilor cotidiene, narează la trecut/viitor și își exprimă opinii simple. Consolidare + gamă conversațională reală.",
-    lessons: 54,
-    hours: 81,
+    lessons: 56,
+    hours: 84,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: grupa de marți și joi 19:00–20:30 (Strada Icoanei 80) e în desfășurare · 54 de lecții",
+      "Fizic: grupa de marți și joi 19:00–20:30 (Strada Icoanei 80) e în desfășurare · 56 de lecții",
       "Online: cohortă în curând — data și programul se anunță",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
     intro: [
       "A1 ți-a dat prezentul. A2 îți dă restul timpului: trecutul verbelor regulate și apoi al celor neregulate, narațiunea la trecut, viitorul cu raḥ, și trecutul habitual cu kān. În momentul în care poți spune ce ai făcut ieri și ce ai de gând mâine, conversația încetează să mai fie o serie de propoziții izolate.",
       "Nivelul adaugă și mecanica de care ai nevoie ca să sune natural: pronumele complement direct și indirect, comparativele și superlativele, acordul adjectivelor, pluralele „sparte”, imperativul și imperativul negativ, verbele modale (lāzim, fī, bidd-), propozițiile relative cu illi, condiționalul de bază cu iza și conectorii (bass, la2an, ma3 inno).",
-      "În paralel se deschid situațiile reale: la doctor și la farmacie, programări și întâlniri, conversații telefonice, călătorii și rezervări, aeroport și hotel, bani și noțiuni bancare, muncă și birou, hobby-uri. Plus descrierea persoanelor, emoțiile și opiniile, primele expresii culturale libaneze și idiomuri, jocuri de rol extinse și ascultare din media reală. 54 de lecții, cu evaluare orală finală.",
+      "În paralel se deschid situațiile reale: la doctor și la farmacie, programări și întâlniri, conversații telefonice, călătorii și rezervări, aeroport și hotel, bani și noțiuni bancare, muncă și birou, hobby-uri. Plus descrierea persoanelor, emoțiile și opiniile, primele expresii culturale libaneze și idiomuri, jocuri de rol extinse și ascultare din media reală. 56 de lecții, cu evaluare orală finală.",
     ],
     outcomes: [
       "Povestești ce ai făcut ieri și ce planuri ai, la trecut și la viitor",
@@ -556,18 +556,18 @@ const EN: CurriculumLevel[] = [
     title: "Level A2 — Elementary",
     objective:
       "Learner handles most everyday situations, narrates in past/future and expresses simple opinions. Consolidation + real conversational range.",
-    lessons: 54,
-    hours: 81,
+    lessons: 56,
+    hours: 84,
     trackLabel: "Spoken",
     schedule: [
-      "In person: the Tuesday & Thursday 19:00–20:30 group (Strada Icoanei 80) is in progress · 54 lessons",
+      "In person: the Tuesday & Thursday 19:00–20:30 group (Strada Icoanei 80) is in progress · 56 lessons",
       "Online: cohort opening soon — date and schedule to be announced",
       "Runs in parallel with A1 · Final exam included",
     ],
     intro: [
       "A1 gave you the present tense. A2 gives you the rest of time: the past of regular verbs and then the irregular ones, narration in the past, the future with raḥ, and the habitual past with kān. The moment you can say what you did yesterday and what you plan for tomorrow, conversation stops being a series of isolated sentences.",
       "The level also adds the machinery that makes it sound natural: direct and indirect object pronouns, comparatives and superlatives, adjective agreement in depth, broken plurals, the imperative and the negative imperative, modal verbs (lāzim, fī, bidd-), relative clauses with illi, the basic conditional with iza, and connectors (bass, la2an, ma3 inno).",
-      "Alongside that, the real situations open up: the doctor and the pharmacy, appointments, phone calls, travel and bookings, the airport and the hotel, money and banking, work and office vocabulary, hobbies. Plus describing people physically and by character, emotions and opinions, the first Lebanese cultural expressions and idioms, extended role plays and listening to real media. 54 lessons, with a final spoken assessment.",
+      "Alongside that, the real situations open up: the doctor and the pharmacy, appointments, phone calls, travel and bookings, the airport and the hotel, money and banking, work and office vocabulary, hobbies. Plus describing people physically and by character, emotions and opinions, the first Lebanese cultural expressions and idioms, extended role plays and listening to real media. 56 lessons, with a final spoken assessment.",
     ],
     outcomes: [
       "Tell someone what you did yesterday and what you are planning, in past and future",

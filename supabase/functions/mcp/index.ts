@@ -58,7 +58,7 @@ var get_pricing_default = defineTool({
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.26.2";
 var LEVELS = [
   { id: "a1", title: "A1 \u2014 Beginner (Survival)", lessons: 32, hours: 48, track: "Spoken", schedule: "In person: Mon & Wed 19:00\u201320:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1" },
-  { id: "a2", title: "A2 \u2014 Elementary", lessons: 54, hours: 81, track: "Spoken", schedule: "In person: Tue & Thu 19:00\u201320:30, 1 Sep 2026 \u2013 4 Mar 2027 (54 lessons), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 in progress" },
+  { id: "a2", title: "A2 \u2014 Elementary", lessons: 56, hours: 84, track: "Spoken", schedule: "In person: Tue & Thu 19:00\u201320:30, 1 Sep 2026 \u2013 11 Mar 2027 (56 lessons), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 in progress" },
   { id: "b1", title: "B1 \u2014 Intermediate", lessons: 72, hours: 108, track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it", schedule: "~9 months \xB7 opens after A2 \u2014 future enrollment" },
   { id: "b2", title: "B2 \u2014 Upper-Intermediate", lessons: 72, hours: 108, track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it", schedule: "~9 months \xB7 opens after B1 \u2014 future enrollment" },
   { id: "c1", title: "C1 \u2014 Advanced", lessons: 72, hours: 108, track: "Spoken + Written", schedule: "~9 months \xB7 opens after B2 \u2014 future enrollment" },

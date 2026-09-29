@@ -198,7 +198,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce nivel CEFR voi atinge după curs?",
-            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~7 luni, 54 de lecții), B1, B2, C1 și C2 ~9 luni fiecare (72 de lecții). La final primești o evaluare a nivelului atins.",
+            a: "Depinde de nivelul de start. Cursul A1 te aduce la nivel A1 complet (~4 luni, 32 de lecții), A2 la A2 (~7 luni, 56 de lecții), B1, B2, C1 și C2 ~9 luni fiecare (72 de lecții). La final primești o evaluare a nivelului atins.",
           },
         ],
       },
@@ -417,7 +417,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What CEFR level will I reach after the course?",
-            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~7 months, 54 lessons), B1, B2, C1 and C2 ~9 months each (72 lessons). At the end you get an assessment of the level you've reached.",
+            a: "It depends on your starting point. The A1 course takes you to full A1 (~4 months, 32 lessons), A2 to A2 (~7 months, 56 lessons), B1, B2, C1 and C2 ~9 months each (72 lessons). At the end you get an assessment of the level you've reached.",
           },
         ],
       },

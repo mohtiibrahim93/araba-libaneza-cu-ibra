@@ -20,7 +20,7 @@ export const GROUP_MONTHLY_ONLINE: Record<GroupLevel, number> = {
  *
  * A group "month" is 8 lessons (classes run 2×/week × ~4 weeks), so the number
  * of monthly subscription charges is ceil(total_lessons / 8). Lesson totals come
- * from the curriculum (src/data/curriculum.ts): A1 32, A2 54, B1–C2 72 each (9 × 8).
+ * from the curriculum (src/data/curriculum.ts): A1 32, A2 56 (7 × 8), B1–C2 72 each (9 × 8).
  * The final month may hold fewer than 8 lessons but is billed as a normal month.
  * Mirrors GROUP_COURSE_MONTHS in src/lib/pricing.ts — change both together.
  */

@@ -17,9 +17,12 @@ const START = "2026-10-01T17:00:00.000Z";
 
 describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
   it("keeps the lesson totals in step with the curriculum", () => {
-    for (const level of getCurriculum("ro")) {
-      if (COURSE_LESSONS[level.id] === undefined) continue;
-      expect(COURSE_LESSONS[level.id]).toBe(level.lessons);
+    // Curriculum ids are lowercase ("a2"), the refund table's keys uppercase.
+    // Comparing them raw skipped every level, so B1–C2 had drifted to 70/80.
+    const levels = getCurriculum("ro");
+    expect(levels.length).toBeGreaterThan(0);
+    for (const level of levels) {
+      expect(COURSE_LESSONS[level.id.toUpperCase()], level.id).toBe(level.lessons);
     }
   });
 
