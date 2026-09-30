@@ -180,15 +180,10 @@ const Navbar = () => {
 
   // Course + resource menus, from src/lib/siteNav.ts. The desktop menus render
   // them through NavDropdown, which keeps every link in the served HTML; the
-  // mobile menu lists the same links below. The index page is only prepended
-  // for the desktop menu — on mobile the section heading is already a link to
-  // it.
+  // mobile menu lists the same links below, the audiences indented under the
+  // group course as in the owner's structure.
   const courseMenu = courseLinks(lang);
   const resourceMenu = resourceLinks(lang);
-  const coursesIndex = {
-    to: lang === "en" ? "/en/courses" : "/cursuri",
-    label: lang === "en" ? "All courses" : "Toate cursurile",
-  };
 
   const langSwitcher = (tone: "light" | "dark") => (
     <DropdownMenu>
@@ -362,7 +357,7 @@ const Navbar = () => {
             <CourseMegaMenu
               label={t.navCourses}
               lang={lang === "en" ? "en" : "ro"}
-              otherCourses={courseMenu.filter((c) => !/\/grup$|\/group$/.test(c.to))}
+              courses={courseMenu}
               next={next}
             />
             <div className="relative px-3 py-2 text-foreground">
@@ -458,12 +453,15 @@ const Navbar = () => {
               {t.navCourses}
             </Link>
             <div className="flex flex-col pl-6">
-              {courseMenu.map((item) => (
+              {courseMenu.map((item, i) => (
                 <Link
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                  className={cn(
+                    "text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center",
+                    i > 0 && !/\/private$/.test(item.to) && "pl-4",
+                  )}
                 >
                   {item.label}
                 </Link>

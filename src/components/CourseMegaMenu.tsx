@@ -8,8 +8,10 @@ import { cohortHref, longDate } from "@/lib/nextCohort";
 import { cn } from "@/lib/utils";
 
 /**
- * "Cursuri" in the menu: a wide panel with every level, the other courses,
- * the quiz and level test, and the next course to join.
+ * "Cursuri" in the menu, in the owner's order: the group course (A1–C2) with
+ * its levels, who it is for (adults, teens, kids), private lessons, then the
+ * quiz and level test and the next course to join. No separate "all courses"
+ * link: the group course heading is it.
  *
  * Same disclosure pattern as NavDropdown (see the comment there): the panel is
  * always rendered and carries `hidden` while closed, so every course link stays
@@ -30,12 +32,19 @@ const OPEN = new Set(["A1", "A2"]);
 interface Props {
   label: string;
   lang: "ro" | "en";
-  otherCourses: NavLink[];
+  /** courseMenu: the group course first, then the audiences, then private lessons. */
+  courses: NavLink[];
   next: Cohort | null;
 }
 
-const CourseMegaMenu = ({ label, lang, otherCourses, next }: Props) => {
+const isPrivate = (c: NavLink) => /\/private$/.test(c.to);
+const isKids = (c: NavLink) => /\/(copii|children)$/.test(c.to);
+
+const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
   const en = lang === "en";
+  const [group, ...rest] = courses;
+  const audiences = rest.filter((c) => !isPrivate(c));
+  const privates = rest.filter(isPrivate);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -91,7 +100,11 @@ const CourseMegaMenu = ({ label, lang, otherCourses, next }: Props) => {
       >
         <div className="mx-auto grid max-w-content gap-7 rounded-b-3xl border border-t-0 border-[#E7E1D6] bg-card p-7 shadow-[0_18px_40px_rgba(26,26,26,0.08)] lg:grid-cols-[1.3fr_1fr_1fr_1.1fr] dark:border-border">
           <div>
-            <p className={heading}>{en ? "Group courses · adults" : "Cursuri de grup · adulți"}</p>
+            {group && (
+              <Link to={group.to} className={cn(heading, "block hover:text-brand-green")}>
+                {group.label} →
+              </Link>
+            )}
             <ul className="flex flex-col gap-0.5">
               {LEVELS.map((l) => (
                 <li key={l.id}>
@@ -110,21 +123,21 @@ const CourseMegaMenu = ({ label, lang, otherCourses, next }: Props) => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link to="/cursuri/grup" className={cn(item, "font-semibold text-brand-green")}>
-                  {en ? "All group levels →" : "Toate nivelurile de grup →"}
-                </Link>
-              </li>
             </ul>
           </div>
 
           <div>
-            <p className={heading}>{en ? "Other courses" : "Alte cursuri"}</p>
+            <p className={heading}>{en ? "Who it's for" : "Pentru cine"}</p>
             <ul className="flex flex-col gap-0.5">
-              {otherCourses.map((c) => (
+              {audiences.map((c) => (
                 <li key={c.to}>
                   <Link to={c.to} className={item}>
-                    {c.label}
+                    <span>{c.label}</span>
+                    {isKids(c) && (
+                      <span className="shrink-0 rounded-full bg-cream px-2 py-0.5 text-[11px] font-bold text-muted-foreground">
+                        {en ? "Coming soon" : "În curând"}
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}
@@ -132,6 +145,16 @@ const CourseMegaMenu = ({ label, lang, otherCourses, next }: Props) => {
           </div>
 
           <div>
+            <p className={heading}>{en ? "One to one" : "Unu la unu"}</p>
+            <ul className="mb-5 flex flex-col gap-0.5">
+              {privates.map((c) => (
+                <li key={c.to}>
+                  <Link to={c.to} className={item}>
+                    {c.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <p className={heading}>{en ? "Not sure what to pick?" : "Nu știi ce să alegi?"}</p>
             <ul className="flex flex-col gap-0.5">
               <li>
@@ -139,9 +162,6 @@ const CourseMegaMenu = ({ label, lang, otherCourses, next }: Props) => {
               </li>
               <li>
                 <Link to="/test-de-nivel" className={item}>{en ? "Level test (the Yalla game)" : "Test de nivel (jocul Yalla)"}</Link>
-              </li>
-              <li>
-                <Link to="/cursuri" className={cn(item, "font-semibold text-brand-green")}>{en ? "All courses →" : "Toate cursurile →"}</Link>
               </li>
             </ul>
           </div>

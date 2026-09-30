@@ -46,22 +46,21 @@ export const courseMenu = (lang: "ro" | "en"): NavLink[] =>
         // those rather than sending an English reader to a Romanian URL. It is
         // also what gives /en/courses/* their internal links: without them the
         // pages existed only in the sitemap.
+        // The owner's structure: the group course, then who it is for, then
+        // private lessons. The Bucharest and 1-on-1 tutor pages are articles,
+        // so they moved to the resource menu.
         { to: "/en/courses/group", label: "Group course (A1–C2)" },
-        { to: "/en/courses/private", label: "Private lessons" },
-        { to: "/en/courses/children", label: "Kids (6–11)" },
-        { to: "/en/arabic-for-teenagers", label: "Teens (12–17)" },
         { to: "/en/courses/adults", label: "Adults" },
-        { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
-        { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
+        { to: "/en/arabic-for-teenagers", label: "Teens (12–17)" },
+        { to: "/en/courses/children", label: "Kids (6–11)" },
+        { to: "/en/courses/private", label: "Private lessons" },
       ]
     : [
         { to: "/cursuri/grup", label: "Curs de grup (A1–C2)" },
-        { to: "/cursuri/private", label: "Lecții private" },
-        { to: "/cursuri/copii", label: "Copii (6–11)" },
-        { to: "/cursuri-araba-adolescenti", label: "Adolescenți (12–17)" },
         { to: "/cursuri/adulti", label: "Adulți" },
-        { to: "/cursuri-araba-bucuresti", label: "Cursuri în București" },
-        { to: "/meditatii-araba", label: "Meditații 1:1" },
+        { to: "/cursuri-araba-adolescenti", label: "Adolescenți (12–17)" },
+        { to: "/cursuri/copii", label: "Copii (6–11)" },
+        { to: "/cursuri/private", label: "Lecții private" },
       ];
 
 /**
@@ -80,6 +79,8 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
         { to: "/blog/lebanese-arabic-phrases", label: "Essential phrases" },
         { to: "/en/arabic-dialects-guide", label: "Arabic dialects guide" },
         { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
+        { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
+        { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
       ]
     : [
         { to: "/joc", label: "Jocul Yalla" },
@@ -91,6 +92,8 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
         { to: "/ce-araba-sa-inveti", label: "Ce arabă să înveți" },
         { to: "/araba-pentru-partener", label: "Arabă pentru partener" },
         { to: "/araba-in-familie", label: "Arabă în familie" },
+        { to: "/cursuri-araba-bucuresti", label: "Cursuri de arabă în București" },
+        { to: "/meditatii-araba", label: "Meditații arabă 1:1" },
       ];
 
 /** Both menus with their headings — what the footer renders as a site map. */
