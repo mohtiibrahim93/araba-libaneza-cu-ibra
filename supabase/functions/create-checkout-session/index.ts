@@ -34,7 +34,10 @@ serve(async (req) => {
   try {
     const { registrationId, plan, setup, email: callerEmail, sig, booking } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
-      throw new Error("registrationId is required");
+      return new Response(JSON.stringify({ error: "registrationId is required" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
     }
     if (!/^[0-9a-f-]{36}$/i.test(registrationId)) {
       return new Response(JSON.stringify({ error: "Invalid registrationId" }), {
