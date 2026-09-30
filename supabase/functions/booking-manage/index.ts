@@ -25,7 +25,11 @@ async function loadByToken(token: string) {
 }
 
 Deno.serve(async (req) => {
-  const corsHeaders = buildCorsHeaders(req);
+  // PATCH (reschedule) and DELETE (cancel) are not CORS-safelisted methods:
+  // without an explicit Allow-Methods the browser preflight rejects them.
+  const corsHeaders = buildCorsHeaders(req, {
+    "Access-Control-Allow-Methods": "GET, PATCH, DELETE, OPTIONS",
+  });
   const json = (body: unknown, status = 200) => {
     const res = _json(body, status);
     for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
