@@ -19,6 +19,7 @@ import { template as bookingCancelled } from './booking-cancelled.tsx'
 import { template as bookingRescheduled } from './booking-rescheduled.tsx'
 import { template as trialFollowup } from './trial-followup.tsx'
 import { template as adminNewRegistration } from './admin-new-registration.tsx'
+import { template as adminTrialBookingFailed } from './admin-trial-booking-failed.tsx'
 import { template as adminBooking } from './admin-booking.tsx'
 import { template as gdprErasureRequest } from './gdpr-erasure-request.tsx'
 import { template as arabiziCheatSheet } from './arabizi-cheat-sheet.tsx'
@@ -36,6 +37,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'booking-rescheduled': bookingRescheduled,
   'trial-followup': trialFollowup,
   'admin-new-registration': adminNewRegistration,
+  'admin-trial-booking-failed': adminTrialBookingFailed,
   'admin-booking': adminBooking,
   'gdpr-erasure-request': gdprErasureRequest,
   'arabizi-cheat-sheet': arabiziCheatSheet,

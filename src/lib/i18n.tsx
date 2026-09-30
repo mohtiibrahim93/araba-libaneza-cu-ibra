@@ -288,7 +288,9 @@ export const translations = {
     paymentSecure: "Plată securizată · 3D Secure · SSL",
     successNextStepsTitle: "Ce urmează?",
     successStepConfirm: "Îți scriem pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) ca să ne cunoaștem.",
-    successStepPay: "Plata îți confirmă locul. În cel mult 24 de ore primești mesajul de bun venit, cu tot ce îți trebuie.",
+    successStepPay: "Plata este cea care îți confirmă locul.",
+    successStepWelcome: "În cel mult 24 de ore de la plată primești mesajul de bun venit, cu tot ce îți trebuie înainte de prima lecție.",
+    successStepChanges: "Orice modificare o anunțăm din timp. Dacă nu primești niciun anunț, totul decurge exact cum a fost stabilit și plătit.",
     successAgain: "Trimite o cerere nouă",
 
     // Cookie consent
@@ -1085,7 +1087,9 @@ export const translations = {
     paymentSecure: "Secure payment · 3D Secure · SSL",
     successNextStepsTitle: "What's next?",
     successStepConfirm: "We message you on WhatsApp within a few hours (one business day at most) to say hello.",
-    successStepPay: "Paying confirms your place. Within 24 hours you get the welcome message, with everything you need.",
+    successStepPay: "Paying is what confirms your place.",
+    successStepWelcome: "Within 24 hours of your payment you get the welcome message, with everything you need before the first lesson.",
+    successStepChanges: "Any change is announced in advance. If no announcement arrives, everything runs exactly as booked and paid for.",
     successAgain: "Submit another request",
 
     // Cookie consent
