@@ -93,6 +93,16 @@ describe("the trial slot is paid for with a card, not a promise", () => {
     expect(create).toContain("bearer === serviceRoleKey");
   });
 
+  it("tells a human when the booking fails after the card is saved", () => {
+    // The one failure that strands someone: card on file, told their spot is
+    // confirmed, no booking, and nothing else notices — the handler logs
+    // rather than throws, on purpose, so Stripe does not retry the card update.
+    expect(webhook).toContain("admin-trial-booking-failed");
+    expect(webhook).toContain("ADMIN_RECIPIENT");
+    // The alert failing must not take the handler down with it.
+    expect(webhook).toContain("could not send the failure alert");
+  });
+
   it("stops telling a visitor who skipped the card that they have a booking", () => {
     const index = read("src/pages/Index.tsx");
     expect(index).not.toContain("your trial booking still stands");

@@ -2,6 +2,10 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
+
+// Where the owner reads their mail. Same address notify-registration uses.
+const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
 
 serve(async (req) => {
   // Stripe calls this server-to-server (no browser Origin), so CORS is not
@@ -146,13 +150,34 @@ serve(async (req) => {
               });
               if (res && res.ok) {
                 console.log(`Registration ${registrationId}: trial booked for ${startAt} after card save`);
-              } else if (res) {
+              } else {
                 // Never throw: Stripe would retry the whole event and the card
-                // update above would run again. The card is saved either way,
-                // and a failure here is visible in the logs with the slot in it.
-                console.error(
-                  `Registration ${registrationId}: booking-create returned ${res.status}`,
-                  await res.text().catch(() => ""),
+                // update above would run again. The card is saved either way.
+                const detail = res
+                  ? `${res.status} ${await res.text().catch(() => "")}`.slice(0, 300)
+                  : "booking-create could not be reached";
+                console.error(`Registration ${registrationId}: booking-create failed — ${detail}`);
+
+                // This is the one failure that strands a person: the card is on
+                // file and they have been told their spot is confirmed, but no
+                // booking exists and nothing else will notice. Mail it to the
+                // owner with everything needed to create it by hand, because
+                // the booking that would have held them is not there to look up.
+                await sendTemplateEmail("admin-trial-booking-failed", ADMIN_RECIPIENT, {
+                  templateData: {
+                    name: trialRow.name,
+                    email: trialRow.email,
+                    phone: trialRow.phone,
+                    startAt,
+                    format: session.metadata?.booking_format || "online",
+                    registrationId,
+                    reason: detail,
+                  },
+                  idempotencyKey: `trial-booking-failed-${registrationId}`,
+                }).catch((e) =>
+                  // A failed alert must not take the handler down with it; the
+                  // log line above is still the backstop.
+                  console.error(`Registration ${registrationId}: could not send the failure alert`, e),
                 );
               }
             }

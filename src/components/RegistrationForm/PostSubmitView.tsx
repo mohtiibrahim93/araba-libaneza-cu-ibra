@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft, ArrowRight } from "lucide-react";
+import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft, ArrowRight, Mail, CalendarCheck } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
@@ -93,6 +93,34 @@ const PostSubmitView = ({
                     {t.successStepPay}
                   </span>
                 </li>
+              )}
+              {/* What happens after paying. The screen used to stop at "pay now"
+                  and the rest of the process lived only in the confirmation
+                  email, so the moment someone is deciding whether to pay is
+                  exactly the moment they could not see what they get for it.
+                  The last line is the one nobody can infer: silence means the
+                  course runs as booked, not that something has gone wrong. */}
+              {showPayment && (
+                <>
+                  <li className="flex items-start gap-3 text-sm text-foreground">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-xs font-semibold flex items-center justify-center text-foreground">
+                      3
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      {t.successStepWelcome}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-foreground">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-xs font-semibold flex items-center justify-center text-foreground">
+                      4
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <CalendarCheck className="w-4 h-4 text-muted-foreground" />
+                      {t.successStepChanges}
+                    </span>
+                  </li>
+                </>
               )}
               {showPrivateChoice && (
                 <li className="flex items-start gap-3 text-sm text-foreground">
