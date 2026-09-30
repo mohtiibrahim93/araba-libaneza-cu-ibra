@@ -224,6 +224,15 @@ const NativeScheduler = ({
   } | null>(null);
   // Trial-only: the server rejects a second free trial for the same email.
   const [trialUsed, setTrialUsed] = useState(false);
+  // Paid lessons: every lesson the registration bought is already booked.
+  const [lessonsUsedUp, setLessonsUsedUp] = useState(false);
+  // Purchase: the embedded Stripe payment, once its intent is ready.
+  const [embeddedPay, setEmbeddedPay] = useState<{
+    clientSecret: string;
+    stripe: Promise<StripeJs | null>;
+    amount: number;
+    currency: string;
+  } | null>(null);
   // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
   // The registration this booking ended up attached to. On /trial the row is
   // created at confirm time, so without keeping it here the card-confirmation
@@ -354,21 +363,24 @@ const NativeScheduler = ({
     return () => window.clearInterval(interval);
   }, [loadAvailability]);
 
-  // Purchase only: straight to Stripe with the chosen slot.
-  const handlePay = async () => {
+  const purchaseBooking = () => ({
+    event_type: eventType,
+    start_at: selectedSlot,
+    format,
+    language: lang,
+    weekly: weekly && (purchase?.quantity ?? 1) > 1,
+  });
+
+  // Fallback: Stripe's hosted page with the chosen slot (when Stripe.js
+  // cannot load in this browser — the same rule /checkout follows).
+  const openHostedCheckout = async () => {
     if (!selectedSlot || !purchase || !registrationId) return;
     setSubmitting(true);
     const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
       body: {
         registrationId,
         email: purchase.email,
-        booking: {
-          event_type: eventType,
-          start_at: selectedSlot,
-          format,
-          language: lang,
-          weekly: weekly && purchase.quantity > 1,
-        },
+        booking: purchaseBooking(),
       },
     });
     if (fnError || !data?.url) {
@@ -383,6 +395,47 @@ const NativeScheduler = ({
     }
     window.location.href = data.url;
   };
+
+  // Purchase: pay inside the site (Stripe Elements). The PaymentIntent carries
+  // the slot; the webhook books it once the payment clears.
+  const handlePay = async () => {
+    if (!selectedSlot || !purchase || !registrationId) return;
+    setSubmitting(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("create-payment-intent", {
+        body: {
+          courseType: "private",
+          email: purchase.email,
+          name: prefill?.name,
+          registrationId,
+          booking: purchaseBooking(),
+        },
+      });
+      if (fnError || !data?.clientSecret || !data?.publishableKey || !(data.amount > 0)) {
+        throw new Error("payment intent unavailable");
+      }
+      const stripe = await Promise.race<StripeJs | null>([
+        loadStripe(data.publishableKey).catch(() => null),
+        new Promise<null>((r) => window.setTimeout(() => r(null), 6000)),
+      ]);
+      if (!stripe) throw new Error("stripe.js unavailable");
+      setEmbeddedPay({
+        clientSecret: data.clientSecret,
+        stripe: Promise.resolve(stripe),
+        amount: data.amount,
+        currency: data.currency ?? "ron",
+      });
+      setSubmitting(false);
+    } catch (e) {
+      console.warn("[scheduler] embedded payment unavailable, using hosted checkout", e);
+      await openHostedCheckout();
+    }
+  };
+
+  // A changed choice needs a fresh intent (its metadata holds the slot).
+  useEffect(() => {
+    setEmbeddedPay(null);
+  }, [weekly, selectedSlot]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
