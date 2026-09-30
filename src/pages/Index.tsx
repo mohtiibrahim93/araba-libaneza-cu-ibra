@@ -6,9 +6,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SocialProofStrip from "@/components/SocialProofStrip";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
-import StepsSection from "@/components/StepsSection";
 import WhySection from "@/components/WhySection";
-import CulturalValueSection from "@/components/CulturalValueSection";
 import ResourcesTeaser from "@/components/ResourcesTeaser";
 import YallaGameBand from "@/components/YallaGameBand";
 import InstructorSection from "@/components/InstructorSection";
@@ -234,20 +232,19 @@ const PageContent = () => {
           <ActiveCoursesBanner />
         </Suspense>
         <SocialProofStrip />
-        {/* Order agreed with the owner: who Ibra is, how you learn, the
-            price, then proof, resources, questions and contact. */}
+        {/* Order agreed with the owner: who Ibra is, why learn with him,
+            Arabizi in practice, reviews, how to start (courses, quiz, game),
+            questions, resources and contact. */}
         <InstructorSection />
-        <ArabiziShowcase />
-        <StepsSection />
         <WhySection />
-        <CulturalValueSection />
+        <ArabiziShowcase />
+        <TestimonialsSection />
         <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
           <ProgramsSection />
         </Suspense>
         <YallaGameBand />
-        <TestimonialsSection />
-        <ResourcesTeaser />
         <FAQSection />
+        <ResourcesTeaser />
         <CTASection />
       </main>
       <Footer />
