@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home, CreditCard, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
+import { isValidPhone } from "@/components/RegistrationForm/LeadFields";
 import { toast } from "sonner";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { buildIcs, downloadIcs } from "@/lib/ics";
@@ -266,6 +267,14 @@ const NativeScheduler = ({
       toast.error(t.schedulerNameRequired);
       return;
     }
+    // The phone number is not optional here either. A free trial that nobody
+    // turns up to costs a real slot, and the phone is the only channel that
+    // reliably reaches someone before the lesson — the placeholder used to say
+    // "optional" and nothing validated it, so trials arrived with no number.
+    if (!isValidPhone(phone)) {
+      toast.error(t.validPhoneError);
+      return;
+    }
     if (!gdpr) {
       toast.error(t.bookingGdprRequired);
       return;
@@ -293,7 +302,7 @@ const NativeScheduler = ({
           format,
           student_name: name.trim(),
           student_email: email.trim(),
-          student_phone: phone.trim() || undefined,
+          student_phone: phone.trim(),
           notes: notes.trim() || undefined,
           language: lang,
           gdpr_consent: true,

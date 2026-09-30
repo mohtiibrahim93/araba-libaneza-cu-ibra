@@ -57,8 +57,11 @@ const COPY = {
     h1: "Play and learn Lebanese Arabic",
     intro:
       "Over 4,300 expressions from the course materials. You practise with cards, exercises and matching, and whatever you get wrong comes back for review.",
-    langNote:
-      "The game itself is in Romanian — its meanings are written in Romanian only, and there is no English version of the card bank.",
+    // The game was Romanian-only and this said so. The card bank, the drills
+    // and their options, the lesson notes and the level test all follow the
+    // site language now, so the warning was turning English readers away from
+    // something built for them.
+    langNote: null as string | null,
     howH2: "How it works",
     howP:
       "A round is 20 expressions. New ones, ones you got wrong, and ones due for review are separate actions, so you always know what you are practising. After each correct answer an expression returns in 1, 3, 7, 14 and then 30 days — the intervals grow only when you have actually retained it, not because you answered quickly.",

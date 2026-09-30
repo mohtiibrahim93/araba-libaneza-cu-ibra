@@ -39,11 +39,11 @@ const TITLES: Record<NonNullable<YallaGameProps["mode"]>, string> = {
 
 const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
   // The frame follows the language the visitor is reading the site in:
-  // public/yalla/i18n.js reads ?lang= and switches the game's interface.
-  // Card meanings stay Romanian until the drafted English glosses have been
-  // through teacher review, so an English player gets English chrome over a
-  // Romanian deck — which is what the "in Romanian" note on the CTAs still
-  // warns about. Remove that note when the deck itself is bilingual.
+  // public/yalla/i18n.js reads ?lang= and switches the game's interface, and
+  // deck-language.js switches the content — card meanings, drills and their
+  // options, lesson notes, topics and the level test. The deck is bilingual, so
+  // the "in Romanian" warnings this comment used to point at are gone from the
+  // CTAs; game-english-coverage.test.ts is what keeps it that way.
   const src = `/yalla/index.html?view=${mode}&lang=${lang}`;
   const c = COPY[lang];
 

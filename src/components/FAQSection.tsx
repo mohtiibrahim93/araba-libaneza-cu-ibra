@@ -41,7 +41,11 @@ const FAQSection = () => {
           <script type="application/ld+json">{JSON.stringify(faqJsonLd(featured))}</script>
         </Helmet>
       )}
-      <div className="max-w-6xl mx-auto">
+      {/* max-w-content, like every other section. This was max-w-6xl, which
+          held the three-column FAQ grid to 1152px while the sections above and
+          below it ran the full 1728px — the answers wrapped into narrow
+          columns for no reason. */}
+      <div className="max-w-content mx-auto">
         <div className="text-center mb-12">
           <span className="text-sm font-medium text-primary mb-2 block">{t.faqBadge}</span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">

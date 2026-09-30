@@ -1,11 +1,14 @@
 import * as React from 'npm:react@19.3.0'
 import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@1.0.12'
 import type { TemplateEntry } from './registry.ts'
+import { emailLanguage, translator } from './language.ts'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
 const SITE_TAGLINE = 'Centrul de Arabă Libaneză'
 
 interface PrivateRegistrationConfirmationProps {
+  /** The language the visitor read the site in; Romanian when absent. */
+  language?: string
   name?: string
   format?: string
   message?: string
@@ -15,64 +18,72 @@ interface PrivateRegistrationConfirmationProps {
   manageUrl?: string
 }
 
-const formatLabels: Record<string, string> = { fizic: 'fizic, în București', online: 'online' }
+const formatLabels: Record<string, Record<string, string>> = {
+  ro: { fizic: 'fizic, în București', online: 'online' },
+  en: { fizic: 'in person, in Bucharest', online: 'online' },
+}
 
-const PrivateRegistrationConfirmationEmail = ({ name, format, message, statusUrl, senderName, zoomLink, manageUrl }: PrivateRegistrationConfirmationProps) => (
-  <Html lang="ro" dir="ltr">
+const PrivateRegistrationConfirmationEmail = ({ language, name, format, message, statusUrl, senderName, zoomLink, manageUrl }: PrivateRegistrationConfirmationProps) => {
+  const lang = emailLanguage(language)
+  const t = translator(lang)
+  return (
+  <Html lang={lang} dir="ltr">
     <Head />
-    <Preview>Am primit cererea ta pentru lecții private.</Preview>
+    <Preview>{t('Am primit cererea ta pentru lecții private.', 'We have received your private lessons request.')}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
           <Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text>
           <Text style={tagline}>{SITE_TAGLINE}</Text>
         </Section>
-        <Heading style={h1}>{name ? `Mulțumim, ${name}!` : 'Mulțumim!'}</Heading>
-        <Text style={text}>Am primit cererea ta pentru lecții private individuale de arabă libaneză.</Text>
+        <Heading style={h1}>{name ? t(`Mulțumim, ${name}!`, `Thank you, ${name}!`) : t('Mulțumim!', 'Thank you!')}</Heading>
+        <Text style={text}>{t('Am primit cererea ta pentru lecții private individuale de arabă libaneză.', 'We have received your request for one-to-one Lebanese Arabic lessons.')}</Text>
         <Section style={detailsBox}>
-          <Text style={infoTitle}>📚 Detaliile cursului</Text>
-          <Text style={infoText}><strong>Tip:</strong> Lecții private (1:1)</Text>
-          {format && <Text style={infoText}>Format preferat: {formatLabels[format] || format}</Text>}
-          <Text style={infoText}><strong>Durată sesiune:</strong> 90 minute</Text>
-          <Text style={infoText}><strong>Program:</strong> flexibil, stabilit împreună</Text>
-          {message && <Text style={infoText}>Mesaj: {message}</Text>}
-          {statusUrl && <Text style={infoText}>Status cerere: <Link href={statusUrl} style={link}>vezi stadiul aici</Link></Text>}
+          <Text style={infoTitle}>📚 {t('Detaliile cursului', 'Lesson details')}</Text>
+          <Text style={infoText}><strong>{t('Tip:', 'Type:')}</strong> {t('Lecții private (1:1)', 'Private lessons (1:1)')}</Text>
+          {format && <Text style={infoText}>{t('Format preferat:', 'Preferred format:')} {formatLabels[lang][format] || format}</Text>}
+          <Text style={infoText}><strong>{t('Durată sesiune:', 'Session length:')}</strong> {t('90 minute', '90 minutes')}</Text>
+          <Text style={infoText}><strong>{t('Program:', 'Schedule:')}</strong> {t('flexibil, stabilit împreună', 'flexible, agreed together')}</Text>
+          {message && <Text style={infoText}>{t('Mesaj:', 'Message:')} {message}</Text>}
+          {statusUrl && <Text style={infoText}>{t('Status cerere:', 'Request status:')} <Link href={statusUrl} style={link}>{t('vezi stadiul aici', 'check it here')}</Link></Text>}
         </Section>
 
         {zoomLink && format === 'online' && (
           <Section style={zoomBox}>
-            <Text style={infoTitle}>🎥 Link Zoom</Text>
+            <Text style={infoTitle}>🎥 {t('Link Zoom', 'Zoom link')}</Text>
             <Text style={infoText}><Link href={zoomLink} style={link}>{zoomLink}</Link></Text>
-            <Text style={infoTextSmall}>Salvează acest link pentru sesiunile online.</Text>
+            <Text style={infoTextSmall}>{t('Salvează acest link pentru sesiunile online.', 'Save this link for your online sessions.')}</Text>
           </Section>
         )}
 
         <Section style={infoBox}>
-          <Text style={infoTitle}>✅ Următorii pași</Text>
-          <Text style={checkItem}>1. Te contactăm pe WhatsApp pentru obiective și disponibilitate</Text>
-          <Text style={checkItem}>2. Stabilim împreună programul</Text>
-          <Text style={checkItem}>3. Confirmi plata pentru prima sesiune</Text>
-          <Text style={checkItem}>4. Începem prima lecție 🎉</Text>
+          <Text style={infoTitle}>✅ {t('Următorii pași', 'Next steps')}</Text>
+          <Text style={checkItem}>{t('1. Te contactăm pe WhatsApp pentru obiective și disponibilitate', '1. We contact you on WhatsApp about your goals and availability')}</Text>
+          <Text style={checkItem}>{t('2. Stabilim împreună programul', '2. We agree the schedule together')}</Text>
+          <Text style={checkItem}>{t('3. Confirmi plata pentru prima sesiune', '3. You confirm payment for the first session')}</Text>
+          <Text style={checkItem}>{t('4. Începem prima lecție 🎉', '4. We start your first lesson 🎉')}</Text>
         </Section>
 
         <Section style={ctaSection}>
-          <Button style={button} href={statusUrl || 'https://wa.me/40763124514'}>{statusUrl ? 'Vezi statusul cererii' : 'Contactează-ne pe WhatsApp'}</Button>
+          <Button style={button} href={statusUrl || 'https://wa.me/40763124514'}>{statusUrl ? t('Vezi statusul cererii', 'Check your request status') : t('Contactează-ne pe WhatsApp', 'Message us on WhatsApp')}</Button>
           {manageUrl && (
-            <Text style={textSmall}>⚙️ <Link href={manageUrl} style={link}>Gestionează înscrierea</Link></Text>
+            <Text style={textSmall}>⚙️ <Link href={manageUrl} style={link}>{t('Gestionează înscrierea', 'Manage your registration')}</Link></Text>
           )}
         </Section>
         <Hr style={hr} />
         <Section style={footerBrand}><Text style={footerLogo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{senderName || SITE_NAME}</Text></Section>
-        <Text style={footer}>Cu drag, echipa noastră</Text>
-        <Text style={footerSmall}>📍 București, România · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
+        <Text style={footer}>{t('Cu drag, echipa noastră', 'Warmly, our team')}</Text>
+        <Text style={footerSmall}>📍 {t('București, România', 'Bucharest, Romania')} · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
       </Container>
     </Body>
   </Html>
-)
+  )
+}
 
 export const template = {
   component: PrivateRegistrationConfirmationEmail,
-  subject: 'Confirmare cerere lecții private',
+  subject: (data: Record<string, unknown>) =>
+    emailLanguage(data?.language) === 'en' ? 'Private lessons request confirmed' : 'Confirmare cerere lecții private',
   displayName: 'Confirmare lecții private',
   previewData: { name: 'Maria Popescu', format: 'online', message: 'Prefer seara, după ora 18:00.', statusUrl: 'https://example.com/private-status/exemplu', zoomLink: 'https://us02web.zoom.us/j/1234567890' },
 } satisfies TemplateEntry

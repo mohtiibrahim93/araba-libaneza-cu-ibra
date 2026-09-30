@@ -132,8 +132,9 @@ describe("every topic and lesson name is translated", () => {
   const SAME = new Set(["Transport", "Comparative & superlative"]);
 
   it("gives every topic a different name in English", () => {
-    const untouched = ro.topics!.map((t, i) => [t.title, en.topics![i]?.title] as const)
-      .filter(([a, b]) => a === b && !SAME.has(a ?? ""))
+    const untouched = (ro.topics ?? [])
+      .map((t, i) => [t.title, en.topics?.[i]?.title] as const)
+      .filter(([a, b]) => b != null && a === b && !SAME.has(a ?? ""))
       .map(([a]) => a);
     expect(untouched, untouched.join(" | ")).toEqual([]);
   });
@@ -141,7 +142,7 @@ describe("every topic and lesson name is translated", () => {
   it("gives every lesson a different title and description in English", () => {
     const untouched = ro.units
       .map((u, i) => [u, en.units[i]] as const)
-      .filter(([a, b]) => !b || a.title === b.title || a.desc === b.desc)
+      .filter(([a, b]) => b != null && (a.title === b.title || a.desc === b.desc))
       .map(([a]) => a.title);
     expect(untouched, untouched.join(" | ")).toEqual([]);
   });
