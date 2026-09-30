@@ -22,6 +22,13 @@ interface CreateBody {
   language?: "ro" | "en";
   gdpr_consent?: boolean;
   registration_id: string;
+  /**
+   * Internal callers only: skip the student and admin emails. The webhook sets
+   * it on lessons 2..N of a weekly private series, whose first lesson's email
+   * already describes the series — ten confirmations for one purchase would
+   * bury the one that matters.
+   */
+  quiet?: boolean;
 }
 
 const fmtLocal = fmtBookingLocal;
@@ -95,7 +102,7 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id")
+      .select("id, payment_status")
       .eq("id", body.registration_id)
       .maybeSingle();
     if (!reg) return json({ error: "registration not found" }, 404);
@@ -107,6 +114,16 @@ Deno.serve(async (req) => {
       .eq("is_active", true)
       .maybeSingle();
     if (!et) return json({ error: "event type not found" }, 404);
+
+    // A paid lesson is booked only once it is paid. This endpoint is public,
+    // and it used to accept any registration id for any event type — so a
+    // "paid" slot could be taken with nothing paid at all. New private
+    // purchases are booked by stripe-webhook (an internal call) after the
+    // payment clears; a returning student who has already paid books the rest
+    // of their lessons here.
+    if (et.slug !== "trial" && !internalCall && reg.payment_status !== "paid") {
+      return json({ error: "payment required", code: "payment_required" }, 402);
+    }
 
     // The free trial is for first contact only: one per person. A cancelled
     // trial can be rebooked, but a kept (confirmed/completed) one blocks a
@@ -140,7 +157,9 @@ Deno.serve(async (req) => {
     if (startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
       return json({ error: "slot too soon" }, 409);
     }
-    if (startMs > now + (et.max_advance_days ?? 30) * 86_400_000) {
+    // The weekly private series books every lesson of the package at once, so
+    // its later weeks run past the 30-day window. Only the webhook can do that.
+    if (!internalCall && startMs > now + (et.max_advance_days ?? 30) * 86_400_000) {
       return json({ error: "slot too far in advance" }, 409);
     }
 
@@ -272,8 +291,10 @@ Deno.serve(async (req) => {
       })
       .eq("id", inserted.id);
 
+    const quiet = internalCall && body.quiet === true;
+
     // Send confirmation email (best-effort, async)
-    sendBookingEmail(
+    if (!quiet) sendBookingEmail(
       "booking-confirmation",
       body.student_email,
       {
@@ -289,7 +310,7 @@ Deno.serve(async (req) => {
     );
 
     // Admin notification (best-effort)
-    sendAdminBookingEmail(
+    if (!quiet) sendAdminBookingEmail(
       "new",
       {
         eventName: et.name_ro,

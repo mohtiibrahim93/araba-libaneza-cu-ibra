@@ -3,6 +3,7 @@ import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { privateLessonStarts } from "../_shared/private-series.ts";
 
 // Where the owner reads their mail. Same address notify-registration uses.
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
@@ -251,7 +252,7 @@ serve(async (req) => {
             ...(monthsPaid ? { months_paid: monthsPaid } : {}),
           })
           .eq(matchColumn, matchValue)
-          .select("id, email, name, form_type")
+          .select("id, email, name, phone, language, form_type")
           .maybeSingle();
 
         if (updateError) {
@@ -263,6 +264,95 @@ serve(async (req) => {
           console.warn(`No registration found for ${matchColumn}=${matchValue}`);
         } else {
           console.log(`Registration ${updated.id} marked as paid`);
+        }
+
+        // Private lessons: the day and time were picked before paying, and are
+        // booked only now that the payment has cleared — the same rule as the
+        // trial's card, for the same reason: a slot held for someone who left
+        // on Stripe's page is a lesson nobody else could take.
+        if (updated && session.metadata?.course_type === "private") {
+          const starts = privateLessonStarts({
+            booking_start_at: session.metadata?.booking_start_at,
+            booking_weekly: session.metadata?.booking_weekly,
+            quantity: session.metadata?.quantity,
+          });
+          const format = session.metadata?.booking_format || "online";
+          const language = session.metadata?.booking_language || updated.language || "ro";
+          const seriesNote =
+            starts.length > 1
+              ? `Serie săptămânală: ${starts.length} lecții, aceeași zi și oră.`
+              : null;
+          // All at once rather than one after another: a 20-lesson series booked
+          // in sequence could outlast Stripe's wait for this response, and a
+          // redelivered event is skipped by the log above — the late weeks
+          // would silently never be booked.
+          const bookOne = async (startAt: string, i: number): Promise<string | null> => {
+            const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+              },
+              body: JSON.stringify({
+                registration_id: updated.id,
+                event_type: session.metadata?.booking_event_type || "paid",
+                start_at: startAt,
+                format,
+                student_name: updated.name,
+                student_email: updated.email,
+                student_phone: updated.phone || undefined,
+                notes: [seriesNote, session.metadata?.booking_notes].filter(Boolean).join(" ") || undefined,
+                language,
+                gdpr_consent: true,
+                // One confirmation for the purchase, not one per week.
+                quiet: i > 0,
+              }),
+            }).catch((e) => {
+              console.error(`Registration ${updated.id}: booking-create call failed`, e);
+              return null;
+            });
+            if (res && res.ok) return null;
+            const detail = res
+              ? `${res.status} ${await res.text().catch(() => "")}`.slice(0, 200)
+              : "booking-create could not be reached";
+            // A redelivered event finds its own booking already there; that is
+            // not a failure worth an alarm.
+            if (res?.status === 409 && detail.includes("conflict")) {
+              const { data: own } = await supabase
+                .from("bookings")
+                .select("id")
+                .eq("registration_id", updated.id)
+                .eq("start_at", new Date(startAt).toISOString())
+                .eq("status", "confirmed")
+                .maybeSingle();
+              if (own) return null;
+            }
+            return `${startAt} — ${detail}`;
+          };
+          const failed = (await Promise.all(starts.map((iso, i) => bookOne(iso, i)))).filter(
+            (f): f is string => f !== null,
+          );
+          if (failed.length > 0) {
+            // Paid, told it is confirmed, and one or more lessons are not in the
+            // calendar. Never throw (Stripe would redo the payment update);
+            // tell the owner, with what is needed to book them by hand.
+            console.error(`Registration ${updated.id}: ${failed.length} private lesson(s) not booked`);
+            await sendTemplateEmail("admin-trial-booking-failed", ADMIN_RECIPIENT, {
+              templateData: {
+                kind: "private",
+                name: updated.name,
+                email: updated.email,
+                phone: updated.phone,
+                startAt: failed.map((f) => f.split(" — ")[0]).join(", "),
+                format,
+                registrationId: updated.id,
+                reason: failed.join(" | ").slice(0, 900),
+              },
+              idempotencyKey: `private-booking-failed-${updated.id}`,
+            }).catch((e) =>
+              console.error(`Registration ${updated.id}: could not send the failure alert`, e),
+            );
+          }
         }
         break;
       }

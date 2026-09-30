@@ -1,12 +1,15 @@
 import CourseLayout from "@/components/course/CourseLayout";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import { useI18n } from "@/lib/i18n";
+import { useSearchParams } from "@/lib/router-compat";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
 import privateImg from "@/assets/private-course.jpg";
 import { courseInstances, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
 
 const CursPrivate = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const [params] = useSearchParams();
+  const cancelled = params.get("plata") === "anulata";
   const online = ONLINE_PRICES.privateLesson;
   const fizic = physicalPrice(online);
 
@@ -78,6 +81,14 @@ const CursPrivate = () => {
       <section id="register" className="scroll-mt-24 mt-section">
         <h2 className="font-display text-display-md font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
         <p className="text-base text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
+        {/* Back from Stripe without paying: say plainly that nothing was booked. */}
+        {cancelled && (
+          <p role="status" className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+            {lang === "en"
+              ? "The payment was cancelled, so nothing was booked. You can pick a time and pay again below."
+              : "Plata a fost anulată, așa că nu s-a rezervat nimic. Poți alege din nou ora și plăti mai jos."}
+          </p>
+        )}
         <div className="rounded-3xl border border-[#E7E1D6] bg-card p-4 sm:p-8 dark:border-border">
           <RegistrationFormSection defaultCourseType="private" lockSelection embedded />
         </div>

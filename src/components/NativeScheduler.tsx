@@ -13,7 +13,7 @@ import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
-import { ONLINE_PRICES, formatLei, priceFor } from "@/lib/pricing";
+import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -65,6 +65,14 @@ interface Props {
     email: string;
     phone: string;
   }) => Promise<string | null>;
+  /**
+   * A new private-lesson purchase (with `registrationId` from the form). The
+   * details are already collected, so the confirm step only asks how to book:
+   * the first lesson, or the same day and time every week for the whole
+   * package — and then goes to Stripe. Nothing is booked here: stripe-webhook
+   * books the lesson(s) once the payment clears.
+   */
+  purchase?: { quantity: number; email: string; format: Format };
 }
 
 interface AvailabilityResp {
@@ -125,6 +133,7 @@ const NativeScheduler = ({
   ensureRegistration,
   currentSlotIso,
   registrationId,
+  purchase,
 }: Props) => {
   const { t, lang } = useI18n();
   const showLocalTz = useShowLocalTz();
@@ -203,7 +212,9 @@ const NativeScheduler = ({
   const [name, setName] = useState(prefill?.name ?? "");
   const [email, setEmail] = useState(prefill?.email ?? "");
   const [phone, setPhone] = useState(prefill?.phone ?? "");
-  const [format, setFormat] = useState<Format>(defaultFormat);
+  const [format, setFormat] = useState<Format>(purchase?.format ?? defaultFormat);
+  // Purchase only: book the first lesson, or the same slot every week.
+  const [weekly, setWeekly] = useState(false);
   const [notes, setNotes] = useState("");
   const [gdpr, setGdpr] = useState(false);
 
@@ -273,6 +284,36 @@ const NativeScheduler = ({
     }, 30_000);
     return () => window.clearInterval(interval);
   }, [loadAvailability]);
+
+  // Purchase only: straight to Stripe with the chosen slot.
+  const handlePay = async () => {
+    if (!selectedSlot || !purchase || !registrationId) return;
+    setSubmitting(true);
+    const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
+      body: {
+        registrationId,
+        email: purchase.email,
+        booking: {
+          event_type: eventType,
+          start_at: selectedSlot,
+          format,
+          language: lang,
+          weekly: weekly && purchase.quantity > 1,
+        },
+      },
+    });
+    if (fnError || !data?.url) {
+      console.error("[scheduler] could not open the payment page", fnError);
+      toast.error(
+        lang === "ro"
+          ? "Nu am putut deschide pagina de plată. Nimic nu a fost rezervat — încearcă din nou."
+          : "Could not open the payment page. Nothing was booked — please try again.",
+      );
+      setSubmitting(false);
+      return;
+    }
+    window.location.href = data.url;
+  };
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
@@ -385,6 +426,13 @@ const NativeScheduler = ({
           setTrialUsed(true);
           return;
         }
+        if (errPayload?.code === "payment_required") {
+          throw new Error(
+            lang === "ro"
+              ? "Lecția se poate programa după plată. Rezervă lecțiile din pagina lecțiilor private."
+              : "The lesson can be booked once it is paid. Book your lessons from the private lessons page.",
+          );
+        }
         throw new Error(errPayload?.error ?? t.schedulerBookingFailed);
       }
       const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; end_at?: string; code?: string; error?: string };
@@ -429,9 +477,8 @@ const NativeScheduler = ({
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">
-            <Link
-              to={`/booking?type=paid${effectiveRegistrationId ? `&registration_id=${encodeURIComponent(effectiveRegistrationId)}` : ""}`}
-            >
+            {/* The private-lessons form: details, day and time, then payment. */}
+            <Link to="/cursuri/private#register">
               <Calendar className="w-4 h-4 mr-2" />
               {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
             </Link>
@@ -572,41 +619,9 @@ const NativeScheduler = ({
             The card now comes first, before anything is reserved, so by the
             time a trial exists it already has one. */}
 
-        {/* Paid private lesson: the slot is held, payment is the final step.
-            Sends the visitor to the existing Stripe checkout page. */}
-        {eventType === "paid" && (
-          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
-            <div className="flex items-start gap-2">
-              <CreditCard className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  {lang === "ro"
-                    ? `Ultimul pas: plătește lecția — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`
-                    : `Last step: pay for the lesson — ${formatLei(priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online"))} lei`}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {lang === "ro"
-                    ? "Intervalul tău este rezervat. Plata se face securizat prin Stripe (card, Apple Pay sau Google Pay) și îți confirmă definitiv lecția."
-                    : "Your time slot is reserved. Payment is handled securely by Stripe (card, Apple Pay or Google Pay) and confirms the lesson for good."}
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  {lang === "ro"
-                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție."
-                    : "Cancelling or rescheduling is free at least 24 hours before the lesson."}
-                </p>
-              </div>
-            </div>
-            <Button asChild className="w-full">
-              <Link
-                to={`/checkout?courseType=private${effectiveRegistrationId ? `&registrationId=${encodeURIComponent(effectiveRegistrationId)}` : ""}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
-              >
-                <CreditCard className="w-4 h-4 mr-2" />
-                {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}
-              </Link>
-            </Button>
-          </div>
-        )}
-
+        {/* No payment step here any more: a paid lesson can only be booked
+            once it is paid (booking-create refuses otherwise), so whoever
+            reaches this screen has already paid. */}
 
         <div className="flex flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={handleIcs} className="flex-1">
@@ -671,6 +686,107 @@ const NativeScheduler = ({
           <MessageCircle className="w-4 h-4" />
           WhatsApp
         </a>
+      </div>
+    );
+  }
+
+  // Purchase: how to book, the total, and the way to Stripe.
+  if (selectedSlot && mode === "create" && purchase) {
+    const qty = Math.max(1, purchase.quantity);
+    const unit = priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online");
+    const total = Math.round(unit * qty * (1 - privateDiscountFor(qty)));
+    const when = fmtFullLocal(selectedSlot, lang);
+    const choices: { id: boolean; title: string; text: string }[] = [
+      {
+        id: false,
+        title: lang === "ro" ? "Doar prima lecție" : "Only the first lesson",
+        text:
+          lang === "ro"
+            ? qty > 1
+              ? "Celelalte lecții le programezi după plată, din pagina de confirmare, sau împreună cu Ibra."
+              : "Lecția ta, la ora aleasă."
+            : qty > 1
+              ? "You book the other lessons after paying, from the confirmation page, or together with Ibra."
+              : "Your lesson, at the time you picked.",
+      },
+      ...(qty > 1
+        ? [
+            {
+              id: true,
+              title:
+                lang === "ro"
+                  ? `Aceeași zi și oră, în fiecare săptămână (${qty} lecții)`
+                  : `Same day and time, every week (${qty} lessons)`,
+              text:
+                lang === "ro"
+                  ? "Toate lecțiile pachetului se programează acum, câte una pe săptămână."
+                  : "Every lesson in the package is booked now, one a week.",
+            },
+          ]
+        : []),
+    ];
+    return (
+      <div className="rounded-2xl border border-[#E7E1D6] bg-card p-5 sm:p-6 space-y-5 dark:border-border">
+        <button
+          onClick={() => setSelectedSlot(null)}
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-4 h-4" /> {t.schedulerBackToSlots}
+        </button>
+        <div className="rounded-xl bg-brand-green/5 border border-brand-green/20 px-4 py-3">
+          <span className="font-semibold text-foreground">{when}</span>
+          <span className="text-muted-foreground"> · {data.event_type.duration_min} min</span>
+          {showLocalTz && localTz !== TZ && (
+            <div className="mt-1 text-xs text-muted-foreground">
+              {t.tzYourTime} ({localTzLabel}): <span className="font-medium text-foreground">{fmtFullInTz(selectedSlot, lang, localTz)}</span>
+            </div>
+          )}
+        </div>
+        <fieldset className="space-y-2">
+          <legend className="mb-2 text-sm font-semibold text-foreground">
+            {lang === "ro" ? "Cum programăm?" : "How should we book?"}
+          </legend>
+          {choices.map((c) => (
+            <label
+              key={String(c.id)}
+              className={cn(
+                "flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors",
+                weekly === c.id ? "border-brand-green bg-brand-green/5" : "border-border hover:border-brand-green/50",
+              )}
+            >
+              <input
+                type="radio"
+                name="booking-plan"
+                checked={weekly === c.id}
+                onChange={() => setWeekly(c.id)}
+                className="mt-1 accent-[hsl(var(--brand-green))]"
+              />
+              <span>
+                <span className="block font-semibold text-foreground">{c.title}</span>
+                <span className="block text-sm text-muted-foreground">{c.text}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+        <div className="flex items-baseline justify-between border-t border-border pt-4">
+          <span className="text-sm text-muted-foreground">
+            {qty} × {formatLei(unit)} lei{privateDiscountFor(qty) > 0 ? ` · −${Math.round(privateDiscountFor(qty) * 100)}%` : ""}
+          </span>
+          <span className="font-display text-2xl font-bold text-foreground">{formatLei(total)} lei</span>
+        </div>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          {lang === "ro"
+            ? "Lecția se confirmă după plată: primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte. Dacă nu finalizezi plata, nu se rezervă nimic. Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte."
+            : "The lesson is confirmed once paid: you get a confirmation email, and Ibra writes to introduce himself. If you don't complete the payment, nothing is booked. Cancelling or rescheduling is free at least 24 hours ahead."}
+        </p>
+        <button
+          onClick={handlePay}
+          disabled={submitting}
+          className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+        >
+          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+          {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
+        </button>
       </div>
     );
   }

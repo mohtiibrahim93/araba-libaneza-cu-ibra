@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import NativeScheduler from "@/components/NativeScheduler";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
@@ -111,6 +112,11 @@ const RegistrationFormSection = ({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
+  // Private lessons, step 2: the details are in, now the day and time, then
+  // payment. Nothing is a booking — or a lead — until the payment clears.
+  const [privatePay, setPrivatePay] = useState<
+    { registrationId: string; email: string; quantity: number; format: "online" | "physical" } | null
+  >(null);
   const [groupPlan, setGroupPlan] = useState<"monthly" | "full">("monthly");
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
@@ -344,6 +350,12 @@ const RegistrationFormSection = ({
       fail("email", t.validEmailError, "email");
       return;
     }
+    // Private lessons are paid and confirmed by email, so the address is
+    // needed: Stripe's receipt, the confirmation and the booking link go there.
+    if (courseType === "private" && !email) {
+      fail("email", t.validEmailError, "email");
+      return;
+    }
 
     trackRegistrationSubmit(courseType as CourseType);
     setSubmitting(true);
@@ -383,8 +395,6 @@ const RegistrationFormSection = ({
         notesParts.push(
           `Lecții: ${privateQuantity}${privateQuantity >= 20 ? " (−15% auto)" : ""}`,
         );
-        // Default flow: first lesson is a free trial (handled post-submit).
-        notesParts.push(`Probă gratuită: da (default)`);
       }
       if (courseType === "group") {
         notesParts.push(
@@ -439,9 +449,24 @@ const RegistrationFormSection = ({
         // a Romanian speaker who chose the English group is recorded as such.
         // Falls back to the reading language when no cohort applies.
         teaching_language: cohortLanguage ?? lang,
+        // A private purchase is not a lead until it is paid: the webhook sets
+        // it to converted then. Left "incomplete", an abandoned one stays out
+        // of the admin's list of real sign-ups.
+        ...(courseType === "private" ? { lead_status: "incomplete" } : {}),
       });
 
       if (error) throw error;
+
+      if (courseType === "private") {
+        sessionStorage.removeItem(STORAGE_KEY);
+        setPrivatePay({
+          registrationId: id,
+          email,
+          quantity,
+          format: format === "fizic" ? "physical" : "online",
+        });
+        return;
+      }
 
       void supabase.functions.invoke("notify-registration", {
         body: { registrationId: id, email: email || "" },
@@ -473,6 +498,41 @@ const RegistrationFormSection = ({
       setSubmitting(false);
     }
   };
+
+  if (privatePay) {
+    const en = lang === "en";
+    return (
+      <section className={embedded ? "space-y-4" : "py-section px-gutter"}>
+        <div className={embedded ? "space-y-4" : "mx-auto max-w-3xl space-y-4"}>
+          <button
+            type="button"
+            onClick={() => setPrivatePay(null)}
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
+            ← {en ? "Change my details" : "Modifică datele"}
+          </button>
+          <div>
+            <span className="mb-1 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+              {en ? "Step 2 of 3" : "Pasul 2 din 3"}
+            </span>
+            <h3 className="font-display text-2xl font-bold text-foreground">
+              {en ? "Choose the day and time" : "Alege ziua și ora"}
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {en
+                ? "Then you pay, and the lesson is confirmed. Nothing is booked until the payment goes through."
+                : "Apoi plătești și lecția e confirmată. Nu se rezervă nimic până nu trece plata."}
+            </p>
+          </div>
+          <NativeScheduler
+            eventType="paid"
+            registrationId={privatePay.registrationId}
+            purchase={{ quantity: privatePay.quantity, email: privatePay.email, format: privatePay.format }}
+          />
+        </div>
+      </section>
+    );
+  }
 
   if (submitted && submittedData) {
     return (
@@ -727,7 +787,13 @@ const RegistrationFormSection = ({
               defaulted into the free trial flow post-submit, with a
               subtle "pay directly" link below the booking embed. */}
 
-          <p className="text-xs text-muted-foreground">{t.mainLeadCallbackNote}</p>
+          <p className="text-xs text-muted-foreground">
+            {courseType === "private"
+              ? lang === "en"
+                ? "Next you choose the day and time, then you pay. The lesson is confirmed once paid, and Ibra writes to introduce himself."
+                : "Urmează să alegi ziua și ora, apoi plătești. Lecția e confirmată după plată, iar Ibra îți scrie ca să se prezinte."
+              : t.mainLeadCallbackNote}
+          </p>
 
           <GdprCheckbox
             checked={gdpr}
@@ -759,6 +825,8 @@ const RegistrationFormSection = ({
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 {t.groupSubmitting}
               </>
+            ) : courseType === "private" ? (
+              lang === "en" ? "Continue: choose the day and time →" : "Continuă: alege ziua și ora →"
             ) : (
               t.mainLeadSubmit
             )}

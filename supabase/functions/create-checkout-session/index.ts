@@ -85,9 +85,31 @@ serve(async (req) => {
     const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${regSig}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}&fallback=1`;
 
+    // The slot (trial) or first lesson (private) rides along in the session
+    // metadata and is booked by the webhook once Stripe confirms. Metadata
+    // rather than a table: Stripe allows 50 keys of 500 characters, and the
+    // name, email and phone are already on the registration row, so only the
+    // slot itself has to travel. Notes are truncated to fit — they are a
+    // nice-to-have, and the booking must not fail because someone wrote an
+    // essay.
+    const bookingMeta: Record<string, string> = {};
+    if (booking && typeof booking === "object") {
+      const put = (k: string, v: unknown, max = 450) => {
+        if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
+      };
+      put("booking_start_at", booking.start_at, 40);
+      put("booking_event_type", booking.event_type, 40);
+      put("booking_format", booking.format, 40);
+      put("booking_language", booking.language, 8);
+      put("booking_notes", booking.notes);
+      if (booking.weekly === true) bookingMeta.booking_weekly = "1";
+    }
+
     // Best-effort reuse: if we already created a session and it's still open,
     // return its URL instead of stacking duplicates.
-    if (reg.stripe_session_id && reg.stripe_session_id.startsWith("cs_")) {
+    // Not when a slot comes with the request: the open session carries the slot
+    // picked last time, and reusing it would book that one instead.
+    if (!bookingMeta.booking_start_at && reg.stripe_session_id && reg.stripe_session_id.startsWith("cs_")) {
       try {
         const prior = await stripe.checkout.sessions.retrieve(
           reg.stripe_session_id,
@@ -140,24 +162,8 @@ serve(async (req) => {
       // The trial booking rides along in the session metadata and is created by
       // the webhook once the card is actually saved. Nothing is booked before
       // that: a free slot that nobody turns up to costs a real lesson, and five
-      // of the first six trials ever booked left no card at all.
-      //
-      // Metadata rather than a table: Stripe allows 50 keys of 500 characters,
-      // and the name, email and phone are already on the registration row, so
-      // only the slot itself has to travel. Notes are truncated to fit — they
-      // are a nice-to-have, and the booking must not fail because someone wrote
-      // an essay.
-      const bookingMeta: Record<string, string> = {};
-      if (booking && typeof booking === "object") {
-        const put = (k: string, v: unknown, max = 450) => {
-          if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
-        };
-        put("booking_start_at", booking.start_at, 40);
-        put("booking_event_type", booking.event_type, 40);
-        put("booking_format", booking.format, 40);
-        put("booking_language", booking.language, 8);
-        put("booking_notes", booking.notes);
-      }
+      // of the first six trials ever booked left no card at all. (bookingMeta
+      // is built above, shared with the private-lesson payment.)
       const session = await stripe.checkout.sessions.create(
         {
           mode: "setup",
@@ -269,7 +275,13 @@ serve(async (req) => {
           customer: customerId,
           customer_email: customerId ? undefined : reg.email || undefined,
           success_url: successUrl,
-          cancel_url: cancelUrl,
+          // A private purchase that started from the day-and-time picker goes
+          // back there: nothing was booked, and the embedded /checkout page has
+          // no slot to show.
+          cancel_url:
+            isPrivate && bookingMeta.booking_start_at
+              ? `${origin}/cursuri/private?plata=anulata#register`
+              : cancelUrl,
           line_items: [
             {
               quantity: isPrivate ? quantity : 1,
@@ -294,10 +306,22 @@ serve(async (req) => {
           metadata: {
             registration_id: registrationId,
             course_type: courseType,
+            // Private lessons: the day and time picked before paying. The
+            // webhook books them once the payment clears — nothing is booked
+            // for someone who leaves on Stripe's page.
+            ...(isPrivate ? { ...bookingMeta, quantity: String(quantity) } : {}),
           },
         },
         // Hour-bucketed for the same reason as the subscription branch above.
-        { idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
+        // The slot is part of the key, so picking another time in the same hour
+        // opens a new session instead of Stripe replaying the old one.
+        {
+          idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${
+            isPrivate && bookingMeta.booking_start_at
+              ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}`
+              : ""
+          }`,
+        },
       );
     }
 

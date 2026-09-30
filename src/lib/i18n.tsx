@@ -476,7 +476,7 @@ export const translations = {
     thankYouInviteCta: "Invită un prieten",
     thankYouInviteCopied: "Link copiat în clipboard!",
     thankYouShareMessage: "Învăț arabă libaneză cu Ibra. Înscrie-te și tu!",
-    thankYouSchedulePrivateCta: "Programează lecția",
+    thankYouSchedulePrivateCta: "Programează celelalte lecții",
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
     thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
@@ -732,7 +732,7 @@ export const translations = {
 
     // Course pages — section labels
     coursePageRegisterTitle: "Înscrie-te acum",
-    coursePageRegisterDesc: "Completează formularul mai jos. Te contactăm în câteva ore (cel mult într-o zi lucrătoare) pentru detalii.",
+    coursePageRegisterDesc: "Trei pași: datele tale, ziua și ora, apoi plata. Lecția e confirmată după plată.",
 
     // Navbar — courses dropdown
 
@@ -780,9 +780,9 @@ export const translations = {
     privateVsGroupTitle: "Privat sau grup?",
     privateVsGroupDesc: "La grup înveți într-o grupă mică — maximum 6 cursanți, online sau fizic — la un preț mai mic și pe un calendar fix. Privat înseamnă atenție 100%, ritm propriu și program flexibil, la un preț per lecție.",
     privateProcessTitle: "Cum se întâmplă, pas cu pas",
-    privateProcessStep1: "Completezi formularul de mai jos, cu obiectivul și disponibilitatea ta.",
-    privateProcessStep2: "Te contactăm în câteva ore (cel mult într-o zi lucrătoare).",
-    privateProcessStep3: "Stabilim împreună programul și fixăm prima lecție.",
+    privateProcessStep1: "Completezi datele tale: formatul, câte lecții vrei și cum te contactăm.",
+    privateProcessStep2: "Alegi ziua și ora — doar pentru prima lecție sau aceeași oră în fiecare săptămână.",
+    privateProcessStep3: "Plătești și lecția e confirmată. Primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte.",
 
     // /cursuri/copii — format cards
     copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
@@ -1267,7 +1267,7 @@ export const translations = {
     thankYouInviteCta: "Invite a friend",
     thankYouInviteCopied: "Link copied to clipboard!",
     thankYouShareMessage: "I'm learning Lebanese Arabic with Ibra. Join me!",
-    thankYouSchedulePrivateCta: "Schedule your lesson",
+    thankYouSchedulePrivateCta: "Book your other lessons",
     thankYouBackHome: "Back to homepage",
     thankYouLoading: "Loading details...",
     thankYouError: "We couldn't load payment details, but your registration was received.",
@@ -1514,7 +1514,7 @@ export const translations = {
 
     // Course pages — section labels
     coursePageRegisterTitle: "Register now",
-    coursePageRegisterDesc: "Fill out the form below. We'll get back to you within a few hours (one business day at most).",
+    coursePageRegisterDesc: "Three steps: your details, the day and time, then payment. The lesson is confirmed once paid.",
 
     // Navbar — courses dropdown
 
@@ -1558,9 +1558,9 @@ export const translations = {
     privateVsGroupTitle: "Private or group?",
     privateVsGroupDesc: "In a group you learn in a small class — at most 6 students, online or in person — at a lower price and on a fixed calendar. Private means 100% attention, your own pace and a flexible schedule, at a per-lesson price.",
     privateProcessTitle: "How it works, step by step",
-    privateProcessStep1: "Fill in the form below with your goal and availability.",
-    privateProcessStep2: "We get back to you within a few hours (one business day at most).",
-    privateProcessStep3: "We agree on the schedule together and book the first lesson.",
+    privateProcessStep1: "Fill in your details: the format, how many lessons, and how to reach you.",
+    privateProcessStep2: "Choose the day and time — for the first lesson only, or the same time every week.",
+    privateProcessStep3: "Pay, and the lesson is confirmed. You get a confirmation email, and Ibra writes to introduce himself.",
 
     copiiFormatChoiceTitle: "Two formats, depending on age",
     copiiFormatPrivateTitle: "Private 1:1 (any age)",

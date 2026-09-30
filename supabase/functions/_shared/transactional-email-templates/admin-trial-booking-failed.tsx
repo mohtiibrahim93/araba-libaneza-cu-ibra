@@ -20,8 +20,13 @@ import type { TemplateEntry } from './registry.ts'
  * fixable — every detail needed to create the booking by hand or call the
  * person back is in it, because the booking that would have held them does not
  * exist to look up.
+ *
+ * Private lessons reuse it (kind: "private"): they are booked the same way,
+ * by the webhook once the payment clears, and fail the same way — paid, told
+ * it is confirmed, and one or more lessons missing from the calendar.
  */
 interface AdminTrialBookingFailedProps {
+  kind?: 'trial' | 'private'
   name?: string
   email?: string
   phone?: string
@@ -31,16 +36,17 @@ interface AdminTrialBookingFailedProps {
   reason?: string
 }
 
-const AdminTrialBookingFailedEmail = ({ name, email, phone, startAt, format, registrationId, reason }: AdminTrialBookingFailedProps) => (
+const AdminTrialBookingFailedEmail = ({ kind, name, email, phone, startAt, format, registrationId, reason }: AdminTrialBookingFailedProps) => (
   <Html lang="ro" dir="ltr">
     <Head />
-    <Preview>Proba nu s-a programat: {name || 'cursant'} — cardul este salvat</Preview>
+    <Preview>{kind === 'private' ? 'Lecții private plătite, dar neprogramate' : 'Proba nu s-a programat'}: {name || 'cursant'}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>⚠️ Proba nu s-a programat</Heading>
+        <Heading style={h1}>{kind === 'private' ? '⚠️ Lecții private neprogramate' : '⚠️ Proba nu s-a programat'}</Heading>
         <Text style={text}>
-          Cardul a fost salvat, dar programarea nu s-a creat. Cursantul crede că are locul confirmat.
-          Sună-l sau creează programarea manual.
+          {kind === 'private'
+            ? 'Plata a trecut, dar una sau mai multe lecții nu s-au creat în calendar. Cursantul crede că are lecțiile confirmate. Contactează-l sau creează programările manual.'
+            : 'Cardul a fost salvat, dar programarea nu s-a creat. Cursantul crede că are locul confirmat. Sună-l sau creează programarea manual.'}
         </Text>
         <Section style={detailsBox}>
           {name && <Text style={infoText}><strong>Nume:</strong> {name}</Text>}
@@ -56,8 +62,9 @@ const AdminTrialBookingFailedEmail = ({ name, email, phone, startAt, format, reg
           </Section>
         )}
         <Text style={text}>
-          Cel mai probabil intervalul a fost ocupat cât timp cursantul era pe pagina Stripe,
-          sau adresa de email își folosise deja proba gratuită.
+          {kind === 'private'
+            ? 'Cel mai probabil intervalul (sau una dintre săptămânile seriei) a fost ocupat între timp.'
+            : 'Cel mai probabil intervalul a fost ocupat cât timp cursantul era pe pagina Stripe, sau adresa de email își folosise deja proba gratuită.'}
         </Text>
         <Hr style={hr} />
         <Text style={footerSmall}>Notificare automată — centruldearabalibaneza.com</Text>
@@ -69,7 +76,9 @@ const AdminTrialBookingFailedEmail = ({ name, email, phone, startAt, format, reg
 export const template = {
   component: AdminTrialBookingFailedEmail,
   subject: (data: Record<string, any>) =>
-    `Proba nu s-a programat: ${data?.name || 'cursant'} — cardul este salvat`,
+    data?.kind === 'private'
+      ? `Lecții private plătite, dar neprogramate: ${data?.name || 'cursant'}`
+      : `Proba nu s-a programat: ${data?.name || 'cursant'} — cardul este salvat`,
   displayName: 'Notificare admin — proba nu s-a programat',
   previewData: {
     name: 'Maria Popescu',
