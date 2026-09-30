@@ -125,6 +125,7 @@ const SiteTextsAdmin = () => {
   };
 
   const reset = async (key: string) => {
+    if (!confirm(`Revii la textul original pentru „${key}”? Textul editat se pierde.`)) return;
     setSavingKey(key);
     try {
       await call({ action: "delete_site_text", key });
