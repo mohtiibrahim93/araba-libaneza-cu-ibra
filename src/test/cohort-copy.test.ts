@@ -90,7 +90,6 @@ describe("no page states a start date in prose any more", () => {
 
   it.each([
     "src/components/ProgramsSection.tsx",
-    "src/components/CTASection.tsx",
     "src/pages/courses/CursGrup.tsx",
   ])("%s renders the note from the database", (file) => {
     expect(read(file)).toContain("<CohortEnrollmentNote");

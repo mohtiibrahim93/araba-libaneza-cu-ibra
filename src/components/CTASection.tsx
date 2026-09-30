@@ -1,7 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import { CalendarDays, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import SocialLinks from "@/components/SocialLinks";
-import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -78,32 +77,9 @@ const CTASection = () => {
           </div>
         </div>
 
-        <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 mb-10">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <CalendarDays className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-foreground">{t.ctaScheduleTitle}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{t.ctaScheduleDesc}</p>
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border border-border p-4">
-              <p className="text-sm font-semibold text-foreground">{t.ctaScheduleGroupLabel}</p>
-              <CohortEnrollmentNote className="text-sm text-muted-foreground mt-1" />
-            </div>
-            <div className="rounded-lg border border-border p-4">
-              <p className="text-sm font-semibold text-foreground">{t.ctaSchedulePrivateLabel}</p>
-              <p className="text-sm text-muted-foreground mt-1">{t.ctaSchedulePrivateValue}</p>
-            </div>
-            <div className="rounded-lg border border-border p-4">
-              <p className="text-sm font-semibold text-foreground">{t.ctaScheduleKidsLabel}</p>
-              <p className="text-sm text-muted-foreground mt-1">{t.ctaScheduleKidsValue}</p>
-            </div>
-          </div>
-        </div>
-
+        {/* The course schedule box that used to sit here repeated the start
+            dates a third time (they are in "Cursuri care încep acum" and on the
+            group card), so it was removed with the owner's agreement. */}
         {/* Official social channels — renders only the configured ones. */}
         <SocialLinks variant="cards" />
         </div>

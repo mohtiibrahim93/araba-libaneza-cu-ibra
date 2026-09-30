@@ -4,7 +4,6 @@ import { useI18n } from "@/lib/i18n";
 import { seoMeta } from "@/lib/seoHead";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import SocialProofStrip from "@/components/SocialProofStrip";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
 import WhySection from "@/components/WhySection";
 import ResourcesTeaser from "@/components/ResourcesTeaser";
@@ -170,7 +169,7 @@ const PageContent = () => {
     // ratings from another site into your own — the markup must describe
     // reviews shown on this page. Breaking that risks a manual action against
     // the whole domain. The rating stays visible to visitors, attributed and
-    // linked to the Preply profile, in SocialProofStrip and TestimonialsSection.
+    // linked to the Preply profile, in the hero and TestimonialsSection.
   };
 
   const courseJsonLd = {
@@ -230,7 +229,6 @@ const PageContent = () => {
         <Suspense fallback={<div className="min-h-[18rem]" aria-hidden="true" />}>
           <ActiveCoursesBanner />
         </Suspense>
-        <SocialProofStrip />
         {/* Order agreed with the owner: who Ibra is, why learn with him,
             Arabizi in practice, reviews, how to start (courses, quiz, game),
             questions, resources and contact. */}
