@@ -80,6 +80,19 @@ describe("the trial slot is paid for with a card, not a promise", () => {
     expect(setupBranch).not.toMatch(/\bthrow\b/);
   });
 
+  it("does not throttle the webhook as if it were a visitor", () => {
+    // booking-create caps 5 per hour per IP, which is right for a public
+    // endpoint that emails a client-supplied address. The webhook calls it
+    // server-to-server, so every visitor's booking shares the function
+    // runtime's IP — that per-person limit would become a global cap of five
+    // trials an hour, failing silently with a card saved and no booking.
+    const create = read("supabase/functions/booking-create/index.ts");
+    expect(create).toContain("internalCall");
+    expect(create).toContain("if (clientIp && !internalCall)");
+    // The exemption must be earned by the service-role key, not assumed.
+    expect(create).toContain("bearer === serviceRoleKey");
+  });
+
   it("stops telling a visitor who skipped the card that they have a booking", () => {
     const index = read("src/pages/Index.tsx");
     expect(index).not.toContain("your trial booking still stands");

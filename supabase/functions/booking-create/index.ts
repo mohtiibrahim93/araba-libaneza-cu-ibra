@@ -71,8 +71,21 @@ Deno.serve(async (req) => {
     // This endpoint is unauthenticated and sends a real transactional email
     // to a client-supplied address — without a throttle it can be scripted
     // into a spam/phishing relay. Cap per-IP before doing any real work.
+    //
+    // The throttle is deliberately skipped for the one trusted caller:
+    // stripe-webhook, which creates a trial booking once the card is saved.
+    // That call arrives with the service-role key, and it is server-to-server,
+    // so every visitor's booking would share the function runtime's IP —
+    // turning a per-person anti-abuse limit into a global cap of five trials
+    // an hour, failing silently after that with a card saved and no booking.
+    // The webhook has its own gate: Stripe verifies the event signature before
+    // it runs at all.
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+    const internalCall = serviceRoleKey.length > 0 && bearer === serviceRoleKey;
+
     const clientIp = getClientIp(req);
-    if (clientIp) {
+    if (clientIp && !internalCall) {
       const allowed = await checkRateLimit(supabase, `booking_create:${clientIp}`, 5, 3600);
       if (!allowed) {
         return json({ error: "Too many booking attempts. Please try again later." }, 429);
