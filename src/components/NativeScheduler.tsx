@@ -495,6 +495,10 @@ const NativeScheduler = ({
           setTrialUsed(true);
           return;
         }
+        if (errPayload?.code === "lessons_used_up") {
+          setLessonsUsedUp(true);
+          return;
+        }
         if (errPayload?.code === "payment_required") {
           throw new Error(
             lang === "ro"
@@ -510,6 +514,10 @@ const NativeScheduler = ({
           toast.error(t.schedulerSlotTaken);
           setSelectedSlot(null);
           await loadAvailability();
+          return;
+        }
+        if (payload?.code === "lessons_used_up") {
+          setLessonsUsedUp(true);
           return;
         }
         if (payload?.code === "trial_used") {
@@ -532,6 +540,24 @@ const NativeScheduler = ({
       setSubmitting(false);
     }
   };
+
+  if (lessonsUsedUp) {
+    return (
+      <div className="rounded-xl border border-amber-300 bg-amber-50 p-6 space-y-4">
+        <p className="text-sm text-foreground">
+          {lang === "ro"
+            ? "Ai programat deja toate lecțiile plătite. Pentru mai multe lecții, rezervă un pachet nou din pagina lecțiilor private."
+            : "You have already booked all the lessons you paid for. For more lessons, book a new package from the private lessons page."}
+        </p>
+        <Button asChild>
+          <Link to={lang === "ro" ? "/cursuri/private#register" : "/en/courses/private#register"}>
+            <Calendar className="w-4 h-4 mr-2" />
+            {lang === "ro" ? "Lecțiile private" : "Private lessons"}
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   if (trialUsed) {
     return (
@@ -848,14 +874,33 @@ const NativeScheduler = ({
             ? "Lecția se confirmă după plată: primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte. Dacă nu finalizezi plata, nu se rezervă nimic. Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte."
             : "The lesson is confirmed once paid: you get a confirmation email, and Ibra writes to introduce himself. If you don't complete the payment, nothing is booked. Cancelling or rescheduling is free at least 24 hours ahead."}
         </p>
-        <button
-          onClick={handlePay}
-          disabled={submitting}
-          className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
-        >
-          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-          {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
-        </button>
+        {embeddedPay && registrationId ? (
+          <Elements
+            stripe={embeddedPay.stripe}
+            options={{ clientSecret: embeddedPay.clientSecret, appearance: { theme: "stripe" } }}
+          >
+            <InlinePrivatePay
+              amount={embeddedPay.amount}
+              currency={embeddedPay.currency}
+              registrationId={registrationId}
+              email={purchase.email}
+              lang={lang}
+              onLoadError={() => {
+                setEmbeddedPay(null);
+                void openHostedCheckout();
+              }}
+            />
+          </Elements>
+        ) : (
+          <button
+            onClick={handlePay}
+            disabled={submitting}
+            className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+          >
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+            {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
+          </button>
+        )}
       </div>
     );
   }
