@@ -43,7 +43,7 @@ const InstructorSection = () => {
 
         {/* Bio */}
         <div>
-          <span className="text-sm font-medium text-primary mb-2 block">
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
             {t.instructorBadge}
           </span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-4">

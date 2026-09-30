@@ -12,7 +12,7 @@ const CTASection = () => {
   const en = lang === "en";
 
   return (
-    <section id="contact" className="py-section px-gutter bg-cream scroll-mt-20">
+    <section id="contact" className="py-section px-gutter bg-background scroll-mt-20">
       <div className="max-w-content mx-auto">
         {/* The closing invitation, as in the design: a greeting, the free
             trial, and the two ways to act on it. */}
@@ -50,7 +50,7 @@ const CTASection = () => {
             row rendered as four cramped columns. The prose below keeps its own
             reading width. */}
         <div className="max-w-content mx-auto">
-        <div className="text-center mb-8">
+        <div className="mb-6">
           <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground block">{t.ctaBadge}</span>
         </div>
 

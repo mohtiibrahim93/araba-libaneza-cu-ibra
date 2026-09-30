@@ -88,11 +88,8 @@ const HeroSection = () => {
             </picture>
           </div>
 
-          {/* Floating card: real Preply rating */}
-          <div className="absolute top-4 right-4 bg-background/95 backdrop-blur-xs rounded-xl shadow-lg px-4 py-3">
-            <p className="text-sm font-bold text-foreground">{t.heroJoin}</p>
-            <p className="text-xs text-muted-foreground">{t.heroHappy}</p>
-          </div>
+          {/* The Preply rating is shown once, under the phones (HeroConversation);
+              the owner asked for it only once in the hero. */}
 
           {/* Floating card: lessons */}
           <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-xs rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">

@@ -48,10 +48,10 @@ const ArabiziShowcase = () => {
   };
 
   return (
-    <section className="py-section px-gutter bg-background">
+    <section className="py-section px-gutter bg-cream">
       <div className="w-full max-w-content mx-auto grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 items-center">
         <div>
-          <span className="mb-3 block text-sm font-semibold uppercase tracking-wide text-primary">
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
             {en ? "Arabizi, with the Arabic script alongside" : "Arabizi, cu scrierea arabă alături"}
           </span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-4">
@@ -62,7 +62,7 @@ const ArabiziShowcase = () => {
               ? "Lessons are in Arabizi: Lebanese written in Latin letters and numbers (7 = ح). The Arabic script appears in lessons only if you also learn the alphabet — optional, from B1 or B2. Here we show it alongside, so you can see what each phrase looks like."
               : "Lecțiile sunt în Arabizi: libaneza scrisă cu litere latine și cifre (7 = ح). Scrierea arabă apare la lecții doar dacă înveți și alfabetul — opțional, de la B1 sau B2. Aici ți-o arătăm alături, ca să vezi cum arată fiecare expresie."}
           </p>
-          <div className="flex items-center gap-4 rounded-2xl border border-border bg-cream px-5 py-4 max-w-xl">
+          <div className="flex items-center gap-4 rounded-2xl border border-border bg-card px-5 py-4 max-w-xl">
             <span className="font-display text-2xl font-bold text-primary whitespace-nowrap" aria-hidden="true">
               7 · 3 · 2
             </span>

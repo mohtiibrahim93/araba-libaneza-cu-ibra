@@ -34,13 +34,14 @@ const ResourcesTeaser = () => {
   ];
 
   return (
-    <section className="py-section bg-secondary/30">
+    <section className="py-section bg-cream">
       <div className="w-full max-w-content mx-auto px-gutter">
-        <div className="text-center mb-12">
-          <h2 className="text-display-lg font-bold tracking-tight mb-4">
+        <div className="mb-10 max-w-3xl">
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{isEn ? "Free" : "Gratuit"}</span>
+          <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {isEn ? "Free resources" : "Resurse gratuite"}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl">
             {isEn
               ? "Guides, phrases and cheat sheets to help you learn Lebanese Arabic at your own pace."
               : "Ghiduri, expresii și fișiere de lucru ca să înveți araba libaneză în ritmul tău."}

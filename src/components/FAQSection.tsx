@@ -31,7 +31,7 @@ const FAQSection = () => {
   const allHref = lang === "en" ? "/en/faq" : "/intrebari-frecvente";
 
   return (
-    <section id="faq" className="py-section px-6 scroll-mt-20">
+    <section id="faq" className="py-section px-gutter bg-background scroll-mt-20">
       {/* The homepage's FAQPage is served by the route head (see FAQ_ROUTES in
           src/lib/seoHead.ts). Emitting it here too appended a second, identical
           block — JSON-LD scripts are not replaced by Helmet the way title and
@@ -46,8 +46,8 @@ const FAQSection = () => {
           below it ran the full 1728px — the answers wrapped into narrow
           columns for no reason. */}
       <div className="max-w-content mx-auto">
-        <div className="text-center mb-12">
-          <span className="text-sm font-medium text-primary mb-2 block">{t.faqBadge}</span>
+        <div className="mb-10 max-w-3xl">
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.faqBadge}</span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {t.faqTitle}
           </h2>

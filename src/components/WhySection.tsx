@@ -87,7 +87,7 @@ const WhySection = () => {
   const cards = en ? EN : RO;
 
   return (
-    <section id="why" className="py-section px-gutter bg-cream scroll-mt-20">
+    <section id="why" className="py-section px-gutter bg-background scroll-mt-20">
       <div className="w-full max-w-content mx-auto">
         <div className="mb-10 max-w-3xl">
           <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
