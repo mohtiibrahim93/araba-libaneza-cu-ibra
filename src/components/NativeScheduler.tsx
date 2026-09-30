@@ -14,6 +14,75 @@ import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
+import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+
+/**
+ * The embedded card form for a private purchase — the same Stripe Elements
+ * payment /checkout uses. The PaymentIntent already carries the chosen slot;
+ * stripe-webhook books it on payment_intent.succeeded.
+ */
+const InlinePrivatePay = ({
+  amount,
+  currency,
+  registrationId,
+  email,
+  lang,
+  onLoadError,
+}: {
+  amount: number;
+  currency: string;
+  registrationId: string;
+  email: string;
+  lang: "ro" | "en";
+  onLoadError: () => void;
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [paying, setPaying] = useState(false);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setPaying(true);
+    const returnUrl = new URL(`${window.location.origin}/payment-status`);
+    returnUrl.searchParams.set("courseType", "private");
+    returnUrl.searchParams.set("amount", String(amount));
+    returnUrl.searchParams.set("currency", currency);
+    returnUrl.searchParams.set("registration_id", registrationId);
+    if (email) returnUrl.searchParams.set("email", email);
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: returnUrl.toString() },
+    });
+    if (error) {
+      toast.error(
+        error.message ||
+          (lang === "ro"
+            ? "Plata a eșuat. Nimic nu a fost rezervat — încearcă din nou."
+            : "The payment failed. Nothing was booked — please try again."),
+      );
+      setPaying(false);
+    }
+  };
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <PaymentElement onLoadError={onLoadError} />
+      <button
+        type="submit"
+        disabled={!stripe || paying}
+        className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+      >
+        {paying ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+        {lang === "ro" ? `Plătește ${formatLei(amount / 100)} lei` : `Pay ${formatLei(amount / 100)} lei`}
+      </button>
+      <p className="text-center text-xs text-muted-foreground">
+        {lang === "ro"
+          ? "Plată securizată procesată de Stripe. Datele cardului tău nu sunt stocate pe acest site."
+          : "Secure payment processed by Stripe. Your card details are not stored on this site."}
+      </p>
+    </form>
+  );
+};
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
