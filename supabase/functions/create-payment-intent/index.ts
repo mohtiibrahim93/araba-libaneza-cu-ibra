@@ -26,10 +26,16 @@ serve(async (req) => {
     const { courseType, email, name, registrationId } = await req.json();
 
     if (!courseType || !COURSE_TYPES.includes(courseType)) {
-      throw new Error("Invalid course type");
+      return new Response(JSON.stringify({ error: "Invalid course type" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
     }
     if (!registrationId || typeof registrationId !== "string") {
-      throw new Error("registrationId is required");
+      return new Response(JSON.stringify({ error: "registrationId is required" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
     }
 
     // Validate the registration exists and is not already paid / in flight.
