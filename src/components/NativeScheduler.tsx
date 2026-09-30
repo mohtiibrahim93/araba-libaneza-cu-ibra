@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home, CreditCard, ShieldCheck } from "lucide-react";
+import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home, CreditCard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { isValidPhone } from "@/components/RegistrationForm/LeadFields";
@@ -147,7 +147,6 @@ const NativeScheduler = ({
   // Trial-only: the server rejects a second free trial for the same email.
   const [trialUsed, setTrialUsed] = useState(false);
   // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
-  const [savingCard, setSavingCard] = useState(false);
   // The registration this booking ended up attached to. On /trial the row is
   // created at confirm time, so without keeping it here the card-confirmation
   // step never rendered (the prop is undefined for a fresh visitor).
@@ -294,6 +293,42 @@ const NativeScheduler = ({
       }
       setBookedRegistrationId(resolvedRegistrationId);
 
+      // A free trial is not booked here. The card is the commitment, so the
+      // slot goes to Stripe with the visitor and the booking is created by the
+      // webhook once the card is actually saved — which is what survives them
+      // closing the tab on Stripe's page.
+      //
+      // The lead is already safe: ensureRegistration wrote name, email and
+      // phone above, so an abandoned card step still leaves someone to contact.
+      if (eventType === "trial" && mode === "create" && resolvedRegistrationId) {
+        const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
+          body: {
+            registrationId: resolvedRegistrationId,
+            setup: true,
+            email: email.trim(),
+            booking: {
+              event_type: eventType,
+              start_at: selectedSlot,
+              format,
+              notes: notes.trim() || undefined,
+              language: lang,
+            },
+          },
+        });
+        if (fnError || !data?.url) {
+          console.error("[scheduler] could not open the card step", fnError);
+          toast.error(
+            lang === "ro"
+              ? "Nu am putut deschide pagina Stripe. Intervalul nu a fost rezervat — încearcă din nou."
+              : "Could not open the Stripe page. Your slot was not reserved — please try again.",
+          );
+          setSubmitting(false);
+          return;
+        }
+        window.location.href = data.url;
+        return;
+      }
+
       const res = await supabase.functions.invoke("booking-create", {
         body: {
           registration_id: resolvedRegistrationId,
@@ -360,30 +395,6 @@ const NativeScheduler = ({
       toast.error(e instanceof Error ? e.message : t.schedulerBookingFailed);
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  // Trial-only 0-lei card confirmation: opens a Stripe setup-mode page that
-  // saves the card without charging (commitment step against no-shows).
-  const startCardConfirmation = async () => {
-    if (!effectiveRegistrationId) return;
-    setSavingCard(true);
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-        body: { registrationId: effectiveRegistrationId, setup: true, email },
-      });
-
-      if (fnError) throw fnError;
-      if (!data?.url) throw new Error("missing url");
-      window.location.href = data.url;
-    } catch (e) {
-      console.error("[scheduler] card confirmation failed", e);
-      toast.error(
-        lang === "ro"
-          ? "Nu am putut deschide pagina Stripe. Locul tău rămâne rezervat."
-          : "Could not open the Stripe page. Your spot is still reserved.",
-      );
-      setSavingCard(false);
     }
   };
 
@@ -537,41 +548,11 @@ const NativeScheduler = ({
           )}
         </div>
 
-        {/* Free trial: 0-lei card-on-file confirmation. Saves the card via a
-            Stripe setup session — nothing is charged — to firm up the spot. */}
-        {eventType === "trial" && effectiveRegistrationId && (
-          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-left space-y-3">
-            <div className="flex items-start gap-2">
-              <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  {lang === "ro"
-                    ? "Ultimul pas: confirmă-ți locul cu cardul — 0 lei"
-                    : "Last step: confirm your spot with your card — 0 lei"}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {lang === "ro"
-                    ? "Nu încasăm absolut nimic — cardul se salvează în siguranță la Stripe doar ca să confirmi serios locul. Nicio plată nu se face vreodată fără acordul tău."
-                    : "We charge absolutely nothing — the card is stored securely with Stripe only to firmly confirm your spot. No payment is ever made without your approval."}
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  {lang === "ro"
-                    ? "Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte de lecție — folosește linkul din emailul de confirmare. La neprezentare sau anulare mai târzie se reține 150 lei, cât o lecție privată."
-                    : "Cancelling or rescheduling is free at least 24 hours before the lesson — use the link in your confirmation email. A no-show or a later cancellation is charged 150 lei, the price of a private lesson."}
-
-                </p>
-              </div>
-            </div>
-            <Button onClick={startCardConfirmation} disabled={savingCard} className="w-full">
-              {savingCard ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <CreditCard className="w-4 h-4 mr-2" />
-              )}
-              {lang === "ro" ? "Confirmă locul (0 lei)" : "Confirm my spot (0 lei)"}
-            </Button>
-          </div>
-        )}
+        {/* The trial's card step used to live here, after the booking was
+            already made — the screen said "Your booking is confirmed!" and then
+            asked for a card, which told people they could simply walk away.
+            The card now comes first, before anything is reserved, so by the
+            time a trial exists it already has one. */}
 
         {/* Paid private lesson: the slot is held, payment is the final step.
             Sends the visitor to the existing Stripe checkout page. */}

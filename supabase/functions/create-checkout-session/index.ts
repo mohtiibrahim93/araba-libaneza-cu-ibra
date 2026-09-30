@@ -32,7 +32,7 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan, setup, email: callerEmail, sig } = await req.json();
+    const { registrationId, plan, setup, email: callerEmail, sig, booking } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       throw new Error("registrationId is required");
     }
@@ -134,6 +134,27 @@ serve(async (req) => {
     // (converting to a private lesson after their freebie), which must not
     // be silently downgraded to a 0-lei setup.
     if (setup === true) {
+      // The trial booking rides along in the session metadata and is created by
+      // the webhook once the card is actually saved. Nothing is booked before
+      // that: a free slot that nobody turns up to costs a real lesson, and five
+      // of the first six trials ever booked left no card at all.
+      //
+      // Metadata rather than a table: Stripe allows 50 keys of 500 characters,
+      // and the name, email and phone are already on the registration row, so
+      // only the slot itself has to travel. Notes are truncated to fit — they
+      // are a nice-to-have, and the booking must not fail because someone wrote
+      // an essay.
+      const bookingMeta: Record<string, string> = {};
+      if (booking && typeof booking === "object") {
+        const put = (k: string, v: unknown, max = 450) => {
+          if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
+        };
+        put("booking_start_at", booking.start_at, 40);
+        put("booking_event_type", booking.event_type, 40);
+        put("booking_format", booking.format, 40);
+        put("booking_language", booking.language, 8);
+        put("booking_notes", booking.notes);
+      }
       const session = await stripe.checkout.sessions.create(
         {
           mode: "setup",
@@ -144,6 +165,7 @@ serve(async (req) => {
           metadata: {
             registration_id: registrationId,
             course_type: "trial",
+            ...bookingMeta,
           },
         },
         { idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },

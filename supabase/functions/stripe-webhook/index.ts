@@ -94,7 +94,7 @@ serve(async (req) => {
           if (registrationId) {
             const { data: trialRow } = await supabase
               .from("registrations")
-              .select("id, payment_status")
+              .select("id, payment_status, name, email, phone, language")
               .eq("id", registrationId)
               .maybeSingle();
             if (trialRow && trialRow.payment_status !== "paid") {
@@ -103,6 +103,58 @@ serve(async (req) => {
                 .update({ payment_status: "card_saved", stripe_session_id: sessionId })
                 .eq("id", registrationId);
               console.log(`Registration ${registrationId}: trial card saved (setup session ${sessionId})`);
+            }
+
+            // The trial slot is booked HERE, not before the redirect. The card
+            // is the commitment: booking first and asking for the card after
+            // meant the confirmation email went out to people who then closed
+            // the tab, and five of the first six trials ever booked carried no
+            // card at all.
+            //
+            // Doing it in the webhook rather than on the browser's return is
+            // what makes it survive a closed tab — Stripe retries this event,
+            // the browser gets one chance.
+            const startAt = session.metadata?.booking_start_at;
+            if (trialRow && startAt) {
+              // booking-create is the only place a booking is made: it holds
+              // the conflict checks, the Zoom link and both emails. Calling it
+              // keeps one implementation rather than a second one here that
+              // would drift.
+              const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+                },
+                body: JSON.stringify({
+                  registration_id: registrationId,
+                  event_type: session.metadata?.booking_event_type || "trial",
+                  start_at: startAt,
+                  format: session.metadata?.booking_format || "online",
+                  student_name: trialRow.name,
+                  student_email: trialRow.email,
+                  student_phone: trialRow.phone || undefined,
+                  notes: session.metadata?.booking_notes || undefined,
+                  language: session.metadata?.booking_language || trialRow.language || "ro",
+                  // Consent was given on the form, before the redirect to
+                  // Stripe; the booking is the same submission finishing.
+                  gdpr_consent: true,
+                }),
+              }).catch((e) => {
+                console.error(`Registration ${registrationId}: booking-create call failed`, e);
+                return null;
+              });
+              if (res && res.ok) {
+                console.log(`Registration ${registrationId}: trial booked for ${startAt} after card save`);
+              } else if (res) {
+                // Never throw: Stripe would retry the whole event and the card
+                // update above would run again. The card is saved either way,
+                // and a failure here is visible in the logs with the slot in it.
+                console.error(
+                  `Registration ${registrationId}: booking-create returned ${res.status}`,
+                  await res.text().catch(() => ""),
+                );
+              }
             }
           }
           break;

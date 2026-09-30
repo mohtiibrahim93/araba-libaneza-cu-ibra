@@ -96,10 +96,13 @@ const PageContent = () => {
       trackEvent("TrialCardSaved");
       window.history.replaceState({}, "", "/");
     } else if (trialCard === "canceled") {
+      // The card IS the booking now: nothing is reserved until it is saved, so
+      // this can no longer promise the slot still stands.
       toast.info(
         lang === "en"
-          ? "Card step skipped — your trial booking still stands."
-          : "Ai sărit peste pasul cu cardul — programarea ta la probă rămâne valabilă.",
+          ? "No card, no booking — your slot was not reserved. You can pick a time again whenever you like."
+          : "Fără card, fără rezervare — intervalul nu a fost reținut. Poți alege din nou o oră oricând.",
+        { duration: 10000 },
       );
       window.history.replaceState({}, "", "/");
     }
