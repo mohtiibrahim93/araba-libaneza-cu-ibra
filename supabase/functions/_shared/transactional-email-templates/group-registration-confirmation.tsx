@@ -1,11 +1,14 @@
 import * as React from 'npm:react@19.3.0'
 import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@1.0.12'
 import type { TemplateEntry } from './registry.ts'
+import { emailLanguage, translator } from './language.ts'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
 const SITE_TAGLINE = 'Centrul de Arabă Libaneză'
 
 interface GroupRegistrationConfirmationProps {
+  /** The language the visitor read the site in; Romanian when absent. */
+  language?: string
   name?: string
   format?: string
   center?: string
@@ -19,84 +22,104 @@ interface GroupRegistrationConfirmationProps {
   manageUrl?: string
 }
 
-const formatLabels: Record<string, string> = { fizic: 'fizic, în București', online: 'online' }
-const centerLabels: Record<string, string> = { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, București', online: 'Online' }
+const formatLabels: Record<string, Record<string, string>> = {
+  ro: { fizic: 'fizic, în București', online: 'online' },
+  en: { fizic: 'in person, in Bucharest', online: 'online' },
+}
+const centerLabels: Record<string, Record<string, string>> = {
+  ro: { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, București', online: 'Online' },
+  en: { bucuresti: 'Raduga Creative Center, Strada Icoanei 80, Bucharest', online: 'Online' },
+}
 
 // Keep in sync with the site (i18n programGroupDuration / curriculum.ts).
-const durationByLevel: Record<string, string> = {
-  A1: 'aproximativ 4 luni · 32 de lecții',
-  A2: 'aproximativ 7 luni · 56 de lecții',
+const durationByLevel: Record<string, Record<string, string>> = {
+  ro: { A1: 'aproximativ 4 luni · 32 de lecții', A2: 'aproximativ 7 luni · 56 de lecții' },
+  en: { A1: 'about 4 months · 32 lessons', A2: 'about 7 months · 56 lessons' },
 }
-const durationLabel = (level?: string) =>
-  durationByLevel[(level || '').trim().toUpperCase()] || 'A1: ~4 luni (32 de lecții) · A2: ~7 luni (56 de lecții)'
+const durationFallback: Record<string, string> = {
+  ro: 'A1: ~4 luni (32 de lecții) · A2: ~7 luni (56 de lecții)',
+  en: 'A1: ~4 months (32 lessons) · A2: ~7 months (56 lessons)',
+}
+const durationLabel = (lang: string, level?: string) =>
+  durationByLevel[lang][(level || '').trim().toUpperCase()] || durationFallback[lang]
 
-const GroupRegistrationConfirmationEmail = ({ name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => (
-  <Html lang="ro" dir="ltr">
+const defaultSchedule: Record<string, string> = {
+  ro: 'marți și joi, 19:00–20:30',
+  en: 'Tuesdays and Thursdays, 19:00–20:30',
+}
+
+const GroupRegistrationConfirmationEmail = ({ language, name, format, center, level, message, senderName, scheduleLabel, startDateLabel, zoomLink, icsUrl, manageUrl }: GroupRegistrationConfirmationProps) => {
+  const lang = emailLanguage(language)
+  const t = translator(lang)
+  return (
+  <Html lang={lang} dir="ltr">
     <Head />
-    <Preview>Am primit cererea ta pentru cursul de grup.</Preview>
+    <Preview>{t('Am primit cererea ta pentru cursul de grup.', 'We have received your group course request.')}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
           <Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text>
           <Text style={tagline}>{SITE_TAGLINE}</Text>
         </Section>
-        <Heading style={h1}>{name ? `Mulțumim, ${name}!` : 'Mulțumim!'}</Heading>
-        <Text style={text}>Am primit cererea ta pentru cursul de grup de arabă libaneză.</Text>
+        <Heading style={h1}>{name ? t(`Mulțumim, ${name}!`, `Thank you, ${name}!`) : t('Mulțumim!', 'Thank you!')}</Heading>
+        <Text style={text}>{t('Am primit cererea ta pentru cursul de grup de arabă libaneză.', 'We have received your request for the Lebanese Arabic group course.')}</Text>
         <Section style={detailsBox}>
-          <Text style={infoTitle}>📚 Detaliile cursului</Text>
-          <Text style={infoText}><strong>Tip:</strong> Curs de grup</Text>
-          {level && <Text style={infoText}>Nivel: {level}</Text>}
-          {format && <Text style={infoText}>Format preferat: {formatLabels[format] || format}</Text>}
-          {center && <Text style={infoText}>Locație: {centerLabels[center] || center}</Text>}
-          <Text style={infoText}><strong>Durată:</strong> {durationLabel(level)}</Text>
-          <Text style={infoText}><strong>Program:</strong> {scheduleLabel || 'marți și joi, 19:00–20:30'}</Text>
-          {startDateLabel && <Text style={infoText}><strong>Start:</strong> {startDateLabel}</Text>}
-          {message && <Text style={infoText}>Mesaj: {message}</Text>}
+          <Text style={infoTitle}>📚 {t('Detaliile cursului', 'Course details')}</Text>
+          <Text style={infoText}><strong>{t('Tip:', 'Type:')}</strong> {t('Curs de grup', 'Group course')}</Text>
+          {level && <Text style={infoText}>{t('Nivel:', 'Level:')} {level}</Text>}
+          {format && <Text style={infoText}>{t('Format preferat:', 'Preferred format:')} {formatLabels[lang][format] || format}</Text>}
+          {center && <Text style={infoText}>{t('Locație:', 'Location:')} {centerLabels[lang][center] || center}</Text>}
+          <Text style={infoText}><strong>{t('Durată:', 'Length:')}</strong> {durationLabel(lang, level)}</Text>
+          <Text style={infoText}><strong>{t('Program:', 'Schedule:')}</strong> {scheduleLabel || defaultSchedule[lang]}</Text>
+          {startDateLabel && <Text style={infoText}><strong>{t('Start:', 'Starts:')}</strong> {startDateLabel}</Text>}
+          {message && <Text style={infoText}>{t('Mesaj:', 'Message:')} {message}</Text>}
         </Section>
 
         {zoomLink && (
           <Section style={zoomBox}>
-            <Text style={infoTitle}>🎥 Link Zoom (lecții online)</Text>
+            <Text style={infoTitle}>🎥 {t('Link Zoom (lecții online)', 'Zoom link (online lessons)')}</Text>
             <Text style={infoText}>
               <Link href={zoomLink} style={link}>{zoomLink}</Link>
             </Text>
-            <Text style={infoTextSmall}>Salvează acest link — îl vei folosi pentru toate lecțiile online.</Text>
+            <Text style={infoTextSmall}>{t('Salvează acest link — îl vei folosi pentru toate lecțiile online.', 'Save this link — you will use it for every online lesson.')}</Text>
           </Section>
         )}
 
         <Section style={infoBox}>
-          <Text style={infoTitle}>✅ Următorii pași</Text>
-          <Text style={checkItem}>1. Te contactăm pe WhatsApp pentru confirmarea locului</Text>
-          <Text style={checkItem}>2. Confirmăm programul și formatul (fizic/online)</Text>
-          <Text style={checkItem}>3. Efectuezi plata (card, transfer sau cash)</Text>
-          <Text style={checkItem}>4. Începem cursul împreună 🎉</Text>
+          <Text style={infoTitle}>✅ {t('Următorii pași', 'Next steps')}</Text>
+          <Text style={checkItem}>{t('1. Te contactăm pe WhatsApp pentru confirmarea locului', '1. We contact you on WhatsApp to confirm your place')}</Text>
+          <Text style={checkItem}>{t('2. Confirmăm programul și formatul (fizic/online)', '2. We confirm the schedule and the format (in person / online)')}</Text>
+          <Text style={checkItem}>{t('3. Efectuezi plata (card, transfer sau cash)', '3. You pay (card, bank transfer or cash)')}</Text>
+          <Text style={checkItem}>{t('4. Începem cursul împreună 🎉', '4. We start the course together 🎉')}</Text>
         </Section>
 
         <Section style={ctaSection}>
-          <Button style={button} href="https://wa.me/40763124514">Contactează-ne pe WhatsApp</Button>
+          <Button style={button} href="https://wa.me/40763124514">{t('Contactează-ne pe WhatsApp', 'Message us on WhatsApp')}</Button>
           {icsUrl && (
             <Text style={textSmall}>
-              📅 <Link href={icsUrl} style={link}>Adaugă în calendar (.ics)</Link>
+              📅 <Link href={icsUrl} style={link}>{t('Adaugă în calendar (.ics)', 'Add to calendar (.ics)')}</Link>
             </Text>
           )}
           {manageUrl && (
             <Text style={textSmall}>
-              ⚙️ <Link href={manageUrl} style={link}>Gestionează înscrierea</Link>
+              ⚙️ <Link href={manageUrl} style={link}>{t('Gestionează înscrierea', 'Manage your registration')}</Link>
             </Text>
           )}
         </Section>
         <Hr style={hr} />
         <Section style={footerBrand}><Text style={footerLogo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{senderName || SITE_NAME}</Text></Section>
-        <Text style={footer}>Cu drag, echipa noastră</Text>
-        <Text style={footerSmall}>📍 București, România · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
+        <Text style={footer}>{t('Cu drag, echipa noastră', 'Warmly, our team')}</Text>
+        <Text style={footerSmall}>📍 {t('București, România', 'Bucharest, Romania')} · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
       </Container>
     </Body>
   </Html>
-)
+  )
+}
 
 export const template = {
   component: GroupRegistrationConfirmationEmail,
-  subject: 'Confirmare cerere curs de grup',
+  subject: (data: Record<string, unknown>) =>
+    emailLanguage(data?.language) === 'en' ? 'Group course request confirmed' : 'Confirmare cerere curs de grup',
   displayName: 'Confirmare curs de grup',
   previewData: { name: 'Maria Popescu', format: 'online', center: 'online', level: 'A1', scheduleLabel: 'marți și joi, 19:00–20:30', startDateLabel: '12 iun. 2026', zoomLink: 'https://us02web.zoom.us/j/1234567890', icsUrl: 'https://example.com/ics?id=abc', manageUrl: 'https://example.com/manage/abc' },
 } satisfies TemplateEntry

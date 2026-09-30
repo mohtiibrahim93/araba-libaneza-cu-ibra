@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     // spoofing arbitrary recipient emails — we only send to what is in DB.
     const { data: reg, error: regErr } = await supabase
       .from("registrations")
-      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age")
+      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age, language")
       .eq("id", registrationId)
       .maybeSingle();
 
@@ -131,6 +131,11 @@ Deno.serve(async (req) => {
       const tpl = TEMPLATE_BY_FORM_TYPE[reg.form_type];
       if (tpl) {
         const baseData: Record<string, unknown> = {
+          // The language the visitor was reading the site in. It was written
+          // on the row from the start and read by nothing: every confirmation
+          // went out in Romanian, including to someone who enrolled in English
+          // on a cohort that is taught in English.
+          language: reg.language || "ro",
           name: reg.name,
           format: reg.format || undefined,
           manageUrl: manageBase,

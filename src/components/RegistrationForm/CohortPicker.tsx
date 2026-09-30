@@ -132,7 +132,19 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
     <div className="space-y-3">
       {languageChoice}
       <Label>{t.cohortPickerLabel} *</Label>
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {/* The column count follows how many cohorts there actually are. A fixed
+          3-column grid left a single cohort — the normal case while only one
+          intake is open — sitting at a third of the form's width, with its
+          schedule wrapping over eight lines while the fields above it ran the
+          full width. Never more columns than cards. */}
+      <div
+        className={cn(
+          "grid gap-2",
+          cohorts.length === 1 && "grid-cols-1",
+          cohorts.length === 2 && "sm:grid-cols-2",
+          cohorts.length >= 3 && "sm:grid-cols-2 lg:grid-cols-3",
+        )}
+      >
         {cohorts.map((c) => {
           const active = c.id === selectedCohortId;
           const label = lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;

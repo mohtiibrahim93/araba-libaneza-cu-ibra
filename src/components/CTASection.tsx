@@ -46,7 +46,11 @@ const CTASection = () => {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        {/* The four contact cards were boxed to max-w-4xl (896px), half the
+            width of the invitation card directly above them, so a lg:grid-cols-4
+            row rendered as four cramped columns. The prose below keeps its own
+            reading width. */}
+        <div className="max-w-content mx-auto">
         <div className="text-center mb-8">
           <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground block">{t.ctaBadge}</span>
         </div>

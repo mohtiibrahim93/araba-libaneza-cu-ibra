@@ -1,11 +1,14 @@
 import * as React from 'npm:react@19.3.0'
 import { Body, Button, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from 'npm:@react-email/components@1.0.12'
 import type { TemplateEntry } from './registry.ts'
+import { emailLanguage, translator } from './language.ts'
 
 const SITE_NAME = 'Arabă Libaneză cu Ibra'
 const SITE_TAGLINE = 'Centrul de Arabă Libaneză'
 
 interface KidsRegistrationConfirmationProps {
+  /** The language the visitor read the site in; Romanian when absent. */
+  language?: string
   name?: string
   childName?: string
   childAge?: string
@@ -16,56 +19,61 @@ interface KidsRegistrationConfirmationProps {
   manageUrl?: string
 }
 
-const KidsRegistrationConfirmationEmail = ({ name, childName, childAge, message, senderName, scheduleLabel, icsUrl, manageUrl }: KidsRegistrationConfirmationProps) => (
-  <Html lang="ro" dir="ltr">
+const KidsRegistrationConfirmationEmail = ({ language, name, childName, childAge, message, senderName, scheduleLabel, icsUrl, manageUrl }: KidsRegistrationConfirmationProps) => {
+  const lang = emailLanguage(language)
+  const t = translator(lang)
+  return (
+  <Html lang={lang} dir="ltr">
     <Head />
-    <Preview>Am primit cererea pentru cursul de copii.</Preview>
+    <Preview>{t('Am primit cererea pentru cursul de copii.', "We have received your request for the children's course.")}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
           <Text style={logo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{SITE_NAME}</Text>
           <Text style={tagline}>{SITE_TAGLINE}</Text>
         </Section>
-        <Heading style={h1}>{name ? `Mulțumim, ${name}!` : 'Mulțumim!'}</Heading>
-        <Text style={text}>Am primit cererea pentru cursul de arabă libaneză pentru copii.</Text>
+        <Heading style={h1}>{name ? t(`Mulțumim, ${name}!`, `Thank you, ${name}!`) : t('Mulțumim!', 'Thank you!')}</Heading>
+        <Text style={text}>{t('Am primit cererea pentru cursul de arabă libaneză pentru copii.', "We have received your request for the Lebanese Arabic course for children.")}</Text>
         <Section style={detailsBox}>
-          <Text style={infoTitle}>📚 Detaliile cursului</Text>
-          <Text style={infoText}><strong>Tip:</strong> Curs copii</Text>
-          {childName && <Text style={infoText}>Nume copil: {childName}</Text>}
-          {childAge && <Text style={infoText}>Vârstă copil: {childAge}</Text>}
-          <Text style={infoText}><strong>Format:</strong> fizic, în București</Text>
-          {scheduleLabel && <Text style={infoText}><strong>Program:</strong> {scheduleLabel}</Text>}
-          <Text style={infoText}><strong>Activități:</strong> jocuri, cântece și activități creative</Text>
-          {message && <Text style={infoText}>Observații: {message}</Text>}
+          <Text style={infoTitle}>📚 {t('Detaliile cursului', 'Course details')}</Text>
+          <Text style={infoText}><strong>{t('Tip:', 'Type:')}</strong> {t('Curs copii', "Children's course")}</Text>
+          {childName && <Text style={infoText}>{t("Nume copil:", "Child's name:")} {childName}</Text>}
+          {childAge && <Text style={infoText}>{t("Vârstă copil:", "Child's age:")} {childAge}</Text>}
+          <Text style={infoText}><strong>{t('Format:', 'Format:')}</strong> {t('fizic, în București', 'in person, in Bucharest')}</Text>
+          {scheduleLabel && <Text style={infoText}><strong>{t('Program:', 'Schedule:')}</strong> {scheduleLabel}</Text>}
+          <Text style={infoText}><strong>{t('Activități:', 'Activities:')}</strong> {t('jocuri, cântece și activități creative', 'games, songs and creative activities')}</Text>
+          {message && <Text style={infoText}>{t('Observații:', 'Notes:')} {message}</Text>}
         </Section>
         <Section style={infoBox}>
-          <Text style={infoTitle}>✅ Următorii pași</Text>
-          <Text style={checkItem}>1. Te contactăm pe WhatsApp pentru confirmare</Text>
-          <Text style={checkItem}>2. Confirmăm grupa potrivită pentru copil</Text>
-          <Text style={checkItem}>3. Stabilim detaliile practice și plata</Text>
-          <Text style={checkItem}>4. Începem cursul 🎉</Text>
+          <Text style={infoTitle}>✅ {t('Următorii pași', 'Next steps')}</Text>
+          <Text style={checkItem}>{t('1. Te contactăm pe WhatsApp pentru confirmare', '1. We contact you on WhatsApp to confirm')}</Text>
+          <Text style={checkItem}>{t('2. Confirmăm grupa potrivită pentru copil', '2. We confirm the right group for your child')}</Text>
+          <Text style={checkItem}>{t('3. Stabilim detaliile practice și plata', '3. We settle the practical details and payment')}</Text>
+          <Text style={checkItem}>{t('4. Începem cursul 🎉', '4. The course begins 🎉')}</Text>
         </Section>
         <Section style={ctaSection}>
-          <Button style={button} href="https://wa.me/40763124514">Contactează-ne pe WhatsApp</Button>
+          <Button style={button} href="https://wa.me/40763124514">{t('Contactează-ne pe WhatsApp', 'Message us on WhatsApp')}</Button>
           {icsUrl && (
-            <Text style={textSmall}>📅 <Link href={icsUrl} style={link}>Adaugă în calendar (.ics)</Link></Text>
+            <Text style={textSmall}>📅 <Link href={icsUrl} style={link}>{t('Adaugă în calendar (.ics)', 'Add to calendar (.ics)')}</Link></Text>
           )}
           {manageUrl && (
-            <Text style={textSmall}>⚙️ <Link href={manageUrl} style={link}>Gestionează înscrierea</Link></Text>
+            <Text style={textSmall}>⚙️ <Link href={manageUrl} style={link}>{t('Gestionează înscrierea', 'Manage your registration')}</Link></Text>
           )}
         </Section>
         <Hr style={hr} />
         <Section style={footerBrand}><Text style={footerLogo}><Img src="https://centruldearabalibaneza.com/logo-mark.png" width="24" height="24" alt="" style={logoMark} />{senderName || SITE_NAME}</Text></Section>
-        <Text style={footer}>Cu drag, echipa noastră</Text>
-        <Text style={footerSmall}>📍 București, România · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
+        <Text style={footer}>{t('Cu drag, echipa noastră', 'Warmly, our team')}</Text>
+        <Text style={footerSmall}>📍 {t('București, România', 'Bucharest, Romania')} · 📞 +40 763 124 514 · 🌐 centruldearabalibaneza.com</Text>
       </Container>
     </Body>
   </Html>
-)
+  )
+}
 
 export const template = {
   component: KidsRegistrationConfirmationEmail,
-  subject: 'Confirmare cerere curs copii',
+  subject: (data: Record<string, unknown>) =>
+    emailLanguage(data?.language) === 'en' ? "Children's course request confirmed" : 'Confirmare cerere curs copii',
   displayName: 'Confirmare curs copii',
   previewData: { name: 'Ana Popescu', childName: 'Maya', childAge: '8 ani', message: 'Îi plac cântecele și activitățile creative.', scheduleLabel: 'sâmbătă, 11:00–12:00', icsUrl: 'https://example.com/ics?id=abc' },
 } satisfies TemplateEntry
