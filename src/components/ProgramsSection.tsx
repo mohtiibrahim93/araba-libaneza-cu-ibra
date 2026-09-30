@@ -20,6 +20,7 @@ import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
+import YallaGameBand from "@/components/YallaGameBand";
 
 // Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
 const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
@@ -99,7 +100,7 @@ const ProgramsSection = () => {
         <Tabs defaultValue="adults" className="w-full">
           <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.programsBadge}</span>
+              <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{lang === "en" ? "How to start" : "Cum începi"}</span>
               <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">{t.programsTitle}</h2>
               <p className="text-muted-foreground max-w-xl">{t.programsDesc}</p>
             </div>
@@ -109,6 +110,49 @@ const ProgramsSection = () => {
             <TabsTrigger value="kids">{t.tabKids}</TabsTrigger>
           </TabsList>
           </div>
+
+          {/* The path in four steps, as the owner laid it out: choose, check
+              if unsure, read the details, sign up. Steps 3 and 4 live on the
+              course cards (level details, curriculum link, the sign-up form). */}
+          <ol className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {(lang === "en"
+              ? [
+                  ["Choose your course", "Group or private, below."],
+                  ["Not sure?", "Take the quiz or find your level in the game.", "#not-sure"],
+                  ["Read the details", "Tap a level: curriculum, schedule, price."],
+                  ["Sign up and pay", "Online, in a few minutes."],
+                ]
+              : [
+                  ["Alege cursul", "De grup sau privat, mai jos."],
+                  ["Nu ești sigur?", "Fă quiz-ul sau află-ți nivelul în joc.", "#not-sure"],
+                  ["Citește detaliile", "Apasă pe un nivel: curriculum, orar, preț."],
+                  ["Înscrie-te și plătește", "Online, în câteva minute."],
+                ]
+            ).map(([title, text, href], i) => {
+              const body = (
+                <>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {i + 1}
+                  </span>
+                  <span className="flex flex-col">
+                    <span className="font-semibold text-foreground">{title}</span>
+                    <span className="text-sm text-foreground/70">{text}</span>
+                  </span>
+                </>
+              );
+              return (
+                <li key={title}>
+                  {href ? (
+                    <a href={href} className="flex h-full items-start gap-3 rounded-2xl border border-[#E7E1D6] bg-card p-4 transition-colors hover:border-brand-green dark:border-border">
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="flex h-full items-start gap-3 rounded-2xl border border-[#E7E1D6] bg-card p-4 dark:border-border">{body}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
 
           <TabsContent value="adults">
             <div className="grid md:grid-cols-2 gap-8">
@@ -578,26 +622,40 @@ const ProgramsSection = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Two different questions, so two CTAs rather than one.
-            The quiz answers "which course suits me" in about 30 seconds and
-            stays primary: at this point the visitor is one click from picking a
-            course, and a 15-minute test would interrupt a decision they are
-            seconds from making. The level test answers "what level am I", which
-            only matters to someone who already speaks some of the language, so
-            it sits underneath in a quieter style. */}
-        <div className="mt-8 flex flex-col items-center gap-2 text-center">
-          <a
-            href="/quiz"
-            className="text-sm font-semibold text-brand-green underline underline-offset-4 hover:opacity-80"
-          >
-            {t.programsQuizLink}
-          </a>
-          <a
-            href="/test-de-nivel"
-            className="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-          >
-            {t.programsLevelTestLink}
-          </a>
+        {/* "Nu ești sigur?" — step 2: the quiz (which course suits me) and the
+            game (what level am I), side by side. The quiz shows its first
+            question here; any answer opens the full quiz on its own page. */}
+        <div id="not-sure" className="mt-12 scroll-mt-24">
+          <h3 className="mb-5 font-display text-2xl sm:text-3xl font-bold text-foreground">
+            {lang === "en" ? "Not sure which course?" : "Nu ești sigur ce curs ți se potrivește?"}
+          </h3>
+          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+            <div className="flex flex-col gap-4 rounded-[28px] border border-[#E7E1D6] bg-card px-6 py-8 sm:px-8 dark:border-border">
+              <span className="text-sm font-bold uppercase tracking-[0.1em] text-primary">
+                {lang === "en" ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"}
+              </span>
+              <p className="font-display text-2xl sm:text-[1.75rem] font-bold leading-tight text-foreground">{t.quizQ1}</p>
+              <div className="flex flex-col gap-3">
+                {[
+                  [t.quizQ1OptSelf, t.quizQ1OptSelfDesc],
+                  [t.quizQ1OptKids, t.quizQ1OptKidsDesc],
+                ].map(([title, desc]) => (
+                  <a
+                    key={title}
+                    href="/quiz"
+                    className="flex flex-col rounded-xl border border-[#E7E1D6] bg-background px-5 py-4 transition-colors hover:border-brand-green dark:border-border"
+                  >
+                    <span className="font-semibold text-foreground">{title}</span>
+                    <span className="text-sm text-foreground/70">{desc}</span>
+                  </a>
+                ))}
+              </div>
+              <a href="/quiz" className="mt-1 text-sm font-semibold text-brand-green underline underline-offset-4 hover:opacity-80">
+                {lang === "en" ? "Take the full quiz →" : "Fă tot quiz-ul →"}
+              </a>
+            </div>
+            <YallaGameBand compact />
+          </div>
         </div>
       </div>
     </section>

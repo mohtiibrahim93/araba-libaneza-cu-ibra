@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/components/LocalizedLink";
 import { cn } from "@/lib/utils";
@@ -19,23 +19,35 @@ const ANSWERS: { arabizi: string; arabic: string; correct: boolean }[] = [
   { arabizi: "Kifak?", arabic: "كيفك؟", correct: false },
 ];
 
-const YallaGameBand = () => {
+const Wrapper = ({ compact, children }: { compact: boolean; children: ReactNode }) =>
+  compact ? <>{children}</> : <section className="py-section px-gutter bg-background">{children}</section>;
+
+/** `compact`: the card inside "Cum începi" (no section of its own, stacked). */
+const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
   const { lang } = useI18n();
   const en = lang === "en";
   const [picked, setPicked] = useState<number | null>(null);
   const answered = picked !== null;
   const right = answered && ANSWERS[picked]?.correct === true;
+  const Heading = compact ? "h3" : "h2";
 
   return (
-    <section className="py-section px-gutter bg-background">
-      <div className="w-full max-w-content mx-auto grid gap-10 rounded-[28px] bg-[#204F3A] px-6 py-10 text-white sm:px-10 lg:grid-cols-12 lg:gap-6 lg:px-16 lg:py-14 items-center">
-        <div className="flex flex-col gap-4 lg:col-span-6">
+    <Wrapper compact={compact}>
+      <div
+        className={cn(
+          "w-full grid rounded-[28px] bg-[#204F3A] text-white items-center",
+          compact
+            ? "h-full gap-6 px-6 py-8 sm:px-8"
+            : "max-w-content mx-auto gap-10 px-6 py-10 sm:px-10 lg:grid-cols-12 lg:gap-6 lg:px-16 lg:py-14",
+        )}
+      >
+        <div className={cn("flex flex-col gap-4", !compact && "lg:col-span-6")}>
           <span className="text-sm font-bold uppercase tracking-[0.1em] text-[#E9C77B]">
             {en ? "Free · no account" : "Gratuit · fără cont"}
           </span>
-          <h2 className="font-display text-display-lg font-bold leading-tight">
+          <Heading className={cn("font-display font-bold leading-tight", compact ? "text-2xl sm:text-[1.75rem]" : "text-display-lg")}>
             {en ? "Play Yalla. 4,300+ expressions, right in your browser." : "Joacă Yalla. 4.300+ expresii, direct în browser."}
-          </h2>
+          </Heading>
           <p className="text-[17px] leading-relaxed text-[#CFE0D6]">
             {en
               ? "Scheduled reviews, so you don't forget what you've learned. Two minutes a day is enough."
@@ -57,7 +69,7 @@ const YallaGameBand = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3.5 rounded-[22px] bg-white p-6 text-[#1A1A1A] sm:p-7 lg:col-span-5 lg:col-start-8">
+        <div className={cn("flex flex-col gap-3.5 rounded-[22px] bg-white p-6 text-[#1A1A1A] sm:p-7", !compact && "lg:col-span-5 lg:col-start-8")}>
           <div className="flex justify-between text-[13px] font-semibold text-[#5B5A57]">
             <span>{en ? "Sample question" : "Întrebare de probă"}</span>
             <span className="text-[#204F3A]">{en ? "Try it" : "Încearcă"}</span>
@@ -110,7 +122,7 @@ const YallaGameBand = () => {
           </p>
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 };
 

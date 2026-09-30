@@ -8,7 +8,6 @@ import SocialProofStrip from "@/components/SocialProofStrip";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
 import WhySection from "@/components/WhySection";
 import ResourcesTeaser from "@/components/ResourcesTeaser";
-import YallaGameBand from "@/components/YallaGameBand";
 import InstructorSection from "@/components/InstructorSection";
 
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -242,7 +241,6 @@ const PageContent = () => {
         <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
           <ProgramsSection />
         </Suspense>
-        <YallaGameBand />
         <FAQSection />
         <ResourcesTeaser />
         <CTASection />
