@@ -38,6 +38,19 @@ const COPY = {
     page: "Pagina",
     read: "Citește",
     min: "min",
+    guidesH2: "Mai multe ghiduri",
+    guides: [
+      {
+        to: "/cursuri-araba-bucuresti",
+        title: "Cursuri de arabă în București",
+        text: "Unde, cum și cât: grupe mici A1–C2, meditații 1:1 și curs pentru copii, la Strada Icoanei 80 sau online.",
+      },
+      {
+        to: "/meditatii-araba",
+        title: "Meditații arabă 1:1",
+        text: "Lecții private cu profesor nativ, în ritmul tău: cum funcționează, cât costă și cum începi.",
+      },
+    ],
   },
   en: {
     title: "Blog — Lebanese Arabic explained simply | Ibra",
@@ -52,6 +65,19 @@ const COPY = {
     page: "Page",
     read: "Read",
     min: "min",
+    guidesH2: "More guides",
+    guides: [
+      {
+        to: "/cursuri-araba-bucuresti",
+        title: "Arabic classes in Bucharest",
+        text: "Where, how and how much: small groups A1–C2, 1-on-1 lessons and a children's course, at Strada Icoanei 80 or online.",
+      },
+      {
+        to: "/meditatii-araba",
+        title: "1-on-1 Arabic tutor",
+        text: "Private lessons with a native teacher, at your pace: how they work, what they cost and how to start.",
+      },
+    ],
   },
 } as const;
 
@@ -223,6 +249,30 @@ const BlogIndex = () => {
               ))}
             </nav>
           )}
+
+          {/* Two articles that live at their own addresses rather than under
+              /blog, so they are not in the registry; the owner wanted them on
+              the blog. The localised Link sends English readers to
+              /en/arabic-classes-near-me and /en/arabic-tutor. */}
+          <div className="mt-16 border-t border-border pt-10">
+            <h2 className="mb-5 font-display text-2xl font-bold text-foreground">{c.guidesH2}</h2>
+            <ul className="grid gap-5 sm:grid-cols-2">
+              {c.guides.map((g) => (
+                <li key={g.to}>
+                  <Link
+                    to={g.to}
+                    className="group flex h-full flex-col gap-2 rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/50"
+                  >
+                    <span className="font-display text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
+                      {g.title}
+                    </span>
+                    <span className="text-sm leading-relaxed text-muted-foreground">{g.text}</span>
+                    <span className="mt-auto pt-2 text-sm font-semibold text-primary">{c.read} →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       </main>
 

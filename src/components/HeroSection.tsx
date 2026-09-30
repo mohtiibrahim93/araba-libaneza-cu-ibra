@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import { BookOpen, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-lebanon-cedar.jpg";
 import heroImgWebp from "@/assets/hero-lebanon-cedar.webp";
 import AnchorLink from "@/components/AnchorLink";
@@ -89,18 +89,8 @@ const HeroSection = () => {
           </div>
 
           {/* The Preply rating is shown once, under the phones (HeroConversation);
-              the owner asked for it only once in the hero. */}
-
-          {/* Floating card: lessons */}
-          <div className="absolute bottom-4 left-4 bg-background/95 backdrop-blur-xs rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-foreground">{t.heroLessons}</p>
-              <p className="text-xs text-muted-foreground">{t.heroComplete}</p>
-            </div>
-          </div>
+              the owner asked for it only once in the hero. The "370+ lessons"
+              card moved to the teacher section's figures, next to the rating. */}
         </div>
       </div>
     </section>
