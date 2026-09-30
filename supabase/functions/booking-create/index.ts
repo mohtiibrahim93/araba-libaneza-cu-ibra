@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, payment_status")
+      .select("id, payment_status, quantity")
       .eq("id", body.registration_id)
       .maybeSingle();
     if (!reg) return json({ error: "registration not found" }, 404);
@@ -123,6 +123,26 @@ Deno.serve(async (req) => {
     // of their lessons here.
     if (et.slug !== "trial" && !internalCall && reg.payment_status !== "paid") {
       return json({ error: "payment required", code: "payment_required" }, 402);
+    }
+
+    // A paid registration books at most the number of lessons it bought.
+    // Applied to internal calls too, so the webhook can never book more than
+    // the package either (a redelivered event lands here as well).
+    if (et.slug !== "trial") {
+      const bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
+      const { count: used, error: countErr } = await supabase
+        .from("bookings")
+        .select("id", { count: "exact", head: true })
+        .eq("registration_id", body.registration_id)
+        .neq("event_type_slug", "trial")
+        .in("status", ["confirmed", "completed"]);
+      if (countErr) {
+        console.error("[booking-create] lesson count failed", countErr);
+        return json({ error: "Internal server error" }, 500);
+      }
+      if ((used ?? 0) >= bought) {
+        return json({ error: "all paid lessons already booked", code: "lessons_used_up" }, 409);
+      }
     }
 
     // The free trial is for first contact only: one per person. A cancelled
