@@ -109,6 +109,7 @@ const RegistrationFormSection = ({
   /** Fires registration_start once, on the first real interaction. */
   const startedRef = useRef(false);
   const [referralCode, setReferralCode] = useState("");
+  const [showReferral, setShowReferral] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
@@ -555,7 +556,7 @@ const RegistrationFormSection = ({
       <div className={embedded ? "" : "max-w-2xl mx-auto"}>
         {!embedded && (
           <div className="text-center mb-10">
-            <h2 className="text-display-lg font-bold tracking-tight text-foreground mb-3">
+            <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
               {t.mainLeadTitle}
             </h2>
             <p className="text-muted-foreground">{t.mainLeadDesc}</p>
@@ -576,7 +577,7 @@ const RegistrationFormSection = ({
           className={
             embedded
               ? "space-y-5"
-              : "bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-xs space-y-5"
+              : "bg-card rounded-3xl border border-[#E7E1D6] p-6 sm:p-8 space-y-5 dark:border-border"
           }
         >
           {/* Honeypot — hidden from real users, attractive to bots */}
@@ -590,6 +591,11 @@ const RegistrationFormSection = ({
             onChange={(e) => setHoneypot(e.target.value)}
             style={{ display: "none" }}
           />
+
+          {/* The form in three labelled parts — the course, your details, then
+              confirm — so a long form reads as a few short steps. Layout
+              only: every field and rule below is unchanged. */}
+          <StepHeading n={1} title={lang === "en" ? "Your course" : "Cursul"} />
 
           {/* Course type */}
           {(lockSelection || lockCourseType) && courseType ? null : (
@@ -732,7 +738,7 @@ const RegistrationFormSection = ({
 
           {/* Online info */}
           {format === "online" && (
-            <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3">
+            <div className="rounded-xl border border-brand-green/25 bg-brand-green/5 px-4 py-3">
               <p className="text-sm font-semibold text-foreground">{t.mainLeadOnlineInfoTitle}</p>
               <p className="text-xs text-muted-foreground mt-1">{t.mainLeadOnlineInfoDesc}</p>
             </div>
@@ -769,6 +775,8 @@ const RegistrationFormSection = ({
             </>
           )}
 
+          <StepHeading n={2} title={lang === "en" ? "Your details" : "Datele tale"} />
+
           {/* Contact + message */}
           <LeadFields
             showErrors={submitAttempted}
@@ -783,9 +791,7 @@ const RegistrationFormSection = ({
             onMessageChange={setMessage}
           />
 
-          {/* Trial UX (Option A): no toggle here. Private students are
-              defaulted into the free trial flow post-submit, with a
-              subtle "pay directly" link below the booking embed. */}
+          <StepHeading n={3} title={lang === "en" ? "Confirm" : "Confirmă"} />
 
           <p className="text-xs text-muted-foreground">
             {courseType === "private"
@@ -804,22 +810,34 @@ const RegistrationFormSection = ({
             error={invalidField === "gdpr" ? t.gdprRequired : undefined}
           />
 
-          <div className="space-y-1.5">
-            <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">
-              {t.referralCodeLabel}
-            </Label>
-            <Input
-              id="referralCode"
-              type="text"
-              value={referralCode}
-              onChange={(e) => setReferralCode(e.target.value)}
-              placeholder={t.referralCodePlaceholder}
-              maxLength={64}
-              autoComplete="off"
-            />
-          </div>
+          {/* The referral code is for the few who have one, so it opens on
+              request instead of being a field everyone has to read past. */}
+          {showReferral || referralCode ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">
+                {t.referralCodeLabel}
+              </Label>
+              <Input
+                id="referralCode"
+                type="text"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
+                placeholder={t.referralCodePlaceholder}
+                maxLength={64}
+                autoComplete="off"
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowReferral(true)}
+              className="text-sm font-medium text-brand-green hover:underline underline-offset-4"
+            >
+              {t.referralCodePlaceholder}
+            </button>
+          )}
 
-          <Button type="submit" className="w-full" disabled={submitting}>
+          <Button type="submit" className="w-full h-12 rounded-xl text-base font-semibold" disabled={submitting}>
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -850,5 +868,16 @@ const RegistrationFormSection = ({
     </section>
   );
 };
+
+
+/** A numbered part of the sign-up form, in the homepage's label style. */
+const StepHeading = ({ n, title }: { n: number; title: string }) => (
+  <div className="flex items-center gap-3 border-t border-[#E7E1D6] pt-5 first-of-type:border-t-0 first-of-type:pt-0 dark:border-border">
+    <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-bold text-white">
+      {n}
+    </span>
+    <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{title}</span>
+  </div>
+);
 
 export default RegistrationFormSection;

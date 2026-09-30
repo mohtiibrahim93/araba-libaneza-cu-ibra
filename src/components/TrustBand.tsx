@@ -1,5 +1,4 @@
 import { useI18n } from "@/lib/i18n";
-import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Globe, ShieldCheck, Star } from "lucide-react";
 
 const TrustBand = () => {
@@ -25,20 +24,19 @@ const TrustBand = () => {
   ];
 
   return (
-    <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 px-4 py-4 sm:px-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        {items.map((item) => (
-          <Badge
-            key={item.label}
-            variant="outline"
-            className="h-auto w-full justify-start gap-2 border-border/50 bg-background/60 px-3 py-2.5 text-xs font-medium text-foreground shadow-none hover:bg-background"
-          >
-            <item.icon className="h-4 w-4 shrink-0 text-primary" />
-            <span className="leading-tight">{item.label}</span>
-          </Badge>
-        ))}
-      </div>
-    </div>
+    // Two columns everywhere: the band sits in the narrow form column on the
+    // level pages, where four pill badges were squeezed into circles.
+    <ul className="mt-6 grid grid-cols-2 gap-2.5">
+      {items.map((item) => (
+        <li
+          key={item.label}
+          className="flex items-center gap-2 rounded-xl border border-[#E7E1D6] bg-card px-3 py-2.5 text-xs font-medium leading-tight text-foreground dark:border-border"
+        >
+          <item.icon className="h-4 w-4 shrink-0 text-brand-green" aria-hidden="true" />
+          <span>{item.label}</span>
+        </li>
+      ))}
+    </ul>
   );
 };
 
