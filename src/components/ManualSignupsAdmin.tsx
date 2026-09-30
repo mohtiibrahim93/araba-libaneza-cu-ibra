@@ -108,6 +108,7 @@ const ManualSignupsAdmin = () => {
   };
 
   const remove = async (id: string) => {
+    if (!confirm("Ștergi această înscriere manuală? Locurile ocupate se recalculează.")) return;
     setDeletingId(id);
     try {
       const { data, error } = await invokeAdmin({ action: "delete_manual_signup", id });
