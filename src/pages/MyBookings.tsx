@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "@/lib/router-compat";
-import { Calendar, Clock, Loader2, Mail, MapPin, RefreshCw, Video, X } from "lucide-react";
+import { Calendar, Clock, Loader2, Mail, MapPin, MessageCircle, RefreshCw, Video, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 
 type Lang = "ro" | "en";
 type BookingStatus = "confirmed" | "cancelled" | "rescheduled" | "completed";
@@ -46,7 +47,12 @@ const COPY = {
     cancelConfirm: "Sigur vrei să anulezi această rezervare?",
     cancelledToast: "Rezervarea a fost anulată.",
     actionError: "Rezervarea nu a putut fi actualizată. Încearcă din nou.",
-    deadline: "Poți anula sau reprograma direct de aici.",
+    deadline: "Poți anula sau reprograma direct de aici, cu cel puțin 24 de ore înainte de lecție.",
+    tooLateTitle: "Prea târziu pentru modificări online",
+    tooLateBody: "Lecția începe în mai puțin de 24 de ore, așa că nu mai poate fi anulată sau reprogramată de aici.",
+    tooLateEmergency: "Dacă a apărut o urgență reală, scrie-ne pe WhatsApp și explică pe scurt ce s-a întâmplat. Fiecare situație este analizată individual.",
+    whatsapp: "Scrie-ne pe WhatsApp",
+    tooLateToast: "Lecția începe în mai puțin de 24 de ore. Scrie-ne pe WhatsApp.",
     expires: "Din motive de siguranță, acest acces expiră în 30 de minute.",
     statuses: { confirmed: "Confirmată", cancelled: "Anulată", rescheduled: "Reprogramată", completed: "Încheiată" },
   },
@@ -71,11 +77,25 @@ const COPY = {
     cancelConfirm: "Are you sure you want to cancel this booking?",
     cancelledToast: "Your booking was cancelled.",
     actionError: "The booking could not be updated. Please try again.",
-    deadline: "You can cancel or reschedule directly from here.",
+    deadline: "You can cancel or reschedule directly from here, at least 24 hours before the lesson.",
+    tooLateTitle: "Too late to change it online",
+    tooLateBody: "The lesson starts in less than 24 hours, so it can no longer be cancelled or rescheduled from here.",
+    tooLateEmergency: "If something genuinely urgent has come up, message us on WhatsApp and explain briefly what happened. Every situation is looked at on its own.",
+    whatsapp: "Message us on WhatsApp",
+    tooLateToast: "The lesson starts in less than 24 hours. Message us on WhatsApp.",
     expires: "For your security, this access expires after 30 minutes.",
     statuses: { confirmed: "Confirmed", cancelled: "Cancelled", rescheduled: "Rescheduled", completed: "Completed" },
   },
 } as const;
+
+/**
+ * Free changes stop 24 hours before the lesson — the same cutoff
+ * `booking-manage` enforces. Shown here so the buttons are not offered for a
+ * call that would come back 409.
+ */
+function tooLateToChange(startAt: string): boolean {
+  return Date.parse(startAt) - Date.now() < 24 * 60 * 60 * 1000;
+}
 
 function formatDate(value: string, lang: Lang): string {
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
@@ -150,7 +170,16 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
         `${import.meta.env["VITE_SUPABASE_URL"]}/functions/v1/booking-manage/${booking.manage_token}`,
         { method: "DELETE", headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] } },
       );
-      if (!response.ok) throw new Error("cancel failed");
+      if (!response.ok) {
+        // The cutoff can pass while this list is open.
+        const body = await response.json().catch(() => ({}));
+        if (body?.code === "too_late") {
+          toast.error(c.tooLateToast);
+          await loadBookings();
+          return;
+        }
+        throw new Error("cancel failed");
+      }
       toast.success(c.cancelledToast);
       await loadBookings();
     } catch {
@@ -228,7 +257,7 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
                   {active && booking.meet_link && (
                     <Button asChild variant="outline" size="sm" className="mt-5"><a href={booking.meet_link} target="_blank" rel="noopener noreferrer"><Video />{c.meet}</a></Button>
                   )}
-                  {active && (
+                  {active && !tooLateToChange(booking.start_at) && (
                     <div className="mt-5 border-t border-border pt-4">
                       <p className="mb-3 text-xs text-muted-foreground">{c.deadline}</p>
                       <div className="flex flex-col gap-2 sm:flex-row">
@@ -238,6 +267,16 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
                           {cancellingId === booking.id ? c.cancelling : c.cancel}
                         </Button>
                       </div>
+                    </div>
+                  )}
+                  {active && tooLateToChange(booking.start_at) && (
+                    <div className="mt-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
+                      <p className="flex items-center gap-2 text-sm font-semibold"><Clock className="h-4 w-4" />{c.tooLateTitle}</p>
+                      <p className="mt-2 text-xs leading-relaxed">{c.tooLateBody}</p>
+                      <p className="mt-2 text-xs leading-relaxed">{c.tooLateEmergency}</p>
+                      <Button asChild size="sm" className="mt-3 bg-amber-900 text-amber-50 hover:bg-amber-800">
+                        <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer"><MessageCircle />{c.whatsapp}</a>
+                      </Button>
                     </div>
                   )}
                 </article>
