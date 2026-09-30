@@ -23,7 +23,7 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId } = await req.json();
+    const { courseType, email, name, registrationId, booking } = await req.json();
 
     if (!courseType || !COURSE_TYPES.includes(courseType)) {
       return new Response(JSON.stringify({ error: "Invalid course type" }), {
@@ -94,6 +94,24 @@ serve(async (req) => {
       courseType === "group" ||
       courseType === "kids";
 
+    // Private lessons from the day-and-time picker: the slot rides on the
+    // PaymentIntent's metadata (same keys create-checkout-session puts on the
+    // hosted session) and stripe-webhook books it on payment_intent.succeeded.
+    // Nothing is booked before the payment clears.
+    const bookingMeta: Record<string, string> = {};
+    if (courseType === "private" && booking && typeof booking === "object") {
+      const put = (k: string, v: unknown, max = 450) => {
+        if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
+      };
+      put("booking_start_at", booking.start_at, 40);
+      put("booking_event_type", booking.event_type, 40);
+      put("booking_format", booking.format, 40);
+      put("booking_language", booking.language, 8);
+      put("booking_notes", booking.notes);
+      if (booking.weekly === true) bookingMeta.booking_weekly = "1";
+    }
+    const hasBooking = Boolean(bookingMeta.booking_start_at);
+
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
       throw new Error("Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.");
@@ -151,7 +169,7 @@ serve(async (req) => {
           existing.client_secret &&
           !["succeeded", "canceled"].includes(existing.status)
         ) {
-          if (existing.amount === finalAmount && existing.currency === currency) {
+          if (!hasBooking && existing.amount === finalAmount && existing.currency === currency) {
             return new Response(
               JSON.stringify({
                 clientSecret: existing.client_secret,
@@ -184,6 +202,9 @@ serve(async (req) => {
                 level: regRow.level || "",
                 format: regRow.format || "",
                 discount_applied: discountApplied ? (courseType === "private" ? "15" : "10") : "0",
+                // A new pick replaces the old one; "" clears a key in Stripe,
+                // so switching weekly off really switches it off.
+                ...(hasBooking ? { booking_weekly: "", booking_notes: "", ...bookingMeta } : {}),
               },
             });
             return new Response(
@@ -241,9 +262,16 @@ serve(async (req) => {
               ? "15"
               : "10"
             : "0",
+          ...bookingMeta,
         },
       },
-      { idempotencyKey: `pi_${registrationId}${idempotencySuffix}` },
+      {
+        // The slot is part of the key, so a different pick is a new intent
+        // rather than an idempotency mismatch against the old one.
+        idempotencyKey: `pi_${registrationId}${idempotencySuffix}${
+          hasBooking ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}` : ""
+        }`,
+      },
     );
 
     // Persist the new intent id — this covers first-time create AND the
