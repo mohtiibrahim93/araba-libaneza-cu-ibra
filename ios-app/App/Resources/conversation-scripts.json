@@ -1102,6 +1102,235 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a1-plans",
+      "scenes": [
+        {
+          "title": "Cu Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-3cca63b48e1b"
+            },
+            {
+              "exerciseID": "syn-context-syn-39077f619d98",
+              "partner": {
+                "arabizi": "Mar7aba! Yemkin ra7 ru7 3al jabal.",
+                "ro": "Salut! Poate voi merge la munte."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1c39090c0a8b",
+              "partner": {
+                "arabizi": "Ma3 as7abe. W ente shu msheerii3ik?",
+                "ro": "Cu prietenii. Și tu, ce planuri ai?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-dc55180eafcb",
+              "partner": {
+                "arabizi": "Lesh? Ta3e ma3na!",
+                "ro": "De ce? Vino cu noi!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-151f2794a9e3",
+              "partner": {
+                "arabizi": "Tayyeb, yemkin el marra el jeye.",
+                "ro": "Bine, poate data viitoare."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4278209e10f8",
+              "partner": {
+                "arabizi": "Ra7 nru7 es sabt es sobe7.",
+                "ro": "Vom merge sâmbătă dimineața."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-39c4eff33327",
+              "partner": {
+                "arabizi": "El a7ad bel layl.",
+                "ro": "Duminică seara."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Aceeași discuție, tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-8b9c4f8c4e07",
+              "partner": {
+                "arabizi": "Mar7aba Karim! Shu ra7 te3mel bel weekend?",
+                "ro": "Salut Karim! Ce vei face în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8ed3bc4261ea",
+              "partner": {
+                "arabizi": "7elo! Ma3 min ra7 tru7?",
+                "ro": "Frumos! Cu cine vei merge?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-caf819e36cad",
+              "partner": {
+                "arabizi": "Ra7 2e23od bel bet w ra7 2ra kteb.",
+                "ro": "Voi sta acasă și voi citi o carte."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-23c805dae04f",
+              "partner": {
+                "arabizi": "Shukran, bass 3ande sho8ol ktiir.",
+                "ro": "Mulțumesc, dar am multă muncă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-e246cf1ad219",
+              "partner": {
+                "arabizi": "Inshallah! Aymta ra7 truu7o?",
+                "ro": "Dacă vrea Dumnezeu! Când veți merge?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-60cd0ac8e493",
+              "partner": {
+                "arabizi": "W ra7 terja3u aymta?",
+                "ro": "Și când vă veți întoarce?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3c2dcc0a64e7",
+              "partner": {
+                "arabizi": "Tameem! Ra7 nshufak el tanen?",
+                "ro": "Perfect! Ne vedem luni?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7423347a28e8",
+              "partner": {
+                "arabizi": "Yalla, estamte3!",
+                "ro": "Hai, distrează-te!"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Un prieten te întreabă ce faci mâine",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-66d476c45bc5",
+              "partner": {
+                "arabizi": "Shu ra7 ta3mol bukra?",
+                "ro": "Ce vei face mâine?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ce04f597bf33",
+              "partner": {
+                "arabizi": "W ba3d el sho8ol?",
+                "ro": "Și după muncă?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1f20614e85aa",
+              "partner": {
+                "arabizi": "Shu ra7 ta3mol bel 3otle?",
+                "ro": "Ce vei face în vacanță?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-69b39c5aae51",
+              "partner": {
+                "arabizi": "W ba3den?",
+                "ro": "Și apoi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0756c0993b4c",
+              "partner": {
+                "arabizi": "Ta3a ma3e 3al mat3am!",
+                "ro": "Vino cu mine la restaurant!"
+              }
+            }
+          ]
+        },
+        {
+          "title": "La telefon",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-843f1405c9f4",
+              "partner": {
+                "arabizi": "Wen enta?",
+                "ro": "Unde ești?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7526d24d82e1",
+              "partner": {
+                "arabizi": "Ra7 tkun bel mat3am?",
+                "ro": "O să fii la restaurant?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0e09c58c0d5c",
+              "partner": {
+                "arabizi": "Ana halla2 mash8ul.",
+                "ro": "Acum sunt ocupat."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Vacanța",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-eda39e9e1ad9",
+              "partner": {
+                "arabizi": "Shu msheerii3ak?",
+                "ro": "Ce planuri ai?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9e231be136e9",
+              "partner": {
+                "arabizi": "W aymta ra7 tsefer?",
+                "ro": "Și când vei pleca?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-86ee18423311",
+              "partner": {
+                "arabizi": "Ra7 nru7 3al ba7er. Ta3a ma3na!",
+                "ro": "Mergem la mare. Vino cu noi!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-46f7d751827e",
+              "partner": {
+                "arabizi": "Akid?",
+                "ro": "Sigur?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-453551f079e4",
+              "partner": {
+                "arabizi": "Aymta ra7 truu7o?",
+                "ro": "Când veți merge?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1002cbd504e7",
+              "partner": {
+                "arabizi": "Yalla, bshufak!",
+                "ro": "Hai, ne vedem!"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

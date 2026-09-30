@@ -55547,7 +55547,7 @@
     },
     {
       "id": "syn-0e09c58c0d5c",
-      "canonicalArabizi": "Ra7 be7kiik ba3den.",
+      "canonicalArabizi": "Ra7 e7kiik ba3den.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -70223,7 +70223,7 @@
       "answer": "Ra7 safer 3ala Terkiyya.",
       "wrongAnswers": [
         "Akiid ra7 eje.",
-        "Ra7 be7kiik ba3den.",
+        "Ra7 e7kiik ba3den.",
         "Ra7 2e23od bel bet w ra7 2ra kteb."
       ]
     },
@@ -70350,7 +70350,7 @@
       },
       "answer": "Akiid ra7 eje.",
       "wrongAnswers": [
-        "Ra7 be7kiik ba3den.",
+        "Ra7 e7kiik ba3den.",
         "Ra7 2e23od bel bet w ra7 2ra kteb.",
         "El a7ad bel layl."
       ]
@@ -70455,7 +70455,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „îți voi vorbi mai târziu”"
       },
-      "answer": "Ra7 be7kiik ba3den.",
+      "answer": "Ra7 e7kiik ba3den.",
       "wrongAnswers": [
         "Ra7 2e23od bel bet w ra7 2ra kteb.",
         "El a7ad bel layl.",
@@ -70673,7 +70673,7 @@
       "wrongAnswers": [
         "Ra7 safer 3ala Terkiyya.",
         "Akiid ra7 eje.",
-        "Ra7 be7kiik ba3den."
+        "Ra7 e7kiik ba3den."
       ]
     },
     {
