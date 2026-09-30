@@ -115,6 +115,13 @@ Deno.serve(async (req) => {
       return true;
     });
 
+    // Chronological order. The candidates come out in the order the
+    // availability rules happen to be stored in, so a day with two windows
+    // (Friday has an evening rule stored before the morning one) listed 09:30
+    // after 17:00. Every value is a UTC toISOString, so a string sort is a
+    // time sort.
+    filtered.sort();
+
     // Group by local date
     const byDate = new Map<string, string[]>();
     for (const iso of filtered) {

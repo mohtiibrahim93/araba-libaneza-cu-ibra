@@ -16,6 +16,39 @@ import {
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
+/**
+ * Free changes stop 24 hours before the lesson — the rule the trial notice,
+ * the FAQ and the confirmation emails all state, and the reason the card is on
+ * file in the first place: a slot nobody turns up for costs a private lesson.
+ *
+ * It is enforced here rather than only in the page, because the page is
+ * reached by a token anyone holding the email link can replay directly against
+ * this function.
+ *
+ * Inside the window a genuine emergency is not refused, it is just not
+ * self-service: the blocked screen points at WhatsApp, and Ibra judges each
+ * one. Letting the button work regardless is what makes an emergency claim
+ * free, and that is what the rule is protecting against.
+ */
+const CHANGE_CUTOFF_MS = 24 * 60 * 60 * 1000;
+
+function tooLateToChange(startAt: string) {
+  return Date.parse(startAt) - Date.now() < CHANGE_CUTOFF_MS;
+}
+
+/**
+ * A server-to-server call carrying the service-role key — the admin panel,
+ * which cancels through this endpoint so that one code path sends the emails
+ * and clears the calendar. The exemption has to be earned by the key, not
+ * assumed: the manage token travels in email and reaches this function from
+ * the visitor's browser with only the anon key.
+ */
+function internalCall(req: Request) {
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  return serviceRoleKey.length > 0 && bearer === serviceRoleKey;
+}
+
 function client() {
   return createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 }
@@ -67,6 +100,13 @@ Deno.serve(async (req) => {
           meet_link: booking.meet_link,
           student_name: booking.student_name,
           student_email: booking.student_email,
+          // The language the booking was made in, so the page reads in the
+          // language of the email the link came from rather than in whatever
+          // the browser last had stored.
+          language: booking.language ?? "ro",
+          // Computed here so the page and this function apply the same cutoff
+          // to the same clock.
+          changes_allowed: booking.status === "confirmed" && !tooLateToChange(booking.start_at),
         },
         tz: TZ,
       });
@@ -74,6 +114,16 @@ Deno.serve(async (req) => {
 
     if (booking.status !== "confirmed") {
       return json({ error: "booking is not active" }, 409);
+    }
+
+    // Both DELETE and PATCH are changes, and both stop at the same cutoff —
+    // for the student. The cutoff protects Ibra's time from a late cancellation,
+    // so it cannot be allowed to stop Ibra: admin-registrations cancels a
+    // booking through this same endpoint with the service-role key, and that is
+    // exactly what he does for the emergency the blocked screen tells people to
+    // write in about.
+    if (!internalCall(req) && tooLateToChange(booking.start_at)) {
+      return json({ error: "too late to change", code: "too_late" }, 409);
     }
 
     const supabase = client();

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "@/lib/router-compat";
-import { ArrowLeft, Calendar, CheckCircle2, Download, Loader2, X } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle2, Clock, Download, Loader2, MessageCircle, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
 import { buildIcs, downloadIcs } from "@/lib/ics";
@@ -42,11 +43,14 @@ interface BookingInfo {
   meet_link: string | null;
   student_name: string;
   student_email: string;
+  language?: "ro" | "en";
+  /** False once the lesson is inside the 24-hour window, computed server-side. */
+  changes_allowed?: boolean;
 }
 
 const BookingManageInner = () => {
   const { token } = useParams();
-  const { lang, t } = useI18n();
+  const { lang, t, setLang } = useI18n();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState<BookingInfo | null>(null);
@@ -77,6 +81,22 @@ const BookingManageInner = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+  // This page is only ever reached from a booking email, so the language of
+  // that email is the language to read it in — including the scheduler inside
+  // the reschedule dialog, which reads the site language rather than a prop.
+  useEffect(() => {
+    if (booking?.language && booking.language !== lang) setLang(booking.language);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [booking?.language]);
+
+  // Free changes stop 24 hours before the lesson. The server decides (same
+  // rule, one clock) and the fallback only applies to an older response that
+  // does not carry the field.
+  const tooLate =
+    booking?.changes_allowed !== undefined
+      ? !booking.changes_allowed
+      : !!booking && Date.parse(booking.start_at) - Date.now() < 24 * 60 * 60 * 1000;
+
   const handleCancel = async () => {
     if (!confirm(t.manageConfirmCancel)) return;
     setBusy(true);
@@ -86,7 +106,15 @@ const BookingManageInner = () => {
         headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] },
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(t.manageGenericError);
+      if (!res.ok) {
+        // The cutoff can pass while this page is open.
+        if (json?.code === "too_late") {
+          toast.error(t.manageTooLateToast);
+          load();
+          return;
+        }
+        throw new Error(t.manageGenericError);
+      }
       toast.success(t.manageCancelledToast);
       load();
     } catch (e) {
@@ -112,6 +140,18 @@ const BookingManageInner = () => {
         if (json?.code === "conflict") {
           toast.error(t.manageSlotTaken);
           setPendingSlot(null);
+          return;
+        }
+        if (json?.code === "invalid_slot") {
+          toast.error(t.manageSlotNotBookable);
+          setPendingSlot(null);
+          return;
+        }
+        if (json?.code === "too_late") {
+          toast.error(t.manageTooLateToast);
+          setPendingSlot(null);
+          setRescheduleOpen(false);
+          load();
           return;
         }
         throw new Error(t.manageGenericError);
@@ -224,21 +264,48 @@ const BookingManageInner = () => {
                   <Download className="w-4 h-4" />
                   {t.bookingAddToCalendar}
                 </button>
-                <button
-                  onClick={() => setRescheduleOpen(true)}
-                  disabled={busy}
-                  className="flex-1 px-gutter py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
+                {!tooLate && (
+                  <>
+                    <button
+                      onClick={() => setRescheduleOpen(true)}
+                      disabled={busy}
+                      className="flex-1 px-gutter py-2 rounded-md border border-border text-sm font-medium hover:bg-muted"
+                    >
+                      {t.manageRescheduleButton}
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      disabled={busy}
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5"
+                    >
+                      <X className="w-4 h-4" />
+                      {t.manageCancelButton}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Inside the last 24 hours the two buttons are gone, so this has to
+                say why, and where a real emergency goes instead — a dead end
+                here is what turns a genuine problem into a no-show. */}
+            {booking.status === "confirmed" && tooLate && (
+              <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+                <p className="font-semibold inline-flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  {t.manageTooLateTitle}
+                </p>
+                <p className="mt-2 text-xs leading-relaxed">{t.manageTooLateBody}</p>
+                <p className="mt-2 text-xs leading-relaxed">{t.manageTooLateEmergency}</p>
+                <a
+                  href={WHATSAPP_CONTACT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-900 text-amber-50 text-sm font-medium hover:bg-amber-800"
                 >
-                  {t.manageRescheduleButton}
-                </button>
-                <button
-                  onClick={handleCancel}
-                  disabled={busy}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5"
-                >
-                  <X className="w-4 h-4" />
-                  {t.manageCancelButton}
-                </button>
+                  <MessageCircle className="w-4 h-4" />
+                  {t.manageWhatsAppCta}
+                </a>
               </div>
             )}
 
