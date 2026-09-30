@@ -1,4 +1,6 @@
+import { Ear, MapPin, MessagesSquare, Mic, Sparkles, TrendingUp, type LucideIcon } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { Link } from "@/components/LocalizedLink";
 
 /**
  * "De ce să înveți cu Ibra?" — the owner's reasons, grouped into six cards.
@@ -11,59 +13,71 @@ import { useI18n } from "@/lib/i18n";
  * "Scrii cum auzi" section that follows.
  */
 
-type Card = { title: string; text: string };
+type Card = { Icon: LucideIcon; title: string; text: string };
 
 const RO: Card[] = [
   {
-    title: "Singurul centru de arabă libaneză din București",
-    text: "Înveți dialectul care se vorbește, nu araba din carte. Libaneza e una dintre cele mai populare variante ale arabei și e înțeleasă în mare parte din lumea arabă.",
+    Icon: MapPin,
+    title: "Singurul centru din București",
+    text: "Dedicat arabei libaneze: dialectul care se vorbește, înțeles în mare parte din lumea arabă.",
   },
   {
+    Icon: Ear,
     title: "Ușor de început",
-    text: "Scrii cum auzi, în Arabizi, fără alfabet de învățat înainte. Întâi vorbești, gramatica vine după: metoda Oral First.",
+    text: "Scrii cum auzi, în Arabizi, fără alfabet înainte. Întâi vorbești, apoi gramatica.",
   },
   {
-    title: "O libaneză „albă”, apropiată de Beirut",
-    text: "Fără accente regionale (nord, Bekaa, sud). Îți arătăm însă sinonimele și felurile diferite de a scrie, ca să le recunoști oriunde în Liban.",
+    Icon: MessagesSquare,
+    title: "Libaneza „albă”, ca la Beirut",
+    text: "Fără accente regionale, dar cu sinonimele și variantele de scriere, ca să le recunoști oriunde.",
   },
   {
+    Icon: Mic,
     title: "Pronunție corectă",
-    text: "Lucrăm sunetele specifice arabei (2, 3, 5, 7, 8 și celelalte): respirația, silabele, poziția limbii și a dinților, până le pronunți corect.",
+    text: "Sunetele 2, 3, 5, 7, 8: respirație, silabe, poziția limbii, până le spui corect.",
   },
   {
-    title: "Tot ce alții nu predau",
-    text: "Cultură, obiceiuri, umor, clișee, argou, chiar și înjurăturile: nu ca să le folosești, ci ca să le recunoști și să știi cum să reacționezi. Nimic nu e tabu într-o abordare academică și realistă.",
+    Icon: Sparkles,
+    title: "Ce alții nu predau",
+    text: "Cultură, umor, expresii de zi cu zi și argou — chiar și cuvintele evitate, ca să știi ce auzi și cum să reacționezi.",
   },
   {
+    Icon: TrendingUp,
     title: "Structurat și personal",
-    text: "De la A1 la C2, de la primele expresii la argou, cu obiective clare pe fiecare nivel. Și atenție personală, chiar și în grup.",
+    text: "A1 → C2, cu obiective clare pe fiecare nivel și atenție personală, chiar și în grup.",
   },
 ];
 
 const EN: Card[] = [
   {
-    title: "The only Lebanese Arabic centre in Bucharest",
-    text: "You learn the dialect people actually speak, not textbook Arabic. Lebanese is one of the most popular varieties of Arabic and is understood across much of the Arab world.",
+    Icon: MapPin,
+    title: "The only centre in Bucharest",
+    text: "Dedicated to Lebanese Arabic: the dialect people speak, understood across much of the Arab world.",
   },
   {
+    Icon: Ear,
     title: "Easy to start",
-    text: "You write what you hear, in Arabizi, with no alphabet to learn first. You speak first and grammar comes after: the Oral First method.",
+    text: "You write what you hear, in Arabizi, with no alphabet first. You speak first, grammar comes after.",
   },
   {
-    title: "A neutral (“white”) Lebanese, close to Beirut's",
-    text: "No regional accents (north, Bekaa, south). We do show you the synonyms and the different spellings, so you recognise them anywhere in Lebanon.",
+    Icon: MessagesSquare,
+    title: "Neutral Lebanese, like Beirut's",
+    text: "No regional accents, but with the synonyms and spellings, so you recognise them anywhere.",
   },
   {
+    Icon: Mic,
     title: "Correct pronunciation",
-    text: "We work on the sounds specific to Arabic (2, 3, 5, 7, 8 and the rest): breathing, syllables, the position of the tongue and teeth, until you pronounce them correctly.",
+    text: "The sounds 2, 3, 5, 7, 8: breathing, syllables, tongue position, until you say them right.",
   },
   {
+    Icon: Sparkles,
     title: "What others don't teach",
-    text: "Culture, customs, humour, clichés, slang, even swear words: not so you use them, but so you recognise them and know how to react. Nothing is off limits in an academic, realistic approach.",
+    text: "Culture, humour, everyday phrases and slang — even the words others avoid, so you know what you hear and how to react.",
   },
   {
+    Icon: TrendingUp,
     title: "Structured and personal",
-    text: "From A1 to C2, from first phrases to slang, with clear goals at every level. And personal attention, even in a group.",
+    text: "A1 → C2, with clear goals at every level and personal attention, even in a group.",
   },
 ];
 
@@ -85,26 +99,39 @@ const WhySection = () => {
         </div>
 
         <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((c, i) => (
+          {cards.map(({ Icon, title, text }, i) => (
             <li
-              key={c.title}
-              className="flex flex-col gap-2.5 rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 dark:border-border"
+              key={title}
+              className="flex flex-col gap-3 rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 dark:border-border"
             >
-              <span className="text-sm font-bold tracking-[0.1em] text-primary">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="font-display text-xl font-bold leading-snug text-foreground">{c.title}</h3>
-              <p className="text-[15px] leading-relaxed text-muted-foreground">{c.text}</p>
+              <div className="flex items-center justify-between">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green">
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <span className="text-sm font-bold tracking-[0.1em] text-muted-foreground/70">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <h3 className="font-display text-xl font-bold leading-snug text-foreground">{title}</h3>
+              <p className="text-[15px] leading-relaxed text-foreground/80">{text}</p>
             </li>
           ))}
         </ol>
 
-        <p className="mt-8 max-w-4xl text-base leading-relaxed text-foreground">
-          <strong>{en ? "Who is it for? " : "Pentru cine? "}</strong>
-          {en
-            ? "For people with Lebanese roots who want the language back, for anyone with a Lebanese partner or family, and for work: official documents are in Standard Arabic, but daily life is lived in dialect."
-            : "Pentru cei cu rădăcini libaneze care vor să-și recupereze limba, pentru cei cu partener sau familie din Liban, și pentru carieră: documentele oficiale sunt în araba standard, dar viața de zi cu zi se trăiește în dialect."}
-        </p>
+        <div className="mt-8 flex flex-col gap-5 rounded-3xl bg-brand-green px-6 py-6 text-white sm:px-8 md:flex-row md:items-center md:justify-between">
+          <p className="max-w-3xl text-base leading-relaxed text-white/90">
+            <strong className="text-white">{en ? "Who is it for? " : "Pentru cine? "}</strong>
+            {en
+              ? "Lebanese roots, a Lebanese partner or family, or work: official papers are in Standard Arabic, but daily life happens in dialect."
+              : "Rădăcini libaneze, partener sau familie din Liban, ori carieră: actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect."}
+          </p>
+          <Link
+            to="/trial"
+            className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
+          >
+            {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
+          </Link>
+        </div>
       </div>
     </section>
   );
