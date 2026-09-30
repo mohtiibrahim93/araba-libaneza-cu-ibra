@@ -9,7 +9,7 @@ export {
   physicalTrialAllowed,
 } from "./schedule-rules.ts";
 // TZ is also used internally below (slot generation, GCal payloads).
-import { TZ } from "./schedule-rules.ts";
+import { TZ, weekdayInTz as weekdayInTzLocal, physicalTrialAllowed as physicalTrialAllowedLocal } from "./schedule-rules.ts";
 
 export const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 export const SITE_URL = "https://centruldearabalibaneza.com";
@@ -358,3 +358,89 @@ export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics>
 }
 
 
+
+// ---------------------------------------------------------------------------
+// Bookable-slot rules, shared by booking-availability (which lists slots) and
+// booking-manage (which validates a reschedule), so the two cannot drift.
+// ---------------------------------------------------------------------------
+
+export interface SlotEventType {
+  slug: string;
+  duration_min: number;
+  min_notice_hours?: number | null;
+  max_advance_days?: number | null;
+}
+export type LocalDay = { y: number; m: number; d: number };
+export type AvailabilityRule = { weekday: number; start_time: string; end_time: string };
+
+export const ACTIVE_COHORT_SELECT =
+  "id,days_of_week,start_time,end_time,start_date,end_date,cohort_meetings(weekday,start_time,end_time)";
+export const ACTIVE_COHORT_STATUSES = ["forming", "minimum_reached", "confirmed", "in_progress"];
+
+/** Candidate slot starts (UTC ISO) from the availability rules for the given local days. */
+export function candidateSlotsForDays(
+  days: LocalDay[],
+  rules: AvailabilityRule[],
+  durationMin: number,
+): string[] {
+  const rulesByDay = new Map<number, Array<{ start_time: string; end_time: string }>>();
+  for (const r of rules) {
+    const arr = rulesByDay.get(r.weekday) ?? [];
+    arr.push({ start_time: r.start_time, end_time: r.end_time });
+    rulesByDay.set(r.weekday, arr);
+  }
+  const out: string[] = [];
+  for (const day of days) {
+    const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
+    const windows = rulesByDay.get(weekdayInTzLocal(probe));
+    if (!windows) continue;
+    out.push(...generateSlotsForDate(day.y, day.m, day.d, windows, durationMin, 30));
+  }
+  return out;
+}
+
+/** Min-notice, max-advance and the weekend-only rule for in-person trials. */
+export function passesTimingRules(
+  et: SlotEventType,
+  format: string,
+  iso: string,
+  now = Date.now(),
+): boolean {
+  const t = Date.parse(iso);
+  const minNoticeMs = (et.min_notice_hours ?? 0) * 3_600_000;
+  const maxAdvanceMs = (et.max_advance_days ?? 30) * 86_400_000;
+  if (t < now + minNoticeMs || t > now + maxAdvanceMs) return false;
+  return physicalTrialAllowedLocal(et.slug, format, iso);
+}
+
+// deno-lint-ignore no-explicit-any
+export function cohortBusyForDays(cohorts: any[], days: LocalDay[]): Array<{ start: number; end: number }> {
+  const out: Array<{ start: number; end: number }> = [];
+  for (const c of cohorts ?? []) {
+    const meetings: Array<{ weekday: number; start_time: string; end_time: string }> =
+      c.cohort_meetings?.length
+        ? c.cohort_meetings
+        : (c.days_of_week ?? []).map((wd: number) => ({
+            weekday: wd,
+            start_time: c.start_time,
+            end_time: c.end_time,
+          }));
+    for (const m of meetings) {
+      if (!m.start_time || !m.end_time) continue;
+      const [csh, csm] = parseHM(m.start_time);
+      const [ceh, cem] = parseHM(m.end_time);
+      for (const day of days) {
+        const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
+        if (weekdayInTzLocal(probe) !== m.weekday) continue;
+        const dayKey = `${day.y}-${String(day.m).padStart(2, "0")}-${String(day.d).padStart(2, "0")}`;
+        if (c.start_date && dayKey < c.start_date) continue;
+        if (c.end_date && dayKey > c.end_date) continue;
+        out.push({
+          start: zonedToUtc(day.y, day.m, day.d, csh, csm).getTime(),
+          end: zonedToUtc(day.y, day.m, day.d, ceh, cem).getTime(),
+        });
+      }
+    }
+  }
+  return out;
+}

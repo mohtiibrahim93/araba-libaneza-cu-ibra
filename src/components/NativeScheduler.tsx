@@ -157,8 +157,26 @@ const NativeScheduler = ({
   // The no-show rule, stated before anyone picks a time rather than only in the
   // Stripe panel at the end. A held slot that nobody turns up for costs the
   // same as a private lesson, so the visitor is told that upfront.
+  // When rescheduling ("pick") there is no card step, so only the 24-hour /
+  // 150-lei rule is repeated there.
   const policyNotice =
-    eventType === "trial" ? (
+    eventType === "trial" && mode === "pick" ? (
+      <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+        {lang === "ro" ? (
+          <>
+            Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți
+            sau anulezi mai târziu de 24 de ore, se reține <strong>150 lei</strong>, cât o lecție
+            privată.
+          </>
+        ) : (
+          <>
+            You can cancel or reschedule free of charge at least 24 hours ahead. If you do not show
+            up, or cancel later than 24 hours, <strong>150 lei</strong> is charged — the price of a
+            private lesson.
+          </>
+        )}
+      </div>
+    ) : eventType === "trial" ? (
       <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
         {lang === "ro" ? (
           <>

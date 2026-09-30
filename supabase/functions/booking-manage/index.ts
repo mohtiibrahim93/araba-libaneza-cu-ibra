@@ -6,6 +6,12 @@ import {
   gcalPatchEvent,
   gcalFreebusy,
   overlaps,
+  utcToZonedParts,
+  candidateSlotsForDays,
+  passesTimingRules,
+  cohortBusyForDays,
+  ACTIVE_COHORT_SELECT,
+  ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
@@ -73,11 +79,21 @@ Deno.serve(async (req) => {
     const supabase = client();
 
     if (req.method === "DELETE") {
-      if (booking.google_event_id) await gcalDeleteEvent(booking.google_event_id);
-      await supabase
+      // Write first, conditional on the row still being the confirmed booking
+      // we loaded, so a failed or duplicate write never deletes the calendar
+      // event or tells the student it is cancelled.
+      const { data: cancelledRows, error: cancelErr } = await supabase
         .from("bookings")
         .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
-        .eq("id", booking.id);
+        .eq("id", booking.id)
+        .eq("status", "confirmed")
+        .select("id");
+      if (cancelErr) {
+        console.error("[booking-manage] cancel write failed", cancelErr);
+        return json({ error: "cancel failed" }, 500);
+      }
+      if (!cancelledRows?.length) return json({ error: "booking is not active" }, 409);
+      if (booking.google_event_id) await gcalDeleteEvent(booking.google_event_id);
       sendBookingEmail(
         "booking-cancelled",
         booking.student_email,
@@ -114,9 +130,23 @@ Deno.serve(async (req) => {
       const startISO = new Date(startMs).toISOString();
       const endISO = new Date(endMs).toISOString();
 
+      // The new time must be one booking-availability would offer: generated
+      // from the availability rules, and inside notice / advance / format
+      // rules. Same helpers as that function, so the rules cannot drift.
+      const p = utcToZonedParts(new Date(startMs));
+      const day = { y: p.year, m: p.month, d: p.day };
+      const { data: rules } = await supabase
+        .from("availability_rules")
+        .select("weekday,start_time,end_time")
+        .eq("is_active", true);
+      const offered = candidateSlotsForDays([day], rules ?? [], et.duration_min);
+      if (!offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO)) {
+        return json({ error: "slot not bookable", code: "invalid_slot" }, 400);
+      }
+
       const checkStart = new Date(startMs - et.buffer_before_min * 60_000).toISOString();
       const checkEnd = new Date(endMs + et.buffer_after_min * 60_000).toISOString();
-      const [busy, { data: clashes }] = await Promise.all([
+      const [busy, { data: clashes }, { data: cohorts }] = await Promise.all([
         gcalFreebusy(checkStart, checkEnd),
         supabase
           .from("bookings")
@@ -125,6 +155,11 @@ Deno.serve(async (req) => {
           .neq("id", booking.id)
           .lt("start_at", checkEnd)
           .gt("end_at", checkStart),
+        supabase
+          .from("group_cohorts")
+          .select(ACTIVE_COHORT_SELECT)
+          .eq("is_active", true)
+          .in("status", ACTIVE_COHORT_STATUSES),
       ]);
       const s = startMs - et.buffer_before_min * 60_000;
       const e = endMs + et.buffer_after_min * 60_000;
@@ -138,8 +173,37 @@ Deno.serve(async (req) => {
           return json({ error: "slot taken", code: "conflict" }, 409);
         }
       }
+      for (const b of cohortBusyForDays(cohorts ?? [], [day])) {
+        if (overlaps(s, e, b.start, b.end)) {
+          return json({ error: "slot taken", code: "conflict" }, 409);
+        }
+      }
 
-      // Mark old booking rescheduled, insert new confirmed booking
+      // Claim the old booking first, atomically: only a row that is still
+      // confirmed at the start time we loaded can be claimed, so a second
+      // concurrent reschedule finds nothing and stops here.
+      const { data: claimed, error: claimErr } = await supabase
+        .from("bookings")
+        .update({ status: "rescheduled" })
+        .eq("id", booking.id)
+        .eq("status", "confirmed")
+        .eq("start_at", booking.start_at)
+        .select("id");
+      if (claimErr) {
+        console.error("[booking-manage] reschedule claim failed", claimErr);
+        return json({ error: "reschedule failed" }, 500);
+      }
+      if (!claimed?.length) return json({ error: "booking is not active" }, 409);
+
+      const restoreOld = async () => {
+        const { error } = await supabase
+          .from("bookings")
+          .update({ status: "confirmed" })
+          .eq("id", booking.id)
+          .eq("status", "rescheduled");
+        if (error) console.error("[booking-manage] could not restore old booking", booking.id, error);
+      };
+
       const { data: created, error: insErr } = await supabase
         .from("bookings")
         .insert({
@@ -161,18 +225,20 @@ Deno.serve(async (req) => {
         .select()
         .single();
       if (insErr || !created) {
+        await restoreOld();
         const msg = (insErr?.message || "").toLowerCase();
         if (msg.includes("duplicate") || msg.includes("unique")) {
           return json({ error: "slot taken", code: "conflict" }, 409);
         }
         return json({ error: "reschedule failed" }, 500);
       }
-      await supabase
+      const { error: clearErr } = await supabase
         .from("bookings")
-        .update({ status: "rescheduled", google_event_id: null, meet_link: null })
+        .update({ google_event_id: null, meet_link: null })
         .eq("id", booking.id);
+      if (clearErr) console.error("[booking-manage] could not clear old event link", booking.id, clearErr);
 
-      // Patch GCal event in place (keeps id + Meet link)
+      // Patch GCal event in place (keeps id + Meet link) — only after the DB is consistent.
       if (booking.google_event_id) await gcalPatchEvent(booking.google_event_id, startISO, endISO);
 
       sendBookingEmail(

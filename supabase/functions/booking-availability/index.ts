@@ -3,13 +3,13 @@ import {
   TZ,
   json as _json,
   gcalFreebusy,
-  generateSlotsForDate,
   overlaps,
-  parseHM,
   utcToZonedParts,
-  weekdayInTz,
-  zonedToUtc,
-  physicalTrialAllowed,
+  candidateSlotsForDays,
+  passesTimingRules,
+  cohortBusyForDays,
+  ACTIVE_COHORT_SELECT,
+  ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
@@ -49,12 +49,6 @@ Deno.serve(async (req) => {
       .from("availability_rules")
       .select("weekday,start_time,end_time")
       .eq("is_active", true);
-    const rulesByDay = new Map<number, Array<{ start_time: string; end_time: string }>>();
-    for (const r of rules ?? []) {
-      const arr = rulesByDay.get(r.weekday) ?? [];
-      arr.push({ start_time: r.start_time, end_time: r.end_time });
-      rulesByDay.set(r.weekday, arr);
-    }
 
     // Iterate dates in local tz between dateFrom and dateTo.
     const [fy, fm, fd] = dateFrom.split("-").map(Number);
@@ -67,27 +61,11 @@ Deno.serve(async (req) => {
       days.push({ y: dt.getUTCFullYear(), m: dt.getUTCMonth() + 1, d: dt.getUTCDate() });
     }
 
-    // Generate raw candidate slots
-    const candidates: string[] = [];
-    for (const day of days) {
-      // weekday for noon-local of that date
-      const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
-      const wd = weekdayInTz(probe);
-      const windows = rulesByDay.get(wd);
-      if (!windows) continue;
-      const slots = generateSlotsForDate(day.y, day.m, day.d, windows, et.duration_min, 30);
-      candidates.push(...slots);
-    }
-
-    // Min-notice + max-advance filtering
+    // Raw candidates, then min-notice / max-advance / in-person-trial rules.
+    // Both helpers are shared with booking-manage's reschedule check.
+    const candidates = candidateSlotsForDays(days, rules ?? [], et.duration_min);
     const now = Date.now();
-    const minNoticeMs = (et.min_notice_hours ?? 0) * 3_600_000;
-    const maxAdvanceMs = (et.max_advance_days ?? 30) * 86_400_000;
-    let filtered = candidates.filter((iso) => {
-      const t = Date.parse(iso);
-      if (t < now + minNoticeMs || t > now + maxAdvanceMs) return false;
-      return physicalTrialAllowed(et.slug, format, iso);
-    });
+    let filtered = candidates.filter((iso) => passesTimingRules(et, format, iso, now));
 
     if (filtered.length === 0) {
       return json({ event_type: et, slots: [], tz: TZ });
@@ -113,9 +91,9 @@ Deno.serve(async (req) => {
       // private lesson on top of a running cohort.
       supabase
         .from("group_cohorts")
-        .select("id,days_of_week,start_time,end_time,start_date,end_date,cohort_meetings(weekday,start_time,end_time)")
+        .select(ACTIVE_COHORT_SELECT)
         .eq("is_active", true)
-        .in("status", ["forming", "minimum_reached", "confirmed", "in_progress"]),
+        .in("status", ACTIVE_COHORT_STATUSES),
     ]);
 
     const bookingBusy = (existing ?? []).map((b) => ({
@@ -124,41 +102,9 @@ Deno.serve(async (req) => {
     }));
     const gcalBusy = busy.map((b) => ({ start: Date.parse(b.start), end: Date.parse(b.end) }));
 
-    // Expand each active cohort into the concrete lesson times it occupies
-    // within the requested days: its weekdays, between its start and end date,
-    // for the hours it meets.
-    const cohortBusy: Array<{ start: number; end: number }> = [];
-    for (const c of cohorts ?? []) {
-      // Per-weekday rows win: a cohort can meet at different hours on
-      // different days (A1 online is Sat 12:00-13:30 but Sun 17:30-19:00),
-      // which the single start_time/end_time pair cannot express. Cohorts
-      // without rows fall back to that pair.
-      const meetings: Array<{ weekday: number; start_time: string; end_time: string }> =
-        c.cohort_meetings?.length
-          ? c.cohort_meetings
-          : (c.days_of_week ?? []).map((wd: number) => ({
-              weekday: wd,
-              start_time: c.start_time,
-              end_time: c.end_time,
-            }));
-
-      for (const m of meetings) {
-        if (!m.start_time || !m.end_time) continue;
-        const [csh, csm] = parseHM(m.start_time);
-        const [ceh, cem] = parseHM(m.end_time);
-        for (const day of days) {
-          const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
-          if (weekdayInTz(probe) !== m.weekday) continue;
-          const dayKey = `${day.y}-${String(day.m).padStart(2, "0")}-${String(day.d).padStart(2, "0")}`;
-          if (c.start_date && dayKey < c.start_date) continue;
-          if (c.end_date && dayKey > c.end_date) continue;
-          cohortBusy.push({
-            start: zonedToUtc(day.y, day.m, day.d, csh, csm).getTime(),
-            end: zonedToUtc(day.y, day.m, day.d, ceh, cem).getTime(),
-          });
-        }
-      }
-    }
+    // Concrete lesson times each active cohort occupies within the requested
+    // days (per-weekday cohort_meetings rows win over start_time/end_time).
+    const cohortBusy = cohortBusyForDays(cohorts ?? [], days);
 
     filtered = filtered.filter((iso) => {
       const s = Date.parse(iso) - et.buffer_before_min * 60_000;
