@@ -86,7 +86,7 @@ const BookingManageInner = () => {
         headers: { apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] },
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.error ?? t.manageGenericError);
+      if (!res.ok) throw new Error(t.manageGenericError);
       toast.success(t.manageCancelledToast);
       load();
     } catch (e) {
@@ -114,7 +114,7 @@ const BookingManageInner = () => {
           setPendingSlot(null);
           return;
         }
-        throw new Error(json?.error ?? t.manageGenericError);
+        throw new Error(t.manageGenericError);
       }
       toast.success(t.manageRescheduledToast);
       setPendingSlot(null);
