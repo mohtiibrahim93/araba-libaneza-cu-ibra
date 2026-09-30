@@ -55426,15 +55426,24 @@
     },
     {
       "id": "syn-1eac454920c4",
-      "canonicalArabizi": "shu 5ottak?",
-      "variants": [],
+      "canonicalArabizi": "shu msheerii3ak?",
+      "variants": [
+        {
+          "value": "shu l plans?",
+          "kind": "spelling"
+        },
+        {
+          "value": "shu 5ottak?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "care e planul tău?"
+          "naturalMeaning": "ce planuri ai?"
         }
       }
     },
@@ -58569,15 +58578,24 @@
     },
     {
       "id": "syn-8ed3bc4261ea",
-      "canonicalArabizi": "Ma3 as7abe. W ente shu 5ottik?",
-      "variants": [],
+      "canonicalArabizi": "Ma3 as7abe. W ente shu msheerii3ik?",
+      "variants": [
+        {
+          "value": "Ma3 as7abe. W ente shu l plans?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Ma3 as7abe. W ente shu 5ottik?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Cu prietenii. Și tu, care e planul tău?"
+          "naturalMeaning": "Cu prietenii. Și tu, ce planuri ai?"
         }
       }
     },
@@ -70191,7 +70209,7 @@
       "wrongAnswers": [
         "Yemkin ra7 ru7.",
         "Ra7 ousal ba3ed shway.",
-        "Ma3 as7abe. W ente shu 5ottik?"
+        "Ma3 as7abe. W ente shu msheerii3ik?"
       ]
     },
     {
@@ -70316,7 +70334,7 @@
       "answer": "Yemkin ra7 ru7.",
       "wrongAnswers": [
         "Ra7 ousal ba3ed shway.",
-        "Ma3 as7abe. W ente shu 5ottik?",
+        "Ma3 as7abe. W ente shu msheerii3ik?",
         "W ra7 terja3u aymta?"
       ]
     },
@@ -70424,7 +70442,7 @@
       },
       "answer": "Ra7 ousal ba3ed shway.",
       "wrongAnswers": [
-        "Ma3 as7abe. W ente shu 5ottik?",
+        "Ma3 as7abe. W ente shu msheerii3ik?",
         "W ra7 terja3u aymta?",
         "Ra7 nshufak el jem3a el jey."
       ]
@@ -70523,11 +70541,13 @@
       "id": "syn-context-syn-8ed3bc4261ea",
       "type": "dialogue-response",
       "unitID": "a1-plans",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-8ed3bc4261ea"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „Cu prietenii. Și tu, care e planul tău?”"
+        "ro": "Alege replica pentru: „Cu prietenii. Și tu, ce planuri ai?”"
       },
-      "answer": "Ma3 as7abe. W ente shu 5ottik?",
+      "answer": "Ma3 as7abe. W ente shu msheerii3ik?",
       "wrongAnswers": [
         "W ra7 terja3u aymta?",
         "Ra7 nshufak el jem3a el jey.",

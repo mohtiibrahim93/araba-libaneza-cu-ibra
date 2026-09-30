@@ -401,7 +401,7 @@
       "wrongAnswers": [
         "Yemkin ra7 ru7.",
         "Ra7 ousal ba3ed shway.",
-        "Ma3 as7abe. W ente shu 5ottik?"
+        "Ma3 as7abe. W ente shu msheerii3ik?"
       ],
       "expressionIDs": [
         "syn-1002cbd504e7"
@@ -1589,7 +1589,7 @@
     "syn-context-syn-843f1405c9f4": {
       "answer": "Ra7 ousal ba3ed shway.",
       "wrongAnswers": [
-        "Ma3 as7abe. W ente shu 5ottik?",
+        "Ma3 as7abe. W ente shu msheerii3ik?",
         "W ra7 terja3u aymta?",
         "Ra7 nshufak el jem3a el jey."
       ]
@@ -1606,7 +1606,7 @@
       "answer": "Yemkin ra7 ru7.",
       "wrongAnswers": [
         "Ra7 ousal ba3ed shway.",
-        "Ma3 as7abe. W ente shu 5ottik?",
+        "Ma3 as7abe. W ente shu msheerii3ik?",
         "W ra7 terja3u aymta?"
       ]
     },
@@ -3522,7 +3522,14 @@
         "W ra7 terja3u aymta?",
         "Ra7 nshufak el jem3a el jey.",
         "Yemkin ra7 ru7."
-      ]
+      ],
+      "answer": "Ma3 as7abe. W ente shu msheerii3ik?",
+      "expressionIDs": [
+        "syn-8ed3bc4261ea"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Cu prietenii. Și tu, ce planuri ai?”"
+      }
     },
     "syn-context-syn-1c39090c0a8b": {
       "wrongAnswers": [
@@ -5331,6 +5338,42 @@
           "kind": "spelling"
         }
       ]
+    },
+    "syn-1eac454920c4": {
+      "canonicalArabizi": "shu msheerii3ak?",
+      "variants": [
+        {
+          "value": "shu l plans?",
+          "kind": "spelling"
+        },
+        {
+          "value": "shu 5ottak?",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "ce planuri ai?"
+        }
+      }
+    },
+    "syn-8ed3bc4261ea": {
+      "canonicalArabizi": "Ma3 as7abe. W ente shu msheerii3ik?",
+      "variants": [
+        {
+          "value": "Ma3 as7abe. W ente shu l plans?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Ma3 as7abe. W ente shu 5ottik?",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Cu prietenii. Și tu, ce planuri ai?"
+        }
+      }
     }
   },
   "unitExpressionAdditions": [
