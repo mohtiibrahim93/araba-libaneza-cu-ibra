@@ -798,7 +798,11 @@ const RegistrationFormSection = ({
               ? lang === "en"
                 ? "Next you choose the day and time, then you pay. The lesson is confirmed once paid, and Ibra writes to introduce himself."
                 : "Urmează să alegi ziua și ora, apoi plătești. Lecția e confirmată după plată, iar Ibra îți scrie ca să se prezinte."
-              : t.mainLeadCallbackNote}
+              : courseType === "group"
+                ? lang === "en"
+                  ? "After sending, you pay online: the payment confirms your place in the group. Ibra then writes to you on WhatsApp to introduce himself."
+                  : "După trimitere plătești online: plata îți confirmă locul în grupă. Apoi Ibra îți scrie pe WhatsApp ca să se prezinte."
+                : t.mainLeadCallbackNote}
           </p>
 
           <GdprCheckbox
@@ -845,6 +849,8 @@ const RegistrationFormSection = ({
               </>
             ) : courseType === "private" ? (
               lang === "en" ? "Continue: choose the day and time →" : "Continuă: alege ziua și ora →"
+            ) : courseType === "group" ? (
+              lang === "en" ? "Send and continue to payment →" : "Trimite și continuă la plată →"
             ) : (
               t.mainLeadSubmit
             )}
