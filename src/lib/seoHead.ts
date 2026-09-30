@@ -27,7 +27,7 @@ import { getCurriculum } from "@/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN, LEVEL_A1_DESCRIPTION } from "@/lib/levelMeta";
 import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
-import { CURSURI_ARABA_META, HOME_META, JOACA_META, JOC_SCOR_META, QUIZ_META, TEST_NIVEL_META } from "@/lib/pageMeta";
+import { CURSURI_ARABA_META, EN_LEVEL_TEST_META, EN_PLAY_META, EN_PLAY_SCORE_META, HOME_META, JOACA_META, JOC_SCOR_META, QUIZ_META, TEST_NIVEL_META } from "@/lib/pageMeta";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -54,8 +54,9 @@ const STATIC_ROUTES: SeoRoute[] = [
   { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
   // The placement test on its own page. /quiz used to carry this query in its
   // title while being a course chooser; this page is the test, so the two stop
-  // competing. Romanian only, like /joc — the card bank's meanings are Romanian.
+  // competing. Twinned at /en/level-test: the placement bank is bilingual.
   { path: "/test-de-nivel", title: TEST_NIVEL_META.title, description: TEST_NIVEL_META.description },
+  { path: "/en/level-test", title: EN_LEVEL_TEST_META.title, description: EN_LEVEL_TEST_META.description },
   // Where a visitor who arrived at a dead address is sent: search plus the
   // courses, resources and articles. The 404 page shows a shortlist of the same
   // recommendations, but a 404 has no URL anyone can link to — this does.
@@ -79,12 +80,14 @@ const STATIC_ROUTES: SeoRoute[] = [
   { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti" },
   { path: "/cursuri-araba", title: "Cursuri de arabă: pagina s-a mutat | Ibra", description: "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.", canonical: "/cursuri-limba-araba" },
   { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
-  // Free practice, not a sixth course page. No twin: the card bank is Romanian
-  // only, so an /en URL would advertise a translation that does not exist.
+  // Free practice, not a sixth course page. Twinned at /en/play now that the
+  // card bank, the drills and the level test all follow the site language.
   { path: "/joc", title: JOACA_META.title, description: JOACA_META.description },
+  { path: "/en/play", title: EN_PLAY_META.title, description: EN_PLAY_META.description },
   // The game score read from the visitor's own browser, with the A1/A2/B1 it
-  // suggests. Romanian only, same reason as /joc.
+  // suggests.
   { path: "/joc/scor", title: JOC_SCOR_META.title, description: JOC_SCOR_META.description },
+  { path: "/en/play/score", title: EN_PLAY_SCORE_META.title, description: EN_PLAY_SCORE_META.description },
   { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
   { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
   { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | de la 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită." },
@@ -287,6 +290,9 @@ const LANDING_PAIRS: Array<[string, string]> = [
   ["/dialecte-arabe/levantina-vs-maghrebina", "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic"],
   ["/dialecte-arabe/levantina-vs-peninsulara", "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic"],
   ["/intrebari-frecvente", "/en/faq"],
+  ["/joc", "/en/play"],
+  ["/joc/scor", "/en/play/score"],
+  ["/test-de-nivel", "/en/level-test"],
   ["/meditatii-araba", "/en/arabic-tutor"],
 ];
 

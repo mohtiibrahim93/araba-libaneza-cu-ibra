@@ -114,12 +114,20 @@ describe("/joc", () => {
     expect(redirectsTo("/joaca"), "/joaca must redirect to /joc").toBe("/joc");
   });
 
-  it("declares no English twin", () => {
-    // The card bank carries Romanian meanings only, so an /en/ URL would
-    // advertise a translation that does not exist. A route with no twin emits
-    // no hreflang, which is correct here rather than an omission.
-    expect(hasRoute("/en/joc"), "/joc has no English twin by design").toBe(false);
-    expect(read("src/lib/languageRoutes.ts")).not.toContain("/joc");
+  it("is twinned at /en/play, in both directions", () => {
+    // It used to declare no twin: the card bank carried Romanian meanings only,
+    // so an /en/ URL would have advertised a translation that did not exist.
+    // The bank is bilingual now — meanings, drills, lesson notes and the level
+    // test all follow the site language — so the twin is honest, and hreflang
+    // has something real to point at.
+    //
+    // The English URL is /en/play, not /en/joc: the /en/ half of the site uses
+    // English slugs throughout.
+    const routes = read("src/lib/languageRoutes.ts");
+    expect(routes).toContain('"/joc": "/en/play"');
+    expect(routes).toContain('"/en/play": "/joc"');
+    expect(routes).toContain('"/test-de-nivel": "/en/level-test"');
+    expect(routes).toContain('"/en/level-test": "/test-de-nivel"');
   });
 });
 

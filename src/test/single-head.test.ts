@@ -105,7 +105,8 @@ describe("the served head is the only head", () => {
       .map((r) => r.path);
     // What is left has no indexable head to serve: the admin and auth screens,
     // the two token-guarded private pages, the database-driven course page, and
-    // /joc, which is a layout whose leaves carry the head.
+    // /joc with its English twin /en/play, which are layouts whose leaves carry
+    // the head.
     expect(missing.sort()).toEqual([
       "/admin",
       "/admin/notifications",
@@ -113,6 +114,7 @@ describe("the served head is the only head", () => {
       "/auth",
       "/booking/manage/$token",
       "/cursuri/curs/$slug",
+      "/en/play",
       "/joc",
       "/private-status/$id",
     ]);

@@ -74,11 +74,10 @@ export const CURSURI_ARABA_META: PageMeta = {
  * Its own /yalla/index.html is kept out of the index via robots.txt so it
  * cannot become a second, chrome-less crawl destination for the same content.
  *
- * Romanian only, and there is no English twin on purpose: the learner content
- * is written in Romanian throughout (Romanian is the only translation language
- * the card bank carries), so an /en/ URL would promise a translation that does
- * not exist. A route with no declared twin emits no hreflang, which is correct
- * here rather than a gap.
+ * It has an English twin at /en/play. It did not use to: the card bank carried
+ * Romanian meanings only, so an /en/ URL would have promised a translation that
+ * did not exist. The bank is bilingual now — meanings, drills, lesson notes and
+ * the level test all follow the site language — so the twin is honest.
  */
 export const JOACA_META: PageMeta = {
   title: "Joacă și învață arabă libaneză — exerciții gratuite",
@@ -88,13 +87,32 @@ export const JOACA_META: PageMeta = {
 
 /**
  * /joc/scor — scorul din joc citit din browser, cu nivelul A1/A2/B1 sugerat.
- * Romanian only, like /joc and /test-de-nivel: the card bank's meanings are
- * Romanian, so an /en URL would advertise a translation that does not exist.
+ * Twinned at /en/play/score, like /joc: the score is read from the visitor's
+ * own browser and the page around it is bilingual.
  */
 export const JOC_SCOR_META: PageMeta = {
   title: "Scorul din Jocul Yalla și nivelul sugerat | Arabă libaneză",
   description:
     "Vezi ce ai strâns în Jocul Yalla — XP, runde, expresii consolidate — și ce nivel A1, A2 sau B1 sugerează scorul tău, cu cursul potrivit.",
+};
+
+/** English twins of the game and test pages. Same components, /en/ URLs. */
+export const EN_PLAY_META: PageMeta = {
+  title: "Play and learn Lebanese Arabic — free practice",
+  description:
+    "Practise Lebanese Arabic free: 4,300+ expressions with English meanings, exercises, matching and scheduled reviews. No account, straight in your browser.",
+};
+
+export const EN_PLAY_SCORE_META: PageMeta = {
+  title: "Your Yalla game score and suggested level | Lebanese Arabic",
+  description:
+    "See what the Yalla game has recorded — XP, rounds, expressions retained — and which level A1, A2 or B1 your score suggests, with the course that matches.",
+};
+
+export const EN_LEVEL_TEST_META: PageMeta = {
+  title: "Free Lebanese Arabic level test | Ibra",
+  description:
+    "A free Lebanese Arabic placement test: 24 questions, about 15 minutes, no timer. The result shows you where to start.",
 };
 
 /**
@@ -107,9 +125,9 @@ export const JOC_SCOR_META: PageMeta = {
  * own. This page is the test; /quiz is now titled as the 30-second chooser it
  * is, so they stop cannibalising each other.
  *
- * Romanian only, like /joc: the test reads situations and takes answers in
- * Arabizi against a card bank whose meanings are Romanian, so an /en/ URL would
- * advertise a translation that does not exist.
+ * Twinned at /en/level-test. The test was Romanian-only when this page was
+ * written; every prompt, answer and distractor in the placement bank is a
+ * T(ro, en) pair now, so the English URL is not advertising something missing.
  */
 export const TEST_NIVEL_META: PageMeta = {
   title: "Test de nivel gratuit la arabă libaneză | Ibra",

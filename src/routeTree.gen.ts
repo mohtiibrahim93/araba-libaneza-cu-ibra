@@ -98,7 +98,9 @@ import { Route as EnLearnLebaneseArabicRouteImport } from './routes/en/learn-leb
 import { Route as EnLearnLevantineArabicRouteImport } from './routes/en/learn-levantine-arabic'
 import { Route as EnLebaneseArabicVsMsaVsEgyptianRouteImport } from './routes/en/lebanese-arabic-vs-msa-vs-egyptian'
 import { Route as EnLevantineArabicDialectsMapRouteImport } from './routes/en/levantine-arabic-dialects-map'
+import { Route as EnLevelTestRouteImport } from './routes/en/level-test'
 import { Route as EnMyBookingsRouteImport } from './routes/en/my-bookings'
+import { Route as EnPlayRouteImport } from './routes/en/play'
 import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
@@ -127,6 +129,8 @@ import { Route as EnCoursesIndexRouteImport } from './routes/en/courses/index'
 import { Route as EnCoursesAdultsRouteImport } from './routes/en/courses/adults'
 import { Route as EnCoursesChildrenRouteImport } from './routes/en/courses/children'
 import { Route as EnCoursesPrivateRouteImport } from './routes/en/courses/private'
+import { Route as EnPlayIndexRouteImport } from './routes/en/play/index'
+import { Route as EnPlayScoreRouteImport } from './routes/en/play/score'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as EnCoursesGroupIndexRouteImport } from './routes/en/courses/group/index'
 import { Route as EnCoursesGroupLevelRouteImport } from './routes/en/courses/group/$level'
@@ -605,9 +609,19 @@ const EnLevantineArabicDialectsMapRoute =
     path: '/en/levantine-arabic-dialects-map',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EnLevelTestRoute = EnLevelTestRouteImport.update({
+  id: '/en/level-test',
+  path: '/en/level-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnMyBookingsRoute = EnMyBookingsRouteImport.update({
   id: '/en/my-bookings',
   path: '/en/my-bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnPlayRoute = EnPlayRouteImport.update({
+  id: '/en/play',
+  path: '/en/play',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
@@ -758,6 +772,16 @@ const EnCoursesPrivateRoute = EnCoursesPrivateRouteImport.update({
   path: '/en/courses/private',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnPlayIndexRoute = EnPlayIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnPlayRoute,
+} as any)
+const EnPlayScoreRoute = EnPlayScoreRouteImport.update({
+  id: '/score',
+  path: '/score',
+  getParentRoute: () => EnPlayRoute,
+} as any)
 const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
   id: '/lovable/email/events',
   path: '/lovable/email/events',
@@ -875,7 +899,9 @@ export interface FileRoutesByFullPath {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
+  '/en/play': typeof EnPlayRouteWithChildren
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -905,11 +931,13 @@ export interface FileRoutesByFullPath {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/en/play/score': typeof EnPlayScoreRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup/': typeof CursuriGrupIndexRoute
   '/en/arabic-dialects-guide/': typeof EnArabicDialectsGuideIndexRoute
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
+  '/en/play/': typeof EnPlayIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1000,6 +1028,7 @@ export interface FileRoutesByTo {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
@@ -1030,11 +1059,13 @@ export interface FileRoutesByTo {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/en/play/score': typeof EnPlayScoreRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup': typeof CursuriGrupIndexRoute
   '/en/arabic-dialects-guide': typeof EnArabicDialectsGuideIndexRoute
   '/en/blog': typeof EnBlogIndexRoute
   '/en/courses': typeof EnCoursesIndexRoute
+  '/en/play': typeof EnPlayIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1127,7 +1158,9 @@ export interface FileRoutesById {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
+  '/en/play': typeof EnPlayRouteWithChildren
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -1157,11 +1190,13 @@ export interface FileRoutesById {
   '/en/courses/adults': typeof EnCoursesAdultsRoute
   '/en/courses/children': typeof EnCoursesChildrenRoute
   '/en/courses/private': typeof EnCoursesPrivateRoute
+  '/en/play/score': typeof EnPlayScoreRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/cursuri/grup/': typeof CursuriGrupIndexRoute
   '/en/arabic-dialects-guide/': typeof EnArabicDialectsGuideIndexRoute
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
+  '/en/play/': typeof EnPlayIndexRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1255,7 +1290,9 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-test'
     | '/en/my-bookings'
+    | '/en/play'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1285,11 +1322,13 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/en/play/score'
     | '/lovable/email/events'
     | '/cursuri/grup/'
     | '/en/arabic-dialects-guide/'
     | '/en/blog/'
     | '/en/courses/'
+    | '/en/play/'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1380,6 +1419,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-test'
     | '/en/my-bookings'
     | '/en/privacy'
     | '/en/quiz'
@@ -1410,11 +1450,13 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/en/play/score'
     | '/lovable/email/events'
     | '/cursuri/grup'
     | '/en/arabic-dialects-guide'
     | '/en/blog'
     | '/en/courses'
+    | '/en/play'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1506,7 +1548,9 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-test'
     | '/en/my-bookings'
+    | '/en/play'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1536,11 +1580,13 @@ export interface FileRouteTypes {
     | '/en/courses/adults'
     | '/en/courses/children'
     | '/en/courses/private'
+    | '/en/play/score'
     | '/lovable/email/events'
     | '/cursuri/grup/'
     | '/en/arabic-dialects-guide/'
     | '/en/blog/'
     | '/en/courses/'
+    | '/en/play/'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1633,7 +1679,9 @@ export interface RootRouteChildren {
   EnLearnLevantineArabicRoute: typeof EnLearnLevantineArabicRoute
   EnLebaneseArabicVsMsaVsEgyptianRoute: typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   EnLevantineArabicDialectsMapRoute: typeof EnLevantineArabicDialectsMapRoute
+  EnLevelTestRoute: typeof EnLevelTestRoute
   EnMyBookingsRoute: typeof EnMyBookingsRoute
+  EnPlayRoute: typeof EnPlayRouteWithChildren
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnQuizRoute: typeof EnQuizRoute
   EnTermsRoute: typeof EnTermsRoute
@@ -2298,11 +2346,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnLevantineArabicDialectsMapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/level-test': {
+      id: '/en/level-test'
+      path: '/en/level-test'
+      fullPath: '/en/level-test'
+      preLoaderRoute: typeof EnLevelTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/my-bookings': {
       id: '/en/my-bookings'
       path: '/en/my-bookings'
       fullPath: '/en/my-bookings'
       preLoaderRoute: typeof EnMyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/play': {
+      id: '/en/play'
+      path: '/en/play'
+      fullPath: '/en/play'
+      preLoaderRoute: typeof EnPlayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/privacy': {
@@ -2501,6 +2563,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCoursesPrivateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/play/': {
+      id: '/en/play/'
+      path: '/'
+      fullPath: '/en/play/'
+      preLoaderRoute: typeof EnPlayIndexRouteImport
+      parentRoute: typeof EnPlayRoute
+    }
+    '/en/play/score': {
+      id: '/en/play/score'
+      path: '/score'
+      fullPath: '/en/play/score'
+      preLoaderRoute: typeof EnPlayScoreRouteImport
+      parentRoute: typeof EnPlayRoute
+    }
     '/lovable/email/events': {
       id: '/lovable/email/events'
       path: '/lovable/email/events'
@@ -2557,6 +2633,19 @@ const JocRouteChildren: JocRouteChildren = {
 }
 
 const JocRouteWithChildren = JocRoute._addFileChildren(JocRouteChildren)
+
+interface EnPlayRouteChildren {
+  EnPlayScoreRoute: typeof EnPlayScoreRoute
+  EnPlayIndexRoute: typeof EnPlayIndexRoute
+}
+
+const EnPlayRouteChildren: EnPlayRouteChildren = {
+  EnPlayScoreRoute: EnPlayScoreRoute,
+  EnPlayIndexRoute: EnPlayIndexRoute,
+}
+
+const EnPlayRouteWithChildren =
+  EnPlayRoute._addFileChildren(EnPlayRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -2651,7 +2740,9 @@ const rootRouteChildren: RootRouteChildren = {
   EnLearnLevantineArabicRoute: EnLearnLevantineArabicRoute,
   EnLebaneseArabicVsMsaVsEgyptianRoute: EnLebaneseArabicVsMsaVsEgyptianRoute,
   EnLevantineArabicDialectsMapRoute: EnLevantineArabicDialectsMapRoute,
+  EnLevelTestRoute: EnLevelTestRoute,
   EnMyBookingsRoute: EnMyBookingsRoute,
+  EnPlayRoute: EnPlayRouteWithChildren,
   EnPrivacyRoute: EnPrivacyRoute,
   EnQuizRoute: EnQuizRoute,
   EnTermsRoute: EnTermsRoute,
