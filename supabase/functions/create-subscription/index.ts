@@ -102,6 +102,7 @@ serve(async (req) => {
     const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
     // No discount on the monthly plan. The only group discount is for paying
     // the whole course upfront, which goes through create-payment-intent.
+    const discountApplied = false;
     const monthlyUnit = monthlyUnitAmount;
     const currency = "ron";
 
