@@ -257,7 +257,7 @@
     "syn-context-syn-02254b3c9745": {
       "answer": "ba3mel sho8ol ktiir",
       "wrongAnswers": [
-        "Shu bte3mel bel sherke?",
+        "Shu bta3mol bel sherke?",
         "Beshte8el b maktab.",
         "Berja3 3al bet."
       ]
@@ -295,11 +295,14 @@
       ]
     },
     "syn-context-syn-0756c0993b4c": {
-      "answer": "Shukran, bas ma 3ande masaare.",
+      "answer": "Shukran, bas ma ma3e masaare.",
       "wrongAnswers": [
         "ra7 e5od 3otle",
         "2ariiban ra7 nshuf.",
         "Shukran, bass 3ande sho8ol ktiir."
+      ],
+      "expressionIDs": [
+        "syn-0756c0993b4c"
       ]
     },
     "syn-context-syn-07a756c3f996": {
@@ -364,7 +367,7 @@
     "syn-context-syn-0e09c58c0d5c": {
       "answer": "Ra7 be7kiik ba3den.",
       "wrongAnswers": [
-        "Ra7 23od bel bayt w ra7 2ra kteb.",
+        "Ra7 2e23od bel bet w ra7 2ra kteb.",
         "El a7ad bel layl.",
         "Ra7 safer 3ala Terkiyya."
       ]
@@ -394,11 +397,14 @@
       ]
     },
     "syn-context-syn-1002cbd504e7": {
-      "answer": "Ra7 nshufak el esbuu3 el jey.",
+      "answer": "Ra7 nshufak el jem3a el jey.",
       "wrongAnswers": [
         "Yemkin ra7 ru7.",
         "Ra7 ousal ba3ed shway.",
         "Ma3 as7abe. W ente shu 5ottik?"
+      ],
+      "expressionIDs": [
+        "syn-1002cbd504e7"
       ]
     },
     "syn-context-syn-108a6134db90": {
@@ -589,7 +595,7 @@
       "answer": "Tayyeb, yemkin el marra el jeye.",
       "wrongAnswers": [
         "Shukran! Mnshufik ariiban.",
-        "Ra7 nru7 es-sabet w narja3 el a7ad.",
+        "Ra7 nru7 es-sabet w nerja3 el a7ad.",
         "ra7 nru7 3al ba7er"
       ]
     },
@@ -598,7 +604,7 @@
       "wrongAnswers": [
         "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
         "Addesh sarlak 3am teshte8el huniik?",
-        "Shu bte3mel bel sherke?"
+        "Shu bta3mol bel sherke?"
       ]
     },
     "syn-context-syn-25afb8239c6a": {
@@ -668,7 +674,7 @@
     "syn-context-syn-2a46d72d6d83": {
       "answer": "Beshte8el men el bet.",
       "wrongAnswers": [
-        "Mar7aba! Ana muhandis. W ente?",
+        "Mar7aba! Ana mhandes. W ente?",
         "Tameem! Btruu7 kill yom 3al sho8ol?",
         "Beshte8el b mustashfa."
       ]
@@ -815,8 +821,8 @@
     "syn-context-syn-39c4eff33327": {
       "answer": "Tameem! Ra7 nshufak el tanen?",
       "wrongAnswers": [
-        "Ra7 23od bel bayt.",
-        "ra7 safer el esbuu3 el jey",
+        "Ra7 2e23od bel bet.",
+        "ra7 safer el jem3a el jey",
         "ma ra7 ru7"
       ]
     },
@@ -862,15 +868,18 @@
       "wrongAnswers": [
         "Tayyeb, yemkin el marra el jeye.",
         "Shukran! Mnshufik ariiban.",
-        "Ra7 nru7 es-sabet w narja3 el a7ad."
+        "Ra7 nru7 es-sabet w nerja3 el a7ad."
       ]
     },
     "syn-context-syn-3ce7c2d5e0fb": {
-      "answer": "Mar7aba! Ana muhandis. W ente?",
+      "answer": "Mar7aba! Ana mhandes. W ente?",
       "wrongAnswers": [
         "Tameem! Btruu7 kill yom 3al sho8ol?",
         "Beshte8el b mustashfa.",
         "Be23od bel bet."
+      ],
+      "expressionIDs": [
+        "syn-3ce7c2d5e0fb"
       ]
     },
     "syn-context-syn-3d21dc0b5e71": {
@@ -958,11 +967,14 @@
       ]
     },
     "syn-context-syn-453551f079e4": {
-      "answer": "Ra7 nru7 es-sabet w narja3 el a7ad.",
+      "answer": "Ra7 nru7 es-sabet w nerja3 el a7ad.",
       "wrongAnswers": [
         "ra7 nru7 3al ba7er",
         "Mar7aba Karim! Shu ra7 te3mel bel weekend?",
         "Tayyeb, yemkin el marra el jeye."
+      ],
+      "expressionIDs": [
+        "syn-453551f079e4"
       ]
     },
     "syn-context-syn-45447086e1f3": {
@@ -990,11 +1002,14 @@
       ]
     },
     "syn-context-syn-46f7d751827e": {
-      "answer": "Akiid ra7 ije.",
+      "answer": "Akiid ra7 eje.",
       "wrongAnswers": [
         "Ra7 be7kiik ba3den.",
-        "Ra7 23od bel bayt w ra7 2ra kteb.",
+        "Ra7 2e23od bel bet w ra7 2ra kteb.",
         "El a7ad bel layl."
+      ],
+      "expressionIDs": [
+        "syn-46f7d751827e"
       ]
     },
     "syn-context-syn-48d35def2830": {
@@ -1008,7 +1023,7 @@
     "syn-context-syn-4a040b2aec92": {
       "answer": "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.",
       "wrongAnswers": [
-        "Shu ra2yak nru7 el esbuu3 el jey?",
+        "Shu ra2yak nru7 el jem3a el jey?",
         "Ken 7elo ktiir! Bass ken fi nes ktiir.",
         "Saba7na w akalna samak. Ken et ta2es mni7."
       ]
@@ -1060,7 +1075,7 @@
       "answer": "Bedrus b il jeem3a",
       "wrongAnswers": [
         "ba3mel sho8ol ktiir",
-        "Shu bte3mel bel sherke?",
+        "Shu bta3mol bel sherke?",
         "Beshte8el b maktab."
       ]
     },
@@ -1091,7 +1106,7 @@
     "syn-context-syn-58956d77f442": {
       "answer": "Mar7aba Karim! Kif ken el weekend?",
       "wrongAnswers": [
-        "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?",
+        "Shu ra2yik nru7 3al ba7er el jem3a el jey?",
         "Sa7, bass el jabal 7elo besh-shete.",
         "B7ebb es safar ktiir, bass leezem eshte8el."
       ]
@@ -1162,7 +1177,7 @@
       "wrongAnswers": [
         "Ana beshte8el bel marketing.",
         "Yalla nruu7 3a es see3a we7de?",
-        "Ana muhandise. W enta shu bte3mel?"
+        "Ana muhandise. W enta shu bta3mol?"
       ]
     },
     "syn-context-syn-614f2e964b79": {
@@ -1235,7 +1250,7 @@
     "syn-context-syn-661de8fd2ed5": {
       "answer": "Yalla nruu7 3a es see3a we7de?",
       "wrongAnswers": [
-        "Ana muhandise. W enta shu bte3mel?",
+        "Ana muhandise. W enta shu bta3mol?",
         "7elo! Bte7ebbe es su2 el lebnene?",
         "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a."
       ]
@@ -1297,9 +1312,9 @@
     "syn-context-syn-69b39c5aae51": {
       "answer": "Ra7 safer 3ala Terkiyya.",
       "wrongAnswers": [
-        "Akiid ra7 ije.",
+        "Akiid ra7 eje.",
         "Ra7 be7kiik ba3den.",
-        "Ra7 23od bel bayt w ra7 2ra kteb."
+        "Ra7 2e23od bel bet w ra7 2ra kteb."
       ]
     },
     "syn-context-syn-6a5650287491": {
@@ -1375,7 +1390,7 @@
     "syn-context-syn-7423347a28e8": {
       "answer": "Shukran! Mnshufik ariiban.",
       "wrongAnswers": [
-        "Ra7 nru7 es-sabet w narja3 el a7ad.",
+        "Ra7 nru7 es-sabet w nerja3 el a7ad.",
         "ra7 nru7 3al ba7er",
         "Mar7aba Karim! Shu ra7 te3mel bel weekend?"
       ]
@@ -1384,8 +1399,8 @@
       "answer": "Ana kameen, bas a7yenan bil-lel.",
       "wrongAnswers": [
         "beshte8el b sherke",
-        "Mar7aba Omar! Shu bte3mel?",
-        "Beshte8el tasmiim. Sho8le mnii7 w 7elo."
+        "Mar7aba Omar! Shu bta3mol?",
+        "Beshte8el tesmiim. She8le mnii7 w 7elo."
       ]
     },
     "syn-context-syn-7526d24d82e1": {
@@ -1478,11 +1493,14 @@
       "answer": "ma 3am ba3mel shi"
     },
     "syn-context-syn-7d745a3f1217": {
-      "answer": "Shu ra2yak nru7 el esbuu3 el jey?",
+      "answer": "Shu ra2yak nru7 el jem3a el jey?",
       "wrongAnswers": [
         "Ken 7elo ktiir! Bass ken fi nes ktiir.",
         "Saba7na w akalna samak. Ken et ta2es mni7.",
         "Eh, yimken ykun 3ande she8el."
+      ],
+      "expressionIDs": [
+        "syn-7d745a3f1217"
       ]
     },
     "syn-context-syn-7da600df6cad": {
@@ -1573,7 +1591,7 @@
       "wrongAnswers": [
         "Ma3 as7abe. W ente shu 5ottik?",
         "W ra7 terja3u aymta?",
-        "Ra7 nshufak el esbuu3 el jey."
+        "Ra7 nshufak el jem3a el jey."
       ]
     },
     "syn-context-syn-86b90d56ddd1": {
@@ -1593,18 +1611,21 @@
       ]
     },
     "syn-context-syn-86fb6aedde17": {
-      "answer": "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?",
+      "answer": "Shu ra2yik nru7 3al ba7er el jem3a el jey?",
       "wrongAnswers": [
         "Sa7, bass el jabal 7elo besh-shete.",
         "B7ebb es safar ktiir, bass leezem eshte8el.",
         "Momken eje iza ken 3ande wa2et."
+      ],
+      "expressionIDs": [
+        "syn-86fb6aedde17"
       ]
     },
     "syn-context-syn-88dc4e1164a3": {
       "answer": "Eza fi talej, leezem nruu7 na3mel ski.",
       "wrongAnswers": [
         "Mar7aba Karim! Kif ken el weekend?",
-        "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?",
+        "Shu ra2yik nru7 3al ba7er el jem3a el jey?",
         "Sa7, bass el jabal 7elo besh-shete."
       ]
     },
@@ -1652,7 +1673,7 @@
       "answer": "Ana beshte8el bel marketing.",
       "wrongAnswers": [
         "Yalla nruu7 3a es see3a we7de?",
-        "Ana muhandise. W enta shu bte3mel?",
+        "Ana muhandise. W enta shu bta3mol?",
         "7elo! Bte7ebbe es su2 el lebnene?"
       ]
     },
@@ -1728,7 +1749,7 @@
       "wrongAnswers": [
         "Sa3eb! Aymta bterja3e 3al bayt?",
         "Beshte8el men el bet.",
-        "Mar7aba! Ana muhandis. W ente?"
+        "Mar7aba! Ana mhandes. W ente?"
       ]
     },
     "syn-context-syn-97c560f53b0c": {
@@ -1764,7 +1785,7 @@
       "wrongAnswers": [
         "La2, 2ariib. 3asher d2eeye2 bel sayyara.",
         "Meshe, yalla nruu7!",
-        "Kifak? Shu bte3mel?"
+        "Kifak? Shu bta3mol?"
       ]
     },
     "syn-context-syn-9b6857d789d3": {
@@ -1776,11 +1797,14 @@
       ]
     },
     "syn-context-syn-9bc369c12ae2": {
-      "answer": "Mar7aba Omar! Shu bte3mel?",
+      "answer": "Mar7aba Omar! Shu bta3mol?",
       "wrongAnswers": [
-        "Beshte8el tasmiim. Sho8le mnii7 w 7elo.",
+        "Beshte8el tesmiim. She8le mnii7 w 7elo.",
         "Bru7 3a-sh-sho8ol es subo7.",
         "Kill yom el subo7."
+      ],
+      "expressionIDs": [
+        "syn-9bc369c12ae2"
       ]
     },
     "syn-context-syn-9bd7a50634f0": {
@@ -1819,11 +1843,14 @@
       ]
     },
     "syn-context-syn-9e231be136e9": {
-      "answer": "ra7 safer el esbuu3 el jey",
+      "answer": "ra7 safer el jem3a el jey",
       "wrongAnswers": [
         "ma ra7 ru7",
         "Lesh? Ta3e ma3na!",
         "Tameem! Ra7 nshufak el tanen?"
+      ],
+      "expressionIDs": [
+        "syn-9e231be136e9"
       ]
     },
     "syn-context-syn-9e9d84a21d1d": {
@@ -1856,7 +1883,7 @@
       "answer": "Sa3eb! Aymta bterja3e 3al bayt?",
       "wrongAnswers": [
         "Beshte8el men el bet.",
-        "Mar7aba! Ana muhandis. W ente?",
+        "Mar7aba! Ana mhandes. W ente?",
         "Tameem! Btruu7 kill yom 3al sho8ol?"
       ]
     },
@@ -1871,7 +1898,7 @@
     "syn-context-syn-a10fbe73b057": {
       "answer": "Meshe, yalla nruu7!",
       "wrongAnswers": [
-        "Kifak? Shu bte3mel?",
+        "Kifak? Shu bta3mol?",
         "3ayltak kbiire! Ana ju3aan, badde ekol.",
         "Tameem! Yalla bina."
       ]
@@ -1931,7 +1958,7 @@
       "answer": "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
       "wrongAnswers": [
         "Addesh sarlak 3am teshte8el huniik?",
-        "Shu bte3mel bel sherke?",
+        "Shu bta3mol bel sherke?",
         "Aklon tayyeb ktiir."
       ]
     },
@@ -1985,7 +2012,7 @@
       "wrongAnswers": [
         "Ana kameen, bas a7yenan bil-lel.",
         "beshte8el b sherke",
-        "Mar7aba Omar! Shu bte3mel?"
+        "Mar7aba Omar! Shu bta3mol?"
       ]
     },
     "syn-context-syn-ae1fc12ffb49": {
@@ -2015,7 +2042,7 @@
     "syn-context-syn-b070e7525663": {
       "answer": "Addesh sarlak 3am teshte8el huniik?",
       "wrongAnswers": [
-        "Shu bte3mel bel sherke?",
+        "Shu bta3mol bel sherke?",
         "Aklon tayyeb ktiir.",
         "7elo! Shu bte3mle bel sherke?"
       ]
@@ -2159,8 +2186,8 @@
       "answer": "Lesh? Ta3e ma3na!",
       "wrongAnswers": [
         "Tameem! Ra7 nshufak el tanen?",
-        "Ra7 23od bel bayt.",
-        "ra7 safer el esbuu3 el jey"
+        "Ra7 2e23od bel bet.",
+        "ra7 safer el jem3a el jey"
       ]
     },
     "syn-context-syn-cb52eaa22d77": {
@@ -2306,7 +2333,7 @@
       "answer": "La2, 2ariib. 3asher d2eeye2 bel sayyara.",
       "wrongAnswers": [
         "Meshe, yalla nruu7!",
-        "Kifak? Shu bte3mel?",
+        "Kifak? Shu bta3mol?",
         "3ayltak kbiire! Ana ju3aan, badde ekol."
       ]
     },
@@ -2330,11 +2357,14 @@
       ]
     },
     "syn-context-syn-d612ea2b1bbe": {
-      "answer": "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey.",
+      "answer": "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
       "wrongAnswers": [
         "Law kont makanak.",
         "ma leezem tru7",
         "Shu ra2yak nru7 3al ba7er bukra?"
+      ],
+      "expressionIDs": [
+        "syn-d612ea2b1bbe"
       ]
     },
     "syn-context-syn-d63c2f6caf95": {
@@ -2389,7 +2419,7 @@
       "answer": "Shukran, bass 3ande sho8ol ktiir.",
       "wrongAnswers": [
         "Akid! Ra7 7kilik 3an er re7le.",
-        "Shukran, bas ma 3ande masaare.",
+        "Shukran, bas ma ma3e masaare.",
         "ra7 e5od 3otle"
       ]
     },
@@ -2426,11 +2456,14 @@
       ]
     },
     "syn-context-syn-e224364dbd8b": {
-      "answer": "Beshte8el tasmiim. Sho8le mnii7 w 7elo.",
+      "answer": "Beshte8el tesmiim. She8le mnii7 w 7elo.",
       "wrongAnswers": [
         "Bru7 3a-sh-sho8ol es subo7.",
         "Kill yom el subo7.",
         "B Bayrut, 2ariib men hon."
+      ],
+      "expressionIDs": [
+        "syn-e224364dbd8b"
       ]
     },
     "syn-context-syn-e2615110805f": {
@@ -2438,7 +2471,7 @@
       "wrongAnswers": [
         "Shukran, bass 3ande sho8ol ktiir.",
         "Akid! Ra7 7kilik 3an er re7le.",
-        "Shukran, bas ma 3ande masaare."
+        "Shukran, bas ma ma3e masaare."
       ]
     },
     "syn-context-syn-e393491306c6": {
@@ -2544,7 +2577,7 @@
       "answer": "Eh, eza fi talej, leezem nruu7 na3mel ski.",
       "wrongAnswers": [
         "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.",
-        "Shu ra2yak nru7 el esbuu3 el jey?",
+        "Shu ra2yak nru7 el jem3a el jey?",
         "Ken 7elo ktiir! Bass ken fi nes ktiir."
       ]
     },
@@ -2661,7 +2694,7 @@
       "answer": "enno"
     },
     "syn-rule-14-0": {
-      "answer": "el esbuu3 el jey",
+      "answer": "el jem3a el jey",
       "prompt": {
         "ro": "Ce moment indică el esbuu3 el jey?"
       }
@@ -2750,8 +2783,8 @@
     },
     "syn-context-syn-d85f41d222cc": {
       "wrongAnswers": [
-        "Mar7aba Omar! Shu bte3mel?",
-        "Beshte8el tasmiim. Sho8le mnii7 w 7elo.",
+        "Mar7aba Omar! Shu bta3mol?",
+        "Beshte8el tesmiim. She8le mnii7 w 7elo.",
         "Bru7 3a-sh-sho8ol es subo7."
       ]
     },
@@ -2781,13 +2814,17 @@
         "Beshte8el b maktab.",
         "Berja3 3al bet.",
         "Wow! Wen el mustashfa?"
+      ],
+      "answer": "Shu bta3mol bel sherke?",
+      "expressionIDs": [
+        "syn-da1ccd7132bf"
       ]
     },
     "syn-context-syn-85b14d0e1239": {
       "wrongAnswers": [
         "Bedrus b il jeem3a",
         "ba3mel sho8ol ktiir",
-        "Shu bte3mel bel sherke?"
+        "Shu bta3mol bel sherke?"
       ]
     },
     "syn-context-syn-95f3fb3e584b": {
@@ -2851,6 +2888,10 @@
         "3ayltak kbiire! Ana ju3aan, badde ekol.",
         "Tameem! Yalla bina.",
         "Mar7aba! Ken sahel, 2ariib men el bank."
+      ],
+      "answer": "Kifak? Shu bta3mol?",
+      "expressionIDs": [
+        "syn-fa18433c778b"
       ]
     },
     "syn-context-syn-ca64cd382206": {
@@ -3273,7 +3314,7 @@
       "wrongAnswers": [
         "iza fi fursa",
         "By2ulu yimken fi matar.",
-        "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey."
+        "Tameem! W law ma 2derna, bnru7 el jem3a el jey."
       ]
     },
     "syn-context-syn-e2f00a6a1781": {
@@ -3321,7 +3362,7 @@
     "syn-context-syn-6c6b08d7567c": {
       "wrongAnswers": [
         "By2ulu yimken fi matar.",
-        "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey.",
+        "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
         "Law kont makanak."
       ]
     },
@@ -3369,7 +3410,7 @@
     },
     "syn-context-syn-c048b97e223f": {
       "wrongAnswers": [
-        "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey.",
+        "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
         "Law kont makanak.",
         "ma leezem tru7"
       ]
@@ -3425,9 +3466,13 @@
     },
     "syn-context-syn-ce04f597bf33": {
       "wrongAnswers": [
-        "ra7 safer el esbuu3 el jey",
+        "ra7 safer el jem3a el jey",
         "ma ra7 ru7",
         "Lesh? Ta3e ma3na!"
+      ],
+      "answer": "Ra7 2e23od bel bet.",
+      "expressionIDs": [
+        "syn-ce04f597bf33"
       ]
     },
     "syn-context-syn-66d476c45bc5": {
@@ -3462,7 +3507,7 @@
       "wrongAnswers": [
         "Lesh? Ta3e ma3na!",
         "Tameem! Ra7 nshufak el tanen?",
-        "Ra7 23od bel bayt."
+        "Ra7 2e23od bel bet."
       ]
     },
     "syn-context-syn-39077f619d98": {
@@ -3475,7 +3520,7 @@
     "syn-context-syn-8ed3bc4261ea": {
       "wrongAnswers": [
         "W ra7 terja3u aymta?",
-        "Ra7 nshufak el esbuu3 el jey.",
+        "Ra7 nshufak el jem3a el jey.",
         "Yemkin ra7 ru7."
       ]
     },
@@ -3483,7 +3528,11 @@
       "wrongAnswers": [
         "El a7ad bel layl.",
         "Ra7 safer 3ala Terkiyya.",
-        "Akiid ra7 ije."
+        "Akiid ra7 eje."
+      ],
+      "answer": "Ra7 2e23od bel bet w ra7 2ra kteb.",
+      "expressionIDs": [
+        "syn-1c39090c0a8b"
       ]
     },
     "syn-context-syn-e246cf1ad219": {
@@ -3495,7 +3544,7 @@
     },
     "syn-context-syn-4278209e10f8": {
       "wrongAnswers": [
-        "Ra7 nshufak el esbuu3 el jey.",
+        "Ra7 nshufak el jem3a el jey.",
         "Yemkin ra7 ru7.",
         "Ra7 ousal ba3ed shway."
       ]
@@ -3503,13 +3552,13 @@
     "syn-context-syn-60cd0ac8e493": {
       "wrongAnswers": [
         "Ra7 safer 3ala Terkiyya.",
-        "Akiid ra7 ije.",
+        "Akiid ra7 eje.",
         "Ra7 be7kiik ba3den."
       ]
     },
     "syn-context-syn-3c2dcc0a64e7": {
       "wrongAnswers": [
-        "Shukran, bas ma 3ande masaare.",
+        "Shukran, bas ma ma3e masaare.",
         "ra7 e5od 3otle",
         "2ariiban ra7 nshuf."
       ]
@@ -3525,7 +3574,7 @@
       "wrongAnswers": [
         "Eza fi talej, leezem nruu7 na3mel ski.",
         "Mar7aba Karim! Kif ken el weekend?",
-        "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?"
+        "Shu ra2yik nru7 3al ba7er el jem3a el jey?"
       ]
     },
     "syn-context-syn-ba227fc72db9": {
@@ -3574,7 +3623,7 @@
       "wrongAnswers": [
         "Eh, eza fi talej, leezem nruu7 na3mel ski.",
         "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.",
-        "Shu ra2yak nru7 el esbuu3 el jey?"
+        "Shu ra2yak nru7 el jem3a el jey?"
       ]
     },
     "syn-context-syn-007bd3cef645": {
@@ -3624,6 +3673,10 @@
         "Aklon tayyeb ktiir.",
         "7elo! Shu bte3mle bel sherke?",
         "Re7et 3as suu2 w shtareet shwayyet 8raad."
+      ],
+      "answer": "Shu bta3mol bel sherke?",
+      "expressionIDs": [
+        "syn-43dcc77af8db"
       ]
     },
     "syn-context-syn-018ec4788209": {
@@ -3666,6 +3719,10 @@
         "7elo! Bte7ebbe es su2 el lebnene?",
         "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
         "Ente jdide hon?"
+      ],
+      "answer": "Ana muhandise. W enta shu bta3mol?",
+      "expressionIDs": [
+        "syn-b914d832f2e9"
       ]
     },
     "syn-context-syn-9ca65770cc34": {
@@ -3733,7 +3790,8 @@
       ]
     },
     "syn-0756c0993b4c": {
-      "canonicalArabizi": "Shukran, bas ma 3ande masaare."
+      "canonicalArabizi": "Shukran, bas ma ma3e masaare.",
+      "variants": []
     },
     "syn-07a756c3f996": {
       "canonicalArabizi": "Shtareet 2amis a7mar."
@@ -3779,7 +3837,8 @@
       "canonicalArabizi": "Uff! Ma b7ebb eshte8el bel weekend."
     },
     "syn-1002cbd504e7": {
-      "canonicalArabizi": "Ra7 nshufak el esbuu3 el jey."
+      "canonicalArabizi": "Ra7 nshufak el jem3a el jey.",
+      "variants": []
     },
     "syn-108a6134db90": {
       "canonicalArabizi": "Wala ana! Bass ken leezem."
@@ -3870,7 +3929,13 @@
       "canonicalArabizi": "El jabal 7elo besh-shete."
     },
     "syn-23c805dae04f": {
-      "canonicalArabizi": "Tayyeb, yemkin el marra el jeye."
+      "canonicalArabizi": "Tayyeb, yemkin el marra el jeye.",
+      "variants": [
+        {
+          "value": "Tayyeb, yemken el marra el jeye.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-244aff0d3a2b": {
       "canonicalArabizi": "Akiid sa3eb bass mhemm."
@@ -4000,7 +4065,13 @@
       "canonicalArabizi": "Mar7aba Karim! Shu ra7 te3mel bel weekend?"
     },
     "syn-3ce7c2d5e0fb": {
-      "canonicalArabizi": "Mar7aba! Ana muhandis. W ente?"
+      "canonicalArabizi": "Mar7aba! Ana mhandes. W ente?",
+      "variants": [
+        {
+          "value": "Mar7aba! Ana muhandis. W ente?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-3d588cf04d62": {
       "exclude": true
@@ -4024,7 +4095,13 @@
       "canonicalArabizi": "Tameem, w ba3den?"
     },
     "syn-43f299eb3f2f": {
-      "canonicalArabizi": "Yemkin nru7 3al ba7er?"
+      "canonicalArabizi": "Yemkin nru7 3al ba7er?",
+      "variants": [
+        {
+          "value": "Yemken nru7 3al ba7er?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-44dc337fa782": {
       "canonicalArabizi": "Ana kameen, bye3jebne sawta!"
@@ -4036,7 +4113,13 @@
       "canonicalArabizi": "B7akik hal esbuu3."
     },
     "syn-453551f079e4": {
-      "canonicalArabizi": "Ra7 nru7 es-sabet w narja3 el a7ad."
+      "canonicalArabizi": "Ra7 nru7 es-sabet w nerja3 el a7ad.",
+      "variants": [
+        {
+          "value": "Ra7 nru7 es-sabet w narja3 el a7ad.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-45447086e1f3": {
       "canonicalArabizi": "3ande 5ayy waa7ad w e5et we7de"
@@ -4048,7 +4131,13 @@
       "canonicalArabizi": "Shu 3am ta3mol halla2?"
     },
     "syn-46f7d751827e": {
-      "canonicalArabizi": "Akiid ra7 ije."
+      "canonicalArabizi": "Akiid ra7 eje.",
+      "variants": [
+        {
+          "value": "Akiid ra7 ije.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-48d35def2830": {
       "canonicalArabizi": "Fairouz a7san m8anniye! B7ebbha ktiir."
@@ -4189,7 +4278,13 @@
       "canonicalArabizi": "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol."
     },
     "syn-69b39c5aae51": {
-      "canonicalArabizi": "Ra7 safer 3ala Terkiyya."
+      "canonicalArabizi": "Ra7 safer 3ala Terkiyya.",
+      "variants": [
+        {
+          "value": "Ra7 safer 3a Terkiyya.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-6a5650287491": {
       "canonicalArabizi": "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
@@ -4262,7 +4357,13 @@
         "ro": {
           "naturalMeaning": "Nu știu, poate merg la un restaurant."
         }
-      }
+      },
+      "variants": [
+        {
+          "value": "Ma b3ref, yemken ruu7 3a shi mat3am.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-7b17306217ad": {
       "exclude": true
@@ -4277,7 +4378,8 @@
       "canonicalArabizi": "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!"
     },
     "syn-7d745a3f1217": {
-      "canonicalArabizi": "Shu ra2yak nru7 el esbuu3 el jey?"
+      "canonicalArabizi": "Shu ra2yak nru7 el jem3a el jey?",
+      "variants": []
     },
     "syn-7da600df6cad": {
       "canonicalArabizi": "Tameem! Ana 3am betfarraj 3a film."
@@ -4328,10 +4430,17 @@
       "canonicalArabizi": "Shu ra7 ta3mol bukra?"
     },
     "syn-86ee18423311": {
-      "canonicalArabizi": "Yemkin ra7 ru7."
+      "canonicalArabizi": "Yemkin ra7 ru7.",
+      "variants": [
+        {
+          "value": "Yemken ra7 ru7.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-86fb6aedde17": {
-      "canonicalArabizi": "Shu ra2yik nru7 3al ba7er el esbuu3 el jey?"
+      "canonicalArabizi": "Shu ra2yik nru7 3al ba7er el jem3a el jey?",
+      "variants": []
     },
     "syn-88dc4e1164a3": {
       "canonicalArabizi": "Eza fi talej, leezem nruu7 na3mel ski."
@@ -4340,7 +4449,13 @@
       "canonicalArabizi": "Eh, fine. Ana 3am 7adder sandwishet."
     },
     "syn-8b9c4f8c4e07": {
-      "canonicalArabizi": "Mar7aba! Yemkin ra7 ru7 3al jabal."
+      "canonicalArabizi": "Mar7aba! Yemkin ra7 ru7 3al jabal.",
+      "variants": [
+        {
+          "value": "Mar7aba! Yemken ra7 ru7 3al jabal.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-8cf16473ae54": {
       "canonicalArabizi": "Sa7, yalla bshufik!"
@@ -4410,7 +4525,13 @@
       "canonicalArabizi": "Ana kameen! B3te2ed enno a7san men el jabal."
     },
     "syn-9bc369c12ae2": {
-      "canonicalArabizi": "Mar7aba Omar! Shu bte3mel?"
+      "canonicalArabizi": "Mar7aba Omar! Shu bta3mol?",
+      "variants": [
+        {
+          "value": "Mar7aba Omar! Shu bte3mel?",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-9bd7a50634f0": {
       "canonicalArabizi": "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
@@ -4436,7 +4557,8 @@
       "canonicalArabizi": "Tameem! Yalla nru7 sawa."
     },
     "syn-9e231be136e9": {
-      "canonicalArabizi": "ra7 safer el esbuu3 el jey"
+      "canonicalArabizi": "ra7 safer el jem3a el jey",
+      "variants": []
     },
     "syn-9eb06dc111e4": {
       "canonicalArabizi": "Es saydaliyye 2ariibe men hon."
@@ -4670,7 +4792,8 @@
       }
     },
     "syn-d612ea2b1bbe": {
-      "canonicalArabizi": "Tameem! W law ma 2derna, bnru7 el esbuu3 el jey."
+      "canonicalArabizi": "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
+      "variants": []
     },
     "syn-d63c2f6caf95": {
       "canonicalArabizi": "Badde shawarma djej law sama7et."
@@ -4718,10 +4841,22 @@
       "canonicalArabizi": "7elo! Fike tjiibe akel?"
     },
     "syn-e224364dbd8b": {
-      "canonicalArabizi": "Beshte8el tasmiim. Sho8le mnii7 w 7elo."
+      "canonicalArabizi": "Beshte8el tesmiim. She8le mnii7 w 7elo.",
+      "variants": [
+        {
+          "value": "Beshte8el tasmiim. Sho8le mnii7 w 7elo.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-e2615110805f": {
-      "canonicalArabizi": "2ariiban ra7 nshuf."
+      "canonicalArabizi": "2ariiban ra7 nshuf.",
+      "variants": [
+        {
+          "value": "2ariiban mnshuf.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-e393491306c6": {
       "canonicalArabizi": "Shu el filem?"
@@ -5076,6 +5211,126 @@
     },
     "x7dd3e3041c8c": {
       "canonicalArabizi": "telmiize"
+    },
+    "x0a5f2c20978d": {
+      "canonicalArabizi": "shu bta3mol?",
+      "variants": [
+        {
+          "value": "shu bte3mel?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc341d8b0e5a0": {
+      "canonicalArabizi": "mhandes",
+      "variants": [
+        {
+          "value": "muhandis",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe9f5452ee41d": {
+      "canonicalArabizi": "she8le",
+      "variants": [
+        {
+          "value": "sho8le",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-ce04f597bf33": {
+      "canonicalArabizi": "Ra7 2e23od bel bet.",
+      "variants": [
+        {
+          "value": "Ra7 2e23od bil bet.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Ra7 2e23od bel bayt.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Ra7 2e23od bil bayt.",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-43dcc77af8db": {
+      "canonicalArabizi": "Shu bta3mol bel sherke?",
+      "variants": [
+        {
+          "value": "Shu bte3mel bel sherke?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-8b281a4b4bd1": {
+      "canonicalArabizi": "shu bta3mol?",
+      "variants": [
+        {
+          "value": "shu bte3mel?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-b276a1136d4b": {
+      "canonicalArabizi": "beshte8el mhandes",
+      "variants": [
+        {
+          "value": "beshte8el muhandis",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-1241ca95ef64": {
+      "canonicalArabizi": "she8le mni7",
+      "variants": [
+        {
+          "value": "sho8le mni7",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-4524043d702a": {
+      "canonicalArabizi": "she8le sa3eb",
+      "variants": [
+        {
+          "value": "sho8le sa3eb",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-da1ccd7132bf": {
+      "canonicalArabizi": "Shu bta3mol bel sherke?",
+      "variants": [
+        {
+          "value": "Shu bte3mel bel sherke?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-fa18433c778b": {
+      "canonicalArabizi": "Kifak? Shu bta3mol?",
+      "variants": [
+        {
+          "value": "Kifak? Shu bte3mel?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-1c39090c0a8b": {
+      "canonicalArabizi": "Ra7 2e23od bel bet w ra7 2ra kteb.",
+      "variants": []
+    },
+    "syn-b914d832f2e9": {
+      "canonicalArabizi": "Ana muhandise. W enta shu bta3mol?",
+      "variants": [
+        {
+          "value": "Ana muhandise. W enta shu bte3mel?",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [
