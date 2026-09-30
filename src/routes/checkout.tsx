@@ -16,6 +16,11 @@ export const Route = createFileRoute("/checkout")({
         content:
           "Plată securizată prin Stripe pentru cursul de arabă libaneză. Datele cardului nu sunt stocate pe acest site.",
       },
+      // The other two steps of this flow, /thank-you and /payment-status, both
+      // carry noindex and this one did not. robots.txt disallows all three, but
+      // a disallowed URL can still be indexed without a snippet when something
+      // links to it — the crawler cannot fetch the page to learn otherwise.
+      { name: "robots", content: "noindex" },
     ],
     links: [{ rel: "canonical", href: "https://centruldearabalibaneza.com/checkout" }],
   }),

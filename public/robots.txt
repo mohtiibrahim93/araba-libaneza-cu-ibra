@@ -31,6 +31,7 @@ Disallow: /yalla/
 Disallow: /admin
 Disallow: /admin/
 Disallow: /private-status/
+Disallow: /booking/manage/
 Disallow: /checkout
 Disallow: /thank-you
 Disallow: /payment-status
