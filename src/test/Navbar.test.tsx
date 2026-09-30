@@ -60,17 +60,20 @@ describe("Navbar accessibility", () => {
 describe("Navbar breakpoints", () => {
   const src = readFileSync(resolve(process.cwd(), "src/components/Navbar.tsx"), "utf8");
 
-  it("shows the full bar from lg up", () => {
-    expect(src).toContain('className="hidden lg:flex items-center gap-3');
+  // The redesigned bar (full width, seven links, two buttons) needs about
+  // 1200px, so it shows from xl and the hamburger takes over below that.
+  it("shows the full bar from xl up", () => {
+    expect(src).toContain('className="hidden xl:flex items-center');
   });
 
   it("hands over to the hamburger at exactly the same width", () => {
-    expect(src).toMatch(/className="lg:hidden flex items-center justify-center/);
-    expect(src).toContain('<div id="mobile-navigation" className="lg:hidden');
+    expect(src).toMatch(/className="xl:hidden flex items-center justify-center/);
+    expect(src).toContain('<div id="mobile-navigation" className="xl:hidden');
   });
 
-  it("holds the homepage anchors back until there is room for them", () => {
-    expect(src).toContain('className="hidden 2xl:inline hover:text-foreground');
+  it("shows the homepage anchors whenever the bar is shown", () => {
+    expect(src).not.toContain("hidden 2xl:inline");
+    expect(src).toContain("className={navLinkClass(activeSection === l.href.slice(1))}");
   });
 });
 
