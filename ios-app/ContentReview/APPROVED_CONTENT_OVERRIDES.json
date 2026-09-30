@@ -1177,7 +1177,7 @@
       "wrongAnswers": [
         "Ana beshte8el bel marketing.",
         "Yalla nruu7 3a es see3a we7de?",
-        "Ana muhandise. W enta shu bta3mol?"
+        "Ana mhandse. W enta shu bta3mol?"
       ]
     },
     "syn-context-syn-614f2e964b79": {
@@ -1250,7 +1250,7 @@
     "syn-context-syn-661de8fd2ed5": {
       "answer": "Yalla nruu7 3a es see3a we7de?",
       "wrongAnswers": [
-        "Ana muhandise. W enta shu bta3mol?",
+        "Ana mhandse. W enta shu bta3mol?",
         "7elo! Bte7ebbe es su2 el lebnene?",
         "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a."
       ]
@@ -1348,7 +1348,7 @@
       },
       "wrongAnswers": [
         "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!",
-        "Ana muhandise, beshte8el b sherke.",
+        "Ana mhandse, beshte8el b sherke.",
         "Min wen ente?"
       ]
     },
@@ -1476,7 +1476,7 @@
     "syn-context-syn-7bce2b6efd7e": {
       "answer": "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!",
       "wrongAnswers": [
-        "Ana muhandise, beshte8el b sherke.",
+        "Ana mhandse, beshte8el b sherke.",
         "Min wen ente?",
         "Fi mat3am lebnene 2arib men hon."
       ]
@@ -1673,7 +1673,7 @@
       "answer": "Ana beshte8el bel marketing.",
       "wrongAnswers": [
         "Yalla nruu7 3a es see3a we7de?",
-        "Ana muhandise. W enta shu bta3mol?",
+        "Ana mhandse. W enta shu bta3mol?",
         "7elo! Bte7ebbe es su2 el lebnene?"
       ]
     },
@@ -3652,7 +3652,8 @@
         "Min wen ente?",
         "Fi mat3am lebnene 2arib men hon.",
         "Jit lel sho8ol. 3am beshte8el b sherke hon."
-      ]
+      ],
+      "answer": "Ana mhandse, beshte8el b sherke."
     },
     "syn-context-syn-03841aefa66c": {
       "wrongAnswers": [
@@ -3704,7 +3705,7 @@
       "wrongAnswers": [
         "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.",
         "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!",
-        "Ana muhandise, beshte8el b sherke."
+        "Ana mhandse, beshte8el b sherke."
       ]
     },
     "syn-context-syn-85950fed3ce1": {
@@ -3727,7 +3728,7 @@
         "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
         "Ente jdide hon?"
       ],
-      "answer": "Ana muhandise. W enta shu bta3mol?",
+      "answer": "Ana mhandse. W enta shu bta3mol?",
       "expressionIDs": [
         "syn-b914d832f2e9"
       ]
@@ -5331,10 +5332,14 @@
       "variants": []
     },
     "syn-b914d832f2e9": {
-      "canonicalArabizi": "Ana muhandise. W enta shu bta3mol?",
+      "canonicalArabizi": "Ana mhandse. W enta shu bta3mol?",
       "variants": [
         {
           "value": "Ana muhandise. W enta shu bte3mel?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Ana muhandise. W enta shu bta3mol?",
           "kind": "spelling"
         }
       ]
@@ -5374,6 +5379,24 @@
           "naturalMeaning": "Cu prietenii. Și tu, ce planuri ai?"
         }
       }
+    },
+    "xd1817aa5a365": {
+      "canonicalArabizi": "mhandse",
+      "variants": [
+        {
+          "value": "muhandise",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-2ff34ecb2a8b": {
+      "canonicalArabizi": "Ana mhandse, beshte8el b sherke.",
+      "variants": [
+        {
+          "value": "Ana muhandise, beshte8el b sherke.",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [
