@@ -14,6 +14,75 @@ import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
+import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+
+/**
+ * The embedded card form for a private purchase — the same Stripe Elements
+ * payment /checkout uses. The PaymentIntent already carries the chosen slot;
+ * stripe-webhook books it on payment_intent.succeeded.
+ */
+const InlinePrivatePay = ({
+  amount,
+  currency,
+  registrationId,
+  email,
+  lang,
+  onLoadError,
+}: {
+  amount: number;
+  currency: string;
+  registrationId: string;
+  email: string;
+  lang: "ro" | "en";
+  onLoadError: () => void;
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [paying, setPaying] = useState(false);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setPaying(true);
+    const returnUrl = new URL(`${window.location.origin}/payment-status`);
+    returnUrl.searchParams.set("courseType", "private");
+    returnUrl.searchParams.set("amount", String(amount));
+    returnUrl.searchParams.set("currency", currency);
+    returnUrl.searchParams.set("registration_id", registrationId);
+    if (email) returnUrl.searchParams.set("email", email);
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: returnUrl.toString() },
+    });
+    if (error) {
+      toast.error(
+        error.message ||
+          (lang === "ro"
+            ? "Plata a eșuat. Nimic nu a fost rezervat — încearcă din nou."
+            : "The payment failed. Nothing was booked — please try again."),
+      );
+      setPaying(false);
+    }
+  };
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <PaymentElement onLoadError={onLoadError} />
+      <button
+        type="submit"
+        disabled={!stripe || paying}
+        className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+      >
+        {paying ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+        {lang === "ro" ? `Plătește ${formatLei(amount / 100)} lei` : `Pay ${formatLei(amount / 100)} lei`}
+      </button>
+      <p className="text-center text-xs text-muted-foreground">
+        {lang === "ro"
+          ? "Plată securizată procesată de Stripe. Datele cardului tău nu sunt stocate pe acest site."
+          : "Secure payment processed by Stripe. Your card details are not stored on this site."}
+      </p>
+    </form>
+  );
+};
 
 const TZ = "Europe/Bucharest";
 const WHATSAPP_FALLBACK =
@@ -155,6 +224,15 @@ const NativeScheduler = ({
   } | null>(null);
   // Trial-only: the server rejects a second free trial for the same email.
   const [trialUsed, setTrialUsed] = useState(false);
+  // Paid lessons: every lesson the registration bought is already booked.
+  const [lessonsUsedUp, setLessonsUsedUp] = useState(false);
+  // Purchase: the embedded Stripe payment, once its intent is ready.
+  const [embeddedPay, setEmbeddedPay] = useState<{
+    clientSecret: string;
+    stripe: Promise<StripeJs | null>;
+    amount: number;
+    currency: string;
+  } | null>(null);
   // Trial-only: redirect state for the 0-lei card-on-file confirmation step.
   // The registration this booking ended up attached to. On /trial the row is
   // created at confirm time, so without keeping it here the card-confirmation
@@ -285,21 +363,24 @@ const NativeScheduler = ({
     return () => window.clearInterval(interval);
   }, [loadAvailability]);
 
-  // Purchase only: straight to Stripe with the chosen slot.
-  const handlePay = async () => {
+  const purchaseBooking = () => ({
+    event_type: eventType,
+    start_at: selectedSlot,
+    format,
+    language: lang,
+    weekly: weekly && (purchase?.quantity ?? 1) > 1,
+  });
+
+  // Fallback: Stripe's hosted page with the chosen slot (when Stripe.js
+  // cannot load in this browser — the same rule /checkout follows).
+  const openHostedCheckout = async () => {
     if (!selectedSlot || !purchase || !registrationId) return;
     setSubmitting(true);
     const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
       body: {
         registrationId,
         email: purchase.email,
-        booking: {
-          event_type: eventType,
-          start_at: selectedSlot,
-          format,
-          language: lang,
-          weekly: weekly && purchase.quantity > 1,
-        },
+        booking: purchaseBooking(),
       },
     });
     if (fnError || !data?.url) {
@@ -314,6 +395,47 @@ const NativeScheduler = ({
     }
     window.location.href = data.url;
   };
+
+  // Purchase: pay inside the site (Stripe Elements). The PaymentIntent carries
+  // the slot; the webhook books it once the payment clears.
+  const handlePay = async () => {
+    if (!selectedSlot || !purchase || !registrationId) return;
+    setSubmitting(true);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("create-payment-intent", {
+        body: {
+          courseType: "private",
+          email: purchase.email,
+          name: prefill?.name,
+          registrationId,
+          booking: purchaseBooking(),
+        },
+      });
+      if (fnError || !data?.clientSecret || !data?.publishableKey || !(data.amount > 0)) {
+        throw new Error("payment intent unavailable");
+      }
+      const stripe = await Promise.race<StripeJs | null>([
+        loadStripe(data.publishableKey).catch(() => null),
+        new Promise<null>((r) => window.setTimeout(() => r(null), 6000)),
+      ]);
+      if (!stripe) throw new Error("stripe.js unavailable");
+      setEmbeddedPay({
+        clientSecret: data.clientSecret,
+        stripe: Promise.resolve(stripe),
+        amount: data.amount,
+        currency: data.currency ?? "ron",
+      });
+      setSubmitting(false);
+    } catch (e) {
+      console.warn("[scheduler] embedded payment unavailable, using hosted checkout", e);
+      await openHostedCheckout();
+    }
+  };
+
+  // A changed choice needs a fresh intent (its metadata holds the slot).
+  useEffect(() => {
+    setEmbeddedPay(null);
+  }, [weekly, selectedSlot]);
 
   const handleConfirm = async () => {
     if (!selectedSlot) return;
@@ -426,6 +548,10 @@ const NativeScheduler = ({
           setTrialUsed(true);
           return;
         }
+        if (errPayload?.code === "lessons_used_up") {
+          setLessonsUsedUp(true);
+          return;
+        }
         if (errPayload?.code === "payment_required") {
           throw new Error(
             lang === "ro"
@@ -441,6 +567,10 @@ const NativeScheduler = ({
           toast.error(t.schedulerSlotTaken);
           setSelectedSlot(null);
           await loadAvailability();
+          return;
+        }
+        if (payload?.code === "lessons_used_up") {
+          setLessonsUsedUp(true);
           return;
         }
         if (payload?.code === "trial_used") {
@@ -463,6 +593,24 @@ const NativeScheduler = ({
       setSubmitting(false);
     }
   };
+
+  if (lessonsUsedUp) {
+    return (
+      <div className="rounded-xl border border-amber-300 bg-amber-50 p-6 space-y-4">
+        <p className="text-sm text-foreground">
+          {lang === "ro"
+            ? "Ai programat deja toate lecțiile plătite. Pentru mai multe lecții, rezervă un pachet nou din pagina lecțiilor private."
+            : "You have already booked all the lessons you paid for. For more lessons, book a new package from the private lessons page."}
+        </p>
+        <Button asChild>
+          <Link to={lang === "ro" ? "/cursuri/private#register" : "/en/courses/private#register"}>
+            <Calendar className="w-4 h-4 mr-2" />
+            {lang === "ro" ? "Lecțiile private" : "Private lessons"}
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   if (trialUsed) {
     return (
@@ -779,14 +927,33 @@ const NativeScheduler = ({
             ? "Lecția se confirmă după plată: primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte. Dacă nu finalizezi plata, nu se rezervă nimic. Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte."
             : "The lesson is confirmed once paid: you get a confirmation email, and Ibra writes to introduce himself. If you don't complete the payment, nothing is booked. Cancelling or rescheduling is free at least 24 hours ahead."}
         </p>
-        <button
-          onClick={handlePay}
-          disabled={submitting}
-          className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
-        >
-          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-          {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
-        </button>
+        {embeddedPay && registrationId ? (
+          <Elements
+            stripe={embeddedPay.stripe}
+            options={{ clientSecret: embeddedPay.clientSecret, appearance: { theme: "stripe" } }}
+          >
+            <InlinePrivatePay
+              amount={embeddedPay.amount}
+              currency={embeddedPay.currency}
+              registrationId={registrationId}
+              email={purchase.email}
+              lang={lang}
+              onLoadError={() => {
+                setEmbeddedPay(null);
+                void openHostedCheckout();
+              }}
+            />
+          </Elements>
+        ) : (
+          <button
+            onClick={handlePay}
+            disabled={submitting}
+            className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+          >
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+            {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
+          </button>
+        )}
       </div>
     );
   }
