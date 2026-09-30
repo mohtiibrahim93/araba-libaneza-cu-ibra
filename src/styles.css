@@ -158,6 +158,24 @@
   --sidebar-accent-foreground: 240 5.9% 10%;
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
+
+  /**
+   * Categorical series colours for the admin analytics charts, in fixed slot
+   * order. Never cycled: a fifth series folds into "other" rather than
+   * inventing a hue.
+   *
+   * Plain hex, not the HSL triples above, because these are validated values
+   * rather than theme knobs — re-stepping one by hand breaks the guarantee.
+   * Checked against the light surface (#ffffff): worst adjacent pair is
+   * yellow↔aqua, CVD ΔE 9.1 (protan), normal-vision ΔE 22.9. Aqua (2.82:1) and
+   * yellow (2.17:1) fall below 3:1 here, so any chart using slots 3 and 4 on
+   * the light surface owes the reader a legend and the numbers in text — the
+   * weekly table under the chart is that relief, not a nicety.
+   */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
 }
 
 .dark {
@@ -201,6 +219,17 @@
   --sidebar-accent-foreground: 0 0% 98%;
   --sidebar-border: 220 14% 20%;
   --sidebar-ring: 0 72% 51%;
+
+  /**
+   * The same four hues re-stepped for the dark surface (#16181d) — chosen, not
+   * an automatic lightening of the values above. All four clear 3:1 here, and
+   * the worst adjacent pair is again yellow↔aqua: CVD ΔE 8.4 (protan),
+   * normal-vision ΔE 19.8.
+   */
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
 }
 
 @layer base {
