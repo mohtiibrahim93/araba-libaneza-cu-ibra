@@ -87,10 +87,10 @@ const GroupRegistrationConfirmationEmail = ({ language, name, format, center, le
 
         <Section style={infoBox}>
           <Text style={infoTitle}>✅ {t('Următorii pași', 'Next steps')}</Text>
-          <Text style={checkItem}>{t('1. Te contactăm pe WhatsApp pentru confirmarea locului', '1. We contact you on WhatsApp to confirm your place')}</Text>
-          <Text style={checkItem}>{t('2. Confirmăm programul și formatul (fizic/online)', '2. We confirm the schedule and the format (in person / online)')}</Text>
-          <Text style={checkItem}>{t('3. Efectuezi plata (card, transfer sau cash)', '3. You pay (card, bank transfer or cash)')}</Text>
-          <Text style={checkItem}>{t('4. Începem cursul împreună 🎉', '4. We start the course together 🎉')}</Text>
+          <Text style={checkItem}>{t('1. Îți scriem pe WhatsApp ca să ne cunoaștem și să răspundem la orice întrebare.', '1. We say hello on WhatsApp, introduce ourselves and answer any questions.')}</Text>
+          <Text style={checkItem}>{t('2. Plata este cea care îți confirmă locul în grupă.', '2. Paying is what confirms your place in the group.')}</Text>
+          <Text style={checkItem}>{t('3. În cel mult 24 de ore de la plată primești mesajul de bun venit, cu tot ce îți trebuie înainte de prima lecție.', '3. Within 24 hours of your payment you get the welcome message, with everything you need before the first lesson.')}</Text>
+          <Text style={checkItem}>{t('4. Orice modificare o anunțăm din timp. Dacă nu primești niciun anunț, cursul începe exact cum a fost stabilit.', '4. Any change is announced in advance. If no announcement arrives, the course runs exactly as booked.')}</Text>
         </Section>
 
         <Section style={ctaSection}>

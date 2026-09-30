@@ -287,8 +287,8 @@ export const translations = {
     paymentAlternativesHide: "Ascunde alte metode",
     paymentSecure: "Plată securizată · 3D Secure · SSL",
     successNextStepsTitle: "Ce urmează?",
-    successStepConfirm: "Te contactăm pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) pentru confirmare.",
-    successStepPay: "Plătește acum pentru a-ți rezerva locul instant.",
+    successStepConfirm: "Îți scriem pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) ca să ne cunoaștem.",
+    successStepPay: "Plata îți confirmă locul. În cel mult 24 de ore primești mesajul de bun venit, cu tot ce îți trebuie.",
     successAgain: "Trimite o cerere nouă",
 
     // Cookie consent
@@ -1084,8 +1084,8 @@ export const translations = {
     paymentAlternativesHide: "Hide other methods",
     paymentSecure: "Secure payment · 3D Secure · SSL",
     successNextStepsTitle: "What's next?",
-    successStepConfirm: "We'll reach out on WhatsApp within a few hours (one business day at most) to confirm.",
-    successStepPay: "Pay now to reserve your spot instantly.",
+    successStepConfirm: "We message you on WhatsApp within a few hours (one business day at most) to say hello.",
+    successStepPay: "Paying confirms your place. Within 24 hours you get the welcome message, with everything you need.",
     successAgain: "Submit another request",
 
     // Cookie consent
