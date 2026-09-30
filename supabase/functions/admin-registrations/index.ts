@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { gcalDiagnose } from "../_shared/booking.ts";
+import { gcalDiagnose, utcToZonedParts } from "../_shared/booking.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -961,6 +961,160 @@ Deno.serve(async (req) => {
       });
 
       return jsonResponse({ data: enriched });
+    }
+
+    // ============ Analytics over a time window ============
+    /**
+     * Everything else in the admin panel counts all of time: the four stat
+     * cards, the trial funnel, the student journey. That makes "is this month
+     * better than last month" unanswerable, which is the question an owner
+     * actually asks.
+     *
+     * So this action is the time dimension, and only things the database knows
+     * exactly. Deliberately not here:
+     *   - Revenue. There is no amount column on `registrations`; a figure would
+     *     have to be re-derived from cohort list prices times months, ignoring
+     *     discounts, which is a guess dressed as a number. Refunds ARE exact
+     *     (`refunded_amount`), so those are reported.
+     *   - Cohort fill. `GroupOverview` already computes it from
+     *     `group_capacities` including `manual_offset`; a second derivation
+     *     here would eventually disagree with it about the same cohort.
+     *   - Traffic and channels. That is Google Analytics' job (property
+     *     G-F167Y815JL). `registrations.source` is only form / whatsapp /
+     *     admin, which is how the row was created, not where the person came
+     *     from — so it is reported as what it is and nothing more.
+     */
+    if (action === "list_analytics") {
+      const days = Math.min(Math.max(Number(body?.days) || 90, 7), 730);
+      const fromMs = Date.now() - days * 86_400_000;
+      const fromISO = new Date(fromMs).toISOString();
+
+      const [{ data: regs, error: regErr }, { data: books, error: bookErr }] = await Promise.all([
+        supabase
+          .from("registrations")
+          .select(
+            "id, created_at, form_type, format, level, language, source, referral_code, payment_status, paid_at, lead_status, refunded_amount, refunded_at",
+          )
+          .gte("created_at", fromISO)
+          .is("anonymized_at", null),
+        // Bookings are windowed on the lesson date, not the created date: the
+        // question is how the lessons in this period went.
+        supabase
+          .from("bookings")
+          .select("id, created_at, start_at, status, event_type_slug, format, cancelled_at, original_booking_id")
+          .gte("start_at", fromISO),
+      ]);
+      if (regErr) throw regErr;
+      if (bookErr) throw bookErr;
+
+      const registrations = regs ?? [];
+      const bookings = books ?? [];
+
+      // Weekly buckets, keyed by the Monday of each ISO week in Bucharest time
+      // so a bucket is a week as Ibra experiences it, not as UTC does.
+      const weekKey = (iso: string) => {
+        const p = utcToZonedParts(new Date(iso));
+        const d = new Date(Date.UTC(p.year, p.month - 1, p.day));
+        // getUTCDay: 0 = Sunday. Shift so Monday starts the week.
+        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+        return d.toISOString().slice(0, 10);
+      };
+
+      const weeks = new Map<string, Record<string, number>>();
+      for (const r of registrations) {
+        const k = weekKey(r.created_at as string);
+        const row = weeks.get(k) ?? { total: 0 };
+        row.total += 1;
+        const ft = (r.form_type as string) || "other";
+        row[ft] = (row[ft] ?? 0) + 1;
+        weeks.set(k, row);
+      }
+      const signupsByWeek = [...weeks.entries()]
+        .sort(([a], [b]) => (a < b ? -1 : 1))
+        .map(([week, counts]) => ({ week, ...counts }));
+
+      const tally = (rows: Array<Record<string, unknown>>, field: string) => {
+        const out: Record<string, number> = {};
+        for (const r of rows) {
+          const v = r[field];
+          const k = typeof v === "string" && v.trim() ? v : "—";
+          out[k] = (out[k] ?? 0) + 1;
+        }
+        return out;
+      };
+
+      // Days from sign-up to payment, median rather than mean: one person who
+      // paid four months later would drag an average into fiction.
+      const payLags = registrations
+        .filter((r) => r.paid_at && r.created_at)
+        .map((r) => (Date.parse(r.paid_at as string) - Date.parse(r.created_at as string)) / 86_400_000)
+        .filter((d) => Number.isFinite(d) && d >= 0)
+        .sort((a, b) => a - b);
+      const median = (xs: number[]) =>
+        xs.length === 0
+          ? null
+          : xs.length % 2
+            ? xs[(xs.length - 1) / 2]
+            : (xs[xs.length / 2 - 1] + xs[xs.length / 2]) / 2;
+
+      const paid = registrations.filter((r) => r.payment_status === "paid").length;
+      const refunds = registrations.filter((r) => r.refunded_at);
+
+      // A cancellation inside the 24-hour window, which booking-manage now
+      // refuses: from here on these can only come from the admin panel, so the
+      // count is a direct read on how often the rule has to be overridden.
+      const lateCancels = bookings.filter(
+        (b) =>
+          b.status === "cancelled" &&
+          b.cancelled_at &&
+          Date.parse(b.start_at as string) - Date.parse(b.cancelled_at as string) < 86_400_000,
+      ).length;
+
+      const byStatus = tally(bookings, "status");
+      const trialBookings = bookings.filter((b) => b.event_type_slug === "trial");
+
+      return jsonResponse({
+        data: {
+          range: { days, from: fromISO, to: new Date().toISOString() },
+          signups: {
+            total: registrations.length,
+            byWeek: signupsByWeek,
+            byFormType: tally(registrations, "form_type"),
+            byFormat: tally(registrations, "format"),
+            byLevel: tally(registrations, "level"),
+            byLanguage: tally(registrations, "language"),
+            bySource: tally(registrations, "source"),
+            byReferral: tally(
+              registrations.filter((r) => r.referral_code),
+              "referral_code",
+            ),
+          },
+          conversion: {
+            registrations: registrations.length,
+            paid,
+            paidPercent: registrations.length ? Math.round((paid / registrations.length) * 100) : 0,
+            byPaymentStatus: tally(registrations, "payment_status"),
+            byLeadStatus: tally(registrations, "lead_status"),
+            medianDaysToPay: median(payLags),
+          },
+          refunds: {
+            count: refunds.length,
+            // refunded_amount is stored in the smallest currency unit by Stripe
+            // convention; the page divides, this does not, so the raw figure
+            // stays inspectable.
+            totalMinorUnits: refunds.reduce((sum, r) => sum + (Number(r.refunded_amount) || 0), 0),
+          },
+          lessons: {
+            total: bookings.length,
+            byStatus,
+            byEventType: tally(bookings, "event_type_slug"),
+            byFormat: tally(bookings, "format"),
+            trials: trialBookings.length,
+            rescheduled: bookings.filter((b) => b.original_booking_id).length,
+            lateCancels,
+          },
+        },
+      });
     }
 
     // ============ Trial → enrollment conversion funnel ============

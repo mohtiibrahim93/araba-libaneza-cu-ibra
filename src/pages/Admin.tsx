@@ -29,6 +29,7 @@ import {
   Newspaper,
   Settings,
   LineChart,
+  BarChart3,
   FileText,
   Languages,
 } from "lucide-react";
@@ -50,6 +51,7 @@ import BookingsAdmin from "@/components/BookingsAdmin";
 import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
+import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
@@ -588,6 +590,12 @@ const Admin = () => {
           icon: GraduationCap,
           hint: "Capacitate, cohorte și cereri de curs",
         },
+        {
+          value: "analytics",
+          label: "Analiză",
+          icon: BarChart3,
+          hint: "Cifrele pe o perioadă, nu pe tot timpul",
+        },
       ],
     },
     {
@@ -650,6 +658,11 @@ const Admin = () => {
             />
             <StudentJourneyAdmin />
             <TrialFunnelAdmin />
+          </TabsContent>
+
+          {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}
+          <TabsContent value="analytics" className="mt-0">
+            <AnalyticsAdmin />
           </TabsContent>
 
           {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
