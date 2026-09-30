@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
-import { ChevronRight, MessageCircle } from "lucide-react";
+import { ChevronRight, MessageCircle, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -159,23 +159,27 @@ const CourseLayout = ({
         <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-12">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-4">
+              {/* Label and heading in the homepage's style, so the course
+                  pages read as the same site. */}
+              <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
                 {badge}
               </span>
-              <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-4">
+              <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-4">
                 {h1}
               </h1>
               {priceLine && (
                 <p className="text-lg font-semibold text-foreground mb-4">{priceLine}</p>
               )}
-              <p className="text-base text-muted-foreground leading-relaxed mb-6">{intro}</p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">{intro}</p>
               <ul className="space-y-2 mb-8">
                 {features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+                  <li key={i} className="flex items-start gap-2.5 text-[15px] text-foreground">
                     <span
                       aria-hidden="true"
-                      className="mt-1 inline-block w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"
-                    />
+                      className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brand-green/10 text-brand-green"
+                    >
+                      <Check className="h-3 w-3" />
+                    </span>
                     {f}
                   </li>
                 ))}
@@ -183,7 +187,7 @@ const CourseLayout = ({
               <div className="flex flex-wrap gap-3">
                 <a
                   href={primaryCtaHref}
-                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                  className="inline-flex h-12 items-center gap-2 px-6 font-semibold bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
                 >
                   {primaryCtaLabel}
                 </a>
@@ -191,9 +195,9 @@ const CourseLayout = ({
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+                  className="inline-flex h-12 items-center gap-2 px-6 font-semibold rounded-xl border border-[#E7E1D6] bg-card text-foreground hover:bg-cream transition-colors dark:border-border"
                 >
-                  <MessageCircle className="w-4 h-4 text-primary" />
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
                   WhatsApp
                 </a>
               </div>
@@ -205,7 +209,7 @@ const CourseLayout = ({
                 width={1200}
                 height={800}
                 loading="eager"
-                className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl border border-border shadow-xs"
+                className="w-full h-64 sm:h-80 lg:h-[26rem] object-cover rounded-3xl"
               />
             </div>
           </div>
@@ -215,24 +219,24 @@ const CourseLayout = ({
         <div className="w-full max-w-content mx-auto px-gutter pb-16">{children}</div>
 
         {/* Other courses */}
-        <section className="bg-muted/50 border-t border-border">
-          <div className="w-full max-w-content mx-auto px-gutter py-12">
-            <h2 className="text-xl font-bold text-foreground mb-4">{t.courseOtherCoursesTitle}</h2>
+        <section className="bg-cream">
+          <div className="w-full max-w-content mx-auto px-gutter py-section">
+            <h2 className="font-display text-2xl font-bold text-foreground mb-5">{t.courseOtherCoursesTitle}</h2>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {otherCourses.map((c) => (
                 <li key={c.to}>
                   <Link
                     to={c.to}
-                    className="block rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground hover:border-primary/50 hover:bg-muted transition-colors"
+                    className="flex items-center justify-between rounded-2xl border border-[#E7E1D6] bg-card px-5 py-4 font-semibold text-foreground hover:border-brand-green/50 transition-colors dark:border-border"
                   >
                     {c.label}
-                    <ChevronRight className="w-4 h-4 inline ml-1 -mt-0.5 text-muted-foreground" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </Link>
                 </li>
               ))}
             </ul>
             <p className="mt-4 text-sm">
-              <Link to="/cursuri" className="text-primary font-medium hover:underline underline-offset-4">
+              <Link to="/cursuri" className="text-brand-green font-semibold hover:underline underline-offset-4">
                 {t.courseSeeAllPrograms}
               </Link>
             </p>

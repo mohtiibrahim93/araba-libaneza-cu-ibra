@@ -178,62 +178,83 @@ const CursGrupLevel = () => {
 
         {/* Hero */}
         <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-8">
-          <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
-            CEFR {upperLevel}
+          {/* Label and heading in the homepage's style. */}
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+            {lang === "en" ? "Group course" : "Curs de grup"} · CEFR {upperLevel}
           </span>
-          <h1 className="text-display-xl font-bold tracking-tight text-foreground mb-4">
+          <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-4">
             {curriculum.title}
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-3xl mb-6">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mb-8">
             {curriculum.objective}
           </p>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 max-w-2xl mb-6">
-            <div className="rounded-xl border border-border bg-card p-4">
-              <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground font-semibold mb-1">
-                <BookOpen className="w-3.5 h-3.5" /> {t.levelPageStatLessons}
-              </div>
-              <p className="text-xl font-bold text-foreground">{curriculum.lessons}</p>
+          {/* One summary card: what the level is, when it runs, what it costs,
+              and the way to the form. These used to be three small boxes, a
+              schedule block and a price pill, one under the other. */}
+          <div className="grid gap-6 rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] dark:border-border">
+            <div>
+              <dl className="flex flex-wrap gap-x-10 gap-y-4">
+                <div>
+                  <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <BookOpen className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatLessons}
+                  </dt>
+                  <dd className="font-display text-3xl font-bold text-foreground">{curriculum.lessons}</dd>
+                </div>
+                <div>
+                  <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatHours}
+                  </dt>
+                  <dd className="font-display text-3xl font-bold text-foreground">{curriculum.hours}</dd>
+                </div>
+                <div>
+                  <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <GraduationCap className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatTrack}
+                  </dt>
+                  <dd className="pt-2 font-semibold text-foreground">{curriculum.trackLabel}</dd>
+                </div>
+              </dl>
+
+              {curriculum.schedule && (
+                <div className="mt-6 border-t border-[#E7E1D6] pt-5 dark:border-border">
+                  <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.levelPageScheduleLabel}</span>
+                  {curriculum.schedule.map((line, i) => (
+                    <p key={i} className="text-[15px] text-foreground/85 mt-1.5">{line}</p>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="rounded-xl border border-border bg-card p-4">
-              <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground font-semibold mb-1">
-                <Clock className="w-3.5 h-3.5" /> {t.levelPageStatHours}
+
+            <div className="flex flex-col justify-between gap-5 rounded-2xl bg-cream p-6">
+              <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+                <span>
+                  <span className="block text-sm text-muted-foreground">{t.priceOnlineShort}</span>
+                  <span className="font-display text-3xl font-bold text-foreground">{formatLei(online)}</span>
+                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+                </span>
+                <span>
+                  <span className="block text-sm text-muted-foreground">{t.priceFizicShort}</span>
+                  <span className="font-display text-3xl font-bold text-foreground">{formatLei(fizic)}</span>
+                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+                </span>
               </div>
-              <p className="text-xl font-bold text-foreground">{curriculum.hours}</p>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-4">
-              <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground font-semibold mb-1">
-                <GraduationCap className="w-3.5 h-3.5" /> {t.levelPageStatTrack}
+              <p className="text-xs text-muted-foreground">{t.priceSurchargeNote}</p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="#register"
+                  className="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  {lang === "en" ? "Sign up →" : "Înscrie-te →"}
+                </a>
+                <Link
+                  to="/trial"
+                  className="inline-flex h-12 items-center justify-center rounded-xl border border-[#E7E1D6] bg-card px-6 font-semibold text-foreground transition-colors hover:bg-background dark:border-border"
+                >
+                  {lang === "en" ? "Free trial lesson" : "Lecție gratuită"}
+                </Link>
               </div>
-              <p className="text-sm font-semibold text-foreground leading-tight">{curriculum.trackLabel}</p>
             </div>
           </div>
-
-          {curriculum.schedule && (
-            <div className="mb-6 max-w-2xl">
-              <span className="text-xs uppercase font-semibold text-muted-foreground">{t.levelPageScheduleLabel}</span>
-              {curriculum.schedule.map((line, i) => (
-                <p key={i} className="text-sm text-foreground font-medium mt-1">{line}</p>
-              ))}
-            </div>
-          )}
-
-          {/* Dual price */}
-          <div className="inline-flex flex-wrap items-baseline gap-4 rounded-xl border border-border bg-muted/40 px-gutter py-3 mb-2">
-            <span>
-              <span className="text-xs uppercase font-semibold text-muted-foreground mr-2">{t.priceOnlineShort}</span>
-              <span className="text-xl font-bold text-foreground">{formatLei(online)}</span>
-              <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
-            </span>
-            <span className="text-muted-foreground">·</span>
-            <span>
-              <span className="text-xs uppercase font-semibold text-muted-foreground mr-2">{t.priceFizicShort}</span>
-              <span className="text-xl font-bold text-foreground">{formatLei(fizic)}</span>
-              <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground max-w-2xl">{t.priceSurchargeNote}</p>
         </section>
 
         {/* Body: curriculum + form */}
@@ -245,22 +266,22 @@ const CursGrupLevel = () => {
                   bullet list, which reads as provisional for a course of this
                   length — B1 and B2 were the two thinnest pages on the site. */}
               {curriculum.intro && (
-                <div className="mb-8 space-y-3 text-foreground/80 leading-relaxed">
+                <div className="mb-8 space-y-4 text-foreground/80 leading-relaxed">
                   {curriculum.intro.map((para, i) => (
-                    <p key={i} className="text-sm">{para}</p>
+                    <p key={i} className="text-base">{para}</p>
                   ))}
                 </div>
               )}
 
               {curriculum.outcomes && (
-                <div className="mb-8 rounded-2xl border border-border bg-muted/30 p-5">
-                  <h2 className="text-lg font-bold text-foreground mb-3">
+                <div className="mb-10 rounded-3xl bg-cream p-6 sm:p-7">
+                  <h2 className="font-display text-xl font-bold text-foreground mb-4">
                     {t.levelPageOutcomesTitle}
                   </h2>
                   <ul className="space-y-2">
                     {curriculum.outcomes.map((o, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
                         <span className="min-w-0 text-foreground">{o}</span>
                       </li>
                     ))}
@@ -268,14 +289,14 @@ const CursGrupLevel = () => {
                 </div>
               )}
 
-              <h2 className="text-2xl font-bold text-foreground mb-4">{t.levelPageCurriculumTitle}</h2>
+              <h2 className="font-display text-display-md font-bold text-foreground mb-5">{t.levelPageCurriculumTitle}</h2>
 
               {/* Flat list (A1, A2, B1, B2) */}
               {curriculum.items && (
-                <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 rounded-2xl border border-border bg-card p-5">
+                <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 rounded-3xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
                   {curriculum.items.map((it, i) => (
                     <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
                       <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                     </li>
                   ))}
@@ -285,12 +306,12 @@ const CursGrupLevel = () => {
               {/* C1: two strands */}
               {curriculum.spokenCore && (
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-border bg-card p-5">
+                  <div className="rounded-3xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
                     <h3 className="text-sm font-bold text-foreground mb-3">{curriculum.spokenCore.intro}</h3>
                     <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                       {curriculum.spokenCore.items.map((it, i) => (
                         <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                          <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
                           <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                         </li>
                       ))}
@@ -302,7 +323,7 @@ const CursGrupLevel = () => {
                       <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                         {curriculum.writingStrand.items.map((it, i) => (
                           <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
-                            <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
                             <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                           </li>
                         ))}
@@ -321,7 +342,7 @@ const CursGrupLevel = () => {
                       <ul className="space-y-2">
                         {b.items.map((it, j) => (
                           <li key={j} className="flex items-start gap-2 text-sm">
-                            <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
                             <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
                           </li>
                         ))}

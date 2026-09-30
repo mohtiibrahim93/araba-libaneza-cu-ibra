@@ -62,8 +62,8 @@ const CursGrup = () => {
     >
       {/* Level grid */}
       <section id="choose-level" className="scroll-mt-24 mt-4">
-        <h2 className="text-2xl font-bold text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
-        <p className="text-sm text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
+        <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
+        <p className="text-base text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
         <CohortEnrollmentNote className="text-sm font-medium text-primary mb-6 max-w-2xl" />
 
         {/* These groups are for adults. Search engines were landing teen
@@ -76,19 +76,6 @@ const CursGrup = () => {
             <>Ai sub 18 ani? Vezi <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">cursurile de arabă pentru adolescenți (12–17 ani)</Link> sau <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">cursul pentru copii (6–11 ani)</Link>.</>
           )}
         </p>
-
-        {/* The two cohorts the note above refers to, shown together. Sits here
-            rather than at the top of the page so it illustrates the note
-            instead of competing with the hero. */}
-        <img
-          src={posterCursuriGrup}
-          alt="Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start marți, 1 septembrie 2026, marți și joi; A1 start miercuri, 2 septembrie 2026, luni și miercuri; 19:00–20:30, Strada Icoanei 80"
-          width={1024}
-          height={1024}
-          loading="lazy"
-          decoding="async"
-          className="w-full max-w-md rounded-2xl border border-border shadow-xs mb-8"
-        />
 
         {/* All six levels side by side.
             The cards below say everything this table says, but one level at a
@@ -186,18 +173,22 @@ const CursGrup = () => {
               <Link
                 key={lvl}
                 to={`${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${lvl.toLowerCase()}`}
-                className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/50 hover:shadow-md transition-all flex flex-col"
+                className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 hover:border-brand-green/50 transition-colors flex flex-col dark:border-border"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-extrabold text-foreground">{lvl}</span>
-                  {!available && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground bg-muted px-2 py-0.5 rounded-[4px]">
+                  <span className="font-display text-3xl font-bold text-foreground">{lvl}</span>
+                  {available ? (
+                    <span className="rounded-full bg-brand-green/10 px-2.5 py-0.5 text-[11px] font-bold text-brand-green">
+                      {lang === "en" ? "Open" : "Înscrieri deschise"}
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-cream px-2.5 py-0.5 text-[11px] font-bold text-muted-foreground">
                       {t.grupLevelInPrepBadge}
                     </span>
                   )}
                 </div>
-                <p className="text-sm font-semibold text-foreground mb-2 line-clamp-2">{data.title.replace(/^Nivel \w+ — /, "").replace(/^Level \w+ — /, "")}</p>
-                <p className="text-xs text-muted-foreground mb-3 line-clamp-3 flex-1">{data.objective}</p>
+                <p className="font-semibold text-foreground mb-2 line-clamp-2">{data.title.replace(/^Nivel \w+ — /, "").replace(/^Level \w+ — /, "")}</p>
+                <p className="text-sm leading-relaxed text-foreground/75 mb-4 line-clamp-3 flex-1">{data.objective}</p>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground mb-3">
                   <span><strong className="text-foreground">{data.lessons}</strong> {t.grupLevelCardLessons}</span>
                   <span>·</span>
@@ -213,7 +204,7 @@ const CursGrup = () => {
                 <div className="text-xs text-muted-foreground mb-3">
                   <span className="font-semibold text-foreground">{formatLei(online)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(fizic)}</span> {t.priceFizicShort} {t.priceLeiPerMonth}
                 </div>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline underline-offset-4">
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-green group-hover:underline underline-offset-4">
                   {t.grupLevelCardViewFull}
                 </span>
               </Link>
@@ -222,12 +213,36 @@ const CursGrup = () => {
         </div>
       </section>
 
+      {/* The flyer of the groups already running. It used to sit next to the
+          enrolment note, where its September start dates read like the next
+          start; here it is labelled as what it is. */}
+      <section className="mt-section">
+        <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+          {lang === "en" ? "Groups in progress" : "Grupe în desfășurare"}
+        </span>
+        <p className="mb-5 max-w-2xl text-base text-muted-foreground">
+          {lang === "en"
+            ? "A1 and A2 in person at Raduga Creative Center, started in September. For the next start dates, see the enrolment note above."
+            : "A1 și A2 fizic, la Raduga Creative Center, începute în septembrie. Pentru următoarele date de start, vezi nota de înscriere de mai sus."}
+        </p>
+        <img
+          src={posterCursuriGrup}
+          alt="Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start marți, 1 septembrie 2026, marți și joi; A1 start miercuri, 2 septembrie 2026, luni și miercuri; 19:00–20:30, Strada Icoanei 80"
+          width={1024}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="w-full max-w-sm rounded-3xl border border-[#E7E1D6] dark:border-border"
+        />
+
+      </section>
+
       {/* Don't know your level? */}
-      <section className="mt-12 rounded-2xl border border-border bg-muted/40 p-6 sm:p-8">
-        <h2 className="text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
+      <section className="mt-section rounded-3xl bg-cream p-6 sm:p-10">
+        <h2 className="font-display text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.dontKnowLevelDesc}</p>
         <div className="grid sm:grid-cols-3 gap-4">
-          <Link to="/quiz" className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors">
+          <Link to="/quiz" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
             <Sparkles className="w-5 h-5 text-primary mb-2" />
             <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptQuizTitle}</h3>
             <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptQuizDesc}</p>
@@ -235,7 +250,7 @@ const CursGrup = () => {
               {t.dontKnowOptQuizTitle} <ChevronRight className="w-3.5 h-3.5" />
             </span>
           </Link>
-          <Link to="/trial" className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors">
+          <Link to="/trial" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
             <Building2 className="w-5 h-5 text-primary mb-2" />
             <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptTestTitle}</h3>
             <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptTestDesc}</p>
@@ -243,7 +258,7 @@ const CursGrup = () => {
               {t.dontKnowOptTestTitle} <ChevronRight className="w-3.5 h-3.5" />
             </span>
           </Link>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
             <MessageCircle className="w-5 h-5 text-primary mb-2" />
             <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptWhatsAppTitle}</h3>
             <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptWhatsAppDesc}</p>

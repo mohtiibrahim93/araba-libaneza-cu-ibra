@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils";
  *   registration insert as /trial;
  * - a group course is a cohort with a fixed start date, so the date is the
  *   cohort, and booking is the registration form on its level page;
- * - private lessons are paid first, and the times are picked after payment
- *   (the thank-you page links to /booking?type=paid).
+ * - private lessons go through the form on /cursuri/private: the owner calls
+ *   back and the schedule is agreed together (the steps on that page).
  *
  * The explanations below the steps are the ones the page had before; they
  * keep it from being too thin to index.
@@ -277,8 +277,8 @@ const BookingLanding = () => {
             <div className={cn(card, "flex flex-col gap-4 p-6")}>
               <p className="text-foreground/80">
                 {en
-                  ? "With private lessons you choose the times after you book the lessons: you fill in the form, pay, and then pick your times from Ibra's calendar."
-                  : "La lecțiile private îți alegi orele după ce rezervi lecțiile: completezi formularul, plătești, apoi îți alegi orele din calendarul lui Ibra."}
+                  ? "With private lessons we set the times together: you fill in the form with your goal and availability, we contact you within a few hours (at most one working day), and we fix the schedule and the first lesson."
+                  : "La lecțiile private stabilim orele împreună: completezi formularul cu obiectivul și disponibilitatea ta, te contactăm în câteva ore (cel mult într-o zi lucrătoare) și fixăm programul și prima lecție."}
               </p>
               <p className="text-sm text-muted-foreground">
                 {en
@@ -299,8 +299,8 @@ const BookingLanding = () => {
               <p className="max-w-3xl text-base leading-relaxed text-white/90">
                 {choice === "privat"
                   ? en
-                    ? "Fill in the form on the private lessons page. After payment you pick your lesson times."
-                    : "Completezi formularul de pe pagina lecțiilor private. După plată îți alegi orele lecțiilor."
+                    ? "Fill in the form on the private lessons page and we will contact you."
+                    : "Completezi formularul de pe pagina lecțiilor private și te contactăm."
                   : cohort
                     ? en
                       ? `${cohort.level} ${cohort.format === "fizic" ? "in person" : "online"}, from ${longDate(cohort.start_date, "en")}. Your place is confirmed by the payment.`
