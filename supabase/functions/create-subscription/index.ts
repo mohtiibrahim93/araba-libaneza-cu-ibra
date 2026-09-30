@@ -48,7 +48,10 @@ serve(async (req) => {
     const { email, name, registrationId } = await req.json();
 
     if (!registrationId || typeof registrationId !== "string") {
-      throw new Error("registrationId is required");
+      return new Response(JSON.stringify({ error: "registrationId is required" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
     }
 
     const supabaseAdmin = createClient(
