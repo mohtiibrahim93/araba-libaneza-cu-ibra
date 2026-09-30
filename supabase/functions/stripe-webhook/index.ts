@@ -8,6 +8,109 @@ import { privateLessonStarts } from "../_shared/private-series.ts";
 // Where the owner reads their mail. Same address notify-registration uses.
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
 
+type PaidRegistration = {
+  id: string;
+  email: string | null;
+  name: string;
+  phone: string | null;
+  language: string | null;
+};
+
+/**
+ * Books the lesson(s) of a paid private purchase from the slot carried in the
+ * Stripe metadata — a Checkout Session's (hosted) or a PaymentIntent's
+ * (embedded). One implementation for both events. It cannot double-book when
+ * both arrive or an event is redelivered: booking-create refuses a slot that
+ * is taken and refuses more lessons than the package, and a refusal caused by
+ * this registration's own existing booking is not treated as a failure.
+ */
+async function bookPrivateLessons(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  updated: PaidRegistration,
+  meta: Record<string, string>,
+): Promise<void> {
+  const starts = privateLessonStarts({
+    booking_start_at: meta.booking_start_at,
+    booking_weekly: meta.booking_weekly,
+    quantity: meta.quantity,
+  });
+  if (starts.length === 0) return;
+  const format = meta.booking_format || "online";
+  const language = meta.booking_language || updated.language || "ro";
+  const seriesNote =
+    starts.length > 1 ? `Serie săptămânală: ${starts.length} lecții, aceeași zi și oră.` : null;
+  // All at once rather than one after another: a 20-lesson series booked
+  // in sequence could outlast Stripe's wait for this response, and a
+  // redelivered event is skipped by the log above — the late weeks
+  // would silently never be booked.
+  const bookOne = async (startAt: string, i: number): Promise<string | null> => {
+    const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+      },
+      body: JSON.stringify({
+        registration_id: updated.id,
+        event_type: meta.booking_event_type || "paid",
+        start_at: startAt,
+        format,
+        student_name: updated.name,
+        student_email: updated.email,
+        student_phone: updated.phone || undefined,
+        notes: [seriesNote, meta.booking_notes].filter(Boolean).join(" ") || undefined,
+        language,
+        gdpr_consent: true,
+        // One confirmation for the purchase, not one per week.
+        quiet: i > 0,
+      }),
+    }).catch((e) => {
+      console.error(`Registration ${updated.id}: booking-create call failed`, e);
+      return null;
+    });
+    if (res && res.ok) return null;
+    const detail = res
+      ? `${res.status} ${await res.text().catch(() => "")}`.slice(0, 200)
+      : "booking-create could not be reached";
+    // A redelivered event (or the other of the two payment events) finds its
+    // own booking already there; that is not a failure worth an alarm.
+    if (res?.status === 409 && (detail.includes("conflict") || detail.includes("lessons_used_up"))) {
+      const { data: own } = await supabase
+        .from("bookings")
+        .select("id")
+        .eq("registration_id", updated.id)
+        .eq("start_at", new Date(startAt).toISOString())
+        .eq("status", "confirmed")
+        .maybeSingle();
+      if (own) return null;
+    }
+    return `${startAt} — ${detail}`;
+  };
+  const failed = (await Promise.all(starts.map((iso, i) => bookOne(iso, i)))).filter(
+    (f): f is string => f !== null,
+  );
+  if (failed.length > 0) {
+    // Paid, told it is confirmed, and one or more lessons are not in the
+    // calendar. Never throw (Stripe would redo the payment update);
+    // tell the owner, with what is needed to book them by hand.
+    console.error(`Registration ${updated.id}: ${failed.length} private lesson(s) not booked`);
+    await sendTemplateEmail("admin-trial-booking-failed", ADMIN_RECIPIENT, {
+      templateData: {
+        kind: "private",
+        name: updated.name,
+        email: updated.email,
+        phone: updated.phone,
+        startAt: failed.map((f) => f.split(" — ")[0]).join(", "),
+        format,
+        registrationId: updated.id,
+        reason: failed.join(" | ").slice(0, 900),
+      },
+      idempotencyKey: `private-booking-failed-${updated.id}`,
+    }).catch((e) => console.error(`Registration ${updated.id}: could not send the failure alert`, e));
+  }
+}
+
 serve(async (req) => {
   // Stripe calls this server-to-server (no browser Origin), so CORS is not
   // the real protection here — the Stripe signature check below is.
@@ -313,7 +416,7 @@ serve(async (req) => {
             stripe_session_id: intent.id,
           })
           .eq(matchColumn, matchValue)
-          .select("id")
+          .select("id, email, name, phone, language")
           .maybeSingle();
 
         if (updateError) {
@@ -322,6 +425,14 @@ serve(async (req) => {
         }
         if (!updated) {
           console.warn(`No registration found for PI ${matchColumn}=${matchValue}`);
+        }
+
+        // Embedded private payment (the day-and-time picker): the slot rides on
+        // the PaymentIntent's metadata. A hosted-Checkout payment's intent
+        // carries no booking_start_at, so this books nothing there — that
+        // purchase is booked on checkout.session.completed instead.
+        if (updated && intent.metadata?.course_type === "private" && intent.metadata?.booking_start_at) {
+          await bookPrivateLessons(supabase, updated, intent.metadata ?? {});
         }
         break;
       }
