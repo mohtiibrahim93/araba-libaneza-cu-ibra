@@ -160,7 +160,7 @@ describe("GA4 conversions", () => {
     // language is what decides which cohorts they can join — group_cohorts
     // carries a teaching_language and the picker filters on it. The trial form
     // shipped without this, so its leads arrived unattributable.
-    const inserts = ["src/pages/Trial.tsx", "src/components/RegistrationFormSection.tsx"];
+    const inserts = ["src/hooks/useTrialRegistration.ts", "src/components/RegistrationFormSection.tsx"];
     for (const f of inserts) {
       const src = read(f);
       expect(src, `${f} does not insert into registrations`).toContain(

@@ -196,7 +196,8 @@ describe("retired URLs that render instead of redirecting", () => {
  */
 describe("an unfinished trial does not look like a booking", () => {
   it("records the lead as incomplete, not as a new lead", () => {
-    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    // The insert lives in the hook /trial and the Programare page share.
+    const trial = readFileSync(resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"), "utf8");
     expect(trial).toContain('lead_status: "incomplete"');
     expect(trial).not.toContain("NEALES");
   });
@@ -216,7 +217,7 @@ describe("an unfinished trial does not look like a booking", () => {
   it("creates the registration once, even if the first slot clashes", () => {
     // A retry after "that time was just taken" must reuse the row rather than
     // leaving a second incomplete lead behind.
-    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    const trial = readFileSync(resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"), "utf8");
     expect(trial).toContain("if (registrationIdRef.current) return registrationIdRef.current;");
   });
 
