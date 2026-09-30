@@ -293,24 +293,33 @@ const Navbar = () => {
             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
             {lang === "en" ? "Bucharest · online" : "București · online"}
           </span>
-          <div className="ml-auto hidden items-center gap-5 md:flex">
-            <a href="tel:+40763124514" tabIndex={scrolled ? -1 : undefined} className="inline-flex items-center gap-1.5 text-white/90 hover:text-white">
+          {/* WhatsApp and Programare are buttons, not plain links: the owner
+              wants them found at a glance, on phones too. */}
+          <div className="ml-auto flex items-center gap-2 md:gap-3">
+            <a href="tel:+40763124514" tabIndex={scrolled ? -1 : undefined} className="mr-2 hidden items-center gap-1.5 text-white/90 hover:text-white md:inline-flex">
               <Phone className="h-3.5 w-3.5" aria-hidden="true" />
               +40 763 124 514
             </a>
-            <a href="https://wa.me/40763124514" target="_blank" rel="noopener noreferrer" tabIndex={scrolled ? -1 : undefined} className="inline-flex items-center gap-1.5 text-white/90 hover:text-white">
+            <a
+              href="https://wa.me/40763124514"
+              target="_blank"
+              rel="noopener noreferrer"
+              tabIndex={scrolled ? -1 : undefined}
+              aria-label="WhatsApp"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[#25D366] px-2.5 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
+            >
               <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
-              WhatsApp
+              <span className="hidden sm:inline">WhatsApp</span>
             </a>
             <Link
               to={lang === "en" ? "/en/booking" : "/booking"}
               tabIndex={scrolled ? -1 : undefined}
-              className="inline-flex items-center gap-1.5 text-white/90 hover:text-white"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-3 font-semibold text-brand-green transition-opacity hover:opacity-90"
             >
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {t.navBooking}
             </Link>
-            {isXl && <span className="h-3.5 w-px bg-white/30" aria-hidden="true" />}
+            {isXl && <span className="ml-2 h-3.5 w-px bg-white/30" aria-hidden="true" />}
             {isXl && (
               <span className="flex items-center gap-3">
                 {themeButton("dark")}
