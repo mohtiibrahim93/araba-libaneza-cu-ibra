@@ -49,8 +49,11 @@ const COPY = {
   en: {
     home: "Home",
     crumb: "Level test",
-    langNote:
-      "The test itself runs in Romanian: it scores answers in Arabizi against meanings written in Romanian, so there is no English version of it. The result and the course recommendation are in English.",
+    // The test used to be Romanian-only and this warned about it. Every prompt,
+    // answer and distractor in the placement bank is a T(ro, en) pair now, so
+    // the warning was telling English readers a test they can take is closed
+    // to them.
+    langNote: null as string | null,
     eyebrow: "Free · about 15 minutes",
     h1: "What is your level in Lebanese Arabic?",
     intro:

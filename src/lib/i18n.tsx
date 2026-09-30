@@ -546,6 +546,8 @@ export const translations = {
     // Find your track quiz
     quizBadge: "Găsește cursul potrivit",
     programsQuizLink: "Nu ești sigur? Fă quiz-ul →",
+    programsLevelTestLink: "Știi deja ceva arabă libaneză? Fă testul de nivel (15 min) →",
+    quizBackToCourses: "Înapoi la cursuri",
     quizTitle: "În 30 de secunde îți recomandăm cursul potrivit pentru tine",
     quizDesc: "Răspunde la câteva întrebări scurte și îți arătăm exact ce ți se potrivește.",
     quizStepLabel: "Pasul {n} din {total}",
@@ -1325,6 +1327,8 @@ export const translations = {
     // Find your track quiz
     quizBadge: "Find your track",
     programsQuizLink: "Not sure? Take the quiz →",
+    programsLevelTestLink: "Already know some Lebanese Arabic? Take the level test (15 min) →",
+    quizBackToCourses: "Back to the courses",
     quizTitle: "We'll recommend the right course for you in 30 seconds",
     quizDesc: "Answer a few short questions and we'll show you exactly what fits.",
     quizStepLabel: "Step {n} of {total}",

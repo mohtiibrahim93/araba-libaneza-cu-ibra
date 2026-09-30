@@ -578,12 +578,25 @@ const ProgramsSection = () => {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-8 text-center">
+        {/* Two different questions, so two CTAs rather than one.
+            The quiz answers "which course suits me" in about 30 seconds and
+            stays primary: at this point the visitor is one click from picking a
+            course, and a 15-minute test would interrupt a decision they are
+            seconds from making. The level test answers "what level am I", which
+            only matters to someone who already speaks some of the language, so
+            it sits underneath in a quieter style. */}
+        <div className="mt-8 flex flex-col items-center gap-2 text-center">
           <a
             href="/quiz"
             className="text-sm font-semibold text-brand-green underline underline-offset-4 hover:opacity-80"
           >
             {t.programsQuizLink}
+          </a>
+          <a
+            href="/test-de-nivel"
+            className="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            {t.programsLevelTestLink}
           </a>
         </div>
       </div>

@@ -329,6 +329,19 @@ const FindYourTrackQuiz = () => {
               >
                 {t.quizCompareAll}
               </button>
+              {/* The way back. Whether someone arrived from the course section
+                  or from the level test, the result used to be a dead end
+                  unless they enrolled right here — there was no route back to
+                  the cards they were comparing. A plain anchor rather than a
+                  router link: the homepage is `/` in both languages, and a full
+                  navigation lands on the section reliably instead of racing the
+                  scroll against the route change. */}
+              <a
+                href="/#programs"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                ← {t.quizBackToCourses}
+              </a>
             </div>
           </CardContent>
         </Card>
