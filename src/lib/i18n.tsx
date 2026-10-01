@@ -1630,7 +1630,7 @@ export const I18nProvider = ({
     // component, would have got a Romanian *body* at an English URL. The path
     // wins here; the toggle still works, because leaving English navigates to
     // the Romanian counterpart (see languageRoutes.ts).
-    if (window.location.pathname.startsWith("/en/")) return "en";
+    if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) return "en";
     // Match the server-rendered language here; localStorage is adopted in the
     // effect below. Reading it during the first render made the client's
     // initial tree differ from the SSR HTML and failed hydration.
@@ -1640,7 +1640,7 @@ export const I18nProvider = ({
   // Adopt the visitor's saved language after hydration (the server cannot
   // know localStorage, so this must not influence the first render).
   useEffect(() => {
-    if (window.location.pathname.startsWith("/en/")) return;
+    if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) return;
     const savedLang = window.localStorage.getItem("site-language");
     if ((savedLang === "en" || savedLang === "ro") && savedLang !== lang) setLangState(savedLang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
