@@ -46,8 +46,10 @@ const PageContent = () => {
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = t.siteTitle;
-  }, [lang, t.siteTitle]);
+    // The full homepage title, not the short brand: this is what the route's
+    // server head serves (HOME_META in pageMeta.ts), and the two must agree.
+    document.title = HOME_META[lang].title;
+  }, [lang]);
 
   useEffect(() => {
     // Analytics consent is handled by the Adopt CMP (Google
