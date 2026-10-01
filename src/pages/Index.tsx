@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import { seoMeta } from "@/lib/seoHead";
+import { HOME_META } from "@/lib/pageMeta";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
