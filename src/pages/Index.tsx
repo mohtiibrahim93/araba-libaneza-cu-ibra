@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import { seoMeta } from "@/lib/seoHead";
+import { HOME_META } from "@/lib/pageMeta";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
@@ -46,8 +47,17 @@ const PageContent = () => {
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = t.siteTitle;
-  }, [lang, t.siteTitle]);
+    // The full title, not `t.siteTitle`.
+    //
+    // `/` is served with HOME_META.ro's title — "Arabă Libaneză cu Ibra —
+    // Profesor Nativ în București" — and this effect used to overwrite it on
+    // hydration with the short "Arabă Libaneză cu Ibra", so the tab, the
+    // bookmark and anything reading the live title lost half the title a
+    // moment after the page appeared. There is no /en homepage, so an English
+    // visitor got the Romanian full title from the server and then the short
+    // English one, which is the same drift in both languages at once.
+    document.title = HOME_META[lang].title;
+  }, [lang]);
 
   useEffect(() => {
     // Analytics consent is handled by the Adopt CMP (Google

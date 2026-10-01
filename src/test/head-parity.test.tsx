@@ -5,6 +5,9 @@ import { seoHead } from "@/lib/seoHead";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { allSeoRoutes } from "@/lib/seoHead";
 import { redirectsTo } from "./helpers/routes";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { HOME_META } from "@/lib/pageMeta";
 
 /**
  * The two heads must say the same thing.
@@ -36,6 +39,29 @@ describe("server head and runtime head agree", () => {
   });
 
   afterEach(cleanup);
+
+  /**
+   * "/" cannot be observed through renderRoute (see the note below), so its
+   * half of the agreement is checked at the source instead.
+   *
+   * The homepage set `document.title = t.siteTitle` on mount — the short
+   * "Arabă Libaneză cu Ibra" — over the full title the server had just served.
+   * The exclusion comment below used to say the two heads agree on the running
+   * server; they did not, and nothing here could see it. There is no /en
+   * homepage either, so an English visitor got the Romanian full title from the
+   * server and then the short English one.
+   */
+  it("paints the full homepage title, in both languages", () => {
+    const index = readFileSync(resolve(process.cwd(), "src/pages/Index.tsx"), "utf8");
+    expect(index).toContain("document.title = HOME_META[lang].title");
+    expect(index).not.toContain("document.title = t.siteTitle");
+    // Both halves are full titles, not the short site name.
+    expect(HOME_META.ro.title).toBe(titleFor("/"));
+    for (const lang of ["ro", "en"] as const) {
+      expect(HOME_META[lang].title.length).toBeGreaterThan(30);
+      expect(HOME_META[lang].title).toContain("—");
+    }
+  });
 
   it("has a title for every blog post in the route table", () => {
     for (const post of BLOG_POSTS) {

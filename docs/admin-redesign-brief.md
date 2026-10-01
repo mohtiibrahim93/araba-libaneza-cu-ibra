@@ -24,6 +24,11 @@ Four admin screens live outside that folder, and one is hidden inside a
 public-facing component. A redesign that globs `src/components/admin/**` will
 leave these behind and the panel will end up half-restyled.
 
+To be clear about what kind of problem this is: the four strays are all
+*rendered* inside `Admin.tsx`'s tabs, so they are reachable from the nav like
+everything else. Only their file location is odd. `YallaGame.tsx` is the
+exception — see §9.
+
 | File | What it is |
 |---|---|
 | `src/pages/Admin.tsx` | The shell, the nav groups, the tab bodies, refunds, subscription cancellation, delete/anonymise |
@@ -206,7 +211,40 @@ On an auto-height column every bar collapses to a 2px sliver, and it looks like
 
 ---
 
-## 9. How to check the work
+## 9. Admin capability that has no button
+
+Three places where the panel and the server disagree about what exists. None of
+this is a redesign task — it is listed so a redesign does not "tidy away" a
+dangling import or assume a tab is missing by accident.
+
+**Four implemented server actions have no caller anywhere in `src/`:**
+
+- `list_kids_slots`, `upsert_kids_slot`, `delete_kids_slot` — a complete CRUD
+  for kids' time slots (`admin-registrations/index.ts` lines 723, 733, 782) with
+  no screen at all.
+- `list_audit_logs` (line 1474) — the audit trail is written and queryable, and
+  nothing in the panel reads it.
+
+Either these want a screen or they want deleting. Do not guess: ask Ibra. A
+designer who sees "Grupe" and assumes kids' slots are covered there will be
+wrong.
+
+**The Yalla game holds an admin editor that the panel never links to.**
+`src/components/YallaGame.tsx` reveals inline "Corectează" controls when a
+Supabase session exists, and publishes the edits through
+`save_card_overrides`. It is reached by going to `/joc` while signed in — not
+from `/admin`. Visibility there is a convenience, not the boundary: the edge
+function still checks `ADMIN_EMAILS` and the table has no public write policy,
+so a signed-in non-admin pressing publish gets a refusal, not a write.
+
+**`/admin/private-leads/:id` has no nav entry** and is reached only by clicking
+a row in `RegistrationsTable.tsx` (line 547). That is correct for a detail page,
+but it means the route is easy to miss when restyling — and it has its own
+chrome, `src/components/AdminNav.tsx`, which is a *second* header component
+distinct from `AdminShell.tsx`. Restyle both or neither; one of them alone
+leaves the panel looking like two different products.
+
+## 10. How to check the work
 
 There is no UI test to lean on, so:
 
