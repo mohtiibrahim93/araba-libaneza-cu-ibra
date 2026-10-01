@@ -122,7 +122,7 @@ const Navbar = () => {
       window.clearTimeout(t);
       io.disconnect();
     };
-  }, [location.pathname]);
+  }, [location.pathname, homePath]);
 
   // Theme and language live in the band on wide screens and in the bar below
   // that. Only one copy is rendered, so the controls are never duplicated.
@@ -145,8 +145,8 @@ const Navbar = () => {
     e.preventDefault();
     const id = hash.replace(/^#/, "");
     setOpen(false);
-    if (location.pathname !== "/") {
-      navigate("/" + hash);
+    if (location.pathname !== homePath) {
+      navigate(homePath + hash);
       scrollToAnchorWhenReady(id);
       return;
     }
