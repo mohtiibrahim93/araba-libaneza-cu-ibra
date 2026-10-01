@@ -52,6 +52,9 @@ const STATIC_ROUTES: SeoRoute[] = [
   // runtime <title> cannot drift apart. Brand-first: the transactional "cursuri
   // de arabă libaneză" query belongs to /cursuri-araba, not here.
   { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
+  // The English homepage: same bilingual component as /, at its own URL, so
+  // the English nav's home link and the hreflang pair have somewhere to go.
+  { path: "/en", title: HOME_META.en.title, description: HOME_META.en.description, lang: "en" },
   // The placement test on its own page. /quiz used to carry this query in its
   // title while being a course chooser; this page is the test, so the two stop
   // competing. Twinned at /en/level-test: the placement bank is bilingual.
