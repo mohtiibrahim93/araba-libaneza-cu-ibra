@@ -47,15 +47,15 @@ const PageContent = () => {
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    // The full title, not `t.siteTitle`.
+    // The full homepage title, not the short brand `t.siteTitle`: this is what
+    // the route's server head serves (HOME_META in pageMeta.ts), and the two
+    // must agree.
     //
-    // `/` is served with HOME_META.ro's title — "Arabă Libaneză cu Ibra —
-    // Profesor Nativ în București" — and this effect used to overwrite it on
-    // hydration with the short "Arabă Libaneză cu Ibra", so the tab, the
-    // bookmark and anything reading the live title lost half the title a
-    // moment after the page appeared. There is no /en homepage, so an English
-    // visitor got the Romanian full title from the server and then the short
-    // English one, which is the same drift in both languages at once.
+    // This effect used to overwrite the served "Arabă Libaneză cu Ibra —
+    // Profesor Nativ în București" with the short "Arabă Libaneză cu Ibra" on
+    // mount, so the tab, the bookmark and anything reading the live title lost
+    // half the title a moment after the page appeared. Keyed on `lang` because
+    // this component serves both / and /en/.
     document.title = HOME_META[lang].title;
   }, [lang]);
 

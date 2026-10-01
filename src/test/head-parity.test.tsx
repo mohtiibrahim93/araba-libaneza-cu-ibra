@@ -47,9 +47,10 @@ describe("server head and runtime head agree", () => {
    * The homepage set `document.title = t.siteTitle` on mount — the short
    * "Arabă Libaneză cu Ibra" — over the full title the server had just served.
    * The exclusion comment below used to say the two heads agree on the running
-   * server; they did not, and nothing here could see it. There is no /en
-   * homepage either, so an English visitor got the Romanian full title from the
-   * server and then the short English one.
+   * server; they did not, and nothing here could see it.
+   *
+   * `/en` renders the same component, so the English half of HOME_META is
+   * checked here too rather than only the Romanian one the "/" route serves.
    */
   it("paints the full homepage title, in both languages", () => {
     const index = readFileSync(resolve(process.cwd(), "src/pages/Index.tsx"), "utf8");
