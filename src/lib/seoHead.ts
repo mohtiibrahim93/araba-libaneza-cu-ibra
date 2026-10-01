@@ -336,6 +336,7 @@ export function hreflangPairs(): Map<string, { ro: string; en: string }> {
     add(`/blog/${p.slug}`, `/en/blog/${p.slug}`);
   }
   add("/blog", "/en/blog");
+  add("/", "/en");
   for (const [ro, en] of COURSE_PAIRS) add(ro, en);
   return pairs;
 }

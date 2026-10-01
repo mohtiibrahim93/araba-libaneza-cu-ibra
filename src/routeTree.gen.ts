@@ -84,6 +84,7 @@ import { Route as DialecteArabeLevantinaVsMaghrebinaRouteImport } from './routes
 import { Route as DialecteArabeLevantinaVsPeninsularaRouteImport } from './routes/dialecte-arabe/levantina-vs-peninsulara'
 import { Route as DialecteArabeLibanezaVsEgipteanaRouteImport } from './routes/dialecte-arabe/libaneza-vs-egipteana'
 import { Route as DialecteArabeLibanezaVsSirianaRouteImport } from './routes/dialecte-arabe/libaneza-vs-siriana'
+import { Route as EnIndexRouteImport } from './routes/en/index'
 import { Route as EnArabicClassesNearMeRouteImport } from './routes/en/arabic-classes-near-me'
 import { Route as EnArabicForTeenagersRouteImport } from './routes/en/arabic-for-teenagers'
 import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
@@ -536,6 +537,11 @@ const DialecteArabeLibanezaVsSirianaRoute =
     path: '/dialecte-arabe/libaneza-vs-siriana',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/en/',
+  path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnArabicClassesNearMeRoute = EnArabicClassesNearMeRouteImport.update({
   id: '/en/arabic-classes-near-me',
   path: '/en/arabic-classes-near-me',
@@ -913,6 +919,7 @@ export interface FileRoutesByFullPath {
   '/booking/': typeof BookingIndexRoute
   '/cursuri/': typeof CursuriIndexRoute
   '/dialecte-arabe/': typeof DialecteArabeIndexRoute
+  '/en/': typeof EnIndexRoute
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
@@ -1041,6 +1048,7 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingIndexRoute
   '/cursuri': typeof CursuriIndexRoute
   '/dialecte-arabe': typeof DialecteArabeIndexRoute
+  '/en': typeof EnIndexRoute
   '/joc': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
@@ -1172,6 +1180,7 @@ export interface FileRoutesById {
   '/booking/': typeof BookingIndexRoute
   '/cursuri/': typeof CursuriIndexRoute
   '/dialecte-arabe/': typeof DialecteArabeIndexRoute
+  '/en/': typeof EnIndexRoute
   '/joc/': typeof JocIndexRoute
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
@@ -1304,6 +1313,7 @@ export interface FileRouteTypes {
     | '/booking/'
     | '/cursuri/'
     | '/dialecte-arabe/'
+    | '/en/'
     | '/joc/'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
@@ -1432,6 +1442,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/cursuri'
     | '/dialecte-arabe'
+    | '/en'
     | '/joc'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
@@ -1562,6 +1573,7 @@ export interface FileRouteTypes {
     | '/booking/'
     | '/cursuri/'
     | '/dialecte-arabe/'
+    | '/en/'
     | '/joc/'
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
@@ -1692,6 +1704,7 @@ export interface RootRouteChildren {
   BookingIndexRoute: typeof BookingIndexRoute
   CursuriIndexRoute: typeof CursuriIndexRoute
   DialecteArabeIndexRoute: typeof DialecteArabeIndexRoute
+  EnIndexRoute: typeof EnIndexRoute
   AdminPrivateLeadsIdRoute: typeof AdminPrivateLeadsIdRoute
   ApiPublicBookingsAccessRoute: typeof ApiPublicBookingsAccessRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
@@ -2248,6 +2261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DialecteArabeLibanezaVsSirianaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/': {
+      id: '/en/'
+      path: '/en'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/arabic-classes-near-me': {
       id: '/en/arabic-classes-near-me'
       path: '/en/arabic-classes-near-me'
@@ -2753,6 +2773,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookingIndexRoute: BookingIndexRoute,
   CursuriIndexRoute: CursuriIndexRoute,
   DialecteArabeIndexRoute: DialecteArabeIndexRoute,
+  EnIndexRoute: EnIndexRoute,
   AdminPrivateLeadsIdRoute: AdminPrivateLeadsIdRoute,
   ApiPublicBookingsAccessRoute: ApiPublicBookingsAccessRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
