@@ -12,6 +12,8 @@
 // which must stay reserved for true equivalents.
 
 const EN_FOR_RO: Record<string, string> = {
+  // The homepage has an English twin at /en.
+  "/": "/en",
   // Course / offer landings
   "/meditatii-araba": "/en/arabic-tutor",
   "/cursuri-limba-araba": "/en/learn-lebanese-arabic",
@@ -96,6 +98,7 @@ const EN_FOR_RO: Record<string, string> = {
 };
 
 const RO_FOR_EN: Record<string, string> = {
+  "/en": "/",
   "/en/faq": "/intrebari-frecvente",
   "/en/arabic-tutor": "/meditatii-araba",
   "/en/best-arabic-course": "/cel-mai-bun-curs-de-araba",

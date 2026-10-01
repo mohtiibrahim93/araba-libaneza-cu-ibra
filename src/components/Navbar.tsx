@@ -94,10 +94,12 @@ const Navbar = () => {
     };
   }, []);
 
-  // On the homepage, underline the section being read.
+  // On the homepage, underline the section being read. The homepage is "/"
+  // in Romanian and "/en" in English.
+  const homePath = lang === "en" ? "/en" : "/";
   const [activeSection, setActiveSection] = useState<string | null>(null);
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (location.pathname !== homePath) {
       setActiveSection(null);
       return;
     }
@@ -120,7 +122,7 @@ const Navbar = () => {
       window.clearTimeout(t);
       io.disconnect();
     };
-  }, [location.pathname]);
+  }, [location.pathname, homePath]);
 
   // Theme and language live in the band on wide screens and in the bar below
   // that. Only one copy is rendered, so the controls are never duplicated.
@@ -143,8 +145,8 @@ const Navbar = () => {
     e.preventDefault();
     const id = hash.replace(/^#/, "");
     setOpen(false);
-    if (location.pathname !== "/") {
-      navigate("/" + hash);
+    if (location.pathname !== homePath) {
+      navigate(homePath + hash);
       scrollToAnchorWhenReady(id);
       return;
     }
@@ -345,13 +347,14 @@ const Navbar = () => {
           )}
         >
           <a
-            href="/"
+            href={lang === "en" ? "/en" : "/"}
             onClick={(e) => {
               e.preventDefault();
-              if (location.pathname === "/") {
+              const home = lang === "en" ? "/en" : "/";
+              if (location.pathname === home) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               } else {
-                navigate("/");
+                navigate(home);
               }
             }}
             aria-label="Centrul de Arabă Libaneză — arabă libaneză cu Ibra"

@@ -260,7 +260,7 @@ function RootComponent() {
   // SSR renders /en/* pages with English chrome so the server HTML matches
   // the client's first render (the client initializer also picks "en" there).
   const { pathname } = useLocation();
-  const initialLang = pathname.startsWith("/en/") ? ("en" as const) : ("ro" as const);
+  const initialLang = pathname === "/en" || pathname.startsWith("/en/") ? ("en" as const) : ("ro" as const);
 
   // ported from main.tsx
   useEffect(() => {

@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useI18n } from "@/lib/i18n";
 import { seoMeta } from "@/lib/seoHead";
+import { HOME_META } from "@/lib/pageMeta";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
@@ -46,8 +47,10 @@ const PageContent = () => {
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = t.siteTitle;
-  }, [lang, t.siteTitle]);
+    // The full homepage title, not the short brand: this is what the route's
+    // server head serves (HOME_META in pageMeta.ts), and the two must agree.
+    document.title = HOME_META[lang].title;
+  }, [lang]);
 
   useEffect(() => {
     // Analytics consent is handled by the Adopt CMP (Google
