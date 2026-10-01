@@ -94,10 +94,12 @@ const Navbar = () => {
     };
   }, []);
 
-  // On the homepage, underline the section being read.
+  // On the homepage, underline the section being read. The homepage is "/"
+  // in Romanian and "/en" in English.
+  const homePath = lang === "en" ? "/en" : "/";
   const [activeSection, setActiveSection] = useState<string | null>(null);
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (location.pathname !== homePath) {
       setActiveSection(null);
       return;
     }
