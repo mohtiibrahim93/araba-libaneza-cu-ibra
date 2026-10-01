@@ -1640,6 +1640,10 @@ export const I18nProvider = ({
   // Adopt the visitor's saved language after hydration (the server cannot
   // know localStorage, so this must not influence the first render).
   useEffect(() => {
+    // An English route stays English: never let a saved "ro" downgrade it.
+    // (In a browser the path check below already covers this; initialLang is
+    // the same signal when the router's location and window.location differ.)
+    if (initialLang === "en") return;
     if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) return;
     const savedLang = window.localStorage.getItem("site-language");
     if ((savedLang === "en" || savedLang === "ro") && savedLang !== lang) setLangState(savedLang);
