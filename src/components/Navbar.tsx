@@ -345,13 +345,14 @@ const Navbar = () => {
           )}
         >
           <a
-            href="/"
+            href={lang === "en" ? "/en" : "/"}
             onClick={(e) => {
               e.preventDefault();
-              if (location.pathname === "/") {
+              const home = lang === "en" ? "/en" : "/";
+              if (location.pathname === home) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               } else {
-                navigate("/");
+                navigate(home);
               }
             }}
             aria-label="Centrul de Arabă Libaneză — arabă libaneză cu Ibra"
