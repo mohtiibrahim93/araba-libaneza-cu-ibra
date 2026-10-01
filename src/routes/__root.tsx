@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   useRouter,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -153,7 +154,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Centrul de Arabă Libaneză" },
       { name: "adopt-website-id", content: ADOPT_WEBSITE_CODE },
-      { name: "google-site-verification", content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU" },
       { "data-rh": "true", property: "og:type", content: "website" },
       { "data-rh": "true", property: "og:url", content: "https://centruldearabalibaneza.com/" },
       { "data-rh": "true", property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
@@ -285,7 +285,7 @@ function RootComponent() {
   );
 }
 
-function RootErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function RootErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
 
   console.error(error);
