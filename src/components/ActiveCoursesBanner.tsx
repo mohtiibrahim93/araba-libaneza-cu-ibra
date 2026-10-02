@@ -34,9 +34,9 @@ const ActiveCoursesBanner = () => {
     <section className="px-gutter py-section-sm bg-background border-y border-border">
       <div className="w-full max-w-content mx-auto">
         <div className="flex items-center justify-between gap-4 mb-4">
-          <div className="flex items-center gap-2">
-            <Flame className="w-4 h-4 text-primary" />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
+          <div className="flex items-center gap-2.5">
+            <Flame className="h-5 w-5 text-primary" />
+            <h2 className="font-display text-xl font-bold text-primary sm:text-2xl">
               {t.activeNowTitle}
             </h2>
           </div>
