@@ -356,60 +356,6 @@ const CursGrupLevel = () => {
                 <p className="mt-4 text-xs text-muted-foreground italic">{curriculum.note}</p>
               )}
 
-              {LEVEL_POSTERS[slug] && availableFormats.length > 0 && (
-                <div className="mt-6">
-                  <div className="mb-3 inline-flex rounded-full border border-border bg-muted/40 p-1 text-sm">
-                    {(["fizic", "online"] as PosterFormat[]).map((fmt) => {
-                      const enabled = availableFormats.includes(fmt);
-                      const active = selectedFormat === fmt;
-                      const label = fmt === "fizic"
-                        ? (lang === "en" ? "In person" : "Fizic")
-                        : "Online";
-                      return (
-                        <button
-                          key={fmt}
-                          type="button"
-                          disabled={!enabled}
-                          onClick={() => enabled && pickFormat(fmt)}
-                          className={`rounded-full px-4 py-1.5 font-semibold transition ${
-                            active
-                              ? "bg-primary text-primary-foreground"
-                              : enabled
-                              ? "text-foreground hover:bg-background"
-                              : "text-muted-foreground cursor-not-allowed"
-                          }`}
-                          aria-pressed={active}
-                        >
-                          {label}
-                          {!enabled && (
-                            <span className="ml-1 text-xs font-normal">
-                              ({lang === "en" ? "soon" : "în curând"})
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {poster && (
-                    <figure className="max-w-md">
-                      {poster.started && (
-                        <figcaption className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                          {lang === "en" ? "In progress" : "În desfășurare"}
-                        </figcaption>
-                      )}
-                      <img
-                        src={poster.src}
-                        alt={poster.alt}
-                        width={800}
-                        height={800}
-                        loading="lazy"
-                        decoding="async"
-                        className={`w-full rounded-2xl border border-border shadow-xs ${poster.started ? "opacity-80" : ""}`}
-                      />
-                    </figure>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Sticky form */}
