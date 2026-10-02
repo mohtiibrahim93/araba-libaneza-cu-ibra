@@ -212,6 +212,17 @@ const CursGrup = () => {
         </div>
       </section>
 
+      <section className="mt-section">
+        <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+          {lang === "en" ? "Groups in progress" : "Grupe în desfășurare"}
+        </span>
+        <p className="mb-5 max-w-2xl text-base text-muted-foreground">
+          {lang === "en"
+            ? "A1 and A2 in person at Raduga Creative Center, started in September. For the next start dates, see the enrolment note above."
+            : "A1 și A2 fizic, la Raduga Creative Center, începute în septembrie. Pentru următoarele date de start, vezi nota de înscriere de mai sus."}
+        </p>
+      </section>
+
       {/* Don't know your level? */}
       <section className="mt-section rounded-3xl bg-cream p-6 sm:p-10">
         <h2 className="font-display text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
