@@ -114,7 +114,7 @@ const ArabischLernen = () => (
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="rounded-xl border border-border bg-card p-5">
               <Icon className="w-5 h-5 text-primary mb-2" />
-              <h3 className="text-sm font-bold text-foreground mb-1">{title}</h3>
+              <p className="text-sm font-bold text-foreground mb-1">{title}</p>
               <p className="text-xs text-muted-foreground">{desc}</p>
             </div>
           ))}
