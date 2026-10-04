@@ -126,6 +126,13 @@ const ActiveCoursesBanner = () => {
                       </span>
                     </span>
                   </p>
+                  {/* Groups open once half the seats are taken (3 of 6). */}
+                  <p className="text-xs text-muted-foreground mb-3 -mt-2">
+                    {lang === "en"
+                      ? `Starts with minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} enrolled`
+                      : `Pornește cu minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} înscriși`}
+                  </p>
+
 
                   <span className="mt-auto inline-flex self-start items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-primary/90">
                     {lang === "en" ? "Enroll" : "Înscrie-te"}
