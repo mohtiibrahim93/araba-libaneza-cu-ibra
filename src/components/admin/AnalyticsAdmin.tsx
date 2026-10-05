@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
+import { ErrorNote, Loading, ScreenHeader, Section, StatTile } from "./ui";
 
 /**
  * The time dimension the rest of the panel does not have.
@@ -207,14 +208,11 @@ const AnalyticsAdmin = () => {
 
   return (
     <section className="space-y-6">
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-bold text-foreground">Analiză</h2>
-          <p className="text-sm text-muted-foreground">
-            Cifrele tale, pe o perioadă. Restul panoului numără tot timpul.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <ScreenHeader
+        title="Analiză"
+        description="Cifrele tale, pe o perioadă. Restul panoului numără tot timpul."
+        actions={
+          <>
           <div className="flex rounded-lg border border-border p-0.5">
             {RANGES.map((r) => (
               <button
@@ -232,38 +230,22 @@ const AnalyticsAdmin = () => {
               </button>
             ))}
           </div>
-          <Button variant="outline" size="sm" onClick={() => void load(days)} disabled={loading}>
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          </Button>
-        </div>
-      </header>
+            <Button variant="outline" size="sm" onClick={() => void load(days)} disabled={loading} aria-label="Reîncarcă">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+            </Button>
+          </>
+        }
+      />
 
-      {error && (
-        <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      {error && <ErrorNote>{error}</ErrorNote>}
 
-      {loading && !data && (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="h-5 w-5 animate-spin text-primary" />
-        </div>
-      )}
+      {loading && !data && <Loading label="Se încarcă…" />}
 
       {data && (
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {cards.map(({ label, value, hint, icon: Icon }) => (
-              <div key={label} className="rounded-xl border border-border bg-background p-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground sm:text-sm">{label}</p>
-                  <Icon className="h-4 w-4 text-primary" />
-                </div>
-                <p className="mt-2 text-2xl font-bold tabular-nums text-foreground sm:text-3xl">
-                  {value}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
-              </div>
+            {cards.map((c) => (
+              <StatTile key={c.label} label={c.label} value={c.value} hint={c.hint} icon={c.icon} />
             ))}
           </div>
 
@@ -435,8 +417,17 @@ const AnalyticsAdmin = () => {
             <Breakdown
               title="Cum a intrat cererea"
               counts={data.signups.bySource}
-              labels={{ form: "Formular", whatsapp: "WhatsApp", admin: "Adăugat manual" }}
-              note="Cum a fost creată înregistrarea — nu de unde a venit persoana."
+              labels={{
+                form: "Formular",
+                whatsapp: "WhatsApp",
+                admin: "Adăugat manual",
+                tiktok: "TikTok",
+                instagram: "Instagram",
+                direct: "Direct",
+                telefon: "Telefon",
+                other: "Altă sursă",
+              }}
+              note="Pentru înscrierile de pe site: cum a fost creată înregistrarea. Pentru cele adăugate manual: de unde a venit cursantul."
             />
             <Breakdown
               title="Status lead"

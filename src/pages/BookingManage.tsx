@@ -290,7 +290,7 @@ const BookingManageInner = () => {
                 say why, and where a real emergency goes instead — a dead end
                 here is what turns a genuine problem into a no-show. */}
             {booking.status === "confirmed" && tooLate && (
-              <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
                 <p className="font-semibold inline-flex items-center gap-2">
                   <Clock className="w-4 h-4" />
                   {t.manageTooLateTitle}
@@ -301,7 +301,7 @@ const BookingManageInner = () => {
                   href={WHATSAPP_CONTACT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-900 text-amber-50 text-sm font-medium hover:bg-amber-800"
+                  className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
                 >
                   <MessageCircle className="w-4 h-4" />
                   {t.manageWhatsAppCta}

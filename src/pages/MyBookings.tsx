@@ -270,11 +270,11 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
                     </div>
                   )}
                   {active && tooLateToChange(booking.start_at) && (
-                    <div className="mt-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
+                    <div className="mt-5 rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-amber-700 dark:text-amber-400">
                       <p className="flex items-center gap-2 text-sm font-semibold"><Clock className="h-4 w-4" />{c.tooLateTitle}</p>
                       <p className="mt-2 text-xs leading-relaxed">{c.tooLateBody}</p>
                       <p className="mt-2 text-xs leading-relaxed">{c.tooLateEmergency}</p>
-                      <Button asChild size="sm" className="mt-3 bg-amber-900 text-amber-50 hover:bg-amber-800">
+                      <Button asChild size="sm" className="mt-3 bg-amber-600 text-white hover:bg-amber-700">
                         <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer"><MessageCircle />{c.whatsapp}</a>
                       </Button>
                     </div>

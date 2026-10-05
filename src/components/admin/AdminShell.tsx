@@ -49,10 +49,10 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
   const current = allItems.find((i) => i.value === active) ?? allItems[0];
 
   const NavList = ({ onNavigate }: { onNavigate?: () => void }) => (
-    <nav className="space-y-6">
+    <nav className="space-y-5">
       {groups.map((group) => (
         <div key={group.title}>
-          <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
             {group.title}
           </p>
           <ul className="space-y-0.5">
@@ -69,7 +69,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
                     }}
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
                       isActive
                         ? "bg-primary/10 font-semibold text-primary"
                         : "text-foreground/80 hover:bg-muted",
@@ -96,7 +96,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
     <div className="min-h-screen bg-muted/30">
       {/* Top bar */}
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-2 px-3 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:px-6">
           <Button
             variant="ghost"
             size="icon"
@@ -133,13 +133,18 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1400px] gap-6 px-3 py-5 sm:px-6 sm:py-6">
+      <div className="mx-auto flex max-w-[1600px] gap-6 px-3 py-5 sm:px-6 sm:py-6">
         {/* Desktop sidebar */}
         <aside className="hidden w-60 shrink-0 lg:block">
-          <div className="sticky top-20 rounded-xl border border-border bg-background p-3 shadow-xs">
-            <NavList />
-            <div className="mt-6 border-t border-border pt-3">
-              <p className="truncate px-3 text-xs text-muted-foreground">{adminEmail || "—"}</p>
+          {/* Ten sections became eighteen, so the sidebar is taller than most
+              screens: it scrolls inside itself and keeps the signed-in address
+              pinned at the bottom rather than pushing it off. */}
+          <div className="sticky top-[4.5rem] flex max-h-[calc(100vh-6rem)] flex-col rounded-xl border border-border bg-background shadow-xs">
+            <div className="min-h-0 flex-1 overflow-y-auto p-3">
+              <NavList />
+            </div>
+            <div className="border-t border-border px-3 py-2.5">
+              <p className="truncate text-xs text-muted-foreground">{adminEmail || "—"}</p>
             </div>
           </div>
         </aside>

@@ -29,6 +29,9 @@ import {
   Newspaper,
   Settings,
   LineChart,
+  Baby,
+  ScrollText,
+  Gamepad2,
   Route,
   Clock,
   HeartPulse,
@@ -59,6 +62,9 @@ import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
 import TodayAdmin from "@/components/admin/TodayAdmin";
+import KidsSlotsAdmin from "@/components/admin/KidsSlotsAdmin";
+import AuditLogAdmin from "@/components/admin/AuditLogAdmin";
+import CardOverridesAdmin from "@/components/admin/CardOverridesAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
@@ -624,6 +630,12 @@ const Admin = () => {
           hint: "Orele în care se pot rezerva lecții",
         },
         {
+          value: "kids-slots",
+          label: "Sloturi copii",
+          icon: Baby,
+          hint: "Intervalele pentru cursurile de copii",
+        },
+        {
           value: "calendar-health",
           label: "Sănătate calendar",
           icon: HeartPulse,
@@ -667,6 +679,12 @@ const Admin = () => {
           icon: Languages,
           hint: "Toate textele afișate pe site",
         },
+        {
+          value: "card-overrides",
+          label: "Cartonașe joc",
+          icon: Gamepad2,
+          hint: "Corecturile pe cartonașele din joc",
+        },
       ],
     },
     {
@@ -674,6 +692,12 @@ const Admin = () => {
       items: [
         { value: "seo", label: "SEO", icon: LineChart, hint: "Backlink-uri și sănătatea domeniului" },
         { value: "settings", label: "Setări", icon: Settings, hint: "Email, plăți și cont" },
+        {
+          value: "audit-log",
+          label: "Jurnal",
+          icon: ScrollText,
+          hint: "Cine a șters, anonimizat sau rambursat",
+        },
       ],
     },
   ];
@@ -888,6 +912,10 @@ const Admin = () => {
             <AvailabilityAdmin />
           </TabsContent>
 
+          <TabsContent value="kids-slots" className="mt-0 space-y-6">
+            <KidsSlotsAdmin />
+          </TabsContent>
+
           <TabsContent value="calendar-health" className="mt-0 space-y-6">
             <CalendarHealth />
           </TabsContent>
@@ -929,11 +957,19 @@ const Admin = () => {
             <SiteTextsAdmin />
           </TabsContent>
 
+          <TabsContent value="card-overrides" className="mt-0">
+            <CardOverridesAdmin />
+          </TabsContent>
+
           <TabsContent value="seo" className="mt-0">
             <BacklinksAdmin />
           </TabsContent>
 
           {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
+          <TabsContent value="audit-log" className="mt-0">
+            <AuditLogAdmin />
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-0">
             <SettingsTab
               emailSettings={emailSettings}

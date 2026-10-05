@@ -248,7 +248,7 @@ const NativeScheduler = ({
   // 150-lei rule is repeated there.
   const policyNotice =
     eventType === "trial" && mode === "pick" ? (
-      <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+      <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
         {lang === "ro" ? (
           <>
             Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți
@@ -264,7 +264,7 @@ const NativeScheduler = ({
         )}
       </div>
     ) : eventType === "trial" ? (
-      <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+      <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
         {lang === "ro" ? (
           <>
             <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la final îți confirmi locul
@@ -596,7 +596,7 @@ const NativeScheduler = ({
 
   if (lessonsUsedUp) {
     return (
-      <div className="rounded-xl border border-amber-300 bg-amber-50 p-6 space-y-4">
+      <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-6 space-y-4">
         <p className="text-sm text-foreground">
           {lang === "ro"
             ? "Ai programat deja toate lecțiile plătite. Pentru mai multe lecții, rezervă un pachet nou din pagina lecțiilor private."
@@ -614,7 +614,7 @@ const NativeScheduler = ({
 
   if (trialUsed) {
     return (
-      <div className="rounded-xl border border-amber-300 bg-amber-50 p-6 space-y-4">
+      <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-6 space-y-4">
         <h3 className="font-bold text-foreground">
           {lang === "ro" ? "Proba gratuită a fost deja folosită" : "The free trial was already used"}
         </h3>
@@ -1130,7 +1130,7 @@ const NativeScheduler = ({
                     // this dense grid. Desktop keeps the tighter look at sm:.
                     "px-2 py-2 min-h-11 sm:min-h-0 justify-center rounded-md border text-sm font-medium transition-colors flex flex-col items-center leading-tight",
                     isCurrent
-                      ? "border-amber-500 bg-amber-50 text-amber-900 cursor-not-allowed"
+                      ? "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400 cursor-not-allowed"
                       : "border-border hover:border-primary hover:bg-primary/5",
                   )}
                 >

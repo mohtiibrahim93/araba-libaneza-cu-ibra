@@ -26,8 +26,21 @@ const COPY = {
   },
 } as const;
 
-const GoogleMapEmbed = ({ lang, className = "" }: { lang: "ro" | "en"; className?: string }) => {
+/**
+ * `compact` is the footer's version: shorter, and without the link row, since
+ * the address right above it already opens the profile.
+ */
+const GoogleMapEmbed = ({
+  lang,
+  compact = false,
+  className = "",
+}: {
+  lang: "ro" | "en";
+  compact?: boolean;
+  className?: string;
+}) => {
   const c = COPY[lang];
+  const height = compact ? "h-48" : "h-80";
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -36,13 +49,13 @@ const GoogleMapEmbed = ({ lang, className = "" }: { lang: "ro" | "en"; className
         <iframe
           src={GOOGLE_MAPS_EMBED_URL}
           title={c.title}
-          className="block h-80 w-full border-0"
+          className={`block ${height} w-full border-0`}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen
         />
       ) : (
-        <div className="flex h-80 flex-col items-center justify-center gap-3 bg-muted/40 p-6 text-center">
+        <div className={`flex ${height} flex-col items-center justify-center gap-3 bg-muted/40 p-6 text-center`}>
           <MapPin className="h-8 w-8 text-primary" />
           <Button type="button" variant="outline" onClick={() => setLoaded(true)}>
             {c.show}
@@ -50,16 +63,18 @@ const GoogleMapEmbed = ({ lang, className = "" }: { lang: "ro" | "en"; className
           <p className="max-w-xs text-xs text-muted-foreground">{c.note}</p>
         </div>
       )}
-      <div className="border-t border-border px-4 py-3 text-sm">
-        <a
-          href={GOOGLE_MAPS_PROFILE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium text-primary hover:underline"
-        >
-          {c.open} →
-        </a>
-      </div>
+      {!compact && (
+        <div className="border-t border-border px-4 py-3 text-sm">
+          <a
+            href={GOOGLE_MAPS_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-primary hover:underline"
+          >
+            {c.open} →
+          </a>
+        </div>
+      )}
     </div>
   );
 };
