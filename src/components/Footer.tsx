@@ -5,6 +5,7 @@ import { Link } from "@/components/LocalizedLink";
 import AnchorLink from "@/components/AnchorLink";
 import BrandLogo from "@/components/BrandLogo";
 import SocialLinks from "@/components/SocialLinks";
+import GoogleMapEmbed from "@/components/GoogleMapEmbed";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -136,6 +137,7 @@ const Footer = () => {
               </a>
             </li>
           </ul>
+          <GoogleMapEmbed lang={lang} compact className="mt-5" />
         </div>
 
       </div>
