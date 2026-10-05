@@ -1338,6 +1338,234 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a1-review",
+      "scenes": [
+        {
+          "title": "Tu ești Maya",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-bfe2a71a9de6"
+            },
+            {
+              "exerciseID": "syn-context-syn-bc8dd5a2755e",
+              "partner": {
+                "arabizi": "Esme Tarek. W ente?",
+                "ro": "Mă cheamă Tarek. Și tu?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-fa18433c778b",
+              "partner": {
+                "arabizi": "Tsharrafna! Ana men Lebnen.",
+                "ro": "Încântat! Sunt din Liban."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6192684b4344",
+              "partner": {
+                "arabizi": "Mni7, shukran. Ana mhandes.",
+                "ro": "Bine, mulțumesc. Sunt inginer."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-19ce671ec6e7",
+              "partner": {
+                "arabizi": "Beshte8el b sherke b bayrut.",
+                "ro": "Lucrez la o companie în Beirut."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-64c707c5341b",
+              "partner": {
+                "arabizi": "Eh, 3ande e5et we7de.",
+                "ro": "Da, am o soră."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8d04227d0953",
+              "partner": {
+                "arabizi": "3ayltak kbiire! Ana ju3aan, badde ekol.",
+                "ro": "Familia ta e mare! Sunt flămând, vreau să mănânc."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-55ba3b3b789e",
+              "partner": {
+                "arabizi": "B7ebb el shawarma ktiir.",
+                "ro": "Îmi place mult shawarma."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-e406da572a85",
+              "partner": {
+                "arabizi": "Yalla nru7 3al mat3am!",
+                "ro": "Hai să mergem la restaurant!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0efefc312efd",
+              "partner": {
+                "arabizi": "Ana b7ebb el ahwe el lebneniyye.",
+                "ro": "Îmi place cafeaua libaneză."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Tarek",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-0e47aeab4edf",
+              "partner": {
+                "arabizi": "Mar7aba! Shu esmak?",
+                "ro": "Salut! Cum te cheamă?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-af846fd69bcb",
+              "partner": {
+                "arabizi": "Ana Maya, men Romania.",
+                "ro": "Eu sunt Maya, din România."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b6c2a576ed79",
+              "partner": {
+                "arabizi": "Kifak? Shu bteshte8el?",
+                "ro": "Ce mai faci? Ce lucrezi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ca64cd382206",
+              "partner": {
+                "arabizi": "7elo! Wen bteshte8el?",
+                "ro": "Frumos! Unde lucrezi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-78449a303eed",
+              "partner": {
+                "arabizi": "Tameem! 3andak e5we?",
+                "ro": "Super! Ai frați?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3678dae1756e",
+              "partner": {
+                "arabizi": "Ana 3ande 5ay w e5ten.",
+                "ro": "Eu am un frate și două surori."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-153031cc1de9",
+              "partner": {
+                "arabizi": "Ana kameen! Shu bte7ebb tekol?",
+                "ro": "Eu la fel! Ce îți place să mănânci?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a98105f45196",
+              "partner": {
+                "arabizi": "Ana b7ebb el 7ommos w el tabbule.",
+                "ro": "Mie îmi place humusul și tabouleh."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ad5a5bdfc426",
+              "partner": {
+                "arabizi": "Fikra mni7a! Badde ahwe kameen.",
+                "ro": "Idee bună! Vreau și cafea."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Mici situații",
+          "turns": [
+            {
+              "exerciseID": "q72"
+            },
+            {
+              "exerciseID": "q73"
+            },
+            {
+              "exerciseID": "q74"
+            },
+            {
+              "exerciseID": "q75"
+            },
+            {
+              "exerciseID": "xq5fe5230d87d7"
+            },
+            {
+              "exerciseID": "xqd255b5f8b19a"
+            }
+          ]
+        },
+        {
+          "title": "Despre tine",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-59fca2ec3a60",
+              "partner": {
+                "arabizi": "Mar7aba! Shu esmik?",
+                "ro": "Salut! Cum te cheamă?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f69f5a6d5007",
+              "partner": {
+                "arabizi": "Shu bteshte8le?",
+                "ro": "Ce lucrezi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9d3d58a96116",
+              "partner": {
+                "arabizi": "Shu bte7ebbe tekol?",
+                "ro": "Ce îți place să mănânci?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-dc86a43a3870",
+              "partner": {
+                "arabizi": "Wen es saydaliyye?",
+                "ro": "Unde e farmacia?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-27fce2cc9265",
+              "partner": {
+                "arabizi": "Ahla w sahla!",
+                "ro": "Bine ai venit!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-5225d522b17f",
+              "partner": {
+                "arabizi": "Shu 3am ta3mle halla2?",
+                "ro": "Ce faci acum?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3c84cb20ac2e",
+              "partner": {
+                "arabizi": "Shu 3melte mbere7?",
+                "ro": "Ce ai făcut ieri?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-07a756c3f996",
+              "partner": {
+                "arabizi": "Shu shtarayte?",
+                "ro": "Ce ai cumpărat?"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
