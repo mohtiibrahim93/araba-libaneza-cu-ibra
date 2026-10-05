@@ -63,6 +63,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   // Where a visitor who arrived at a dead address is sent: search plus the
   // courses, resources and articles. The 404 page shows a shortlist of the same
   // recommendations, but a 404 has no URL anyone can link to — this does.
+  { path: "/preturi", title: "Prețuri cursuri arabă libaneză | Grup, private, probă", description: "Toate prețurile: grup A1–C2 de la 500 lei/lună online, lecții private 150 lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită." },
   { path: "/te-ajutam", title: "Te ajutăm să găsești pagina potrivită | Arabă libaneză", description: "Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc." },
   { path: "/en/find-your-page", title: "Find the right page | Lebanese Arabic with Ibra", description: "Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.", lang: "en" },
   // Contact: a written message form next to the WhatsApp/email/address details,

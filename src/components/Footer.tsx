@@ -75,6 +75,7 @@ const Footer = () => {
             <li><Link to={lang === "en" ? "/en/my-bookings" : "/rezervari"} className="hover:text-foreground transition-colors">{lang === "en" ? "My bookings" : "Rezervările mele"}</Link></li>
             <li><Link to={lang === "en" ? "/en/find-your-page" : "/te-ajutam"} className="hover:text-foreground transition-colors">{lang === "en" ? "Find your page" : "Te ajutăm să găsești"}</Link></li>
             <li><Link to={lang === "en" ? "/en/trial" : "/trial"} className="hover:text-foreground transition-colors">{lang === "en" ? "Free trial lesson" : "Lecție de probă gratuită"}</Link></li>
+            <li><Link to="/preturi" className="hover:text-foreground transition-colors">{lang === "en" ? "Prices" : "Prețuri"}</Link></li>
             <li><AnchorLink to="#about" className="hover:text-foreground transition-colors">{t.navWhy}</AnchorLink></li>
           </ul>
         </div>

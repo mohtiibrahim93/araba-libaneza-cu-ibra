@@ -173,8 +173,6 @@ const Navbar = () => {
   }, []);
 
   const links = [
-    // Prices are shown in the Programs section — there is no #pricing block.
-    { href: "#programs", label: t.navPricing },
     { href: "#testimonials", label: t.navTestimonials },
     { href: "#faq", label: t.navFaq },
     { href: "#contact", label: t.navContact },
@@ -378,6 +376,11 @@ const Navbar = () => {
             <Link to={lang === "en" ? "/en/blog" : "/blog"} onClick={() => setOpen(false)} className={navLinkClass(false)}>
               {t.navBlog}
             </Link>
+            {/* Prices have their own page now (every price in one place); the
+                other links below are sections of the homepage. */}
+            <Link to="/preturi" onClick={() => setOpen(false)} className={navLinkClass(location.pathname === "/preturi")}>
+              {t.navPricing}
+            </Link>
             {links.map((l) => (
               <a
                 key={l.href}
@@ -509,6 +512,13 @@ const Navbar = () => {
               className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
             >
               {t.navBlog}
+            </Link>
+            <Link
+              to="/preturi"
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center"
+            >
+              {t.navPricing}
             </Link>
             {links.map((l) => (
               <a

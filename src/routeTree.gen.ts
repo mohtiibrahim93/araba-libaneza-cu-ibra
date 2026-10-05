@@ -33,6 +33,7 @@ import { Route as JoacaRouteImport } from './routes/joaca'
 import { Route as JocRouteImport } from './routes/joc'
 import { Route as MeditatiiArabaRouteImport } from './routes/meditatii-araba'
 import { Route as PaymentStatusRouteImport } from './routes/payment-status'
+import { Route as PreturiRouteImport } from './routes/preturi'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResurseRouteImport } from './routes/resurse'
@@ -257,6 +258,11 @@ const MeditatiiArabaRoute = MeditatiiArabaRouteImport.update({
 const PaymentStatusRoute = PaymentStatusRouteImport.update({
   id: '/payment-status',
   path: '/payment-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreturiRoute = PreturiRouteImport.update({
+  id: '/preturi',
+  path: '/preturi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -845,6 +851,7 @@ export interface FileRoutesByFullPath {
   '/joc': typeof JocRouteWithChildren
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
+  '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
@@ -975,6 +982,7 @@ export interface FileRoutesByTo {
   '/joaca': typeof JoacaRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
+  '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
@@ -1106,6 +1114,7 @@ export interface FileRoutesById {
   '/joc': typeof JocRouteWithChildren
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
+  '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
@@ -1239,6 +1248,7 @@ export interface FileRouteTypes {
     | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
+    | '/preturi'
     | '/privacy'
     | '/quiz'
     | '/resurse'
@@ -1369,6 +1379,7 @@ export interface FileRouteTypes {
     | '/joaca'
     | '/meditatii-araba'
     | '/payment-status'
+    | '/preturi'
     | '/privacy'
     | '/quiz'
     | '/resurse'
@@ -1499,6 +1510,7 @@ export interface FileRouteTypes {
     | '/joc'
     | '/meditatii-araba'
     | '/payment-status'
+    | '/preturi'
     | '/privacy'
     | '/quiz'
     | '/resurse'
@@ -1631,6 +1643,7 @@ export interface RootRouteChildren {
   JocRoute: typeof JocRouteWithChildren
   MeditatiiArabaRoute: typeof MeditatiiArabaRoute
   PaymentStatusRoute: typeof PaymentStatusRoute
+  PreturiRoute: typeof PreturiRoute
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
   ResurseRoute: typeof ResurseRoute
@@ -1902,6 +1915,13 @@ declare module '@tanstack/react-router' {
       path: '/payment-status'
       fullPath: '/payment-status'
       preLoaderRoute: typeof PaymentStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preturi': {
+      id: '/preturi'
+      path: '/preturi'
+      fullPath: '/preturi'
+      preLoaderRoute: typeof PreturiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -2692,6 +2712,7 @@ const rootRouteChildren: RootRouteChildren = {
   JocRoute: JocRouteWithChildren,
   MeditatiiArabaRoute: MeditatiiArabaRoute,
   PaymentStatusRoute: PaymentStatusRoute,
+  PreturiRoute: PreturiRoute,
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
   ResurseRoute: ResurseRoute,
