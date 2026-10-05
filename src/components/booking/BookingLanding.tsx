@@ -65,8 +65,8 @@ const BookingLanding = () => {
         ? `from ${formatLei(ONLINE_PRICES.groupMonthly.A1)} lei/month`
         : `de la ${formatLei(ONLINE_PRICES.groupMonthly.A1)} lei/lună`,
       text: en
-        ? "Up to 6 students, two 90-minute sessions a week, online or in Bucharest."
-        : "Maximum 6 cursanți, două ședințe de 90 de minute pe săptămână, online sau în București.",
+        ? "Up to 6 students online or 8 in person, two 90-minute sessions a week."
+        : "Maximum 6 cursanți online, 8 fizic, două ședințe de 90 de minute pe săptămână.",
     },
     {
       id: "privat",

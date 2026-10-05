@@ -304,7 +304,7 @@ const CohortsAdmin = () => {
               onChange={(e) => setDraft({ ...draft, max_seats: Number(e.target.value) })}
             />
             <p className="text-[11px] text-muted-foreground mt-1">
-              Max. {MAX_GROUP_SIZE.online} online · {MAX_GROUP_SIZE.fizic} fizic
+              Max. {MAX_GROUP_SIZE.online} online · {MAX_GROUP_SIZE.fizic} fizic · pornește la jumătate din locuri
             </p>
           </div>
           <div className="md:col-span-2">

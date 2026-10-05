@@ -104,7 +104,7 @@ const PreturiPage = () => {
           {/* Group */}
           <section id="grup" className="mt-section scroll-mt-28">
             <span className={label}>{en ? "Group course · A1–C2" : "Curs de grup · A1–C2"}</span>
-            <h2 className={h2}>{en ? "Small groups, up to 6 students" : "Grupe mici, maximum 6 cursanți"}</h2>
+            <h2 className={h2}>{en ? "Small groups: up to 6 online, 8 in person" : "Grupe mici: maximum 6 online, 8 fizic"}</h2>
             <p className="mt-2 max-w-3xl text-muted-foreground">
               {en
                 ? `Two 90-minute lessons a week. Pay monthly — it stops automatically at the end of the level — or pay the whole level upfront and get ${discountLabel(GROUP_FULL_COURSE_DISCOUNT)}.`

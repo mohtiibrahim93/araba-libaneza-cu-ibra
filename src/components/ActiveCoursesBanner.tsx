@@ -1,3 +1,4 @@
+import { minGroupSize } from "@/lib/groupSize";
 import { Link } from "@/lib/router-compat";
 import { MapPin, Monitor, ChevronRight, Flame, Users } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
@@ -126,11 +127,11 @@ const ActiveCoursesBanner = () => {
                       </span>
                     </span>
                   </p>
-                  {/* Groups open once half the seats are taken (3 of 6). */}
+                  {/* A group starts once half its places are taken (3 of 6, 4 of 8). */}
                   <p className="text-xs text-muted-foreground mb-3 -mt-2">
                     {lang === "en"
-                      ? `Starts with minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} enrolled`
-                      : `Pornește cu minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} înscriși`}
+                      ? `Starts with minimum ${minGroupSize(c.max_seats)}/${c.max_seats} enrolled`
+                      : `Pornește cu minimum ${minGroupSize(c.max_seats)}/${c.max_seats} înscriși`}
                   </p>
 
 

@@ -109,7 +109,7 @@ const ArabischLernen = () => (
         <div className="grid sm:grid-cols-3 gap-4 my-8">
           {[
             { icon: Globe, title: "Online weltweit", desc: "Zoom-Kurse aus D/A/CH — nur eine Stunde Zeitunterschied zu Bukarest." },
-            { icon: Users, title: "Einzeln oder in Gruppen", desc: "1:1-Unterricht nach deinen Zielen oder Kleingruppen: max. 6 Teilnehmende, online oder vor Ort." },
+            { icon: Users, title: "Einzeln oder in Gruppen", desc: "1:1-Unterricht nach deinen Zielen oder Kleingruppen: max. 6 Teilnehmende online, 8 vor Ort." },
             { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Sechs Niveaus, vom Überleben bis zur vollen Flüssigkeit." },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="rounded-xl border border-border bg-card p-5">
@@ -151,7 +151,7 @@ const ArabischLernen = () => (
                 <Users className="w-4 h-4 text-primary" /> Gruppenkurse
               </h3>
               <p className="text-sm text-muted-foreground">
-                Kleine Gruppen (max. 6 Personen, online oder vor Ort), 2× pro Woche, 90 Minuten pro Einheit. Online oder in
+                Kleine Gruppen (max. 6 Personen online, 8 vor Ort), 2× pro Woche, 90 Minuten pro Einheit. Online oder in
                 Bukarest. Fester Stundenplan mit klarem CEFR-Curriculum.
               </p>
               <p className="text-sm font-medium text-foreground mt-3">Ab 500 LEI / Monat (~100 €) online</p>

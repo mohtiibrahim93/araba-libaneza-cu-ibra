@@ -645,6 +645,10 @@ Deno.serve(async (req) => {
       if (form_type === "group" && cFormat === "online" && max > 6) {
         return jsonResponse({ error: "Grupele online au maximum 6 locuri" });
       }
+      // In-person groups: at most 8 (group_cohorts_fizic_max_seats).
+      if (cFormat === "fizic" && max > 8) {
+        return jsonResponse({ error: "Grupele fizice au maximum 8 locuri" });
+      }
       const ALLOWED_COHORT_STATUSES = [
         "draft","forming","minimum_reached","confirmed","full","in_progress","completed","cancelled",
       ];
@@ -1862,7 +1866,9 @@ Deno.serve(async (req) => {
     if (e?.code === "23514") {
       const msg = e.message?.includes("group_cohorts_online_max_seats")
         ? "Grupele online au maximum 6 locuri"
-        : "Valori invalide pentru acest formular";
+        : e.message?.includes("group_cohorts_fizic_max_seats")
+          ? "Grupele fizice au maximum 8 locuri"
+          : "Valori invalide pentru acest formular";
       return jsonResponse({ error: msg });
     }
     return jsonResponse({ error: "Internal server error" }, 500);

@@ -5,7 +5,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "Unde se țin cursurile de arabă în București?",
-    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — cu acces ușor cu metroul (M2 Piața Romană / M1 Ștefan cel Mare) și tramvai. Sala e mică și liniștită, cu maximum 6 cursanți per grupă.",
+    a: "La Raduga Creative Center, Strada Icoanei 80, sector 2 — cu acces ușor cu metroul (M2 Piața Romană / M1 Ștefan cel Mare) și tramvai. Sala e mică și liniștită, cu maximum 8 cursanți per grupă.",
   },
   {
     q: "Sunt cursuri de arabă în București pentru începători?",
@@ -121,7 +121,7 @@ const CursuriArabaBucuresti = () => (
     <ul>
       <li>
         <strong><Link to="/cursuri/grup">Curs de grup adulți A1–C2</Link></strong> — 2 lecții/săpt.,
-        seara (19:00–20:30), grupe de max. 6. De la 700 lei/lună fizic.
+        seara (19:00–20:30), grupe de max. 8. De la 700 lei/lună fizic.
       </li>
       <li>
         <strong><Link to="/meditatii-araba">Meditații de arabă 1:1</Link></strong> — 150 lei/lecție online, 210 lei fizic, program

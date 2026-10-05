@@ -102,7 +102,7 @@ const LearnLebaneseArabic = () => (
     <div className="grid sm:grid-cols-3 gap-4 not-prose my-8">
       {[
         { icon: Globe, title: "Online worldwide", desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET)." },
-        { icon: Users, title: "1-on-1 or small group", desc: "Private lessons tailored to your goals, or groups of at most 6 students, online or in person." },
+        { icon: Users, title: "1-on-1 or small group", desc: "Private lessons tailored to your goals, or groups of at most 6 students online and 8 in person." },
         { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Six levels, from survival Lebanese to full fluency." },
       ].map(({ icon: Icon, title, desc }) => (
         <div key={title} className="rounded-xl border border-border bg-card p-5">
@@ -162,7 +162,7 @@ const LearnLebaneseArabic = () => (
           <Users className="w-4 h-4 text-primary" /> Group courses
         </h3>
         <p className="text-sm text-muted-foreground">
-          Small groups (max 6 students, online or in person), twice a week, 90 minutes per session. Online or in Bucharest. Fixed schedule with a clear CEFR syllabus.
+          Small groups (max 6 students online, 8 in person), twice a week, 90 minutes per session. Online or in Bucharest. Fixed schedule with a clear CEFR syllabus.
         </p>
         <p className="text-sm font-medium text-foreground mt-3">From 500 LEI / month online</p>
       </div>

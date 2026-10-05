@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 import {
   MAX_GROUP_SIZE,
   MAX_KIDS_GROUP_SIZE,
-  MIN_GROUP_SIZE,
+  minGroupSize,
   groupSizeLabel,
 } from "@/lib/groupSize";
 
@@ -32,13 +32,14 @@ function* sourceFiles(dir: string): Generator<string> {
 }
 
 describe("group-size copy", () => {
-  it("caps every group at 6, online and in person", () => {
+  it("caps online groups at 6 and in-person groups at 8, starting at half", () => {
     expect(MAX_GROUP_SIZE.online).toBe(6);
-    expect(MAX_GROUP_SIZE.fizic).toBe(6);
+    expect(MAX_GROUP_SIZE.fizic).toBe(8);
     expect(MAX_KIDS_GROUP_SIZE).toBe(MAX_GROUP_SIZE.fizic);
-    expect(MIN_GROUP_SIZE).toBe(4);
-    expect(groupSizeLabel("ro")).toBe("max. 6 cursanți, online sau fizic");
-    expect(groupSizeLabel("en")).toBe("max 6 students, online or in person");
+    expect(minGroupSize(MAX_GROUP_SIZE.online)).toBe(3);
+    expect(minGroupSize(MAX_GROUP_SIZE.fizic)).toBe(4);
+    expect(groupSizeLabel("ro")).toBe("max. 6 cursanți online, 8 fizic");
+    expect(groupSizeLabel("en")).toBe("max 6 students online, 8 in person");
   });
 
   it("states no class size the constants contradict", () => {
@@ -46,8 +47,8 @@ describe("group-size copy", () => {
     const AGE = /(ani|years old|Jahre)/;
     const CLAIMS = [
       /\b4\s*[-–]\s*10\b(?![^.]{0,12}(ani|years|Jahre))/, // the old generic range
-      /max\.?\s*8\b/i, // the old English pages
-      /\bmaximum 8\b/i,
+      // "max 6" stated for both formats at once: in-person groups take 8 now.
+      /max\.?\s*6\s*(cursanți|students|Personen|Teilnehmende)?,?\s*(online sau fizic|online or in person|online oder vor Ort)/i,
     ];
     const offenders: string[] = [];
     for (const file of sourceFiles(SRC)) {
