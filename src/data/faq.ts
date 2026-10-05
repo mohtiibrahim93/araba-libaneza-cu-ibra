@@ -26,8 +26,9 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Libanezii sunt arabi?",
-            // The owner's own answer (October 2026).
-            a: "Politic, da: Libanul face parte din Liga Arabă, iar araba este limba oficială a țării. Ca origine, însă, libanezii sunt o națiune arabizată, care descinde în primul rând din populația nativă a Levantului — canaaneenii din Libanul de azi, cunoscuți ca fenicieni după purpura pentru care erau renumiți. În perioada greacă și romană s-au creștinat și au vorbit aramaica, apoi siriaca (aramaica), ca limbă liturgică și de zi cu zi. Mai târziu s-au arabizat, iar o parte s-au islamizat — dar sunt același popor ca strămoșii lor.",
+            // The owner's own answer (October 2026). The longer story — the
+            // genetics, Syriac, Garshuni, the Maronite Church — is for articles.
+            a: "Politic, da: Libanul face parte din Liga Arabă, iar araba este limba oficială. Ca origine, libanezii sunt o națiune arabizată, care descinde în primul rând din populația nativă a Levantului — canaaneenii, pe care grecii i-au numit fenicieni, cel mai probabil după phoinos (roșu închis, purpuriu), culoarea purpurei de Tir pentru care erau renumiți. Un studiu publicat în 2017 în The American Journal of Human Genetics, pe ADN vechi de circa 3.700 de ani din Sidon, a arătat că aproximativ 93% din ascendența libanezilor de azi provine de la canaaneenii din Epoca Bronzului. În perioada greacă și romană s-au creștinat și au vorbit aramaica, apoi siriaca, limbă liturgică și de zi cu zi — Biserica Maronită o folosește și azi în liturghie, iar araba libaneză păstrează urme ale ei (ēmta — „când”, jawwa / barra — „înăuntru / afară”). După secolul al VII-lea s-au arabizat, iar o parte s-au islamizat — dar sunt același popor ca strămoșii lor.",
           },
           {
             q: "Libanezii vorbesc arabă?",
@@ -254,8 +255,9 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Are Lebanese people Arabs?",
-            // The owner's own answer (October 2026).
-            a: "Politically, yes: Lebanon is a member of the Arab League, and Arabic is the country's official language. By origin, though, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites of today's Lebanon, known as the Phoenicians after the purple dye they were famous for. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac (Aramaic) as a liturgical and everyday language. Later they were Arabised and some Islamised — but they are the same people as their ancestors.",
+            // The owner's own answer (October 2026). The longer story — the
+            // genetics, Syriac, Garshuni, the Maronite Church — is for articles.
+            a: "Politically, yes: Lebanon is a member of the Arab League, and Arabic is the official language. By origin, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites, whom the Greeks called Phoenicians, most probably from phoinos (dark red, purple), the colour of the Tyrian purple dye they were famous for. A 2017 study in The American Journal of Human Genetics, on 3,700-year-old DNA from Sidon, found that about 93% of present-day Lebanese ancestry comes from the Bronze Age Canaanites. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac, as a liturgical and everyday language — the Maronite Church still uses it in its liturgy, and Lebanese Arabic keeps traces of it (ēmta, \"when\"; jawwa / barra, \"inside / outside\"). After the 7th century they were Arabised and some Islamised — but they are the same people as their ancestors.",
           },
           {
             q: "What's the difference between Lebanese Arabic and Modern Standard Arabic?",
