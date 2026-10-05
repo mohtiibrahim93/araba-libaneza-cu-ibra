@@ -2328,6 +2328,129 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a2-connections",
+      "scenes": [
+        {
+          "title": "Planuri pentru mare (tu începi)",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-53c41d7e093b"
+            },
+            {
+              "exerciseID": "syn-context-syn-8a05ba819a5e",
+              "partner": {
+                "arabizi": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+                "ro": "Idee bună! Dar dacă vremea e bună."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f1a7ba9b332a",
+              "partner": {
+                "arabizi": "Bi2ulo yimken tshatte.",
+                "ro": "Spun că poate plouă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-809f801d4d8d",
+              "partner": {
+                "arabizi": "Mnru7 3as sinema.",
+                "ro": "Mergem la cinema."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0441219ee6d2",
+              "partner": {
+                "arabizi": "Ana kameen. Law ken et ta2es a7san...",
+                "ro": "Eu la fel. Dacă vremea ar fi mai bună..."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d612ea2b1bbe",
+              "partner": {
+                "arabizi": "Meeshe. Iza ma fi shete, akid mnru7.",
+                "ro": "Ok. Dacă nu plouă, sigur mergem."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b5d6565f22dc",
+              "partner": {
+                "arabizi": "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
+                "ro": "Da, dar de data asta trebuie să ținem cont de vreme."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-da520babe53a",
+              "partner": {
+                "arabizi": "Sa7. Fiina n7joz halla2?",
+                "ro": "Corect. Putem rezerva acum?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Planuri pentru mare (prietenul începe)",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-87743df5af36",
+              "partner": {
+                "arabizi": "Shu ra2yak nru7 bukra 3al ba7er?",
+                "ro": "Ce zici să mergem la mare mâine?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-c048b97e223f",
+              "partner": {
+                "arabizi": "Shefet ta2es bukra?",
+                "ro": "Ai văzut vremea de mâine?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-cbd4e267f780",
+              "partner": {
+                "arabizi": "Uff! Iza btshatte, shu mna3mol?",
+                "ro": "Of! Dacă plouă, ce facem?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7b357719f926",
+              "partner": {
+                "arabizi": "7elo! Bass ana bfaddel el ba7er.",
+                "ro": "Frumos! Dar eu prefer marea."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-617cde834078",
+              "partner": {
+                "arabizi": "Yalla nontor la bukra w nshuf.",
+                "ro": "Hai să așteptăm până mâine și vedem."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-637d9b2bb910",
+              "partner": {
+                "arabizi": "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
+                "ro": "Perfect! Și dacă nu putem, mergem săptămâna viitoare."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-2225e5c89583",
+              "partner": {
+                "arabizi": "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
+                "ro": "Sigur. Dacă mergem sigur, trebuie să luăm hotel."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1cba62d6df5b",
+              "partner": {
+                "arabizi": "Fina bas a7san nontor la bukra.",
+                "ro": "Putem, dar e mai bine să așteptăm până mâine."
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

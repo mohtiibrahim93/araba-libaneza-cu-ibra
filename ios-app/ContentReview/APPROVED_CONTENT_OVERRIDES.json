@@ -532,11 +532,11 @@
       ]
     },
     "syn-context-syn-1cba62d6df5b": {
-      "answer": "Meeshe, b7akik bukra!",
+      "answer": "Meeshe, b7eekik bukra!",
       "wrongAnswers": [
         "Yimken ba3ed bukra.",
         "momken nla2e 7all",
-        "Momken nru7 3as sinema."
+        "Mnru7 3as sinema."
       ]
     },
     "syn-context-syn-1df0b8b69176": {
@@ -1207,7 +1207,7 @@
       ]
     },
     "syn-context-syn-617cde834078": {
-      "answer": "Meeshe. Iza ma fi matar, akid bnru7.",
+      "answer": "Meeshe. Iza ma fi shete, akid mnru7.",
       "wrongAnswers": [
         "Iza baddak, mnru7.",
         "Law kont fade, kont ejayt akid!",
@@ -1242,12 +1242,15 @@
       ]
     },
     "syn-context-syn-637d9b2bb910": {
-      "answer": "Eh, bass leezem n5attet mni7.",
+      "answer": "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
       "wrongAnswers": [
         "Law ejayt, konna re7na.",
         "iza ken et ta2es mni7",
-        "Fikra 7elwe! Bass iza ken et ta2es mni7."
-      ]
+        "Fekra 7elwe! Bass iza ken et ta2es mni7."
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Da, dar de data asta trebuie să ținem cont de vreme.”"
+      }
     },
     "syn-context-syn-64b2d9a36853": {
       "answer": "7doret filem lebnene. Ken ra2e3!",
@@ -1478,7 +1481,7 @@
     "syn-context-syn-7b357719f926": {
       "answer": "Ana kameen. Law ken et ta2es a7san...",
       "wrongAnswers": [
-        "Yimken a7san nestanna la bukra.",
+        "Fina bas a7san nontor la bukra.",
         "W iza ma 2dert?",
         "law fi mushkle"
       ]
@@ -1965,9 +1968,9 @@
     "syn-context-syn-a502a0bd98f5": {
       "answer": "ma leezem tru7",
       "wrongAnswers": [
-        "Shu ra2yak nru7 3al ba7er bukra?",
+        "Shu ra2yak nru7 bukra 3al ba7er?",
         "Ana kameen. Law ken et ta2es a7san...",
-        "Yimken a7san nestanna la bukra."
+        "Fina bas a7san nontor la bukra."
       ]
     },
     "syn-context-syn-a7ea0d46073f": {
@@ -2108,12 +2111,15 @@
       ]
     },
     "syn-context-syn-b5d6565f22dc": {
-      "answer": "Akid. Iza badna nru7, leezem n7jez fondo2.",
+      "answer": "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
       "wrongAnswers": [
         "Law ken 3andak wa2et.",
         "law 3ande wa2et",
-        "Sheft en nashra? Shu by2ulu?"
-      ]
+        "Shefet ta2es bukra?"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Sigur. Dacă mergem sigur, trebuie să luăm hotel.”"
+      }
     },
     "syn-context-syn-b6c2a576ed79": {
       "answer": "Mni7, shukran. Ana mhandes.",
@@ -2395,11 +2401,11 @@
       ]
     },
     "syn-context-syn-d612ea2b1bbe": {
-      "answer": "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
+      "answer": "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
       "wrongAnswers": [
         "Law kont makanak.",
         "ma leezem tru7",
-        "Shu ra2yak nru7 3al ba7er bukra?"
+        "Shu ra2yak nru7 bukra 3al ba7er?"
       ],
       "expressionIDs": [
         "syn-d612ea2b1bbe"
@@ -3376,170 +3382,184 @@
     "syn-context-syn-ff7cd5cdae79": {
       "wrongAnswers": [
         "ma leezem tru7",
-        "Shu ra2yak nru7 3al ba7er bukra?",
+        "Shu ra2yak nru7 bukra 3al ba7er?",
         "Ana kameen. Law ken et ta2es a7san..."
       ]
     },
     "syn-context-syn-556ebd95a181": {
       "wrongAnswers": [
         "iza ken et ta2es mni7",
-        "Fikra 7elwe! Bass iza ken et ta2es mni7.",
-        "Yalla nestanna la bukra w nshuf."
+        "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+        "Yalla nontor la bukra w nshuf."
       ]
     },
     "syn-context-syn-b134cc3991e9": {
       "wrongAnswers": [
         "law 3ande wa2et",
-        "Sheft en nashra? Shu by2ulu?",
-        "Meeshe. Iza ma fi matar, akid bnru7."
+        "Shefet ta2es bukra?",
+        "Meeshe. Iza ma fi shete, akid mnru7."
       ]
     },
     "syn-context-syn-1d891c2fb14e": {
       "wrongAnswers": [
         "iza fi fursa",
-        "By2ulu yimken fi matar.",
-        "Tameem! W law ma 2derna, bnru7 el jem3a el jey."
+        "Bi2ulo yimken tshatte.",
+        "Tameem! W ezama 2derna, mnruu7 el jem3a el jey."
       ]
     },
     "syn-context-syn-e2f00a6a1781": {
       "wrongAnswers": [
         "law fi mushkle",
-        "Uff! Iza fi matar, shu badna ne3mel?",
-        "Eh, bass leezem n5attet mni7."
+        "Uff! Iza btshatte, shu mna3mol?",
+        "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra."
       ]
     },
     "syn-context-syn-ae9886523620": {
       "wrongAnswers": [
         "momken nla2e 7all",
-        "Momken nru7 3as sinema.",
-        "Akid. Iza badna nru7, leezem n7jez fondo2."
+        "Mnru7 3as sinema.",
+        "Akid. Iza ray7een 3al akiid, leezem nekhod otel."
       ]
     },
     "syn-context-syn-dd41fc598f57": {
       "wrongAnswers": [
         "iza ma fi matar",
         "7elo! Bass ana bfaddel el ba7er.",
-        "Sa7. Momken n7jez halla2?"
+        "Sa7. Fiina n7joz halla2?"
       ]
     },
     "syn-context-syn-b6ed2a7c686a": {
       "wrongAnswers": [
-        "Yalla nestanna la bukra w nshuf.",
-        "Meeshe, b7akik bukra!",
+        "Yalla nontor la bukra w nshuf.",
+        "Meeshe, b7eekik bukra!",
         "Yimken ba3ed bukra."
       ]
     },
     "syn-context-syn-a1b0a14e2d67": {
       "wrongAnswers": [
-        "Sheft en nashra? Shu by2ulu?",
-        "Meeshe. Iza ma fi matar, akid bnru7.",
+        "Shefet ta2es bukra?",
+        "Meeshe. Iza ma fi shete, akid mnru7.",
         "Iza baddak, mnru7."
       ]
     },
     "syn-context-syn-0e2d5b882c80": {
-      "wrongAnswers": [
-        "ma leezem tru7",
-        "Shu ra2yak nru7 3al ba7er bukra?",
-        "Ana kameen. Law ken et ta2es a7san..."
-      ]
+      "exclude": true
     },
     "syn-context-syn-6c6b08d7567c": {
       "wrongAnswers": [
-        "By2ulu yimken fi matar.",
-        "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
+        "Bi2ulo yimken tshatte.",
+        "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
         "Law kont makanak."
       ]
     },
     "syn-context-syn-0f23a5db62df": {
       "wrongAnswers": [
-        "Uff! Iza fi matar, shu badna ne3mel?",
-        "Eh, bass leezem n5attet mni7.",
+        "Uff! Iza btshatte, shu mna3mol?",
+        "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
         "Law ejayt, konna re7na."
       ]
     },
     "syn-context-syn-7c9adbe93fbf": {
       "wrongAnswers": [
-        "Momken nru7 3as sinema.",
-        "Akid. Iza badna nru7, leezem n7jez fondo2.",
+        "Mnru7 3as sinema.",
+        "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
         "Law ken 3andak wa2et."
       ]
     },
     "syn-context-syn-9f915f9ccf74": {
       "wrongAnswers": [
         "7elo! Bass ana bfaddel el ba7er.",
-        "Sa7. Momken n7jez halla2?",
+        "Sa7. Fiina n7joz halla2?",
         "Iza ken 3ande wa2et, akid!"
       ]
     },
     "syn-context-syn-53c41d7e093b": {
       "wrongAnswers": [
         "Ana kameen. Law ken et ta2es a7san...",
-        "Yimken a7san nestanna la bukra.",
+        "Fina bas a7san nontor la bukra.",
         "W iza ma 2dert?"
-      ]
+      ],
+      "answer": "Shu ra2yak nru7 bukra 3al ba7er?"
     },
     "syn-context-syn-87743df5af36": {
       "wrongAnswers": [
-        "Yalla nestanna la bukra w nshuf.",
-        "Meeshe, b7akik bukra!",
+        "Yalla nontor la bukra w nshuf.",
+        "Meeshe, b7eekik bukra!",
         "Yimken ba3ed bukra."
-      ]
+      ],
+      "answer": "Fekra 7elwe! Bass iza ken et ta2es mni7."
     },
     "syn-context-syn-8a05ba819a5e": {
       "wrongAnswers": [
-        "Meeshe. Iza ma fi matar, akid bnru7.",
+        "Meeshe. Iza ma fi shete, akid mnru7.",
         "Iza baddak, mnru7.",
         "Law kont fade, kont ejayt akid!"
-      ]
+      ],
+      "answer": "Shefet ta2es bukra?",
+      "prompt": {
+        "ro": "Alege replica pentru: „Ai văzut vremea de mâine?”"
+      }
     },
     "syn-context-syn-c048b97e223f": {
       "wrongAnswers": [
-        "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
+        "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
         "Law kont makanak.",
         "ma leezem tru7"
-      ]
+      ],
+      "answer": "Bi2ulo yimken tshatte."
     },
     "syn-context-syn-f1a7ba9b332a": {
       "wrongAnswers": [
-        "Eh, bass leezem n5attet mni7.",
+        "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
         "Law ejayt, konna re7na.",
         "iza ken et ta2es mni7"
-      ]
+      ],
+      "answer": "Uff! Iza btshatte, shu mna3mol?"
     },
     "syn-context-syn-cbd4e267f780": {
       "wrongAnswers": [
-        "Akid. Iza badna nru7, leezem n7jez fondo2.",
+        "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
         "Law ken 3andak wa2et.",
         "law 3ande wa2et"
-      ]
+      ],
+      "answer": "Mnru7 3as sinema.",
+      "prompt": {
+        "ro": "Alege replica pentru: „Mergem la cinema.”"
+      }
     },
     "syn-context-syn-809f801d4d8d": {
       "wrongAnswers": [
-        "Sa7. Momken n7jez halla2?",
+        "Sa7. Fiina n7joz halla2?",
         "Iza ken 3ande wa2et, akid!",
         "iza fi fursa"
       ]
     },
     "syn-context-syn-0441219ee6d2": {
       "wrongAnswers": [
-        "Meeshe, b7akik bukra!",
+        "Meeshe, b7eekik bukra!",
         "Yimken ba3ed bukra.",
         "momken nla2e 7all"
-      ]
+      ],
+      "answer": "Yalla nontor la bukra w nshuf."
     },
     "syn-context-syn-2225e5c89583": {
       "wrongAnswers": [
         "Iza ken 3ande wa2et, akid!",
         "iza fi fursa",
-        "By2ulu yimken fi matar."
-      ]
+        "Bi2ulo yimken tshatte."
+      ],
+      "answer": "Sa7. Fiina n7joz halla2?"
     },
     "syn-context-syn-da520babe53a": {
       "wrongAnswers": [
         "W iza ma 2dert?",
         "law fi mushkle",
-        "Uff! Iza fi matar, shu badna ne3mel?"
-      ]
+        "Uff! Iza btshatte, shu mna3mol?"
+      ],
+      "answer": "Fina bas a7san nontor la bukra.",
+      "prompt": {
+        "ro": "Alege replica pentru: „Putem, dar e mai bine să așteptăm până mâine.”"
+      }
     },
     "syn-context-syn-1f20614e85aa": {
       "wrongAnswers": [
@@ -4050,7 +4070,7 @@
       "canonicalArabizi": "Tameem, shukran ktiir!"
     },
     "syn-1cba62d6df5b": {
-      "canonicalArabizi": "Meeshe, b7akik bukra!"
+      "canonicalArabizi": "Meeshe, b7eekik bukra!"
     },
     "syn-1df0b8b69176": {
       "canonicalArabizi": "Ana kameen. Shu 3emelt mbere7?"
@@ -4387,7 +4407,7 @@
       "canonicalArabizi": "Ana ju3aan ktiir."
     },
     "syn-617cde834078": {
-      "canonicalArabizi": "Meeshe. Iza ma fi matar, akid bnru7."
+      "canonicalArabizi": "Meeshe. Iza ma fi shete, akid mnru7."
     },
     "syn-6192684b4344": {
       "canonicalArabizi": "7elo! Wen bteshte8el?"
@@ -4405,7 +4425,12 @@
       "canonicalArabizi": "Ba3do 8ale. Tletiin?"
     },
     "syn-637d9b2bb910": {
-      "canonicalArabizi": "Eh, bass leezem n5attet mni7."
+      "canonicalArabizi": "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Da, dar de data asta trebuie să ținem cont de vreme."
+        }
+      }
     },
     "syn-64b2d9a36853": {
       "canonicalArabizi": "7doret filem lebnene. Ken ra2e3!"
@@ -4857,7 +4882,12 @@
       ]
     },
     "syn-b5d6565f22dc": {
-      "canonicalArabizi": "Akid. Iza badna nru7, leezem n7jez fondo2."
+      "canonicalArabizi": "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Sigur. Dacă mergem sigur, trebuie să luăm hotel."
+        }
+      }
     },
     "syn-b6c2a576ed79": {
       "canonicalArabizi": "Mni7, shukran. Ana mhandes."
@@ -4992,7 +5022,7 @@
       }
     },
     "syn-d612ea2b1bbe": {
-      "canonicalArabizi": "Tameem! W law ma 2derna, bnru7 el jem3a el jey.",
+      "canonicalArabizi": "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
       "variants": []
     },
     "syn-d63c2f6caf95": {
@@ -5680,6 +5710,51 @@
           "naturalMeaning": "Bine, poți duminică?"
         }
       }
+    },
+    "syn-53c41d7e093b": {
+      "canonicalArabizi": "Shu ra2yak nru7 bukra 3al ba7er?"
+    },
+    "syn-87743df5af36": {
+      "canonicalArabizi": "Fekra 7elwe! Bass iza ken et ta2es mni7."
+    },
+    "syn-8a05ba819a5e": {
+      "canonicalArabizi": "Shefet ta2es bukra?",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Ai văzut vremea de mâine?"
+        }
+      }
+    },
+    "syn-c048b97e223f": {
+      "canonicalArabizi": "Bi2ulo yimken tshatte."
+    },
+    "syn-f1a7ba9b332a": {
+      "canonicalArabizi": "Uff! Iza btshatte, shu mna3mol?"
+    },
+    "syn-cbd4e267f780": {
+      "canonicalArabizi": "Mnru7 3as sinema.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Mergem la cinema."
+        }
+      }
+    },
+    "syn-0441219ee6d2": {
+      "canonicalArabizi": "Yalla nontor la bukra w nshuf."
+    },
+    "syn-2225e5c89583": {
+      "canonicalArabizi": "Sa7. Fiina n7joz halla2?"
+    },
+    "syn-da520babe53a": {
+      "canonicalArabizi": "Fina bas a7san nontor la bukra.",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Putem, dar e mai bine să așteptăm până mâine."
+        }
+      }
+    },
+    "syn-0e2d5b882c80": {
+      "exclude": true
     }
   },
   "unitExpressionAdditions": [
