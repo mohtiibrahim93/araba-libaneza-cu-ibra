@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { gcalDiagnose, utcToZonedParts } from "../_shared/booking.ts";
+import { gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -1062,6 +1062,124 @@ Deno.serve(async (req) => {
       });
 
       return jsonResponse({ data: enriched });
+    }
+
+    // ============ The worklist: what needs Ibra today ============
+    /**
+     * What the admin panel opens on.
+     *
+     * The home screen used to show four all-time totals and two all-time
+     * funnels. "How many registrations have there ever been" is not why anyone
+     * opens the panel in the morning, and since the Analiză tab exists it is
+     * also a second, worse answer to a question that tab handles properly.
+     *
+     * So this returns work, not statistics: five lists, each one something
+     * that may need an action today, each one already sorted into the order
+     * you would deal with it.
+     *
+     * Read-only, and deliberately bounded — every list has a horizon or a
+     * limit, because a worklist that grows without end is a report.
+     */
+    if (action === "list_today") {
+      const now = Date.now();
+      // "Today" starts at local midnight in Bucharest, not UTC midnight: at
+      // 01:00 local in summer those are different days, and the lesson at 09:00
+      // would drop off the list the owner is reading at breakfast.
+      const p = utcToZonedParts(new Date(now));
+      const dayStart = zonedToUtc(p.year, p.month, p.day, 0, 0).toISOString();
+      const horizon = new Date(now + 2 * 86_400_000).toISOString();
+      const staleAfter = new Date(now - 30 * 86_400_000).toISOString();
+
+      const [
+        { data: lessons, error: lessonErr },
+        { data: uncontacted, error: uncErr },
+        { data: unpaid, error: unpaidErr },
+        { data: cohorts, error: cohortErr },
+      ] = await Promise.all([
+        // Today and the next two days, so a Friday evening still shows Monday.
+        supabase
+          .from("bookings")
+          .select(
+            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_sync_error, manage_token",
+          )
+          .eq("status", "confirmed")
+          .gte("start_at", dayStart)
+          .lte("start_at", horizon)
+          .order("start_at", { ascending: true }),
+        // Nobody has said hello yet. Oldest first: the longest wait is the
+        // most urgent, which is the opposite of how a list of leads usually
+        // sorts itself.
+        supabase
+          .from("registrations")
+          .select("id, created_at, name, phone, email, form_type, format, level, language")
+          .is("whatsapp_sent_at", null)
+          .is("anonymized_at", null)
+          .gte("created_at", staleAfter)
+          .order("created_at", { ascending: true })
+          .limit(50),
+        // Said yes, never paid. A trial is free, so it is not in here — only
+        // the course types that carry money.
+        supabase
+          .from("registrations")
+          .select("id, created_at, name, phone, email, form_type, level, format, payment_status")
+          .in("form_type", ["group", "private", "kids"])
+          .not("payment_status", "in", '("paid","refunded")')
+          .is("anonymized_at", null)
+          .gte("created_at", staleAfter)
+          .order("created_at", { ascending: true })
+          .limit(50),
+        // Starting within a fortnight. Deliberately no seat-fill number here:
+        // "Grupe" already computes that from group_capacities including the
+        // manual offset, and a second derivation would eventually disagree
+        // with the first about the same cohort.
+        supabase
+          .from("group_cohorts")
+          .select("id, title_ro, title_en, level, format, start_date, status, teaching_language")
+          .eq("is_active", true)
+          .gte("start_date", new Date(now).toISOString().slice(0, 10))
+          .lte("start_date", new Date(now + 14 * 86_400_000).toISOString().slice(0, 10))
+          .order("start_date", { ascending: true }),
+      ]);
+      if (lessonErr) throw lessonErr;
+      if (uncErr) throw uncErr;
+      if (unpaidErr) throw unpaidErr;
+      if (cohortErr) throw cohortErr;
+
+      const days = (iso: string) => Math.floor((now - Date.parse(iso)) / 86_400_000);
+
+      // Anything the system itself is unhappy about. A calendar event that
+      // failed to sync is the one that bites: the lesson exists here and not
+      // in the owner's calendar, so it is the lesson he does not turn up to.
+      const problems: Array<{ kind: string; detail: string; id: string }> = [];
+      for (const b of lessons ?? []) {
+        if (b.google_sync_error) {
+          problems.push({
+            kind: "calendar",
+            id: b.id as string,
+            detail: `${b.student_name}: ${b.google_sync_error}`,
+          });
+        }
+      }
+      for (const r of unpaid ?? []) {
+        if (r.payment_status === "failed" || r.payment_status === "past_due") {
+          problems.push({
+            kind: "payment",
+            id: r.id as string,
+            detail: `${r.name}: ${r.payment_status}`,
+          });
+        }
+      }
+
+      return jsonResponse({
+        data: {
+          now: new Date(now).toISOString(),
+          lessons: lessons ?? [],
+          uncontacted: (uncontacted ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
+          unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
+          cohortsStartingSoon: cohorts ?? [],
+          problems,
+        },
+      });
     }
 
     // ============ Analytics over a time window ============

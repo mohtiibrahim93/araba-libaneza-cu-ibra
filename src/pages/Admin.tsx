@@ -58,6 +58,7 @@ import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
+import TodayAdmin from "@/components/admin/TodayAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
@@ -562,12 +563,6 @@ const Admin = () => {
     return <AdminLogin loading={loading} error={error} onGoogleSignIn={handleGoogleSignIn} />;
   }
 
-  const statCards = [
-    { label: "Înscrieri totale", value: stats.total, icon: Users },
-    { label: "Lead-uri noi", value: stats.newLeads, icon: Gift },
-    { label: "Plătite", value: stats.paid, icon: CreditCard },
-    { label: "Abonamente active", value: stats.activeSubs, icon: Repeat },
-  ];
 
   /**
    * The sections, grouped by the kind of work rather than by which component
@@ -694,30 +689,7 @@ const Admin = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
           <TabsContent value="today" className="mt-0 space-y-6">
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {statCards.map(({ label, value, icon: Icon }) => (
-                <div
-                  key={label}
-                  className="bg-background rounded-xl border border-border p-4 sm:p-5 shadow-xs"
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs sm:text-sm text-muted-foreground">{label}</p>
-                    <Icon className="w-4 h-4 text-primary" />
-                  </div>
-                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-2">{value}</p>
-                </div>
-              ))}
-            </div>
-
-            <PrivateLeadStats
-              counts={privateLeadCounts}
-              onSelect={(status) => {
-                setCourseTypeFilter("private");
-                setLeadStatusFilter(status === "all" ? "all" : status);
-                setActiveTab("leads");
-              }}
-            />
+            <TodayAdmin onGoToLeads={() => setActiveTab("leads")} />
           </TabsContent>
 
           {/* ── Parcurs: de la prima cerere până la înscriere ─────────────── */}
@@ -733,6 +705,15 @@ const Admin = () => {
 
           {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
           <TabsContent value="leads" className="mt-0 space-y-4">
+            {/* The private-lead status counts, above the table they filter —
+                clicking one sets the filter below rather than navigating. */}
+            <PrivateLeadStats
+              counts={privateLeadCounts}
+              onSelect={(status) => {
+                setCourseTypeFilter("private");
+                setLeadStatusFilter(status === "all" ? "all" : status);
+              }}
+            />
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}
