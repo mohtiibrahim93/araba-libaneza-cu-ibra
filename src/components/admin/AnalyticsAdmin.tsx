@@ -435,8 +435,17 @@ const AnalyticsAdmin = () => {
             <Breakdown
               title="Cum a intrat cererea"
               counts={data.signups.bySource}
-              labels={{ form: "Formular", whatsapp: "WhatsApp", admin: "Adăugat manual" }}
-              note="Cum a fost creată înregistrarea — nu de unde a venit persoana."
+              labels={{
+                form: "Formular",
+                whatsapp: "WhatsApp",
+                admin: "Adăugat manual",
+                tiktok: "TikTok",
+                instagram: "Instagram",
+                direct: "Direct",
+                telefon: "Telefon",
+                other: "Altă sursă",
+              }}
+              note="Pentru înscrierile de pe site: cum a fost creată înregistrarea. Pentru cele adăugate manual: de unde a venit cursantul."
             />
             <Breakdown
               title="Status lead"

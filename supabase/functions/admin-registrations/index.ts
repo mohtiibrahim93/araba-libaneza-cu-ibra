@@ -635,7 +635,13 @@ Deno.serve(async (req) => {
           language: cohort.teaching_language,
           source: mSource,
           lead_status: isPaid ? "converted" : "qualified",
-          payment_status: isPaid ? "paid" : "unpaid",
+          // "pending", not "unpaid": the rest of the system writes six values
+          // for this column (paid, pending, card_saved, failed, past_due,
+          // refunded) and there is no constraint to stop a seventh. A student
+          // added by hand and one who registered on the site are in the same
+          // state and belong in the same bucket, or every filter and
+          // breakdown has to learn a synonym.
+          payment_status: isPaid ? "paid" : "pending",
           paid_at: isPaid ? now : null,
           payment_method: isPaid ? method : null,
           notes: clean(mNotes, 2000) || null,
