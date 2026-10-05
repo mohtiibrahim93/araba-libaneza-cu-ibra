@@ -29,6 +29,11 @@ import {
   Newspaper,
   Settings,
   LineChart,
+  Route,
+  Clock,
+  HeartPulse,
+  Inbox,
+  UserPlus,
   BarChart3,
   FileText,
   Languages,
@@ -203,7 +208,7 @@ const Admin = () => {
   );
 
   // Which admin tab is open; PrivateLeadStats / stat cards can jump to "leads".
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("today");
 
   const stats = useMemo(() => {
     const incomplete = registrations.filter(
@@ -563,16 +568,40 @@ const Admin = () => {
     { label: "Abonamente active", value: stats.activeSubs, icon: Repeat },
   ];
 
+  /**
+   * The sections, grouped by the kind of work rather than by which component
+   * happened to be written first.
+   *
+   * "Grupe" and "Programări" each used to be one scrolling page with five and
+   * three separate screens stacked on it; they are sub-items now. "Azi" is the
+   * home screen (Acasă): a worklist rather than all-time totals, which is what
+   * the Analiză tab is for.
+   *
+   * Every `value` here is matched by a <TabsContent value="..."> below. Renaming
+   * one without the other makes a section unreachable with no error anywhere,
+   * which is what src/test/admin-nav-reachable.test.ts exists to catch.
+   */
   const navGroups = [
     {
-      title: "Activitate",
+      title: "Panou",
       items: [
         {
-          value: "overview",
-          label: "Panou general",
+          value: "today",
+          label: "Azi",
           icon: LayoutDashboard,
-          hint: "Cifrele zilei și traseul cursanților",
+          hint: "Ce are nevoie de tine astăzi",
         },
+        {
+          value: "analytics",
+          label: "Analiză",
+          icon: BarChart3,
+          hint: "Cifrele pe o perioadă, nu pe tot timpul",
+        },
+      ],
+    },
+    {
+      title: "Cursanți",
+      items: [
         {
           value: "leads",
           label: "Înscrieri",
@@ -581,22 +610,52 @@ const Admin = () => {
           hint: "Toate cererile și plățile",
         },
         {
-          value: "bookings",
-          label: "Programări",
-          icon: CalendarDays,
-          hint: "Disponibilitate, rezervări și calendar",
+          value: "journey",
+          label: "Parcurs",
+          icon: Route,
+          hint: "De la prima cerere până la înscriere",
+        },
+      ],
+    },
+    {
+      title: "Program",
+      items: [
+        { value: "bookings", label: "Lecții", icon: CalendarDays, hint: "Rezervările cursanților" },
+        {
+          value: "availability",
+          label: "Disponibilitate",
+          icon: Clock,
+          hint: "Orele în care se pot rezerva lecții",
         },
         {
-          value: "groups",
-          label: "Grupe",
-          icon: GraduationCap,
-          hint: "Capacitate, cohorte și cereri de curs",
+          value: "calendar-health",
+          label: "Sănătate calendar",
+          icon: HeartPulse,
+          hint: "Sincronizarea cu Google Calendar",
+        },
+      ],
+    },
+    {
+      title: "Grupe",
+      items: [
+        { value: "cohorts", label: "Cohorte", icon: GraduationCap, hint: "Grupele și programul lor" },
+        {
+          value: "capacities",
+          label: "Capacități",
+          icon: Users,
+          hint: "Minim și maxim de locuri pe grupă",
         },
         {
-          value: "analytics",
-          label: "Analiză",
-          icon: BarChart3,
-          hint: "Cifrele pe o perioadă, nu pe tot timpul",
+          value: "course-requests",
+          label: "Cereri de curs",
+          icon: Inbox,
+          hint: "Cereri pentru grupe care nu există încă",
+        },
+        {
+          value: "manual-signups",
+          label: "Înscrieri externe",
+          icon: UserPlus,
+          hint: "Cursanți veniți din afara site-ului",
         },
       ],
     },
@@ -633,7 +692,7 @@ const Admin = () => {
     >
       <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
-          <TabsContent value="overview" className="mt-0 space-y-6">
+          <TabsContent value="today" className="mt-0 space-y-6">
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {statCards.map(({ label, value, icon: Icon }) => (
@@ -658,6 +717,10 @@ const Admin = () => {
                 setActiveTab("leads");
               }}
             />
+          </TabsContent>
+
+          {/* ── Parcurs: de la prima cerere până la înscriere ─────────────── */}
+          <TabsContent value="journey" className="mt-0 space-y-6">
             <StudentJourneyAdmin />
             <TrialFunnelAdmin />
           </TabsContent>
@@ -836,18 +899,33 @@ const Admin = () => {
 
           {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
           <TabsContent value="bookings" className="mt-0 space-y-6">
-            <CalendarHealth />
-            <AvailabilityAdmin />
             <BookingsAdmin />
           </TabsContent>
 
+          <TabsContent value="availability" className="mt-0 space-y-6">
+            <AvailabilityAdmin />
+          </TabsContent>
+
+          <TabsContent value="calendar-health" className="mt-0 space-y-6">
+            <CalendarHealth />
+          </TabsContent>
+
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
-          <TabsContent value="groups" className="mt-0 space-y-6">
+          <TabsContent value="cohorts" className="mt-0 space-y-6">
             <GroupOverview />
-            <CapacitiesAdmin />
-            <CourseRequestsAdmin />
-            <ManualSignupsAdmin />
             <CohortsAdmin />
+          </TabsContent>
+
+          <TabsContent value="capacities" className="mt-0 space-y-6">
+            <CapacitiesAdmin />
+          </TabsContent>
+
+          <TabsContent value="course-requests" className="mt-0 space-y-6">
+            <CourseRequestsAdmin />
+          </TabsContent>
+
+          <TabsContent value="manual-signups" className="mt-0 space-y-6">
+            <ManualSignupsAdmin />
           </TabsContent>
 
           {/* ── Blog: editare articole (CMS override) ────────────────────── */}
