@@ -75,6 +75,10 @@ const EN_FOR_RO: Record<string, string> = {
   // Blog: every article has an exact English twin at the same slug.
   "/blog": "/en/blog",
   "/blog/lebanese-arabic-learning-resources": "/en/blog/lebanese-arabic-learning-resources",
+  "/blog/siriaca-in-araba-libaneza": "/en/blog/siriaca-in-araba-libaneza",
+  "/blog/fenicienii-si-identitatea-libaneza": "/en/blog/fenicienii-si-identitatea-libaneza",
+  "/blog/garshuni-si-tiparnita-de-la-qozhaya": "/en/blog/garshuni-si-tiparnita-de-la-qozhaya",
+  "/blog/sfantul-efrem-sirul-si-biserica-maronita": "/en/blog/sfantul-efrem-sirul-si-biserica-maronita",
   "/blog/limbile-vorbite-in-liban": "/en/blog/limbile-vorbite-in-liban",
   "/blog/de-ce-invatam-araba-in-2026": "/en/blog/de-ce-invatam-araba-in-2026",
   "/blog/lebanese-arabic-phrases": "/en/blog/lebanese-arabic-phrases",
@@ -142,6 +146,10 @@ const RO_FOR_EN: Record<string, string> = {
   // Blog twins, the other way round.
   "/en/blog": "/blog",
   "/en/blog/lebanese-arabic-learning-resources": "/blog/lebanese-arabic-learning-resources",
+  "/en/blog/siriaca-in-araba-libaneza": "/blog/siriaca-in-araba-libaneza",
+  "/en/blog/fenicienii-si-identitatea-libaneza": "/blog/fenicienii-si-identitatea-libaneza",
+  "/en/blog/garshuni-si-tiparnita-de-la-qozhaya": "/blog/garshuni-si-tiparnita-de-la-qozhaya",
+  "/en/blog/sfantul-efrem-sirul-si-biserica-maronita": "/blog/sfantul-efrem-sirul-si-biserica-maronita",
   "/en/blog/limbile-vorbite-in-liban": "/blog/limbile-vorbite-in-liban",
   "/en/blog/de-ce-invatam-araba-in-2026": "/blog/de-ce-invatam-araba-in-2026",
   "/en/blog/lebanese-arabic-phrases": "/blog/lebanese-arabic-phrases",

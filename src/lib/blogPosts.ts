@@ -29,6 +29,62 @@ export const L = (v: Localized, lang: "ro" | "en") => v[lang] ?? v.ro;
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "siriaca-in-araba-libaneza",
+    title: {
+      ro: "Siriaca din araba libaneză: cuvinte, luni, nume de sate",
+      en: "The Syriac inside Lebanese Arabic: words, months, villages",
+    },
+    description: {
+      ro: "Înainte de arabă, în Liban se vorbea aramaica. Ce a rămas din ea în libaneza de azi: cuvinte, construcții, numele lunilor și ale satelor.",
+      en: "Before Arabic, Lebanon spoke Aramaic. What it left in today's Lebanese: everyday words, a grammar habit, the names of the months and of villages.",
+    },
+    published: "2026-10-04",
+    readingMinutes: 6,
+    tag: { ro: "Limbă", en: "Language" },
+  },
+  {
+    slug: "fenicienii-si-identitatea-libaneza",
+    title: {
+      ro: "Fenicienii și identitatea libaneză",
+      en: "The Phoenicians and Lebanese identity",
+    },
+    description: {
+      ro: "Cine au fost fenicienii, de unde le vine numele și ce spune genetica: libanezii de azi descind în primul rând din canaaneenii de pe coastă.",
+      en: "Who the Phoenicians were, where their name comes from and what genetics says: Lebanese people today descend primarily from the coastal Canaanites.",
+    },
+    published: "2026-10-04",
+    readingMinutes: 6,
+    tag: { ro: "Istorie", en: "History" },
+  },
+  {
+    slug: "garshuni-si-tiparnita-de-la-qozhaya",
+    title: {
+      ro: "Garshuni și tiparnița de la Qozhaya",
+      en: "Garshuni and the Qozhaya printing press",
+    },
+    description: {
+      ro: "Araba scrisă cu litere siriace și tiparnița din valea Qadisha care, în 1610, a tipărit Psaltirea — prima carte tipărită în Liban.",
+      en: "Arabic written in Syriac letters, and the press in the Qadisha valley that printed the Psalter in 1610 — the first book printed in Lebanon.",
+    },
+    published: "2026-10-04",
+    readingMinutes: 5,
+    tag: { ro: "Istorie", en: "History" },
+  },
+  {
+    slug: "sfantul-efrem-sirul-si-biserica-maronita",
+    title: {
+      ro: "Sfântul Efrem Sirul și Biserica Maronită",
+      en: "Saint Ephrem the Syrian and the Maronite Church",
+    },
+    description: {
+      ro: "Poetul care a pus teologia pe muzică, Biserica Maronită care cântă și azi în siriacă și valea Qadisha, inima ei — până la Gibran.",
+      en: "The poet who set theology to music, the Maronite Church that still sings in Syriac, and the Qadisha valley at its heart — all the way to Gibran.",
+    },
+    published: "2026-10-04",
+    readingMinutes: 5,
+    tag: { ro: "Istorie", en: "History" },
+  },
+  {
     slug: "lebanese-arabic-learning-resources",
     title: {
       ro: "Resurse pentru araba libaneză: aplicații și podcasturi",

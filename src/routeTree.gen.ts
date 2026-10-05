@@ -60,6 +60,8 @@ import { Route as BlogCumAlegiProfesorDeArabaRouteImport } from './routes/blog/c
 import { Route as BlogCumInvetiArabaLibanezaRouteImport } from './routes/blog/cum-inveti-araba-libaneza'
 import { Route as BlogCumSalutiInLibanezaRouteImport } from './routes/blog/cum-saluti-in-libaneza'
 import { Route as BlogDeCeInvatamArabaIn2026RouteImport } from './routes/blog/de-ce-invatam-araba-in-2026'
+import { Route as BlogFenicieniiSiIdentitateaLibanezaRouteImport } from './routes/blog/fenicienii-si-identitatea-libaneza'
+import { Route as BlogGarshuniSiTiparnitaDeLaQozhayaRouteImport } from './routes/blog/garshuni-si-tiparnita-de-la-qozhaya'
 import { Route as BlogGramaticaArabeiLibanezeRouteImport } from './routes/blog/gramatica-arabei-libaneze'
 import { Route as BlogInvataArabaLibanezaOnlineRouteImport } from './routes/blog/invata-araba-libaneza-online'
 import { Route as BlogLearnLebaneseArabicRouteImport } from './routes/blog/learn-lebanese-arabic'
@@ -69,6 +71,8 @@ import { Route as BlogLebaneseFamilyVocabularyRouteImport } from './routes/blog/
 import { Route as BlogLimbileVorbiteInLibanRouteImport } from './routes/blog/limbile-vorbite-in-liban'
 import { Route as BlogNumereInArabaLibanezaRouteImport } from './routes/blog/numere-in-araba-libaneza'
 import { Route as BlogPrimele20DeExpresiiLibanezeRouteImport } from './routes/blog/primele-20-de-expresii-libaneze'
+import { Route as BlogSfantulEfremSirulSiBisericaMaronitaRouteImport } from './routes/blog/sfantul-efrem-sirul-si-biserica-maronita'
+import { Route as BlogSiriacaInArabaLibanezaRouteImport } from './routes/blog/siriaca-in-araba-libaneza'
 import { Route as BookingIndexRouteImport } from './routes/booking/index'
 import { Route as CursuriIndexRouteImport } from './routes/cursuri/index'
 import { Route as CursuriAdultiRouteImport } from './routes/cursuri/adulti'
@@ -404,6 +408,18 @@ const BlogDeCeInvatamArabaIn2026Route =
     path: '/blog/de-ce-invatam-araba-in-2026',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogFenicieniiSiIdentitateaLibanezaRoute =
+  BlogFenicieniiSiIdentitateaLibanezaRouteImport.update({
+    id: '/blog/fenicienii-si-identitatea-libaneza',
+    path: '/blog/fenicienii-si-identitatea-libaneza',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogGarshuniSiTiparnitaDeLaQozhayaRoute =
+  BlogGarshuniSiTiparnitaDeLaQozhayaRouteImport.update({
+    id: '/blog/garshuni-si-tiparnita-de-la-qozhaya',
+    path: '/blog/garshuni-si-tiparnita-de-la-qozhaya',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogGramaticaArabeiLibanezeRoute =
   BlogGramaticaArabeiLibanezeRouteImport.update({
     id: '/blog/gramatica-arabei-libaneze',
@@ -455,6 +471,18 @@ const BlogPrimele20DeExpresiiLibanezeRoute =
   BlogPrimele20DeExpresiiLibanezeRouteImport.update({
     id: '/blog/primele-20-de-expresii-libaneze',
     path: '/blog/primele-20-de-expresii-libaneze',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogSfantulEfremSirulSiBisericaMaronitaRoute =
+  BlogSfantulEfremSirulSiBisericaMaronitaRouteImport.update({
+    id: '/blog/sfantul-efrem-sirul-si-biserica-maronita',
+    path: '/blog/sfantul-efrem-sirul-si-biserica-maronita',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogSiriacaInArabaLibanezaRoute =
+  BlogSiriacaInArabaLibanezaRouteImport.update({
+    id: '/blog/siriaca-in-araba-libaneza',
+    path: '/blog/siriaca-in-araba-libaneza',
     getParentRoute: () => rootRouteImport,
   } as any)
 const BookingIndexRoute = BookingIndexRouteImport.update({
@@ -876,6 +904,8 @@ export interface FileRoutesByFullPath {
   '/blog/cum-inveti-araba-libaneza': typeof BlogCumInvetiArabaLibanezaRoute
   '/blog/cum-saluti-in-libaneza': typeof BlogCumSalutiInLibanezaRoute
   '/blog/de-ce-invatam-araba-in-2026': typeof BlogDeCeInvatamArabaIn2026Route
+  '/blog/fenicienii-si-identitatea-libaneza': typeof BlogFenicieniiSiIdentitateaLibanezaRoute
+  '/blog/garshuni-si-tiparnita-de-la-qozhaya': typeof BlogGarshuniSiTiparnitaDeLaQozhayaRoute
   '/blog/gramatica-arabei-libaneze': typeof BlogGramaticaArabeiLibanezeRoute
   '/blog/invata-araba-libaneza-online': typeof BlogInvataArabaLibanezaOnlineRoute
   '/blog/learn-lebanese-arabic': typeof BlogLearnLebaneseArabicRoute
@@ -885,6 +915,8 @@ export interface FileRoutesByFullPath {
   '/blog/limbile-vorbite-in-liban': typeof BlogLimbileVorbiteInLibanRoute
   '/blog/numere-in-araba-libaneza': typeof BlogNumereInArabaLibanezaRoute
   '/blog/primele-20-de-expresii-libaneze': typeof BlogPrimele20DeExpresiiLibanezeRoute
+  '/blog/sfantul-efrem-sirul-si-biserica-maronita': typeof BlogSfantulEfremSirulSiBisericaMaronitaRoute
+  '/blog/siriaca-in-araba-libaneza': typeof BlogSiriacaInArabaLibanezaRoute
   '/cursuri/adulti': typeof CursuriAdultiRoute
   '/cursuri/copii': typeof CursuriCopiiRoute
   '/cursuri/online': typeof CursuriOnlineRoute
@@ -1007,6 +1039,8 @@ export interface FileRoutesByTo {
   '/blog/cum-inveti-araba-libaneza': typeof BlogCumInvetiArabaLibanezaRoute
   '/blog/cum-saluti-in-libaneza': typeof BlogCumSalutiInLibanezaRoute
   '/blog/de-ce-invatam-araba-in-2026': typeof BlogDeCeInvatamArabaIn2026Route
+  '/blog/fenicienii-si-identitatea-libaneza': typeof BlogFenicieniiSiIdentitateaLibanezaRoute
+  '/blog/garshuni-si-tiparnita-de-la-qozhaya': typeof BlogGarshuniSiTiparnitaDeLaQozhayaRoute
   '/blog/gramatica-arabei-libaneze': typeof BlogGramaticaArabeiLibanezeRoute
   '/blog/invata-araba-libaneza-online': typeof BlogInvataArabaLibanezaOnlineRoute
   '/blog/learn-lebanese-arabic': typeof BlogLearnLebaneseArabicRoute
@@ -1016,6 +1050,8 @@ export interface FileRoutesByTo {
   '/blog/limbile-vorbite-in-liban': typeof BlogLimbileVorbiteInLibanRoute
   '/blog/numere-in-araba-libaneza': typeof BlogNumereInArabaLibanezaRoute
   '/blog/primele-20-de-expresii-libaneze': typeof BlogPrimele20DeExpresiiLibanezeRoute
+  '/blog/sfantul-efrem-sirul-si-biserica-maronita': typeof BlogSfantulEfremSirulSiBisericaMaronitaRoute
+  '/blog/siriaca-in-araba-libaneza': typeof BlogSiriacaInArabaLibanezaRoute
   '/cursuri/adulti': typeof CursuriAdultiRoute
   '/cursuri/copii': typeof CursuriCopiiRoute
   '/cursuri/online': typeof CursuriOnlineRoute
@@ -1139,6 +1175,8 @@ export interface FileRoutesById {
   '/blog/cum-inveti-araba-libaneza': typeof BlogCumInvetiArabaLibanezaRoute
   '/blog/cum-saluti-in-libaneza': typeof BlogCumSalutiInLibanezaRoute
   '/blog/de-ce-invatam-araba-in-2026': typeof BlogDeCeInvatamArabaIn2026Route
+  '/blog/fenicienii-si-identitatea-libaneza': typeof BlogFenicieniiSiIdentitateaLibanezaRoute
+  '/blog/garshuni-si-tiparnita-de-la-qozhaya': typeof BlogGarshuniSiTiparnitaDeLaQozhayaRoute
   '/blog/gramatica-arabei-libaneze': typeof BlogGramaticaArabeiLibanezeRoute
   '/blog/invata-araba-libaneza-online': typeof BlogInvataArabaLibanezaOnlineRoute
   '/blog/learn-lebanese-arabic': typeof BlogLearnLebaneseArabicRoute
@@ -1148,6 +1186,8 @@ export interface FileRoutesById {
   '/blog/limbile-vorbite-in-liban': typeof BlogLimbileVorbiteInLibanRoute
   '/blog/numere-in-araba-libaneza': typeof BlogNumereInArabaLibanezaRoute
   '/blog/primele-20-de-expresii-libaneze': typeof BlogPrimele20DeExpresiiLibanezeRoute
+  '/blog/sfantul-efrem-sirul-si-biserica-maronita': typeof BlogSfantulEfremSirulSiBisericaMaronitaRoute
+  '/blog/siriaca-in-araba-libaneza': typeof BlogSiriacaInArabaLibanezaRoute
   '/cursuri/adulti': typeof CursuriAdultiRoute
   '/cursuri/copii': typeof CursuriCopiiRoute
   '/cursuri/online': typeof CursuriOnlineRoute
@@ -1273,6 +1313,8 @@ export interface FileRouteTypes {
     | '/blog/cum-inveti-araba-libaneza'
     | '/blog/cum-saluti-in-libaneza'
     | '/blog/de-ce-invatam-araba-in-2026'
+    | '/blog/fenicienii-si-identitatea-libaneza'
+    | '/blog/garshuni-si-tiparnita-de-la-qozhaya'
     | '/blog/gramatica-arabei-libaneze'
     | '/blog/invata-araba-libaneza-online'
     | '/blog/learn-lebanese-arabic'
@@ -1282,6 +1324,8 @@ export interface FileRouteTypes {
     | '/blog/limbile-vorbite-in-liban'
     | '/blog/numere-in-araba-libaneza'
     | '/blog/primele-20-de-expresii-libaneze'
+    | '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+    | '/blog/siriaca-in-araba-libaneza'
     | '/cursuri/adulti'
     | '/cursuri/copii'
     | '/cursuri/online'
@@ -1404,6 +1448,8 @@ export interface FileRouteTypes {
     | '/blog/cum-inveti-araba-libaneza'
     | '/blog/cum-saluti-in-libaneza'
     | '/blog/de-ce-invatam-araba-in-2026'
+    | '/blog/fenicienii-si-identitatea-libaneza'
+    | '/blog/garshuni-si-tiparnita-de-la-qozhaya'
     | '/blog/gramatica-arabei-libaneze'
     | '/blog/invata-araba-libaneza-online'
     | '/blog/learn-lebanese-arabic'
@@ -1413,6 +1459,8 @@ export interface FileRouteTypes {
     | '/blog/limbile-vorbite-in-liban'
     | '/blog/numere-in-araba-libaneza'
     | '/blog/primele-20-de-expresii-libaneze'
+    | '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+    | '/blog/siriaca-in-araba-libaneza'
     | '/cursuri/adulti'
     | '/cursuri/copii'
     | '/cursuri/online'
@@ -1535,6 +1583,8 @@ export interface FileRouteTypes {
     | '/blog/cum-inveti-araba-libaneza'
     | '/blog/cum-saluti-in-libaneza'
     | '/blog/de-ce-invatam-araba-in-2026'
+    | '/blog/fenicienii-si-identitatea-libaneza'
+    | '/blog/garshuni-si-tiparnita-de-la-qozhaya'
     | '/blog/gramatica-arabei-libaneze'
     | '/blog/invata-araba-libaneza-online'
     | '/blog/learn-lebanese-arabic'
@@ -1544,6 +1594,8 @@ export interface FileRouteTypes {
     | '/blog/limbile-vorbite-in-liban'
     | '/blog/numere-in-araba-libaneza'
     | '/blog/primele-20-de-expresii-libaneze'
+    | '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+    | '/blog/siriaca-in-araba-libaneza'
     | '/cursuri/adulti'
     | '/cursuri/copii'
     | '/cursuri/online'
@@ -1668,6 +1720,8 @@ export interface RootRouteChildren {
   BlogCumInvetiArabaLibanezaRoute: typeof BlogCumInvetiArabaLibanezaRoute
   BlogCumSalutiInLibanezaRoute: typeof BlogCumSalutiInLibanezaRoute
   BlogDeCeInvatamArabaIn2026Route: typeof BlogDeCeInvatamArabaIn2026Route
+  BlogFenicieniiSiIdentitateaLibanezaRoute: typeof BlogFenicieniiSiIdentitateaLibanezaRoute
+  BlogGarshuniSiTiparnitaDeLaQozhayaRoute: typeof BlogGarshuniSiTiparnitaDeLaQozhayaRoute
   BlogGramaticaArabeiLibanezeRoute: typeof BlogGramaticaArabeiLibanezeRoute
   BlogInvataArabaLibanezaOnlineRoute: typeof BlogInvataArabaLibanezaOnlineRoute
   BlogLearnLebaneseArabicRoute: typeof BlogLearnLebaneseArabicRoute
@@ -1677,6 +1731,8 @@ export interface RootRouteChildren {
   BlogLimbileVorbiteInLibanRoute: typeof BlogLimbileVorbiteInLibanRoute
   BlogNumereInArabaLibanezaRoute: typeof BlogNumereInArabaLibanezaRoute
   BlogPrimele20DeExpresiiLibanezeRoute: typeof BlogPrimele20DeExpresiiLibanezeRoute
+  BlogSfantulEfremSirulSiBisericaMaronitaRoute: typeof BlogSfantulEfremSirulSiBisericaMaronitaRoute
+  BlogSiriacaInArabaLibanezaRoute: typeof BlogSiriacaInArabaLibanezaRoute
   CursuriAdultiRoute: typeof CursuriAdultiRoute
   CursuriCopiiRoute: typeof CursuriCopiiRoute
   CursuriOnlineRoute: typeof CursuriOnlineRoute
@@ -2106,6 +2162,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogDeCeInvatamArabaIn2026RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/fenicienii-si-identitatea-libaneza': {
+      id: '/blog/fenicienii-si-identitatea-libaneza'
+      path: '/blog/fenicienii-si-identitatea-libaneza'
+      fullPath: '/blog/fenicienii-si-identitatea-libaneza'
+      preLoaderRoute: typeof BlogFenicieniiSiIdentitateaLibanezaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/garshuni-si-tiparnita-de-la-qozhaya': {
+      id: '/blog/garshuni-si-tiparnita-de-la-qozhaya'
+      path: '/blog/garshuni-si-tiparnita-de-la-qozhaya'
+      fullPath: '/blog/garshuni-si-tiparnita-de-la-qozhaya'
+      preLoaderRoute: typeof BlogGarshuniSiTiparnitaDeLaQozhayaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/gramatica-arabei-libaneze': {
       id: '/blog/gramatica-arabei-libaneze'
       path: '/blog/gramatica-arabei-libaneze'
@@ -2167,6 +2237,20 @@ declare module '@tanstack/react-router' {
       path: '/blog/primele-20-de-expresii-libaneze'
       fullPath: '/blog/primele-20-de-expresii-libaneze'
       preLoaderRoute: typeof BlogPrimele20DeExpresiiLibanezeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/sfantul-efrem-sirul-si-biserica-maronita': {
+      id: '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+      path: '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+      fullPath: '/blog/sfantul-efrem-sirul-si-biserica-maronita'
+      preLoaderRoute: typeof BlogSfantulEfremSirulSiBisericaMaronitaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/siriaca-in-araba-libaneza': {
+      id: '/blog/siriaca-in-araba-libaneza'
+      path: '/blog/siriaca-in-araba-libaneza'
+      fullPath: '/blog/siriaca-in-araba-libaneza'
+      preLoaderRoute: typeof BlogSiriacaInArabaLibanezaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/booking/': {
@@ -2742,6 +2826,10 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCumInvetiArabaLibanezaRoute: BlogCumInvetiArabaLibanezaRoute,
   BlogCumSalutiInLibanezaRoute: BlogCumSalutiInLibanezaRoute,
   BlogDeCeInvatamArabaIn2026Route: BlogDeCeInvatamArabaIn2026Route,
+  BlogFenicieniiSiIdentitateaLibanezaRoute:
+    BlogFenicieniiSiIdentitateaLibanezaRoute,
+  BlogGarshuniSiTiparnitaDeLaQozhayaRoute:
+    BlogGarshuniSiTiparnitaDeLaQozhayaRoute,
   BlogGramaticaArabeiLibanezeRoute: BlogGramaticaArabeiLibanezeRoute,
   BlogInvataArabaLibanezaOnlineRoute: BlogInvataArabaLibanezaOnlineRoute,
   BlogLearnLebaneseArabicRoute: BlogLearnLebaneseArabicRoute,
@@ -2752,6 +2840,9 @@ const rootRouteChildren: RootRouteChildren = {
   BlogLimbileVorbiteInLibanRoute: BlogLimbileVorbiteInLibanRoute,
   BlogNumereInArabaLibanezaRoute: BlogNumereInArabaLibanezaRoute,
   BlogPrimele20DeExpresiiLibanezeRoute: BlogPrimele20DeExpresiiLibanezeRoute,
+  BlogSfantulEfremSirulSiBisericaMaronitaRoute:
+    BlogSfantulEfremSirulSiBisericaMaronitaRoute,
+  BlogSiriacaInArabaLibanezaRoute: BlogSiriacaInArabaLibanezaRoute,
   CursuriAdultiRoute: CursuriAdultiRoute,
   CursuriCopiiRoute: CursuriCopiiRoute,
   CursuriOnlineRoute: CursuriOnlineRoute,

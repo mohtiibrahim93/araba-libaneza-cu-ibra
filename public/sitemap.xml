@@ -522,6 +522,26 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://centruldearabalibaneza.com/blog/siriaca-in-araba-libaneza</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/fenicienii-si-identitatea-libaneza</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/garshuni-si-tiparnita-de-la-qozhaya</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/blog/sfantul-efrem-sirul-si-biserica-maronita</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://centruldearabalibaneza.com/blog/lebanese-arabic-learning-resources</loc>
     <lastmod>2026-09-27T20:12:52+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -632,6 +652,26 @@
   <url>
     <loc>https://centruldearabalibaneza.com/blog/gramatica-arabei-libaneze</loc>
     <lastmod>2026-09-27T20:07:57+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/blog/siriaca-in-araba-libaneza</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/blog/fenicienii-si-identitatea-libaneza</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/blog/garshuni-si-tiparnita-de-la-qozhaya</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://centruldearabalibaneza.com/en/blog/sfantul-efrem-sirul-si-biserica-maronita</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { seoHead } from "@/lib/seoHead";
 import type { ComponentType } from "react";
 import NotFound from "@/pages/NotFound";
+import BlogSiriacaInArabaLibaneza from "@/pages/blog/SiriacaInArabaLibaneza";
+import BlogFenicieniiIdentitateaLibaneza from "@/pages/blog/FenicieniiIdentitateaLibaneza";
+import BlogGarshuniTiparnitaQozhaya from "@/pages/blog/GarshuniTiparnitaQozhaya";
+import BlogSfantulEfremBisericaMaronita from "@/pages/blog/SfantulEfremBisericaMaronita";
 import BlogCumInvetiArabaLibaneza from "@/pages/blog/CumInvetiArabaLibaneza";
 import BlogArabaLibanezaVsArabaStandard from "@/pages/blog/ArabaLibanezaVsArabaStandard";
 import BlogPrimele20Expresii from "@/pages/blog/Primele20Expresii";
@@ -47,6 +51,10 @@ const BLOG_COMPONENTS: Record<string, ComponentType> = {
   "de-ce-invatam-araba-in-2026": BlogDeCeInvatamAraba2026,
   "limbile-vorbite-in-liban": BlogLimbileVorbiteInLiban,
   "lebanese-arabic-learning-resources": BlogLebaneseArabicLearningResources,
+  "siriaca-in-araba-libaneza": BlogSiriacaInArabaLibaneza,
+  "fenicienii-si-identitatea-libaneza": BlogFenicieniiIdentitateaLibaneza,
+  "garshuni-si-tiparnita-de-la-qozhaya": BlogGarshuniTiparnitaQozhaya,
+  "sfantul-efrem-sirul-si-biserica-maronita": BlogSfantulEfremBisericaMaronita,
 };
 
 function EnBlogPost() {
