@@ -35,6 +35,11 @@ interface Props {
   lead: string;
   faq?: Faq[];
   /**
+   * The FAQ page renders its own grouped list (FaqGroups). Its questions still
+   * feed the FAQPage structured data, but are not listed a second time.
+   */
+  faqVisible?: boolean;
+  /**
    * Root-relative EN counterpart of this page. Drives the hreflang cluster, so
    * it must name a *true* equivalent whose own `roHref` points back here —
    * hreflang has to be 1:1 and reciprocal, and the build fails the check in
@@ -73,7 +78,7 @@ interface Props {
  * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, parents = [], lead: leadProp, faq: faqProp, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
+const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, parents = [], lead: leadProp, faq: faqProp, faqVisible = true, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
   const url = `${BASE}/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -211,7 +216,7 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
             {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
-            {faq?.length ? (
+            {faqVisible && faq?.length ? (
               <section>
                 <h2>Întrebări frecvente</h2>
                 <div className="space-y-4 mt-4">

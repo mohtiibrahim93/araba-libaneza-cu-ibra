@@ -169,16 +169,18 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
     <div className="min-h-screen bg-background">
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto max-w-5xl px-4 py-16">
-        <h1 className="font-display text-3xl font-bold text-foreground sm:text-4xl">{c.h1}</h1>
-        <p className="mt-4 max-w-2xl text-muted-foreground">{c.lead}</p>
+      {/* pt-28 clears the fixed menu (band + bar); the title used to sit under it. */}
+      <main id="main-content" className="mx-auto max-w-content px-gutter pb-section pt-28">
+        <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">Contact</span>
+        <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">{c.h1}</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{c.lead}</p>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5">
           {/* Form */}
           <div className="lg:col-span-3">
             {sent ? (
-              <div className="rounded-2xl border border-border bg-card p-8 text-center space-y-3">
-                <CheckCircle2 className="mx-auto h-10 w-10 text-primary" />
+              <div className="rounded-3xl border border-[#E7E1D6] bg-card p-8 text-center space-y-3 dark:border-border">
+                <CheckCircle2 className="mx-auto h-10 w-10 text-brand-green" />
                 <h2 className="font-display text-xl font-bold text-foreground">{c.sentTitle}</h2>
                 <p className="text-sm text-muted-foreground">{c.sentBody}</p>
                 <Button
@@ -192,7 +194,7 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                 </Button>
               </div>
             ) : (
-              <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4">
+              <form onSubmit={submit} className="rounded-3xl border border-[#E7E1D6] bg-card p-5 sm:p-8 space-y-4 dark:border-border">
                 <div>
                   <h2 className="font-display text-xl font-bold text-foreground">{c.formTitle}</h2>
                   <p className="text-sm text-muted-foreground">{c.formLead}</p>
@@ -241,10 +243,10 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
 
           {/* Existing channels — the form is an addition, not a replacement. */}
           <aside className="lg:col-span-2">
-            <p className="text-sm font-semibold text-foreground">{c.channels}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{c.channels}</p>
             <ul className="mt-4 space-y-5 text-sm">
               <li className="flex items-start gap-3">
-                <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-green/10 text-brand-green"><MessageCircle className="h-4 w-4" aria-hidden="true" /></span>
                 <div>
                   <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-foreground hover:underline">
                     {PHONE_LABEL}
@@ -253,7 +255,7 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-green/10 text-brand-green"><Mail className="h-4 w-4" aria-hidden="true" /></span>
                 <div>
                   <a href={`mailto:${EMAIL}`} className="font-medium leading-snug text-foreground hover:underline">
                     marhaba@<wbr />centruldearabalibaneza.com
@@ -262,7 +264,7 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-green/10 text-brand-green"><MapPin className="h-4 w-4" aria-hidden="true" /></span>
                 <div>
                   <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-foreground hover:underline">
                     {ADDRESS}
@@ -271,7 +273,7 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-green/10 text-brand-green"><Clock className="h-4 w-4" aria-hidden="true" /></span>
                 <div>
                   <p className="font-medium text-foreground">{c.hours}</p>
                   <p className="text-muted-foreground">{c.hoursNote}</p>
@@ -279,23 +281,23 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
               </li>
             </ul>
 
-            <div className="mt-8 rounded-2xl border border-border bg-muted/40 p-5">
+            <div className="mt-8 rounded-3xl bg-cream p-5">
               <p className="text-sm text-muted-foreground">{c.alt}</p>
               <Link
                 to={lang === "en" ? "/en/trial" : "/trial"}
-                className="mt-3 inline-flex text-sm font-semibold text-primary hover:underline"
+                className="mt-3 inline-flex text-sm font-semibold text-brand-green hover:underline"
               >
                 {c.altCta} →
               </Link>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-border bg-muted/40 p-5">
+            <div className="mt-4 rounded-3xl bg-cream p-5">
               <p className="text-sm text-muted-foreground">{c.reviewLead}</p>
               <a
                 href={GOOGLE_REVIEW_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-green hover:underline"
               >
                 <Star className="h-4 w-4" /> {c.reviewCta} →
               </a>

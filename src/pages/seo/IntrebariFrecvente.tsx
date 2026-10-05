@@ -23,6 +23,7 @@ const IntrebariFrecvente = () => (
     crumb="Întrebări frecvente"
     lead="Tot ce ne întreabă cursanții înainte să se înscrie — preț și orar, cât durează până ții o conversație, diferența dintre libaneză și araba standard, și cum funcționează gramatica."
     faq={allFaqs("ro")}
+    faqVisible={false}
   >
     <p>
       Am strâns aici întrebările pe care le primim cel mai des, grupate pe teme. Dacă vrei

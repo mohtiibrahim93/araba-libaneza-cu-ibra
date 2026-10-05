@@ -26,7 +26,8 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Libanezii sunt arabi?",
-            a: "Da — Libanul este parte din Liga Arabă, iar araba este limba oficială a țării. În același timp, mulți libanezi au și o identitate culturală proprie (feniciană, levantină, creștină sau druză), motiv pentru care unii preferă să se identifice ca „libanezi” înainte de „arabi”. Pe scurt: din punct de vedere lingvistic și politic da, cultural este mai nuanțat.",
+            // The owner's own answer (October 2026).
+            a: "Politic, da: Libanul face parte din Liga Arabă, iar araba este limba oficială a țării. Ca origine, însă, libanezii sunt o națiune arabizată, care descinde în primul rând din populația nativă a Levantului — canaaneenii din Libanul de azi, cunoscuți ca fenicieni după purpura pentru care erau renumiți. În perioada greacă și romană s-au creștinat și au vorbit aramaica, apoi siriaca (aramaica), ca limbă liturgică și de zi cu zi. Mai târziu s-au arabizat, iar o parte s-au islamizat — dar sunt același popor ca strămoșii lor.",
           },
           {
             q: "Libanezii vorbesc arabă?",
@@ -253,7 +254,8 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Are Lebanese people Arabs?",
-            a: "Yes — Lebanon is a member of the Arab League, and Arabic is the country's official language. That said, many Lebanese also identify with a distinct cultural heritage (Phoenician, Levantine, Christian, or Druze), so some prefer to describe themselves as \"Lebanese\" first and \"Arab\" second. In short: linguistically and politically yes, culturally it's more nuanced.",
+            // The owner's own answer (October 2026).
+            a: "Politically, yes: Lebanon is a member of the Arab League, and Arabic is the country's official language. By origin, though, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites of today's Lebanon, known as the Phoenicians after the purple dye they were famous for. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac (Aramaic) as a liturgical and everyday language. Later they were Arabised and some Islamised — but they are the same people as their ancestors.",
           },
           {
             q: "What's the difference between Lebanese Arabic and Modern Standard Arabic?",

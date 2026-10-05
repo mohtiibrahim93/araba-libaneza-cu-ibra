@@ -33,6 +33,11 @@ interface Props {
   parents?: { name: string; href: string }[];
   lead: string;
   faq?: Faq[];
+  /**
+   * The FAQ page renders its own grouped list (FaqGroups). Its questions still
+   * feed the FAQPage structured data, but are not listed a second time.
+   */
+  faqVisible?: boolean;
   courseSchema?: boolean;
   /**
    * Root-relative RO counterpart of this page. Drives the hreflang cluster, so
@@ -64,7 +69,7 @@ const EnLandingLayout = ({
   crumb,
   parents = [],
   lead: leadProp,
-  faq: faqProp,
+  faq: faqProp, faqVisible = true,
   courseSchema = true,
   roHref = null,
   deHref = null,
@@ -198,7 +203,7 @@ const EnLandingLayout = ({
           <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
             {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
-            {faq?.length ? (
+            {faqVisible && faq?.length ? (
               <section>
                 <h2>Frequently asked questions</h2>
                 <div className="space-y-4 mt-4">

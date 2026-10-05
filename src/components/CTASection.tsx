@@ -55,23 +55,23 @@ const CTASection = () => {
         </div>
 
         <div className="grid gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="min-w-0 [overflow-wrap:anywhere] bg-background rounded-2xl border border-border p-5 sm:p-6 text-center hover:border-primary/40 transition-colors">
-            <MessageCircle className="w-6 h-6 text-primary mx-auto mb-3" />
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
+            <MessageCircle className="w-6 h-6 text-brand-green mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaWhatsapp}</h3>
             <p className="text-sm text-muted-foreground mt-1">{t.ctaWhatsappDesc}</p>
           </a>
-          <a href={PHONE_URL} className="min-w-0 [overflow-wrap:anywhere] bg-background rounded-2xl border border-border p-5 sm:p-6 text-center hover:border-primary/40 transition-colors">
-            <Phone className="w-6 h-6 text-primary mx-auto mb-3" />
+          <a href={PHONE_URL} className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
+            <Phone className="w-6 h-6 text-brand-green mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaPhone}</h3>
             <p className="text-sm text-muted-foreground mt-1">{t.ctaPhoneVal}</p>
           </a>
-          <a href={`mailto:${EMAIL}`} className="min-w-0 [overflow-wrap:anywhere] bg-background rounded-2xl border border-border p-5 sm:p-6 text-center hover:border-primary/40 transition-colors">
-            <Mail className="w-6 h-6 text-primary mx-auto mb-3" />
+          <a href={`mailto:${EMAIL}`} className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
+            <Mail className="w-6 h-6 text-brand-green mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaEmail}</h3>
             <p className="text-sm text-muted-foreground mt-1">{t.ctaEmailVal}</p>
           </a>
-          <div className="min-w-0 [overflow-wrap:anywhere] bg-background rounded-2xl border border-border p-5 sm:p-6 text-center">
-            <MapPin className="w-6 h-6 text-primary mx-auto mb-3" />
+          <div className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center dark:border-border">
+            <MapPin className="w-6 h-6 text-brand-green mx-auto mb-3" />
             <h3 className="font-semibold text-foreground text-sm">{t.ctaLocation}</h3>
             <p className="text-sm text-muted-foreground mt-1">{t.ctaLocationVal}</p>
           </div>

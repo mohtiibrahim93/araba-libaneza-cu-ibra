@@ -20,6 +20,7 @@ const Faq = () => (
     crumb="FAQ"
     lead="Everything students ask before they enrol — price and schedule, how long it takes before you can hold a conversation, how Lebanese differs from Modern Standard Arabic, and how the grammar works."
     faq={allFaqs("en")}
+    faqVisible={false}
   >
     <p>
       These are the questions we get most often, grouped by topic. For the short version —
