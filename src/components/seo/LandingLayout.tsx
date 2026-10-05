@@ -216,7 +216,7 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
                 <h2>Întrebări frecvente</h2>
                 <div className="space-y-4 mt-4">
                   {faq.map(({ q, a }) => (
-                    <div key={q} className="rounded-lg border border-border bg-muted/30 p-4">
+                    <div key={q} className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border">
                       <h3 className="font-semibold text-foreground">{q}</h3>
                       <p className="text-sm mt-1">{a}</p>
                     </div>
@@ -229,34 +229,34 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
           </div>
 
 
-          <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-foreground">
+          <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
+            <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
               Începe cu o lecție de probă gratuită
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-white/85">
               30 de minute cu profesor nativ — online sau fizic în București. Fără nicio obligație.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/trial"
-                className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+                className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
               >
                 Rezervă proba gratuită
               </Link>
               <Link
                 to="/test-de-nivel"
-                className="inline-block border border-border px-6 py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
+                className="inline-flex h-12 items-center justify-center border border-white/40 px-6 rounded-xl font-semibold text-white hover:bg-white/10 transition"
               >
                 Fă testul de nivel (~15 min)
               </Link>
             </div>
             {/* Cross-links to the two priority pages — skipped on those pages
                 themselves, where they would be links to the current URL. */}
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/80">
               {slug !== "meditatii-araba" && (
                 <>
                   Preferi un program flexibil? Vezi{" "}
-                  <Link to="/meditatii-araba" className="font-medium text-primary underline">
+                  <Link to="/meditatii-araba" className="font-medium text-white underline">
                     meditațiile de arabă 1:1
                   </Link>
                   .{" "}
@@ -265,7 +265,7 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
               {slug !== "cursuri-araba-bucuresti" && (
                 <>
                   Cauți cursuri fizice? Descoperă{" "}
-                  <Link to="/cursuri-araba-bucuresti" className="font-medium text-primary underline">
+                  <Link to="/cursuri-araba-bucuresti" className="font-medium text-white underline">
                     cursurile de arabă în București
                   </Link>
                   .

@@ -727,7 +727,7 @@ export const translations = {
     courseCopiiIntro: "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Fizic, la centru; varianta online o vom adăuga mai târziu.",
     courseCopiiFeat1: "Vârste 6–11 ani, grupe pe categorii de vârstă",
     courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
-    courseCopiiFeat3: "Online",
+    courseCopiiFeat3: "Fizic, în București (online mai târziu)",
     courseCopiiFeat4: "Profesor nativ, atmosferă caldă",
 
     // Course pages — section labels
@@ -788,7 +788,7 @@ export const translations = {
     copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
     copiiFormatPrivateTitle: "Privat 1:1 (orice vârstă)",
     copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic, la centru.",
-    copiiFormatGroupTitle: "Grup (minim 4 copii)",
+    copiiFormatGroupTitle: "Grup (4–8 copii)",
     copiiFormatGroupDesc: "Activități prin joc într-o grupă mică, fizic, la centru.",
 
     // /cursuri/copii — curriculum
@@ -1509,7 +1509,7 @@ export const translations = {
     courseCopiiIntro: "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. In person, at the centre; an online option will be added later.",
     courseCopiiFeat1: "Ages 6–11, grouped by age",
     courseCopiiFeat2: "Play-based, interactive lessons",
-    courseCopiiFeat3: "Online",
+    courseCopiiFeat3: "In person, in Bucharest (online later)",
     courseCopiiFeat4: "Native instructor, warm atmosphere",
 
     // Course pages — section labels
@@ -1565,7 +1565,7 @@ export const translations = {
     copiiFormatChoiceTitle: "Two formats, depending on age",
     copiiFormatPrivateTitle: "Private 1:1 (any age)",
     copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person, at the centre.",
-    copiiFormatGroupTitle: "Group (minimum 4 kids)",
+    copiiFormatGroupTitle: "Group (4–8 kids)",
     copiiFormatGroupDesc: "Play-based activities in a small group, in person at the centre.",
 
     // /cursuri/copii — curriculum
