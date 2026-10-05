@@ -51836,7 +51836,7 @@
     },
     {
       "id": "syn-d033db9fe39c",
-      "canonicalArabizi": "Momken ru7 bukra iza be2dar.",
+      "canonicalArabizi": "Momken ru7 bukra iza 2aader.",
       "variants": [
         {
           "value": "Momken ru7 bukra iza b2dar.",
@@ -51869,7 +51869,7 @@
     },
     {
       "id": "syn-7a096e2f873b",
-      "canonicalArabizi": "Iza ken et ta2es mni7, bnru7 3al ba7er.",
+      "canonicalArabizi": "Iza et ta2es mni7, 3al ba7er.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -51877,7 +51877,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Dacă vremea este bună, mergem la mare."
+          "naturalMeaning": "Dacă vremea e bună, la mare."
         }
       }
     },
@@ -51897,7 +51897,7 @@
     },
     {
       "id": "syn-abc156a9fd67",
-      "canonicalArabizi": "Momken eje iza ken 3ande wa2et.",
+      "canonicalArabizi": "Yemkin eje iza ken 3ande wa2et.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -51905,7 +51905,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Pot să vin dacă am timp."
+          "naturalMeaning": "Poate vin, dacă am timp."
         }
       }
     },
@@ -51925,7 +51925,7 @@
     },
     {
       "id": "syn-8242e10b9aba",
-      "canonicalArabizi": "Iza ken et ta2es mni7, momken nru7 sawa.",
+      "canonicalArabizi": "Iza et ta2es mni7, fina nru7 sawa.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -51939,7 +51939,7 @@
     },
     {
       "id": "syn-4162e36eafea",
-      "canonicalArabizi": "B3te2ed enno a7san men el jabal.",
+      "canonicalArabizi": "Bera2ye enno a7san men el jabal.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52023,7 +52023,7 @@
     },
     {
       "id": "syn-cb52eaa22d77",
-      "canonicalArabizi": "El marra el jayye leezem nru7 bakiir.",
+      "canonicalArabizi": "El marra el jayye leezem nru7 bakkiir.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52037,7 +52037,7 @@
     },
     {
       "id": "syn-44efc94b1bbc",
-      "canonicalArabizi": "B7eekik hal esbuu3.",
+      "canonicalArabizi": "B7akiik hal esbuu3.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52051,7 +52051,7 @@
     },
     {
       "id": "syn-f01eb79d3430",
-      "canonicalArabizi": "Iza be2dar, b7eekik bukra.",
+      "canonicalArabizi": "Iza b2dar, b7akiik bukra.",
       "variants": [
         {
           "value": "Iza b2dar, b7eekik bukra.",
@@ -52178,7 +52178,7 @@
     },
     {
       "id": "syn-858983649bab",
-      "canonicalArabizi": "Shu 3melte embere7?",
+      "canonicalArabizi": "Shu 3melte mbere7?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52206,7 +52206,7 @@
     },
     {
       "id": "syn-b0da3771e4c5",
-      "canonicalArabizi": "Wayn re7te embere7?",
+      "canonicalArabizi": "Wayn re7te mbere7?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52234,7 +52234,7 @@
     },
     {
       "id": "syn-43dcc77af8db",
-      "canonicalArabizi": "Shu bta3mol bel sherke?",
+      "canonicalArabizi": "Shu bta3mol b il sherke?",
       "variants": [
         {
           "value": "Shu bte3mel bel sherke?",
@@ -52379,7 +52379,7 @@
     },
     {
       "id": "syn-cf19b9343c36",
-      "canonicalArabizi": "Meeshe! bhsufak hon.",
+      "canonicalArabizi": "Meeshe! Bshufak hon.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -58871,8 +58871,13 @@
     },
     {
       "id": "syn-f7201a55665e",
-      "canonicalArabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
-      "variants": [],
+      "canonicalArabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7abe.",
+      "variants": [
+        {
+          "value": "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7aabe.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -58885,7 +58890,7 @@
     },
     {
       "id": "syn-ecb20906eef6",
-      "canonicalArabizi": "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
+      "canonicalArabizi": "Wow! B7ebb el ba7er ktiir. Shu 3melto?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -58899,8 +58904,13 @@
     },
     {
       "id": "syn-baf73ff6d377",
-      "canonicalArabizi": "Sbe7na w akalna samak. Ken et ta2es mni7.",
-      "variants": [],
+      "canonicalArabizi": "Sba7na w akalna samak. Ken et ta2es mni7.",
+      "variants": [
+        {
+          "value": "Sbe7na w akalna samak. Ken et ta2es mni7.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -58969,8 +58979,13 @@
     },
     {
       "id": "syn-8c5a03bdaebd",
-      "canonicalArabizi": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
-      "variants": [],
+      "canonicalArabizi": "Fikra 7elwe! Bass iza ken et ta2es mni7.",
+      "variants": [
+        {
+          "value": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -58983,7 +58998,7 @@
     },
     {
       "id": "syn-123008b3c938",
-      "canonicalArabizi": "Akid. W leezem nshuf iza fi wa2et.",
+      "canonicalArabizi": "Akid. Lezem nshuf iza 3anna wa2et.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -58991,16 +59006,16 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Sigur. Și trebuie să vedem dacă avem timp."
+          "naturalMeaning": "Sigur. Trebuie să vedem dacă avem timp."
         }
       }
     },
     {
       "id": "syn-37f5816e576d",
-      "canonicalArabizi": "Eh, yemken ykun 3ande she8el.",
+      "canonicalArabizi": "Eh, yimken ykun 3ande she8el.",
       "variants": [
         {
-          "value": "Eh, yimken ykun 3ande she8el.",
+          "value": "Eh, yemken ykun 3ande she8el.",
           "kind": "spelling"
         }
       ],
@@ -59030,8 +59045,17 @@
     },
     {
       "id": "syn-fceca554f261",
-      "canonicalArabizi": "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
-      "variants": [],
+      "canonicalArabizi": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+      "variants": [
+        {
+          "value": "Tameem! El ba7er huwe el ma7al el mofaddal 3ande.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59045,7 +59069,12 @@
     {
       "id": "syn-9b6857d789d3",
       "canonicalArabizi": "Ana kameen! B3te2ed enno a7san men el jabal.",
-      "variants": [],
+      "variants": [
+        {
+          "value": "Ana kameen! Bera2ye a7san men el jabal.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59114,10 +59143,10 @@
     },
     {
       "id": "syn-007bd3cef645",
-      "canonicalArabizi": "Eh, hayda meshkle. Law konna re7na bakiir...",
+      "canonicalArabizi": "Eh, hayda l meshkle. Law re7na bakkiir...",
       "variants": [
         {
-          "value": "Eh, hayda mushkle. Law konna re7na bakiir...",
+          "value": "Eh, hayde-l meshkle. Law re7na bakkiir...",
           "kind": "spelling"
         }
       ],
@@ -59133,8 +59162,17 @@
     },
     {
       "id": "syn-295e7371a28e",
-      "canonicalArabizi": "Sa7! El marra el jayye leezem nru7 bakiir.",
-      "variants": [],
+      "canonicalArabizi": "Sa7! El marra el jeeye leezem nru7 bakkiir.",
+      "variants": [
+        {
+          "value": "Sa7! El marra el jeeye leezem nru7 bakiiir.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Sa7! El marra el jayye leezem nru7 bakkiir.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59147,7 +59185,7 @@
     },
     {
       "id": "syn-b8e97100f241",
-      "canonicalArabizi": "Meeshe. Yalla, b7eekik hal esbuu3.",
+      "canonicalArabizi": "Meeshe. Yalla, b7akik hal esbuu3.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59161,7 +59199,7 @@
     },
     {
       "id": "syn-bed8262abbde",
-      "canonicalArabizi": "Tameem! Iza be2dar, b7ekiik bukra.",
+      "canonicalArabizi": "Tameem! Iza b2dar, be7kik ana bukra.",
       "variants": [
         {
           "value": "Tameem! Iza b2dar, b7ekiik bukra.",
@@ -59208,7 +59246,7 @@
     },
     {
       "id": "syn-dd95327b2fe7",
-      "canonicalArabizi": "Eh, ana men romania. Esme Maya.",
+      "canonicalArabizi": "Eh, ana men Romania. Esme Maya.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59222,7 +59260,7 @@
     },
     {
       "id": "syn-cce5d005ef50",
-      "canonicalArabizi": "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?",
+      "canonicalArabizi": "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59236,8 +59274,13 @@
     },
     {
       "id": "syn-85950fed3ce1",
-      "canonicalArabizi": "Jit lel sho8ol. 3am beshte8el b sherke hon.",
-      "variants": [],
+      "canonicalArabizi": "Jeye she8el. 3am beshte8el b sherke hon.",
+      "variants": [
+        {
+          "value": "Jit la sh-sho8ol. 3am beshte8el b sherke hon.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59250,8 +59293,13 @@
     },
     {
       "id": "syn-8296c850f547",
-      "canonicalArabizi": "7elo! Shu bte3mle bel sherke?",
-      "variants": [],
+      "canonicalArabizi": "7elo! Shu bta3mle bel sherke?",
+      "variants": [
+        {
+          "value": "7elo! Shu bte3mle bel sherke?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59301,7 +59349,7 @@
     },
     {
       "id": "syn-93e672f514f4",
-      "canonicalArabizi": "Wow! Kam sar lak 3am teshte8el huniik?",
+      "canonicalArabizi": "Wow! Addesh sar lak 3am teshte8el huniik?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59343,7 +59391,7 @@
     },
     {
       "id": "syn-cf0689f82974",
-      "canonicalArabizi": "Eh. Shu 3melte embere7?",
+      "canonicalArabizi": "Eh. Shu 3melte mbere7?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59371,7 +59419,7 @@
     },
     {
       "id": "syn-7b6c42c329dd",
-      "canonicalArabizi": "7elo! Bte7ebbe es su2 el lebnene?",
+      "canonicalArabizi": "7elo! Bte7ebbe es su2 b lebnen?",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59379,7 +59427,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Frumos! Îți place piața libaneză?"
+          "naturalMeaning": "Frumos! Îți place piața din Liban?"
         }
       }
     },
@@ -59427,8 +59475,13 @@
     },
     {
       "id": "syn-a9dd2a104368",
-      "canonicalArabizi": "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
-      "variants": [],
+      "canonicalArabizi": "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2liyye?",
+      "variants": [
+        {
+          "value": "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2leyye?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59441,8 +59494,13 @@
     },
     {
       "id": "syn-97c560f53b0c",
-      "canonicalArabizi": "W bt7ebb el-7elo el-libneene?",
-      "variants": [],
+      "canonicalArabizi": "W bte7ebb el-7elo el-lebneene?",
+      "variants": [
+        {
+          "value": "W bte7ebb el-7elo el-libneene?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59469,8 +59527,13 @@
     },
     {
       "id": "syn-090b0b874f85",
-      "canonicalArabizi": "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
-      "variants": [],
+      "canonicalArabizi": "Bfaddel el-me2leyye, bass el-nayye kameen mni7a.",
+      "variants": [
+        {
+          "value": "Bfaddel el-me2liyye, bass el-nayye kameen mni7a.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "b1"
       ],
@@ -59777,6 +59840,29 @@
       "localizations": {
         "ro": {
           "naturalMeaning": "Vreau mărimea medie."
+        }
+      }
+    },
+    {
+      "id": "teacher.b1-experiences.ski-crowded",
+      "canonicalArabizi": "B7ebb el ski ktiir! Re7et es sene el madye. Bass ken fi nes ktiir.",
+      "variants": [
+        {
+          "value": "B7ebb el ski ktiir! Re7et es sene el madye. Bass kenet 3ej2a.",
+          "kind": "spelling"
+        },
+        {
+          "value": "B7ebb el ski ktiir! Re7et es sene el madye. Bass ken fi kteer 3aj2a.",
+          "kind": "spelling"
+        }
+      ],
+      "levelTags": [
+        "b1"
+      ],
+      "topics": [],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Îmi place mult schiul! Am mers anul trecut. Dar erau mulți oameni."
         }
       }
     },
@@ -63787,7 +63873,8 @@
         "syn-295e7371a28e",
         "syn-b8e97100f241",
         "syn-bed8262abbde",
-        "syn-6d04c68c3acc"
+        "syn-6d04c68c3acc",
+        "teacher.b1-experiences.ski-crowded"
       ],
       "localizations": {
         "ro": {
@@ -70837,9 +70924,9 @@
       },
       "answer": "B7ebb es safar ktiir, bass leezem eshte8el.",
       "wrongAnswers": [
-        "Momken eje iza ken 3ande wa2et.",
+        "Yemkin eje iza ken 3ande wa2et.",
         "Re7t es sene el madye.",
-        "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?"
+        "Wow! B7ebb el ba7er ktiir. Shu 3melto?"
       ]
     },
     {
@@ -70854,7 +70941,7 @@
       "wrongAnswers": [
         "Shu ra2yak nru7 el jem3a el jey?",
         "Ken 7elo ktiir! Bass ken fi nes ktiir.",
-        "Sbe7na w akalna samak. Ken et ta2es mni7."
+        "Sba7na w akalna samak. Ken et ta2es mni7."
       ]
     },
     {
@@ -70867,8 +70954,8 @@
       },
       "answer": "Re7et 3al jabal es sene el madye w nbasatet ktiir.",
       "wrongAnswers": [
-        "Iza ken et ta2es mni7, momken nru7 sawa.",
-        "El marra el jayye leezem nru7 bakiir.",
+        "Iza et ta2es mni7, fina nru7 sawa.",
+        "El marra el jayye leezem nru7 bakkiir.",
         "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7."
       ]
     },
@@ -70882,10 +70969,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „E posibil să merg mâine, dacă pot.”"
       },
-      "answer": "Momken ru7 bukra iza be2dar.",
+      "answer": "Momken ru7 bukra iza 2aader.",
       "wrongAnswers": [
-        "B3te2ed enno a7san men el jabal.",
-        "B7eekik hal esbuu3.",
+        "Bera2ye enno a7san men el jabal.",
+        "B7akiik hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend."
       ]
     },
@@ -70900,7 +70987,7 @@
       "answer": "B7ebb el ba7er bass leezem eshte8el.",
       "wrongAnswers": [
         "El jabal 7elo besh-shete.",
-        "Iza be2dar, b7eekik bukra.",
+        "Iza b2dar, b7akiik bukra.",
         "Wala ana! Bass ken leezem."
       ]
     },
@@ -70908,11 +70995,13 @@
       "id": "syn-context-syn-7a096e2f873b",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-7a096e2f873b"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „Dacă vremea este bună, mergem la mare.”"
+        "ro": "Alege replica pentru: „Dacă vremea e bună, la mare.”"
       },
-      "answer": "Iza ken et ta2es mni7, bnru7 3al ba7er.",
+      "answer": "Iza et ta2es mni7, 3al ba7er.",
       "wrongAnswers": [
         "Eza fi talej, leezem nruu7 na3mel ski.",
         "Mar7aba Karim! Kif ken el weekend?",
@@ -70930,23 +71019,25 @@
       "answer": "Re7t 3al jabal w ken 7elo.",
       "wrongAnswers": [
         "B7ebb el ski ktiir!",
-        "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
-        "Fekra 7elwe! Bass iza ken et ta2es mni7."
+        "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7abe.",
+        "Fikra 7elwe! Bass iza ken et ta2es mni7."
       ]
     },
     {
       "id": "syn-context-syn-abc156a9fd67",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-abc156a9fd67"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „Pot să vin dacă am timp.”"
+        "ro": "Alege replica pentru: „Poate vin, dacă am timp.”"
       },
-      "answer": "Momken eje iza ken 3ande wa2et.",
+      "answer": "Yemkin eje iza ken 3ande wa2et.",
       "wrongAnswers": [
         "Re7t es sene el madye.",
-        "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
-        "Akid. W leezem nshuf iza fi wa2et."
+        "Wow! B7ebb el ba7er ktiir. Shu 3melto?",
+        "Akid. Lezem nshuf iza 3anna wa2et."
       ]
     },
     {
@@ -70962,21 +71053,23 @@
       "answer": "Shu ra2yak nru7 el jem3a el jey?",
       "wrongAnswers": [
         "Ken 7elo ktiir! Bass ken fi nes ktiir.",
-        "Sbe7na w akalna samak. Ken et ta2es mni7.",
-        "Eh, yemken ykun 3ande she8el."
+        "Sba7na w akalna samak. Ken et ta2es mni7.",
+        "Eh, yimken ykun 3ande she8el."
       ]
     },
     {
       "id": "syn-context-syn-8242e10b9aba",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-8242e10b9aba"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Dacă vremea este bună, putem merge împreună.”"
       },
-      "answer": "Iza ken et ta2es mni7, momken nru7 sawa.",
+      "answer": "Iza et ta2es mni7, fina nru7 sawa.",
       "wrongAnswers": [
-        "El marra el jayye leezem nru7 bakiir.",
+        "El marra el jayye leezem nru7 bakkiir.",
         "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
         "Eza ma 2aadra, fiina nru7 ba3ed esbuu3."
       ]
@@ -70985,15 +71078,17 @@
       "id": "syn-context-syn-4162e36eafea",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-4162e36eafea"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Cred că este mai bun decât muntele.”"
       },
-      "answer": "B3te2ed enno a7san men el jabal.",
+      "answer": "Bera2ye enno a7san men el jabal.",
       "wrongAnswers": [
-        "B7eekik hal esbuu3.",
+        "B7akiik hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend.",
-        "Tameem! El ba7er huwe el makan el mofaddal 3ande."
+        "Tameem! El ba7er huwe el maken el mofaddal 3ande."
       ]
     },
     {
@@ -71006,7 +71101,7 @@
       },
       "answer": "El jabal 7elo besh-shete.",
       "wrongAnswers": [
-        "Iza be2dar, b7eekik bukra.",
+        "Iza b2dar, b7akiik bukra.",
         "Wala ana! Bass ken leezem.",
         "Ana kameen! B3te2ed enno a7san men el jabal."
       ]
@@ -71036,8 +71131,8 @@
       },
       "answer": "B7ebb el ski ktiir!",
       "wrongAnswers": [
-        "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
-        "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+        "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7abe.",
+        "Fikra 7elwe! Bass iza ken et ta2es mni7.",
         "Eh, eza fi talej, leezem nruu7 na3mel ski."
       ]
     },
@@ -71051,8 +71146,8 @@
       },
       "answer": "Re7t es sene el madye.",
       "wrongAnswers": [
-        "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
-        "Akid. W leezem nshuf iza fi wa2et.",
+        "Wow! B7ebb el ba7er ktiir. Shu 3melto?",
+        "Akid. Lezem nshuf iza 3anna wa2et.",
         "B7ebb el ski ktiir! Re7et es sene el madye."
       ]
     },
@@ -71066,20 +71161,22 @@
       },
       "answer": "Ken 7elo ktiir! Bass ken fi nes ktiir.",
       "wrongAnswers": [
-        "Sbe7na w akalna samak. Ken et ta2es mni7.",
-        "Eh, yemken ykun 3ande she8el.",
-        "Eh, hayda meshkle. Law konna re7na bakiir..."
+        "Sba7na w akalna samak. Ken et ta2es mni7.",
+        "Eh, yimken ykun 3ande she8el.",
+        "Eh, hayda l meshkle. Law re7na bakkiir..."
       ]
     },
     {
       "id": "syn-context-syn-cb52eaa22d77",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-cb52eaa22d77"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Data viitoare trebuie să mergem devreme.”"
       },
-      "answer": "El marra el jayye leezem nru7 bakiir.",
+      "answer": "El marra el jayye leezem nru7 bakkiir.",
       "wrongAnswers": [
         "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
         "Eza ma 2aadra, fiina nru7 ba3ed esbuu3.",
@@ -71090,15 +71187,17 @@
       "id": "syn-context-syn-44efc94b1bbc",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-44efc94b1bbc"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Vorbim săptămâna aceasta. (către o femeie)”"
       },
-      "answer": "B7eekik hal esbuu3.",
+      "answer": "B7akiik hal esbuu3.",
       "wrongAnswers": [
         "Uff! Ma b7ebb eshte8el bel weekend.",
-        "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
-        "Iza ken et ta2es mni7, bnru7 3al ba7er."
+        "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+        "Iza et ta2es mni7, 3al ba7er."
       ]
     },
     {
@@ -71111,7 +71210,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Dacă pot, vorbim mâine. (către o femeie)”"
       },
-      "answer": "Iza be2dar, b7eekik bukra.",
+      "answer": "Iza b2dar, b7akiik bukra.",
       "wrongAnswers": [
         "Wala ana! Bass ken leezem.",
         "Ana kameen! B3te2ed enno a7san men el jabal.",
@@ -71137,13 +71236,15 @@
       "id": "syn-context-syn-f7201a55665e",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-f7201a55665e"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „A fost foarte frumos! Am mers la mare cu prietenii.”"
       },
-      "answer": "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
+      "answer": "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7abe.",
       "wrongAnswers": [
-        "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+        "Fikra 7elwe! Bass iza ken et ta2es mni7.",
         "Eh, eza fi talej, leezem nruu7 na3mel ski.",
         "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er."
       ]
@@ -71152,13 +71253,15 @@
       "id": "syn-context-syn-ecb20906eef6",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-ecb20906eef6"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Uau! Îmi place mult marea. Ce ați făcut?”"
       },
-      "answer": "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
+      "answer": "Wow! B7ebb el ba7er ktiir. Shu 3melto?",
       "wrongAnswers": [
-        "Akid. W leezem nshuf iza fi wa2et.",
+        "Akid. Lezem nshuf iza 3anna wa2et.",
         "B7ebb el ski ktiir! Re7et es sene el madye.",
         "Re7et 3al jabal es sene el madye w nbasatet ktiir."
       ]
@@ -71167,15 +71270,17 @@
       "id": "syn-context-syn-baf73ff6d377",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-baf73ff6d377"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Am înotat și am mâncat pește. Vremea a fost bună.”"
       },
-      "answer": "Sbe7na w akalna samak. Ken et ta2es mni7.",
+      "answer": "Sba7na w akalna samak. Ken et ta2es mni7.",
       "wrongAnswers": [
-        "Eh, yemken ykun 3ande she8el.",
-        "Eh, hayda meshkle. Law konna re7na bakiir...",
-        "Momken ru7 bukra iza be2dar."
+        "Eh, yimken ykun 3ande she8el.",
+        "Eh, hayda l meshkle. Law re7na bakkiir...",
+        "Momken ru7 bukra iza 2aader."
       ]
     },
     {
@@ -71189,7 +71294,7 @@
       "answer": "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
       "wrongAnswers": [
         "Eza ma 2aadra, fiina nru7 ba3ed esbuu3.",
-        "Sa7! El marra el jayye leezem nru7 bakiir.",
+        "Sa7! El marra el jeeye leezem nru7 bakkiir.",
         "B7ebb el ba7er bass leezem eshte8el."
       ]
     },
@@ -71203,9 +71308,9 @@
       },
       "answer": "Uff! Ma b7ebb eshte8el bel weekend.",
       "wrongAnswers": [
-        "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
-        "Meeshe. Yalla, b7eekik hal esbuu3.",
-        "Iza ken et ta2es mni7, bnru7 3al ba7er."
+        "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Iza et ta2es mni7, 3al ba7er."
       ]
     },
     {
@@ -71219,7 +71324,7 @@
       "answer": "Wala ana! Bass ken leezem.",
       "wrongAnswers": [
         "Ana kameen! B3te2ed enno a7san men el jabal.",
-        "Tameem! Iza be2dar, b7ekiik bukra.",
+        "Tameem! Iza b2dar, be7kik ana bukra.",
         "Re7t 3al jabal w ken 7elo."
       ]
     },
@@ -71237,18 +71342,20 @@
       "wrongAnswers": [
         "Sa7, bass el jabal 7elo besh-shete.",
         "B7ebb es safar ktiir, bass leezem eshte8el.",
-        "Momken eje iza ken 3ande wa2et."
+        "Yemkin eje iza ken 3ande wa2et."
       ]
     },
     {
       "id": "syn-context-syn-8c5a03bdaebd",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-8c5a03bdaebd"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Idee bună! Dar dacă vremea e bună.”"
       },
-      "answer": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+      "answer": "Fikra 7elwe! Bass iza ken et ta2es mni7.",
       "wrongAnswers": [
         "Eh, eza fi talej, leezem nruu7 na3mel ski.",
         "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er.",
@@ -71259,15 +71366,17 @@
       "id": "syn-context-syn-123008b3c938",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-123008b3c938"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „Sigur. Și trebuie să vedem dacă avem timp.”"
+        "ro": "Alege replica pentru: „Sigur. Trebuie să vedem dacă avem timp.”"
       },
-      "answer": "Akid. W leezem nshuf iza fi wa2et.",
+      "answer": "Akid. Lezem nshuf iza 3anna wa2et.",
       "wrongAnswers": [
         "B7ebb el ski ktiir! Re7et es sene el madye.",
         "Re7et 3al jabal es sene el madye w nbasatet ktiir.",
-        "Iza ken et ta2es mni7, momken nru7 sawa."
+        "Iza et ta2es mni7, fina nru7 sawa."
       ]
     },
     {
@@ -71280,11 +71389,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Da, e posibil să am treabă.”"
       },
-      "answer": "Eh, yemken ykun 3ande she8el.",
+      "answer": "Eh, yimken ykun 3ande she8el.",
       "wrongAnswers": [
-        "Eh, hayda meshkle. Law konna re7na bakiir...",
-        "Momken ru7 bukra iza be2dar.",
-        "B3te2ed enno a7san men el jabal."
+        "Eh, hayda l meshkle. Law re7na bakkiir...",
+        "Momken ru7 bukra iza 2aader.",
+        "Bera2ye enno a7san men el jabal."
       ]
     },
     {
@@ -71297,7 +71406,7 @@
       },
       "answer": "Eza ma 2aadra, fiina nru7 ba3ed esbuu3.",
       "wrongAnswers": [
-        "Sa7! El marra el jayye leezem nru7 bakiir.",
+        "Sa7! El marra el jeeye leezem nru7 bakkiir.",
         "B7ebb el ba7er bass leezem eshte8el.",
         "El jabal 7elo besh-shete."
       ]
@@ -71306,14 +71415,16 @@
       "id": "syn-context-syn-fceca554f261",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-fceca554f261"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Perfect! Marea e locul meu preferat.”"
       },
-      "answer": "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
+      "answer": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
       "wrongAnswers": [
-        "Meeshe. Yalla, b7eekik hal esbuu3.",
-        "Iza ken et ta2es mni7, bnru7 3al ba7er.",
+        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski."
       ]
     },
@@ -71321,13 +71432,15 @@
       "id": "syn-context-syn-9b6857d789d3",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-9b6857d789d3"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Și eu! Cred că e mai bun decât muntele.”"
       },
       "answer": "Ana kameen! B3te2ed enno a7san men el jabal.",
       "wrongAnswers": [
-        "Tameem! Iza be2dar, b7ekiik bukra.",
+        "Tameem! Iza b2dar, be7kik ana bukra.",
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!"
       ]
@@ -71343,7 +71456,7 @@
       "answer": "Sa7, bass el jabal 7elo besh-shete.",
       "wrongAnswers": [
         "B7ebb es safar ktiir, bass leezem eshte8el.",
-        "Momken eje iza ken 3ande wa2et.",
+        "Yemkin eje iza ken 3ande wa2et.",
         "Re7t es sene el madye."
       ]
     },
@@ -71373,8 +71486,8 @@
       "answer": "B7ebb el ski ktiir! Re7et es sene el madye.",
       "wrongAnswers": [
         "Re7et 3al jabal es sene el madye w nbasatet ktiir.",
-        "Iza ken et ta2es mni7, momken nru7 sawa.",
-        "El marra el jayye leezem nru7 bakiir."
+        "Iza et ta2es mni7, fina nru7 sawa.",
+        "El marra el jayye leezem nru7 bakkiir."
       ]
     },
     {
@@ -71387,39 +71500,43 @@
       "prompt": {
         "ro": "Alege replica pentru: „Da, asta e o problemă. Dacă am fi mers devreme...”"
       },
-      "answer": "Eh, hayda meshkle. Law konna re7na bakiir...",
+      "answer": "Eh, hayda l meshkle. Law re7na bakkiir...",
       "wrongAnswers": [
-        "Momken ru7 bukra iza be2dar.",
-        "B3te2ed enno a7san men el jabal.",
-        "B7eekik hal esbuu3."
+        "Momken ru7 bukra iza 2aader.",
+        "Bera2ye enno a7san men el jabal.",
+        "B7akiik hal esbuu3."
       ]
     },
     {
       "id": "syn-context-syn-295e7371a28e",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-295e7371a28e"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Corect! Data viitoare trebuie să mergem devreme.”"
       },
-      "answer": "Sa7! El marra el jayye leezem nru7 bakiir.",
+      "answer": "Sa7! El marra el jeeye leezem nru7 bakkiir.",
       "wrongAnswers": [
         "B7ebb el ba7er bass leezem eshte8el.",
         "El jabal 7elo besh-shete.",
-        "Iza be2dar, b7eekik bukra."
+        "Iza b2dar, b7akiik bukra."
       ]
     },
     {
       "id": "syn-context-syn-b8e97100f241",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-b8e97100f241"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Ok. Hai, vorbim săptămâna asta.”"
       },
-      "answer": "Meeshe. Yalla, b7eekik hal esbuu3.",
+      "answer": "Meeshe. Yalla, b7akik hal esbuu3.",
       "wrongAnswers": [
-        "Iza ken et ta2es mni7, bnru7 3al ba7er.",
+        "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski.",
         "Mar7aba Karim! Kif ken el weekend?"
       ]
@@ -71434,11 +71551,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Perfect! Dacă pot, vorbim mâine.”"
       },
-      "answer": "Tameem! Iza be2dar, b7ekiik bukra.",
+      "answer": "Tameem! Iza b2dar, be7kik ana bukra.",
       "wrongAnswers": [
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!",
-        "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe."
+        "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7abe."
       ]
     },
     {
@@ -71451,9 +71568,9 @@
       },
       "answer": "Ana jdide hon, esme Maya.",
       "wrongAnswers": [
-        "Wayn re7te embere7?",
+        "Wayn re7te mbere7?",
         "Wen bte7ebb nru7?",
-        "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?"
+        "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?"
       ]
     },
     {
@@ -71468,7 +71585,7 @@
       "wrongAnswers": [
         "Min wen ente?",
         "Fi mat3am lebnene 2arib men hon.",
-        "Jit lel sho8ol. 3am beshte8el b sherke hon."
+        "Jeye she8el. 3am beshte8el b sherke hon."
       ]
     },
     {
@@ -71481,9 +71598,9 @@
       },
       "answer": "Addesh sarlak 3am teshte8el huniik?",
       "wrongAnswers": [
-        "Shu bta3mol bel sherke?",
+        "Shu bta3mol b il sherke?",
         "Aklon tayyeb ktiir.",
-        "7elo! Shu bte3mle bel sherke?"
+        "7elo! Shu bta3mle bel sherke?"
       ]
     },
     {
@@ -71512,7 +71629,7 @@
       "answer": "Re7t 3a-s-su2 mbeere7.",
       "wrongAnswers": [
         "Kam sar lak hon?",
-        "Meeshe! bhsufak hon.",
+        "Meeshe! Bshufak hon.",
         "Ana duktor, beshte8el b mustashfa 2arib men hon."
       ]
     },
@@ -71527,7 +71644,7 @@
       "answer": "Ente jdide hon?",
       "wrongAnswers": [
         "Ba3dne 3am bet3allam.",
-        "Wow! Kam sar lak 3am teshte8el huniik?",
+        "Wow! Addesh sar lak 3am teshte8el huniik?",
         "Shu bte7ebbe tekle men el akel el lebnene?"
       ]
     },
@@ -71535,14 +71652,16 @@
       "id": "syn-context-syn-858983649bab",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-858983649bab"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Ce ai făcut ieri? (feminin)”"
       },
-      "answer": "Shu 3melte embere7?",
+      "answer": "Shu 3melte mbere7?",
       "wrongAnswers": [
         "Faade ne7ke ed-dohor?",
-        "Eh, ana men romania. Esme Maya.",
+        "Eh, ana men Romania. Esme Maya.",
         "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir."
       ]
     },
@@ -71550,14 +71669,16 @@
       "id": "syn-context-syn-b0da3771e4c5",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-b0da3771e4c5"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Unde ai mers ieri? (feminin)”"
       },
-      "answer": "Wayn re7te embere7?",
+      "answer": "Wayn re7te mbere7?",
       "wrongAnswers": [
         "Wen bte7ebb nru7?",
-        "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?",
+        "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?",
         "Akiid sa3eb bass mhemm."
       ]
     },
@@ -71572,8 +71693,8 @@
       "answer": "Min wen ente?",
       "wrongAnswers": [
         "Fi mat3am lebnene 2arib men hon.",
-        "Jit lel sho8ol. 3am beshte8el b sherke hon.",
-        "Eh. Shu 3melte embere7?"
+        "Jeye she8el. 3am beshte8el b sherke hon.",
+        "Eh. Shu 3melte mbere7?"
       ]
     },
     {
@@ -71586,10 +71707,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Ce faci în firmă? (masculin)”"
       },
-      "answer": "Shu bta3mol bel sherke?",
+      "answer": "Shu bta3mol b il sherke?",
       "wrongAnswers": [
         "Aklon tayyeb ktiir.",
-        "7elo! Shu bte3mle bel sherke?",
+        "7elo! Shu bta3mle bel sherke?",
         "Re7et 3as suu2 w shtareet shwayyet 8raad."
       ]
     },
@@ -71605,7 +71726,7 @@
       "wrongAnswers": [
         "Yalla nruu7 3a es see3a we7de?",
         "Ana mhandse. W enta shu bta3mol?",
-        "7elo! Bte7ebbe es su2 el lebnene?"
+        "7elo! Bte7ebbe es su2 b lebnen?"
       ]
     },
     {
@@ -71618,7 +71739,7 @@
       },
       "answer": "Kam sar lak hon?",
       "wrongAnswers": [
-        "Meeshe! bhsufak hon.",
+        "Meeshe! Bshufak hon.",
         "Ana duktor, beshte8el b mustashfa 2arib men hon.",
         "Ktiir! En nes mahdumin w el as3ar mnii7a."
       ]
@@ -71634,7 +71755,7 @@
       "answer": "Ba3dne 3am bet3allam.",
       "wrongAnswers": [
         "Mar7aba! Ente jdide hon?",
-        "Wow! Kam sar lak 3am teshte8el huniik?",
+        "Wow! Addesh sar lak 3am teshte8el huniik?",
         "Shu bte7ebbe tekle men el akel el lebnene?"
       ]
     },
@@ -71648,7 +71769,7 @@
       },
       "answer": "Faade ne7ke ed-dohor?",
       "wrongAnswers": [
-        "Eh, ana men romania. Esme Maya.",
+        "Eh, ana men Romania. Esme Maya.",
         "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.",
         "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!"
       ]
@@ -71663,9 +71784,9 @@
       },
       "answer": "Wen bte7ebb nru7?",
       "wrongAnswers": [
-        "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?",
+        "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?",
         "Akiid sa3eb bass mhemm.",
-        "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?"
+        "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2liyye?"
       ]
     },
     {
@@ -71678,9 +71799,9 @@
       },
       "answer": "Fi mat3am lebnene 2arib men hon.",
       "wrongAnswers": [
-        "Jit lel sho8ol. 3am beshte8el b sherke hon.",
-        "Eh. Shu 3melte embere7?",
-        "W bt7ebb el-7elo el-libneene?"
+        "Jeye she8el. 3am beshte8el b sherke hon.",
+        "Eh. Shu 3melte mbere7?",
+        "W bte7ebb el-7elo el-lebneene?"
       ]
     },
     {
@@ -71693,7 +71814,7 @@
       },
       "answer": "Aklon tayyeb ktiir.",
       "wrongAnswers": [
-        "7elo! Shu bte3mle bel sherke?",
+        "7elo! Shu bta3mle bel sherke?",
         "Re7et 3as suu2 w shtareet shwayyet 8raad.",
         "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe."
       ]
@@ -71709,19 +71830,21 @@
       "answer": "Yalla nruu7 3a es see3a we7de?",
       "wrongAnswers": [
         "Ana mhandse. W enta shu bta3mol?",
-        "7elo! Bte7ebbe es su2 el lebnene?",
-        "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a."
+        "7elo! Bte7ebbe es su2 b lebnen?",
+        "Bfaddel el-me2leyye, bass el-nayye kameen mni7a."
       ]
     },
     {
       "id": "syn-context-syn-cf19b9343c36",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-cf19b9343c36"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Bine! Ne vedem aici. (masculin)”"
       },
-      "answer": "Meeshe! bhsufak hon.",
+      "answer": "Meeshe! Bshufak hon.",
       "wrongAnswers": [
         "Ana duktor, beshte8el b mustashfa 2arib men hon.",
         "Ktiir! En nes mahdumin w el as3ar mnii7a.",
@@ -71738,7 +71861,7 @@
       },
       "answer": "Mar7aba! Ente jdide hon?",
       "wrongAnswers": [
-        "Wow! Kam sar lak 3am teshte8el huniik?",
+        "Wow! Addesh sar lak 3am teshte8el huniik?",
         "Shu bte7ebbe tekle men el akel el lebnene?",
         "Ana jdide hon, esme Maya."
       ]
@@ -71747,11 +71870,13 @@
       "id": "syn-context-syn-dd95327b2fe7",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-dd95327b2fe7"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Da, sunt din România. Mă cheamă Maya.”"
       },
-      "answer": "Eh, ana men romania. Esme Maya.",
+      "answer": "Eh, ana men Romania. Esme Maya.",
       "wrongAnswers": [
         "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.",
         "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!",
@@ -71762,14 +71887,16 @@
       "id": "syn-context-syn-cce5d005ef50",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-cce5d005ef50"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Încântat! Eu sunt Karim. Ce te-a adus în Liban?”"
       },
-      "answer": "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?",
+      "answer": "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?",
       "wrongAnswers": [
         "Akiid sa3eb bass mhemm.",
-        "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
+        "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2liyye?",
         "Addesh sarlak 3am teshte8el huniik?"
       ]
     },
@@ -71777,14 +71904,16 @@
       "id": "syn-context-syn-85950fed3ce1",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-85950fed3ce1"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Am venit pentru muncă. Lucrez la o companie aici.”"
       },
-      "answer": "Jit lel sho8ol. 3am beshte8el b sherke hon.",
+      "answer": "Jeye she8el. 3am beshte8el b sherke hon.",
       "wrongAnswers": [
-        "Eh. Shu 3melte embere7?",
-        "W bt7ebb el-7elo el-libneene?",
+        "Eh. Shu 3melte mbere7?",
+        "W bte7ebb el-7elo el-lebneene?",
         "B7ebb el akel el lebnene ktiir."
       ]
     },
@@ -71792,11 +71921,13 @@
       "id": "syn-context-syn-8296c850f547",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-8296c850f547"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Frumos! Ce faci la companie?”"
       },
-      "answer": "7elo! Shu bte3mle bel sherke?",
+      "answer": "7elo! Shu bta3mle bel sherke?",
       "wrongAnswers": [
         "Re7et 3as suu2 w shtareet shwayyet 8raad.",
         "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
@@ -71815,8 +71946,8 @@
       },
       "answer": "Ana mhandse. W enta shu bta3mol?",
       "wrongAnswers": [
-        "7elo! Bte7ebbe es su2 el lebnene?",
-        "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
+        "7elo! Bte7ebbe es su2 b lebnen?",
+        "Bfaddel el-me2leyye, bass el-nayye kameen mni7a.",
         "Ente jdide hon?"
       ]
     },
@@ -71832,22 +71963,24 @@
       "wrongAnswers": [
         "Ktiir! En nes mahdumin w el as3ar mnii7a.",
         "Akiid! El-be2leewe w el-kneefe... yeslamo!",
-        "Shu 3melte embere7?"
+        "Shu 3melte mbere7?"
       ]
     },
     {
       "id": "syn-context-syn-93e672f514f4",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-93e672f514f4"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Uau! De cât timp lucrezi acolo?”"
       },
-      "answer": "Wow! Kam sar lak 3am teshte8el huniik?",
+      "answer": "Wow! Addesh sar lak 3am teshte8el huniik?",
       "wrongAnswers": [
         "Shu bte7ebbe tekle men el akel el lebnene?",
         "Ana jdide hon, esme Maya.",
-        "Wayn re7te embere7?"
+        "Wayn re7te mbere7?"
       ]
     },
     {
@@ -71875,22 +72008,24 @@
       },
       "answer": "Akiid sa3eb bass mhemm.",
       "wrongAnswers": [
-        "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
+        "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2liyye?",
         "Addesh sarlak 3am teshte8el huniik?",
-        "Shu bta3mol bel sherke?"
+        "Shu bta3mol b il sherke?"
       ]
     },
     {
       "id": "syn-context-syn-cf0689f82974",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-cf0689f82974"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Da. Ce ai făcut ieri?”"
       },
-      "answer": "Eh. Shu 3melte embere7?",
+      "answer": "Eh. Shu 3melte mbere7?",
       "wrongAnswers": [
-        "W bt7ebb el-7elo el-libneene?",
+        "W bte7ebb el-7elo el-lebneene?",
         "B7ebb el akel el lebnene ktiir.",
         "Ana beshte8el bel marketing."
       ]
@@ -71914,13 +72049,15 @@
       "id": "syn-context-syn-7b6c42c329dd",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-7b6c42c329dd"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „Frumos! Îți place piața libaneză?”"
+        "ro": "Alege replica pentru: „Frumos! Îți place piața din Liban?”"
       },
-      "answer": "7elo! Bte7ebbe es su2 el lebnene?",
+      "answer": "7elo! Bte7ebbe es su2 b lebnen?",
       "wrongAnswers": [
-        "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
+        "Bfaddel el-me2leyye, bass el-nayye kameen mni7a.",
         "Ente jdide hon?",
         "Ba3dne 3am bet3allam."
       ]
@@ -71936,7 +72073,7 @@
       "answer": "Ktiir! En nes mahdumin w el as3ar mnii7a.",
       "wrongAnswers": [
         "Akiid! El-be2leewe w el-kneefe... yeslamo!",
-        "Shu 3melte embere7?",
+        "Shu 3melte mbere7?",
         "Faade ne7ke ed-dohor?"
       ]
     },
@@ -71951,7 +72088,7 @@
       "answer": "Shu bte7ebbe tekle men el akel el lebnene?",
       "wrongAnswers": [
         "Ana jdide hon, esme Maya.",
-        "Wayn re7te embere7?",
+        "Wayn re7te mbere7?",
         "Wen bte7ebb nru7?"
       ]
     },
@@ -71974,14 +72111,16 @@
       "id": "syn-context-syn-a9dd2a104368",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-a9dd2a104368"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Kibbeh-ul e foarte bun! Îți place kibbeh nayyeh sau cel prăjit?”"
       },
-      "answer": "El-kebbe tayyibe ktiir! Bt7ebb el-kebbe el-nayye walla el-m`a2aale?",
+      "answer": "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2liyye?",
       "wrongAnswers": [
         "Addesh sarlak 3am teshte8el huniik?",
-        "Shu bta3mol bel sherke?",
+        "Shu bta3mol b il sherke?",
         "Aklon tayyeb ktiir."
       ]
     },
@@ -71989,11 +72128,13 @@
       "id": "syn-context-syn-97c560f53b0c",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-97c560f53b0c"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Și îți plac dulciurile libaneze?”"
       },
-      "answer": "W bt7ebb el-7elo el-libneene?",
+      "answer": "W bte7ebb el-7elo el-lebneene?",
       "wrongAnswers": [
         "B7ebb el akel el lebnene ktiir.",
         "Ana beshte8el bel marketing.",
@@ -72012,18 +72153,20 @@
       "wrongAnswers": [
         "Re7t 3a-s-su2 mbeere7.",
         "Kam sar lak hon?",
-        "Meeshe! bhsufak hon."
+        "Meeshe! Bshufak hon."
       ]
     },
     {
       "id": "syn-context-syn-090b0b874f85",
       "type": "dialogue-response",
       "unitID": "b1-conversation",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-090b0b874f85"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Prefer varianta prăjită, dar și cea crudă este bună.”"
       },
-      "answer": "Bfaddel el-m`a2aale, bass el-nayye kameen mni7a.",
+      "answer": "Bfaddel el-me2leyye, bass el-nayye kameen mni7a.",
       "wrongAnswers": [
         "Ente jdide hon?",
         "Ba3dne 3am bet3allam.",
@@ -72040,9 +72183,9 @@
       },
       "answer": "Akiid! El-be2leewe w el-kneefe... yeslamo!",
       "wrongAnswers": [
-        "Shu 3melte embere7?",
+        "Shu 3melte mbere7?",
         "Faade ne7ke ed-dohor?",
-        "Eh, ana men romania. Esme Maya."
+        "Eh, ana men Romania. Esme Maya."
       ]
     },
     {
@@ -72345,14 +72488,16 @@
       "id": "teacher.b1-experiences.ski-crowded",
       "type": "dialogue-response",
       "unitID": "b1-experiences",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "teacher.b1-experiences.ski-crowded"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Îmi place mult schiul! Am mers anul trecut. Dar erau mulți oameni.”"
       },
       "answer": "B7ebb el ski ktiir! Re7et es sene el madye. Bass ken fi nes ktiir.",
       "wrongAnswers": [
         "Sa7, bass el jabal 7elo besh-shete.",
-        "Eh, yemken ykun 3ande she8el.",
+        "Eh, yimken ykun 3ande she8el.",
         "Wala ana! Bass ken leezem."
       ]
     }

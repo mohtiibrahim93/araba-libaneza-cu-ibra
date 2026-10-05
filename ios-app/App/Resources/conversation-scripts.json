@@ -2555,14 +2555,14 @@
             {
               "exerciseID": "syn-context-syn-ecb20906eef6",
               "partner": {
-                "arabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
+                "arabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 s7aabe.",
                 "ro": "A fost foarte frumos! Am mers la mare cu prietenii."
               }
             },
             {
               "exerciseID": "syn-context-syn-9bd7a50634f0",
               "partner": {
-                "arabizi": "Sbe7na w akalna samak. Ken et ta2es mni7.",
+                "arabizi": "Sba7na w akalna samak. Ken et ta2es mni7.",
                 "ro": "Am înotat și am mâncat pește. Vremea a fost bună."
               }
             },
@@ -2597,8 +2597,8 @@
             {
               "exerciseID": "syn-context-syn-ae2e21e89a75",
               "partner": {
-                "arabizi": "Ana kameen! B3te2ed enno a7san men el jabal.",
-                "ro": "Și eu! Cred că e mai bun decât muntele."
+                "arabizi": "Ana kameen! Bera2ye a7san men el jabal.",
+                "ro": "Și eu! După mine, e mai bună decât muntele."
               }
             },
             {
@@ -2611,14 +2611,14 @@
             {
               "exerciseID": "syn-context-syn-295e7371a28e",
               "partner": {
-                "arabizi": "Eh, hayda meshkle. Law konna re7na bakiir...",
-                "ro": "Da, asta e o problemă. Dacă am fi mers devreme..."
+                "arabizi": "Eh, hayde-l meshkle. Law re7na bakkiir...",
+                "ro": "Da, asta e problema. Dacă am fi mers devreme..."
               }
             },
             {
               "exerciseID": "syn-context-syn-bed8262abbde",
               "partner": {
-                "arabizi": "Meeshe. Yalla, b7eekik hal esbuu3.",
+                "arabizi": "Meeshe. Yalla, b7ekiik hal esbuu3.",
                 "ro": "Ok. Hai, vorbim săptămâna asta."
               }
             }
@@ -2637,7 +2637,7 @@
             {
               "exerciseID": "syn-context-syn-baf73ff6d377",
               "partner": {
-                "arabizi": "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
+                "arabizi": "Wow! B7ebb el ba7er ktiir. Shu 3melto?",
                 "ro": "Uau! Îmi place mult marea. Ce ați făcut?"
               }
             },
@@ -2658,14 +2658,14 @@
             {
               "exerciseID": "syn-context-syn-123008b3c938",
               "partner": {
-                "arabizi": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+                "arabizi": "Fikra 7elwe! Bass iza ken et ta2es mni7.",
                 "ro": "Idee bună! Dar dacă vremea e bună."
               }
             },
             {
               "exerciseID": "syn-context-syn-9c0432d88058",
               "partner": {
-                "arabizi": "Eh, yemken ykun 3ande she8el.",
+                "arabizi": "Eh, yimken ykun 3ande she8el.",
                 "ro": "Da, e posibil să am treabă."
               }
             },
@@ -2693,7 +2693,7 @@
             {
               "exerciseID": "syn-context-syn-b8e97100f241",
               "partner": {
-                "arabizi": "Sa7! El marra el jayye leezem nru7 bakiir.",
+                "arabizi": "Sa7! El marra el jayye leezem nru7 bakkiir.",
                 "ro": "Corect! Data viitoare trebuie să mergem devreme."
               }
             }
@@ -2733,8 +2733,8 @@
             {
               "exerciseID": "syn-context-syn-b68babae38b9",
               "partner": {
-                "arabizi": "Emta re7et?",
-                "ro": "Când ai fost?"
+                "arabizi": "Emta re7et e5er marra?",
+                "ro": "Când ai fost ultima dată?"
               }
             },
             {
@@ -2772,14 +2772,14 @@
             {
               "exerciseID": "syn-context-syn-d033db9fe39c",
               "partner": {
-                "arabizi": "Btruu7 bukra 3al sho8ol?",
+                "arabizi": "Raaye7 bukra 3al sho8ol?",
                 "ro": "Mergi mâine la muncă?"
               }
             },
             {
               "exerciseID": "syn-context-syn-abc156a9fd67",
               "partner": {
-                "arabizi": "W 3al 7afle btije?",
+                "arabizi": "W 3al 7afle jeeye?",
                 "ro": "Și la petrecere vii?"
               }
             }
@@ -2798,7 +2798,7 @@
             {
               "exerciseID": "syn-context-syn-283e3b868968",
               "partner": {
-                "arabizi": "W bte7ebb el ba7er?",
+                "arabizi": "W bt7ebb el ba7er?",
                 "ro": "Și îți place marea?"
               }
             },
@@ -2812,7 +2812,7 @@
             {
               "exerciseID": "syn-context-syn-800190fd1721",
               "partner": {
-                "arabizi": "Re7et 3al jabal abel?",
+                "arabizi": "Raaye7 3al jabal abel?",
                 "ro": "Ai mai fost la munte?"
               }
             },
@@ -2826,7 +2826,7 @@
             {
               "exerciseID": "syn-context-syn-44efc94b1bbc",
               "partner": {
-                "arabizi": "Emta mne7ke?",
+                "arabizi": "Aymta 7a ne7ke?",
                 "ro": "Când vorbim?"
               }
             },
@@ -2836,6 +2836,276 @@
                 "arabizi": "W bukra?",
                 "ro": "Și mâine?"
               }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitID": "b1-conversation",
+      "scenes": [
+        {
+          "title": "Tu ești Maya",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-dd95327b2fe7",
+              "partner": {
+                "arabizi": "Mar7aba! Ente jdide hon?",
+                "ro": "Salut! Ești nouă aici?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-85950fed3ce1",
+              "partner": {
+                "arabizi": "Tsharrafna! Ana Karim. Shu jeebik 3a Lebnen?",
+                "ro": "Încântat! Eu sunt Karim. Ce te-a adus în Liban?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b914d832f2e9",
+              "partner": {
+                "arabizi": "7elo! Shu bte3mle bel sherke?",
+                "ro": "Frumos! Ce faci la companie?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-93e672f514f4",
+              "partner": {
+                "arabizi": "Ana duktor, beshte8el b mustashfa 2arib men hon.",
+                "ro": "Sunt doctor, lucrez la un spital aproape de aici."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-244aff0d3a2b",
+              "partner": {
+                "arabizi": "Sarle ta2riiban 5ames sniin hon. B7ebb she8le ktiir.",
+                "ro": "Sunt aici de aproape cinci ani. Îmi place mult jobul."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7336e33d4bf1",
+              "partner": {
+                "arabizi": "Eh. Shu 3melte mbere7?",
+                "ro": "Da. Ce ai făcut ieri?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0596620bdc87",
+              "partner": {
+                "arabizi": "7elo! Bte7ebbe es su2 b lebnen?",
+                "ro": "Frumos! Îți place piața din Liban?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7bce2b6efd7e",
+              "partner": {
+                "arabizi": "Shu bte7ebbe tekle men el akel el lebnene?",
+                "ro": "Ce îți place să mănânci din mâncarea libaneză?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a9dd2a104368",
+              "partner": {
+                "arabizi": "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
+                "ro": "Și eu! Dar mâncarea mea preferată este kibbeh."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-97c560f53b0c",
+              "partner": {
+                "arabizi": "Bfaddel el-me2liyye bass el-nayye kameen mni7a.",
+                "ro": "Prefer varianta prăjită, dar și cea crudă e bună."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-e43621aef5ac"
+            },
+            {
+              "exerciseID": "syn-context-syn-cce5d005ef50",
+              "partner": {
+                "arabizi": "Eh, ana men Romania. Esme Maya.",
+                "ro": "Da, sunt din România. Mă cheamă Maya."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8296c850f547",
+              "partner": {
+                "arabizi": "Jit la sh-sho8ol. 3am beshte8el b sherke hon.",
+                "ro": "Am venit pentru muncă. Lucrez la o companie aici."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9ca65770cc34",
+              "partner": {
+                "arabizi": "Ana mhandse. W enta shu bta3mol?",
+                "ro": "Sunt ingineră. Și tu ce faci?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6d3f1fdf6fa2",
+              "partner": {
+                "arabizi": "Wow! Addesh sar lak 3am teshte8el huniik?",
+                "ro": "Uau! De cât timp lucrezi acolo?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-cf0689f82974",
+              "partner": {
+                "arabizi": "Akiid sa3eb bass mhemm.",
+                "ro": "Sigur e greu, dar important."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7b6c42c329dd",
+              "partner": {
+                "arabizi": "Re7et 3as suu2 w shtareet shwayyet 8raad.",
+                "ro": "Am mers la piață și am cumpărat câteva lucruri."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a3c4779b186f",
+              "partner": {
+                "arabizi": "Ktiir! En nes mahdumin w el as3ar mnii7a.",
+                "ro": "Foarte! Oamenii sunt drăguți și prețurile sunt bune."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b075a2b0e163",
+              "partner": {
+                "arabizi": "B7ebb el-7ommos w el-tabbule ktiir. W el-shawarma!",
+                "ro": "Îmi plac foarte mult humusul și tabbouleh-ul. Și shaorma!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-090b0b874f85",
+              "partner": {
+                "arabizi": "El-kebbe tayyibe ktiir! Bte7ebb el-kebbe el-nayye walla el-me2leyye?",
+                "ro": "Kibbeh-ul e foarte bun! Îți place kibbeh nayyeh sau cel prăjit?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-c70e6bbdca73",
+              "partner": {
+                "arabizi": "W bte7ebb el-7elo el-libneene?",
+                "ro": "Și îți plac dulciurile libaneze?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Prima zi la muncă",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-0e4e61930ef6",
+              "partner": {
+                "arabizi": "Mar7aba! Ente jdide hon?",
+                "ro": "Salut! Ești nouă aici?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-2ff34ecb2a8b",
+              "partner": {
+                "arabizi": "Shu bteshte8le?",
+                "ro": "Ce lucrezi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a1b3d6f86486",
+              "partner": {
+                "arabizi": "Kif el she8el?",
+                "ro": "Cum e munca?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-5e2a3a56f78b",
+              "partner": {
+                "arabizi": "Shu bte7ebbe b Lebnen?",
+                "ro": "Ce îți place în Liban?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7db567246872",
+              "partner": {
+                "arabizi": "Shu 3melte mbere7?",
+                "ro": "Ce ai făcut ieri?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Pauza de prânz",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-3878ee6591c3"
+            },
+            {
+              "exerciseID": "syn-context-syn-f0baae3824b5",
+              "partner": {
+                "arabizi": "Eh, akiid!",
+                "ro": "Da, sigur!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-afde5052c9ca",
+              "partner": {
+                "arabizi": "Ma ba3ref. 3andak fekra?",
+                "ro": "Nu știu. Ai vreo idee?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-fa54b463aca7",
+              "partner": {
+                "arabizi": "Kif aklon?",
+                "ro": "Cum e mâncarea lor?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-661de8fd2ed5",
+              "partner": {
+                "arabizi": "Emta?",
+                "ro": "Când?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-cf19b9343c36",
+              "partner": {
+                "arabizi": "Eh, tameem.",
+                "ro": "Da, perfect."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Întrebări",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-03841aefa66c"
+            },
+            {
+              "exerciseID": "syn-context-syn-28ab1e1ccb01"
+            },
+            {
+              "exerciseID": "syn-context-syn-018ec4788209"
+            },
+            {
+              "exerciseID": "syn-context-syn-b070e7525663"
+            },
+            {
+              "exerciseID": "syn-context-syn-43dcc77af8db"
+            },
+            {
+              "exerciseID": "syn-context-syn-9042b3abae0d"
+            },
+            {
+              "exerciseID": "syn-context-syn-858983649bab"
+            },
+            {
+              "exerciseID": "syn-context-syn-b0da3771e4c5"
             }
           ]
         }
