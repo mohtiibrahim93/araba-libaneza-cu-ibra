@@ -42375,7 +42375,7 @@
     },
     {
       "id": "xed9a967d5fe6",
-      "canonicalArabizi": "ba3dayn",
+      "canonicalArabizi": "ba3den",
       "variants": [],
       "levelTags": [
         "a1"
@@ -51131,7 +51131,7 @@
     },
     {
       "id": "syn-c0a05fa9e02c",
-      "canonicalArabizi": "Fade ba3dayn?",
+      "canonicalArabizi": "Fade ba3den?",
       "variants": [],
       "levelTags": [
         "a1"
@@ -54198,10 +54198,10 @@
     },
     {
       "id": "syn-c67c9b1ab8a9",
-      "canonicalArabizi": "ba3dayn b7akiik",
+      "canonicalArabizi": "ba3den b7akiik",
       "variants": [
         {
-          "value": "ba3dayn b7akiike",
+          "value": "ba3den b7akiike",
           "kind": "spelling"
         }
       ],
@@ -54992,7 +54992,7 @@
     },
     {
       "id": "syn-52caff56351c",
-      "canonicalArabizi": "momken ba3dayn",
+      "canonicalArabizi": "momken ba3den",
       "variants": [],
       "levelTags": [
         "a2"
@@ -55577,14 +55577,19 @@
     {
       "id": "syn-0e09c58c0d5c",
       "canonicalArabizi": "Ra7 e7kiik ba3den.",
-      "variants": [],
+      "variants": [
+        {
+          "value": "Ra7 e7kiike ba3den.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "îți voi vorbi mai târziu"
+          "naturalMeaning": "îți voi vorbi mai târziu (e7kiik către un bărbat, e7kiike către o femeie)"
         }
       }
     },
@@ -56636,7 +56641,7 @@
     },
     {
       "id": "syn-f58d8c90d844",
-      "canonicalArabizi": "Bshufik ba3dayn!",
+      "canonicalArabizi": "Bshufik ba3den!",
       "variants": [],
       "levelTags": [
         "a1"
@@ -65483,7 +65488,7 @@
       "prompt": {
         "ro": "Care cuvânt leagă următorul eveniment?"
       },
-      "answer": "ba3dayn",
+      "answer": "ba3den",
       "wrongAnswers": [
         "wayn",
         "kam"
@@ -70641,7 +70646,9 @@
       "id": "syn-context-syn-0e09c58c0d5c",
       "type": "dialogue-response",
       "unitID": "a1-plans",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-0e09c58c0d5c"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „îți voi vorbi mai târziu”"
       },

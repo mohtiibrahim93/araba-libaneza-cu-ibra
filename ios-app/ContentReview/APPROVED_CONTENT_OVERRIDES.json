@@ -373,6 +373,9 @@
         "Ra7 2e23od bel bet w ra7 2ra kteb.",
         "El a7ad bel layl.",
         "Ra7 safer 3ala Terkiyya."
+      ],
+      "expressionIDs": [
+        "syn-0e09c58c0d5c"
       ]
     },
     "syn-context-syn-0e3c6cbb38b2": {
@@ -4036,6 +4039,9 @@
       "prompt": {
         "ro": "Întreabă un prieten dacă vrea o farfurie."
       }
+    },
+    "syn-rule-9-1": {
+      "answer": "ba3den"
     }
   },
   "expressionOverrides": {
@@ -4108,7 +4114,18 @@
       "canonicalArabizi": "Mne7ke ba3den."
     },
     "syn-0e09c58c0d5c": {
-      "canonicalArabizi": "Ra7 e7kiik ba3den."
+      "canonicalArabizi": "Ra7 e7kiik ba3den.",
+      "variants": [
+        {
+          "value": "Ra7 e7kiike ba3den.",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "îți voi vorbi mai târziu (e7kiik către un bărbat, e7kiike către o femeie)"
+        }
+      }
     },
     "syn-0e3c6cbb38b2": {
       "canonicalArabizi": "Shu no3 el musii2a li bte7bbiya?"
@@ -5518,7 +5535,7 @@
       "canonicalArabizi": "Yalla, bshufik!"
     },
     "syn-f58d8c90d844": {
-      "canonicalArabizi": "Bshufik ba3dayn!"
+      "canonicalArabizi": "Bshufik ba3den!"
     },
     "syn-6d04c68c3acc": {
       "canonicalArabizi": "Yalla, bshufik!"
@@ -6091,10 +6108,10 @@
       }
     },
     "syn-c67c9b1ab8a9": {
-      "canonicalArabizi": "ba3dayn b7akiik",
+      "canonicalArabizi": "ba3den b7akiik",
       "variants": [
         {
-          "value": "ba3dayn b7akiike",
+          "value": "ba3den b7akiike",
           "kind": "spelling"
         }
       ],
@@ -6103,6 +6120,15 @@
           "naturalMeaning": "vorbim mai târziu (b7akiik către un bărbat, b7akiike către o femeie)"
         }
       }
+    },
+    "xed9a967d5fe6": {
+      "canonicalArabizi": "ba3den"
+    },
+    "syn-c0a05fa9e02c": {
+      "canonicalArabizi": "Fade ba3den?"
+    },
+    "syn-52caff56351c": {
+      "canonicalArabizi": "momken ba3den"
     }
   },
   "unitExpressionAdditions": [
