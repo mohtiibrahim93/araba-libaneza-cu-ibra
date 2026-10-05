@@ -57477,8 +57477,13 @@
     },
     {
       "id": "syn-ac0802384fa0",
-      "canonicalArabizi": "Mar7aba Karim! Kif la2ayt el makan?",
-      "variants": [],
+      "canonicalArabizi": "Mar7aba Kariim! l2iit el ma7al?",
+      "variants": [
+        {
+          "value": "Mar7aba Karim! l2iit el ma7al?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -57491,7 +57496,7 @@
     },
     {
       "id": "syn-2d4cf4b7368b",
-      "canonicalArabizi": "Mar7aba! Ken sahel, 2ariib men el bank.",
+      "canonicalArabizi": "Mar7aba! bshule, 2ariib men el bank.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57547,8 +57552,13 @@
     },
     {
       "id": "syn-6c83e06d43cf",
-      "canonicalArabizi": "Re7t 3as su2 w eshtarayt 2amis.",
-      "variants": [],
+      "canonicalArabizi": "Re7t 3as su2 w shtareet 2amis.",
+      "variants": [
+        {
+          "value": "Re7t 3as su2 w eshtaret 2amiis.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -57561,7 +57571,7 @@
     },
     {
       "id": "syn-da733d752414",
-      "canonicalArabizi": "7elo! Shu el lon?",
+      "canonicalArabizi": "7elo! Shu lawno?",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57576,7 +57586,12 @@
     {
       "id": "syn-9b35dc311667",
       "canonicalArabizi": "Azra2. Ken 8ale shway.",
-      "variants": [],
+      "variants": [
+        {
+          "value": "Azra2. Ken 8aale shway.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -57617,7 +57632,7 @@
     },
     {
       "id": "syn-6996b78e494e",
-      "canonicalArabizi": "Mni7! Ana re7t 3as sinema.",
+      "canonicalArabizi": "Ana re7t 3as sinema.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57625,7 +57640,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Bine! Eu am mers la cinema."
+          "naturalMeaning": "Eu am mers la cinema."
         }
       }
     },
@@ -57645,7 +57660,7 @@
     },
     {
       "id": "syn-64b2d9a36853",
-      "canonicalArabizi": "7deret filem lebnene. Ken ra2e3!",
+      "canonicalArabizi": "7doret filem lebnene. Ken ra2e3!",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57687,8 +57702,13 @@
     },
     {
       "id": "syn-c32133ea805d",
-      "canonicalArabizi": "Ah b3erfo. B3id men hon?",
-      "variants": [],
+      "canonicalArabizi": "Ah ba3erfo. B3id men hon?",
+      "variants": [
+        {
+          "value": "Ah b3erfo. B3id men hon?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
@@ -57715,7 +57735,7 @@
     },
     {
       "id": "syn-caf02013bad9",
-      "canonicalArabizi": "7elo! Shu 3am bte3mle halla2?",
+      "canonicalArabizi": "7elo! Shu 3am ta3mle halla2?",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57729,7 +57749,7 @@
     },
     {
       "id": "syn-20ca1866edec",
-      "canonicalArabizi": "3am bfakker ru7 3al ma77al.",
+      "canonicalArabizi": "3am fakker ru7 3a ma7al tyeb.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57737,7 +57757,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Mă gândesc să merg la magazin."
+          "naturalMeaning": "Mă gândesc să merg la un magazin bun."
         }
       }
     },
@@ -57771,7 +57791,7 @@
     },
     {
       "id": "syn-3b2e75b23131",
-      "canonicalArabizi": "Fi ma7all mnii7 7add el bank.",
+      "canonicalArabizi": "Fi ma7all 7elo 7add el bank.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -57785,7 +57805,7 @@
     },
     {
       "id": "syn-9dfc75ef33a2",
-      "canonicalArabizi": "Tameem! Yalla nru7 sawa.",
+      "canonicalArabizi": "Tameem! emshe nru7 sawa.",
       "variants": [],
       "levelTags": [
         "a1"
@@ -66825,7 +66845,7 @@
       "wrongAnswers": [
         "Ana 3ande 5ay w e5ten.",
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Karim! Kif la2ayt el makan?"
+        "Mar7aba Kariim! l2iit el ma7al?"
       ]
     },
     {
@@ -66842,7 +66862,7 @@
       "wrongAnswers": [
         "3ayltak kbiire! Ana ju3aan, badde ekol.",
         "Tameem! Yalla nruu7!",
-        "Mar7aba! Ken sahel, 2ariib men el bank."
+        "Mar7aba! bshule, 2ariib men el bank."
       ]
     },
     {
@@ -66904,7 +66924,7 @@
       "wrongAnswers": [
         "Yalla nru7 3al mat3am!",
         "Re7et 3a el su2 mbeere7 w shtareet fweeke.",
-        "Re7t 3as su2 w eshtarayt 2amis."
+        "Re7t 3as su2 w shtareet 2amis."
       ]
     },
     {
@@ -66919,7 +66939,7 @@
       "wrongAnswers": [
         "Fikra mni7a! Badde ahwe kameen.",
         "Shtareet 2amis a7mar.",
-        "7elo! Shu el lon?"
+        "7elo! Shu lawno?"
       ]
     },
     {
@@ -66933,7 +66953,7 @@
       "answer": "Ana 3ande 5ay w e5ten.",
       "wrongAnswers": [
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Karim! Kif la2ayt el makan?",
+        "Mar7aba Kariim! l2iit el ma7al?",
         "Azra2. Ken 8ale shway."
       ]
     },
@@ -66948,7 +66968,7 @@
       "answer": "3ayltak kbiire! Ana ju3aan, badde ekol.",
       "wrongAnswers": [
         "Tameem! Yalla nruu7!",
-        "Mar7aba! Ken sahel, 2ariib men el bank.",
+        "Mar7aba! bshule, 2ariib men el bank.",
         "Arb3iin dollar. Bas 7elo ktiir."
       ]
     },
@@ -66964,7 +66984,7 @@
       "wrongAnswers": [
         "Es saydaliyye 7add el bank, 2ariibe men hon.",
         "Tameem! Shu 3am ta3mel halla2?",
-        "Mni7! Ana re7t 3as sinema."
+        "Ana re7t 3as sinema."
       ]
     },
     {
@@ -66979,7 +66999,7 @@
       "wrongAnswers": [
         "Addesh se3er el 2amis el a7mar?",
         "3am beshrab ahwe. W ente?",
-        "7deret filem lebnene. Ken ra2e3!"
+        "7doret filem lebnene. Ken ra2e3!"
       ]
     },
     {
@@ -67008,7 +67028,7 @@
       "answer": "Yalla nru7 3al mat3am!",
       "wrongAnswers": [
         "Re7et 3a el su2 mbeere7 w shtareet fweeke.",
-        "Re7t 3as su2 w eshtarayt 2amis.",
+        "Re7t 3as su2 w shtareet 2amis.",
         "7add el mall el kbiir."
       ]
     },
@@ -67023,8 +67043,8 @@
       "answer": "Fikra mni7a! Badde ahwe kameen.",
       "wrongAnswers": [
         "Shtareet 2amis a7mar.",
-        "7elo! Shu el lon?",
-        "Ah b3erfo. B3id men hon?"
+        "7elo! Shu lawno?",
+        "Ah ba3erfo. B3id men hon?"
       ]
     },
     {
@@ -67037,7 +67057,7 @@
       },
       "answer": "Ana b7ebb el ahwe el lebneniyye.",
       "wrongAnswers": [
-        "Mar7aba Karim! Kif la2ayt el makan?",
+        "Mar7aba Kariim! l2iit el ma7al?",
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara."
       ]
@@ -67052,9 +67072,9 @@
       },
       "answer": "Tameem! Yalla nruu7!",
       "wrongAnswers": [
-        "Mar7aba! Ken sahel, 2ariib men el bank.",
+        "Mar7aba! bshule, 2ariib men el bank.",
         "Arb3iin dollar. Bas 7elo ktiir.",
-        "7elo! Shu 3am bte3mle halla2?"
+        "7elo! Shu 3am ta3mle halla2?"
       ]
     },
     {
@@ -68530,8 +68550,8 @@
       "answer": "Es saydaliyye 7add el bank, 2ariibe men hon.",
       "wrongAnswers": [
         "Tameem! Shu 3am ta3mel halla2?",
-        "Mni7! Ana re7t 3as sinema.",
-        "3am bfakker ru7 3al ma77al."
+        "Ana re7t 3as sinema.",
+        "3am fakker ru7 3a ma7al tyeb."
       ]
     },
     {
@@ -68545,7 +68565,7 @@
       "answer": "Addesh se3er el 2amis el a7mar?",
       "wrongAnswers": [
         "3am beshrab ahwe. W ente?",
-        "7deret filem lebnene. Ken ra2e3!",
+        "7doret filem lebnene. Ken ra2e3!",
         "Baddik teshtre she?"
       ]
     },
@@ -68574,9 +68594,9 @@
       },
       "answer": "Re7et 3a el su2 mbeere7 w shtareet fweeke.",
       "wrongAnswers": [
-        "Re7t 3as su2 w eshtarayt 2amis.",
+        "Re7t 3as su2 w shtareet 2amis.",
         "7add el mall el kbiir.",
-        "Fi ma7all mnii7 7add el bank."
+        "Fi ma7all 7elo 7add el bank."
       ]
     },
     {
@@ -68589,20 +68609,22 @@
       },
       "answer": "Shtareet 2amis a7mar.",
       "wrongAnswers": [
-        "7elo! Shu el lon?",
-        "Ah b3erfo. B3id men hon?",
-        "Tameem! Yalla nru7 sawa."
+        "7elo! Shu lawno?",
+        "Ah ba3erfo. B3id men hon?",
+        "Tameem! emshe nru7 sawa."
       ]
     },
     {
       "id": "syn-context-syn-ac0802384fa0",
       "type": "dialogue-response",
       "unitID": "a1-review",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-ac0802384fa0"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Salut Karim! Cum ai găsit locul?”"
       },
-      "answer": "Mar7aba Karim! Kif la2ayt el makan?",
+      "answer": "Mar7aba Kariim! l2iit el ma7al?",
       "wrongAnswers": [
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara.",
@@ -68617,10 +68639,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Salut! A fost ușor, aproape de bancă.”"
       },
-      "answer": "Mar7aba! Ken sahel, 2ariib men el bank.",
+      "answer": "Mar7aba! bshule, 2ariib men el bank.",
       "wrongAnswers": [
         "Arb3iin dollar. Bas 7elo ktiir.",
-        "7elo! Shu 3am bte3mle halla2?",
+        "7elo! Shu 3am ta3mle halla2?",
         "Mar7aba! Esme Maria w ana men Romania."
       ]
     },
@@ -68634,8 +68656,8 @@
       },
       "answer": "Tameem! Shu 3am ta3mel halla2?",
       "wrongAnswers": [
-        "Mni7! Ana re7t 3as sinema.",
-        "3am bfakker ru7 3al ma77al.",
+        "Ana re7t 3as sinema.",
+        "3am fakker ru7 3a ma7al tyeb.",
         "Beshte8el doktora b mustashfa."
       ]
     },
@@ -68649,7 +68671,7 @@
       },
       "answer": "3am beshrab ahwe. W ente?",
       "wrongAnswers": [
-        "7deret filem lebnene. Ken ra2e3!",
+        "7doret filem lebnene. Ken ra2e3!",
         "Baddik teshtre she?",
         "B7ebb el shawarma w el ahwe el lebneniyye."
       ]
@@ -68673,14 +68695,16 @@
       "id": "syn-context-syn-6c83e06d43cf",
       "type": "dialogue-response",
       "unitID": "a1-review",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-6c83e06d43cf"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Am mers la piață și am cumpărat o cămașă.”"
       },
-      "answer": "Re7t 3as su2 w eshtarayt 2amis.",
+      "answer": "Re7t 3as su2 w shtareet 2amis.",
       "wrongAnswers": [
         "7add el mall el kbiir.",
-        "Fi ma7all mnii7 7add el bank.",
+        "Fi ma7all 7elo 7add el bank.",
         "Ana Maya, men Romania."
       ]
     },
@@ -68692,10 +68716,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Frumos! Ce culoare?”"
       },
-      "answer": "7elo! Shu el lon?",
+      "answer": "7elo! Shu lawno?",
       "wrongAnswers": [
-        "Ah b3erfo. B3id men hon?",
-        "Tameem! Yalla nru7 sawa.",
+        "Ah ba3erfo. B3id men hon?",
+        "Tameem! emshe nru7 sawa.",
         "Tsharrafna! Ana men Lebnen."
       ]
     },
@@ -68703,7 +68727,9 @@
       "id": "syn-context-syn-9b35dc311667",
       "type": "dialogue-response",
       "unitID": "a1-review",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-9b35dc311667"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Albastru. A fost puțin scump.”"
       },
@@ -68724,7 +68750,7 @@
       },
       "answer": "Arb3iin dollar. Bas 7elo ktiir.",
       "wrongAnswers": [
-        "7elo! Shu 3am bte3mle halla2?",
+        "7elo! Shu 3am ta3mle halla2?",
         "Mar7aba! Esme Maria w ana men Romania.",
         "Mni7, shukran. Ana mhandes."
       ]
@@ -68735,11 +68761,11 @@
       "unitID": "a1-review",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Bine! Eu am mers la cinema.”"
+        "ro": "Alege replica pentru: „Eu am mers la cinema.”"
       },
-      "answer": "Mni7! Ana re7t 3as sinema.",
+      "answer": "Ana re7t 3as sinema.",
       "wrongAnswers": [
-        "3am bfakker ru7 3al ma77al.",
+        "3am fakker ru7 3a ma7al tyeb.",
         "Beshte8el doktora b mustashfa.",
         "7elo! Wen bteshte8el?"
       ]
@@ -68752,7 +68778,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Un film libanez. A fost minunat!”"
       },
-      "answer": "7deret filem lebnene. Ken ra2e3!",
+      "answer": "7doret filem lebnene. Ken ra2e3!",
       "wrongAnswers": [
         "Baddik teshtre she?",
         "B7ebb el shawarma w el ahwe el lebneniyye.",
@@ -68784,7 +68810,7 @@
       },
       "answer": "7add el mall el kbiir.",
       "wrongAnswers": [
-        "Fi ma7all mnii7 7add el bank.",
+        "Fi ma7all 7elo 7add el bank.",
         "Ana Maya, men Romania.",
         "Eh, 3ande e5et we7de."
       ]
@@ -68793,13 +68819,15 @@
       "id": "syn-context-syn-c32133ea805d",
       "type": "dialogue-response",
       "unitID": "a1-review",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-c32133ea805d"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Ah, îl știu. E departe de aici?”"
       },
-      "answer": "Ah b3erfo. B3id men hon?",
+      "answer": "Ah ba3erfo. B3id men hon?",
       "wrongAnswers": [
-        "Tameem! Yalla nru7 sawa.",
+        "Tameem! emshe nru7 sawa.",
         "Tsharrafna! Ana men Lebnen.",
         "Ana 3ande 5ay w e5ten."
       ]
@@ -68827,7 +68855,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Frumos! Ce faci acum?”"
       },
-      "answer": "7elo! Shu 3am bte3mle halla2?",
+      "answer": "7elo! Shu 3am ta3mle halla2?",
       "wrongAnswers": [
         "Mar7aba! Esme Maria w ana men Romania.",
         "Mni7, shukran. Ana mhandes.",
@@ -68840,9 +68868,9 @@
       "unitID": "a1-review",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Mă gândesc să merg la magazin.”"
+        "ro": "Alege replica pentru: „Mă gândesc să merg la un magazin bun.”"
       },
-      "answer": "3am bfakker ru7 3al ma77al.",
+      "answer": "3am fakker ru7 3a ma7al tyeb.",
       "wrongAnswers": [
         "Beshte8el doktora b mustashfa.",
         "7elo! Wen bteshte8el?",
@@ -68887,7 +68915,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „E un magazin bun lângă bancă.”"
       },
-      "answer": "Fi ma7all mnii7 7add el bank.",
+      "answer": "Fi ma7all 7elo 7add el bank.",
       "wrongAnswers": [
         "Ana Maya, men Romania.",
         "Eh, 3ande e5et we7de.",
@@ -68902,7 +68930,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Perfect! Hai să mergem împreună.”"
       },
-      "answer": "Tameem! Yalla nru7 sawa.",
+      "answer": "Tameem! emshe nru7 sawa.",
       "wrongAnswers": [
         "Tsharrafna! Ana men Lebnen.",
         "Ana 3ande 5ay w e5ten.",

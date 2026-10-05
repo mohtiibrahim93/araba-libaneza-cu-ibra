@@ -1564,6 +1564,166 @@
               }
             }
           ]
+        },
+        {
+          "title": "Tu ești prietena lui Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-ac0802384fa0"
+            },
+            {
+              "exerciseID": "syn-context-syn-71b1f3365b45",
+              "partner": {
+                "arabizi": "Mar7aba! Eh, l2iito bshule, 2ariib men el bank.",
+                "ro": "Salut! Da, l-am găsit ușor, aproape de bancă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1df0b8b69176",
+              "partner": {
+                "arabizi": "3am beshrab ahwe. W ente?",
+                "ro": "Beau cafea. Și tu?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-da733d752414",
+              "partner": {
+                "arabizi": "Re7t 3as su2 w shtareet 2amis.",
+                "ro": "Am mers la piață și am cumpărat o cămașă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6996b78e494e",
+              "partner": {
+                "arabizi": "Azra2. Ken 8aale shway. Ente, shu 3melte mbere7?",
+                "ro": "Albastru. A fost puțin scump. Și tu, ce ai făcut ieri?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-64b2d9a36853",
+              "partner": {
+                "arabizi": "Shu 7dorte?",
+                "ro": "Ce ai văzut?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d5a7e5f0f030",
+              "partner": {
+                "arabizi": "Wen es sinema?",
+                "ro": "Unde e cinematograful?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d56463eaf234",
+              "partner": {
+                "arabizi": "Ah b3erfo. B3id men hon?",
+                "ro": "Ah, îl știu. E departe de aici?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-20ca1866edec",
+              "partner": {
+                "arabizi": "7elo! Shu 3am ta3mle halla2?",
+                "ro": "Frumos! Ce faci acum?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f8c3f7e96290",
+              "partner": {
+                "arabizi": "Baddik teshtre she?",
+                "ro": "Vrei să cumperi ceva?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9dfc75ef33a2",
+              "partner": {
+                "arabizi": "Fi ma7al mnii7 7add el bank.",
+                "ro": "E un magazin bun lângă bancă."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-2d4cf4b7368b",
+              "partner": {
+                "arabizi": "Mar7aba Karim! l2iit el ma7al?",
+                "ro": "Salut Karim! Cum ai găsit locul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-123c1509d947",
+              "partner": {
+                "arabizi": "Tameem! Shu 3am ta3mel halla2?",
+                "ro": "Perfect! Ce faci acum?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6c83e06d43cf",
+              "partner": {
+                "arabizi": "Ana kameen. Shu 3emelet mbere7?",
+                "ro": "Eu la fel. Ce ai făcut ieri?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9b35dc311667",
+              "partner": {
+                "arabizi": "7elo! Shu lawno?",
+                "ro": "Frumos! Ce culoare?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ba37ac3768b3",
+              "partner": {
+                "arabizi": "Addeesh dafa3et?",
+                "ro": "Cât ai plătit?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9612f959f867",
+              "partner": {
+                "arabizi": "Mni7! Ana re7t 3as sinema. 7deret filem lebnene. Ken bisattel!",
+                "ro": "Bine! Eu am mers la cinema. Am văzut un film libanez. A fost super!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-c32133ea805d",
+              "partner": {
+                "arabizi": "7add el mall el kbiir.",
+                "ro": "Lângă mall-ul mare."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-caf02013bad9",
+              "partner": {
+                "arabizi": "La2, 2ariib. 3asher d2eeye2 bel sayyara.",
+                "ro": "Nu, aproape. Zece minute cu mașina."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8dabad401cc1",
+              "partner": {
+                "arabizi": "3am fakker ru7 3a ma7al tyeb.",
+                "ro": "Mă gândesc să merg la un magazin bun."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3b2e75b23131",
+              "partner": {
+                "arabizi": "Eh, badde fostan lal 3eres.",
+                "ro": "Da, vreau o rochie pentru nuntă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a10fbe73b057",
+              "partner": {
+                "arabizi": "Tameem! Yalla nruu7 3le.",
+                "ro": "Perfect! Hai să mergem acolo."
+              }
+            }
+          ]
         }
       ]
     }
