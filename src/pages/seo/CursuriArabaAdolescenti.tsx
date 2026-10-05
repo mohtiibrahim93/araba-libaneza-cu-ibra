@@ -65,23 +65,30 @@ const CursuriArabaAdolescenti = () => (
         33.5 with no clicks, and a visitor had to scroll past four sections
         before finding the price or a way to start. Age, format, size, price and
         the trial, answered immediately. */}
-    <div className="not-prose rounded-xl border border-border bg-muted/40 p-5 md:p-6">
-      <ul className="space-y-1.5 text-sm md:text-base">
-        <li><strong>Vârsta:</strong> 12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)</li>
-        <li><strong>Format:</strong> fizic în București, Strada Icoanei 80, sau online pe Zoom</li>
-        <li><strong>Ritm:</strong> două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 cursanți online, 8 fizic)</li>
-        <li><strong>Preț:</strong> de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min</li>
-        <li><strong>Nivel de start:</strong> de la zero, fără alfabet arab — se începe oral, cu arabizi</li>
+    <div className="not-prose">
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {[
+          ["Vârsta", "12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)"],
+          ["Format", "fizic în București, Strada Icoanei 80, sau online pe Zoom"],
+          ["Ritm", "două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 cursanți online, 8 fizic)"],
+          ["Preț", "de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min"],
+          ["Nivel de start", "de la zero, fără alfabet arab — se începe oral, cu arabizi"],
+        ].map(([k, v]) => (
+          <li key={k} className="rounded-2xl border border-[#E7E1D6] bg-card p-4 dark:border-border">
+            <span className="block text-xs font-bold uppercase tracking-[0.1em] text-brand-green">{k}</span>
+            <span className="mt-1 block text-[15px] leading-relaxed text-foreground">{v}</span>
+          </li>
+        ))}
+        <li className="flex items-center rounded-2xl bg-cream p-4">
+          <Link
+            to="/trial"
+            data-cta
+            className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
+          >
+            Rezervă lecția de probă gratuită (30 min)
+          </Link>
+        </li>
       </ul>
-      <div className="mt-5">
-        <Link
-          to="/trial"
-          data-cta
-        className="inline-block rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
-        >
-          Rezervă lecția de probă gratuită (30 min)
-        </Link>
-      </div>
     </div>
 
     <h2>Pentru cine este cursul</h2>
@@ -184,13 +191,24 @@ const CursuriArabaAdolescenti = () => (
       pe Zoom. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau{" "}
       <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>.
     </p>
-    <h2 id="lista-asteptare">Anunță-mă când pornește grupa</h2>
-    <p>
-      Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o cohortă imediat ce avem
-      suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
-      poți începe oricând cu <Link to="/meditatii-araba">meditații de arabă 1:1</Link>.
-    </p>
-    <NotifyMeForm context="Grupă adolescenți 12–17" className="not-prose my-6" />
+    {/* Its own green section, so a parent looking for "when does it start"
+        finds it without reading the whole page. */}
+    <section className="not-prose rounded-3xl bg-brand-green/5 p-5 sm:p-8">
+      <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">Grupe în formare</span>
+      <h2 id="lista-asteptare" className="font-display text-2xl font-bold text-foreground md:text-3xl">
+        Anunță-mă când pornește grupa
+      </h2>
+      <p className="mt-2 leading-relaxed text-foreground/80">
+        Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o cohortă imediat ce avem
+        suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
+        poți începe oricând cu{" "}
+        <Link to="/meditatii-araba" className="text-primary underline">
+          meditații de arabă 1:1
+        </Link>
+        .
+      </p>
+      <NotifyMeForm context="Grupă adolescenți 12–17" className="mt-5" />
+    </section>
   </LandingLayout>
 );
 
