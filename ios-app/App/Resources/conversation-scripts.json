@@ -2993,6 +2993,10 @@
               "partner": {
                 "arabizi": "W bte7ebb el-7elo el-libneene?",
                 "ro": "Și îți plac dulciurile libaneze?"
+              },
+              "learnerRoByAnswer": {
+                "Akiid! El-be2leewe w el-kneefe... yeslamo!": "Sigur! Baklava și kanafeh… mulțumesc!",
+                "Eh akiid! Ma badda tnen ye7ko fiya! Bmut 3a 7aleewet el jebn men 3and el 7alleeb.": "Da, sigur! Nici nu se discută! Mor după 7aleewet el jebn de la 7alleeb."
               }
             }
           ]
