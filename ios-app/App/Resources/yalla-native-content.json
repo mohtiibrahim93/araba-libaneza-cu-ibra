@@ -57477,10 +57477,18 @@
     },
     {
       "id": "syn-ac0802384fa0",
-      "canonicalArabizi": "Mar7aba Kariim! l2iit el ma7al?",
+      "canonicalArabizi": "Mar7aba Kariim! Kiif l2iit el ma7al?",
       "variants": [
         {
-          "value": "Mar7aba Karim! l2iit el ma7al?",
+          "value": "Mar7aba Karim! Kiif l2iit el ma7al?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba Kariim! Kif l2iit el ma7al?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba Karim! Kif l2iit el ma7al?",
           "kind": "spelling"
         }
       ],
@@ -66845,7 +66853,7 @@
       "wrongAnswers": [
         "Ana 3ande 5ay w e5ten.",
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Kariim! l2iit el ma7al?"
+        "Mar7aba Kariim! Kiif l2iit el ma7al?"
       ]
     },
     {
@@ -66953,7 +66961,7 @@
       "answer": "Ana 3ande 5ay w e5ten.",
       "wrongAnswers": [
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Kariim! l2iit el ma7al?",
+        "Mar7aba Kariim! Kiif l2iit el ma7al?",
         "Azra2. Ken 8ale shway."
       ]
     },
@@ -67057,7 +67065,7 @@
       },
       "answer": "Ana b7ebb el ahwe el lebneniyye.",
       "wrongAnswers": [
-        "Mar7aba Kariim! l2iit el ma7al?",
+        "Mar7aba Kariim! Kiif l2iit el ma7al?",
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara."
       ]
@@ -68624,7 +68632,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Salut Karim! Cum ai găsit locul?”"
       },
-      "answer": "Mar7aba Kariim! l2iit el ma7al?",
+      "answer": "Mar7aba Kariim! Kiif l2iit el ma7al?",
       "wrongAnswers": [
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara.",

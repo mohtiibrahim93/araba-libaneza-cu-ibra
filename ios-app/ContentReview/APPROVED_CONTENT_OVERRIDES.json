@@ -1246,7 +1246,7 @@
       "answer": "Ana 3ande 5ay w e5ten.",
       "wrongAnswers": [
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Kariim! l2iit el ma7al?",
+        "Mar7aba Kariim! Kiif l2iit el ma7al?",
         "Azra2. Ken 8ale shway."
       ]
     },
@@ -1985,7 +1985,7 @@
       ]
     },
     "syn-context-syn-ac0802384fa0": {
-      "answer": "Mar7aba Kariim! l2iit el ma7al?",
+      "answer": "Mar7aba Kariim! Kiif l2iit el ma7al?",
       "wrongAnswers": [
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara.",
@@ -2011,7 +2011,7 @@
     "syn-context-syn-ad5a5bdfc426": {
       "answer": "Ana b7ebb el ahwe el lebneniyye.",
       "wrongAnswers": [
-        "Mar7aba Kariim! l2iit el ma7al?",
+        "Mar7aba Kariim! Kiif l2iit el ma7al?",
         "Azra2. Ken 8ale shway.",
         "La2, 2ariib. 3asher d2eeye2 bel sayyara."
       ]
@@ -2905,7 +2905,7 @@
       "wrongAnswers": [
         "Ana 3ande 5ay w e5ten.",
         "Ana b7ebb el ahwe el lebneniyye.",
-        "Mar7aba Kariim! l2iit el ma7al?"
+        "Mar7aba Kariim! Kiif l2iit el ma7al?"
       ],
       "answer": "Tsharrafna! Ana men Lebnen."
     },
@@ -4703,10 +4703,18 @@
       "canonicalArabizi": "Eh, ktiir. W ente?"
     },
     "syn-ac0802384fa0": {
-      "canonicalArabizi": "Mar7aba Kariim! l2iit el ma7al?",
+      "canonicalArabizi": "Mar7aba Kariim! Kiif l2iit el ma7al?",
       "variants": [
         {
-          "value": "Mar7aba Karim! l2iit el ma7al?",
+          "value": "Mar7aba Karim! Kiif l2iit el ma7al?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba Kariim! Kif l2iit el ma7al?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mar7aba Karim! Kif l2iit el ma7al?",
           "kind": "spelling"
         }
       ]
