@@ -507,11 +507,14 @@
       ]
     },
     "syn-context-syn-1ae0ed713d37": {
-      "answer": "Eh ktiir! Ken el jaw ra2e3.",
+      "answer": "Eh ktiir! Ken el jaw raw3a.",
       "wrongAnswers": [
-        "Ana 2a3adt bel bayt.",
+        "Ana 2a3adet bel bayt.",
         "Shu 3emelt bel weekend?",
         "Ken fi ktiir 3aalam."
+      ],
+      "expressionIDs": [
+        "syn-1ae0ed713d37"
       ]
     },
     "syn-context-syn-1cb1dbbb7ba8": {
@@ -615,7 +618,7 @@
       "wrongAnswers": [
         "Sbe7na w l3ebna futbol.",
         "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
-        "2ret kteb w tfarrajet 3a filem."
+        "2riit kteeb w tfarrajet 3a filem."
       ]
     },
     "syn-context-syn-27fce2cc9265": {
@@ -1102,7 +1105,7 @@
       "answer": "Ktiir! W ente shu 3melte?",
       "wrongAnswers": [
         "Re7t 3al ba7er.",
-        "ma sar she",
+        "ma saar she",
         "Shu 3meltu huniik?"
       ]
     },
@@ -1168,10 +1171,10 @@
       ]
     },
     "syn-context-syn-5da1e48191e8": {
-      "answer": "Mar7aba Fadi! Shu 3emelt bel weekend?",
+      "answer": "Mar7aba Fadi! Shu 3emelet bel weekend?",
       "wrongAnswers": [
         "Re7na 3a mat3am w akalna samak.",
-        "Eh, w tfarrajet 3a film kameen.",
+        "Eh, w tfarrajet 3a filem kameen.",
         "Shu 3emelt mbere7?"
       ]
     },
@@ -1307,8 +1310,8 @@
     "syn-context-syn-695d7c1548a1": {
       "answer": "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
       "wrongAnswers": [
-        "2ret kteb w tfarrajet 3a filem.",
-        "Mar7aba Fadi! Shu 3emelt bel weekend?",
+        "2riit kteeb w tfarrajet 3a filem.",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?",
         "Re7na 3a mat3am w akalna samak."
       ]
     },
@@ -1553,8 +1556,8 @@
       "answer": "7elo! Yalla bshufik!",
       "wrongAnswers": [
         "re7t 3al mat3am",
-        "Eh ktiir! Ken el jaw ra2e3.",
-        "Ana 2a3adt bel bayt."
+        "Eh ktiir! Ken el jaw raw3a.",
+        "Ana 2a3adet bel bayt."
       ]
     },
     "syn-context-syn-800190fd1721": {
@@ -1707,8 +1710,8 @@
     "syn-context-syn-944c5743499a": {
       "answer": "Shu 3meltu huniik?",
       "wrongAnswers": [
-        "Laysh? Konte marida?",
-        "2a3adt bel bayt.",
+        "Lesh? Kente marida?",
+        "2a3adet bel bayt.",
         "ken yom 7elo"
       ]
     },
@@ -1772,11 +1775,11 @@
       ]
     },
     "syn-context-syn-99f12673901d": {
-      "answer": "2ret kteb w tfarrajet 3a filem.",
+      "answer": "2riit kteeb w tfarrajet 3a filem.",
       "wrongAnswers": [
-        "Mar7aba Fadi! Shu 3emelt bel weekend?",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?",
         "Re7na 3a mat3am w akalna samak.",
-        "Eh, w tfarrajet 3a film kameen."
+        "Eh, w tfarrajet 3a filem kameen."
       ]
     },
     "syn-context-syn-9a79f6640456": {
@@ -2253,7 +2256,7 @@
       ]
     },
     "syn-context-syn-cd11a02eda89": {
-      "answer": "Eh, w tfarrajet 3a film kameen.",
+      "answer": "Eh, w tfarrajet 3a filem kameen.",
       "wrongAnswers": [
         "Shu 3emelt mbere7?",
         "Wow! Ken 7elo?",
@@ -2543,8 +2546,8 @@
       "answer": "Sbe7na w l3ebna futbol.",
       "wrongAnswers": [
         "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
-        "2ret kteb w tfarrajet 3a filem.",
-        "Mar7aba Fadi! Shu 3emelt bel weekend?"
+        "2riit kteeb w tfarrajet 3a filem.",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?"
       ]
     },
     "syn-context-syn-ef24e1ec2dc8": {
@@ -2574,7 +2577,7 @@
     "syn-context-syn-f11eb4e6a3a7": {
       "answer": "7elo! W ba3den?",
       "wrongAnswers": [
-        "Ah fehmet. 2arayte kteb?",
+        "Ah fehmet. 2riite kteb?",
         "Ba3den re7na 3as sinema.",
         "Mar7aba! Re7t 3al ba7er ma3 s7aabe."
       ]
@@ -3170,9 +3173,9 @@
     },
     "syn-context-syn-979774a1f19c": {
       "wrongAnswers": [
-        "ma sar she",
+        "ma saar she",
         "Shu 3meltu huniik?",
-        "Laysh? Konte marida?"
+        "Lesh? Kente marida?"
       ]
     },
     "syn-context-syn-af4cc414e93b": {
@@ -3186,27 +3189,29 @@
       "wrongAnswers": [
         "ken yom 7elo",
         "7elo! W ba3den?",
-        "Ah fehmet. 2arayte kteb?"
-      ]
+        "Ah fehmet. 2riite kteb?"
+      ],
+      "answer": "2a3adet bel bayt."
     },
     "syn-context-syn-43818ad2dfe6": {
       "wrongAnswers": [
-        "Eh ktiir! Ken el jaw ra2e3.",
-        "Ana 2a3adt bel bayt.",
+        "Eh ktiir! Ken el jaw raw3a.",
+        "Ana 2a3adet bel bayt.",
         "Shu 3emelt bel weekend?"
       ]
     },
     "syn-context-syn-a50a2472f7c7": {
       "wrongAnswers": [
         "Shu 3meltu huniik?",
-        "Laysh? Konte marida?",
-        "2a3adt bel bayt."
-      ]
+        "Lesh? Kente marida?",
+        "2a3adet bel bayt."
+      ],
+      "answer": "ma saar she"
     },
     "syn-context-syn-843d53e9af6f": {
       "wrongAnswers": [
         "7elo! W ba3den?",
-        "Ah fehmet. 2arayte kteb?",
+        "Ah fehmet. 2riite kteb?",
         "Ba3den re7na 3as sinema."
       ]
     },
@@ -3214,12 +3219,12 @@
       "wrongAnswers": [
         "Ktiir! W ente shu 3melte?",
         "Re7t 3al ba7er.",
-        "ma sar she"
+        "ma saar she"
       ]
     },
     "syn-context-syn-6b9cc945e444": {
       "wrongAnswers": [
-        "Eh, w tfarrajet 3a film kameen.",
+        "Eh, w tfarrajet 3a filem kameen.",
         "Shu 3emelt mbere7?",
         "Wow! Ken 7elo?"
       ]
@@ -3228,7 +3233,7 @@
       "wrongAnswers": [
         "7elo! Yalla bshufik!",
         "re7t 3al mat3am",
-        "Eh ktiir! Ken el jaw ra2e3."
+        "Eh ktiir! Ken el jaw raw3a."
       ]
     },
     "syn-context-syn-9d7e7d73b554": {
@@ -3236,13 +3241,18 @@
         "Shu 3emelt bel weekend?",
         "Ken fi ktiir 3aalam.",
         "Sbe7na w l3ebna futbol."
-      ]
+      ],
+      "answer": "Ana 2a3adet bel bayt."
     },
     "syn-context-syn-171dc59264a0": {
       "wrongAnswers": [
-        "2a3adt bel bayt.",
+        "2a3adet bel bayt.",
         "ken yom 7elo",
         "7elo! W ba3den?"
+      ],
+      "answer": "Lesh? Kente marida?",
+      "expressionIDs": [
+        "syn-171dc59264a0"
       ]
     },
     "syn-context-syn-ebdb54abaf57": {
@@ -3250,7 +3260,8 @@
         "Ba3den re7na 3as sinema.",
         "Mar7aba! Re7t 3al ba7er ma3 s7aabe.",
         "Yamm! Ken tayyeb?"
-      ]
+      ],
+      "answer": "Ah fehmet. 2riite kteb?"
     },
     "syn-context-syn-8d4bfe997d36": {
       "wrongAnswers": [
@@ -3979,7 +3990,13 @@
       ]
     },
     "syn-1ae0ed713d37": {
-      "canonicalArabizi": "Eh ktiir! Ken el jaw ra2e3."
+      "canonicalArabizi": "Eh ktiir! Ken el jaw raw3a.",
+      "variants": [
+        {
+          "value": "Eh ktiir! Ken el jaw bisattel.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-1cb1dbbb7ba8": {
       "canonicalArabizi": "Tameem, shukran ktiir!"
@@ -4297,7 +4314,7 @@
       "canonicalArabizi": "7elo! Ana kameen jou3an."
     },
     "syn-5da1e48191e8": {
-      "canonicalArabizi": "Mar7aba Fadi! Shu 3emelt bel weekend?"
+      "canonicalArabizi": "Mar7aba Fadi! Shu 3emelet bel weekend?"
     },
     "syn-5e2a3a56f78b": {
       "canonicalArabizi": "B7ebb el akel el lebnene ktiir.",
@@ -4598,7 +4615,7 @@
       "canonicalArabizi": "Ken 7elo ktiir! Bass ken fi nes ktiir."
     },
     "syn-99f12673901d": {
-      "canonicalArabizi": "2ret kteb w tfarrajet 3a filem."
+      "canonicalArabizi": "2riit kteeb w tfarrajet 3a filem."
     },
     "syn-9a79f6640456": {
       "exclude": true
@@ -4849,7 +4866,7 @@
       "canonicalArabizi": "Tsharrafna! Ana Karim. Shu jeebak 3a Lebnen?"
     },
     "syn-cd11a02eda89": {
-      "canonicalArabizi": "Eh, w tfarrajet 3a film kameen."
+      "canonicalArabizi": "Eh, w tfarrajet 3a filem kameen."
     },
     "syn-ced297d92d16": {
       "canonicalArabizi": "Ru7e du8re la e5er esh share3."
@@ -5531,6 +5548,27 @@
     },
     "syn-caf02013bad9": {
       "canonicalArabizi": "7elo! Shu 3am ta3mle halla2?"
+    },
+    "syn-4bf9ad383bee": {
+      "canonicalArabizi": "2a3adet bel bayt."
+    },
+    "syn-a50a2472f7c7": {
+      "canonicalArabizi": "ma saar she"
+    },
+    "syn-9d7e7d73b554": {
+      "canonicalArabizi": "Ana 2a3adet bel bayt."
+    },
+    "syn-171dc59264a0": {
+      "canonicalArabizi": "Lesh? Kente marida?",
+      "variants": [
+        {
+          "value": "Lesh? Kente mariida?",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-ebdb54abaf57": {
+      "canonicalArabizi": "Ah fehmet. 2riite kteb?"
     }
   },
   "unitExpressionAdditions": [

@@ -1726,6 +1726,206 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a2-past",
+      "scenes": [
+        {
+          "title": "Tu ești prietena lui Fadi",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-5da1e48191e8"
+            },
+            {
+              "exerciseID": "syn-context-syn-2a6f5aea8bb0",
+              "partner": {
+                "arabizi": "Mar7aba! Re7t 3al ba7er ma3 s7aabe.",
+                "ro": "Salut! Am mers la mare cu prietenii."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-944c5743499a",
+              "partner": {
+                "arabizi": "Eh ktiir! Ken el jaw bisattel.",
+                "ro": "Da, foarte! Vremea a fost minunată."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f11eb4e6a3a7",
+              "partner": {
+                "arabizi": "Sbe7na w l3ebna futbol.",
+                "ro": "Am înotat și ne-am jucat fotbal."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-3954cf5cbd5c",
+              "partner": {
+                "arabizi": "Re7na 3a mat3am w akalna samak.",
+                "ro": "Am mers la restaurant și am mâncat pește."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9d7e7d73b554",
+              "partner": {
+                "arabizi": "Ktiir! W ente shu 3melte?",
+                "ro": "Foarte! Și tu ce ai făcut?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-695d7c1548a1",
+              "partner": {
+                "arabizi": "Lesh? Kente mariida?",
+                "ro": "De ce? Erai bolnavă?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-cd11a02eda89",
+              "partner": {
+                "arabizi": "Ah fehmet. 2riite kteb?",
+                "ro": "Ah, înțeleg. Ai citit o carte?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Fadi",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-83ab4906ec93",
+              "partner": {
+                "arabizi": "Mar7aba Fadi! Shu 3melet bel weekend?",
+                "ro": "Salut Fadi! Ce ai făcut în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1ae0ed713d37",
+              "partner": {
+                "arabizi": "Wow! Ken 7elo?",
+                "ro": "Uau! A fost frumos?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ee94fc2d2880",
+              "partner": {
+                "arabizi": "Shu 3melto huniik?",
+                "ro": "Ce ați făcut acolo?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6b9cc945e444",
+              "partner": {
+                "arabizi": "7elo! W ba3deen?",
+                "ro": "Frumos! Și apoi?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-5722dd3736f9",
+              "partner": {
+                "arabizi": "Yamm! Ken tayyeb?",
+                "ro": "Mmm! A fost gustos?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-171dc59264a0",
+              "partner": {
+                "arabizi": "Ana 2a3adt bel bayt.",
+                "ro": "Eu am stat acasă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ebdb54abaf57",
+              "partner": {
+                "arabizi": "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
+                "ro": "Nu, eram ocupată. Aveam multă muncă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-7fafcb18d749",
+              "partner": {
+                "arabizi": "Eh, w tfarrajet 3a film kameen.",
+                "ro": "Da, și m-am uitat la un film."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Ieri",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-f8c4dfb99ed9"
+            },
+            {
+              "exerciseID": "syn-context-syn-43818ad2dfe6",
+              "partner": {
+                "arabizi": "Ma 3melt shi. W enta?",
+                "ro": "Nimic. Și tu?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-25afb8239c6a",
+              "partner": {
+                "arabizi": "Ken fi 3aalam?",
+                "ro": "Erau oameni?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-843d53e9af6f",
+              "partner": {
+                "arabizi": "Kif ken yawmak?",
+                "ro": "Cum a fost ziua ta?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "La mare",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-af4cc414e93b"
+            },
+            {
+              "exerciseID": "syn-context-syn-979774a1f19c",
+              "partner": {
+                "arabizi": "Ma shi mhem. W enta?",
+                "ro": "Nimic important. Și tu?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-21d54103c4b4",
+              "partner": {
+                "arabizi": "W ba3den?",
+                "ro": "Și apoi?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Acasă",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-4bf9ad383bee",
+              "partner": {
+                "arabizi": "Shu 3melet bel weekend?",
+                "ro": "Ce ai făcut în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a50a2472f7c7",
+              "partner": {
+                "arabizi": "Lesh? Shu saar?",
+                "ro": "De ce? Ce s-a întâmplat?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-99f12673901d",
+              "partner": {
+                "arabizi": "W shu 3melet bel bet?",
+                "ro": "Și ce ai făcut acasă?"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

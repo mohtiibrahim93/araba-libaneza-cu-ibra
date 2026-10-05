@@ -51201,7 +51201,7 @@
     },
     {
       "id": "syn-4bf9ad383bee",
-      "canonicalArabizi": "2a3adt bel bayt.",
+      "canonicalArabizi": "2a3adet bel bayt.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -51229,7 +51229,7 @@
     },
     {
       "id": "syn-99f12673901d",
-      "canonicalArabizi": "2ret kteb w tfarrajet 3a filem.",
+      "canonicalArabizi": "2riit kteeb w tfarrajet 3a filem.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -54319,7 +54319,7 @@
     },
     {
       "id": "syn-a50a2472f7c7",
-      "canonicalArabizi": "ma sar she",
+      "canonicalArabizi": "ma saar she",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57253,7 +57253,7 @@
     },
     {
       "id": "syn-5da1e48191e8",
-      "canonicalArabizi": "Mar7aba Fadi! Shu 3emelt bel weekend?",
+      "canonicalArabizi": "Mar7aba Fadi! Shu 3emelet bel weekend?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57295,8 +57295,13 @@
     },
     {
       "id": "syn-1ae0ed713d37",
-      "canonicalArabizi": "Eh ktiir! Ken el jaw ra2e3.",
-      "variants": [],
+      "canonicalArabizi": "Eh ktiir! Ken el jaw raw3a.",
+      "variants": [
+        {
+          "value": "Eh ktiir! Ken el jaw bisattel.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a2"
       ],
@@ -57393,7 +57398,7 @@
     },
     {
       "id": "syn-9d7e7d73b554",
-      "canonicalArabizi": "Ana 2a3adt bel bayt.",
+      "canonicalArabizi": "Ana 2a3adet bel bayt.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57407,8 +57412,13 @@
     },
     {
       "id": "syn-171dc59264a0",
-      "canonicalArabizi": "Laysh? Konte marida?",
-      "variants": [],
+      "canonicalArabizi": "Lesh? Kente marida?",
+      "variants": [
+        {
+          "value": "Lesh? Kente mariida?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a2"
       ],
@@ -57435,7 +57445,7 @@
     },
     {
       "id": "syn-ebdb54abaf57",
-      "canonicalArabizi": "Ah fehmet. 2arayte kteb?",
+      "canonicalArabizi": "Ah fehmet. 2riite kteb?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57449,7 +57459,7 @@
     },
     {
       "id": "syn-cd11a02eda89",
-      "canonicalArabizi": "Eh, w tfarrajet 3a film kameen.",
+      "canonicalArabizi": "Eh, w tfarrajet 3a filem kameen.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -68167,9 +68177,9 @@
       },
       "answer": "Re7t 3al ba7er.",
       "wrongAnswers": [
-        "ma sar she",
+        "ma saar she",
         "Shu 3meltu huniik?",
-        "Laysh? Konte marida?"
+        "Lesh? Kente marida?"
       ]
     },
     {
@@ -68195,11 +68205,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Am stat acasă.”"
       },
-      "answer": "2a3adt bel bayt.",
+      "answer": "2a3adet bel bayt.",
       "wrongAnswers": [
         "ken yom 7elo",
         "7elo! W ba3den?",
-        "Ah fehmet. 2arayte kteb?"
+        "Ah fehmet. 2riite kteb?"
       ]
     },
     {
@@ -68210,11 +68220,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Am citit o carte și m-am uitat la un film.”"
       },
-      "answer": "2ret kteb w tfarrajet 3a filem.",
+      "answer": "2riit kteeb w tfarrajet 3a filem.",
       "wrongAnswers": [
-        "Mar7aba Fadi! Shu 3emelt bel weekend?",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?",
         "Re7na 3a mat3am w akalna samak.",
-        "Eh, w tfarrajet 3a film kameen."
+        "Eh, w tfarrajet 3a filem kameen."
       ]
     },
     {
@@ -68257,8 +68267,8 @@
       },
       "answer": "re7t 3al mat3am",
       "wrongAnswers": [
-        "Eh ktiir! Ken el jaw ra2e3.",
-        "Ana 2a3adt bel bayt.",
+        "Eh ktiir! Ken el jaw raw3a.",
+        "Ana 2a3adet bel bayt.",
         "Shu 3emelt bel weekend?"
       ]
     },
@@ -68270,11 +68280,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „nu s-a întâmplat nimic”"
       },
-      "answer": "ma sar she",
+      "answer": "ma saar she",
       "wrongAnswers": [
         "Shu 3meltu huniik?",
-        "Laysh? Konte marida?",
-        "2a3adt bel bayt."
+        "Lesh? Kente marida?",
+        "2a3adet bel bayt."
       ]
     },
     {
@@ -68289,7 +68299,7 @@
       "wrongAnswers": [
         "Sbe7na w l3ebna futbol.",
         "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
-        "2ret kteb w tfarrajet 3a filem."
+        "2riit kteeb w tfarrajet 3a filem."
       ]
     },
     {
@@ -68303,7 +68313,7 @@
       "answer": "ken yom 7elo",
       "wrongAnswers": [
         "7elo! W ba3den?",
-        "Ah fehmet. 2arayte kteb?",
+        "Ah fehmet. 2riite kteb?",
         "Ba3den re7na 3as sinema."
       ]
     },
@@ -68315,10 +68325,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Salut Fadi! Ce ai făcut în weekend?”"
       },
-      "answer": "Mar7aba Fadi! Shu 3emelt bel weekend?",
+      "answer": "Mar7aba Fadi! Shu 3emelet bel weekend?",
       "wrongAnswers": [
         "Re7na 3a mat3am w akalna samak.",
-        "Eh, w tfarrajet 3a film kameen.",
+        "Eh, w tfarrajet 3a filem kameen.",
         "Shu 3emelt mbere7?"
       ]
     },
@@ -68349,20 +68359,22 @@
       "wrongAnswers": [
         "Ktiir! W ente shu 3melte?",
         "Re7t 3al ba7er.",
-        "ma sar she"
+        "ma saar she"
       ]
     },
     {
       "id": "syn-context-syn-1ae0ed713d37",
       "type": "dialogue-response",
       "unitID": "a2-past",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-1ae0ed713d37"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Da, foarte! Vremea a fost minunată.”"
       },
-      "answer": "Eh ktiir! Ken el jaw ra2e3.",
+      "answer": "Eh ktiir! Ken el jaw raw3a.",
       "wrongAnswers": [
-        "Ana 2a3adt bel bayt.",
+        "Ana 2a3adet bel bayt.",
         "Shu 3emelt bel weekend?",
         "Ken fi ktiir 3aalam."
       ]
@@ -68377,8 +68389,8 @@
       },
       "answer": "Shu 3meltu huniik?",
       "wrongAnswers": [
-        "Laysh? Konte marida?",
-        "2a3adt bel bayt.",
+        "Lesh? Kente marida?",
+        "2a3adet bel bayt.",
         "ken yom 7elo"
       ]
     },
@@ -68393,8 +68405,8 @@
       "answer": "Sbe7na w l3ebna futbol.",
       "wrongAnswers": [
         "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
-        "2ret kteb w tfarrajet 3a filem.",
-        "Mar7aba Fadi! Shu 3emelt bel weekend?"
+        "2riit kteeb w tfarrajet 3a filem.",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?"
       ]
     },
     {
@@ -68407,7 +68419,7 @@
       },
       "answer": "7elo! W ba3den?",
       "wrongAnswers": [
-        "Ah fehmet. 2arayte kteb?",
+        "Ah fehmet. 2riite kteb?",
         "Ba3den re7na 3as sinema.",
         "Mar7aba! Re7t 3al ba7er ma3 s7aabe."
       ]
@@ -68422,7 +68434,7 @@
       },
       "answer": "Re7na 3a mat3am w akalna samak.",
       "wrongAnswers": [
-        "Eh, w tfarrajet 3a film kameen.",
+        "Eh, w tfarrajet 3a filem kameen.",
         "Shu 3emelt mbere7?",
         "Wow! Ken 7elo?"
       ]
@@ -68439,7 +68451,7 @@
       "wrongAnswers": [
         "7elo! Yalla bshufik!",
         "re7t 3al mat3am",
-        "Eh ktiir! Ken el jaw ra2e3."
+        "Eh ktiir! Ken el jaw raw3a."
       ]
     },
     {
@@ -68453,7 +68465,7 @@
       "answer": "Ktiir! W ente shu 3melte?",
       "wrongAnswers": [
         "Re7t 3al ba7er.",
-        "ma sar she",
+        "ma saar she",
         "Shu 3meltu huniik?"
       ]
     },
@@ -68465,7 +68477,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Eu am stat acasă.”"
       },
-      "answer": "Ana 2a3adt bel bayt.",
+      "answer": "Ana 2a3adet bel bayt.",
       "wrongAnswers": [
         "Shu 3emelt bel weekend?",
         "Ken fi ktiir 3aalam.",
@@ -68476,13 +68488,15 @@
       "id": "syn-context-syn-171dc59264a0",
       "type": "dialogue-response",
       "unitID": "a2-past",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-171dc59264a0"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „De ce? Erai bolnavă?”"
       },
-      "answer": "Laysh? Konte marida?",
+      "answer": "Lesh? Kente marida?",
       "wrongAnswers": [
-        "2a3adt bel bayt.",
+        "2a3adet bel bayt.",
         "ken yom 7elo",
         "7elo! W ba3den?"
       ]
@@ -68497,8 +68511,8 @@
       },
       "answer": "Ma re7et, kenet mash8uule. Ken 3ande ktiir shu8ol.",
       "wrongAnswers": [
-        "2ret kteb w tfarrajet 3a filem.",
-        "Mar7aba Fadi! Shu 3emelt bel weekend?",
+        "2riit kteeb w tfarrajet 3a filem.",
+        "Mar7aba Fadi! Shu 3emelet bel weekend?",
         "Re7na 3a mat3am w akalna samak."
       ]
     },
@@ -68510,7 +68524,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Ah, înțeleg. Ai citit o carte?”"
       },
-      "answer": "Ah fehmet. 2arayte kteb?",
+      "answer": "Ah fehmet. 2riite kteb?",
       "wrongAnswers": [
         "Ba3den re7na 3as sinema.",
         "Mar7aba! Re7t 3al ba7er ma3 s7aabe.",
@@ -68525,7 +68539,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Da, și m-am uitat la un film.”"
       },
-      "answer": "Eh, w tfarrajet 3a film kameen.",
+      "answer": "Eh, w tfarrajet 3a filem kameen.",
       "wrongAnswers": [
         "Shu 3emelt mbere7?",
         "Wow! Ken 7elo?",
@@ -68543,8 +68557,8 @@
       "answer": "7elo! Yalla bshufik!",
       "wrongAnswers": [
         "re7t 3al mat3am",
-        "Eh ktiir! Ken el jaw ra2e3.",
-        "Ana 2a3adt bel bayt."
+        "Eh ktiir! Ken el jaw raw3a.",
+        "Ana 2a3adet bel bayt."
       ]
     },
     {
