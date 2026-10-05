@@ -34,9 +34,9 @@ const ActiveCoursesBanner = () => {
     <section className="px-gutter py-section-sm bg-background border-y border-border">
       <div className="w-full max-w-content mx-auto">
         <div className="flex items-center justify-between gap-4 mb-4">
-          <div className="flex items-center gap-2">
-            <Flame className="w-4 h-4 text-primary" />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
+          <div className="flex items-center gap-2.5">
+            <Flame className="h-5 w-5 text-primary" />
+            <h2 className="font-display text-xl font-bold text-primary sm:text-2xl">
               {t.activeNowTitle}
             </h2>
           </div>
@@ -126,6 +126,13 @@ const ActiveCoursesBanner = () => {
                       </span>
                     </span>
                   </p>
+                  {/* Groups open once half the seats are taken (3 of 6). */}
+                  <p className="text-xs text-muted-foreground mb-3 -mt-2">
+                    {lang === "en"
+                      ? `Starts with minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} enrolled`
+                      : `Pornește cu minimum ${Math.ceil(c.max_seats / 2)}/${c.max_seats} înscriși`}
+                  </p>
+
 
                   <span className="mt-auto inline-flex self-start items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-primary/90">
                     {lang === "en" ? "Enroll" : "Înscrie-te"}

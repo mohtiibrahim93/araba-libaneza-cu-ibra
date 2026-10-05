@@ -12,7 +12,6 @@ import {
   physicalPrice,
 } from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
-import posterCursuriGrup from "@/assets/poster-cursuri-grup-sep2026.webp";
 import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 
@@ -213,9 +212,6 @@ const CursGrup = () => {
         </div>
       </section>
 
-      {/* The flyer of the groups already running. It used to sit next to the
-          enrolment note, where its September start dates read like the next
-          start; here it is labelled as what it is. */}
       <section className="mt-section">
         <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
           {lang === "en" ? "Groups in progress" : "Grupe în desfășurare"}
@@ -225,16 +221,6 @@ const CursGrup = () => {
             ? "A1 and A2 in person at Raduga Creative Center, started in September. For the next start dates, see the enrolment note above."
             : "A1 și A2 fizic, la Raduga Creative Center, începute în septembrie. Pentru următoarele date de start, vezi nota de înscriere de mai sus."}
         </p>
-        <img
-          src={posterCursuriGrup}
-          alt="Poster cursuri de arabă libaneză, fizic la Raduga Creative Center — A2 start marți, 1 septembrie 2026, marți și joi; A1 start miercuri, 2 septembrie 2026, luni și miercuri; 19:00–20:30, Strada Icoanei 80"
-          width={1024}
-          height={1024}
-          loading="lazy"
-          decoding="async"
-          className="w-full max-w-sm rounded-3xl border border-[#E7E1D6] dark:border-border"
-        />
-
       </section>
 
       {/* Don't know your level? */}

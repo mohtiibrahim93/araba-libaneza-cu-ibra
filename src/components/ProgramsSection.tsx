@@ -14,25 +14,11 @@ import {
   PRIVATE_DISCOUNT_TIERS,
 } from "@/lib/pricing";
 import { getCurriculum } from "@/data/curriculum";
-import posterA1Fizic from "@/assets/poster-a1-fizic-sep2026.webp";
-import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
 import groupImg from "@/assets/group-course.jpg";
 import privateImg from "@/assets/private-course.jpg";
 import kidsImg from "@/assets/kids-course.jpg";
 import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
 import YallaGameBand from "@/components/YallaGameBand";
-
-// Cohort posters shown in the inline level summary — only A1/A2 have announced cohorts.
-const LEVEL_POSTERS: Partial<Record<string, { src: string; alt: string }[]>> = {
-  // The A1 online cohort has already started, so its poster (which advertises a
-  // start date that has passed) is no longer shown here.
-  A1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80" },
-  ],
-  A2: [
-    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80" },
-  ],
-};
 
 const wa = (msg: string) =>
   "https://wa.me/40763124514?text=" + encodeURIComponent(msg);
@@ -273,22 +259,6 @@ const ProgramsSection = () => {
                     <div className="mb-3 space-y-0.5">
                       {activeLevelData.schedule.map((line, i) => (
                         <p key={i} className="text-xs text-muted-foreground">{line}</p>
-                      ))}
-                    </div>
-                  )}
-                  {LEVEL_POSTERS[activeLevel] && (
-                    <div className="mb-3 grid grid-cols-2 gap-2 max-w-sm">
-                      {LEVEL_POSTERS[activeLevel]!.map((p) => (
-                        <img
-                          key={p.src}
-                          src={p.src}
-                          alt={p.alt}
-                          width={800}
-                          height={800}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full rounded-lg border border-border"
-                        />
                       ))}
                     </div>
                   )}

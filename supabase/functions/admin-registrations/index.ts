@@ -1421,8 +1421,13 @@ Deno.serve(async (req) => {
         (r.refunded_amount ?? 0) > 0 ||
         !!r.stripe_subscription_id;
 
-      const blocked = (rows ?? []).filter(hasMoney).map((r) => r.id);
-      const deletable = (rows ?? []).filter((r) => !hasMoney(r)).map((r) => r.id);
+      // force=true: admin explicitly confirmed (typed confirmation in the UI)
+      // that these are test rows; payment traces are deleted too.
+      const force = body?.force === true;
+      const blocked = force ? [] : (rows ?? []).filter(hasMoney).map((r) => r.id);
+      const deletable = force
+        ? (rows ?? []).map((r) => r.id)
+        : (rows ?? []).filter((r) => !hasMoney(r)).map((r) => r.id);
 
       if (deletable.length > 0) {
         const { error } = await supabase.from("registrations").delete().in("id", deletable);
@@ -1430,7 +1435,7 @@ Deno.serve(async (req) => {
         await supabase.from("audit_logs").insert(
           deletable.map((rid) => ({
             actor: callerEmail!,
-            action: "delete",
+            action: force ? "force_delete" : "delete",
             registration_id: rid,
           })),
         );
