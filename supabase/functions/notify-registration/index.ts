@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     // spoofing arbitrary recipient emails — we only send to what is in DB.
     const { data: reg, error: regErr } = await supabase
       .from("registrations")
-      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age, language")
+      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age, language, payment_status")
       .eq("id", registrationId)
       .maybeSingle();
 
@@ -126,6 +126,27 @@ Deno.serve(async (req) => {
     };
 
 
+    /**
+     * Whether this registration has actually been paid for.
+     *
+     * This function runs the moment the form is submitted, which is before any
+     * payment exists — so for almost every registration this is false, and that
+     * is the point. The email it sends is a receipt for a *request*: its words
+     * already say so ("am primit cererea ta", "plata este cea care îți confirmă
+     * locul"). But it was also handing over the Zoom link under a heading
+     * telling the reader to save it because they would use it for every online
+     * lesson, and an .ics calendar invite for a course they had not bought.
+     *
+     * One static Zoom room serves every online lesson, so that link is the
+     * class. Anyone who filled in the form — no card, no intention to pay —
+     * received the key to it and a calendar entry saying they were in.
+     *
+     * Paid registrants lose nothing: the welcome message within 24 hours of
+     * payment, which step 3 of the same email promises, is where the joining
+     * details belong.
+     */
+    const paid = reg.payment_status === "paid";
+
     // 1) Confirmation to the registrant (only if they provided an email)
     if (reg.email) {
       const tpl = TEMPLATE_BY_FORM_TYPE[reg.form_type];
@@ -146,18 +167,18 @@ Deno.serve(async (req) => {
             center: reg.center || undefined,
             scheduleLabel: scheduleLabel || undefined,
             startDateLabel: startDateLabel || undefined,
-            zoomLink: zoomLink || undefined,
-            icsUrl: hasSchedule ? icsUrl : undefined,
+            zoomLink: paid ? zoomLink || undefined : undefined,
+            icsUrl: paid && hasSchedule ? icsUrl : undefined,
           });
         } else if (reg.form_type === "kids") {
           Object.assign(baseData, {
             childAge: reg.child_age || undefined,
             scheduleLabel: scheduleLabel || undefined,
-            icsUrl: hasSchedule ? icsUrl : undefined,
+            icsUrl: paid && hasSchedule ? icsUrl : undefined,
           });
         } else if (reg.form_type === "private") {
           Object.assign(baseData, {
-            zoomLink: reg.format === "online" ? (zoomLink || undefined) : undefined,
+            zoomLink: paid && reg.format === "online" ? (zoomLink || undefined) : undefined,
             message: reg.notes || undefined,
           });
         }
