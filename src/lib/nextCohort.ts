@@ -28,6 +28,15 @@ export const longDate = (iso: string, lang: "ro" | "en") =>
     month: "long",
   });
 
-/** Where "sign up" for a cohort leads: its level page, with the format preset. */
-export const cohortHref = (c: Cohort) =>
-  `/cursuri/grup/${(c.level ?? "a1").toLowerCase()}${c.format ? `?mod=${c.format}` : ""}`;
+/**
+ * Where "sign up" for a cohort leads: its level page, with the format and the
+ * teaching language preset — so the English-taught A1 opens the form on
+ * English, not on whatever language the visitor reads the site in.
+ */
+export const cohortHref = (c: Cohort) => {
+  const q = new URLSearchParams();
+  if (c.format) q.set("mod", c.format);
+  if (c.teaching_language) q.set("predare", c.teaching_language);
+  const qs = q.toString();
+  return `/cursuri/grup/${(c.level ?? "a1").toLowerCase()}${qs ? `?${qs}` : ""}`;
+};

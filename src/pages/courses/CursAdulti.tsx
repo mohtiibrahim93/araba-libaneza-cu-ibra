@@ -11,7 +11,9 @@ const CursAdulti = () => {
   const { t, lang } = useI18n();
   const en = lang === "en";
   // The groups an adult can join now: the same list the sign-up form offers.
-  const { cohorts } = useGroupCohorts("group", null, null, en ? "en" : "ro");
+  const { cohorts } = useGroupCohorts("group", null, null, null);
+  // Every open group, whatever language it is taught in: a Romanian reader may
+  // want the English-taught A1 and the other way round. Each card says which.
   const open = cohorts.filter((c) => !c.full);
 
   const courseSchema = {
@@ -36,7 +38,16 @@ const CursAdulti = () => {
       badge={t.trackAdultiTitle}
       h1={t.cursAdultiH1}
       intro={t.cursAdultiIntro}
-      features={[t.courseGrupFeat1, t.courseGrupFeat2, t.coursePrivateFeat2, t.courseGrupFeat4]}
+      features={[
+        t.courseGrupFeat1,
+        t.courseGrupFeat2,
+        // Not "you choose the times": that is true of private lessons only. A
+        // group runs on its fixed schedule (the owner's correction).
+        en
+          ? "Groups on a fixed schedule; private lessons at times you choose"
+          : "Grupă cu orar fix; lecții private la orele alese de tine",
+        t.courseGrupFeat4,
+      ]}
       primaryCtaLabel={t.courseCtaSeeOptions}
       primaryCtaHref="#options"
       otherCourses={[
@@ -100,7 +111,8 @@ const CursAdulti = () => {
                   className="flex h-full flex-col gap-1 rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border"
                 >
                   <span className="text-sm font-bold text-brand-green">
-                    {c.level} · {c.format === "fizic" ? (en ? "in person" : "fizic") : "online"}
+                    {c.level} · {c.format === "fizic" ? (en ? "in person" : "fizic") : "online"} ·{" "}
+                    {c.teaching_language === "en" ? (en ? "taught in English" : "în engleză") : en ? "taught in Romanian" : "în română"}
                   </span>
                   <span className="font-display text-lg font-bold text-foreground">
                     {en ? "Starts " : "Începe pe "}{longDate(c.start_date, en ? "en" : "ro")}

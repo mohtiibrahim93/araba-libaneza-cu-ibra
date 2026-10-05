@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 import { Label } from "@/components/ui/label";
@@ -59,7 +59,15 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
 
   // Default to the language being read, but only if classes exist in it —
   // otherwise start on a language that actually has something to join.
+  // A link to a specific group (?predare=en from the menu, Programare or the
+  // adults page) opens on that group's teaching language.
+  // Read after mount, not during render: the server has no URL query, and a
+  // different first render would not hydrate cleanly.
   const [chosen, setChosen] = useState<"ro" | "en" | null>(null);
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("predare");
+    if (v === "ro" || v === "en") setChosen(v);
+  }, []);
   const teachingLanguage: "ro" | "en" =
     chosen ?? (languagesAvailable.includes(lang) ? lang : (languagesAvailable[0] as "ro" | "en") ?? lang);
 

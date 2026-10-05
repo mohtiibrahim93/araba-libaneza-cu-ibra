@@ -42,7 +42,9 @@ const BookingLanding = () => {
   );
   const [cohortId, setCohortId] = useState<string | null>(null);
   const ensureRegistration = useTrialRegistration();
-  const { cohorts, loading } = useGroupCohorts("group", null, null, en ? "en" : "ro");
+  const { cohorts, loading } = useGroupCohorts("group", null, null, null);
+  // Every open group, whatever language it is taught in: a Romanian reader may
+  // want the English-taught A1 and the other way round. Each card says which.
   const cohort = cohorts.find((c) => c.id === cohortId) ?? null;
 
   const options: { id: Choice; Icon: typeof Gift; title: string; meta: string; text: string }[] = [
@@ -243,7 +245,8 @@ const BookingLanding = () => {
                             )}
                           >
                             <span className="text-sm font-bold text-brand-green">
-                              {c.level} · {c.format === "fizic" ? (en ? "in person" : "fizic") : "online"}
+                              {c.level} · {c.format === "fizic" ? (en ? "in person" : "fizic") : "online"} ·{" "}
+                    {c.teaching_language === "en" ? (en ? "taught in English" : "în engleză") : en ? "taught in Romanian" : "în română"}
                             </span>
                             <span className="font-display text-lg font-bold text-foreground">
                               {en ? "Starts " : "Începe pe "}
