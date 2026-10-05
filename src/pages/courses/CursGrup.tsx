@@ -1,3 +1,4 @@
+import GroupStartRule from "@/components/GroupStartRule";
 import CourseLayout from "@/components/course/CourseLayout";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/lib/router-compat";
@@ -64,6 +65,7 @@ const CursGrup = () => {
         <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
         <p className="text-base text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
         <CohortEnrollmentNote className="text-sm font-medium text-primary mb-6 max-w-2xl" />
+        <GroupStartRule className="mb-6 max-w-3xl" />
 
         {/* These groups are for adults. Search engines were landing teen
             queries on this page, so send that intent to the page that answers

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import { useI18n } from "@/lib/i18n";
 import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 import { Label } from "@/components/ui/label";
@@ -64,6 +65,8 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
   // Read after mount, not during render: the server has no URL query, and a
   // different first render would not hydrate cleanly.
   const [chosen, setChosen] = useState<"ro" | "en" | null>(null);
+  // A full group cannot be joined; clicking it opens its waiting list instead.
+  const [waitlistFor, setWaitlistFor] = useState<string | null>(null);
   useEffect(() => {
     const v = new URLSearchParams(window.location.search).get("predare");
     if (v === "ro" || v === "en") setChosen(v);
@@ -163,7 +166,14 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
             <button
               key={c.id}
               type="button"
-              onClick={() => onSelect(active ? null : c)}
+              onClick={() => {
+                if (c.full) {
+                  setWaitlistFor(waitlistFor === c.id ? null : c.id);
+                  return;
+                }
+                setWaitlistFor(null);
+                onSelect(active ? null : c);
+              }}
               className={cn(
                 "text-left rounded-lg border p-3 transition-colors",
                 active
@@ -205,7 +215,9 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
               <div className="mt-2 flex items-center gap-1.5 text-xs">
                 <Users className="w-3.5 h-3.5 text-muted-foreground" />
                 {c.full ? (
-                  <span className="font-semibold text-primary">{t.cohortFull}</span>
+                  <span className="font-semibold text-primary">
+                    {lang === "en" ? "Full · join the waiting list" : "Completă · intră pe lista de așteptare"}
+                  </span>
                 ) : (
                   <span
                     className={cn(
@@ -221,6 +233,28 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
           );
         })}
       </div>
+      {(() => {
+        const w = cohorts.find((c) => c.id === waitlistFor);
+        if (!w) return null;
+        const fmt = w.format === "fizic" ? "fizic" : "online";
+        const langLabel = w.teaching_language === "en" ? "engleză" : "română";
+        return (
+          <NotifyMeForm
+            nested
+            cohortId={w.id}
+            {...(w.level ? { level: w.level } : {})}
+            presetFormat={fmt}
+            title={lang === "en" ? "Waiting list" : "Listă de așteptare"}
+            // Romanian for the admin, which reads it in Cereri.
+            context={`Listă de așteptare: ${w.level ?? ""} ${fmt}, în ${langLabel}, start ${w.start_date}`}
+            label={
+              lang === "en"
+                ? `This group is full. Leave your details and we'll contact you as soon as a place frees up or a new group opens.`
+                : `Grupa e completă. Lasă-ți datele și te contactăm imediat ce se eliberează un loc sau se deschide o grupă nouă.`
+            }
+          />
+        );
+      })()}
       <p className="text-xs text-muted-foreground">{t.cohortPickerHelp}</p>
     </div>
   );

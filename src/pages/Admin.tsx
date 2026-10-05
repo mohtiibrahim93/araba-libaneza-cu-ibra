@@ -43,6 +43,7 @@ import { toast } from "@/hooks/use-toast";
 import AdminShell from "@/components/admin/AdminShell";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
+import ManualStudentForm from "@/components/admin/ManualStudentForm";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import GroupOverview from "@/components/admin/GroupOverview";
 import BlogAdmin from "@/components/admin/BlogAdmin";
@@ -925,6 +926,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="manual-signups" className="mt-0 space-y-6">
+            <ManualStudentForm />
             <ManualSignupsAdmin />
           </TabsContent>
 

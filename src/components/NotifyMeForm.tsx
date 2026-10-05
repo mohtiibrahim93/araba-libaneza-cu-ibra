@@ -22,6 +22,21 @@ interface NotifyMeFormProps {
    *  `context`, which stays in Romanian for the admin. */
   label?: string | undefined;
   className?: string;
+  /**
+   * Waiting list for a specific full group: the request is attached to it
+   * (matched_cohort_id) and the format is that group's, so the form does not
+   * ask for it.
+   */
+  cohortId?: string;
+  presetFormat?: "online" | "fizic";
+  /** Heading override, e.g. "Listă de așteptare". */
+  title?: string;
+  /**
+   * Rendered inside another <form> (the sign-up form's group picker): a nested
+   * <form> is invalid HTML and its button could submit the outer form, so this
+   * renders a <div> with a plain button instead.
+   */
+  nested?: boolean;
 }
 
 /**
@@ -29,18 +44,18 @@ interface NotifyMeFormProps {
  * scheduled yet. Writes to public.course_requests (anon INSERT policy,
  * status='new'), so requests land in the admin instead of a WhatsApp thread.
  */
-const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) => {
+const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat, title, nested }: NotifyMeFormProps) => {
   const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [format, setFormat] = useState<"online" | "fizic" | "">("");
+  const [format, setFormat] = useState<"online" | "fizic" | "">(presetFormat ?? "");
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submit = async (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
     if (!name.trim() || !phone.trim()) {
       toast.error(t.schedulerNameRequired);
       return;
@@ -64,7 +79,10 @@ const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) =
         phone: phone.trim(),
         email: email.trim() || null,
         level: level || null,
-        format: format || null,
+        // The table stores "physical", not the site's "fizic": sending "fizic"
+        // broke the insert for anyone who picked in person.
+        format: format === "fizic" ? "physical" : format || null,
+        matched_cohort_id: cohortId ?? null,
         preferred_language: lang,
         lesson_type: "group",
         status: "new", // required by the anon INSERT policy
@@ -90,16 +108,21 @@ const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) =
         </h3>
         <p className="text-sm text-muted-foreground">
           {lang === "en"
-            ? "We'll contact you the moment this group starts. No spam."
-            : "Te contactăm în momentul în care pornește grupa. Fără spam."}
+            ? cohortId
+              ? "We'll contact you as soon as a place frees up or a new group opens. No spam."
+              : "We'll contact you the moment this group starts. No spam."
+            : cohortId
+              ? "Te contactăm imediat ce se eliberează un loc sau se deschide o grupă nouă. Fără spam."
+              : "Te contactăm în momentul în care pornește grupa. Fără spam."}
         </p>
       </div>
     );
   }
 
+  const Root = nested ? "div" : "form";
   return (
-    <form
-      onSubmit={submit}
+    <Root
+      {...(nested ? {} : { onSubmit: submit })}
       className={`rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4 ${className ?? ""}`}
     >
       <div className="flex items-start gap-3">
@@ -108,7 +131,7 @@ const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) =
         </div>
         <div>
           <h3 className="font-display text-lg font-bold text-foreground">
-            {lang === "en" ? "Notify me when it starts" : "Anunță-mă când pornește"}
+            {title ?? (lang === "en" ? "Notify me when it starts" : "Anunță-mă când pornește")}
           </h3>
           <p className="text-sm text-muted-foreground">{label ?? context}</p>
         </div>
@@ -127,7 +150,7 @@ const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) =
           <Label htmlFor="nm-email">{t.labelEmail}</Label>
           <Input id="nm-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} />
         </div>
-        <div className="space-y-1.5">
+        {!presetFormat && <div className="space-y-1.5">
           <Label htmlFor="nm-format">{lang === "en" ? "Preferred format" : "Format preferat"}</Label>
           <select
             id="nm-format"
@@ -139,16 +162,21 @@ const NotifyMeForm = ({ context, level, label, className }: NotifyMeFormProps) =
             <option value="online">Online</option>
             <option value="fizic">{lang === "en" ? "In person (Bucharest)" : "Fizic (București)"}</option>
           </select>
-        </div>
+        </div>}
       </div>
 
       <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
 
-      <Button type="submit" className="w-full" disabled={submitting}>
+      <Button
+        type={nested ? "button" : "submit"}
+        {...(nested ? { onClick: () => void submit() } : {})}
+        className="w-full"
+        disabled={submitting}
+      >
         {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BellRing className="w-4 h-4 mr-2" />}
         {lang === "en" ? "Add me to the list" : "Adaugă-mă pe listă"}
       </Button>
-    </form>
+    </Root>
   );
 };
 

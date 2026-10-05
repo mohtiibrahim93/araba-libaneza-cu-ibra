@@ -593,6 +593,59 @@ Deno.serve(async (req) => {
       return jsonResponse({ data });
     }
 
+    // A student added by hand (WhatsApp, TikTok, a phone call…): a real
+    // registration in the exact group, so they take a seat, show in the list
+    // and get the group's emails. Paid → converted; not paid yet → qualified
+    // (both hold a place — see get_cohort_signup_counts).
+    if (action === "add_manual_registration") {
+      const MANUAL_SOURCES = ["whatsapp", "tiktok", "instagram", "direct", "telefon", "other"];
+      const PAY_METHODS = ["cash", "transfer", "card", "paypal"];
+      const { name, phone, email, cohort_id: mCohort, source: mSource, paid, payment_method: method, notes: mNotes } = body;
+      const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+      const mName = clean(name, 200);
+      const mPhone = clean(phone, 40);
+      const mEmail = clean(email, 320);
+      if (!mName) return jsonResponse({ error: "Numele e obligatoriu" });
+      if (!mPhone) return jsonResponse({ error: "Telefonul e obligatoriu" });
+      if (mEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail)) return jsonResponse({ error: "Email invalid" });
+      if (typeof mSource !== "string" || !MANUAL_SOURCES.includes(mSource)) return jsonResponse({ error: "Sursă invalidă" });
+      if (typeof mCohort !== "string" || !mCohort) return jsonResponse({ error: "Alege grupa" });
+      const isPaid = paid === true;
+      if (isPaid && (typeof method !== "string" || !PAY_METHODS.includes(method))) {
+        return jsonResponse({ error: "Alege cum a plătit" });
+      }
+      const { data: cohort } = await supabase
+        .from("group_cohorts")
+        .select("id, form_type, level, format, teaching_language")
+        .eq("id", mCohort)
+        .maybeSingle();
+      if (!cohort) return jsonResponse({ error: "Grupa nu există" });
+      const now = new Date().toISOString();
+      const { data, error } = await supabase
+        .from("registrations")
+        .insert({
+          form_type: cohort.form_type === "kids" ? "kids" : "group",
+          name: mName,
+          phone: mPhone,
+          email: mEmail || null,
+          cohort_id: cohort.id,
+          level: cohort.level,
+          format: cohort.format,
+          teaching_language: cohort.teaching_language,
+          language: cohort.teaching_language,
+          source: mSource,
+          lead_status: isPaid ? "converted" : "qualified",
+          payment_status: isPaid ? "paid" : "unpaid",
+          paid_at: isPaid ? now : null,
+          payment_method: isPaid ? method : null,
+          notes: clean(mNotes, 2000) || null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      return jsonResponse({ success: true, data });
+    }
+
     if (action === "upsert_cohort") {
       const {
         id: cId,
@@ -705,10 +758,54 @@ Deno.serve(async (req) => {
         payload.manual_offset = off;
       }
       if (typeof cId === "string" && cId) {
+        const { data: before } = await supabase
+          .from("group_cohorts").select("status").eq("id", cId).maybeSingle();
         const { data, error } = await supabase
           .from("group_cohorts").update(payload).eq("id", cId).select().single();
         if (error) throw error;
-        return jsonResponse({ success: true, data });
+
+        // "Minim atins": tell this group's students it starts for sure, the
+        // moment the owner sets it — the owner's rule is that a group is
+        // confirmed as soon as half its places are taken. Only on the change
+        // itself, and each student once (idempotency key per cohort+student),
+        // so saving the group again sends nothing.
+        let notified = 0;
+        if (data && data.status === "minimum_reached" && before?.status !== "minimum_reached") {
+          const { data: regs } = await supabase
+            .from("registrations")
+            .select("id, name, email, language, teaching_language")
+            .eq("cohort_id", cId)
+            .not("email", "is", null)
+            // The students who hold a place — the same rule as the seat count
+            // (get_cohort_signup_counts): qualified or converted, not refunded.
+            .in("lead_status", ["qualified", "converted"])
+            .is("refunded_at", null);
+          for (const r of regs ?? []) {
+            const lang = (r.teaching_language || r.language) === "en" ? "en" : "ro";
+            const startDateLabel = data.start_date
+              ? new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "ro-RO", {
+                  weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Bucharest",
+                }).format(new Date(`${data.start_date}T12:00:00Z`))
+              : undefined;
+            try {
+              const res = await sendTemplateEmail("group-confirmed", r.email, {
+                idempotencyKey: `group-confirmed-${cId}-${r.id}`,
+                templateData: {
+                  language: lang,
+                  name: r.name,
+                  level: data.level,
+                  format: data.format,
+                  startDateLabel,
+                  scheduleLabel: lang === "en" ? data.schedule_label_en : data.schedule_label_ro,
+                },
+              });
+              if (res.sent) notified++;
+            } catch (e) {
+              console.error(`[admin-registrations] group-confirmed email failed for ${r.id}`, e);
+            }
+          }
+        }
+        return jsonResponse({ success: true, data, notified });
       }
       const { data, error } = await supabase
         .from("group_cohorts").insert(payload).select().single();

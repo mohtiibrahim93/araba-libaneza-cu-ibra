@@ -133,8 +133,8 @@ const ManualSignupsAdmin = () => {
       <div className="mb-4">
         <h2 className="text-base font-semibold text-foreground">Înscrieri manuale (alte surse)</h2>
         <p className="text-sm text-muted-foreground">
-          Adaugă cursanți veniți din WhatsApp, TikTok, direct etc. Se adună la numărul afișat
-          „X/Y locuri ocupate” pentru grupa aleasă.
+          Adaugă doar un număr de locuri ocupate pentru un nivel. Pentru un cursant cu nume, telefon și
+          plată, folosește „Adaugă un cursant manual” de mai sus — acolo alegi exact grupa.
         </p>
       </div>
 

@@ -29,7 +29,7 @@ type CohortStatus =
 const STATUSES: { value: CohortStatus; label: string }[] = [
   { value: "draft", label: "Draft (ascuns)" },
   { value: "forming", label: "În formare" },
-  { value: "minimum_reached", label: "Minim atins" },
+  { value: "minimum_reached", label: "Minim atins (trimite email: pornește sigur)" },
   { value: "confirmed", label: "Confirmată" },
   { value: "full", label: "Plină (waitlist)" },
   { value: "in_progress", label: "În desfășurare" },
@@ -145,8 +145,13 @@ const CohortsAdmin = () => {
   const save = async (row: Cohort) => {
     setSavingId(row.id);
     try {
-      await call("upsert_cohort", row);
-      toast({ title: "Cohortă salvată" });
+      const res = await call("upsert_cohort", row);
+      // Setting "Minim atins" emails the group's students (once each).
+      toast({
+        title: res?.notified
+          ? `Cohortă salvată · ${res.notified} ${res.notified === 1 ? "cursant anunțat" : "cursanți anunțați"} că grupa pornește sigur`
+          : "Cohortă salvată",
+      });
       await load();
     } catch (err) {
       toast({

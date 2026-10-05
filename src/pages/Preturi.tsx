@@ -1,3 +1,4 @@
+import GroupStartRule from "@/components/GroupStartRule";
 import { Gift, Users, UserRound, Baby, CreditCard, ShieldCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -200,6 +201,7 @@ const PreturiPage = () => {
                 );
               })}
             </ul>
+            <GroupStartRule className="mt-6" />
           </section>
 
           {/* Private */}

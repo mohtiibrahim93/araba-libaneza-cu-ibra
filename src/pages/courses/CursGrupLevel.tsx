@@ -1,3 +1,4 @@
+import GroupStartRule from "@/components/GroupStartRule";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate, useSearchParams } from "@/lib/router-compat";
@@ -291,6 +292,7 @@ const CursGrupLevel = () => {
               )}
             </div>
           </div>
+          {available && <GroupStartRule className="mt-4" />}
         </section>
 
         {/* Body: curriculum + form */}
