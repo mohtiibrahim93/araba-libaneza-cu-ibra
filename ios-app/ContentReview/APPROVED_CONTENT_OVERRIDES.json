@@ -534,8 +534,8 @@
     "syn-context-syn-1cba62d6df5b": {
       "answer": "Meeshe, b7eekik bukra!",
       "wrongAnswers": [
-        "Yimken ba3ed bukra.",
-        "momken nla2e 7all",
+        "Yemken ba3ed bukra.",
+        "fiina nle2e 7all",
         "Mnru7 3as sinema."
       ]
     },
@@ -1210,7 +1210,7 @@
       "answer": "Meeshe. Iza ma fi shete, akid mnru7.",
       "wrongAnswers": [
         "Iza baddak, mnru7.",
-        "Law kont fade, kont ejayt akid!",
+        "Law kenet faade, kenet akiid bije!",
         "7elo! Bass ana bfaddel el ba7er."
       ]
     },
@@ -1244,7 +1244,7 @@
     "syn-context-syn-637d9b2bb910": {
       "answer": "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
       "wrongAnswers": [
-        "Law ejayt, konna re7na.",
+        "Law jiit, konna re7na.",
         "iza ken et ta2es mni7",
         "Fekra 7elwe! Bass iza ken et ta2es mni7."
       ],
@@ -1483,7 +1483,7 @@
       "wrongAnswers": [
         "Fina bas a7san nontor la bukra.",
         "W iza ma 2dert?",
-        "law fi mushkle"
+        "eza fi meshkle"
       ]
     },
     "syn-context-syn-7b598f353dc1": {
@@ -2403,7 +2403,7 @@
     "syn-context-syn-d612ea2b1bbe": {
       "answer": "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
       "wrongAnswers": [
-        "Law kont makanak.",
+        "Law kont ma7allak.",
         "ma leezem tru7",
         "Shu ra2yak nru7 bukra 3al ba7er?"
       ],
@@ -3374,8 +3374,8 @@
     },
     "syn-context-syn-a55babccd65d": {
       "wrongAnswers": [
-        "Law kont fade, kont ejayt akid!",
-        "iza ma fi matar",
+        "Law kenet faade, kenet akiid bije!",
+        "iza ma fi shete",
         "7elo! Bass ana bfaddel el ba7er."
       ]
     },
@@ -3384,14 +3384,16 @@
         "ma leezem tru7",
         "Shu ra2yak nru7 bukra 3al ba7er?",
         "Ana kameen. Law ken et ta2es a7san..."
-      ]
+      ],
+      "answer": "Law kont ma7allak."
     },
     "syn-context-syn-556ebd95a181": {
       "wrongAnswers": [
         "iza ken et ta2es mni7",
         "Fekra 7elwe! Bass iza ken et ta2es mni7.",
         "Yalla nontor la bukra w nshuf."
-      ]
+      ],
+      "answer": "Law jiit, konna re7na."
     },
     "syn-context-syn-b134cc3991e9": {
       "wrongAnswers": [
@@ -3409,30 +3411,32 @@
     },
     "syn-context-syn-e2f00a6a1781": {
       "wrongAnswers": [
-        "law fi mushkle",
+        "eza fi meshkle",
         "Uff! Iza btshatte, shu mna3mol?",
         "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra."
       ]
     },
     "syn-context-syn-ae9886523620": {
       "wrongAnswers": [
-        "momken nla2e 7all",
+        "fiina nle2e 7all",
         "Mnru7 3as sinema.",
         "Akid. Iza ray7een 3al akiid, leezem nekhod otel."
-      ]
+      ],
+      "answer": "Yemken ba3ed bukra."
     },
     "syn-context-syn-dd41fc598f57": {
       "wrongAnswers": [
-        "iza ma fi matar",
+        "iza ma fi shete",
         "7elo! Bass ana bfaddel el ba7er.",
         "Sa7. Fiina n7joz halla2?"
-      ]
+      ],
+      "answer": "Law kenet faade, kenet akiid bije!"
     },
     "syn-context-syn-b6ed2a7c686a": {
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
         "Meeshe, b7eekik bukra!",
-        "Yimken ba3ed bukra."
+        "Yemken ba3ed bukra."
       ]
     },
     "syn-context-syn-a1b0a14e2d67": {
@@ -3449,14 +3453,21 @@
       "wrongAnswers": [
         "Bi2ulo yimken tshatte.",
         "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
-        "Law kont makanak."
+        "Law kont ma7allak."
       ]
     },
     "syn-context-syn-0f23a5db62df": {
       "wrongAnswers": [
         "Uff! Iza btshatte, shu mna3mol?",
         "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
-        "Law ejayt, konna re7na."
+        "Law jiit, konna re7na."
+      ],
+      "answer": "eza fi meshkle",
+      "prompt": {
+        "ro": "Alege replica pentru: „dacă e o problemă”"
+      },
+      "expressionIDs": [
+        "syn-0f23a5db62df"
       ]
     },
     "syn-context-syn-7c9adbe93fbf": {
@@ -3464,14 +3475,16 @@
         "Mnru7 3as sinema.",
         "Akid. Iza ray7een 3al akiid, leezem nekhod otel.",
         "Law ken 3andak wa2et."
-      ]
+      ],
+      "answer": "fiina nle2e 7all"
     },
     "syn-context-syn-9f915f9ccf74": {
       "wrongAnswers": [
         "7elo! Bass ana bfaddel el ba7er.",
         "Sa7. Fiina n7joz halla2?",
         "Iza ken 3ande wa2et, akid!"
-      ]
+      ],
+      "answer": "iza ma fi shete"
     },
     "syn-context-syn-53c41d7e093b": {
       "wrongAnswers": [
@@ -3485,7 +3498,7 @@
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
         "Meeshe, b7eekik bukra!",
-        "Yimken ba3ed bukra."
+        "Yemken ba3ed bukra."
       ],
       "answer": "Fekra 7elwe! Bass iza ken et ta2es mni7."
     },
@@ -3493,7 +3506,7 @@
       "wrongAnswers": [
         "Meeshe. Iza ma fi shete, akid mnru7.",
         "Iza baddak, mnru7.",
-        "Law kont fade, kont ejayt akid!"
+        "Law kenet faade, kenet akiid bije!"
       ],
       "answer": "Shefet ta2es bukra?",
       "prompt": {
@@ -3503,7 +3516,7 @@
     "syn-context-syn-c048b97e223f": {
       "wrongAnswers": [
         "Tameem! W ezama 2derna, mnruu7 el jem3a el jey.",
-        "Law kont makanak.",
+        "Law kont ma7allak.",
         "ma leezem tru7"
       ],
       "answer": "Bi2ulo yimken tshatte."
@@ -3511,7 +3524,7 @@
     "syn-context-syn-f1a7ba9b332a": {
       "wrongAnswers": [
         "Eh, bass leezem ne5od b3en l e3tibar lta2es hal marra.",
-        "Law ejayt, konna re7na.",
+        "Law jiit, konna re7na.",
         "iza ken et ta2es mni7"
       ],
       "answer": "Uff! Iza btshatte, shu mna3mol?"
@@ -3537,8 +3550,8 @@
     "syn-context-syn-0441219ee6d2": {
       "wrongAnswers": [
         "Meeshe, b7eekik bukra!",
-        "Yimken ba3ed bukra.",
-        "momken nla2e 7all"
+        "Yemken ba3ed bukra.",
+        "fiina nle2e 7all"
       ],
       "answer": "Yalla nontor la bukra w nshuf."
     },
@@ -3553,7 +3566,7 @@
     "syn-context-syn-da520babe53a": {
       "wrongAnswers": [
         "W iza ma 2dert?",
-        "law fi mushkle",
+        "eza fi meshkle",
         "Uff! Iza btshatte, shu mna3mol?"
       ],
       "answer": "Fina bas a7san nontor la bukra.",
@@ -5755,6 +5768,38 @@
     },
     "syn-0e2d5b882c80": {
       "exclude": true
+    },
+    "syn-ff7cd5cdae79": {
+      "canonicalArabizi": "Law kont ma7allak."
+    },
+    "syn-556ebd95a181": {
+      "canonicalArabizi": "Law jiit, konna re7na."
+    },
+    "syn-ae9886523620": {
+      "canonicalArabizi": "Yemken ba3ed bukra."
+    },
+    "syn-dd41fc598f57": {
+      "canonicalArabizi": "Law kenet faade, kenet akiid bije!"
+    },
+    "syn-0f23a5db62df": {
+      "canonicalArabizi": "eza fi meshkle",
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "dacă e o problemă"
+        }
+      },
+      "variants": [
+        {
+          "value": "eza fi mushkle",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-7c9adbe93fbf": {
+      "canonicalArabizi": "fiina nle2e 7all"
+    },
+    "syn-9f915f9ccf74": {
+      "canonicalArabizi": "iza ma fi shete"
     }
   },
   "unitExpressionAdditions": [

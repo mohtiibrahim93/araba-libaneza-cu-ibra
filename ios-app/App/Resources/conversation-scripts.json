@@ -2449,6 +2449,97 @@
               }
             }
           ]
+        },
+        {
+          "title": "Dacă…",
+          "turns": [
+            {
+              "exerciseID": "q76",
+              "partner": {
+                "arabizi": "Ana 3etsheen.",
+                "ro": "Mi-e sete."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a55babccd65d",
+              "partner": {
+                "arabizi": "Badde ruu7 3al ba7er.",
+                "ro": "Vreau să merg la mare."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1d891c2fb14e",
+              "partner": {
+                "arabizi": "Ta3a 3al 7afle bukra!",
+                "ro": "Vino mâine la petrecere!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-e2f00a6a1781",
+              "partner": {
+                "arabizi": "Lezem teje!",
+                "ro": "Trebuie să vii!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ae9886523620",
+              "partner": {
+                "arabizi": "Tayyeb, emta fiik?",
+                "ro": "Bine, când poți?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Ce-ar fi fost",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-dd41fc598f57",
+              "partner": {
+                "arabizi": "Lesh ma jiit mbere7?",
+                "ro": "De ce n-ai venit ieri?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-556ebd95a181",
+              "partner": {
+                "arabizi": "Ma 2dert eje.",
+                "ro": "N-am putut să vin."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Expresii cu „dacă”",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-ff7cd5cdae79"
+            },
+            {
+              "exerciseID": "syn-context-syn-b134cc3991e9"
+            },
+            {
+              "exerciseID": "syn-context-syn-a1b0a14e2d67"
+            },
+            {
+              "exerciseID": "syn-context-syn-b6ed2a7c686a"
+            },
+            {
+              "exerciseID": "syn-context-syn-9f915f9ccf74"
+            },
+            {
+              "exerciseID": "syn-context-syn-6c6b08d7567c"
+            },
+            {
+              "exerciseID": "syn-context-syn-0f23a5db62df"
+            },
+            {
+              "exerciseID": "syn-context-syn-7c9adbe93fbf"
+            },
+            {
+              "exerciseID": "syn-context-syn-a502a0bd98f5"
+            }
+          ]
         }
       ]
     }
