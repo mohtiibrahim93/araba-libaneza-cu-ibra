@@ -1926,6 +1926,228 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a2-opinions",
+      "scenes": [
+        {
+          "title": "Tu ești prietena lui Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-967421fb4032"
+            },
+            {
+              "exerciseID": "syn-context-syn-ef64b98836e0",
+              "partner": {
+                "arabizi": "B7ebb er-ryaada ktiir, 5suse l futbol!",
+                "ro": "Îmi place mult sportul, mai ales fotbalul."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-dc8056ef1851",
+              "partner": {
+                "arabizi": "Shu no3 el musii2a li bte7bbiya?",
+                "ro": "Ce fel de muzică îți place?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-48d35def2830",
+              "partner": {
+                "arabizi": "Tameem! Shu ra2yik b Fairouz?",
+                "ro": "Super! Ce părere ai despre Fairouz?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-e159e19de474",
+              "partner": {
+                "arabizi": "Ana kameen, bye3jebne sawta!",
+                "ro": "Și eu! Îmi place vocea ei."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-e6beff6e554b",
+              "partner": {
+                "arabizi": "B7ebb el afleem, bas mish ktiir.",
+                "ro": "Îmi plac filmele, dar nu foarte mult."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-78792f0caf26",
+              "partner": {
+                "arabizi": "Bfakker enno \"Capernaum\" a7san filem lebnene.",
+                "ro": "Cred că \"Capernaum\" e cel mai bun film libanez."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4a8ff27db794",
+              "partner": {
+                "arabizi": "W ente, bte7bbe el 2reeye?",
+                "ro": "Și tu, îți place să citești?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f5edf4d83ff1",
+              "partner": {
+                "arabizi": "Ana ma b7ebb el 2reeye, bizha2.",
+                "ro": "Mie nu îmi place să citesc, mă plictisesc."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-dc0f4d9bccdb",
+              "partner": {
+                "arabizi": "Mar7aba Karim! Shu heweytak?",
+                "ro": "Salut Karim! Care e hobby-ul tău?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0e3c6cbb38b2",
+              "partner": {
+                "arabizi": "7elo! Ana b7ebb el musii2a.",
+                "ro": "Frumos! Mie îmi place muzica."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-db93bca31e7f",
+              "partner": {
+                "arabizi": "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
+                "ro": "Îmi place muzica libaneză și arabă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-44dc337fa782",
+              "partner": {
+                "arabizi": "Fairouz a7san mu8anniye! B7ebba ktiir.",
+                "ro": "Fairouz e cea mai bună cântăreață! O iubesc mult."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4f8fdb9fd717",
+              "partner": {
+                "arabizi": "Shu ra2yak bel afleem?",
+                "ro": "Ce părere ai despre filme?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-bccbcf404ee5",
+              "partner": {
+                "arabizi": "Shu el filem el mofaddal 3andak?",
+                "ro": "Care e filmul tău preferat?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ba5114196bc5",
+              "partner": {
+                "arabizi": "Sa7! Ken filem ktiir shayye2.",
+                "ro": "Corect! A fost un film foarte captivant."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-a43d04dd1d92",
+              "partner": {
+                "arabizi": "Eh ktiir! B7ebb er riweyeet.",
+                "ro": "Da, foarte mult! Îmi plac romanele."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8cf16473ae54",
+              "partner": {
+                "arabizi": "Hahaha, kell wa7ad w zaw2a!",
+                "ro": "Haha, fiecare cu gusturile lui!"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Gusturi",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-82e7084bfdb6",
+              "partner": {
+                "arabizi": "Bte7ebb er-ryaada?",
+                "ro": "Îți place sportul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f54fb6fad9d0",
+              "partner": {
+                "arabizi": "W es safar?",
+                "ro": "Și călătoriile?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d280b14f30d3",
+              "partner": {
+                "arabizi": "Shu el heweye el mofaddale 3andak?",
+                "ro": "Care e hobby-ul tău preferat?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-6a5650287491",
+              "partner": {
+                "arabizi": "Shu bte7ebb tesma3?",
+                "ro": "Ce îți place să asculți?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "După film",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-2da83ea30cd8",
+              "partner": {
+                "arabizi": "Kif ken el filem?",
+                "ro": "Cum a fost filmul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-2d33d08af2d3",
+              "partner": {
+                "arabizi": "Wala shway?",
+                "ro": "Deloc?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Preferințe",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-cbca12375d50",
+              "partner": {
+                "arabizi": "Shu ra2yak b hal 2amis?",
+                "ro": "Ce părere ai despre cămașa asta?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8d4bfe997d36",
+              "partner": {
+                "arabizi": "Hayda el lon el mofaddal 3andak?",
+                "ro": "Asta e culoarea ta preferată?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f5475593e2bd",
+              "partner": {
+                "arabizi": "Shu bte7ebb ta3mel bel weekend?",
+                "ro": "Ce îți place să faci în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-10dbc6b30331",
+              "partner": {
+                "arabizi": "Er-ryaada mni7a lal sa77a, sa7?",
+                "ro": "Sportul e bun pentru sănătate, nu?"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

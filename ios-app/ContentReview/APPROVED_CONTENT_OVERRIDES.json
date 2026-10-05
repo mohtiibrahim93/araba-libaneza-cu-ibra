@@ -373,11 +373,11 @@
       ]
     },
     "syn-context-syn-0e3c6cbb38b2": {
-      "answer": "Shu no3 el musi2a li bte7bbiya?",
+      "answer": "Shu no3 el musii2a li bte7bbiya?",
       "wrongAnswers": [
         "Shu el filem el mofaddal 3andak?",
         "Sa7, yalla bshufik!",
-        "el mofaddal 3ande"
+        "L mufaddal 3ande"
       ]
     },
     "syn-context-syn-0efefc312efd": {
@@ -418,9 +418,9 @@
     "syn-context-syn-10dbc6b30331": {
       "answer": "Sa7, miyye bel miyye.",
       "wrongAnswers": [
-        "Fairouz a7san m8anniye! B7ebbha ktiir.",
-        "W ente, bte7bbe el 2raye?",
-        "El hiweye el mofaddale 3ande heyye el musii2a."
+        "Fairouz a7san mu8anniye! B7ebba ktiir.",
+        "W ente, bte7bbe el 2reeye?",
+        "El heweye el mofaddale 3ande heyye el musii2a."
       ]
     },
     "syn-context-syn-11cebd862fff": {
@@ -704,9 +704,9 @@
     "syn-context-syn-2d33d08af2d3": {
       "answer": "Ma b7ebb abadan.",
       "wrongAnswers": [
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
-        "Shu ra2yak bel aflem?",
-        "Ana ma b7ebb el 2raye, mamell shway."
+        "B7ebb er-ryaada ktiir, 5suse l futbol!",
+        "Shu ra2yak bel afleem?",
+        "Ana ma b7ebb el 2reeye, bizha2."
       ]
     },
     "syn-context-syn-2d4cf4b7368b": {
@@ -722,7 +722,7 @@
       "wrongAnswers": [
         "B7ebb es safar.",
         "Tameem! Shu ra2yik b Fairouz?",
-        "Sa7! Ken filem mthir ktiir."
+        "Sa7! Ken filem ktiir shayye2."
       ]
     },
     "syn-context-syn-2dcea3000b0d": {
@@ -955,9 +955,9 @@
     "syn-context-syn-44dc337fa782": {
       "answer": "Ana kameen, bye3jebne sawta!",
       "wrongAnswers": [
-        "Eh ktiir! B7ebb er riwayat.",
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
-        "Mar7aba Karim! Shu hwaytak?"
+        "Eh ktiir! B7ebb er riweyeet.",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
+        "Mar7aba Karim! Shu heweytak?"
       ]
     },
     "syn-context-syn-44e07d592b08": {
@@ -1019,10 +1019,10 @@
       ]
     },
     "syn-context-syn-48d35def2830": {
-      "answer": "Fairouz a7san m8anniye! B7ebbha ktiir.",
+      "answer": "Fairouz a7san mu8anniye! B7ebba ktiir.",
       "wrongAnswers": [
-        "W ente, bte7bbe el 2raye?",
-        "El hiweye el mofaddale 3ande heyye el musii2a.",
+        "W ente, bte7bbe el 2reeye?",
+        "El heweye el mofaddale 3ande heyye el musii2a.",
         "Sa7, miyye bel miyye."
       ]
     },
@@ -1038,19 +1038,19 @@
       "exclude": true
     },
     "syn-context-syn-4a8ff27db794": {
-      "answer": "Eh ktiir! B7ebb er riwayat.",
+      "answer": "Eh ktiir! B7ebb er riweyeet.",
       "wrongAnswers": [
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
-        "Mar7aba Karim! Shu hwaytak?",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
+        "Mar7aba Karim! Shu heweytak?",
         "Ana kameen, bye3jebne sawta!"
       ]
     },
     "syn-context-syn-4f8fdb9fd717": {
-      "answer": "B7ebb el aflem, bas mish ktiir.",
+      "answer": "B7ebb el afleem, bas mish ktiir.",
       "wrongAnswers": [
-        "Hahaha, kell wa7ad w zo2o!",
+        "Hahaha, kell wa7ad w zaw2a!",
         "Bye3jebne hal shi.",
-        "7elo! Ana b7ebb el musi2a."
+        "7elo! Ana b7ebb el musii2a."
       ]
     },
     "syn-context-syn-5004543f44a8": {
@@ -1324,11 +1324,11 @@
       ]
     },
     "syn-context-syn-6a5650287491": {
-      "answer": "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
+      "answer": "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
       "wrongAnswers": [
-        "Mar7aba Karim! Shu hwaytak?",
+        "Mar7aba Karim! Shu heweytak?",
         "Ana kameen, bye3jebne sawta!",
-        "Eh ktiir! B7ebb er riwayat."
+        "Eh ktiir! B7ebb er riweyeet."
       ]
     },
     "syn-context-syn-6b3fa2fd4cd8": {
@@ -1434,7 +1434,7 @@
       ]
     },
     "syn-context-syn-78792f0caf26": {
-      "answer": "Sa7! Ken filem mthir ktiir.",
+      "answer": "Sa7! Ken filem ktiir shayye2.",
       "wrongAnswers": [
         "Ma bye3jebne hal filem.",
         "B7ebb es safar.",
@@ -1577,9 +1577,9 @@
       ]
     },
     "syn-context-syn-82e7084bfdb6": {
-      "answer": "Ma b7ebb er riyada.",
+      "answer": "Ma b7ebb er-ryaada.",
       "wrongAnswers": [
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
         "Ma bye3jebne hal filem."
       ]
@@ -1654,8 +1654,8 @@
     "syn-context-syn-8cf16473ae54": {
       "answer": "Sa7, yalla bshufik!",
       "wrongAnswers": [
-        "el mofaddal 3ande",
-        "Shu no3 el musi2a li bte7bbiya?",
+        "L mufaddal 3ande",
+        "Shu no3 el musii2a li bte7bbiya?",
         "Shu el filem el mofaddal 3andak?"
       ]
     },
@@ -1743,11 +1743,11 @@
       ]
     },
     "syn-context-syn-967421fb4032": {
-      "answer": "Mar7aba Karim! Shu hwaytak?",
+      "answer": "Mar7aba Karim! Shu heweytak?",
       "wrongAnswers": [
         "Ana kameen, bye3jebne sawta!",
-        "Eh ktiir! B7ebb er riwayat.",
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye."
+        "Eh ktiir! B7ebb er riweyeet.",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye."
       ]
     },
     "syn-context-syn-96d2561806f5": {
@@ -1937,12 +1937,15 @@
       ]
     },
     "syn-context-syn-a43d04dd1d92": {
-      "answer": "Ana ma b7ebb el 2raye, mamell shway.",
+      "answer": "Ana ma b7ebb el 2reeye, bizha2.",
       "wrongAnswers": [
         "Ma b7ebb abadan.",
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
-        "Shu ra2yak bel aflem?"
-      ]
+        "B7ebb er-ryaada ktiir, 5suse l futbol!",
+        "Shu ra2yak bel afleem?"
+      ],
+      "prompt": {
+        "ro": "Alege replica pentru: „Mie nu îmi place să citesc, mă plictisesc.”"
+      }
     },
     "syn-context-syn-a44710654fd6": {
       "exclude": true
@@ -2140,9 +2143,9 @@
     "syn-context-syn-bccbcf404ee5": {
       "answer": "Bfakker enno \"Capernaum\" a7san filem lebnene.",
       "wrongAnswers": [
-        "Ma b7ebb er riyada.",
-        "B7ebb er riyada.",
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye."
+        "Ma b7ebb er-ryaada.",
+        "B7ebb er-ryaada.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye."
       ]
     },
     "syn-context-syn-bed8262abbde": {
@@ -2234,9 +2237,9 @@
     "syn-context-syn-cbca12375d50": {
       "answer": "Bye3jebne hal shi.",
       "wrongAnswers": [
-        "7elo! Ana b7ebb el musi2a.",
-        "B7ebb el aflem, bas mish ktiir.",
-        "Hahaha, kell wa7ad w zo2o!"
+        "7elo! Ana b7ebb el musii2a.",
+        "B7ebb el afleem, bas mish ktiir.",
+        "Hahaha, kell wa7ad w zaw2a!"
       ]
     },
     "syn-context-syn-cbdd5dd08eae": {
@@ -2307,11 +2310,11 @@
       ]
     },
     "syn-context-syn-d280b14f30d3": {
-      "answer": "El hiweye el mofaddale 3ande heyye el musii2a.",
+      "answer": "El heweye el mofaddale 3ande heyye el musii2a.",
       "wrongAnswers": [
         "Sa7, miyye bel miyye.",
-        "Fairouz a7san m8anniye! B7ebbha ktiir.",
-        "W ente, bte7bbe el 2raye?"
+        "Fairouz a7san mu8anniye! B7ebba ktiir.",
+        "W ente, bte7bbe el 2reeye?"
       ]
     },
     "syn-context-syn-d2b3d581bc81": {
@@ -2419,16 +2422,16 @@
     "syn-context-syn-db93bca31e7f": {
       "answer": "Tameem! Shu ra2yik b Fairouz?",
       "wrongAnswers": [
-        "Sa7! Ken filem mthir ktiir.",
+        "Sa7! Ken filem ktiir shayye2.",
         "Ma bye3jebne hal filem.",
         "B7ebb es safar."
       ]
     },
     "syn-context-syn-dc0f4d9bccdb": {
-      "answer": "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
+      "answer": "B7ebb er-ryaada ktiir, 5suse l futbol!",
       "wrongAnswers": [
-        "Shu ra2yak bel aflem?",
-        "Ana ma b7ebb el 2raye, mamell shway.",
+        "Shu ra2yak bel afleem?",
+        "Ana ma b7ebb el 2reeye, bizha2.",
         "Ma b7ebb abadan."
       ]
     },
@@ -2441,11 +2444,11 @@
       ]
     },
     "syn-context-syn-dc8056ef1851": {
-      "answer": "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+      "answer": "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
       "wrongAnswers": [
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
-        "Ma b7ebb er riyada.",
-        "B7ebb er riyada."
+        "Ma b7ebb er-ryaada.",
+        "B7ebb er-ryaada."
       ]
     },
     "syn-context-syn-dc86a43a3870": {
@@ -2522,8 +2525,8 @@
       "answer": "Shu el filem el mofaddal 3andak?",
       "wrongAnswers": [
         "Sa7, yalla bshufik!",
-        "el mofaddal 3ande",
-        "Shu no3 el musi2a li bte7bbiya?"
+        "L mufaddal 3ande",
+        "Shu no3 el musii2a li bte7bbiya?"
       ]
     },
     "syn-context-syn-ecb20906eef6": {
@@ -2559,10 +2562,10 @@
       ]
     },
     "syn-context-syn-ef64b98836e0": {
-      "answer": "7elo! Ana b7ebb el musi2a.",
+      "answer": "7elo! Ana b7ebb el musii2a.",
       "wrongAnswers": [
-        "B7ebb el aflem, bas mish ktiir.",
-        "Hahaha, kell wa7ad w zo2o!",
+        "B7ebb el afleem, bas mish ktiir.",
+        "Hahaha, kell wa7ad w zaw2a!",
         "Bye3jebne hal shi."
       ]
     },
@@ -2607,9 +2610,9 @@
       ]
     },
     "syn-context-syn-f5475593e2bd": {
-      "answer": "B7ebb er riyada.",
+      "answer": "B7ebb er-ryaada.",
       "wrongAnswers": [
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
         "B7ebb es safar."
       ]
@@ -2618,7 +2621,7 @@
       "answer": "B7ebb es safar.",
       "wrongAnswers": [
         "Tameem! Shu ra2yik b Fairouz?",
-        "Sa7! Ken filem mthir ktiir.",
+        "Sa7! Ken filem ktiir shayye2.",
         "Ma bye3jebne hal filem."
       ]
     },
@@ -3265,31 +3268,38 @@
     },
     "syn-context-syn-8d4bfe997d36": {
       "wrongAnswers": [
-        "Shu no3 el musi2a li bte7bbiya?",
+        "Shu no3 el musii2a li bte7bbiya?",
         "Shu el filem el mofaddal 3andak?",
         "Sa7, yalla bshufik!"
+      ],
+      "answer": "L mufaddal 3ande",
+      "expressionIDs": [
+        "syn-8d4bfe997d36"
       ]
     },
     "syn-context-syn-e159e19de474": {
       "wrongAnswers": [
-        "Ana ma b7ebb el 2raye, mamell shway.",
+        "Ana ma b7ebb el 2reeye, bizha2.",
         "Ma b7ebb abadan.",
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam."
-      ]
+        "B7ebb er-ryaada ktiir, 5suse l futbol!"
+      ],
+      "answer": "Shu ra2yak bel afleem?"
     },
     "syn-context-syn-ba5114196bc5": {
       "wrongAnswers": [
-        "El hiweye el mofaddale 3ande heyye el musii2a.",
+        "El heweye el mofaddale 3ande heyye el musii2a.",
         "Sa7, miyye bel miyye.",
-        "Fairouz a7san m8anniye! B7ebbha ktiir."
-      ]
+        "Fairouz a7san mu8anniye! B7ebba ktiir."
+      ],
+      "answer": "W ente, bte7bbe el 2reeye?"
     },
     "syn-context-syn-f5edf4d83ff1": {
       "wrongAnswers": [
         "Bye3jebne hal shi.",
-        "7elo! Ana b7ebb el musi2a.",
-        "B7ebb el aflem, bas mish ktiir."
-      ]
+        "7elo! Ana b7ebb el musii2a.",
+        "B7ebb el afleem, bas mish ktiir."
+      ],
+      "answer": "Hahaha, kell wa7ad w zaw2a!"
     },
     "syn-context-syn-1c01883f538b": {
       "wrongAnswers": [
@@ -3907,7 +3917,7 @@
       "canonicalArabizi": "Ra7 e7kiik ba3den."
     },
     "syn-0e3c6cbb38b2": {
-      "canonicalArabizi": "Shu no3 el musi2a li bte7bbiya?"
+      "canonicalArabizi": "Shu no3 el musii2a li bte7bbiya?"
     },
     "syn-0efefc312efd": {
       "canonicalArabizi": "Tameem! Yalla nruu7!"
@@ -4242,7 +4252,7 @@
       ]
     },
     "syn-48d35def2830": {
-      "canonicalArabizi": "Fairouz a7san m8anniye! B7ebbha ktiir."
+      "canonicalArabizi": "Fairouz a7san mu8anniye! B7ebba ktiir."
     },
     "syn-4a040b2aec92": {
       "canonicalArabizi": "Law ken 3ande wa2et, kenet kill weekend bruu7 3al ba7er."
@@ -4251,7 +4261,7 @@
       "exclude": true
     },
     "syn-4a8ff27db794": {
-      "canonicalArabizi": "Eh ktiir! B7ebb er riwayat.",
+      "canonicalArabizi": "Eh ktiir! B7ebb er riweyeet.",
       "variants": [
         {
           "value": "Eh ktiir! B7ibb er riwayat.",
@@ -4260,7 +4270,7 @@
       ]
     },
     "syn-4f8fdb9fd717": {
-      "canonicalArabizi": "B7ebb el aflem, bas mish ktiir.",
+      "canonicalArabizi": "B7ebb el afleem, bas mish ktiir.",
       "variants": [
         {
           "value": "B7ibb el aflem, bas mish ktiir.",
@@ -4389,7 +4399,7 @@
       ]
     },
     "syn-6a5650287491": {
-      "canonicalArabizi": "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
+      "canonicalArabizi": "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
       "variants": [
         {
           "value": "B7ibb esma3 musi2a lebneniyye w 3arabiyye.",
@@ -4448,7 +4458,7 @@
       "canonicalArabizi": "Eh, 3ande e5et we7de."
     },
     "syn-78792f0caf26": {
-      "canonicalArabizi": "Sa7! Ken filem mthir ktiir."
+      "canonicalArabizi": "Sa7! Ken filem ktiir shayye2."
     },
     "syn-7a15e7999c58": {
       "canonicalArabizi": "Shu 3am ta3mol halla2?"
@@ -4514,7 +4524,7 @@
       "canonicalArabizi": "La2, ma besiir. 5amsaw w tletiin."
     },
     "syn-82e7084bfdb6": {
-      "canonicalArabizi": "Ma b7ebb er riyada.",
+      "canonicalArabizi": "Ma b7ebb er-ryaada.",
       "variants": [
         {
           "value": "Ma b7ibb er riyada.",
@@ -4603,7 +4613,7 @@
       "canonicalArabizi": "Wen es sinema?"
     },
     "syn-967421fb4032": {
-      "canonicalArabizi": "Mar7aba Karim! Shu hwaytak?"
+      "canonicalArabizi": "Mar7aba Karim! Shu heweytak?"
     },
     "syn-96d2561806f5": {
       "canonicalArabizi": "B Bayrut, 2ariib men hon."
@@ -4693,13 +4703,18 @@
       "canonicalArabizi": "Shu ra7 ta3mol bel 3otle?"
     },
     "syn-a43d04dd1d92": {
-      "canonicalArabizi": "Ana ma b7ebb el 2raye, mamell shway.",
+      "canonicalArabizi": "Ana ma b7ebb el 2reeye, bizha2.",
       "variants": [
         {
           "value": "Ana ma b7ibb el 2raye, mamell shway.",
           "kind": "spelling"
         }
-      ]
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "Mie nu îmi place să citesc, mă plictisesc."
+        }
+      }
     },
     "syn-a44710654fd6": {
       "exclude": true
@@ -4885,7 +4900,7 @@
       "canonicalArabizi": "Bil-lel, ba3ed el sho8ol."
     },
     "syn-d280b14f30d3": {
-      "canonicalArabizi": "El hiweye el mofaddale 3ande heyye el musii2a."
+      "canonicalArabizi": "El heweye el mofaddale 3ande heyye el musii2a."
     },
     "syn-d2b3d581bc81": {
       "canonicalArabizi": "7elo! 5ayye el-kbiir mjawwaz."
@@ -4933,7 +4948,7 @@
       "canonicalArabizi": "Tameem! Shu ra2yik b Fairouz?"
     },
     "syn-dc0f4d9bccdb": {
-      "canonicalArabizi": "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
+      "canonicalArabizi": "B7ebb er-ryaada ktiir, 5suse l futbol!",
       "variants": [
         {
           "value": "B7ibb er riyada ktiir, 5asatan koret el 2adam.",
@@ -4945,7 +4960,7 @@
       "canonicalArabizi": "Shukran, bass 3ande sho8ol ktiir."
     },
     "syn-dc8056ef1851": {
-      "canonicalArabizi": "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+      "canonicalArabizi": "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
       "variants": [
         {
           "value": "B7ibb el musi2a el lebneniyye w el 3arabiyye.",
@@ -5008,7 +5023,7 @@
       "canonicalArabizi": "Fikra 7elwe! Masmuu7a es sbee7a?"
     },
     "syn-ef64b98836e0": {
-      "canonicalArabizi": "7elo! Ana b7ebb el musi2a.",
+      "canonicalArabizi": "7elo! Ana b7ebb el musii2a.",
       "variants": [
         {
           "value": "7elo! Ana b7ibb el musi2a.",
@@ -5032,7 +5047,7 @@
       "canonicalArabizi": "Eh, masmu7. Bas mamnu3 et tad5in."
     },
     "syn-f5475593e2bd": {
-      "canonicalArabizi": "B7ebb er riyada.",
+      "canonicalArabizi": "B7ebb er-ryaada.",
       "variants": [
         {
           "value": "B7ibb er riyada.",
@@ -5569,6 +5584,28 @@
     },
     "syn-ebdb54abaf57": {
       "canonicalArabizi": "Ah fehmet. 2riite kteb?"
+    },
+    "syn-8d4bfe997d36": {
+      "canonicalArabizi": "L mufaddal 3ande",
+      "variants": [
+        {
+          "value": "El mufaddal 3ande",
+          "kind": "spelling"
+        },
+        {
+          "value": "el mofaddal 3ande",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "syn-e159e19de474": {
+      "canonicalArabizi": "Shu ra2yak bel afleem?"
+    },
+    "syn-ba5114196bc5": {
+      "canonicalArabizi": "W ente, bte7bbe el 2reeye?"
+    },
+    "syn-f5edf4d83ff1": {
+      "canonicalArabizi": "Hahaha, kell wa7ad w zaw2a!"
     }
   },
   "unitExpressionAdditions": [

@@ -51355,7 +51355,7 @@
     },
     {
       "id": "syn-82e7084bfdb6",
-      "canonicalArabizi": "Ma b7ebb er riyada.",
+      "canonicalArabizi": "Ma b7ebb er-ryaada.",
       "variants": [
         {
           "value": "Ma b7ibb er riyada.",
@@ -51388,7 +51388,7 @@
     },
     {
       "id": "syn-d280b14f30d3",
-      "canonicalArabizi": "El hiweye el mofaddale 3ande heyye el musii2a.",
+      "canonicalArabizi": "El heweye el mofaddale 3ande heyye el musii2a.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -51402,7 +51402,7 @@
     },
     {
       "id": "syn-6a5650287491",
-      "canonicalArabizi": "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
+      "canonicalArabizi": "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
       "variants": [
         {
           "value": "B7ibb esma3 musi2a lebneniyye w 3arabiyye.",
@@ -54604,8 +54604,17 @@
     },
     {
       "id": "syn-8d4bfe997d36",
-      "canonicalArabizi": "el mofaddal 3ande",
-      "variants": [],
+      "canonicalArabizi": "L mufaddal 3ande",
+      "variants": [
+        {
+          "value": "El mufaddal 3ande",
+          "kind": "spelling"
+        },
+        {
+          "value": "el mofaddal 3ande",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a2"
       ],
@@ -54632,7 +54641,7 @@
     },
     {
       "id": "syn-f5475593e2bd",
-      "canonicalArabizi": "B7ebb er riyada.",
+      "canonicalArabizi": "B7ebb er-ryaada.",
       "variants": [
         {
           "value": "B7ibb er riyada.",
@@ -57851,7 +57860,7 @@
     },
     {
       "id": "syn-967421fb4032",
-      "canonicalArabizi": "Mar7aba Karim! Shu hwaytak?",
+      "canonicalArabizi": "Mar7aba Karim! Shu heweytak?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57865,7 +57874,7 @@
     },
     {
       "id": "syn-dc0f4d9bccdb",
-      "canonicalArabizi": "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
+      "canonicalArabizi": "B7ebb er-ryaada ktiir, 5suse l futbol!",
       "variants": [
         {
           "value": "B7ibb er riyada ktiir, 5asatan koret el 2adam.",
@@ -57884,7 +57893,7 @@
     },
     {
       "id": "syn-ef64b98836e0",
-      "canonicalArabizi": "7elo! Ana b7ebb el musi2a.",
+      "canonicalArabizi": "7elo! Ana b7ebb el musii2a.",
       "variants": [
         {
           "value": "7elo! Ana b7ibb el musi2a.",
@@ -57903,7 +57912,7 @@
     },
     {
       "id": "syn-0e3c6cbb38b2",
-      "canonicalArabizi": "Shu no3 el musi2a li bte7bbiya?",
+      "canonicalArabizi": "Shu no3 el musii2a li bte7bbiya?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57917,7 +57926,7 @@
     },
     {
       "id": "syn-dc8056ef1851",
-      "canonicalArabizi": "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+      "canonicalArabizi": "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
       "variants": [
         {
           "value": "B7ibb el musi2a el lebneniyye w el 3arabiyye.",
@@ -57950,7 +57959,7 @@
     },
     {
       "id": "syn-48d35def2830",
-      "canonicalArabizi": "Fairouz a7san m8anniye! B7ebbha ktiir.",
+      "canonicalArabizi": "Fairouz a7san mu8anniye! B7ebba ktiir.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57978,7 +57987,7 @@
     },
     {
       "id": "syn-e159e19de474",
-      "canonicalArabizi": "Shu ra2yak bel aflem?",
+      "canonicalArabizi": "Shu ra2yak bel afleem?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -57992,7 +58001,7 @@
     },
     {
       "id": "syn-4f8fdb9fd717",
-      "canonicalArabizi": "B7ebb el aflem, bas mish ktiir.",
+      "canonicalArabizi": "B7ebb el afleem, bas mish ktiir.",
       "variants": [
         {
           "value": "B7ibb el aflem, bas mish ktiir.",
@@ -58039,7 +58048,7 @@
     },
     {
       "id": "syn-78792f0caf26",
-      "canonicalArabizi": "Sa7! Ken filem mthir ktiir.",
+      "canonicalArabizi": "Sa7! Ken filem ktiir shayye2.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58053,7 +58062,7 @@
     },
     {
       "id": "syn-ba5114196bc5",
-      "canonicalArabizi": "W ente, bte7bbe el 2raye?",
+      "canonicalArabizi": "W ente, bte7bbe el 2reeye?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58067,7 +58076,7 @@
     },
     {
       "id": "syn-4a8ff27db794",
-      "canonicalArabizi": "Eh ktiir! B7ebb er riwayat.",
+      "canonicalArabizi": "Eh ktiir! B7ebb er riweyeet.",
       "variants": [
         {
           "value": "Eh ktiir! B7ibb er riwayat.",
@@ -58086,7 +58095,7 @@
     },
     {
       "id": "syn-a43d04dd1d92",
-      "canonicalArabizi": "Ana ma b7ebb el 2raye, mamell shway.",
+      "canonicalArabizi": "Ana ma b7ebb el 2reeye, bizha2.",
       "variants": [
         {
           "value": "Ana ma b7ibb el 2raye, mamell shway.",
@@ -58099,13 +58108,13 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Mie nu îmi place să citesc, e puțin plictisitor."
+          "naturalMeaning": "Mie nu îmi place să citesc, mă plictisesc."
         }
       }
     },
     {
       "id": "syn-f5edf4d83ff1",
-      "canonicalArabizi": "Hahaha, kell wa7ad w zo2o!",
+      "canonicalArabizi": "Hahaha, kell wa7ad w zaw2a!",
       "variants": [],
       "levelTags": [
         "a2"
@@ -68982,9 +68991,9 @@
       "prompt": {
         "ro": "Alege replica pentru: „Nu îmi place sportul.”"
       },
-      "answer": "Ma b7ebb er riyada.",
+      "answer": "Ma b7ebb er-ryaada.",
       "wrongAnswers": [
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
         "Ma bye3jebne hal filem."
       ]
@@ -69001,7 +69010,7 @@
       "wrongAnswers": [
         "B7ebb es safar.",
         "Tameem! Shu ra2yik b Fairouz?",
-        "Sa7! Ken filem mthir ktiir."
+        "Sa7! Ken filem ktiir shayye2."
       ]
     },
     {
@@ -69012,11 +69021,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Hobby-ul meu preferat este muzica.”"
       },
-      "answer": "El hiweye el mofaddale 3ande heyye el musii2a.",
+      "answer": "El heweye el mofaddale 3ande heyye el musii2a.",
       "wrongAnswers": [
         "Sa7, miyye bel miyye.",
-        "Fairouz a7san m8anniye! B7ebbha ktiir.",
-        "W ente, bte7bbe el 2raye?"
+        "Fairouz a7san mu8anniye! B7ebba ktiir.",
+        "W ente, bte7bbe el 2reeye?"
       ]
     },
     {
@@ -69027,11 +69036,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Îmi place să ascult muzică libaneză și arabă.”"
       },
-      "answer": "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
+      "answer": "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
       "wrongAnswers": [
-        "Mar7aba Karim! Shu hwaytak?",
+        "Mar7aba Karim! Shu heweytak?",
         "Ana kameen, bye3jebne sawta!",
-        "Eh ktiir! B7ebb er riwayat."
+        "Eh ktiir! B7ebb er riweyeet."
       ]
     },
     {
@@ -69044,9 +69053,9 @@
       },
       "answer": "Ma b7ebb abadan.",
       "wrongAnswers": [
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
-        "Shu ra2yak bel aflem?",
-        "Ana ma b7ebb el 2raye, mamell shway."
+        "B7ebb er-ryaada ktiir, 5suse l futbol!",
+        "Shu ra2yak bel afleem?",
+        "Ana ma b7ebb el 2reeye, bizha2."
       ]
     },
     {
@@ -69059,22 +69068,24 @@
       },
       "answer": "Bye3jebne hal shi.",
       "wrongAnswers": [
-        "7elo! Ana b7ebb el musi2a.",
-        "B7ebb el aflem, bas mish ktiir.",
-        "Hahaha, kell wa7ad w zo2o!"
+        "7elo! Ana b7ebb el musii2a.",
+        "B7ebb el afleem, bas mish ktiir.",
+        "Hahaha, kell wa7ad w zaw2a!"
       ]
     },
     {
       "id": "syn-context-syn-8d4bfe997d36",
       "type": "dialogue-response",
       "unitID": "a2-opinions",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-8d4bfe997d36"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „preferatul meu”"
       },
-      "answer": "el mofaddal 3ande",
+      "answer": "L mufaddal 3ande",
       "wrongAnswers": [
-        "Shu no3 el musi2a li bte7bbiya?",
+        "Shu no3 el musii2a li bte7bbiya?",
         "Shu el filem el mofaddal 3andak?",
         "Sa7, yalla bshufik!"
       ]
@@ -69087,9 +69098,9 @@
       "prompt": {
         "ro": "Alege replica pentru: „îmi place sportul”"
       },
-      "answer": "B7ebb er riyada.",
+      "answer": "B7ebb er-ryaada.",
       "wrongAnswers": [
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
         "B7ebb es safar."
       ]
@@ -69105,7 +69116,7 @@
       "answer": "B7ebb es safar.",
       "wrongAnswers": [
         "Tameem! Shu ra2yik b Fairouz?",
-        "Sa7! Ken filem mthir ktiir.",
+        "Sa7! Ken filem ktiir shayye2.",
         "Ma bye3jebne hal filem."
       ]
     },
@@ -69119,9 +69130,9 @@
       },
       "answer": "Sa7, miyye bel miyye.",
       "wrongAnswers": [
-        "Fairouz a7san m8anniye! B7ebbha ktiir.",
-        "W ente, bte7bbe el 2raye?",
-        "El hiweye el mofaddale 3ande heyye el musii2a."
+        "Fairouz a7san mu8anniye! B7ebba ktiir.",
+        "W ente, bte7bbe el 2reeye?",
+        "El heweye el mofaddale 3ande heyye el musii2a."
       ]
     },
     {
@@ -69132,11 +69143,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Salut Karim! Care e hobby-ul tău?”"
       },
-      "answer": "Mar7aba Karim! Shu hwaytak?",
+      "answer": "Mar7aba Karim! Shu heweytak?",
       "wrongAnswers": [
         "Ana kameen, bye3jebne sawta!",
-        "Eh ktiir! B7ebb er riwayat.",
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye."
+        "Eh ktiir! B7ebb er riweyeet.",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye."
       ]
     },
     {
@@ -69147,10 +69158,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Îmi place mult sportul, mai ales fotbalul.”"
       },
-      "answer": "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
+      "answer": "B7ebb er-ryaada ktiir, 5suse l futbol!",
       "wrongAnswers": [
-        "Shu ra2yak bel aflem?",
-        "Ana ma b7ebb el 2raye, mamell shway.",
+        "Shu ra2yak bel afleem?",
+        "Ana ma b7ebb el 2reeye, bizha2.",
         "Ma b7ebb abadan."
       ]
     },
@@ -69162,10 +69173,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Frumos! Mie îmi place muzica.”"
       },
-      "answer": "7elo! Ana b7ebb el musi2a.",
+      "answer": "7elo! Ana b7ebb el musii2a.",
       "wrongAnswers": [
-        "B7ebb el aflem, bas mish ktiir.",
-        "Hahaha, kell wa7ad w zo2o!",
+        "B7ebb el afleem, bas mish ktiir.",
+        "Hahaha, kell wa7ad w zaw2a!",
         "Bye3jebne hal shi."
       ]
     },
@@ -69177,11 +69188,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Ce fel de muzică îți place?”"
       },
-      "answer": "Shu no3 el musi2a li bte7bbiya?",
+      "answer": "Shu no3 el musii2a li bte7bbiya?",
       "wrongAnswers": [
         "Shu el filem el mofaddal 3andak?",
         "Sa7, yalla bshufik!",
-        "el mofaddal 3ande"
+        "L mufaddal 3ande"
       ]
     },
     {
@@ -69192,11 +69203,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Îmi place muzica libaneză și arabă.”"
       },
-      "answer": "B7ebb el musi2a el lebneniyye w el 3arabiyye.",
+      "answer": "B7ebb el musii2a el lebneniyye w el 3arabiyye.",
       "wrongAnswers": [
         "Bfakker enno \"Capernaum\" a7san filem lebnene.",
-        "Ma b7ebb er riyada.",
-        "B7ebb er riyada."
+        "Ma b7ebb er-ryaada.",
+        "B7ebb er-ryaada."
       ]
     },
     {
@@ -69209,7 +69220,7 @@
       },
       "answer": "Tameem! Shu ra2yik b Fairouz?",
       "wrongAnswers": [
-        "Sa7! Ken filem mthir ktiir.",
+        "Sa7! Ken filem ktiir shayye2.",
         "Ma bye3jebne hal filem.",
         "B7ebb es safar."
       ]
@@ -69222,10 +69233,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Fairouz e cea mai bună cântăreață! O iubesc mult.”"
       },
-      "answer": "Fairouz a7san m8anniye! B7ebbha ktiir.",
+      "answer": "Fairouz a7san mu8anniye! B7ebba ktiir.",
       "wrongAnswers": [
-        "W ente, bte7bbe el 2raye?",
-        "El hiweye el mofaddale 3ande heyye el musii2a.",
+        "W ente, bte7bbe el 2reeye?",
+        "El heweye el mofaddale 3ande heyye el musii2a.",
         "Sa7, miyye bel miyye."
       ]
     },
@@ -69239,9 +69250,9 @@
       },
       "answer": "Ana kameen, bye3jebne sawta!",
       "wrongAnswers": [
-        "Eh ktiir! B7ebb er riwayat.",
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
-        "Mar7aba Karim! Shu hwaytak?"
+        "Eh ktiir! B7ebb er riweyeet.",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
+        "Mar7aba Karim! Shu heweytak?"
       ]
     },
     {
@@ -69252,11 +69263,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Ce părere ai despre filme?”"
       },
-      "answer": "Shu ra2yak bel aflem?",
+      "answer": "Shu ra2yak bel afleem?",
       "wrongAnswers": [
-        "Ana ma b7ebb el 2raye, mamell shway.",
+        "Ana ma b7ebb el 2reeye, bizha2.",
         "Ma b7ebb abadan.",
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam."
+        "B7ebb er-ryaada ktiir, 5suse l futbol!"
       ]
     },
     {
@@ -69267,11 +69278,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Îmi plac filmele, dar nu foarte mult.”"
       },
-      "answer": "B7ebb el aflem, bas mish ktiir.",
+      "answer": "B7ebb el afleem, bas mish ktiir.",
       "wrongAnswers": [
-        "Hahaha, kell wa7ad w zo2o!",
+        "Hahaha, kell wa7ad w zaw2a!",
         "Bye3jebne hal shi.",
-        "7elo! Ana b7ebb el musi2a."
+        "7elo! Ana b7ebb el musii2a."
       ]
     },
     {
@@ -69285,8 +69296,8 @@
       "answer": "Shu el filem el mofaddal 3andak?",
       "wrongAnswers": [
         "Sa7, yalla bshufik!",
-        "el mofaddal 3ande",
-        "Shu no3 el musi2a li bte7bbiya?"
+        "L mufaddal 3ande",
+        "Shu no3 el musii2a li bte7bbiya?"
       ]
     },
     {
@@ -69299,9 +69310,9 @@
       },
       "answer": "Bfakker enno \"Capernaum\" a7san filem lebnene.",
       "wrongAnswers": [
-        "Ma b7ebb er riyada.",
-        "B7ebb er riyada.",
-        "B7ebb el musi2a el lebneniyye w el 3arabiyye."
+        "Ma b7ebb er-ryaada.",
+        "B7ebb er-ryaada.",
+        "B7ebb el musii2a el lebneniyye w el 3arabiyye."
       ]
     },
     {
@@ -69312,7 +69323,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Corect! A fost un film foarte captivant.”"
       },
-      "answer": "Sa7! Ken filem mthir ktiir.",
+      "answer": "Sa7! Ken filem ktiir shayye2.",
       "wrongAnswers": [
         "Ma bye3jebne hal filem.",
         "B7ebb es safar.",
@@ -69327,11 +69338,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Și tu, îți place să citești?”"
       },
-      "answer": "W ente, bte7bbe el 2raye?",
+      "answer": "W ente, bte7bbe el 2reeye?",
       "wrongAnswers": [
-        "El hiweye el mofaddale 3ande heyye el musii2a.",
+        "El heweye el mofaddale 3ande heyye el musii2a.",
         "Sa7, miyye bel miyye.",
-        "Fairouz a7san m8anniye! B7ebbha ktiir."
+        "Fairouz a7san mu8anniye! B7ebba ktiir."
       ]
     },
     {
@@ -69342,10 +69353,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „Da, foarte mult! Îmi plac romanele.”"
       },
-      "answer": "Eh ktiir! B7ebb er riwayat.",
+      "answer": "Eh ktiir! B7ebb er riweyeet.",
       "wrongAnswers": [
-        "B7ebb esma3 musi2a lebneniyye w 3arabiyye.",
-        "Mar7aba Karim! Shu hwaytak?",
+        "B7ebb esma3 musii2a lebneniyye w 3arabiyye.",
+        "Mar7aba Karim! Shu heweytak?",
         "Ana kameen, bye3jebne sawta!"
       ]
     },
@@ -69355,13 +69366,13 @@
       "unitID": "a2-opinions",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Mie nu îmi place să citesc, e puțin plictisitor.”"
+        "ro": "Alege replica pentru: „Mie nu îmi place să citesc, mă plictisesc.”"
       },
-      "answer": "Ana ma b7ebb el 2raye, mamell shway.",
+      "answer": "Ana ma b7ebb el 2reeye, bizha2.",
       "wrongAnswers": [
         "Ma b7ebb abadan.",
-        "B7ebb er riyada ktiir, 5asatan koret el 2adam.",
-        "Shu ra2yak bel aflem?"
+        "B7ebb er-ryaada ktiir, 5suse l futbol!",
+        "Shu ra2yak bel afleem?"
       ]
     },
     {
@@ -69372,11 +69383,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Haha, fiecare cu gusturile lui!”"
       },
-      "answer": "Hahaha, kell wa7ad w zo2o!",
+      "answer": "Hahaha, kell wa7ad w zaw2a!",
       "wrongAnswers": [
         "Bye3jebne hal shi.",
-        "7elo! Ana b7ebb el musi2a.",
-        "B7ebb el aflem, bas mish ktiir."
+        "7elo! Ana b7ebb el musii2a.",
+        "B7ebb el afleem, bas mish ktiir."
       ]
     },
     {
@@ -69389,8 +69400,8 @@
       },
       "answer": "Sa7, yalla bshufik!",
       "wrongAnswers": [
-        "el mofaddal 3ande",
-        "Shu no3 el musi2a li bte7bbiya?",
+        "L mufaddal 3ande",
+        "Shu no3 el musii2a li bte7bbiya?",
         "Shu el filem el mofaddal 3andak?"
       ]
     },
