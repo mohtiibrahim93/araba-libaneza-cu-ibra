@@ -95,6 +95,22 @@ const SCENES: Record<string, Localized> = {
     ro: "O tablă albă pe care un verb arab este conjugat pas cu pas",
     en: "A whiteboard showing an Arabic verb conjugated step by step",
   },
+  "siriaca-in-araba-libaneza": {
+    ro: "Un sat de piatră din Munții Libanului, cu acoperișuri roșii de țiglă și o biserică veche cu clopotniță, pe un versant în terase",
+    en: "A stone village in Mount Lebanon with red-tiled roofs and an old church with a bell tower, on a terraced mountainside",
+  },
+  "fenicienii-si-identitatea-libaneza": {
+    ro: "Portul antic din Byblos la apus: ziduri de piatră, bărci mici de pescuit și Marea Mediterană în lumină aurie",
+    en: "The ancient harbour of Byblos at sunset: old stone walls, small fishing boats and the Mediterranean in golden light",
+  },
+  "garshuni-si-tiparnita-de-la-qozhaya": {
+    ro: "O presă de tipar veche din lemn într-o cameră de mănăstire din piatră, cu o carte legată în piele deschisă alături",
+    en: "An old wooden hand printing press in a dim stone monastery room, with an open leather-bound book beside it",
+  },
+  "sfantul-efrem-sirul-si-biserica-maronita": {
+    ro: "Valea Qadisha din nordul Libanului: o pădure adâncă verde între stânci de calcar, cu o mică mănăstire de piatră săpată în stâncă",
+    en: "The Qadisha valley in northern Lebanon: a deep green forest gorge between limestone cliffs, with a small stone monastery built into the rock",
+  },
 };
 
 /** The cover for an article, or undefined when it has no photo yet. */
