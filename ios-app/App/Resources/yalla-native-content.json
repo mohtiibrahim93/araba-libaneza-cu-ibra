@@ -54833,7 +54833,7 @@
     },
     {
       "id": "syn-24d7369d09d7",
-      "canonicalArabizi": "ma b2dar eje",
+      "canonicalArabizi": "ma be2dar eje",
       "variants": [],
       "levelTags": [
         "a2"
@@ -54861,15 +54861,24 @@
     },
     {
       "id": "syn-ae1fc12ffb49",
-      "canonicalArabizi": "Mamnuu3 et tad5iin.",
-      "variants": [],
+      "canonicalArabizi": "la2, hon Mamnuu3 et tad5iin.",
+      "variants": [
+        {
+          "value": "La2, hon mamnuu3 et tad5iin.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Mamnuu3 et tad5iin.",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a2"
       ],
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "fumatul e interzis"
+          "naturalMeaning": "Nu, aici fumatul e interzis."
         }
       }
     },
@@ -58142,7 +58151,7 @@
     },
     {
       "id": "syn-3f49fb7cf434",
-      "canonicalArabizi": "Mar7aba Karim! Baddak totla3 ma3e bel weekend?",
+      "canonicalArabizi": "Mar7aba Karim! Baddak tedhar ma3e bel weekend?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58184,7 +58193,7 @@
     },
     {
       "id": "syn-14a76eec3636",
-      "canonicalArabizi": "Eh, 3ande sho8ol muhemm ktiir.",
+      "canonicalArabizi": "Eh, 3ande sha8le ktiir mhemme lezem 5allesa.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58192,13 +58201,13 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Da, am o treabă foarte importantă."
+          "naturalMeaning": "Da, am o treabă foarte importantă pe care trebuie s-o termin."
         }
       }
     },
     {
       "id": "syn-9f4f106aea70",
-      "canonicalArabizi": "Tayyeb, momken el a7ad?",
+      "canonicalArabizi": "Tayyeb, Bte2dar el a7ad?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58206,13 +58215,13 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Bine, e posibil duminică?"
+          "naturalMeaning": "Bine, poți duminică?"
         }
       }
     },
     {
       "id": "syn-0c0ae560a960",
-      "canonicalArabizi": "El a7ad b2dar! Shu baddik na3mel?",
+      "canonicalArabizi": "El a7ad be2dar! Shu baddik na3mel?",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58226,7 +58235,7 @@
     },
     {
       "id": "syn-43f299eb3f2f",
-      "canonicalArabizi": "Yemkin nru7 3al ba7er?",
+      "canonicalArabizi": "Fina nru7 3al ba7er. Baddak?",
       "variants": [
         {
           "value": "Yemken nru7 3al ba7er?",
@@ -58239,7 +58248,7 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Poate să mergem la mare?"
+          "naturalMeaning": "Putem merge la mare. Vrei?"
         }
       }
     },
@@ -58259,7 +58268,7 @@
     },
     {
       "id": "syn-f247f7f73317",
-      "canonicalArabizi": "Eh, masmu7. Bas mamnu3 et tad5in.",
+      "canonicalArabizi": "Eh, masmu7a. Bas mamnu3 et ted5in.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58287,8 +58296,17 @@
     },
     {
       "id": "syn-1236aa690087",
-      "canonicalArabizi": "Tameem! Lezem nru7 badre?",
-      "variants": [],
+      "canonicalArabizi": "Tameem! Lezem nru7 bakiir?",
+      "variants": [
+        {
+          "value": "Tameem! Lezem nru7 bakkiir?",
+          "kind": "spelling"
+        },
+        {
+          "value": "Tameem! Lezem nru7 bakkiiir?",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a2"
       ],
@@ -58301,7 +58319,7 @@
     },
     {
       "id": "syn-20f887518bcd",
-      "canonicalArabizi": "Eh, lezem. Bysir fi nes ktiir.",
+      "canonicalArabizi": "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -58309,13 +58327,13 @@
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "Da, trebuie. Ajung mulți oameni."
+          "naturalMeaning": "Da, trebuie, altfel se aglomerează și nu mai găsim loc."
         }
       }
     },
     {
       "id": "syn-67744d20af7b",
-      "canonicalArabizi": "Meshe, b2dar fii2 bakiir.",
+      "canonicalArabizi": "Meshe, be2dar fii2 bakiir.",
       "variants": [],
       "levelTags": [
         "a2"
@@ -69416,7 +69434,7 @@
       "answer": "Ma lezem ru7.",
       "wrongAnswers": [
         "Ma leezem tru7.",
-        "Yemkin nru7 3al ba7er?",
+        "Fina nru7 3al ba7er. Baddak?",
         "7elo! Fike tjiibe akel?"
       ]
     },
@@ -69445,8 +69463,8 @@
       },
       "answer": "La2, mish daruure.",
       "wrongAnswers": [
-        "Mar7aba Karim! Baddak totla3 ma3e bel weekend?",
-        "Eh, masmu7. Bas mamnu3 et tad5in.",
+        "Mar7aba Karim! Baddak tedhar ma3e bel weekend?",
+        "Eh, masmu7a. Bas mamnu3 et ted5in.",
         "Yeslamo! Yalla, bshufik el a7ad!"
       ]
     },
@@ -69473,10 +69491,10 @@
       "prompt": {
         "ro": "Alege replica pentru: „nu pot să vin”"
       },
-      "answer": "ma b2dar eje",
+      "answer": "ma be2dar eje",
       "wrongAnswers": [
-        "Eh, 3ande sho8ol muhemm ktiir.",
-        "Tameem! Lezem nru7 badre?",
+        "Eh, 3ande sha8le ktiir mhemme lezem 5allesa.",
+        "Tameem! Lezem nru7 bakiir?",
         "Ma b2dar se3dak."
       ]
     },
@@ -69484,14 +69502,16 @@
       "id": "syn-context-syn-ae1fc12ffb49",
       "type": "dialogue-response",
       "unitID": "a2-modals",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-ae1fc12ffb49"
+      ],
       "prompt": {
-        "ro": "Alege replica pentru: „fumatul e interzis”"
+        "ro": "Alege replica pentru: „Nu, aici fumatul e interzis.”"
       },
-      "answer": "Mamnuu3 et tad5iin.",
+      "answer": "la2, hon Mamnuu3 et tad5iin.",
       "wrongAnswers": [
-        "Tayyeb, momken el a7ad?",
-        "Eh, lezem. Bysir fi nes ktiir.",
+        "Tayyeb, Bte2dar el a7ad?",
+        "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al.",
         "La2, mish daruure."
       ]
     },
@@ -69505,8 +69525,8 @@
       },
       "answer": "lezem nru7 halla2",
       "wrongAnswers": [
-        "El a7ad b2dar! Shu baddik na3mel?",
-        "Meshe, b2dar fii2 bakiir.",
+        "El a7ad be2dar! Shu baddik na3mel?",
+        "Meshe, be2dar fii2 bakiir.",
         "El yom lezem eshte8el ktiir."
       ]
     },
@@ -69520,9 +69540,9 @@
       },
       "answer": "Ma leezem tru7.",
       "wrongAnswers": [
-        "Yemkin nru7 3al ba7er?",
+        "Fina nru7 3al ba7er. Baddak?",
         "7elo! Fike tjiibe akel?",
-        "ma b2dar eje"
+        "ma be2dar eje"
       ]
     },
     {
@@ -69537,7 +69557,7 @@
       "wrongAnswers": [
         "Fikra 7elwe! Masmuu7a es sbee7a?",
         "Eh, fine. Ana 3am 7adder sandwishet.",
-        "Mamnuu3 et tad5iin."
+        "la2, hon Mamnuu3 et tad5iin."
       ]
     },
     {
@@ -69548,9 +69568,9 @@
       "prompt": {
         "ro": "Alege replica pentru: „Salut Karim! Vrei să ieși cu mine în weekend?”"
       },
-      "answer": "Mar7aba Karim! Baddak totla3 ma3e bel weekend?",
+      "answer": "Mar7aba Karim! Baddak tedhar ma3e bel weekend?",
       "wrongAnswers": [
-        "Eh, masmu7. Bas mamnu3 et tad5in.",
+        "Eh, masmu7a. Bas mamnu3 et ted5in.",
         "Yeslamo! Yalla, bshufik el a7ad!",
         "lezem nru7 halla2"
       ]
@@ -69576,11 +69596,11 @@
       "unitID": "a2-modals",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Da, am o treabă foarte importantă.”"
+        "ro": "Alege replica pentru: „Da, am o treabă foarte importantă pe care trebuie s-o termin.”"
       },
-      "answer": "Eh, 3ande sho8ol muhemm ktiir.",
+      "answer": "Eh, 3ande sha8le ktiir mhemme lezem 5allesa.",
       "wrongAnswers": [
-        "Tameem! Lezem nru7 badre?",
+        "Tameem! Lezem nru7 bakiir?",
         "Ma b2dar se3dak.",
         "Bte2dar ta3mel hek?"
       ]
@@ -69591,13 +69611,13 @@
       "unitID": "a2-modals",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Bine, e posibil duminică?”"
+        "ro": "Alege replica pentru: „Bine, poți duminică?”"
       },
-      "answer": "Tayyeb, momken el a7ad?",
+      "answer": "Tayyeb, Bte2dar el a7ad?",
       "wrongAnswers": [
-        "Eh, lezem. Bysir fi nes ktiir.",
+        "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al.",
         "La2, mish daruure.",
-        "Mar7aba Karim! Baddak totla3 ma3e bel weekend?"
+        "Mar7aba Karim! Baddak tedhar ma3e bel weekend?"
       ]
     },
     {
@@ -69608,9 +69628,9 @@
       "prompt": {
         "ro": "Alege replica pentru: „Duminică pot! Ce vrei să facem?”"
       },
-      "answer": "El a7ad b2dar! Shu baddik na3mel?",
+      "answer": "El a7ad be2dar! Shu baddik na3mel?",
       "wrongAnswers": [
-        "Meshe, b2dar fii2 bakiir.",
+        "Meshe, be2dar fii2 bakiir.",
         "El yom lezem eshte8el ktiir.",
         "Badde, bas lezem eshte8el es-sabet."
       ]
@@ -69621,13 +69641,13 @@
       "unitID": "a2-modals",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Poate să mergem la mare?”"
+        "ro": "Alege replica pentru: „Putem merge la mare. Vrei?”"
       },
-      "answer": "Yemkin nru7 3al ba7er?",
+      "answer": "Fina nru7 3al ba7er. Baddak?",
       "wrongAnswers": [
         "7elo! Fike tjiibe akel?",
-        "ma b2dar eje",
-        "Eh, 3ande sho8ol muhemm ktiir."
+        "ma be2dar eje",
+        "Eh, 3ande sha8le ktiir mhemme lezem 5allesa."
       ]
     },
     {
@@ -69641,8 +69661,8 @@
       "answer": "Fikra 7elwe! Masmuu7a es sbee7a?",
       "wrongAnswers": [
         "Eh, fine. Ana 3am 7adder sandwishet.",
-        "Mamnuu3 et tad5iin.",
-        "Tayyeb, momken el a7ad?"
+        "la2, hon Mamnuu3 et tad5iin.",
+        "Tayyeb, Bte2dar el a7ad?"
       ]
     },
     {
@@ -69653,11 +69673,11 @@
       "prompt": {
         "ro": "Alege replica pentru: „Da, e permis. Dar fumatul e interzis.”"
       },
-      "answer": "Eh, masmu7. Bas mamnu3 et tad5in.",
+      "answer": "Eh, masmu7a. Bas mamnu3 et ted5in.",
       "wrongAnswers": [
         "Yeslamo! Yalla, bshufik el a7ad!",
         "lezem nru7 halla2",
-        "El a7ad b2dar! Shu baddik na3mel?"
+        "El a7ad be2dar! Shu baddik na3mel?"
       ]
     },
     {
@@ -69672,18 +69692,20 @@
       "wrongAnswers": [
         "Ma lezem ru7.",
         "Ma leezem tru7.",
-        "Yemkin nru7 3al ba7er?"
+        "Fina nru7 3al ba7er. Baddak?"
       ]
     },
     {
       "id": "syn-context-syn-1236aa690087",
       "type": "dialogue-response",
       "unitID": "a2-modals",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-1236aa690087"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Perfect! Trebuie să mergem devreme?”"
       },
-      "answer": "Tameem! Lezem nru7 badre?",
+      "answer": "Tameem! Lezem nru7 bakiir?",
       "wrongAnswers": [
         "Ma b2dar se3dak.",
         "Bte2dar ta3mel hek?",
@@ -69696,13 +69718,13 @@
       "unitID": "a2-modals",
       "expressionIDs": [],
       "prompt": {
-        "ro": "Alege replica pentru: „Da, trebuie. Ajung mulți oameni.”"
+        "ro": "Alege replica pentru: „Da, trebuie, altfel se aglomerează și nu mai găsim loc.”"
       },
-      "answer": "Eh, lezem. Bysir fi nes ktiir.",
+      "answer": "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al.",
       "wrongAnswers": [
         "La2, mish daruure.",
-        "Mar7aba Karim! Baddak totla3 ma3e bel weekend?",
-        "Eh, masmu7. Bas mamnu3 et tad5in."
+        "Mar7aba Karim! Baddak tedhar ma3e bel weekend?",
+        "Eh, masmu7a. Bas mamnu3 et ted5in."
       ]
     },
     {
@@ -69713,7 +69735,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Bine, pot să mă trezesc devreme.”"
       },
-      "answer": "Meshe, b2dar fii2 bakiir.",
+      "answer": "Meshe, be2dar fii2 bakiir.",
       "wrongAnswers": [
         "El yom lezem eshte8el ktiir.",
         "Badde, bas lezem eshte8el es-sabet.",
@@ -69730,9 +69752,9 @@
       },
       "answer": "7elo! Fike tjiibe akel?",
       "wrongAnswers": [
-        "ma b2dar eje",
-        "Eh, 3ande sho8ol muhemm ktiir.",
-        "Tameem! Lezem nru7 badre?"
+        "ma be2dar eje",
+        "Eh, 3ande sha8le ktiir mhemme lezem 5allesa.",
+        "Tameem! Lezem nru7 bakiir?"
       ]
     },
     {
@@ -69745,9 +69767,9 @@
       },
       "answer": "Eh, fine. Ana 3am 7adder sandwishet.",
       "wrongAnswers": [
-        "Mamnuu3 et tad5iin.",
-        "Tayyeb, momken el a7ad?",
-        "Eh, lezem. Bysir fi nes ktiir."
+        "la2, hon Mamnuu3 et tad5iin.",
+        "Tayyeb, Bte2dar el a7ad?",
+        "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al."
       ]
     },
     {
@@ -69761,8 +69783,8 @@
       "answer": "Yeslamo! Yalla, bshufik el a7ad!",
       "wrongAnswers": [
         "lezem nru7 halla2",
-        "El a7ad b2dar! Shu baddik na3mel?",
-        "Meshe, b2dar fii2 bakiir."
+        "El a7ad be2dar! Shu baddik na3mel?",
+        "Meshe, be2dar fii2 bakiir."
       ]
     },
     {
@@ -72215,6 +72237,96 @@
         "Adde el se3er?",
         "Eh law sama7et.",
         "Tameem, baddik kiis?"
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.cinema-what-is-on",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Idee bună! Ce filme rulează?”"
+      },
+      "answer": "Fikra 7elwe! Shu 3ardiin?",
+      "wrongAnswers": [
+        "Ma b2dar se3dak.",
+        "La2, mish daruure.",
+        "Bte2dar ta3mel hek?"
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.love-dicaprio",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Îl iubesc pe DiCaprio. Merg la film.”"
+      },
+      "answer": "Ana b7ebbo la dicaprio. Bshil filem.",
+      "wrongAnswers": [
+        "Eh, masmu7a. Bas mamnu3 et ted5in.",
+        "lezem nru7 halla2",
+        "ma be2dar eje"
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.deal-see-you-there",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Da! S-a făcut! Hai, ne vedem acolo atunci!”"
+      },
+      "answer": "Eh! Deal! Yalla bshufik huunik lakan!",
+      "wrongAnswers": [
+        "Ma b2dar se3dak.",
+        "La2, mish daruure.",
+        "3ande ktiir she8el."
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.lots-of-work",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Am mult de lucru.”"
+      },
+      "answer": "3ande ktiir she8el.",
+      "wrongAnswers": [
+        "Fikra 7elwe! Shu 3ardiin?",
+        "Eh, masmu7a. Bas mamnu3 et ted5in.",
+        "lezem nru7 halla2"
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.sure-not-necessary",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Da, sigur. Nu e necesar. Dar dacă vrei, poți să vii!”"
+      },
+      "answer": "Eh, akiid. Mish daruure. Bas eza baddak fik teje!",
+      "wrongAnswers": [
+        "ma be2dar eje",
+        "lezem nru7 halla2",
+        "Bte2dar ta3mel hek?"
+      ]
+    },
+    {
+      "id": "teacher.a2-modals.yalla",
+      "type": "dialogue-response",
+      "unitID": "a2-modals",
+      "expressionIDs": [],
+      "prompt": {
+        "ro": "Alege replica pentru: „Hai!”"
+      },
+      "answer": "Yalla",
+      "wrongAnswers": [
+        "Ma b2dar se3dak.",
+        "3ande ktiir she8el.",
+        "la2, hon Mamnuu3 et tad5iin."
       ]
     }
   ],

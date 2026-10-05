@@ -2148,6 +2148,186 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "a2-modals",
+      "scenes": [
+        {
+          "title": "Tu ești prietena lui Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-3f49fb7cf434"
+            },
+            {
+              "exerciseID": "syn-context-syn-9f4f106aea70",
+              "partner": {
+                "arabizi": "Eh kent bshiil dahra, bas lezem eshte8el es-sabet. 3ande sha8le mhemme ktiir leezem seewiya.",
+                "ro": "Da, aș fi ieșit, dar trebuie să lucrez sâmbătă. Am o treabă foarte importantă pe care trebuie s-o fac."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-43f299eb3f2f",
+              "partner": {
+                "arabizi": "El a7ad be2dar! Shu baddik na3mul?",
+                "ro": "Duminică pot! Ce vrei să facem?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f247f7f73317",
+              "partner": {
+                "arabizi": "Fikra 7elwe! Masmuu7a es sbee7a?",
+                "ro": "Idee bună! E permis să înotăm?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-1236aa690087",
+              "partner": {
+                "arabizi": "3ade, ana ma bda55en.",
+                "ro": "Bine, eu nu fumez."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-67744d20af7b",
+              "partner": {
+                "arabizi": "Eh, lezem wa ila bte3jo2 w ma men 3uud nle2e ma7al.",
+                "ro": "Da, trebuie, altfel se aglomerează și nu mai găsim loc."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8b5f244bde51",
+              "partner": {
+                "arabizi": "7elo! Fike tjiibe akel?",
+                "ro": "Frumos! Poți să aduci mâncare?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-0823cb321526",
+              "partner": {
+                "arabizi": "Mar7aba Karim! Baddak tedhar ma3e bel weekend?",
+                "ro": "Salut Karim! Vrei să ieși cu mine în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-14a76eec3636",
+              "partner": {
+                "arabizi": "Shi daruure?",
+                "ro": "E ceva urgent?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0c0ae560a960",
+              "partner": {
+                "arabizi": "Tayyeb, el a7ad?",
+                "ro": "Bine, duminică?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.cinema-what-is-on",
+              "partner": {
+                "arabizi": "Truu7 ne7dar cinema?",
+                "ro": "Mergem la cinema?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.love-dicaprio",
+              "partner": {
+                "arabizi": "Ma ba3ref, mnshuuf.. Fi filem la di caprio jdeed..",
+                "ro": "Nu știu, vedem... E un film nou cu DiCaprio."
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.deal-see-you-there",
+              "partner": {
+                "arabizi": "Tayyeb, mnelta2a 3al 5 de8re huniik?",
+                "ro": "Bine, ne întâlnim la 5 fix acolo?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Nu pot",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-0b7e7cae6e80",
+              "partner": {
+                "arabizi": "Fiik tse3edne?",
+                "ro": "Poți să mă ajuți?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-24d7369d09d7",
+              "partner": {
+                "arabizi": "Ta3a 3al 7afle el layle!",
+                "ro": "Vino la petrecere diseară!"
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.lots-of-work",
+              "partner": {
+                "arabizi": "Lesh?",
+                "ro": "De ce?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Trebuie?",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-e01da0d8fbac",
+              "partner": {
+                "arabizi": "Lezem ije ma3ak?",
+                "ro": "Trebuie să vin cu tine?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.sure-not-necessary",
+              "partner": {
+                "arabizi": "Akiid?",
+                "ro": "Sigur?"
+              }
+            },
+            {
+              "exerciseID": "teacher.a2-modals.yalla",
+              "partner": {
+                "arabizi": "Tab yalla beje ma3ak. Mnetsalla.",
+                "ro": "Bine, hai că vin cu tine. Ne distrăm."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Reguli și grabă",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-ae1fc12ffb49",
+              "partner": {
+                "arabizi": "Fiyye da55en hon?",
+                "ro": "Pot să fumez aici?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f12523bc5368",
+              "partner": {
+                "arabizi": "Shuf shu 3am ba3mol!",
+                "ro": "Uite ce fac!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d5cd5b35bec2",
+              "partner": {
+                "arabizi": "El se3a tmeene!",
+                "ro": "E ora opt!"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
