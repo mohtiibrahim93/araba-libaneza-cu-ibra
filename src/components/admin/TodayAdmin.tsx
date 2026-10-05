@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
+import { Empty, ErrorNote, Loading, Pill, ScreenHeader, Section } from "./ui";
 
 /**
  * The screen the panel opens on.
@@ -108,6 +109,7 @@ const dayLabel = (iso: string, now: string) => {
 
 const waitLabel = (d: number) => (d === 0 ? "azi" : d === 1 ? "de ieri" : `de ${d} zile`);
 
+/** A worklist block: a shared Section with the count beside its title. */
 const Card = ({
   title,
   count,
@@ -121,20 +123,9 @@ const Card = ({
   tone?: "default" | "warn";
   children: React.ReactNode;
 }) => (
-  <section
-    className={`rounded-2xl border p-5 ${
-      tone === "warn" ? "border-amber-300 bg-amber-50/60" : "border-border bg-background"
-    }`}
-  >
-    <header className="mb-4 flex items-center gap-2">
-      <Icon className={`h-4 w-4 ${tone === "warn" ? "text-amber-700" : "text-primary"}`} />
-      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-      <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs tabular-nums text-muted-foreground">
-        {count}
-      </span>
-    </header>
+  <Section title={title} icon={Icon} tone={tone} actions={<Pill tone={tone === "warn" ? "warn" : "default"}>{count}</Pill>}>
     {children}
-  </section>
+  </Section>
 );
 
 const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
@@ -172,39 +163,26 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
 
   return (
     <div className="space-y-5">
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-bold text-foreground">Azi</h2>
-          <p className="text-sm text-muted-foreground">
-            Ce are nevoie de tine. Cifrele pe perioade sunt în Analiză.
-          </p>
-        </div>
-        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-        </Button>
-      </header>
+      <ScreenHeader
+        title="Azi"
+        description="Ce are nevoie de tine. Cifrele pe perioade sunt în Analiză."
+        actions={
+          <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+          </Button>
+        }
+      />
 
-      {error && (
-        <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      {error && <ErrorNote>{error}</ErrorNote>}
 
-      {loading && !data && (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="h-5 w-5 animate-spin text-primary" />
-        </div>
-      )}
+      {loading && !data && <Loading label="Se încarcă…" />}
 
       {nothingToDo && (
-        <div className="rounded-2xl border border-border bg-background p-10 text-center">
-          <CheckCircle2 className="mx-auto h-8 w-8 text-primary" />
-          <p className="mt-3 font-semibold text-foreground">Nimic de rezolvat acum.</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Nicio lecție în următoarele două zile, niciun lead necontactat, nicio plată în
-            așteptare.
-          </p>
-        </div>
+        <Empty
+          icon={CheckCircle2}
+          title="Nimic de rezolvat acum."
+          description="Nicio lecție în următoarele două zile, niciun lead necontactat, nicio plată în așteptare."
+        />
       )}
 
       {data && !nothingToDo && (
@@ -213,7 +191,7 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
             <Card title="Ce nu merge" count={data.problems.length} icon={AlertTriangle} tone="warn">
               <ul className="space-y-2">
                 {data.problems.map((p) => (
-                  <li key={`${p.kind}-${p.id}`} className="text-sm text-amber-900">
+                  <li key={`${p.kind}-${p.id}`} className="text-sm text-amber-700 dark:text-amber-400">
                     <span className="font-medium">
                       {p.kind === "calendar" ? "Calendar" : "Plată"}:
                     </span>{" "}
@@ -221,7 +199,7 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-xs text-amber-900/80">
+              <p className="mt-3 text-xs text-amber-700/80 dark:text-amber-400/80">
                 O lecție care nu s-a sincronizat există aici, dar nu și în calendarul tău — e
                 lecția la care riști să nu ajungi.
               </p>
