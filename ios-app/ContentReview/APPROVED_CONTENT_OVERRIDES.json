@@ -395,7 +395,7 @@
       "answer": "Uff! Ma b7ebb eshte8el bel weekend.",
       "wrongAnswers": [
         "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
-        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er."
       ]
     },
@@ -414,7 +414,7 @@
       "answer": "Wala ana! Bass ken leezem.",
       "wrongAnswers": [
         "Ana kameen! B3te2ed enno a7san men el jabal.",
-        "Tameem! Iza b2dar, be7kik ana bukra.",
+        "Tameem! Iza b2dar, b7akiik ana bukra.",
         "Re7t 3al jabal w ken 7elo."
       ]
     },
@@ -541,11 +541,14 @@
       ]
     },
     "syn-context-syn-1cba62d6df5b": {
-      "answer": "Meeshe, b7eekik bukra!",
+      "answer": "Meeshe, b7akiik bukra!",
       "wrongAnswers": [
         "Yemken ba3ed bukra.",
         "fiina nle2e 7all",
         "Mnru7 3as sinema."
+      ],
+      "expressionIDs": [
+        "syn-1cba62d6df5b"
       ]
     },
     "syn-context-syn-1df0b8b69176": {
@@ -600,7 +603,7 @@
     "syn-context-syn-22a2e0ee0b9b": {
       "answer": "El jabal 7elo besh-shete.",
       "wrongAnswers": [
-        "Iza b2dar, b7akiik bukra.",
+        "Iza b2dar, b7akiike bukra.",
         "Wala ana! Bass ken leezem.",
         "Ana kameen! B3te2ed enno a7san men el jabal."
       ]
@@ -651,7 +654,7 @@
       "answer": "B7ebb el ba7er bass leezem eshte8el.",
       "wrongAnswers": [
         "El jabal 7elo besh-shete.",
-        "Iza b2dar, b7akiik bukra.",
+        "Iza b2dar, b7akiike bukra.",
         "Wala ana! Bass ken leezem."
       ]
     },
@@ -684,7 +687,7 @@
       "wrongAnswers": [
         "B7ebb el ba7er bass leezem eshte8el.",
         "El jabal 7elo besh-shete.",
-        "Iza b2dar, b7akiik bukra."
+        "Iza b2dar, b7akiike bukra."
       ],
       "expressionIDs": [
         "syn-295e7371a28e"
@@ -955,7 +958,7 @@
     "syn-context-syn-4162e36eafea": {
       "answer": "Bera2ye enno a7san men el jabal.",
       "wrongAnswers": [
-        "B7akiik hal esbuu3.",
+        "B7akiike hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend.",
         "Tameem! El ba7er huwe el maken el mofaddal 3ande."
       ],
@@ -995,7 +998,7 @@
       "exclude": true
     },
     "syn-context-syn-44efc94b1bbc": {
-      "answer": "B7akiik hal esbuu3.",
+      "answer": "B7akiike hal esbuu3.",
       "wrongAnswers": [
         "Uff! Ma b7ebb eshte8el bel weekend.",
         "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
@@ -1842,7 +1845,7 @@
     "syn-context-syn-9b6857d789d3": {
       "answer": "Ana kameen! B3te2ed enno a7san men el jabal.",
       "wrongAnswers": [
-        "Tameem! Iza b2dar, be7kik ana bukra.",
+        "Tameem! Iza b2dar, b7akiik ana bukra.",
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!"
       ],
@@ -2171,7 +2174,7 @@
       ]
     },
     "syn-context-syn-b8e97100f241": {
-      "answer": "Meeshe. Yalla, b7akik hal esbuu3.",
+      "answer": "Meeshe. Yalla, b7akiike hal esbuu3.",
       "wrongAnswers": [
         "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski.",
@@ -2209,7 +2212,7 @@
       ]
     },
     "syn-context-syn-bed8262abbde": {
-      "answer": "Tameem! Iza b2dar, be7kik ana bukra.",
+      "answer": "Tameem! Iza b2dar, b7akiik ana bukra.",
       "wrongAnswers": [
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!",
@@ -2776,7 +2779,7 @@
     "syn-context-syn-fceca554f261": {
       "answer": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
       "wrongAnswers": [
-        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski."
       ],
@@ -3495,7 +3498,7 @@
     "syn-context-syn-b6ed2a7c686a": {
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra."
       ]
     },
@@ -3557,7 +3560,7 @@
     "syn-context-syn-87743df5af36": {
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra."
       ],
       "answer": "Fekra 7elwe! Bass iza ken et ta2es mni7."
@@ -3609,7 +3612,7 @@
     },
     "syn-context-syn-0441219ee6d2": {
       "wrongAnswers": [
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra.",
         "fiina nle2e 7all"
       ],
@@ -3750,7 +3753,7 @@
     "syn-context-syn-d033db9fe39c": {
       "wrongAnswers": [
         "Bera2ye enno a7san men el jabal.",
-        "B7akiik hal esbuu3.",
+        "B7akiike hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend."
       ],
       "answer": "Momken ru7 bukra iza 2aader.",
@@ -3817,7 +3820,7 @@
         "Ana kameen! B3te2ed enno a7san men el jabal.",
         "Re7t 3al jabal w ken 7elo."
       ],
-      "answer": "Iza b2dar, b7akiik bukra.",
+      "answer": "Iza b2dar, b7akiike bukra.",
       "expressionIDs": [
         "syn-f01eb79d3430"
       ]
@@ -3848,7 +3851,7 @@
       "wrongAnswers": [
         "Momken ru7 bukra iza 2aader.",
         "Bera2ye enno a7san men el jabal.",
-        "B7akiik hal esbuu3."
+        "B7akiike hal esbuu3."
       ],
       "answer": "Eh, hayda l meshkle. Law re7na bakkiir...",
       "expressionIDs": [
@@ -4223,7 +4226,7 @@
       "canonicalArabizi": "Tameem, shukran ktiir!"
     },
     "syn-1cba62d6df5b": {
-      "canonicalArabizi": "Meeshe, b7eekik bukra!"
+      "canonicalArabizi": "Meeshe, b7akiik bukra!"
     },
     "syn-1df0b8b69176": {
       "canonicalArabizi": "Ana kameen. Shu 3emelt mbere7?"
@@ -4459,7 +4462,7 @@
       "exclude": true
     },
     "syn-44efc94b1bbc": {
-      "canonicalArabizi": "B7akiik hal esbuu3."
+      "canonicalArabizi": "B7akiike hal esbuu3."
     },
     "syn-453551f079e4": {
       "canonicalArabizi": "Ra7 nru7 es-sabet w nerja3 el a7ad.",
@@ -5089,7 +5092,7 @@
       ]
     },
     "syn-b8e97100f241": {
-      "canonicalArabizi": "Meeshe. Yalla, b7akik hal esbuu3."
+      "canonicalArabizi": "Meeshe. Yalla, b7akiike hal esbuu3."
     },
     "syn-b97376f1db81": {
       "canonicalArabizi": "Adde el se3er?"
@@ -5110,13 +5113,7 @@
       "canonicalArabizi": "Bfakker enno \"Capernaum\" a7san filem lebnene."
     },
     "syn-bed8262abbde": {
-      "canonicalArabizi": "Tameem! Iza b2dar, be7kik ana bukra.",
-      "variants": [
-        {
-          "value": "Tameem! Iza b2dar, b7ekiik bukra.",
-          "kind": "spelling"
-        }
-      ]
+      "canonicalArabizi": "Tameem! Iza b2dar, b7akiik ana bukra."
     },
     "syn-bf0130fd8b1c": {
       "canonicalArabizi": "B3ide shway, 5ams d2eeye2 meshe."
@@ -6007,13 +6004,7 @@
       ]
     },
     "syn-f01eb79d3430": {
-      "canonicalArabizi": "Iza b2dar, b7akiik bukra.",
-      "variants": [
-        {
-          "value": "Iza b2dar, b7eekik bukra.",
-          "kind": "spelling"
-        }
-      ]
+      "canonicalArabizi": "Iza b2dar, b7akiike bukra."
     },
     "syn-baf73ff6d377": {
       "canonicalArabizi": "Sba7na w akalna samak. Ken et ta2es mni7.",
@@ -6096,6 +6087,20 @@
       "localizations": {
         "ro": {
           "naturalMeaning": "Frumos! Îți place piața din Liban?"
+        }
+      }
+    },
+    "syn-c67c9b1ab8a9": {
+      "canonicalArabizi": "ba3dayn b7akiik",
+      "variants": [
+        {
+          "value": "ba3dayn b7akiike",
+          "kind": "spelling"
+        }
+      ],
+      "localizations": {
+        "ro": {
+          "naturalMeaning": "vorbim mai târziu (b7akiik către un bărbat, b7akiike către o femeie)"
         }
       }
     }

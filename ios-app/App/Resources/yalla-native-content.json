@@ -52037,7 +52037,7 @@
     },
     {
       "id": "syn-44efc94b1bbc",
-      "canonicalArabizi": "B7akiik hal esbuu3.",
+      "canonicalArabizi": "B7akiike hal esbuu3.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -52051,13 +52051,8 @@
     },
     {
       "id": "syn-f01eb79d3430",
-      "canonicalArabizi": "Iza b2dar, b7akiik bukra.",
-      "variants": [
-        {
-          "value": "Iza b2dar, b7eekik bukra.",
-          "kind": "spelling"
-        }
-      ],
+      "canonicalArabizi": "Iza b2dar, b7akiike bukra.",
+      "variants": [],
       "levelTags": [
         "b1"
       ],
@@ -54203,15 +54198,20 @@
     },
     {
       "id": "syn-c67c9b1ab8a9",
-      "canonicalArabizi": "ba3dayn b7akik",
-      "variants": [],
+      "canonicalArabizi": "ba3dayn b7akiik",
+      "variants": [
+        {
+          "value": "ba3dayn b7akiike",
+          "kind": "spelling"
+        }
+      ],
       "levelTags": [
         "a1"
       ],
       "topics": [],
       "localizations": {
         "ro": {
-          "naturalMeaning": "vorbim mai târziu"
+          "naturalMeaning": "vorbim mai târziu (b7akiik către un bărbat, b7akiike către o femeie)"
         }
       }
     },
@@ -58600,7 +58600,7 @@
     },
     {
       "id": "syn-1cba62d6df5b",
-      "canonicalArabizi": "Meeshe, b7eekik bukra!",
+      "canonicalArabizi": "Meeshe, b7akiik bukra!",
       "variants": [],
       "levelTags": [
         "a2"
@@ -59185,7 +59185,7 @@
     },
     {
       "id": "syn-b8e97100f241",
-      "canonicalArabizi": "Meeshe. Yalla, b7akik hal esbuu3.",
+      "canonicalArabizi": "Meeshe. Yalla, b7akiike hal esbuu3.",
       "variants": [],
       "levelTags": [
         "b1"
@@ -59199,13 +59199,8 @@
     },
     {
       "id": "syn-bed8262abbde",
-      "canonicalArabizi": "Tameem! Iza b2dar, be7kik ana bukra.",
-      "variants": [
-        {
-          "value": "Tameem! Iza b2dar, b7ekiik bukra.",
-          "kind": "spelling"
-        }
-      ],
+      "canonicalArabizi": "Tameem! Iza b2dar, b7akiik ana bukra.",
+      "variants": [],
       "levelTags": [
         "b1"
       ],
@@ -70035,7 +70030,7 @@
       "answer": "iza ken et ta2es mni7",
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra."
       ]
     },
@@ -70142,7 +70137,7 @@
       "answer": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
       "wrongAnswers": [
         "Yalla nontor la bukra w nshuf.",
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra."
       ]
     },
@@ -70246,7 +70241,7 @@
       },
       "answer": "Yalla nontor la bukra w nshuf.",
       "wrongAnswers": [
-        "Meeshe, b7eekik bukra!",
+        "Meeshe, b7akiik bukra!",
         "Yemken ba3ed bukra.",
         "fiina nle2e 7all"
       ]
@@ -70347,11 +70342,13 @@
       "id": "syn-context-syn-1cba62d6df5b",
       "type": "dialogue-response",
       "unitID": "a2-connections",
-      "expressionIDs": [],
+      "expressionIDs": [
+        "syn-1cba62d6df5b"
+      ],
       "prompt": {
         "ro": "Alege replica pentru: „Bine, vorbim mâine!”"
       },
-      "answer": "Meeshe, b7eekik bukra!",
+      "answer": "Meeshe, b7akiik bukra!",
       "wrongAnswers": [
         "Yemken ba3ed bukra.",
         "fiina nle2e 7all",
@@ -70972,7 +70969,7 @@
       "answer": "Momken ru7 bukra iza 2aader.",
       "wrongAnswers": [
         "Bera2ye enno a7san men el jabal.",
-        "B7akiik hal esbuu3.",
+        "B7akiike hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend."
       ]
     },
@@ -70987,7 +70984,7 @@
       "answer": "B7ebb el ba7er bass leezem eshte8el.",
       "wrongAnswers": [
         "El jabal 7elo besh-shete.",
-        "Iza b2dar, b7akiik bukra.",
+        "Iza b2dar, b7akiike bukra.",
         "Wala ana! Bass ken leezem."
       ]
     },
@@ -71086,7 +71083,7 @@
       },
       "answer": "Bera2ye enno a7san men el jabal.",
       "wrongAnswers": [
-        "B7akiik hal esbuu3.",
+        "B7akiike hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend.",
         "Tameem! El ba7er huwe el maken el mofaddal 3ande."
       ]
@@ -71101,7 +71098,7 @@
       },
       "answer": "El jabal 7elo besh-shete.",
       "wrongAnswers": [
-        "Iza b2dar, b7akiik bukra.",
+        "Iza b2dar, b7akiike bukra.",
         "Wala ana! Bass ken leezem.",
         "Ana kameen! B3te2ed enno a7san men el jabal."
       ]
@@ -71193,7 +71190,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Vorbim săptămâna aceasta. (către o femeie)”"
       },
-      "answer": "B7akiik hal esbuu3.",
+      "answer": "B7akiike hal esbuu3.",
       "wrongAnswers": [
         "Uff! Ma b7ebb eshte8el bel weekend.",
         "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
@@ -71210,7 +71207,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Dacă pot, vorbim mâine. (către o femeie)”"
       },
-      "answer": "Iza b2dar, b7akiik bukra.",
+      "answer": "Iza b2dar, b7akiike bukra.",
       "wrongAnswers": [
         "Wala ana! Bass ken leezem.",
         "Ana kameen! B3te2ed enno a7san men el jabal.",
@@ -71309,7 +71306,7 @@
       "answer": "Uff! Ma b7ebb eshte8el bel weekend.",
       "wrongAnswers": [
         "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
-        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er."
       ]
     },
@@ -71324,7 +71321,7 @@
       "answer": "Wala ana! Bass ken leezem.",
       "wrongAnswers": [
         "Ana kameen! B3te2ed enno a7san men el jabal.",
-        "Tameem! Iza b2dar, be7kik ana bukra.",
+        "Tameem! Iza b2dar, b7akiik ana bukra.",
         "Re7t 3al jabal w ken 7elo."
       ]
     },
@@ -71423,7 +71420,7 @@
       },
       "answer": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
       "wrongAnswers": [
-        "Meeshe. Yalla, b7akik hal esbuu3.",
+        "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski."
       ]
@@ -71440,7 +71437,7 @@
       },
       "answer": "Ana kameen! B3te2ed enno a7san men el jabal.",
       "wrongAnswers": [
-        "Tameem! Iza b2dar, be7kik ana bukra.",
+        "Tameem! Iza b2dar, b7akiik ana bukra.",
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!"
       ]
@@ -71504,7 +71501,7 @@
       "wrongAnswers": [
         "Momken ru7 bukra iza 2aader.",
         "Bera2ye enno a7san men el jabal.",
-        "B7akiik hal esbuu3."
+        "B7akiike hal esbuu3."
       ]
     },
     {
@@ -71521,7 +71518,7 @@
       "wrongAnswers": [
         "B7ebb el ba7er bass leezem eshte8el.",
         "El jabal 7elo besh-shete.",
-        "Iza b2dar, b7akiik bukra."
+        "Iza b2dar, b7akiike bukra."
       ]
     },
     {
@@ -71534,7 +71531,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Ok. Hai, vorbim săptămâna asta.”"
       },
-      "answer": "Meeshe. Yalla, b7akik hal esbuu3.",
+      "answer": "Meeshe. Yalla, b7akiike hal esbuu3.",
       "wrongAnswers": [
         "Iza et ta2es mni7, 3al ba7er.",
         "Eza fi talej, leezem nruu7 na3mel ski.",
@@ -71551,7 +71548,7 @@
       "prompt": {
         "ro": "Alege replica pentru: „Perfect! Dacă pot, vorbim mâine.”"
       },
-      "answer": "Tameem! Iza b2dar, be7kik ana bukra.",
+      "answer": "Tameem! Iza b2dar, b7akiik ana bukra.",
       "wrongAnswers": [
         "Re7t 3al jabal w ken 7elo.",
         "B7ebb el ski ktiir!",
