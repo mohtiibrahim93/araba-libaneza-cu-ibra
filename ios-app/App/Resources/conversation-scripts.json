@@ -2542,6 +2542,304 @@
           ]
         }
       ]
+    },
+    {
+      "unitID": "b1-experiences",
+      "scenes": [
+        {
+          "title": "Tu ești prietena lui Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-58956d77f442"
+            },
+            {
+              "exerciseID": "syn-context-syn-ecb20906eef6",
+              "partner": {
+                "arabizi": "Ken 7elo ktiir! Re7t 3al ba7er ma3 as7abe.",
+                "ro": "A fost foarte frumos! Am mers la mare cu prietenii."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9bd7a50634f0",
+              "partner": {
+                "arabizi": "Sbe7na w akalna samak. Ken et ta2es mni7.",
+                "ro": "Am înotat și am mâncat pește. Vremea a fost bună."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-108a6134db90",
+              "partner": {
+                "arabizi": "Uff! Ma b7ebb eshte8el bel weekend.",
+                "ro": "Of! Nu îmi place să lucrez în weekend."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8c5a03bdaebd",
+              "partner": {
+                "arabizi": "Shu ra2yik nru7 3al ba7er el jem3a el jey?",
+                "ro": "Ce zici să mergem la mare săptămâna viitoare?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-37f5816e576d",
+              "partner": {
+                "arabizi": "Akid. W leezem nshuf iza fi wa2et.",
+                "ro": "Sigur. Și trebuie să vedem dacă avem timp."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-fceca554f261",
+              "partner": {
+                "arabizi": "Eza ma 2aadra, fiina nru7 ba3ed esbuu3.",
+                "ro": "Dacă nu poți, putem merge peste o săptămână."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ae2e21e89a75",
+              "partner": {
+                "arabizi": "Ana kameen! B3te2ed enno a7san men el jabal.",
+                "ro": "Și eu! Cred că e mai bun decât muntele."
+              }
+            },
+            {
+              "exerciseID": "teacher.b1-experiences.ski-crowded",
+              "partner": {
+                "arabizi": "Eh, eza fi talej, leezem nruu7 na3mel ski.",
+                "ro": "Da, dacă e zăpadă, trebuie să mergem la schi."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-295e7371a28e",
+              "partner": {
+                "arabizi": "Eh, hayda meshkle. Law konna re7na bakiir...",
+                "ro": "Da, asta e o problemă. Dacă am fi mers devreme..."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-bed8262abbde",
+              "partner": {
+                "arabizi": "Meeshe. Yalla, b7eekik hal esbuu3.",
+                "ro": "Ok. Hai, vorbim săptămâna asta."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Tu ești Karim",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-f7201a55665e",
+              "partner": {
+                "arabizi": "Mar7aba Karim! Kif ken el weekend?",
+                "ro": "Salut Karim! Cum a fost weekendul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-baf73ff6d377",
+              "partner": {
+                "arabizi": "Wow! B7ebb el ba7er ktiir. Shu 3ameltu?",
+                "ro": "Uau! Îmi place mult marea. Ce ați făcut?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-0fecf2ea7211",
+              "partner": {
+                "arabizi": "Aywa! Ma7zuuz! Ana ken leezem eshte8el mbere7.",
+                "ro": "Ce norocos! Eu a trebuit să lucrez ieri."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-86fb6aedde17",
+              "partner": {
+                "arabizi": "Wala ana! Bass ken leezem.",
+                "ro": "Nici mie! Dar a fost necesar."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-123008b3c938",
+              "partner": {
+                "arabizi": "Fekra 7elwe! Bass iza ken et ta2es mni7.",
+                "ro": "Idee bună! Dar dacă vremea e bună."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9c0432d88058",
+              "partner": {
+                "arabizi": "Eh, yemken ykun 3ande she8el.",
+                "ro": "Da, e posibil să am treabă."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-9b6857d789d3",
+              "partner": {
+                "arabizi": "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
+                "ro": "Perfect! Marea e locul meu preferat."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f155c7142a61",
+              "partner": {
+                "arabizi": "Sa7, bass el jabal 7elo besh-shete.",
+                "ro": "Corect, dar muntele e frumos iarna."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-007bd3cef645",
+              "partner": {
+                "arabizi": "B7ebb el ski ktiir! Re7et es sene el madye. Bass ken fi nes ktiir.",
+                "ro": "Îmi place mult schiul! Am mers anul trecut. Dar erau mulți oameni."
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b8e97100f241",
+              "partner": {
+                "arabizi": "Sa7! El marra el jayye leezem nru7 bakiir.",
+                "ro": "Corect! Data viitoare trebuie să mergem devreme."
+              }
+            }
+          ]
+        },
+        {
+          "title": "Munte sau mare?",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-22a2e0ee0b9b",
+              "partner": {
+                "arabizi": "Bte7ebb el jabal?",
+                "ro": "Îți place muntele?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-88dc4e1164a3",
+              "partner": {
+                "arabizi": "Fi talej halla2?",
+                "ro": "E zăpadă acum?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4162e36eafea",
+              "partner": {
+                "arabizi": "W el ba7er?",
+                "ro": "Și marea?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-5004543f44a8",
+              "partner": {
+                "arabizi": "Bte7ebb el ski?",
+                "ro": "Îți place schiul?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-b68babae38b9",
+              "partner": {
+                "arabizi": "Emta re7et?",
+                "ro": "Când ai fost?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-98cd0f1f701e",
+              "partner": {
+                "arabizi": "Kif ken?",
+                "ro": "Cum a fost?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-cb52eaa22d77"
+            }
+          ]
+        },
+        {
+          "title": "Planuri",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-7d745a3f1217"
+            },
+            {
+              "exerciseID": "syn-context-syn-7a096e2f873b",
+              "partner": {
+                "arabizi": "La wen?",
+                "ro": "Unde?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-8242e10b9aba",
+              "partner": {
+                "arabizi": "Ana kameen badde ruu7!",
+                "ro": "Și eu vreau să merg!"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-d033db9fe39c",
+              "partner": {
+                "arabizi": "Btruu7 bukra 3al sho8ol?",
+                "ro": "Mergi mâine la muncă?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-abc156a9fd67",
+              "partner": {
+                "arabizi": "W 3al 7afle btije?",
+                "ro": "Și la petrecere vii?"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Muncă și călătorii",
+          "turns": [
+            {
+              "exerciseID": "syn-context-syn-684b5024cd28",
+              "partner": {
+                "arabizi": "Bte7ebb es safar?",
+                "ro": "Îți place să călătorești?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-283e3b868968",
+              "partner": {
+                "arabizi": "W bte7ebb el ba7er?",
+                "ro": "Și îți place marea?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-4a040b2aec92",
+              "partner": {
+                "arabizi": "Lesh ma btruu7 aktar?",
+                "ro": "De ce nu mergi mai des?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-800190fd1721",
+              "partner": {
+                "arabizi": "Re7et 3al jabal abel?",
+                "ro": "Ai mai fost la munte?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-ba227fc72db9",
+              "partner": {
+                "arabizi": "Shu 3melet bel weekend?",
+                "ro": "Ce ai făcut în weekend?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-44efc94b1bbc",
+              "partner": {
+                "arabizi": "Emta mne7ke?",
+                "ro": "Când vorbim?"
+              }
+            },
+            {
+              "exerciseID": "syn-context-syn-f01eb79d3430",
+              "partner": {
+                "arabizi": "W bukra?",
+                "ro": "Și mâine?"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
