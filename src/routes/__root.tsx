@@ -18,7 +18,7 @@ import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import { useLocation } from "@/lib/router-compat";
 import { initContactClickTracking } from "@/lib/tracking";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
-import { COURSE_INSTRUCTOR } from "@/lib/courseSchema";
+import { COURSE_INSTRUCTOR, ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 import NotFound from "@/pages/NotFound";
 import AskAssistant from "@/components/AskAssistant";
 import appCss from "../styles.css?url";
@@ -120,6 +120,9 @@ const organizationJsonLd = JSON.stringify({
       // Google and the answer engines read the site, the Preply reviews and the
       // Superprof listing as one teacher.
       founder: { "@id": COURSE_INSTRUCTOR["@id"] },
+      // Ties the site to the Google Business Profile, the tutoring listings
+      // and the social profiles, so they read as one business.
+      sameAs: ORGANIZATION_SAME_AS,
       address: {
         "@type": "PostalAddress",
         streetAddress: "Strada Icoanei 80",

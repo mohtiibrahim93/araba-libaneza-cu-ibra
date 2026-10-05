@@ -14,7 +14,7 @@
  */
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Mail, MapPin, MessageCircle, Send, CheckCircle2, Loader2, Clock } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Send, CheckCircle2, Loader2, Clock, Star } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -27,12 +27,13 @@ import { toast } from "sonner";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 import { trackGenerateLead } from "@/lib/tracking";
+import { GOOGLE_MAPS_PROFILE_URL, GOOGLE_REVIEW_URL } from "@/lib/googleBusiness";
+import GoogleMapEmbed from "@/components/GoogleMapEmbed";
 
 const EMAIL = "marhaba@centruldearabalibaneza.com";
 const PHONE_LABEL = "+40 763 124 514";
 const ADDRESS = "Raduga Creative Center, Strada Icoanei 80, București";
-const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Raduga+Creative+Center+Strada+Icoanei+80+Bucuresti";
+const MAPS_URL = GOOGLE_MAPS_PROFILE_URL;
 
 const COPY = {
   ro: {
@@ -65,6 +66,8 @@ const COPY = {
     errSend: "Mesajul nu a putut fi trimis. Încearcă din nou sau scrie-ne pe WhatsApp.",
     alt: "Preferi să vorbim direct? Rezervă o lecție de probă gratuită.",
     altCta: "Lecție de probă gratuită",
+    reviewLead: "Ai învățat cu noi? O recenzie pe Google îi ajută pe alții să ne găsească.",
+    reviewCta: "Lasă-ne o recenzie pe Google",
   },
   en: {
     h1: "Contact",
@@ -96,6 +99,8 @@ const COPY = {
     errSend: "The message couldn't be sent. Please try again, or message us on WhatsApp.",
     alt: "Rather talk in person? Book a free trial lesson.",
     altCta: "Free trial lesson",
+    reviewLead: "Learned with us? A Google review helps others find us.",
+    reviewCta: "Leave us a review on Google",
   },
 } as const;
 
@@ -283,8 +288,22 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                 {c.altCta} →
               </Link>
             </div>
+
+            <div className="mt-4 rounded-2xl border border-border bg-muted/40 p-5">
+              <p className="text-sm text-muted-foreground">{c.reviewLead}</p>
+              <a
+                href={GOOGLE_REVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              >
+                <Star className="h-4 w-4" /> {c.reviewCta} →
+              </a>
+            </div>
           </aside>
         </div>
+
+        <GoogleMapEmbed lang={lang} className="mt-12" />
       </main>
       <Footer />
     </div>

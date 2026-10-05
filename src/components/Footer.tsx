@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import { MessageCircle, Mail, MapPin } from "lucide-react";
+import { MessageCircle, Mail, MapPin, Star } from "lucide-react";
+import { GOOGLE_MAPS_PROFILE_URL, GOOGLE_REVIEW_URL } from "@/lib/googleBusiness";
 import { Link } from "@/components/LocalizedLink";
 import AnchorLink from "@/components/AnchorLink";
 import BrandLogo from "@/components/BrandLogo";
@@ -119,12 +120,18 @@ const Footer = () => {
             <li className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-primary mt-0.5" />
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Raduga+Creative+Center+Strada+Icoanei+80+Bucuresti"
+                href={GOOGLE_MAPS_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
               >
                 Raduga Creative Center, Strada Icoanei 80, București
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-primary" />
+              <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                {lang === "en" ? "Leave us a review on Google" : "Lasă-ne o recenzie pe Google"}
               </a>
             </li>
           </ul>
