@@ -564,7 +564,7 @@ The simplest way is a short chat so we can gauge your child's level and interest
 | --- | --- | --- |
 | Eh / La' | إيه / لأ | Da / Nu |
 | Min fadlak (m) | من فضلك | Te rog |
-| Shukran ktir | شكراً كتير | Mulțumesc mult |
+| Shukran ktiir | شكراً كتير | Mulțumesc mult |
 | 3afwan | عفواً | Cu plăcere / Scuze |
 | Aasef (m) · Aasfeh (f) | آسف | Îmi pare rău |
 | Ma fhemet | ما فهمت | Nu am înțeles |
@@ -578,7 +578,7 @@ The simplest way is a short chat so we can gauge your child's level and interest
 | Wein el 7ammem? | وين الحمام؟ | Unde e toaleta? |
 | 3al yamin / 3ash-shmel | عاليمين / عالشمال | La dreapta / La stânga |
 | Wa''ifni hon | وقفني هون | Oprește-mă aici (în taxi) |
-| Ktir tayyeb! | كتير طيّب! | Foarte gustos! |
+| Ktiir tayyeb! | كتير طيّب! | Foarte gustos! |
 
 ## Expresii libaneze de suflet
 
@@ -612,7 +612,7 @@ Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui �
 | --- | --- | --- |
 | Eh / La' | إيه / لأ | Yes / No |
 | Min fadlak (m) | من فضلك | Please |
-| Shukran ktir | شكراً كتير | Thank you very much |
+| Shukran ktiir | شكراً كتير | Thank you very much |
 | 3afwan | عفواً | You're welcome / Excuse me |
 | Aasef (m) · Aasfeh (f) | آسف | I'm sorry |
 | Ma fhemet | ما فهمت | I didn't understand |
@@ -626,7 +626,7 @@ Dacă expresiile de mai sus ți-au plăcut, pasul următor firesc e să le pui �
 | Wein el 7ammem? | وين الحمام؟ | Where's the toilet? |
 | 3al yamin / 3ash-shmel | عاليمين / عالشمال | To the right / To the left |
 | Wa''ifni hon | وقفني هون | Stop here (in a taxi) |
-| Ktir tayyeb! | كتير طيّب! | Very tasty! |
+| Ktiir tayyeb! | كتير طيّب! | Very tasty! |
 
 ## Heartfelt Lebanese expressions
 
@@ -840,7 +840,7 @@ Poți învăța [online sau fizic în București](/cursuri) — ambele funcțion
 
 - **Marhaba** — Bună
 - **Kifak? / Kifik?** — Ce faci? (către bărbat / femeie)
-- **Mnih, shukran** — Bine, mulțumesc
+- **Mni7, shukran** — Bine, mulțumesc
 - **Shu ismak? / ismik?** — Cum te cheamă?
 - **Ana ismi…** — Numele meu este…
 - **Ana mn Rumania** — Sunt din România
@@ -901,7 +901,7 @@ You can learn [online or in person in Bucharest](/cursuri) — both work, if you
 
 - **Marhaba** — Hello
 - **Kifak? / Kifik?** — How are you? (to a man / woman)
-- **Mnih, shukran** — Good, thanks
+- **Mni7, shukran** — Good, thanks
 - **Shu ismak? / ismik?** — What's your name?
 - **Ana ismi…** — My name is…
 - **Ana mn Rumania** — I'm from Romania

@@ -19,7 +19,7 @@ const FAQ = [
   },
   {
     q: "Ce înseamnă 5 și 2 în arabă?",
-    a: "5 înlocuiește خ (kh), un h aspru ca în germanul „Bach” — 5alas (destul). 2 înlocuiește hamza ء, o oprire glotală scurtă — 2ana (eu), to2borne.",
+    a: "5 înlocuiește خ (kh), un h aspru ca în germanul „Bach” — 5alas (destul). 2 înlocuiește hamza ء, o oprire glotală scurtă — 2aleb (inimă), to2borne.",
   },
   {
     q: "De ce scriu arabii cu cifre?",
@@ -90,15 +90,15 @@ const Arabizi = () => (
 
     <h2>Cum citești un mesaj real, cuvânt cu cuvânt</h2>
     <p className="font-semibold text-foreground">
-      „mar7aba 7abibi, kifak? 3anjad ktir mnih, yalla ba3dein”
+      „mar7aba 7abibi, kifak? 3anjad ktiir mni7, yalla ba3den”
     </p>
     <ul>
       <li><strong>mar7aba</strong> → mar<em>h</em>aba (ح) — salut</li>
       <li><strong>7abibi</strong> → <em>h</em>abibi — dragul meu</li>
       <li><strong>kifak?</strong> — ce faci? (către un bărbat; „kifik?” către o femeie)</li>
       <li><strong>3anjad</strong> → sunetul ع — serios, pe bune</li>
-      <li><strong>ktir mnih</strong> — foarte bine</li>
-      <li><strong>yalla ba3dein</strong> — hai, pe mai târziu</li>
+      <li><strong>ktiir mni7</strong> — foarte bine</li>
+      <li><strong>yalla ba3den</strong> — hai, pe mai târziu</li>
     </ul>
     <p>
       Traducere: „Salut dragul meu, ce faci? Pe bune, foarte bine, hai pe mai târziu.” Mai multe

@@ -40,8 +40,8 @@ export const ARABIZI_DIGITS: ArabiziDigit[] = [
       en: "in Lebanese, ق is pronounced this way too",
     },
     examples: {
-      ro: "2ana (eu), 2aleb (inimă), 2amar (lună)",
-      en: "2ana (I), 2aleb (heart), 2amar (moon)",
+      ro: "2aleb (inimă), 2amar (lună)",
+      en: "2aleb (heart), 2amar (moon)",
     },
   },
   {

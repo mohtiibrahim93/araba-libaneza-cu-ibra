@@ -46,7 +46,7 @@ const ArabaPentruPartener = () => (
     <ul>
       <li><strong>mar7aba, tsharrafna</strong> — bună ziua, îmi pare bine de cunoștință</li>
       <li><strong>kif 7adretak / 7adretik?</strong> — ce mai faceți? (formă respectuoasă)</li>
-      <li><strong>shukran ktir 3a hal 2akel</strong> — mulțumesc mult pentru mâncare</li>
+      <li><strong>shukran ktiir 3a hal 2akel</strong> — mulțumesc mult pentru mâncare</li>
       <li><strong>sa77tein</strong> — poftă bună (se spune la masă)</li>
       <li><strong>2eideyke</strong> — „binecuvântate fie mâinile tale”, complimentul clasic pentru gazdă</li>
       <li><strong>bayti baytak</strong> — casa mea e casa ta</li>

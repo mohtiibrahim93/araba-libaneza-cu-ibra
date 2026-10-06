@@ -29,7 +29,7 @@ const NASKH_600 = font("noto-naskh-arabic/files/noto-naskh-arabic-arabic-600-nor
 const PHRASES = [
   ["Mar7aba", "Salut"],
   ["Kifak? / Kifik?", "Ce faci? (m / f)"],
-  ["Mnih, w inta?", "Bine, și tu?"],
+  ["Mni7, w enta?", "Bine, și tu?"],
   ["Shu fi ma fi?", "Ce se aude? / Ce e nou?"],
   ["Shukran", "Mulțumesc"],
   ["3afwan", "Cu plăcere / Scuze"],
@@ -38,14 +38,14 @@ const PHRASES = [
   ["Ya3ne", "Adică"],
   ["3anjad?", "Serios?"],
   ["7abibi / 7abibti", "Dragul meu / draga mea"],
-  ["Ktir", "Foarte / mult"],
+  ["Ktiir", "Foarte / mult"],
   ["Ma3lesh", "Nu-i nimic"],
   ["Sa7tein", "Poftă bună"],
   ["Tislam / Yislamo", "Mersi, ești super"],
   ["Walaw!", "Zău, nu era nevoie!"],
   ["Inshallah", "Dacă vrea Dumnezeu"],
   ["Mashallah", "Ce frumos! (admirație)"],
-  ["Bkir / Ba3dein", "Devreme / Mai târziu"],
+  ["Bakiir / Ba3den", "Devreme / Mai târziu"],
   ["Yalla bye", "Hai, pa (foarte libanez)"],
 ];
 
@@ -132,7 +132,7 @@ const html = `<!doctype html>
 
 <h2>3. Cum decodezi un mesaj real</h2>
 <div class="msg">
-  <div class="quote">„mar7aba 7abibi, kifak? 3anjad ktir mnih, yalla ba3dein”</div>
+  <div class="quote">„mar7aba 7abibi, kifak? 3anjad ktiir mni7, yalla ba3den”</div>
   <ul class="decode">
     <li><b>mar7aba</b> → marhaba (<span class="ar">ح</span>) = salut</li>
     <li><b>7abibi</b> → habibi = dragul meu</li>

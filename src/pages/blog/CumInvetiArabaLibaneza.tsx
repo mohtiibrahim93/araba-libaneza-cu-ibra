@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n";
 const PHRASES: [string, string, string][] = [
   ["Marhaba", "Bună", "Hello"],
   ["Kifak? / Kifik?", "Ce faci? (către bărbat / femeie)", "How are you? (to a man / woman)"],
-  ["Mnih, shukran", "Bine, mulțumesc", "Good, thanks"],
+  ["Mni7, shukran", "Bine, mulțumesc", "Good, thanks"],
   ["Shu ismak? / ismik?", "Cum te cheamă?", "What's your name?"],
   ["Ana ismi…", "Numele meu este…", "My name is…"],
   ["Ana mn Rumania", "Sunt din România", "I'm from Romania"],
