@@ -8,8 +8,9 @@ export const GOOGLE_MAPS_PROFILE_URL = "https://maps.app.goo.gl/2ZCZZjv3Tu8q3wKU
 export const GOOGLE_REVIEW_URL = "https://g.page/r/CWtW4ZQEuS9lEBM/review";
 
 /**
- * Keyless embed of the venue's address. It shows the pin at Strada Icoanei 80;
- * the profile itself is one click away through GOOGLE_MAPS_PROFILE_URL.
+ * Keyless embed, searched by the business name and street so Google can match
+ * the pin to the profile rather than to the venue that hosts the lessons.
  */
-export const GOOGLE_MAPS_EMBED_URL =
-  "https://www.google.com/maps?q=Raduga+Creative+Center,+Strada+Icoanei+80,+Bucuresti&output=embed";
+export const GOOGLE_MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(
+  "Centrul de Arabă Libaneză, Strada Icoanei 80, București",
+)}&output=embed`;

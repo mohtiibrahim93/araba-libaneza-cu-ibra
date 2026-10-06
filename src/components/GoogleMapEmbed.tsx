@@ -13,13 +13,13 @@ import { GOOGLE_MAPS_EMBED_URL, GOOGLE_MAPS_PROFILE_URL } from "@/lib/googleBusi
 
 const COPY = {
   ro: {
-    title: "Harta: Raduga Creative Center, Strada Icoanei 80, București",
+    title: "Harta: Centrul de Arabă Libaneză, Strada Icoanei 80, București",
     show: "Afișează harta",
     note: "Harta se încarcă de la Google Maps, care poate seta cookies.",
     open: "Deschide în Google Maps",
   },
   en: {
-    title: "Map: Raduga Creative Center, Strada Icoanei 80, Bucharest",
+    title: "Map: Centrul de Arabă Libaneză, Strada Icoanei 80, Bucharest",
     show: "Show the map",
     note: "The map loads from Google Maps, which may set cookies.",
     open: "Open in Google Maps",
