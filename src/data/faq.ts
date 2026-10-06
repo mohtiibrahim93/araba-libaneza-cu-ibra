@@ -176,6 +176,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         title: "Despre cursurile noastre",
         items: [
           {
+            q: "Cum aflu ce nivel am, dacă nu știu de unde să încep?",
+            a: "Ai trei variante gratuite: quiz-ul de 30 de secunde îți recomandă formatul de curs, testul de nivel online (24 de întrebări, aproximativ 15 minute) îți sugerează nivelul, iar verificarea de nivel cu Ibra îl stabilește precis — până la 30 de minute, pe Zoom sau la centru, cu o discuție și câteva întrebări scrise în arabizi. O programezi din pagina Verificare de nivel: alegi o oră, ceri să te sune Ibra sau îi scrii pe WhatsApp. Nu e lecția de probă — acolo doar îți verificăm nivelul.",
+          },
+          {
             q: "Predați adulților, adolescenților și copiilor?",
             a: "Tuturor. Avem cursuri de grup și private pentru adulți și adolescenți (12–17 ani), toate nivelurile CEFR, plus un program pentru copii de 6–11 ani, cu activități potrivite vârstei (momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm).",
           },
@@ -396,6 +400,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
       {
         title: "About our courses",
         items: [
+          {
+            q: "How do I find out my level if I don't know where to start?",
+            a: "There are three free options: the 30-second quiz recommends a course format, the online level test (24 questions, about 15 minutes) suggests your level, and the level check with Ibra pins it down — up to 30 minutes, on Zoom or at the center, with a conversation and a few written questions in Arabizi. Book it from the Level check page: pick a time, ask Ibra to call you, or message on WhatsApp. It is not the trial lesson — it only checks your level.",
+          },
           {
             q: "Do you teach adults, teens and kids?",
             a: "All three. We offer group and private courses for adults and teens (12–17), all CEFR levels, plus a program for children aged 6–11 with age-appropriate activities (we don't have kids' courses at the moment — leave your details and we'll let you know).",

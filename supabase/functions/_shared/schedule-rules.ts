@@ -47,12 +47,16 @@ export function weekdayInTz(d: Date, tz = TZ): number {
  */
 export const PHYSICAL_TRIAL_WEEKDAYS = [0, 6]; // Sunday, Saturday
 
+/** The free bookings that follow the in-person weekend rule: the trial lesson
+ *  and the level check with Ibra (both at the center only at weekends). */
+export const WEEKEND_ONLY_IN_PERSON = ["trial", "verificare-nivel"];
+
 export function physicalTrialAllowed(
   eventTypeSlug: string,
   format: string,
   startISO: string,
   tz = TZ,
 ): boolean {
-  if (eventTypeSlug !== "trial" || format !== "physical") return true;
+  if (!WEEKEND_ONLY_IN_PERSON.includes(eventTypeSlug) || format !== "physical") return true;
   return PHYSICAL_TRIAL_WEEKDAYS.includes(weekdayInTz(new Date(startISO), tz));
 }

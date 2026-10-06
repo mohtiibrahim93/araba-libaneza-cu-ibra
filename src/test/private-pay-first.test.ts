@@ -36,7 +36,10 @@ describe("weekly private series", () => {
 describe("a private lesson is booked only once paid", () => {
   it("refuses a public booking of a paid lesson without a payment", () => {
     const src = read("supabase/functions/booking-create/index.ts");
-    expect(src).toContain('et.slug !== "trial" && !internalCall && reg.payment_status !== "paid"');
+    // Only the two free bookings skip it: the trial and the level check.
+    expect(src).toContain('const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;');
+    expect(src).toContain('const LEVEL_CHECK_SLUG = "verificare-nivel";');
+    expect(src).toContain("if (!isFree && !internalCall && reg.payment_status !== \"paid\")");
     expect(src).toContain('code: "payment_required"');
   });
 

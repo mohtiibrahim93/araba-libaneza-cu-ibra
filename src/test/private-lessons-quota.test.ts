@@ -21,7 +21,8 @@ describe("paid lessons are capped at the quantity bought", () => {
 
   it("applies to internal calls too (the check is not gated on internalCall)", () => {
     const block = src.slice(src.indexOf("// A paid registration books at most"), src.indexOf('code: "lessons_used_up"'));
-    expect(block).toContain('if (et.slug !== "trial") {');
+    // Free bookings (the trial and the level check with Ibra) are not lessons.
+    expect(block).toContain("if (!isFree) {");
     expect(block).not.toContain("internalCall");
   });
 

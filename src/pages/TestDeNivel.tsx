@@ -28,6 +28,7 @@ const COPY = {
     viewLabel: "Cum vrei să faci testul?",
     viewFocus: "Doar testul",
     viewFull: "Testul în jocul Yalla",
+    viewFocusHint: "Doar cele 24 de întrebări, fără meniul jocului.",
     viewFullHint: "Cu meniul jocului: misiuni, XP și restul exercițiilor.",
     langNote: null as string | null,
     eyebrow: "Gratuit · aproximativ 15 minute",
@@ -57,6 +58,7 @@ const COPY = {
     viewLabel: "How do you want to take the test?",
     viewFocus: "Just the test",
     viewFull: "The test inside the Yalla game",
+    viewFocusHint: "Only the 24 questions, without the game's menu.",
     viewFullHint: "With the game's menu: missions, XP and the other exercises.",
     // The test used to be Romanian-only and this warned about it. Every prompt,
     // answer and distractor in the placement bank is a T(ro, en) pair now, so
@@ -89,9 +91,10 @@ const COPY = {
 const TestDeNivel = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
-  // The owner's choice for this page: the test alone by default, or inside the
-  // whole game for someone who wants to keep playing afterwards.
-  const [focus, setFocus] = useState(true);
+  // The visitor chooses first: the test alone, or inside the whole game for
+  // someone who wants to keep playing afterwards. Nothing loads until they
+  // pick — the frame is the heaviest thing on the page.
+  const [focus, setFocus] = useState<boolean | null>(null);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -129,30 +132,36 @@ const TestDeNivel = () => {
         {/* The test itself. `placement` is one of the game's own views, so this
             opens straight on it rather than on the practice game. */}
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <div role="radiogroup" aria-label={c.viewLabel} className="mb-4 flex flex-wrap items-center justify-center gap-2">
-            {([
-              [true, c.viewFocus],
-              [false, c.viewFull],
-            ] as const).map(([value, label]) => (
-              <button
-                key={label}
-                type="button"
-                role="radio"
-                aria-checked={focus === value}
-                onClick={() => setFocus(value)}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-semibold transition",
-                  focus === value
-                    ? "border-brand-green bg-brand-green text-white"
-                    : "border-[#E7E1D6] bg-card text-foreground hover:border-brand-green/50",
-                )}
-              >
-                {label}
-              </button>
-            ))}
+          <div role="radiogroup" aria-label={c.viewLabel}>
+            {focus === null && (
+              <p className="mb-4 text-center font-display text-xl font-bold text-foreground">{c.viewLabel}</p>
+            )}
+            <div className={cn("mx-auto grid max-w-2xl gap-3", focus === null ? "sm:grid-cols-2" : "mb-4 grid-cols-2 sm:max-w-md")}>
+              {([
+                [true, c.viewFocus, c.viewFocusHint],
+                [false, c.viewFull, c.viewFullHint],
+              ] as const).map(([value, label, hint]) => (
+                <button
+                  key={label}
+                  type="button"
+                  role="radio"
+                  aria-checked={focus === value}
+                  onClick={() => setFocus(value)}
+                  className={cn(
+                    "rounded-2xl border text-left transition",
+                    focus === null ? "p-5" : "px-4 py-2 text-center text-sm",
+                    focus === value
+                      ? "border-brand-green bg-brand-green text-white"
+                      : "border-[#E7E1D6] bg-card text-foreground hover:border-brand-green hover:bg-brand-green/5",
+                  )}
+                >
+                  <span className={cn("block font-semibold", focus === null && "font-display text-lg")}>{label}</span>
+                  {focus === null && <span className="mt-1 block text-sm text-muted-foreground">{hint}</span>}
+                </button>
+              ))}
+            </div>
           </div>
-          {!focus && <p className="mb-4 text-center text-sm text-muted-foreground">{c.viewFullHint}</p>}
-          <YallaGame lang={lang} mode="placement" focus={focus} />
+          {focus !== null && <YallaGame lang={lang} mode="placement" focus={focus} />}
         </div>
 
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
@@ -184,6 +193,13 @@ const TestDeNivel = () => {
                 </Link>
                 {/* The game's practice history is a level signal too — the
                     alternative to sitting this test. */}
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {lang === "en" ? "Rather talk to someone? " : "Preferi să vorbești cu cineva? "}
+                  <Link to="/verificare-nivel" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
+                    {lang === "en" ? "Free level check with Ibra" : "Verificare de nivel gratuită cu Ibra"}
+                  </Link>
+                  {lang === "en" ? " — up to 30 minutes, on Zoom or at the center." : " — până la 30 de minute, pe Zoom sau la centru."}
+                </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   {c.playedP}{" "}
                   <Link to="/joc/scor" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">

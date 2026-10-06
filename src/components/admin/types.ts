@@ -74,6 +74,7 @@ export const formTypeLabels: Record<string, string> = {
   private: "Lecții Private",
   kids: "Curs Copii",
   trial: "Probă gratuită",
+  level_check: "Verificare de nivel",
 };
 
 export const leadStatusLabels: Record<LeadStatus, string> = {

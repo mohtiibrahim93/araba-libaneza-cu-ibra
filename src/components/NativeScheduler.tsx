@@ -89,7 +89,7 @@ const WHATSAPP_FALLBACK =
   "https://wa.me/40763124514?text=" +
   encodeURIComponent("Salut! Vreau să rezerv o lecție.");
 
-type EventType = "trial" | "paid";
+type EventType = "trial" | "paid" | "verificare-nivel";
 type Format = "online" | "physical";
 
 interface Props {
@@ -1005,7 +1005,7 @@ const NativeScheduler = ({
             <option value="online">{t.bookingFormatOnline}</option>
             <option value="physical">{t.bookingFormatPhysical}</option>
           </select>
-          {eventType === "trial" && format === "physical" && (
+          {(eventType === "trial" || eventType === "verificare-nivel") && format === "physical" && (
             // Without this the weekday slots simply disappear when you switch,
             // which reads as a bug rather than a rule.
             <p className="text-xs text-muted-foreground sm:col-span-2">

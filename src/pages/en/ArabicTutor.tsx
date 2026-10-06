@@ -73,7 +73,7 @@ const ArabicTutor = () => (
         one-to-one, with {Math.round(privateDiscountFor(10) * 100)}% off from ten lessons
         and {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}% off from{" "}
         {PRIVATE_PACKAGE_SIZE} — no subscription, no minimum term. The tutor is{" "}
-        <strong>Ibrahim Gabriel Moaty</strong> (Ibra), a native Lebanese speaker teaching
+        <strong>Ibra</strong>, a native Lebanese speaker teaching
         from Bucharest for more than five years, live over video anywhere in the world or
         in person at Strada Icoanei 80. Lessons cover CEFR A1 to C2 in Lebanese Arabic —
         the Levantine dialect of Lebanon, Syria, Jordan and Palestine — and you speak in
