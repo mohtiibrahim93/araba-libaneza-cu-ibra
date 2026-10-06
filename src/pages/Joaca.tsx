@@ -45,7 +45,7 @@ const COPY = {
     ctaTrial: "Lecție de probă gratuită",
     levelH2: "Verifică-ți nivelul în joc",
     levelP:
-      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibrahim.",
+      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibra.",
     ctaLevel: "Începe testul de nivel",
     ctaBack: "Înapoi la exerciții",
     ctaScore: "Vezi scorul și nivelul tău",
@@ -75,7 +75,7 @@ const COPY = {
     ctaTrial: "Free trial lesson",
     levelH2: "Check your level in the game",
     levelP:
-      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibrahim.",
+      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibra.",
     ctaLevel: "Start the level test",
     ctaBack: "Back to practice",
     ctaScore: "See your score and level",

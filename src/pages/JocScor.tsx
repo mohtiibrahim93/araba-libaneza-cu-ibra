@@ -51,7 +51,7 @@ const COPY = {
     levelFromTest: "Din testul de orientare din joc",
     levelFromPractice: "Estimat din ce ai exersat",
     levelDisclaimer:
-      "Sugestia este orientativă: măsoară citirea și recunoașterea, nu ascultarea sau vorbirea. Grupa se confirmă într-o conversație cu Ibrahim.",
+      "Sugestia este orientativă: măsoară citirea și recunoașterea, nu ascultarea sau vorbirea. Grupa se confirmă într-o conversație cu Ibra.",
     ctaCourse: "Vezi cursul potrivit",
     ctaTrial: "Lecție de probă gratuită",
     altH2: "Vrei un răspuns mai precis?",
@@ -84,7 +84,7 @@ const COPY = {
     levelFromTest: "From the in-game placement quiz",
     levelFromPractice: "Estimated from your practice",
     levelDisclaimer:
-      "The suggestion is indicative: it measures reading and recognition, not listening or speaking. Group placement is confirmed in a conversation with Ibrahim.",
+      "The suggestion is indicative: it measures reading and recognition, not listening or speaking. Group placement is confirmed in a conversation with Ibra.",
     ctaCourse: "See the right course",
     ctaTrial: "Free trial lesson",
     altH2: "Want a sharper answer?",

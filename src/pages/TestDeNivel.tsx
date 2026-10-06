@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
+import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -24,6 +25,10 @@ const COPY = {
   ro: {
     home: "Acasă",
     crumb: "Test de nivel",
+    viewLabel: "Cum vrei să faci testul?",
+    viewFocus: "Doar testul",
+    viewFull: "Testul în jocul Yalla",
+    viewFullHint: "Cu meniul jocului: misiuni, XP și restul exercițiilor.",
     langNote: null as string | null,
     eyebrow: "Gratuit · aproximativ 15 minute",
     h1: "Ce nivel ai la araba libaneză?",
@@ -37,18 +42,22 @@ const COPY = {
     honestH2: "Ce măsoară testul — și ce nu",
     honest: [
       "Măsoară citirea și răspunsurile scurte scrise în arabizi.",
-      "Nu măsoară ascultarea și nici vorbirea — acestea se verifică într-o conversație cu Ibrahim.",
+      "Nu măsoară ascultarea și nici vorbirea — acestea se verifică într-o conversație cu Ibra.",
       "Rezultatul este o recomandare de pornire, nu o certificare CEFR.",
       "Poți răspunde „Nu știu”. Este înregistrat ca atare și nu îți strică rezultatul.",
       "Nu ai nevoie de cont. Progresul rămâne în browserul tău.",
     ],
     afterH2: "După test",
     afterP:
-      "Rezultatul îți arată nivelul de pornire și te duce direct la cursul potrivit. Grupa se confirmă într-o discuție scurtă cu Ibrahim — de aceea recomandarea este un punct de plecare, nu o încadrare finală.",
+      "Rezultatul îți arată nivelul de pornire și te duce direct la cursul potrivit. Grupa se confirmă într-o discuție scurtă cu Ibra — de aceea recomandarea este un punct de plecare, nu o încadrare finală.",
   },
   en: {
     home: "Home",
     crumb: "Level test",
+    viewLabel: "How do you want to take the test?",
+    viewFocus: "Just the test",
+    viewFull: "The test inside the Yalla game",
+    viewFullHint: "With the game's menu: missions, XP and the other exercises.",
     // The test used to be Romanian-only and this warned about it. Every prompt,
     // answer and distractor in the placement bank is a T(ro, en) pair now, so
     // the warning was telling English readers a test they can take is closed
@@ -66,20 +75,23 @@ const COPY = {
     honestH2: "What the test measures — and what it does not",
     honest: [
       "It measures reading and short written answers in Arabizi.",
-      "It does not measure listening or speaking — those are checked in a conversation with Ibrahim.",
+      "It does not measure listening or speaking — those are checked in a conversation with Ibra.",
       "The result is a starting recommendation, not a CEFR certification.",
       "You can answer “I don't know”. It is recorded as such and does not count against you.",
       "No account needed. Your progress stays in your own browser.",
     ],
     afterH2: "After the test",
     afterP:
-      "The result shows your starting level and takes you straight to the matching course. The group is confirmed in a short conversation with Ibrahim, which is why the recommendation is a starting point rather than a final placement.",
+      "The result shows your starting level and takes you straight to the matching course. The group is confirmed in a short conversation with Ibra, which is why the recommendation is a starting point rather than a final placement.",
   },
 } as const;
 
 const TestDeNivel = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  // The owner's choice for this page: the test alone by default, or inside the
+  // whole game for someone who wants to keep playing afterwards.
+  const [focus, setFocus] = useState(true);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -117,7 +129,30 @@ const TestDeNivel = () => {
         {/* The test itself. `placement` is one of the game's own views, so this
             opens straight on it rather than on the practice game. */}
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <YallaGame lang={lang} mode="placement" />
+          <div role="radiogroup" aria-label={c.viewLabel} className="mb-4 flex flex-wrap items-center justify-center gap-2">
+            {([
+              [true, c.viewFocus],
+              [false, c.viewFull],
+            ] as const).map(([value, label]) => (
+              <button
+                key={label}
+                type="button"
+                role="radio"
+                aria-checked={focus === value}
+                onClick={() => setFocus(value)}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-semibold transition",
+                  focus === value
+                    ? "border-brand-green bg-brand-green text-white"
+                    : "border-[#E7E1D6] bg-card text-foreground hover:border-brand-green/50",
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {!focus && <p className="mb-4 text-center text-sm text-muted-foreground">{c.viewFullHint}</p>}
+          <YallaGame lang={lang} mode="placement" focus={focus} />
         </div>
 
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
