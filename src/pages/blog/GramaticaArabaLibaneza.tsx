@@ -162,13 +162,13 @@ const GramaticaArabaLibaneza = () => {
           </thead>
           <tbody className="divide-y divide-border">
             <tr><td className="p-3">{en ? "I" : "eu"}</td><td className="p-3">ana</td><td className="p-3">-i</td><td className="p-3 text-muted-foreground">bayt-i</td></tr>
-            <tr><td className="p-3">{en ? "you (m.)" : "tu (m.)"}</td><td className="p-3">inta</td><td className="p-3">-ak</td><td className="p-3 text-muted-foreground">bayt-ak</td></tr>
-            <tr><td className="p-3">{en ? "you (f.)" : "tu (f.)"}</td><td className="p-3">inti</td><td className="p-3">-ek</td><td className="p-3 text-muted-foreground">bayt-ek</td></tr>
+            <tr><td className="p-3">{en ? "you (m.)" : "tu (m.)"}</td><td className="p-3">enta</td><td className="p-3">-ak</td><td className="p-3 text-muted-foreground">bayt-ak</td></tr>
+            <tr><td className="p-3">{en ? "you (f.)" : "tu (f.)"}</td><td className="p-3">ente</td><td className="p-3">-ek</td><td className="p-3 text-muted-foreground">bayt-ek</td></tr>
             <tr><td className="p-3">{en ? "he" : "el"}</td><td className="p-3">huwwe</td><td className="p-3">-o</td><td className="p-3 text-muted-foreground">bayt-o</td></tr>
-            <tr><td className="p-3">{en ? "she" : "ea"}</td><td className="p-3">hiyye</td><td className="p-3">-(h)a</td><td className="p-3 text-muted-foreground">bayt-a</td></tr>
-            <tr><td className="p-3">{en ? "we" : "noi"}</td><td className="p-3">nihna</td><td className="p-3">-na</td><td className="p-3 text-muted-foreground">bayt-na</td></tr>
-            <tr><td className="p-3">{en ? "you (pl.)" : "voi"}</td><td className="p-3">intu</td><td className="p-3">-kon</td><td className="p-3 text-muted-foreground">bayt-kon</td></tr>
-            <tr><td className="p-3">{en ? "they" : "ei/ele"}</td><td className="p-3">hinne</td><td className="p-3">-hon</td><td className="p-3 text-muted-foreground">bayt-hon</td></tr>
+            <tr><td className="p-3">{en ? "she" : "ea"}</td><td className="p-3">heyye</td><td className="p-3">-(h)a</td><td className="p-3 text-muted-foreground">bayt-a</td></tr>
+            <tr><td className="p-3">{en ? "we" : "noi"}</td><td className="p-3">ne7na</td><td className="p-3">-na</td><td className="p-3 text-muted-foreground">bayt-na</td></tr>
+            <tr><td className="p-3">{en ? "you (pl.)" : "voi"}</td><td className="p-3">ento</td><td className="p-3">-kon</td><td className="p-3 text-muted-foreground">bayt-kon</td></tr>
+            <tr><td className="p-3">{en ? "they" : "ei/ele"}</td><td className="p-3">henne</td><td className="p-3">-hon</td><td className="p-3 text-muted-foreground">bayt-hon</td></tr>
           </tbody>
         </table>
         <p>
@@ -224,7 +224,7 @@ const GramaticaArabaLibaneza = () => {
           <tbody className="divide-y divide-border">
             <tr><td className="p-3">{en ? "Case endings" : "Terminații de caz"}</td><td className="p-3 text-muted-foreground">{en ? "Full system (-u, -a, -i)" : "Sistem complet (-u, -a, -i)"}</td><td className="p-3 text-muted-foreground">{en ? "None" : "Nu există"}</td></tr>
             <tr><td className="p-3">{en ? "Dual number" : "Numărul dual"}</td><td className="p-3 text-muted-foreground">{en ? "Separate dual form" : "Formă duală separată"}</td><td className="p-3 text-muted-foreground">{en ? "Uses plural" : "Se folosește pluralul"}</td></tr>
-            <tr><td className="p-3">{en ? "Feminine plural verb" : "Feminin plural la verbe"}</td><td className="p-3 text-muted-foreground">{en ? "Separate conjugation" : "Conjugare separată"}</td><td className="p-3 text-muted-foreground">{en ? "Merged into hinne" : "Contopit în hinne"}</td></tr>
+            <tr><td className="p-3">{en ? "Feminine plural verb" : "Feminin plural la verbe"}</td><td className="p-3 text-muted-foreground">{en ? "Separate conjugation" : "Conjugare separată"}</td><td className="p-3 text-muted-foreground">{en ? "Merged into henne" : "Contopit în henne"}</td></tr>
             <tr><td className="p-3">{en ? "Present tense" : "Prezent"}</td><td className="p-3 text-muted-foreground">aktub</td><td className="p-3 text-muted-foreground">bektob (b- prefix)</td></tr>
             <tr><td className="p-3">{en ? "Future tense" : "Viitor"}</td><td className="p-3 text-muted-foreground">sa-aktub / sawfa</td><td className="p-3 text-muted-foreground">rah ektob / ha-ektob</td></tr>
             <tr><td className="p-3">{en ? "Negation" : "Negație"}</td><td className="p-3 text-muted-foreground">la / lam / lan / laysa</td><td className="p-3 text-muted-foreground">ma (+ suffix -sh in some regions)</td></tr>

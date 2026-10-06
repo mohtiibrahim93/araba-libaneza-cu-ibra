@@ -232,7 +232,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Care sunt pronumele personale și posesive în araba libaneză?",
-            a: "Personale: ana (eu), inta / inti (tu m/f), huwwe / hiyye (el/ea), nihna (noi), intu (voi), hinne (ei/ele). Posesive (atașate la substantiv): -i (al meu), -ak / -ek (al tău m/f), -o (al lui), -(h)a (al ei), -na (al nostru), -kon (al vostru), -hon (al lor). Exemplu: bayt = casă → bayti (casa mea), baytak (casa ta), bayto (casa lui), bayta (casa ei).",
+            a: "Personale: ana (eu), enta / ente (tu m/f), huwwe / heyye (el/ea), ne7na (noi), ento (voi), henne (ei/ele). Posesive (atașate la substantiv): -i (al meu), -ak / -ek (al tău m/f), -o (al lui), -(h)a (al ei), -na (al nostru), -kon (al vostru), -hon (al lor). Exemplu: bayt = casă → bayti (casa mea), baytak (casa ta), bayto (casa lui), bayta (casa ei).",
           },
           {
             q: "Ordinea cuvintelor în araba libaneză este VSO sau SVO?",
@@ -240,7 +240,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Prin ce diferă gramatica arabei libaneze de MSA?",
-            a: "Libaneza simplifică mult MSA: fără terminații de caz (dammah, kasrah, fathah), fără dual complet (folosim pluralul), fără femininul de plural separat la verbe (hinne acoperă tot), timpul viitor cu رح / ح- (rah rooh = voi merge) în loc de سـ, negație cu ما (ma) simplu în loc de لا/لم/لن, și ordine SVO în loc de VSO. Rezultat: aceleași rădăcini, mult mai puține reguli — de aceea libaneza e mai ușor de vorbit decât MSA.",
+            a: "Libaneza simplifică mult MSA: fără terminații de caz (dammah, kasrah, fathah), fără dual complet (folosim pluralul), fără femininul de plural separat la verbe (henne acoperă tot), timpul viitor cu رح / ح- (rah rooh = voi merge) în loc de سـ, negație cu ما (ma) simplu în loc de لا/لم/لن, și ordine SVO în loc de VSO. Rezultat: aceleași rădăcini, mult mai puține reguli — de aceea libaneza e mai ușor de vorbit decât MSA.",
           },
         ],
       },
@@ -451,7 +451,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What are the personal and possessive pronouns in Lebanese Arabic?",
-            a: "Personal: ana (I), inta / inti (you m/f), huwwe / hiyye (he/she), nihna (we), intu (you pl.), hinne (they). Possessive (attached to the noun): -i (my), -ak / -ek (your m/f), -o (his), -(h)a (her), -na (our), -kon (your pl.), -hon (their). Example: bayt = house → bayti (my house), baytak (your house), bayto (his house), bayta (her house).",
+            a: "Personal: ana (I), enta / ente (you m/f), huwwe / heyye (he/she), ne7na (we), ento (you pl.), henne (they). Possessive (attached to the noun): -i (my), -ak / -ek (your m/f), -o (his), -(h)a (her), -na (our), -kon (your pl.), -hon (their). Example: bayt = house → bayti (my house), baytak (your house), bayto (his house), bayta (her house).",
           },
           {
             q: "Is Lebanese Arabic word order VSO or SVO?",
@@ -459,7 +459,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How is Lebanese Arabic grammar different from Modern Standard Arabic (MSA)?",
-            a: "Lebanese drops most of MSA's complexity: no case endings (dammah, kasrah, fathah), no full dual (we use the plural), no separate feminine plural in verbs (hinne covers everyone), future tense with رح / ح- (rah rooh = I will go) instead of سـ, negation with a simple ما (ma) instead of لا/لم/لن, and SVO word order instead of VSO. The result: same roots, far fewer rules — which is why Lebanese is faster to speak than MSA.",
+            a: "Lebanese drops most of MSA's complexity: no case endings (dammah, kasrah, fathah), no full dual (we use the plural), no separate feminine plural in verbs (henne covers everyone), future tense with رح / ح- (rah rooh = I will go) instead of سـ, negation with a simple ما (ma) instead of لا/لم/لن, and SVO word order instead of VSO. The result: same roots, far fewer rules — which is why Lebanese is faster to speak than MSA.",
           },
         ],
       },
