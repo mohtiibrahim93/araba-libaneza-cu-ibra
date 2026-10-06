@@ -1,11 +1,11 @@
 import { Link } from "@/lib/router-compat";
 import LandingLayout from "@/components/seo/LandingLayout";
-import ResourceDownloadForm from "@/components/ResourceDownloadForm";
+import ResourcePicker from "@/components/ResourcePicker";
 
 const FAQ = [
   {
     q: "Cum primesc materialele?",
-    a: "Completezi prenumele și emailul la resursa dorită, bifezi acordul și primești imediat un email cu linkul de descărcare al PDF-ului.",
+    a: "Bifezi PDF-urile dorite, completezi prenumele și emailul o singură dată, dai acordul și primești imediat câte un email cu linkul de descărcare pentru fiecare.",
   },
   {
     q: "Costă ceva?",
@@ -13,7 +13,7 @@ const FAQ = [
   },
   {
     q: "Pot primi toate materialele deodată?",
-    a: "Da, completează pe rând formularele de mai jos. Fiecare resursă vine într-un email separat, cu propriul link de descărcare.",
+    a: "Da, toate trei sunt bifate de la început. Fiecare vine într-un email separat, cu propriul link de descărcare.",
   },
   {
     q: "Ce fac cu datele mele?",
@@ -28,7 +28,7 @@ const Resurse = () => (
     metaTitle="Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat"
     description="Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse."
     crumb="Resurse gratuite"
-    lead="Toate materialele noastre gratuite într-un singur loc. Alegi resursa, lași emailul și primești PDF-ul în câteva secunde."
+    lead="Toate materialele noastre gratuite într-un singur loc. Bifezi ce vrei, lași emailul o singură dată și primești PDF-urile în câteva secunde."
     enHref={null}
     faq={FAQ}
   >
@@ -37,48 +37,48 @@ const Resurse = () => (
       <Link to="/arabizi">arabizi</Link>, ca să le poți citi din prima zi, fără alfabetul arab.
     </p>
 
-    <h2>1. Cheat-sheet Arabizi</h2>
-    <p>
-      O pagină cu tabelul cifrelor (2, 3, 5, 7, 8) și literele arabe pe care le înlocuiesc, 20
-      de expresii esențiale și un mesaj real de WhatsApp decodat cuvânt cu cuvânt. Ghidul complet
-      stă pe <Link to="/arabizi">pagina Arabizi</Link>.
-    </p>
-    <ResourceDownloadForm
-      resource="arabizi-cheat-sheet"
+    <h2>Cele 3 PDF-uri gratuite</h2>
+    <ResourcePicker
       source="/resurse"
-      idPrefix="res-arabizi"
-      fileHref="/arabizi-cheat-sheet.pdf"
-      title="Cheat-sheet Arabizi (PDF)"
-      description="Tabelul cifrelor, 20 de expresii libaneze și un mesaj real decodat. Gratuit, pe email."
+      items={[
+        {
+          resource: "arabizi-cheat-sheet",
+          fileHref: "/arabizi-cheat-sheet.pdf",
+          title: "Cheat-sheet Arabizi",
+          description: "Tabelul cifrelor, 20 de expresii libaneze și un mesaj real de WhatsApp decodat.",
+        },
+        {
+          resource: "100-expresii-libaneze",
+          fileHref: "/100-expresii-libaneze.pdf",
+          title: "100 de expresii libaneze",
+          description: "Șapte situații de zi cu zi, cu pronunție în arabizi și traducere în română.",
+        },
+        {
+          resource: "plan-30-zile",
+          fileHref: "/plan-30-zile-araba-libaneza.pdf",
+          title: "Plan de 30 de zile",
+          description: "15–20 de minute pe zi, cu obiective săptămânale și resurse gratuite recomandate.",
+        },
+      ]}
     />
 
-    <h2>2. Pachetul de start: 100 de expresii libaneze</h2>
-    <p>
-      Expresiile de care ai nevoie în primele luni, grupate pe situații: salut și prezentare,
-      restaurant, taxi, cumpărături, familie, urări și politețe. Fiecare cu arabizi și traducere.
-    </p>
-    <ResourceDownloadForm
-      resource="100-expresii-libaneze"
-      source="/resurse"
-      idPrefix="res-exp100"
-      fileHref="/100-expresii-libaneze.pdf"
-      title="100 de expresii libaneze esențiale (PDF)"
-      description="Șapte situații de zi cu zi, cu pronunție în arabizi și traducere în română."
-    />
-
-    <h2>3. Plan de învățare pentru 30 de zile</h2>
-    <p>
-      Ce faci în fiecare zi, 15–20 de minute, folosind doar resurse gratuite, cu verificări la final
-      de săptămână. Vezi și <Link to="/invata-araba-gratis">ghidul complet de învățare gratuită</Link>.
-    </p>
-    <ResourceDownloadForm
-      resource="plan-30-zile"
-      source="/resurse"
-      idPrefix="res-plan30"
-      fileHref="/plan-30-zile-araba-libaneza.pdf"
-      title="Plan de 30 de zile (PDF)"
-      description="Program zilnic de 15–20 min, cu obiective săptămânale și resurse gratuite recomandate."
-    />
+    <h2>Ce conține fiecare</h2>
+    <ul>
+      <li>
+        <strong>Cheat-sheet Arabizi</strong> — o pagină cu tabelul cifrelor (2, 3, 5, 7, 8) și literele
+        arabe pe care le înlocuiesc, 20 de expresii esențiale și un mesaj real de WhatsApp decodat cuvânt
+        cu cuvânt. Ghidul complet stă pe <Link to="/arabizi">pagina Arabizi</Link>.
+      </li>
+      <li>
+        <strong>100 de expresii libaneze</strong> — expresiile de care ai nevoie în primele luni, grupate
+        pe situații: salut și prezentare, restaurant, taxi, cumpărături, familie, urări și politețe.
+      </li>
+      <li>
+        <strong>Plan de 30 de zile</strong> — ce faci în fiecare zi, folosind doar resurse gratuite, cu
+        verificări la final de săptămână. Vezi și{" "}
+        <Link to="/invata-araba-gratis">ghidul complet de învățare gratuită</Link>.
+      </li>
+    </ul>
 
     <h2>Resurse gratuite direct pe site</h2>
     <ul>

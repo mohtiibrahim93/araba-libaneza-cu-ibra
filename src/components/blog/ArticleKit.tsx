@@ -28,14 +28,14 @@ const L = (ro: string, en: string, lang: "ro" | "en") => (lang === "en" ? en : r
 export const Tldr = ({ points }: { points: Loc[] }) => {
   const lang = useLang();
   return (
-    <aside className="not-prose my-8 rounded-2xl border border-border bg-muted/40 p-5 sm:p-6">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+    <aside className="not-prose my-8 rounded-2xl bg-cream p-5 sm:p-6">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-green">
         {L("Pe scurt", "In short", lang)}
       </p>
       <ul className="space-y-2 text-sm leading-relaxed text-foreground/90">
         {points.map((p, i) => (
           <li key={i} className="flex gap-2">
-            <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-green" />
             <span>{pick(p, lang)}</span>
           </li>
         ))}
@@ -129,7 +129,7 @@ export const PullQuote = ({ children }: { children: ReactNode }) => (
 export const InlineCta = ({ title, text, href, label }: { title: Loc; text: Loc; href: string; label: Loc }) => {
   const lang = useLang();
   return (
-    <div className="not-prose my-10 rounded-2xl border border-border bg-primary/5 p-6 text-center">
+    <div className="not-prose my-10 rounded-2xl border border-brand-green/25 bg-brand-green/5 p-6 text-center">
       {/* Deliberately not an <h2>: the article outline is built from h2s, and a
           call to action is not a section of the article. */}
       <p className="font-display text-xl font-bold text-foreground">{pick(title, lang)}</p>

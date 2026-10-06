@@ -15,6 +15,7 @@ import { canonicalPath } from "@/lib/languageRoutes";
 import type { Localized } from "@/lib/blogPosts";
 import { BLOG_POSTS, L } from "@/lib/blogPosts";
 import { getBlogCover } from "@/lib/blogCovers";
+import instructorPhotoWebp from "@/assets/instructor-photo.webp";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -255,11 +256,21 @@ const BlogArticleLayout = ({
           </nav>
 
           <header className="mb-10 space-y-4">
+            {registryPost?.tag && (
+              <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
+                Blog · {L(registryPost.tag, lang)}
+              </p>
+            )}
             <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
               {tTitle}
             </h1>
             <p className="text-lg text-muted-foreground">{tLead}</p>
-            <p className="text-sm text-muted-foreground">{metaLine}</p>
+            <p className="flex items-center gap-2.5 text-sm text-muted-foreground">
+              <img src={instructorPhotoWebp} alt="" width={32} height={32} className="h-8 w-8 rounded-full object-cover" />
+              <span>
+                <span className="font-semibold text-foreground">Ibra</span> · {metaLine}
+              </span>
+            </p>
             {cover && (
               /* Eager + high priority: this is the largest element above the
                  fold, so lazy-loading it would only delay the paint. */
@@ -288,7 +299,7 @@ const BlogArticleLayout = ({
               </h2>
               <div className="mt-4 space-y-4">
                 {faq.map(({ q, a }) => (
-                  <div key={pick(q, lang)} className="rounded-lg border border-border bg-muted/30 p-4">
+                  <div key={pick(q, lang)} className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border">
                     <h3 className="font-semibold text-foreground">{pick(q, lang)}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">{pick(a, lang)}</p>
                   </div>
@@ -299,14 +310,29 @@ const BlogArticleLayout = ({
 
           </div>
 
+          <aside className="mt-12 flex items-center gap-4 rounded-2xl bg-cream p-5 sm:p-6">
+            <img src={instructorPhotoWebp} alt="" width={64} height={64} loading="lazy" className="h-16 w-16 shrink-0 rounded-2xl object-cover" />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
+                {lang === "en" ? "Written by" : "Scris de"}
+              </p>
+              <p className="font-display text-lg font-bold text-foreground">Ibra</p>
+              <p className="text-sm text-foreground/75">
+                {lang === "en"
+                  ? "Native Lebanese Arabic teacher, in Bucharest and online."
+                  : "Profesor nativ de arabă libaneză, în București și online."}
+              </p>
+            </div>
+          </aside>
+
           <RelatedPosts currentSlug={slug} />
 
-          <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-foreground">{pick(cta.title, lang)}</h2>
-            <p className="text-muted-foreground">{pick(cta.text, lang)}</p>
+          <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
+            <h2 className="font-display text-2xl font-bold text-white md:text-3xl">{pick(cta.title, lang)}</h2>
+            <p className="text-white/85">{pick(cta.text, lang)}</p>
             <Link
               to={cta.href}
-              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+              className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
             >
               {pick(cta.label, lang)}
             </Link>
