@@ -51,6 +51,7 @@
   --color-admin-nav: hsl(var(--admin-nav));
   --color-admin-nav-fg: hsl(var(--admin-nav-fg));
   --color-admin-nav-muted: hsl(var(--admin-nav-muted));
+  --color-admin-nav-border: hsl(var(--admin-nav-border));
   --color-admin-canvas: hsl(var(--admin-canvas));
   /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
      matching pre-migration behaviour). */
@@ -179,19 +180,19 @@
   /**
    * The admin panel's own surfaces.
    *
-   * The navigation rail is a dark green in BOTH themes, so it reads as one
-   * fixed surface whichever way the site is set. `--brand-green` cannot be used
-   * directly: it lightens to 58% in dark mode for use as text on dark
-   * backgrounds, which would put cream type on a pale green rail.
-   *
-   * `--admin-canvas` is the warm cream the public site uses for its section
-   * bands, so the panel belongs to the same product as the pages it edits
-   * rather than to a generic template.
+   * Neutral on purpose. A first attempt painted the rail in the brand's cedar
+   * green on a cream canvas, reasoning that the panel should look like the site
+   * it edits. It should not: the site is marketing and the panel is a tool, and
+   * a saturated surface behind dense data fights the data. Every admin people
+   * actually like to use — and the owner's own verdict on the green — points
+   * the same way: a neutral shell, strong typography, and colour reserved for
+   * status and for the one action that matters on screen.
    */
-  --admin-nav: 152 42% 16%;
-  --admin-nav-fg: 40 33% 94%;
-  --admin-nav-muted: 152 18% 68%;
-  --admin-canvas: 40 33% 96%;
+  --admin-nav: 0 0% 100%;
+  --admin-nav-fg: 220 14% 12%;
+  --admin-nav-muted: 220 9% 46%;
+  --admin-nav-border: 220 13% 90%;
+  --admin-canvas: 220 20% 98%;
 
   --series-1: #2a78d6;
   --series-2: #eb6834;
@@ -248,10 +249,11 @@
    * normal-vision ΔE 19.8.
    */
   /* The rail stays dark; only the canvas follows the theme. */
-  --admin-nav: 152 30% 10%;
-  --admin-nav-fg: 40 20% 92%;
-  --admin-nav-muted: 152 12% 62%;
-  --admin-canvas: 220 14% 9%;
+  --admin-nav: 220 14% 11%;
+  --admin-nav-fg: 0 0% 96%;
+  --admin-nav-muted: 220 9% 58%;
+  --admin-nav-border: 220 14% 20%;
+  --admin-canvas: 220 14% 8%;
 
   --series-1: #3987e5;
   --series-2: #d95926;

@@ -77,14 +77,16 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
                         // not an answer to "where am I". Inverting the surface is
                         // unambiguous, and works in both themes because the rail
                         // is dark in both.
-                        ? "bg-admin-nav-fg font-semibold text-admin-nav shadow-sm"
-                        : "text-admin-nav-fg/75 hover:bg-white/5 hover:text-admin-nav-fg",
+                        // A tinted pill plus a red marker. On a neutral rail
+                        // this is unmistakable without inverting the surface.
+                        ? "bg-primary/10 font-semibold text-primary"
+                        : "text-admin-nav-fg/70 hover:bg-muted hover:text-admin-nav-fg",
                     )}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span className="truncate">{item.label}</span>
                     {typeof item.badge === "number" && item.badge > 0 && (
-                      <span className="ml-auto rounded-full bg-white/10 px-1.5 py-0.5 text-[0.6875rem] tabular-nums text-admin-nav-fg/70">
+                      <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[0.6875rem] tabular-nums text-muted-foreground">
                         {item.badge}
                       </span>
                     )}
@@ -147,14 +149,13 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
           {/* Ten sections became eighteen, so the sidebar is taller than most
               screens: it scrolls inside itself and keeps the signed-in address
               pinned at the bottom rather than pushing it off. */}
-          {/* A navigation surface rather than a list in a white box: the deep
-              cedar green the public site uses for its bands, so the panel reads
-              as part of the same product as the pages it edits. */}
-          <div className="sticky top-[4.5rem] flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-xl bg-admin-nav shadow-sm">
+          {/* A quiet rail. It is chrome, not content: a hairline against the
+              canvas and nothing else, so the eye goes to the data. */}
+          <div className="sticky top-[4.5rem] flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-xl border border-admin-nav-border bg-admin-nav">
             <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
               <NavList />
             </div>
-            <div className="border-t border-white/10 px-4 py-2.5">
+            <div className="border-t border-admin-nav-border px-4 py-2.5">
               <p className="truncate text-[0.6875rem] text-admin-nav-muted">{adminEmail || "—"}</p>
             </div>
           </div>
@@ -194,7 +195,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
               </Button>
             </div>
             <NavList onNavigate={() => setMenuOpen(false)} />
-            <div className="mt-6 space-y-2 border-t border-white/10 pt-4">
+            <div className="mt-6 space-y-2 border-t border-admin-nav-border pt-4">
               <Button asChild variant="outline" size="sm" className="w-full justify-start">
                 <Link to="/admin/notifications" onClick={() => setMenuOpen(false)}>
                   <Send className="h-4 w-4" />
