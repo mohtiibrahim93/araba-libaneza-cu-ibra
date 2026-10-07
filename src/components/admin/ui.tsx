@@ -34,29 +34,18 @@ import { cn } from "@/lib/utils";
 /* ── Screen ────────────────────────────────────────────────────────────── */
 
 /** The title of a whole screen. Lora, with a rule that sets it apart. */
-export function ScreenHeader({
-  title,
-  description,
-  actions,
-}: {
-  title: string;
-  description?: string;
-  actions?: ReactNode;
-}) {
+/**
+ * The controls that belong to one screen — a refresh, a period switch, an
+ * "add" button.
+ *
+ * It deliberately carries no title. The shell heads every screen from the
+ * navigation entry, so a screen that also titled itself would print the same
+ * words twice; that is exactly what used to happen on all twenty.
+ */
+export function ScreenToolbar({ children }: { children?: ReactNode }) {
+  if (!children) return null;
   return (
-    <header className="mb-5 flex flex-wrap items-end justify-between gap-x-4 gap-y-3 border-b border-border/70 pb-4">
-      <div className="min-w-0">
-        <h2 className="font-display text-2xl font-semibold leading-tight tracking-tight text-foreground">
-          {title}
-        </h2>
-        {description && (
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </p>
-        )}
-      </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
-    </header>
+    <div className="-mt-1 mb-5 flex flex-wrap items-center justify-end gap-2">{children}</div>
   );
 }
 

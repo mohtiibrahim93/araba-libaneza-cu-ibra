@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, Pill, ScreenHeader, Section } from "./ui";
+import { Empty, ErrorNote, Loading, Pill, ScreenToolbar, Section } from "./ui";
 
 /**
  * The screen the panel opens on.
@@ -170,15 +170,11 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Azi"
-        description="Ce are nevoie de tine. Cifrele pe perioade sunt în Analiză."
-        actions={
-          <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          </Button>
-        }
-      />
+      <ScreenToolbar>
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+        </Button>
+      </ScreenToolbar>
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
