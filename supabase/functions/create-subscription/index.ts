@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   groupMonthlyUnitAmount,
   groupMonthsFor,
@@ -70,6 +71,11 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!(await verifiedRegistrationOwner(req, regRow, supabaseAdmin.auth))) {
+      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (regRow.form_type !== "group" && regRow.form_type !== "kids") {

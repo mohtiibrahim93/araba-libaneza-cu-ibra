@@ -40,13 +40,13 @@ export const Route = createFileRoute("/api/chat")({
           )
           .map((m) => ({
             id: typeof m.id === "string" ? m.id.slice(0, 100) : "",
-            role: m.role,
+            role: "user" as const,
             parts: (Array.isArray(m.parts) ? m.parts : [])
               .filter((p) => p && p.type === "text" && typeof p.text === "string")
               .map((p) => ({ type: "text" as const, text: (p as { text: string }).text.slice(0, 4000) })),
           }))
           .filter((m) => m.parts.length > 0) as UIMessage[];
-        if (sanitizedMessages.at(-1)?.role !== "user") {
+        if ((messages.at(-1) as UIMessage | undefined)?.role !== "user" || sanitizedMessages.length === 0) {
           return new Response("Invalid messages", { status: 400 });
         }
 

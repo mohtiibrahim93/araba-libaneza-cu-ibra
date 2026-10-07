@@ -13,6 +13,7 @@ import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } f
 import { LEVEL_CHECK_SLUG, levelCheckTimeAllowed } from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 
 interface CreateBody {
   event_type: string;
@@ -105,10 +106,14 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, payment_status, quantity")
+      .select("id, email, payment_status, quantity")
       .eq("id", body.registration_id)
       .maybeSingle();
     if (!reg) return json({ error: "registration not found" }, 404);
+    // Preserve only the existing trusted webhook booking path.
+    if (!internalCall && !(await verifiedRegistrationOwner(req, reg, supabase.auth))) {
+      return json({ error: "Sign in with your verified registration email to continue" }, 403);
+    }
 
     const { data: et } = await supabase
       .from("booking_event_types")
