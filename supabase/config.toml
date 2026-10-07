@@ -2,7 +2,9 @@ project_id = "pzouzxgswccyhxhpgfwb"
 
 [functions]
   [functions.admin-registrations]
-    verify_jwt = true
+    # The function verifies the caller and the admin allowlist itself; the
+    # gateway check only rejects otherwise-valid sessions (asymmetric JWT).
+    verify_jwt = false
   [functions.auth-email-hook]
     verify_jwt = false
   [functions.create-payment-intent]
