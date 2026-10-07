@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ExternalLink, Gamepad2, RefreshCw, SquarePen } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * The game cards that have been corrected by hand.
@@ -130,14 +130,14 @@ const CardOverridesAdmin = () => {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.card_id}>
+                <Tr key={r.card_id}>
                   <Td className="font-mono text-xs text-muted-foreground">{r.card_id}</Td>
                   <Td className="max-w-[16rem] truncate text-foreground">{r.ar || "—"}</Td>
                   <Td className="max-w-[16rem] truncate text-muted-foreground">{r.ro || "—"}</Td>
                   <Td className="whitespace-nowrap tabular-nums text-xs text-muted-foreground">
                     {stamp.format(new Date(r.updated_at))}
                   </Td>
-                </tr>
+                </Tr>
               ))}
             </tbody>
           </TableWrap>

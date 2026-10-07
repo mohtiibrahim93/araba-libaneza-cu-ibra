@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * The weekly slots a kids' course can be booked into.
@@ -272,24 +272,24 @@ const KidsSlotsAdmin = () => {
               <tr>
                 <Th>Ziua</Th>
                 <Th>Ora</Th>
-                <Th>Durată</Th>
+                <Th numeric>Durată</Th>
                 <Th>Format</Th>
-                <Th>Locuri</Th>
+                <Th numeric>Locuri</Th>
                 <Th>Pe site</Th>
                 <Th />
               </tr>
             </thead>
             <tbody>
               {slots.map((s) => (
-                <tr key={s.id}>
+                <Tr key={s.id}>
                   <Td className="font-medium text-foreground">{WEEKDAYS[s.weekday - 1]}</Td>
                   <Td className="tabular-nums">{hhmm(s.start_time)}</Td>
-                  <Td className="tabular-nums text-muted-foreground">{s.duration_min} min</Td>
+                  <Td numeric className="text-muted-foreground">{s.duration_min} min</Td>
                   <Td className="text-muted-foreground">
                     {s.format === "online" ? "Online" : "La centru"}
                     {s.location ? ` · ${s.location}` : ""}
                   </Td>
-                  <Td className="tabular-nums text-muted-foreground">{s.max_seats}</Td>
+                  <Td numeric className="text-muted-foreground">{s.max_seats}</Td>
                   <Td>
                     {s.is_active ? (
                       <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
@@ -339,7 +339,7 @@ const KidsSlotsAdmin = () => {
                       </AlertDialog>
                     </div>
                   </Td>
-                </tr>
+                </Tr>
               ))}
             </tbody>
           </TableWrap>

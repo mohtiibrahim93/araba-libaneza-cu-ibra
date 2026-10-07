@@ -48,6 +48,11 @@
   /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
   --color-brand-green: hsl(var(--brand-green));
   --color-cream: hsl(var(--cream));
+  --color-admin-nav: hsl(var(--admin-nav));
+  --color-admin-nav-fg: hsl(var(--admin-nav-fg));
+  --color-admin-nav-muted: hsl(var(--admin-nav-muted));
+  --color-admin-nav-border: hsl(var(--admin-nav-border));
+  --color-admin-canvas: hsl(var(--admin-canvas));
   /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
      matching pre-migration behaviour). */
   --color-cedar: hsl(var(--cedar-green));
@@ -172,6 +177,23 @@
    * the light surface owes the reader a legend and the numbers in text — the
    * weekly table under the chart is that relief, not a nicety.
    */
+  /**
+   * The admin panel's own surfaces.
+   *
+   * Neutral on purpose. A first attempt painted the rail in the brand's cedar
+   * green on a cream canvas, reasoning that the panel should look like the site
+   * it edits. It should not: the site is marketing and the panel is a tool, and
+   * a saturated surface behind dense data fights the data. Every admin people
+   * actually like to use — and the owner's own verdict on the green — points
+   * the same way: a neutral shell, strong typography, and colour reserved for
+   * status and for the one action that matters on screen.
+   */
+  --admin-nav: 0 0% 100%;
+  --admin-nav-fg: 220 14% 12%;
+  --admin-nav-muted: 220 9% 46%;
+  --admin-nav-border: 220 13% 90%;
+  --admin-canvas: 220 20% 98%;
+
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -226,6 +248,13 @@
    * the worst adjacent pair is again yellow↔aqua: CVD ΔE 8.4 (protan),
    * normal-vision ΔE 19.8.
    */
+  /* The rail stays dark; only the canvas follows the theme. */
+  --admin-nav: 220 14% 11%;
+  --admin-nav-fg: 0 0% 96%;
+  --admin-nav-muted: 220 9% 58%;
+  --admin-nav-border: 220 14% 20%;
+  --admin-canvas: 220 14% 8%;
+
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;

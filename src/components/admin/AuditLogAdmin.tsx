@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ScrollText, ShieldAlert } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * Who did what, and when.
@@ -105,7 +105,7 @@ const AuditLogAdmin = () => {
           icon={ScrollText}
           description="Cele mai recente primele. Jurnalul nu poate fi editat din panou."
         >
-          <TableWrap>
+          <TableWrap stickyHeader maxHeight="max-h-[70vh]">
             <thead>
               <tr>
                 <Th>Când</Th>
@@ -119,7 +119,7 @@ const AuditLogAdmin = () => {
               {rows.map((r) => {
                 const destructive = DESTRUCTIVE.has(r.action);
                 return (
-                  <tr key={r.id}>
+                  <Tr key={r.id}>
                     <Td className="whitespace-nowrap tabular-nums text-muted-foreground">
                       {stamp.format(new Date(r.created_at))}
                     </Td>
@@ -144,7 +144,7 @@ const AuditLogAdmin = () => {
                     <Td className="max-w-[20rem] truncate text-xs text-muted-foreground">
                       {r.details ? JSON.stringify(r.details) : "—"}
                     </Td>
-                  </tr>
+                  </Tr>
                 );
               })}
             </tbody>
