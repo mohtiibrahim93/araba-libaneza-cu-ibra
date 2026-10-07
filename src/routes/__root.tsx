@@ -94,7 +94,7 @@ if (window.__ANALYTICS_ENABLED__) {
   gt.src = "https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}";
   document.head.appendChild(gt);
   gtag('js', new Date());
-  gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' });
+  gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
   gtag('config', '${GA_MEASUREMENT_ID}');
 }
 `;
