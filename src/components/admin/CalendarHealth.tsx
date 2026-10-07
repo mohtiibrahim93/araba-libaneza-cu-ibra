@@ -10,6 +10,8 @@ import {
   Loader2,
   RefreshCw,
   XCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 interface Probe {
@@ -74,10 +76,22 @@ const Row = ({
  * Runs the same connector calls the booking functions run and shows what
  * came back, plus the subscription feed as the no-API fallback.
  */
+/**
+ * Replaces the token in the feed URL with bullets, keeping enough of the shape
+ * for the owner to recognise the right link without reading the secret out.
+ */
+function maskToken(url: string): string {
+  return url.replace(/([?&]token=)([^&]+)/i, (_m, prefix: string, token: string) => {
+    const tail = token.length > 4 ? token.slice(-4) : "";
+    return `${prefix}${"•".repeat(12)}${tail}`;
+  });
+}
+
 const CalendarHealth = () => {
   const [health, setHealth] = useState<Health | null>(null);
   const [loading, setLoading] = useState(true);
   const [probing, setProbing] = useState(false);
+  const [showFeedUrl, setShowFeedUrl] = useState(false);
 
   const run = useCallback(async (probeWrite: boolean) => {
     if (probeWrite) setProbing(true);
@@ -263,15 +277,38 @@ const CalendarHealth = () => {
                   În Google Calendar: <em>Alte calendare → + → De la URL</em>, lipește linkul de
                   mai jos. Rezervările apar automat, în sens unic.
                 </p>
+                {/* The link carries OWNER_CALENDAR_TOKEN, and the token is the
+                    whole of the authentication: anyone holding this URL can
+                    read every booking. Printing it in full meant it was on
+                    screen during any screen-share or over any shoulder, so it
+                    stays masked until asked for. Copying never needs it
+                    revealed. */}
                 <div className="mt-2 flex items-center gap-2">
                   <code className="min-w-0 flex-1 truncate rounded-[4px] bg-muted px-2 py-1 text-xs">
-                    {health.feed.url}
+                    {showFeedUrl ? health.feed.url : maskToken(health.feed.url)}
                   </code>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowFeedUrl((v) => !v)}
+                    aria-pressed={showFeedUrl}
+                  >
+                    {showFeedUrl ? (
+                      <EyeOff className="mr-1.5 h-4 w-4" aria-hidden />
+                    ) : (
+                      <Eye className="mr-1.5 h-4 w-4" aria-hidden />
+                    )}
+                    {showFeedUrl ? "Ascunde" : "Arată"}
+                  </Button>
                   <Button variant="outline" size="sm" onClick={copyFeed}>
                     <Copy className="mr-1.5 h-4 w-4" aria-hidden />
                     Copiază
                   </Button>
                 </div>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Linkul conține o cheie secretă: cine îl are poate citi toate rezervările. Nu
+                  îl arăta pe ecran partajat și nu îl pune într-un calendar public.
+                </p>
               </>
             ) : (
               <p className="mt-1 text-sm text-muted-foreground">

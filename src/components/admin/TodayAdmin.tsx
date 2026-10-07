@@ -80,6 +80,8 @@ interface Today {
   unpaid: Lead[];
   cohortsStartingSoon: Cohort[];
   problems: Problem[];
+  /** Past lessons that never reached the calendar — a backlog, not work. */
+  olderUnsyncedLessons?: number;
 }
 
 const TZ = "Europe/Bucharest";
@@ -166,7 +168,8 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
     data.uncontacted.length === 0 &&
     data.unpaid.length === 0 &&
     data.cohortsStartingSoon.length === 0 &&
-    data.problems.length === 0;
+    data.problems.length === 0 &&
+    !data.olderUnsyncedLessons;
 
   return (
     <div className="space-y-5">
@@ -190,6 +193,23 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
 
       {data && !nothingToDo && (
         <div className="space-y-5">
+          {!!data.olderUnsyncedLessons && (
+            <Card
+              title="Sincronizarea cu calendarul a ratat lecții"
+              count={data.olderUnsyncedLessons}
+              icon={AlertTriangle}
+              tone="warn"
+            >
+              <p className="text-sm text-amber-700 dark:text-amber-400">
+                {data.olderUnsyncedLessons === 1
+                  ? "O lecție deja trecută nu a ajuns niciodată în Google Calendar."
+                  : `${data.olderUnsyncedLessons} lecții deja trecute nu au ajuns niciodată în Google Calendar.`}{" "}
+                Nu mai e nimic de făcut pentru ele, dar înseamnă că sincronizarea a căzut, nu
+                că a fost ghinion. Vezi „Sănătate calendar”.
+              </p>
+            </Card>
+          )}
+
           {data.problems.length > 0 && (
             <Card title="Ce nu merge" count={data.problems.length} icon={AlertTriangle} tone="warn">
               <ul className="space-y-2">

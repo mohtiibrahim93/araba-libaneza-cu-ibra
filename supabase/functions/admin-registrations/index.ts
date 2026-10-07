@@ -1101,12 +1101,13 @@ Deno.serve(async (req) => {
         { data: uncontacted, error: uncErr },
         { data: unpaid, error: unpaidErr },
         { data: cohorts, error: cohortErr },
+        { count: olderUnsynced },
       ] = await Promise.all([
         // Today and the next two days, so a Friday evening still shows Monday.
         supabase
           .from("bookings")
           .select(
-            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_sync_error, manage_token",
+            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_event_id, google_sync_error, manage_token",
           )
           .eq("status", "confirmed")
           .gte("start_at", dayStart)
@@ -1145,6 +1146,20 @@ Deno.serve(async (req) => {
           .gte("start_date", new Date(now).toISOString().slice(0, 10))
           .lte("start_date", new Date(now + 14 * 86_400_000).toISOString().slice(0, 10))
           .order("start_date", { ascending: true }),
+        // Lessons already past that never reached the calendar. They are not
+        // work any more — nobody can attend August retroactively — so they do
+        // not belong in the worklist itself. But a backlog of them means the
+        // sync is broken rather than unlucky, and Azi saying nothing at all
+        // while "Sănătate calendar" reported three of four missing is how the
+        // two screens came to contradict each other. A count is enough to send
+        // the owner to the screen that explains it.
+        supabase
+          .from("bookings")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "confirmed")
+          .is("google_event_id", null)
+          .gte("start_at", new Date(now - 180 * 86_400_000).toISOString())
+          .lt("start_at", dayStart),
       ]);
       if (lessonErr) throw lessonErr;
       if (uncErr) throw uncErr;
@@ -1157,12 +1172,21 @@ Deno.serve(async (req) => {
       // failed to sync is the one that bites: the lesson exists here and not
       // in the owner's calendar, so it is the lesson he does not turn up to.
       const problems: Array<{ kind: string; detail: string; id: string }> = [];
+      // A lesson counts as a calendar problem when it has no event, not merely
+      // when an error was recorded. Those are different failures: the sync can
+      // fall over without ever writing google_sync_error — a dropped request, a
+      // token that expired between the write and the retry — and that silent
+      // case was the one nobody saw. "Sănătate calendar" has always asked
+      // whether the event exists; this asks the same question, so the two
+      // screens can no longer disagree about the same booking.
       for (const b of lessons ?? []) {
-        if (b.google_sync_error) {
+        if (!b.google_event_id) {
           problems.push({
             kind: "calendar",
             id: b.id as string,
-            detail: `${b.student_name}: ${b.google_sync_error}`,
+            detail: b.google_sync_error
+              ? `${b.student_name}: ${b.google_sync_error}`
+              : `${b.student_name}: lecția nu are eveniment în Google Calendar.`,
           });
         }
       }
@@ -1184,6 +1208,7 @@ Deno.serve(async (req) => {
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],
           problems,
+          olderUnsyncedLessons: olderUnsynced ?? 0,
         },
       });
     }
