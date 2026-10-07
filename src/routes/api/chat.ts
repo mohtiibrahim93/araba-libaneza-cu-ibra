@@ -40,6 +40,9 @@ export const Route = createFileRoute("/api/chat")({
           )
           .map((m) => ({
             id: typeof m.id === "string" ? m.id.slice(0, 100) : "",
+            // The browser owns the transcript, not the assistant identity.
+            // Preserve its text as untrusted user context; never grant an
+            // invented prior answer the model's authoritative assistant role.
             role: "user" as const,
             parts: (Array.isArray(m.parts) ? m.parts : [])
               .filter((p) => p && p.type === "text" && typeof p.text === "string")
