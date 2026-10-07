@@ -46,14 +46,26 @@ const GoogleMapEmbed = ({
   return (
     <div className={`overflow-hidden rounded-2xl border border-border bg-card ${className}`}>
       {loaded ? (
-        <iframe
-          src={GOOGLE_MAPS_EMBED_URL}
-          title={c.title}
-          className={`block ${height} w-full border-0`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-        />
+        // Clicks inside a Google iframe stay inside it, so a click on the pin
+        // went nowhere. A transparent link laid over the map sends every click
+        // to the Business Profile instead.
+        <div className="relative">
+          <iframe
+            src={GOOGLE_MAPS_EMBED_URL}
+            title={c.title}
+            className={`block ${height} w-full border-0`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            tabIndex={-1}
+          />
+          <a
+            href={GOOGLE_MAPS_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={c.open}
+            className="absolute inset-0"
+          />
+        </div>
       ) : (
         <div className={`flex ${height} flex-col items-center justify-center gap-3 bg-muted/40 p-6 text-center`}>
           <MapPin className="h-8 w-8 text-primary" />
