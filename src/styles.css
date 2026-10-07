@@ -48,6 +48,10 @@
   /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
   --color-brand-green: hsl(var(--brand-green));
   --color-cream: hsl(var(--cream));
+  --color-admin-nav: hsl(var(--admin-nav));
+  --color-admin-nav-fg: hsl(var(--admin-nav-fg));
+  --color-admin-nav-muted: hsl(var(--admin-nav-muted));
+  --color-admin-canvas: hsl(var(--admin-canvas));
   /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
      matching pre-migration behaviour). */
   --color-cedar: hsl(var(--cedar-green));
@@ -172,6 +176,23 @@
    * the light surface owes the reader a legend and the numbers in text — the
    * weekly table under the chart is that relief, not a nicety.
    */
+  /**
+   * The admin panel's own surfaces.
+   *
+   * The navigation rail is a dark green in BOTH themes, so it reads as one
+   * fixed surface whichever way the site is set. `--brand-green` cannot be used
+   * directly: it lightens to 58% in dark mode for use as text on dark
+   * backgrounds, which would put cream type on a pale green rail.
+   *
+   * `--admin-canvas` is the warm cream the public site uses for its section
+   * bands, so the panel belongs to the same product as the pages it edits
+   * rather than to a generic template.
+   */
+  --admin-nav: 152 42% 16%;
+  --admin-nav-fg: 40 33% 94%;
+  --admin-nav-muted: 152 18% 68%;
+  --admin-canvas: 40 33% 96%;
+
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -226,6 +247,12 @@
    * the worst adjacent pair is again yellow↔aqua: CVD ΔE 8.4 (protan),
    * normal-vision ΔE 19.8.
    */
+  /* The rail stays dark; only the canvas follows the theme. */
+  --admin-nav: 152 30% 10%;
+  --admin-nav-fg: 40 20% 92%;
+  --admin-nav-muted: 152 12% 62%;
+  --admin-canvas: 220 14% 9%;
+
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;

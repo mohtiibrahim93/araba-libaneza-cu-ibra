@@ -123,7 +123,14 @@ const Card = ({
   tone?: "default" | "warn";
   children: React.ReactNode;
 }) => (
-  <Section title={title} icon={Icon} tone={tone} actions={<Pill tone={tone === "warn" ? "warn" : "default"}>{count}</Pill>}>
+  <Section
+    title={title}
+    icon={Icon}
+    // The worklist speaks in two voices — a problem, or a list — which map onto
+    // the two tones that matter here.
+    tone={tone === "warn" ? "alert" : "raised"}
+    actions={<Pill tone={tone === "warn" ? "warn" : "default"}>{count}</Pill>}
+  >
     {children}
   </Section>
 );

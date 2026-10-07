@@ -3,84 +3,37 @@ import { Loader2, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * The admin panel's shared vocabulary.
+ * The admin panel's design vocabulary.
  *
- * Twenty-two screens were written at different times, so each invented its own
- * section heading, its own table, its own "nothing here" and its own spinner —
- * and several invented none, rendering a bare "—" or nothing at all on failure.
- * The result reads as a dozen small tools rather than one panel.
+ * The first version of this file made twenty-seven screens consistent, which
+ * was worth doing and was not the same as designing them. Everything came out
+ * at one visual weight: identical radius, identical border, identical padding,
+ * almost everything at `text-sm`, and none of the brand — grey Inter on white,
+ * while the site it administers is deep green, cream and red with Lora as its
+ * display face. Tidy, and it could have belonged to any product.
  *
- * These are deliberately thin. They own spacing, weight and colour and nothing
- * else: no data fetching, no state, no action names. A screen adopting them
- * changes how it looks and not what it does, which is the whole point of a
- * visual pass on code with no UI tests.
+ * What changed here:
+ *
+ *   - **A type scale with real steps.** Screen titles are Lora, the serif the
+ *     public pages use; section titles are a weight above body; meta is a step
+ *     below. The eye now has something to anchor on.
+ *   - **Rank by weight, not by sameness.** `alert` is loud, `raised` is the
+ *     default card, `flush` has no chrome at all. An urgent warning and a quiet
+ *     list no longer compete.
+ *   - **Density.** This is a tool that gets scanned and acted on, not browsed,
+ *     so rows are tighter and more fits on a screen.
+ *   - **Tables treated as tables** — hover, a sticky header for long lists, and
+ *     numerals that line up.
+ *
+ * They remain thin on purpose: spacing, weight and colour, and nothing else.
+ * No fetching, no state, no action names — a screen adopting them changes how
+ * it looks and not what it does, which is the whole point in code with no UI
+ * tests.
  */
 
-/** A titled block. The unit every screen is built from. */
-export function Section({
-  title,
-  description,
-  icon: Icon,
-  actions,
-  tone = "default",
-  className,
-  children,
-}: {
-  title?: string;
-  description?: string;
-  icon?: LucideIcon;
-  /** Buttons, filters — anything that belongs beside the title. */
-  actions?: ReactNode;
-  tone?: "default" | "warn" | "quiet";
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      className={cn(
-        "rounded-2xl border p-5",
-        tone === "warn" && "border-amber-500/40 bg-amber-500/10",
-        tone === "quiet" && "border-border bg-muted/30",
-        tone === "default" && "border-border bg-background",
-        className,
-      )}
-    >
-      {(title || actions) && (
-        <header className="mb-4 flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3
-              className={cn(
-                "flex items-center gap-2 text-sm font-semibold",
-                tone === "warn" ? "text-amber-700 dark:text-amber-400" : "text-foreground",
-              )}
-            >
-              {Icon && (
-                <Icon
-                  className={cn("h-4 w-4 shrink-0", tone === "warn" ? "text-amber-600 dark:text-amber-400" : "text-primary")}
-                />
-              )}
-              {title}
-            </h3>
-            {description && (
-              <p
-                className={cn(
-                  "mt-1 text-xs leading-relaxed",
-                  tone === "warn" ? "text-amber-700/80 dark:text-amber-400/80" : "text-muted-foreground",
-                )}
-              >
-                {description}
-              </p>
-            )}
-          </div>
-          {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
-        </header>
-      )}
-      {children}
-    </section>
-  );
-}
+/* ── Screen ────────────────────────────────────────────────────────────── */
 
-/** The heading above a whole screen, not a block within one. */
+/** The title of a whole screen. Lora, with a rule that sets it apart. */
 export function ScreenHeader({
   title,
   description,
@@ -91,23 +44,112 @@ export function ScreenHeader({
   actions?: ReactNode;
 }) {
   return (
-    <header className="flex flex-wrap items-start justify-between gap-3">
+    <header className="mb-5 flex flex-wrap items-end justify-between gap-x-4 gap-y-3 border-b border-border/70 pb-4">
       <div className="min-w-0">
-        <h2 className="text-lg font-bold text-foreground">{title}</h2>
-        {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
+        <h2 className="font-display text-2xl font-semibold leading-tight tracking-tight text-foreground">
+          {title}
+        </h2>
+        {description && (
+          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        )}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
   );
 }
 
+/* ── Section ───────────────────────────────────────────────────────────── */
+
+type Tone = "raised" | "flush" | "alert" | "quiet";
+
+const TONE: Record<Tone, string> = {
+  // The default: a white card lifting off the cream canvas. A hairline plus a
+  // whisper of shadow reads cleaner than the heavy border it replaces.
+  raised: "rounded-xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
+  // No chrome. For a block that is already inside something.
+  flush: "",
+  // Loud on purpose, and the only tone that uses colour for its surface.
+  alert: "rounded-xl border border-amber-500/40 bg-amber-500/10",
+  // Explanatory asides: present, not competing.
+  quiet: "rounded-xl border border-border/60 bg-muted/40",
+};
+
+export function Section({
+  title,
+  description,
+  icon: Icon,
+  actions,
+  tone = "raised",
+  className,
+  bodyClassName,
+  children,
+}: {
+  title?: string;
+  description?: string;
+  icon?: LucideIcon;
+  actions?: ReactNode;
+  tone?: Tone;
+  className?: string;
+  /** Escape hatch for a body that manages its own padding, e.g. a full-bleed table. */
+  bodyClassName?: string;
+  children: ReactNode;
+}) {
+  const alert = tone === "alert";
+  return (
+    <section className={cn(TONE[tone], className)}>
+      {(title || actions) && (
+        <header
+          className={cn(
+            "flex flex-wrap items-start justify-between gap-x-4 gap-y-2",
+            tone === "flush" ? "mb-3" : "border-b border-border/50 px-4 py-3",
+            alert && "border-amber-500/25",
+          )}
+        >
+          <div className="min-w-0">
+            <h3
+              className={cn(
+                "flex items-center gap-2 text-[0.9375rem] font-semibold leading-snug",
+                alert ? "text-amber-700 dark:text-amber-400" : "text-foreground",
+              )}
+            >
+              {Icon && (
+                <Icon
+                  className={cn(
+                    "h-[1.05rem] w-[1.05rem] shrink-0",
+                    alert ? "text-amber-600 dark:text-amber-400" : "text-primary",
+                  )}
+                />
+              )}
+              {title}
+            </h3>
+            {description && (
+              <p
+                className={cn(
+                  "mt-1 max-w-prose text-xs leading-relaxed",
+                  alert ? "text-amber-700/80 dark:text-amber-400/80" : "text-muted-foreground",
+                )}
+              >
+                {description}
+              </p>
+            )}
+          </div>
+          {actions && <div className="flex shrink-0 items-center gap-1.5">{actions}</div>}
+        </header>
+      )}
+      <div className={cn(tone === "flush" ? "" : "px-4 py-3.5", bodyClassName)}>{children}</div>
+    </section>
+  );
+}
+
+/* ── States ────────────────────────────────────────────────────────────── */
+
 /**
  * Nothing here — said properly.
  *
  * Several screens rendered a bare "—" or an empty box, which reads as a page
- * that failed rather than a list with nothing in it. An empty state says which
- * of the two it is, and when there is something the reader could do about it,
- * says that too.
+ * that failed rather than a list with nothing in it.
  */
 export function Empty({
   icon: Icon,
@@ -121,59 +163,89 @@ export function Empty({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border px-6 py-10 text-center">
-      {Icon && <Icon className="mb-3 h-7 w-7 text-muted-foreground/70" />}
-      <p className="text-sm font-medium text-foreground">{title}</p>
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/40 px-6 py-12 text-center">
+      {Icon && <Icon className="mb-3 h-7 w-7 text-muted-foreground/50" />}
+      <p className="font-display text-base font-semibold text-foreground">{title}</p>
       {description && (
-        <p className="mt-1 max-w-sm text-xs leading-relaxed text-muted-foreground">{description}</p>
+        <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </p>
       )}
-      {action && <div className="mt-4">{action}</div>}
+      {action && <div className="mt-5">{action}</div>}
     </div>
   );
 }
 
-/** One spinner, one size, one place on the screen. */
 export function Loading({ label }: { label?: string }) {
   return (
     <div
-      className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground"
+      className="flex items-center justify-center gap-2.5 py-14 text-sm text-muted-foreground"
       role="status"
     >
-      <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      <Loader2 className="h-4 w-4 animate-spin text-primary" />
       {label}
     </div>
   );
 }
 
-/** A failure the reader can see, instead of a blank area and a console line. */
 export function ErrorNote({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+    <p className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
       {children}
     </p>
   );
 }
 
+/* ── Table ─────────────────────────────────────────────────────────────── */
+
 /**
- * A table that stays readable on a phone.
+ * A table that behaves like one.
  *
- * The admin is used from a phone often enough that it was rebuilt once for
- * that reason. A wide table cannot be made narrow, so it scrolls — but it
- * scrolls inside its own box rather than dragging the whole page sideways.
+ * It scrolls inside its own box rather than dragging the page sideways — the
+ * panel is used from a phone often enough that the shell was rebuilt once for
+ * that reason. `stickyHeader` is for the long lists (registrations, the audit
+ * log) where the header leaves the screen before the rows do.
  */
-export function TableWrap({ children }: { children: ReactNode }) {
+export function TableWrap({
+  children,
+  stickyHeader,
+  maxHeight,
+}: {
+  children: ReactNode;
+  stickyHeader?: boolean;
+  maxHeight?: string;
+}) {
   return (
-    <div className="-mx-1 overflow-x-auto px-1">
-      <table className="w-full min-w-[32rem] text-sm">{children}</table>
+    <div
+      className={cn("-mx-4 overflow-auto px-4", maxHeight)}
+      style={maxHeight ? undefined : undefined}
+    >
+      <table
+        className={cn(
+          "w-full min-w-[34rem] border-collapse text-sm",
+          stickyHeader && "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-card",
+        )}
+      >
+        {children}
+      </table>
     </div>
   );
 }
 
-export function Th({ children, className }: { children?: ReactNode; className?: string }) {
+export function Th({
+  children,
+  className,
+  numeric,
+}: {
+  children?: ReactNode;
+  className?: string;
+  numeric?: boolean;
+}) {
   return (
     <th
       className={cn(
-        "border-b border-border py-2 pr-3 text-left text-xs font-medium text-muted-foreground",
+        "border-b border-border py-2 pr-3 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground",
+        numeric && "text-right",
         className,
       )}
     >
@@ -182,11 +254,36 @@ export function Th({ children, className }: { children?: ReactNode; className?: 
   );
 }
 
-export function Td({ children, className }: { children?: ReactNode; className?: string }) {
-  return <td className={cn("border-b border-border/60 py-2.5 pr-3 align-middle", className)}>{children}</td>;
+export function Td({
+  children,
+  className,
+  numeric,
+}: {
+  children?: ReactNode;
+  className?: string;
+  numeric?: boolean;
+}) {
+  return (
+    <td
+      className={cn(
+        "border-b border-border/50 py-2 pr-3 align-middle",
+        numeric && "text-right tabular-nums",
+        className,
+      )}
+    >
+      {children}
+    </td>
+  );
 }
 
-/** A number worth looking at, with what it means underneath. */
+/** Row with a hover tint, so the eye can track across a wide table. */
+export function Tr({ children, className }: { children: ReactNode; className?: string }) {
+  return <tr className={cn("transition-colors hover:bg-muted/40", className)}>{children}</tr>;
+}
+
+/* ── Figures ───────────────────────────────────────────────────────────── */
+
+/** A number worth looking at. The figure leads; the label explains it. */
 export function StatTile({
   label,
   value,
@@ -199,24 +296,35 @@ export function StatTile({
   icon?: LucideIcon;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-background p-4">
+    <div className="rounded-xl border border-border/70 bg-card px-4 py-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-xs text-muted-foreground sm:text-sm">{label}</p>
-        {Icon && <Icon className="h-4 w-4 shrink-0 text-primary" />}
+        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {label}
+        </p>
+        {Icon && <Icon className="h-4 w-4 shrink-0 text-primary/70" />}
       </div>
-      <p className="mt-2 text-2xl font-bold tabular-nums text-foreground sm:text-3xl">{value}</p>
-      {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
+      <p className="mt-1.5 font-display text-[1.75rem] font-semibold leading-none tabular-nums text-foreground">
+        {value}
+      </p>
+      {hint && <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{hint}</p>}
     </div>
   );
 }
 
-/** A small count beside a heading. */
-export function Pill({ children, tone = "default" }: { children: ReactNode; tone?: "default" | "warn" }) {
+export function Pill({
+  children,
+  tone = "default",
+}: {
+  children: ReactNode;
+  tone?: "default" | "warn" | "good";
+}) {
   return (
     <span
       className={cn(
-        "rounded-full px-2 py-0.5 text-xs tabular-nums",
-        tone === "warn" ? "bg-amber-500/20 text-amber-700 dark:text-amber-400" : "bg-muted text-muted-foreground",
+        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium tabular-nums",
+        tone === "warn" && "bg-amber-500/20 text-amber-700 dark:text-amber-400",
+        tone === "good" && "bg-brand-green/10 text-brand-green",
+        tone === "default" && "bg-muted text-muted-foreground",
       )}
     >
       {children}

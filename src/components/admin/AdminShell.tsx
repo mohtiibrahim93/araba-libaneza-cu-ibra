@@ -52,7 +52,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
     <nav className="space-y-5">
       {groups.map((group) => (
         <div key={group.title}>
-          <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
+          <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-admin-nav-muted">
             {group.title}
           </p>
           <ul className="space-y-0.5">
@@ -69,16 +69,22 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
                     }}
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
+                      "flex w-full items-center gap-2.5 rounded-lg px-3 py-1.5 text-[0.8125rem] transition-colors",
                       isActive
-                        ? "bg-primary/10 font-semibold text-primary"
-                        : "text-foreground/80 hover:bg-muted",
+                        // A cream pill, not a tinted one. A 15% red wash over a
+                        // dark green rail is almost the same colour as the rail:
+                        // it rendered as a slightly different dark box, which is
+                        // not an answer to "where am I". Inverting the surface is
+                        // unambiguous, and works in both themes because the rail
+                        // is dark in both.
+                        ? "bg-admin-nav-fg font-semibold text-admin-nav shadow-sm"
+                        : "text-admin-nav-fg/75 hover:bg-white/5 hover:text-admin-nav-fg",
                     )}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span className="truncate">{item.label}</span>
                     {typeof item.badge === "number" && item.badge > 0 && (
-                      <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                      <span className="ml-auto rounded-full bg-white/10 px-1.5 py-0.5 text-[0.6875rem] tabular-nums text-admin-nav-fg/70">
                         {item.badge}
                       </span>
                     )}
@@ -93,9 +99,9 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
   );
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-admin-canvas">
       {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-card/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:px-6">
           <Button
             variant="ghost"
@@ -107,7 +113,9 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
             <Menu className="h-5 w-5" />
           </Button>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-foreground">{current?.label}</p>
+            <p className="truncate font-display text-[0.9375rem] font-semibold text-foreground">
+              {current?.label}
+            </p>
             {current?.hint && (
               <p className="hidden truncate text-xs text-muted-foreground sm:block">
                 {current.hint}
@@ -139,12 +147,15 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
           {/* Ten sections became eighteen, so the sidebar is taller than most
               screens: it scrolls inside itself and keeps the signed-in address
               pinned at the bottom rather than pushing it off. */}
-          <div className="sticky top-[4.5rem] flex max-h-[calc(100vh-6rem)] flex-col rounded-xl border border-border bg-background shadow-xs">
-            <div className="min-h-0 flex-1 overflow-y-auto p-3">
+          {/* A navigation surface rather than a list in a white box: the deep
+              cedar green the public site uses for its bands, so the panel reads
+              as part of the same product as the pages it edits. */}
+          <div className="sticky top-[4.5rem] flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-xl bg-admin-nav shadow-sm">
+            <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
               <NavList />
             </div>
-            <div className="border-t border-border px-3 py-2.5">
-              <p className="truncate text-xs text-muted-foreground">{adminEmail || "—"}</p>
+            <div className="border-t border-white/10 px-4 py-2.5">
+              <p className="truncate text-[0.6875rem] text-admin-nav-muted">{adminEmail || "—"}</p>
             </div>
           </div>
         </aside>
@@ -152,7 +163,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
         {/* Content */}
         <main className="min-w-0 flex-1 space-y-6">
           <div className="lg:hidden">
-            <h1 className="text-xl font-bold text-foreground">{current?.label}</h1>
+            <h1 className="font-display text-xl font-semibold text-foreground">{current?.label}</h1>
             {current?.hint && (
               <p className="mt-0.5 text-sm text-muted-foreground">{current.hint}</p>
             )}
@@ -170,9 +181,9 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
             className="absolute inset-0 bg-foreground/40"
             onClick={() => setMenuOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 flex w-[min(19rem,85vw)] flex-col overflow-y-auto bg-background p-4 shadow-xl">
+          <div className="absolute inset-y-0 left-0 flex w-[min(19rem,85vw)] flex-col overflow-y-auto bg-admin-nav p-4 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-foreground">Administrare</p>
+              <p className="font-display text-base font-semibold text-admin-nav-fg">Administrare</p>
               <Button
                 variant="ghost"
                 size="icon"
@@ -183,7 +194,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
               </Button>
             </div>
             <NavList onNavigate={() => setMenuOpen(false)} />
-            <div className="mt-6 space-y-2 border-t border-border pt-4">
+            <div className="mt-6 space-y-2 border-t border-white/10 pt-4">
               <Button asChild variant="outline" size="sm" className="w-full justify-start">
                 <Link to="/admin/notifications" onClick={() => setMenuOpen(false)}>
                   <Send className="h-4 w-4" />
@@ -196,7 +207,7 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
                   Înapoi pe site
                 </Link>
               </Button>
-              <p className="truncate px-1 pt-2 text-xs text-muted-foreground">{adminEmail}</p>
+              <p className="truncate px-1 pt-2 text-xs text-admin-nav-muted">{adminEmail}</p>
             </div>
           </div>
         </div>
