@@ -635,13 +635,15 @@ Deno.serve(async (req) => {
           language: cohort.teaching_language,
           source: mSource,
           lead_status: isPaid ? "converted" : "qualified",
-          // "pending", not "unpaid": the rest of the system writes six values
-          // for this column (paid, pending, card_saved, failed, past_due,
-          // refunded) and there is no constraint to stop a seventh. A student
-          // added by hand and one who registered on the site are in the same
-          // state and belong in the same bucket, or every filter and
-          // breakdown has to learn a synonym.
-          payment_status: isPaid ? "paid" : "pending",
+          // "unpaid", not "pending": the two are different states, and this
+          // one has no payment in flight. "pending" is what the checkout
+          // functions write once a Stripe session exists and the money is on
+          // its way or awaiting confirmation. A student added here by hand has
+          // started nothing — their first payment has not happened, and may
+          // never happen, in which case they are charged the full price. That
+          // is what "unpaid" means, and collapsing it into "pending" would
+          // report money as in flight when nobody has tried to pay.
+          payment_status: isPaid ? "paid" : "unpaid",
           paid_at: isPaid ? now : null,
           payment_method: isPaid ? method : null,
           notes: clean(mNotes, 2000) || null,
