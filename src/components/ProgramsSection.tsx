@@ -626,6 +626,24 @@ const ProgramsSection = () => {
             </div>
             <YallaGameBand compact />
           </div>
+          {/* The owner's free level check: for whoever would rather talk to
+              someone than take a quiz or a test. */}
+          <a
+            href="/verificare-nivel"
+            className="mt-6 flex flex-col gap-3 rounded-[28px] border border-[#E7E1D6] bg-card px-6 py-6 transition-colors hover:border-brand-green sm:flex-row sm:items-center sm:justify-between sm:px-8 dark:border-border"
+          >
+            <span>
+              <span className="block font-display text-xl font-bold text-foreground">
+                {lang === "en" ? "Rather talk to someone? Free level check with Ibra" : "Preferi să vorbești cu cineva? Verificare de nivel gratuită cu Ibra"}
+              </span>
+              <span className="mt-1 block text-sm text-foreground/70">
+                {lang === "en"
+                  ? "Up to 30 minutes, on Zoom or at the center: a conversation and a few written questions in Arabizi."
+                  : "Până la 30 de minute, pe Zoom sau la centru: o discuție și câteva întrebări scrise în arabizi."}
+              </span>
+            </span>
+            <span className="shrink-0 font-semibold text-brand-green">{lang === "en" ? "Book it →" : "Programează →"}</span>
+          </a>
         </div>
       </div>
     </section>

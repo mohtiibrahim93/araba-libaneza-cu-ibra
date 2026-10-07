@@ -67,8 +67,11 @@ export const INSTRUCTOR_ID = `${BASE_URL}/#ibra`;
 export const COURSE_INSTRUCTOR = {
   "@type": "Person",
   "@id": INSTRUCTOR_ID,
-  name: "Ibrahim Gabriel Moaty",
-  alternateName: "Ibra",
+  // The owner's name as on Preply; Gabriel is his baptism name, used on
+  // Facebook and other profiles. "Moaty" is the spelling in the meditatii.ro
+  // profile URL below. Ibra is the name every visitor sees.
+  name: "Ibrahim Mohti",
+  alternateName: ["Ibra", "Ibrahim Gabriel Mohti", "Ibrahim Gabriel Moaty"],
   jobTitle: "Profesor de arabă libaneză",
   description: "Profesor nativ de arabă libaneză",
   sameAs: [

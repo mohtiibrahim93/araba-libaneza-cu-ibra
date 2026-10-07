@@ -17,6 +17,7 @@ const FORM_TYPE_LABEL: Record<string, string> = {
   group: "Grup",
   private: "Privat",
   kids: "Copii",
+  level_check: "Verificare de nivel",
 };
 
 Deno.serve(async (req) => {

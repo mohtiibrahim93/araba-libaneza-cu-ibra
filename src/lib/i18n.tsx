@@ -161,13 +161,13 @@ export const translations = {
     testimonial1Author: "Anamaria-Bianca",
     testimonial2: "Apreciez abordarea lui și modul în care face lucrurile să pară atât de ușor de înțeles. Lecțiile sunt foarte bine pregătite.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibrahim este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
+    testimonial3: "Ibra este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibrahim este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
+    testimonial4: "Ibra este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
     testimonial4Author: "Harry",
     testimonial5: "Prima lecție de descoperire pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
     testimonial5Author: "Razvan",
-    testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibrahim a arătat-o. Voi relua sesiunile cu el cu siguranță.",
+    testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibra a arătat-o. Voi relua sesiunile cu el cu siguranță.",
     testimonial6Author: "Cimpan",
 
     // FAQ
@@ -377,7 +377,7 @@ export const translations = {
     // thin enough that Google can decline to index it — while being one of the
     // pages we most want indexed. Every claim here is already stated elsewhere
     // on the site or comes from booking_event_types in the database.
-    schedulerPhysicalTrialWeekend: "Proba fizică, la centrul din București, se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
+    schedulerPhysicalTrialWeekend: "La centrul din București se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
     quizWhatH2: "Ce face chestionarul",
     quizWhatP: "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
     quizNotH2: "Ce nu este",
@@ -972,13 +972,13 @@ export const translations = {
     testimonial1Author: "Anamaria-Bianca",
     testimonial2: "I appreciate his approach and the way he makes things seem so easy to understand. The lessons are very well prepared.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibrahim is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
+    testimonial3: "Ibra is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibrahim is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
+    testimonial4: "Ibra is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
     testimonial4Author: "Harry",
     testimonial5: "First discovery lesson for an absolute beginner was very eye opening. He did a great job explaining the different aspects of the language.",
     testimonial5Author: "Razvan",
-    testimonial6: "I was very pleased with Professor Ibrahim's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
+    testimonial6: "I was very pleased with Professor Ibra's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
     testimonial6Author: "Cimpan",
 
     faqBadge: "FAQ",
@@ -1170,7 +1170,7 @@ export const translations = {
     trialPageSubtitle: "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
     trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
     trialPageSeoDesc: "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
-    schedulerPhysicalTrialWeekend: "In-person trials at the Bucharest centre are, for now, only on Saturdays and Sundays. For any other day, choose online.",
+    schedulerPhysicalTrialWeekend: "At the Bucharest centre, bookings are for now only on Saturdays and Sundays. For any other day, choose online.",
     quizWhatH2: "What the quiz does",
     quizWhatP: "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
     quizNotH2: "What it is not",

@@ -89,7 +89,7 @@ const WHATSAPP_FALLBACK =
   "https://wa.me/40763124514?text=" +
   encodeURIComponent("Salut! Vreau să rezerv o lecție.");
 
-type EventType = "trial" | "paid";
+type EventType = "trial" | "paid" | "verificare-nivel";
 type Format = "online" | "physical";
 
 interface Props {

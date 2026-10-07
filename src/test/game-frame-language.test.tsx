@@ -29,7 +29,8 @@ describe("the game frame follows the reader's language", () => {
 
   it("keys the frame on the language as well as the mode", () => {
     const src = read("src/components/YallaGame.tsx");
-    expect(src).toContain("key={`${mode}-${lang}`}");
+    // Mode, language and the level test's "test only" choice all remount it.
+    expect(src).toContain('key={`${mode}-${lang}-${focus ? "focus" : "full"}`}');
   });
 
   it("passes the language on the frame's query string", () => {

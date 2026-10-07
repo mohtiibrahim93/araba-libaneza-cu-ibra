@@ -116,7 +116,7 @@ export function suggestLevel(summary: YallaSummary): LevelSuggestion {
       level: "B1",
       source: "practice",
       detail:
-        "Stăpânești temeinic materialul A1 și A2 din joc. Nivelul B1 se confirmă într-o discuție de plasare cu Ibrahim — jocul nu măsoară vorbirea.",
+        "Stăpânești temeinic materialul A1 și A2 din joc. Nivelul B1 se confirmă într-o discuție de plasare cu Ibra — jocul nu măsoară vorbirea.",
     };
   }
   if (a1Share >= 0.5) {

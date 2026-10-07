@@ -12,6 +12,7 @@ import {
   ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG } from "../_shared/schedule-rules.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -63,7 +64,13 @@ Deno.serve(async (req) => {
 
     // Raw candidates, then min-notice / max-advance / in-person-trial rules.
     // Both helpers are shared with booking-manage's reschedule check.
-    const candidates = candidateSlotsForDays(days, rules ?? [], et.duration_min);
+    // The level check has its own hours (weekdays 12:00–13:00), not the
+    // general availability rules.
+    const candidates = candidateSlotsForDays(
+      days,
+      slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : (rules ?? []),
+      et.duration_min,
+    );
     const now = Date.now();
     let filtered = candidates.filter((iso) => passesTimingRules(et, format, iso, now));
 

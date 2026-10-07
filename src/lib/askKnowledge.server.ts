@@ -13,7 +13,7 @@ const groupLine = (level: keyof typeof ONLINE_PRICES.groupMonthly) => {
 
 const FACTS = `
 ȘCOALA
-Nume: Centrul de Arabă Libaneză — "Arabă Libaneză cu Ibra". Profesor: Ibrahim (Ibra), vorbitor nativ de arabă libaneză, în București de peste 10 ani, 5+ ani de predare.
+Nume: Centrul de Arabă Libaneză — "Arabă Libaneză cu Ibra". Profesor: Ibra (pe Preply apare ca Ibrahim), vorbitor nativ de arabă libaneză, în București de peste 10 ani, 5+ ani de predare.
 Locație fizică: Strada Icoanei 80, București. Online: oriunde.
 Email: marhaba@centruldearabalibaneza.com · Telefon/WhatsApp: +40 763 124 514.
 Limba predată: arabă libaneză (dialect levantin), vorbită din primele lecții; A1 și A2 doar oral; de la B1 sau B2 grupa poate adăuga scrisul cu alfabet arab, doar dacă toți cursanții o cer.

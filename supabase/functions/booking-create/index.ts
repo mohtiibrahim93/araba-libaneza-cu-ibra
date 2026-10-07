@@ -8,6 +8,9 @@ import {
   physicalTrialAllowed,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
+// The free level check with Ibra (oral, and written in arabizi), booked
+// without a card — unlike the trial, it is not a lesson.
+import { LEVEL_CHECK_SLUG, levelCheckTimeAllowed } from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
@@ -121,14 +124,16 @@ Deno.serve(async (req) => {
     // purchases are booked by stripe-webhook (an internal call) after the
     // payment clears; a returning student who has already paid books the rest
     // of their lessons here.
-    if (et.slug !== "trial" && !internalCall && reg.payment_status !== "paid") {
+    // Free bookings: the trial lesson and the level check with Ibra.
+    const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;
+    if (!isFree && !internalCall && reg.payment_status !== "paid") {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
 
     // A paid registration books at most the number of lessons it bought.
     // Applied to internal calls too, so the webhook can never book more than
     // the package either (a redelivered event lands here as well).
-    if (et.slug !== "trial") {
+    if (!isFree) {
       const bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
       const { count: used, error: countErr } = await supabase
         .from("bookings")
@@ -210,6 +215,11 @@ Deno.serve(async (req) => {
     }
 
     const format = body.format ?? "online";
+    // The level check is offered only on weekdays 12:00–13:00 (see
+    // _shared/schedule-rules.ts); refuse anything else posted straight here.
+    if (et.slug === LEVEL_CHECK_SLUG && !levelCheckTimeAllowed(startISO, et.duration_min)) {
+      return json({ error: "slot not offered", code: "level_check_hours" }, 409);
+    }
     // Enforced here too: booking-availability never offers these slots, but
     // this endpoint is unauthenticated and a client can post any start_at.
     if (!physicalTrialAllowed(et.slug, format, startISO)) {

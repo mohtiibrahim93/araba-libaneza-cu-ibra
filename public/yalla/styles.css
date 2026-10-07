@@ -57,3 +57,7 @@
   font:inherit;background:#fff;color:inherit;min-width:0}
 .inline-edit-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.15rem}
 .inline-edit-open{margin-top:.6rem;font-size:.8rem}
+
+/* Level test, "test only" (?focus=1, set in i18n.js): no menu, no XP, no teacher link. */
+html.focus .sidebar,html.focus .top-stats,html.focus .footer-link,html.focus .skip-link{display:none}
+html.focus .app-body{margin-left:0;min-height:0}

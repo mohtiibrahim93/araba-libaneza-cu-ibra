@@ -64,7 +64,7 @@ const LearnLebaneseArabic = () => (
       <p>
         You learn Lebanese Arabic by speaking it from the first lesson with someone who
         grew up in it, rather than by working through Modern Standard Arabic first. At
-        Centrul de Arabă Libaneză the teacher is <strong>Ibrahim Gabriel Moaty</strong> (Ibra),
+        Centrul de Arabă Libaneză the teacher is <strong>Ibra</strong>,
         a native Lebanese teacher in Bucharest, and lessons are live — online worldwide,
         or in person at Strada Icoanei 80. Courses run the full CEFR ladder, A1 to C2:
         small groups of up to six students, online or in the classroom, meet twice a week for 90

@@ -47,6 +47,32 @@ export function weekdayInTz(d: Date, tz = TZ): number {
  */
 export const PHYSICAL_TRIAL_WEEKDAYS = [0, 6]; // Sunday, Saturday
 
+/**
+ * The level check with Ibra (event type `verificare-nivel`) has its own hours,
+ * not the general availability rules: weekdays 12:00–13:00, the owner's usual
+ * free hour (October 2026). A lesson booked then still blocks it — the usual
+ * busy checks run on top. No weekend-only rule: it can be online or at the
+ * center on any of these days.
+ */
+export const LEVEL_CHECK_SLUG = "verificare-nivel";
+export const LEVEL_CHECK_RULES = [1, 2, 3, 4, 5].map((weekday) => ({
+  weekday,
+  start_time: "12:00:00",
+  end_time: "13:00:00",
+}));
+
+/** A level-check start that fits inside its weekday 12:00–13:00 hour. */
+export function levelCheckTimeAllowed(startISO: string, durationMin: number, tz = TZ): boolean {
+  const d = new Date(startISO);
+  const wd = weekdayInTz(d, tz);
+  if (wd < 1 || wd > 5) return false;
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(d);
+  const h = Number(parts.find((p) => p.type === "hour")?.value);
+  const m = Number(parts.find((p) => p.type === "minute")?.value);
+  const startMin = h * 60 + m;
+  return startMin >= 12 * 60 && startMin + durationMin <= 13 * 60;
+}
+
 export function physicalTrialAllowed(
   eventTypeSlug: string,
   format: string,
