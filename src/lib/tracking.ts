@@ -144,6 +144,10 @@ export function trackRegistrationSubmit(formType: RegistrationFormType) {
  */
 export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
   trackEvent("begin_checkout", { course_type: courseType });
+  // Google Ads conversion action "Begin checkout" (AW-18482373882, linked to
+  // the site's Google tag). Ads generated this event name and counts only it,
+  // so it is sent alongside the GA4 event rather than instead of it.
+  trackEvent("ads_conversion_Begin_checkout_1", { course_type: courseType });
 }
 
 let trackingInitialized = false;
