@@ -12,7 +12,7 @@ describe("paid lessons are capped at the quantity bought", () => {
   const src = read("supabase/functions/booking-create/index.ts");
 
   it("counts confirmed and completed non-trial bookings against registrations.quantity", () => {
-    expect(src).toContain('.select("id, payment_status, quantity")');
+    expect(src).toContain('.select("id, email, payment_status, quantity")');
     expect(src).toContain('.neq("event_type_slug", "trial")');
     expect(src).toContain('.in("status", ["confirmed", "completed"])');
     expect(src).toContain("(used ?? 0) >= bought");
