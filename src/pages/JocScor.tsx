@@ -14,6 +14,7 @@ import {
   type YallaSummary,
   type LevelSuggestion,
 } from "@/lib/yallaProgress";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /joc/scor — the visitor's game score, read from their own browser, and the
@@ -97,6 +98,8 @@ const COPY = {
 const JocScor = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  // Signed in: the account's progress is merged in first; re-read after.
+  const { user, syncing, version } = useStudentSync();
 
   const [summary, setSummary] = useState<YallaSummary | null>(null);
   const [suggestion, setSuggestion] = useState<LevelSuggestion | null>(null);
@@ -114,7 +117,8 @@ const JocScor = () => {
       setSuggestion(suggestLevel(s));
     }
     setLoaded(true);
-  }, []);
+    // Re-read when a sync replaced the device's progress with the account's.
+  }, [version]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -147,6 +151,9 @@ const JocScor = () => {
         </header>
 
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
+          <div className="mx-auto mb-6 max-w-3xl">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
           {loaded && !summary && (
             <div className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 text-center sm:p-10">
               <h2 className="font-display text-2xl font-bold text-foreground">{c.emptyH2}</h2>

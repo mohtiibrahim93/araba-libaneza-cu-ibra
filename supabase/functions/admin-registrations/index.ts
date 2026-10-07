@@ -155,6 +155,46 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Neautorizat" });
     }
 
+    // Lets the site tell an admin from a signed-in student (students have
+    // accounts since October 2026): the game shows its teacher controls only
+    // when this answers.
+    if (action === "whoami") {
+      return jsonResponse({ isAdmin: true });
+    }
+
+    // Student accounts: each student's saved Yalla progress (summary columns
+    // only, not the full game state), with their registrations matched by
+    // email so the owner sees a level next to a lead.
+    if (action === "list_student_progress") {
+      const { data: rows, error: rowsErr } = await supabase
+        .from("student_progress")
+        .select("user_id, email, placement, xp, rounds, items_seen, last_played_at, created_at, updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(500);
+      if (rowsErr) {
+        console.error("[admin-registrations] list_student_progress failed", rowsErr);
+        return jsonResponse({ error: "Nu am putut încărca progresul elevilor" });
+      }
+      const emails = Array.from(
+        new Set((rows ?? []).map((r: { email: string | null }) => (r.email ?? "").toLowerCase()).filter(Boolean)),
+      );
+      let regs: Array<{ id: string; email: string | null; name: string; form_type: string; level: string | null; lead_status: string | null; payment_status: string | null; created_at: string }> = [];
+      if (emails.length) {
+        const { data: regRows } = await supabase
+          .from("registrations")
+          .select("id, email, name, form_type, level, lead_status, payment_status, created_at")
+          // Case-insensitive: a registration may have been typed "Maria@…".
+          .or(emails.map((e) => `email.ilike.${e.replace(/([%_\\])/g, "\\$1")}`).join(","))
+          .order("created_at", { ascending: false });
+        regs = regRows ?? [];
+      }
+      const data = (rows ?? []).map((r: { email: string | null }) => ({
+        ...r,
+        registrations: regs.filter((g) => (g.email ?? "").toLowerCase() === (r.email ?? "").toLowerCase()),
+      }));
+      return jsonResponse({ data });
+    }
+
     if (action === "list_capacities") {
       const { data, error } = await supabase
         .from("group_capacities")

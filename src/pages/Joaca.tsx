@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /joc — free practice, and the one page on the site that asks for nothing.
@@ -85,6 +86,7 @@ const COPY = {
 const Joaca = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  const { user, syncing, version } = useStudentSync();
 
   // The frame hosts both the practice game and the level test; switching
   // modes remounts it (YallaGame keys on mode), so progress in one view is
@@ -167,7 +169,10 @@ const Joaca = () => {
         </div>
 
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm" ref={frameRef}>
-          <YallaGame lang={lang} mode={mode} />
+          <div className="mb-4">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
+          <YallaGame lang={lang} mode={mode} version={version} />
         </div>
 
         {/* Prose below the frame. A page whose only content sits inside an

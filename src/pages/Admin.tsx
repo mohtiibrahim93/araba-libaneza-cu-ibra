@@ -62,6 +62,7 @@ import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
 import TodayAdmin from "@/components/admin/TodayAdmin";
+import StudentProgressAdmin from "@/components/admin/StudentProgressAdmin";
 import KidsSlotsAdmin from "@/components/admin/KidsSlotsAdmin";
 import AuditLogAdmin from "@/components/admin/AuditLogAdmin";
 import CardOverridesAdmin from "@/components/admin/CardOverridesAdmin";
@@ -622,6 +623,12 @@ const Admin = () => {
           icon: Route,
           hint: "De la prima cerere până la înscriere",
         },
+        {
+          value: "student-progress",
+          label: "Elevi cu cont",
+          icon: Gamepad2,
+          hint: "Testul de nivel și progresul din joc",
+        },
       ],
     },
     {
@@ -725,6 +732,11 @@ const Admin = () => {
           <TabsContent value="journey" className="mt-0 space-y-6">
             <StudentJourneyAdmin />
             <TrialFunnelAdmin />
+          </TabsContent>
+
+          {/* ── Elevi cu cont: test de nivel + progres din joc ─────────────── */}
+          <TabsContent value="student-progress" className="mt-0 space-y-6">
+            <StudentProgressAdmin />
           </TabsContent>
 
           {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}

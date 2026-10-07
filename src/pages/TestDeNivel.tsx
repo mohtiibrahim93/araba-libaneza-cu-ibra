@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /test-de-nivel — the placement test, on a page that actually is the test.
@@ -88,6 +89,7 @@ const COPY = {
 const TestDeNivel = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  const { user, syncing, version } = useStudentSync();
   // The visitor chooses first: the test alone, or inside the whole game for
   // someone who wants to keep playing afterwards. Nothing loads until they
   // pick — the frame is the heaviest thing on the page.
@@ -132,7 +134,7 @@ const TestDeNivel = () => {
             opens straight on it rather than on the practice game. */}
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
           {started ? (
-            <YallaGame lang={lang} mode="placement" focus />
+            <YallaGame lang={lang} mode="placement" focus version={version} />
           ) : (
             <div className="mx-auto max-w-md text-center">
               <button
@@ -145,6 +147,9 @@ const TestDeNivel = () => {
               <p className="mt-3 text-sm text-muted-foreground">{c.startHint}</p>
             </div>
           )}
+          <div className="mx-auto mt-5 max-w-2xl">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
           <p className="mt-5 text-center text-sm text-muted-foreground">
             {c.practice}{" "}
             <Link to="/joc" className="font-semibold text-brand-green underline underline-offset-4">
