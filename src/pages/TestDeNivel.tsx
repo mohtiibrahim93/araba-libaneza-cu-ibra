@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
-import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -25,11 +24,10 @@ const COPY = {
   ro: {
     home: "Acasă",
     crumb: "Test de nivel",
-    viewLabel: "Cum vrei să faci testul?",
-    viewFocus: "Doar testul",
-    viewFull: "Testul în jocul Yalla",
-    viewFocusHint: "Doar cele 24 de întrebări, fără meniul jocului.",
-    viewFullHint: "Cu meniul jocului: misiuni, XP și restul exercițiilor.",
+    start: "Începe testul",
+    startHint: "Cele 24 de întrebări, fără cont. Se încarcă doar după ce apeși.",
+    practice: "Vrei să exersezi după test?",
+    practiceCta: "Jocul Yalla",
     langNote: null as string | null,
     eyebrow: "Gratuit · aproximativ 15 minute",
     h1: "Ce nivel ai la araba libaneză?",
@@ -55,11 +53,10 @@ const COPY = {
   en: {
     home: "Home",
     crumb: "Level test",
-    viewLabel: "How do you want to take the test?",
-    viewFocus: "Just the test",
-    viewFull: "The test inside the Yalla game",
-    viewFocusHint: "Only the 24 questions, without the game's menu.",
-    viewFullHint: "With the game's menu: missions, XP and the other exercises.",
+    start: "Start the test",
+    startHint: "The 24 questions, no account. It loads only once you press.",
+    practice: "Want to practise after the test?",
+    practiceCta: "The Yalla game",
     // The test used to be Romanian-only and this warned about it. Every prompt,
     // answer and distractor in the placement bank is a T(ro, en) pair now, so
     // the warning was telling English readers a test they can take is closed
@@ -94,7 +91,9 @@ const TestDeNivel = () => {
   // The visitor chooses first: the test alone, or inside the whole game for
   // someone who wants to keep playing afterwards. Nothing loads until they
   // pick — the frame is the heaviest thing on the page.
-  const [focus, setFocus] = useState<boolean | null>(null);
+  // One job per page: this one is the test only (no game menu); the full game
+  // lives on /joc, linked below. Nothing loads until the visitor presses Start.
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -132,36 +131,26 @@ const TestDeNivel = () => {
         {/* The test itself. `placement` is one of the game's own views, so this
             opens straight on it rather than on the practice game. */}
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <div role="radiogroup" aria-label={c.viewLabel}>
-            {focus === null && (
-              <p className="mb-4 text-center font-display text-xl font-bold text-foreground">{c.viewLabel}</p>
-            )}
-            <div className={cn("mx-auto grid max-w-2xl gap-3", focus === null ? "sm:grid-cols-2" : "mb-4 grid-cols-2 sm:max-w-md")}>
-              {([
-                [true, c.viewFocus, c.viewFocusHint],
-                [false, c.viewFull, c.viewFullHint],
-              ] as const).map(([value, label, hint]) => (
-                <button
-                  key={label}
-                  type="button"
-                  role="radio"
-                  aria-checked={focus === value}
-                  onClick={() => setFocus(value)}
-                  className={cn(
-                    "rounded-2xl border text-left transition",
-                    focus === null ? "p-5" : "px-4 py-2 text-center text-sm",
-                    focus === value
-                      ? "border-brand-green bg-brand-green text-white"
-                      : "border-[#E7E1D6] bg-card text-foreground hover:border-brand-green hover:bg-brand-green/5",
-                  )}
-                >
-                  <span className={cn("block font-semibold", focus === null && "font-display text-lg")}>{label}</span>
-                  {focus === null && <span className="mt-1 block text-sm text-muted-foreground">{hint}</span>}
-                </button>
-              ))}
+          {started ? (
+            <YallaGame lang={lang} mode="placement" focus />
+          ) : (
+            <div className="mx-auto max-w-md text-center">
+              <button
+                type="button"
+                onClick={() => setStarted(true)}
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-brand-green px-8 font-semibold text-white transition hover:opacity-90"
+              >
+                {c.start}
+              </button>
+              <p className="mt-3 text-sm text-muted-foreground">{c.startHint}</p>
             </div>
-          </div>
-          {focus !== null && <YallaGame lang={lang} mode="placement" focus={focus} />}
+          )}
+          <p className="mt-5 text-center text-sm text-muted-foreground">
+            {c.practice}{" "}
+            <Link to="/joc" className="font-semibold text-brand-green underline underline-offset-4">
+              {c.practiceCta} →
+            </Link>
+          </p>
         </div>
 
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
