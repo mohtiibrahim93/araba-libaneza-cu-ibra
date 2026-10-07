@@ -177,7 +177,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "Cum aflu ce nivel am, dacă nu știu de unde să încep?",
-            a: "Ai trei variante gratuite: quiz-ul de 30 de secunde îți recomandă formatul de curs, testul de nivel online (24 de întrebări, aproximativ 15 minute) îți sugerează nivelul, iar verificarea de nivel cu Ibra îl stabilește precis — până la 30 de minute, pe Zoom sau la centru, cu o discuție și câteva întrebări scrise în arabizi. O programezi din pagina Verificare de nivel: alegi o oră, ceri să te sune Ibra sau îi scrii pe WhatsApp. Nu e lecția de probă — acolo doar îți verificăm nivelul.",
+            a: "Ai trei variante gratuite: quiz-ul de 30 de secunde îți recomandă formatul de curs, testul de nivel online (24 de întrebări, aproximativ 15 minute) îți sugerează nivelul, iar verificarea de nivel cu Ibra îl stabilește precis — până la 30 de minute, pe Zoom sau la centru, cu o discuție și câteva întrebări scrise în arabizi. O programezi din pagina Verificare de nivel: îi scrii lui Ibra pe WhatsApp, ceri să te sune ca să stabiliți ora sau alegi o oră liberă (în zilele lucrătoare, între 12:00 și 13:00). Nu e lecția de probă — acolo doar îți verificăm nivelul.",
           },
           {
             q: "Predați adulților, adolescenților și copiilor?",
@@ -402,7 +402,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "How do I find out my level if I don't know where to start?",
-            a: "There are three free options: the 30-second quiz recommends a course format, the online level test (24 questions, about 15 minutes) suggests your level, and the level check with Ibra pins it down — up to 30 minutes, on Zoom or at the center, with a conversation and a few written questions in Arabizi. Book it from the Level check page: pick a time, ask Ibra to call you, or message on WhatsApp. It is not the trial lesson — it only checks your level.",
+            a: "There are three free options: the 30-second quiz recommends a course format, the online level test (24 questions, about 15 minutes) suggests your level, and the level check with Ibra pins it down — up to 30 minutes, on Zoom or at the center, with a conversation and a few written questions in Arabizi. Book it from the Level check page: message Ibra on WhatsApp, ask for a call to agree the time, or pick a free slot (weekdays, between 12:00 and 13:00). It is not the trial lesson — it only checks your level.",
           },
           {
             q: "Do you teach adults, teens and kids?",

@@ -1005,7 +1005,7 @@ const NativeScheduler = ({
             <option value="online">{t.bookingFormatOnline}</option>
             <option value="physical">{t.bookingFormatPhysical}</option>
           </select>
-          {(eventType === "trial" || eventType === "verificare-nivel") && format === "physical" && (
+          {eventType === "trial" && format === "physical" && (
             // Without this the weekday slots simply disappear when you switch,
             // which reads as a bug rather than a rule.
             <p className="text-xs text-muted-foreground sm:col-span-2">

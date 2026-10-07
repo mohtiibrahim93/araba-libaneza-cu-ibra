@@ -8,6 +8,9 @@ import {
   physicalTrialAllowed,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
+// The free level check with Ibra (oral, and written in arabizi), booked
+// without a card — unlike the trial, it is not a lesson.
+import { LEVEL_CHECK_SLUG, levelCheckTimeAllowed } from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 
@@ -32,10 +35,6 @@ interface CreateBody {
 }
 
 const fmtLocal = fmtBookingLocal;
-
-/** The free level check with Ibra (oral, and written in arabizi), booked
- *  without a card — unlike the trial, it is not a lesson. */
-const LEVEL_CHECK_SLUG = "verificare-nivel";
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -216,6 +215,11 @@ Deno.serve(async (req) => {
     }
 
     const format = body.format ?? "online";
+    // The level check is offered only on weekdays 12:00–13:00 (see
+    // _shared/schedule-rules.ts); refuse anything else posted straight here.
+    if (et.slug === LEVEL_CHECK_SLUG && !levelCheckTimeAllowed(startISO, et.duration_min)) {
+      return json({ error: "slot not offered", code: "level_check_hours" }, 409);
+    }
     // Enforced here too: booking-availability never offers these slots, but
     // this endpoint is unauthenticated and a client can post any start_at.
     if (!physicalTrialAllowed(et.slug, format, startISO)) {

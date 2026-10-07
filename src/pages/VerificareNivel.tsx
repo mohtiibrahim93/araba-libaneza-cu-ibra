@@ -47,12 +47,14 @@ const COPY = {
     notTrialLink: "rezervă lecția de probă gratuită",
     script: "Partea scrisă e în arabizi, pentru că toate cursurile folosesc deocamdată arabizi.",
     waysH2: "Cum vrei să o programezi?",
+    waysP: "Cel mai simplu e să-i scrii lui Ibra sau să te sune scurt, ca să stabiliți ora împreună.",
+    recommended: "Recomandat",
     ways: {
-      calendar: ["Alege o oră", "Vezi orele libere și rezervi direct."],
-      callback: ["Te sună Ibra", "Lași numărul și Ibra te contactează să stabiliți ora."],
-      whatsapp: ["Scrie pe WhatsApp", "Mesajul e deja scris, doar îl trimiți."],
+      whatsapp: ["Scrie pe WhatsApp", "Mesajul e deja scris, doar îl trimiți. Stabiliți ora împreună."],
+      callback: ["Te sună Ibra", "Lași numărul și Ibra te sună scurt, în zilele lucrătoare între 9 și 18, ca să stabiliți ora."],
+      calendar: ["Alege o oră", "Ore libere în zilele lucrătoare, între 12:00 și 13:00."],
     } as Record<Way, [string, string]>,
-    calendarNote: "Alege Online (Zoom) sau Fizic (la centrul din București) în formularul de rezervare.",
+    calendarNote: "Aici apar doar orele libere dintre 12:00 și 13:00, în zilele lucrătoare. Dacă nu ți se potrivește niciuna, scrie-i lui Ibra pe WhatsApp. Alege Online (Zoom) sau Fizic (la centru) în formular.",
     name: "Nume",
     phone: "Telefon",
     email: "Email (opțional)",
@@ -69,7 +71,7 @@ const COPY = {
     needConsent: "Bifează acordul ca să te putem contacta.",
     failed: "Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe WhatsApp.",
     doneH: "Gata, am primit cererea",
-    doneP: "Ibra te sună în curând ca să stabiliți ora. Dacă vrei să grăbești lucrurile, scrie-i pe WhatsApp.",
+    doneP: "Ibra te sună în zilele lucrătoare, între 9 și 18, ca să stabiliți ora. Dacă vrei să grăbești lucrurile, scrie-i pe WhatsApp.",
     waText: "Bună, Ibra! Aș vrea o verificare de nivel gratuită (online pe Zoom / la centru).",
     waBtn: "Deschide WhatsApp",
     waNote: "Se deschide WhatsApp cu mesajul gata scris. Poți schimba Zoom / centru înainte să-l trimiți.",
@@ -95,12 +97,14 @@ const COPY = {
     notTrialLink: "book the free trial lesson",
     script: "The written part is in Arabizi, because all the courses use Arabizi for now.",
     waysH2: "How would you like to book it?",
+    waysP: "The simplest way is to message Ibra or have a short call, and agree the time together.",
+    recommended: "Recommended",
     ways: {
-      calendar: ["Pick a time", "See the free times and book directly."],
-      callback: ["Ibra calls you", "Leave your number and Ibra gets in touch to agree a time."],
-      whatsapp: ["Message on WhatsApp", "The message is already written, just send it."],
+      whatsapp: ["Message on WhatsApp", "The message is already written, just send it. You agree the time together."],
+      callback: ["Ibra calls you", "Leave your number and Ibra gives you a short call, on weekdays between 9 and 18, to agree a time."],
+      calendar: ["Pick a time", "Free times on weekdays, between 12:00 and 13:00."],
     } as Record<Way, [string, string]>,
-    calendarNote: "Choose Online (Zoom) or In person (at the Bucharest center) in the booking form.",
+    calendarNote: "Only the free times between 12:00 and 13:00 on weekdays show here. If none suits you, message Ibra on WhatsApp. Choose Online (Zoom) or In person (at the center) in the form.",
     name: "Name",
     phone: "Phone",
     email: "Email (optional)",
@@ -117,7 +121,7 @@ const COPY = {
     needConsent: "Please tick the consent box so we can contact you.",
     failed: "We couldn't send your request. Please try again or message us on WhatsApp.",
     doneH: "Done, we have your request",
-    doneP: "Ibra will call you soon to agree a time. If you'd like to speed things up, message Ibra on WhatsApp.",
+    doneP: "Ibra will call you on a weekday between 9 and 18 to agree a time. If you'd like to speed things up, message Ibra on WhatsApp.",
     waText: "Hi Ibra! I'd like a free level check (online on Zoom / at the center).",
     waBtn: "Open WhatsApp",
     waNote: "WhatsApp opens with the message ready. You can change Zoom / center before sending it.",
@@ -129,10 +133,12 @@ const COPY = {
   },
 } as const;
 
+// The owner's order: a message or a short call to agree the time together
+// comes first; the calendar is for whoever prefers to pick a slot alone.
 const WAYS: { id: Way; Icon: typeof CalendarDays }[] = [
-  { id: "calendar", Icon: CalendarDays },
-  { id: "callback", Icon: PhoneCall },
   { id: "whatsapp", Icon: MessageCircle },
+  { id: "callback", Icon: PhoneCall },
+  { id: "calendar", Icon: CalendarDays },
 ];
 
 const input = "w-full rounded-lg border border-input bg-white px-3 py-2.5 text-sm dark:bg-background";
@@ -311,6 +317,7 @@ const VerificareNivel = () => {
 
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
           <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">{c.waysH2}</h2>
+          <p className="mt-2 text-muted-foreground">{c.waysP}</p>
           <div role="radiogroup" aria-label={c.waysH2} className="mt-5 grid gap-3 md:grid-cols-3">
             {WAYS.map(({ id, Icon }) => {
               const [title, text] = c.ways[id];
@@ -332,6 +339,11 @@ const VerificareNivel = () => {
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <span>
+                    {id === "whatsapp" && (
+                      <span className="mb-1 inline-block rounded-full bg-brand-green px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
+                        {c.recommended}
+                      </span>
+                    )}
                     <span className="block font-display text-lg font-bold text-foreground">{title}</span>
                     <span className="mt-1 block text-sm text-muted-foreground">{text}</span>
                   </span>
