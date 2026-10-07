@@ -50,7 +50,7 @@ const GoogleMapEmbed = ({
           title={c.title}
           className={`block ${height} w-full border-0`}
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         />
       ) : (
