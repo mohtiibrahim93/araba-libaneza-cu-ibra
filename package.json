@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite-node scripts/generateSitemap.ts && vite build",
-    "build:dev": "vite-node scripts/generateSitemap.ts && vite build --mode development",
+    "build": "vite-node scripts/generateSitemap.ts && vite build && node scripts/guardWorkerRuntime.mjs",
+    "build:dev": "vite-node scripts/generateSitemap.ts && vite build --mode development && node scripts/guardWorkerRuntime.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
