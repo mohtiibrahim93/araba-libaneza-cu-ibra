@@ -13,4 +13,4 @@ export const GOOGLE_REVIEW_URL = "https://g.page/r/CWtW4ZQEuS9lEBM/review";
  * refuse it, and it opens on the profile itself.
  */
 export const GOOGLE_MAPS_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d28119.2486757375!2d26.083558!3d44.4635364!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1f9d660560841%3A0x652fb90494e1566b!2zQ2VudHJ1bCBkZSBBcmFiYSBMaWJhbmV6YSAoQXJhYmEgbGliYW5lemEgY3UgSWJyYSkgN2tpIGxlYm5lZW5lLSDYrdmD2Yog2YTYqNmG2KfZhtmK!5e1!3m2!1sen!2sro!4v1791382595975!5m2!1sen!2sro";
+  "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d5696.331180464962!2d26.106999685277728!3d44.45027565070877!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1f9d660560841%3A0x652fb90494e1566b!2zQ2VudHJ1bCBkZSBBcmFiYSBMaWJhbmV6YSAoQXJhYmEgbGliYW5lemEgY3UgSWJyYSkgN2tpIGxlYm5lZW5lLSDYrdmD2Yog2YTYqNmG2KfZhtmK!5e0!3m2!1sen!2sro!4v1791385631673!5m2!1sen!2sro";
