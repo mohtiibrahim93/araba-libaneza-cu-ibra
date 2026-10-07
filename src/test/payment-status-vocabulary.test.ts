@@ -6,21 +6,25 @@ import { resolve, join } from "node:path";
  * `registrations.payment_status` has no database constraint, so any string at
  * all will insert cleanly and be wrong only later.
  *
- * Six values are in use: paid, pending, card_saved, failed, past_due,
- * refunded. Everything that reads the column — the status badge, the filters,
- * the analytics breakdown, the "has not paid" worklist — knows those six.
+ * Six values are what the code writes: paid, pending, card_saved, failed,
+ * past_due, refunded. A seventh is not a database error, it is a slow one. The
+ * row inserts, the badge falls through to its default and looks plausible, and
+ * the breakdowns quietly grow a bucket nobody labelled.
  *
- * A seventh is not a database error, it is a slow one. The row inserts, the
- * badge falls through to its default and looks plausible, and the breakdowns
- * quietly grow a bucket nobody labelled. That is what happened: a student
- * added by hand in the admin was written as "unpaid" while an identical
- * student from the site was "pending" — the same state under two names, in
- * the same table, in the same list.
+ * That is exactly what happened, and — contrary to what this file used to
+ * claim — it was not caught in time. Production rows carry "unpaid": on
+ * 2026-10-07 five of six registrations had it, against one "card_saved". The
+ * same state lives in the table under two names, "unpaid" and "pending".
  *
- * It was caught before the function was deployed, so no row ever carried it.
- * This keeps the vocabulary at six.
+ * So the rule has two halves. New code writes only the six. Anything that
+ * READS the column must also be able to name "unpaid", because the data has it
+ * and an unlabelled value renders as the raw database key.
  */
+/** What new code is allowed to write. */
 const ALLOWED = ["paid", "pending", "card_saved", "failed", "past_due", "refunded"];
+
+/** What the column actually holds, so what a reader has to be able to label. */
+const IN_THE_DATA = [...ALLOWED, "unpaid"];
 
 /** Every .ts/.tsx under a root, so a new function cannot slip past. */
 function walk(dir: string, out: string[] = []): string[] {
@@ -38,7 +42,7 @@ const files = [
   ...walk(resolve(process.cwd(), "src")),
 ].filter((f) => !f.includes("/test/"));
 
-describe("payment_status stays to its six values", () => {
+describe("payment_status stays to its six written values", () => {
   it("has files to check", () => {
     expect(files.length).toBeGreaterThan(50);
   });
@@ -58,19 +62,14 @@ describe("payment_status stays to its six values", () => {
     expect(bad, `payment_status values outside the six:\n${bad.join("\n")}`).toEqual([]);
   });
 
-  it("labels every one of them in the analytics breakdown", () => {
-    // An unlabelled value renders as the raw database key.
-    const page = readFileSync(
-      resolve(process.cwd(), "src/components/admin/AnalyticsAdmin.tsx"),
-      "utf8",
-    );
-    // Slice from where the breakdown is rendered, not from the interface that
-    // declares it — the type appears first in the file and carries no labels.
-    const at = page.indexOf("counts={data.conversion.byPaymentStatus}");
-    expect(at, "the payment-status breakdown is no longer rendered").toBeGreaterThan(-1);
-    const block = page.slice(at, at + 600);
-    for (const v of ALLOWED) {
-      expect(block, `${v} has no Romanian label`).toContain(`${v}:`);
+  it("labels every value the column can hold", async () => {
+    // An unlabelled value renders as the raw database key, which is how
+    // "unpaid" and "no_response" ended up on screen next to Romanian words.
+    // Assert against the shared map rather than any one screen's source text:
+    // the map is what every screen reads.
+    const { paymentStatusLabels } = await import("../components/admin/types");
+    for (const v of IN_THE_DATA) {
+      expect(paymentStatusLabels[v], `${v} has no Romanian label`).toBeTruthy();
     }
   });
 

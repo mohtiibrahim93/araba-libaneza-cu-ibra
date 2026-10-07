@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ExternalLink, Gamepad2, RefreshCw, SquarePen } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * The game cards that have been corrected by hand.
@@ -78,18 +78,12 @@ const CardOverridesAdmin = () => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Cartonașe joc"
-        description="Corecturile aplicate peste cartonașele din joc, pentru toți cursanții."
-        actions={
-          <>
-            {openGame}
-            <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-          </>
-        }
-      />
+      <ScreenToolbar>
+        {openGame}
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+          <RefreshCw className="h-4 w-4" />
+        </Button>
+      </ScreenToolbar>
 
       <Section
         title="Unde se editează"
