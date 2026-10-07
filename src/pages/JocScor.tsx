@@ -137,7 +137,7 @@ const JocScor = () => {
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-2 block text-sm font-medium text-primary">{c.eyebrow}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
           </h1>
@@ -148,7 +148,7 @@ const JocScor = () => {
 
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
           {loaded && !summary && (
-            <div className="rounded-xl border bg-card p-6 text-center sm:p-10">
+            <div className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 text-center sm:p-10">
               <h2 className="font-display text-2xl font-bold text-foreground">{c.emptyH2}</h2>
               <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">{c.emptyP}</p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
@@ -176,7 +176,7 @@ const JocScor = () => {
                     [summary.practiced, c.statPracticed],
                     [summary.mastered, c.statMastered],
                   ].map(([value, label]) => (
-                    <div key={label as string} className="rounded-xl border bg-card p-4 text-center">
+                    <div key={label as string} className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-4 text-center">
                       <div className="font-display text-3xl font-bold text-foreground">{value}</div>
                       <div className="mt-1 text-sm text-muted-foreground">{label}</div>
                     </div>
@@ -187,7 +187,7 @@ const JocScor = () => {
 
               <section
                 aria-labelledby="scor-nivel"
-                className="rounded-xl border bg-card p-6 sm:p-8"
+                className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 sm:p-8"
               >
                 <span className="text-sm font-medium text-primary">
                   {suggestion.source === "placement" ? c.levelFromTest : c.levelFromPractice}

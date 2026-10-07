@@ -193,14 +193,18 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
     <div className="min-h-screen bg-background">
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto w-full max-w-4xl px-gutter py-16">
-        <div className="max-w-2xl">
-          <h1 className="font-display text-3xl font-bold text-foreground sm:text-4xl">{c.h1}</h1>
-          <p className="mt-4 text-muted-foreground">{c.lead}</p>
+      {/* pt-36 clears the fixed header (band + navbar); the title used to sit
+          under it. */}
+      <div className="bg-cream pt-36 pb-12">
+        <div className="mx-auto w-full max-w-4xl px-gutter">
+          <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">{c.h1}</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{c.lead}</p>
         </div>
+      </div>
+      <main className="mx-auto w-full max-w-4xl px-gutter pb-16">
 
         {!token && !sent && (
-          <form onSubmit={requestLink} className="mt-10 max-w-xl space-y-4 rounded-lg border border-border bg-card p-6">
+          <form onSubmit={requestLink} className="mt-10 max-w-xl space-y-4 rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
             <div className="space-y-2">
               <Label htmlFor="bookings-email">{c.email}</Label>
               <Input id="bookings-email" type="email" required autoComplete="email" maxLength={255} value={email} onChange={(event) => setEmail(event.target.value)} />
@@ -213,8 +217,8 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
         )}
 
         {!token && sent && (
-          <div className="mt-10 max-w-xl rounded-lg border border-border bg-card p-6">
-            <h2 className="text-xl font-semibold text-foreground">{c.sentTitle}</h2>
+          <div className="mt-10 max-w-xl rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
+            <h2 className="font-display text-xl font-bold text-foreground">{c.sentTitle}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{c.sentBody}</p>
             <Button variant="outline" className="mt-5" onClick={() => setSent(false)}>{c.requestAgain}</Button>
           </div>
@@ -237,22 +241,22 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
               <p className="text-sm text-muted-foreground">{c.expires}</p>
               <Button variant="outline" size="sm" onClick={() => setParams({})}>{c.requestAgain}</Button>
             </div>
-            {bookings.length === 0 && <p className="rounded-lg border border-border bg-card p-6 text-muted-foreground">{c.empty}</p>}
+            {bookings.length === 0 && <p className="rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border text-muted-foreground">{c.empty}</p>}
             {bookings.map((booking) => {
               const active = booking.status === "confirmed";
               const name = lang === "ro" ? booking.booking_event_types?.name_ro : booking.booking_event_types?.name_en;
               return (
-                <article key={booking.id} className="rounded-lg border border-border bg-card p-5 sm:p-6">
+                <article key={booking.id} className="rounded-2xl border border-[#E7E1D6] bg-card p-5 sm:p-6 dark:border-border">
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                     <div>
-                      <h2 className="text-lg font-semibold text-foreground">{name ?? (booking.event_type_slug === "trial" ? "Trial" : "Private lesson")}</h2>
+                      <h2 className="font-display text-xl font-bold text-foreground">{name ?? (booking.event_type_slug === "trial" ? "Trial" : "Private lesson")}</h2>
                       <div className="mt-3 space-y-2 text-sm text-muted-foreground">
                         <p className="flex items-center gap-2"><Calendar />{formatDate(booking.start_at, lang)}</p>
                         <p className="flex items-center gap-2">{booking.format === "online" ? <Video /> : <MapPin />}{booking.format === "online" ? c.online : c.physical}</p>
                         <p className="flex items-center gap-2"><Clock />{booking.booking_event_types?.duration_min ?? Math.round((Date.parse(booking.end_at) - Date.parse(booking.start_at)) / 60000)} min</p>
                       </div>
                     </div>
-                    <span className="w-fit rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-foreground">{c.statuses[booking.status]}</span>
+                    <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${active ? "bg-brand-green/10 text-brand-green" : "bg-muted text-foreground"}`}>{c.statuses[booking.status]}</span>
                   </div>
                   {active && booking.meet_link && (
                     <Button asChild variant="outline" size="sm" className="mt-5"><a href={booking.meet_link} target="_blank" rel="noopener noreferrer"><Video />{c.meet}</a></Button>

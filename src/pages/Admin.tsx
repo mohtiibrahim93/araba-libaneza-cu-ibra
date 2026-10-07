@@ -144,6 +144,11 @@ const Admin = () => {
               "Contul Google folosit nu are drepturi de admin. Cere să fie adăugat în lista de administratori.",
             );
             await supabase.auth.signOut();
+          } else if (/invalid jwt|401|session|token/i.test(msg)) {
+            // Expired or rejected sign-in token: ask for a fresh sign-in
+            // instead of leaving a blank screen.
+            setError("Sesiunea a expirat. Te rugăm să te autentifici din nou.");
+            await supabase.auth.signOut();
           } else {
             setError("Nu am putut încărca panoul de admin. Reîncearcă.");
           }

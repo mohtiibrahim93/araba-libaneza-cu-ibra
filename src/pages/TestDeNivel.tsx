@@ -117,7 +117,7 @@ const TestDeNivel = () => {
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-2 block text-sm font-medium text-primary">{c.eyebrow}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">{c.h1}</h1>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
           {/* Only an English reader is surprised by this, so only they are told

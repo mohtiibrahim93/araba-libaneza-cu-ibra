@@ -482,6 +482,27 @@ const Navbar = () => {
                 </Link>
               ))}
             </div>
+            {/* Same three as the desktop course menu's "Nu știi ce să alegi?" —
+                the mobile menu had none of them. */}
+            <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {lang === "en" ? "Not sure what to pick?" : "Nu știi ce să alegi?"}
+            </p>
+            <div className="flex flex-col pl-6">
+              {([
+                ["/quiz", lang === "en" ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"],
+                ["/test-de-nivel", lang === "en" ? "Online level test · 15 min" : "Test de nivel online · 15 min"],
+                ["/verificare-nivel", lang === "en" ? "Level check with Ibra (free)" : "Verificare de nivel cu Ibra (gratuit)"],
+              ] as const).map(([to, label]) => (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2.5 min-h-10 flex items-center"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
             <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {lang === "en" ? "Resources" : "Resurse"}
             </p>

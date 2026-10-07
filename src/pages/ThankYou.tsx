@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2, Mail, Video, Calendar, Share2, Loader2, ArrowLeft } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import { trackPurchase } from "@/lib/tracking";
@@ -153,118 +155,117 @@ const ThankYou = () => {
     }
   };
 
+  // Only the rows we actually know. With no Stripe session (the page opened
+  // directly, or the lookup failed) the summary used to show "—" rows.
+  const summaryRows = [
+    details.courseType ? [t.thankYouCourseType, courseLabel] : null,
+    details.courseType ? [t.thankYouSchedule, scheduleLabel] : null,
+    amountFormatted ? [t.thankYouAmount, amountFormatted] : null,
+    details.customerEmail ? [t.thankYouEmail, details.customerEmail] : null,
+  ].filter((r): r is [string, string] => r !== null);
+
+  const card = "rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border";
+
   return (
-    <div className="min-h-screen bg-muted/30 py-12 px-gutter">
-      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-8">
-          <div className="relative mb-6">
-            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-            <div className="relative w-20 h-20 rounded-full bg-primary flex items-center justify-center animate-in zoom-in-50 duration-500">
-              <CheckCircle2 className="w-12 h-12 text-primary-foreground" strokeWidth={2.5} />
+    <div className="min-h-screen bg-background flex flex-col">
+      <Navbar />
+      <main id="main-content" className="flex-1">
+        <div className="bg-cream pt-36 pb-12">
+          <div className="mx-auto flex w-full max-w-2xl flex-col items-center px-gutter text-center">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 rounded-full bg-brand-green/20 animate-ping" />
+              <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-brand-green animate-in zoom-in-50 duration-500">
+                <CheckCircle2 className="h-11 w-11 text-white" strokeWidth={2.5} />
+              </div>
             </div>
+            <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">{t.thankYouTitle}</h1>
+            <p className="mt-3 max-w-md text-lg text-muted-foreground">
+              {paid ? t.thankYouSubtitle : t.thankYouSubtitleUnconfirmed}
+            </p>
           </div>
-          <h1 className="text-display-lg font-bold text-foreground mb-3">
-            {t.thankYouTitle}
-          </h1>
-          <p className="text-muted-foreground max-w-md">
-            {paid ? t.thankYouSubtitle : t.thankYouSubtitleUnconfirmed}
-          </p>
         </div>
 
-        {loading ? (
-          <div className="text-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
-            <p className="text-sm text-muted-foreground mt-3">{t.thankYouLoading}</p>
-          </div>
-        ) : (
-          <Card className="mb-6">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-semibold mb-4">{t.thankYouOrderSummary}</h2>
-              {errored && (
-                <p className="text-sm text-muted-foreground mb-4">{t.thankYouError}</p>
-              )}
-              <dl className="space-y-3 text-sm">
-                <div className="flex justify-between gap-4 border-b border-border pb-3">
-                  <dt className="text-muted-foreground">{t.thankYouCourseType}</dt>
-                  <dd className="font-medium text-right">{courseLabel}</dd>
-                </div>
-                <div className="flex justify-between gap-4 border-b border-border pb-3">
-                  <dt className="text-muted-foreground">{t.thankYouSchedule}</dt>
-                  <dd className="font-medium text-right">{scheduleLabel}</dd>
-                </div>
-                {amountFormatted && (
-                  <div className="flex justify-between gap-4 border-b border-border pb-3">
-                    <dt className="text-muted-foreground">{t.thankYouAmount}</dt>
-                    <dd className="font-semibold text-right">{amountFormatted}</dd>
-                  </div>
-                )}
-                {details.customerEmail && (
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-muted-foreground">{t.thankYouEmail}</dt>
-                    <dd className="font-medium text-right break-all">{details.customerEmail}</dd>
-                  </div>
-                )}
-              </dl>
-            </CardContent>
-          </Card>
-        )}
+        <div className="mx-auto w-full max-w-2xl space-y-5 px-gutter py-10">
+          {loading ? (
+            <div className="py-6 text-center">
+              <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+              <p className="mt-3 text-sm text-muted-foreground">{t.thankYouLoading}</p>
+            </div>
+          ) : (
+            (summaryRows.length > 0 || errored) && (
+              <section className={card}>
+                <h2 className="mb-4 font-display text-xl font-bold text-foreground">{t.thankYouOrderSummary}</h2>
+                {errored && <p className="mb-4 text-sm text-muted-foreground">{t.thankYouError}</p>}
+                <dl className="space-y-3 text-sm">
+                  {summaryRows.map(([k, v], i) => (
+                    <div key={k} className={cn("flex justify-between gap-4", i < summaryRows.length - 1 && "border-b border-[#E7E1D6] pb-3 dark:border-border")}>
+                      <dt className="text-muted-foreground">{k}</dt>
+                      <dd className="break-all text-right font-semibold text-foreground">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )
+          )}
 
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <h2 className="text-lg font-semibold mb-4">{t.thankYouNextStepsTitle}</h2>
-            <ol className="space-y-4">
+          {details.courseType === "private" && details.registrationId && (
+            <div className="text-center">
+              <Link
+                to={`/booking?type=paid&registration_id=${details.registrationId}`}
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition hover:bg-primary/90"
+              >
+                {t.thankYouSchedulePrivateCta}
+              </Link>
+            </div>
+          )}
+
+          <section className={card}>
+            <h2 className="mb-5 font-display text-xl font-bold text-foreground">{t.thankYouNextStepsTitle}</h2>
+            <ol className="space-y-5">
               {[
                 { icon: Mail, title: t.thankYouStep1Title, desc: t.thankYouStep1Desc },
                 { icon: Video, title: t.thankYouStep2Title, desc: t.thankYouStep2Desc },
                 { icon: Calendar, title: t.thankYouStep3Title, desc: t.thankYouStep3Desc },
               ].map((step, i) => (
                 <li key={i} className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white">
                     {i + 1}
-                  </div>
+                  </span>
                   <div>
-                    <div className="flex items-center gap-2 font-medium text-foreground">
-                      <step.icon className="w-4 h-4 text-primary" />
+                    <p className="flex items-center gap-2 font-semibold text-foreground">
+                      <step.icon className="h-4 w-4 text-brand-green" aria-hidden />
                       {step.title}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">{step.desc}</p>
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
                   </div>
                 </li>
               ))}
             </ol>
-          </CardContent>
-        </Card>
+          </section>
 
-        <Card className="mb-6 bg-primary/5 border-primary/20">
-          <CardContent className="p-6 text-center">
-            <h2 className="text-lg font-semibold mb-2">{t.thankYouInviteTitle}</h2>
-            <p className="text-sm text-muted-foreground mb-4">{t.thankYouInviteDesc}</p>
-            <Button onClick={handleShare} size="lg" className="gap-2">
-              <Share2 className="w-4 h-4" />
+          <section className="rounded-2xl bg-cream p-6 text-center">
+            <h2 className="font-display text-xl font-bold text-foreground">{t.thankYouInviteTitle}</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t.thankYouInviteDesc}</p>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-brand-green px-5 font-semibold text-brand-green transition hover:bg-brand-green hover:text-white"
+            >
+              <Share2 className="h-4 w-4" />
               {t.thankYouInviteCta}
-            </Button>
-          </CardContent>
-        </Card>
+            </button>
+          </section>
 
-        {details.courseType === "private" && details.registrationId && (
-          <div className="text-center mb-6">
-            <Button asChild size="lg" variant="default">
-              <Link to={`/booking?type=paid&registration_id=${details.registrationId}`}>
-                {t.thankYouSchedulePrivateCta}
-              </Link>
-            </Button>
-          </div>
-        )}
-
-        <div className="text-center">
-          <Button asChild variant="ghost" className="gap-2">
-            <Link to="/">
-              <ArrowLeft className="w-4 h-4" />
+          <div className="pt-2 text-center">
+            <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" />
               {t.thankYouBackHome}
             </Link>
-          </Button>
+          </div>
         </div>
-      </div>
+      </main>
+      <Footer />
+      <WhatsAppButton />
     </div>
   );
 };
