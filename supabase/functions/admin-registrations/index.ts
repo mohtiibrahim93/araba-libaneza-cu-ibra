@@ -1574,6 +1574,7 @@ Deno.serve(async (req) => {
           guests,
           plan: addRemaining ? [] : fullPlan,
           created,
+          repaired,
         });
       }
 
