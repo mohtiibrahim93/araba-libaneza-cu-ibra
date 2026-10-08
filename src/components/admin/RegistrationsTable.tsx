@@ -82,22 +82,22 @@ const badge = (cls: string, label: string) => (
 );
 
 const paymentBadge = (r: Registration) => {
-  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-gray-200 text-gray-700", "Rambursat");
+  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-muted text-muted-foreground", "Rambursat");
   switch (r.payment_status) {
     case "paid":
-      return badge("bg-green-100 text-green-800", "Plătit");
+      return badge("bg-emerald-500/10 text-emerald-700 dark:text-emerald-400", "Plătit");
     case "pending":
-      return badge("bg-yellow-100 text-yellow-800", "În așteptare");
+      return badge("bg-amber-500/10 text-amber-700 dark:text-amber-400", "În așteptare");
     case "past_due":
-      return badge("bg-red-100 text-red-800", "Restanță");
+      return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Restanță");
     case "failed":
-      return badge("bg-red-100 text-red-800", "Plată eșuată");
+      return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Plată eșuată");
     case "expired":
-      return badge("bg-gray-100 text-gray-600", "Expirat");
+      return badge("bg-muted text-muted-foreground", "Expirat");
     case "card_saved":
-      return badge("bg-blue-100 text-blue-800", "Card salvat · trial");
+      return badge("bg-blue-500/10 text-blue-700 dark:text-blue-400", "Card salvat · trial");
     default:
-      return badge("bg-gray-100 text-gray-600", "Neplătit");
+      return badge("bg-muted text-muted-foreground", "Neplătit");
   }
 };
 
@@ -462,7 +462,7 @@ const RegistrationsTable = ({
                 </span>
               )}
               {r.anonymized_at && (
-                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
                   Anonimizat
                 </span>
               )}
@@ -487,7 +487,7 @@ const RegistrationsTable = ({
                 {formTypeLabels[r.form_type] || r.form_type}
               </span>
               {r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id) && (
-                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
+                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
                   Fără interval
                 </span>
               )}

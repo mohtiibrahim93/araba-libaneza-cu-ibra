@@ -233,14 +233,17 @@ const CohortSessionsAdmin = () => {
                     >
                       Adaugă următoarea lecție (L{r.plan[0]?.lesson_number})
                     </button>
-                    {r.plan.length >= 4 && (
+                    {/* Two, not four: the owner adds lessons to the calendar a
+                        step at a time and four was more than he wanted to commit
+                        to in one press. */}
+                    {r.plan.length >= 2 && (
                       <button
                         type="button"
                         disabled={!!busy}
-                        onClick={() => ask(r, r.plan.slice(0, 4))}
+                        onClick={() => ask(r, r.plan.slice(0, 2))}
                         className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-brand-green px-4 text-sm font-semibold text-brand-green hover:bg-accent dark:border-primary dark:text-primary"
                       >
-                        Adaugă următoarele 4 lecții (L{r.plan[0]?.lesson_number}–L{r.plan[3]?.lesson_number})
+                        Adaugă următoarele 2 lecții (L{r.plan[0]?.lesson_number}–L{r.plan[1]?.lesson_number})
                       </button>
                     )}
                     <button

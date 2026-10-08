@@ -81,3 +81,37 @@ describe("visitor chrome stays off the admin", () => {
     expect(src).toContain('delete document.documentElement.dataset["adminChrome"]');
   });
 });
+
+describe("the admin reads in both themes and at both widths", () => {
+  it("gives payment badges colours that survive dark mode", () => {
+    // They were written for a light panel: fixed -100/-200 fills with dark
+    // text, which in dark mode are bright blocks of near-white.
+    const src = read("src/components/admin/RegistrationsTable.tsx");
+    // Reject a fixed shade; an opacity form like bg-red-500/10 is fine in
+    // both themes, so the lookahead must not stop mid-number.
+    const lightOnly = src.match(/bg-(?:gray|green|yellow|red|blue)-[0-9]{2,3}(?![0-9/])/g) ?? [];
+    expect(lightOnly, `light-only badge fills left: ${lightOnly.join(", ")}`).toEqual([]);
+  });
+
+  it("lets a title wrap on a phone instead of clipping it", () => {
+    // 23 articles all clipped to "Siriaca din ..." is a list you cannot read.
+    for (const f of ["src/components/admin/BlogAdmin.tsx", "src/components/admin/PagesAdmin.tsx"]) {
+      expect(read(f), `${f} still truncates at every width`).toContain("line-clamp-2");
+    }
+  });
+});
+
+describe("adding lessons to the calendar offers the step the owner takes", () => {
+  it("offers the next two, not the next four", () => {
+    const src = read("src/components/admin/CohortSessionsAdmin.tsx");
+    expect(src).toContain("Adaugă următoarele 2 lecții");
+    expect(src).toContain("r.plan.slice(0, 2)");
+    expect(src, "the four-lesson batch is gone").not.toContain("Adaugă următoarele 4 lecții");
+  });
+
+  it("still offers one lesson and all remaining", () => {
+    const src = read("src/components/admin/CohortSessionsAdmin.tsx");
+    expect(src).toContain("Adaugă următoarea lecție");
+    expect(src).toContain("Adaugă toate cele");
+  });
+});
