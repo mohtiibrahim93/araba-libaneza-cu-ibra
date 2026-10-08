@@ -41,6 +41,8 @@ interface Result {
   start_date?: string;
   /** Guests of the group's latest lesson; the new lessons invite them too. */
   guests?: string[];
+  /** The group's own students, set in "Numele grupelor în calendar". */
+  members?: string[];
   plan: Planned[];
   created: number[];
 }
@@ -257,8 +259,8 @@ const CohortSessionsAdmin = () => {
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {r.guests?.length
-                      ? `Invitați: ${r.guests.length} (din ultima lecție), plus cine adaugi tu.`
-                      : "Ultima lecție nu are invitați; poți adăuga emailuri la pasul următor."}
+                      ? `Primesc invitație: ${r.guests.length} (cursanții grupei și cei de pe ultima lecție).`
+                      : "Nimeni nu e invitat încă: trece cursanții grupei la „Numele grupelor în calendar”."}
                   </p>
                 </>
               ) : (
@@ -298,11 +300,15 @@ const CohortSessionsAdmin = () => {
                     ? `${fmtDay(confirm.lessons[0]!.date)} · ${confirm.lessons[0]!.start_time}–${confirm.lessons[0]!.end_time}`
                     : `lecțiile ${confirm.lessons[0]?.lesson_number}–${confirm.lessons[confirm.lessons.length - 1]?.lesson_number}, în zilele și orele grupei`}
                   , cu același loc și același link ca ultima lecție.{" "}
-                  {confirm.r.guests?.length ? `Primesc invitație cei ${confirm.r.guests.length} invitați ai ultimei lecții` : "Ultima lecție nu are invitați"}
+                  {confirm.r.members?.length
+                    ? `Primesc invitație cursanții grupei (${confirm.r.members.join(", ")}), cei de pe ultima lecție`
+                    : confirm.r.guests?.length
+                      ? `Primesc invitație cei ${confirm.r.guests.length} de pe ultima lecție`
+                      : "Grupa nu are încă cursanți trecuți în admin"}
                   {" "}și cine scrii mai jos. Le poți muta sau șterge oricând din Google Calendar.
                 </AlertDialogDescription>
                 <label className="mt-2 flex flex-col gap-1.5 text-sm font-semibold">
-                  Invitați în plus (un cursant nou), câte un email pe rând
+                  Alte persoane, invitate doar la aceste lecții (câte un email pe rând)
                   <textarea
                     rows={2}
                     value={extra}

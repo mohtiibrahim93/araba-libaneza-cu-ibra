@@ -25,7 +25,7 @@ interface Group {
   status: string;
   title_ro: string | null;
   schedule_label_ro: string | null;
-  link: { calendar_title: string; total_lessons: number } | null;
+  link: { calendar_title: string; total_lessons: number; members?: string[] } | null;
 }
 
 const STATUS: Record<string, string> = {
@@ -40,12 +40,21 @@ const STATUS: Record<string, string> = {
 const lessonsFor = (level: string | null) =>
   getCurriculum("ro").find((l) => l.id === (level ?? "").toLowerCase())?.lessons ?? 32;
 
+/** Emails typed one per line (or separated by commas/spaces), "mailto:" tolerated. */
+const emailsOf = (text: string) =>
+  text
+    .split(/[\s,;]+/)
+    .map((e) => e.replace(/^mailto:/i, "").trim().toLowerCase())
+    .filter(Boolean);
+
 const fmtDate = (d: string) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 
 const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
   const [groups, setGroups] = useState<Group[] | null>(null);
-  const [draft, setDraft] = useState<Record<string, { title: string; total: string; grupa: string; rename: boolean }>>({});
+  const [draft, setDraft] = useState<
+    Record<string, { title: string; total: string; grupa: string; rename: boolean; members: string }>
+  >({});
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -68,6 +77,7 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
             total: String(g.link?.total_lessons ?? lessonsFor(g.level)),
             grupa: "",
             rename: true,
+            members: (g.link?.members ?? []).join("\n"),
           },
         ]),
       ),
@@ -109,6 +119,7 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
       cohort_id: g.id,
       calendar_title: d.title.trim(),
       total_lessons: Number(d.total),
+      members: emailsOf(d.members),
     });
     setBusy(null);
     if (err || data?.error) return setError(data?.error ?? "Nu am putut salva.");
@@ -145,10 +156,13 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
       )}
       <ul className="divide-y divide-border/70">
         {groups?.map((g) => {
-          const d = draft[g.id] ?? { title: "", total: "32", grupa: "", rename: true };
-          const changed = d.title.trim() !== (g.link?.calendar_title ?? "") || Number(d.total) !== (g.link?.total_lessons ?? NaN);
+          const d = draft[g.id] ?? { title: "", total: "32", grupa: "", rename: true, members: "" };
+          const changed =
+            d.title.trim() !== (g.link?.calendar_title ?? "") ||
+            Number(d.total) !== (g.link?.total_lessons ?? NaN) ||
+            emailsOf(d.members).join(",") !== (g.link?.members ?? []).join(",");
           return (
-            <li key={g.id} className="flex flex-col gap-3 py-4 lg:flex-row lg:items-end">
+            <li key={g.id} className="flex flex-col gap-3 py-4 lg:flex-row lg:flex-wrap lg:items-end">
               <div className="min-w-0 lg:w-64">
                 <p className="font-semibold">
                   {g.level ?? "Grupă"} · {g.format === "online" ? "online" : g.format === "fizic" ? "la centru" : g.format ?? ""}
@@ -246,6 +260,16 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                 )}
                 </div>
               </div>
+              <label className="flex w-full flex-col gap-1 text-sm text-muted-foreground lg:basis-full">
+                Cursanții grupei (primesc automat toate lecțiile noi), câte un email pe rând
+                <textarea
+                  rows={2}
+                  value={d.members}
+                  onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, members: e.target.value } }))}
+                  placeholder="cursant@exemplu.ro"
+                  className="rounded-xl border border-input bg-background px-3 py-2 text-base text-foreground"
+                />
+              </label>
             </li>
           );
         })}

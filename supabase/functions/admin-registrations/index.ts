@@ -1174,7 +1174,7 @@ Deno.serve(async (req) => {
       if (gErr) throw gErr;
       const { data: links, error: lErr } = await supabase
         .from("cohort_calendar")
-        .select("cohort_id, calendar_title, total_lessons");
+        .select("cohort_id, calendar_title, total_lessons, members");
       if (lErr) throw lErr;
       return jsonResponse({
         data: (groups ?? []).map((g: { id: string }) => ({
@@ -1191,9 +1191,23 @@ Deno.serve(async (req) => {
       if (!cohortId || !title || !Number.isInteger(total) || total < 1 || total > 300) {
         return jsonResponse({ error: "Numele din calendar și numărul de lecții sunt obligatorii." });
       }
+      // The group's own students, invited to every lesson added for it.
+      const members = Array.isArray(body.members)
+        ? Array.from(
+            new Set(
+              (body.members as unknown[])
+                .filter((e): e is string => typeof e === "string")
+                .map((e) => e.replace(/^mailto:/i, "").trim().toLowerCase())
+                .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254),
+            ),
+          ).slice(0, 60)
+        : undefined;
       const { error: upErr } = await supabase
         .from("cohort_calendar")
-        .upsert({ cohort_id: cohortId, calendar_title: title, total_lessons: total }, { onConflict: "cohort_id" });
+        .upsert(
+          { cohort_id: cohortId, calendar_title: title, total_lessons: total, ...(members ? { members } : {}) },
+          { onConflict: "cohort_id" },
+        );
       if (upErr) throw upErr;
       return jsonResponse({ success: true });
     }
@@ -1301,7 +1315,7 @@ Deno.serve(async (req) => {
 
       // Active groups that have a calendar name (cohort_calendar): running
       // ones, and future ones whose lessons can be created ahead of time.
-      let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons");
+      let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons, members");
       if (onlyCohort) lq = lq.eq("cohort_id", onlyCohort);
       const { data: links, error: lErr } = await lq;
       if (lErr) throw lErr;
@@ -1322,7 +1336,7 @@ Deno.serve(async (req) => {
           end_time: string | null;
         }) => {
           const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
-          return { ...g, calendar_title: l.calendar_title, total_lessons: l.total_lessons };
+          return { ...g, calendar_title: l.calendar_title, total_lessons: l.total_lessons, members: (l.members ?? []) as string[] };
         },
       );
 
@@ -1446,9 +1460,12 @@ Deno.serve(async (req) => {
         const plan = addRemaining ? wanted : fullPlan;
 
         const created: number[] = [];
-        // The group's students: everyone on its latest lesson, plus anyone added now.
+        // Who is invited: the group's own students (permanent, from the
+        // admin), everyone already on its latest lesson, and the extra guests
+        // for just these lessons.
         const guests = Array.from(
           new Set([
+            ...c.members,
             ...(last?.e.attendees ?? [])
               .filter((a) => a.email && !a.self && !a.resource)
               .map((a) => a.email!.toLowerCase()),
@@ -1533,6 +1550,7 @@ Deno.serve(async (req) => {
           name_not_found: !last && c.start_date < todayLocal,
           start_date: c.start_date,
           guests,
+          members: c.members,
           plan: addRemaining ? [] : fullPlan,
           created,
         });
