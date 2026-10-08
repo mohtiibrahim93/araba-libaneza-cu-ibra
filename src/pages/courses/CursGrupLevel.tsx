@@ -11,6 +11,7 @@ import RegistrationFormSection from "@/components/RegistrationFormSection";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import { useGroupCohorts } from "@/hooks/useGroupCohorts";
 import RunningGroups from "@/components/RunningGroups";
+import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -405,8 +406,8 @@ const CursGrupLevel = () => {
                   <h2 className="text-xl font-bold text-foreground mb-1">
                     {cohortStarted
                       ? lang === "en"
-                        ? "This group has already started"
-                        : "Această grupă a început deja"
+                        ? "This group has started — you can still join"
+                        : "Grupa a început — te mai poți alătura"
                       : available
                         ? t.levelPageRegisterTitle
                         : t.levelPageInPrepTitle}
@@ -414,12 +415,23 @@ const CursGrupLevel = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {cohortStarted
                       ? lang === "en"
-                        ? "The lessons are under way, so this group can no longer be joined. Leave your details and we'll email you first when the next group in this format opens — we start one as soon as enough people are waiting. You can also begin right away with private 1:1 lessons."
-                        : "Lecțiile sunt deja în desfășurare, așa că nu se mai poate intra în grupă. Lasă-ți datele și te anunțăm primul pe email când deschidem următoarea grupă în acest format — pornim una imediat ce sunt suficienți înscriși. Poți începe oricând și cu lecții private 1:1."
+                        ? "Until the course's last month, you can join a running group: message Ibra and you'll catch up on the lessons you missed together, free of charge. Where each group is, and until which lesson you can join, is shown in \"Groups in progress\" above. Or leave your details and we'll email you when the next group in this format opens."
+                        : "Până în ultima lună a cursului poți intra într-o grupă care a început: scrie-i lui Ibra și recuperați împreună, gratuit, lecțiile pierdute. Unde a ajuns fiecare grupă și până la ce lecție te poți alătura vezi mai sus, la „Grupe în desfășurare”. Sau lasă-ți datele și te anunțăm când pornește următoarea grupă în acest format."
                       : available
                         ? t.levelPageRegisterDesc
                         : t.levelPageInPrepDesc}
                   </p>
+                  {cohortStarted && (
+                    <a
+                      href={WHATSAPP_CONTACT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mb-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90"
+                    >
+                      <MessageCircle className="h-4 w-4" aria-hidden />
+                      {lang === "en" ? "Message Ibra" : "Scrie-i lui Ibra"}
+                    </a>
+                  )}
                   {canEnrol ? (
                     <RegistrationFormSection
                       defaultCourseType="group"
