@@ -1271,6 +1271,45 @@ export type Database = {
         }
         Relationships: []
       }
+      student_progress: {
+        Row: {
+          created_at: string
+          email: string | null
+          items_seen: number
+          last_played_at: string | null
+          placement: Json | null
+          rounds: number
+          state: Json
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          items_seen?: number
+          last_played_at?: string | null
+          placement?: Json | null
+          rounds?: number
+          state?: Json
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          items_seen?: number
+          last_played_at?: string | null
+          placement?: Json | null
+          rounds?: number
+          state?: Json
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           anonymized_at: string | null

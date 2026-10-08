@@ -1169,9 +1169,25 @@ Deno.serve(async (req) => {
         // sorts itself.
         supabase
           .from("registrations")
-          .select("id, created_at, name, phone, email, form_type, format, level, language")
+          .select(
+            "id, created_at, name, phone, email, form_type, format, level, language, lead_status",
+          )
           .is("whatsapp_sent_at", null)
           .is("anonymized_at", null)
+          // Being contacted is recorded two ways and only one of them was read
+          // here. whatsapp_sent_at is set by the WhatsApp button; lead_status is
+          // what the owner sets by hand from the list, and that is the one he
+          // actually uses. Someone marked "Contactat" still had a null
+          // whatsapp_sent_at, so this screen kept asking him to contact a person
+          // he had already contacted and marked.
+          //
+          // So a lead is still waiting only while its status says nobody has
+          // triaged it: "new", or "incomplete" (the form was started but no slot
+          // was ever chosen, which is its own kind of chasing). Every other
+          // status — contacted, qualified, converted, no_response, not_suitable,
+          // spam — means a decision was made, and the screen must respect it.
+          // A null status is an old row that predates the column and reads as new.
+          .or("lead_status.is.null,lead_status.in.(new,incomplete)")
           .gte("created_at", staleAfter)
           .order("created_at", { ascending: true })
           .limit(50),
@@ -1209,7 +1225,16 @@ Deno.serve(async (req) => {
           .select("id", { count: "exact", head: true })
           .eq("status", "confirmed")
           .is("google_event_id", null)
-          .gte("start_at", new Date(now - 180 * 86_400_000).toISOString())
+          // Thirty days, not the health screen's hundred and eighty. This
+          // number answers "is the sync broken now", and only a recent failure
+          // can say yes. Three lessons that failed last August are history: the
+          // events will never appear, nobody can attend them retroactively, and
+          // counting them here would put the same warning on this screen every
+          // morning for six months until they aged out on their own. A warning
+          // that never goes away is one the owner learns to ignore, which costs
+          // more than the warning is worth. The long view belongs to "Sănătate
+          // calendar", which is where you go to ask what the history looks like.
+          .gte("start_at", new Date(now - 30 * 86_400_000).toISOString())
           .lt("start_at", dayStart),
       ]);
       if (lessonErr) throw lessonErr;

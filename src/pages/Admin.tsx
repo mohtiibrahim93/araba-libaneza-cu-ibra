@@ -636,7 +636,7 @@ const Admin = () => {
           value: "leads",
           label: "Înscrieri",
           icon: ClipboardList,
-          badge: registrations.length,
+          badge: stats.total,
           hint: "Toate cererile și plățile. Apasă pe un nume pentru fișa lui.",
         },
         {
@@ -834,8 +834,18 @@ const Admin = () => {
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}
                 <span className="text-muted-foreground font-normal">
-                  ({filteredRegistrations.length}/{registrations.length})
+                  ({filteredRegistrations.length}/{stats.total})
                 </span>
+                {leadStatusFilter === "all" && stats.incomplete > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setLeadStatusFilter("incomplete")}
+                    className="ml-2 rounded-full border border-border px-2 py-0.5 text-xs font-normal text-muted-foreground hover:text-foreground"
+                    title="Formulare începute fără interval ales — nu sunt rezervări, deci nu apar în listă"
+                  >
+                    +{stats.incomplete} incomplet{stats.incomplete === 1 ? "" : "e"}
+                  </button>
+                )}
               </h2>
               <div className="flex items-center gap-2">
                 <Button
