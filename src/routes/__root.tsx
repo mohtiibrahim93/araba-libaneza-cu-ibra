@@ -280,7 +280,9 @@ function RootComponent() {
             <RouteAnalytics />
             <LanguageFromPath />
             <Outlet />
-            <AskAssistant />
+            {/* The visitors' course assistant has no business in the admin,
+                where it sat on top of the menu and the phone's bottom bar. */}
+            {pathname !== "/admin" && !pathname.startsWith("/admin/") && <AskAssistant />}
           </I18nProvider>
         </TooltipProvider>
       </QueryClientProvider>

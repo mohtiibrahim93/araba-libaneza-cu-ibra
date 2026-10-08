@@ -73,6 +73,8 @@ interface Props {
   onPreviewRefund: (id: string, lessonsTaken: number) => Promise<RefundPreview>;
   onPreviewCancel: (id: string) => Promise<CancelPreview>;
   onCancelSubscription: (id: string) => void;
+  /** Opens the person's page (Fișa cursantului). */
+  onOpen?: (id: string) => void;
 }
 
 const badge = (cls: string, label: string) => (
@@ -354,6 +356,7 @@ const RegistrationsTable = ({
   onPreviewRefund,
   onPreviewCancel,
   onCancelSubscription,
+  onOpen,
 }: Props) => {
   // Registration ids that already have a (non-cancelled) booking, so trial
   // leads who never picked a slot can be flagged for follow-up.
@@ -410,7 +413,17 @@ const RegistrationsTable = ({
             {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
             <TableCell className="align-top">
               <p className="font-semibold text-foreground leading-tight">
-                {r.name}
+                {onOpen ? (
+                  <button
+                    type="button"
+                    onClick={() => onOpen(r.id)}
+                    className="text-left font-semibold text-brand-green underline-offset-2 hover:underline dark:text-primary"
+                  >
+                    {r.name}
+                  </button>
+                ) : (
+                  r.name
+                )}
                 {/* Anyone who registered in English needs an English-taught
                     cohort, and there is none yet — so it is flagged rather than
                     left to be discovered on the first day of class. */}

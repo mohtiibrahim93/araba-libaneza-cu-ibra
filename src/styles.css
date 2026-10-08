@@ -53,6 +53,11 @@
   --color-admin-nav-muted: hsl(var(--admin-nav-muted));
   --color-admin-nav-border: hsl(var(--admin-nav-border));
   --color-admin-canvas: hsl(var(--admin-canvas));
+  --color-admin-warn-bg: hsl(var(--admin-warn-bg));
+  --color-admin-warn-line: hsl(var(--admin-warn-line));
+  --color-admin-warn-fg: hsl(var(--admin-warn-fg));
+  --color-admin-info-bg: hsl(var(--admin-info-bg));
+  --color-admin-info-fg: hsl(var(--admin-info-fg));
   /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
      matching pre-migration behaviour). */
   --color-cedar: hsl(var(--cedar-green));
@@ -259,6 +264,74 @@
   --series-2: #d95926;
   --series-3: #199e70;
   --series-4: #c98500;
+}
+
+/*
+ * The admin's own look (October 2026 redesign, drawn in Claude Design):
+ * cream ground, warm hairlines, deep green for what you act on, and Instrument
+ * Sans for body text. Scoped to the admin wrapper, so every existing admin
+ * screen picks it up through bg-card / border-border / text-primary without
+ * being rewritten, and the public site is untouched. Dark mode keeps its own
+ * palette and only swaps the red primary for the brand green.
+ */
+.admin-theme {
+  --background: 43 100% 99%;
+  --foreground: 45 8% 10%;
+  --card: 43 100% 99%;
+  --card-foreground: 45 8% 10%;
+  --popover: 43 100% 99%;
+  --popover-foreground: 45 8% 10%;
+  --primary: 152 42% 22%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 39 36% 91%;
+  --secondary-foreground: 45 8% 10%;
+  --muted: 39 36% 91%;
+  --muted-foreground: 40 11% 33%;
+  --accent: 147 21% 91%;
+  --accent-foreground: 152 42% 18%;
+  --border: 39 30% 84%;
+  --input: 39 30% 80%;
+  --ring: 152 42% 22%;
+  --admin-nav: 40 60% 96%;
+  --admin-nav-fg: 45 8% 10%;
+  --admin-nav-muted: 40 11% 33%;
+  --admin-nav-border: 39 30% 84%;
+  --admin-canvas: 40 47% 94%;
+  --admin-warn-bg: 35 75% 95%;
+  --admin-warn-line: 35 64% 76%;
+  --admin-warn-fg: 28 90% 25%;
+  --admin-info-bg: 221 46% 93%;
+  --admin-info-fg: 219 53% 31%;
+  font-family: "Instrument Sans", var(--font-body);
+}
+.dark .admin-theme {
+  --background: 220 14% 10%;
+  --foreground: 0 0% 96%;
+  --card: 220 14% 12%;
+  --card-foreground: 0 0% 96%;
+  --popover: 220 14% 12%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 152 35% 58%;
+  --primary-foreground: 152 42% 10%;
+  --secondary: 220 14% 18%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 220 14% 18%;
+  --muted-foreground: 220 12% 72%;
+  --accent: 152 20% 18%;
+  --accent-foreground: 152 35% 80%;
+  --border: 220 14% 20%;
+  --input: 220 14% 24%;
+  --ring: 152 35% 58%;
+  --admin-nav: 220 14% 11%;
+  --admin-nav-fg: 0 0% 96%;
+  --admin-nav-muted: 220 9% 58%;
+  --admin-nav-border: 220 14% 20%;
+  --admin-canvas: 220 14% 8%;
+  --admin-warn-bg: 30 40% 14%;
+  --admin-warn-line: 30 50% 35%;
+  --admin-warn-fg: 35 90% 70%;
+  --admin-info-bg: 220 30% 16%;
+  --admin-info-fg: 220 70% 80%;
 }
 
 @layer base {

@@ -30,8 +30,9 @@ describe("the admin names each screen exactly once", () => {
   it("gives the shell the only page heading", () => {
     expect(shell.match(/<h1/g) ?? []).toHaveLength(1);
     // Driven by the navigation entry, so the heading and the sidebar can never
-    // disagree about what the screen is called.
-    expect(shell).toContain("{current?.label}");
+    // disagree about what the screen is called. Acasă greets instead.
+    expect(shell).toContain("const heading = isHome ? greeting() : section.label;");
+    expect(shell).toContain("{heading}");
   });
 
   it("leaves no screen titling itself", () => {
@@ -55,7 +56,7 @@ describe("the admin names each screen exactly once", () => {
   it("stops the top bar repeating the heading on desktop", () => {
     // The bar still names the screen on phones, where the rail is hidden and
     // the heading scrolls away — but only there.
-    const at = shell.indexOf("{current?.label}");
+    const at = shell.indexOf("{section.label}");
     const line = shell.slice(shell.lastIndexOf("<p", at), at);
     expect(line).toContain("lg:hidden");
   });
