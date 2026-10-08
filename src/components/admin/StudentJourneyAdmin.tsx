@@ -3,7 +3,7 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle2, Circle, Calendar, CreditCard, UserPlus, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formTypeLabels } from "./types";
+import { formTypeLabels, paymentStatusLabels } from "./types";
 
 interface JourneyRow {
   id: string;
@@ -85,7 +85,7 @@ const StudentJourneyAdmin = () => {
                 ? r.paid_at
                   ? fmtDate(r.paid_at)
                   : "plătit"
-                : r.payment_status,
+                : (paymentStatusLabels[r.payment_status] ?? r.payment_status),
           },
           class: {
             done: r.class_completed,

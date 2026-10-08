@@ -35,8 +35,9 @@ const PrivateStatus = () => {
       if (!id) return;
 
       setLoading(true);
+      const sig = new URLSearchParams(window.location.search).get("sig") || "";
       const { data, error: fnError } = await supabase.functions.invoke("admin-registrations", {
-        body: { action: "get_private_status", id },
+        body: { action: "get_private_status", id, sig },
       });
 
       if (fnError || data?.error) {

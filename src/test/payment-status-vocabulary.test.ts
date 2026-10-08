@@ -6,21 +6,39 @@ import { resolve, join } from "node:path";
  * `registrations.payment_status` has no database constraint, so any string at
  * all will insert cleanly and be wrong only later.
  *
- * Six values are in use: paid, pending, card_saved, failed, past_due,
- * refunded. Everything that reads the column — the status badge, the filters,
- * the analytics breakdown, the "has not paid" worklist — knows those six.
+ * Seven values are in use, and two of them look like synonyms but are not:
  *
- * A seventh is not a database error, it is a slow one. The row inserts, the
- * badge falls through to its default and looks plausible, and the breakdowns
- * quietly grow a bucket nobody labelled. That is what happened: a student
- * added by hand in the admin was written as "unpaid" while an identical
- * student from the site was "pending" — the same state under two names, in
- * the same table, in the same list.
+ *   unpaid     Nobody has tried to pay. The first payment has not happened and
+ *              may never happen, in which case the student is charged the full
+ *              price — a trial that is not converted, a course place taken
+ *              without payment. This is where a hand-added student starts.
+ *   pending    A payment is in flight or awaiting confirmation. The checkout
+ *              functions write it once a Stripe session exists, so there is a
+ *              real attempt behind it.
+ *   card_saved A card is on file but not yet charged.
+ *   paid / failed / past_due / refunded  What Stripe reports afterwards.
  *
- * It was caught before the function was deployed, so no row ever carried it.
- * This keeps the vocabulary at six.
+ * This file once claimed the two were one state and that "unpaid" had been
+ * caught before any row could carry it. Both claims were wrong: production is
+ * mostly "unpaid", and merging it into "pending" would report money as on its
+ * way when nobody has tried to pay.
+ *
+ * The real risk is an eighth value, not the seventh: the column takes anything,
+ * the badge falls through to its default and looks plausible, and a breakdown
+ * grows a bucket nobody labelled.
  */
-const ALLOWED = ["paid", "pending", "card_saved", "failed", "past_due", "refunded"];
+const ALLOWED = [
+  "paid",
+  "unpaid",
+  "pending",
+  "card_saved",
+  "failed",
+  "past_due",
+  "refunded",
+];
+
+/** Everything a reader has to be able to name. Same list: all seven are real. */
+const IN_THE_DATA = ALLOWED;
 
 /** Every .ts/.tsx under a root, so a new function cannot slip past. */
 function walk(dir: string, out: string[] = []): string[] {
@@ -38,7 +56,7 @@ const files = [
   ...walk(resolve(process.cwd(), "src")),
 ].filter((f) => !f.includes("/test/"));
 
-describe("payment_status stays to its six values", () => {
+describe("payment_status stays to its seven values", () => {
   it("has files to check", () => {
     expect(files.length).toBeGreaterThan(50);
   });
@@ -55,22 +73,46 @@ describe("payment_status stays to its six values", () => {
         }
       }
     }
-    expect(bad, `payment_status values outside the six:\n${bad.join("\n")}`).toEqual([]);
+    expect(bad, `payment_status values outside the seven:\n${bad.join("\n")}`).toEqual([]);
   });
 
-  it("labels every one of them in the analytics breakdown", () => {
-    // An unlabelled value renders as the raw database key.
-    const page = readFileSync(
-      resolve(process.cwd(), "src/components/admin/AnalyticsAdmin.tsx"),
+  it("labels every value the column can hold", async () => {
+    // An unlabelled value renders as the raw database key, which is how
+    // "unpaid" and "no_response" ended up on screen next to Romanian words.
+    // Assert against the shared map rather than any one screen's source text:
+    // the map is what every screen reads.
+    const { paymentStatusLabels } = await import("../components/admin/types");
+    for (const v of IN_THE_DATA) {
+      expect(paymentStatusLabels[v], `${v} has no Romanian label`).toBeTruthy();
+    }
+  });
+
+  it("keeps a hand-added student apart from one who started a checkout", () => {
+    // The distinction this file exists to protect, and the one that has been
+    // collapsed twice. A student added in "Inscrieri externe" has attempted no
+    // payment; one who reached Stripe has a session open behind them. Writing
+    // "pending" for the first reports money as in flight when nobody has tried.
+    const admin = readFileSync(
+      resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
       "utf8",
     );
-    // Slice from where the breakdown is rendered, not from the interface that
-    // declares it — the type appears first in the file and carries no labels.
-    const at = page.indexOf("counts={data.conversion.byPaymentStatus}");
-    expect(at, "the payment-status breakdown is no longer rendered").toBeGreaterThan(-1);
-    const block = page.slice(at, at + 600);
-    for (const v of ALLOWED) {
-      expect(block, `${v} has no Romanian label`).toContain(`${v}:`);
+    expect(admin, "the hand-added student must start as unpaid").toContain(
+      'payment_status: isPaid ? "paid" : "unpaid"',
+    );
+
+    for (const fn of [
+      "create-checkout-session",
+      "create-checkout",
+      "create-payment-intent",
+      "create-subscription",
+    ]) {
+      const src = readFileSync(
+        resolve(process.cwd(), `supabase/functions/${fn}/index.ts`),
+        "utf8",
+      );
+      expect(src, `${fn} starts a real payment, so it writes pending`).toContain(
+        'payment_status: "pending"',
+      );
     }
   });
 

@@ -59,6 +59,19 @@ const EVENT_LABEL: Record<string, string> = {
   paid: "Lecție privată",
 };
 
+// The columns used to print the database column straight out, so the table read
+// "physical" and "confirmed" in the middle of an otherwise Romanian screen.
+const FORMAT_LABEL: Record<string, string> = {
+  online: "Online",
+  physical: "La centru",
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  confirmed: "Confirmată",
+  cancelled: "Anulată",
+  pending: "În așteptare",
+};
+
 const BookingsAdmin = () => {
   const [rows, setRows] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -260,7 +273,7 @@ const BookingsAdmin = () => {
                     )}
                   </td>
                   <td className="py-2 pr-2">
-                    {b.format}
+                    {FORMAT_LABEL[b.format] ?? b.format}
                     {b.meet_link && (
                       <a
                         href={b.meet_link}
@@ -274,7 +287,7 @@ const BookingsAdmin = () => {
                     )}
                   </td>
                   <td className="py-2 pr-2">
-                    {b.status}
+                    {STATUS_LABEL[b.status] ?? b.status}
                     {b.status === "confirmed" && !b.google_event_id && (
                       <span
                         className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400"

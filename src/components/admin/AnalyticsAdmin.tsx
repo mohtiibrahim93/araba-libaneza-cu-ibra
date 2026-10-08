@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { ErrorNote, Loading, ScreenHeader, Section, StatTile } from "./ui";
+import { ErrorNote, Loading, ScreenToolbar, Section, StatTile } from "./ui";
+import { leadStatusLabels, paymentStatusLabels } from "./types";
 
 /**
  * The time dimension the rest of the panel does not have.
@@ -208,34 +209,28 @@ const AnalyticsAdmin = () => {
 
   return (
     <section className="space-y-6">
-      <ScreenHeader
-        title="Analiză"
-        description="Cifrele tale, pe o perioadă. Restul panoului numără tot timpul."
-        actions={
-          <>
-          <div className="flex rounded-lg border border-border p-0.5">
-            {RANGES.map((r) => (
-              <button
-                key={r.days}
-                type="button"
-                onClick={() => setDays(r.days)}
-                aria-pressed={days === r.days}
-                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                  days === r.days
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-            <Button variant="outline" size="sm" onClick={() => void load(days)} disabled={loading} aria-label="Reîncarcă">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-            </Button>
-          </>
-        }
-      />
+      <ScreenToolbar>
+        <div className="flex rounded-lg border border-border p-0.5">
+          {RANGES.map((r) => (
+            <button
+              key={r.days}
+              type="button"
+              onClick={() => setDays(r.days)}
+              aria-pressed={days === r.days}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                days === r.days
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <Button variant="outline" size="sm" onClick={() => void load(days)} disabled={loading} aria-label="Reîncarcă">
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+        </Button>
+      </ScreenToolbar>
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
@@ -395,14 +390,7 @@ const AnalyticsAdmin = () => {
             <Breakdown
               title="Status plată"
               counts={data.conversion.byPaymentStatus}
-              labels={{
-                paid: "Plătit",
-                pending: "În așteptare",
-                card_saved: "Card salvat",
-                failed: "Eșuat",
-                refunded: "Rambursat",
-                past_due: "Restant",
-              }}
+              labels={paymentStatusLabels}
             />
             <Breakdown
               title="Nivel"
@@ -432,7 +420,7 @@ const AnalyticsAdmin = () => {
             <Breakdown
               title="Status lead"
               counts={data.conversion.byLeadStatus}
-              labels={{ new: "Nou", incomplete: "Incomplet", converted: "Convertit" }}
+              labels={leadStatusLabels}
             />
             {Object.keys(data.signups.byReferral ?? {}).length > 0 && (
               <Breakdown title="Cod de recomandare" counts={data.signups.byReferral} />

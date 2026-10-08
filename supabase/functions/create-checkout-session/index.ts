@@ -13,7 +13,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
-import { callerOwnsRegistration, signRegistrationId } from "../_shared/registration-access.ts";
+import { signRegistrationId } from "../_shared/registration-access.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -32,7 +33,7 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan, setup, email: callerEmail, sig, booking } = await req.json();
+    const { registrationId, plan, setup, booking } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(JSON.stringify({ error: "registrationId is required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -58,11 +59,15 @@ serve(async (req) => {
       .eq("id", registrationId)
       .maybeSingle();
 
-    // Only the registrant (matching email, or a server-signed link) may act.
-    if (!reg || !(await callerOwnsRegistration(reg, { email: callerEmail, sig }))) {
+    if (!reg) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!(await verifiedRegistrationOwner(req, reg, supabaseAdmin.auth))) {
+      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (reg.payment_status === "paid") {

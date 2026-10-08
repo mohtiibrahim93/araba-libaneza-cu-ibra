@@ -114,15 +114,15 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
           >
             <Menu className="h-5 w-5" />
           </Button>
+          {/* The bar names the screen only where the sidebar cannot: on phones
+              the rail is hidden and the page heading scrolls away, so this is
+              the only standing answer to "where am I". On desktop the rail
+              already highlights the section and the page owns its heading, so
+              repeating it here would print the same words twice. */}
           <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-[0.9375rem] font-semibold text-foreground">
+            <p className="truncate font-display text-[0.9375rem] font-semibold text-foreground lg:hidden">
               {current?.label}
             </p>
-            {current?.hint && (
-              <p className="hidden truncate text-xs text-muted-foreground sm:block">
-                {current.hint}
-              </p>
-            )}
           </div>
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
             <Link to="/admin/notifications">
@@ -162,14 +162,21 @@ const AdminShell = ({ groups, active, onChange, adminEmail, onLogout, children }
         </aside>
 
         {/* Content */}
-        <main className="min-w-0 flex-1 space-y-6">
-          <div className="lg:hidden">
-            <h1 className="font-display text-xl font-semibold text-foreground">{current?.label}</h1>
+        {/* The shell owns the page heading for every screen, so all twenty are
+            titled the same way and none of them can drift. Screens contribute
+            their own controls through <ScreenToolbar>, never another title. */}
+        <main className="min-w-0 flex-1">
+          <header className="mb-5 border-b border-border/70 pb-4">
+            <h1 className="font-display text-2xl font-semibold leading-tight tracking-tight text-foreground">
+              {current?.label}
+            </h1>
             {current?.hint && (
-              <p className="mt-0.5 text-sm text-muted-foreground">{current.hint}</p>
+              <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                {current.hint}
+              </p>
             )}
-          </div>
-          {children}
+          </header>
+          <div className="space-y-6">{children}</div>
         </main>
       </div>
 

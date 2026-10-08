@@ -10,6 +10,7 @@ import {
 } from "../_shared/refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
 
 function jsonResponseWith(cors: Record<string, string>) {
@@ -122,6 +123,10 @@ Deno.serve(async (req) => {
       if (typeof id !== "string") {
         return jsonResponse({ error: "Cerere invalidă" });
       }
+      // Public status page: only a server-signed link may read the status.
+      if (!(await verifyRegistrationSignature(id, body?.sig))) {
+        return jsonResponse({ error: "Cererea nu a fost găsită" });
+      }
 
       const { data: registration, error: registrationError } = await supabase
         .from("registrations")
@@ -144,7 +149,11 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
     const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
-    const callerEmail = userData?.user?.email?.toLowerCase();
+    const caller = userData?.user;
+    // Only a confirmed, non-anonymous mailbox counts as proof of the admin address.
+    const callerEmail = caller && caller.email_confirmed_at && !caller.is_anonymous
+      ? caller.email?.trim().toLowerCase()
+      : undefined;
     const adminEmails = (Deno.env.get("ADMIN_EMAILS") || "")
       .split(",")
       .map((e) => e.trim().toLowerCase())
@@ -675,13 +684,15 @@ Deno.serve(async (req) => {
           language: cohort.teaching_language,
           source: mSource,
           lead_status: isPaid ? "converted" : "qualified",
-          // "pending", not "unpaid": the rest of the system writes six values
-          // for this column (paid, pending, card_saved, failed, past_due,
-          // refunded) and there is no constraint to stop a seventh. A student
-          // added by hand and one who registered on the site are in the same
-          // state and belong in the same bucket, or every filter and
-          // breakdown has to learn a synonym.
-          payment_status: isPaid ? "paid" : "pending",
+          // "unpaid", not "pending": the two are different states, and this
+          // one has no payment in flight. "pending" is what the checkout
+          // functions write once a Stripe session exists and the money is on
+          // its way or awaiting confirmation. A student added here by hand has
+          // started nothing — their first payment has not happened, and may
+          // never happen, in which case they are charged the full price. That
+          // is what "unpaid" means, and collapsing it into "pending" would
+          // report money as in flight when nobody has tried to pay.
+          payment_status: isPaid ? "paid" : "unpaid",
           paid_at: isPaid ? now : null,
           payment_method: isPaid ? method : null,
           notes: clean(mNotes, 2000) || null,
@@ -1141,12 +1152,13 @@ Deno.serve(async (req) => {
         { data: uncontacted, error: uncErr },
         { data: unpaid, error: unpaidErr },
         { data: cohorts, error: cohortErr },
+        { count: olderUnsynced },
       ] = await Promise.all([
         // Today and the next two days, so a Friday evening still shows Monday.
         supabase
           .from("bookings")
           .select(
-            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_sync_error, manage_token",
+            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_event_id, google_sync_error, manage_token",
           )
           .eq("status", "confirmed")
           .gte("start_at", dayStart)
@@ -1185,6 +1197,20 @@ Deno.serve(async (req) => {
           .gte("start_date", new Date(now).toISOString().slice(0, 10))
           .lte("start_date", new Date(now + 14 * 86_400_000).toISOString().slice(0, 10))
           .order("start_date", { ascending: true }),
+        // Lessons already past that never reached the calendar. They are not
+        // work any more — nobody can attend August retroactively — so they do
+        // not belong in the worklist itself. But a backlog of them means the
+        // sync is broken rather than unlucky, and Azi saying nothing at all
+        // while "Sănătate calendar" reported three of four missing is how the
+        // two screens came to contradict each other. A count is enough to send
+        // the owner to the screen that explains it.
+        supabase
+          .from("bookings")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "confirmed")
+          .is("google_event_id", null)
+          .gte("start_at", new Date(now - 180 * 86_400_000).toISOString())
+          .lt("start_at", dayStart),
       ]);
       if (lessonErr) throw lessonErr;
       if (uncErr) throw uncErr;
@@ -1197,12 +1223,21 @@ Deno.serve(async (req) => {
       // failed to sync is the one that bites: the lesson exists here and not
       // in the owner's calendar, so it is the lesson he does not turn up to.
       const problems: Array<{ kind: string; detail: string; id: string }> = [];
+      // A lesson counts as a calendar problem when it has no event, not merely
+      // when an error was recorded. Those are different failures: the sync can
+      // fall over without ever writing google_sync_error — a dropped request, a
+      // token that expired between the write and the retry — and that silent
+      // case was the one nobody saw. "Sănătate calendar" has always asked
+      // whether the event exists; this asks the same question, so the two
+      // screens can no longer disagree about the same booking.
       for (const b of lessons ?? []) {
-        if (b.google_sync_error) {
+        if (!b.google_event_id) {
           problems.push({
             kind: "calendar",
             id: b.id as string,
-            detail: `${b.student_name}: ${b.google_sync_error}`,
+            detail: b.google_sync_error
+              ? `${b.student_name}: ${b.google_sync_error}`
+              : `${b.student_name}: lecția nu are eveniment în Google Calendar.`,
           });
         }
       }
@@ -1224,6 +1259,7 @@ Deno.serve(async (req) => {
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],
           problems,
+          olderUnsyncedLessons: olderUnsynced ?? 0,
         },
       });
     }

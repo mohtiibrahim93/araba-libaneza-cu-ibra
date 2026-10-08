@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * The weekly slots a kids' course can be booked into.
@@ -219,18 +219,14 @@ const KidsSlotsAdmin = () => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Sloturi copii"
-        description="Intervalele în care se pot înscrie copiii. Cele active apar pe site."
-        actions={
-          !draft && (
-            <Button size="sm" onClick={() => setDraft({ ...blank })}>
-              <Plus className="h-4 w-4" />
-              Adaugă interval
-            </Button>
-          )
-        }
-      />
+      <ScreenToolbar>
+        {!draft && (
+          <Button size="sm" onClick={() => setDraft({ ...blank })}>
+            <Plus className="h-4 w-4" />
+            Adaugă interval
+          </Button>
+        )}
+      </ScreenToolbar>
 
       {error && <ErrorNote>{error}</ErrorNote>}
 

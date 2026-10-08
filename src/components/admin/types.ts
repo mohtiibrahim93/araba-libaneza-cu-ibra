@@ -88,6 +88,22 @@ export const leadStatusLabels: Record<LeadStatus, string> = {
   converted: "Convertit",
 };
 
+/**
+ * payment_status carries no database constraint, so the column holds every
+ * value the code has written over its life. "unpaid" is the commonest one in
+ * production even though newer paths write "pending" instead, so anything that
+ * shows a payment status has to be able to name it.
+ */
+export const paymentStatusLabels: Record<string, string> = {
+  paid: "Plătit",
+  unpaid: "Neplătit",
+  pending: "În așteptare",
+  card_saved: "Card salvat",
+  failed: "Eșuat",
+  refunded: "Rambursat",
+  past_due: "Restant",
+};
+
 export const leadSourceLabels: Record<LeadSource, string> = {
   form: "Formular",
   whatsapp: "WhatsApp",

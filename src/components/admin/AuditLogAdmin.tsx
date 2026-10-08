@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ScrollText, ShieldAlert } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th, Tr } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * Who did what, and when.
@@ -77,15 +77,11 @@ const AuditLogAdmin = () => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Jurnal"
-        description="Acțiunile care șterg sau schimbă date, cu cine le-a făcut. Doar de citit."
-        actions={
-          <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        }
-      />
+      <ScreenToolbar>
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+          <RefreshCw className="h-4 w-4" />
+        </Button>
+      </ScreenToolbar>
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
