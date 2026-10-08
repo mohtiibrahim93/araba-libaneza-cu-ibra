@@ -1159,6 +1159,56 @@ Deno.serve(async (req) => {
      * Read-only, and deliberately bounded — every list has a horizon or a
      * limit, because a worklist that grows without end is a report.
      */
+    // ============ Calendar names of groups ============
+    // Which name each group has in the owner's Google Calendar ("curs online
+    // a1, grupa 1" → events "curs online a1, grupa 1 lectia 1", …). Chosen in
+    // the admin, independent of how the group is titled on the website.
+    if (action === "list_cohort_calendar") {
+      const { data: groups, error: gErr } = await supabase
+        .from("group_cohorts")
+        .select("id, level, format, start_date, status, title_ro, schedule_label_ro, session_count")
+        .eq("is_active", true)
+        .eq("form_type", "group")
+        .not("status", "in", '("completed","cancelled")')
+        .order("start_date", { ascending: true });
+      if (gErr) throw gErr;
+      const { data: links, error: lErr } = await supabase
+        .from("cohort_calendar")
+        .select("cohort_id, calendar_title, total_lessons");
+      if (lErr) throw lErr;
+      return jsonResponse({
+        data: (groups ?? []).map((g: { id: string }) => ({
+          ...g,
+          link: (links ?? []).find((l: { cohort_id: string }) => l.cohort_id === g.id) ?? null,
+        })),
+      });
+    }
+
+    if (action === "upsert_cohort_calendar") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
+      const total = Number(body.total_lessons);
+      if (!cohortId || !title || !Number.isInteger(total) || total < 1 || total > 300) {
+        return jsonResponse({ error: "Numele din calendar și numărul de lecții sunt obligatorii." });
+      }
+      const { error: upErr } = await supabase
+        .from("cohort_calendar")
+        .upsert({ cohort_id: cohortId, calendar_title: title, total_lessons: total }, { onConflict: "cohort_id" });
+      if (upErr) throw upErr;
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "delete_cohort_calendar") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      if (!cohortId) return jsonResponse({ error: "Lipsește grupa." });
+      // Only the link and the lessons read from the calendar here; the
+      // calendar itself is never touched.
+      await supabase.from("cohort_sessions").delete().eq("cohort_id", cohortId);
+      const { error: delErr } = await supabase.from("cohort_calendar").delete().eq("cohort_id", cohortId);
+      if (delErr) throw delErr;
+      return jsonResponse({ success: true });
+    }
+
     // ============ Group lessons from Google Calendar ============
     /**
      * Reads the owner's lesson events ("<course> – Lecția N") for each running
@@ -1194,21 +1244,32 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
       };
 
-      // Running groups that have a calendar name (cohort_calendar).
+      // Active groups that have a calendar name (cohort_calendar): running
+      // ones, and future ones whose lessons can be created ahead of time.
       let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons");
       if (onlyCohort) lq = lq.eq("cohort_id", onlyCohort);
       const { data: links, error: lErr } = await lq;
       if (lErr) throw lErr;
       const { data: running, error: cErr } = await supabase
         .from("group_cohorts")
-        .select("id, start_date, status")
+        .select("id, start_date, status, format, days_of_week, start_time, end_time")
         .in("id", (links ?? []).map((l: { cohort_id: string }) => l.cohort_id))
-        .eq("status", "in_progress");
+        .eq("is_active", true)
+        .not("status", "in", '("completed","cancelled")');
       if (cErr) throw cErr;
-      const cohorts = (running ?? []).map((g: { id: string; start_date: string }) => {
-        const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
-        return { id: g.id, start_date: g.start_date, calendar_title: l.calendar_title, total_lessons: l.total_lessons };
-      });
+      const cohorts = (running ?? []).map(
+        (g: {
+          id: string;
+          start_date: string;
+          format: string | null;
+          days_of_week: number[] | null;
+          start_time: string | null;
+          end_time: string | null;
+        }) => {
+          const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
+          return { ...g, calendar_title: l.calendar_title, total_lessons: l.total_lessons };
+        },
+      );
 
       const localDate = (iso: string) =>
         new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest" }).format(new Date(iso));
@@ -1289,15 +1350,34 @@ Deno.serve(async (req) => {
           .select("weekday, start_time, end_time")
           .eq("cohort_id", c.id);
         const total = (c.total_lessons as number | null) ?? 0;
-        const plan =
-          last && total
-            ? planRemaining({
-                lastNumber: last.n,
-                lastDate: localDate(last.e.start!.dateTime!),
-                meetings: (meetingRows ?? []) as Meeting[],
-                total,
-              })
-            : [];
+        // The weekly pattern: per-day meetings when the group has them, else
+        // the single days/time pair every cohort carries.
+        const meetings: Meeting[] =
+          (meetingRows ?? []).length > 0
+            ? ((meetingRows ?? []) as Meeting[])
+            : c.start_time && c.end_time
+              ? (c.days_of_week ?? []).map((weekday: number) => ({
+                  weekday,
+                  start_time: c.start_time as string,
+                  end_time: c.end_time as string,
+                }))
+              : [];
+        // After the last lesson in the calendar; for a group with none yet,
+        // from its start date, lesson 1.
+        const dayBefore = (d: string) => new Date(Date.parse(`${d}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+        // Never plan a started group from lesson 1: finding none of its lessons
+        // means the name does not match the calendar, and creating L1… again
+        // would duplicate the real ones.
+        const todayLocal = localDate(new Date().toISOString());
+        const canPlan = total > 0 && (!!last || c.start_date >= todayLocal);
+        const plan = canPlan
+          ? planRemaining({
+              lastNumber: last ? last.n : 0,
+              lastDate: last ? localDate(last.e.start!.dateTime!) : dayBefore(c.start_date),
+              meetings,
+              total,
+            })
+          : [];
 
         const created: number[] = [];
         // The group's students: everyone on its latest lesson, plus anyone added now.
@@ -1309,7 +1389,10 @@ Deno.serve(async (req) => {
             ...extraGuests,
           ]),
         );
-        if (addRemaining && last && plan.length) {
+        // A brand-new online group gets one Google Meet link, made with its
+        // first lesson and reused for the rest, like a group's lessons share one.
+        let conference: unknown = last?.e.conferenceData;
+        if (addRemaining && plan.length) {
           for (const p of plan) {
             const [y, mo, d] = p.date.split("-").map(Number);
             const [sh, sm] = p.start_time.split(":").map(Number);
@@ -1324,11 +1407,24 @@ Deno.serve(async (req) => {
                 method: "POST",
                 headers: gHeaders,
                 body: JSON.stringify({
-                  summary: titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number),
+                  // Written like the group's latest lesson; for a new group,
+                  // "<name> lectia N" with the name chosen in the admin.
+                  summary: last
+                    ? titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number)
+                    : `${prefix} lectia ${p.lesson_number}`,
                   // Same place and the same meeting link as the group's last lesson.
-                  location: last.e.location,
-                  description: last.e.description,
-                  conferenceData: last.e.conferenceData,
+                  location: last?.e.location,
+                  description: last?.e.description,
+                  conferenceData:
+                    conference ??
+                    (c.format === "online"
+                      ? {
+                          createRequest: {
+                            requestId: crypto.randomUUID(),
+                            conferenceSolutionKey: { type: "hangoutsMeet" },
+                          },
+                        }
+                      : undefined),
                   attendees: guests.map((email) => ({ email })),
                   start: { dateTime: startISO, timeZone: "Europe/Bucharest" },
                   end: { dateTime: endISO, timeZone: "Europe/Bucharest" },
@@ -1339,6 +1435,13 @@ Deno.serve(async (req) => {
             if (!res.ok) {
               console.error("[sync_cohort_sessions] create failed", res.status, ev);
               break;
+            }
+            if (!conference && ev.conferenceData?.conferenceId) {
+              conference = {
+                conferenceId: ev.conferenceData.conferenceId,
+                conferenceSolution: ev.conferenceData.conferenceSolution,
+                entryPoints: ev.conferenceData.entryPoints,
+              };
             }
             const { error: insErr } = await supabase.from("cohort_sessions").insert({
               cohort_id: c.id,
@@ -1359,7 +1462,10 @@ Deno.serve(async (req) => {
           total_lessons: total || null,
           found: rows.length,
           last_lesson: last ? { number: last.n, starts_at: last.e.start!.dateTime } : null,
-          missing_meetings: (meetingRows ?? []).length === 0,
+          missing_meetings: meetings.length === 0,
+          // Started, yet no lesson matched the name: the name needs checking.
+          name_not_found: !last && c.start_date < todayLocal,
+          start_date: c.start_date,
           guests,
           plan: addRemaining ? [] : plan,
           created,

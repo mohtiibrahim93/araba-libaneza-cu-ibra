@@ -31,7 +31,7 @@ interface GroupLesson {
   lesson_number: number;
   starts_at: string;
   ends_at: string;
-  group_cohorts: { level: string | null; format: string | null; calendar_title: string | null } | null;
+  group_cohorts: { level: string | null; format: string | null } | null;
 }
 
 // cohort_sessions is newer than the generated Supabase types; public read (RLS).
@@ -139,7 +139,9 @@ const WeekLessons = () => {
     const from = new Date(Date.parse(`${days[0]}T00:00:00Z`) - 86_400_000).toISOString();
     const to = new Date(Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86_400_000).toISOString();
     void sessionsTable()
-      .select("id, lesson_number, starts_at, ends_at, group_cohorts(level, format, calendar_title)")
+      // Only columns that exist on group_cohorts: asking for one that does not
+      // fails the whole request, and the week then shows no group lessons.
+      .select("id, lesson_number, starts_at, ends_at, group_cohorts(level, format)")
       .gte("starts_at", from)
       .lt("starts_at", to)
       .then(({ data }) => !cancelled && setGroupLessons(data ?? []));

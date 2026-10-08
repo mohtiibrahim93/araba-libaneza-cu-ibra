@@ -49,6 +49,7 @@ import AdminSearch from "@/components/admin/AdminSearch";
 import PersonSheet from "@/components/admin/PersonSheet";
 import WeekLessons from "@/components/admin/WeekLessons";
 import CohortSessionsAdmin from "@/components/admin/CohortSessionsAdmin";
+import CohortCalendarNames from "@/components/admin/CohortCalendarNames";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
@@ -231,6 +232,8 @@ const Admin = () => {
   // The redesign's always-there pieces: search, one person's page, and what
   // Acasă learned on load (calendar health, people waiting on a reply).
   const [searchOpen, setSearchOpen] = useState(false);
+  // Bumped when a group's calendar name changes, so the lessons panel re-reads.
+  const [calendarNamesVersion, setCalendarNamesVersion] = useState(0);
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const [personId, setPersonId] = useState<string | null>(null);
   const [calendarOk, setCalendarOk] = useState<boolean | null>(null);
@@ -1030,7 +1033,8 @@ const Admin = () => {
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
           <TabsContent value="cohorts" className="mt-0 space-y-6">
-            <CohortSessionsAdmin />
+            <CohortSessionsAdmin key={calendarNamesVersion} />
+            <CohortCalendarNames onChanged={() => setCalendarNamesVersion((v) => v + 1)} />
             <GroupOverview />
             <CohortsAdmin />
           </TabsContent>

@@ -17,7 +17,8 @@ import { ErrorNote } from "./ui";
 /**
  * Grupe › Lecțiile grupelor (October 2026).
  *
- * The running groups' lessons, read from Google Calendar ("<curs>-L<N>")
+ * The groups' lessons, read from Google Calendar ("<name> lectia N" / "-LN";
+ * the name is set per group in CohortCalendarNames)
  * by admin-registrations: sync_cohort_sessions. Reading is safe and happens on
  * open; adding the remaining lessons to the calendar is a separate button with
  * a preview and a confirmation, because it writes to the owner's calendar.
@@ -35,6 +36,9 @@ interface Result {
   found: number;
   last_lesson: { number: number; starts_at: string } | null;
   missing_meetings: boolean;
+  /** Started, yet no lesson in the calendar matched the name. */
+  name_not_found?: boolean;
+  start_date?: string;
   /** Guests of the group's latest lesson; the new lessons invite them too. */
   guests?: string[];
   plan: Planned[];
@@ -173,6 +177,12 @@ const CohortSessionsAdmin = () => {
                 {busy === r.cohort_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                 Sincronizează doar grupa asta
               </button>
+              {r.name_not_found && (
+                <p className="rounded-xl bg-admin-warn-bg px-3 py-2 text-sm text-admin-warn-fg">
+                  Grupa a început, dar nicio lecție din calendar nu are numele „{r.calendar_title}”. Verifică numele mai jos
+                  — până atunci nu se creează nimic, ca să nu dubleze lecțiile reale.
+                </p>
+              )}
               {r.missing_meetings && (
                 <p className="text-sm text-admin-warn-fg">Grupa nu are zilele și orele setate, așa că nu pot plănui restul.</p>
               )}
