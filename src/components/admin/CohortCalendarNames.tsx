@@ -2,20 +2,23 @@ import { useCallback, useEffect, useState } from "react";
 import { Loader2, Save, Trash2 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { getCurriculum } from "@/data/curriculum";
+import { commonCalendarName } from "../../../supabase/functions/_shared/cohort-sessions";
 import { ErrorNote } from "./ui";
 
 /**
  * Grupe › Numele grupelor în calendar (October 2026).
  *
  * The owner names each group once, the way he writes it in Google Calendar —
- * "Curs online A1 - Grupa 1" (the common structure, one click from the group
- * number) — whatever the group is called on the website. Lessons titled
+ * "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1" (the common
+ * structure, one click from the group number) — whatever the group is called on the website. Lessons titled
  * "<that name> - L<N>" are then synced and new ones created with it. Changing
  * the name of a group with lessons renames them in Google Calendar quietly
  * (rename_cohort_events, no invitations). Stored in cohort_calendar.
  */
 interface Group {
   id: string;
+  form_type?: string | null;
+  age_category?: string | null;
   level: string | null;
   format: string | null;
   start_date: string;
@@ -128,8 +131,8 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
       <div>
         <h2 className="font-display text-2xl font-semibold">Numele grupelor în calendar</h2>
         <p className="text-sm text-muted-foreground">
-          Numele cu care grupa apare în Google Calendar. Structura comună: „Curs online A1 - Grupa 1”, iar lecțiile devin
-          „Curs online A1 - Grupa 1 - L13”. Scrie numărul grupei și apasă „Structura comună”, sau scrie numele tău. Se
+          Numele cu care grupa apare în Google Calendar. Structura comună: „Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1”,
+          iar lecțiile devin „… - Grupa 1 - L13”. Scrie numărul grupei și apasă „Structura comună”, sau scrie numele tău. Se
           sincronizează doar lecțiile cu acest nume urmat de numărul lecției; nu contează cum se numește grupa pe site.
         </p>
       </div>
@@ -175,7 +178,12 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                     ...x,
                     [g.id]: {
                       ...d,
-                      title: `Curs ${g.format === "online" ? "online" : "fizic"} ${g.level ?? ""} - Grupa ${d.grupa}`.replace(/\s+/g, " "),
+                      title: commonCalendarName({
+                        kids: g.form_type === "kids" || /copii|kids|child/i.test(g.age_category ?? ""),
+                        format: g.format,
+                        level: g.level,
+                        grupa: d.grupa,
+                      }),
                     },
                   }))
                 }
@@ -188,7 +196,7 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                 <input
                   value={d.title}
                   onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, title: e.target.value } }))}
-                  placeholder="ex. curs online a1, grupa 1"
+                  placeholder="ex. Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1"
                   className="h-11 rounded-xl border border-input bg-background px-3 text-base text-foreground"
                 />
               </label>

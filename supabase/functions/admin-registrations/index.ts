@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { GCAL_GATEWAY, gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
-import { lessonNumber, normTitle, planRemaining, titleForLesson, type Meeting } from "../_shared/cohort-sessions.ts";
+import { lessonNumber, normTitle, planMissing, titleForLesson, type Meeting } from "../_shared/cohort-sessions.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -1166,9 +1166,9 @@ Deno.serve(async (req) => {
     if (action === "list_cohort_calendar") {
       const { data: groups, error: gErr } = await supabase
         .from("group_cohorts")
-        .select("id, level, format, start_date, status, title_ro, schedule_label_ro, session_count")
+        .select("id, form_type, age_category, level, format, start_date, status, title_ro, schedule_label_ro, session_count")
         .eq("is_active", true)
-        .eq("form_type", "group")
+        .in("form_type", ["group", "kids"])
         .not("status", "in", '("completed","cancelled")')
         .order("start_date", { ascending: true });
       if (gErr) throw gErr;
@@ -1268,7 +1268,8 @@ Deno.serve(async (req) => {
      * for the rest always starts after the last lesson actually there.
      *
      * add_remaining: false = read only (and return the plan as a preview);
-     * true = also create the planned events, for one group (cohort_id) or all.
+     * true = also create the planned events, for one group (cohort_id) or all;
+     * lesson_numbers / lesson_limit narrow that to some lessons or the next N.
      * The new lessons invite the guests of the group's latest lesson plus any
      * extra_guests (a student who just joined), with Google's usual invite.
      */
@@ -1277,6 +1278,11 @@ Deno.serve(async (req) => {
       const onlyCohort = typeof body.cohort_id === "string" ? body.cohort_id : null;
       // Extra people to invite to the new lessons (a student who just joined),
       // on top of the guests already on the group's latest lesson.
+      // Add only some of the missing lessons: these numbers, or the next N.
+      const lessonNumbers: number[] = Array.isArray(body.lesson_numbers)
+        ? (body.lesson_numbers as unknown[]).filter((n): n is number => Number.isInteger(n) && (n as number) > 0).slice(0, 300)
+        : [];
+      const lessonLimit = Number.isInteger(body.lesson_limit) && body.lesson_limit > 0 ? (body.lesson_limit as number) : 0;
       const extraGuests: string[] = Array.isArray(body.extra_guests)
         ? (body.extra_guests as unknown[])
             .filter((e): e is string => typeof e === "string")
@@ -1411,22 +1417,33 @@ Deno.serve(async (req) => {
                   end_time: c.end_time as string,
                 }))
               : [];
-        // After the last lesson in the calendar; for a group with none yet,
-        // from its start date, lesson 1.
-        const dayBefore = (d: string) => new Date(Date.parse(`${d}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+        // Every missing lesson on its own slot, so lessons can be added one,
+        // four or all at a time and each keeps its date (planMissing). For a
+        // group with none yet, from its start date, lesson 1.
         // Never plan a started group from lesson 1: finding none of its lessons
         // means the name does not match the calendar, and creating L1… again
         // would duplicate the real ones.
         const todayLocal = localDate(new Date().toISOString());
         const canPlan = total > 0 && (!!last || c.start_date >= todayLocal);
-        const plan = canPlan
-          ? planRemaining({
-              lastNumber: last ? last.n : 0,
-              lastDate: last ? localDate(last.e.start!.dateTime!) : dayBefore(c.start_date),
+        const nowMs = Date.now();
+        const fullPlan = canPlan
+          ? planMissing({
+              lessons: lessons.map(({ e, n }) => ({ n, date: localDate(e.start!.dateTime!) })),
+              pastMax: lessons
+                .filter(({ e }) => Date.parse(e.start!.dateTime!) < nowMs)
+                .reduce((m, { n }) => Math.max(m, n), 0),
               meetings,
               total,
+              startDate: c.start_date,
             })
           : [];
+        // Which of them to add now: specific lessons, the next N, or all.
+        const wanted = lessonNumbers.length
+          ? fullPlan.filter((p) => lessonNumbers.includes(p.lesson_number))
+          : lessonLimit > 0
+            ? fullPlan.slice(0, lessonLimit)
+            : fullPlan;
+        const plan = addRemaining ? wanted : fullPlan;
 
         const created: number[] = [];
         // The group's students: everyone on its latest lesson, plus anyone added now.
@@ -1516,7 +1533,7 @@ Deno.serve(async (req) => {
           name_not_found: !last && c.start_date < todayLocal,
           start_date: c.start_date,
           guests,
-          plan: addRemaining ? [] : plan,
+          plan: addRemaining ? [] : fullPlan,
           created,
         });
       }

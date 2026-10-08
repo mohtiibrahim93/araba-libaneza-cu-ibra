@@ -93,3 +93,52 @@ describe("joining a running group", () => {
     expect(joinClosesAfter(56)).toBe(48);
   });
 });
+
+import { commonCalendarName, planMissing } from "../../supabase/functions/_shared/cohort-sessions";
+
+describe("adding lessons a few at a time", () => {
+  const meetings = [
+    { weekday: 1, start_time: "19:00", end_time: "20:30" },
+    { weekday: 3, start_time: "19:00", end_time: "20:30" },
+  ];
+  const past = Array.from({ length: 11 }, (_, i) => ({ n: i + 1, date: `2026-09-${String(i + 1).padStart(2, "0")}` }));
+  past[10] = { n: 11, date: "2026-10-07" };
+
+  it("plans the same dates whether lessons are added one by one or all at once", () => {
+    const all = planMissing({ lessons: past, pastMax: 11, meetings, total: 32, startDate: "2026-09-02" });
+    expect(all[0]).toMatchObject({ lesson_number: 12, date: "2026-10-12" });
+    // L14 added on its own first: L12 and L13 keep their days, L14 is not planned again.
+    const l14 = all.find((p) => p.lesson_number === 14)!;
+    const after = planMissing({
+      lessons: [...past, { n: 14, date: l14.date }],
+      pastMax: 11,
+      meetings,
+      total: 32,
+      startDate: "2026-09-02",
+    });
+    expect(after.map((p) => p.lesson_number).slice(0, 3)).toEqual([12, 13, 15]);
+    expect(after.find((p) => p.lesson_number === 15)?.date).toBe(all.find((p) => p.lesson_number === 15)?.date);
+  });
+
+  it("plans a new group from its start date", () => {
+    const plan = planMissing({ lessons: [], pastMax: 0, meetings, total: 32, startDate: "2026-11-02" });
+    expect(plan[0]).toMatchObject({ lesson_number: 1, date: "2026-11-02" });
+    expect(plan).toHaveLength(32);
+  });
+});
+
+describe("the common calendar name", () => {
+  it("follows the owner's structure", () => {
+    expect(commonCalendarName({ kids: false, format: "online", level: "A1", grupa: "1" })).toBe(
+      "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1",
+    );
+    expect(commonCalendarName({ kids: true, format: "fizic", level: "A1", grupa: "3" })).toBe(
+      "Curs - Arabă Libaneză - Copii - Fizic - A1 - Grupa 3",
+    );
+  });
+  it("is read back by the sync, lesson number included", () => {
+    expect(lessonNumber("Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1 - L13", "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1")).toBe(13);
+    // Grupa 1 is not Grupa 10.
+    expect(lessonNumber("Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 10 - L3", "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1")).toBeNull();
+  });
+});

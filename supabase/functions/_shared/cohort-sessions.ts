@@ -116,3 +116,56 @@ export function canStillJoin(lessonsDone: number, total: number): boolean {
 export function joinClosesAfter(total: number): number {
   return Math.max(0, total - 8);
 }
+
+/**
+ * The lessons still missing from a group's calendar, each on its own slot of
+ * the weekly pattern — so lessons can be added one at a time, or four, or all,
+ * in any order, and every lesson keeps the same date it would have had.
+ *
+ * The plan starts after the end of the run of lessons that follows the most
+ * recent past lesson (gaps further back are history, not work). Numbers that
+ * already exist in the calendar keep their slot and are left out.
+ */
+export function planMissing(input: {
+  /** Lessons in the calendar: number and local date (YYYY-MM-DD). */
+  lessons: Array<{ n: number; date: string }>;
+  /** Highest lesson number that has already taken place (0 if none). */
+  pastMax: number;
+  meetings: Meeting[];
+  total: number;
+  /** For a group with no lessons yet: its first day. */
+  startDate: string;
+}): PlannedLesson[] {
+  const { lessons, pastMax, meetings, total, startDate } = input;
+  const have = new Set(lessons.map((l) => l.n));
+  let anchor: { n: number; date: string } | null = null;
+  if (lessons.length) {
+    const sorted = [...lessons].sort((a, b) => a.n - b.n || a.date.localeCompare(b.date));
+    for (const l of sorted) {
+      if (l.n >= pastMax && !have.has(l.n + 1)) {
+        anchor = l;
+        break;
+      }
+    }
+    anchor ??= sorted[sorted.length - 1]!;
+  }
+  const dayBefore = new Date(Date.parse(`${startDate}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+  return planRemaining({
+    lastNumber: anchor ? anchor.n : 0,
+    lastDate: anchor ? anchor.date : dayBefore,
+    meetings,
+    total,
+  }).filter((p) => !have.has(p.lesson_number));
+}
+
+/**
+ * The owner's common structure for a group's calendar name (October 2026):
+ * "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1". Lessons add
+ * " - L<N>".
+ */
+export function commonCalendarName(input: { kids: boolean; format: string | null; level: string | null; grupa: string }): string {
+  const where = input.format === "online" ? "Online" : "Fizic";
+  return ["Curs", "Arabă Libaneză", input.kids ? "Copii" : "Adulți", where, input.level ?? "", `Grupa ${input.grupa}`]
+    .filter((p) => p.trim())
+    .join(" - ");
+}

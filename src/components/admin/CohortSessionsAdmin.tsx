@@ -56,10 +56,11 @@ const CohortSessionsAdmin = () => {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   // One group, or "all" of them.
-  const [confirm, setConfirm] = useState<Result | "all" | null>(null);
+  // "all" groups, or one group with the lessons chosen: a list of numbers.
+  const [confirm, setConfirm] = useState<{ r: Result; lessons: Planned[] } | "all" | null>(null);
   const [extra, setExtra] = useState("");
 
-  const sync = useCallback(async (cohortId?: string, addRemaining = false, extraGuests: string[] = []) => {
+  const sync = useCallback(async (cohortId?: string, addRemaining = false, extraGuests: string[] = [], lessonNumbers: number[] = []) => {
     setBusy(cohortId ?? "all");
     setError("");
     try {
@@ -68,6 +69,7 @@ const CohortSessionsAdmin = () => {
         ...(cohortId ? { cohort_id: cohortId } : {}),
         add_remaining: addRemaining,
         ...(extraGuests.length ? { extra_guests: extraGuests } : {}),
+        ...(lessonNumbers.length ? { lesson_numbers: lessonNumbers } : {}),
       });
       if (err || data?.error) throw new Error(data?.error ?? "Sincronizarea a eșuat.");
       const fresh = data?.data ?? [];
@@ -100,6 +102,11 @@ const CohortSessionsAdmin = () => {
   useEffect(() => {
     void sync();
   }, [sync]);
+
+  const ask = (r: Result, lessons: Planned[]) => {
+    setExtra("");
+    setConfirm({ r, lessons });
+  };
 
   return (
     <section className="space-y-4 rounded-[20px] border border-border bg-card p-5 sm:p-6">
@@ -196,30 +203,58 @@ const CohortSessionsAdmin = () => {
                   <p className="text-sm">
                     Mai lipsesc <b>{r.plan.length}</b> lecții, până la Lecția {total}:
                   </p>
-                  <ul className="max-h-40 overflow-y-auto rounded-xl bg-muted/60 px-3 py-2 text-sm tabular-nums">
+                  <ul className="max-h-56 overflow-y-auto rounded-xl bg-muted/60 px-2 py-1 text-sm tabular-nums">
                     {r.plan.map((p) => (
-                      <li key={p.lesson_number} className="flex justify-between gap-2 py-0.5">
-                        <span>Lecția {p.lesson_number}</span>
-                        <span className="text-muted-foreground">
-                          {fmtDay(p.date)} · {p.start_time}–{p.end_time}
+                      <li key={p.lesson_number} className="flex items-center justify-between gap-2 py-0.5 pl-1">
+                        <span>
+                          Lecția {p.lesson_number}{" "}
+                          <span className="text-muted-foreground">
+                            · {fmtDay(p.date)} · {p.start_time}–{p.end_time}
+                          </span>
                         </span>
+                        <button
+                          type="button"
+                          disabled={!!busy}
+                          onClick={() => ask(r, [p])}
+                          aria-label={`Adaugă lecția ${p.lesson_number} în calendar`}
+                          className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-brand-green hover:bg-card disabled:opacity-40 dark:text-primary"
+                        >
+                          <CalendarPlus className="h-3.5 w-3.5" aria-hidden /> Adaugă
+                        </button>
                       </li>
                     ))}
                   </ul>
-                  <button
-                    type="button"
-                    disabled={!!busy}
-                    onClick={() => {
-                      setExtra("");
-                      setConfirm(r);
-                    }}
-                    className={cn(
-                      "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90",
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      disabled={!!busy}
+                      onClick={() => ask(r, r.plan.slice(0, 1))}
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-brand-green px-4 text-sm font-semibold text-brand-green hover:bg-accent dark:border-primary dark:text-primary"
+                    >
+                      Adaugă următoarea lecție (L{r.plan[0]?.lesson_number})
+                    </button>
+                    {r.plan.length >= 4 && (
+                      <button
+                        type="button"
+                        disabled={!!busy}
+                        onClick={() => ask(r, r.plan.slice(0, 4))}
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-brand-green px-4 text-sm font-semibold text-brand-green hover:bg-accent dark:border-primary dark:text-primary"
+                      >
+                        Adaugă următoarele 4 lecții (L{r.plan[0]?.lesson_number}–L{r.plan[3]?.lesson_number})
+                      </button>
                     )}
-                  >
-                    {busy === r.cohort_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
-                    Adaugă-le în Google Calendar
-                  </button>
+                    <button
+                      type="button"
+                      disabled={!!busy}
+                      onClick={() => ask(r, r.plan)}
+                      className={cn(
+                        "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90",
+                      )}
+                    >
+                      {busy === r.cohort_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
+                      Adaugă toate cele {r.plan.length} lecții
+                    </button>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     {r.guests?.length
                       ? `Invitați: ${r.guests.length} (din ultima lecție), plus cine adaugi tu.`
@@ -252,11 +287,18 @@ const CohortSessionsAdmin = () => {
           ) : (
             confirm && (
               <AlertDialogHeader>
-                <AlertDialogTitle>Adaugi {confirm.plan.length} lecții în calendar?</AlertDialogTitle>
+                <AlertDialogTitle>
+                  {confirm.lessons.length === 1
+                    ? `Adaugi lecția ${confirm.lessons[0]?.lesson_number} în calendar?`
+                    : `Adaugi ${confirm.lessons.length} lecții în calendar?`}
+                </AlertDialogTitle>
                 <AlertDialogDescription>
-                  {confirm.calendar_title}, lecțiile {confirm.plan[0]?.lesson_number}–
-                  {confirm.plan[confirm.plan.length - 1]?.lesson_number}, în zilele și orele grupei, cu același loc și același
-                  link ca ultima lecție. {confirm.guests?.length ? `Primesc invitație cei ${confirm.guests.length} invitați ai ultimei lecții` : "Ultima lecție nu are invitați"}
+                  {confirm.r.calendar_title},{" "}
+                  {confirm.lessons.length === 1
+                    ? `${fmtDay(confirm.lessons[0]!.date)} · ${confirm.lessons[0]!.start_time}–${confirm.lessons[0]!.end_time}`
+                    : `lecțiile ${confirm.lessons[0]?.lesson_number}–${confirm.lessons[confirm.lessons.length - 1]?.lesson_number}, în zilele și orele grupei`}
+                  , cu același loc și același link ca ultima lecție.{" "}
+                  {confirm.r.guests?.length ? `Primesc invitație cei ${confirm.r.guests.length} invitați ai ultimei lecții` : "Ultima lecție nu are invitați"}
                   {" "}și cine scrii mai jos. Le poți muta sau șterge oricând din Google Calendar.
                 </AlertDialogDescription>
                 <label className="mt-2 flex flex-col gap-1.5 text-sm font-semibold">
@@ -283,7 +325,13 @@ const CohortSessionsAdmin = () => {
                   .map((e) => e.replace(/^mailto:/i, "").trim())
                   .filter(Boolean);
                 if (c === "all") void sync(undefined, true);
-                else if (c) void sync(c.cohort_id, true, emails);
+                else if (c)
+                  void sync(
+                    c.r.cohort_id,
+                    true,
+                    emails,
+                    c.lessons.length === c.r.plan.length ? [] : c.lessons.map((l) => l.lesson_number),
+                  );
               }}
             >
               Adaugă
