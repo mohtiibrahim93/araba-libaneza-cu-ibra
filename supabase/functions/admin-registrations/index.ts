@@ -10,6 +10,7 @@ import {
 } from "../_shared/refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
 
 function jsonResponseWith(cors: Record<string, string>) {
@@ -121,6 +122,10 @@ Deno.serve(async (req) => {
     if (action === "get_private_status") {
       if (typeof id !== "string") {
         return jsonResponse({ error: "Cerere invalidă" });
+      }
+      // Public status page: only a server-signed link may read the status.
+      if (!(await verifyRegistrationSignature(id, body?.sig))) {
+        return jsonResponse({ error: "Cererea nu a fost găsită" });
       }
 
       const { data: registration, error: registrationError } = await supabase
