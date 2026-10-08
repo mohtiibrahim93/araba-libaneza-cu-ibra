@@ -9,7 +9,7 @@ import { canStillJoin, joinClosesAfter } from "../../supabase/functions/_shared/
  * "Grupe în desfășurare" on a level page (October 2026).
  *
  * A running group's progress, from cohort_sessions — the owner's own calendar,
- * synced in the admin: which lesson it is on, the next dates, and the whole
+ * synced in the admin (course length from cohort_calendar): which lesson it is on, the next dates, and the whole
  * calendar on request. Only dates and lesson numbers are public; no names, no
  * meeting links.
  *
@@ -30,7 +30,7 @@ interface RunningCohort {
   id: string;
   level: string | null;
   format: string | null;
-  total_lessons: number | null;
+  cohort_calendar: { total_lessons: number } | Array<{ total_lessons: number }> | null;
   schedule_label_ro: string | null;
   schedule_label_en: string | null;
 }
@@ -95,7 +95,7 @@ const RunningGroups = ({ level, defaultTotal, className = "" }: { level: string;
     void (async () => {
       const { data: cs, error } = await db()
         .from("group_cohorts")
-        .select("id, level, format, total_lessons, schedule_label_ro, schedule_label_en")
+        .select("id, level, format, schedule_label_ro, schedule_label_en, cohort_calendar(total_lessons)")
         .eq("level", level)
         .eq("status", "in_progress");
       if (error || !cs?.length || cancelled) return;
@@ -130,7 +130,8 @@ const RunningGroups = ({ level, defaultTotal, className = "" }: { level: string;
         {shown.map((g) => {
           const mine = sessions.filter((s) => s.cohort_id === g.id);
           const done = mine.filter((s) => Date.parse(s.ends_at) <= now).reduce((m, s) => Math.max(m, s.lesson_number), 0);
-          const total = g.total_lessons ?? defaultTotal;
+          const link = Array.isArray(g.cohort_calendar) ? g.cohort_calendar[0] : g.cohort_calendar;
+          const total = link?.total_lessons ?? defaultTotal;
           const upcoming = mine.filter((s) => Date.parse(s.ends_at) > now);
           const pct = Math.min(100, Math.round((done / total) * 100));
           const label = lang === "en" ? g.schedule_label_en : g.schedule_label_ro;

@@ -35,6 +35,8 @@ interface Result {
   found: number;
   last_lesson: { number: number; starts_at: string } | null;
   missing_meetings: boolean;
+  /** Guests of the group's latest lesson; the new lessons invite them too. */
+  guests?: string[];
   plan: Planned[];
   created: number[];
 }
@@ -49,9 +51,11 @@ const CohortSessionsAdmin = () => {
   const [rows, setRows] = useState<Result[] | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
-  const [confirm, setConfirm] = useState<Result | null>(null);
+  // One group, or "all" of them.
+  const [confirm, setConfirm] = useState<Result | "all" | null>(null);
+  const [extra, setExtra] = useState("");
 
-  const sync = useCallback(async (cohortId?: string, addRemaining = false) => {
+  const sync = useCallback(async (cohortId?: string, addRemaining = false, extraGuests: string[] = []) => {
     setBusy(cohortId ?? "all");
     setError("");
     try {
@@ -59,6 +63,7 @@ const CohortSessionsAdmin = () => {
         action: "sync_cohort_sessions",
         ...(cohortId ? { cohort_id: cohortId } : {}),
         add_remaining: addRemaining,
+        ...(extraGuests.length ? { extra_guests: extraGuests } : {}),
       });
       if (err || data?.error) throw new Error(data?.error ?? "Sincronizarea a eșuat.");
       const fresh = data?.data ?? [];
@@ -66,10 +71,19 @@ const CohortSessionsAdmin = () => {
         cohortId && prev ? prev.map((r) => fresh.find((f) => f.cohort_id === r.cohort_id) ?? r) : fresh,
       );
       // After adding, read again so the preview reflects what is now there.
-      if (addRemaining && cohortId) {
-        const again = await invokeAdmin<{ data?: Result[] }>({ action: "sync_cohort_sessions", cohort_id: cohortId });
-        const r = again.data?.data?.[0];
-        if (r) setRows((prev) => prev?.map((x) => (x.cohort_id === r.cohort_id ? { ...r, created: fresh[0]?.created ?? [] } : x)) ?? null);
+      if (addRemaining) {
+        const again = await invokeAdmin<{ data?: Result[] }>({
+          action: "sync_cohort_sessions",
+          ...(cohortId ? { cohort_id: cohortId } : {}),
+        });
+        const reread = again.data?.data ?? [];
+        setRows((prev) =>
+          (prev ?? []).map((x) => {
+            const r = reread.find((y) => y.cohort_id === x.cohort_id);
+            const made = fresh.find((y) => y.cohort_id === x.cohort_id)?.created ?? [];
+            return r ? { ...r, created: made } : x;
+          }),
+        );
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Sincronizarea a eșuat.");
@@ -93,15 +107,27 @@ const CohortSessionsAdmin = () => {
             la următoarea sincronizare.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => void sync()}
-          disabled={!!busy}
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-4 font-semibold hover:bg-muted"
-        >
-          {busy === "all" ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          Sincronizează
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => void sync()}
+            disabled={!!busy}
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-4 font-semibold hover:bg-muted"
+          >
+            {busy === "all" ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+            Sincronizează toate
+          </button>
+          {(rows ?? []).filter((r) => r.plan.length > 0).length > 1 && (
+            <button
+              type="button"
+              onClick={() => setConfirm("all")}
+              disabled={!!busy}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90"
+            >
+              <CalendarPlus className="h-4 w-4" /> Adaugă la toate
+            </button>
+          )}
+        </div>
       </div>
 
       {error && <ErrorNote>{error}</ErrorNote>}
@@ -138,6 +164,15 @@ const CohortSessionsAdmin = () => {
                   </p>
                 </div>
               )}
+              <button
+                type="button"
+                onClick={() => void sync(r.cohort_id)}
+                disabled={!!busy}
+                className="inline-flex min-h-10 items-center gap-2 self-start rounded-xl border border-border px-3 text-sm font-semibold hover:bg-muted"
+              >
+                {busy === r.cohort_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                Sincronizează doar grupa asta
+              </button>
               {r.missing_meetings && (
                 <p className="text-sm text-admin-warn-fg">Grupa nu are zilele și orele setate, așa că nu pot plănui restul.</p>
               )}
@@ -164,7 +199,10 @@ const CohortSessionsAdmin = () => {
                   <button
                     type="button"
                     disabled={!!busy}
-                    onClick={() => setConfirm(r)}
+                    onClick={() => {
+                      setExtra("");
+                      setConfirm(r);
+                    }}
                     className={cn(
                       "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90",
                     )}
@@ -172,6 +210,11 @@ const CohortSessionsAdmin = () => {
                     {busy === r.cohort_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
                     Adaugă-le în Google Calendar
                   </button>
+                  <p className="text-xs text-muted-foreground">
+                    {r.guests?.length
+                      ? `Invitați: ${r.guests.length} (din ultima lecție), plus cine adaugi tu.`
+                      : "Ultima lecție nu are invitați; poți adăuga emailuri la pasul următor."}
+                  </p>
                 </>
               ) : (
                 total > 0 &&
@@ -184,22 +227,53 @@ const CohortSessionsAdmin = () => {
 
       <AlertDialog open={!!confirm} onOpenChange={(o) => !o && setConfirm(null)}>
         <AlertDialogContent className="admin-theme">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Adaugi {confirm?.plan.length} lecții în calendar?</AlertDialogTitle>
-            <AlertDialogDescription>
-              „{confirm?.calendar_title} – Lecția {confirm?.plan[0]?.lesson_number}” până la Lecția{" "}
-              {confirm?.plan[confirm.plan.length - 1]?.lesson_number}, în zilele și orele grupei, cu același loc și același
-              link de întâlnire ca ultima lecție. Nu se trimite nicio invitație. Le poți muta sau șterge oricând din Google
-              Calendar.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+          {confirm === "all" ? (
+            <AlertDialogHeader>
+              <AlertDialogTitle>Adaugi lecțiile lipsă la toate grupele?</AlertDialogTitle>
+              <AlertDialogDescription>
+                {(rows ?? [])
+                  .filter((r) => r.plan.length)
+                  .map((r) => `${r.calendar_title}: ${r.plan.length}`)
+                  .join(" · ")}
+                . Fiecare lecție are aceleași zile și ore ca grupa, același loc și link ca ultima lecție, iar invitații ultimei
+                lecții primesc invitația obișnuită de la Google.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+          ) : (
+            confirm && (
+              <AlertDialogHeader>
+                <AlertDialogTitle>Adaugi {confirm.plan.length} lecții în calendar?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {confirm.calendar_title}, lecțiile {confirm.plan[0]?.lesson_number}–
+                  {confirm.plan[confirm.plan.length - 1]?.lesson_number}, în zilele și orele grupei, cu același loc și același
+                  link ca ultima lecție. {confirm.guests?.length ? `Primesc invitație cei ${confirm.guests.length} invitați ai ultimei lecții` : "Ultima lecție nu are invitați"}
+                  {" "}și cine scrii mai jos. Le poți muta sau șterge oricând din Google Calendar.
+                </AlertDialogDescription>
+                <label className="mt-2 flex flex-col gap-1.5 text-sm font-semibold">
+                  Invitați în plus (un cursant nou), câte un email pe rând
+                  <textarea
+                    rows={2}
+                    value={extra}
+                    onChange={(e) => setExtra(e.target.value)}
+                    placeholder="nume@exemplu.ro"
+                    className="rounded-xl border border-input bg-background px-3 py-2 text-sm font-normal"
+                  />
+                </label>
+              </AlertDialogHeader>
+            )
+          )}
           <AlertDialogFooter>
             <AlertDialogCancel>Anulează</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 const c = confirm;
                 setConfirm(null);
-                if (c) void sync(c.cohort_id, true);
+                const emails = extra
+                  .split(/[\s,;]+/)
+                  .map((e) => e.replace(/^mailto:/i, "").trim())
+                  .filter(Boolean);
+                if (c === "all") void sync(undefined, true);
+                else if (c) void sync(c.cohort_id, true, emails);
               }}
             >
               Adaugă

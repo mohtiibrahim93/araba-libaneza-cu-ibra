@@ -1148,12 +1148,22 @@ Deno.serve(async (req) => {
      * for the rest always starts after the last lesson actually there.
      *
      * add_remaining: false = read only (and return the plan as a preview);
-     * true = also create the planned events. Nobody is invited and no email
-     * goes out: the new events are the owner's own, like the ones he typed.
+     * true = also create the planned events, for one group (cohort_id) or all.
+     * The new lessons invite the guests of the group's latest lesson plus any
+     * extra_guests (a student who just joined), with Google's usual invite.
      */
     if (action === "sync_cohort_sessions") {
       const addRemaining = body.add_remaining === true;
       const onlyCohort = typeof body.cohort_id === "string" ? body.cohort_id : null;
+      // Extra people to invite to the new lessons (a student who just joined),
+      // on top of the guests already on the group's latest lesson.
+      const extraGuests: string[] = Array.isArray(body.extra_guests)
+        ? (body.extra_guests as unknown[])
+            .filter((e): e is string => typeof e === "string")
+            .map((e) => e.trim().toLowerCase())
+            .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254)
+            .slice(0, 30)
+        : [];
       const lovableKey = Deno.env.get("LOVABLE_API_KEY");
       const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
       if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
@@ -1163,14 +1173,21 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
       };
 
-      let cq = supabase
+      // Running groups that have a calendar name (cohort_calendar).
+      let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons");
+      if (onlyCohort) lq = lq.eq("cohort_id", onlyCohort);
+      const { data: links, error: lErr } = await lq;
+      if (lErr) throw lErr;
+      const { data: running, error: cErr } = await supabase
         .from("group_cohorts")
-        .select("id, level, format, start_date, end_date, calendar_title, total_lessons, status")
-        .not("calendar_title", "is", null)
+        .select("id, start_date, status")
+        .in("id", (links ?? []).map((l: { cohort_id: string }) => l.cohort_id))
         .eq("status", "in_progress");
-      if (onlyCohort) cq = cq.eq("id", onlyCohort);
-      const { data: cohorts, error: cErr } = await cq;
       if (cErr) throw cErr;
+      const cohorts = (running ?? []).map((g: { id: string; start_date: string }) => {
+        const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
+        return { id: g.id, start_date: g.start_date, calendar_title: l.calendar_title, total_lessons: l.total_lessons };
+      });
 
       const localDate = (iso: string) =>
         new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest" }).format(new Date(iso));
@@ -1181,7 +1198,16 @@ Deno.serve(async (req) => {
         // Every event of this group, one instance per lesson, oldest first.
         const timeMin = new Date(Date.parse(`${c.start_date}T00:00:00Z`) - 14 * 86_400_000).toISOString();
         const timeMax = new Date(Date.parse(`${c.start_date}T00:00:00Z`) + 2 * 365 * 86_400_000).toISOString();
-        const events: Array<{ id: string; summary?: string; start?: { dateTime?: string }; end?: { dateTime?: string }; location?: string; description?: string; conferenceData?: unknown }> = [];
+        const events: Array<{
+          id: string;
+          summary?: string;
+          start?: { dateTime?: string };
+          end?: { dateTime?: string };
+          location?: string;
+          description?: string;
+          conferenceData?: unknown;
+          attendees?: Array<{ email?: string; self?: boolean; resource?: boolean }>;
+        }> = [];
         let pageToken: string | undefined;
         // Google's search matches words; the plain words of the name find
         // every lesson whatever dashes and spaces the title was typed with.
@@ -1253,6 +1279,15 @@ Deno.serve(async (req) => {
             : [];
 
         const created: number[] = [];
+        // The group's students: everyone on its latest lesson, plus anyone added now.
+        const guests = Array.from(
+          new Set([
+            ...(last?.e.attendees ?? [])
+              .filter((a) => a.email && !a.self && !a.resource)
+              .map((a) => a.email!.toLowerCase()),
+            ...extraGuests,
+          ]),
+        );
         if (addRemaining && last && plan.length) {
           for (const p of plan) {
             const [y, mo, d] = p.date.split("-").map(Number);
@@ -1261,7 +1296,9 @@ Deno.serve(async (req) => {
             const startISO = zonedToUtc(y, mo, d, sh, sm).toISOString();
             const endISO = zonedToUtc(y, mo, d, eh, em).toISOString();
             const res = await fetch(
-              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=none&conferenceDataVersion=1`,
+              // Guests get Google's normal invitation, as they did for the
+              // lessons the owner created by hand.
+              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=${guests.length ? "all" : "none"}&conferenceDataVersion=1`,
               {
                 method: "POST",
                 headers: gHeaders,
@@ -1271,6 +1308,7 @@ Deno.serve(async (req) => {
                   location: last.e.location,
                   description: last.e.description,
                   conferenceData: last.e.conferenceData,
+                  attendees: guests.map((email) => ({ email })),
                   start: { dateTime: startISO, timeZone: "Europe/Bucharest" },
                   end: { dateTime: endISO, timeZone: "Europe/Bucharest" },
                 }),
@@ -1301,6 +1339,7 @@ Deno.serve(async (req) => {
           found: rows.length,
           last_lesson: last ? { number: last.n, starts_at: last.e.start!.dateTime } : null,
           missing_meetings: (meetingRows ?? []).length === 0,
+          guests,
           plan: addRemaining ? [] : plan,
           created,
         });
