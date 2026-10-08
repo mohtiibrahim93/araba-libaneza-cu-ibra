@@ -1,7 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
+import { GCAL_GATEWAY, gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
+import { lessonNumber, normTitle, planRemaining, titleForLesson, type Meeting } from "../_shared/cohort-sessions.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -1137,6 +1138,180 @@ Deno.serve(async (req) => {
      * Read-only, and deliberately bounded — every list has a horizon or a
      * limit, because a worklist that grows without end is a report.
      */
+    // ============ Group lessons from Google Calendar ============
+    /**
+     * Reads the owner's lesson events ("<course> – Lecția N") for each running
+     * group into cohort_sessions, and — only when asked — adds the lessons
+     * still missing to the calendar on the group's weekly pattern, up to the
+     * course's total. The calendar stays the source of truth: a lesson moved
+     * or removed there (a break) is followed on the next sync, and the plan
+     * for the rest always starts after the last lesson actually there.
+     *
+     * add_remaining: false = read only (and return the plan as a preview);
+     * true = also create the planned events. Nobody is invited and no email
+     * goes out: the new events are the owner's own, like the ones he typed.
+     */
+    if (action === "sync_cohort_sessions") {
+      const addRemaining = body.add_remaining === true;
+      const onlyCohort = typeof body.cohort_id === "string" ? body.cohort_id : null;
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      const gHeaders = {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": gcalKey,
+        "Content-Type": "application/json",
+      };
+
+      let cq = supabase
+        .from("group_cohorts")
+        .select("id, level, format, start_date, end_date, calendar_title, total_lessons, status")
+        .not("calendar_title", "is", null)
+        .eq("status", "in_progress");
+      if (onlyCohort) cq = cq.eq("id", onlyCohort);
+      const { data: cohorts, error: cErr } = await cq;
+      if (cErr) throw cErr;
+
+      const localDate = (iso: string) =>
+        new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest" }).format(new Date(iso));
+
+      const results = [];
+      for (const c of cohorts ?? []) {
+        const prefix = c.calendar_title as string;
+        // Every event of this group, one instance per lesson, oldest first.
+        const timeMin = new Date(Date.parse(`${c.start_date}T00:00:00Z`) - 14 * 86_400_000).toISOString();
+        const timeMax = new Date(Date.parse(`${c.start_date}T00:00:00Z`) + 2 * 365 * 86_400_000).toISOString();
+        const events: Array<{ id: string; summary?: string; start?: { dateTime?: string }; end?: { dateTime?: string }; location?: string; description?: string; conferenceData?: unknown }> = [];
+        let pageToken: string | undefined;
+        // Google's search matches words; the plain words of the name find
+        // every lesson whatever dashes and spaces the title was typed with.
+        const q = normTitle(prefix);
+        do {
+          const qs = new URLSearchParams({
+            q,
+            singleEvents: "true",
+            orderBy: "startTime",
+            timeMin,
+            timeMax,
+            maxResults: "250",
+          });
+          if (pageToken) qs.set("pageToken", pageToken);
+          const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+          const page = await res.json();
+          if (!res.ok) {
+            console.error("[sync_cohort_sessions] list failed", res.status, page);
+            return jsonResponse({ error: `Google Calendar a refuzat citirea (${res.status}).` });
+          }
+          events.push(...(page.items ?? []));
+          pageToken = page.nextPageToken;
+        } while (pageToken);
+
+        const lessons = events
+          .map((e) => ({ e, n: lessonNumber(e.summary, prefix) }))
+          .filter((x): x is { e: (typeof events)[number]; n: number } =>
+            x.n !== null && !!x.e.start?.dateTime && !!x.e.end?.dateTime,
+          );
+
+        const rows = lessons.map(({ e, n }) => ({
+          cohort_id: c.id,
+          lesson_number: n,
+          starts_at: new Date(e.start!.dateTime!).toISOString(),
+          ends_at: new Date(e.end!.dateTime!).toISOString(),
+          google_event_id: e.id,
+          synced_at: new Date().toISOString(),
+        }));
+        if (rows.length) {
+          const { error: upErr } = await supabase
+            .from("cohort_sessions")
+            .upsert(rows, { onConflict: "google_event_id" });
+          if (upErr) throw upErr;
+        }
+        // Lessons removed from the calendar (a break, a cancellation) leave here too.
+        const keep = rows.map((r) => r.google_event_id);
+        let del = supabase.from("cohort_sessions").delete().eq("cohort_id", c.id);
+        if (keep.length) del = del.not("google_event_id", "in", `(${keep.map((k) => `"${k}"`).join(",")})`);
+        const { error: delErr } = await del;
+        if (delErr) throw delErr;
+
+        const last = lessons.reduce<(typeof lessons)[number] | null>(
+          (a, b) => (!a || b.n > a.n || (b.n === a.n && b.e.start!.dateTime! > a.e.start!.dateTime!) ? b : a),
+          null,
+        );
+        const { data: meetingRows } = await supabase
+          .from("cohort_meetings")
+          .select("weekday, start_time, end_time")
+          .eq("cohort_id", c.id);
+        const total = (c.total_lessons as number | null) ?? 0;
+        const plan =
+          last && total
+            ? planRemaining({
+                lastNumber: last.n,
+                lastDate: localDate(last.e.start!.dateTime!),
+                meetings: (meetingRows ?? []) as Meeting[],
+                total,
+              })
+            : [];
+
+        const created: number[] = [];
+        if (addRemaining && last && plan.length) {
+          for (const p of plan) {
+            const [y, mo, d] = p.date.split("-").map(Number);
+            const [sh, sm] = p.start_time.split(":").map(Number);
+            const [eh, em] = p.end_time.split(":").map(Number);
+            const startISO = zonedToUtc(y, mo, d, sh, sm).toISOString();
+            const endISO = zonedToUtc(y, mo, d, eh, em).toISOString();
+            const res = await fetch(
+              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=none&conferenceDataVersion=1`,
+              {
+                method: "POST",
+                headers: gHeaders,
+                body: JSON.stringify({
+                  summary: titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number),
+                  // Same place and the same meeting link as the group's last lesson.
+                  location: last.e.location,
+                  description: last.e.description,
+                  conferenceData: last.e.conferenceData,
+                  start: { dateTime: startISO, timeZone: "Europe/Bucharest" },
+                  end: { dateTime: endISO, timeZone: "Europe/Bucharest" },
+                }),
+              },
+            );
+            const ev = await res.json();
+            if (!res.ok) {
+              console.error("[sync_cohort_sessions] create failed", res.status, ev);
+              break;
+            }
+            const { error: insErr } = await supabase.from("cohort_sessions").insert({
+              cohort_id: c.id,
+              lesson_number: p.lesson_number,
+              starts_at: startISO,
+              ends_at: endISO,
+              google_event_id: ev.id,
+              source: "generated",
+            });
+            if (insErr) throw insErr;
+            created.push(p.lesson_number);
+          }
+        }
+
+        results.push({
+          cohort_id: c.id,
+          calendar_title: prefix,
+          total_lessons: total || null,
+          found: rows.length,
+          last_lesson: last ? { number: last.n, starts_at: last.e.start!.dateTime } : null,
+          missing_meetings: (meetingRows ?? []).length === 0,
+          plan: addRemaining ? [] : plan,
+          created,
+        });
+      }
+
+      console.log("[sync_cohort_sessions]", callerEmail, addRemaining ? "add_remaining" : "read",
+        results.map((r) => `${r.calendar_title}: ${r.found} found, ${r.created.length} created`).join("; "));
+
+      return jsonResponse({ data: results });
+    }
+
     if (action === "list_today") {
       const now = Date.now();
       // "Today" starts at local midnight in Bucharest, not UTC midnight: at

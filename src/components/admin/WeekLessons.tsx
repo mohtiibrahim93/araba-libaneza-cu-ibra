@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, MapPin, RefreshCw, Video } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { ErrorNote } from "./ui";
 
@@ -8,7 +9,9 @@ import { ErrorNote } from "./ui";
  * Program › Săptămâna (October 2026 redesign): the booked lessons laid out on
  * the week, so a free afternoon or a crowded Thursday shows at a glance. Same
  * data as "Toate lecțiile" (list_bookings), read-only; cancelling and the rest
- * stay there. Group classes are not bookings, so they are not drawn here.
+ * stay there. Group lessons come from cohort_sessions — the owner's own
+ * calendar events, read in by the Grupe › Lecțiile grupelor sync — and are
+ * drawn alongside, as "L15" of their group.
  */
 interface Booking {
   id: string;
@@ -22,6 +25,31 @@ interface Booking {
   google_sync_error: string | null;
   google_event_id: string | null;
 }
+
+interface GroupLesson {
+  id: string;
+  lesson_number: number;
+  starts_at: string;
+  ends_at: string;
+  group_cohorts: { level: string | null; format: string | null; calendar_title: string | null } | null;
+}
+
+// cohort_sessions is newer than the generated Supabase types; public read (RLS).
+const sessionsTable = () =>
+  (supabase as unknown as {
+    from: (t: string) => {
+      select: (c: string) => {
+        gte: (k: string, v: string) => {
+          lt: (k: string, v: string) => Promise<{ data: GroupLesson[] | null; error: unknown }>;
+        };
+      };
+    };
+  }).from("cohort_sessions");
+
+const groupName = (g: GroupLesson) =>
+  [g.group_cohorts?.level, g.group_cohorts?.format === "online" ? "online" : g.group_cohorts?.format ? "la centru" : null]
+    .filter(Boolean)
+    .join(" · ") || "Grupă";
 
 const TZ = "Europe/Bucharest";
 const HOUR_PX = 52;
@@ -81,6 +109,7 @@ const WeekLessons = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [groupLessons, setGroupLessons] = useState<GroupLesson[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -103,6 +132,27 @@ const WeekLessons = () => {
   }, [load]);
 
   const days = useMemo(() => weekKeys(offset), [offset]);
+
+  useEffect(() => {
+    let cancelled = false;
+    // A day either side of the week, so time zones never cut a lesson off.
+    const from = new Date(Date.parse(`${days[0]}T00:00:00Z`) - 86_400_000).toISOString();
+    const to = new Date(Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86_400_000).toISOString();
+    void sessionsTable()
+      .select("id, lesson_number, starts_at, ends_at, group_cohorts(level, format, calendar_title)")
+      .gte("starts_at", from)
+      .lt("starts_at", to)
+      .then(({ data }) => !cancelled && setGroupLessons(data ?? []));
+    return () => {
+      cancelled = true;
+    };
+  }, [days]);
+
+  const groupsByDay = useMemo(() => {
+    const map = new Map<string, GroupLesson[]>(days.map((d) => [d, []]));
+    for (const g of groupLessons) map.get(parts(new Date(g.starts_at)).key)?.push(g);
+    return map;
+  }, [groupLessons, days]);
   const today = parts(new Date()).key;
 
   const byDay = useMemo(() => {
@@ -117,8 +167,17 @@ const WeekLessons = () => {
   }, [rows, days]);
 
   const all = [...byDay.values()].flat();
-  const startHour = Math.min(9, ...all.map((b) => parts(new Date(b.start_at)).hour));
-  const endHour = Math.max(20, ...all.map((b) => parts(new Date(b.end_at)).hour + 1));
+  const allGroups = [...groupsByDay.values()].flat();
+  const startHour = Math.min(
+    9,
+    ...all.map((b) => parts(new Date(b.start_at)).hour),
+    ...allGroups.map((g) => parts(new Date(g.starts_at)).hour),
+  );
+  const endHour = Math.max(
+    20,
+    ...all.map((b) => parts(new Date(b.end_at)).hour + 1),
+    ...allGroups.map((g) => parts(new Date(g.ends_at)).hour + 1),
+  );
   const hours = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
 
   const dayNum = (k: string) => Number(k.slice(8));
@@ -157,8 +216,9 @@ const WeekLessons = () => {
         </button>
         <span className="ml-1 font-bold">{range}</span>
         <span className="text-sm text-muted-foreground">
-          · {all.length} {all.length === 1 ? "lecție" : "lecții"}
+          · {all.length} {all.length === 1 ? "lecție rezervată" : "lecții rezervate"}
           {free ? `, ${free} gratuite` : ""}
+          {allGroups.length ? ` · ${allGroups.length} de grupă` : ""}
         </span>
         <button
           type="button"
@@ -184,6 +244,7 @@ const WeekLessons = () => {
           <div className="space-y-4 sm:hidden">
             {days.map((k, i) => {
               const list = byDay.get(k) ?? [];
+              const groups = groupsByDay.get(k) ?? [];
               return (
                 <section key={k} className="space-y-2">
                   <h3
@@ -195,10 +256,23 @@ const WeekLessons = () => {
                     {DAY_NAMES[i]} {dayNum(k)}
                     {k === today ? " · azi" : ""}
                   </h3>
-                  {list.length === 0 ? (
+                  {list.length === 0 && groups.length === 0 ? (
                     <p className="text-sm text-muted-foreground">Nicio lecție.</p>
                   ) : (
-                    list.map((b) => <AgendaRow key={b.id} b={b} />)
+                    <>
+                      {groups.map((g) => (
+                        <div key={g.id} className="flex gap-3">
+                          <span className="w-12 shrink-0 pt-3.5 font-bold tabular-nums">{time(g.starts_at)}</span>
+                          <div className="flex-1 rounded-2xl bg-admin-info-bg p-3.5 text-admin-info-fg">
+                            <p className="font-bold">Grupa {groupName(g)}</p>
+                            <p className="text-[0.8125rem]">Lecția {g.lesson_number}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {list.map((b) => (
+                        <AgendaRow key={b.id} b={b} />
+                      ))}
+                    </>
                   )}
                 </section>
               );
@@ -246,6 +320,25 @@ const WeekLessons = () => {
                       style={{ top: (12 - startHour) * HOUR_PX + 2, height: HOUR_PX - 4 }}
                     />
                   )}
+                  {(groupsByDay.get(k) ?? []).map((g) => {
+                    const s = parts(new Date(g.starts_at));
+                    const e = parts(new Date(g.ends_at));
+                    const top = (s.hour - startHour + s.minute / 60) * HOUR_PX;
+                    const mins = Math.max(50, (e.hour - s.hour) * 60 + (e.minute - s.minute));
+                    return (
+                      <div
+                        key={g.id}
+                        title={`${time(g.starts_at)} Grupa ${groupName(g)} · Lecția ${g.lesson_number}`}
+                        className="absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] bg-admin-info-fg px-2 py-1 text-[0.8125rem] leading-tight text-white dark:bg-admin-info-bg dark:text-admin-info-fg"
+                        style={{ top: top + 2, height: (mins / 60) * HOUR_PX - 4 }}
+                      >
+                        <b className="truncate">
+                          {time(g.starts_at)} {groupName(g)}
+                        </b>
+                        <span className="truncate opacity-90">Lecția {g.lesson_number}</span>
+                      </div>
+                    );
+                  })}
                   {(byDay.get(k) ?? []).map((b) => {
                     const s = parts(new Date(b.start_at));
                     const e = parts(new Date(b.end_at));
@@ -283,6 +376,9 @@ const WeekLessons = () => {
             <div className="flex flex-wrap gap-4 px-1 pt-3 text-[0.8125rem] text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="h-3 w-3 rounded bg-brand-green" /> Lecție plătită
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-3 w-3 rounded bg-admin-info-fg" /> Grupă
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="h-3 w-3 rounded border border-brand-green bg-accent" /> Probă / verificare nivel (gratuit)

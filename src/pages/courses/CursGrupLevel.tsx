@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import { useGroupCohorts } from "@/hooks/useGroupCohorts";
+import RunningGroups from "@/components/RunningGroups";
 import { useI18n } from "@/lib/i18n";
 import { getCurriculum } from "@/data/curriculum";
 import { ONLINE_PRICES, physicalPrice, formatLei } from "@/lib/pricing";
@@ -293,6 +294,7 @@ const CursGrupLevel = () => {
             </div>
           </div>
           {available && <GroupStartRule className="mt-4" />}
+          <RunningGroups level={upperLevel} defaultTotal={curriculum.lessons} className="mt-6" />
         </section>
 
         {/* Body: curriculum + form */}

@@ -48,6 +48,7 @@ import AdminShell, { type AdminSection } from "@/components/admin/AdminShell";
 import AdminSearch from "@/components/admin/AdminSearch";
 import PersonSheet from "@/components/admin/PersonSheet";
 import WeekLessons from "@/components/admin/WeekLessons";
+import CohortSessionsAdmin from "@/components/admin/CohortSessionsAdmin";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
@@ -1029,6 +1030,7 @@ const Admin = () => {
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
           <TabsContent value="cohorts" className="mt-0 space-y-6">
+            <CohortSessionsAdmin />
             <GroupOverview />
             <CohortsAdmin />
           </TabsContent>
