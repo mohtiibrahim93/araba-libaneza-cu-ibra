@@ -131,7 +131,8 @@ async function handlePreview(req: Request): Promise<Response> {
   }
 
   const sampleData = SAMPLE_DATA[type] || {}
-  const html = await render(React.createElement(EmailTemplate, sampleData))
+  // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
+  const html = await render(React.createElement(EmailTemplate, sampleData) as any)
 
   return new Response(html, {
     status: 200,
@@ -240,8 +241,9 @@ async function handleWebhook(req: Request): Promise<Response> {
   }
 
   // Render React Email to HTML and plain text
-  const html = await render(React.createElement(EmailTemplate, templateProps))
-  const text = await render(React.createElement(EmailTemplate, templateProps), {
+  // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
+  const html = await render(React.createElement(EmailTemplate, templateProps) as any)
+  const text = await render(React.createElement(EmailTemplate, templateProps) as any, {
     plainText: true,
   })
 
