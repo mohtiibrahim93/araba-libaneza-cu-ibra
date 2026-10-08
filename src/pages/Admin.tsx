@@ -752,7 +752,7 @@ const Admin = () => {
       icon: Settings,
       secondary: true,
       items: [
-        { value: "settings", label: "Email, plăți și cont", icon: Settings, hint: "Email, plăți și cont" },
+        { value: "settings", label: "Setări", icon: Settings, hint: "Email, plăți și cont" },
         {
           value: "audit-log",
           label: "Jurnal",

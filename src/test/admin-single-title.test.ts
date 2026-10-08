@@ -53,6 +53,24 @@ describe("the admin names each screen exactly once", () => {
     expect(body).not.toMatch(/<h[1-3]/);
   });
 
+  it("never gives a screen a subtitle that repeats its own heading", () => {
+    // The shell prints label as the heading and hint as the subtitle directly
+    // beneath it, so a hint equal to its label puts the same words on screen
+    // twice -- the very thing removing the duplicate titles was for. It
+    // happened again when "Setări" was relabelled to its own description.
+    const nav = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    const offenders: string[] = [];
+    const entry = /value:\s*"([^"]+)"[^}]*?label:\s*"([^"]+)"[^}]*?hint:\s*"([^"]+)"/gs;
+    for (const [, value, label, hint] of nav.matchAll(entry)) {
+      if (!label || !hint) continue;
+      if (label.trim() === hint.trim()) offenders.push(`${value} ("${label}")`);
+    }
+    expect(
+      offenders,
+      `these screens print their heading twice: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
   it("stops the top bar repeating the heading on desktop", () => {
     // The bar still names the screen on phones, where the rail is hidden and
     // the heading scrolls away — but only there.
