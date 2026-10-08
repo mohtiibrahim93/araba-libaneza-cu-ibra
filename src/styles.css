@@ -390,3 +390,12 @@
     max-height: 60vh !important;
   }
 }
+
+/* The reCAPTCHA script is declared in a static head(), so it loads on every
+   route including the admin, where no form uses it and its fixed badge sat on
+   top of the content in the bottom-right corner. Google requires the badge
+   wherever reCAPTCHA actually protects a form; the admin has none, so hiding
+   it there costs nothing and gives the corner back. */
+html[data-admin-chrome="true"] .grecaptcha-badge {
+  visibility: hidden;
+}

@@ -270,6 +270,8 @@ function RootComponent() {
     initContactClickTracking();
   }, []);
 
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
@@ -281,13 +283,35 @@ function RootComponent() {
             <LanguageFromPath />
             <Outlet />
             {/* The visitors' course assistant has no business in the admin,
-                where it sat on top of the menu and the phone's bottom bar. */}
-            {pathname !== "/admin" && !pathname.startsWith("/admin/") && <AskAssistant />}
+                where it sat on top of the menu and the phone's bottom bar. The
+                reCAPTCHA badge is the same problem and was left behind when the
+                assistant was moved out: it is fixed to the bottom-right corner
+                of every page, including the ones with no form to protect, where
+                it covered the content beneath it. The script is declared in a
+                static head() and so cannot be dropped per route; marking the
+                document instead lets one stylesheet rule hide the badge where
+                nothing uses it. */}
+            {isAdmin ? <AdminChromeMarker /> : <AskAssistant />}
           </I18nProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </HelmetProvider>
   );
+}
+
+/**
+ * Flags the document as showing admin chrome, so the stylesheet can hide the
+ * reCAPTCHA badge there. Renders nothing; it exists for the side effect, and
+ * clears the flag on the way out so a visitor page keeps its badge.
+ */
+function AdminChromeMarker() {
+  useEffect(() => {
+    document.documentElement.dataset["adminChrome"] = "true";
+    return () => {
+      delete document.documentElement.dataset["adminChrome"];
+    };
+  }, []);
+  return null;
 }
 
 function RootErrorComponent({ error, reset }: ErrorComponentProps) {

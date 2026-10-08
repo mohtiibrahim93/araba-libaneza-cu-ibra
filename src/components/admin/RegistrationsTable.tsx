@@ -361,6 +361,13 @@ const RegistrationsTable = ({
   // Registration ids that already have a (non-cancelled) booking, so trial
   // leads who never picked a slot can be flagged for follow-up.
   const [bookedRegIds, setBookedRegIds] = useState<Set<string>>(new Set());
+  // The set starts empty and fills in asynchronously, so "has no booking" and
+  // "we have not looked yet" were the same thing to the badge below: for the
+  // first second after the tab opened, every trial was accused of never
+  // picking a slot. Six false alarms at once, on the screen the owner opens
+  // most. The flag stays false until the answer is actually known, and stays
+  // false if the fetch fails -- which is what the catch below always intended.
+  const [bookingsKnown, setBookingsKnown] = useState(false);
   useEffect(() => {
     let active = true;
     (async () => {
@@ -372,7 +379,10 @@ const RegistrationsTable = ({
         (data?.data || []).forEach((b) => {
           if (b.registration_id && b.status !== "cancelled") ids.add(b.registration_id);
         });
-        if (active) setBookedRegIds(ids);
+        if (active) {
+          setBookedRegIds(ids);
+          setBookingsKnown(true);
+        }
       } catch {
         /* non-blocking: the flag just won't show if bookings can't load */
       }
@@ -476,7 +486,7 @@ const RegistrationsTable = ({
               <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 {formTypeLabels[r.form_type] || r.form_type}
               </span>
-              {r.form_type === "trial" && !bookedRegIds.has(r.id) && (
+              {r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id) && (
                 <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
                   Fără interval
                 </span>
