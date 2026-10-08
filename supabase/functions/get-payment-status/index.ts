@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { callerOwnsRegistration } from "../_shared/registration-access.ts";
+import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -34,9 +34,8 @@ Deno.serve(async (req) => {
     return json({ error: "Lookup failed" }, 500);
   }
 
-  // Caller must prove ownership: server-signed return link or matching email.
-  const proof = { sig: url.searchParams.get("sig"), email: url.searchParams.get("email") };
-  if (!data || !(await callerOwnsRegistration(data, proof))) {
+  // Caller must hold the server-signed return link; a typed email is not proof.
+  if (!data || !(await verifyRegistrationSignature(data.id, url.searchParams.get("sig")))) {
     return json({ payment_status: null, paid_at: null });
   }
 

@@ -1,7 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
-import { callerOwnsRegistration, signRegistrationId } from "../_shared/registration-access.ts";
+import { signRegistrationId } from "../_shared/registration-access.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 
 
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
@@ -27,7 +28,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { registrationId, email: callerEmail } = await req.json();
+    const { registrationId } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(JSON.stringify({ error: "registrationId is required" }), {
         status: 400,
@@ -48,11 +49,11 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     // Only the visitor who just submitted may trigger the confirmation:
-    // the registration must be fresh (30 min) and the caller must supply
-    // the same email when one is stored.
+    // the registration must be fresh (30 min) and the caller must be signed
+    // in with the registration's verified email.
     const createdMs = reg?.created_at ? Date.parse(reg.created_at) : NaN;
     const fresh = Number.isFinite(createdMs) && Date.now() - createdMs < 30 * 60 * 1000;
-    if (regErr || !reg || !fresh || !(await callerOwnsRegistration(reg, { email: callerEmail }))) {
+    if (regErr || !reg || !fresh || !(await verifiedRegistrationOwner(req, reg, supabase.auth))) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
