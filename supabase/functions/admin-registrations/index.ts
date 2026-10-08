@@ -1027,7 +1027,9 @@ Deno.serve(async (req) => {
       const since = new Date(Date.now() - 180 * 86_400_000).toISOString();
       const { data: recent } = await supabase
         .from("bookings")
-        .select("id, start_at, student_name, status, google_event_id, google_sync_error")
+        .select(
+          "id, start_at, created_at, student_name, status, google_event_id, google_sync_error",
+        )
         .eq("status", "confirmed")
         .gte("start_at", since)
         .order("start_at", { ascending: false })
@@ -1046,6 +1048,25 @@ Deno.serve(async (req) => {
             total: rows.length,
             synced: rows.filter((r) => r.google_event_id).length,
             failed: rows.filter((r) => !r.google_event_id).length,
+            // The six-month totals answer "what happened", and they were the
+            // only thing this screen said. That made a run of failures last
+            // August read as a fault happening now, months after the sync
+            // started working again — three of four missing, printed every day,
+            // for bookings whose events can never appear.
+            //
+            // "Is it working" is a different question and only recent attempts
+            // can answer it. A booking syncs when it is made, so this counts by
+            // created_at rather than by when the lesson falls.
+            latest: (() => {
+              const cutoff = Date.now() - 30 * 86_400_000;
+              const madeLately = rows.filter(
+                (r) => Date.parse(r.created_at as string) >= cutoff,
+              );
+              return {
+                total: madeLately.length,
+                synced: madeLately.filter((r) => r.google_event_id).length,
+              };
+            })(),
             unsynced: rows
               .filter((r) => !r.google_event_id)
               .slice(0, 10)

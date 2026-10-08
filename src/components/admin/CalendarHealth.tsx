@@ -28,6 +28,8 @@ interface Health {
     total: number;
     synced: number;
     failed: number;
+    /** The last 30 days by booking date — whether the sync works now. */
+    latest: { total: number; synced: number };
     unsynced: Array<{
       id: string;
       start_at: string;
@@ -112,6 +114,7 @@ const CalendarHealth = () => {
           total: 0,
           synced: 0,
           failed: 0,
+          latest: { total: 0, synced: 0 },
           unsynced: [],
           ...(raw.bookings ?? {}),
         },
@@ -250,10 +253,31 @@ const CalendarHealth = () => {
 
           <div className="rounded-md border border-border p-3">
             <p className="text-sm font-medium text-foreground">
-              Rezervări confirmate (ultimele 6 luni)
+              Sincronizarea acum
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {health.bookings.synced} din {health.bookings.total} au ajuns în Google Calendar.
+            {health.bookings.latest.total === 0 ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                Nicio rezervare nouă în ultimele 30 de zile, deci nu există nimic recent de
+                verificat. Istoricul de mai jos rămâne valabil.
+              </p>
+            ) : health.bookings.latest.synced === health.bookings.latest.total ? (
+              <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-400">
+                Funcționează: toate cele {health.bookings.latest.total} rezervări din ultimele 30
+                de zile au ajuns în Google Calendar.
+              </p>
+            ) : (
+              <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">
+                {health.bookings.latest.synced} din {health.bookings.latest.total} rezervări din
+                ultimele 30 de zile au ajuns în Google Calendar. Asta e o problemă acum.
+              </p>
+            )}
+            {/* The six-month figure used to be the only one here, so a run of
+                failures months ago read as a fault happening today. It is
+                history, and it is labelled as history. */}
+            <p className="mt-2 text-xs text-muted-foreground">
+              Istoric, ultimele 6 luni: {health.bookings.synced} din {health.bookings.total}.
+              {health.bookings.failed > 0 &&
+                " Rezervările trecute care nu au ajuns nu mai pot fi recuperate — evenimentul nu va apărea retroactiv."}
             </p>
             {health.bookings.unsynced.length > 0 && (
               <ul className="mt-2 space-y-1">
