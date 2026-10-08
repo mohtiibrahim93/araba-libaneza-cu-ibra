@@ -1446,6 +1446,13 @@ Deno.serve(async (req) => {
         const plan = addRemaining ? wanted : fullPlan;
 
         const created: number[] = [];
+        // The owner (organizer) stays on the invitation, as on hand-made lessons.
+        let ownerEmail = (last?.e.attendees ?? []).find((a) => a.self && a.email)?.email?.toLowerCase() ?? null;
+        if (!ownerEmail) {
+          const calRes = await fetch(`${GCAL_GATEWAY}/calendars/primary`, { headers: gHeaders });
+          const cal = await calRes.json().catch(() => ({}));
+          if (calRes.ok && typeof cal.id === "string") ownerEmail = cal.id.toLowerCase();
+        }
         // The group's students: everyone on its latest lesson, plus anyone added now.
         const guests = Array.from(
           new Set([
@@ -1454,10 +1461,20 @@ Deno.serve(async (req) => {
               .map((a) => a.email!.toLowerCase()),
             ...extraGuests,
           ]),
-        );
-        // A brand-new online group gets one Google Meet link, made with its
-        // first lesson and reused for the rest, like a group's lessons share one.
-        let conference: unknown = last?.e.conferenceData;
+        ).filter((e) => e !== ownerEmail);
+        const attendeeList = [
+          ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+          ...guests.map((email) => ({ email })),
+        ];
+        // Online lessons always carry the Zoom link; no Google Meet is added.
+        const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? "";
+        const isOnline = c.format === "online";
+        const baseDesc = last?.e.description ?? "";
+        const description =
+          isOnline && zoomUrl && !baseDesc.includes(zoomUrl)
+            ? `${baseDesc ? baseDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
+            : baseDesc || undefined;
+        const location = last?.e.location || (isOnline && zoomUrl ? zoomUrl : undefined);
         if (addRemaining && plan.length) {
           for (const p of plan) {
             const [y, mo, d] = p.date.split("-").map(Number);
@@ -1468,7 +1485,7 @@ Deno.serve(async (req) => {
             const res = await fetch(
               // Guests get Google's normal invitation, as they did for the
               // lessons the owner created by hand.
-              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=${guests.length ? "all" : "none"}&conferenceDataVersion=1`,
+              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=${guests.length ? "all" : "none"}`,
               {
                 method: "POST",
                 headers: gHeaders,
@@ -1478,20 +1495,9 @@ Deno.serve(async (req) => {
                   summary: last
                     ? titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number)
                     : `${prefix} - L${p.lesson_number}`,
-                  // Same place and the same meeting link as the group's last lesson.
-                  location: last?.e.location,
-                  description: last?.e.description,
-                  conferenceData:
-                    conference ??
-                    (c.format === "online"
-                      ? {
-                          createRequest: {
-                            requestId: crypto.randomUUID(),
-                            conferenceSolutionKey: { type: "hangoutsMeet" },
-                          },
-                        }
-                      : undefined),
-                  attendees: guests.map((email) => ({ email })),
+                  location,
+                  description,
+                  attendees: attendeeList,
                   start: { dateTime: startISO, timeZone: "Europe/Bucharest" },
                   end: { dateTime: endISO, timeZone: "Europe/Bucharest" },
                 }),
@@ -1501,13 +1507,6 @@ Deno.serve(async (req) => {
             if (!res.ok) {
               console.error("[sync_cohort_sessions] create failed", res.status, ev);
               break;
-            }
-            if (!conference && ev.conferenceData?.conferenceId) {
-              conference = {
-                conferenceId: ev.conferenceData.conferenceId,
-                conferenceSolution: ev.conferenceData.conferenceSolution,
-                entryPoints: ev.conferenceData.entryPoints,
-              };
             }
             const { error: insErr } = await supabase.from("cohort_sessions").insert({
               cohort_id: c.id,
@@ -1519,6 +1518,46 @@ Deno.serve(async (req) => {
             });
             if (insErr) throw insErr;
             created.push(p.lesson_number);
+          }
+        }
+
+        // Repair lessons the sync already created: add Zoom link + organizer,
+        // drop any Google Meet. Quiet update, no new emails.
+        const repaired: number[] = [];
+        if (body.repair_generated === true) {
+          const { data: gen } = await supabase
+            .from("cohort_sessions")
+            .select("lesson_number, google_event_id")
+            .eq("cohort_id", c.id)
+            .eq("source", "generated");
+          for (const g of gen ?? []) {
+            const ev = events.find((e) => e.id === g.google_event_id);
+            if (!ev) continue;
+            const keepGuests = (ev.attendees ?? [])
+              .filter((a) => a.email && !a.self && !a.resource && a.email.toLowerCase() !== ownerEmail)
+              .map((a) => ({ email: a.email!.toLowerCase() }));
+            const evDesc = ev.description ?? "";
+            const res = await fetch(
+              `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(g.google_event_id)}?sendUpdates=none&conferenceDataVersion=1`,
+              {
+                method: "PATCH",
+                headers: gHeaders,
+                body: JSON.stringify({
+                  description:
+                    isOnline && zoomUrl && !evDesc.includes(zoomUrl)
+                      ? `${evDesc ? evDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
+                      : evDesc,
+                  location: ev.location || (isOnline && zoomUrl ? zoomUrl : undefined),
+                  ...(isOnline && zoomUrl ? { conferenceData: null } : {}),
+                  attendees: [
+                    ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+                    ...keepGuests,
+                  ],
+                }),
+              },
+            );
+            if (res.ok) repaired.push(g.lesson_number);
+            else console.error("[sync_cohort_sessions] repair failed", res.status, await res.text());
           }
         }
 
@@ -1535,6 +1574,7 @@ Deno.serve(async (req) => {
           guests,
           plan: addRemaining ? [] : fullPlan,
           created,
+          repaired,
         });
       }
 
