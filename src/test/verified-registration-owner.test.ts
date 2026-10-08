@@ -46,7 +46,9 @@ describe("verified registration ownership", () => {
   it("keeps only the trusted booking bypass", () => {
     const src = readFileSync("supabase/functions/booking-create/index.ts", "utf8");
     expect(src).toContain("serviceRoleKey.length > 0 && bearer === serviceRoleKey");
-    expect(src).toContain("!internalCall && !(await verifiedRegistrationOwner(req, reg, supabase.auth))");
+    expect(src).toContain("!internalCall && (!reg || !(await verifiedRegistrationOwner(req, reg, supabase.auth)))");
+    // Unknown IDs must not answer differently from not-owned ones.
+    expect(src.indexOf("verifiedRegistrationOwner(req")).toBeLessThan(src.indexOf('"registration not found"'));
   });
   it("does not trust resubmitted assistant roles", () => {
     const src = readFileSync("src/routes/api/chat.ts", "utf8");
