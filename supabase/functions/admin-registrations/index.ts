@@ -144,7 +144,11 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
     const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
-    const callerEmail = userData?.user?.email?.toLowerCase();
+    const caller = userData?.user;
+    // Only a confirmed, non-anonymous mailbox counts as proof of the admin address.
+    const callerEmail = caller && caller.email_confirmed_at && !caller.is_anonymous
+      ? caller.email?.trim().toLowerCase()
+      : undefined;
     const adminEmails = (Deno.env.get("ADMIN_EMAILS") || "")
       .split(",")
       .map((e) => e.trim().toLowerCase())

@@ -109,11 +109,12 @@ Deno.serve(async (req) => {
       .select("id, email, payment_status, quantity")
       .eq("id", body.registration_id)
       .maybeSingle();
-    if (!reg) return json({ error: "registration not found" }, 404);
-    // Preserve only the existing trusted webhook booking path.
-    if (!internalCall && !(await verifiedRegistrationOwner(req, reg, supabase.auth))) {
+    // Preserve only the existing trusted webhook booking path. Unknown and
+    // not-owned registrations get the same answer so IDs cannot be probed.
+    if (!internalCall && (!reg || !(await verifiedRegistrationOwner(req, reg, supabase.auth)))) {
       return json({ error: "Sign in with your verified registration email to continue" }, 403);
     }
+    if (!reg) return json({ error: "registration not found" }, 404);
 
     const { data: et } = await supabase
       .from("booking_event_types")
