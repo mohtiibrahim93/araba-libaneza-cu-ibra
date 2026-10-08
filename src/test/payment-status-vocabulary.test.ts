@@ -116,6 +116,54 @@ describe("payment_status stays to its seven values", () => {
     }
   });
 
+  it("lets no migration merge unpaid into pending", () => {
+    // The mistake this file exists to prevent, in the form it actually took: a
+    // migration that rewrote every "unpaid" row to "pending" on the reasoning
+    // that they were one state under two names. They are not, and the rows
+    // carried the distinction correctly. It was deleted before it ran.
+    const dir = resolve(process.cwd(), "supabase/migrations");
+    const offenders: string[] = [];
+    for (const name of readdirSync(dir)) {
+      if (!name.endsWith(".sql")) continue;
+      const sql = readFileSync(join(dir, name), "utf8")
+        .split("\n")
+        .filter((line) => !line.trim().startsWith("--"))
+        .join("\n")
+        .toLowerCase();
+      if (!sql.includes("payment_status")) continue;
+      // Specifically an assignment of one value driven by the other, in either
+      // direction. Not a mention of both: the RLS policies legitimately list
+      // them together as the states a public insert may start in, which is
+      // itself evidence that both are real.
+      const setsPending = /set\s+payment_status\s*=\s*'pending'/.test(sql);
+      const setsUnpaid = /set\s+payment_status\s*=\s*'unpaid'/.test(sql);
+      const readsUnpaid = /payment_status\s*=\s*'unpaid'/.test(sql);
+      const readsPending = /payment_status\s*=\s*'pending'/.test(sql);
+      if ((setsPending && readsUnpaid) || (setsUnpaid && readsPending)) {
+        offenders.push(name);
+      }
+    }
+    expect(
+      [...new Set(offenders)],
+      "unpaid and pending are different states; migrating one into the other destroys real information",
+    ).toEqual([]);
+  });
+
+  it("writes the rule down where both humans and agents will read it", () => {
+    // AGENTS.md is the file the build agent follows, and this pair has been
+    // defined wrongly more than once, in both directions.
+    const agents = readFileSync(resolve(process.cwd(), "AGENTS.md"), "utf8");
+    expect(agents).toContain("payment_status");
+    expect(agents.toLowerCase()).toContain("never merge or migrate");
+
+    const types = readFileSync(
+      resolve(process.cwd(), "src/components/admin/types.ts"),
+      "utf8",
+    );
+    // The distinguishing question, stated once, where the labels live.
+    expect(types).toContain("has a payment attempt started?");
+  });
+
   it("counts anything-but-paid as owing, so a new value is never missed silently", () => {
     // The worklist asks what is NOT paid rather than listing what is unpaid:
     // a seventh value would show up there rather than disappear from it.

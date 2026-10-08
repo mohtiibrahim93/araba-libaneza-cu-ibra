@@ -89,10 +89,43 @@ export const leadStatusLabels: Record<LeadStatus, string> = {
 };
 
 /**
- * payment_status carries no database constraint, so the column holds every
- * value the code has written over its life. "unpaid" is the commonest one in
- * production even though newer paths write "pending" instead, so anything that
- * shows a payment status has to be able to name it.
+ * What `registrations.payment_status` means. The column has no database
+ * constraint, so this comment is the only thing holding the vocabulary
+ * together; `payment-status-vocabulary.test.ts` enforces it.
+ *
+ * The column tracks THE MONEY, never the policy or the outcome. The question
+ * that separates the first two values — the pair that has been confused
+ * repeatedly, in both directions — is simply: has a payment attempt started?
+ *
+ *   unpaid      Nobody has tried to pay. No checkout session, no card on file.
+ *               This is where anyone who owes money begins, and where they stay
+ *               if they never pay. A student added by hand in "Înscrieri
+ *               externe" starts here.
+ *   pending     An attempt is open. A Stripe session exists, so the money is in
+ *               flight or awaiting confirmation. The four checkout functions
+ *               UPDATE the registration from unpaid to pending at that moment,
+ *               which is what makes the distinction real rather than nominal.
+ *   card_saved  A card is on file and authorised but deliberately not charged;
+ *               a trial, chargeable later without asking again.
+ *   paid        The money arrived.
+ *   failed      An attempt was made and declined. Not the same as unpaid: one
+ *               tried and was refused, the other never tried.
+ *   past_due    A subscription renewal lapsed. The relationship continues.
+ *   refunded    The money arrived and was given back.
+ *
+ * Two things that are NOT payment states, and must not be folded in here:
+ *
+ *   - "They never paid, so they are charged the full price." That is a business
+ *     consequence of staying `unpaid`; the money has not moved, so the status
+ *     has not changed.
+ *   - Whether it is their first payment or their fifth. An attempt is an
+ *     attempt. Splitting the pair by WHICH payment is what made `unpaid` and
+ *     `pending` collapse into each other every time someone tried to define
+ *     them, because a first payment can be in flight too.
+ *
+ * So `unpaid` is not a legacy spelling of `pending` to be migrated away, and a
+ * migration that merged them would destroy a distinction the data carries
+ * correctly. One was written and deleted before it ran.
  */
 export const paymentStatusLabels: Record<string, string> = {
   paid: "Plătit",
