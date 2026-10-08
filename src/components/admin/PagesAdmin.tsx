@@ -270,7 +270,7 @@ const PagesAdmin = () => {
           return (
             <div key={path} className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
               <div className="min-w-0">
-                <div className="font-medium text-foreground truncate">{row?.h1 || PAGE_SEEDS.find((s) => s.path === path)?.h1 || path}</div>
+                <div className="line-clamp-2 font-medium text-foreground sm:truncate">{row?.h1 || PAGE_SEEDS.find((s) => s.path === path)?.h1 || path}</div>
                 <code className="text-xs text-muted-foreground">{path}</code>
                 {row ? (
                   <span className="ml-2 text-xs text-primary">
