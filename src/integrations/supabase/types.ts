@@ -391,6 +391,35 @@ export type Database = {
           },
         ]
       }
+      cohort_calendar: {
+        Row: {
+          calendar_title: string
+          cohort_id: string
+          created_at: string
+          total_lessons: number
+        }
+        Insert: {
+          calendar_title: string
+          cohort_id: string
+          created_at?: string
+          total_lessons: number
+        }
+        Update: {
+          calendar_title?: string
+          cohort_id?: string
+          created_at?: string
+          total_lessons?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_calendar_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: true
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cohort_meetings: {
         Row: {
           cohort_id: string
@@ -419,6 +448,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "cohort_meetings_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohort_sessions: {
+        Row: {
+          cohort_id: string
+          created_at: string
+          ends_at: string
+          google_event_id: string
+          id: string
+          lesson_number: number
+          source: string
+          starts_at: string
+          synced_at: string
+        }
+        Insert: {
+          cohort_id: string
+          created_at?: string
+          ends_at: string
+          google_event_id: string
+          id?: string
+          lesson_number: number
+          source?: string
+          starts_at: string
+          synced_at?: string
+        }
+        Update: {
+          cohort_id?: string
+          created_at?: string
+          ends_at?: string
+          google_event_id?: string
+          id?: string
+          lesson_number?: number
+          source?: string
+          starts_at?: string
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_sessions_cohort_id_fkey"
             columns: ["cohort_id"]
             isOneToOne: false
             referencedRelation: "group_cohorts"
