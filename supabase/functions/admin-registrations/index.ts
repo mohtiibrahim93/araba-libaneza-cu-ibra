@@ -1198,6 +1198,55 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    // Renames every lesson of a group in Google Calendar to the new name
+    // ("<new name> - L<N>") and stores the new name. sendUpdates=none: guests'
+    // calendars update quietly, nobody gets an email. Run right after a sync
+    // under the old name, so every lesson of the group is known here.
+    if (action === "rename_cohort_events") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
+      if (!cohortId || !title) return jsonResponse({ error: "Lipsește grupa sau numele." });
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      const { data: sessions, error: sErr } = await supabase
+        .from("cohort_sessions")
+        .select("google_event_id, lesson_number")
+        .eq("cohort_id", cohortId)
+        .order("lesson_number", { ascending: true });
+      if (sErr) throw sErr;
+      let renamed = 0;
+      const failed: number[] = [];
+      for (const ses of sessions ?? []) {
+        const res = await fetch(
+          `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(ses.google_event_id)}?sendUpdates=none`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${lovableKey}`,
+              "X-Connection-Api-Key": gcalKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ summary: `${title} - L${ses.lesson_number}` }),
+          },
+        );
+        if (res.ok) renamed += 1;
+        else {
+          failed.push(ses.lesson_number);
+          console.error("[rename_cohort_events] patch failed", res.status, await res.text());
+        }
+      }
+      // Keep the old name if nothing could be renamed, so the next sync still finds them.
+      if (renamed > 0 || (sessions ?? []).length === 0) {
+        const { error: upErr } = await supabase
+          .from("cohort_calendar")
+          .update({ calendar_title: title })
+          .eq("cohort_id", cohortId);
+        if (upErr) throw upErr;
+      }
+      return jsonResponse({ success: failed.length === 0, renamed, failed });
+    }
+
     if (action === "delete_cohort_calendar") {
       const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
       if (!cohortId) return jsonResponse({ error: "Lipsește grupa." });
@@ -1408,10 +1457,10 @@ Deno.serve(async (req) => {
                 headers: gHeaders,
                 body: JSON.stringify({
                   // Written like the group's latest lesson; for a new group,
-                  // "<name> lectia N" with the name chosen in the admin.
+                  // "<name> - L<N>" with the name chosen in the admin.
                   summary: last
                     ? titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number)
-                    : `${prefix} lectia ${p.lesson_number}`,
+                    : `${prefix} - L${p.lesson_number}`,
                   // Same place and the same meeting link as the group's last lesson.
                   location: last?.e.location,
                   description: last?.e.description,

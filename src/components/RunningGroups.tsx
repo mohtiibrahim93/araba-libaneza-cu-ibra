@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, Check, MessageCircle } from "lucide-react";
+import { CalendarDays, Check, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
@@ -173,19 +173,7 @@ const RunningGroups = ({ level, defaultTotal, className = "" }: { level: string;
               >
                 <CalendarDays className="h-4 w-4" aria-hidden /> {open === g.id ? c.hide : c.all}
               </button>
-              {open === g.id && (
-                <ul className="grid grid-cols-1 gap-1 text-sm sm:grid-cols-2">
-                  {mine.map((s) => {
-                    const past = Date.parse(s.ends_at) <= now;
-                    return (
-                      <li key={s.id} className={`flex items-center gap-2 tabular-nums ${past ? "text-muted-foreground" : "text-foreground"}`}>
-                        {past ? <Check className="h-3.5 w-3.5 text-brand-green" aria-hidden /> : <span className="h-3.5 w-3.5" />}
-                        L{s.lesson_number} · {day(s.starts_at)}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+              {open === g.id && <LessonCalendar sessions={mine} lang={lang} now={now} />}
 
               <div className="border-t border-[#E7E1D6] pt-4 text-sm dark:border-border">
                 {joinable ? (
@@ -209,6 +197,119 @@ const RunningGroups = ({ level, defaultTotal, className = "" }: { level: string;
         })}
       </div>
     </section>
+  );
+};
+
+/** Local (Bucharest) YYYY-MM-DD of an instant. */
+const dayKey = (iso: string | number) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date(iso));
+
+/**
+ * The group's lessons on a month calendar: held ones in red, the ones still to
+ * come in green. A lesson turns red once it has ended, so the calendar fills in
+ * by itself as the course goes on. Colour is never the only signal: held
+ * lessons also carry a tick.
+ */
+const LessonCalendar = ({ sessions, lang, now }: { sessions: Session[]; lang: "ro" | "en"; now: number }) => {
+  const todayKey = dayKey(now);
+  const [y0, m0] = todayKey.split("-").map(Number) as [number, number];
+  const [offset, setOffset] = useState(0);
+  const first = new Date(Date.UTC(y0, m0 - 1 + offset, 1, 12));
+  const year = first.getUTCFullYear();
+  const month = first.getUTCMonth();
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0, 12)).getUTCDate();
+  const lead = (first.getUTCDay() + 6) % 7; // Monday first
+  const byDay = new Map<string, Session[]>();
+  for (const s of sessions) {
+    const k = dayKey(s.starts_at);
+    byDay.set(k, [...(byDay.get(k) ?? []), s]);
+  }
+  const months = sessions.map((s) => dayKey(s.starts_at).slice(0, 7)).sort();
+  const thisMonth = `${year}-${String(month + 1).padStart(2, "0")}`;
+  const canPrev = months.length > 0 && months[0]! < thisMonth;
+  const canNext = months.length > 0 && months[months.length - 1]! > thisMonth;
+  const title = first.toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", { month: "long", year: "numeric", timeZone: "UTC" });
+  const names = lang === "en" ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] : ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
+  const t =
+    lang === "en"
+      ? { prev: "Previous month", next: "Next month", done: "Held", todo: "Coming up", today: "Today" }
+      : { prev: "Luna trecută", next: "Luna viitoare", done: "Făcută", todo: "Urmează", today: "Azi" };
+
+  return (
+    <div className="rounded-2xl border border-[#E7E1D6] bg-card p-3 sm:p-4 dark:border-border">
+      <div className="mb-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => setOffset((o) => o - 1)}
+          disabled={!canPrev}
+          aria-label={t.prev}
+          className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-muted disabled:opacity-30"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <p className="font-semibold capitalize text-foreground">{title}</p>
+        <button
+          type="button"
+          onClick={() => setOffset((o) => o + 1)}
+          disabled={!canNext}
+          aria-label={t.next}
+          className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-muted disabled:opacity-30"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="grid grid-cols-7 gap-1 text-center text-xs">
+        {names.map((n) => (
+          <span key={n} className="pb-1 font-semibold text-muted-foreground">
+            {n}
+          </span>
+        ))}
+        {Array.from({ length: lead }, (_, i) => (
+          <span key={`e${i}`} />
+        ))}
+        {Array.from({ length: daysInMonth }, (_, i) => {
+          const d = i + 1;
+          const k = `${thisMonth}-${String(d).padStart(2, "0")}`;
+          const lessons = byDay.get(k) ?? [];
+          const held = lessons.length > 0 && lessons.every((s) => Date.parse(s.ends_at) <= now);
+          const isToday = k === todayKey;
+          return (
+            <span
+              key={k}
+              className={`flex min-h-11 flex-col items-center justify-center rounded-lg leading-tight ${
+                lessons.length
+                  ? held
+                    ? "bg-primary font-semibold text-primary-foreground"
+                    : "bg-brand-green font-semibold text-white"
+                  : "text-foreground"
+              } ${isToday ? "ring-2 ring-foreground ring-offset-1" : ""}`}
+              title={lessons.map((s) => `L${s.lesson_number}`).join(", ") || undefined}
+            >
+              <span className="flex items-center gap-0.5">
+                {held && <Check className="h-3 w-3" aria-hidden />}
+                {d}
+              </span>
+              {lessons.length > 0 && (
+                <span className="text-[10px] font-medium opacity-90">{lessons.map((s) => `L${s.lesson_number}`).join(" ")}</span>
+              )}
+            </span>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <span className="flex h-4 w-4 items-center justify-center rounded bg-primary text-primary-foreground">
+            <Check className="h-3 w-3" aria-hidden />
+          </span>
+          {t.done}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-4 w-4 rounded bg-brand-green" /> {t.todo}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-4 w-4 rounded ring-2 ring-foreground" /> {t.today}
+        </span>
+      </div>
+    </div>
   );
 };
 
