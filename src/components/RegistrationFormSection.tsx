@@ -374,9 +374,15 @@ const RegistrationFormSection = ({
           "verify-recaptcha",
           { body: { token: recaptchaToken } },
         );
-        if (verifyErr) {
-          console.warn("[registration] recaptcha verify error, proceeding", verifyErr);
-        } else if (verify && verify.success === false) {
+        // Block only on Google's own verdict (a low score, no error codes).
+        // A broken key or Google project answers success:false with error
+        // codes for everyone — October 2026: "Project … has been deleted"
+        // kept every registration at step 1 — so that lets people through.
+        const configProblem =
+          !verify || (Array.isArray(verify.errors) && verify.errors.length > 0) || Boolean(verify.error);
+        if (verifyErr || configProblem) {
+          console.warn("[registration] recaptcha unavailable, proceeding", verifyErr ?? verify);
+        } else if (verify.success === false) {
           toast.error(t.recaptchaFailed);
           setSubmitting(false);
           return;
