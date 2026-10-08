@@ -726,7 +726,6 @@ const RegistrationFormSection = ({
                   <SelectItem value="Bucuresti - Centru (Raduga)">
                     {t.mainLeadLocationBucharestCentru}
                   </SelectItem>
-                  <SelectItem value="Alt oras">{t.mainLeadLocationOtherCity}</SelectItem>
                 </SelectContent>
               </Select>
               {centerError && (
