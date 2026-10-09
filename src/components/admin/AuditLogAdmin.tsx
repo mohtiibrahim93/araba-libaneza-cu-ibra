@@ -37,6 +37,7 @@ const ACTION_LABELS: Record<string, string> = {
   refund: "Rambursare",
   cancel_subscription: "Anulare abonament",
   update_status: "Schimbare status",
+  reschedule_booking: "Mutare lecție",
 };
 
 /** The ones that destroy data rather than change it. */
@@ -70,6 +71,13 @@ function describeDetails(details: unknown): string {
     typeof v === "string" ? (leadStatusLabels[v as keyof typeof leadStatusLabels] ?? v) : String(v);
 
   if ("from" in d && "to" in d) return `${name(d["from"])} → ${name(d["to"])}`;
+
+  // A reschedule carries only the new time, and a raw ISO string in a
+  // Romanian panel is not a time anyone reads.
+  if ("to" in d && typeof d["to"] === "string" && !Number.isNaN(Date.parse(d["to"] as string))) {
+    const when = stamp.format(new Date(d["to"] as string));
+    return d["forced"] === true ? `mutată la ${when} (forțat)` : `mutată la ${when}`;
+  }
 
   const pairs = Object.entries(d).map(([k, v]) => `${k}: ${name(v)}`);
   return pairs.length > 0 ? pairs.join(" · ") : "—";

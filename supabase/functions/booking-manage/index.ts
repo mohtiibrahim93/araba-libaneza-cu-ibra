@@ -171,8 +171,10 @@ Deno.serve(async (req) => {
     }
 
     if (req.method === "PATCH") {
-      const body = (await req.json()) as { start_at?: string };
+      const body = (await req.json()) as { start_at?: string; force?: boolean };
       if (!body?.start_at) return json({ error: "start_at required" }, 400);
+      // The owner, through admin-registrations, with the service-role key.
+      const admin = internalCall(req);
       const startMs = Date.parse(body.start_at);
       if (!Number.isFinite(startMs)) return json({ error: "invalid start_at" }, 400);
       const et = booking.booking_event_types;
@@ -190,7 +192,17 @@ Deno.serve(async (req) => {
         .select("weekday,start_time,end_time")
         .eq("is_active", true);
       const offered = candidateSlotsForDays([day], rules ?? [], et.duration_min);
-      if (!offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO)) {
+      const outsideAvailability =
+        !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO);
+      // A student may only move a booking to a slot this site would have
+      // offered them: inside the published hours, and inside the notice and
+      // advance windows. The owner is not bound by his own opening hours --
+      // "same time next week, but at nine, just this once" is a normal thing
+      // to agree with a student, and refusing it in the panel is what sends
+      // him to edit Google Calendar by hand instead, which is the direction
+      // that does not sync back. He is still told when a time is outside
+      // them; see `outside_availability` in the conflict reply below.
+      if (!admin && outsideAvailability) {
         return json({ error: "slot not bookable", code: "invalid_slot" }, 400);
       }
 
@@ -213,20 +225,47 @@ Deno.serve(async (req) => {
       ]);
       const s = startMs - et.buffer_before_min * 60_000;
       const e = endMs + et.buffer_after_min * 60_000;
+      // Named rather than counted: "slot taken" tells the owner nothing he can
+      // act on, and the three causes have different answers -- another student
+      // means pick a different time, his own calendar might be a thing he is
+      // willing to move, a group lesson almost certainly is not.
+      const found: string[] = [];
       for (const b of clashes ?? []) {
         if (overlaps(s, e, Date.parse(b.start_at), Date.parse(b.end_at))) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("another_booking");
+          break;
         }
       }
       for (const b of busy) {
         if (overlaps(s, e, Date.parse(b.start), Date.parse(b.end))) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("calendar");
+          break;
         }
       }
       for (const b of cohortBusyForDays(cohorts ?? [], [day])) {
         if (overlaps(s, e, b.start, b.end)) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("group_lesson");
+          break;
         }
+      }
+      // A student is simply refused, exactly as before. The owner is refused
+      // once, with the reasons, and goes through on a second call that says
+      // force -- so overriding is deliberate rather than a button that
+      // silently double-books him.
+      if (found.length > 0 && (!admin || body.force !== true)) {
+        return json(
+          { error: "slot taken", code: "conflict", clashes: found, outside_availability: outsideAvailability },
+          409,
+        );
+      }
+      // Nothing clashes, but it is outside the published hours: say so and let
+      // the second call confirm. Silence here would make the panel look like
+      // it had quietly extended his working week.
+      if (found.length === 0 && admin && outsideAvailability && body.force !== true) {
+        return json(
+          { error: "outside availability", code: "outside_availability", clashes: [], outside_availability: true },
+          409,
+        );
       }
 
       // Claim the old booking first, atomically: only a row that is still

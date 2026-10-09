@@ -2019,6 +2019,76 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    /**
+     * Move a student's lesson.
+     *
+     * The panel could cancel a booking and nothing else, so changing a time
+     * meant cancelling and asking the student to book again -- or editing
+     * Google Calendar by hand, which is the one direction that does not come
+     * back into the panel. Both are worse than the thing that was missing.
+     *
+     * Routed through booking-manage with the service-role key, exactly as
+     * cancel_booking is, so that one code path patches the calendar event in
+     * place (keeping its Meet link), writes the new row with
+     * original_booking_id, and sends the student and the owner their emails.
+     * Nothing about bookings is reimplemented here.
+     *
+     * `force` is passed through: the first call reports what the new time
+     * clashes with, or that it is outside the published hours, and only a
+     * second call with force actually overrides it.
+     */
+    if (action === "reschedule_booking") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const newStart = (body as { start_at?: unknown }).start_at;
+      if (typeof newStart !== "string" || !Number.isFinite(Date.parse(newStart))) {
+        return jsonResponse({ error: "Ora nouă este invalidă." });
+      }
+      const force = (body as { force?: unknown }).force === true;
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select("manage_token, status, registration_id")
+        .eq("id", id)
+        .single();
+      if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
+      if (booking.status !== "confirmed") {
+        return jsonResponse({ error: "Programarea nu este activă." });
+      }
+      const regIdForBooking = booking.registration_id as string | null;
+      const resp = await fetch(
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage/${booking.manage_token}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ start_at: newStart, force }),
+        },
+      );
+      const out = await resp.json().catch(() => ({}));
+      if (!resp.ok || out?.error) {
+        // The structured codes travel on, so the panel can name what clashes
+        // and offer to do it anyway rather than showing "Mutare eșuată".
+        return jsonResponse({
+          error: out?.error || "Mutare eșuată",
+          code: out?.code,
+          clashes: out?.clashes ?? [],
+          outside_availability: out?.outside_availability ?? false,
+        });
+      }
+      // Moving someone's lesson is a change to their arrangements, so it goes
+      // in the same trail as deletions and refunds. registration_id, not the
+      // booking id, because that is the column the trail is keyed on and the
+      // screen that reads it resolves names from it.
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "reschedule_booking",
+        registration_id: regIdForBooking,
+        details: { to: newStart, forced: force },
+      });
+      return jsonResponse({ success: true, start_at: out?.start_at ?? newStart });
+    }
+
     if (action === "list_notifications") {
       const { data: regs, error: regsError } = await supabase
         .from("registrations")
