@@ -263,7 +263,7 @@ const KidsSlotsAdmin = () => {
 
       {slots.length > 0 && (
         <Section title="Intervale" icon={CalendarClock}>
-          <TableWrap>
+          <TableWrap label="Intervale">
             <thead>
               <tr>
                 <Th>Ziua</Th>

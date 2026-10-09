@@ -114,7 +114,7 @@ const CardOverridesAdmin = () => {
 
       {rows.length > 0 && (
         <Section title={`Cartonașe corectate (${rows.length})`} icon={SquarePen}>
-          <TableWrap>
+          <TableWrap label="Cartonașe corectate">
             <thead>
               <tr>
                 <Th>Cartonaș</Th>

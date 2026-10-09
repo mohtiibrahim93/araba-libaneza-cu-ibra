@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Loader2, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { scrollRegionProps, useHorizontalOverflow } from "@/hooks/useHorizontalOverflow";
 
 /**
  * The admin panel's design vocabulary.
@@ -194,29 +195,56 @@ export function ErrorNote({ children }: { children: ReactNode }) {
  * panel is used from a phone often enough that the shell was rebuilt once for
  * that reason. `stickyHeader` is for the long lists (registrations, the audit
  * log) where the header leaves the screen before the rows do.
+ *
+ * The scroll was the problem, though, not the fix. At 34rem minimum width a
+ * 360px phone shows roughly the first two thirds of a row and nothing says
+ * so: the columns past the edge are not hidden, they are unannounced, which
+ * reads as missing. Înscrieri, Lecții, Parcurs, SEO and Jurnal all looked
+ * truncated on a phone for that reason.
+ *
+ * So when there is more to the right, the box says so twice: a fade at the
+ * edge for anyone who can see it, and a focusable labelled region for anyone
+ * driving by keyboard or screen reader, who otherwise cannot scroll it at all.
+ * Both appear only while the table really does overflow — a tab stop on a
+ * table that fits is just one more thing to tab past.
  */
 export function TableWrap({
   children,
   stickyHeader,
   maxHeight,
+  label,
 }: {
   children: ReactNode;
   stickyHeader?: boolean;
   maxHeight?: string;
+  /** Names the scrollable region for screen readers, e.g. "Înscrieri". */
+  label?: string;
 }) {
+  const { ref, overflows, atEnd, measure } = useHorizontalOverflow<HTMLDivElement>();
+
   return (
-    <div
-      className={cn("-mx-4 overflow-auto px-4", maxHeight)}
-      style={maxHeight ? undefined : undefined}
-    >
-      <table
-        className={cn(
-          "w-full min-w-[34rem] border-collapse text-sm",
-          stickyHeader && "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-card",
-        )}
+    <div className="relative -mx-4">
+      <div
+        ref={ref}
+        onScroll={measure}
+        className={cn("overflow-auto px-4", maxHeight)}
+        {...scrollRegionProps(overflows, label)}
       >
-        {children}
-      </table>
+        <table
+          className={cn(
+            "w-full min-w-[34rem] border-collapse text-sm",
+            stickyHeader && "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-card",
+          )}
+        >
+          {children}
+        </table>
+      </div>
+      {overflows && !atEnd && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-card via-card/80 to-transparent"
+        />
+      )}
     </div>
   );
 }
