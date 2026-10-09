@@ -15,6 +15,13 @@
       "when": 1791468288920,
       "tag": "0001_yalla_card_overrides",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791529101756,
+      "tag": "0002_yalla_card_overrides_private",
+      "breakpoints": true
     }
   ]
 }

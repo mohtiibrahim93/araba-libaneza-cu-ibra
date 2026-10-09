@@ -396,18 +396,21 @@ export type Database = {
           calendar_title: string
           cohort_id: string
           created_at: string
+          members: string[]
           total_lessons: number
         }
         Insert: {
           calendar_title: string
           cohort_id: string
           created_at?: string
+          members?: string[]
           total_lessons: number
         }
         Update: {
           calendar_title?: string
           cohort_id?: string
           created_at?: string
+          members?: string[]
           total_lessons?: number
         }
         Relationships: [
@@ -1497,6 +1500,45 @@ export type Database = {
         }
         Relationships: []
       }
+      yalla_card_override_history: {
+        Row: {
+          card_id: string
+          changed_at: string
+          id: number
+          new_ar: string | null
+          new_ro: string | null
+          new_variants: Json | null
+          old_ar: string | null
+          old_ro: string | null
+          old_variants: Json | null
+          op: string
+        }
+        Insert: {
+          card_id: string
+          changed_at?: string
+          id?: never
+          new_ar?: string | null
+          new_ro?: string | null
+          new_variants?: Json | null
+          old_ar?: string | null
+          old_ro?: string | null
+          old_variants?: Json | null
+          op: string
+        }
+        Update: {
+          card_id?: string
+          changed_at?: string
+          id?: never
+          new_ar?: string | null
+          new_ro?: string | null
+          new_variants?: Json | null
+          old_ar?: string | null
+          old_ro?: string | null
+          old_variants?: Json | null
+          op?: string
+        }
+        Relationships: []
+      }
       yalla_card_overrides: {
         Row: {
           ar: string
@@ -1555,6 +1597,15 @@ export type Database = {
         Returns: {
           kids_slot_id: string
           taken: number
+        }[]
+      }
+      get_published_card_overrides: {
+        Args: never
+        Returns: {
+          ar: string
+          card_id: string
+          ro: string
+          variants: Json
         }[]
       }
       student_name_key: { Args: { p_name: string }; Returns: string }
