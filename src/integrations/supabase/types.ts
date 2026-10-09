@@ -396,18 +396,21 @@ export type Database = {
           calendar_title: string
           cohort_id: string
           created_at: string
+          members: string[]
           total_lessons: number
         }
         Insert: {
           calendar_title: string
           cohort_id: string
           created_at?: string
+          members?: string[]
           total_lessons: number
         }
         Update: {
           calendar_title?: string
           cohort_id?: string
           created_at?: string
+          members?: string[]
           total_lessons?: number
         }
         Relationships: [
