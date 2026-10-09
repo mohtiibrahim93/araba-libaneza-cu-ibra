@@ -36,7 +36,14 @@ const CookieConsentBanner = ({ force = false }: { force?: boolean }) => {
       role="dialog"
       aria-live="polite"
       aria-label={t.cookieTitle}
-      className="fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[60] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:max-w-md"
+      /* The bottom-right corner is crowded: WhatsApp and phone are pinned
+         there (`hidden md:flex`, so from 768px up), and at z-60 this card
+         covers both of them until it is dismissed — the one CTA the site
+         most wants tapped, hidden behind a consent prompt. The mobile offset
+         already clears that corner; `md:bottom-32` does the same from the
+         width where the buttons actually appear, rather than at `sm`, where
+         there is nothing to clear and the card would just float high. */
+      className="fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[60] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:max-w-md md:bottom-32"
     >
       <div className="rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-lg sm:p-5">
         <p className="text-sm font-semibold">{t.cookieTitle}</p>

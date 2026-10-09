@@ -37,6 +37,17 @@ describe("the badge", () => {
   });
 });
 
+describe("the rest of that corner", () => {
+  it("keeps the consent banner off the WhatsApp buttons", () => {
+    // Same corner, same mistake: the banner sits at z-60 over a stack pinned
+    // at bottom-6 right-6, so it covered both buttons until dismissed. The
+    // offset starts at md, which is where `hidden md:flex` puts them.
+    const banner = read("src/components/CookieConsentBanner.tsx");
+    expect(banner).toContain("md:bottom-32");
+    expect(read("src/components/WhatsAppButton.tsx")).toContain("hidden flex-col items-end gap-2 md:flex");
+  });
+});
+
 describe("the disclosure that pays for it", () => {
   it("carries Google's wording and both links", () => {
     expect(notice).toContain("t.recaptchaNotice");
