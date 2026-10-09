@@ -13,13 +13,19 @@ import { resolve } from "node:path";
  * That table decides what 4,315 cards teach to everyone at once, which makes
  * its write path the part worth pinning down. A public write policy, or a
  * client that writes directly, would let any visitor rewrite the lessons.
+ *
+ * It is also the record of which cards an owner judged wrong, and when, and
+ * that half is private. The two were one table-wide read grant until
+ * 20261009070000, so the split -- published text out through a function,
+ * correction records locked behind RLS with no policy -- is pinned here too.
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 const migrations = resolve(process.cwd(), "supabase/migrations");
 const migration = readdirSync(migrations)
-  .filter((f) => f.includes("yalla_card_overrides"))
+  .filter((f) => f.includes("yalla_card_override"))
   .map((f) => readFileSync(resolve(migrations, f), "utf8"))
   .join("\n");
+const privacy = read("supabase/migrations/20261009070000_yalla_card_overrides_private.sql");
 
 describe("the overrides table", () => {
   it("exists with the card id as its key", () => {
@@ -29,10 +35,12 @@ describe("the overrides table", () => {
     expect(migration).toContain("card_id text PRIMARY KEY");
   });
 
-  it("is readable by anyone and writable by no one", () => {
-    expect(migration).toContain("GRANT SELECT ON public.yalla_card_overrides TO anon, authenticated");
+  it("is readable by no one directly and writable by no one", () => {
     expect(migration).toContain("ENABLE ROW LEVEL SECURITY");
-    expect(migration).toMatch(/CREATE POLICY[^;]*FOR SELECT USING \(true\)/);
+    // The original grant and policy are gone: a visitor's game reads the
+    // published text through get_published_card_overrides(), never the table.
+    expect(privacy).toContain('DROP POLICY IF EXISTS "yalla_card_overrides public read"');
+    expect(privacy).toContain("REVOKE SELECT ON public.yalla_card_overrides FROM anon, authenticated");
     // The absence of these is the whole security model: writes reach the table
     // only through service_role, which means only through the admin function.
     for (const write of ["FOR INSERT", "FOR UPDATE", "FOR DELETE", "FOR ALL"]) {
@@ -46,6 +54,60 @@ describe("the overrides table", () => {
     expect(migration).toContain("btrim(ar) <> ''");
     expect(migration).toContain("btrim(ro) <> ''");
     expect(migration).toContain("jsonb_typeof(variants) = 'array'");
+  });
+});
+
+/**
+ * Correction records.
+ *
+ * What a card said before someone fixed it, and when, is the owner's record of
+ * their own judgement. A visitor needs the corrected text and nothing else, so
+ * the history lives in its own table that no public role can reach, and the
+ * public read path is a function that returns four columns and cannot see it.
+ */
+describe("correction records stay private", () => {
+  it("keeps the history in a table with RLS and no policy", () => {
+    expect(privacy).toContain("CREATE TABLE IF NOT EXISTS public.yalla_card_override_history");
+    expect(privacy).toContain("ALTER TABLE public.yalla_card_override_history ENABLE ROW LEVEL SECURITY");
+    // RLS with no policy denies every row to anon and authenticated; the
+    // revoke is the second lock, because Supabase grants those roles table
+    // privileges by default and a policy added here later would open reads.
+    expect(privacy).toContain("REVOKE ALL ON public.yalla_card_override_history FROM anon, authenticated");
+    expect(privacy).not.toMatch(/CREATE POLICY[^;]*yalla_card_override_history/);
+  });
+
+  it("records every change, including the delete the republish does", () => {
+    // save_card_overrides deletes the whole set and reinserts it, so a
+    // trigger on INSERT and UPDATE alone would log a reverted correction as
+    // nothing at all.
+    expect(privacy).toContain("AFTER INSERT OR UPDATE OR DELETE ON public.yalla_card_overrides");
+    expect(privacy).toContain("FOR EACH ROW EXECUTE FUNCTION public.tg_yalla_card_override_history()");
+  });
+
+  it("lets the public function return only the published text", () => {
+    const fn = privacy.slice(privacy.indexOf("CREATE OR REPLACE FUNCTION public.get_published_card_overrides"));
+    expect(fn).toContain("RETURNS TABLE(card_id text, ar text, ro text, variants jsonb)");
+    // Not updated_at, which dates the correction, and not the history table.
+    expect(fn).not.toContain("updated_at");
+    expect(fn).not.toContain("yalla_card_override_history");
+    // SECURITY DEFINER reaches past the revoked table grant; a mutable
+    // search_path would let a caller point those names elsewhere.
+    expect(fn).toContain("SECURITY DEFINER");
+    expect(fn).toContain("SET search_path TO 'public'");
+    expect(fn).toContain("GRANT EXECUTE ON FUNCTION public.get_published_card_overrides() TO anon, authenticated, service_role");
+  });
+
+  it("gives no public role the trigger function either", () => {
+    expect(privacy).toContain("REVOKE ALL ON FUNCTION public.tg_yalla_card_override_history() FROM PUBLIC, anon, authenticated");
+  });
+
+  it("is reachable from nothing in the app but the admin function", () => {
+    // The panel lists overrides through list_card_overrides and writes through
+    // save_card_overrides, both service_role. Nothing in src/ should name the
+    // history table at all.
+    for (const f of ["src/hooks/useCardOverrides.ts", "src/components/admin/CardOverridesAdmin.tsx", "src/components/YallaGame.tsx"]) {
+      expect(read(f), `${f} must not reach the correction records`).not.toContain("yalla_card_override_history");
+    }
   });
 });
 
@@ -81,16 +143,17 @@ describe("the read path", () => {
     expect(hook).toContain("retry: false");
   });
 
-  it("declares the table in a migration, and never reaches it through any", () => {
-    // The table's shape is owned by the migration. The generated client types do
-    // not carry it yet, because that migration has not been applied to the
-    // database — until it is, the hook reads the table through one narrow cast
-    // in useCardOverrides.ts rather than `as any`, which would throw away the
-    // row types the hook maps.
+  it("reads through the published-only function, never the table", () => {
+    // The table's shape is owned by the migration. The hook calls the function
+    // through one narrow cast rather than `as any`, which would throw away the
+    // row types it maps.
     expect(read("supabase/migrations/20260914180000_yalla_card_overrides.sql")).toContain(
       "CREATE TABLE public.yalla_card_overrides",
     );
-    expect(read("src/hooks/useCardOverrides.ts")).not.toContain("as any");
+    const hook = read("src/hooks/useCardOverrides.ts");
+    expect(hook).toContain('rpc("get_published_card_overrides")');
+    expect(hook).not.toContain('from("yalla_card_overrides")');
+    expect(hook).not.toContain("as any");
   });
 
   it("keeps Supabase off /joc's critical path", () => {

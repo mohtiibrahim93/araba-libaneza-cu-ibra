@@ -118,6 +118,11 @@ const RegistrationFormSection = ({
   const [privatePay, setPrivatePay] = useState<
     { registrationId: string; email: string; quantity: number; format: "online" | "physical" } | null
   >(null);
+  // Which of those two the scheduler is actually showing. The heading above it
+  // said "Pasul 2 din 3 — alege ziua și ora" the whole way through, including
+  // on the payment screen, so the last step of a three-step flow never
+  // appeared: you were paying under a heading telling you to pick a time.
+  const [privatePayPhase, setPrivatePayPhase] = useState<"pick" | "pay">("pick");
   const [groupPlan, setGroupPlan] = useState<"monthly" | "full">("monthly");
   const [payDeposit, setPayDeposit] = useState(false);
   const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
@@ -513,28 +518,48 @@ const RegistrationFormSection = ({
         <div className={embedded ? "space-y-4" : "mx-auto max-w-3xl space-y-4"}>
           <button
             type="button"
-            onClick={() => setPrivatePay(null)}
+            onClick={() => {
+              setPrivatePay(null);
+              setPrivatePayPhase("pick");
+            }}
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
             ← {en ? "Change my details" : "Modifică datele"}
           </button>
           <div>
             <span className="mb-1 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-              {en ? "Step 2 of 3" : "Pasul 2 din 3"}
+              {privatePayPhase === "pay"
+                ? en
+                  ? "Step 3 of 3"
+                  : "Pasul 3 din 3"
+                : en
+                  ? "Step 2 of 3"
+                  : "Pasul 2 din 3"}
             </span>
             <h3 className="font-display text-2xl font-bold text-foreground">
-              {en ? "Choose the day and time" : "Alege ziua și ora"}
+              {privatePayPhase === "pay"
+                ? en
+                  ? "Pay and confirm"
+                  : "Plătește și confirmă"
+                : en
+                  ? "Choose the day and time"
+                  : "Alege ziua și ora"}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {en
-                ? "Then you pay, and the lesson is confirmed. Nothing is booked until the payment goes through."
-                : "Apoi plătești și lecția e confirmată. Nu se rezervă nimic până nu trece plata."}
+              {privatePayPhase === "pay"
+                ? en
+                  ? "The card form is right here — we don't send you anywhere else. The lesson is booked the moment the payment goes through."
+                  : "Plătești cu cardul aici, nu te trimitem pe altă pagină. Lecția se rezervă în momentul în care trece plata."
+                : en
+                  ? "Then you pay, and the lesson is confirmed. Nothing is booked until the payment goes through."
+                  : "Apoi plătești și lecția e confirmată. Nu se rezervă nimic până nu trece plata."}
             </p>
           </div>
           <NativeScheduler
             eventType="paid"
             registrationId={privatePay.registrationId}
             purchase={{ quantity: privatePay.quantity, email: privatePay.email, format: privatePay.format }}
+            onPhaseChange={setPrivatePayPhase}
           />
         </div>
       </section>

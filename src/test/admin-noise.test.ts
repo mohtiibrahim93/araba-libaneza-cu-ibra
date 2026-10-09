@@ -63,22 +63,17 @@ describe("the admin speaks Romanian, not JSON", () => {
 describe("visitor chrome stays off the admin", () => {
   it("keeps the course assistant out, as before", () => {
     const src = read("src/routes/__root.tsx");
-    expect(src).toContain("isAdmin ? <AdminChromeMarker /> : <AskAssistant />");
+    expect(src).toContain("isAdmin ? null : <AskAssistant />");
   });
 
-  it("hides the reCAPTCHA badge where no form uses it", () => {
-    // The script is declared in a static head() and cannot be dropped per
-    // route, so the document is marked instead and one rule hides the badge.
+  it("no longer marks the document for a rule that is now global", () => {
+    // The badge is hidden on every route (see recaptcha-badge.test.ts), so
+    // the data-admin-chrome flag had nothing reading it. A component that
+    // exists for a side effect nobody observes is worse than no component.
     const src = read("src/routes/__root.tsx");
-    expect(src).toContain("adminChrome");
-
-    const css = read("src/styles.css");
-    expect(css).toContain('html[data-admin-chrome="true"] .grecaptcha-badge');
-  });
-
-  it("clears the mark on the way out, so visitor pages keep their badge", () => {
-    const src = read("src/routes/__root.tsx");
-    expect(src).toContain('delete document.documentElement.dataset["adminChrome"]');
+    expect(src).not.toContain("adminChrome");
+    expect(src).not.toContain("AdminChromeMarker");
+    expect(read("src/styles.css")).not.toContain("data-admin-chrome");
   });
 });
 

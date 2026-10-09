@@ -3,6 +3,7 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TimeField } from "@/components/admin/TimeField";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 
@@ -135,20 +136,18 @@ const AvailabilityAdmin = () => {
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Start</Label>
-                <Input
-                  type="time"
-                  className="w-28"
-                  value={r.start_time.slice(0, 5)}
-                  onChange={(e) => update(r.id, { start_time: e.target.value + ":00" })}
+                <TimeField
+                  label={`Start ${WD[r.weekday] ?? ""}`}
+                  value={r.start_time}
+                  onChange={(hhmm) => update(r.id, { start_time: hhmm + ":00" })}
                 />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Final</Label>
-                <Input
-                  type="time"
-                  className="w-28"
-                  value={r.end_time.slice(0, 5)}
-                  onChange={(e) => update(r.id, { end_time: e.target.value + ":00" })}
+                <TimeField
+                  label={`Final ${WD[r.weekday] ?? ""}`}
+                  value={r.end_time}
+                  onChange={(hhmm) => update(r.id, { end_time: hhmm + ":00" })}
                 />
               </div>
               <label className="flex items-center gap-1 text-sm">
@@ -187,20 +186,18 @@ const AvailabilityAdmin = () => {
             </div>
             <div className="space-y-1">
               <Label className="text-xs">Start</Label>
-              <Input
-                type="time"
-                className="w-28"
+              <TimeField
+                label="Start, interval nou"
                 value={newRule.start_time}
-                onChange={(e) => setNewRule({ ...newRule, start_time: e.target.value })}
+                onChange={(hhmm) => setNewRule({ ...newRule, start_time: hhmm })}
               />
             </div>
             <div className="space-y-1">
               <Label className="text-xs">Final</Label>
-              <Input
-                type="time"
-                className="w-28"
+              <TimeField
+                label="Final, interval nou"
                 value={newRule.end_time}
-                onChange={(e) => setNewRule({ ...newRule, end_time: e.target.value })}
+                onChange={(hhmm) => setNewRule({ ...newRule, end_time: hhmm })}
               />
             </div>
             <Button size="sm" onClick={add} className="ml-auto">

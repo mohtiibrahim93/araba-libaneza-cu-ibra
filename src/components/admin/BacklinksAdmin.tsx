@@ -573,7 +573,7 @@ export default function BacklinksAdmin() {
               Nicio înregistrare. Apasă „Actualizează automat (gratuit)” sau adaugă manual un snapshot.
             </p>
           ) : (
-            <Table>
+            <Table aria-label="Backlink-uri">
               <TableHeader>
                 <TableRow>
                   <TableHead>Data</TableHead>

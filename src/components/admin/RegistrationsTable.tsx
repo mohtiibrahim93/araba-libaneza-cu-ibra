@@ -394,7 +394,7 @@ const RegistrationsTable = ({
 
   return (
   <div className="border border-border rounded-lg overflow-hidden">
-    <Table>
+    <Table aria-label="Înscrieri">
       <TableHeader>
         <TableRow className="bg-muted/50">
           <TableHead className="w-10">

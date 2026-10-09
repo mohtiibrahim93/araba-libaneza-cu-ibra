@@ -126,7 +126,7 @@ const AuditLogAdmin = () => {
           icon={ScrollText}
           description="Cele mai recente primele. Jurnalul nu poate fi editat din panou."
         >
-          <TableWrap stickyHeader maxHeight="max-h-[70vh]">
+          <TableWrap stickyHeader maxHeight="max-h-[70vh]" label="Jurnal">
             <thead>
               <tr>
                 <Th>Când</Th>

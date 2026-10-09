@@ -1,6 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/lib/i18n";
+import RecaptchaNotice from "@/components/RecaptchaNotice";
 
 interface GdprCheckboxProps {
   checked: boolean;
@@ -44,17 +45,11 @@ const GdprCheckbox = ({ checked, onCheckedChange, error }: GdprCheckboxProps) =>
           {error}
         </p>
       )}
-      <p className="text-[11px] text-muted-foreground leading-relaxed pl-6">
-        {t.recaptchaNotice.split("Google")[0]}
-        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-          Google Privacy Policy
-        </a>
-        {" / "}
-        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-          Terms of Service
-        </a>
-        .
-      </p>
+      {/* Was assembled by splitting the sentence on the word "Google" and
+          appending two English link labels, so the Romanian read "...și
+          Termenii Google Privacy Policy / Terms of Service." One component
+          now, in both languages, shared with the footer. */}
+      <RecaptchaNotice className="pl-6" />
     </div>
   );
 };

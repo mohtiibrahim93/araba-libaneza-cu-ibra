@@ -16,6 +16,7 @@
 
 import { ONLINE_PRICES, physicalPrice } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
+import { GOOGLE_MAPS_PROFILE_URL } from "@/lib/googleBusiness";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 
@@ -42,8 +43,10 @@ export const ORGANIZATION_SAME_AS: readonly string[] = [
   "https://meditatii.ro/meditatii/limba-araba-ibrahim-gabriel-moaty-26623",
   "https://anunturi-meditatii.ro/araba/meditator-ibrahim-gabriel_52392",
   "https://www.olx.ro/d/oferta/araba-libaneza-cu-ibra-IDgE526.html",
-  // The Google Business Profile (Google Maps listing).
-  "https://maps.app.goo.gl/2ZCZZjv3Tu8q3wKU9",
+  // The Google Business Profile (Google Maps listing). Imported rather than
+  // written out again: this was a second copy of the share link, so the two
+  // could drift and only one of them would ever be checked.
+  GOOGLE_MAPS_PROFILE_URL,
   // Social profiles.
   "https://www.instagram.com/culturalibanezaro",
   "https://www.tiktok.com/@lebanesewithibra",
