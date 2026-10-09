@@ -1,6 +1,6 @@
-// GA4 event helpers. Consent is handled by the Adopt CMP via Google Consent
-// Mode: index.html sets consent "default: denied" and Adopt flips it to
-// "granted" when the visitor accepts, so we send events unconditionally and
+// GA4 event helpers. Consent is handled by CookieConsentBanner via Google
+// Consent Mode: the gtag bootstrap sets consent "default: denied" and the
+// banner flips it to "granted" when the visitor accepts, so we send events unconditionally and
 // let Consent Mode gate them. Meta Pixel isn't set up yet.
 
 

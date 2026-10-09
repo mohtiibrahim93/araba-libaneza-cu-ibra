@@ -60,7 +60,7 @@ const PageContent = () => {
   }, [lang]);
 
   useEffect(() => {
-    // Analytics consent is handled by the Adopt CMP (Google
+    // Analytics consent is handled by CookieConsentBanner (Google
     // Consent Mode); here we only handle post-payment redirect toasts.
     const params = new URLSearchParams(window.location.search);
     const payment = params.get("payment");

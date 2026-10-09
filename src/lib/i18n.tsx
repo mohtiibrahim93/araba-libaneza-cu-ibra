@@ -272,6 +272,13 @@ export const translations = {
     recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
     recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
 
+    // Cookie consent banner
+    cookieTitle: "Cookie-uri",
+    cookieMessage: "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads), ca să vedem ce funcționează pe site.",
+    cookieAcceptAll: "Acceptă toate",
+    cookieEssentialOnly: "Doar esențiale",
+    cookiePrivacyLink: "Politica de confidențialitate",
+
     // Payment instructions
     paymentTitle: "Instrucțiuni de plată",
     paymentDesc: "Poți plăti prin una din următoarele metode:",
@@ -1075,6 +1082,13 @@ export const translations = {
     gdprRequired: "You must accept the privacy policy.",
     recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
     recaptchaFailed: "Security check failed. Please try again.",
+
+    // Cookie consent banner
+    cookieTitle: "Cookies",
+    cookieMessage: "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads) to see what works on the site.",
+    cookieAcceptAll: "Accept all",
+    cookieEssentialOnly: "Essential only",
+    cookiePrivacyLink: "Privacy policy",
 
     // Payment instructions
     paymentTitle: "Payment Instructions",

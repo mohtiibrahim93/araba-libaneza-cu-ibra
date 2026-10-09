@@ -3,6 +3,7 @@ import { MessageCircle, Mail, MapPin, Star } from "lucide-react";
 import { GOOGLE_MAPS_PROFILE_URL, GOOGLE_REVIEW_URL } from "@/lib/googleBusiness";
 import { Link } from "@/components/LocalizedLink";
 import AnchorLink from "@/components/AnchorLink";
+import { OPEN_CONSENT_EVENT } from "@/lib/cookieConsent";
 import BrandLogo from "@/components/BrandLogo";
 import SocialLinks from "@/components/SocialLinks";
 import GoogleMapEmbed from "@/components/GoogleMapEmbed";
@@ -156,17 +157,7 @@ const Footer = () => {
             <li>
               <button
                 type="button"
-                onClick={() => {
-                  const w = window as any;
-                  // Adopt exposes a few reopen entry points depending on build.
-                  const open =
-                    w.adoptWidget?.show ||
-                    w.adopt?.showSettings ||
-                    w.Adopt?.open ||
-                    w.__adoptOpenSettings;
-                  if (typeof open === "function") open();
-                  else document.querySelector<HTMLElement>("[data-adopt-settings]")?.click();
-                }}
+                onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
                 className="hover:text-foreground transition-colors"
               >
                 {lang === "en" ? "Cookie settings" : "Setări cookies"}

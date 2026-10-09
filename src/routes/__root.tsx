@@ -21,12 +21,12 @@ import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { COURSE_INSTRUCTOR, ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 import NotFound from "@/pages/NotFound";
 import AskAssistant from "@/components/AskAssistant";
+import CookieConsentBanner from "@/components/CookieConsentBanner";
 import appCss from "../styles.css?url";
 
-const ADOPT_WEBSITE_CODE = "1771d601-0d76-4374-9255-347fecce75e3";
 const GA_MEASUREMENT_ID = "G-F167Y815JL";
 
-// Skip consent/analytics vendors inside the Lovable editor preview iframe:
+// Skip analytics vendors inside the Lovable editor preview iframe:
 // they probe the parent frame and throw cross-origin SecurityErrors there.
 const analyticsBootstrap = `
 window.__ANALYTICS_ENABLED__ = (function () {
@@ -38,12 +38,6 @@ window.__ANALYTICS_ENABLED__ = (function () {
   }
   return true;
 })();
-if (window.__ANALYTICS_ENABLED__) {
-  var adopt = document.createElement("script");
-  adopt.src = "https://tag.goadopt.io/injector.js?website_code=${ADOPT_WEBSITE_CODE}";
-  adopt.className = "adopt-injector";
-  document.head.appendChild(adopt);
-}
 `;
 
 // One-time cleanup of the previous CMP (consentmanager.net) leftovers.
@@ -95,6 +89,13 @@ if (window.__ANALYTICS_ENABLED__) {
   document.head.appendChild(gt);
   gtag('js', new Date());
   gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+  // A visitor who already accepted all (CookieConsentBanner, localStorage
+  // "cookie_consent") is granted before config, so the page view counts.
+  try {
+    if (localStorage.getItem("cookie_consent") === "all") {
+      gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' });
+    }
+  } catch (e) {}
   gtag('config', '${GA_MEASUREMENT_ID}');
 }
 `;
@@ -156,7 +157,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
       },
       { name: "author", content: "Centrul de Arabă Libaneză" },
-      { name: "adopt-website-id", content: ADOPT_WEBSITE_CODE },
       { "data-rh": "true", property: "og:type", content: "website" },
       { "data-rh": "true", property: "og:url", content: "https://centruldearabalibaneza.com/" },
       { "data-rh": "true", property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
@@ -292,6 +292,7 @@ function RootComponent() {
                 document instead lets one stylesheet rule hide the badge where
                 nothing uses it. */}
             {isAdmin ? <AdminChromeMarker /> : <AskAssistant />}
+            <CookieConsentBanner />
           </I18nProvider>
         </TooltipProvider>
       </QueryClientProvider>
