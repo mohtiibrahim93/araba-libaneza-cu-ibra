@@ -30,14 +30,11 @@ export function useCardOverrides() {
     queryKey: ["yalla-card-overrides"],
     queryFn: async (): Promise<CardOverrides> => {
       const { supabase } = await import("@/integrations/supabase/client");
-      // The generated Supabase types don't yet include yalla_card_overrides,
-      // so the query chain is loosened while the row shape stays explicit.
+      // Read through the published-only function: the table itself is private.
       interface Row { card_id: string; ar: string; ro: string; variants: unknown }
       const { data, error } = await (supabase as unknown as {
-        from: (t: string) => { select: (c: string) => Promise<{ data: Row[] | null; error: unknown }> };
-      })
-        .from("yalla_card_overrides")
-        .select("card_id, ar, ro, variants");
+        rpc: (fn: string) => Promise<{ data: Row[] | null; error: unknown }>;
+      }).rpc("get_published_card_overrides");
       if (error || !data) return {};
       const out: CardOverrides = {};
       for (const row of data) {
