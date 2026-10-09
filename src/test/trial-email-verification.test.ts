@@ -134,6 +134,26 @@ describe("the email", () => {
     expect(hookMagic).toContain("token: data.token ?? undefined");
   });
 
+  it("is rendered the same by both auth hooks, whichever one Supabase calls", () => {
+    // There are two implementations: the site route and the auth-email-hook
+    // edge function, each with its own copy of the templates. Only one is
+    // configured in Supabase, and nothing in the repo says which -- so both
+    // have to carry the code, and both have to say the same thing in the
+    // subject, which is what someone waiting for a code scans for.
+    const edgeHook = read("supabase/functions/auth-email-hook/index.ts");
+    expect(edgeHook).toContain("token: payload.data.token");
+    for (const subject of ["'Your confirmation code'", "'Your login code'"]) {
+      expect(hook, `site route subject ${subject}`).toContain(subject);
+      expect(edgeHook, `edge function subject ${subject}`).toContain(subject);
+    }
+    for (const f of [
+      "supabase/functions/_shared/email-templates/signup.tsx",
+      "supabase/functions/_shared/email-templates/magic-link.tsx",
+    ]) {
+      expect(read(f), `${f} must render the code too`).toContain("<Text style={codeStyle}>{token}</Text>");
+    }
+  });
+
   it("keeps the link for the two flows that have always used one", () => {
     // The admin fallback sign-in and the student account send this same email
     // and expect a link, so the code is added rather than swapped in.

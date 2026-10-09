@@ -26,9 +26,14 @@ const corsHeaders = {
 }
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
+  // signup and magiclink now lead with a six-digit code in the body, and the
+  // subject is what someone waiting for a code actually scans. The site route
+  // at src/routes/lovable/email/auth/webhook.ts sends the same two emails and
+  // must keep the same subjects: only one of the two hooks is configured in
+  // Supabase, and which one it is should not change what the reader sees.
+  signup: 'Your confirmation code',
   invite: "You've been invited",
-  magiclink: 'Your login link',
+  magiclink: 'Your login code',
   recovery: 'Reset your password',
   email_change: 'Confirm your new email',
   reauthentication: 'Your verification code',
