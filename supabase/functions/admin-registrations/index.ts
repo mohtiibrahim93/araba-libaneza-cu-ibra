@@ -43,6 +43,141 @@ function isAllowedSenderEmail(email: string) {
  * happened. It defaults to 0, which is the generous reading — nothing consumed
  * — so a forgotten field can never refund a student less than they are owed.
  */
+/**
+ * Lessons whose Google Calendar event no longer says what the panel says.
+ *
+ * Bookings are written to Google and never read back: nothing in this project
+ * notices when an event is moved or deleted there. So the owner edits a lesson
+ * on his phone, the panel keeps showing the old hour, and the reminder goes out
+ * on the old hour too. That was his complaint, and it is the half of the sync
+ * that does not exist.
+ *
+ * This is the read-only half of the answer, and deliberately only that: it
+ * compares and reports, and writes nothing. Pulling Google's times into
+ * `bookings` automatically is a bigger decision than it looks -- a wrong match
+ * would rewrite a real lesson's time -- and it should not ride in on a health
+ * screen. Telling him what disagrees costs nothing and is most of the value.
+ *
+ * One paginated `events.list` over the window rather than one fetch per
+ * booking: forty upcoming lessons would otherwise be forty round trips every
+ * time the screen opens. `showDeleted` is on, because an event cancelled in
+ * Google is exactly what we are looking for and is otherwise omitted.
+ *
+ * Failure is not an error here. If Google cannot be read, the health screen
+ * still has everything else to say, so this returns null and the panel says it
+ * could not check rather than showing nothing at all.
+ */
+async function calendarDrift(
+  rows: Array<Record<string, unknown>>,
+): Promise<
+  | null
+  | Array<{
+      id: string;
+      student_name: string | null;
+      booked_at: string;
+      google_at: string | null;
+      kind: "moved" | "cancelled_in_google" | "not_found";
+    }>
+> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+  if (!lovableKey || !gcalKey) return null;
+
+  const now = Date.now();
+  // Only lessons still to come: a past lesson moved in Google needs no action,
+  // and including them would make the list long and ignorable.
+  const upcoming = rows.filter(
+    (r) => typeof r["google_event_id"] === "string" && Date.parse(String(r["start_at"])) >= now,
+  );
+  if (upcoming.length === 0) return [];
+
+  const gHeaders = {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": gcalKey,
+    "Content-Type": "application/json",
+  };
+  // Wider than the lessons themselves, so an event moved a long way still
+  // turns up as moved rather than as missing.
+  const timeMin = new Date(now - 7 * 86_400_000).toISOString();
+  const timeMax = new Date(now + 400 * 86_400_000).toISOString();
+
+  const byId = new Map<string, { start?: string; status?: string }>();
+  try {
+    let pageToken: string | undefined;
+    do {
+      const qs = new URLSearchParams({
+        singleEvents: "true",
+        showDeleted: "true",
+        orderBy: "startTime",
+        timeMin,
+        timeMax,
+        maxResults: "250",
+      });
+      if (pageToken) qs.set("pageToken", pageToken);
+      const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+      if (!res.ok) {
+        console.error("[calendar_drift] list failed", res.status);
+        return null;
+      }
+      const page = await res.json();
+      for (const ev of page.items ?? []) {
+        if (typeof ev?.id === "string") {
+          byId.set(ev.id, { start: ev?.start?.dateTime, status: ev?.status });
+        }
+      }
+      pageToken = page.nextPageToken;
+    } while (pageToken);
+  } catch (err) {
+    console.error("[calendar_drift] list threw", err);
+    return null;
+  }
+
+  const out: Array<{
+    id: string;
+    student_name: string | null;
+    booked_at: string;
+    google_at: string | null;
+    kind: "moved" | "cancelled_in_google" | "not_found";
+  }> = [];
+  for (const r of upcoming) {
+    const eventId = String(r["google_event_id"]);
+    const bookedAt = String(r["start_at"]);
+    const ev = byId.get(eventId);
+    if (!ev) {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: null,
+        kind: "not_found",
+      });
+      continue;
+    }
+    if (ev.status === "cancelled") {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: null,
+        kind: "cancelled_in_google",
+      });
+      continue;
+    }
+    // A minute of slack: Google returns its own offset format, and comparing
+    // the instants rather than the strings is the only reliable way.
+    if (ev.start && Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000) {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: new Date(Date.parse(ev.start)).toISOString(),
+        kind: "moved",
+      });
+    }
+  }
+  return out;
+}
+
 async function refundInputsFor(
   // deno-lint-ignore no-explicit-any
   supabase: any,
@@ -1078,6 +1213,7 @@ Deno.serve(async (req) => {
               })),
           },
           feed: { configured: !!feedToken, url: feedUrl },
+          drift: await calendarDrift(rows),
         },
       });
     }

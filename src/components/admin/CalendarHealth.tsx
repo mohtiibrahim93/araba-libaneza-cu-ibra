@@ -38,6 +38,23 @@ interface Health {
     }>;
   };
   feed: { configured: boolean; url: string | null };
+  /**
+   * Upcoming lessons whose Google event no longer agrees with the panel.
+   *
+   * null means the check could not run (Google unreadable, or not connected),
+   * which is different from an empty list meaning everything agrees — and the
+   * difference matters, because "nothing to report" and "I could not look" read
+   * identically if you print them the same way.
+   */
+  drift:
+    | null
+    | Array<{
+        id: string;
+        student_name: string | null;
+        booked_at: string;
+        google_at: string | null;
+        kind: "moved" | "cancelled_in_google" | "not_found";
+      }>;
 }
 
 const fmt = (iso: string) =>
@@ -119,6 +136,7 @@ const CalendarHealth = () => {
           ...(raw.bookings ?? {}),
         },
         feed: { configured: false, url: null, ...(raw.feed ?? {}) },
+        drift: raw.drift === undefined ? null : raw.drift,
       };
       setHealth(normalized);
       if (probeWrite) {
@@ -340,6 +358,58 @@ const CalendarHealth = () => {
                 <code className="rounded-[4px] bg-muted px-1">OWNER_CALENDAR_TOKEN</code> cu o valoare
                 lungă și aleatorie, apoi reverifică — linkul de abonare va apărea aici.
               </p>
+            )}
+          </div>
+
+          {/* The half of the sync that did not exist: lessons written to
+              Google and then changed there, which the panel never learned
+              about. Read-only on purpose — it reports, it does not rewrite a
+              real lesson's time from a calendar match. */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold text-foreground">
+              Lecții modificate în Google Calendar
+            </h3>
+            {health.drift === null ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                N-am putut verifica acum (Google Calendar n-a răspuns). Restul verificărilor de
+                mai sus sunt valabile.
+              </p>
+            ) : health.drift.length === 0 ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                Toate lecțiile viitoare au în Google aceeași oră pe care o arată panoul.
+              </p>
+            ) : (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Astea au fost schimbate direct în Google, așa că panoul, emailurile și
+                  memento-urile folosesc încă ora veche. Pune ora nouă din Programări → Mută
+                  lecția, ca să afle și cursantul.
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {health.drift.map((d) => (
+                    <li
+                      key={d.id}
+                      className="rounded-lg border border-amber-300/70 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+                    >
+                      <span className="font-medium">{d.student_name ?? "Cursant necunoscut"}</span>
+                      {d.kind === "moved" && d.google_at ? (
+                        <>
+                          {" "}
+                          — în panou {fmt(d.booked_at)}, în Google {fmt(d.google_at)}.
+                        </>
+                      ) : d.kind === "cancelled_in_google" ? (
+                        <> — {fmt(d.booked_at)}, dar evenimentul e anulat în Google.</>
+                      ) : (
+                        <>
+                          {" "}
+                          — {fmt(d.booked_at)}, dar evenimentul nu mai există în Google (șters, sau
+                          mutat foarte departe).
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
           </div>
         </div>
