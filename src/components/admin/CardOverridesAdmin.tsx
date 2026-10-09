@@ -9,9 +9,10 @@ import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, T
  *
  * Two loose ends meet here. `list_card_overrides` was the last admin action
  * with no caller in `src/` — not an orphaned feature like the kids' slots, but
- * a redundant one: `useCardOverrides.ts` reads `yalla_card_overrides` straight
- * from the table, which is granted SELECT to anon, so the game never needed
- * the admin route.
+ * a redundant one: the game reads the published text for itself, through
+ * `get_published_card_overrides()`, so it never needed the admin route. The
+ * table itself is private now, and the correction records behind it are not
+ * readable from the browser at all.
  *
  * The other is that the editing itself happens inside the public game.
  * `YallaGame.tsx` reveals its "Corectează" controls when a Supabase session
