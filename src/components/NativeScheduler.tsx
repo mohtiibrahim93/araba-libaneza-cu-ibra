@@ -142,6 +142,13 @@ interface Props {
    * books the lesson(s) once the payment clears.
    */
   purchase?: { quantity: number; email: string; format: Format };
+  /**
+   * Which screen the scheduler is on, for a parent that heads it with a step
+   * number. A private purchase is two screens — the times, then the summary
+   * and the card — under one heading owned by the form above, which otherwise
+   * keeps saying "choose a day and time" while you are paying.
+   */
+  onPhaseChange?: (phase: "pick" | "pay") => void;
 }
 
 interface AvailabilityResp {
@@ -203,6 +210,7 @@ const NativeScheduler = ({
   currentSlotIso,
   registrationId,
   purchase,
+  onPhaseChange,
 }: Props) => {
   const { t, lang } = useI18n();
   const showLocalTz = useShowLocalTz();
@@ -215,6 +223,13 @@ const NativeScheduler = ({
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Kept in step with the `selectedSlot && mode === "create" && purchase`
+  // branch below, which is the screen that asks for the card.
+  const payPhase = Boolean(selectedSlot) && mode === "create" && Boolean(purchase);
+  useEffect(() => {
+    onPhaseChange?.(payPhase ? "pay" : "pick");
+  }, [payPhase, onPhaseChange]);
   const [confirmed, setConfirmed] = useState<{
     start_at: string;
     meet_link?: string | null | undefined;

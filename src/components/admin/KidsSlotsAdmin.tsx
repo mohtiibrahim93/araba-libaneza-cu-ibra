@@ -4,6 +4,7 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TimeField } from "./TimeField";
 import { toast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -147,11 +148,10 @@ const KidsSlotsAdmin = () => {
       </div>
       <div className="space-y-1.5">
         <Label className="text-xs">Ora de început</Label>
-        <Input
-          type="time"
-          className="h-9"
+        <TimeField
+          label="Ora de început"
           value={hhmm(value.start_time)}
-          onChange={(e) => onChange({ ...value, start_time: e.target.value })}
+          onChange={(start_time) => onChange({ ...value, start_time })}
         />
       </div>
       <div className="space-y-1.5">
