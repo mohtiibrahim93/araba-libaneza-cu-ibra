@@ -38,6 +38,7 @@ const ACTION_LABELS: Record<string, string> = {
   cancel_subscription: "Anulare abonament",
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
+  book_for_student: "Programare manuală",
 };
 
 /** The ones that destroy data rather than change it. */

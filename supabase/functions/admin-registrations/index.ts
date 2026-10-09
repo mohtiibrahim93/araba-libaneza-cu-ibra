@@ -2089,6 +2089,122 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, start_at: out?.start_at ?? newStart });
     }
 
+    /**
+     * Book a private lesson for someone, from the panel.
+     *
+     * The panel could add a manual signup to a group, and that was the only
+     * way to put anybody anywhere. A private lesson has a time, so it could
+     * not be added that way at all: the owner agrees an hour with someone on
+     * WhatsApp and then has nowhere to record it, which is how a lesson ends
+     * up only in Google Calendar and the panel never learns about it.
+     *
+     * Booked through booking-create with the service-role key, so the one
+     * code path creates the calendar event with its Zoom or Meet link, sends
+     * the student their confirmation and manage link, and promotes the lead.
+     *
+     * A fresh private registration is written for each of these rather than
+     * attaching to an existing one. booking-create caps bookings at the
+     * number of lessons the registration bought -- deliberately, so a
+     * redelivered Stripe event cannot over-book a package -- and quietly
+     * borrowing someone's unused lesson would make the money and the lessons
+     * disagree. A booking the owner made by hand is its own arrangement, and
+     * `payment_status` records whether it has been paid for.
+     */
+    if (action === "book_for_student") {
+      const b = body as {
+        student_name?: unknown;
+        student_email?: unknown;
+        student_phone?: unknown;
+        start_at?: unknown;
+        format?: unknown;
+        notes?: unknown;
+        quantity?: unknown;
+        paid?: unknown;
+        force?: unknown;
+        language?: unknown;
+      };
+      const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
+      const email = typeof b.student_email === "string" ? b.student_email.trim() : "";
+      const phone = typeof b.student_phone === "string" ? b.student_phone.trim() : "";
+      const startAt = typeof b.start_at === "string" ? b.start_at : "";
+      const format = b.format === "physical" ? "physical" : "online";
+      const language = b.language === "en" ? "en" : "ro";
+      const quantity = Math.max(1, Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1));
+      const paid = b.paid === true;
+      const force = b.force === true;
+
+      if (name.length < 2) return jsonResponse({ error: "Numele este obligatoriu." });
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        return jsonResponse({ error: "Emailul nu este valid." });
+      }
+      if (!Number.isFinite(Date.parse(startAt))) {
+        return jsonResponse({ error: "Data sau ora nu sunt valide." });
+      }
+
+      const registrationId = crypto.randomUUID();
+      const { error: regErr } = await supabase.from("registrations").insert({
+        id: registrationId,
+        form_type: "private",
+        name,
+        email,
+        phone: phone || null,
+        language,
+        format: format === "physical" ? "fizic" : "online",
+        quantity,
+        // unpaid is "no payment has been attempted", which is exactly true of
+        // a lesson agreed by hand and not yet paid for. Never pending: there
+        // is no payment in flight.
+        payment_status: paid ? "paid" : "unpaid",
+        // Not a lead to chase: the owner has already spoken to them.
+        lead_status: "contacted",
+      });
+      if (regErr) {
+        console.error("[book_for_student] registration insert failed", regErr);
+        return jsonResponse({ error: "Nu am putut salva cursantul." });
+      }
+
+      const resp = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // "paid" is the private 60-minute lesson in booking_event_types.
+          event_type: "paid",
+          registration_id: registrationId,
+          start_at: startAt,
+          format,
+          student_name: name,
+          student_email: email,
+          student_phone: phone || undefined,
+          notes: typeof b.notes === "string" && b.notes.trim() ? b.notes.trim() : undefined,
+          language,
+          gdpr_consent: true,
+          force,
+        }),
+      });
+      const out = await resp.json().catch(() => ({}));
+      if (!resp.ok || out?.error) {
+        // The registration was written a moment ago and has no booking, so it
+        // would otherwise sit in Înscrieri as a lesson that never happened.
+        await supabase.from("registrations").delete().eq("id", registrationId);
+        return jsonResponse({
+          error: out?.error || "Programarea a eșuat.",
+          code: out?.code,
+          clashes: out?.clashes ?? [],
+        });
+      }
+
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "book_for_student",
+        registration_id: registrationId,
+        details: { at: startAt, format, quantity, paid, forced: force },
+      });
+      return jsonResponse({ success: true, registration_id: registrationId });
+    }
+
     if (action === "list_notifications") {
       const { data: regs, error: regsError } = await supabase
         .from("registrations")

@@ -27,6 +27,13 @@ interface CreateBody {
   gdpr_consent?: boolean;
   registration_id: string;
   /**
+   * Internal callers only: go ahead despite a clash. The owner booking a
+   * student in from the panel is told what the time collides with and can
+   * decide anyway; nothing public sets this, and without it a clash is still
+   * refused exactly as before.
+   */
+  force?: boolean;
+  /**
    * Internal callers only: skip the student and admin emails. The webhook sets
    * it on lessons 2..N of a weekly private series, whose first lesson's email
    * already describes the series — ten confirmations for one purchase would
@@ -185,8 +192,15 @@ Deno.serve(async (req) => {
 
     // min-notice / max-advance
     const now = Date.now();
-    if (startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
+    // The notice period protects Ibra from a stranger booking him in twenty
+    // minutes. It cannot apply to Ibra: "I am with him now, put the lesson in
+    // for this afternoon" is the normal reason to book someone from the panel.
+    // A time in the past is still refused, for everyone.
+    if (!internalCall && startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
       return json({ error: "slot too soon" }, 409);
+    }
+    if (startMs < now - 60_000) {
+      return json({ error: "slot in the past", code: "past" }, 409);
     }
     // The weekly private series books every lesson of the package at once, so
     // its later weeks run past the 30-day window. Only the webhook can do that.
@@ -209,15 +223,24 @@ Deno.serve(async (req) => {
     ]);
     const s = startMs - et.buffer_before_min * 60_000;
     const e = endMs + et.buffer_after_min * 60_000;
+    const found: string[] = [];
     for (const b of clashes ?? []) {
       if (overlaps(s, e, Date.parse(b.start_at), Date.parse(b.end_at))) {
-        return json({ error: "slot just taken", code: "conflict" }, 409);
+        found.push("another_booking");
+        break;
       }
     }
     for (const b of busy) {
       if (overlaps(s, e, Date.parse(b.start), Date.parse(b.end))) {
-        return json({ error: "slot just taken", code: "conflict" }, 409);
+        found.push("calendar");
+        break;
       }
+    }
+    // A visitor is refused, exactly as before. The owner is refused once with
+    // the reasons and goes through on a second call carrying force, so
+    // double-booking himself is a decision rather than an accident.
+    if (found.length > 0 && (!internalCall || body.force !== true)) {
+      return json({ error: "slot just taken", code: "conflict", clashes: found }, 409);
     }
 
     const format = body.format ?? "online";

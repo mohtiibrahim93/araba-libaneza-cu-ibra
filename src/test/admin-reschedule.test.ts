@@ -132,3 +132,95 @@ describe("the panel", () => {
     expect(ui).toContain("în afara orelor tale din Disponibilitate");
   });
 });
+
+/**
+ * Booking a private lesson for someone by hand.
+ *
+ * A group signup could be added from the panel. A private lesson has a time,
+ * so it could not be added at all — the owner agrees an hour on WhatsApp and
+ * has nowhere to record it, which is how a lesson ends up in Google Calendar
+ * and nowhere else, and the panel never learns about it.
+ */
+describe("booking a private lesson from the panel", () => {
+  const block = admin.slice(admin.indexOf('action === "book_for_student"'));
+  const head = block.slice(0, 5200);
+
+  it("books through booking-create rather than writing a booking row", () => {
+    // That one path creates the calendar event with its link, emails the
+    // student their confirmation and manage link, and promotes the lead.
+    expect(head).toContain("/functions/v1/booking-create");
+    expect(head).toContain("SUPABASE_SERVICE_ROLE_KEY");
+    expect(head).not.toMatch(/from\("bookings"\)\s*\.insert/);
+  });
+
+  it("books the private lesson type, by its real slug", () => {
+    // "paid" is the 60-minute private lesson in booking_event_types; the
+    // group courses are not bookings at all.
+    expect(head).toContain('event_type: "paid"');
+  });
+
+  it("records unpaid rather than pending when it is not paid for", () => {
+    // AGENTS.md: unpaid means no payment was attempted, which is exactly a
+    // lesson agreed by hand. pending would claim money is in flight.
+    expect(head).toContain('payment_status: paid ? "paid" : "unpaid"');
+    expect(head).not.toContain('"pending"');
+  });
+
+  it("does not leave a registration behind when the booking fails", () => {
+    // It is written first, so a refused slot would otherwise leave a lesson
+    // in Înscrieri that never happened.
+    expect(head).toContain('from("registrations").delete().eq("id", registrationId)');
+  });
+
+  it("validates the name, the email and the time before writing anything", () => {
+    expect(head).toContain("Numele este obligatoriu");
+    expect(head).toContain("Emailul nu este valid");
+    expect(head).toContain("Number.isFinite(Date.parse(startAt))");
+  });
+
+  it("writes it to the audit trail", () => {
+    expect(head).toContain('action: "book_for_student"');
+    expect(read("src/components/admin/AuditLogAdmin.tsx")).toContain(
+      'book_for_student: "Programare manuală"',
+    );
+  });
+});
+
+describe("the notice period and the panel", () => {
+  const create = read("supabase/functions/booking-create/index.ts");
+
+  it("does not apply the owner's own notice period to the owner", () => {
+    // "I am with him now, put the lesson in for this afternoon" is the normal
+    // reason to book from the panel; a 12-hour notice would refuse it.
+    expect(create).toContain("if (!internalCall && startMs < now + (et.min_notice_hours ?? 0)");
+  });
+
+  it("still refuses a time in the past, for everyone", () => {
+    expect(create).toContain('code: "past"');
+    const past = create.slice(create.indexOf('code: "past"') - 200, create.indexOf('code: "past"'));
+    expect(past).not.toContain("internalCall");
+  });
+
+  it("keeps a visitor's clash refusal unchanged", () => {
+    expect(create).toContain("if (found.length > 0 && (!internalCall || body.force !== true))");
+    expect(create).toContain('code: "conflict"');
+  });
+});
+
+describe("the booking form", () => {
+  it("collects what a lesson needs and nothing it does not", () => {
+    expect(ui).toContain('action: "book_for_student"');
+    expect(ui).toContain("Programează o lecție privată");
+    expect(ui).toContain("A plătit deja");
+  });
+
+  it("says that only the first lesson of a package is booked", () => {
+    // Otherwise "câte lecții a luat: 10" reads as booking ten slots now.
+    expect(ui).toContain("Se programează doar prima");
+  });
+
+  it("converts the time with the DST-aware helper, like the move dialog", () => {
+    const form = ui.slice(ui.indexOf("const submitBooking"));
+    expect(form.slice(0, 900)).toContain("bucharestCivilToUtc(y, m, d, hh, mm)");
+  });
+});
