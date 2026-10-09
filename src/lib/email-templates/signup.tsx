@@ -30,7 +30,7 @@ interface SignupEmailProps {
   siteUrl: string
   recipient: string
   confirmationUrl: string
-  /** The six-digit code. Absent only if Supabase sent no token. */
+  /** The one-time code (Supabase sends 6-10 digits by project setting). */
   token?: string | undefined
 }
 

@@ -99,11 +99,26 @@ describe("the confirmation step", () => {
     expect(screen).toContain("fmtFullLocal(selectedSlot, lang)");
   });
 
-  it("is a six-digit numeric field a phone can autofill", () => {
+  it("is a numeric field a phone can autofill", () => {
     const screen = scheduler.slice(scheduler.indexOf("if (verifyFor) {"), scheduler.indexOf("if (loading) {"));
     expect(screen).toContain('autoComplete="one-time-code"');
     expect(screen).toContain('inputMode="numeric"');
-    expect(screen).toContain("maxLength={6}");
+    expect(screen).toContain("maxLength={CODE_MAX_DIGITS}");
+  });
+
+  it("accepts the code length Supabase is actually set to send", () => {
+    // This is the bug a real end-to-end run caught and no unit test could:
+    // the screen hardcoded six digits, the project sends eight, so the
+    // visitor could type only the first six and then not submit them. The
+    // length is a Supabase dashboard setting, so the range is what belongs
+    // in the code -- the server decides whether the code is right.
+    expect(scheduler).toContain("const CODE_MIN_DIGITS = 6;");
+    expect(scheduler).toContain("const CODE_MAX_DIGITS = 10;");
+    expect(scheduler).toContain("code.length < CODE_MIN_DIGITS");
+    expect(scheduler).not.toContain("code.length !== 6");
+    // And the copy must not promise a count the setting can change.
+    expect(scheduler).not.toContain("șase cifre");
+    expect(scheduler).not.toContain("six-digit code to");
   });
 
   it("says plainly that no account is being created", () => {

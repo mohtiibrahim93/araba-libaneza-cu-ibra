@@ -167,6 +167,24 @@ function fmtSlotTime(iso: string) {
 function fmtTimeInTz(iso: string, tz: string) {
   return new Intl.DateTimeFormat("ro-RO", { timeZone: tz, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 }
+/**
+ * How many digits the emailed code has.
+ *
+ * Supabase's OTP length is a project setting, not a constant: it can be 6 to
+ * 10 digits, and this project is on 8. The first version of this screen
+ * hardcoded 6, which let the visitor type only the first six digits of an
+ * eight-digit code and then refused to submit them — the funnel would have
+ * stayed broken one screen further along than before, and no unit test could
+ * have caught it, because the length lives in the Supabase dashboard. A real
+ * code arrived in a real inbox and read 20137377.
+ *
+ * So: accept the whole range rather than the current setting, and let the
+ * server be the judge of whether the code is right. Changing the setting
+ * later must not break this screen again.
+ */
+const CODE_MIN_DIGITS = 6;
+const CODE_MAX_DIGITS = 10;
+
 function fmtFullLocal(iso: string, lang: "ro" | "en") {
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
     timeZone: TZ,
@@ -248,7 +266,7 @@ const NativeScheduler = ({
    * step answered 403 and the free trial could not be completed by anyone who
    * was not already signed in.
    *
-   * So the missing step is added rather than the gate removed: a six-digit
+   * So the missing step is added rather than the gate removed: a one-time
    * code to the address they just typed. Everything else — the slot, the
    * name, the phone, the notes, the format — stays in this component's state
    * while they read their email, because this is a branch of the same render
@@ -777,8 +795,10 @@ const NativeScheduler = ({
     const en = lang === "en";
     const submitCode = async () => {
       const token = code.replace(/\D/g, "");
-      if (token.length !== 6) {
-        setCodeError(en ? "The code has six digits." : "Codul are șase cifre.");
+      if (token.length < CODE_MIN_DIGITS) {
+        setCodeError(
+          en ? "Type the whole code from the email." : "Scrie codul întreg din email.",
+        );
         return;
       }
       setSubmitting(true);
@@ -824,12 +844,12 @@ const NativeScheduler = ({
           <p className="mt-1 text-sm text-muted-foreground">
             {en ? (
               <>
-                We sent a six-digit code to <span className="font-medium text-foreground">{verifyFor.email}</span>.
+                We sent a code to <span className="font-medium text-foreground">{verifyFor.email}</span>.
                 Type it here and we go straight on — you will not have to enter anything again.
               </>
             ) : (
               <>
-                Ți-am trimis un cod de șase cifre la{" "}
+                Ți-am trimis un cod la{" "}
                 <span className="font-medium text-foreground">{verifyFor.email}</span>. Scrie-l aici și continuăm
                 direct — nu mai trebuie să reintroduci nimic.
               </>
@@ -855,7 +875,7 @@ const NativeScheduler = ({
           <input
             id="trial-code"
             value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_MAX_DIGITS))}
             onKeyDown={(e) => {
               if (e.key === "Enter") void submitCode();
             }}
@@ -863,12 +883,12 @@ const NativeScheduler = ({
             // notification, which is most of the friction gone on a phone.
             autoComplete="one-time-code"
             inputMode="numeric"
-            maxLength={6}
+            maxLength={CODE_MAX_DIGITS}
             autoFocus
             aria-invalid={codeError ? true : undefined}
             aria-describedby={codeError ? "trial-code-error" : undefined}
             className="h-14 w-full rounded-xl border border-input bg-background px-4 text-center font-mono text-2xl tracking-[0.4em] text-foreground"
-            placeholder="······"
+            placeholder="········"
           />
           {codeError && (
             <p id="trial-code-error" role="alert" className="text-sm font-medium text-destructive">
@@ -880,7 +900,7 @@ const NativeScheduler = ({
         <button
           type="button"
           onClick={() => void submitCode()}
-          disabled={submitting || code.length !== 6}
+          disabled={submitting || code.length < CODE_MIN_DIGITS}
           className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}

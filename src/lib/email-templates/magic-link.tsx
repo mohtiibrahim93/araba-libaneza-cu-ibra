@@ -15,7 +15,7 @@ import {
  * The code first, the link second.
  *
  * Supabase sends one email for an email sign-in and puts both in the payload:
- * a six-digit token and a URL. This template used to render only the URL, and
+ * a one-time token and a URL. This template used to render only the URL, and
  * that is a problem for the one flow that needs it most — booking a free
  * trial. The visitor has a slot selected and their details typed in; opening
  * a link signs in a different tab and leaves that state behind in this one.
@@ -28,7 +28,7 @@ import {
 interface MagicLinkEmailProps {
   siteName: string
   confirmationUrl: string
-  /** The six-digit code. Absent only if Supabase sent no token. */
+  /** The one-time code (Supabase sends 6-10 digits by project setting). */
   token?: string | undefined
 }
 

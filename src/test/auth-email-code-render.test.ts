@@ -39,7 +39,7 @@ const props = {
 };
 
 describe.each(templates)("%s email", (_name, Template) => {
-  it("renders the six-digit code in visible HTML, preserving leading zeros", async () => {
+  it("renders the code in visible HTML, preserving leading zeros", async () => {
     const html = await render(React.createElement(Template, { ...props, token: "012345" }));
     const body = new DOMParser().parseFromString(html, "text/html").body;
     body.querySelectorAll('[style*="display:none"], [style*="display: none"]').forEach((node) => node.remove());
@@ -52,6 +52,16 @@ describe.each(templates)("%s email", (_name, Template) => {
     const text = await render(React.createElement(Template, { ...props, token: "012345" }), { plainText: true });
     expect(text).toContain("012345");
     expect(text).toContain(props.confirmationUrl);
+  });
+
+  it("renders the eight-digit code this project actually sends", async () => {
+    // Supabase's OTP length is a project setting (6-10); this one is on 8, and
+    // a real code from a real inbox read 20137377. The six-digit case above
+    // passed while the booking screen refused to accept the live length.
+    const html = await render(React.createElement(Template, { ...props, token: "20137377" }));
+    const body = new DOMParser().parseFromString(html, "text/html").body;
+    body.querySelectorAll('[style*="display:none"], [style*="display: none"]').forEach((node) => node.remove());
+    expect(body.textContent).toContain("20137377");
   });
 
   it("keeps link-based sign-in working when the hook supplies no code", async () => {
