@@ -391,11 +391,28 @@
   }
 }
 
-/* The reCAPTCHA script is declared in a static head(), so it loads on every
-   route including the admin, where no form uses it and its fixed badge sat on
-   top of the content in the bottom-right corner. Google requires the badge
-   wherever reCAPTCHA actually protects a form; the admin has none, so hiding
-   it there costs nothing and gives the corner back. */
-html[data-admin-chrome="true"] .grecaptcha-badge {
+/* The reCAPTCHA badge is hidden everywhere, and paid for in words.
+
+   The script is declared in a static head(), so it loads on every route, and
+   its badge is fixed to the bottom-right corner at a z-index of two billion.
+   That is the corner the WhatsApp and phone buttons are pinned to — the
+   footer says as much, a few lines of it are about not putting a link row
+   under them — so the badge floated on top of the one control the site most
+   wants tapped. On the admin it covered the content instead, where no form
+   uses reCAPTCHA at all.
+
+   Google's terms allow hiding the badge on one condition: the sentence
+   "This site is protected by reCAPTCHA and the Google Privacy Policy and
+   Terms of Service apply", with both links, visible in the user flow. That is
+   RecaptchaNotice, and it is in the footer (so it is present wherever the
+   script is) and beside the registration form's consent box (where reCAPTCHA
+   actually runs). Removing it would make this rule a breach, so a test holds
+   the two together.
+
+   `visibility: hidden` rather than `display: none`: the badge is an iframe
+   the API talks to, and removing it from the layout has been reported to
+   break the challenge flow on the v2 fallback. Hidden is enough — it cannot
+   be seen and cannot be clicked. */
+.grecaptcha-badge {
   visibility: hidden;
 }

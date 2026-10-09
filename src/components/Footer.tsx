@@ -6,6 +6,7 @@ import AnchorLink from "@/components/AnchorLink";
 import BrandLogo from "@/components/BrandLogo";
 import SocialLinks from "@/components/SocialLinks";
 import GoogleMapEmbed from "@/components/GoogleMapEmbed";
+import RecaptchaNotice from "@/components/RecaptchaNotice";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -174,6 +175,11 @@ const Footer = () => {
             </li>
           </ul>
           <p>{t.footer}</p>
+          {/* reCAPTCHA v3 runs on every page, and its badge is hidden because
+              it covered the floating buttons in this corner. Google's terms
+              take this notice in its place, so it belongs wherever the script
+              is — which is everywhere. */}
+          <RecaptchaNotice className="text-center" />
         </div>
       </div>
     </footer>

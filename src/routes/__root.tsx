@@ -291,27 +291,14 @@ function RootComponent() {
                 static head() and so cannot be dropped per route; marking the
                 document instead lets one stylesheet rule hide the badge where
                 nothing uses it. */}
-            {isAdmin ? <AdminChromeMarker /> : <AskAssistant />}
+            {/* The admin gets no course assistant: it answers questions for
+                visitors, and the panel is not one. */}
+            {isAdmin ? null : <AskAssistant />}
           </I18nProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </HelmetProvider>
   );
-}
-
-/**
- * Flags the document as showing admin chrome, so the stylesheet can hide the
- * reCAPTCHA badge there. Renders nothing; it exists for the side effect, and
- * clears the flag on the way out so a visitor page keeps its badge.
- */
-function AdminChromeMarker() {
-  useEffect(() => {
-    document.documentElement.dataset["adminChrome"] = "true";
-    return () => {
-      delete document.documentElement.dataset["adminChrome"];
-    };
-  }, []);
-  return null;
 }
 
 function RootErrorComponent({ error, reset }: ErrorComponentProps) {

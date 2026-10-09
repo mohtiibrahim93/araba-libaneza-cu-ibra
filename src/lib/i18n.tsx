@@ -270,6 +270,10 @@ export const translations = {
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
     recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
+    // The two links that have to accompany the sentence above. Short labels:
+    // the sentence already names them, these are the places to click.
+    recaptchaPrivacyShort: "Politica de confidențialitate",
+    recaptchaTermsShort: "Termeni",
     recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
 
     // Payment instructions
@@ -1080,6 +1084,8 @@ export const translations = {
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
     recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    recaptchaPrivacyShort: "Privacy Policy",
+    recaptchaTermsShort: "Terms of Service",
     recaptchaFailed: "Security check failed. Please try again.",
 
     // Payment instructions
