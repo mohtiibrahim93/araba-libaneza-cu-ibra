@@ -47,13 +47,17 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
           sendUrl: process.env['LOVABLE_SEND_URL'],
           emails: {
             signup: {
-              subject: 'Confirm your email',
+              // This is the one a free-trial visitor gets: they have never
+              // signed in, so Supabase calls their email confirmation a
+              // signup. The code has to be here, not only in magiclink.
+              subject: 'Your confirmation code',
               render: (data) =>
                 React.createElement(SignupEmail, {
                   siteName: SITE_NAME,
                   siteUrl: SITE_URL,
                   recipient: data.email,
                   confirmationUrl: data.url,
+                  token: data.token ?? undefined,
                 }),
             },
             invite: {
@@ -66,11 +70,16 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             magiclink: {
-              subject: 'Your login link',
+              // Both halves travel: the six-digit code for the booking flow,
+              // where following a link would abandon a selected slot in
+              // another tab, and the link for the admin and student sign-ins
+              // that have always used one.
+              subject: 'Your login code',
               render: (data) =>
                 React.createElement(MagicLinkEmail, {
                   siteName: SITE_NAME,
                   confirmationUrl: data.url,
+                  token: data.token ?? undefined,
                 }),
             },
             recovery: {

@@ -164,6 +164,31 @@ serve(async (req) => {
     // (converting to a private lesson after their freebie), which must not
     // be silently downgraded to a 0-lei setup.
     if (setup === true) {
+      // One free trial per person, checked here rather than only in
+      // booking-create. That check runs on the webhook, which fires *after*
+      // the card is saved — so a second attempt used to get all the way
+      // through Stripe, save a card, and then have the booking refused, with
+      // nothing to show for it. Asking first costs one query.
+      if (bookingMeta.booking_event_type === "trial" && reg.email) {
+        const emailPattern = String(reg.email).trim().replace(/([%_\\])/g, "\\$1");
+        const { data: priorTrials } = await supabaseAdmin
+          .from("bookings")
+          .select("id")
+          .eq("event_type_slug", "trial")
+          .in("status", ["confirmed", "completed"])
+          .ilike("student_email", emailPattern)
+          .limit(1);
+        if ((priorTrials ?? []).length > 0) {
+          return new Response(
+            JSON.stringify({
+              error: "Proba gratuită a fost deja folosită pentru acest email.",
+              code: "trial_used",
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 409 },
+          );
+        }
+      }
+
       // The trial booking rides along in the session metadata and is created by
       // the webhook once the card is actually saved. Nothing is booked before
       // that: a free slot that nobody turns up to costs a real lesson, and five
