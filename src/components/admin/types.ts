@@ -22,11 +22,24 @@ export const LEAD_STATUSES: readonly LeadStatus[] = [
   "converted",
 ] as const;
 
-export type CourseTypeFilter = "all" | "group" | "private" | "kids" | "trial";
+export type CourseTypeFilter = "all" | "group" | "private" | "kids" | "trial" | "level_check";
 export type LeadStatusFilter = "all" | LeadStatus;
 
 export type LeadSource = "form" | "whatsapp" | "admin";
 export type TrackPreference = "arabizi" | "arabic_script" | "not_sure";
+
+export interface RegistrationCohort {
+  id: string;
+  title_ro: string | null;
+  level: string | null;
+  format: string | null;
+  age_category: string | null;
+  teaching_language: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  schedule_label_ro: string | null;
+  status: string;
+}
 
 export interface Registration {
   id: string;
@@ -42,6 +55,11 @@ export interface Registration {
   lead_status: LeadStatus;
   source?: LeadSource | null;
   track_preference?: TrackPreference | null;
+  cohort_id?: string | null;
+  cohort?: RegistrationCohort | null;
+  level?: string | null;
+  age_category?: string | null;
+  teaching_language?: string | null;
   payment_status?: string;
   stripe_session_id?: string | null;
   paid_at?: string | null;

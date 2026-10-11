@@ -300,6 +300,21 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Neautorizat" });
     }
 
+    // PostgREST caps a read at one page. Use stable pages for admin totals
+    // and the enrolment list rather than silently truncating older records.
+    const readAll = async (table: string, fields: string, orderBy = "id", ascending = true) => {
+      const data: Array<Record<string, any>> = [];
+      for (let offset = 0; ; offset += 1000) {
+        let query = supabase.from(table).select(fields).order(orderBy, { ascending });
+        if (orderBy !== "id") query = query.order("id", { ascending: true });
+        const result = await query.range(offset, offset + 999);
+        if (result.error) throw result.error;
+        const page = result.data ?? [];
+        data.push(...page);
+        if (page.length < 1000) return { data };
+      }
+    };
+
     // Lets the site tell an admin from a signed-in student (students have
     // accounts since October 2026): the game shows its teacher controls only
     // when this answers.
@@ -764,6 +779,37 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+
+    // Read-only course overview. Occupancy remains owned by the existing RPC;
+    // payment counts only describe registrations with recorded payment states.
+    if (action === "course_overview") {
+      const [cohorts, registrations, manual, occupancy] = await Promise.all([
+        readAll("group_cohorts", "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset"),
+        readAll("registrations", "cohort_id,payment_status,refunded_at,lead_status"),
+        readAll("manual_signups", "cohort_id,count"),
+        supabase.rpc("get_cohort_signup_counts"),
+      ]);
+      if (occupancy.error) throw occupancy.error;
+      const seats = new Map((occupancy.data ?? []).map((r: { cohort_id: string; taken: number }) => [r.cohort_id, Number(r.taken)]));
+      const data = (cohorts.data ?? []).map((c) => {
+        const regs = (registrations.data ?? []).filter((r) => r.cohort_id === c.id);
+        const payments: Record<string, number> = {};
+        for (const r of regs) {
+          const state = r.refunded_at ? "refunded" : (r.payment_status || "unspecified");
+          payments[state] = (payments[state] ?? 0) + 1;
+        }
+        return {
+          ...c,
+          taken: seats.has(c.id) && Number.isFinite(seats.get(c.id)) ? seats.get(c.id) : null,
+          registration_count: regs.length,
+          incomplete_count: regs.filter((r) => r.lead_status === "incomplete").length,
+          manual_signup_count: (manual.data ?? []).filter((r) => r.cohort_id === c.id)
+            .reduce((sum: number, r) => sum + Number(r.count), 0),
+          payments,
+        };
+      });
+      return jsonResponse({ data });
+    }
 
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
@@ -2281,6 +2327,7 @@ Deno.serve(async (req) => {
       const { error: regErr } = await supabase.from("registrations").insert({
         id: registrationId,
         form_type: "private",
+        source: "admin",
         name,
         email,
         phone: phone || null,
@@ -2942,13 +2989,40 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Acțiune necunoscută", code: "unknown_action" }, 400);
     }
 
-    // Default: list all
-    const { data, error } = await supabase
-      .from("registrations")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // Default: list all. cohort_id has no FK in the current schema, so resolve
+    // its exact ID explicitly rather than relying on a PostgREST relationship.
+    const { data } = await readAll("registrations", "*", "created_at", false);
 
-    if (error) throw error;
+    if (data.length) {
+      const cohortIds = [...new Set(data.map((r) => r.cohort_id).filter(Boolean))];
+      if (cohortIds.length) {
+        const cohorts: Array<Record<string, any>> = [];
+        for (let offset = 0; offset < cohortIds.length; offset += 100) {
+          const result = await supabase.from("group_cohorts")
+            .select("id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status")
+            .in("id", cohortIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          cohorts.push(...(result.data ?? []));
+        }
+        const byId = new Map(cohorts.map((c) => [c.id, c]));
+        for (const r of data) r.cohort = byId.get(r.cohort_id) ?? null;
+      } else {
+        for (const r of data) r.cohort = null;
+      }
+      // Older manual private bookings used the default source='form'. Their
+      // existing audit record proves the origin without changing stored rows.
+      const privateIds = data.filter((r) => r.form_type === "private").map((r) => r.id);
+      if (privateIds.length) {
+        const manualIds = new Set<string>();
+        for (let offset = 0; offset < privateIds.length; offset += 100) {
+          const result = await supabase.from("audit_logs").select("registration_id")
+            .eq("action", "book_for_student").in("registration_id", privateIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          for (const r of result.data ?? []) manualIds.add(r.registration_id);
+        }
+        for (const r of data) if (manualIds.has(r.id)) r.source = "admin";
+      }
+    }
 
     // Duplicate indicator: how many registrations share each email (spec
     // §3.3 — surfaced to the admin, never auto-merged).

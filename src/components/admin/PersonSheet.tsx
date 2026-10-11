@@ -3,6 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
+import RegistrationCourse from "./RegistrationCourse";
 import {
   formTypeLabels,
   LEAD_STATUSES,
@@ -135,6 +136,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable 
               </div>
 
               <div className="flex flex-col gap-5 px-4 py-5 sm:px-6">
+                <RegistrationCourse registration={person} />
                 <div className="flex items-center gap-4">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-green font-display text-xl font-bold text-white">
                     {initials(person.name)}

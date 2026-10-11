@@ -9,7 +9,7 @@ function adminHandler() {
       reads.push(table);
       const query = {
         select: () => query, eq: () => query,
-        order: async () => ({ data: [], error: null }),
+        order: () => query, range: async () => ({ data: [], error: null }),
         maybeSingle: async () => ({ data: null, error: null }),
       };
       return query;

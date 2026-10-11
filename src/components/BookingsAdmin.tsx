@@ -76,7 +76,7 @@ const STATUS_LABEL: Record<string, string> = {
   pending: "În așteptare",
 };
 
-const BookingsAdmin = () => {
+const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boolean; onChanged?: () => void } = {}) => {
   const [rows, setRows] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -160,6 +160,8 @@ const BookingsAdmin = () => {
     };
   }, [load]);
 
+  const scopedRows = useMemo(() => privateOnly ? rows.filter((b) => b.event_type_slug === "paid") : rows, [rows, privateOnly]);
+
   const visible = useMemo(() => {
     const now = Date.now();
     const q = query.trim().toLowerCase();
@@ -177,7 +179,7 @@ const BookingsAdmin = () => {
       return true;
     };
 
-    return rows
+    return scopedRows
       .filter((b) => inView(b) && matches(b))
       // Upcoming reads soonest-first; everything else most-recent-first.
       .sort((a, b) =>
@@ -185,19 +187,19 @@ const BookingsAdmin = () => {
           ? a.start_at.localeCompare(b.start_at)
           : b.start_at.localeCompare(a.start_at),
       );
-  }, [rows, view, query]);
+  }, [scopedRows, view, query]);
 
   const counts = useMemo(() => {
     const now = Date.now();
     return {
-      upcoming: rows.filter((b) => b.status !== "cancelled" && new Date(b.start_at).getTime() >= now)
+      upcoming: scopedRows.filter((b) => b.status !== "cancelled" && new Date(b.start_at).getTime() >= now)
         .length,
-      past: rows.filter((b) => b.status !== "cancelled" && new Date(b.start_at).getTime() < now)
+      past: scopedRows.filter((b) => b.status !== "cancelled" && new Date(b.start_at).getTime() < now)
         .length,
-      cancelled: rows.filter((b) => b.status === "cancelled").length,
-      all: rows.length,
+      cancelled: scopedRows.filter((b) => b.status === "cancelled").length,
+      all: scopedRows.length,
     } as Record<View, number>;
-  }, [rows]);
+  }, [scopedRows]);
 
   /** The booking's own date and time, as Bucharest shows them. */
   const bucharestFields = (iso: string) => {
@@ -337,6 +339,7 @@ const BookingsAdmin = () => {
       setBooking(false);
       setBkWarn(null);
       void load(true);
+      onChanged?.();
     } catch (err) {
       toast({
         title: err instanceof Error ? err.message : "Programarea a eșuat",
@@ -371,7 +374,7 @@ const BookingsAdmin = () => {
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Programări</h2>
+          <h2 className="text-base font-semibold text-foreground">{privateOnly ? "Programări private" : "Programări"}</h2>
           <p className="text-sm text-muted-foreground">
             Lecții de probă și lecții private rezervate pe site. Anularea șterge și evenimentul din
             Google Calendar.
