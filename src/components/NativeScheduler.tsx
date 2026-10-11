@@ -1075,7 +1075,7 @@ const NativeScheduler = ({
     );
   }
 
-  const dateKeys = Object.keys(data.slots_by_date).sort();
+  const dateKeys = Object.keys(data.slots_by_date ?? {}).sort();
   // Merge the current (own) slot into availability so the user can see it
   // highlighted even if it's outside the standard availability window.
   const slotsByDate: Record<string, string[]> = { ...data.slots_by_date };

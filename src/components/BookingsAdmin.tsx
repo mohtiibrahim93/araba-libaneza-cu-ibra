@@ -261,6 +261,7 @@ const BookingsAdmin = () => {
         return;
       }
       if (data?.error) throw new Error(data.error);
+      if (data?.success !== true) throw new Error("Mutarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
       toast({ title: "Lecție mutată", description: "Cursantul a primit un email cu ora nouă." });
       setMoving(null);
       setMoveWarn(null);
@@ -328,6 +329,7 @@ const BookingsAdmin = () => {
         return;
       }
       if (data?.error) throw new Error(data.error);
+      if (data?.success !== true) throw new Error("Programarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
       toast({
         title: "Lecție programată",
         description: "Cursantul a primit confirmarea pe email, cu linkul lecției.",
@@ -352,6 +354,7 @@ const BookingsAdmin = () => {
       const { data, error } = await invokeAdmin({ action: "cancel_booking", id: b.id });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
+      if (data?.success !== true) throw new Error("Anularea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
       toast({ title: "Programare anulată" });
       void load(true);
     } catch (err) {
