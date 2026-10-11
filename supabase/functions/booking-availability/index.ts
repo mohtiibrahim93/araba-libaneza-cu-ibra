@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
     let filtered = candidates.filter((iso) => passesTimingRules(et, format, iso, now));
 
     if (filtered.length === 0) {
-      return json({ event_type: et, slots: [], tz: TZ });
+      return json({ event_type: et, slots: [], slots_by_date: {}, tz: TZ });
     }
 
     // Window for freebusy & DB lookups

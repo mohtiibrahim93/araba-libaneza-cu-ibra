@@ -15,6 +15,7 @@ import {
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG } from "../_shared/schedule-rules.ts";
 
 /**
  * Free changes stop 24 hours before the lesson — the rule the trial notice,
@@ -191,7 +192,11 @@ Deno.serve(async (req) => {
         .from("availability_rules")
         .select("weekday,start_time,end_time")
         .eq("is_active", true);
-      const offered = candidateSlotsForDays([day], rules ?? [], et.duration_min);
+      const offered = candidateSlotsForDays(
+        [day],
+        booking.event_type_slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : (rules ?? []),
+        et.duration_min,
+      );
       const outsideAvailability =
         !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO);
       // A student may only move a booking to a slot this site would have

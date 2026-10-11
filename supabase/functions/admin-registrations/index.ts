@@ -2936,6 +2936,12 @@ Deno.serve(async (req) => {
       return jsonResponse({ data: { registration, history } });
     }
 
+    // The existing dashboard sends an unnamed list request. A named action
+    // that reached here was not handled; never disguise it as a successful read.
+    if (action !== undefined) {
+      return jsonResponse({ error: "Acțiune necunoscută", code: "unknown_action" }, 400);
+    }
+
     // Default: list all
     const { data, error } = await supabase
       .from("registrations")
