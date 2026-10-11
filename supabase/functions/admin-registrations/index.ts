@@ -1,3 +1,4 @@
+import { reconcileCalendar, repairBookingCalendar } from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
@@ -299,6 +300,35 @@ Deno.serve(async (req) => {
     if (!isAdmin) {
       return jsonResponse({ error: "Neautorizat" });
     }
+
+    if (action === "update_contact") {
+      const contactName = typeof body.name === "string" ? body.name.trim() : "";
+      const contactEmail = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+      const contactPhone = typeof body.phone === "string" ? body.phone.trim() : "";
+      if (typeof id !== "string" || !contactName || contactName.length > 160 || contactEmail.length > 254 || (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) || contactPhone.length > 40) {
+        return jsonResponse({ error: "Date de contact invalide." }, 400);
+      }
+      const { error } = await supabase.rpc("admin_update_registration_contact", {
+        p_id: id, p_name: contactName, p_email: contactEmail || null, p_phone: contactPhone || null, p_actor: callerEmail,
+      });
+      if (error) return jsonResponse({ error: "Contactul nu a fost salvat. Reîncearcă.", code: "contact_update_failed" }, 500);
+      return jsonResponse({ success: true });
+    }
+
+    // PostgREST caps a read at one page. Use stable pages for admin totals
+    // and the enrolment list rather than silently truncating older records.
+    const readAll = async (table: string, fields: string, orderBy = "id", ascending = true) => {
+      const data: Array<Record<string, any>> = [];
+      for (let offset = 0; ; offset += 1000) {
+        let query = supabase.from(table).select(fields).order(orderBy, { ascending });
+        if (orderBy !== "id") query = query.order("id", { ascending: true });
+        const result = await query.range(offset, offset + 999);
+        if (result.error) throw result.error;
+        const page = result.data ?? [];
+        data.push(...page);
+        if (page.length < 1000) return { data };
+      }
+    };
 
     // Lets the site tell an admin from a signed-in student (students have
     // accounts since October 2026): the game shows its teacher controls only
@@ -765,6 +795,37 @@ Deno.serve(async (req) => {
     }
 
 
+    // Read-only course overview. Occupancy remains owned by the existing RPC;
+    // payment counts only describe registrations with recorded payment states.
+    if (action === "course_overview") {
+      const [cohorts, registrations, manual, occupancy] = await Promise.all([
+        readAll("group_cohorts", "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset"),
+        readAll("registrations", "cohort_id,payment_status,refunded_at,lead_status"),
+        readAll("manual_signups", "cohort_id,count"),
+        supabase.rpc("get_cohort_signup_counts"),
+      ]);
+      if (occupancy.error) throw occupancy.error;
+      const seats = new Map((occupancy.data ?? []).map((r: { cohort_id: string; taken: number }) => [r.cohort_id, Number(r.taken)]));
+      const data = (cohorts.data ?? []).map((c) => {
+        const regs = (registrations.data ?? []).filter((r) => r.cohort_id === c.id);
+        const payments: Record<string, number> = {};
+        for (const r of regs) {
+          const state = r.refunded_at ? "refunded" : (r.payment_status || "unspecified");
+          payments[state] = (payments[state] ?? 0) + 1;
+        }
+        return {
+          ...c,
+          taken: seats.has(c.id) && Number.isFinite(seats.get(c.id)) ? seats.get(c.id) : null,
+          registration_count: regs.length,
+          incomplete_count: regs.filter((r) => r.lead_status === "incomplete").length,
+          manual_signup_count: (manual.data ?? []).filter((r) => r.cohort_id === c.id)
+            .reduce((sum: number, r) => sum + Number(r.count), 0),
+          payments,
+        };
+      });
+      return jsonResponse({ data });
+    }
+
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
       const { data, error } = await supabase
@@ -1135,6 +1196,24 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    if (action === "repair_booking_calendar") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: booking, error } = await supabase.from("bookings").select("*").eq("id", id).maybeSingle();
+      if (error || !booking || booking.status !== "confirmed" || Date.parse(booking.start_at) < Date.now()) return jsonResponse({ error: "Lecția nu este disponibilă pentru reparare." }, 400);
+      if (booking.google_event_id && booking.google_sync_error !== "calendar_create_pending") return jsonResponse({ success: true });
+      const result = await repairBookingCalendar(supabase, booking, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") });
+      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "repair_booking_calendar", registration_id: booking.registration_id, details: { booking_id: id, event_id: result.event_id } });
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "sync_calendar") {
+      const from = typeof body.from === "string" ? body.from : new Date(Date.now() - 7 * 86400000).toISOString();
+      const to = typeof body.to === "string" ? body.to : new Date(Date.now() + 400 * 86400000).toISOString();
+      if (!Number.isFinite(Date.parse(from)) || !Number.isFinite(Date.parse(to)) || Date.parse(to) <= Date.parse(from) || Date.parse(to) - Date.parse(from) > 410 * 86400000) return jsonResponse({ error: "Interval invalid." }, 400);
+      const result = await reconcileCalendar(supabase, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"), from, to });
+      return jsonResponse({ success: result.errors.length === 0, data: result });
+    }
+
     if (action === "list_bookings") {
       const { status_filter } = body;
       let q = supabase
@@ -1181,8 +1260,8 @@ Deno.serve(async (req) => {
           ...diag,
           bookings: {
             total: rows.length,
-            synced: rows.filter((r) => r.google_event_id).length,
-            failed: rows.filter((r) => !r.google_event_id).length,
+            synced: rows.filter((r) => r.google_event_id && !r.google_sync_error).length,
+            failed: rows.filter((r) => !r.google_event_id || !!r.google_sync_error).length,
             // The six-month totals answer "what happened", and they were the
             // only thing this screen said. That made a run of failures last
             // August read as a fault happening now, months after the sync
@@ -1199,11 +1278,11 @@ Deno.serve(async (req) => {
               );
               return {
                 total: madeLately.length,
-                synced: madeLately.filter((r) => r.google_event_id).length,
+                synced: madeLately.filter((r) => r.google_event_id && !r.google_sync_error).length,
               };
             })(),
             unsynced: rows
-              .filter((r) => !r.google_event_id)
+              .filter((r) => !r.google_event_id || !!r.google_sync_error)
               .slice(0, 10)
               .map((r) => ({
                 id: r.id,
@@ -1857,7 +1936,7 @@ Deno.serve(async (req) => {
       // whether the event exists; this asks the same question, so the two
       // screens can no longer disagree about the same booking.
       for (const b of lessons ?? []) {
-        if (!b.google_event_id) {
+        if (!b.google_event_id || !!b.google_sync_error) {
           problems.push({
             kind: "calendar",
             id: b.id as string,
@@ -2152,7 +2231,7 @@ Deno.serve(async (req) => {
       );
       const out = await resp.json().catch(() => ({}));
       if (!resp.ok || out?.error) return jsonResponse({ error: out?.error || "Anulare eșuată" });
-      return jsonResponse({ success: true });
+      return jsonResponse({ success: true, sync_pending: out?.sync_pending === true });
     }
 
     /**
@@ -2222,7 +2301,7 @@ Deno.serve(async (req) => {
         registration_id: regIdForBooking,
         details: { to: newStart, forced: force },
       });
-      return jsonResponse({ success: true, start_at: out?.start_at ?? newStart });
+      return jsonResponse({ success: true, start_at: out?.start_at ?? newStart, sync_pending: out?.sync_pending === true });
     }
 
     /**
@@ -2281,6 +2360,7 @@ Deno.serve(async (req) => {
       const { error: regErr } = await supabase.from("registrations").insert({
         id: registrationId,
         form_type: "private",
+        source: "admin",
         name,
         email,
         phone: phone || null,
@@ -2338,7 +2418,7 @@ Deno.serve(async (req) => {
         registration_id: registrationId,
         details: { at: startAt, format, quantity, paid, forced: force },
       });
-      return jsonResponse({ success: true, registration_id: registrationId });
+      return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
     }
 
     if (action === "list_notifications") {
@@ -2942,13 +3022,44 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Acțiune necunoscută", code: "unknown_action" }, 400);
     }
 
-    // Default: list all
-    const { data, error } = await supabase
-      .from("registrations")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // Default: list all. cohort_id has no FK in the current schema, so resolve
+    // its exact ID explicitly rather than relying on a PostgREST relationship.
+    const { data } = await readAll("registrations", "*", "created_at", false);
 
-    if (error) throw error;
+    for (const registration of data) {
+      registration.account_email = registration.email;
+      registration.email = registration.contact_email ?? registration.email;
+    }
+    if (data.length) {
+      const cohortIds = [...new Set(data.map((r) => r.cohort_id).filter(Boolean))];
+      if (cohortIds.length) {
+        const cohorts: Array<Record<string, any>> = [];
+        for (let offset = 0; offset < cohortIds.length; offset += 100) {
+          const result = await supabase.from("group_cohorts")
+            .select("id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status")
+            .in("id", cohortIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          cohorts.push(...(result.data ?? []));
+        }
+        const byId = new Map(cohorts.map((c) => [c.id, c]));
+        for (const r of data) r.cohort = byId.get(r.cohort_id) ?? null;
+      } else {
+        for (const r of data) r.cohort = null;
+      }
+      // Older manual private bookings used the default source='form'. Their
+      // existing audit record proves the origin without changing stored rows.
+      const privateIds = data.filter((r) => r.form_type === "private").map((r) => r.id);
+      if (privateIds.length) {
+        const manualIds = new Set<string>();
+        for (let offset = 0; offset < privateIds.length; offset += 100) {
+          const result = await supabase.from("audit_logs").select("registration_id")
+            .eq("action", "book_for_student").in("registration_id", privateIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          for (const r of result.data ?? []) manualIds.add(r.registration_id);
+        }
+        for (const r of data) if (manualIds.has(r.id)) r.source = "admin";
+      }
+    }
 
     // Duplicate indicator: how many registrations share each email (spec
     // §3.3 — surfaced to the admin, never auto-merged).

@@ -28,6 +28,7 @@ interface Props {
   locked?: boolean;
   /** Submit was rejected because no level was chosen — mark the field. */
   levelError?: boolean;
+  cohortError?: boolean;
 }
 
 const GroupFields = ({
@@ -40,6 +41,7 @@ const GroupFields = ({
   onCohortChange,
   locked = false,
   levelError = false,
+  cohortError = false,
 }: Props) => {
   const { t, lang } = useI18n();
   const [showModal, setShowModal] = useState(false);
@@ -103,6 +105,7 @@ const GroupFields = ({
       />}
 
       {level && (
+        <div id="cohort-selection" tabIndex={-1} aria-invalid={cohortError || undefined}>
         <CohortPicker
           formType="group"
           level={level}
@@ -110,6 +113,8 @@ const GroupFields = ({
           selectedCohortId={cohortId}
           onSelect={onCohortChange}
         />
+        {cohortError && <p role="alert" className="text-sm text-destructive">{lang === "en" ? "Choose a group before continuing." : "Alege o grupă înainte de a continua."}</p>}
+        </div>
       )}
 
       {level && (() => {

@@ -122,7 +122,7 @@ export function trackRegistrationStep(
  * it we know people fail, not what they fail on.
  */
 export function trackRegistrationValidationFailed(
-  field: "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
+  field: "cohort" | "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
   formType: RegistrationFormType | "unknown",
 ) {
   trackEvent("registration_validation_failed", { field, form_type: formType });

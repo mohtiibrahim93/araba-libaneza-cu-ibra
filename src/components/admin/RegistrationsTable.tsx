@@ -40,6 +40,7 @@ import {
   LEAD_STATUSES,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
+import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
 
 interface CancelPreview {
   within_grace: boolean;
@@ -493,13 +494,14 @@ const RegistrationsTable = ({
               )}
               <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
                 {[
-                  r.format,
+                  registrationFormatLabel(r),
                   r.center,
                   r.child_age ? `copil ${r.child_age} ani` : null,
                 ]
                   .filter(Boolean)
                   .join(" · ") || "—"}
               </p>
+              <RegistrationCourse registration={r} />
             </TableCell>
             <TableCell className="align-top">
               <Select

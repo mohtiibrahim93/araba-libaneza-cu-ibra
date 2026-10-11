@@ -1,3 +1,4 @@
+import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -62,7 +63,7 @@ serve(async (req) => {
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, format",
+        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, cohort_id, format",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -84,6 +85,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const groupError = await groupEnrolmentError(supabaseAdmin, regRow);
+    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     if (regRow.payment_status === "paid") {
       return new Response(JSON.stringify({ error: "Registration already paid" }), {
         status: 409,

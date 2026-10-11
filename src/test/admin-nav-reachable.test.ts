@@ -61,7 +61,8 @@ describe("the admin nav and its screens agree", () => {
     // Cohorts on one page; Programări was CalendarHealth + Availability +
     // Bookings. Each is its own section now, and each must still render.
     for (const c of [
-      "GroupOverview",
+      "CourseOverviewAdmin",
+      "PrivateLessonsAdmin",
       "CapacitiesAdmin",
       "CourseRequestsAdmin",
       "ManualSignupsAdmin",

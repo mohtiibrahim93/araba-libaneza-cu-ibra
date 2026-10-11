@@ -9,7 +9,7 @@ function adminHandler() {
       reads.push(table);
       const query = {
         select: () => query, eq: () => query,
-        order: async () => ({ data: [], error: null }),
+        order: () => query, range: async () => ({ data: [], error: null }),
         maybeSingle: async () => ({ data: null, error: null }),
       };
       return query;
@@ -19,7 +19,7 @@ function adminHandler() {
     "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db },
     "https://esm.sh/stripe@18.5.0": { default: class {} },
     "../_shared/cors.ts": { buildCorsHeaders: () => ({}) },
-    "../_shared/booking.ts": {}, "../_shared/cohort-sessions.ts": {},
+    "../_shared/booking.ts": {}, "../_shared/calendar-reconciliation.ts": {}, "../_shared/cohort-sessions.ts": {},
     "../_shared/refund.ts": {}, "../_shared/prices.ts": {},
     "../_shared/managed-email.ts": {}, "../_shared/registration-access.ts": {},
   }, { ADMIN_EMAILS: "admin@example.test" });

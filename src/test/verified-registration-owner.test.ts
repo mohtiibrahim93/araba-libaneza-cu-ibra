@@ -31,6 +31,7 @@ describe("verified registration ownership", () => {
     expect(await verifiedRegistrationOwner(req("valid"), reg, { getUser: async () => ({ data: { user: { email: reg.email, email_confirmed_at: "2026-01-01", is_anonymous: true } }, error: null }) })).toBe(false);
   });
   it.each([
+    ["create-payment-intent", "stripe.paymentIntents.create("],
     ["create-subscription", "stripe.subscriptions.create("],
     ["booking-create", '.from("bookings")\n      .insert('],
     ["create-checkout", "stripe.checkout.sessions.create("],

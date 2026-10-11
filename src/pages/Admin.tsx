@@ -24,6 +24,7 @@ import {
   Gift,
   ClipboardList,
   CalendarDays,
+  CalendarClock,
   GraduationCap,
   Newspaper,
   Settings,
@@ -54,7 +55,8 @@ import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
-import GroupOverview from "@/components/admin/GroupOverview";
+import CourseOverviewAdmin from "@/components/admin/CourseOverviewAdmin";
+import PrivateLessonsAdmin from "@/components/admin/PrivateLessonsAdmin";
 import BlogAdmin from "@/components/admin/BlogAdmin";
 import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
 import PagesAdmin from "@/components/admin/PagesAdmin";
@@ -75,6 +77,8 @@ import CardOverridesAdmin from "@/components/admin/CardOverridesAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
+import CourseFilters from "@/components/admin/CourseFilters";
+import { describeRegistrationCourse, emptyCourseFilters, matchesCourseFilters } from "@/lib/adminCourseFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable, { type RefundPreview } from "@/components/admin/RegistrationsTable";
 import {
@@ -108,6 +112,8 @@ const Admin = () => {
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
+  const [courseDetailsFilter, setCourseDetailsFilter] = useState(emptyCourseFilters);
+  const [selectedGroup, setSelectedGroup] = useState<{ id: string; name: string } | null>(null);
   const [emailSettings, setEmailSettings] = useState<EmailSettings>({
     sender_name: "Arabă Libaneză cu Ibra",
     sender_email: "noreply@centruldearabalibaneza.com",
@@ -194,16 +200,16 @@ const Admin = () => {
       // not bookings, and mixing them in is what made the admin unusable. They
       // are still one click away by selecting the "Incomplet" status.
       const matchesStatus =
-        leadStatusFilter === "all" ? status !== "incomplete" : status === leadStatusFilter;
+        leadStatusFilter === "all" ? (!!selectedGroup || status !== "incomplete") : status === leadStatusFilter;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
         (r.form_type === "private" &&
           messageTerms.every((term) =>
             (r.notes || "").toLocaleLowerCase("ro-RO").includes(term),
           ));
-      return matchesCourse && matchesStatus && matchesPrivateMessage;
+      return matchesCourse && matchesStatus && matchesPrivateMessage && matchesCourseFilters(describeRegistrationCourse(r), courseDetailsFilter) && (!selectedGroup || r.cohort_id === selectedGroup.id);
     });
-  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch]);
+  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch, courseDetailsFilter, selectedGroup]);
 
   const privateLeadCounts = useMemo(() => {
     const initial = LEAD_STATUSES.reduce(
@@ -713,6 +719,13 @@ const Admin = () => {
       ],
     },
     {
+      id: "private",
+      label: "Lecții private",
+      icon: CalendarClock,
+      primary: true,
+      items: [{ value: "private-lessons", label: "Înscrieri și lecții", icon: CalendarClock, hint: "Online și în persoană, de pe site sau adăugate manual" }],
+    },
+    {
       id: "reports",
       label: "Rapoarte",
       icon: BarChart3,
@@ -787,10 +800,16 @@ const Admin = () => {
       />
       <PersonSheet
         person={person}
+        onChanged={() => void loadData().catch(() => toast({ title: "Contact salvat; reîncarcă lista pentru datele noi.", variant: "destructive" }))}
         onClose={() => setPersonId(null)}
         onStatusChange={handleStatusChange}
         updating={!!person && updatingStatus?.id === person.id}
         onShowInTable={() => {
+          setSelectedGroup(null);
+          setCourseTypeFilter("all");
+          setLeadStatusFilter(person?.lead_status === "incomplete" ? "incomplete" : "all");
+          setPrivateMessageSearch("");
+          setCourseDetailsFilter(emptyCourseFilters());
           setPersonId(null);
           setActiveTab("leads");
         }}
@@ -830,6 +849,7 @@ const Admin = () => {
             <PrivateLeadStats
               counts={privateLeadCounts}
               onSelect={(status) => {
+                setSelectedGroup(null);
                 setCourseTypeFilter("private");
                 setLeadStatusFilter(status === "all" ? "all" : status);
               }}
@@ -840,7 +860,7 @@ const Admin = () => {
                 <span className="text-muted-foreground font-normal">
                   ({filteredRegistrations.length}/{stats.total})
                 </span>
-                {leadStatusFilter === "all" && stats.incomplete > 0 && (
+                {leadStatusFilter === "all" && !selectedGroup && stats.incomplete > 0 && (
                   <button
                     type="button"
                     onClick={() => setLeadStatusFilter("incomplete")}
@@ -886,15 +906,20 @@ const Admin = () => {
               courseType={courseTypeFilter}
               leadStatus={leadStatusFilter}
               privateMessageSearch={privateMessageSearch}
-              onCourseTypeChange={setCourseTypeFilter}
+              onCourseTypeChange={(value) => { setCourseTypeFilter(value); setSelectedGroup(null); }}
               onLeadStatusChange={setLeadStatusFilter}
               onPrivateMessageSearchChange={setPrivateMessageSearch}
               onReset={() => {
                 setCourseTypeFilter("all");
                 setLeadStatusFilter("all");
                 setPrivateMessageSearch("");
+                setCourseDetailsFilter(emptyCourseFilters());
+                setSelectedGroup(null);
               }}
             />
+
+            {selectedGroup && <div className="flex items-center gap-2 text-sm"><span>Grupă: {selectedGroup.name}</span><Button variant="ghost" size="sm" onClick={() => setSelectedGroup(null)}>Toate grupele</Button></div>}
+            <CourseFilters rows={registrations.map(describeRegistrationCourse)} value={courseDetailsFilter} onChange={setCourseDetailsFilter} />
 
             {selected.size > 0 && (
               <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
@@ -1016,7 +1041,12 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="bookings" className="mt-0 space-y-6">
-            <BookingsAdmin />
+            <BookingsAdmin onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
+          </TabsContent>
+
+          <TabsContent value="private-lessons" className="mt-0 space-y-6">
+            <PrivateLessonsAdmin registrations={registrations} onOpen={setPersonId}
+              onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
           </TabsContent>
 
           <TabsContent value="availability" className="mt-0 space-y-6">
@@ -1035,7 +1065,10 @@ const Admin = () => {
           <TabsContent value="cohorts" className="mt-0 space-y-6">
             <CohortSessionsAdmin key={calendarNamesVersion} />
             <CohortCalendarNames onChanged={() => setCalendarNamesVersion((v) => v + 1)} />
-            <GroupOverview />
+            <CourseOverviewAdmin onShowRegistrations={(id, name) => {
+              setSelectedGroup({ id, name }); setCourseTypeFilter("all"); setLeadStatusFilter("all");
+              setPrivateMessageSearch(""); setCourseDetailsFilter(emptyCourseFilters()); setActiveTab("leads");
+            }} />
             <CohortsAdmin />
           </TabsContent>
 

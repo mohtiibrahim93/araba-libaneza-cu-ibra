@@ -1,3 +1,4 @@
+import CalendarSyncPanel from "./CalendarSyncPanel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, MapPin, RefreshCw, Video } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -102,13 +103,14 @@ const time = (iso: string) => {
 };
 // Same test as Acasă and Sănătate calendar: no event means not in the calendar,
 // whether or not an error was recorded.
-const notInCalendar = (b: Booking) => b.status === "confirmed" && !b.google_event_id;
+const notInCalendar = (b: Booking) => b.status === "confirmed" && (!b.google_event_id || !!b.google_sync_error);
 
 const WeekLessons = () => {
   const [rows, setRows] = useState<Booking[] | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [sessionRefresh, setSessionRefresh] = useState(0);
   const [groupLessons, setGroupLessons] = useState<GroupLesson[]>([]);
 
   const load = useCallback(async () => {
@@ -148,7 +150,7 @@ const WeekLessons = () => {
     return () => {
       cancelled = true;
     };
-  }, [days]);
+  }, [days, sessionRefresh]);
 
   const groupsByDay = useMemo(() => {
     const map = new Map<string, GroupLesson[]>(days.map((d) => [d, []]));
@@ -233,6 +235,7 @@ const WeekLessons = () => {
         </button>
       </div>
 
+      <CalendarSyncPanel from={new Date(Date.parse(`${days[0]}T00:00:00Z`) - 86400000).toISOString()} to={new Date(Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86400000).toISOString()} onChanged={() => { void load(); setSessionRefresh((value) => value + 1); }} />
       {error && <ErrorNote>{error}</ErrorNote>}
       {!rows && (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">

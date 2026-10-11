@@ -1,8 +1,9 @@
+import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { callerOwnsRegistration } from "../_shared/registration-access.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -47,17 +48,19 @@ serve(async (req) => {
     );
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
-      .select("id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, format")
+      .select("id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, cohort_id, format")
       .eq("id", registrationId)
       .maybeSingle();
 
     // Only the registrant (matching email) may create/read a payment intent.
-    if (regErr || !regRow || !(await callerOwnsRegistration(regRow, { email }))) {
+    if (regErr || !regRow || !(await verifiedRegistrationOwner(req, regRow, supabaseAdmin.auth))) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const groupError = await groupEnrolmentError(supabaseAdmin, regRow);
+    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     // A "trial" registration paying for a private lesson is the natural
     // conversion path (the free trial is once per person; after that the
     // same lead pays) — allow it instead of hard-matching form_type.
