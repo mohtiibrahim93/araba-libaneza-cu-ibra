@@ -1,3 +1,4 @@
+import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 // Hosted Stripe Checkout fallback. When js.stripe.com is blocked in the
 // visitor's browser (Brave Shields, adblockers, DNS filters, corporate Wi-Fi,
 // etc.), the embedded Elements flow on /checkout can't load. This function
@@ -5,7 +6,7 @@
 // redirects to checkout.stripe.com, which is a first-party navigation and
 // bypasses tracker/script blockers.
 //
-// Pricing is derived server-side from the registration row (level, format,
+// Pricing is derived server-side from the registration row (level, cohort_id, format,
 // quantity) — never from client input — so the amount charged matches the
 // embedded flow exactly.
 
@@ -54,7 +55,7 @@ serve(async (req) => {
     const { data: reg } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, created_at, form_type, payment_status, email, name, quantity, level, format, stripe_session_id",
+        "id, created_at, form_type, payment_status, email, name, quantity, level, cohort_id, format, stripe_session_id",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -70,6 +71,8 @@ serve(async (req) => {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const groupError = await groupEnrolmentError(supabaseAdmin, reg);
+    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     if (reg.payment_status === "paid") {
       return new Response(JSON.stringify({ error: "Registration already paid" }), {
         status: 409,

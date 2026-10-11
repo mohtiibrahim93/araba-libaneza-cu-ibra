@@ -26,7 +26,7 @@ function handler({ rpcError = false, authorized = true, longHistory = false } = 
     "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db },
     "https://esm.sh/stripe@18.5.0": { default: class {} },
     "../_shared/cors.ts": { buildCorsHeaders: () => ({}) },
-    "../_shared/booking.ts": {}, "../_shared/cohort-sessions.ts": {},
+    "../_shared/booking.ts": {}, "../_shared/calendar-reconciliation.ts": {}, "../_shared/cohort-sessions.ts": {},
     "../_shared/refund.ts": {}, "../_shared/prices.ts": {},
     "../_shared/managed-email.ts": {}, "../_shared/registration-access.ts": {},
   }, { ADMIN_EMAILS: "admin@example.test" });

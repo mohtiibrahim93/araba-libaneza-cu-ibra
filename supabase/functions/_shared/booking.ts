@@ -113,6 +113,8 @@ export interface GCalEventInput {
   attendeeEmail: string;
   attendeeName?: string;
   withMeet?: boolean;
+  eventId?: string;
+  bookingId?: string;
 }
 
 export async function gcalCreateEvent(input: GCalEventInput): Promise<{
@@ -136,6 +138,8 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
   }
 
   const body: Record<string, unknown> = {
+    ...(input.eventId ? { id: input.eventId } : {}),
+    ...(input.bookingId ? { extendedProperties: { private: { booking_id: input.bookingId, student_contact_email: input.attendeeEmail } } } : {}),
     summary: input.summary,
     description: input.description,
     start: { dateTime: input.startISO, timeZone: TZ },
@@ -154,7 +158,7 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
 
   try {
     const url = `${GCAL_GATEWAY}/calendars/primary/events?conferenceDataVersion=${input.withMeet ? 1 : 0}&sendUpdates=all`;
-    const res = await fetch(url, {
+    let res = await fetch(url, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${lovableKey}`,
@@ -163,6 +167,11 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
       },
       body: JSON.stringify(body),
     });
+    if (res.status === 409 && input.eventId && input.bookingId) {
+      res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(input.eventId)}`, { headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey } });
+      const existing = await res.clone().json().catch(() => null);
+      if (!res.ok || existing?.extendedProperties?.private?.booking_id !== input.bookingId || existing?.status === "cancelled") return { ok: false, error: "event-identity-mismatch" };
+    }
     const data = await res.json();
     if (!res.ok) {
       console.error("[booking] gcal create failed", res.status, data);

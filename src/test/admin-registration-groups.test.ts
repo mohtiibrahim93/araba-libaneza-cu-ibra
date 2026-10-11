@@ -24,7 +24,7 @@ function admin(longHistory = false) {
     } };
   const h = loadEdgeHandler("supabase/functions/admin-registrations/index.ts", {
     "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db }, "https://esm.sh/stripe@18.5.0": { default: class {} },
-    "../_shared/cors.ts": { buildCorsHeaders: () => ({}) }, "../_shared/booking.ts": {}, "../_shared/cohort-sessions.ts": {},
+    "../_shared/cors.ts": { buildCorsHeaders: () => ({}) }, "../_shared/booking.ts": {}, "../_shared/calendar-reconciliation.ts": {}, "../_shared/cohort-sessions.ts": {},
     "../_shared/refund.ts": {}, "../_shared/prices.ts": {}, "../_shared/managed-email.ts": {}, "../_shared/registration-access.ts": {},
   }, { ADMIN_EMAILS: "admin@example.test", SUPABASE_URL: "https://backend.example.test", SUPABASE_SERVICE_ROLE_KEY: "synthetic-service" });
   return { inserts, call: (body: unknown) => h(new Request("https://example.test/admin", { method: "POST", headers: { Authorization: "Bearer synthetic-admin", "Content-Type": "application/json" }, body: JSON.stringify(body) })) };

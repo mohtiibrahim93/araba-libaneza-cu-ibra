@@ -1,3 +1,4 @@
+import { googleBookingEventId } from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   TZ,
@@ -328,6 +329,8 @@ Deno.serve(async (req) => {
       .join("\n");
 
     const gcal = await gcalCreateEvent({
+      eventId: await googleBookingEventId(inserted.id),
+      bookingId: inserted.id,
       summary,
       description,
       startISO,
@@ -341,7 +344,7 @@ Deno.serve(async (req) => {
     // calendar used to be indistinguishable from one that did — both just had
     // google_event_id = NULL — so the admin panel and the health check now read
     // google_sync_error to tell them apart.
-    await supabase
+    const { error: syncSaveError } = await supabase
       .from("bookings")
       .update({
         google_event_id: gcal.ok && gcal.id ? gcal.id : null,
@@ -349,6 +352,8 @@ Deno.serve(async (req) => {
         meet_link: onlineLink,
       })
       .eq("id", inserted.id);
+
+    if (syncSaveError) console.error("[booking-create] calendar link could not be saved", syncSaveError);
 
     const quiet = internalCall && body.quiet === true;
 
@@ -391,6 +396,7 @@ Deno.serve(async (req) => {
     return json({
       ok: true,
       booking_id: inserted.id,
+      sync_pending: !gcal.ok || !gcal.id || !!syncSaveError,
       manage_token: inserted.manage_token,
       meet_link: onlineLink,
       start_at: startISO,

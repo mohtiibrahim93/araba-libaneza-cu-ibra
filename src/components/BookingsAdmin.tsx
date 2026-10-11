@@ -1,3 +1,4 @@
+import CalendarSyncPanel from "./admin/CalendarSyncPanel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
@@ -252,6 +253,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
       const startAt = bucharestCivilToUtc(y, m, d, hh, mm).toISOString();
       const { data, error } = await invokeAdmin<{
         success?: boolean;
+        sync_pending?: boolean;
         error?: string;
         code?: string;
         clashes?: string[];
@@ -264,7 +266,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
       }
       if (data?.error) throw new Error(data.error);
       if (data?.success !== true) throw new Error("Mutarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
-      toast({ title: "Lecție mutată", description: "Cursantul a primit un email cu ora nouă." });
+      toast({ title: data.sync_pending ? "Lecție mutată în admin; sincronizarea Google este în așteptare" : "Lecție mutată", description: data.sync_pending ? "Reîncearcă sincronizarea din Program." : "Confirmarea cu ora nouă a fost solicitată prin email.", ...(data.sync_pending ? { variant: "destructive" as const } : {}) });
       setMoving(null);
       setMoveWarn(null);
       void load(true);
@@ -310,6 +312,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
       const startAt = bucharestCivilToUtc(y, m, d, hh, mm).toISOString();
       const { data, error } = await invokeAdmin<{
         success?: boolean;
+        sync_pending?: boolean;
         error?: string;
         code?: string;
         clashes?: string[];
@@ -333,8 +336,8 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
       if (data?.error) throw new Error(data.error);
       if (data?.success !== true) throw new Error("Programarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
       toast({
-        title: "Lecție programată",
-        description: "Cursantul a primit confirmarea pe email, cu linkul lecției.",
+        title: data.sync_pending ? "Lecție salvată; Google Calendar este în așteptare" : "Lecție programată",
+        description: "Confirmarea prin email a fost solicitată, cu linkul lecției.",
       });
       setBooking(false);
       setBkWarn(null);
@@ -350,6 +353,15 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
     }
   };
 
+  const repairCalendar = async (booking: Booking) => {
+    if (!confirm("Creezi evenimentul Google pentru această lecție? Verifică mai întâi evenimentele fără asociere din Program pentru a evita dublurile vechi.")) return;
+    try {
+      const { data, error } = await invokeAdmin({ action: "repair_booking_calendar", id: booking.id });
+      if (error || data?.error || data?.success !== true) throw new Error(data?.error || "Repararea nu a fost confirmată.");
+      toast({ title: "Lecția este în Google Calendar" }); void load(true);
+    } catch (failure) { toast({ title: failure instanceof Error ? failure.message : "Reparare eșuată", variant: "destructive" }); }
+  };
+
   const cancel = async (b: Booking) => {
     if (!confirm(`Anulezi programarea cu ${b.student_name} (${fmt(b.start_at)})?`)) return;
     setCancellingId(b.id);
@@ -358,7 +370,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       if (data?.success !== true) throw new Error("Anularea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.");
-      toast({ title: "Programare anulată" });
+      toast({ title: data.sync_pending ? "Anulată în admin; anularea Google este în așteptare" : "Programare anulată", ...(data.sync_pending ? { variant: "destructive" as const } : {}) });
       void load(true);
     } catch (err) {
       toast({
@@ -372,6 +384,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
 
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
+      <CalendarSyncPanel onChanged={() => void load(true)} showExternal={false} />
       <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-base font-semibold text-foreground">{privateOnly ? "Programări private" : "Programări"}</h2>
@@ -482,7 +495,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                   </td>
                   <td className="py-2 pr-2">
                     {STATUS_LABEL[b.status] ?? b.status}
-                    {b.status === "confirmed" && !b.google_event_id && (
+                    {b.status === "confirmed" && (!b.google_event_id || !!b.google_sync_error) && (
                       <span
                         className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400"
                         title={
@@ -492,7 +505,8 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                         }
                       >
                         <CalendarX2 className="h-3 w-3 shrink-0" aria-hidden />
-                        fără Calendar
+                        {b.google_event_id ? "Calendar în așteptare" : "fără Calendar"}
+                        {(!b.google_event_id || b.google_sync_error === "calendar_create_pending") && <button type="button" className="underline" onClick={() => void repairCalendar(b)}>Repară</button>}
                       </span>
                     )}
                   </td>

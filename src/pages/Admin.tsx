@@ -800,6 +800,7 @@ const Admin = () => {
       />
       <PersonSheet
         person={person}
+        onChanged={() => void loadData().catch(() => toast({ title: "Contact salvat; reîncarcă lista pentru datele noi.", variant: "destructive" }))}
         onClose={() => setPersonId(null)}
         onStatusChange={handleStatusChange}
         updating={!!person && updatingStatus?.id === person.id}

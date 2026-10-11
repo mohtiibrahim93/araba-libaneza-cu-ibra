@@ -60,6 +60,7 @@ export const STORAGE_KEY = "registration_form_draft";
 
 /** Which field rejected a submit — also the value reported to analytics. */
 type InvalidField =
+  | "cohort"
   | "course_type"
   | "format"
   | "level"
@@ -338,6 +339,10 @@ const RegistrationFormSection = ({
     }
     if (courseType === "group" && !level) {
       fail("level", t.mainLeadErrorLevel, "level");
+      return;
+    }
+    if (courseType === "group" && !cohortId) {
+      fail("cohort", lang === "en" ? "Choose a group before continuing." : "Alege o grupă înainte de a continua.", "cohort-selection");
       return;
     }
     if (format === "fizic" && !center) {
@@ -673,6 +678,7 @@ const RegistrationFormSection = ({
                 onValueChange={(v) => {
                   noteStart();
                   setFormat(v as FormatType);
+                  setCohortId(null);
                   setFormatError(false);
                   setInvalidField(null);
                   trackRegistrationStep("format", (courseType || "unknown") as CourseType | "unknown", v);
@@ -712,11 +718,13 @@ const RegistrationFormSection = ({
                 setInvalidField(null);
                 trackRegistrationStep("level", "group", lvl);
                 setLevel(lvl);
+                setCohortId(null);
               }}
               levelError={invalidField === "level"}
               format={format}
               groupPlan={groupPlan}
               onGroupPlanChange={setGroupPlan}
+              cohortError={invalidField === "cohort"}
               cohortId={cohortId}
               onCohortChange={(c) => {
                 setCohortId(c?.id ?? null);

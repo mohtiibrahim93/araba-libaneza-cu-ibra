@@ -1,0 +1,202 @@
+const GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
+type Config = { lovableKey?: string | undefined; calendarKey?: string | undefined; from: string; to: string };
+type GoogleEvent = { id?: string; status?: string; etag?: string; summary?: string; description?: string; attendees?: Array<Record<string, unknown>>; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; extendedProperties?: { private?: Record<string, string>; shared?: Record<string, string> } };
+/** Synchronize exact existing links. A missing event is an error, never a deletion. */
+export async function reconcileCalendar(db: any, config: Config, request: typeof fetch = fetch) {
+  const result = { updated: 0, pushed: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string }> };
+  if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
+  const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
+  const all = async (table: string, fields: string) => {
+    const rows: any[] = [];
+    for (let offset = 0; ; offset += 1000) {
+      const page = await db.from(table).select(fields).order("id").range(offset, offset + 999);
+      if (page.error) throw page.error;
+      rows.push(...(page.data ?? []));
+      if ((page.data ?? []).length < 1000) return rows;
+    }
+  };
+  const bookings = await all("bookings", "id,registration_id,event_type_slug,start_at,end_at,status,google_event_id,google_sync_error,google_contact_email,student_name,student_email,student_phone,meet_link");
+  const sessions = await all("cohort_sessions", "id,google_event_id,starts_at,ends_at");
+  const events = new Map<string, GoogleEvent>();
+  let token: string | undefined;
+  do {
+    const qs = new URLSearchParams({ singleEvents: "true", showDeleted: "true", timeMin: config.from, timeMax: config.to, maxResults: "2500" });
+    if (token) qs.set("pageToken", token);
+    const response = await request(`${GATEWAY}/calendars/primary/events?${qs}`, { headers });
+    if (!response.ok) throw new Error(`Google Calendar read failed (${response.status})`);
+    const page = await response.json();
+    if (!Array.isArray(page.items)) throw new Error("Google Calendar returned an invalid event list");
+    for (const event of page.items) if (typeof event.id === "string") events.set(event.id, event);
+    token = page.nextPageToken;
+  } while (token);
+  const linked = new Set([...bookings, ...sessions].map(row => row.google_event_id).filter(Boolean));
+  const instant = (value: unknown) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
+  for (const booking of bookings) {
+    if (!booking.google_event_id) {
+      if (booking.status === "confirmed" && Date.parse(booking.start_at) >= Date.parse(config.from) && Date.parse(booking.start_at) < Date.parse(config.to)) result.errors.push(`${booking.id}: Lecția nu are eveniment Google. Folosește Repară din Toate lecțiile.`);
+      continue;
+    }
+    if (booking.status !== "confirmed" && booking.google_sync_error === "cancel_update_pending") {
+      try {
+        const response = await request(`${GATEWAY}/calendars/primary/events/${encodeURIComponent(booking.google_event_id)}?sendUpdates=all`, { method: "DELETE", headers });
+        if (!response.ok && response.status !== 404 && response.status !== 410) throw new Error(`Google cancellation failed (${response.status})`);
+        const write = await db.from("bookings").update({ google_sync_error: null }).eq("id", booking.id).eq("status", booking.status).select("id");
+        if (write.error || !write.data?.length) throw new Error("Cancellation confirmation could not be saved");
+        result.pushed++;
+      } catch (error) { result.errors.push(`${booking.id}: ${error instanceof Error ? error.message : "Cancellation sync failed"}`); }
+      continue;
+    }
+    if (booking.status !== "confirmed") continue;
+    if (booking.google_sync_error === "calendar_create_pending") {
+      try { await repairBookingCalendar(db, booking, config, request); result.pushed++; }
+      catch (error) { result.errors.push(`${booking.id}: ${error instanceof Error ? error.message : "Calendar creation retry failed"}`); }
+      continue;
+    }
+    // Include events moved out of this window, but do not poll every old lesson.
+    if (!events.has(booking.google_event_id) && !(Date.parse(booking.start_at) >= Date.parse(config.from) && Date.parse(booking.start_at) < Date.parse(config.to)) && !booking.google_sync_error) continue;
+    let event = events.get(booking.google_event_id);
+    try {
+      if (!event || booking.google_sync_error) {
+        const response = await request(`${GATEWAY}/calendars/primary/events/${encodeURIComponent(booking.google_event_id)}`, { method: "GET", headers });
+        if (response.status === 410) event = { id: booking.google_event_id, status: "cancelled" };
+        else if (!response.ok) throw new Error(`Google event unavailable (${response.status})`);
+        else event = await response.json();
+      }
+      if (!event || event.id !== booking.google_event_id) throw new Error("Google event identity mismatch");
+      const update = async (patch: Record<string, unknown>) => {
+        // Compare-and-set protects a concurrent admin move from stale import.
+        let writeQuery = db.from("bookings").update(patch).eq("id", booking.id).eq("status", "confirmed").eq("start_at", booking.start_at);
+        for (const field of ["student_name", "student_email", "student_phone"]) {
+          writeQuery = booking[field] == null ? writeQuery.is(field, null) : writeQuery.eq(field, booking[field]);
+        }
+        writeQuery = booking.google_sync_error ? writeQuery.eq("google_sync_error", booking.google_sync_error) : writeQuery.is("google_sync_error", null);
+        const write = await writeQuery.select("id");
+        if (write.error) throw write.error;
+        if (!write.data?.length) throw new Error("Lesson changed during synchronization; retry");
+      };
+      if (booking.google_sync_error) {
+        // An explicit pending admin change takes precedence over importing old Google data.
+        if (event.status === "cancelled") throw new Error("Google event was cancelled; review the pending admin change");
+        const oldEmail = event.extendedProperties?.private?.student_contact_email ?? booking.google_contact_email ?? booking.student_email;
+        const attendees = (event.attendees ?? []).filter(guest => String(guest.email ?? "").toLowerCase() !== String(oldEmail ?? "").toLowerCase());
+        if (booking.student_email) attendees.unshift({ email: booking.student_email, displayName: booking.student_name });
+        const contact = `Contact cursant: ${booking.student_name}\nEmail: ${booking.student_email ?? ""}\nTelefon: ${booking.student_phone ?? ""}`;
+        let originalDescription = (event.description ?? "").split("\n\nContact cursant:")[0] ?? "";
+        const originalName = originalDescription.match(/^Student: (.*)$/m)?.[1];
+        const generated = originalDescription.startsWith("Student: ");
+        if (generated) originalDescription = originalDescription.replace(/^Student:.*$/m, `Student: ${booking.student_name}`).replace(/^Email:.*$/m, `Email: ${booking.student_email ?? ""}`).replace(/^Telefon:.*$/m, `Telefon: ${booking.student_phone ?? ""}`);
+        const description = `${originalDescription}\n\n${contact}`;
+        const summary = generated && originalName && event.summary?.endsWith(` — ${originalName}`) ? event.summary.slice(0, -originalName.length) + booking.student_name : undefined;
+        const contactOnly = booking.google_sync_error === "contact_update_pending";
+        const pushedStart = contactOnly ? instant(event.start?.dateTime) : booking.start_at;
+        const pushedEnd = contactOnly ? instant(event.end?.dateTime) : booking.end_at;
+        if (!pushedStart || !pushedEnd) throw new Error("Google event has an unsupported lesson time");
+        const patch = { start: { dateTime: pushedStart, timeZone: "Europe/Bucharest" }, end: { dateTime: pushedEnd, timeZone: "Europe/Bucharest" }, attendees, description, ...(summary ? { summary } : {}), extendedProperties: { ...event.extendedProperties, private: { ...event.extendedProperties?.private, student_contact_email: booking.student_email ?? "" } } };
+        const response = await request(`${GATEWAY}/calendars/primary/events/${encodeURIComponent(booking.google_event_id)}?sendUpdates=all`, {
+          method: "PATCH", headers: { ...headers, ...(event.etag ? { "If-Match": event.etag } : {}) }, body: JSON.stringify(patch),
+        });
+        if (!response.ok) throw new Error(`Google Calendar update failed (${response.status})`);
+        await update({ google_sync_error: null, google_contact_email: booking.student_email, ...(contactOnly ? { start_at: pushedStart, end_at: pushedEnd } : {}) });
+        result.pushed++;
+        continue;
+      }
+      if (event.status === "cancelled") {
+        await update({ status: "cancelled", cancelled_at: new Date().toISOString(), google_sync_error: null });
+        result.updated++;
+        continue;
+      }
+      const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
+      if (!start || !end || Date.parse(end) <= Date.parse(start)) throw new Error("Google event has an unsupported lesson time");
+      if (Date.parse(start) !== Date.parse(booking.start_at) || Date.parse(end) !== Date.parse(booking.end_at) || (event.hangoutLink && event.hangoutLink !== booking.meet_link)) {
+        await update({ start_at: start, end_at: end, ...(event.hangoutLink ? { meet_link: event.hangoutLink } : {}) });
+        result.updated++;
+      }
+    } catch (error) { result.errors.push(`${booking.id}: ${error instanceof Error ? error.message : "Synchronization failed"}`); }
+  }
+  for (const session of sessions) {
+    if (!session.google_event_id) continue;
+    if (!events.has(session.google_event_id) && !(Date.parse(session.starts_at) >= Date.parse(config.from) && Date.parse(session.starts_at) < Date.parse(config.to))) continue;
+    try {
+      let event = events.get(session.google_event_id);
+      if (!event) {
+        const response = await request(`${GATEWAY}/calendars/primary/events/${encodeURIComponent(session.google_event_id)}`, { method: "GET", headers });
+        if (response.status === 410) event = { id: session.google_event_id, status: "cancelled" };
+        else if (!response.ok) throw new Error(`Google group event unavailable (${response.status})`);
+        else event = await response.json();
+      }
+      if (!event || event.id !== session.google_event_id) throw new Error("Google group event identity mismatch");
+      if (event.status === "cancelled") {
+        const write = await db.from("cohort_sessions").delete().eq("id", session.id).eq("starts_at", session.starts_at).select("id");
+        if (write.error || !write.data?.length) throw new Error("Group cancellation could not be saved; retry");
+        result.updated++; continue;
+      }
+      const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
+      if (!start || !end || Date.parse(end) <= Date.parse(start)) throw new Error("Google group event has an unsupported time");
+      if (Date.parse(start) !== Date.parse(session.starts_at) || Date.parse(end) !== Date.parse(session.ends_at)) {
+        const write = await db.from("cohort_sessions").update({ starts_at: start, ends_at: end, synced_at: new Date().toISOString() }).eq("id", session.id).eq("starts_at", session.starts_at).select("id");
+        if (write.error || !write.data?.length) throw new Error("Group lesson changed during synchronization; retry");
+        result.updated++;
+      }
+    } catch (error) { result.errors.push(`${session.id}: ${error instanceof Error ? error.message : "Group synchronization failed"}`); }
+  }
+  for (const event of events.values()) {
+    const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
+    if (event.id && !linked.has(event.id) && event.status !== "cancelled" && start && end) result.unmatched.push({ id: event.id, summary: event.summary || "Eveniment Google Calendar", start_at: start, end_at: end });
+  }
+  return result;
+}
+
+/** Google event IDs use base32hex characters; SHA-256 hex is a valid subset. */
+export async function googleBookingEventId(bookingId: string) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`booking:${bookingId}`));
+  return `b${Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("")}`;
+}
+/** Explicit recovery for a saved lesson with no Google link. It creates no registration or booking. */
+export async function repairBookingCalendar(db: any, booking: any, config: Omit<Config, "from" | "to">, request: typeof fetch = fetch) {
+  if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
+  const eventId = await googleBookingEventId(booking.id);
+  if (booking.status !== "confirmed" || !booking.student_email || (booking.google_event_id && (booking.google_event_id !== eventId || booking.google_sync_error !== "calendar_create_pending"))) throw new Error("Lesson cannot be repaired");
+  const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
+  const contactGuard = (query: any) => {
+    for (const field of ["student_name", "student_email", "student_phone"]) query = booking[field] == null ? query.is(field, null) : query.eq(field, booking[field]);
+    return query;
+  };
+  // Persist the exact retry/cleanup identity BEFORE Google can create an invitation.
+  let claim = db.from("bookings").update({ google_event_id: eventId, google_sync_error: "calendar_create_pending" }).eq("id", booking.id).eq("status", "confirmed").eq("start_at", booking.start_at);
+  claim = booking.google_event_id ? claim.eq("google_event_id", eventId).eq("google_sync_error", "calendar_create_pending") : claim.is("google_event_id", null);
+  const claimed = await contactGuard(claim).select("id");
+  if (claimed.error || !claimed.data?.length) throw new Error("Lesson changed before repair; reload and retry");
+  const body = { id: eventId, summary: `Lecție — ${booking.student_name}`, description: [`Student: ${booking.student_name}`, `Email: ${booking.student_email}`, booking.student_phone ? `Telefon: ${booking.student_phone}` : null, booking.meet_link ? `Link: ${booking.meet_link}` : null, booking.notes ?? null].filter(Boolean).join("\n"),
+    start: { dateTime: booking.start_at, timeZone: "Europe/Bucharest" }, end: { dateTime: booking.end_at, timeZone: "Europe/Bucharest" }, attendees: [{ email: booking.student_email, displayName: booking.student_name }],
+    extendedProperties: { private: { booking_id: booking.id, student_contact_email: booking.student_email } } };
+  let recovered: any = null;
+  const created = await request(`${GATEWAY}/calendars/primary/events?sendUpdates=all`, { method: "POST", headers, body: JSON.stringify(body) });
+  if (created.status === 409) {
+    const existing = await request(`${GATEWAY}/calendars/primary/events/${eventId}`, { method: "GET", headers });
+    if (!existing.ok) throw new Error("Existing calendar event could not be verified");
+    recovered = await existing.json();
+    if (recovered.id !== eventId || recovered.extendedProperties?.private?.booking_id !== booking.id || recovered.status === "cancelled") throw new Error("Calendar event identity mismatch");
+    // Recover the exact link without replacing owner edits or additional guests.
+    if (!recovered.start?.dateTime || !recovered.end?.dateTime || !Number.isFinite(Date.parse(recovered.start.dateTime)) || !Number.isFinite(Date.parse(recovered.end.dateTime)) || Date.parse(recovered.end.dateTime) <= Date.parse(recovered.start.dateTime)) throw new Error("Recovered calendar event has an unsupported time");
+  } else {
+    if (!created.ok) throw new Error(`Calendar repair failed (${created.status})`);
+    const event = await created.json();
+    if (event.id !== eventId) throw new Error("Calendar event identity mismatch");
+  }
+  const saved = await contactGuard(db.from("bookings").update({ google_sync_error: recovered ? (booking.google_sync_error === "reschedule_update_pending" ? "reschedule_update_pending" : "contact_update_pending") : null, google_contact_email: recovered?.extendedProperties?.private?.student_contact_email ?? booking.student_email,
+    ...(recovered && booking.google_sync_error !== "reschedule_update_pending" ? { start_at: new Date(recovered.start.dateTime).toISOString(), end_at: new Date(recovered.end.dateTime).toISOString() } : {}) }).eq("id", booking.id).eq("status", "confirmed").eq("google_event_id", eventId).eq("google_sync_error", "calendar_create_pending").eq("start_at", booking.start_at)).select("id");
+  if (saved.error || !saved.data?.length) {
+    const owner = await db.from("bookings").select("id").eq("google_event_id", eventId).eq("status", "confirmed").maybeSingle();
+    if (owner.error) throw new Error("Repair ownership could not be checked; durable retry remains pending");
+    if (!owner.data) {
+      // A cancellation can finish while the POST is in flight. Delete only this
+      // exact owned event; keep cleanup retry state if Google cannot confirm.
+      const removed = await request(`${GATEWAY}/calendars/primary/events/${eventId}?sendUpdates=all`, { method: "DELETE", headers }).catch(() => null);
+      const cleaned = !!removed && (removed.ok || removed.status === 404 || removed.status === 410);
+      const cleanup = await db.from("bookings").update({ google_sync_error: cleaned ? null : "cancel_update_pending" }).eq("google_event_id", eventId).in("status", ["cancelled", "rescheduled"]).select("id");
+      if (cleanup.error) throw new Error("Calendar cleanup retry could not be recorded");
+    }
+    throw new Error("Lesson changed during repair; its recovery or cleanup remains tracked");
+  }
+  return { event_id: eventId };
+}

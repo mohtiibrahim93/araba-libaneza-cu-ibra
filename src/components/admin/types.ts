@@ -48,6 +48,8 @@ export interface Registration {
   name: string;
   phone: string;
   email: string | null;
+  account_email?: string | null;
+  contact_email?: string | null;
   center: string | null;
   format: string | null;
   child_age: string | null;

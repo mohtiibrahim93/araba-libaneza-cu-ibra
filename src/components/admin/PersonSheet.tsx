@@ -3,6 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
+import ContactEditor from "./ContactEditor";
 import RegistrationCourse from "./RegistrationCourse";
 import {
   formTypeLabels,
@@ -71,14 +72,16 @@ interface Props {
   onStatusChange: (id: string, status: LeadStatus) => void;
   updating: boolean;
   onShowInTable: () => void;
+  onChanged?: () => void;
 }
 
-const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable }: Props) => {
+const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable, onChanged }: Props) => {
   const [progress, setProgress] = useState<Progress | null | undefined>(undefined);
 
   useEffect(() => {
     setProgress(undefined);
-    const email = person?.email?.trim().toLowerCase();
+    const identityEmail = person?.account_email !== undefined ? person.account_email : person?.email;
+    const email = identityEmail?.trim().toLowerCase();
     if (!email) {
       setProgress(null);
       return;
@@ -90,7 +93,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable 
     return () => {
       cancelled = true;
     };
-  }, [person?.email]);
+  }, [person?.email, person?.account_email]);
 
   const status = (person?.lead_status || "new") as LeadStatus;
   const paid = person?.payment_status === "paid" || !!person?.paid_at;
@@ -137,6 +140,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable 
 
               <div className="flex flex-col gap-5 px-4 py-5 sm:px-6">
                 <RegistrationCourse registration={person} />
+                <ContactEditor person={person} onChanged={onChanged} />
                 <div className="flex items-center gap-4">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-green font-display text-xl font-bold text-white">
                     {initials(person.name)}

@@ -3,6 +3,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-libra
 import BookingsAdmin from "@/components/BookingsAdmin";
 
 const api = vi.hoisted(() => ({ invoke: vi.fn(), toast: vi.fn() }));
+vi.mock("@/components/admin/CalendarSyncPanel", () => ({ default: () => null }));
 vi.mock("@/lib/adminAuth", () => ({ invokeAdmin: api.invoke }));
 vi.mock("@/hooks/use-toast", () => ({ toast: api.toast }));
 

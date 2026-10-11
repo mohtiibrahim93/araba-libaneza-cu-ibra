@@ -39,6 +39,8 @@ const ACTION_LABELS: Record<string, string> = {
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
   book_for_student: "Programare manuală",
+  update_contact: "Contact actualizat",
+  repair_booking_calendar: "Calendar reparat",
 };
 
 /** The ones that destroy data rather than change it. */
