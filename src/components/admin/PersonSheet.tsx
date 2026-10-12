@@ -3,6 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import ContactEditor from "./ContactEditor";
 import RegistrationCourse from "./RegistrationCourse";
 import {
@@ -61,13 +62,6 @@ const initials = (name: string) =>
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase())
     .join("") || "?";
-
-// wa.me needs the full international number; Romanian mobiles are stored
-// locally as 07…, so a leading 0 becomes the 40 country code.
-const waLink = (phone: string) => {
-  const digits = phone.replace(/[^\d]/g, "");
-  return `https://wa.me/${digits.startsWith("0") ? `40${digits.slice(1)}` : digits}`;
-};
 
 const CONTACTED: LeadStatus[] = ["contacted", "qualified", "converted", "no_response"];
 
@@ -179,7 +173,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                   <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2">
                     {person.phone ? (
                       <a
-                        href={waLink(person.phone)}
+                        href={buildWhatsAppUrl(person.phone)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-brand-green font-semibold text-white hover:opacity-90"

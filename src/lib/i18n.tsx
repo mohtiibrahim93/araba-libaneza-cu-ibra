@@ -323,7 +323,7 @@ export const translations = {
     labelEmail: "Email",
     labelFormat: "Format dorit",
     placeholderName: "Ion Popescu",
-    placeholderPhone: "+40 7XX XXX XXX",
+    placeholderPhone: "7XX XXX XXX",
     placeholderEmail: "ion@email.com",
 
     footer: "© 2026 Arabă Libaneză cu Ibra. Toate drepturile rezervate.",
@@ -1139,7 +1139,7 @@ export const translations = {
     labelEmail: "Email",
     labelFormat: "Preferred Format",
     placeholderName: "John Smith",
-    placeholderPhone: "+40 7XX XXX XXX",
+    placeholderPhone: "7XX XXX XXX",
     placeholderEmail: "john@email.com",
 
     footer: "© 2026 Lebanese Arabic with Ibra. All rights reserved.",

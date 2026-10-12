@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { formTypeLabels, paymentStatusLabels } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
 
@@ -389,7 +390,7 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                       </div>
                       {!unpaid && r.phone && (
                         <a
-                          href={`https://wa.me/${(() => { const d = r.phone.replace(/[^\d]/g, ""); return d.startsWith("0") ? `40${d.slice(1)}` : d; })()}`}
+                          href={buildWhatsAppUrl(r.phone)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={cn(rowBtn, "bg-brand-green text-white hover:opacity-90")}

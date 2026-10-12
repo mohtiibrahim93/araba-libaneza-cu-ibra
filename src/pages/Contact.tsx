@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { trackGenerateLead } from "@/lib/tracking";
 import { GOOGLE_MAPS_PROFILE_URL, GOOGLE_REVIEW_URL } from "@/lib/googleBusiness";
 import GoogleMapEmbed from "@/components/GoogleMapEmbed";
@@ -210,7 +211,7 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
                   </div>
                   <div className="space-y-1.5 sm:col-span-2">
                     <Label htmlFor="ct-phone">{c.phone}</Label>
-                    <Input id="ct-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} autoComplete="tel" />
+                    <PhoneInput id="ct-phone" value={phone} onChange={setPhone} maxLength={30} autoComplete="tel" />
                   </div>
                 </div>
                 <div className="space-y-1.5">

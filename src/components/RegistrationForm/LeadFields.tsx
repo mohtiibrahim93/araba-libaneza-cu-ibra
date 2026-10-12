@@ -1,12 +1,13 @@
 import { useI18n } from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { CourseType } from "./types";
 import { useState } from "react";
 
-// Romanian mobile or international E.164. Strip spaces / dashes / parens before testing.
-const PHONE_RE = /^(?:\+[1-9]\d{6,14}|0[27]\d{8})$/;
+// International E.164. PhoneInput emits this shape; strip spaces / dashes / parens before testing.
+const PHONE_RE = /^\+[1-9]\d{6,14}$/;
 const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
 // Mailboxes that cannot meaningfully receive a booking confirmation. admin@ is
 // deliberately NOT here: admin@firma.ro is a normal business address and a
@@ -92,17 +93,16 @@ const LeadFields = ({
         </div>
         <div className="space-y-2">
           <Label htmlFor="phone">{t.labelPhone} *</Label>
-          <Input
+          <PhoneInput
             id="phone"
-            type="tel"
             value={phone}
-            onChange={(e) => onPhoneChange(e.target.value)}
+            onChange={onPhoneChange}
             onBlur={() => setPhoneTouched(true)}
             placeholder={t.placeholderPhone}
             required
             maxLength={30}
+            autoComplete="tel"
             aria-invalid={phoneError || undefined}
-            className={phoneError ? "border-destructive focus-visible:ring-destructive" : ""}
           />
           {phoneError && (
             <p className="text-xs text-destructive">{t.validPhoneError}</p>

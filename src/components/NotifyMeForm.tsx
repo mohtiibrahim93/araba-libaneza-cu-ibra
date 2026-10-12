@@ -4,6 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 import { Loader2, BellRing, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import GdprCheckbox from "@/components/GdprCheckbox";
@@ -144,7 +145,7 @@ const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="nm-phone">{t.labelPhone} *</Label>
-          <Input id="nm-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required maxLength={30} />
+          <PhoneInput id="nm-phone" value={phone} onChange={setPhone} required maxLength={30} autoComplete="tel" />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="nm-email">{t.labelEmail}</Label>
