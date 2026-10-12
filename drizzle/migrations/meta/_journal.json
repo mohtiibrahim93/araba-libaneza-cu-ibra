@@ -29,6 +29,13 @@
       "when": 1791704604041,
       "tag": "0003_cohort_calendar_hide_members",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791791618406,
+      "tag": "0004_pr48_contact_booking_move_calendar_sync",
+      "breakpoints": true
     }
   ]
 }
