@@ -3,6 +3,7 @@ import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Ho
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { isValidPhone } from "@/components/RegistrationForm/LeadFields";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { toast } from "sonner";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { buildIcs, downloadIcs } from "@/lib/ics";
@@ -991,11 +992,12 @@ const NativeScheduler = ({
             placeholder="email@…"
             className="w-full px-3 py-2 rounded-md border border-input text-sm"
           />
-          <input
+          <PhoneInput
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={setPhone}
             placeholder={t.schedulerPhonePlaceholder}
-            className="w-full px-3 py-2 rounded-md border border-input text-sm"
+            autoComplete="tel"
+            maxLength={30}
           />
           <select
             value={format}

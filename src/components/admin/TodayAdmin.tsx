@@ -14,6 +14,7 @@ import {
   Video,
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 import { Empty, ErrorNote, Loading, Pill, ScreenHeader, Section } from "./ui";
 
@@ -261,7 +262,7 @@ const TodayAdmin = ({ onGoToLeads }: { onGoToLeads?: () => void }) => {
                     <span className="text-xs text-muted-foreground">{r.form_type}</span>
                     <span className="text-xs text-muted-foreground">{waitLabel(r.waitingDays)}</span>
                     <a
-                      href={`https://wa.me/${r.phone.replace(/[^\d]/g, "")}`}
+                      href={buildWhatsAppUrl(r.phone)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
