@@ -129,7 +129,7 @@ const REST: Country[] = [
   { iso: "LT", en: "Lithuania", ro: "Lituania", dial: "370" },
   { iso: "LU", en: "Luxembourg", ro: "Luxemburg", dial: "352" },
   { iso: "MG", en: "Madagascar", ro: "Madagascar", dial: "261" },
-  { iso: "MY", en: "Malaysia", ro: "Malaysia", dial: "60" },
+  { iso: "MY", en: "Malaysia", ro: "Malaezia", dial: "60" },
   { iso: "ML", en: "Mali", ro: "Mali", dial: "223" },
   { iso: "MT", en: "Malta", ro: "Malta", dial: "356" },
   { iso: "MR", en: "Mauritania", ro: "Mauritania", dial: "222" },
