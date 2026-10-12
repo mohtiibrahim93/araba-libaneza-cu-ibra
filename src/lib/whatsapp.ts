@@ -23,7 +23,9 @@ export function buildWhatsAppUrl(rawPhone: string, text?: string): string {
   // 3. Desktop check: link directly to WhatsApp Web to bypass api.whatsapp.com
   const isMobile =
     typeof navigator !== "undefined" &&
-    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
 
   if (!isMobile) {
     const textParam = text ? `&text=${encodeURIComponent(text)}` : "";

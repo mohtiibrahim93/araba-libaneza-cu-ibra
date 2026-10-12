@@ -10,7 +10,13 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
  * The phone field must hand the form a clean E.164 number whatever the
  * visitor types: the Romanian `07…` habit, a pasted `+961 …`, or `00…`.
  */
-function Harness({ initial = "", onValue }: { initial?: string; onValue: (v: string) => void }) {
+function Harness({
+  initial = "",
+  onValue,
+}: {
+  initial?: string;
+  onValue: (v: string) => void;
+}) {
   const [v, setV] = useState(initial);
   return (
     <PhoneInput
@@ -28,7 +34,8 @@ vi.mock("@/lib/i18n", () => ({ useI18n: () => ({ lang: "ro" }) }));
 
 afterEach(cleanup);
 
-const type = (value: string) => fireEvent.change(screen.getByLabelText("phone"), { target: { value } });
+const type = (value: string) =>
+  fireEvent.change(screen.getByLabelText("phone"), { target: { value } });
 
 describe("PhoneInput", () => {
   it("drops the Romanian trunk 0 from the emitted value as you type, and from the field on blur", () => {
@@ -92,12 +99,18 @@ describe("countryForDigits", () => {
 
 describe("buildWhatsAppUrl", () => {
   it("links desktop to WhatsApp Web and mobile to wa.me", () => {
-    expect(buildWhatsAppUrl("0735 123 456")).toBe("https://web.whatsapp.com/send?phone=40735123456");
+    expect(buildWhatsAppUrl("0735 123 456")).toBe(
+      "https://web.whatsapp.com/send?phone=40735123456",
+    );
     expect(buildWhatsAppUrl("+961 3 123 456", "Salut!")).toBe(
       "https://web.whatsapp.com/send?phone=9613123456&text=Salut!",
     );
-    const ua = vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Mozilla/5.0 (iPhone)");
-    expect(buildWhatsAppUrl("0040735123456", "a b")).toBe("https://wa.me/40735123456?text=a+b");
+    const ua = vi
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue("Mozilla/5.0 (iPhone)");
+    expect(buildWhatsAppUrl("0040735123456", "a b")).toBe(
+      "https://wa.me/40735123456?text=a+b",
+    );
     ua.mockRestore();
   });
 });

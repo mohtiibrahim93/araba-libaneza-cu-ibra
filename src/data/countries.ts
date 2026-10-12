@@ -17,21 +17,36 @@ export interface Country {
 
 /** Regional-indicator flag emoji from a two-letter ISO code. */
 export const flagEmoji = (iso: string) =>
-  String.fromCodePoint(...iso.toUpperCase().split("").map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+  String.fromCodePoint(
+    ...iso
+      .toUpperCase()
+      .split("")
+      .map((c) => 0x1f1e6 + c.charCodeAt(0) - 65),
+  );
 
-export const DEFAULT_COUNTRY: Country = { iso: "RO", en: "Romania", ro: "România", dial: "40" };
+export const DEFAULT_COUNTRY: Country = {
+  iso: "RO",
+  en: "Romania",
+  ro: "România",
+  dial: "40",
+};
 
 export const PINNED_COUNTRIES: Country[] = [
   DEFAULT_COUNTRY,
   { iso: "LB", en: "Lebanon", ro: "Liban", dial: "961" },
-  { iso: "MD", en: "Moldova", ro: "Moldova", dial: "373" },
+  { iso: "MD", en: "Moldova", ro: "Republica Moldova", dial: "373" },
   { iso: "GB", en: "United Kingdom", ro: "Regatul Unit", dial: "44" },
   { iso: "DE", en: "Germany", ro: "Germania", dial: "49" },
   { iso: "FR", en: "France", ro: "Franța", dial: "33" },
   { iso: "IT", en: "Italy", ro: "Italia", dial: "39" },
   { iso: "ES", en: "Spain", ro: "Spania", dial: "34" },
   { iso: "US", en: "United States / Canada", ro: "SUA / Canada", dial: "1" },
-  { iso: "AE", en: "United Arab Emirates", ro: "Emiratele Arabe Unite", dial: "971" },
+  {
+    iso: "AE",
+    en: "United Arab Emirates",
+    ro: "Emiratele Arabe Unite",
+    dial: "971",
+  },
 ];
 
 const REST: Country[] = [
@@ -51,7 +66,12 @@ const REST: Country[] = [
   { iso: "BE", en: "Belgium", ro: "Belgia", dial: "32" },
   { iso: "BJ", en: "Benin", ro: "Benin", dial: "229" },
   { iso: "BO", en: "Bolivia", ro: "Bolivia", dial: "591" },
-  { iso: "BA", en: "Bosnia and Herzegovina", ro: "Bosnia și Herțegovina", dial: "387" },
+  {
+    iso: "BA",
+    en: "Bosnia and Herzegovina",
+    ro: "Bosnia și Herțegovina",
+    dial: "387",
+  },
   { iso: "BR", en: "Brazil", ro: "Brazilia", dial: "55" },
   { iso: "BG", en: "Bulgaria", ro: "Bulgaria", dial: "359" },
   { iso: "BF", en: "Burkina Faso", ro: "Burkina Faso", dial: "226" },
@@ -67,9 +87,14 @@ const REST: Country[] = [
   { iso: "CU", en: "Cuba", ro: "Cuba", dial: "53" },
   { iso: "CY", en: "Cyprus", ro: "Cipru", dial: "357" },
   { iso: "CZ", en: "Czechia", ro: "Cehia", dial: "420" },
-  { iso: "CD", en: "DR Congo", ro: "RD Congo", dial: "243" },
+  { iso: "CD", en: "DR Congo", ro: "Congo - Kinshasa", dial: "243" },
   { iso: "DK", en: "Denmark", ro: "Danemarca", dial: "45" },
-  { iso: "DO", en: "Dominican Republic", ro: "Republica Dominicană", dial: "1" },
+  {
+    iso: "DO",
+    en: "Dominican Republic",
+    ro: "Republica Dominicană",
+    dial: "1",
+  },
   { iso: "EC", en: "Ecuador", ro: "Ecuador", dial: "593" },
   { iso: "EG", en: "Egypt", ro: "Egipt", dial: "20" },
   { iso: "EE", en: "Estonia", ro: "Estonia", dial: "372" },
@@ -169,9 +194,14 @@ const REST: Country[] = [
   { iso: "ZW", en: "Zimbabwe", ro: "Zimbabwe", dial: "263" },
 ];
 
-export const OTHER_COUNTRIES: Country[] = [...REST].sort((a, b) => a.en.localeCompare(b.en));
+export const OTHER_COUNTRIES: Country[] = [...REST].sort((a, b) =>
+  a.en.localeCompare(b.en),
+);
 
-export const ALL_COUNTRIES: Country[] = [...PINNED_COUNTRIES, ...OTHER_COUNTRIES];
+export const ALL_COUNTRIES: Country[] = [
+  ...PINNED_COUNTRIES,
+  ...OTHER_COUNTRIES,
+];
 
 /**
  * The country whose dial code is the longest prefix of `digits` (no "+").
@@ -184,7 +214,12 @@ export function countryForDigits(digits: string): Country | undefined {
   let best: Country | undefined;
   for (const c of ALL_COUNTRIES) {
     if (!digits.startsWith(c.dial)) continue;
-    if (!best || c.dial.length > best.dial.length || SHARED_DIAL_PREFERENCE[c.dial] === c.iso) best = c;
+    if (
+      !best ||
+      c.dial.length > best.dial.length ||
+      SHARED_DIAL_PREFERENCE[c.dial] === c.iso
+    )
+      best = c;
   }
   return best;
 }

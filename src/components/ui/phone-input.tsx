@@ -4,7 +4,11 @@ import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -34,16 +38,31 @@ import {
  */
 
 const COPY = {
-  ro: { search: "Caută țara sau prefixul", empty: "Nicio țară găsită.", popular: "Frecvente", all: "Toate țările", prefix: "Prefix" },
-  en: { search: "Search country or code", empty: "No country found.", popular: "Common", all: "All countries", prefix: "Country code" },
+  ro: {
+    search: "Caută țara sau prefixul",
+    empty: "Nicio țară găsită.",
+    popular: "Frecvente",
+    all: "Toate țările",
+    prefix: "Prefix",
+  },
+  en: {
+    search: "Search country or code",
+    empty: "No country found.",
+    popular: "Common",
+    all: "All countries",
+    prefix: "Country code",
+  },
 } as const;
 
-const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const fold = (s: string) =>
+  s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 /** Digits to emit for the national part: RO drops its trunk 0. */
 const nationalDigits = (country: Country, raw: string) => {
   const digits = raw.replace(/\D/g, "");
-  return country.iso === "RO" && digits.startsWith("0") ? digits.slice(1) : digits;
+  return country.iso === "RO" && digits.startsWith("0")
+    ? digits.slice(1)
+    : digits;
 };
 
 const toE164 = (country: Country, raw: string) => {
@@ -52,22 +71,31 @@ const toE164 = (country: Country, raw: string) => {
 };
 
 /** Split a stored value back into country + national part. */
-function parse(value: string, fallback: Country): { country: Country; national: string } {
+function parse(
+  value: string,
+  fallback: Country,
+): { country: Country; national: string } {
   const v = value.trim();
   if (!v) return { country: fallback, national: "" };
   if (v.startsWith("+") || v.startsWith("00")) {
     let digits = v.replace(/\D/g, "");
     if (!v.startsWith("+")) digits = digits.slice(2);
     const match = countryForDigits(digits);
-    if (match) return { country: match, national: digits.slice(match.dial.length) };
+    if (match)
+      return { country: match, national: digits.slice(match.dial.length) };
     return { country: fallback, national: v };
   }
   // A bare local number (old drafts, prefill from earlier registrations) is Romanian.
-  return { country: DEFAULT_COUNTRY, national: nationalDigits(DEFAULT_COUNTRY, v) };
+  return {
+    country: DEFAULT_COUNTRY,
+    national: nationalDigits(DEFAULT_COUNTRY, v),
+  };
 }
 
-export interface PhoneInputProps
-  extends Omit<React.ComponentProps<"input">, "value" | "onChange" | "type" | "defaultValue"> {
+export interface PhoneInputProps extends Omit<
+  React.ComponentProps<"input">,
+  "value" | "onChange" | "type" | "defaultValue"
+> {
   value: string;
   onChange: (e164: string) => void;
 }
@@ -96,7 +124,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       const parsed = parse(value, country);
       setCountry(parsed.country);
       setNational(parsed.national);
-      const normalised = value.trim() && !parsed.national.startsWith("+") ? toE164(parsed.country, parsed.national) : value;
+      const normalised =
+        value.trim() && !parsed.national.startsWith("+")
+          ? toE164(parsed.country, parsed.national)
+          : value;
       emit(normalised);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
@@ -155,19 +186,33 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     }, [query]);
 
     const item = (c: Country) => (
-      <CommandItem key={`${c.iso}-${c.dial}`} value={c.iso} onSelect={() => selectCountry(c)} className="gap-2">
+      <CommandItem
+        key={`${c.iso}-${c.dial}`}
+        value={c.iso}
+        onSelect={() => selectCountry(c)}
+        className="gap-2"
+      >
         <span aria-hidden>{flagEmoji(c.iso)}</span>
         <span className="flex-1 truncate">{lang === "en" ? c.en : c.ro}</span>
         <span className="text-muted-foreground">+{c.dial}</span>
-        <Check className={cn("h-4 w-4", c === country ? "opacity-100" : "opacity-0")} />
+        <Check
+          className={cn("h-4 w-4", c === country ? "opacity-100" : "opacity-0")}
+        />
       </CommandItem>
     );
 
-    const invalid = props["aria-invalid"] === true || props["aria-invalid"] === "true";
+    const invalid =
+      props["aria-invalid"] === true || props["aria-invalid"] === "true";
 
     return (
       <div className={cn("flex w-full", className)}>
-        <Popover open={open} onOpenChange={(o) => { setOpen(o); if (!o) setQuery(""); }}>
+        <Popover
+          open={open}
+          onOpenChange={(o) => {
+            setOpen(o);
+            if (!o) setQuery("");
+          }}
+        >
           <PopoverTrigger asChild>
             <button
               type="button"
@@ -185,16 +230,24 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           </PopoverTrigger>
           <PopoverContent className="w-72 p-0" align="start">
             <Command shouldFilter={false}>
-              <CommandInput placeholder={copy.search} value={query} onValueChange={setQuery} />
+              <CommandInput
+                placeholder={copy.search}
+                value={query}
+                onValueChange={setQuery}
+              />
               <CommandList>
                 <CommandEmpty>{copy.empty}</CommandEmpty>
                 {filtered ? (
                   <CommandGroup>{filtered.map(item)}</CommandGroup>
                 ) : (
                   <>
-                    <CommandGroup heading={copy.popular}>{PINNED_COUNTRIES.map(item)}</CommandGroup>
+                    <CommandGroup heading={copy.popular}>
+                      {PINNED_COUNTRIES.map(item)}
+                    </CommandGroup>
                     <CommandSeparator />
-                    <CommandGroup heading={copy.all}>{OTHER_COUNTRIES.map(item)}</CommandGroup>
+                    <CommandGroup heading={copy.all}>
+                      {OTHER_COUNTRIES.map(item)}
+                    </CommandGroup>
                   </>
                 )}
               </CommandList>
@@ -214,7 +267,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           value={national}
           onChange={(e) => handleInput(e.target.value)}
           onBlur={handleBlur}
-          className={cn("rounded-l-none", invalid && "border-destructive focus-visible:ring-destructive")}
+          className={cn(
+            "rounded-l-none",
+            invalid && "border-destructive focus-visible:ring-destructive",
+          )}
         />
       </div>
     );
