@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
 import CheckoutEmailGate from "@/components/CheckoutEmailGate";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "@/lib/router-compat";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import {
@@ -141,6 +141,16 @@ const Checkout = () => {
   const { lang } = useI18n();
   const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
   const emailVerified = !!email && verifiedEmail === email;
+  // The registration form cannot send the student their confirmation: they are
+  // not signed in yet, and notify-registration only mails the address on the
+  // row to someone who has proved they own it. This is where they prove it.
+  // The function sends it once per registration, so a revisit sends nothing.
+  const onEmailVerified = useCallback(() => {
+    setVerifiedEmail(email);
+    if (registrationId) {
+      void supabase.functions.invoke("notify-registration", { body: { registrationId } });
+    }
+  }, [email, registrationId]);
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
@@ -350,7 +360,7 @@ const Checkout = () => {
             </p>
           </div>
 
-          {!emailVerified ? <CheckoutEmailGate email={email} english={lang === "en"} onVerified={() => setVerifiedEmail(email)} /> : showFallback && !hostedAutoFailed ? (
+          {!emailVerified ? <CheckoutEmailGate email={email} english={lang === "en"} onVerified={onEmailVerified} /> : showFallback && !hostedAutoFailed ? (
             /* Seamless path: the embedded form can't load here, so we're
                already redirecting to Stripe's hosted page — no error screen,
                no extra click. */
