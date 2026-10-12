@@ -27,31 +27,41 @@ session (two merged PRs, #47 and #48), and Lovable (which both edits and
 deploys). `main` moved 9 commits under this session at one point. Always
 `git fetch` and check before assuming anything.
 
-## 1. FIRST: verify the deploy that was running when this session ended
+## 1. FIRST: the deploy outcome, verified
 
-A deploy-only request was sent to Lovable at 07:54 UTC on 12 October, from
-`main` at `e9c76e3`, asking for **all edge functions** plus a **site publish**.
-Its status was `running` when the session ended. It was not confirmed.
+A deploy-only request went to Lovable at 07:54 UTC on 12 October. It completed
+and cost 0.7 credits. Three parts, three different outcomes — do not take the
+reply as one result:
 
-Verify it independently rather than trusting the reply, because Lovable has
-reported "publishing was requested" before without that being the same thing
-as published:
+**Edge functions: DEPLOYED.** All twelve, from a workspace at `0a75fe99`:
+`admin-registrations`, `auth-email-hook`, `booking-availability`,
+`booking-create`, `booking-manage`, `booking-reminders`, `calendar-feed`,
+`calendar-sync` (**first deploy ever**), `create-checkout`,
+`create-checkout-session`, `create-payment-intent`, `create-subscription`.
+The whole set was asked for because Codex changed three shared modules that most
+functions bundle (`_shared/booking.ts`, the new `_shared/calendar-reconciliation.ts`,
+the new `_shared/group-enrolment.ts`), so naming a short list would have shipped
+a stale bundle somewhere.
 
-```bash
-# 1. Did the site publish? Content hashes are deterministic, so compare.
-npm run build
-ls .output/public/assets/ | grep '^Trial-'       # local, from this commit
-curl -s https://centruldearabalibaneza.com/trial | grep -ao '/assets/Trial-[A-Za-z0-9_-]*\.js' | sort -u
-# Same hash  → published from this commit.
-# Different  → NOT published. At the time of writing: live was Trial-BZ1dsUQq.js,
-#              a local build of e9c76e3 gives Trial-Bv3dzkBz.js.
-```
+**Site publish: NOT LANDED.** Lovable said "publishing was requested", which is
+not the same as published, and the evidence says it has not taken effect. Checked
+after the deploy finished:
 
-**Then the migration that is still missing** — this is the one real defect left
-and it is not in the code, it is in the database:
+| | Trial chunk |
+|---|---|
+| local build of current HEAD | `Trial-Bv3dzkBz.js` |
+| live `centruldearabalibaneza.com` | `Trial-BZ1dsUQq.js` |
 
-`supabase/migrations/20261011212000_calendar_sync_schedule.sql` **has never been
-applied.** Verified against `cron.job`: the only jobs are
+Vite hashes are content-derived, so different hash means different content. Also
+checked: `araba-libaneza-cu-ibra.lovable.app` and `www.` do not respond at all,
+so this is not a custom-domain cache showing a stale copy of a good publish.
+**Everything this session built is still not live.** Re-run the comparison in
+§4 before concluding anything; if it still mismatches, the publish needs doing
+again, and it is worth watching the Lovable UI rather than trusting the reply.
+
+**The cron migration: NOT APPLIED, and it is the owner's decision.**
+`supabase/migrations/20261011212000_calendar_sync_schedule.sql` has never been
+applied. Verified against `cron.job`: the only jobs are
 `backlink-snapshot-weekly`, `booking-reminders-every-15-min` and
 `trial-followup-twice-daily`. There is no `booking-calendar-sync`. The other two
 migrations from the same Codex batch *are* applied
@@ -59,19 +69,49 @@ migrations from the same Codex batch *are* applied
 `require_public_registration_group`, and the `copy_rescheduled_booking_contact`
 trigger all exist live), so it is only this one.
 
-Without it, Codex's new `calendar-sync` function never runs on a schedule —
-which is the entire point of it, and it is the two-way sync the owner asked for.
+Without it, Codex's new `calendar-sync` never runs on a schedule — which is the
+entire point of it, and it is the two-way Google sync the owner asked for.
 
-**Order matters.** That migration schedules `calendar-sync` every five minutes by
-cloning the `booking-reminders` job's authenticated command. Applying it before
-`calendar-sync` is deployed makes the cron fail every five minutes against a
-function that does not exist. I deliberately did not apply it myself for that
-reason. So: confirm `calendar-sync` is deployed, *then* apply it, then confirm
-with:
+Lovable declined to apply it on its own and asked the owner first, for a fair
+reason: `*/5 * * * *` is 288 runs a day, each waking the database even with
+nothing to sync, which carries a small ongoing cost. That is a recurring-cost
+decision and it belongs to the owner, which is why this session did not apply it
+either, despite having direct database access and being able to do it in one
+statement at no credit cost.
+
+The ordering constraint that mattered is now satisfied: `calendar-sync` is
+deployed, so scheduling it will no longer fail every five minutes against a
+function that does not exist.
+
+Two ways to finish it, once the owner has decided the cadence:
 
 ```sql
+-- Option A, as written (every 5 minutes). Run directly; no credits.
+DO $$
+DECLARE reminder_command text;
+BEGIN
+  SELECT command INTO reminder_command FROM cron.job
+    WHERE command LIKE '%/functions/v1/booking-reminders%' ORDER BY jobid LIMIT 1;
+  IF reminder_command IS NOT NULL THEN
+    PERFORM cron.schedule('booking-calendar-sync', '*/5 * * * *',
+      replace(reminder_command, '/functions/v1/booking-reminders', '/functions/v1/calendar-sync'));
+  ELSE
+    RAISE NOTICE 'Configure the authenticated CRON_SECRET job first.';
+  END IF;
+END;
+$$;
+
+-- Then confirm:
 select jobname, schedule, active from cron.job order by jobname;
 ```
+
+Option B is to tell Lovable "apply it", which costs credits and does the same
+thing. The schedule string is the only thing worth changing first: every 15
+minutes would quarter the cost and still be well inside useful.
+
+Note the migration clones the `booking-reminders` job's command rather than
+inventing a secret, so it silently does nothing if that job is ever removed —
+the `RAISE NOTICE` branch. Check `cron.job` afterwards, not just the exit status.
 
 ## 2. The owner's own to-do list
 
@@ -260,6 +300,29 @@ from 768px up) and got `md:bottom-32`.
   a deliberate look before building more in that area.
 
 ## 4. Known-good verification recipes (no credits, no browser)
+
+**Is the site actually published from this commit?** Vite hashes are content
+derived, so a build here and the live HTML settle it without asking Lovable:
+
+```bash
+npm run build
+ls .output/public/assets/ | grep '^Trial-'
+curl -s https://centruldearabalibaneza.com/trial \
+  | grep -ao '/assets/Trial-[A-Za-z0-9_-]*\.js' | sort -u
+# same hash → published from this commit; different → not published
+```
+
+**Are the repo's migrations applied?** Ask the database for the objects, not the
+migrations table — Lovable and Codex both write migrations, and one of Codex's
+three was never applied despite the other two being live:
+
+```sql
+select proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+ where n.nspname = 'public' and proname in
+   ('admin_update_registration_contact','move_booking_atomically','get_published_card_overrides');
+select jobname, schedule, active from cron.job order by jobname;
+```
+
 
 The browser could not be made to trust the egress proxy for this host, and TLS
 verification must not be disabled, so the live checks were done over HTTP:
