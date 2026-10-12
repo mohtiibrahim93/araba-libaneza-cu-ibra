@@ -35,6 +35,7 @@ import PostSubmitView from "./RegistrationForm/PostSubmitView";
 import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
 import type { Cohort } from "@/lib/cohortTypes";
 import type { KidsSlot } from "@/hooks/useKidsSlots";
+import CheckoutEmailGate from "@/components/CheckoutEmailGate";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -136,6 +137,9 @@ const RegistrationFormSection = ({
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
   const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
   const [retryingDeposit, setRetryingDeposit] = useState(false);
+  // create-checkout requires a confirmed registration email, so the deposit
+  // redirect waits behind the email-code step instead of failing with a 403.
+  const [depositNeedsVerify, setDepositNeedsVerify] = useState(false);
 
   // Kids: online is only available from age 10+. Parse the first integer we
   // find in the free-text field ("8 ani", "8", "10 years" all work). If no
@@ -249,6 +253,7 @@ const RegistrationFormSection = ({
     setCohortId(null);
     setKidsSlotId(null);
     setDepositCheckoutFailed(false);
+    setDepositNeedsVerify(false);
   };
 
   const attemptKidsDepositCheckout = async (
@@ -506,7 +511,7 @@ const RegistrationFormSection = ({
       sessionStorage.removeItem(STORAGE_KEY);
 
       if (courseType === "kids" && payDeposit) {
-        await attemptKidsDepositCheckout(id, email, recipientName);
+        setDepositNeedsVerify(true);
       }
     } catch (err) {
       console.error("Registration error", err);
@@ -565,6 +570,27 @@ const RegistrationFormSection = ({
             registrationId={privatePay.registrationId}
             purchase={{ quantity: privatePay.quantity, email: privatePay.email, format: privatePay.format }}
             onPhaseChange={setPrivatePayPhase}
+          />
+        </div>
+      </section>
+    );
+  }
+
+  if (submitted && submittedData && depositNeedsVerify) {
+    return (
+      <section className={embedded ? "" : "py-20 px-6 scroll-mt-24"}>
+        <div className={embedded ? "" : "max-w-2xl mx-auto"}>
+          <CheckoutEmailGate
+            email={submittedData.email}
+            english={lang === "en"}
+            onVerified={() => {
+              setDepositNeedsVerify(false);
+              void attemptKidsDepositCheckout(
+                submittedData.registrationId,
+                submittedData.email,
+                submittedData.name,
+              );
+            }}
           />
         </div>
       </section>

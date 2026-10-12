@@ -12,6 +12,7 @@ import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
+import CheckoutEmailGate from "@/components/CheckoutEmailGate";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
 import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
@@ -274,6 +275,10 @@ const NativeScheduler = ({
    * shows the slot so it is visible that nothing was lost.
    */
   const [verifyFor, setVerifyFor] = useState<{ email: string; registrationId: string } | null>(null);
+  // A paid purchase needs the same confirmed email: create-payment-intent and
+  // create-checkout-session refuse a caller without one, so the card form is
+  // only offered once the registration's address is verified here.
+  const [purchaseVerifiedEmail, setPurchaseVerifiedEmail] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [resendIn, setResendIn] = useState(0);
@@ -1210,7 +1215,13 @@ const NativeScheduler = ({
             ? "Lecția se confirmă după plată: primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte. Dacă nu finalizezi plata, nu se rezervă nimic. Anularea sau reprogramarea e gratuită cu cel puțin 24 de ore înainte."
             : "The lesson is confirmed once paid: you get a confirmation email, and Ibra writes to introduce himself. If you don't complete the payment, nothing is booked. Cancelling or rescheduling is free at least 24 hours ahead."}
         </p>
-        {embeddedPay && registrationId ? (
+        {purchaseVerifiedEmail !== purchase.email ? (
+          <CheckoutEmailGate
+            email={purchase.email}
+            english={lang === "en"}
+            onVerified={() => setPurchaseVerifiedEmail(purchase.email)}
+          />
+        ) : embeddedPay && registrationId ? (
           <Elements
             stripe={embeddedPay.stripe}
             options={{ clientSecret: embeddedPay.clientSecret, appearance: { theme: "stripe" } }}
