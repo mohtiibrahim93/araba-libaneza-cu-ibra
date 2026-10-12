@@ -48,6 +48,16 @@
   /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
   --color-brand-green: hsl(var(--brand-green));
   --color-cream: hsl(var(--cream));
+  --color-admin-nav: hsl(var(--admin-nav));
+  --color-admin-nav-fg: hsl(var(--admin-nav-fg));
+  --color-admin-nav-muted: hsl(var(--admin-nav-muted));
+  --color-admin-nav-border: hsl(var(--admin-nav-border));
+  --color-admin-canvas: hsl(var(--admin-canvas));
+  --color-admin-warn-bg: hsl(var(--admin-warn-bg));
+  --color-admin-warn-line: hsl(var(--admin-warn-line));
+  --color-admin-warn-fg: hsl(var(--admin-warn-fg));
+  --color-admin-info-bg: hsl(var(--admin-info-bg));
+  --color-admin-info-fg: hsl(var(--admin-info-fg));
   /* Legacy aliases kept from tailwind.config.ts (vars intentionally undefined,
      matching pre-migration behaviour). */
   --color-cedar: hsl(var(--cedar-green));
@@ -172,6 +182,23 @@
    * the light surface owes the reader a legend and the numbers in text — the
    * weekly table under the chart is that relief, not a nicety.
    */
+  /**
+   * The admin panel's own surfaces.
+   *
+   * Neutral on purpose. A first attempt painted the rail in the brand's cedar
+   * green on a cream canvas, reasoning that the panel should look like the site
+   * it edits. It should not: the site is marketing and the panel is a tool, and
+   * a saturated surface behind dense data fights the data. Every admin people
+   * actually like to use — and the owner's own verdict on the green — points
+   * the same way: a neutral shell, strong typography, and colour reserved for
+   * status and for the one action that matters on screen.
+   */
+  --admin-nav: 0 0% 100%;
+  --admin-nav-fg: 220 14% 12%;
+  --admin-nav-muted: 220 9% 46%;
+  --admin-nav-border: 220 13% 90%;
+  --admin-canvas: 220 20% 98%;
+
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -226,10 +253,85 @@
    * the worst adjacent pair is again yellow↔aqua: CVD ΔE 8.4 (protan),
    * normal-vision ΔE 19.8.
    */
+  /* The rail stays dark; only the canvas follows the theme. */
+  --admin-nav: 220 14% 11%;
+  --admin-nav-fg: 0 0% 96%;
+  --admin-nav-muted: 220 9% 58%;
+  --admin-nav-border: 220 14% 20%;
+  --admin-canvas: 220 14% 8%;
+
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;
   --series-4: #c98500;
+}
+
+/*
+ * The admin's own look (October 2026 redesign, drawn in Claude Design):
+ * cream ground, warm hairlines, deep green for what you act on, and Instrument
+ * Sans for body text. Scoped to the admin wrapper, so every existing admin
+ * screen picks it up through bg-card / border-border / text-primary without
+ * being rewritten, and the public site is untouched. Dark mode keeps its own
+ * palette and only swaps the red primary for the brand green.
+ */
+.admin-theme {
+  --background: 43 100% 99%;
+  --foreground: 45 8% 10%;
+  --card: 43 100% 99%;
+  --card-foreground: 45 8% 10%;
+  --popover: 43 100% 99%;
+  --popover-foreground: 45 8% 10%;
+  --primary: 152 42% 22%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 39 36% 91%;
+  --secondary-foreground: 45 8% 10%;
+  --muted: 39 36% 91%;
+  --muted-foreground: 40 11% 33%;
+  --accent: 147 21% 91%;
+  --accent-foreground: 152 42% 18%;
+  --border: 39 30% 84%;
+  --input: 39 30% 80%;
+  --ring: 152 42% 22%;
+  --admin-nav: 40 60% 96%;
+  --admin-nav-fg: 45 8% 10%;
+  --admin-nav-muted: 40 11% 33%;
+  --admin-nav-border: 39 30% 84%;
+  --admin-canvas: 40 47% 94%;
+  --admin-warn-bg: 35 75% 95%;
+  --admin-warn-line: 35 64% 76%;
+  --admin-warn-fg: 28 90% 25%;
+  --admin-info-bg: 221 46% 93%;
+  --admin-info-fg: 219 53% 31%;
+  font-family: "Instrument Sans", var(--font-body);
+}
+.dark .admin-theme {
+  --background: 220 14% 10%;
+  --foreground: 0 0% 96%;
+  --card: 220 14% 12%;
+  --card-foreground: 0 0% 96%;
+  --popover: 220 14% 12%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 152 35% 58%;
+  --primary-foreground: 152 42% 10%;
+  --secondary: 220 14% 18%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 220 14% 18%;
+  --muted-foreground: 220 12% 72%;
+  --accent: 152 20% 18%;
+  --accent-foreground: 152 35% 80%;
+  --border: 220 14% 20%;
+  --input: 220 14% 24%;
+  --ring: 152 35% 58%;
+  --admin-nav: 220 14% 11%;
+  --admin-nav-fg: 0 0% 96%;
+  --admin-nav-muted: 220 9% 58%;
+  --admin-nav-border: 220 14% 20%;
+  --admin-canvas: 220 14% 8%;
+  --admin-warn-bg: 30 40% 14%;
+  --admin-warn-line: 30 50% 35%;
+  --admin-warn-fg: 35 90% 70%;
+  --admin-info-bg: 220 30% 16%;
+  --admin-info-fg: 220 70% 80%;
 }
 
 @layer base {
@@ -254,37 +356,28 @@
   }
 }
 
-/*
- * Adopt's consent banner (#cookie-banner, injected by tag.goadopt.io with
- * position:fixed and z-index 2147483647). Left where the vendor puts it, it
- * floats over the middle-left of the viewport: on /trial that is exactly the
- * booking calendar, so the one screen that earns money was the one screen it
- * covered. Pinning it to a corner is the only lever available here — the markup
- * is the vendor's and re-renders on every load — hence the !important.
- *
- * The id is what the injector sets; the adopt-c-* class beside it is a hashed
- * build artefact and would break on their next release, so it is not used.
- */
-#cookie-banner {
-  top: auto !important;
-  bottom: max(1rem, env(safe-area-inset-bottom)) !important;
-  left: 1rem !important;
-  right: auto !important;
-  /* A long policy text must scroll inside the banner rather than grow it back
-     over the page. */
-  max-height: min(70vh, 32rem) !important;
-  overflow-y: auto !important;
-}
+/* The reCAPTCHA badge is hidden everywhere, and paid for in words.
 
-@media (max-width: 767px) {
-  /* Full width, and lifted clear of the sticky enrol bar at the bottom edge so
-     the two do not overlap each other instead of the page. */
-  #cookie-banner {
-    left: 0.75rem !important;
-    right: 0.75rem !important;
-    width: auto !important;
-    max-width: none !important;
-    bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
-    max-height: 60vh !important;
-  }
+   The script is declared in a static head(), so it loads on every route, and
+   its badge is fixed to the bottom-right corner at a z-index of two billion.
+   That is the corner the WhatsApp and phone buttons are pinned to — the
+   footer says as much, a few lines of it are about not putting a link row
+   under them — so the badge floated on top of the one control the site most
+   wants tapped. On the admin it covered the content instead, where no form
+   uses reCAPTCHA at all.
+
+   Google's terms allow hiding the badge on one condition: the sentence
+   "This site is protected by reCAPTCHA and the Google Privacy Policy and
+   Terms of Service apply", with both links, visible in the user flow. That is
+   RecaptchaNotice, and it is in the footer (so it is present wherever the
+   script is) and beside the registration form's consent box (where reCAPTCHA
+   actually runs). Removing it would make this rule a breach, so a test holds
+   the two together.
+
+   `visibility: hidden` rather than `display: none`: the badge is an iframe
+   the API talks to, and removing it from the layout has been reported to
+   break the challenge flow on the v2 fallback. Hidden is enough — it cannot
+   be seen and cannot be clicked. */
+.grecaptcha-badge {
+  visibility: hidden;
 }

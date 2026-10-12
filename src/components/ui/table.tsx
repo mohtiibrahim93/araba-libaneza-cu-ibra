@@ -1,13 +1,40 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { scrollRegionProps, useHorizontalOverflow } from "@/hooks/useHorizontalOverflow";
 
+/**
+ * The wrapper scrolls sideways, and now says when it is doing so.
+ *
+ * Înscrieri declares about 980px of minimum column widths, so on a phone this
+ * box shows the first third of a row. It always scrolled; nothing announced
+ * it, which read as columns missing rather than columns offscreen. A fade at
+ * the edge covers that for anyone who can see it, and the region attributes
+ * cover the keyboard and screen-reader case, which previously could not reach
+ * the rest of the table at all.
+ */
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
-      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-    </div>
-  ),
+  ({ className, ...props }, ref) => {
+    const { ref: scroller, overflows, atEnd, measure } = useHorizontalOverflow<HTMLDivElement>();
+    return (
+      <div className="relative w-full">
+        <div
+          ref={scroller}
+          onScroll={measure}
+          className="w-full overflow-auto"
+          {...scrollRegionProps(overflows, typeof props["aria-label"] === "string" ? props["aria-label"] : undefined)}
+        >
+          <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
+        </div>
+        {overflows && !atEnd && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-card via-card/80 to-transparent"
+          />
+        )}
+      </div>
+    );
+  },
 );
 Table.displayName = "Table";
 

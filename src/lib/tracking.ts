@@ -1,6 +1,6 @@
-// GA4 event helpers. Consent is handled by the Adopt CMP via Google Consent
-// Mode: index.html sets consent "default: denied" and Adopt flips it to
-// "granted" when the visitor accepts, so we send events unconditionally and
+// GA4 event helpers. Consent is handled by CookieConsentBanner via Google
+// Consent Mode: the gtag bootstrap sets consent "default: denied" and the
+// banner flips it to "granted" when the visitor accepts, so we send events unconditionally and
 // let Consent Mode gate them. Meta Pixel isn't set up yet.
 
 
@@ -122,7 +122,7 @@ export function trackRegistrationStep(
  * it we know people fail, not what they fail on.
  */
 export function trackRegistrationValidationFailed(
-  field: "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
+  field: "cohort" | "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
   formType: RegistrationFormType | "unknown",
 ) {
   trackEvent("registration_validation_failed", { field, form_type: formType });
@@ -144,6 +144,10 @@ export function trackRegistrationSubmit(formType: RegistrationFormType) {
  */
 export function trackCheckoutStart(courseType: "group" | "private" | "kids") {
   trackEvent("begin_checkout", { course_type: courseType });
+  // Google Ads conversion action "Begin checkout" (AW-18482373882, linked to
+  // the site's Google tag). Ads generated this event name and counts only it,
+  // so it is sent alongside the GA4 event rather than instead of it.
+  trackEvent("ads_conversion_Begin_checkout_1", { course_type: courseType });
 }
 
 let trackingInitialized = false;

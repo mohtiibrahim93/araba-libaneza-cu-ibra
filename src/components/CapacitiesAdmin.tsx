@@ -93,7 +93,12 @@ const CapacitiesAdmin = () => {
               key={r.id}
               className="flex flex-wrap items-end gap-3 rounded-md border border-border bg-background p-3"
             >
-              <div className="flex-1 min-w-[140px]">
+              {/* Full width on a phone, so the row wraps as "name, then the
+                  two fields". Sharing the line with them left the title taking
+                  most of the width, Min wrapping beside it and Max dropping to
+                  a line of its own -- the labels and their inputs ended up
+                  looking like they belonged to different rows. */}
+              <div className="w-full sm:flex-1 sm:min-w-[140px]">
                 <p className="text-sm font-semibold text-foreground">{labelFor(r)}</p>
               </div>
               <div className="space-y-1">

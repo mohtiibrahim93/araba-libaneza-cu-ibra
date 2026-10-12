@@ -45,8 +45,8 @@ const TermsContent = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main id="main-content" className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter py-28">
-        <h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>
+      <main id="main-content" className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter pt-36 pb-28">
+        <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-8">{page.title}</h1>
         <div className="prose prose-sm text-muted-foreground space-y-6">
           <p><strong>{page.updated}</strong> {"updatedValue" in page ? page.updatedValue : "Septembrie 2026"}</p>
           {page.sections.map(([title, body]) => (

@@ -252,7 +252,7 @@ const BlogAdmin = () => {
               <div key={slug} className="flex items-center justify-between gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm">
                 <div className="min-w-0 flex items-center gap-2">
                   <FileText className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
-                  <span className="truncate font-medium text-foreground">{title}</span>
+                  <span className="line-clamp-2 font-medium text-foreground sm:truncate">{title}</span>
                   {o ? (
                     <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${o.is_published ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : "bg-amber-500/10 text-amber-700 dark:text-amber-400"}`}>
                       {o.is_published ? "editat · publicat" : "draft"}

@@ -14,6 +14,7 @@ import {
   type YallaSummary,
   type LevelSuggestion,
 } from "@/lib/yallaProgress";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /joc/scor — the visitor's game score, read from their own browser, and the
@@ -51,7 +52,7 @@ const COPY = {
     levelFromTest: "Din testul de orientare din joc",
     levelFromPractice: "Estimat din ce ai exersat",
     levelDisclaimer:
-      "Sugestia este orientativă: măsoară citirea și recunoașterea, nu ascultarea sau vorbirea. Grupa se confirmă într-o conversație cu Ibrahim.",
+      "Sugestia este orientativă: măsoară citirea și recunoașterea, nu ascultarea sau vorbirea. Grupa se confirmă într-o conversație cu Ibra.",
     ctaCourse: "Vezi cursul potrivit",
     ctaTrial: "Lecție de probă gratuită",
     altH2: "Vrei un răspuns mai precis?",
@@ -84,7 +85,7 @@ const COPY = {
     levelFromTest: "From the in-game placement quiz",
     levelFromPractice: "Estimated from your practice",
     levelDisclaimer:
-      "The suggestion is indicative: it measures reading and recognition, not listening or speaking. Group placement is confirmed in a conversation with Ibrahim.",
+      "The suggestion is indicative: it measures reading and recognition, not listening or speaking. Group placement is confirmed in a conversation with Ibra.",
     ctaCourse: "See the right course",
     ctaTrial: "Free trial lesson",
     altH2: "Want a sharper answer?",
@@ -97,6 +98,8 @@ const COPY = {
 const JocScor = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  // Signed in: the account's progress is merged in first; re-read after.
+  const { user, syncing, version } = useStudentSync();
 
   const [summary, setSummary] = useState<YallaSummary | null>(null);
   const [suggestion, setSuggestion] = useState<LevelSuggestion | null>(null);
@@ -114,7 +117,8 @@ const JocScor = () => {
       setSuggestion(suggestLevel(s));
     }
     setLoaded(true);
-  }, []);
+    // Re-read when a sync replaced the device's progress with the account's.
+  }, [version]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -137,7 +141,7 @@ const JocScor = () => {
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-2 block text-sm font-medium text-primary">{c.eyebrow}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
           </h1>
@@ -147,8 +151,11 @@ const JocScor = () => {
         </header>
 
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
+          <div className="mx-auto mb-6 max-w-3xl">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
           {loaded && !summary && (
-            <div className="rounded-xl border bg-card p-6 text-center sm:p-10">
+            <div className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 text-center sm:p-10">
               <h2 className="font-display text-2xl font-bold text-foreground">{c.emptyH2}</h2>
               <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">{c.emptyP}</p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
@@ -176,7 +183,7 @@ const JocScor = () => {
                     [summary.practiced, c.statPracticed],
                     [summary.mastered, c.statMastered],
                   ].map(([value, label]) => (
-                    <div key={label as string} className="rounded-xl border bg-card p-4 text-center">
+                    <div key={label as string} className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-4 text-center">
                       <div className="font-display text-3xl font-bold text-foreground">{value}</div>
                       <div className="mt-1 text-sm text-muted-foreground">{label}</div>
                     </div>
@@ -187,7 +194,7 @@ const JocScor = () => {
 
               <section
                 aria-labelledby="scor-nivel"
-                className="rounded-xl border bg-card p-6 sm:p-8"
+                className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 sm:p-8"
               >
                 <span className="text-sm font-medium text-primary">
                   {suggestion.source === "placement" ? c.levelFromTest : c.levelFromPractice}

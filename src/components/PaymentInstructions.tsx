@@ -15,6 +15,13 @@ const WHATSAPP_URL = "https://wa.me/40763124514";
 
 interface PaymentInstructionsProps {
   courseType?: "group" | "private" | "kids" | undefined;
+  /**
+   * Whether the money has already arrived. False everywhere this renders
+   * today — it is the screen shown straight after submitting — and it is the
+   * reason the alternatives carry a warning rather than reading as three
+   * equally good ways to have your place already.
+   */
+  paid?: boolean | undefined;
   email?: string | undefined;
   name?: string | undefined;
   registrationId?: string | undefined;
@@ -23,7 +30,7 @@ interface PaymentInstructionsProps {
   plan?: "monthly" | "full" | undefined;
 }
 
-const PaymentInstructions = ({ courseType, email, name, registrationId, quantity, plan }: PaymentInstructionsProps) => {
+const PaymentInstructions = ({ courseType, email, name, registrationId, quantity, plan, paid }: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [showAlternatives, setShowAlternatives] = useState(false);
@@ -85,6 +92,20 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
 
         {showAlternatives && (
           <div className="mt-4 space-y-3">
+            {/* Cash, transfer and PayPal all stay on offer. What they do not
+                do is hold the place on their own: the card clears in seconds,
+                the other three clear when Ibra has seen the money. Listing
+                them with no word on that read as "any of these and you are
+                in", which for a group with a seat cap is not true. */}
+            {!paid && (
+              <p
+                role="status"
+                className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+              >
+                {t.paymentAlternativesUnpaid}
+                {(courseType === "group" || courseType === "kids") && ` ${t.paymentAlternativesUnpaidSeat}`}
+              </p>
+            )}
             <ul className="space-y-2.5">
               <li className="flex items-start gap-3 text-sm text-foreground">
                 <Banknote className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />

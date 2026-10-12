@@ -125,7 +125,7 @@ const FormatColumn = ({
               : "bg-muted text-muted-foreground"
           }`}
         >
-          {openCount > 0 ? `${openCount} deschisă${openCount > 1 ? "e" : ""}` : "închis"}
+          {openCount === 0 ? "închis" : openCount === 1 ? "1 deschisă" : `${openCount} deschise`}
         </span>
       </div>
       {cohorts.length === 0 ? (
@@ -193,7 +193,7 @@ const GroupOverview = () => {
         </div>
         {!loading && (
           <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-            {totalOpen} cohortă{totalOpen === 1 ? "" : "e"} deschisă{totalOpen === 1 ? "" : "e"}
+            {totalOpen === 1 ? "1 cohortă deschisă" : `${totalOpen} cohorte deschise`}
           </span>
         )}
       </div>

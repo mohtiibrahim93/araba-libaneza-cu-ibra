@@ -155,7 +155,7 @@ export const COURSE_PICKS: Recommendation[] = [
   {
     to: "/cursuri/private",
     label: { ro: "Lecții private", en: "Private lessons" },
-    note: { ro: "Program flexibil, 1:1 cu Ibrahim", en: "Flexible schedule, 1-on-1 with Ibrahim" },
+    note: { ro: "Program flexibil, 1:1 cu Ibra", en: "Flexible schedule, 1-on-1 with Ibra" },
   },
   {
     to: "/cursuri/copii",

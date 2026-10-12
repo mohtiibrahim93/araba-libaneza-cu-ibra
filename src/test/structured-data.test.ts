@@ -111,8 +111,9 @@ describe("the teacher and the levels are identifiable", () => {
   afterEach(cleanup);
 
   it("names the instructor in full, keeping Ibra as the alternate", () => {
-    expect(COURSE_INSTRUCTOR.name).toBe("Ibrahim Gabriel Moaty");
-    expect(COURSE_INSTRUCTOR.alternateName).toBe("Ibra");
+    expect(COURSE_INSTRUCTOR.name).toBe("Ibrahim Mohti");
+    expect(COURSE_INSTRUCTOR.alternateName).toContain("Ibra");
+    expect(COURSE_INSTRUCTOR.alternateName).toContain("Ibrahim Gabriel Mohti");
     // Profiles that carry his own name, so the person can be matched.
     expect(COURSE_INSTRUCTOR.sameAs.length).toBeGreaterThan(1);
     for (const url of COURSE_INSTRUCTOR.sameAs) {
@@ -150,7 +151,7 @@ describe("the teacher and the levels are identifiable", () => {
     const instructor = (course!["hasCourseInstance"] as Record<string, unknown>[])[0]![
       "instructor"
     ] as Record<string, unknown>;
-    expect(instructor["name"]).toBe("Ibrahim Gabriel Moaty");
+    expect(instructor["name"]).toBe("Ibrahim Mohti");
 
     // The numbers are the page's own, not a second copy that can go stale.
     const online = ONLINE_PRICES.groupMonthly.A1;

@@ -26,4 +26,13 @@
   };
 
   try { document.documentElement.lang = lang; } catch (e) { /* not in a document */ }
+
+  /* ?focus=1 — the level test page's "test only" choice: the frame shows the
+     test alone, without the game's menu, XP or teacher link. styles.css hides
+     them under html.focus; the game itself runs unchanged. */
+  try {
+    if (new URLSearchParams(root.location.search).get('focus') === '1') {
+      document.documentElement.classList.add('focus');
+    }
+  } catch (e) { /* no URL access: full game */ }
 })(window);

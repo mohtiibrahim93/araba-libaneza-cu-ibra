@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 
 function maskEmail(e: string | null): string | null {
   if (!e || !e.includes("@")) return null;
@@ -26,6 +28,22 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items"],
     });
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    );
+    const registrationId = session.metadata?.registration_id;
+    const { data: reg } = registrationId
+      ? await supabaseAdmin.from("registrations").select("email").eq("id", registrationId).maybeSingle()
+      : { data: null };
+    // Legacy standalone deposit sessions use the stored Stripe customer email.
+    // Never fall back when a registration is referenced but cannot be found.
+    const owner = registrationId ? reg : { email: session.customer_email || session.customer_details?.email };
+    if (!owner || !(await verifiedRegistrationOwner(req, owner, supabaseAdmin.auth))) {
+      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const payload = {
       id: session.id,

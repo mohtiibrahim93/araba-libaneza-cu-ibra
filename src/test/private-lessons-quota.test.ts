@@ -12,7 +12,7 @@ describe("paid lessons are capped at the quantity bought", () => {
   const src = read("supabase/functions/booking-create/index.ts");
 
   it("counts confirmed and completed non-trial bookings against registrations.quantity", () => {
-    expect(src).toContain('.select("id, payment_status, quantity")');
+    expect(src).toContain('.select("id, email, payment_status, quantity")');
     expect(src).toContain('.neq("event_type_slug", "trial")');
     expect(src).toContain('.in("status", ["confirmed", "completed"])');
     expect(src).toContain("(used ?? 0) >= bought");
@@ -21,7 +21,8 @@ describe("paid lessons are capped at the quantity bought", () => {
 
   it("applies to internal calls too (the check is not gated on internalCall)", () => {
     const block = src.slice(src.indexOf("// A paid registration books at most"), src.indexOf('code: "lessons_used_up"'));
-    expect(block).toContain('if (et.slug !== "trial") {');
+    // Free bookings (the trial and the level check with Ibra) are not lessons.
+    expect(block).toContain("if (!isFree) {");
     expect(block).not.toContain("internalCall");
   });
 

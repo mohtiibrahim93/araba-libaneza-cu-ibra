@@ -40,6 +40,7 @@ import {
   LEAD_STATUSES,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
+import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
 
 interface CancelPreview {
   within_grace: boolean;
@@ -73,6 +74,8 @@ interface Props {
   onPreviewRefund: (id: string, lessonsTaken: number) => Promise<RefundPreview>;
   onPreviewCancel: (id: string) => Promise<CancelPreview>;
   onCancelSubscription: (id: string) => void;
+  /** Opens the person's page (Fișa cursantului). */
+  onOpen?: (id: string) => void;
 }
 
 const badge = (cls: string, label: string) => (
@@ -80,22 +83,22 @@ const badge = (cls: string, label: string) => (
 );
 
 const paymentBadge = (r: Registration) => {
-  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-gray-200 text-gray-700", "Rambursat");
+  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-muted text-muted-foreground", "Rambursat");
   switch (r.payment_status) {
     case "paid":
-      return badge("bg-green-100 text-green-800", "Plătit");
+      return badge("bg-emerald-500/10 text-emerald-700 dark:text-emerald-400", "Plătit");
     case "pending":
-      return badge("bg-yellow-100 text-yellow-800", "În așteptare");
+      return badge("bg-amber-500/10 text-amber-700 dark:text-amber-400", "În așteptare");
     case "past_due":
-      return badge("bg-red-100 text-red-800", "Restanță");
+      return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Restanță");
     case "failed":
-      return badge("bg-red-100 text-red-800", "Plată eșuată");
+      return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Plată eșuată");
     case "expired":
-      return badge("bg-gray-100 text-gray-600", "Expirat");
+      return badge("bg-muted text-muted-foreground", "Expirat");
     case "card_saved":
-      return badge("bg-blue-100 text-blue-800", "Card salvat · trial");
+      return badge("bg-blue-500/10 text-blue-700 dark:text-blue-400", "Card salvat · trial");
     default:
-      return badge("bg-gray-100 text-gray-600", "Neplătit");
+      return badge("bg-muted text-muted-foreground", "Neplătit");
   }
 };
 
@@ -354,10 +357,18 @@ const RegistrationsTable = ({
   onPreviewRefund,
   onPreviewCancel,
   onCancelSubscription,
+  onOpen,
 }: Props) => {
   // Registration ids that already have a (non-cancelled) booking, so trial
   // leads who never picked a slot can be flagged for follow-up.
   const [bookedRegIds, setBookedRegIds] = useState<Set<string>>(new Set());
+  // The set starts empty and fills in asynchronously, so "has no booking" and
+  // "we have not looked yet" were the same thing to the badge below: for the
+  // first second after the tab opened, every trial was accused of never
+  // picking a slot. Six false alarms at once, on the screen the owner opens
+  // most. The flag stays false until the answer is actually known, and stays
+  // false if the fetch fails -- which is what the catch below always intended.
+  const [bookingsKnown, setBookingsKnown] = useState(false);
   useEffect(() => {
     let active = true;
     (async () => {
@@ -369,7 +380,10 @@ const RegistrationsTable = ({
         (data?.data || []).forEach((b) => {
           if (b.registration_id && b.status !== "cancelled") ids.add(b.registration_id);
         });
-        if (active) setBookedRegIds(ids);
+        if (active) {
+          setBookedRegIds(ids);
+          setBookingsKnown(true);
+        }
       } catch {
         /* non-blocking: the flag just won't show if bookings can't load */
       }
@@ -381,7 +395,7 @@ const RegistrationsTable = ({
 
   return (
   <div className="border border-border rounded-lg overflow-hidden">
-    <Table>
+    <Table aria-label="Înscrieri">
       <TableHeader>
         <TableRow className="bg-muted/50">
           <TableHead className="w-10">
@@ -410,7 +424,17 @@ const RegistrationsTable = ({
             {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
             <TableCell className="align-top">
               <p className="font-semibold text-foreground leading-tight">
-                {r.name}
+                {onOpen ? (
+                  <button
+                    type="button"
+                    onClick={() => onOpen(r.id)}
+                    className="text-left font-semibold text-brand-green underline-offset-2 hover:underline dark:text-primary"
+                  >
+                    {r.name}
+                  </button>
+                ) : (
+                  r.name
+                )}
                 {/* Anyone who registered in English needs an English-taught
                     cohort, and there is none yet — so it is flagged rather than
                     left to be discovered on the first day of class. */}
@@ -439,7 +463,7 @@ const RegistrationsTable = ({
                 </span>
               )}
               {r.anonymized_at && (
-                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
                   Anonimizat
                 </span>
               )}
@@ -463,20 +487,21 @@ const RegistrationsTable = ({
               <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 {formTypeLabels[r.form_type] || r.form_type}
               </span>
-              {r.form_type === "trial" && !bookedRegIds.has(r.id) && (
-                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
+              {r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id) && (
+                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
                   Fără interval
                 </span>
               )}
               <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
                 {[
-                  r.format,
+                  registrationFormatLabel(r),
                   r.center,
                   r.child_age ? `copil ${r.child_age} ani` : null,
                 ]
                   .filter(Boolean)
                   .join(" · ") || "—"}
               </p>
+              <RegistrationCourse registration={r} />
             </TableCell>
             <TableCell className="align-top">
               <Select

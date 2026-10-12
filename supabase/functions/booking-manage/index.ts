@@ -15,6 +15,7 @@ import {
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG } from "../_shared/schedule-rules.ts";
 
 /**
  * Free changes stop 24 hours before the lesson — the rule the trial notice,
@@ -132,18 +133,24 @@ Deno.serve(async (req) => {
       // Write first, conditional on the row still being the confirmed booking
       // we loaded, so a failed or duplicate write never deletes the calendar
       // event or tells the student it is cancelled.
-      const { data: cancelledRows, error: cancelErr } = await supabase
+      let cancelQuery = supabase
         .from("bookings")
-        .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
+        .update({ status: "cancelled", cancelled_at: new Date().toISOString(), google_sync_error: booking.google_event_id ? "cancel_update_pending" : null })
         .eq("id", booking.id)
-        .eq("status", "confirmed")
-        .select("id");
+        .eq("status", "confirmed");
+      cancelQuery = booking.google_event_id ? cancelQuery.eq("google_event_id", booking.google_event_id) : cancelQuery.is("google_event_id", null);
+      const { data: cancelledRows, error: cancelErr } = await cancelQuery.select("id");
       if (cancelErr) {
         console.error("[booking-manage] cancel write failed", cancelErr);
         return json({ error: "cancel failed" }, 500);
       }
       if (!cancelledRows?.length) return json({ error: "booking is not active" }, 409);
-      if (booking.google_event_id) await gcalDeleteEvent(booking.google_event_id);
+      const calendarDeleted = !booking.google_event_id || await gcalDeleteEvent(booking.google_event_id);
+      const deletionPending = !calendarDeleted || booking.google_sync_error === "calendar_create_pending";
+      if (!deletionPending) {
+        const { error } = await supabase.from("bookings").update({ google_sync_error: null }).eq("id", booking.id);
+        if (error) console.error("[booking-manage] cancellation sync marker not cleared", error);
+      }
       sendBookingEmail(
         "booking-cancelled",
         booking.student_email,
@@ -167,12 +174,14 @@ Deno.serve(async (req) => {
         },
         `admin-booking-cancel-${booking.id}`,
       );
-      return json({ ok: true, status: "cancelled" });
+      return json({ ok: true, status: "cancelled", sync_pending: deletionPending });
     }
 
     if (req.method === "PATCH") {
-      const body = (await req.json()) as { start_at?: string };
+      const body = (await req.json()) as { start_at?: string; force?: boolean };
       if (!body?.start_at) return json({ error: "start_at required" }, 400);
+      // The owner, through admin-registrations, with the service-role key.
+      const admin = internalCall(req);
       const startMs = Date.parse(body.start_at);
       if (!Number.isFinite(startMs)) return json({ error: "invalid start_at" }, 400);
       const et = booking.booking_event_types;
@@ -189,8 +198,22 @@ Deno.serve(async (req) => {
         .from("availability_rules")
         .select("weekday,start_time,end_time")
         .eq("is_active", true);
-      const offered = candidateSlotsForDays([day], rules ?? [], et.duration_min);
-      if (!offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO)) {
+      const offered = candidateSlotsForDays(
+        [day],
+        booking.event_type_slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : (rules ?? []),
+        et.duration_min,
+      );
+      const outsideAvailability =
+        !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO);
+      // A student may only move a booking to a slot this site would have
+      // offered them: inside the published hours, and inside the notice and
+      // advance windows. The owner is not bound by his own opening hours --
+      // "same time next week, but at nine, just this once" is a normal thing
+      // to agree with a student, and refusing it in the panel is what sends
+      // him to edit Google Calendar by hand instead, which is the direction
+      // that does not sync back. He is still told when a time is outside
+      // them; see `outside_availability` in the conflict reply below.
+      if (!admin && outsideAvailability) {
         return json({ error: "slot not bookable", code: "invalid_slot" }, 400);
       }
 
@@ -213,89 +236,79 @@ Deno.serve(async (req) => {
       ]);
       const s = startMs - et.buffer_before_min * 60_000;
       const e = endMs + et.buffer_after_min * 60_000;
+      // Named rather than counted: "slot taken" tells the owner nothing he can
+      // act on, and the three causes have different answers -- another student
+      // means pick a different time, his own calendar might be a thing he is
+      // willing to move, a group lesson almost certainly is not.
+      const found: string[] = [];
       for (const b of clashes ?? []) {
         if (overlaps(s, e, Date.parse(b.start_at), Date.parse(b.end_at))) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("another_booking");
+          break;
         }
       }
       for (const b of busy) {
         if (overlaps(s, e, Date.parse(b.start), Date.parse(b.end))) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("calendar");
+          break;
         }
       }
       for (const b of cohortBusyForDays(cohorts ?? [], [day])) {
         if (overlaps(s, e, b.start, b.end)) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
+          found.push("group_lesson");
+          break;
         }
       }
+      // A student is simply refused, exactly as before. The owner is refused
+      // once, with the reasons, and goes through on a second call that says
+      // force -- so overriding is deliberate rather than a button that
+      // silently double-books him.
+      if (found.length > 0 && (!admin || body.force !== true)) {
+        return json(
+          { error: "slot taken", code: "conflict", clashes: found, outside_availability: outsideAvailability },
+          409,
+        );
+      }
+      // Nothing clashes, but it is outside the published hours: say so and let
+      // the second call confirm. Silence here would make the panel look like
+      // it had quietly extended his working week.
+      if (found.length === 0 && admin && outsideAvailability && body.force !== true) {
+        return json(
+          { error: "outside availability", code: "outside_availability", clashes: [], outside_availability: true },
+          409,
+        );
+      }
 
-      // Claim the old booking first, atomically: only a row that is still
-      // confirmed at the start time we loaded can be claimed, so a second
-      // concurrent reschedule finds nothing and stops here.
-      const { data: claimed, error: claimErr } = await supabase
-        .from("bookings")
-        .update({ status: "rescheduled" })
-        .eq("id", booking.id)
-        .eq("status", "confirmed")
-        .eq("start_at", booking.start_at)
-        .select("id");
-      if (claimErr) {
-        console.error("[booking-manage] reschedule claim failed", claimErr);
+      // Atomic claim, replacement and exact Calendar link transfer. The
+      // registration lock shares the contact editor's transaction order.
+      const { data: created, error: moveError } = await supabase.rpc("move_booking_atomically", {
+        p_id: booking.id, p_expected_start: booking.start_at, p_expected_event: booking.google_event_id,
+        p_start: startISO, p_end: endISO,
+      });
+      if (moveError || !created) {
+        if (moveError?.code === "23505") return json({ error: "slot taken", code: "conflict" }, 409);
+        if (moveError?.code === "40001") return json({ error: "booking changed; reload and retry", code: "booking_changed" }, 409);
+        console.error("[booking-manage] atomic reschedule failed", moveError);
         return json({ error: "reschedule failed" }, 500);
       }
-      if (!claimed?.length) return json({ error: "booking is not active" }, 409);
-
-      const restoreOld = async () => {
-        const { error } = await supabase
-          .from("bookings")
-          .update({ status: "confirmed" })
-          .eq("id", booking.id)
-          .eq("status", "rescheduled");
-        if (error) console.error("[booking-manage] could not restore old booking", booking.id, error);
-      };
-
-      const { data: created, error: insErr } = await supabase
-        .from("bookings")
-        .insert({
-          event_type_slug: booking.event_type_slug,
-          registration_id: booking.registration_id,
-          start_at: startISO,
-          end_at: endISO,
-          student_name: booking.student_name,
-          student_email: booking.student_email,
-          student_phone: booking.student_phone,
-          format: booking.format,
-          notes: booking.notes,
-          status: "confirmed",
-          original_booking_id: booking.id,
-          google_event_id: booking.google_event_id,
-          meet_link: booking.meet_link,
-          language: booking.language,
-        })
-        .select()
-        .single();
-      if (insErr || !created) {
-        await restoreOld();
-        const msg = (insErr?.message || "").toLowerCase();
-        if (msg.includes("duplicate") || msg.includes("unique")) {
-          return json({ error: "slot taken", code: "conflict" }, 409);
-        }
-        return json({ error: "reschedule failed" }, 500);
-      }
-      const { error: clearErr } = await supabase
-        .from("bookings")
-        .update({ google_event_id: null, meet_link: null })
-        .eq("id", booking.id);
-      if (clearErr) console.error("[booking-manage] could not clear old event link", booking.id, clearErr);
 
       // Patch GCal event in place (keeps id + Meet link) — only after the DB is consistent.
-      if (booking.google_event_id) await gcalPatchEvent(booking.google_event_id, startISO, endISO);
+      const calendarPatched = !!booking.google_event_id && await gcalPatchEvent(booking.google_event_id, startISO, endISO);
+      const contactStillPending = !!booking.google_sync_error || created.student_name !== booking.student_name || created.student_email !== booking.student_email || created.student_phone !== booking.student_phone;
+      let calendarConfirmed = false;
+      if (calendarPatched) {
+        let syncWrite = supabase.from("bookings").update({ google_sync_error: contactStillPending ? "contact_update_pending" : null }).eq("id", created.id).eq("status", "confirmed").eq("start_at", created.start_at).eq("google_sync_error", created.google_sync_error);
+        for (const field of ["student_name", "student_email", "student_phone"]) syncWrite = created[field] == null ? syncWrite.is(field, null) : syncWrite.eq(field, created[field]);
+        const { data: syncedRows, error } = await syncWrite.select("id");
+        calendarConfirmed = !error && !!syncedRows?.length && !contactStillPending;
+        if (error) console.error("[booking-manage] reschedule sync marker not cleared", error);
+      }
 
       sendBookingEmail(
         "booking-rescheduled",
-        booking.student_email,
+        created.student_email,
         {
-          name: booking.student_name,
+          name: created.student_name,
           oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
           newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
           meetLink: booking.meet_link,
@@ -309,9 +322,9 @@ Deno.serve(async (req) => {
         "rescheduled",
         {
           eventName: booking.booking_event_types?.name_ro,
-          studentName: booking.student_name,
-          studentEmail: booking.student_email,
-          studentPhone: booking.student_phone,
+          studentName: created.student_name,
+          studentEmail: created.student_email,
+          studentPhone: created.student_phone,
           format: booking.format === "online" ? "online" : "fizic",
           oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
           newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
@@ -320,7 +333,7 @@ Deno.serve(async (req) => {
         `admin-booking-resched-${created.id}`,
       );
 
-      return json({ ok: true, manage_token: created.manage_token, start_at: startISO });
+      return json({ ok: true, manage_token: created.manage_token, start_at: startISO, sync_pending: !calendarConfirmed });
     }
 
     return json({ error: "method not allowed" }, 405);

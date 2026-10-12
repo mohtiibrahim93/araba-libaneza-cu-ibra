@@ -22,9 +22,9 @@ import {
   CreditCard,
   Repeat,
   Gift,
-  LayoutDashboard,
   ClipboardList,
   CalendarDays,
+  CalendarClock,
   GraduationCap,
   Newspaper,
   Settings,
@@ -40,15 +40,23 @@ import {
   BarChart3,
   FileText,
   Languages,
+  Home,
+  Layers,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import AdminShell from "@/components/admin/AdminShell";
+import AdminShell, { type AdminSection } from "@/components/admin/AdminShell";
+import AdminSearch from "@/components/admin/AdminSearch";
+import PersonSheet from "@/components/admin/PersonSheet";
+import WeekLessons from "@/components/admin/WeekLessons";
+import CohortSessionsAdmin from "@/components/admin/CohortSessionsAdmin";
+import CohortCalendarNames from "@/components/admin/CohortCalendarNames";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
-import GroupOverview from "@/components/admin/GroupOverview";
+import CourseOverviewAdmin from "@/components/admin/CourseOverviewAdmin";
+import PrivateLessonsAdmin from "@/components/admin/PrivateLessonsAdmin";
 import BlogAdmin from "@/components/admin/BlogAdmin";
 import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
 import PagesAdmin from "@/components/admin/PagesAdmin";
@@ -61,13 +69,16 @@ import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
-import TodayAdmin from "@/components/admin/TodayAdmin";
+import TodayAdmin, { type TodaySummary } from "@/components/admin/TodayAdmin";
+import StudentProgressAdmin from "@/components/admin/StudentProgressAdmin";
 import KidsSlotsAdmin from "@/components/admin/KidsSlotsAdmin";
 import AuditLogAdmin from "@/components/admin/AuditLogAdmin";
 import CardOverridesAdmin from "@/components/admin/CardOverridesAdmin";
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
+import CourseFilters from "@/components/admin/CourseFilters";
+import { describeRegistrationCourse, emptyCourseFilters, matchesCourseFilters } from "@/lib/adminCourseFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable, { type RefundPreview } from "@/components/admin/RegistrationsTable";
 import {
@@ -101,6 +112,8 @@ const Admin = () => {
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
+  const [courseDetailsFilter, setCourseDetailsFilter] = useState(emptyCourseFilters);
+  const [selectedGroup, setSelectedGroup] = useState<{ id: string; name: string } | null>(null);
   const [emailSettings, setEmailSettings] = useState<EmailSettings>({
     sender_name: "Arabă Libaneză cu Ibra",
     sender_email: "noreply@centruldearabalibaneza.com",
@@ -144,6 +157,11 @@ const Admin = () => {
               "Contul Google folosit nu are drepturi de admin. Cere să fie adăugat în lista de administratori.",
             );
             await supabase.auth.signOut();
+          } else if (/invalid jwt|401|session|token/i.test(msg)) {
+            // Expired or rejected sign-in token: ask for a fresh sign-in
+            // instead of leaving a blank screen.
+            setError("Sesiunea a expirat. Te rugăm să te autentifici din nou.");
+            await supabase.auth.signOut();
           } else {
             setError("Nu am putut încărca panoul de admin. Reîncearcă.");
           }
@@ -182,16 +200,16 @@ const Admin = () => {
       // not bookings, and mixing them in is what made the admin unusable. They
       // are still one click away by selecting the "Incomplet" status.
       const matchesStatus =
-        leadStatusFilter === "all" ? status !== "incomplete" : status === leadStatusFilter;
+        leadStatusFilter === "all" ? (!!selectedGroup || status !== "incomplete") : status === leadStatusFilter;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
         (r.form_type === "private" &&
           messageTerms.every((term) =>
             (r.notes || "").toLocaleLowerCase("ro-RO").includes(term),
           ));
-      return matchesCourse && matchesStatus && matchesPrivateMessage;
+      return matchesCourse && matchesStatus && matchesPrivateMessage && matchesCourseFilters(describeRegistrationCourse(r), courseDetailsFilter) && (!selectedGroup || r.cohort_id === selectedGroup.id);
     });
-  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch]);
+  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch, courseDetailsFilter, selectedGroup]);
 
   const privateLeadCounts = useMemo(() => {
     const initial = LEAD_STATUSES.reduce(
@@ -217,6 +235,27 @@ const Admin = () => {
 
   // Which admin tab is open; PrivateLeadStats / stat cards can jump to "leads".
   const [activeTab, setActiveTab] = useState("today");
+  // The redesign's always-there pieces: search, one person's page, and what
+  // Acasă learned on load (calendar health, people waiting on a reply).
+  const [searchOpen, setSearchOpen] = useState(false);
+  // Bumped when a group's calendar name changes, so the lessons panel re-reads.
+  const [calendarNamesVersion, setCalendarNamesVersion] = useState(0);
+  const openSearch = useCallback(() => setSearchOpen(true), []);
+  const [personId, setPersonId] = useState<string | null>(null);
+  const [calendarOk, setCalendarOk] = useState<boolean | null>(null);
+  const [peopleToDo, setPeopleToDo] = useState(0);
+  const onTodayLoaded = useCallback((s: TodaySummary) => {
+    setCalendarOk(s.calendarOk);
+    setPeopleToDo(s.peopleToDo);
+  }, []);
+
+  const newLast7 = useMemo(() => {
+    const since = Date.now() - 7 * 86_400_000;
+    const recent = registrations.filter(
+      (r) => Date.parse(r.created_at) >= since && (r.lead_status || "new") !== "incomplete",
+    );
+    return { total: recent.length, trials: recent.filter((r) => r.form_type === "trial").length };
+  }, [registrations]);
 
   const stats = useMemo(() => {
     const incomplete = registrations.filter(
@@ -571,45 +610,44 @@ const Admin = () => {
 
 
   /**
-   * The sections, grouped by the kind of work rather than by which component
-   * happened to be written first.
-   *
-   * "Grupe" and "Programări" each used to be one scrolling page with five and
-   * three separate screens stacked on it; they are sub-items now. "Azi" is the
-   * home screen (Acasă): a worklist rather than all-time totals, which is what
-   * the Analiză tab is for.
+   * The seven places (October 2026 redesign, drawn in Claude Design). The
+   * twenty-one screens are all still here; they are grouped by what you are
+   * doing — people, the week, groups, numbers, the site, settings — and each
+   * place shows its screens as tabs along the top. Acasă (was "Azi") is the
+   * home screen: a worklist rather than all-time totals, which Rapoarte has.
    *
    * Every `value` here is matched by a <TabsContent value="..."> below. Renaming
    * one without the other makes a section unreachable with no error anywhere,
    * which is what src/test/admin-nav-reachable.test.ts exists to catch.
    */
-  const navGroups = [
+  const sections: AdminSection[] = [
     {
-      title: "Panou",
+      id: "home",
+      label: "Acasă",
+      icon: Home,
+      primary: true,
       items: [
         {
           value: "today",
-          label: "Azi",
-          icon: LayoutDashboard,
-          hint: "Ce are nevoie de tine astăzi",
-        },
-        {
-          value: "analytics",
-          label: "Analiză",
-          icon: BarChart3,
-          hint: "Cifrele pe o perioadă, nu pe tot timpul",
+          label: "Acasă",
+          icon: Home,
+          hint: "Ce are nevoie de tine azi. Cifrele pe perioade sunt în Rapoarte.",
         },
       ],
     },
     {
-      title: "Cursanți",
+      id: "people",
+      label: "Cursanți",
+      icon: Users,
+      primary: true,
+      badge: peopleToDo,
       items: [
         {
           value: "leads",
           label: "Înscrieri",
           icon: ClipboardList,
-          badge: registrations.length,
-          hint: "Toate cererile și plățile",
+          badge: stats.total,
+          hint: "Toate cererile și plățile. Apasă pe un nume pentru fișa lui.",
         },
         {
           value: "journey",
@@ -617,12 +655,34 @@ const Admin = () => {
           icon: Route,
           hint: "De la prima cerere până la înscriere",
         },
+        {
+          value: "student-progress",
+          label: "Cu cont Yalla",
+          icon: Gamepad2,
+          hint: "Testul de nivel și progresul din joc",
+        },
+        {
+          value: "course-requests",
+          label: "Cereri de curs",
+          icon: Inbox,
+          hint: "Cereri pentru grupe care nu există încă",
+        },
+        {
+          value: "manual-signups",
+          label: "Înscrieri externe",
+          icon: UserPlus,
+          hint: "Cursanți veniți din afara site-ului",
+        },
       ],
     },
     {
-      title: "Program",
+      id: "schedule",
+      label: "Program",
+      icon: CalendarDays,
+      primary: true,
       items: [
-        { value: "bookings", label: "Lecții", icon: CalendarDays, hint: "Rezervările cursanților" },
+        { value: "week", label: "Săptămâna", icon: CalendarDays, hint: "Lecțiile rezervate, pe zile și ore" },
+        { value: "bookings", label: "Toate lecțiile", icon: ClipboardList, hint: "Rezervările cursanților" },
         {
           value: "availability",
           label: "Disponibilitate",
@@ -644,31 +704,45 @@ const Admin = () => {
       ],
     },
     {
-      title: "Grupe",
+      id: "groups",
+      label: "Grupe",
+      icon: Layers,
+      primary: true,
       items: [
-        { value: "cohorts", label: "Cohorte", icon: GraduationCap, hint: "Grupele și programul lor" },
+        { value: "cohorts", label: "Grupele", icon: GraduationCap, hint: "Fiecare grupă, programul și starea ei" },
         {
           value: "capacities",
           label: "Capacități",
           icon: Users,
           hint: "Minim și maxim de locuri pe grupă",
         },
+      ],
+    },
+    {
+      id: "private",
+      label: "Lecții private",
+      icon: CalendarClock,
+      primary: true,
+      items: [{ value: "private-lessons", label: "Înscrieri și lecții", icon: CalendarClock, hint: "Online și în persoană, de pe site sau adăugate manual" }],
+    },
+    {
+      id: "reports",
+      label: "Rapoarte",
+      icon: BarChart3,
+      items: [
         {
-          value: "course-requests",
-          label: "Cereri de curs",
-          icon: Inbox,
-          hint: "Cereri pentru grupe care nu există încă",
-        },
-        {
-          value: "manual-signups",
-          label: "Înscrieri externe",
-          icon: UserPlus,
-          hint: "Cursanți veniți din afara site-ului",
+          value: "analytics",
+          label: "Analiză",
+          icon: BarChart3,
+          hint: "Cifrele tale pe o perioadă aleasă. Restul panoului numără tot timpul.",
         },
       ],
     },
     {
-      title: "Conținut",
+      id: "site",
+      label: "Site",
+      icon: Newspaper,
+      secondary: true,
       items: [
         { value: "blog", label: "Blog", icon: Newspaper, hint: "Articolele de pe site" },
         { value: "resources", label: "Resurse", icon: FileText, hint: "Materiale descărcabile" },
@@ -685,41 +759,82 @@ const Admin = () => {
           icon: Gamepad2,
           hint: "Corecturile pe cartonașele din joc",
         },
+        { value: "seo", label: "SEO", icon: LineChart, hint: "Backlink-uri și sănătatea domeniului" },
       ],
     },
     {
-      title: "Sistem",
+      id: "settings",
+      label: "Setări",
+      icon: Settings,
+      secondary: true,
       items: [
-        { value: "seo", label: "SEO", icon: LineChart, hint: "Backlink-uri și sănătatea domeniului" },
         { value: "settings", label: "Setări", icon: Settings, hint: "Email, plăți și cont" },
         {
           value: "audit-log",
           label: "Jurnal",
           icon: ScrollText,
-          hint: "Cine a șters, anonimizat sau rambursat",
+          hint: "Cine a șters, anonimizat sau rambursat. Doar de citit.",
         },
       ],
     },
   ];
 
+  const person = personId ? registrations.find((r) => r.id === personId) ?? null : null;
+
   return (
     <AdminShell
-      groups={navGroups}
+      sections={sections}
       active={activeTab}
       onChange={setActiveTab}
       adminEmail={adminEmail}
       onLogout={handleLogout}
+      calendarOk={calendarOk}
+      onSearch={openSearch}
+      onAddExternal={() => setActiveTab("manual-signups")}
     >
+      <AdminSearch
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        registrations={registrations}
+        onPick={setPersonId}
+      />
+      <PersonSheet
+        person={person}
+        onChanged={() => void loadData().catch(() => toast({ title: "Contact salvat; reîncarcă lista pentru datele noi.", variant: "destructive" }))}
+        onClose={() => setPersonId(null)}
+        onStatusChange={handleStatusChange}
+        updating={!!person && updatingStatus?.id === person.id}
+        onShowInTable={() => {
+          setSelectedGroup(null);
+          setCourseTypeFilter("all");
+          setLeadStatusFilter(person?.lead_status === "incomplete" ? "incomplete" : "all");
+          setPrivateMessageSearch("");
+          setCourseDetailsFilter(emptyCourseFilters());
+          setPersonId(null);
+          setActiveTab("leads");
+        }}
+      />
       <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
           <TabsContent value="today" className="mt-0 space-y-6">
-            <TodayAdmin onGoToLeads={() => setActiveTab("leads")} />
+            <TodayAdmin
+              onGoToLeads={() => setActiveTab("leads")}
+              onOpenPerson={setPersonId}
+              onGo={setActiveTab}
+              newLast7={newLast7}
+              onLoaded={onTodayLoaded}
+            />
           </TabsContent>
 
           {/* ── Parcurs: de la prima cerere până la înscriere ─────────────── */}
           <TabsContent value="journey" className="mt-0 space-y-6">
             <StudentJourneyAdmin />
             <TrialFunnelAdmin />
+          </TabsContent>
+
+          {/* ── Elevi cu cont: test de nivel + progres din joc ─────────────── */}
+          <TabsContent value="student-progress" className="mt-0 space-y-6">
+            <StudentProgressAdmin />
           </TabsContent>
 
           {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}
@@ -734,6 +849,7 @@ const Admin = () => {
             <PrivateLeadStats
               counts={privateLeadCounts}
               onSelect={(status) => {
+                setSelectedGroup(null);
                 setCourseTypeFilter("private");
                 setLeadStatusFilter(status === "all" ? "all" : status);
               }}
@@ -742,8 +858,18 @@ const Admin = () => {
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}
                 <span className="text-muted-foreground font-normal">
-                  ({filteredRegistrations.length}/{registrations.length})
+                  ({filteredRegistrations.length}/{stats.total})
                 </span>
+                {leadStatusFilter === "all" && !selectedGroup && stats.incomplete > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setLeadStatusFilter("incomplete")}
+                    className="ml-2 rounded-full border border-border px-2 py-0.5 text-xs font-normal text-muted-foreground hover:text-foreground"
+                    title="Formulare începute fără interval ales — nu sunt rezervări, deci nu apar în listă"
+                  >
+                    +{stats.incomplete} incomplet{stats.incomplete === 1 ? "" : "e"}
+                  </button>
+                )}
               </h2>
               <div className="flex items-center gap-2">
                 <Button
@@ -780,15 +906,20 @@ const Admin = () => {
               courseType={courseTypeFilter}
               leadStatus={leadStatusFilter}
               privateMessageSearch={privateMessageSearch}
-              onCourseTypeChange={setCourseTypeFilter}
+              onCourseTypeChange={(value) => { setCourseTypeFilter(value); setSelectedGroup(null); }}
               onLeadStatusChange={setLeadStatusFilter}
               onPrivateMessageSearchChange={setPrivateMessageSearch}
               onReset={() => {
                 setCourseTypeFilter("all");
                 setLeadStatusFilter("all");
                 setPrivateMessageSearch("");
+                setCourseDetailsFilter(emptyCourseFilters());
+                setSelectedGroup(null);
               }}
             />
+
+            {selectedGroup && <div className="flex items-center gap-2 text-sm"><span>Grupă: {selectedGroup.name}</span><Button variant="ghost" size="sm" onClick={() => setSelectedGroup(null)}>Toate grupele</Button></div>}
+            <CourseFilters rows={registrations.map(describeRegistrationCourse)} value={courseDetailsFilter} onChange={setCourseDetailsFilter} />
 
             {selected.size > 0 && (
               <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
@@ -898,14 +1029,24 @@ const Admin = () => {
                   onPreviewRefund={previewRefund}
                   onPreviewCancel={previewCancelSubscription}
                   onCancelSubscription={handleCancelSubscription}
+                  onOpen={setPersonId}
                 />
               </div>
             )}
           </TabsContent>
 
-          {/* ── Programări: disponibilitate + rezervări ──────────────────── */}
+          {/* ── Program: săptămâna, lecții, disponibilitate ───────────────── */}
+          <TabsContent value="week" className="mt-0 space-y-6">
+            <WeekLessons />
+          </TabsContent>
+
           <TabsContent value="bookings" className="mt-0 space-y-6">
-            <BookingsAdmin />
+            <BookingsAdmin onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
+          </TabsContent>
+
+          <TabsContent value="private-lessons" className="mt-0 space-y-6">
+            <PrivateLessonsAdmin registrations={registrations} onOpen={setPersonId}
+              onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
           </TabsContent>
 
           <TabsContent value="availability" className="mt-0 space-y-6">
@@ -922,7 +1063,12 @@ const Admin = () => {
 
           {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
           <TabsContent value="cohorts" className="mt-0 space-y-6">
-            <GroupOverview />
+            <CohortSessionsAdmin key={calendarNamesVersion} />
+            <CohortCalendarNames onChanged={() => setCalendarNamesVersion((v) => v + 1)} />
+            <CourseOverviewAdmin onShowRegistrations={(id, name) => {
+              setSelectedGroup({ id, name }); setCourseTypeFilter("all"); setLeadStatusFilter("all");
+              setPrivateMessageSearch(""); setCourseDetailsFilter(emptyCourseFilters()); setActiveTab("leads");
+            }} />
             <CohortsAdmin />
           </TabsContent>
 

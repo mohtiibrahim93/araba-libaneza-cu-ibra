@@ -90,7 +90,7 @@ const WHATSAPP_FALLBACK =
   "https://wa.me/40763124514?text=" +
   encodeURIComponent("Salut! Vreau să rezerv o lecție.");
 
-type EventType = "trial" | "paid";
+type EventType = "trial" | "paid" | "verificare-nivel";
 type Format = "online" | "physical";
 
 interface Props {
@@ -143,6 +143,13 @@ interface Props {
    * books the lesson(s) once the payment clears.
    */
   purchase?: { quantity: number; email: string; format: Format };
+  /**
+   * Which screen the scheduler is on, for a parent that heads it with a step
+   * number. A private purchase is two screens — the times, then the summary
+   * and the card — under one heading owned by the form above, which otherwise
+   * keeps saying "choose a day and time" while you are paying.
+   */
+  onPhaseChange?: (phase: "pick" | "pay") => void;
 }
 
 interface AvailabilityResp {
@@ -161,6 +168,24 @@ function fmtSlotTime(iso: string) {
 function fmtTimeInTz(iso: string, tz: string) {
   return new Intl.DateTimeFormat("ro-RO", { timeZone: tz, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 }
+/**
+ * How many digits the emailed code has.
+ *
+ * Supabase's OTP length is a project setting, not a constant: it can be 6 to
+ * 10 digits, and this project is on 8. The first version of this screen
+ * hardcoded 6, which let the visitor type only the first six digits of an
+ * eight-digit code and then refused to submit them — the funnel would have
+ * stayed broken one screen further along than before, and no unit test could
+ * have caught it, because the length lives in the Supabase dashboard. A real
+ * code arrived in a real inbox and read 20137377.
+ *
+ * So: accept the whole range rather than the current setting, and let the
+ * server be the judge of whether the code is right. Changing the setting
+ * later must not break this screen again.
+ */
+const CODE_MIN_DIGITS = 6;
+const CODE_MAX_DIGITS = 10;
+
 function fmtFullLocal(iso: string, lang: "ro" | "en") {
   return new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
     timeZone: TZ,
@@ -204,6 +229,7 @@ const NativeScheduler = ({
   currentSlotIso,
   registrationId,
   purchase,
+  onPhaseChange,
 }: Props) => {
   const { t, lang } = useI18n();
   const showLocalTz = useShowLocalTz();
@@ -216,6 +242,13 @@ const NativeScheduler = ({
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Kept in step with the `selectedSlot && mode === "create" && purchase`
+  // branch below, which is the screen that asks for the card.
+  const payPhase = Boolean(selectedSlot) && mode === "create" && Boolean(purchase);
+  useEffect(() => {
+    onPhaseChange?.(payPhase ? "pay" : "pick");
+  }, [payPhase, onPhaseChange]);
   const [confirmed, setConfirmed] = useState<{
     start_at: string;
     meet_link?: string | null | undefined;
@@ -225,6 +258,36 @@ const NativeScheduler = ({
   } | null>(null);
   // Trial-only: the server rejects a second free trial for the same email.
   const [trialUsed, setTrialUsed] = useState(false);
+  /**
+   * The free trial's email confirmation, held in this component on purpose.
+   *
+   * create-checkout-session and booking-create both require an Auth-confirmed
+   * email matching the registration, which is the rule in AGENTS.md and is
+   * not negotiable here. A first-time visitor has no account, so the card
+   * step answered 403 and the free trial could not be completed by anyone who
+   * was not already signed in.
+   *
+   * So the missing step is added rather than the gate removed: a one-time
+   * code to the address they just typed. Everything else — the slot, the
+   * name, the phone, the notes, the format — stays in this component's state
+   * while they read their email, because this is a branch of the same render
+   * and not a different page. Nothing is re-entered, and the code screen
+   * shows the slot so it is visible that nothing was lost.
+   */
+  const [verifyFor, setVerifyFor] = useState<{ email: string; registrationId: string } | null>(null);
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
+  const [resendIn, setResendIn] = useState(0);
+
+  // Resend cooldown. Supabase Auth rate-limits sends on its own; this stops
+  // someone tapping the button six times while the first email is in flight
+  // and then being locked out by that limit.
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const id = setTimeout(() => setResendIn((n) => n - 1), 1000);
+    return () => clearTimeout(id);
+  }, [resendIn]);
+
   // Paid lessons: every lesson the registration bought is already booked.
   const [lessonsUsedUp, setLessonsUsedUp] = useState(false);
   // Purchase: the embedded Stripe payment, once its intent is ready.
@@ -438,6 +501,89 @@ const NativeScheduler = ({
     setEmbeddedPay(null);
   }, [weekly, selectedSlot]);
 
+  // Non-2xx from an edge function arrives as a FunctionsHttpError with the
+  // original Response on .context; without reading it the structured codes
+  // (trial_used, conflict) degrade to a generic failure toast.
+  const readFunctionError = async (err: unknown): Promise<{ code?: string; error?: string } | null> => {
+    const ctx = (err as { context?: Response } | null)?.context;
+    if (!ctx || typeof ctx.json !== "function") return null;
+    try {
+      return (await ctx.json()) as { code?: string; error?: string };
+    } catch {
+      return null;
+    }
+  };
+
+  /** Hands the visitor to Stripe for the 0-lei card save. */
+  const startTrialCardStep = async (regId: string, slotIso: string) => {
+    const { data: res, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
+      body: {
+        registrationId: regId,
+        setup: true,
+        email: email.trim(),
+        booking: {
+          event_type: eventType,
+          start_at: slotIso,
+          format,
+          notes: notes.trim() || undefined,
+          language: lang,
+        },
+      },
+    });
+    if (fnError || !res?.url) {
+      const payload = await readFunctionError(fnError);
+      // Checked before Stripe now, so a second trial is refused here rather
+      // than after a card has been saved for nothing.
+      if (payload?.code === "trial_used") {
+        setTrialUsed(true);
+        return;
+      }
+      console.error("[scheduler] could not open the card step", fnError);
+      toast.error(
+        payload?.error ??
+          (lang === "ro"
+            ? "Nu am putut deschide pagina Stripe. Intervalul nu a fost rezervat — încearcă din nou."
+            : "Could not open the Stripe page. Your slot was not reserved — please try again."),
+      );
+      return;
+    }
+    window.location.href = res.url;
+  };
+
+  /**
+   * True when Auth already holds a confirmed session for this address, so the
+   * code screen can be skipped entirely — the owner testing the funnel, or
+   * anyone coming back while their session is still alive.
+   */
+  const alreadyVerified = async (addr: string) => {
+    const { data } = await supabase.auth.getUser();
+    const user = data.user;
+    if (user?.email_confirmed_at && !user.is_anonymous && user.email?.trim().toLowerCase() === addr) {
+      return true;
+    }
+    // A session for a different address has to go: Supabase keeps one per
+    // client, and verifyOtp would otherwise be confirming the wrong person.
+    // This does sign an admin out of the panel in the same browser if they
+    // book a trial under another address, which is the rarer of the two.
+    if (user) await supabase.auth.signOut();
+    return false;
+  };
+
+  const sendCode = async (addr: string) => {
+    const { error: otpErr } = await supabase.auth.signInWithOtp({
+      email: addr,
+      options: { shouldCreateUser: true },
+    });
+    if (otpErr) {
+      // Supabase Auth rate-limits sends per address and per IP; its message is
+      // more use than ours would be.
+      setCodeError(otpErr.message);
+      return false;
+    }
+    setResendIn(60);
+    return true;
+  };
+
   const handleConfirm = async () => {
     if (!selectedSlot) return;
     if (mode === "create" && !registrationId && !ensureRegistration) {
@@ -483,31 +629,24 @@ const NativeScheduler = ({
       // The lead is already safe: ensureRegistration wrote name, email and
       // phone above, so an abandoned card step still leaves someone to contact.
       if (eventType === "trial" && mode === "create" && resolvedRegistrationId) {
-        const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-          body: {
-            registrationId: resolvedRegistrationId,
-            setup: true,
-            email: email.trim(),
-            booking: {
-              event_type: eventType,
-              start_at: selectedSlot,
-              format,
-              notes: notes.trim() || undefined,
-              language: lang,
-            },
-          },
-        });
-        if (fnError || !data?.url) {
-          console.error("[scheduler] could not open the card step", fnError);
-          toast.error(
-            lang === "ro"
-              ? "Nu am putut deschide pagina Stripe. Intervalul nu a fost rezervat — încearcă din nou."
-              : "Could not open the Stripe page. Your slot was not reserved — please try again.",
-          );
+        // The card step needs a confirmed email, so it is asked for here if
+        // Auth does not already have one. The slot and the typed details stay
+        // in state; nothing is repeated afterwards.
+        const addr = email.trim().toLowerCase();
+        if (!(await alreadyVerified(addr))) {
+          setCodeError(null);
+          setCode("");
+          const sent = await sendCode(addr);
+          setVerifyFor({ email: email.trim(), registrationId: resolvedRegistrationId });
+          if (!sent) {
+            // Still show the screen: the message says why, and Resend is there.
+            console.warn("[scheduler] could not send the confirmation code");
+          }
           setSubmitting(false);
           return;
         }
-        window.location.href = data.url;
+        await startTrialCardStep(resolvedRegistrationId, selectedSlot);
+        setSubmitting(false);
         return;
       }
 
@@ -653,6 +792,150 @@ const NativeScheduler = ({
     );
   }
 
+  if (verifyFor) {
+    const en = lang === "en";
+    const submitCode = async () => {
+      const token = code.replace(/\D/g, "");
+      if (token.length < CODE_MIN_DIGITS) {
+        setCodeError(
+          en ? "Type the whole code from the email." : "Scrie codul întreg din email.",
+        );
+        return;
+      }
+      setSubmitting(true);
+      setCodeError(null);
+      const { error: vErr } = await supabase.auth.verifyOtp({
+        email: verifyFor.email.trim().toLowerCase(),
+        token,
+        type: "email",
+      });
+      if (vErr) {
+        setCodeError(
+          en
+            ? "That code is wrong or has expired. Ask for a new one below."
+            : "Codul e greșit sau a expirat. Cere unul nou mai jos.",
+        );
+        setSubmitting(false);
+        return;
+      }
+      // Confirmed: straight on to the card step with the slot still selected.
+      await startTrialCardStep(verifyFor.registrationId, selectedSlot ?? "");
+      setSubmitting(false);
+    };
+
+    return (
+      <div className="rounded-2xl border border-[#E7E1D6] bg-card p-5 sm:p-6 space-y-5 dark:border-border">
+        <button
+          type="button"
+          onClick={() => {
+            setVerifyFor(null);
+            setCode("");
+            setCodeError(null);
+          }}
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {en ? "Change my email" : "Modifică emailul"}
+        </button>
+
+        <div>
+          <h3 className="font-display text-xl font-bold text-foreground">
+            {en ? "Confirm your email" : "Confirmă adresa de email"}
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {en ? (
+              <>
+                We sent a code to <span className="font-medium text-foreground">{verifyFor.email}</span>.
+                Type it here and we go straight on — you will not have to enter anything again.
+              </>
+            ) : (
+              <>
+                Ți-am trimis un cod la{" "}
+                <span className="font-medium text-foreground">{verifyFor.email}</span>. Scrie-l aici și continuăm
+                direct — nu mai trebuie să reintroduci nimic.
+              </>
+            )}
+          </p>
+        </div>
+
+        {/* Shown so it is visible that the slot is still held in this screen. */}
+        {selectedSlot && (
+          <div className="rounded-xl bg-brand-green/5 border border-brand-green/20 px-4 py-3 text-sm">
+            <span className="font-semibold text-foreground">{fmtFullLocal(selectedSlot, lang)}</span>
+            <span className="text-muted-foreground">
+              {" "}
+              · {en ? "your slot, still selected" : "intervalul tău, încă ales"}
+            </span>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <label htmlFor="trial-code" className="block text-sm font-semibold text-foreground">
+            {en ? "The code from the email" : "Codul din email"}
+          </label>
+          <input
+            id="trial-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_MAX_DIGITS))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") void submitCode();
+            }}
+            // one-time-code lets iOS and Android offer the code from the
+            // notification, which is most of the friction gone on a phone.
+            autoComplete="one-time-code"
+            inputMode="numeric"
+            maxLength={CODE_MAX_DIGITS}
+            autoFocus
+            aria-invalid={codeError ? true : undefined}
+            aria-describedby={codeError ? "trial-code-error" : undefined}
+            className="h-14 w-full rounded-xl border border-input bg-background px-4 text-center font-mono text-2xl tracking-[0.4em] text-foreground"
+            placeholder="········"
+          />
+          {codeError && (
+            <p id="trial-code-error" role="alert" className="text-sm font-medium text-destructive">
+              {codeError}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => void submitCode()}
+          disabled={submitting || code.length < CODE_MIN_DIGITS}
+          className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+        >
+          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+          {en ? "Confirm and continue" : "Confirmă și continuă"}
+        </button>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+          <span>
+            {en
+              ? "No account, no password — the code only proves the address is yours."
+              : "Fără cont și fără parolă — codul doar confirmă că adresa e a ta."}
+          </span>
+          <button
+            type="button"
+            disabled={resendIn > 0 || submitting}
+            onClick={() => {
+              setCodeError(null);
+              void sendCode(verifyFor.email.trim().toLowerCase());
+            }}
+            className="font-semibold text-foreground underline underline-offset-2 disabled:no-underline disabled:opacity-60"
+          >
+            {resendIn > 0
+              ? en
+                ? `Resend in ${resendIn}s`
+                : `Trimite din nou în ${resendIn}s`
+              : en
+                ? "Resend the code"
+                : "Trimite codul din nou"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12 rounded-lg border border-border">
@@ -793,7 +1076,7 @@ const NativeScheduler = ({
     );
   }
 
-  const dateKeys = Object.keys(data.slots_by_date).sort();
+  const dateKeys = Object.keys(data.slots_by_date ?? {}).sort();
   // Merge the current (own) slot into availability so the user can see it
   // highlighted even if it's outside the standard availability window.
   const slotsByDate: Record<string, string[]> = { ...data.slots_by_date };

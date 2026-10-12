@@ -2,16 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import { ExternalLink, Gamepad2, RefreshCw, SquarePen } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
 
 /**
  * The game cards that have been corrected by hand.
  *
  * Two loose ends meet here. `list_card_overrides` was the last admin action
  * with no caller in `src/` — not an orphaned feature like the kids' slots, but
- * a redundant one: `useCardOverrides.ts` reads `yalla_card_overrides` straight
- * from the table, which is granted SELECT to anon, so the game never needed
- * the admin route.
+ * a redundant one: the game reads the published text for itself, through
+ * `get_published_card_overrides()`, so it never needed the admin route. The
+ * table itself is private now, and the correction records behind it are not
+ * readable from the browser at all.
  *
  * The other is that the editing itself happens inside the public game.
  * `YallaGame.tsx` reveals its "Corectează" controls when a Supabase session
@@ -78,18 +79,12 @@ const CardOverridesAdmin = () => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Cartonașe joc"
-        description="Corecturile aplicate peste cartonașele din joc, pentru toți cursanții."
-        actions={
-          <>
-            {openGame}
-            <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-          </>
-        }
-      />
+      <ScreenToolbar>
+        {openGame}
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+          <RefreshCw className="h-4 w-4" />
+        </Button>
+      </ScreenToolbar>
 
       <Section
         title="Unde se editează"
@@ -119,7 +114,7 @@ const CardOverridesAdmin = () => {
 
       {rows.length > 0 && (
         <Section title={`Cartonașe corectate (${rows.length})`} icon={SquarePen}>
-          <TableWrap>
+          <TableWrap label="Cartonașe corectate">
             <thead>
               <tr>
                 <Th>Cartonaș</Th>
@@ -130,14 +125,14 @@ const CardOverridesAdmin = () => {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.card_id}>
+                <Tr key={r.card_id}>
                   <Td className="font-mono text-xs text-muted-foreground">{r.card_id}</Td>
                   <Td className="max-w-[16rem] truncate text-foreground">{r.ar || "—"}</Td>
                   <Td className="max-w-[16rem] truncate text-muted-foreground">{r.ro || "—"}</Td>
                   <Td className="whitespace-nowrap tabular-nums text-xs text-muted-foreground">
                     {stamp.format(new Date(r.updated_at))}
                   </Td>
-                </tr>
+                </Tr>
               ))}
             </tbody>
           </TableWrap>

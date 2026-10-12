@@ -107,6 +107,11 @@ const blank = (): Cohort => ({
   content: {},
 });
 
+/** The seat cap for a format. Kids cohorts carry no format and take none. */
+function capFor(format: string | null | undefined): number {
+  return format === "online" ? MAX_GROUP_SIZE.online : MAX_GROUP_SIZE.fizic;
+}
+
 const CohortsAdmin = () => {
   const [rows, setRows] = useState<Cohort[]>([]);
   const [loading, setLoading] = useState(true);
@@ -378,11 +383,27 @@ const CohortsAdmin = () => {
                 value={r.start_date}
                 onChange={(e) => update(r.id, { start_date: e.target.value })}
               />
-              <Input
-                type="number" min={1}
-                value={r.max_seats}
-                onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
-              />
+              {/* The cohorts running now were created before the caps and keep
+                  their larger numbers; the database grandfathers them with a
+                  NOT VALID constraint. So this field cannot simply clamp to the
+                  cap — that would silently shrink a running group on the next
+                  save — but it must not let a row drift further over it either.
+                  The ceiling is the cap, or the seats the row already has,
+                  whichever is higher, and the row says why when it is over. */}
+              <div>
+                <Input
+                  type="number"
+                  min={1}
+                  max={Math.max(capFor(r.format), r.max_seats)}
+                  value={r.max_seats}
+                  onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
+                />
+                {r.max_seats > capFor(r.format) && (
+                  <p className="mt-0.5 text-[10px] leading-tight text-muted-foreground">
+                    Peste plafonul de {capFor(r.format)} — grupă începută înainte de regulă.
+                  </p>
+                )}
+              </div>
               <div>
                 <Label className="text-[10px] uppercase text-muted-foreground">Manual</Label>
                 <Input

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -138,22 +140,26 @@ const PaymentStatus = () => {
       : null;
 
   return (
-    <div className="min-h-screen bg-muted/30 py-12 px-gutter">
+    <div className="min-h-screen bg-cream flex flex-col">
+      <Navbar />
+      <main id="main-content" className="flex-1 px-gutter pt-36 pb-16">
       <div className="max-w-xl mx-auto">
-        <Card>
+        <Card className="rounded-2xl border-[#E7E1D6] shadow-xs dark:border-border">
           <CardContent className="p-8 text-center space-y-4">
             {status === "pending" && (
               <>
-                <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto" />
-                <h2 className="text-xl font-semibold">Confirmăm plata</h2>
+                <Loader2 className="w-10 h-10 animate-spin text-brand-green mx-auto" />
+                <h1 className="font-display text-2xl font-bold">Confirmăm plata</h1>
                 <p className="text-sm text-muted-foreground">{message}</p>
               </>
             )}
 
             {status === "succeeded" && (
               <>
-                <CheckCircle2 className="w-12 h-12 text-primary mx-auto" strokeWidth={2.5} />
-                <h1 className="text-2xl font-bold">Plată reușită</h1>
+                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-green">
+                  <CheckCircle2 className="h-9 w-9 text-white" strokeWidth={2.5} />
+                </span>
+                <h1 className="font-display text-display-md font-bold tracking-tight">Plată reușită</h1>
                 <p className="text-sm text-muted-foreground">
                   Îți mulțumim! Am înregistrat plata cu succes.
                 </p>
@@ -181,9 +187,9 @@ const PaymentStatus = () => {
             {(status === "failed" || status === "canceled") && (
               <>
                 <XCircle className="w-12 h-12 text-destructive mx-auto" strokeWidth={2.5} />
-                <h2 className="text-2xl font-bold">
+                <h1 className="font-display text-2xl font-bold">
                   {status === "canceled" ? "Plata a fost anulată" : "Plata a eșuat"}
-                </h2>
+                </h1>
                 <p className="text-sm text-muted-foreground">
                   Nu am reușit să procesăm plata. Poți să încerci din nou sau să ne scrii pe
                   WhatsApp la 0763 124 514.
@@ -211,6 +217,8 @@ const PaymentStatus = () => {
           </p>
         )}
       </div>
+      </main>
+      <Footer />
     </div>
   );
 };

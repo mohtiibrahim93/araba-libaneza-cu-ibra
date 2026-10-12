@@ -18,7 +18,7 @@ import { useI18n } from "@/lib/i18n";
  * the gain is that nobody is asked for anything until they have seen a time
  * they want.
  */
-export function useTrialRegistration() {
+export function useTrialRegistration(formType: "trial" | "level_check" = "trial") {
   const { t, lang } = useI18n();
   // The registration this visit created, if any. Held in a ref so a retry
   // after a clashing slot reuses the row instead of writing a second one.
@@ -29,7 +29,8 @@ export function useTrialRegistration() {
     const id = crypto.randomUUID();
     const { error } = await supabase.from("registrations").insert({
       id,
-      form_type: "trial",
+      // "level_check" for the free level check with Ibra (/verificare-nivel).
+      form_type: formType,
       name: d.name,
       email: d.email,
       phone: d.phone,

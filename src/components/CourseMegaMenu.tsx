@@ -161,7 +161,10 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
                 <a href="/quiz" className={item}>{en ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"}</a>
               </li>
               <li>
-                <Link to="/test-de-nivel" className={item}>{en ? "Level test (the Yalla game)" : "Test de nivel (jocul Yalla)"}</Link>
+                <Link to="/test-de-nivel" className={item}>{en ? "Online level test · 15 min" : "Test de nivel online · 15 min"}</Link>
+              </li>
+              <li>
+                <Link to="/verificare-nivel" className={item}>{en ? "Level check with Ibra (free)" : "Verificare de nivel cu Ibra (gratuit)"}</Link>
               </li>
             </ul>
           </div>

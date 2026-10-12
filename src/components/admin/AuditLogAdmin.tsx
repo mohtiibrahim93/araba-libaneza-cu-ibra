@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ScrollText, ShieldAlert } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenHeader, Section, TableWrap, Td, Th } from "./ui";
+import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
+import { leadStatusLabels } from "./types";
 
 /**
  * Who did what, and when.
@@ -36,6 +37,10 @@ const ACTION_LABELS: Record<string, string> = {
   refund: "Rambursare",
   cancel_subscription: "Anulare abonament",
   update_status: "Schimbare status",
+  reschedule_booking: "Mutare lecție",
+  book_for_student: "Programare manuală",
+  update_contact: "Contact actualizat",
+  repair_booking_calendar: "Calendar reparat",
 };
 
 /** The ones that destroy data rather than change it. */
@@ -49,6 +54,37 @@ const stamp = new Intl.DateTimeFormat("ro-RO", {
   hour: "2-digit",
   minute: "2-digit",
 });
+
+/**
+ * Turns the stored `details` object into something readable.
+ *
+ * The column printed the raw JSON, so a status change showed as
+ * {"to":"no_response","from":"new"} -- the database's own words, in a panel
+ * that is Romanian everywhere else, and the only row type that carries details
+ * at all. A status change is the common case and reads as an arrow; anything
+ * else is listed as plain pairs rather than as a serialised object.
+ */
+function describeDetails(details: unknown): string {
+  if (details == null) return "—";
+  if (typeof details === "string") return details;
+  if (typeof details !== "object") return String(details);
+
+  const d = details as Record<string, unknown>;
+  const name = (v: unknown) =>
+    typeof v === "string" ? (leadStatusLabels[v as keyof typeof leadStatusLabels] ?? v) : String(v);
+
+  if ("from" in d && "to" in d) return `${name(d["from"])} → ${name(d["to"])}`;
+
+  // A reschedule carries only the new time, and a raw ISO string in a
+  // Romanian panel is not a time anyone reads.
+  if ("to" in d && typeof d["to"] === "string" && !Number.isNaN(Date.parse(d["to"] as string))) {
+    const when = stamp.format(new Date(d["to"] as string));
+    return d["forced"] === true ? `mutată la ${when} (forțat)` : `mutată la ${when}`;
+  }
+
+  const pairs = Object.entries(d).map(([k, v]) => `${k}: ${name(v)}`);
+  return pairs.length > 0 ? pairs.join(" · ") : "—";
+}
 
 const AuditLogAdmin = () => {
   const [rows, setRows] = useState<Entry[]>([]);
@@ -77,15 +113,11 @@ const AuditLogAdmin = () => {
 
   return (
     <div className="space-y-5">
-      <ScreenHeader
-        title="Jurnal"
-        description="Acțiunile care șterg sau schimbă date, cu cine le-a făcut. Doar de citit."
-        actions={
-          <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        }
-      />
+      <ScreenToolbar>
+        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+          <RefreshCw className="h-4 w-4" />
+        </Button>
+      </ScreenToolbar>
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
@@ -105,7 +137,7 @@ const AuditLogAdmin = () => {
           icon={ScrollText}
           description="Cele mai recente primele. Jurnalul nu poate fi editat din panou."
         >
-          <TableWrap>
+          <TableWrap stickyHeader maxHeight="max-h-[70vh]" label="Jurnal">
             <thead>
               <tr>
                 <Th>Când</Th>
@@ -119,7 +151,7 @@ const AuditLogAdmin = () => {
               {rows.map((r) => {
                 const destructive = DESTRUCTIVE.has(r.action);
                 return (
-                  <tr key={r.id}>
+                  <Tr key={r.id}>
                     <Td className="whitespace-nowrap tabular-nums text-muted-foreground">
                       {stamp.format(new Date(r.created_at))}
                     </Td>
@@ -142,9 +174,9 @@ const AuditLogAdmin = () => {
                       {r.registration_id ? r.registration_id.slice(0, 8) : "—"}
                     </Td>
                     <Td className="max-w-[20rem] truncate text-xs text-muted-foreground">
-                      {r.details ? JSON.stringify(r.details) : "—"}
+                      {describeDetails(r.details)}
                     </Td>
-                  </tr>
+                  </Tr>
                 );
               })}
             </tbody>

@@ -46,9 +46,9 @@ const NotFound = () => {
       </Helmet>
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto max-w-5xl px-4 py-16">
-        <p className="text-sm font-semibold uppercase tracking-widest text-primary">404</p>
-        <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
+      <main className="mx-auto max-w-5xl px-gutter pt-36 pb-16">
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">404</p>
+        <h1 className="mt-3 font-display text-display-lg font-bold tracking-tight text-foreground">
           {en ? "We couldn't find that page" : "Nu am găsit pagina căutată"}
         </h1>
         <p className="mt-4 max-w-2xl text-muted-foreground">

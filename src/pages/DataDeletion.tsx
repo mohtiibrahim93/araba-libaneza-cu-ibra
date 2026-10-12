@@ -85,10 +85,10 @@ const DataDeletion = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main id="main-content" className="max-w-xl mx-auto px-gutter py-16">
+      <main id="main-content" className="max-w-xl mx-auto px-gutter pt-36 pb-16">
         <div className="flex items-center gap-3 mb-4">
           <Trash2 className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl font-bold text-foreground">{page.title}</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">{page.title}</h1>
         </div>
         <p className="text-sm text-muted-foreground mb-8">{page.intro}</p>
 

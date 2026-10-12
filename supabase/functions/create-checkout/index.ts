@@ -1,8 +1,9 @@
+import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
-import { callerOwnsRegistration } from "../_shared/registration-access.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   KIDS_DEPOSIT_SHARE,
   groupMonthlyUnitAmount,
@@ -55,7 +56,7 @@ serve(async (req) => {
       );
       const { data: regRow } = await adminClient
         .from("registrations")
-        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, format, quantity")
+        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity")
         .eq("id", registrationId)
         .maybeSingle();
       if (!regRow) {
@@ -64,13 +65,15 @@ serve(async (req) => {
           status: 404,
         });
       }
-      // Only the registrant (matching email) may start checkout for it.
-      if (!(await callerOwnsRegistration(regRow, { email }))) {
-        return new Response(JSON.stringify({ error: "Registration not found" }), {
+      // Verify control of the stored mailbox, not knowledge of its address.
+      if (!(await verifiedRegistrationOwner(req, regRow, adminClient.auth))) {
+        return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 404,
+          status: 403,
         });
       }
+      const groupError = await groupEnrolmentError(adminClient, regRow);
+      if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       if (regRow.payment_status === "paid") {
         return new Response(JSON.stringify({ error: "Already paid" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },

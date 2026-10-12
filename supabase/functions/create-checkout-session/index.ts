@@ -1,3 +1,4 @@
+import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 // Hosted Stripe Checkout fallback. When js.stripe.com is blocked in the
 // visitor's browser (Brave Shields, adblockers, DNS filters, corporate Wi-Fi,
 // etc.), the embedded Elements flow on /checkout can't load. This function
@@ -5,7 +6,7 @@
 // redirects to checkout.stripe.com, which is a first-party navigation and
 // bypasses tracker/script blockers.
 //
-// Pricing is derived server-side from the registration row (level, format,
+// Pricing is derived server-side from the registration row (level, cohort_id, format,
 // quantity) — never from client input — so the amount charged matches the
 // embedded flow exactly.
 
@@ -13,7 +14,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
-import { callerOwnsRegistration, signRegistrationId } from "../_shared/registration-access.ts";
+import { signRegistrationId } from "../_shared/registration-access.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -32,7 +34,7 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan, setup, email: callerEmail, sig, booking } = await req.json();
+    const { registrationId, plan, setup, booking } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(JSON.stringify({ error: "registrationId is required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -53,18 +55,24 @@ serve(async (req) => {
     const { data: reg } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, created_at, form_type, payment_status, email, name, quantity, level, format, stripe_session_id",
+        "id, created_at, form_type, payment_status, email, name, quantity, level, cohort_id, format, stripe_session_id",
       )
       .eq("id", registrationId)
       .maybeSingle();
 
-    // Only the registrant (matching email, or a server-signed link) may act.
-    if (!reg || !(await callerOwnsRegistration(reg, { email: callerEmail, sig }))) {
+    if (!reg) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    if (!(await verifiedRegistrationOwner(req, reg, supabaseAdmin.auth))) {
+      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const groupError = await groupEnrolmentError(supabaseAdmin, reg);
+    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     if (reg.payment_status === "paid") {
       return new Response(JSON.stringify({ error: "Registration already paid" }), {
         status: 409,
@@ -159,6 +167,31 @@ serve(async (req) => {
     // (converting to a private lesson after their freebie), which must not
     // be silently downgraded to a 0-lei setup.
     if (setup === true) {
+      // One free trial per person, checked here rather than only in
+      // booking-create. That check runs on the webhook, which fires *after*
+      // the card is saved — so a second attempt used to get all the way
+      // through Stripe, save a card, and then have the booking refused, with
+      // nothing to show for it. Asking first costs one query.
+      if (bookingMeta.booking_event_type === "trial" && reg.email) {
+        const emailPattern = String(reg.email).trim().replace(/([%_\\])/g, "\\$1");
+        const { data: priorTrials } = await supabaseAdmin
+          .from("bookings")
+          .select("id")
+          .eq("event_type_slug", "trial")
+          .in("status", ["confirmed", "completed"])
+          .ilike("student_email", emailPattern)
+          .limit(1);
+        if ((priorTrials ?? []).length > 0) {
+          return new Response(
+            JSON.stringify({
+              error: "Proba gratuită a fost deja folosită pentru acest email.",
+              code: "trial_used",
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 409 },
+          );
+        }
+      }
+
       // The trial booking rides along in the session metadata and is created by
       // the webhook once the card is actually saved. Nothing is booked before
       // that: a free slot that nobody turns up to costs a real lesson, and five

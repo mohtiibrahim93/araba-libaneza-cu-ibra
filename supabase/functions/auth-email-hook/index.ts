@@ -26,9 +26,14 @@ const corsHeaders = {
 }
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
+  // signup and magiclink now lead with a six-digit code in the body, and the
+  // subject is what someone waiting for a code actually scans. The site route
+  // at src/routes/lovable/email/auth/webhook.ts sends the same two emails and
+  // must keep the same subjects: only one of the two hooks is configured in
+  // Supabase, and which one it is should not change what the reader sees.
+  signup: 'Your confirmation code',
   invite: "You've been invited",
-  magiclink: 'Your login link',
+  magiclink: 'Your login code',
   recovery: 'Reset your password',
   email_change: 'Confirm your new email',
   reauthentication: 'Your verification code',
@@ -131,7 +136,8 @@ async function handlePreview(req: Request): Promise<Response> {
   }
 
   const sampleData = SAMPLE_DATA[type] || {}
-  const html = await render(React.createElement(EmailTemplate, sampleData))
+  // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
+  const html = await render(React.createElement(EmailTemplate, sampleData) as any)
 
   return new Response(html, {
     status: 200,
@@ -240,8 +246,9 @@ async function handleWebhook(req: Request): Promise<Response> {
   }
 
   // Render React Email to HTML and plain text
-  const html = await render(React.createElement(EmailTemplate, templateProps))
-  const text = await render(React.createElement(EmailTemplate, templateProps), {
+  // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
+  const html = await render(React.createElement(EmailTemplate, templateProps) as any)
+  const text = await render(React.createElement(EmailTemplate, templateProps) as any, {
     plainText: true,
   })
 

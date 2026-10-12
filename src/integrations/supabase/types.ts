@@ -271,6 +271,7 @@ export type Database = {
           event_type_slug: string
           format: string
           gdpr_consent_at: string | null
+          google_contact_email: string | null
           google_event_id: string | null
           google_sync_error: string | null
           id: string
@@ -303,6 +304,7 @@ export type Database = {
           event_type_slug: string
           format?: string
           gdpr_consent_at?: string | null
+          google_contact_email?: string | null
           google_event_id?: string | null
           google_sync_error?: string | null
           id?: string
@@ -335,6 +337,7 @@ export type Database = {
           event_type_slug?: string
           format?: string
           gdpr_consent_at?: string | null
+          google_contact_email?: string | null
           google_event_id?: string | null
           google_sync_error?: string | null
           id?: string
@@ -391,6 +394,38 @@ export type Database = {
           },
         ]
       }
+      cohort_calendar: {
+        Row: {
+          calendar_title: string
+          cohort_id: string
+          created_at: string
+          members: string[]
+          total_lessons: number
+        }
+        Insert: {
+          calendar_title: string
+          cohort_id: string
+          created_at?: string
+          members?: string[]
+          total_lessons: number
+        }
+        Update: {
+          calendar_title?: string
+          cohort_id?: string
+          created_at?: string
+          members?: string[]
+          total_lessons?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_calendar_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: true
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cohort_meetings: {
         Row: {
           cohort_id: string
@@ -419,6 +454,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "cohort_meetings_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohort_sessions: {
+        Row: {
+          cohort_id: string
+          created_at: string
+          ends_at: string
+          google_event_id: string
+          id: string
+          lesson_number: number
+          source: string
+          starts_at: string
+          synced_at: string
+        }
+        Insert: {
+          cohort_id: string
+          created_at?: string
+          ends_at: string
+          google_event_id: string
+          id?: string
+          lesson_number: number
+          source?: string
+          starts_at: string
+          synced_at?: string
+        }
+        Update: {
+          cohort_id?: string
+          created_at?: string
+          ends_at?: string
+          google_event_id?: string
+          id?: string
+          lesson_number?: number
+          source?: string
+          starts_at?: string
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_sessions_cohort_id_fkey"
             columns: ["cohort_id"]
             isOneToOne: false
             referencedRelation: "group_cohorts"
@@ -1033,6 +1112,7 @@ export type Database = {
           center: string | null
           child_age: string | null
           cohort_id: string | null
+          contact_email: string | null
           created_at: string
           email: string | null
           form_type: string
@@ -1072,6 +1152,7 @@ export type Database = {
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
+          contact_email?: string | null
           created_at?: string
           email?: string | null
           form_type: string
@@ -1111,6 +1192,7 @@ export type Database = {
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
+          contact_email?: string | null
           created_at?: string
           email?: string | null
           form_type?: string
@@ -1271,6 +1353,45 @@ export type Database = {
         }
         Relationships: []
       }
+      student_progress: {
+        Row: {
+          created_at: string
+          email: string | null
+          items_seen: number
+          last_played_at: string | null
+          placement: Json | null
+          rounds: number
+          state: Json
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          items_seen?: number
+          last_played_at?: string | null
+          placement?: Json | null
+          rounds?: number
+          state?: Json
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          items_seen?: number
+          last_played_at?: string | null
+          placement?: Json | null
+          rounds?: number
+          state?: Json
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           anonymized_at: string | null
@@ -1385,11 +1506,84 @@ export type Database = {
         }
         Relationships: []
       }
+      yalla_card_override_history: {
+        Row: {
+          card_id: string
+          changed_at: string
+          id: number
+          new_ar: string | null
+          new_ro: string | null
+          new_variants: Json | null
+          old_ar: string | null
+          old_ro: string | null
+          old_variants: Json | null
+          op: string
+        }
+        Insert: {
+          card_id: string
+          changed_at?: string
+          id?: never
+          new_ar?: string | null
+          new_ro?: string | null
+          new_variants?: Json | null
+          old_ar?: string | null
+          old_ro?: string | null
+          old_variants?: Json | null
+          op: string
+        }
+        Update: {
+          card_id?: string
+          changed_at?: string
+          id?: never
+          new_ar?: string | null
+          new_ro?: string | null
+          new_variants?: Json | null
+          old_ar?: string | null
+          old_ro?: string | null
+          old_variants?: Json | null
+          op?: string
+        }
+        Relationships: []
+      }
+      yalla_card_overrides: {
+        Row: {
+          ar: string
+          card_id: string
+          ro: string
+          updated_at: string
+          variants: Json
+        }
+        Insert: {
+          ar: string
+          card_id: string
+          ro: string
+          updated_at?: string
+          variants?: Json
+        }
+        Update: {
+          ar?: string
+          card_id?: string
+          ro?: string
+          updated_at?: string
+          variants?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      admin_update_registration_contact: {
+        Args: {
+          p_actor: string
+          p_email: string
+          p_id: string
+          p_name: string
+          p_phone: string
+        }
+        Returns: undefined
+      }
       check_and_record_rate_limit: {
         Args: { p_bucket: string; p_max: number; p_window_seconds: number }
         Returns: boolean
@@ -1420,6 +1614,25 @@ export type Database = {
           kids_slot_id: string
           taken: number
         }[]
+      }
+      get_published_card_overrides: {
+        Args: never
+        Returns: {
+          ar: string
+          card_id: string
+          ro: string
+          variants: Json
+        }[]
+      }
+      move_booking_atomically: {
+        Args: {
+          p_end: string
+          p_expected_event: string
+          p_expected_start: string
+          p_id: string
+          p_start: string
+        }
+        Returns: Json
       }
       student_name_key: { Args: { p_name: string }; Returns: string }
       student_names_match: {

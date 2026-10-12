@@ -1,3 +1,4 @@
+import { googleBookingEventId } from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   TZ,
@@ -8,8 +9,12 @@ import {
   physicalTrialAllowed,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
+// The free level check with Ibra (oral, and written in arabizi), booked
+// without a card — unlike the trial, it is not a lesson.
+import { LEVEL_CHECK_SLUG, levelCheckTimeAllowed } from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
+import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 
 interface CreateBody {
   event_type: string;
@@ -22,6 +27,13 @@ interface CreateBody {
   language?: "ro" | "en";
   gdpr_consent?: boolean;
   registration_id: string;
+  /**
+   * Internal callers only: go ahead despite a clash. The owner booking a
+   * student in from the panel is told what the time collides with and can
+   * decide anyway; nothing public sets this, and without it a clash is still
+   * refused exactly as before.
+   */
+  force?: boolean;
   /**
    * Internal callers only: skip the student and admin emails. The webhook sets
    * it on lessons 2..N of a weekly private series, whose first lesson's email
@@ -102,9 +114,14 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, payment_status, quantity")
+      .select("id, email, payment_status, quantity")
       .eq("id", body.registration_id)
       .maybeSingle();
+    // Preserve only the existing trusted webhook booking path. Unknown and
+    // not-owned registrations get the same answer so IDs cannot be probed.
+    if (!internalCall && (!reg || !(await verifiedRegistrationOwner(req, reg, supabase.auth)))) {
+      return json({ error: "Sign in with your verified registration email to continue" }, 403);
+    }
     if (!reg) return json({ error: "registration not found" }, 404);
 
     const { data: et } = await supabase
@@ -121,14 +138,16 @@ Deno.serve(async (req) => {
     // purchases are booked by stripe-webhook (an internal call) after the
     // payment clears; a returning student who has already paid books the rest
     // of their lessons here.
-    if (et.slug !== "trial" && !internalCall && reg.payment_status !== "paid") {
+    // Free bookings: the trial lesson and the level check with Ibra.
+    const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;
+    if (!isFree && !internalCall && reg.payment_status !== "paid") {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
 
     // A paid registration books at most the number of lessons it bought.
     // Applied to internal calls too, so the webhook can never book more than
     // the package either (a redelivered event lands here as well).
-    if (et.slug !== "trial") {
+    if (!isFree) {
       const bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
       const { count: used, error: countErr } = await supabase
         .from("bookings")
@@ -174,8 +193,15 @@ Deno.serve(async (req) => {
 
     // min-notice / max-advance
     const now = Date.now();
-    if (startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
+    // The notice period protects Ibra from a stranger booking him in twenty
+    // minutes. It cannot apply to Ibra: "I am with him now, put the lesson in
+    // for this afternoon" is the normal reason to book someone from the panel.
+    // A time in the past is still refused, for everyone.
+    if (!internalCall && startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
       return json({ error: "slot too soon" }, 409);
+    }
+    if (startMs < now - 60_000) {
+      return json({ error: "slot in the past", code: "past" }, 409);
     }
     // The weekly private series books every lesson of the package at once, so
     // its later weeks run past the 30-day window. Only the webhook can do that.
@@ -198,18 +224,32 @@ Deno.serve(async (req) => {
     ]);
     const s = startMs - et.buffer_before_min * 60_000;
     const e = endMs + et.buffer_after_min * 60_000;
+    const found: string[] = [];
     for (const b of clashes ?? []) {
       if (overlaps(s, e, Date.parse(b.start_at), Date.parse(b.end_at))) {
-        return json({ error: "slot just taken", code: "conflict" }, 409);
+        found.push("another_booking");
+        break;
       }
     }
     for (const b of busy) {
       if (overlaps(s, e, Date.parse(b.start), Date.parse(b.end))) {
-        return json({ error: "slot just taken", code: "conflict" }, 409);
+        found.push("calendar");
+        break;
       }
+    }
+    // A visitor is refused, exactly as before. The owner is refused once with
+    // the reasons and goes through on a second call carrying force, so
+    // double-booking himself is a decision rather than an accident.
+    if (found.length > 0 && (!internalCall || body.force !== true)) {
+      return json({ error: "slot just taken", code: "conflict", clashes: found }, 409);
     }
 
     const format = body.format ?? "online";
+    // The level check is offered only on weekdays 12:00–13:00 (see
+    // _shared/schedule-rules.ts); refuse anything else posted straight here.
+    if (et.slug === LEVEL_CHECK_SLUG && !levelCheckTimeAllowed(startISO, et.duration_min)) {
+      return json({ error: "slot not offered", code: "level_check_hours" }, 409);
+    }
     // Enforced here too: booking-availability never offers these slots, but
     // this endpoint is unauthenticated and a client can post any start_at.
     if (!physicalTrialAllowed(et.slug, format, startISO)) {
@@ -289,6 +329,8 @@ Deno.serve(async (req) => {
       .join("\n");
 
     const gcal = await gcalCreateEvent({
+      eventId: await googleBookingEventId(inserted.id),
+      bookingId: inserted.id,
       summary,
       description,
       startISO,
@@ -302,7 +344,7 @@ Deno.serve(async (req) => {
     // calendar used to be indistinguishable from one that did — both just had
     // google_event_id = NULL — so the admin panel and the health check now read
     // google_sync_error to tell them apart.
-    await supabase
+    const { error: syncSaveError } = await supabase
       .from("bookings")
       .update({
         google_event_id: gcal.ok && gcal.id ? gcal.id : null,
@@ -310,6 +352,8 @@ Deno.serve(async (req) => {
         meet_link: onlineLink,
       })
       .eq("id", inserted.id);
+
+    if (syncSaveError) console.error("[booking-create] calendar link could not be saved", syncSaveError);
 
     const quiet = internalCall && body.quiet === true;
 
@@ -352,6 +396,7 @@ Deno.serve(async (req) => {
     return json({
       ok: true,
       booking_id: inserted.id,
+      sync_pending: !gcal.ok || !gcal.id || !!syncSaveError,
       manage_token: inserted.manage_token,
       meet_link: onlineLink,
       start_at: startISO,

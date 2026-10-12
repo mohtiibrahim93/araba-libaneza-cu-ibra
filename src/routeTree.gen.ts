@@ -44,6 +44,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TestDeNivelRouteImport } from './routes/test-de-nivel'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TrialRouteImport } from './routes/trial'
+import { Route as VerificareNivelRouteImport } from './routes/verificare-nivel'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminNotificationsRouteImport } from './routes/admin/notifications'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -317,6 +318,11 @@ const ThankYouRoute = ThankYouRouteImport.update({
 const TrialRoute = TrialRouteImport.update({
   id: '/trial',
   path: '/trial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificareNivelRoute = VerificareNivelRouteImport.update({
+  id: '/verificare-nivel',
+  path: '/verificare-nivel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -890,6 +896,7 @@ export interface FileRoutesByFullPath {
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
+  '/verificare-nivel': typeof VerificareNivelRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
@@ -1025,6 +1032,7 @@ export interface FileRoutesByTo {
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
+  '/verificare-nivel': typeof VerificareNivelRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
@@ -1161,6 +1169,7 @@ export interface FileRoutesById {
   '/test-de-nivel': typeof TestDeNivelRoute
   '/thank-you': typeof ThankYouRoute
   '/trial': typeof TrialRoute
+  '/verificare-nivel': typeof VerificareNivelRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
@@ -1299,6 +1308,7 @@ export interface FileRouteTypes {
     | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
+    | '/verificare-nivel'
     | '/admin/notifications'
     | '/api/chat'
     | '/api/health'
@@ -1434,6 +1444,7 @@ export interface FileRouteTypes {
     | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
+    | '/verificare-nivel'
     | '/admin/notifications'
     | '/api/chat'
     | '/api/health'
@@ -1569,6 +1580,7 @@ export interface FileRouteTypes {
     | '/test-de-nivel'
     | '/thank-you'
     | '/trial'
+    | '/verificare-nivel'
     | '/admin/notifications'
     | '/api/chat'
     | '/api/health'
@@ -1706,6 +1718,7 @@ export interface RootRouteChildren {
   TestDeNivelRoute: typeof TestDeNivelRoute
   ThankYouRoute: typeof ThankYouRoute
   TrialRoute: typeof TrialRoute
+  VerificareNivelRoute: typeof VerificareNivelRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiHealthRoute: typeof ApiHealthRoute
@@ -2048,6 +2061,13 @@ declare module '@tanstack/react-router' {
       path: '/trial'
       fullPath: '/trial'
       preLoaderRoute: typeof TrialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verificare-nivel': {
+      id: '/verificare-nivel'
+      path: '/verificare-nivel'
+      fullPath: '/verificare-nivel'
+      preLoaderRoute: typeof VerificareNivelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -2807,6 +2827,7 @@ const rootRouteChildren: RootRouteChildren = {
   TestDeNivelRoute: TestDeNivelRoute,
   ThankYouRoute: ThankYouRoute,
   TrialRoute: TrialRoute,
+  VerificareNivelRoute: VerificareNivelRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
   ApiChatRoute: ApiChatRoute,
   ApiHealthRoute: ApiHealthRoute,

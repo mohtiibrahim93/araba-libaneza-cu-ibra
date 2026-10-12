@@ -82,7 +82,9 @@ describe("the two orphaned features now have screens", () => {
     for (const w of ["upsert_audit", "delete_audit", "update_audit"]) {
       expect(audit, `the audit log must not be editable (${w})`).not.toContain(w);
     }
-    expect(audit).toContain("Doar de citit");
+    // The subtitle lives on the navigation entry now, not in the screen.
+    const nav = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    expect(nav).toContain("Doar de citit");
   });
 
   it("marks the actions that destroy data", () => {

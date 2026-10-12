@@ -16,7 +16,11 @@ const PrivateLeadStats = ({ counts, onSelect }: Props) => (
       <p className="text-xs font-medium text-muted-foreground">Lead-uri private</p>
       <p className="mt-1 text-2xl font-bold text-foreground">{counts.total}</p>
     </button>
-    {LEAD_STATUSES.map((status) => (
+    {/* Only the statuses that have someone in them. With six private leads and
+        eight statuses, printing every one meant a wall of zeros above the table
+        -- on a phone, roughly a screen of them before any data. A count of zero
+        is not a filter worth offering: clicking it shows an empty list. */}
+    {LEAD_STATUSES.filter((status) => counts[status] > 0).map((status) => (
       <button
         key={status}
         type="button"

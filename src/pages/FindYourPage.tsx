@@ -26,10 +26,16 @@ const FindYourPage = ({ lang }: { lang: "ro" | "en" }) => (
   <div className="min-h-screen bg-background">
     <ScrollToTop />
     <Navbar />
-    <main className="mx-auto max-w-5xl px-4 py-16">
-      <h1 className="text-3xl font-bold sm:text-4xl">{COPY[lang].h1}</h1>
-      <p className="mt-4 max-w-2xl text-muted-foreground">{COPY[lang].lead}</p>
-      <div className="mt-12">
+    {/* pt-36 clears the fixed header (band + navbar); the title used to sit
+        under it. */}
+    <main>
+      <div className="bg-cream pt-36 pb-12">
+        <div className="mx-auto max-w-5xl px-gutter">
+          <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">{COPY[lang].h1}</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{COPY[lang].lead}</p>
+        </div>
+      </div>
+      <div className="mx-auto max-w-5xl px-gutter py-12">
         <PageFinder lang={lang} full />
       </div>
     </main>

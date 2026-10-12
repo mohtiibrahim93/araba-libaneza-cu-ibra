@@ -106,9 +106,9 @@ describe("the served head is the only head", () => {
     // What is left has no indexable head to serve: the admin and auth screens,
     // the two token-guarded private pages, the database-driven course page, and
     // /joc with its English twin /en/play, which are layouts whose leaves carry
-    // the head.
+    // the head. (/admin has a head since the October 2026 redesign, but only
+    // to load its body font; it still serves nothing indexable.)
     expect(missing.sort()).toEqual([
-      "/admin",
       "/admin/notifications",
       "/admin/private-leads/$id",
       "/auth",

@@ -54,7 +54,7 @@ const BestArabicCourse = () => (
         ({ONLINE_PRICES.privateLesson} RON per 60 minutes, with −15% on a package of 20), an app
         for vocabulary drilling and nothing else. Whatever you choose, judge it on three
         things: a native teacher, speaking in the first lesson, and public prices. Ours are
-        taught by <strong>Ibrahim Gabriel Moaty</strong> (Ibra), online worldwide or in
+        taught by <strong>Ibra</strong>, online worldwide or in
         person in Bucharest, and the first 30-minute lesson is free.
       </p>
     </DirectAnswer>

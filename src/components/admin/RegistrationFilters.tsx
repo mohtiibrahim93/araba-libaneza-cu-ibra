@@ -45,6 +45,7 @@ const RegistrationFilters = ({
             <SelectItem value="private">Lead-uri lecții private</SelectItem>
             <SelectItem value="kids">{formTypeLabels["kids"]}</SelectItem>
             <SelectItem value="trial">{formTypeLabels["trial"]}</SelectItem>
+            <SelectItem value="level_check">{formTypeLabels["level_check"]}</SelectItem>
           </SelectContent>
         </Select>
       </div>

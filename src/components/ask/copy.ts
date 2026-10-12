@@ -25,7 +25,7 @@ export const COPY = {
     thinking: "Se gândește…",
     loading: "Se încarcă…",
     error: "Nu am putut răspunde acum. Încearcă din nou în câteva momente sau scrie-ne pe WhatsApp.",
-    disclaimer: "Asistent automat. Pentru confirmări, vorbește cu Ibrahim.",
+    disclaimer: "Asistent automat. Pentru confirmări, vorbește cu Ibra.",
     suggestions: [
       "Cât costă cursul de grup?",
       "Ce nivel mi se potrivește?",
@@ -44,7 +44,7 @@ export const COPY = {
     thinking: "Thinking…",
     loading: "Loading…",
     error: "I couldn't answer just now. Try again in a moment, or message us on WhatsApp.",
-    disclaimer: "Automated assistant. For confirmations, talk to Ibrahim.",
+    disclaimer: "Automated assistant. For confirmations, talk to Ibra.",
     suggestions: [
       "How much is the group course?",
       "Which level suits me?",

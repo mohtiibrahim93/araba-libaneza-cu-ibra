@@ -21,9 +21,9 @@ import { resolve } from "node:path";
  */
 const admin = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
 
-/** Nav item values, read from the navGroups block only. */
+/** Nav item values, read from the sections block only. */
 const navValues = (() => {
-  const block = admin.slice(admin.indexOf("const navGroups = ["), admin.indexOf("return (\n    <AdminShell"));
+  const block = admin.slice(admin.indexOf("const sections: AdminSection[] = ["), admin.indexOf("return (\n    <AdminShell"));
   return [...block.matchAll(/value: "([a-z-]+)"/g)].map((m) => m[1]);
 })();
 
@@ -61,7 +61,8 @@ describe("the admin nav and its screens agree", () => {
     // Cohorts on one page; Programări was CalendarHealth + Availability +
     // Bookings. Each is its own section now, and each must still render.
     for (const c of [
-      "GroupOverview",
+      "CourseOverviewAdmin",
+      "PrivateLessonsAdmin",
       "CapacitiesAdmin",
       "CourseRequestsAdmin",
       "ManualSignupsAdmin",

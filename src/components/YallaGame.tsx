@@ -23,6 +23,12 @@ type YallaGameProps = {
   mode?: "journey" | "placement" | "speaking" | "exports";
   /** Romanian by default; the chrome around the game follows the site language. */
   lang?: "ro" | "en";
+  /** Show only the opened view, without the game's menu, XP or teacher link
+   *  (the level test's "test only" choice; see public/yalla/i18n.js). */
+  focus?: boolean;
+  /** Bumped when a signed-in student's saved progress replaced the device's;
+   *  remounts the frame so the game loads it (src/components/StudentAccount.tsx). */
+  version?: number;
 };
 
 const COPY = {
@@ -37,14 +43,14 @@ const TITLES: Record<NonNullable<YallaGameProps["mode"]>, string> = {
   exports: "Yalla — exporturi",
 };
 
-const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
+const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }: YallaGameProps) => {
   // The frame follows the language the visitor is reading the site in:
   // public/yalla/i18n.js reads ?lang= and switches the game's interface, and
   // deck-language.js switches the content — card meanings, drills and their
   // options, lesson notes, topics and the level test. The deck is bilingual, so
   // the "in Romanian" warnings this comment used to point at are gone from the
   // CTAs; game-english-coverage.test.ts is what keeps it that way.
-  const src = `/yalla/index.html?view=${mode}&lang=${lang}`;
+  const src = `/yalla/index.html?view=${mode}&lang=${lang}${focus ? "&focus=1" : ""}`;
   const c = COPY[lang];
 
   // The frame gets its src only after mount, and this is not a micro-
@@ -119,7 +125,13 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
       try {
         const { supabase } = await import("@/integrations/supabase/client");
         const { data } = await supabase.auth.getSession();
-        if (!cancelled) setSignedIn(Boolean(data.session));
+        if (!data.session) return;
+        // Students have accounts too now, so a session alone is not enough:
+        // only a real admin (ADMIN_EMAILS, checked by the function) gets the
+        // teacher controls.
+        const { invokeAdmin } = await import("@/lib/adminAuth");
+        const { data: who } = await invokeAdmin<{ isAdmin?: boolean }>({ action: "whoami" });
+        if (!cancelled) setSignedIn(Boolean(who?.isAdmin));
       } catch {
         /* not signed in, or offline — the control simply stays hidden */
       }
@@ -221,7 +233,7 @@ const YallaGame = ({ mode = "journey", lang = "ro" }: YallaGameProps) => {
           visitor, and for anyone who used the language toggle here. */}
       <iframe
         ref={frameRef}
-        key={`${mode}-${lang}`}
+        key={`${mode}-${lang}-${focus ? "focus" : "full"}-${version}`}
         src={mounted ? src : undefined}
         title={TITLES[mode]}
         allow="microphone 'self'"

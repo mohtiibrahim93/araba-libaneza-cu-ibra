@@ -60,7 +60,8 @@ Deno.serve(async (req) => {
 
     try {
       const html = await render(
-        React.createElement(entry.component, entry.previewData) as React.ReactNode
+        // deno-lint-ignore no-explicit-any
+        React.createElement(entry.component, entry.previewData) as any
       )
       const resolvedSubject =
         typeof entry.subject === 'function'

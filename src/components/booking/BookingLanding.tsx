@@ -180,9 +180,13 @@ const BookingLanding = () => {
             <a href="/quiz" className="font-semibold text-brand-green hover:underline">
               {en ? "Take the 30-second quiz" : "Fă quiz-ul de 30 de secunde"}
             </a>
-            {en ? " or " : " sau "}
+            {", "}
             <Link to="/test-de-nivel" className="font-semibold text-brand-green hover:underline">
               {en ? "the level test" : "testul de nivel"}
+            </Link>
+            {en ? ", or book a " : ", ori programează o "}
+            <Link to="/verificare-nivel" className="font-semibold text-brand-green hover:underline">
+              {en ? "free level check with Ibra" : "verificare de nivel gratuită cu Ibra"}
             </Link>
             .
           </p>

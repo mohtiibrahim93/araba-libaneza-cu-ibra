@@ -1,3 +1,5 @@
+import { useI18n } from "@/lib/i18n";
+import CheckoutEmailGate from "@/components/CheckoutEmailGate";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "@/lib/router-compat";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
@@ -136,6 +138,10 @@ const Checkout = () => {
   // to load / times out in this browser.
   const forceFallback = params.get("fallback") === "1";
 
+  const { lang } = useI18n();
+  const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
+  const emailVerified = !!email && verifiedEmail === email;
+
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [amount, setAmount] = useState(0);
@@ -155,6 +161,7 @@ const Checkout = () => {
   // copies ended up in the same HTML.
 
   useEffect(() => {
+    if (!emailVerified) return;
     // If we're already in fallback mode there's no point trying to load
     // Stripe.js at all — the visitor's browser blocks it.
     if (forceFallback) {
@@ -241,7 +248,7 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseType, email, name, registrationId, quantity, groupPlan, forceFallback]);
+  }, [courseType, email, name, registrationId, quantity, groupPlan, forceFallback, emailVerified]);
 
   // Watchdog: some blockers never reject the js.stripe.com fetch, they just
   // hang. If Stripe.js hasn't resolved after 6 s while we're supposedly
@@ -306,11 +313,11 @@ const Checkout = () => {
   // backup if the automatic redirect itself fails.
   const autoRedirectRef = useRef(false);
   useEffect(() => {
-    if (!showFallback || autoRedirectRef.current || !registrationId) return;
+    if (!emailVerified || !showFallback || autoRedirectRef.current || !registrationId) return;
     autoRedirectRef.current = true;
     void startHostedCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showFallback, registrationId]);
+  }, [showFallback, registrationId, emailVerified]);
 
   const options = useMemo(
     () =>
@@ -343,7 +350,7 @@ const Checkout = () => {
             </p>
           </div>
 
-          {showFallback && !hostedAutoFailed ? (
+          {!emailVerified ? <CheckoutEmailGate email={email} english={lang === "en"} onVerified={() => setVerifiedEmail(email)} /> : showFallback && !hostedAutoFailed ? (
             /* Seamless path: the embedded form can't load here, so we're
                already redirecting to Stripe's hosted page — no error screen,
                no extra click. */

@@ -3,9 +3,11 @@ import { MessageCircle, Mail, MapPin, Star } from "lucide-react";
 import { GOOGLE_MAPS_PROFILE_URL, GOOGLE_REVIEW_URL } from "@/lib/googleBusiness";
 import { Link } from "@/components/LocalizedLink";
 import AnchorLink from "@/components/AnchorLink";
+import { OPEN_CONSENT_EVENT } from "@/lib/cookieConsent";
 import BrandLogo from "@/components/BrandLogo";
 import SocialLinks from "@/components/SocialLinks";
 import GoogleMapEmbed from "@/components/GoogleMapEmbed";
+import RecaptchaNotice from "@/components/RecaptchaNotice";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 
@@ -71,6 +73,7 @@ const Footer = () => {
           <p className="text-sm font-semibold text-foreground mb-4">{t.footerQuickLinks}</p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li><Link to="/test-de-nivel" className="hover:text-foreground transition-colors">{lang === "en" ? "Level test" : "Test de nivel"}</Link></li>
+            <li><Link to="/verificare-nivel" className="hover:text-foreground transition-colors">{lang === "en" ? "Level check with Ibra" : "Verificare de nivel cu Ibra"}</Link></li>
             <li><Link to={lang === "en" ? "/en/quiz" : "/quiz"} className="hover:text-foreground transition-colors">{lang === "en" ? "Find your course" : "Găsește cursul potrivit"}</Link></li>
             <li><Link to={lang === "en" ? "/en/contact" : "/contact"} className="hover:text-foreground transition-colors">{lang === "en" ? "Contact" : "Contact"}</Link></li>
             <li><Link to={lang === "en" ? "/en/my-bookings" : "/rezervari"} className="hover:text-foreground transition-colors">{lang === "en" ? "My bookings" : "Rezervările mele"}</Link></li>
@@ -155,17 +158,7 @@ const Footer = () => {
             <li>
               <button
                 type="button"
-                onClick={() => {
-                  const w = window as any;
-                  // Adopt exposes a few reopen entry points depending on build.
-                  const open =
-                    w.adoptWidget?.show ||
-                    w.adopt?.showSettings ||
-                    w.Adopt?.open ||
-                    w.__adoptOpenSettings;
-                  if (typeof open === "function") open();
-                  else document.querySelector<HTMLElement>("[data-adopt-settings]")?.click();
-                }}
+                onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
                 className="hover:text-foreground transition-colors"
               >
                 {lang === "en" ? "Cookie settings" : "Setări cookies"}
@@ -173,6 +166,11 @@ const Footer = () => {
             </li>
           </ul>
           <p>{t.footer}</p>
+          {/* reCAPTCHA v3 runs on every page, and its badge is hidden because
+              it covered the floating buttons in this corner. Google's terms
+              take this notice in its place, so it belongs wherever the script
+              is — which is everywhere. */}
+          <RecaptchaNotice className="text-center" />
         </div>
       </div>
     </footer>

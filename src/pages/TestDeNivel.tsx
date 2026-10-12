@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /test-de-nivel — the placement test, on a page that actually is the test.
@@ -24,6 +25,10 @@ const COPY = {
   ro: {
     home: "Acasă",
     crumb: "Test de nivel",
+    start: "Începe testul",
+    startHint: "Cele 24 de întrebări, fără cont. Se încarcă doar după ce apeși.",
+    practice: "Vrei să exersezi după test?",
+    practiceCta: "Jocul Yalla",
     langNote: null as string | null,
     eyebrow: "Gratuit · aproximativ 15 minute",
     h1: "Ce nivel ai la araba libaneză?",
@@ -37,18 +42,22 @@ const COPY = {
     honestH2: "Ce măsoară testul — și ce nu",
     honest: [
       "Măsoară citirea și răspunsurile scurte scrise în arabizi.",
-      "Nu măsoară ascultarea și nici vorbirea — acestea se verifică într-o conversație cu Ibrahim.",
+      "Nu măsoară ascultarea și nici vorbirea — acestea se verifică într-o conversație cu Ibra.",
       "Rezultatul este o recomandare de pornire, nu o certificare CEFR.",
       "Poți răspunde „Nu știu”. Este înregistrat ca atare și nu îți strică rezultatul.",
       "Nu ai nevoie de cont. Progresul rămâne în browserul tău.",
     ],
     afterH2: "După test",
     afterP:
-      "Rezultatul îți arată nivelul de pornire și te duce direct la cursul potrivit. Grupa se confirmă într-o discuție scurtă cu Ibrahim — de aceea recomandarea este un punct de plecare, nu o încadrare finală.",
+      "Rezultatul îți arată nivelul de pornire și te duce direct la cursul potrivit. Grupa se confirmă într-o discuție scurtă cu Ibra — de aceea recomandarea este un punct de plecare, nu o încadrare finală.",
   },
   en: {
     home: "Home",
     crumb: "Level test",
+    start: "Start the test",
+    startHint: "The 24 questions, no account. It loads only once you press.",
+    practice: "Want to practise after the test?",
+    practiceCta: "The Yalla game",
     // The test used to be Romanian-only and this warned about it. Every prompt,
     // answer and distractor in the placement bank is a T(ro, en) pair now, so
     // the warning was telling English readers a test they can take is closed
@@ -66,20 +75,27 @@ const COPY = {
     honestH2: "What the test measures — and what it does not",
     honest: [
       "It measures reading and short written answers in Arabizi.",
-      "It does not measure listening or speaking — those are checked in a conversation with Ibrahim.",
+      "It does not measure listening or speaking — those are checked in a conversation with Ibra.",
       "The result is a starting recommendation, not a CEFR certification.",
       "You can answer “I don't know”. It is recorded as such and does not count against you.",
       "No account needed. Your progress stays in your own browser.",
     ],
     afterH2: "After the test",
     afterP:
-      "The result shows your starting level and takes you straight to the matching course. The group is confirmed in a short conversation with Ibrahim, which is why the recommendation is a starting point rather than a final placement.",
+      "The result shows your starting level and takes you straight to the matching course. The group is confirmed in a short conversation with Ibra, which is why the recommendation is a starting point rather than a final placement.",
   },
 } as const;
 
 const TestDeNivel = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  const { user, syncing, version } = useStudentSync();
+  // The visitor chooses first: the test alone, or inside the whole game for
+  // someone who wants to keep playing afterwards. Nothing loads until they
+  // pick — the frame is the heaviest thing on the page.
+  // One job per page: this one is the test only (no game menu); the full game
+  // lives on /joc, linked below. Nothing loads until the visitor presses Start.
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -102,7 +118,7 @@ const TestDeNivel = () => {
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-2 block text-sm font-medium text-primary">{c.eyebrow}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">{c.h1}</h1>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
           {/* Only an English reader is surprised by this, so only they are told
@@ -117,7 +133,29 @@ const TestDeNivel = () => {
         {/* The test itself. `placement` is one of the game's own views, so this
             opens straight on it rather than on the practice game. */}
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm">
-          <YallaGame lang={lang} mode="placement" />
+          {started ? (
+            <YallaGame lang={lang} mode="placement" focus version={version} />
+          ) : (
+            <div className="mx-auto max-w-md text-center">
+              <button
+                type="button"
+                onClick={() => setStarted(true)}
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-brand-green px-8 font-semibold text-white transition hover:opacity-90"
+              >
+                {c.start}
+              </button>
+              <p className="mt-3 text-sm text-muted-foreground">{c.startHint}</p>
+            </div>
+          )}
+          <div className="mx-auto mt-5 max-w-2xl">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
+          <p className="mt-5 text-center text-sm text-muted-foreground">
+            {c.practice}{" "}
+            <Link to="/joc" className="font-semibold text-brand-green underline underline-offset-4">
+              {c.practiceCta} →
+            </Link>
+          </p>
         </div>
 
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
@@ -149,6 +187,13 @@ const TestDeNivel = () => {
                 </Link>
                 {/* The game's practice history is a level signal too — the
                     alternative to sitting this test. */}
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {lang === "en" ? "Rather talk to someone? " : "Preferi să vorbești cu cineva? "}
+                  <Link to="/verificare-nivel" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
+                    {lang === "en" ? "Free level check with Ibra" : "Verificare de nivel gratuită cu Ibra"}
+                  </Link>
+                  {lang === "en" ? " — up to 30 minutes, on Zoom or at the center." : " — până la 30 de minute, pe Zoom sau la centru."}
+                </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   {c.playedP}{" "}
                   <Link to="/joc/scor" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">

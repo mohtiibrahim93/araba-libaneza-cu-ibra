@@ -438,7 +438,7 @@ const AdminNotifications = () => {
         </div>
 
         <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <Table>
+          <Table aria-label="Notificări">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-10">

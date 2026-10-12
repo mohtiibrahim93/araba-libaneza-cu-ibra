@@ -161,13 +161,13 @@ export const translations = {
     testimonial1Author: "Anamaria-Bianca",
     testimonial2: "Apreciez abordarea lui și modul în care face lucrurile să pară atât de ușor de înțeles. Lecțiile sunt foarte bine pregătite.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibrahim este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
+    testimonial3: "Ibra este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibrahim este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
+    testimonial4: "Ibra este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
     testimonial4Author: "Harry",
     testimonial5: "Prima lecție de descoperire pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
     testimonial5Author: "Razvan",
-    testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibrahim a arătat-o. Voi relua sesiunile cu el cu siguranță.",
+    testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibra a arătat-o. Voi relua sesiunile cu el cu siguranță.",
     testimonial6Author: "Cimpan",
 
     // FAQ
@@ -233,7 +233,6 @@ export const translations = {
     mainLeadLocationPlaceholder: "Alege orașul / zona",
     mainLeadLocationHelp: "Locațiile fizice depind de profesori și centrele disponibile.",
     mainLeadLocationBucharestCentru: "București — Centru (Raduga)",
-    mainLeadLocationOtherCity: "Alt oraș (precizează în mesaj)",
     mainLeadOnlineInfoTitle: "Cursuri online",
     mainLeadOnlineInfoDesc: "Toate sesiunile online se țin pe Zoom. După confirmarea înscrierii, primești pe email linkul, ora exactă și materialele.",
     mainLeadErrorLocation: "Alege o locație fizică pentru curs.",
@@ -271,7 +270,18 @@ export const translations = {
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
     recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
+    // The two links that have to accompany the sentence above. Short labels:
+    // the sentence already names them, these are the places to click.
+    recaptchaPrivacyShort: "Politica de confidențialitate",
+    recaptchaTermsShort: "Termeni",
     recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
+
+    // Cookie consent banner
+    cookieTitle: "Cookie-uri",
+    cookieMessage: "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads), ca să vedem ce funcționează pe site.",
+    cookieAcceptAll: "Acceptă toate",
+    cookieEssentialOnly: "Doar esențiale",
+    cookiePrivacyLink: "Politica de confidențialitate",
 
     // Payment instructions
     paymentTitle: "Instrucțiuni de plată",
@@ -285,6 +295,12 @@ export const translations = {
     paymentPrimaryCta: "Plătește acum cu cardul",
     paymentAlternativesToggle: "Vezi alte metode de plată",
     paymentAlternativesHide: "Ascunde alte metode",
+    // Shown with the alternatives while nothing is paid yet. The methods stay
+    // available; what changes is that none of them holds the place by itself.
+    paymentAlternativesUnpaid:
+      "Locul nu e rezervat până nu intră plata. Cu cardul e instant. Prin numerar, transfer sau PayPal ți-l ținem doar după ce confirmăm că banii au ajuns.",
+    paymentAlternativesUnpaidSeat:
+      "Grupele au locuri limitate, așa că până atunci locul poate fi luat de altcineva.",
     paymentSecure: "Plată securizată · 3D Secure · SSL",
     successNextStepsTitle: "Ce urmează?",
     successStepConfirm: "Îți scriem pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) ca să ne cunoaștem.",
@@ -377,7 +393,7 @@ export const translations = {
     // thin enough that Google can decline to index it — while being one of the
     // pages we most want indexed. Every claim here is already stated elsewhere
     // on the site or comes from booking_event_types in the database.
-    schedulerPhysicalTrialWeekend: "Proba fizică, la centrul din București, se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
+    schedulerPhysicalTrialWeekend: "La centrul din București se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
     quizWhatH2: "Ce face chestionarul",
     quizWhatP: "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
     quizNotH2: "Ce nu este",
@@ -467,8 +483,8 @@ export const translations = {
     thankYouNextStepsTitle: "Ce urmează:",
     thankYouStep1Title: "Verifică-ți emailul",
     thankYouStep1Desc: "Vei primi un email de confirmare cu toate detaliile în câteva minute.",
-    thankYouStep2Title: "Primești link-ul Zoom",
-    thankYouStep2Desc: "Cu o zi înainte de prima ședință, îți trimitem link-ul Zoom și materialele.",
+    thankYouStep2Title: "Îți scriem cu detaliile",
+    thankYouStep2Desc: "În 24 de ore de la plată îți scriem cu link-ul Zoom (online) sau adresa centrului (fizic) și materialele.",
     thankYouStep3Title: "Prima ta lecție",
     thankYouStep3Desc: "Ne vedem la prima lecție! Vino cu întrebări și entuziasm.",
     thankYouInviteTitle: "Învață cu un prieten",
@@ -972,13 +988,13 @@ export const translations = {
     testimonial1Author: "Anamaria-Bianca",
     testimonial2: "I appreciate his approach and the way he makes things seem so easy to understand. The lessons are very well prepared.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibrahim is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
+    testimonial3: "Ibra is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibrahim is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
+    testimonial4: "Ibra is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
     testimonial4Author: "Harry",
     testimonial5: "First discovery lesson for an absolute beginner was very eye opening. He did a great job explaining the different aspects of the language.",
     testimonial5Author: "Razvan",
-    testimonial6: "I was very pleased with Professor Ibrahim's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
+    testimonial6: "I was very pleased with Professor Ibra's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
     testimonial6Author: "Cimpan",
 
     faqBadge: "FAQ",
@@ -1041,7 +1057,6 @@ export const translations = {
     mainLeadLocationPlaceholder: "Choose city / area",
     mainLeadLocationHelp: "Physical locations depend on available teachers and centers.",
     mainLeadLocationBucharestCentru: "Bucharest — Center (Raduga)",
-    mainLeadLocationOtherCity: "Another city (specify in message)",
     mainLeadOnlineInfoTitle: "Online lessons",
     mainLeadOnlineInfoDesc: "All online sessions take place on Zoom. Once your enrollment is confirmed, you’ll receive the link, exact time and materials by email.",
     mainLeadErrorLocation: "Choose a physical location for the course.",
@@ -1076,7 +1091,16 @@ export const translations = {
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
     recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    recaptchaPrivacyShort: "Privacy Policy",
+    recaptchaTermsShort: "Terms of Service",
     recaptchaFailed: "Security check failed. Please try again.",
+
+    // Cookie consent banner
+    cookieTitle: "Cookies",
+    cookieMessage: "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads) to see what works on the site.",
+    cookieAcceptAll: "Accept all",
+    cookieEssentialOnly: "Essential only",
+    cookiePrivacyLink: "Privacy policy",
 
     // Payment instructions
     paymentTitle: "Payment Instructions",
@@ -1090,6 +1114,10 @@ export const translations = {
     paymentPrimaryCta: "Pay now with card",
     paymentAlternativesToggle: "See other payment methods",
     paymentAlternativesHide: "Hide other methods",
+    paymentAlternativesUnpaid:
+      "Your place is not held until the payment arrives. By card that is instant. By cash, transfer or PayPal we hold it only once we have confirmed the money.",
+    paymentAlternativesUnpaidSeat:
+      "Groups have a limited number of places, so until then someone else can take it.",
     paymentSecure: "Secure payment · 3D Secure · SSL",
     successNextStepsTitle: "What's next?",
     successStepConfirm: "We message you on WhatsApp within a few hours (one business day at most) to say hello.",
@@ -1170,7 +1198,7 @@ export const translations = {
     trialPageSubtitle: "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
     trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
     trialPageSeoDesc: "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
-    schedulerPhysicalTrialWeekend: "In-person trials at the Bucharest centre are, for now, only on Saturdays and Sundays. For any other day, choose online.",
+    schedulerPhysicalTrialWeekend: "At the Bucharest centre, bookings are for now only on Saturdays and Sundays. For any other day, choose online.",
     quizWhatH2: "What the quiz does",
     quizWhatP: "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
     quizNotH2: "What it is not",
@@ -1258,8 +1286,8 @@ export const translations = {
     thankYouNextStepsTitle: "What's next:",
     thankYouStep1Title: "Check your email",
     thankYouStep1Desc: "You'll receive a confirmation email with all the details within a few minutes.",
-    thankYouStep2Title: "Get your Zoom link",
-    thankYouStep2Desc: "One day before your first session, we'll send the Zoom link and materials.",
+    thankYouStep2Title: "We send you the details",
+    thankYouStep2Desc: "Within 24 hours of payment we write to you with the Zoom link (online) or the center's address (in person) and the materials.",
     thankYouStep3Title: "Your first lesson",
     thankYouStep3Desc: "See you at your first lesson! Come with questions and enthusiasm.",
     thankYouInviteTitle: "Learn with a friend",

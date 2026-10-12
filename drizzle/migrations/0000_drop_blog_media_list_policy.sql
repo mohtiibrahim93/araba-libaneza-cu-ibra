@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "blog_media_public_read" ON storage.objects;

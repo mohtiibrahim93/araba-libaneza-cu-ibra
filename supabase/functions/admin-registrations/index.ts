@@ -1,7 +1,9 @@
+import { reconcileCalendar, repairBookingCalendar } from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
+import { GCAL_GATEWAY, gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
+import { lessonNumber, normTitle, planMissing, titleForLesson, type Meeting } from "../_shared/cohort-sessions.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -10,6 +12,7 @@ import {
 } from "../_shared/refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
 
 function jsonResponseWith(cors: Record<string, string>) {
@@ -41,6 +44,141 @@ function isAllowedSenderEmail(email: string) {
  * happened. It defaults to 0, which is the generous reading — nothing consumed
  * — so a forgotten field can never refund a student less than they are owed.
  */
+/**
+ * Lessons whose Google Calendar event no longer says what the panel says.
+ *
+ * Bookings are written to Google and never read back: nothing in this project
+ * notices when an event is moved or deleted there. So the owner edits a lesson
+ * on his phone, the panel keeps showing the old hour, and the reminder goes out
+ * on the old hour too. That was his complaint, and it is the half of the sync
+ * that does not exist.
+ *
+ * This is the read-only half of the answer, and deliberately only that: it
+ * compares and reports, and writes nothing. Pulling Google's times into
+ * `bookings` automatically is a bigger decision than it looks -- a wrong match
+ * would rewrite a real lesson's time -- and it should not ride in on a health
+ * screen. Telling him what disagrees costs nothing and is most of the value.
+ *
+ * One paginated `events.list` over the window rather than one fetch per
+ * booking: forty upcoming lessons would otherwise be forty round trips every
+ * time the screen opens. `showDeleted` is on, because an event cancelled in
+ * Google is exactly what we are looking for and is otherwise omitted.
+ *
+ * Failure is not an error here. If Google cannot be read, the health screen
+ * still has everything else to say, so this returns null and the panel says it
+ * could not check rather than showing nothing at all.
+ */
+async function calendarDrift(
+  rows: Array<Record<string, unknown>>,
+): Promise<
+  | null
+  | Array<{
+      id: string;
+      student_name: string | null;
+      booked_at: string;
+      google_at: string | null;
+      kind: "moved" | "cancelled_in_google" | "not_found";
+    }>
+> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+  if (!lovableKey || !gcalKey) return null;
+
+  const now = Date.now();
+  // Only lessons still to come: a past lesson moved in Google needs no action,
+  // and including them would make the list long and ignorable.
+  const upcoming = rows.filter(
+    (r) => typeof r["google_event_id"] === "string" && Date.parse(String(r["start_at"])) >= now,
+  );
+  if (upcoming.length === 0) return [];
+
+  const gHeaders = {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": gcalKey,
+    "Content-Type": "application/json",
+  };
+  // Wider than the lessons themselves, so an event moved a long way still
+  // turns up as moved rather than as missing.
+  const timeMin = new Date(now - 7 * 86_400_000).toISOString();
+  const timeMax = new Date(now + 400 * 86_400_000).toISOString();
+
+  const byId = new Map<string, { start?: string; status?: string }>();
+  try {
+    let pageToken: string | undefined;
+    do {
+      const qs = new URLSearchParams({
+        singleEvents: "true",
+        showDeleted: "true",
+        orderBy: "startTime",
+        timeMin,
+        timeMax,
+        maxResults: "250",
+      });
+      if (pageToken) qs.set("pageToken", pageToken);
+      const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+      if (!res.ok) {
+        console.error("[calendar_drift] list failed", res.status);
+        return null;
+      }
+      const page = await res.json();
+      for (const ev of page.items ?? []) {
+        if (typeof ev?.id === "string") {
+          byId.set(ev.id, { start: ev?.start?.dateTime, status: ev?.status });
+        }
+      }
+      pageToken = page.nextPageToken;
+    } while (pageToken);
+  } catch (err) {
+    console.error("[calendar_drift] list threw", err);
+    return null;
+  }
+
+  const out: Array<{
+    id: string;
+    student_name: string | null;
+    booked_at: string;
+    google_at: string | null;
+    kind: "moved" | "cancelled_in_google" | "not_found";
+  }> = [];
+  for (const r of upcoming) {
+    const eventId = String(r["google_event_id"]);
+    const bookedAt = String(r["start_at"]);
+    const ev = byId.get(eventId);
+    if (!ev) {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: null,
+        kind: "not_found",
+      });
+      continue;
+    }
+    if (ev.status === "cancelled") {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: null,
+        kind: "cancelled_in_google",
+      });
+      continue;
+    }
+    // A minute of slack: Google returns its own offset format, and comparing
+    // the instants rather than the strings is the only reliable way.
+    if (ev.start && Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000) {
+      out.push({
+        id: String(r["id"]),
+        student_name: (r["student_name"] as string | null) ?? null,
+        booked_at: bookedAt,
+        google_at: new Date(Date.parse(ev.start)).toISOString(),
+        kind: "moved",
+      });
+    }
+  }
+  return out;
+}
+
 async function refundInputsFor(
   // deno-lint-ignore no-explicit-any
   supabase: any,
@@ -122,6 +260,10 @@ Deno.serve(async (req) => {
       if (typeof id !== "string") {
         return jsonResponse({ error: "Cerere invalidă" });
       }
+      // Public status page: only a server-signed link may read the status.
+      if (!(await verifyRegistrationSignature(id, body?.sig))) {
+        return jsonResponse({ error: "Cererea nu a fost găsită" });
+      }
 
       const { data: registration, error: registrationError } = await supabase
         .from("registrations")
@@ -144,7 +286,11 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
     const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
-    const callerEmail = userData?.user?.email?.toLowerCase();
+    const caller = userData?.user;
+    // Only a confirmed, non-anonymous mailbox counts as proof of the admin address.
+    const callerEmail = caller && caller.email_confirmed_at && !caller.is_anonymous
+      ? caller.email?.trim().toLowerCase()
+      : undefined;
     const adminEmails = (Deno.env.get("ADMIN_EMAILS") || "")
       .split(",")
       .map((e) => e.trim().toLowerCase())
@@ -153,6 +299,75 @@ Deno.serve(async (req) => {
 
     if (!isAdmin) {
       return jsonResponse({ error: "Neautorizat" });
+    }
+
+    if (action === "update_contact") {
+      const contactName = typeof body.name === "string" ? body.name.trim() : "";
+      const contactEmail = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+      const contactPhone = typeof body.phone === "string" ? body.phone.trim() : "";
+      if (typeof id !== "string" || !contactName || contactName.length > 160 || contactEmail.length > 254 || (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) || contactPhone.length > 40) {
+        return jsonResponse({ error: "Date de contact invalide." }, 400);
+      }
+      const { error } = await supabase.rpc("admin_update_registration_contact", {
+        p_id: id, p_name: contactName, p_email: contactEmail || null, p_phone: contactPhone || null, p_actor: callerEmail,
+      });
+      if (error) return jsonResponse({ error: "Contactul nu a fost salvat. Reîncearcă.", code: "contact_update_failed" }, 500);
+      return jsonResponse({ success: true });
+    }
+
+    // PostgREST caps a read at one page. Use stable pages for admin totals
+    // and the enrolment list rather than silently truncating older records.
+    const readAll = async (table: string, fields: string, orderBy = "id", ascending = true) => {
+      const data: Array<Record<string, any>> = [];
+      for (let offset = 0; ; offset += 1000) {
+        let query = supabase.from(table).select(fields).order(orderBy, { ascending });
+        if (orderBy !== "id") query = query.order("id", { ascending: true });
+        const result = await query.range(offset, offset + 999);
+        if (result.error) throw result.error;
+        const page = result.data ?? [];
+        data.push(...page);
+        if (page.length < 1000) return { data };
+      }
+    };
+
+    // Lets the site tell an admin from a signed-in student (students have
+    // accounts since October 2026): the game shows its teacher controls only
+    // when this answers.
+    if (action === "whoami") {
+      return jsonResponse({ isAdmin: true });
+    }
+
+    // Student accounts: each student's saved Yalla progress (summary columns
+    // only, not the full game state), with their registrations matched by
+    // email so the owner sees a level next to a lead.
+    if (action === "list_student_progress") {
+      const { data: rows, error: rowsErr } = await supabase
+        .from("student_progress")
+        .select("user_id, email, placement, xp, rounds, items_seen, last_played_at, created_at, updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(500);
+      if (rowsErr) {
+        console.error("[admin-registrations] list_student_progress failed", rowsErr);
+        return jsonResponse({ error: "Nu am putut încărca progresul elevilor" });
+      }
+      const emails = Array.from(
+        new Set((rows ?? []).map((r: { email: string | null }) => (r.email ?? "").toLowerCase()).filter(Boolean)),
+      );
+      let regs: Array<{ id: string; email: string | null; name: string; form_type: string; level: string | null; lead_status: string | null; payment_status: string | null; created_at: string }> = [];
+      if (emails.length) {
+        const { data: regRows } = await supabase
+          .from("registrations")
+          .select("id, email, name, form_type, level, lead_status, payment_status, created_at")
+          // Case-insensitive: a registration may have been typed "Maria@…".
+          .or(emails.map((e) => `email.ilike.${e.replace(/([%_\\])/g, "\\$1")}`).join(","))
+          .order("created_at", { ascending: false });
+        regs = regRows ?? [];
+      }
+      const data = (rows ?? []).map((r: { email: string | null }) => ({
+        ...r,
+        registrations: regs.filter((g) => (g.email ?? "").toLowerCase() === (r.email ?? "").toLowerCase()),
+      }));
+      return jsonResponse({ data });
     }
 
     if (action === "list_capacities") {
@@ -580,6 +795,37 @@ Deno.serve(async (req) => {
     }
 
 
+    // Read-only course overview. Occupancy remains owned by the existing RPC;
+    // payment counts only describe registrations with recorded payment states.
+    if (action === "course_overview") {
+      const [cohorts, registrations, manual, occupancy] = await Promise.all([
+        readAll("group_cohorts", "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset"),
+        readAll("registrations", "cohort_id,payment_status,refunded_at,lead_status"),
+        readAll("manual_signups", "cohort_id,count"),
+        supabase.rpc("get_cohort_signup_counts"),
+      ]);
+      if (occupancy.error) throw occupancy.error;
+      const seats = new Map((occupancy.data ?? []).map((r: { cohort_id: string; taken: number }) => [r.cohort_id, Number(r.taken)]));
+      const data = (cohorts.data ?? []).map((c) => {
+        const regs = (registrations.data ?? []).filter((r) => r.cohort_id === c.id);
+        const payments: Record<string, number> = {};
+        for (const r of regs) {
+          const state = r.refunded_at ? "refunded" : (r.payment_status || "unspecified");
+          payments[state] = (payments[state] ?? 0) + 1;
+        }
+        return {
+          ...c,
+          taken: seats.has(c.id) && Number.isFinite(seats.get(c.id)) ? seats.get(c.id) : null,
+          registration_count: regs.length,
+          incomplete_count: regs.filter((r) => r.lead_status === "incomplete").length,
+          manual_signup_count: (manual.data ?? []).filter((r) => r.cohort_id === c.id)
+            .reduce((sum: number, r) => sum + Number(r.count), 0),
+          payments,
+        };
+      });
+      return jsonResponse({ data });
+    }
+
     // ============ Group cohorts ============
     if (action === "list_cohorts") {
       const { data, error } = await supabase
@@ -635,13 +881,15 @@ Deno.serve(async (req) => {
           language: cohort.teaching_language,
           source: mSource,
           lead_status: isPaid ? "converted" : "qualified",
-          // "pending", not "unpaid": the rest of the system writes six values
-          // for this column (paid, pending, card_saved, failed, past_due,
-          // refunded) and there is no constraint to stop a seventh. A student
-          // added by hand and one who registered on the site are in the same
-          // state and belong in the same bucket, or every filter and
-          // breakdown has to learn a synonym.
-          payment_status: isPaid ? "paid" : "pending",
+          // "unpaid", not "pending": the two are different states, and this
+          // one has no payment in flight. "pending" is what the checkout
+          // functions write once a Stripe session exists and the money is on
+          // its way or awaiting confirmation. A student added here by hand has
+          // started nothing — their first payment has not happened, and may
+          // never happen, in which case they are charged the full price. That
+          // is what "unpaid" means, and collapsing it into "pending" would
+          // report money as in flight when nobody has tried to pay.
+          payment_status: isPaid ? "paid" : "unpaid",
           paid_at: isPaid ? now : null,
           payment_method: isPaid ? method : null,
           notes: clean(mNotes, 2000) || null,
@@ -948,6 +1196,24 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    if (action === "repair_booking_calendar") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: booking, error } = await supabase.from("bookings").select("*").eq("id", id).maybeSingle();
+      if (error || !booking || booking.status !== "confirmed" || Date.parse(booking.start_at) < Date.now()) return jsonResponse({ error: "Lecția nu este disponibilă pentru reparare." }, 400);
+      if (booking.google_event_id && booking.google_sync_error !== "calendar_create_pending") return jsonResponse({ success: true });
+      const result = await repairBookingCalendar(supabase, booking, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") });
+      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "repair_booking_calendar", registration_id: booking.registration_id, details: { booking_id: id, event_id: result.event_id } });
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "sync_calendar") {
+      const from = typeof body.from === "string" ? body.from : new Date(Date.now() - 7 * 86400000).toISOString();
+      const to = typeof body.to === "string" ? body.to : new Date(Date.now() + 400 * 86400000).toISOString();
+      if (!Number.isFinite(Date.parse(from)) || !Number.isFinite(Date.parse(to)) || Date.parse(to) <= Date.parse(from) || Date.parse(to) - Date.parse(from) > 410 * 86400000) return jsonResponse({ error: "Interval invalid." }, 400);
+      const result = await reconcileCalendar(supabase, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"), from, to });
+      return jsonResponse({ success: result.errors.length === 0, data: result });
+    }
+
     if (action === "list_bookings") {
       const { status_filter } = body;
       let q = supabase
@@ -975,7 +1241,9 @@ Deno.serve(async (req) => {
       const since = new Date(Date.now() - 180 * 86_400_000).toISOString();
       const { data: recent } = await supabase
         .from("bookings")
-        .select("id, start_at, student_name, status, google_event_id, google_sync_error")
+        .select(
+          "id, start_at, created_at, student_name, status, google_event_id, google_sync_error",
+        )
         .eq("status", "confirmed")
         .gte("start_at", since)
         .order("start_at", { ascending: false })
@@ -992,10 +1260,29 @@ Deno.serve(async (req) => {
           ...diag,
           bookings: {
             total: rows.length,
-            synced: rows.filter((r) => r.google_event_id).length,
-            failed: rows.filter((r) => !r.google_event_id).length,
+            synced: rows.filter((r) => r.google_event_id && !r.google_sync_error).length,
+            failed: rows.filter((r) => !r.google_event_id || !!r.google_sync_error).length,
+            // The six-month totals answer "what happened", and they were the
+            // only thing this screen said. That made a run of failures last
+            // August read as a fault happening now, months after the sync
+            // started working again — three of four missing, printed every day,
+            // for bookings whose events can never appear.
+            //
+            // "Is it working" is a different question and only recent attempts
+            // can answer it. A booking syncs when it is made, so this counts by
+            // created_at rather than by when the lesson falls.
+            latest: (() => {
+              const cutoff = Date.now() - 30 * 86_400_000;
+              const madeLately = rows.filter(
+                (r) => Date.parse(r.created_at as string) >= cutoff,
+              );
+              return {
+                total: madeLately.length,
+                synced: madeLately.filter((r) => r.google_event_id && !r.google_sync_error).length,
+              };
+            })(),
             unsynced: rows
-              .filter((r) => !r.google_event_id)
+              .filter((r) => !r.google_event_id || !!r.google_sync_error)
               .slice(0, 10)
               .map((r) => ({
                 id: r.id,
@@ -1005,6 +1292,7 @@ Deno.serve(async (req) => {
               })),
           },
           feed: { configured: !!feedToken, url: feedUrl },
+          drift: await calendarDrift(rows),
         },
       });
     }
@@ -1086,6 +1374,449 @@ Deno.serve(async (req) => {
      * Read-only, and deliberately bounded — every list has a horizon or a
      * limit, because a worklist that grows without end is a report.
      */
+    // ============ Calendar names of groups ============
+    // Which name each group has in the owner's Google Calendar ("curs online
+    // a1, grupa 1" → events "curs online a1, grupa 1 lectia 1", …). Chosen in
+    // the admin, independent of how the group is titled on the website.
+    if (action === "list_cohort_calendar") {
+      const { data: groups, error: gErr } = await supabase
+        .from("group_cohorts")
+        .select("id, form_type, age_category, level, format, start_date, status, title_ro, schedule_label_ro, session_count")
+        .eq("is_active", true)
+        .in("form_type", ["group", "kids"])
+        .not("status", "in", '("completed","cancelled")')
+        .order("start_date", { ascending: true });
+      if (gErr) throw gErr;
+      const { data: links, error: lErr } = await supabase
+        .from("cohort_calendar")
+        .select("cohort_id, calendar_title, total_lessons, members");
+      if (lErr) throw lErr;
+      return jsonResponse({
+        data: (groups ?? []).map((g: { id: string }) => ({
+          ...g,
+          link: (links ?? []).find((l: { cohort_id: string }) => l.cohort_id === g.id) ?? null,
+        })),
+      });
+    }
+
+    if (action === "upsert_cohort_calendar") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
+      const total = Number(body.total_lessons);
+      if (!cohortId || !title || !Number.isInteger(total) || total < 1 || total > 300) {
+        return jsonResponse({ error: "Numele din calendar și numărul de lecții sunt obligatorii." });
+      }
+      // The group's own students, invited to every lesson added for it.
+      const members = Array.isArray(body.members)
+        ? Array.from(
+            new Set(
+              (body.members as unknown[])
+                .filter((e): e is string => typeof e === "string")
+                .map((e) => e.replace(/^mailto:/i, "").trim().toLowerCase())
+                .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254),
+            ),
+          ).slice(0, 60)
+        : undefined;
+      const { error: upErr } = await supabase
+        .from("cohort_calendar")
+        .upsert(
+          { cohort_id: cohortId, calendar_title: title, total_lessons: total, ...(members ? { members } : {}) },
+          { onConflict: "cohort_id" },
+        );
+      if (upErr) throw upErr;
+      return jsonResponse({ success: true });
+    }
+
+    // Renames every lesson of a group in Google Calendar to the new name
+    // ("<new name> - L<N>") and stores the new name. sendUpdates=none: guests'
+    // calendars update quietly, nobody gets an email. Run right after a sync
+    // under the old name, so every lesson of the group is known here.
+    if (action === "rename_cohort_events") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
+      if (!cohortId || !title) return jsonResponse({ error: "Lipsește grupa sau numele." });
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      const { data: sessions, error: sErr } = await supabase
+        .from("cohort_sessions")
+        .select("google_event_id, lesson_number")
+        .eq("cohort_id", cohortId)
+        .order("lesson_number", { ascending: true });
+      if (sErr) throw sErr;
+      let renamed = 0;
+      const failed: number[] = [];
+      for (const ses of sessions ?? []) {
+        const res = await fetch(
+          `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(ses.google_event_id)}?sendUpdates=none`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${lovableKey}`,
+              "X-Connection-Api-Key": gcalKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ summary: `${title} - L${ses.lesson_number}` }),
+          },
+        );
+        if (res.ok) renamed += 1;
+        else {
+          failed.push(ses.lesson_number);
+          console.error("[rename_cohort_events] patch failed", res.status, await res.text());
+        }
+      }
+      // Keep the old name if nothing could be renamed, so the next sync still finds them.
+      if (renamed > 0 || (sessions ?? []).length === 0) {
+        const { error: upErr } = await supabase
+          .from("cohort_calendar")
+          .update({ calendar_title: title })
+          .eq("cohort_id", cohortId);
+        if (upErr) throw upErr;
+      }
+      return jsonResponse({ success: failed.length === 0, renamed, failed });
+    }
+
+    if (action === "delete_cohort_calendar") {
+      const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      if (!cohortId) return jsonResponse({ error: "Lipsește grupa." });
+      // Only the link and the lessons read from the calendar here; the
+      // calendar itself is never touched.
+      await supabase.from("cohort_sessions").delete().eq("cohort_id", cohortId);
+      const { error: delErr } = await supabase.from("cohort_calendar").delete().eq("cohort_id", cohortId);
+      if (delErr) throw delErr;
+      return jsonResponse({ success: true });
+    }
+
+    // ============ Group lessons from Google Calendar ============
+    /**
+     * Reads the owner's lesson events ("<course> – Lecția N") for each running
+     * group into cohort_sessions, and — only when asked — adds the lessons
+     * still missing to the calendar on the group's weekly pattern, up to the
+     * course's total. The calendar stays the source of truth: a lesson moved
+     * or removed there (a break) is followed on the next sync, and the plan
+     * for the rest always starts after the last lesson actually there.
+     *
+     * add_remaining: false = read only (and return the plan as a preview);
+     * true = also create the planned events, for one group (cohort_id) or all;
+     * lesson_numbers / lesson_limit narrow that to some lessons or the next N.
+     * The new lessons invite the guests of the group's latest lesson plus any
+     * extra_guests (a student who just joined), with Google's usual invite.
+     */
+    if (action === "sync_cohort_sessions") {
+      const addRemaining = body.add_remaining === true;
+      const onlyCohort = typeof body.cohort_id === "string" ? body.cohort_id : null;
+      // Extra people to invite to the new lessons (a student who just joined),
+      // on top of the guests already on the group's latest lesson.
+      // Add only some of the missing lessons: these numbers, or the next N.
+      const lessonNumbers: number[] = Array.isArray(body.lesson_numbers)
+        ? (body.lesson_numbers as unknown[]).filter((n): n is number => Number.isInteger(n) && (n as number) > 0).slice(0, 300)
+        : [];
+      const lessonLimit = Number.isInteger(body.lesson_limit) && body.lesson_limit > 0 ? (body.lesson_limit as number) : 0;
+      const extraGuests: string[] = Array.isArray(body.extra_guests)
+        ? (body.extra_guests as unknown[])
+            .filter((e): e is string => typeof e === "string")
+            .map((e) => e.trim().toLowerCase())
+            .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254)
+            .slice(0, 30)
+        : [];
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      const gHeaders = {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": gcalKey,
+        "Content-Type": "application/json",
+      };
+
+      // Active groups that have a calendar name (cohort_calendar): running
+      // ones, and future ones whose lessons can be created ahead of time.
+      let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons, members");
+      if (onlyCohort) lq = lq.eq("cohort_id", onlyCohort);
+      const { data: links, error: lErr } = await lq;
+      if (lErr) throw lErr;
+      const { data: running, error: cErr } = await supabase
+        .from("group_cohorts")
+        .select("id, start_date, status, format, days_of_week, start_time, end_time")
+        .in("id", (links ?? []).map((l: { cohort_id: string }) => l.cohort_id))
+        .eq("is_active", true)
+        .not("status", "in", '("completed","cancelled")');
+      if (cErr) throw cErr;
+      const cohorts = (running ?? []).map(
+        (g: {
+          id: string;
+          start_date: string;
+          format: string | null;
+          days_of_week: number[] | null;
+          start_time: string | null;
+          end_time: string | null;
+        }) => {
+          const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
+          return { ...g, calendar_title: l.calendar_title, total_lessons: l.total_lessons, members: (l.members ?? []) as string[] };
+        },
+      );
+
+      const localDate = (iso: string) =>
+        new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest" }).format(new Date(iso));
+
+      const results = [];
+      for (const c of cohorts ?? []) {
+        const prefix = c.calendar_title as string;
+        // Every event of this group, one instance per lesson, oldest first.
+        const timeMin = new Date(Date.parse(`${c.start_date}T00:00:00Z`) - 14 * 86_400_000).toISOString();
+        const timeMax = new Date(Date.parse(`${c.start_date}T00:00:00Z`) + 2 * 365 * 86_400_000).toISOString();
+        const events: Array<{
+          id: string;
+          summary?: string;
+          start?: { dateTime?: string };
+          end?: { dateTime?: string };
+          location?: string;
+          description?: string;
+          conferenceData?: unknown;
+          attendees?: Array<{ email?: string; self?: boolean; resource?: boolean }>;
+        }> = [];
+        let pageToken: string | undefined;
+        // Google's search matches words; the plain words of the name find
+        // every lesson whatever dashes and spaces the title was typed with.
+        const q = normTitle(prefix);
+        do {
+          const qs = new URLSearchParams({
+            q,
+            singleEvents: "true",
+            orderBy: "startTime",
+            timeMin,
+            timeMax,
+            maxResults: "250",
+          });
+          if (pageToken) qs.set("pageToken", pageToken);
+          const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+          const page = await res.json();
+          if (!res.ok) {
+            console.error("[sync_cohort_sessions] list failed", res.status, page);
+            return jsonResponse({ error: `Google Calendar a refuzat citirea (${res.status}).` });
+          }
+          events.push(...(page.items ?? []));
+          pageToken = page.nextPageToken;
+        } while (pageToken);
+
+        const lessons = events
+          .map((e) => ({ e, n: lessonNumber(e.summary, prefix) }))
+          .filter((x): x is { e: (typeof events)[number]; n: number } =>
+            x.n !== null && !!x.e.start?.dateTime && !!x.e.end?.dateTime,
+          );
+
+        const rows = lessons.map(({ e, n }) => ({
+          cohort_id: c.id,
+          lesson_number: n,
+          starts_at: new Date(e.start!.dateTime!).toISOString(),
+          ends_at: new Date(e.end!.dateTime!).toISOString(),
+          google_event_id: e.id,
+          synced_at: new Date().toISOString(),
+        }));
+        if (rows.length) {
+          const { error: upErr } = await supabase
+            .from("cohort_sessions")
+            .upsert(rows, { onConflict: "google_event_id" });
+          if (upErr) throw upErr;
+        }
+        // Lessons removed from the calendar (a break, a cancellation) leave here too.
+        const keep = rows.map((r) => r.google_event_id);
+        let del = supabase.from("cohort_sessions").delete().eq("cohort_id", c.id);
+        if (keep.length) del = del.not("google_event_id", "in", `(${keep.map((k) => `"${k}"`).join(",")})`);
+        const { error: delErr } = await del;
+        if (delErr) throw delErr;
+
+        const last = lessons.reduce<(typeof lessons)[number] | null>(
+          (a, b) => (!a || b.n > a.n || (b.n === a.n && b.e.start!.dateTime! > a.e.start!.dateTime!) ? b : a),
+          null,
+        );
+        const { data: meetingRows } = await supabase
+          .from("cohort_meetings")
+          .select("weekday, start_time, end_time")
+          .eq("cohort_id", c.id);
+        const total = (c.total_lessons as number | null) ?? 0;
+        // The weekly pattern: per-day meetings when the group has them, else
+        // the single days/time pair every cohort carries.
+        const meetings: Meeting[] =
+          (meetingRows ?? []).length > 0
+            ? ((meetingRows ?? []) as Meeting[])
+            : c.start_time && c.end_time
+              ? (c.days_of_week ?? []).map((weekday: number) => ({
+                  weekday,
+                  start_time: c.start_time as string,
+                  end_time: c.end_time as string,
+                }))
+              : [];
+        // Every missing lesson on its own slot, so lessons can be added one,
+        // four or all at a time and each keeps its date (planMissing). For a
+        // group with none yet, from its start date, lesson 1.
+        // Never plan a started group from lesson 1: finding none of its lessons
+        // means the name does not match the calendar, and creating L1… again
+        // would duplicate the real ones.
+        const todayLocal = localDate(new Date().toISOString());
+        const canPlan = total > 0 && (!!last || c.start_date >= todayLocal);
+        const nowMs = Date.now();
+        const fullPlan = canPlan
+          ? planMissing({
+              lessons: lessons.map(({ e, n }) => ({ n, date: localDate(e.start!.dateTime!) })),
+              pastMax: lessons
+                .filter(({ e }) => Date.parse(e.start!.dateTime!) < nowMs)
+                .reduce((m, { n }) => Math.max(m, n), 0),
+              meetings,
+              total,
+              startDate: c.start_date,
+            })
+          : [];
+        // Which of them to add now: specific lessons, the next N, or all.
+        const wanted = lessonNumbers.length
+          ? fullPlan.filter((p) => lessonNumbers.includes(p.lesson_number))
+          : lessonLimit > 0
+            ? fullPlan.slice(0, lessonLimit)
+            : fullPlan;
+        const plan = addRemaining ? wanted : fullPlan;
+
+        const created: number[] = [];
+        // The owner (organizer) stays on the invitation, as on hand-made lessons.
+        let ownerEmail = (last?.e.attendees ?? []).find((a) => a.self && a.email)?.email?.toLowerCase() ?? null;
+        if (!ownerEmail) {
+          const calRes = await fetch(`${GCAL_GATEWAY}/calendars/primary`, { headers: gHeaders });
+          const cal = await calRes.json().catch(() => ({}));
+          if (calRes.ok && typeof cal.id === "string") ownerEmail = cal.id.toLowerCase();
+        }
+        // Who is invited: the group's own students (permanent, from the
+        // admin), everyone already on its latest lesson, and the extra guests
+        // for just these lessons.
+        const guests = Array.from(
+          new Set([
+            ...c.members,
+            ...(last?.e.attendees ?? [])
+              .filter((a) => a.email && !a.self && !a.resource)
+              .map((a) => a.email!.toLowerCase()),
+            ...extraGuests,
+          ]),
+        ).filter((e) => e !== ownerEmail);
+        const attendeeList = [
+          ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+          ...guests.map((email) => ({ email })),
+        ];
+        // Online lessons always carry the Zoom link; no Google Meet is added.
+        const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? "";
+        const isOnline = c.format === "online";
+        const baseDesc = last?.e.description ?? "";
+        const description =
+          isOnline && zoomUrl && !baseDesc.includes(zoomUrl)
+            ? `${baseDesc ? baseDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
+            : baseDesc || undefined;
+        const location = last?.e.location || (isOnline && zoomUrl ? zoomUrl : undefined);
+        if (addRemaining && plan.length) {
+          for (const p of plan) {
+            const [y, mo, d] = p.date.split("-").map(Number);
+            const [sh, sm] = p.start_time.split(":").map(Number);
+            const [eh, em] = p.end_time.split(":").map(Number);
+            const startISO = zonedToUtc(y, mo, d, sh, sm).toISOString();
+            const endISO = zonedToUtc(y, mo, d, eh, em).toISOString();
+            const res = await fetch(
+              // Guests get Google's normal invitation, as they did for the
+              // lessons the owner created by hand.
+              `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=${guests.length ? "all" : "none"}`,
+              {
+                method: "POST",
+                headers: gHeaders,
+                body: JSON.stringify({
+                  // Written like the group's latest lesson; for a new group,
+                  // "<name> - L<N>" with the name chosen in the admin.
+                  summary: last
+                    ? titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number)
+                    : `${prefix} - L${p.lesson_number}`,
+                  location,
+                  description,
+                  attendees: attendeeList,
+                  start: { dateTime: startISO, timeZone: "Europe/Bucharest" },
+                  end: { dateTime: endISO, timeZone: "Europe/Bucharest" },
+                }),
+              },
+            );
+            const ev = await res.json();
+            if (!res.ok) {
+              console.error("[sync_cohort_sessions] create failed", res.status, ev);
+              break;
+            }
+            const { error: insErr } = await supabase.from("cohort_sessions").insert({
+              cohort_id: c.id,
+              lesson_number: p.lesson_number,
+              starts_at: startISO,
+              ends_at: endISO,
+              google_event_id: ev.id,
+              source: "generated",
+            });
+            if (insErr) throw insErr;
+            created.push(p.lesson_number);
+          }
+        }
+
+        // Repair lessons the sync already created: add Zoom link + organizer,
+        // drop any Google Meet. Quiet update, no new emails.
+        const repaired: number[] = [];
+        if (body.repair_generated === true) {
+          const { data: gen } = await supabase
+            .from("cohort_sessions")
+            .select("lesson_number, google_event_id")
+            .eq("cohort_id", c.id)
+            .eq("source", "generated");
+          for (const g of gen ?? []) {
+            const ev = events.find((e) => e.id === g.google_event_id);
+            if (!ev) continue;
+            const keepGuests = (ev.attendees ?? [])
+              .filter((a) => a.email && !a.self && !a.resource && a.email.toLowerCase() !== ownerEmail)
+              .map((a) => ({ email: a.email!.toLowerCase() }));
+            const evDesc = ev.description ?? "";
+            const res = await fetch(
+              `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(g.google_event_id)}?sendUpdates=none&conferenceDataVersion=1`,
+              {
+                method: "PATCH",
+                headers: gHeaders,
+                body: JSON.stringify({
+                  description:
+                    isOnline && zoomUrl && !evDesc.includes(zoomUrl)
+                      ? `${evDesc ? evDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
+                      : evDesc,
+                  location: ev.location || (isOnline && zoomUrl ? zoomUrl : undefined),
+                  ...(isOnline && zoomUrl ? { conferenceData: null } : {}),
+                  attendees: [
+                    ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+                    ...keepGuests,
+                  ],
+                }),
+              },
+            );
+            if (res.ok) repaired.push(g.lesson_number);
+            else console.error("[sync_cohort_sessions] repair failed", res.status, await res.text());
+          }
+        }
+
+        results.push({
+          cohort_id: c.id,
+          calendar_title: prefix,
+          total_lessons: total || null,
+          found: rows.length,
+          last_lesson: last ? { number: last.n, starts_at: last.e.start!.dateTime } : null,
+          missing_meetings: meetings.length === 0,
+          // Started, yet no lesson matched the name: the name needs checking.
+          name_not_found: !last && c.start_date < todayLocal,
+          start_date: c.start_date,
+          guests,
+          members: c.members,
+          plan: addRemaining ? [] : fullPlan,
+          created,
+          repaired,
+        });
+      }
+
+      console.log("[sync_cohort_sessions]", callerEmail, addRemaining ? "add_remaining" : "read",
+        results.map((r) => `${r.calendar_title}: ${r.found} found, ${r.created.length} created`).join("; "));
+
+      return jsonResponse({ data: results });
+    }
+
     if (action === "list_today") {
       const now = Date.now();
       // "Today" starts at local midnight in Bucharest, not UTC midnight: at
@@ -1101,12 +1832,13 @@ Deno.serve(async (req) => {
         { data: uncontacted, error: uncErr },
         { data: unpaid, error: unpaidErr },
         { data: cohorts, error: cohortErr },
+        { count: olderUnsynced },
       ] = await Promise.all([
         // Today and the next two days, so a Friday evening still shows Monday.
         supabase
           .from("bookings")
           .select(
-            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_sync_error, manage_token",
+            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_event_id, google_sync_error, manage_token",
           )
           .eq("status", "confirmed")
           .gte("start_at", dayStart)
@@ -1117,9 +1849,25 @@ Deno.serve(async (req) => {
         // sorts itself.
         supabase
           .from("registrations")
-          .select("id, created_at, name, phone, email, form_type, format, level, language")
+          .select(
+            "id, created_at, name, phone, email, form_type, format, level, language, lead_status",
+          )
           .is("whatsapp_sent_at", null)
           .is("anonymized_at", null)
+          // Being contacted is recorded two ways and only one of them was read
+          // here. whatsapp_sent_at is set by the WhatsApp button; lead_status is
+          // what the owner sets by hand from the list, and that is the one he
+          // actually uses. Someone marked "Contactat" still had a null
+          // whatsapp_sent_at, so this screen kept asking him to contact a person
+          // he had already contacted and marked.
+          //
+          // So a lead is still waiting only while its status says nobody has
+          // triaged it: "new", or "incomplete" (the form was started but no slot
+          // was ever chosen, which is its own kind of chasing). Every other
+          // status — contacted, qualified, converted, no_response, not_suitable,
+          // spam — means a decision was made, and the screen must respect it.
+          // A null status is an old row that predates the column and reads as new.
+          .or("lead_status.is.null,lead_status.in.(new,incomplete)")
           .gte("created_at", staleAfter)
           .order("created_at", { ascending: true })
           .limit(50),
@@ -1145,6 +1893,29 @@ Deno.serve(async (req) => {
           .gte("start_date", new Date(now).toISOString().slice(0, 10))
           .lte("start_date", new Date(now + 14 * 86_400_000).toISOString().slice(0, 10))
           .order("start_date", { ascending: true }),
+        // Lessons already past that never reached the calendar. They are not
+        // work any more — nobody can attend August retroactively — so they do
+        // not belong in the worklist itself. But a backlog of them means the
+        // sync is broken rather than unlucky, and Azi saying nothing at all
+        // while "Sănătate calendar" reported three of four missing is how the
+        // two screens came to contradict each other. A count is enough to send
+        // the owner to the screen that explains it.
+        supabase
+          .from("bookings")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "confirmed")
+          .is("google_event_id", null)
+          // Thirty days, not the health screen's hundred and eighty. This
+          // number answers "is the sync broken now", and only a recent failure
+          // can say yes. Three lessons that failed last August are history: the
+          // events will never appear, nobody can attend them retroactively, and
+          // counting them here would put the same warning on this screen every
+          // morning for six months until they aged out on their own. A warning
+          // that never goes away is one the owner learns to ignore, which costs
+          // more than the warning is worth. The long view belongs to "Sănătate
+          // calendar", which is where you go to ask what the history looks like.
+          .gte("start_at", new Date(now - 30 * 86_400_000).toISOString())
+          .lt("start_at", dayStart),
       ]);
       if (lessonErr) throw lessonErr;
       if (uncErr) throw uncErr;
@@ -1157,12 +1928,21 @@ Deno.serve(async (req) => {
       // failed to sync is the one that bites: the lesson exists here and not
       // in the owner's calendar, so it is the lesson he does not turn up to.
       const problems: Array<{ kind: string; detail: string; id: string }> = [];
+      // A lesson counts as a calendar problem when it has no event, not merely
+      // when an error was recorded. Those are different failures: the sync can
+      // fall over without ever writing google_sync_error — a dropped request, a
+      // token that expired between the write and the retry — and that silent
+      // case was the one nobody saw. "Sănătate calendar" has always asked
+      // whether the event exists; this asks the same question, so the two
+      // screens can no longer disagree about the same booking.
       for (const b of lessons ?? []) {
-        if (b.google_sync_error) {
+        if (!b.google_event_id || !!b.google_sync_error) {
           problems.push({
             kind: "calendar",
             id: b.id as string,
-            detail: `${b.student_name}: ${b.google_sync_error}`,
+            detail: b.google_sync_error
+              ? `${b.student_name}: ${b.google_sync_error}`
+              : `${b.student_name}: lecția nu are eveniment în Google Calendar.`,
           });
         }
       }
@@ -1184,6 +1964,7 @@ Deno.serve(async (req) => {
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],
           problems,
+          olderUnsyncedLessons: olderUnsynced ?? 0,
         },
       });
     }
@@ -1450,7 +2231,194 @@ Deno.serve(async (req) => {
       );
       const out = await resp.json().catch(() => ({}));
       if (!resp.ok || out?.error) return jsonResponse({ error: out?.error || "Anulare eșuată" });
-      return jsonResponse({ success: true });
+      return jsonResponse({ success: true, sync_pending: out?.sync_pending === true });
+    }
+
+    /**
+     * Move a student's lesson.
+     *
+     * The panel could cancel a booking and nothing else, so changing a time
+     * meant cancelling and asking the student to book again -- or editing
+     * Google Calendar by hand, which is the one direction that does not come
+     * back into the panel. Both are worse than the thing that was missing.
+     *
+     * Routed through booking-manage with the service-role key, exactly as
+     * cancel_booking is, so that one code path patches the calendar event in
+     * place (keeping its Meet link), writes the new row with
+     * original_booking_id, and sends the student and the owner their emails.
+     * Nothing about bookings is reimplemented here.
+     *
+     * `force` is passed through: the first call reports what the new time
+     * clashes with, or that it is outside the published hours, and only a
+     * second call with force actually overrides it.
+     */
+    if (action === "reschedule_booking") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const newStart = (body as { start_at?: unknown }).start_at;
+      if (typeof newStart !== "string" || !Number.isFinite(Date.parse(newStart))) {
+        return jsonResponse({ error: "Ora nouă este invalidă." });
+      }
+      const force = (body as { force?: unknown }).force === true;
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select("manage_token, status, registration_id")
+        .eq("id", id)
+        .single();
+      if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
+      if (booking.status !== "confirmed") {
+        return jsonResponse({ error: "Programarea nu este activă." });
+      }
+      const regIdForBooking = booking.registration_id as string | null;
+      const resp = await fetch(
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage/${booking.manage_token}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ start_at: newStart, force }),
+        },
+      );
+      const out = await resp.json().catch(() => ({}));
+      if (!resp.ok || out?.error) {
+        // The structured codes travel on, so the panel can name what clashes
+        // and offer to do it anyway rather than showing "Mutare eșuată".
+        return jsonResponse({
+          error: out?.error || "Mutare eșuată",
+          code: out?.code,
+          clashes: out?.clashes ?? [],
+          outside_availability: out?.outside_availability ?? false,
+        });
+      }
+      // Moving someone's lesson is a change to their arrangements, so it goes
+      // in the same trail as deletions and refunds. registration_id, not the
+      // booking id, because that is the column the trail is keyed on and the
+      // screen that reads it resolves names from it.
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "reschedule_booking",
+        registration_id: regIdForBooking,
+        details: { to: newStart, forced: force },
+      });
+      return jsonResponse({ success: true, start_at: out?.start_at ?? newStart, sync_pending: out?.sync_pending === true });
+    }
+
+    /**
+     * Book a private lesson for someone, from the panel.
+     *
+     * The panel could add a manual signup to a group, and that was the only
+     * way to put anybody anywhere. A private lesson has a time, so it could
+     * not be added that way at all: the owner agrees an hour with someone on
+     * WhatsApp and then has nowhere to record it, which is how a lesson ends
+     * up only in Google Calendar and the panel never learns about it.
+     *
+     * Booked through booking-create with the service-role key, so the one
+     * code path creates the calendar event with its Zoom or Meet link, sends
+     * the student their confirmation and manage link, and promotes the lead.
+     *
+     * A fresh private registration is written for each of these rather than
+     * attaching to an existing one. booking-create caps bookings at the
+     * number of lessons the registration bought -- deliberately, so a
+     * redelivered Stripe event cannot over-book a package -- and quietly
+     * borrowing someone's unused lesson would make the money and the lessons
+     * disagree. A booking the owner made by hand is its own arrangement, and
+     * `payment_status` records whether it has been paid for.
+     */
+    if (action === "book_for_student") {
+      const b = body as {
+        student_name?: unknown;
+        student_email?: unknown;
+        student_phone?: unknown;
+        start_at?: unknown;
+        format?: unknown;
+        notes?: unknown;
+        quantity?: unknown;
+        paid?: unknown;
+        force?: unknown;
+        language?: unknown;
+      };
+      const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
+      const email = typeof b.student_email === "string" ? b.student_email.trim() : "";
+      const phone = typeof b.student_phone === "string" ? b.student_phone.trim() : "";
+      const startAt = typeof b.start_at === "string" ? b.start_at : "";
+      const format = b.format === "physical" ? "physical" : "online";
+      const language = b.language === "en" ? "en" : "ro";
+      const quantity = Math.max(1, Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1));
+      const paid = b.paid === true;
+      const force = b.force === true;
+
+      if (name.length < 2) return jsonResponse({ error: "Numele este obligatoriu." });
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        return jsonResponse({ error: "Emailul nu este valid." });
+      }
+      if (!Number.isFinite(Date.parse(startAt))) {
+        return jsonResponse({ error: "Data sau ora nu sunt valide." });
+      }
+
+      const registrationId = crypto.randomUUID();
+      const { error: regErr } = await supabase.from("registrations").insert({
+        id: registrationId,
+        form_type: "private",
+        source: "admin",
+        name,
+        email,
+        phone: phone || null,
+        language,
+        format: format === "physical" ? "fizic" : "online",
+        quantity,
+        // unpaid is "no payment has been attempted", which is exactly true of
+        // a lesson agreed by hand and not yet paid for. Never pending: there
+        // is no payment in flight.
+        payment_status: paid ? "paid" : "unpaid",
+        // Not a lead to chase: the owner has already spoken to them.
+        lead_status: "contacted",
+      });
+      if (regErr) {
+        console.error("[book_for_student] registration insert failed", regErr);
+        return jsonResponse({ error: "Nu am putut salva cursantul." });
+      }
+
+      const resp = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // "paid" is the private 60-minute lesson in booking_event_types.
+          event_type: "paid",
+          registration_id: registrationId,
+          start_at: startAt,
+          format,
+          student_name: name,
+          student_email: email,
+          student_phone: phone || undefined,
+          notes: typeof b.notes === "string" && b.notes.trim() ? b.notes.trim() : undefined,
+          language,
+          gdpr_consent: true,
+          force,
+        }),
+      });
+      const out = await resp.json().catch(() => ({}));
+      if (!resp.ok || out?.error) {
+        // The registration was written a moment ago and has no booking, so it
+        // would otherwise sit in Înscrieri as a lesson that never happened.
+        await supabase.from("registrations").delete().eq("id", registrationId);
+        return jsonResponse({
+          error: out?.error || "Programarea a eșuat.",
+          code: out?.code,
+          clashes: out?.clashes ?? [],
+        });
+      }
+
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "book_for_student",
+        registration_id: registrationId,
+        details: { at: startAt, format, quantity, paid, forced: force },
+      });
+      return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
     }
 
     if (action === "list_notifications") {
@@ -2048,13 +3016,50 @@ Deno.serve(async (req) => {
       return jsonResponse({ data: { registration, history } });
     }
 
-    // Default: list all
-    const { data, error } = await supabase
-      .from("registrations")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // The existing dashboard sends an unnamed list request. A named action
+    // that reached here was not handled; never disguise it as a successful read.
+    if (action !== undefined) {
+      return jsonResponse({ error: "Acțiune necunoscută", code: "unknown_action" }, 400);
+    }
 
-    if (error) throw error;
+    // Default: list all. cohort_id has no FK in the current schema, so resolve
+    // its exact ID explicitly rather than relying on a PostgREST relationship.
+    const { data } = await readAll("registrations", "*", "created_at", false);
+
+    for (const registration of data) {
+      registration.account_email = registration.email;
+      registration.email = registration.contact_email ?? registration.email;
+    }
+    if (data.length) {
+      const cohortIds = [...new Set(data.map((r) => r.cohort_id).filter(Boolean))];
+      if (cohortIds.length) {
+        const cohorts: Array<Record<string, any>> = [];
+        for (let offset = 0; offset < cohortIds.length; offset += 100) {
+          const result = await supabase.from("group_cohorts")
+            .select("id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status")
+            .in("id", cohortIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          cohorts.push(...(result.data ?? []));
+        }
+        const byId = new Map(cohorts.map((c) => [c.id, c]));
+        for (const r of data) r.cohort = byId.get(r.cohort_id) ?? null;
+      } else {
+        for (const r of data) r.cohort = null;
+      }
+      // Older manual private bookings used the default source='form'. Their
+      // existing audit record proves the origin without changing stored rows.
+      const privateIds = data.filter((r) => r.form_type === "private").map((r) => r.id);
+      if (privateIds.length) {
+        const manualIds = new Set<string>();
+        for (let offset = 0; offset < privateIds.length; offset += 100) {
+          const result = await supabase.from("audit_logs").select("registration_id")
+            .eq("action", "book_for_student").in("registration_id", privateIds.slice(offset, offset + 100));
+          if (result.error) throw result.error;
+          for (const r of result.data ?? []) manualIds.add(r.registration_id);
+        }
+        for (const r of data) if (manualIds.has(r.id)) r.source = "admin";
+      }
+    }
 
     // Duplicate indicator: how many registrations share each email (spec
     // §3.3 — surfaced to the admin, never auto-merged).

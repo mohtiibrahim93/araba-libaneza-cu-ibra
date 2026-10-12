@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import YallaGame from "@/components/YallaGame";
+import { StudentAccountBox, useStudentSync } from "@/components/StudentAccount";
 
 /**
  * /joc — free practice, and the one page on the site that asks for nothing.
@@ -45,7 +46,7 @@ const COPY = {
     ctaTrial: "Lecție de probă gratuită",
     levelH2: "Verifică-ți nivelul în joc",
     levelP:
-      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibrahim.",
+      "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibra.",
     ctaLevel: "Începe testul de nivel",
     ctaBack: "Înapoi la exerciții",
     ctaScore: "Vezi scorul și nivelul tău",
@@ -75,7 +76,7 @@ const COPY = {
     ctaTrial: "Free trial lesson",
     levelH2: "Check your level in the game",
     levelP:
-      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibrahim.",
+      "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibra.",
     ctaLevel: "Start the level test",
     ctaBack: "Back to practice",
     ctaScore: "See your score and level",
@@ -85,6 +86,7 @@ const COPY = {
 const Joaca = () => {
   const { lang } = useI18n();
   const c = COPY[lang];
+  const { user, syncing, version } = useStudentSync();
 
   // The frame hosts both the practice game and the level test; switching
   // modes remounts it (YallaGame keys on mode), so progress in one view is
@@ -167,7 +169,10 @@ const Joaca = () => {
         </div>
 
         <div className="mx-auto w-full max-w-content px-gutter pb-section-sm" ref={frameRef}>
-          <YallaGame lang={lang} mode={mode} />
+          <div className="mb-4">
+            <StudentAccountBox user={user} syncing={syncing} />
+          </div>
+          <YallaGame lang={lang} mode={mode} version={version} />
         </div>
 
         {/* Prose below the frame. A page whose only content sits inside an
