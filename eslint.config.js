@@ -6,7 +6,19 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi"] },
+  {
+    ignores: [
+      "dist",
+      ".output",
+      ".vinxi",
+      // Generated / minified Yalla data bundles (scripts/buildYallaContent.mjs).
+      // Hundreds of KB each; running Prettier over them stalls `eslint .`.
+      "public/yalla/content.js",
+      "public/yalla/content-en.js",
+      "public/yalla/synthesis.js",
+      "content/yalla-source-bank.js",
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
