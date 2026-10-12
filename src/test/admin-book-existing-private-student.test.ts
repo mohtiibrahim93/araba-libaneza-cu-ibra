@@ -122,3 +122,22 @@ describe("booking dialog", () => {
       .toBe("Ana — a@example.test · 2/5 lecții · plătit");
   });
 });
+
+describe("lecție în plus for an existing student", () => {
+  it("creates a separate registration with the student's saved details and leaves their package alone", async () => {
+    const h = harness({ registrations: [website] }, { status: 200, body: { ok: true } });
+    const out = await (await h.call({ ...slot, extra: true, quantity: 1, paid: false, student_name: "Typed", student_email: "typed@example.test" })).json();
+    expect(out.success).toBe(true);
+    expect(out.registration_id).not.toBe("reg-web");
+    const inserted = h.writes.find((w) => w.table === "registrations" && w.op === "insert")!.payload as Record<string, unknown>;
+    expect(inserted).toMatchObject({ name: "Ana Website", email: "account@example.test", contact_email: "contact@example.test", phone: "0700", quantity: 1, payment_status: "unpaid", source: "admin" });
+    expect(h.bookingBody()).toMatchObject({ registration_id: out.registration_id, student_email: "contact@example.test" });
+    expect(h.writes.filter((w) => w.table === "registrations" && w.op !== "insert")).toEqual([]);
+  });
+
+  it("removes only the new registration if the extra lesson is refused", async () => {
+    const h = harness({ registrations: [website] }, { status: 409, body: { error: "slot just taken", code: "conflict" } });
+    await h.call({ ...slot, extra: true });
+    expect(h.writes.filter((w) => w.table === "registrations").map((w) => w.op)).toEqual(["insert", "delete"]);
+  });
+});

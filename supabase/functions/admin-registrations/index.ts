@@ -2409,7 +2409,12 @@ Deno.serve(async (req) => {
       // paid package is used lesson by lesson and booking-create's cap still
       // applies. Their stored details are used as they are; the account and
       // payment email on the registration is never changed here.
-      let existing: { id: string; name: string; email: string; phone: string | null } | null = null;
+      // With extra=true the student's details are reused but the lesson gets a
+      // registration of its own ("lecție în plus": the package is used up, or
+      // the lesson is outside it), so nothing is retyped and the package stays
+      // exactly what was bought.
+      const extra = b.extra === true;
+      let existing: { id: string; name: string; email: string; accountEmail: string; contactEmail: string | null; phone: string | null } | null = null;
       if (b.registration_id !== undefined && b.registration_id !== null && b.registration_id !== "") {
         if (typeof b.registration_id !== "string") return jsonResponse({ error: "Cursant invalid." });
         const { data: reg, error: lookupErr } = await supabase
@@ -2420,7 +2425,7 @@ Deno.serve(async (req) => {
         if (lookupErr || !reg || reg.form_type !== "private" || reg.anonymized_at) {
           return jsonResponse({ error: "Cursantul nu a fost găsit." });
         }
-        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", phone: reg.phone ?? null };
+        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", accountEmail: reg.email || reg.contact_email || "", contactEmail: reg.contact_email || null, phone: reg.phone ?? null };
       }
       const studentName = existing ? existing.name.trim() : name;
       const studentEmail = existing ? existing.email.trim() : email;
@@ -2434,14 +2439,18 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }
 
-      const registrationId = existing?.id ?? crypto.randomUUID();
-      const { error: regErr } = existing ? { error: null } : await supabase.from("registrations").insert({
+      const onExisting = existing !== null && !extra;
+      const registrationId = onExisting ? existing!.id : crypto.randomUUID();
+      const { error: regErr } = onExisting ? { error: null } : await supabase.from("registrations").insert({
         id: registrationId,
         form_type: "private",
         source: "admin",
-        name,
-        email,
-        phone: phone || null,
+        name: studentName,
+        // An extra lesson keeps the same account email as the student's other
+        // registration, so ownership checks treat them as the same person.
+        email: existing ? existing.accountEmail : email,
+        ...(existing?.contactEmail ? { contact_email: existing.contactEmail } : {}),
+        phone: studentPhone || null,
         language,
         format: format === "physical" ? "fizic" : "online",
         quantity,
@@ -2483,10 +2492,10 @@ Deno.serve(async (req) => {
         // The registration was written a moment ago and has no booking, so it
         // would otherwise sit in Înscrieri as a lesson that never happened.
         // An existing student's registration is theirs and stays untouched.
-        if (!existing) await supabase.from("registrations").delete().eq("id", registrationId);
+        if (!onExisting) await supabase.from("registrations").delete().eq("id", registrationId);
         return jsonResponse({
           error: out?.code === "lessons_used_up"
-            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Programează-l ca lecție nouă, fără să alegi cursantul existent."
+            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Bifează „Lecție în plus” ca să o programezi separat, cu aceleași date."
             : out?.error || "Programarea a eșuat.",
           code: out?.code,
           clashes: out?.clashes ?? [],
@@ -2497,9 +2506,9 @@ Deno.serve(async (req) => {
         actor: callerEmail!,
         action: "book_for_student",
         registration_id: registrationId,
-        details: existing
+        details: onExisting
           ? { at: startAt, format, forced: force, existing_registration: true }
-          : { at: startAt, format, quantity, paid, forced: force },
+          : { at: startAt, format, quantity, paid, forced: force, ...(existing ? { extra_for: existing.id } : {}) },
       });
       return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
     }
