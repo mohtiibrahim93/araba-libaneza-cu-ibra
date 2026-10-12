@@ -24,7 +24,7 @@ import {
   OTHER_COUNTRIES,
   PINNED_COUNTRIES,
   countryForDigits,
-  flagEmoji,
+  flagSrc,
   type Country,
 } from "@/data/countries";
 
@@ -53,6 +53,18 @@ const COPY = {
     prefix: "Country code",
   },
 } as const;
+
+const Flag = ({ iso }: { iso: string }) => (
+  <img
+    src={flagSrc(iso)}
+    alt=""
+    aria-hidden
+    width={20}
+    height={14}
+    loading="lazy"
+    className="h-3.5 w-5 shrink-0 rounded-[2px] object-cover ring-1 ring-black/10"
+  />
+);
 
 const fold = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -192,7 +204,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
         onSelect={() => selectCountry(c)}
         className="gap-2"
       >
-        <span aria-hidden>{flagEmoji(c.iso)}</span>
+        <Flag iso={c.iso} />
         <span className="flex-1 truncate">{lang === "en" ? c.en : c.ro}</span>
         <span className="text-muted-foreground">+{c.dial}</span>
         <Check
@@ -223,7 +235,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 invalid && "border-destructive",
               )}
             >
-              <span aria-hidden>{flagEmoji(country.iso)}</span>
+              <Flag iso={country.iso} />
               <span>+{country.dial}</span>
               <ChevronDown className="h-3.5 w-3.5 opacity-60" aria-hidden />
             </button>

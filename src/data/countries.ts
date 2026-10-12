@@ -2,7 +2,8 @@
  * Countries for the phone input's prefix picker.
  *
  * Kept deliberately small: ISO code, English and Romanian name, dial code.
- * The flag emoji is derived from the ISO code, so it does not need storing.
+ * The flag image is derived from the ISO code (public/flags/<ISO>.svg, from
+ * the MIT-licensed country-flag-icons package), so it does not need storing.
  * PINNED_COUNTRIES come first in the picker (where our students actually
  * are); OTHER_COUNTRIES follow alphabetically by English name.
  */
@@ -15,14 +16,12 @@ export interface Country {
   dial: string;
 }
 
-/** Regional-indicator flag emoji from a two-letter ISO code. */
-export const flagEmoji = (iso: string) =>
-  String.fromCodePoint(
-    ...iso
-      .toUpperCase()
-      .split("")
-      .map((c) => 0x1f1e6 + c.charCodeAt(0) - 65),
-  );
+/**
+ * Flag image URL from a two-letter ISO code. An image rather than the
+ * regional-indicator emoji, because Windows renders flag emoji as plain
+ * letters ("RO").
+ */
+export const flagSrc = (iso: string) => `/flags/${iso.toUpperCase()}.svg`;
 
 export const DEFAULT_COUNTRY: Country = {
   iso: "RO",
