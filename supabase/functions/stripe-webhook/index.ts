@@ -160,6 +160,12 @@ serve(async (req) => {
   // Event log + idempotency: record every verified event once; a redelivery
   // (same evt_ id) short-circuits so double-processing can't corrupt counters.
   // Best-effort — if the log write itself fails we still process the event.
+  //
+  // The row is a claim, not a receipt: it is written before processing, so if
+  // processing then fails the claim is released (see the catch below). Leaving
+  // it in place made Stripe's retry look like a duplicate and the event was
+  // dropped for good — a paid registration never marked paid.
+  let claimed = false;
   try {
     const { data: logged, error: logErr } = await supabase
       .from("stripe_events")
@@ -182,6 +188,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    claimed = !logErr;
   } catch (logCatch) {
     console.warn("stripe_events log failed, processing anyway:", logCatch);
   }
@@ -537,6 +544,11 @@ serve(async (req) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Webhook processing error";
     console.error("Webhook handler error:", message);
+    // Release the claim so Stripe's retry is processed instead of skipped.
+    if (claimed) {
+      const { error: releaseErr } = await supabase.from("stripe_events").delete().eq("id", event.id);
+      if (releaseErr) console.error(`Event ${event.id}: could not release the idempotency claim`, releaseErr);
+    }
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
