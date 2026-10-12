@@ -71,7 +71,9 @@ async function fetchCohorts(
       break_note_en: c.break_note_en ?? null,
       taken,
       seatsLeft: Math.max(0, c.max_seats - taken),
-      full: taken >= c.max_seats,
+      // A group the admin marked full is full even with seats on paper: the
+      // database refuses registrations for it, so it must open the waiting list.
+      full: c.status === "full" || taken >= c.max_seats,
     };
   });
 }

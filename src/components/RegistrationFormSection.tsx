@@ -515,7 +515,20 @@ const RegistrationFormSection = ({
       }
     } catch (err) {
       console.error("Registration error", err);
-      toast.error(t.mainLeadError);
+      // The database refuses a full or closed group (it may have filled since
+      // this page loaded); say so instead of a generic failure.
+      const message = err && typeof err === "object" && "message" in err ? String((err as { message?: unknown }).message ?? "") : "";
+      if (message.includes("group_full")) {
+        toast.error(lang === "en"
+          ? "This group has just filled up. Choose another group or join its waiting list."
+          : "Grupa tocmai s-a ocupat. Alege altă grupă sau intră pe lista de așteptare.");
+      } else if (message.includes("selected group is unavailable")) {
+        toast.error(lang === "en"
+          ? "This group is no longer open for registration. Choose another group."
+          : "Grupa nu mai primește înscrieri. Alege altă grupă.");
+      } else {
+        toast.error(t.mainLeadError);
+      }
     } finally {
       setSubmitting(false);
     }

@@ -63,7 +63,7 @@ serve(async (req) => {
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, cohort_id, format",
+        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, cohort_id, format, lead_status",
       )
       .eq("id", registrationId)
       .maybeSingle();
