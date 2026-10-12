@@ -2325,8 +2325,39 @@ Deno.serve(async (req) => {
      * disagree. A booking the owner made by hand is its own arrangement, and
      * `payment_status` records whether it has been paid for.
      */
+    // Private students the owner can book a lesson for: website purchases and
+    // earlier hand-made bookings alike. Read-only; lessons_used counts the same
+    // bookings booking-create counts against the package.
+    if (action === "private_students") {
+      const { data: regs } = await readAll("registrations", "id,name,email,contact_email,phone,quantity,payment_status,lead_status,source,created_at,anonymized_at,form_type", "created_at", false);
+      const students = regs.filter((r) => r.form_type === "private" && !r.anonymized_at);
+      const used = new Map<string, number>();
+      for (let offset = 0; offset < students.length; offset += 100) {
+        const ids = students.slice(offset, offset + 100).map((r) => r.id);
+        const result = await supabase.from("bookings").select("registration_id")
+          .in("registration_id", ids).neq("event_type_slug", "trial").in("status", ["confirmed", "completed"]);
+        if (result.error) throw result.error;
+        for (const row of result.data ?? []) used.set(row.registration_id, (used.get(row.registration_id) ?? 0) + 1);
+      }
+      return jsonResponse({
+        data: students.map((r) => ({
+          id: r.id,
+          name: r.name,
+          email: r.contact_email || r.email,
+          phone: r.phone,
+          quantity: Math.max(1, Number.parseInt(String(r.quantity ?? 1), 10) || 1),
+          lessons_used: used.get(r.id) ?? 0,
+          payment_status: r.payment_status,
+          lead_status: r.lead_status,
+          source: r.source,
+          created_at: r.created_at,
+        })),
+      });
+    }
+
     if (action === "book_for_student") {
       const b = body as {
+        registration_id?: unknown;
         student_name?: unknown;
         student_email?: unknown;
         student_phone?: unknown;
@@ -2348,16 +2379,38 @@ Deno.serve(async (req) => {
       const paid = b.paid === true;
       const force = b.force === true;
 
-      if (name.length < 2) return jsonResponse({ error: "Numele este obligatoriu." });
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      // An existing private student (a website purchase or an earlier
+      // hand-made booking): the lesson goes on their own registration, so a
+      // paid package is used lesson by lesson and booking-create's cap still
+      // applies. Their stored details are used as they are; the account and
+      // payment email on the registration is never changed here.
+      let existing: { id: string; name: string; email: string; phone: string | null } | null = null;
+      if (b.registration_id !== undefined && b.registration_id !== null && b.registration_id !== "") {
+        if (typeof b.registration_id !== "string") return jsonResponse({ error: "Cursant invalid." });
+        const { data: reg, error: lookupErr } = await supabase
+          .from("registrations")
+          .select("id,name,email,contact_email,phone,form_type,anonymized_at")
+          .eq("id", b.registration_id)
+          .maybeSingle();
+        if (lookupErr || !reg || reg.form_type !== "private" || reg.anonymized_at) {
+          return jsonResponse({ error: "Cursantul nu a fost găsit." });
+        }
+        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", phone: reg.phone ?? null };
+      }
+      const studentName = existing ? existing.name.trim() : name;
+      const studentEmail = existing ? existing.email.trim() : email;
+      const studentPhone = existing ? (existing.phone ?? "").trim() : phone;
+
+      if (studentName.length < 2) return jsonResponse({ error: "Numele este obligatoriu." });
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(studentEmail)) {
         return jsonResponse({ error: "Emailul nu este valid." });
       }
       if (!Number.isFinite(Date.parse(startAt))) {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }
 
-      const registrationId = crypto.randomUUID();
-      const { error: regErr } = await supabase.from("registrations").insert({
+      const registrationId = existing?.id ?? crypto.randomUUID();
+      const { error: regErr } = existing ? { error: null } : await supabase.from("registrations").insert({
         id: registrationId,
         form_type: "private",
         source: "admin",
@@ -2391,9 +2444,9 @@ Deno.serve(async (req) => {
           registration_id: registrationId,
           start_at: startAt,
           format,
-          student_name: name,
-          student_email: email,
-          student_phone: phone || undefined,
+          student_name: studentName,
+          student_email: studentEmail,
+          student_phone: studentPhone || undefined,
           notes: typeof b.notes === "string" && b.notes.trim() ? b.notes.trim() : undefined,
           language,
           gdpr_consent: true,
@@ -2404,9 +2457,12 @@ Deno.serve(async (req) => {
       if (!resp.ok || out?.error) {
         // The registration was written a moment ago and has no booking, so it
         // would otherwise sit in Înscrieri as a lesson that never happened.
-        await supabase.from("registrations").delete().eq("id", registrationId);
+        // An existing student's registration is theirs and stays untouched.
+        if (!existing) await supabase.from("registrations").delete().eq("id", registrationId);
         return jsonResponse({
-          error: out?.error || "Programarea a eșuat.",
+          error: out?.code === "lessons_used_up"
+            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Programează-l ca lecție nouă, fără să alegi cursantul existent."
+            : out?.error || "Programarea a eșuat.",
           code: out?.code,
           clashes: out?.clashes ?? [],
         });
@@ -2416,7 +2472,9 @@ Deno.serve(async (req) => {
         actor: callerEmail!,
         action: "book_for_student",
         registration_id: registrationId,
-        details: { at: startAt, format, quantity, paid, forced: force },
+        details: existing
+          ? { at: startAt, format, forced: force, existing_registration: true }
+          : { at: startAt, format, quantity, paid, forced: force },
       });
       return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
     }

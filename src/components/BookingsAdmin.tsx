@@ -37,6 +37,23 @@ interface Booking {
  * tomorrow's one. So the view is now time-based: upcoming first, ascending
  * (soonest at the top), with past and cancelled as separate lenses.
  */
+export interface PrivateStudent {
+  id: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  quantity: number;
+  lessons_used: number;
+  payment_status: string | null;
+  source: string | null;
+}
+
+/** "Name — email · 2/5 lecții · plătit" — enough to tell two students apart. */
+export function studentOptionLabel(s: PrivateStudent): string {
+  const paid = s.payment_status === "paid" ? "plătit" : "neplătit";
+  return `${s.name || "Fără nume"} — ${s.email || "fără email"} · ${s.lessons_used}/${s.quantity} lecții · ${paid}`;
+}
+
 type View = "upcoming" | "past" | "cancelled" | "all";
 
 const VIEWS: { key: View; label: string }[] = [
@@ -118,6 +135,11 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
+  // An existing private student (website purchase or an earlier hand booking).
+  // When one is chosen the lesson goes on their registration and their stored
+  // details are used; empty means a new student, as before.
+  const [bkStudentId, setBkStudentId] = useState("");
+  const [bkStudents, setBkStudents] = useState<PrivateStudent[] | null>(null);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   // Guards the very first load only: a background poll must not blank the
   // table into a spinner under the admin's cursor.
@@ -293,7 +315,22 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
     setBkPaid(false);
     setBkNotes("");
     setBkWarn(null);
+    setBkStudentId("");
     setBooking(true);
+    setBkStudents(null);
+    void invokeAdmin<{ data?: PrivateStudent[]; error?: string }>({ action: "private_students" })
+      .then(({ data }) => setBkStudents(Array.isArray(data?.data) ? data.data : []))
+      .catch(() => setBkStudents([]));
+  };
+
+  const chooseStudent = (id: string) => {
+    setBkStudentId(id);
+    setBkWarn(null);
+    const s = bkStudents?.find((x) => x.id === id);
+    if (!s) return;
+    setBkName(s.name ?? "");
+    setBkEmail(s.email ?? "");
+    setBkPhone(s.phone ?? "");
   };
 
   const submitBooking = async (force: boolean) => {
@@ -318,6 +355,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
         clashes?: string[];
       }>({
         action: "book_for_student",
+        ...(bkStudentId ? { registration_id: bkStudentId } : {}),
         student_name: bkName.trim(),
         student_email: bkEmail.trim(),
         student_phone: bkPhone.trim(),
@@ -652,8 +690,38 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
+              <Label className="text-xs" htmlFor="bk-existing-student">Cursant existent (opțional)</Label>
+              <select
+                id="bk-existing-student"
+                className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+                value={bkStudentId}
+                disabled={bkStudents === null}
+                onChange={(e) => {
+                  if (e.target.value) chooseStudent(e.target.value);
+                  else {
+                    setBkStudentId("");
+                    setBkName("");
+                    setBkEmail("");
+                    setBkPhone("");
+                  }
+                }}
+              >
+                <option value="">{bkStudents === null ? "Se încarcă cursanții…" : "Cursant nou"}</option>
+                {(bkStudents ?? []).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {studentOptionLabel(s)}
+                  </option>
+                ))}
+              </select>
+              <p className="text-[11px] text-muted-foreground">
+                {bkStudentId
+                  ? "Lecția se adaugă la înscrierea lui. Datele de mai jos sunt cele salvate; emailul contului și al plății nu se schimbă."
+                  : "Alege un cursant înscris pe site sau programat deja de tine, ca lecția să intre la el, nu ca înscriere nouă."}
+              </p>
+            </div>
+            <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs">Nume</Label>
-              <Input className="h-9" value={bkName} onChange={(e) => setBkName(e.target.value)} />
+              <Input className="h-9" value={bkName} disabled={!!bkStudentId} onChange={(e) => setBkName(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Email</Label>
@@ -661,12 +729,13 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                 className="h-9"
                 type="email"
                 value={bkEmail}
+                disabled={!!bkStudentId}
                 onChange={(e) => setBkEmail(e.target.value)}
               />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Telefon (opțional)</Label>
-              <Input className="h-9" value={bkPhone} onChange={(e) => setBkPhone(e.target.value)} />
+              <Input className="h-9" value={bkPhone} disabled={!!bkStudentId} onChange={(e) => setBkPhone(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Data</Label>
@@ -702,6 +771,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                 <option value="physical">La centru</option>
               </select>
             </div>
+            {!bkStudentId && (<>
             <div className="space-y-1.5">
               <Label className="text-xs">Câte lecții a luat</Label>
               <Input
@@ -723,6 +793,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
               <input type="checkbox" checked={bkPaid} onChange={(e) => setBkPaid(e.target.checked)} />
               A plătit deja
             </label>
+            </>)}
             <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs">Notițe (opțional)</Label>
               <Input className="h-9" value={bkNotes} onChange={(e) => setBkNotes(e.target.value)} />
