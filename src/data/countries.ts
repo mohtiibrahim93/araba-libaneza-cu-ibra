@@ -87,7 +87,7 @@ const REST: Country[] = [
   { iso: "CU", en: "Cuba", ro: "Cuba", dial: "53" },
   { iso: "CY", en: "Cyprus", ro: "Cipru", dial: "357" },
   { iso: "CZ", en: "Czechia", ro: "Cehia", dial: "420" },
-  { iso: "CD", en: "DR Congo", ro: "Congo - Kinshasa", dial: "243" },
+  { iso: "CD", en: "DR Congo", ro: "Republica Democratică Congo", dial: "243" },
   { iso: "DK", en: "Denmark", ro: "Danemarca", dial: "45" },
   {
     iso: "DO",
