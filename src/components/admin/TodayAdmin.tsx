@@ -389,7 +389,7 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                       </div>
                       {!unpaid && r.phone && (
                         <a
-                          href={`https://wa.me/${r.phone.replace(/[^\d]/g, "")}`}
+                          href={`https://wa.me/${(() => { const d = r.phone.replace(/[^\d]/g, ""); return d.startsWith("0") ? `40${d.slice(1)}` : d; })()}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={cn(rowBtn, "bg-brand-green text-white hover:opacity-90")}
