@@ -30,8 +30,8 @@ deploys). `main` moved 9 commits under this session at one point. Always
 ## 1. FIRST: the deploy outcome, verified
 
 A deploy-only request went to Lovable at 07:54 UTC on 12 October. It completed
-and cost 0.7 credits. Three parts, three different outcomes — do not take the
-reply as one result:
+and cost 0.7 credits. Three parts; two landed and one did not, so do not
+take the reply as one result:
 
 **Edge functions: DEPLOYED.** All twelve, from a workspace at `0a75fe99`:
 `admin-registrations`, `auth-email-hook`, `booking-availability`,
@@ -43,7 +43,7 @@ functions bundle (`_shared/booking.ts`, the new `_shared/calendar-reconciliation
 the new `_shared/group-enrolment.ts`), so naming a short list would have shipped
 a stale bundle somewhere.
 
-**Site publish: NOT LANDED.** Lovable said "publishing was requested", which is
+**Site publish: STILL NOT LANDED**, rechecked after the later commits. Lovable said "publishing was requested", which is
 not the same as published, and the evidence says it has not taken effect. Checked
 after the deploy finished:
 
@@ -59,59 +59,31 @@ so this is not a custom-domain cache showing a stale copy of a good publish.
 §4 before concluding anything; if it still mismatches, the publish needs doing
 again, and it is worth watching the Lovable UI rather than trusting the reply.
 
-**The cron migration: NOT APPLIED, and it is the owner's decision.**
-`supabase/migrations/20261011212000_calendar_sync_schedule.sql` has never been
-applied. Verified against `cron.job`: the only jobs are
-`backlink-snapshot-weekly`, `booking-reminders-every-15-min` and
-`trial-followup-twice-daily`. There is no `booking-calendar-sync`. The other two
-migrations from the same Codex batch *are* applied
-(`admin_update_registration_contact`, `move_booking_atomically`,
-`require_public_registration_group`, and the `copy_rescheduled_booking_contact`
-trigger all exist live), so it is only this one.
+**The cron migration: APPLIED, and verified.** The owner told Lovable to apply
+it after the deploy, in commit `db6be98` "Applied calendar-sync schedule".
+Confirmed against the database rather than taken from the commit message:
 
-Without it, Codex's new `calendar-sync` never runs on a schedule — which is the
-entire point of it, and it is the two-way Google sync the owner asked for.
-
-Lovable declined to apply it on its own and asked the owner first, for a fair
-reason: `*/5 * * * *` is 288 runs a day, each waking the database even with
-nothing to sync, which carries a small ongoing cost. That is a recurring-cost
-decision and it belongs to the owner, which is why this session did not apply it
-either, despite having direct database access and being able to do it in one
-statement at no credit cost.
-
-The ordering constraint that mattered is now satisfied: `calendar-sync` is
-deployed, so scheduling it will no longer fail every five minutes against a
-function that does not exist.
-
-Two ways to finish it, once the owner has decided the cadence:
-
-```sql
--- Option A, as written (every 5 minutes). Run directly; no credits.
-DO $$
-DECLARE reminder_command text;
-BEGIN
-  SELECT command INTO reminder_command FROM cron.job
-    WHERE command LIKE '%/functions/v1/booking-reminders%' ORDER BY jobid LIMIT 1;
-  IF reminder_command IS NOT NULL THEN
-    PERFORM cron.schedule('booking-calendar-sync', '*/5 * * * *',
-      replace(reminder_command, '/functions/v1/booking-reminders', '/functions/v1/calendar-sync'));
-  ELSE
-    RAISE NOTICE 'Configure the authenticated CRON_SECRET job first.';
-  END IF;
-END;
-$$;
-
--- Then confirm:
-select jobname, schedule, active from cron.job order by jobname;
+```
+jobname                         schedule        target
+backlink-snapshot-weekly        0 4 * * 1       other
+booking-calendar-sync           */5 * * * *     calendar-sync   ← new
+booking-reminders-every-15-min  */15 * * * *    booking-reminders
+trial-followup-twice-daily      0 9,18 * * *    other
 ```
 
-Option B is to tell Lovable "apply it", which costs credits and does the same
-thing. The schedule string is the only thing worth changing first: every 15
-minutes would quarter the cost and still be well inside useful.
+So `calendar-sync` is deployed and is now scheduled every five minutes, and the
+ordering risk is gone — the function existed before the schedule was created.
 
-Note the migration clones the `booking-reminders` job's command rather than
-inventing a secret, so it silently does nothing if that job is ever removed —
-the `RAISE NOTICE` branch. Check `cron.job` afterwards, not just the exit status.
+Two things to keep in mind about it rather than forget:
+
+- `*/5` is 288 runs a day, each waking the database even with nothing to sync.
+  Lovable raised the cost before applying it and the owner accepted that cadence.
+  If it ever wants trimming, `*/15` would quarter it and still be well inside
+  useful; change it with `cron.alter_job` or reschedule the same job name.
+- The migration *clones the `booking-reminders` job's command* rather than
+  inventing a secret, so it silently does nothing if that job is ever removed —
+  the `RAISE NOTICE` branch. After any change in that area, check `cron.job`
+  itself, not the migration's exit status.
 
 ## 2. The owner's own to-do list
 
