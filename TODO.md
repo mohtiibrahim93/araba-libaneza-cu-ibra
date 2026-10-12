@@ -33,7 +33,7 @@ code works. Left here only so the history is not lost.
 
 ## 3. A list of what is left, and do it
 
-This file. See also `HANDOFF-codex.md` for the environment notes and the
+This file. See also `HANDOFF.md` for the environment notes and the
 standing constraints.
 
 ## 4. Everything functional
