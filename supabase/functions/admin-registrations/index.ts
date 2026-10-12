@@ -3028,7 +3028,8 @@ Deno.serve(async (req) => {
 
     for (const registration of data) {
       registration.account_email = registration.email;
-      registration.email = registration.contact_email ?? registration.email;
+      // A cleared contact email is stored as "" — fall back to the account email.
+      registration.email = registration.contact_email || registration.email;
     }
     if (data.length) {
       const cohortIds = [...new Set(data.map((r) => r.cohort_id).filter(Boolean))];
