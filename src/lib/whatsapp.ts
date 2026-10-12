@@ -1,9 +1,14 @@
 /**
  * WhatsApp chat link for a stored phone number.
  *
- * On desktop this goes straight to web.whatsapp.com: wa.me redirects through
- * api.whatsapp.com, which ad blockers and privacy extensions block with
- * ERR_BLOCKED_BY_RESPONSE. On mobile wa.me is still right — it opens the app.
+ * On desktop this goes straight to web.whatsapp.com, saving the wa.me ->
+ * api.whatsapp.com redirect. On mobile wa.me is right — it opens the app.
+ *
+ * "web.whatsapp.com is blocked … ERR_BLOCKED_BY_RESPONSE" is not this link:
+ * WhatsApp sends Cross-Origin-Opener-Policy: same-origin (api.whatsapp.com:
+ * same-origin-allow-popups), and Chrome refuses such a page in a tab opened
+ * from a sandboxed iframe, such as the Lovable editor preview. From the
+ * site in its own tab the link works.
  */
 export function buildWhatsAppUrl(rawPhone: string, text?: string): string {
   // 1. Strip non-digits
