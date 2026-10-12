@@ -406,3 +406,51 @@ without checking Google Ads → Conversions.** A real gap that can be named: onl
 `begin_checkout` has an Ads conversion — there is none for `generate_lead` or
 `purchase`, and for a lead-gen site the lead is what Ads should bid on. Adding
 those needs conversion action names created in the owner's Ads account.
+
+## 8. Addendum — the parallel session (forms, reCAPTCHA, cookies), 12 October
+
+A second Claude session ran alongside the one above. What it found and did,
+in the order it matters to whoever picks this up:
+
+- **Live site, rechecked 12 Oct after the publish note in §1 was written:** the
+  live home page now contains `cookie_consent` and no `goadopt`, so a publish
+  carrying the new cookie banner *has* landed. Re-run the §4 hash comparison
+  rather than trusting either note.
+- **Why no group/private/kids registration had ever been saved:** the Google
+  Cloud project behind the reCAPTCHA key (project number `1060524901775`) had
+  been deleted by the owner by mistake. Google answered every token with
+  "Project … has been deleted", `verify-recaptcha` returned `success:false`, and
+  `RegistrationFormSection` stopped every submit at step 1 with a toast. Trials
+  were unaffected (different path). Two fixes:
+  - code: the form now blocks only on Google's own low score; a verify error or
+    any `errors[]` (key/project/config failure) lets the visitor through, as the
+    soft check was always meant to (`configProblem`, commit a80a85a);
+  - the owner restored the project in Google Cloud. Verified: a dummy token now
+    gets `invalid-input-response`, i.e. the secret and project are live again.
+  First non-trial registration ever: a group sign-up on 11 Oct (still unpaid).
+  If reCAPTCHA ever breaks again, a new v3 key needs the site key in
+  `src/lib/recaptcha.ts` + `__root.tsx` and `RECAPTCHA_SECRET_KEY` via Lovable.
+- **Other Google Cloud projects the owner asked about:** three
+  `gen-lang-client-*` (Google AI Studio / Gemini keys) and "My Project 31793"
+  are not referenced by the site. `top-splice-8v9wh` belongs to Google DeepMind's
+  "Gemini API Tenant Sandbox" org — not the owner's, nothing to do.
+- **Cookie consent:** Adopt removed entirely (injector, meta, CSS, footer hook).
+  `CookieConsentBanner` + `src/lib/cookieConsent.ts`, localStorage
+  `cookie_consent` = `all|essential`; the gtag bootstrap re-grants a stored
+  `all` *before* `gtag('config')`; footer "Setări cookies" fires
+  `cookie-consent:open`; "Doar esențiale" after "all" sends `denied`. Tests in
+  `src/test/cookie-consent.test.tsx`. (The `md:bottom-32` noted in §3 is
+  Lovable's later tweak to this same component.)
+- **Privacy policy** (RO+EN, §4 and §7): Adopt removed, "Google Ads campaign
+  measurement" added next to Analytics, banner described, dated October 2026.
+  **Owner to confirm** GA4 is linked to Google Ads; if not, drop the Ads wording.
+- **Private-lesson paid path has never run live end to end.** Static checks
+  pass (availability returns slots; `create-payment-intent` ownership is
+  email-match, fine for anonymous visitors; the trial path proves Stripe +
+  webhook + calendar work). The owner agreed to book one lesson with his own
+  card and refund it — then check the registration is `paid`, the booking
+  exists with a `google_event_id`, and it shows in the admin.
+- **`cohort_calendar.members`** ("Cursanții grupei"): needed the
+  `admin-registrations` deploy; §1 says all functions deployed from `0a75fe99`,
+  which includes it — verify once by adding a lesson to A1 online and checking
+  bandaricaefrem@gmail.com is on the invite.
