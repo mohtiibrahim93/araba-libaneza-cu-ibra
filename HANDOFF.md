@@ -1,67 +1,83 @@
 # Handoff — centruldearabalibaneza.com
 
-Written 2026-10-12, at the end of a long Claude Code session. Supersedes
-`HANDOFF-codex.md` (9 October), which is still accurate about the environment
-but out of date about the work. Read this one first.
+The single handoff for this repo. It merges three earlier files — `HANDOFF.md`
+(12 Oct 2026), `HANDOFF-codex.md` (9 Oct) and `docs/CLAUDE_HANDOFF.md` (SEO,
+1 Sep, originally in Romanian) — without repeating anything. The originals are
+in git history at `124db82`.
 
 Repo `mohtiibrahim93/araba-libaneza-cu-ibra`. Owner/teacher: Ibrahim Gabriel
 Mohti ("Ibra"). Lebanese Arabic school in Bucharest. Site is RO/EN, admin is
-Romanian only.
+Romanian only. Stack: Vite + React + TS + Tailwind, backend Supabase via
+Lovable Cloud.
+
+Three agents work on this repo: Claude Code, Codex (merged PRs #47 and #48) and
+Lovable (which both edits and deploys). `main` has moved under a session more
+than once. Always `git fetch` and check before assuming anything.
 
 ---
 
-## 0. State right now
+## 1. Hard constraints — read before changing anything
 
-- Branch `claude/blog-cms-migration-tli9p7` and `main` are both at **`e9c76e3`**.
-  Working tree clean.
-- **972 tests pass** (`npx vitest run`), `npx tsc --noEmit -p tsconfig.json`
-  clean, `npm run build` clean.
-- **A deploy is in flight.** See §1 — this is the first thing to check.
+`AGENTS.md` is binding, including for Lovable. Two rules matter most:
+
+1. **The ownership gate.** Verify subscription, checkout and visitor booking
+   ownership with an Auth-confirmed email matched to the stored registration
+   email; preserve only the existing trusted webhook path. **Never weaken it to
+   fix a 403** — add the step that lets an honest visitor through (see §4).
+   `src/test/trial-email-verification.test.ts` fails if either edge function is
+   weakened.
+2. **`registrations.payment_status`.** `unpaid`, `pending` and `failed` are
+   distinct states and must never be merged or migrated into one another.
+   `unpaid` = no payment attempted; `pending` = an attempt is open; `failed` =
+   declined. Documented above `paymentStatusLabels` in
+   `src/components/admin/types.ts`, enforced by
+   `src/test/payment-status-vocabulary.test.ts`. A migration merging `unpaid`
+   into `pending` was once written by mistake and deleted before it ran.
+
+Standing, from the owner:
+- Do **not** modify `public/4ce740356d5ab7d75677bda846853184.txt` (IndexNow key).
+- Do **not** modify `public/robots.txt` — the single `User-agent: *` group is
+  deliberate; no per-bot groups like `Google-Extended` or `GPTBot`.
+- Do **not** modify `scripts/seoPrerender.ts` or `scripts/prerenderBody.tsx`
+  without explicit instruction.
+- Keep RO ↔ EN reciprocity: any new or changed route needs both halves.
+- All existing Vitest tests must stay green.
+- Do not submit forms with real personal data.
+- Never put a Supabase personal access token, GA4 service-account JSON or admin
+  credentials in chat — they belong in Supabase secrets. Never disable TLS
+  verification or unset `HTTPS_PROXY`.
+- Admin screenshots contain real student names, emails and phones; blur before
+  committing.
+
+## 2. State as of 12 October 2026
+
+- `main` at `124db82`. 972 tests passed (`npx vitest run`) at `e9c76e3`;
+  `tsc --noEmit` and `npm run build` clean.
 - Three remote branches are fully merged into `main` and safe to delete:
   `gpt-work`, `codex/admin-course-clarity`, `codex/audit-booking-reliability`.
-  (`yalla-app-ios` and `yalla-app-ios-screenshots` were not touched and were
-  not assessed.)
+  (`yalla-app-ios` and `yalla-app-ios-screenshots` were not assessed.)
 
-Three agents have been working on this repo: this Claude session, a Codex
-session (two merged PRs, #47 and #48), and Lovable (which both edits and
-deploys). `main` moved 9 commits under this session at one point. Always
-`git fetch` and check before assuming anything.
+### The 12 Oct deploy (Lovable, 0.7 credits) — three parts, judge separately
 
-## 1. FIRST: the deploy outcome, verified
-
-A deploy-only request went to Lovable at 07:54 UTC on 12 October. It completed
-and cost 0.7 credits. Three parts; two landed and one did not, so do not
-take the reply as one result:
-
-**Edge functions: DEPLOYED.** All twelve, from a workspace at `0a75fe99`:
+**Edge functions: DEPLOYED.** All twelve, from workspace `0a75fe99`:
 `admin-registrations`, `auth-email-hook`, `booking-availability`,
 `booking-create`, `booking-manage`, `booking-reminders`, `calendar-feed`,
-`calendar-sync` (**first deploy ever**), `create-checkout`,
-`create-checkout-session`, `create-payment-intent`, `create-subscription`.
-The whole set was asked for because Codex changed three shared modules that most
-functions bundle (`_shared/booking.ts`, the new `_shared/calendar-reconciliation.ts`,
-the new `_shared/group-enrolment.ts`), so naming a short list would have shipped
-a stale bundle somewhere.
+`calendar-sync` (first deploy ever), `create-checkout`,
+`create-checkout-session`, `create-payment-intent`, `create-subscription`. The
+whole set was deployed because Codex changed shared modules most functions
+bundle (`_shared/booking.ts`, `_shared/calendar-reconciliation.ts`,
+`_shared/group-enrolment.ts`).
 
-**Site publish: STILL NOT LANDED**, rechecked after the later commits. Lovable said "publishing was requested", which is
-not the same as published, and the evidence says it has not taken effect. Checked
-after the deploy finished:
+**Site publish: UNCERTAIN.** After the deploy, the live Trial chunk was
+`Trial-BZ1dsUQq.js` against a local `Trial-Bv3dzkBz.js`, i.e. not published
+from HEAD; `araba-libaneza-cu-ibra.lovable.app` and `www.` did not respond at
+all. Later the same day the live home page contained `cookie_consent` and no
+`goadopt`, so a publish carrying the new cookie banner had landed. **Re-run the
+hash comparison in §8 before concluding anything**; if it mismatches, publish
+again and watch the Lovable UI rather than trusting its reply ("publishing was
+requested" is not "published").
 
-| | Trial chunk |
-|---|---|
-| local build of current HEAD | `Trial-Bv3dzkBz.js` |
-| live `centruldearabalibaneza.com` | `Trial-BZ1dsUQq.js` |
-
-Vite hashes are content-derived, so different hash means different content. Also
-checked: `araba-libaneza-cu-ibra.lovable.app` and `www.` do not respond at all,
-so this is not a custom-domain cache showing a stale copy of a good publish.
-**Everything this session built is still not live.** Re-run the comparison in
-§4 before concluding anything; if it still mismatches, the publish needs doing
-again, and it is worth watching the Lovable UI rather than trusting the reply.
-
-**The cron migration: APPLIED, and verified.** The owner told Lovable to apply
-it after the deploy, in commit `db6be98` "Applied calendar-sync schedule".
-Confirmed against the database rather than taken from the commit message:
+**Cron: APPLIED, verified against `cron.job`** (commit `db6be98`):
 
 ```
 jobname                         schedule        target
@@ -71,210 +87,341 @@ booking-reminders-every-15-min  */15 * * * *    booking-reminders
 trial-followup-twice-daily      0 9,18 * * *    other
 ```
 
-So `calendar-sync` is deployed and is now scheduled every five minutes, and the
-ordering risk is gone — the function existed before the schedule was created.
-
-Two things to keep in mind about it rather than forget:
-
-- `*/5` is 288 runs a day, each waking the database even with nothing to sync.
-  Lovable raised the cost before applying it and the owner accepted that cadence.
-  If it ever wants trimming, `*/15` would quarter it and still be well inside
-  useful; change it with `cron.alter_job` or reschedule the same job name.
+- `*/5` is 288 runs a day; the owner accepted that cost. `*/15` would quarter it
+  (`cron.alter_job` or reschedule the same job name).
 - The migration *clones the `booking-reminders` job's command* rather than
-  inventing a secret, so it silently does nothing if that job is ever removed —
-  the `RAISE NOTICE` branch. After any change in that area, check `cron.job`
-  itself, not the migration's exit status.
+  holding a secret, so it silently does nothing (`RAISE NOTICE`) if that job is
+  removed. After any change there, check `cron.job` itself.
 
-## 2. The owner's own to-do list
+## 3. The owner's to-do list and his open decision
 
-`TODO.md` is in the repo and holds his eight items in his order, with what is
-known about each. It is the authoritative list; this file does not repeat it.
-Two of the eight were completed during this session and are marked so.
+`TODO.md` holds his eight items in his order and is the authoritative list.
 
-His item 8 is **an open question he has not answered**, and it should not be
-implemented by guessing. He asked what should happen to a free trial after the
-card is saved: if he cancels, the trial currently cannot be taken again. My
-proposal, which he has not accepted or rejected: `confirmed → done | no_show`,
-with a timer that only *asks* (after 24h the lesson appears in "Azi" with two
-buttons) rather than deciding by itself — because auto-marking "taken" removes
-a free trial from someone who may simply have been ill, and auto-marking "not
-taken" hands a second free trial to a no-show. Both fail silently; asking costs
-him five seconds. **Get his decision before building it.**
+His item 8 is **an open question he has not answered — do not build it by
+guessing.** What should happen to a free trial after the card is saved? If he
+cancels, the trial currently cannot be taken again. Proposed, not accepted or
+rejected: `confirmed → done | no_show`, with a timer that only *asks* (after
+24h the lesson appears in "Azi" with two buttons) rather than deciding, because
+auto-"taken" removes a trial from someone who was ill and auto-"not taken" gives
+a no-show a second free trial. Both fail silently; asking costs five seconds.
 
-## 3. What this session did, in order, and why
+## 4. What has been built, and why
 
-Every item below is pushed to `main`. The reasoning matters more than the diff
-in several of these, so it is given.
+All on `main`. The reasoning matters more than the diff in several of these.
 
-### The free trial was unbookable by the public — fixed
-From 7 October, `create-checkout-session` and `booking-create` both required an
+### Free trial was unbookable by the public — fixed (`157e1bf` and later)
+From 7 Oct, `create-checkout-session` and `booking-create` required an
 Auth-confirmed email matching the registration (`verifiedRegistrationOwner`,
-which Lovable added in `518b6b3`, live from the `0d27a4a` deploy). A first-time
-visitor has no account, so the card step answered **403** and nobody outside the
-office could complete a free trial. Verified against the live function with the
-published anon key, not inferred from the code.
+Lovable `518b6b3`, live from the `0d27a4a` deploy). A first-time visitor has no
+account, so the card step answered **403 "Sign in with your verified
+registration email to continue"**. The 403 fires before the Stripe client is
+built, so probing it has no Stripe side effect.
 
-`AGENTS.md` mandates that gate, so it was not removed. The owner chose to keep
-it and add the missing step. The fix is a one-time code emailed to the address
-the visitor types, then the card step — no account, no password, no sign-in
-screen, and no second form: the code screen is a *branch of the same render* in
-`NativeScheduler`, so the slot, name, phone, notes and format survive it with
-nothing re-entered. Done through Supabase Auth (`signInWithOtp` / `verifyOtp`)
-rather than a homemade code table, which is why it works: Auth's own expiry and
-rate limits apply, and the session it returns is exactly what the two edge
-functions already accept. **Neither edge function's security changed**, and
-`src/test/trial-email-verification.test.ts` fails if someone "fixes" a future
-403 by weakening them.
+The owner chose to keep the gate and add an email-code step. His spec,
+verbatim:
 
-Two traps found here, both worth knowing:
+> Option B — Email code before the card step, but optimize it for minimal
+> friction. Do not require visitors to create an account or sign in. Send a
+> 6-digit verification code to the email entered during registration. Preserve
+> the selected trial slot and all registration information during
+> verification. Allow code resending, with expiration and rate limiting. Once
+> verified, continue automatically to the card step without asking the visitor
+> to repeat anything. Verify the code securely on the server, not just in the
+> frontend. Ensure visitors cannot bypass verification by directly calling the
+> booking or checkout functions. Prevent duplicate free-trial registrations and
+> apply reasonable abuse protection. Do not introduce unnecessary friction into
+> the booking funnel. Test the complete process in a fresh incognito session as
+> a first-time public visitor, without an existing login.
 
-1. **Supabase calls a first-time visitor's confirmation a *signup*, not a magic
-   link**, so it sends the signup email. The obvious place for a one-time code
-   is the magic-link template, and putting it only there would have covered
-   everyone *except* the people the change was for. Both templates carry it now,
-   each keeping its button below the code, because the admin fallback sign-in and
-   the student account send the same emails and expect a link.
-2. **The code was eight digits and the screen accepted six.** Found only by
-   running the real flow against production — a real code arrived reading
-   `20137377`. The length is a Supabase dashboard setting (6–10), not something
-   in the repo, so no unit test could have caught it. The screen now accepts the
-   whole range and lets the server judge the code. The owner has since set the
-   length to 6 and confirmed "codul merge", so this is now insurance rather than
-   a live fix.
+Implemented through Supabase Auth (`signInWithOtp` / `verifyOtp`), not a
+homemade code table: Auth's expiry and per-address rate limits apply, and the
+session it returns is exactly what the two edge functions already accept.
+**Neither edge function's security changed.**
 
-Verified end to end at the protocol level as a first-time visitor with no prior
-session: `POST /auth/v1/otp` → 200 and email delivered; the email's subject and
-code correct in HTML and plain text; `POST /auth/v1/verify` (type `"email"`) →
-200 with `email_confirmed_at` set; `POST /rest/v1/registrations` as anon → 201;
-`POST /functions/v1/create-checkout-session` → **200 with a live Stripe URL**,
-where it returned 403 that morning.
+- `src/components/NativeScheduler.tsx`:
+  - `alreadyVerified(addr)` skips the screen when Auth already holds a confirmed
+    matching session. It signs out a session for a *different* address first
+    (Supabase keeps one per client) — this logs an admin out of the panel in the
+    same browser if they book under another address; known, judged rarer.
+  - `sendCode(addr)` with a 60s resend cooldown.
+  - The code screen is a `verifyFor` **branch of the same render, not a route**,
+    so slot, name, phone, notes and format survive with nothing re-entered; it
+    shows the chosen slot.
+  - `startTrialCardStep(regId, slotIso)` runs on success and when already
+    verified. `readFunctionError` pulls the JSON body off a `FunctionsHttpError`
+    so `trial_used` / `conflict` survive instead of a generic toast.
+- `create-checkout-session` checks one-free-trial-per-person **before** the
+  Stripe call. `booking-create`'s check runs on the webhook, after the card is
+  saved, so a repeat attempt used to go through the whole card step and then be
+  refused.
 
-### Two admin controls that did not exist
-The panel could cancel a booking and nothing else. Changing a time meant
-cancelling and asking the student to rebook, or editing Google Calendar by hand
-— and that second one is the direction that does not sync back, so the admin's
-calendar view went stale *because of the owner doing the only thing left to him*.
-Fixing the controls is the root of the "calendar does not sync back" complaint,
-not a detour from it.
+Traps found here:
+1. **Supabase treats a first-time visitor's confirmation as a *signup*, not a
+   magic link**, so it sends the signup email. Both `signup.tsx` and
+   `magic-link.tsx` carry the code, each keeping its button below it, because
+   `AdminLogin.tsx` and `StudentAccount.tsx` send the same emails and expect a
+   link.
+2. **The code was eight digits and the screen accepted six** (a real code read
+   `20137377`). Length is a Supabase dashboard setting (6–10), not repo code.
+   The screen accepts the whole range and lets the server judge. The owner has
+   since set 6 and confirmed "codul merge".
+3. `auth.users.confirmation_token` is a hash, not the code — you need the inbox.
+
+Two template copies exist and both are live-capable:
+`src/lib/email-templates/` (site route `src/routes/lovable/email/auth/webhook.ts`
+— **the one configured in Supabase**, its subject appeared on the real email)
+and `supabase/functions/_shared/email-templates/` (`auth-email-hook`, which has
+always passed the token — the `gpt-work` branch added the code there). Both
+carry the code and the same subjects. `auth-email-code-render.test.ts` (from
+`gpt-work`) renders the email and strips the hidden preheader before asserting;
+it was kept and extended with the 8-digit case.
+
+Verified end to end in production as a first-time visitor: `POST /auth/v1/otp` →
+200 and email delivered; subject and code correct in HTML and plain text;
+`POST /auth/v1/verify` (type `"email"`) → 200 with `email_confirmed_at`;
+`POST /rest/v1/registrations` as anon → 201; `create-checkout-session` → **200
+with a live Stripe URL**.
+
+### Admin: move a lesson and book one by hand
+The panel could only cancel. Changing a time meant editing Google Calendar by
+hand, which does not sync back — the root of the "calendar does not sync back"
+complaint.
 
 - **Mută lecția** — move a booking, including outside published hours.
-- **Programează o lecție privată** — book someone in from scratch. Private
-  lessons only; group courses are not bookings.
+- **Programează o lecție privată** — book someone in from scratch (private only;
+  group courses are not bookings).
 
-Both route through `booking-manage` / `booking-create` with the service-role key,
-exactly as `cancel_booking` already did, so one code path still owns the calendar
-event (patched in place, so the Meet link survives) and the emails. Nothing about
-bookings is reimplemented.
+Both go through `booking-manage` / `booking-create` with the service-role key,
+like `cancel_booking`, so one code path owns the calendar event (patched in
+place, Meet link survives) and the emails. **A student stays bound by published
+availability and 12-hour notice; the owner does not** — exempted by the
+service-role key, like the 24-hour cancellation exemption; a test catches it
+leaking. The first attempt reports the conflict and names the cause (another
+booking, Google Calendar, or a group lesson); a second deliberate click
+overrides. Past times are refused for everyone. Both dialogs use
+`bucharestCivilToUtc`, not an offset (a hand-rolled offset is wrong twice a
+year).
 
-The design point: **a student stays bound by the published availability and the
-12-hour notice; the owner does not.** "Nine on Sunday, just this once" is a
-normal arrangement, and a panel that refuses it is what sends him back to Google.
-The exemption is earned by the service-role key, the same way the existing
-24-hour cancellation exemption was, and a test exists to catch it leaking.
-Not bound is not unwarned: the first attempt *reports* and names the cause —
-another booking, Google Calendar, or a group lesson, three causes with three
-different answers where "slot taken" said nothing actionable — and only a second,
-deliberate click overrides it. Times in the past are still refused for everyone.
+Each hand-made booking gets a **fresh registration**, deliberately:
+`booking-create` caps bookings at the lessons a registration bought (so a
+redelivered Stripe event cannot over-book), and attaching to an existing one
+would consume a paid lesson. A refused booking deletes its registration again.
+`payment_status` is `unpaid`, never `pending`, when not paid.
 
-Both dialogs convert Bucharest civil time with `bucharestCivilToUtc`, not an
-offset, because an hour out books a real student at the wrong time and a
-hand-rolled offset is wrong twice a year.
+### Sănătate calendar names the drift
+Upcoming lessons whose Google event disagrees: moved (both times shown),
+cancelled in Google, or gone. **Read-only on purpose** — it never rewrites a
+booking from a calendar match. One paginated `events.list`; `showDeleted` on;
+instants compared with a minute of slack (Google's offset format breaks string
+equality). A failed read returns `null`, not `[]`, and the panel says it could
+not check.
 
-### A fresh registration per hand-made booking — deliberate
-`booking-create` caps bookings at the number of lessons the registration bought,
-on purpose, so a redelivered Stripe event cannot over-book a package. Attaching
-an admin booking to an existing registration would silently consume someone's
-paid lesson and make the money and the lessons disagree. If the booking is
-refused the registration is deleted again, so a rejected slot leaves nothing in
-Înscrieri. `payment_status` is `unpaid`, never `pending`, when it has not been
-paid for — see §5.
+### Forms were silently blocked by reCAPTCHA (`a80a85a`)
+No group/private/kids registration had ever been saved: the Google Cloud
+project behind the reCAPTCHA key (project number `1060524901775`) had been
+deleted by mistake, `verify-recaptcha` returned `success:false`, and
+`RegistrationFormSection` stopped every submit at step 1. Trials use another
+path and were unaffected. Fixes: the form now blocks only on Google's own low
+score — a verify error or any `errors[]` lets the visitor through
+(`configProblem`); and the owner restored the project (a dummy token now gets
+`invalid-input-response`). First non-trial registration ever: a group sign-up
+on 11 Oct (unpaid). If it breaks again, a new v3 key needs the site key in
+`src/lib/recaptcha.ts` + `__root.tsx` and `RECAPTCHA_SECRET_KEY` via Lovable.
 
-### Sănătate calendar now names the drift
-Upcoming lessons whose Google event disagrees with the panel: moved (both times
-shown), cancelled in Google, or gone. **Read-only on purpose** — it reports, it
-never rewrites a booking's time from a calendar match, because a wrong match
-rewrites a real lesson and that should not arrive as a side effect of opening a
-health screen. One paginated `events.list`, not one fetch per booking;
-`showDeleted` on, because a cancelled event is exactly what is sought and the
-API omits it otherwise; instants compared with a minute of slack, since Google
-returns its own offset format and string equality flags everything as moved.
-A failed read returns `null`, not `[]`, and the panel says it could not check —
-"nothing to report" and "I could not look" must not print identically.
+Other Google Cloud projects the owner asked about: three `gen-lang-client-*`
+(AI Studio / Gemini keys) and "My Project 31793" are not used by the site;
+`top-splice-8v9wh` belongs to Google DeepMind's "Gemini API Tenant Sandbox" org,
+not the owner's.
 
-### reCAPTCHA badge, and the corner it was in
-The badge is fixed bottom-right at z-index two billion — the corner the WhatsApp
-and phone buttons occupy — so it floated on top of the control the site most
-wants tapped. It is now hidden on every route, and Google's required sentence
-("This site is protected by reCAPTCHA…", with both links) is in the footer and
-beside the consent box instead, as `RecaptchaNotice`. **Hiding the badge and
-showing the notice are one decision**: delete the footer line and the site is in
-breach while still looking fine, so one test asserts both halves together.
-`visibility: hidden`, not `display: none` — the badge is an iframe the API talks
-to. `AdminChromeMarker` was deleted; the rule is global now and nothing read the
-flag. Lovable's new cookie banner had the same problem (z-60 over the buttons
-from 768px up) and got `md:bottom-32`.
+### reCAPTCHA badge (`6f48986`)
+The badge sat bottom-right at z-index two billion over the WhatsApp/phone
+buttons. Hidden on every route; Google's required sentence is in the footer and
+beside the consent box (`src/components/RecaptchaNotice.tsx`). **Hiding the
+badge and showing the notice are one decision** — `src/test/recaptcha-badge.test.ts`
+asserts both. `visibility: hidden`, not `display: none` (the badge is an iframe
+the API talks to). `AdminChromeMarker` deleted; nothing read it.
 
-### Smaller, all with tests
-- **Private lessons never reached step 3.** The heading said "Pasul 2 din 3 —
-  alege ziua și ora" while you were paying. The scheduler now reports which of
-  its two screens it is on, derived from the same condition that renders the card
-  step so the two cannot drift.
-- **Disponibilitate showed 12:00 PM.** `<input type="time">` renders in the
-  *browser's* locale, not the page's, and no attribute forces 24-hour. The only
-  reliable fix is not to ask the browser for a clock: `TimeField` is two selects.
-  A stored minute off the 15-minute grid is offered as itself, not snapped.
-  Kids slots had the same control and the same problem. A test fails if any
-  admin component reintroduces a native time input.
-- **Cash / transfer / PayPal** read as though any of them held your place. The
-  three methods stay exactly where they were — an earlier pass of mine started
-  deleting them, which was wrong and was reverted before anything was committed —
-  and they now carry the condition that was missing: the place is not held until
-  the money arrives, plus a seat-cap sentence where there is a cap.
-- **Admin tables** declared up to ~980px of minimum column widths inside boxes
-  that always scrolled sideways and never said so. They now show a fade and
-  become a focusable labelled region *only while they overflow*. The keyboard
-  half is not decoration: an unfocusable scroll div is unreachable without a
-  pointer.
-- **Two unverifiable Google links** became one verified identity. CID
-  `0x652fb90494e1566b` = `7291249751064925803` was already on the site in the map
-  embed; the profile link is built from it, the structured data imports that
-  constant instead of a second pasted copy, and the review link's `g.page` key is
-  checked by decoding it to the same CID — arithmetically, because this sandbox
-  cannot reach `goo.gl` at all. Saying "verified" off a blocked request would
-  have been worth nothing.
-- **Yalla corrections.** Lovable separated published card text from correction
-  records but wrote the migration only to `drizzle/migrations/`, which this repo
-  does not read; `supabase/migrations/` still said the opposite, so a fresh
-  database would have re-opened the public read it had just closed. Recorded
-  properly, plus a revoke Lovable's version left off. Verified with the published
-  anon key: the function returns exactly `card_id, ar, ro, variants`; direct
-  reads of both tables return `42501`. **This item is closed** — the owner never
-  saw a security warning; that phrasing was mine, and Lovable's scan is clean.
-  Do not reopen it.
+### Cookie consent
+Lovable (`535b9ff`, `2f3757c`) replaced the expired Adopt CMP with a built-in
+banner and Consent Mode v2; it was then completed: Adopt removed entirely
+(injector, meta, CSS, footer hook). `CookieConsentBanner` +
+`src/lib/cookieConsent.ts`, localStorage `cookie_consent` = `all|essential`;
+the gtag bootstrap re-grants a stored `all` *before* `gtag('config')`; footer
+"Setări cookies" fires `cookie-consent:open`; "Doar esențiale" after "all" sends
+`denied`. Tests in `src/test/cookie-consent.test.tsx`. The banner sat at z-60
+over the WhatsApp/phone buttons from 768px up; `md:bottom-32` fixed it
+(`8a4854c`).
 
-### The other agents' work
-- **`gpt-work`** added the one-time code to the *other* copy of the templates
-  (`supabase/functions/_shared/email-templates/`). My first read called it a dead
-  copy; **that was wrong** — `auth-email-hook/index.ts:237` has always passed the
-  token, so on that path the template was the only missing piece. Both auth-email
-  implementations are live-capable and only one is configured in Supabase (the
-  **site route** is the live one — its subject appeared on the real email), so
-  both now carry the code and the same subjects. Its
-  `auth-email-code-render.test.ts` is **better than my own test** — it actually
-  renders the email and strips the hidden preheader before asserting — and was
-  kept and extended with the real 8-digit case.
-- **Codex** merged two PRs covering admin contact editing, group-enrolment
-  validation, atomic booking moves, calendar reconciliation and a new
-  `calendar-sync` function. I verified my features survived the merge and the
-  suite is green, but **I have not reviewed Codex's work line by line.** There is
-  likely conceptual overlap between its `move_booking_atomically` /
-  `calendar-reconciliation` and my `reschedule_booking` / `calendarDrift`. Worth
-  a deliberate look before building more in that area.
+Privacy policy (RO+EN, §4 and §7): Adopt removed, "Google Ads campaign
+measurement" added next to Analytics, banner described, dated October 2026.
+**Owner to confirm** GA4 is linked to Google Ads; if not, drop the Ads wording.
 
-## 4. Known-good verification recipes (no credits, no browser)
+### Smaller fixes, all with tests
+- **Private lessons reach "Pasul 3 din 3"** while paying (it said step 2). The
+  scheduler reports its screen from the same condition that renders the card
+  step.
+- **Disponibilitate showed 12:00 PM.** `<input type="time">` uses the browser's
+  locale and no attribute forces 24-hour; `src/components/admin/TimeField.tsx`
+  is two selects. Off-grid stored minutes are shown as-is. Kids slots too. A
+  test fails if an admin component reintroduces a native time input.
+- **Cash / transfer / PayPal** now say the place is not held until the money
+  arrives, plus a seat-cap sentence where there is a cap. **The three methods
+  stay** — an earlier pass started deleting them, wrongly; reverted uncommitted.
+- **Admin tables** (`a2074ce`): `useHorizontalOverflow` + a fade + a focusable
+  labelled region only while they overflow (an unfocusable scroll div is
+  unreachable without a pointer). "Lecții" and "Parcurs" are grids, no table.
+- **Google Business links**: one verified identity, CID `0x652fb90494e1566b` =
+  `7291249751064925803` (already in the map embed); structured data imports the
+  constant; the review link's `g.page` key decoded arithmetically to the same
+  CID, since this sandbox cannot reach `goo.gl`.
+- **Yalla corrections** (`03134aa`): Lovable wrote the migration only to
+  `drizzle/migrations/`, which this repo does not read. Recorded as
+  `supabase/migrations/20261009070000_yalla_card_overrides_private.sql`, plus
+  revoking `anon`/`authenticated` on `yalla_card_override_history`. Verified:
+  `get_published_card_overrides()` returns exactly `card_id, ar, ro, variants`;
+  direct reads of both tables → `42501`. **Closed — do not reopen.** The owner
+  never saw a security warning; Lovable's scan is clean.
 
-**Is the site actually published from this commit?** Vite hashes are content
-derived, so a build here and the live HTML settle it without asking Lovable:
+### Codex's work — not reviewed line by line
+Admin contact editing, group-enrolment validation, atomic booking moves,
+calendar reconciliation and `calendar-sync`. Suite is green and Claude's
+features survived the merge, but there is likely overlap between
+`move_booking_atomically` / `calendar-reconciliation` and `reschedule_booking` /
+`calendarDrift`. Look before building more there. One of Codex's three
+migrations was once found unapplied while the other two were live.
+
+### SEO metadata (Lovable, 1 Sep)
+Based on a GSC export (11 Jun → 22 Aug 2026, Web) and GA4 (1 Jan → 1 Sep 2026).
+Key figures are in `docs/SEO_AUDIT.md` §2–3; the full plan is
+`docs/SEO_ACTION_PLAN.md`.
+
+| File | Change | Why |
+|---|---|---|
+| `src/lib/tracking.ts` | `email_click` for `mailto:`; `cta_click` with `cta_target` for internal links to `/trial`, `/inscriere`, `/checkout`, `/booking` (one global listener) | GA4 had no contact/CTA events |
+| `src/pages/seo/CursuriArabaBucuresti.tsx` | title + description (year, address, price, free trial) | 85 impressions, CTR 2.35%, position 40 |
+| `src/pages/seo/CursuriArabaAdolescenti.tsx` | title + description aligned to "cursuri adolescenti araba" | 466 impressions, 0 clicks |
+| `src/pages/seo/MeditatiiAraba.tsx` | title with price and "probă gratuită" | 473 impressions on "meditatii araba", 0 clicks |
+| `src/pages/seo/Resurse.tsx` | clearer title + internal links to `/cursuri-araba`, `/cursuri-araba-bucuresti`, `/meditatii-araba` | ranks 6.6; passes authority to commercial pages |
+| `src/pages/seo/CeArabaSaInveti.tsx` | title with year | position 5.2, CTR 10% |
+
+Metadata only, deliberately: reversible and measurable on its own; content
+rewrites are separate tasks (§6) so their effect can be attributed.
+
+## 5. Still open
+
+Not blocked:
+- Cohorte has ~12 unlabelled row controls (missing `aria-label`).
+- `compatibility_date` in the generated `wrangler.json` is the build date (nitro
+  generates it; there is no `wrangler.toml`).
+- **"Măsurare" self-check** for the analytics screen (whether gtag loaded,
+  consent granted, events fired, in the current browser): written, **not
+  pushed** — the mounting edit was interrupted, so both halves were reverted.
+  ~140 lines and one edit to redo.
+- **Embedded no-redirect card form everywhere** (private lessons have it; group
+  checkout, subscriptions and the kids deposit still redirect to Stripe). Owner
+  asked for it. Not started; scope it first.
+- **Private-lesson paid path has never run live end to end.** The owner agreed
+  to book one with his own card and refund it, then check the registration is
+  `paid`, the booking exists with a `google_event_id`, and it shows in admin.
+- **Admin cancel inside 24h** has never been tested in the real panel.
+- **`cohort_calendar.members`** ("Cursanții grupei"): verify once by adding a
+  lesson to A1 online and checking bandaricaefrem@gmail.com is on the invite.
+- SEO tasks T1–T5 (§6).
+
+Blocked on the owner:
+- GA4 phase two: numeric property ID and a service-account JSON.
+- Confirmation email button points at `https://araba-libaneza-cu-ibra.lovable.app`,
+  not the real domain — Supabase Auth Site URL / redirect allow-list (a setting).
+- The trial lifecycle decision (§3).
+- Whether GA4 is linked to Google Ads (privacy policy wording, §4).
+- Google UI steps in §7.
+
+### Analytics / Ads (his item 1), established by reading
+The **root cause was consent, not the tags**: while Adopt's trial was expired
+its banner never rendered, Consent Mode stayed `denied`, and GA4,
+`generate_lead` and Ads conversions recorded nothing. The new banner should
+have restarted it; **unverified**. `__ANALYTICS_ENABLED__` is not the problem
+(it only switches off in Lovable previews and iframes). The Ads account is
+`AW-18482373882` but the bootstrap configures only `G-F167Y815JL`; the code
+says the Ads conversion was created against the site's existing Google tag,
+which Google supports — **check Google Ads → Conversions before calling it
+broken.** A real gap: only `begin_checkout` has an Ads conversion — none for
+`generate_lead` or `purchase`. Adding them needs conversion actions created in
+his Ads account.
+
+## 6. SEO tasks remaining
+
+**T1 — Rewrite the teens page (P1, highest).** `src/pages/seo/CursuriArabaAdolescenti.tsx`.
+466 impressions, 0 clicks, position 33.5; GA4: 5 sessions with 4s engagement on
+`/cursuri/tineri` (redirects here). Steps: above the fold answers age, format,
+price, where, how to start; "Pentru părinți" (schedule, group, safety,
+communication); "Pentru adolescenți" (what they say after 4 weeks, examples);
+FAQ from the GSC teen queries; `/trial` CTA top and bottom. Accept: single H1,
+≥ 900 words, valid `Course` JSON-LD, internal links to `/cursuri-araba-bucuresti`
+and `/trial`.
+
+**T2 — Homepage vs `/cursuri-araba` cannibalisation (P1).** `src/pages/Index.tsx`
+(or its sections), `src/pages/seo/CursuriAraba.tsx`. Homepage becomes brand +
+formats and stops targeting exactly "cursuri arabă" in H1/title; `/cursuri-araba`
+is the main commercial page for the generic query, linked from the homepage with
+anchor "cursuri de arabă"; self-referential canonical on both, no
+cross-canonical. Accept: distinct title/H1, one main internal link from the
+homepage. **Risk:** homepage positions may dip before `/cursuri-araba` rises —
+publish T2 on its own so the effect is attributable.
+
+**T3 — `/cursuri/grup` (P1).** 449 impressions, CTR 0.22%, position 31.9. Title
+and first paragraph on the intent "curs de arabă în grupă"; visible table of
+levels, start dates and price. Accept: title ≤ 60 chars, description ≤ 155,
+first paragraph answers price + start + format.
+
+**T4 — CTAs in ranking blog posts (P2).** `alfabetul-arab-pentru-incepatori` and
+the other GSC top-10 posts: end-of-article CTA to `/trial` and the relevant
+course page. Accept: every top-10 post has at least one internal CTA.
+
+**T5 — Form abandonment (P3).** GA4: 27 `form_start` → 14 `Lead` (~48%
+abandon). `src/components/RegistrationFormSection.tsx`, `src/pages/Trial.tsx`:
+minimum required fields, inline validation, visible errors on mobile, loading
+state on the button. Accept: completable at 390px with no horizontal scroll;
+every error has visible text next to its field.
+
+(T6, "measure the Adopt consent rate", is superseded by the consent work in §4.)
+
+Risk: `cta_click` can be high volume — do not make it a key event unless needed.
+Data limit: no GSC history before June 2026, so no year-on-year comparison for
+12 months.
+
+## 7. Google UI steps (cannot be done from code)
+
+1. GA4 → Admin → Events → mark as **key events**: `generate_lead`,
+   `trial_booking_complete`, `paid_booking_complete` (optionally `cta_click`).
+   Until then every GA4 conversion report shows 0, and T5 cannot be validated.
+2. GA4 → Admin → Product links → link Search Console.
+3. GSC → check the indexed pages report for the new routes.
+
+After publishing SEO changes: changed routes answer 200; new title/description
+in the served HTML; `public/sitemap.xml` contains them; JSON-LD valid; GA4
+DebugView receives `email_click` and `cta_click`; sitemap resubmitted in GSC.
+
+KPIs to compare at 14 / 30 / 60 days (use complete windows of equal length):
+
+| KPI | Source | Baseline |
+|---|---|---|
+| Organic clicks | GSC | 34 (10 weeks) |
+| Average CTR | GSC | ~1.1% |
+| Average position | GSC | ~26 |
+| "cursuri araba bucuresti" position | GSC | 16.93 |
+| "meditatii araba bucuresti" position | GSC | 14.91 |
+| "cursuri adolescenti araba" position | GSC | 33.52 |
+| `/meditatii-araba` CTR | GSC | 0.91% |
+| `/cursuri/grup` CTR | GSC | 0.22% |
+| Organic Search sessions | GA4 | 50 |
+| `Lead` events | GA4 | 14 |
+| `form_start` | GA4 | 27 |
+| Key events | GA4 | 0 (to enable) |
+
+## 8. Verification recipes and environment
+
+**Is the site published from this commit?** Vite hashes are content-derived:
 
 ```bash
 npm run build
@@ -284,9 +431,7 @@ curl -s https://centruldearabalibaneza.com/trial \
 # same hash → published from this commit; different → not published
 ```
 
-**Are the repo's migrations applied?** Ask the database for the objects, not the
-migrations table — Lovable and Codex both write migrations, and one of Codex's
-three was never applied despite the other two being live:
+**Are migrations applied?** Ask for the objects, not the migrations table:
 
 ```sql
 select proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
@@ -295,162 +440,43 @@ select proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
 select jobname, schedule, active from cron.job order by jobname;
 ```
 
-
-The browser could not be made to trust the egress proxy for this host, and TLS
-verification must not be disabled, so the live checks were done over HTTP:
+**An anonymous visitor's view of an edge function** (the browser could not be
+made to trust the egress proxy, so live checks were done with curl):
 
 ```bash
-set -a && . ./.env && set +a        # anon/publishable key only; no secrets in repo
+set -a && . ./.env && set +a        # anon/publishable key only
 U="$VITE_SUPABASE_URL"; K="$VITE_SUPABASE_PUBLISHABLE_KEY"
-# an anonymous visitor's view of any edge function
 curl -s -w '\nHTTP %{http_code}\n' -X POST "$U/functions/v1/<fn>" \
   -H "apikey: $K" -H "Authorization: Bearer $K" -H 'Content-Type: application/json' -d '{}'
 ```
 
-Database inspection went through Lovable's `query_database` (production; there is
-no staging — wrap anything exploratory in `BEGIN; … ROLLBACK;`).
-
-The connected Gmail is **`marhaba@centruldearabalibaneza.com`**, *not*
-`mohtiibrahim@gmail.com` — a `+alias` of it is how the OTP email was read. Two
-confirmed auth users were left behind on purpose, both the owner's own aliases:
-`marhaba+e2etrial@…` and `mohtiibrahim+e2etrial@gmail.com`. The test
-registration row was deleted.
-
-## 5. Hard constraints — read before changing anything
-
-`AGENTS.md` is binding, including for Lovable. Two rules matter most:
-
-1. **The ownership gate.** Verify subscription, checkout and visitor booking
-   ownership with an Auth-confirmed email matched to the stored registration
-   email; preserve only the existing trusted webhook path. **Never weaken it to
-   fix a 403** — add the step that lets an honest visitor through, as above.
-2. **`registrations.payment_status`.** `unpaid`, `pending` and `failed` are
-   distinct states and must never be merged or migrated into one another.
-   `unpaid` = no payment attempted; `pending` = an attempt is open; `failed` =
-   declined. The vocabulary is documented above `paymentStatusLabels` in
-   `src/components/admin/types.ts` and enforced by
-   `src/test/payment-status-vocabulary.test.ts`. I got this wrong once and wrote
-   a migration merging `unpaid` into `pending`; it was deleted before it ran.
-
-Also standing, from the owner:
-- Do **not** modify `public/4ce740356d5ab7d75677bda846853184.txt` (IndexNow key).
-- Do **not** modify `public/robots.txt` — the single `User-agent: *` group is
-  deliberate; no per-bot groups.
-- Do **not** modify `scripts/seoPrerender.ts` or `scripts/prerenderBody.tsx`
-  without explicit instruction.
-- Keep RO ↔ EN reciprocity: any new or changed route needs both halves.
-- All existing Vitest tests must stay green.
-- Do not submit forms with real personal data.
-- Never put a Supabase personal access token, GA4 service-account JSON or admin
-  credentials in chat — they belong in Supabase secrets. Never disable TLS
-  verification or unset `HTTPS_PROXY`.
-- Admin screenshots contain real student names, emails and phones.
-
-## 6. Environment notes that save time
-
-- `npm run build` runs `scripts/guardWorkerRuntime.mjs`, which patches
-  `createRequire(import.meta.url)` → `createRequire(import.meta.url || "file:///")`
-  in `.output/server`. **Not cosmetic:** unguarded, `import.meta.url` is undefined
-  on Lovable's host, the module throws at load, and **every SSR route 500s** while
-  static assets keep serving. Not reproducible under `wrangler dev`, which defines
-  `import.meta.url`. Leave it wired into `build`.
-- **ESLint is broken in this container** (`ajv` / `defaultMeta` TypeError). Use
-  `tsc --noEmit` + `vitest` as the gates.
-- **Nothing type-checks the Deno edge functions.** Syntax-check them with:
+Environment:
+- Gates: `npx vitest run`, `npx tsc --noEmit -p tsconfig.json`, `npm run build`.
+  **ESLint is broken in this container** (`ajv` / `defaultMeta` TypeError).
+- **Nothing type-checks the Deno edge functions.** Syntax-check with
   `npx tsc --noEmit --noResolve --skipLibCheck --target es2022 --module esnext --moduleResolution bundler supabase/functions/<fn>/index.ts`
   and grep for `error TS1`.
-- The outbound proxy **403s `maps.app.goo.gl` and `g.page` on CONNECT**. A `000`
-  or `curl: (56)` there means the proxy blocked it, not that the link is dead.
+- `npm run build` runs `scripts/guardWorkerRuntime.mjs`, patching
+  `createRequire(import.meta.url)` → `createRequire(import.meta.url || "file:///")`
+  in `.output/server`. **Not cosmetic:** without it `import.meta.url` is
+  undefined on Lovable's host and **every SSR route 500s** while static assets
+  still serve. Not reproducible under `wrangler dev`. Leave it in `build`.
+- Database: Lovable's `query_database` against **production** (no staging) —
+  wrap anything exploratory in `BEGIN; … ROLLBACK;`.
+- `.env` is committed and holds only the anon/publishable key (deliberate — see
+  `AUDIT_BACKLOG.md`); no service-role key in the repo, ever.
+- The outbound proxy **403s `maps.app.goo.gl` and `g.page` on CONNECT** — a
+  `000` / `curl: (56)` means blocked, not dead.
+- Chromium + Playwright are preinstalled (`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`);
+  do not run `playwright install`. A fresh context is the incognito equivalent.
+- Connected Gmail is **`marhaba@centruldearabalibaneza.com`**, not
+  `mohtiibrahim@gmail.com`; a `+alias` of it receives test OTPs. Two confirmed
+  auth users were left on purpose, both the owner's aliases:
+  `marhaba+e2etrial@…` and `mohtiibrahim+e2etrial@gmail.com`.
 - Lockfile is `bun.lock`, not `bun.lockb`.
 - Lovable project `b6dbaaf5-f5c4-4603-a0e4-cbbbddd78e67`, workspace
   `h4MoYRUNZUYzXyaEnLT2`. Supabase project ref `pzouzxgswccyhxhpgfwb`.
-- **Lovable publishes workspace HEAD at Publish time** — it is not a branch
-  watcher, so it must sync to `main` first. There is no branch setting.
-- **Credits are scarce.** Bundle everything into one deploy request. Before
-  spending one, check whether the site is already current using the hash
-  comparison in §1, and check whether migrations are already applied with SQL —
-  both are free and both saved a wasted credit this session.
-
-## 7. Still open
-
-Not blocked, nobody waiting:
-- Cohorte has ~12 unlabelled row controls (missing `aria-label`).
-- `compatibility_date` in the generated `wrangler.json` is the build date.
-- A **"Măsurare" self-check** for the analytics screen — reports whether gtag
-  loaded, whether consent was granted and how many events fired, in the browser
-  you are in. It was written in this session and **deliberately not pushed**: the
-  edit that mounts it was interrupted, which left a dangling import, so both
-  halves were reverted rather than put half a feature on `main`. ~140 lines and
-  one edit to redo.
-- The embedded, no-redirect card form that private lessons use, applied to the
-  places that still redirect to Stripe (group checkout, subscriptions, the kids
-  deposit). The owner asked for this. Not started.
-
-Blocked on the owner:
-- GA4 phase two needs the numeric property ID and a service-account JSON.
-- The confirmation email's button points at
-  `https://araba-libaneza-cu-ibra.lovable.app`, not the real domain — Supabase
-  Auth's Site URL / redirect allow-list, a setting, not code.
-- The trial lifecycle decision (§2).
-
-On his item 1 (GA conversions / Ads / cookie banner), established by reading:
-the **root cause was consent, not the tags** — while Adopt's trial was expired
-its banner never rendered, so Consent Mode stayed `denied` for every visitor and
-GA4, `generate_lead` and the Ads conversions recorded nothing. Lovable's new
-banner should have restarted it; **unverified**. `__ANALYTICS_ENABLED__` is *not*
-the problem (it only switches off in Lovable previews and iframes). The Ads
-account is `AW-18482373882` but the bootstrap configures only `G-F167Y815JL`;
-the code's comment says the Ads conversion action was created against the site's
-existing Google tag, which Google does support, **so do not call it broken
-without checking Google Ads → Conversions.** A real gap that can be named: only
-`begin_checkout` has an Ads conversion — there is none for `generate_lead` or
-`purchase`, and for a lead-gen site the lead is what Ads should bid on. Adding
-those needs conversion action names created in the owner's Ads account.
-
-## 8. Addendum — the parallel session (forms, reCAPTCHA, cookies), 12 October
-
-A second Claude session ran alongside the one above. What it found and did,
-in the order it matters to whoever picks this up:
-
-- **Live site, rechecked 12 Oct after the publish note in §1 was written:** the
-  live home page now contains `cookie_consent` and no `goadopt`, so a publish
-  carrying the new cookie banner *has* landed. Re-run the §4 hash comparison
-  rather than trusting either note.
-- **Why no group/private/kids registration had ever been saved:** the Google
-  Cloud project behind the reCAPTCHA key (project number `1060524901775`) had
-  been deleted by the owner by mistake. Google answered every token with
-  "Project … has been deleted", `verify-recaptcha` returned `success:false`, and
-  `RegistrationFormSection` stopped every submit at step 1 with a toast. Trials
-  were unaffected (different path). Two fixes:
-  - code: the form now blocks only on Google's own low score; a verify error or
-    any `errors[]` (key/project/config failure) lets the visitor through, as the
-    soft check was always meant to (`configProblem`, commit a80a85a);
-  - the owner restored the project in Google Cloud. Verified: a dummy token now
-    gets `invalid-input-response`, i.e. the secret and project are live again.
-  First non-trial registration ever: a group sign-up on 11 Oct (still unpaid).
-  If reCAPTCHA ever breaks again, a new v3 key needs the site key in
-  `src/lib/recaptcha.ts` + `__root.tsx` and `RECAPTCHA_SECRET_KEY` via Lovable.
-- **Other Google Cloud projects the owner asked about:** three
-  `gen-lang-client-*` (Google AI Studio / Gemini keys) and "My Project 31793"
-  are not referenced by the site. `top-splice-8v9wh` belongs to Google DeepMind's
-  "Gemini API Tenant Sandbox" org — not the owner's, nothing to do.
-- **Cookie consent:** Adopt removed entirely (injector, meta, CSS, footer hook).
-  `CookieConsentBanner` + `src/lib/cookieConsent.ts`, localStorage
-  `cookie_consent` = `all|essential`; the gtag bootstrap re-grants a stored
-  `all` *before* `gtag('config')`; footer "Setări cookies" fires
-  `cookie-consent:open`; "Doar esențiale" after "all" sends `denied`. Tests in
-  `src/test/cookie-consent.test.tsx`. (The `md:bottom-32` noted in §3 is
-  Lovable's later tweak to this same component.)
-- **Privacy policy** (RO+EN, §4 and §7): Adopt removed, "Google Ads campaign
-  measurement" added next to Analytics, banner described, dated October 2026.
-  **Owner to confirm** GA4 is linked to Google Ads; if not, drop the Ads wording.
-- **Private-lesson paid path has never run live end to end.** Static checks
-  pass (availability returns slots; `create-payment-intent` ownership is
-  email-match, fine for anonymous visitors; the trial path proves Stripe +
-  webhook + calendar work). The owner agreed to book one lesson with his own
-  card and refund it — then check the registration is `paid`, the booking
-  exists with a `google_event_id`, and it shows in the admin.
-- **`cohort_calendar.members`** ("Cursanții grupei"): needed the
-  `admin-registrations` deploy; §1 says all functions deployed from `0a75fe99`,
-  which includes it — verify once by adding a lesson to A1 online and checking
-  bandaricaefrem@gmail.com is on the invite.
+- **Lovable publishes workspace HEAD at Publish time** — not a branch watcher;
+  it must sync to `main` first.
+- **Credits are scarce.** Bundle everything into one deploy request. Check the
+  hash (above) and migrations (SQL) first — both free.
