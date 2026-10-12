@@ -62,7 +62,12 @@ const initials = (name: string) =>
     .map((w) => w[0]?.toUpperCase())
     .join("") || "?";
 
-const waLink = (phone: string) => `https://wa.me/${phone.replace(/[^\d]/g, "")}`;
+// wa.me needs the full international number; Romanian mobiles are stored
+// locally as 07…, so a leading 0 becomes the 40 country code.
+const waLink = (phone: string) => {
+  const digits = phone.replace(/[^\d]/g, "");
+  return `https://wa.me/${digits.startsWith("0") ? `40${digits.slice(1)}` : digits}`;
+};
 
 const CONTACTED: LeadStatus[] = ["contacted", "qualified", "converted", "no_response"];
 
