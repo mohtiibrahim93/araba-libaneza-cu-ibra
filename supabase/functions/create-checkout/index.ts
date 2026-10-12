@@ -56,7 +56,7 @@ serve(async (req) => {
       );
       const { data: regRow } = await adminClient
         .from("registrations")
-        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity")
+        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity, lead_status")
         .eq("id", registrationId)
         .maybeSingle();
       if (!regRow) {
