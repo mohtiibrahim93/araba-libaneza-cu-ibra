@@ -1136,6 +1136,7 @@ export type Database = {
           refund_reason: string | null
           refunded_amount: number | null
           refunded_at: string | null
+          seat_hold_until: string | null
           sms_confirmation_opt_in: boolean
           source: string
           stripe_session_id: string | null
@@ -1176,6 +1177,7 @@ export type Database = {
           refund_reason?: string | null
           refunded_amount?: number | null
           refunded_at?: string | null
+          seat_hold_until?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
@@ -1216,6 +1218,7 @@ export type Database = {
           refund_reason?: string | null
           refunded_amount?: number | null
           refunded_at?: string | null
+          seat_hold_until?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
@@ -1588,6 +1591,10 @@ export type Database = {
         Args: { p_bucket: string; p_max: number; p_window_seconds: number }
         Returns: boolean
       }
+      cohort_seats_taken: {
+        Args: { p_cohort: string; p_exclude?: string }
+        Returns: number
+      }
       find_or_create_student: {
         Args: { p_email: string; p_name: string; p_phone: string }
         Returns: string
@@ -1623,6 +1630,10 @@ export type Database = {
           ro: string
           variants: Json
         }[]
+      }
+      hold_group_seat: {
+        Args: { p_minutes?: number; p_registration: string }
+        Returns: boolean
       }
       move_booking_atomically: {
         Args: {
