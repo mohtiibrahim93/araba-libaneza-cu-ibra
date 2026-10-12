@@ -3,7 +3,7 @@ type Config = { lovableKey?: string | undefined; calendarKey?: string | undefine
 type GoogleEvent = { id?: string; status?: string; etag?: string; summary?: string; description?: string; attendees?: Array<Record<string, unknown>>; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; extendedProperties?: { private?: Record<string, string>; shared?: Record<string, string> } };
 /** Synchronize exact existing links. A missing event is an error, never a deletion. */
 export async function reconcileCalendar(db: any, config: Config, request: typeof fetch = fetch) {
-  const result = { updated: 0, pushed: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string }> };
+  const result = { updated: 0, pushed: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string; guest_email: string | null }> };
   if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
   const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
   const all = async (table: string, fields: string) => {
@@ -141,9 +141,65 @@ export async function reconcileCalendar(db: any, config: Config, request: typeof
   }
   for (const event of events.values()) {
     const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
-    if (event.id && !linked.has(event.id) && event.status !== "cancelled" && start && end) result.unmatched.push({ id: event.id, summary: event.summary || "Eveniment Google Calendar", start_at: start, end_at: end });
+    if (event.id && !linked.has(event.id) && event.status !== "cancelled" && start && end) result.unmatched.push({ id: event.id, summary: event.summary || "Eveniment Google Calendar", start_at: start, end_at: end, guest_email: firstGuestEmail(event) });
   }
   return result;
+}
+
+/** The first guest who is not the organizer: a suggestion for the owner, never used on its own. */
+function firstGuestEmail(event: GoogleEvent): string | null {
+  const guest = (event.attendees ?? []).find((a) => a.organizer !== true && a.self !== true && typeof a.email === "string");
+  return guest ? String(guest.email).toLowerCase() : null;
+}
+
+const toInstant = (value: unknown) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
+
+/**
+ * Owner-confirmed import of one unmatched Google event as a private lesson.
+ * The owner names the student; nothing is matched or guessed here. The event
+ * keeps its own time (read from Google, never from the browser) and becomes
+ * the lesson's calendar link, so later moves in Google sync back. No Google
+ * write and no email: the student already has the invitation.
+ */
+export async function importCalendarEvent(
+  db: any,
+  config: { lovableKey?: string | undefined; calendarKey?: string | undefined },
+  input: { eventId: string; name: string; email: string; phone: string | null; quantity: number; paid: boolean; format: "online" | "physical" },
+  request: typeof fetch = fetch,
+) {
+  if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
+  const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
+  const response = await request(`${GATEWAY}/calendars/primary/events/${encodeURIComponent(input.eventId)}`, { method: "GET", headers });
+  if (!response.ok) throw new Error("Evenimentul Google nu a putut fi citit.");
+  const event: GoogleEvent = await response.json();
+  if (event.id !== input.eventId || event.status === "cancelled") throw new Error("Evenimentul Google nu mai există.");
+  const start = toInstant(event.start?.dateTime), end = toInstant(event.end?.dateTime);
+  if (!start || !end || Date.parse(end) <= Date.parse(start)) throw new Error("Evenimentul nu are o oră de lecție validă.");
+  for (const table of ["bookings", "cohort_sessions"]) {
+    const linked = await db.from(table).select("id").eq("google_event_id", input.eventId).limit(1);
+    if (linked.error) throw linked.error;
+    if (linked.data?.length) throw new Error("Evenimentul este deja asociat unei lecții.");
+  }
+  const registrationId = crypto.randomUUID();
+  const reg = await db.from("registrations").insert({
+    id: registrationId, form_type: "private", source: "admin", name: input.name, email: input.email,
+    phone: input.phone, language: "ro", format: input.format === "physical" ? "fizic" : "online",
+    quantity: input.quantity, payment_status: input.paid ? "paid" : "unpaid", lead_status: "contacted",
+  });
+  if (reg.error) throw new Error("Cursantul nu a putut fi salvat.");
+  const status = Date.parse(end) <= Date.now() ? "completed" : "confirmed";
+  const booking = await db.from("bookings").insert({
+    registration_id: registrationId, event_type_slug: "paid", start_at: start, end_at: end,
+    student_name: input.name, student_email: input.email, student_phone: input.phone, format: input.format,
+    status, language: "ro", google_event_id: input.eventId, google_contact_email: input.email,
+    meet_link: event.hangoutLink ?? null,
+  }).select("id").single();
+  if (booking.error || !booking.data) {
+    await db.from("registrations").delete().eq("id", registrationId);
+    const message = String(booking.error?.message ?? "").toLowerCase();
+    throw new Error(message.includes("duplicate") || message.includes("unique") ? "Există deja o lecție confirmată la aceeași oră." : "Lecția nu a putut fi salvată.");
+  }
+  return { registration_id: registrationId, booking_id: booking.data.id as string, start_at: start, end_at: end, status };
 }
 
 /** Google event IDs use base32hex characters; SHA-256 hex is a valid subset. */

@@ -1,4 +1,4 @@
-import { reconcileCalendar, repairBookingCalendar } from "../_shared/calendar-reconciliation.ts";
+import { importCalendarEvent, reconcileCalendar, repairBookingCalendar } from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
@@ -1204,6 +1204,31 @@ Deno.serve(async (req) => {
       const result = await repairBookingCalendar(supabase, booking, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") });
       await supabase.from("audit_logs").insert({ actor: callerEmail, action: "repair_booking_calendar", registration_id: booking.registration_id, details: { booking_id: id, event_id: result.event_id } });
       return jsonResponse({ success: true });
+    }
+
+    // The owner names the student for one unmatched Google event; the lesson is
+    // then linked to that event. Never automatic (AGENTS/plan: unmatched events
+    // are not assigned to guessed students).
+    if (action === "import_calendar_event") {
+      const b = body as Record<string, unknown>;
+      const eventId = typeof b.event_id === "string" ? b.event_id.trim() : "";
+      const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
+      const email = typeof b.student_email === "string" ? b.student_email.trim().toLowerCase() : "";
+      const phone = typeof b.student_phone === "string" && b.student_phone.trim() ? b.student_phone.trim() : null;
+      const quantity = Math.max(1, Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1));
+      if (!eventId || eventId.length > 1024) return jsonResponse({ error: "Eveniment invalid." }, 400);
+      if (name.length < 2 || name.length > 160) return jsonResponse({ error: "Numele este obligatoriu." }, 400);
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254) return jsonResponse({ error: "Emailul nu este valid." }, 400);
+      if (phone && phone.length > 40) return jsonResponse({ error: "Telefonul nu este valid." }, 400);
+      try {
+        const out = await importCalendarEvent(supabase, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") }, {
+          eventId, name, email, phone, quantity, paid: b.paid === true, format: b.format === "physical" ? "physical" : "online",
+        });
+        await supabase.from("audit_logs").insert({ actor: callerEmail, action: "import_calendar_event", registration_id: out.registration_id, details: { event_id: eventId, at: out.start_at, quantity, paid: b.paid === true } });
+        return jsonResponse({ success: true, ...out });
+      } catch (failure) {
+        return jsonResponse({ error: failure instanceof Error ? failure.message : "Importul a eșuat." }, 400);
+      }
     }
 
     if (action === "sync_calendar") {

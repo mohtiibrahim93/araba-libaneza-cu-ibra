@@ -48,28 +48,45 @@ Deno.serve(async (req) => {
       .eq("id", registrationId)
       .maybeSingle();
 
-    // Only the visitor who just submitted may trigger the confirmation:
-    // the registration must be fresh (30 min) and the caller must be signed
-    // in with the registration's verified email.
+    // Two emails, two different rules.
+    //
+    // The admin alert goes to the school's own inbox, never to an address taken
+    // from the row, so anyone who just submitted the form may trigger it: the
+    // registration only has to be fresh (30 min).
+    //
+    // The student's confirmation goes to the address on the row, which an
+    // anonymous visitor typed and nobody has checked. It is sent only when the
+    // caller is signed in with that verified email (AGENTS.md: ownership is an
+    // Auth-confirmed email). Most visitors are not signed in when the form
+    // submits, so Checkout calls this again once CheckoutEmailGate verifies the
+    // address, within 24 hours.
+    //
+    // On 8 Oct the verified-email rule was applied to the whole function, which
+    // silently stopped both emails for every anonymous group, kids and
+    // level-check sign-up — including the admin alert.
     const createdMs = reg?.created_at ? Date.parse(reg.created_at) : NaN;
-    const fresh = Number.isFinite(createdMs) && Date.now() - createdMs < 30 * 60 * 1000;
-    if (regErr || !reg || !fresh || !(await verifiedRegistrationOwner(req, reg, supabase.auth))) {
+    const ageMs = Number.isFinite(createdMs) ? Date.now() - createdMs : Infinity;
+    const fresh = ageMs < 30 * 60 * 1000;
+    const verifiedOwner =
+      !regErr && !!reg && ageMs < 24 * 60 * 60 * 1000 && (await verifiedRegistrationOwner(req, reg, supabase.auth));
+    if (regErr || !reg || (!fresh && !verifiedOwner)) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Abuse guard: an unauthenticated caller with a known registrationId could
-    // call this in a loop to spam the student. Reject if we have already
-    // attempted (or completed) a send for this registration's idempotency keys.
-    const idemKeys = [`reg-${reg.id}`, `admin-reg-${reg.id}`];
+    // Abuse guard: each email is attempted at most once per registration, so
+    // calling this in a loop sends nothing new. Checked per key, so the student
+    // confirmation can still follow an admin alert sent earlier.
     const { data: prior } = await supabase
       .from("email_send_log")
       .select("idempotency_key")
-      .in("idempotency_key", idemKeys)
-      .limit(1);
-    if (prior && prior.length > 0) {
+      .in("idempotency_key", [`reg-${reg.id}`, `admin-reg-${reg.id}`]);
+    const alreadyTried = new Set((prior ?? []).map((r: { idempotency_key: string }) => r.idempotency_key));
+    const sendStudent = verifiedOwner && !alreadyTried.has(`reg-${reg.id}`);
+    const sendAdmin = fresh && !alreadyTried.has(`admin-reg-${reg.id}`);
+    if (!sendStudent && !sendAdmin) {
       return new Response(JSON.stringify({ success: true, deduped: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -150,7 +167,7 @@ Deno.serve(async (req) => {
     const paid = reg.payment_status === "paid";
 
     // 1) Confirmation to the registrant (only if they provided an email)
-    if (reg.email) {
+    if (sendStudent && reg.email) {
       const tpl = TEMPLATE_BY_FORM_TYPE[reg.form_type];
       if (tpl) {
         const baseData: Record<string, unknown> = {
@@ -194,7 +211,7 @@ Deno.serve(async (req) => {
     }
 
     // 2) Admin notification with the full lead details
-    await invokeEmail({
+    if (sendAdmin) await invokeEmail({
       templateName: "admin-new-registration",
       recipientEmail: ADMIN_RECIPIENT,
       idempotencyKey: `admin-reg-${reg.id}`,
