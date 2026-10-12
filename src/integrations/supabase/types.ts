@@ -271,6 +271,7 @@ export type Database = {
           event_type_slug: string
           format: string
           gdpr_consent_at: string | null
+          google_contact_email: string | null
           google_event_id: string | null
           google_sync_error: string | null
           id: string
@@ -303,6 +304,7 @@ export type Database = {
           event_type_slug: string
           format?: string
           gdpr_consent_at?: string | null
+          google_contact_email?: string | null
           google_event_id?: string | null
           google_sync_error?: string | null
           id?: string
@@ -335,6 +337,7 @@ export type Database = {
           event_type_slug?: string
           format?: string
           gdpr_consent_at?: string | null
+          google_contact_email?: string | null
           google_event_id?: string | null
           google_sync_error?: string | null
           id?: string
@@ -1109,6 +1112,7 @@ export type Database = {
           center: string | null
           child_age: string | null
           cohort_id: string | null
+          contact_email: string | null
           created_at: string
           email: string | null
           form_type: string
@@ -1148,6 +1152,7 @@ export type Database = {
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
+          contact_email?: string | null
           created_at?: string
           email?: string | null
           form_type: string
@@ -1187,6 +1192,7 @@ export type Database = {
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
+          contact_email?: string | null
           created_at?: string
           email?: string | null
           form_type?: string
@@ -1568,6 +1574,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_update_registration_contact: {
+        Args: {
+          p_actor: string
+          p_email: string
+          p_id: string
+          p_name: string
+          p_phone: string
+        }
+        Returns: undefined
+      }
       check_and_record_rate_limit: {
         Args: { p_bucket: string; p_max: number; p_window_seconds: number }
         Returns: boolean
@@ -1607,6 +1623,16 @@ export type Database = {
           ro: string
           variants: Json
         }[]
+      }
+      move_booking_atomically: {
+        Args: {
+          p_end: string
+          p_expected_event: string
+          p_expected_start: string
+          p_id: string
+          p_start: string
+        }
+        Returns: Json
       }
       student_name_key: { Args: { p_name: string }; Returns: string }
       student_names_match: {
