@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 export default function CheckoutEmailGate({ email, onVerified, english = false }: { email: string; onVerified: () => void; english?: boolean }) {
   const [checking, setChecking] = useState(true), [sent, setSent] = useState(false), [busy, setBusy] = useState(false), [code, setCode] = useState(""), [error, setError] = useState("");
   const callback = useRef(onVerified); callback.current = onVerified;
-  const matches = (user: { email?: string | undefined; email_confirmed_at?: string | undefined; is_anonymous?: boolean | undefined } | null | undefined) => !!user?.email_confirmed_at && !user.is_anonymous && user.email?.trim().toLowerCase() === email.trim().toLowerCase();
-  useEffect(() => { let active = true; setChecking(true); setSent(false); setError(""); void supabase.auth.getUser().then(({ data }) => { if (active) { if (matches(data.user)) callback.current(); setChecking(false); } }).catch(() => { if (active) setChecking(false); }); return () => { active = false; }; }, [email]);
+  const matches = useCallback((user: { email?: string | undefined; email_confirmed_at?: string | undefined; is_anonymous?: boolean | undefined } | null | undefined) => !!user?.email_confirmed_at && !user.is_anonymous && user.email?.trim().toLowerCase() === email.trim().toLowerCase(), [email]);
+  useEffect(() => { let active = true; setChecking(true); setSent(false); setError(""); void supabase.auth.getUser().then(({ data }) => { if (active) { if (matches(data.user)) callback.current(); setChecking(false); } }).catch(() => { if (active) setChecking(false); }); return () => { active = false; }; }, [matches]);
   if (checking) return <p role="status">{english ? "Checking your account…" : "Se verifică contul…"}</p>;
   if (!email) return <p role="alert">{english ? "A registration email is required to pay online. Please return to the form and add your email." : "Plata online necesită emailul înscrierii. Revino la formular și adaugă adresa de email."}</p>;
   return <section className="space-y-3 rounded border p-4"><h2 className="font-semibold">{english ? "Verify your registration email" : "Verifică emailul înscrierii"}</h2><p className="text-sm">{email}</p>

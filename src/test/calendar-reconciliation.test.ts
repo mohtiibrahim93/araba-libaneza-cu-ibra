@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { loadEdgeModule } from "./helpers/edge-handler";
 function database(pending = false, sessions: any[] = []) {
  const rows: any[] = [{ id: "b", google_event_id: "e", registration_id: "r", start_at: "2026-10-12T13:30:00Z", end_at: "2026-10-12T14:30:00Z", status: "confirmed", student_email: "new@example.test", google_contact_email: "old@example.test", student_name: "New Name", student_phone: "123", google_sync_error: pending ? "contact_update_pending" : null }];
- return { rows, sessions, from: (table: string) => { let filters: [string, unknown][] = []; let patch: any;
+ return { rows, sessions, from: (table: string) => { const filters: [string, unknown][] = []; let patch: any;
  const q: any = { is: (k: string,v: unknown) => { filters.push([k,v]); return q; }, select: () => q, order: () => q, range: () => q, eq: (k: string,v: unknown) => { filters.push([k,v]); return q; }, update: (p: any) => { patch=p; return q; },
  then: (resolve: any) => { const source=table==="bookings" ? rows : table==="cohort_sessions" ? sessions : []; const selected=source.filter(r=>filters.every(([k,v])=>r[k]===v));
  if(patch) selected.forEach(r=>Object.assign(r,patch)); return Promise.resolve({data:selected.map(r=>({...r})),error:null}).then(resolve); } }; return q; } };

@@ -67,7 +67,6 @@ const ProgramsSection = () => {
     } catch {
       // ignore corrupted drafts
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isAvailable = (level: Level) => level === "A1" || level === "A2";

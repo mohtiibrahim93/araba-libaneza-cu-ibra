@@ -1347,7 +1347,7 @@ Deno.serve(async (req) => {
       if (regsError) throw regsError;
 
       const ids = (regs || []).map((r) => r.id);
-      let bookingsByReg = new Map<string, Array<Record<string, unknown>>>();
+      const bookingsByReg = new Map<string, Array<Record<string, unknown>>>();
       if (ids.length > 0) {
         const { data: bookings, error: bErr } = await supabase
           .from("bookings")
@@ -2165,7 +2165,7 @@ Deno.serve(async (req) => {
         .filter(Boolean);
 
       // 2) Bookings tied to those trial registrations
-      let bookingsByReg = new Map<string, { start_at: string; end_at: string; status: string }>();
+      const bookingsByReg = new Map<string, { start_at: string; end_at: string; status: string }>();
       if (trialIds.length > 0) {
         const { data: bookings, error: bErr } = await supabase
           .from("bookings")

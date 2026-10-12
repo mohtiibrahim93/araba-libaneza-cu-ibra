@@ -114,7 +114,7 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
   });
 
   it("formats bani the way the admin displays money", () => {
-    expect(formatBani(151_875).replace(/ /g, " ")).toBe("1.518,75 lei");
+    expect(formatBani(151_875).replace(/\u00a0/g, " ")).toBe("1.518,75 lei");
     expect(formatBani(0)).toBe("0,00 lei");
   });
 });

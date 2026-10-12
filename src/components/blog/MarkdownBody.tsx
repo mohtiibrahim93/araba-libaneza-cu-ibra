@@ -20,7 +20,6 @@ const MarkdownBody = ({ markdown }: { markdown: string }) => (
         if (AUDIO_RE.test(href)) {
           return (
             <span className="block my-3">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <audio controls preload="none" src={href} className="w-full max-w-md" />
             </span>
           );

@@ -173,7 +173,7 @@ const AnalyticsAdmin = () => {
     void load(days);
   }, [days, load]);
 
-  const weeks = data?.signups.byWeek ?? [];
+  const weeks = useMemo(() => data?.signups.byWeek ?? [], [data]);
   const peak = useMemo(() => Math.max(1, ...weeks.map((w) => w.total)), [weeks]);
 
   const cards = data

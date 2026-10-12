@@ -17,6 +17,8 @@ export default tseslint.config(
       "public/yalla/content-en.js",
       "public/yalla/synthesis.js",
       "content/yalla-source-bank.js",
+      // Bundled by @lovable.dev/mcp-js from src/lib/mcp; "do not edit".
+      "supabase/functions/mcp/index.ts",
     ],
   },
   {

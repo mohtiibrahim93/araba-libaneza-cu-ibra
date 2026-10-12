@@ -163,7 +163,7 @@ describe("the chat assistant loads only when it is opened", () => {
       const source = read(file);
       // A type-only import is erased at build time and costs nothing.
       const values = importsOf(source).filter(
-        (spec) => !new RegExp(`import\\s+type[^;]*"${spec.replace(/[.*+?^\${}()|[\]\\]/g, "\\$&")}"`).test(source),
+        (spec) => !new RegExp(`import\\s+type[^;]*"${spec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(source),
       );
       for (const spec of values) {
         if (HEAVY.some((h) => spec.startsWith(h))) {

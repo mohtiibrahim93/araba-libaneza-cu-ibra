@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useI18n } from "@/lib/i18n";
 import {
   Dialog,
@@ -29,12 +29,15 @@ const LevelAssessmentModal = ({
   const { t } = useI18n();
   const [step, setStep] = useState<QuizStep>({ type: "question", index: 0 });
 
-  const questions = [
-    { text: t.levelQuizQ1, noResult: "A1" as LevelType, yesNext: 1 },
-    { text: t.levelQuizQ2, noResult: "A1" as LevelType, yesNext: 2 },
-    { text: t.levelQuizQ3, noResult: "A2" as LevelType, yesNext: 3 },
-    { text: t.levelQuizQ4, noResult: "B1" as LevelType, yesNext: null },
-  ];
+  const questions = useMemo(
+    () => [
+      { text: t.levelQuizQ1, noResult: "A1" as LevelType, yesNext: 1 },
+      { text: t.levelQuizQ2, noResult: "A1" as LevelType, yesNext: 2 },
+      { text: t.levelQuizQ3, noResult: "A2" as LevelType, yesNext: 3 },
+      { text: t.levelQuizQ4, noResult: "B1" as LevelType, yesNext: null },
+    ],
+    [t],
+  );
 
   const handleAnswer = useCallback(
     (answer: "yes" | "no") => {

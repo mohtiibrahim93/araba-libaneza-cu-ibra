@@ -765,7 +765,6 @@ export function seoPrerenderPlugin(): Plugin {
         }
         const sitemapCount = writeSitemap(root, allRoutes());
         const llmsCount = writeLlmsTxt(root, allRoutes());
-        // eslint-disable-next-line no-console
         console.log(
           `[seo-prerender] wrote static <head> for ${count} routes ` +
             `(${pairs.size / 2} reciprocal RO/EN hreflang pairs), ` +
