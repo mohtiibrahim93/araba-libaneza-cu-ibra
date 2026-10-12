@@ -143,7 +143,9 @@ describe("the panel", () => {
  */
 describe("booking a private lesson from the panel", () => {
   const block = admin.slice(admin.indexOf('action === "book_for_student"'));
-  const head = block.slice(0, 5200);
+  // Exactly this action, up to the next one: a fixed-length window either cut
+  // it short (it grew with the existing-student path) or ran into the next.
+  const head = block.slice(0, block.indexOf('if (action === "list_notifications")'));
 
   it("books through booking-create rather than writing a booking row", () => {
     // That one path creates the calendar event with its link, emails the

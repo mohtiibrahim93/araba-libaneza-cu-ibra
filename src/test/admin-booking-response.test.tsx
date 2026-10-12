@@ -36,7 +36,8 @@ describe("manual booking confirmation", () => {
   it("keeps the conflict warning until the owner confirms the override", async () => {
     let attempts = 0;
     api.invoke.mockImplementation(async ({ action }) => ({
-      data: action === "list_bookings" ? { data: [] } : ++attempts === 1
+      // The dialog also loads the private-student list; only the booking attempts count.
+      data: action === "list_bookings" || action === "private_students" ? { data: [] } : ++attempts === 1
         ? { error: "slot taken", code: "conflict", clashes: ["calendar"] }
         : { success: true, registration_id: "new-registration" }, error: null,
     }));
