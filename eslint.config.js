@@ -48,6 +48,9 @@ export default tseslint.config(
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+      // Warn, not error: ~100 existing `any`s (mostly untyped Supabase query
+      // builders) are fixed as their files are touched; new ones stay visible.
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
   eslintPluginPrettier,
