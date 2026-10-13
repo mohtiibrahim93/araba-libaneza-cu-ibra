@@ -2435,6 +2435,7 @@ Deno.serve(async (req) => {
         paid?: unknown;
         force?: unknown;
         language?: unknown;
+        extra?: unknown;
       };
       const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
       const email = typeof b.student_email === "string" ? b.student_email.trim() : "";
