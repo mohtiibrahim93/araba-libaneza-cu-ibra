@@ -19,15 +19,23 @@ import { resolve } from "node:path";
  *
  * This is the check that makes rearranging the nav safe to do.
  */
-const admin = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+const admin = readFileSync(
+  resolve(process.cwd(), "src/pages/Admin.tsx"),
+  "utf8",
+);
 
 /** Nav item values, read from the sections block only. */
 const navValues = (() => {
-  const block = admin.slice(admin.indexOf("const sections: AdminSection[] = ["), admin.indexOf("return (\n    <AdminShell"));
+  const block = admin.slice(
+    admin.indexOf("const sections: AdminSection[] = ["),
+    admin.indexOf("return (\n    <AdminShell"),
+  );
   return [...block.matchAll(/value: "([a-z-]+)"/g)].map((m) => m[1]);
 })();
 
-const tabValues = [...admin.matchAll(/<TabsContent value="([a-z-]+)"/g)].map((m) => m[1]);
+const tabValues = [...admin.matchAll(/<TabsContent value="([a-z-]+)"/g)].map(
+  (m) => m[1],
+);
 
 describe("the admin nav and its screens agree", () => {
   it("found both halves", () => {
@@ -42,17 +50,24 @@ describe("the admin nav and its screens agree", () => {
 
   it("gives every screen a way in", () => {
     const orphans = tabValues.filter((v) => !navValues.includes(v));
-    expect(orphans, `screens with no nav item: ${orphans.join(", ")}`).toEqual([]);
+    expect(orphans, `screens with no nav item: ${orphans.join(", ")}`).toEqual(
+      [],
+    );
   });
 
   it("opens on a section that exists", () => {
     const initial = admin.match(/useState\("([a-z-]+)"\)/)?.[1];
     expect(initial, "could not find the initial tab").toBeTruthy();
-    expect(navValues, `the panel opens on "${initial}", which is not in the nav`).toContain(initial);
+    expect(
+      navValues,
+      `the panel opens on "${initial}", which is not in the nav`,
+    ).toContain(initial);
   });
 
   it("keeps every section's value unique", () => {
-    const dupes = [...new Set(navValues.filter((v, i) => navValues.indexOf(v) !== i))];
+    const dupes = [
+      ...new Set(navValues.filter((v, i) => navValues.indexOf(v) !== i)),
+    ];
     expect(dupes, `duplicate nav values: ${dupes.join(", ")}`).toEqual([]);
   });
 

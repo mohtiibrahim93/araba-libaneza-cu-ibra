@@ -22,12 +22,30 @@ import { createContext, runInContext } from "node:vm";
  * are T() call sites, guarded in game-i18n.test.ts), and the teacher workshop's
  * "the source text" panel, which shows the Romanian source on purpose.
  */
-const SCRIPTS = ["i18n.js", "content.js", "curriculum.js", "synthesis.js", "content-en.js", "deck-language.js"];
+const SCRIPTS = [
+  "i18n.js",
+  "content.js",
+  "curriculum.js",
+  "synthesis.js",
+  "content-en.js",
+  "deck-language.js",
+];
 
 type Card = { ro?: string; roOriginal?: string; en?: string };
-type Drill = { prompt?: string; note?: string; context?: string; answer?: string; wrong?: string[] };
+type Drill = {
+  prompt?: string;
+  note?: string;
+  context?: string;
+  answer?: string;
+  wrong?: string[];
+};
 type Lesson = { title?: string; speaking?: string; points?: string[] };
-type Unit = { title?: string; desc?: string; tips?: string[]; learningNotes?: Lesson[] };
+type Unit = {
+  title?: string;
+  desc?: string;
+  tips?: string[];
+  learningNotes?: Lesson[];
+};
 type Bank = {
   cards: Card[];
   drills: Drill[];
@@ -38,11 +56,23 @@ type Bank = {
 
 /** Load the game's content pipeline the way the browser does, for one language. */
 const load = (lang: "ro" | "en"): Bank => {
-  const win: Record<string, unknown> = { location: { search: `?lang=${lang}` }, addEventListener: () => {} };
+  const win: Record<string, unknown> = {
+    location: { search: `?lang=${lang}` },
+    addEventListener: () => {},
+  };
   win["window"] = win;
-  const ctx = createContext({ window: win, document: { documentElement: {}, addEventListener: () => {} }, URLSearchParams, console });
+  const ctx = createContext({
+    window: win,
+    document: { documentElement: {}, addEventListener: () => {} },
+    URLSearchParams,
+    console,
+  });
   for (const f of SCRIPTS) {
-    runInContext(readFileSync(resolve(process.cwd(), "public/yalla", f), "utf8"), ctx, { filename: f });
+    runInContext(
+      readFileSync(resolve(process.cwd(), "public/yalla", f), "utf8"),
+      ctx,
+      { filename: f },
+    );
   }
   return win["YALLA"] as Bank;
 };
@@ -62,14 +92,20 @@ describe("the game's content in English", () => {
     // `roOriginal` marks a card the overlay converted, so its `ro` holding a
     // Romanian word now means the English text quotes one — "What does masă
     // mean in Lebanese?" is a card about the Romanian word.
-    const left = en.cards.filter((c) => romanian(c.ro) && !c.roOriginal).map((c) => c.ro);
-    expect(left, `Romanian card meanings: ${left.slice(0, 5).join(" | ")}`).toEqual([]);
+    const left = en.cards
+      .filter((c) => romanian(c.ro) && !c.roOriginal)
+      .map((c) => c.ro);
+    expect(
+      left,
+      `Romanian card meanings: ${left.slice(0, 5).join(" | ")}`,
+    ).toEqual([]);
   });
 
   it("shows no Romanian in a drill, including its options", () => {
     const left: string[] = [];
     for (const d of en.drills) {
-      for (const k of ["prompt", "note", "context", "answer"] as const) if (romanian(d[k])) left.push(`${k}: ${d[k]}`);
+      for (const k of ["prompt", "note", "context", "answer"] as const)
+        if (romanian(d[k])) left.push(`${k}: ${d[k]}`);
       for (const w of d.wrong ?? []) if (romanian(w)) left.push(`wrong: ${w}`);
     }
     expect(left, left.slice(0, 5).join(" | ")).toEqual([]);
@@ -84,7 +120,8 @@ describe("the game's content in English", () => {
       for (const l of u.learningNotes ?? []) {
         if (romanian(l.title)) left.push(`note: ${l.title}`);
         if (romanian(l.speaking)) left.push(`speaking: ${l.speaking}`);
-        for (const p of l.points ?? []) if (romanian(p)) left.push(`point: ${p}`);
+        for (const p of l.points ?? [])
+          if (romanian(p)) left.push(`point: ${p}`);
       }
     }
     expect(left, left.slice(0, 5).join(" | ")).toEqual([]);
@@ -92,7 +129,9 @@ describe("the game's content in English", () => {
 
   it("shows no Romanian topic or source", () => {
     const left = [
-      ...(en.topics ?? []).filter((t) => romanian(t.title)).map((t) => `topic: ${t.title}`),
+      ...(en.topics ?? [])
+        .filter((t) => romanian(t.title))
+        .map((t) => `topic: ${t.title}`),
       ...(en.sources ?? []).flatMap((s) => [
         ...(romanian(s.title) ? [`source: ${s.title}`] : []),
         ...(romanian(s.detail) ? [`detail: ${s.detail}`] : []),
@@ -107,8 +146,13 @@ describe("the game's content in English", () => {
     // through a first pass that only looked for ăâîșț. The template is the
     // reliable tell — an untranslated reply drill still says "Alege replica
     // pentru", whatever the phrase inside it looks like.
-    const left = en.drills.filter((d) => /^Alege replica pentru:/.test(d.prompt ?? "")).map((d) => d.prompt);
-    expect(left, `${left.length} drills: ${left.slice(0, 3).join(" | ")}`).toEqual([]);
+    const left = en.drills
+      .filter((d) => /^Alege replica pentru:/.test(d.prompt ?? ""))
+      .map((d) => d.prompt);
+    expect(
+      left,
+      `${left.length} drills: ${left.slice(0, 3).join(" | ")}`,
+    ).toEqual([]);
   });
 
   it("never turns a distractor into the right answer", () => {
@@ -142,7 +186,9 @@ describe("every topic and lesson name is translated", () => {
   it("gives every lesson a different title and description in English", () => {
     const untouched = ro.units
       .map((u, i) => [u, en.units[i]] as const)
-      .filter(([a, b]) => b != null && (a.title === b.title || a.desc === b.desc))
+      .filter(
+        ([a, b]) => b != null && (a.title === b.title || a.desc === b.desc),
+      )
       .map(([a]) => a.title);
     expect(untouched, untouched.join(" | ")).toEqual([]);
   });
@@ -155,6 +201,8 @@ describe("the game's content in Romanian", () => {
     // The overlay must be inert in Romanian: it only runs for lang === 'en'.
     expect(ro.cards.some((c) => c.roOriginal)).toBe(false);
     expect(ro.cards.filter((c) => romanian(c.ro)).length).toBeGreaterThan(1000);
-    expect(ro.drills.filter((d) => romanian(d.prompt)).length).toBeGreaterThan(100);
+    expect(ro.drills.filter((d) => romanian(d.prompt)).length).toBeGreaterThan(
+      100,
+    );
   });
 });

@@ -24,17 +24,35 @@ describe("the calendar's class names match the installed library", () => {
     expect(headers.length, "expected seven weekday headers").toBe(7);
     // Without a width on each cell the seven abbreviations run together.
     for (const cell of headers) {
-      expect(cell.className, `weekday header has no width: "${cell.className}"`).toMatch(/\bw-\d+/);
+      expect(
+        cell.className,
+        `weekday header has no width: "${cell.className}"`,
+      ).toMatch(/\bw-\d+/);
     }
   });
 
   it("uses no key the installed version has dropped", () => {
     const live = new Set<string>(Object.values(UI) as string[]);
     // v8 names that silently do nothing in v9.
-    for (const dead of ["head_row", "head_cell", "row", "cell", "caption", "table",
-                        "nav_button", "nav_button_previous", "nav_button_next",
-                        "day_selected", "day_today", "day_outside", "day_disabled", "day_hidden"]) {
-      expect(live.has(dead), `${dead} is a v8 key and would be ignored`).toBe(false);
+    for (const dead of [
+      "head_row",
+      "head_cell",
+      "row",
+      "cell",
+      "caption",
+      "table",
+      "nav_button",
+      "nav_button_previous",
+      "nav_button_next",
+      "day_selected",
+      "day_today",
+      "day_outside",
+      "day_disabled",
+      "day_hidden",
+    ]) {
+      expect(live.has(dead), `${dead} is a v8 key and would be ignored`).toBe(
+        false,
+      );
     }
   });
 
@@ -42,6 +60,8 @@ describe("the calendar's class names match the installed library", () => {
     const { container } = render(<Calendar mode="single" />);
     const cells = container.querySelectorAll("td");
     expect(cells.length).toBeGreaterThan(27);
-    expect(cells[0]?.className, "day cells lost their size").toMatch(/\bh-\d+ w-\d+/);
+    expect(cells[0]?.className, "day cells lost their size").toMatch(
+      /\bh-\d+ w-\d+/,
+    );
   });
 });

@@ -20,7 +20,10 @@ const ring = (slug: string) => {
   const all = blogPostsNewestFirst;
   const here = all.findIndex((p) => p.slug === slug);
   const start = here === -1 ? 0 : here + 1;
-  return Array.from({ length: Math.min(3, Math.max(all.length - 1, 0)) }, (_, i) => all[(start + i) % all.length]!)
+  return Array.from(
+    { length: Math.min(3, Math.max(all.length - 1, 0)) },
+    (_, i) => all[(start + i) % all.length]!,
+  )
     .filter((p) => p.slug !== slug)
     .map((p) => p.slug);
 };
@@ -34,14 +37,16 @@ describe("related posts spread their links", () => {
 
   it("links every post from at least three others", () => {
     const inbound = new Map(slugs.map((s) => [s, 0]));
-    for (const s of slugs) for (const t of ring(s)) inbound.set(t, (inbound.get(t) ?? 0) + 1);
+    for (const s of slugs)
+      for (const t of ring(s)) inbound.set(t, (inbound.get(t) ?? 0) + 1);
     const starved = [...inbound.entries()].filter(([, n]) => n < 3);
     expect(starved.map(([s, n]) => `${s} (${n})`)).toEqual([]);
   });
 
   it("gives no post more than its share", () => {
     const inbound = new Map(slugs.map((s) => [s, 0]));
-    for (const s of slugs) for (const t of ring(s)) inbound.set(t, (inbound.get(t) ?? 0) + 1);
+    for (const s of slugs)
+      for (const t of ring(s)) inbound.set(t, (inbound.get(t) ?? 0) + 1);
     // A ring is exactly even; the cap leaves room for a future tag-aware tweak
     // without letting the old "three newest for everyone" pattern back in.
     expect(Math.max(...inbound.values())).toBeLessThanOrEqual(6);
@@ -53,7 +58,10 @@ describe("related posts spread their links", () => {
 
   it("reads the ring off the component, not a copy of the list", () => {
     // If the component stops using the registry this test stops being evidence.
-    const src = readFileSync(resolve(process.cwd(), "src/components/blog/RelatedPosts.tsx"), "utf8");
+    const src = readFileSync(
+      resolve(process.cwd(), "src/components/blog/RelatedPosts.tsx"),
+      "utf8",
+    );
     expect(src).toContain("blogPostsNewestFirst");
     expect(src).toContain("% all.length");
   });

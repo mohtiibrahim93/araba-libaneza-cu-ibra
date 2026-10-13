@@ -3,6 +3,7 @@ import { readFileSync, existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { JOACA_META, TITLE_MAX, DESC_MAX } from "@/lib/pageMeta";
 import { hasRoute, redirectsTo } from "./helpers/routes";
+import { code } from "./helpers/sourceText";
 
 /**
  * The Yalla practice game, served from this domain rather than embedded from
@@ -42,8 +43,16 @@ const MODULES = [
 
 describe("Yalla game assets", () => {
   it("ships every module index.html asks for", () => {
-    for (const f of [...MODULES, "index.html", "styles.css", "beirut-cafe.png"]) {
-      expect(existsSync(resolve(process.cwd(), `public/yalla/${f}`)), `public/yalla/${f} is missing`).toBe(true);
+    for (const f of [
+      ...MODULES,
+      "index.html",
+      "styles.css",
+      "beirut-cafe.png",
+    ]) {
+      expect(
+        existsSync(resolve(process.cwd(), `public/yalla/${f}`)),
+        `public/yalla/${f} is missing`,
+      ).toBe(true);
     }
   });
 
@@ -54,7 +63,9 @@ describe("Yalla game assets", () => {
     // transfer → app. Each module reads globals the previous one defined, so a
     // reordered tag is a TypeError at start-up, not a subtle bug.
     const html = read("public/yalla/index.html");
-    const loaded = [...html.matchAll(/<script src="\.\/([^"]+)"/g)].map((m) => m[1]);
+    const loaded = [...html.matchAll(/<script src="\.\/([^"]+)"/g)].map(
+      (m) => m[1],
+    );
     expect(loaded).toEqual(MODULES);
   });
 
@@ -63,7 +74,11 @@ describe("Yalla game assets", () => {
     // that the one belonging in public/yalla carries this flag, which is how
     // the game knows it is running from the site rather than from a rebuild
     // checkout. Copying the wrong one is silent.
-    expect(read("public/yalla/content.js").startsWith("window.YALLA_PACKAGED = true;")).toBe(true);
+    expect(
+      read("public/yalla/content.js").startsWith(
+        "window.YALLA_PACKAGED = true;",
+      ),
+    ).toBe(true);
   });
 
   it("references its artwork by a path that exists", () => {
@@ -71,9 +86,13 @@ describe("Yalla game assets", () => {
     // recovered artwork; a zero-length or truncated copy still passes an
     // existence check, so assert it is a real PNG.
     expect(read("public/yalla/app.js")).toContain("./beirut-cafe.png");
-    const png = readFileSync(resolve(process.cwd(), "public/yalla/beirut-cafe.png"));
+    const png = readFileSync(
+      resolve(process.cwd(), "public/yalla/beirut-cafe.png"),
+    );
     expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
-    expect(statSync(resolve(process.cwd(), "public/yalla/beirut-cafe.png")).size).toBeGreaterThan(1000);
+    expect(
+      statSync(resolve(process.cwd(), "public/yalla/beirut-cafe.png")).size,
+    ).toBeGreaterThan(1000);
   });
 });
 
@@ -82,7 +101,7 @@ describe("/joc", () => {
     expect(hasRoute("/joc"), "no route for /joc").toBe(true);
     // Without a STATIC_ROUTES entry the route serves the site-wide head to
     // crawlers instead of its own.
-    expect(seoHeadSrc).toContain('{ path: "/joc"');
+    expect(code(seoHeadSrc)).toContain(code('{ path: "/joc"'));
   });
 
   it("keeps its head inside the length limits", () => {
@@ -142,8 +161,14 @@ describe("the game's own URL stays out of the index", () => {
 
   it("still ships the key file and the sitemap line above it", () => {
     // Guard against a careless edit to robots.txt taking these with it.
-    expect(robots).toContain("Sitemap: https://centruldearabalibaneza.com/sitemap.xml");
-    expect(existsSync(resolve(process.cwd(), "public/4ce740356d5ab7d75677bda846853184.txt"))).toBe(true);
+    expect(robots).toContain(
+      "Sitemap: https://centruldearabalibaneza.com/sitemap.xml",
+    );
+    expect(
+      existsSync(
+        resolve(process.cwd(), "public/4ce740356d5ab7d75677bda846853184.txt"),
+      ),
+    ).toBe(true);
   });
 
   it("keeps one wildcard user-agent group", () => {

@@ -51,7 +51,6 @@ describe("structured data reaches the server-rendered HTML", () => {
   });
 });
 
-
 /**
  * sameAs has to point somewhere other than this site.
  *
@@ -62,7 +61,10 @@ describe("structured data reaches the server-rendered HTML", () => {
  * doing no work at all.
  */
 describe("Organization sameAs", () => {
-  const schema = readFileSync(resolve(process.cwd(), "src/lib/courseSchema.ts"), "utf8");
+  const schema = readFileSync(
+    resolve(process.cwd(), "src/lib/courseSchema.ts"),
+    "utf8",
+  );
 
   it("is defined once and reused, not copied per page", () => {
     expect(schema).toContain("export const ORGANIZATION_SAME_AS");
@@ -71,8 +73,12 @@ describe("Organization sameAs", () => {
       "src/pages/courses/CourseDetail.tsx",
     ]) {
       const src = readFileSync(resolve(process.cwd(), f), "utf8");
-      expect(src, `${f} should reuse the shared list`).toContain("sameAs: ORGANIZATION_SAME_AS");
-      expect(src, `${f} still has a hand-rolled sameAs`).not.toMatch(/sameAs: `\$\{BASE_URL\}/);
+      expect(src, `${f} should reuse the shared list`).toContain(
+        "sameAs: ORGANIZATION_SAME_AS",
+      );
+      expect(src, `${f} still has a hand-rolled sameAs`).not.toMatch(
+        /sameAs: `\$\{BASE_URL\}/,
+      );
     }
   });
 
@@ -135,7 +141,9 @@ describe("the teacher and the levels are identifiable", () => {
     renderRoute("/cursuri/grup/a1");
     await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
 
-    const course = [...document.querySelectorAll('script[type="application/ld+json"]')]
+    const course = [
+      ...document.querySelectorAll('script[type="application/ld+json"]'),
+    ]
       .map((el) => {
         try {
           return JSON.parse(el.textContent || "{}") as Record<string, unknown>;
@@ -148,20 +156,25 @@ describe("the teacher and the levels are identifiable", () => {
     expect(course, "/cursuri/grup/a1 should carry Course markup").toBeTruthy();
     expect(course!["educationalLevel"]).toBe("CEFR A1");
 
-    const instructor = (course!["hasCourseInstance"] as Record<string, unknown>[])[0]![
-      "instructor"
-    ] as Record<string, unknown>;
+    const instructor = (
+      course!["hasCourseInstance"] as Record<string, unknown>[]
+    )[0]!["instructor"] as Record<string, unknown>;
     expect(instructor["name"]).toBe("Ibrahim Mohti");
 
     // The numbers are the page's own, not a second copy that can go stale.
     const online = ONLINE_PRICES.groupMonthly.A1;
     const prices = (course!["offers"] as Record<string, unknown>[]).map(
-      (offer) => (offer["priceSpecification"] as Record<string, unknown>)["price"],
+      (offer) =>
+        (offer["priceSpecification"] as Record<string, unknown>)["price"],
     );
     expect(prices).toEqual([online, physicalPrice(online)]);
     // A monthly fee has to say so, or it reads as the price of the whole course.
     for (const offer of course!["offers"] as Record<string, unknown>[]) {
-      expect((offer["priceSpecification"] as Record<string, unknown>)["billingDuration"]).toBe("P1M");
+      expect(
+        (offer["priceSpecification"] as Record<string, unknown>)[
+          "billingDuration"
+        ],
+      ).toBe("P1M");
     }
   });
 });

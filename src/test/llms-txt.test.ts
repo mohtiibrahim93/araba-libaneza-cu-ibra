@@ -20,20 +20,33 @@ describe("llms.txt", () => {
   });
 
   it("covers courses, guides, blog and English", () => {
-    for (const heading of ["## Cursuri", "## Ghiduri și resurse", "## Blog", "## English"]) {
+    for (const heading of [
+      "## Cursuri",
+      "## Ghiduri și resurse",
+      "## Blog",
+      "## English",
+    ]) {
       expect(txt).toContain(heading);
     }
   });
 
   it("names the pages that actually sell the courses", () => {
-    for (const path of ["(/cursuri/grup)", "(/cursuri-limba-araba)", "(/cursuri/private)"]) {
+    for (const path of [
+      "(/cursuri/grup)",
+      "(/cursuri-limba-araba)",
+      "(/cursuri/private)",
+    ]) {
       expect(txt).toContain(path);
     }
   });
 
   it("leaves out redirects and noindex pages", () => {
     // Signposts, not answers — same reason they stay out of the sitemap.
-    for (const path of ["(/cursuri-araba)", "(/invata-araba)", "(/stergere-date)"]) {
+    for (const path of [
+      "(/cursuri-araba)",
+      "(/invata-araba)",
+      "(/stergere-date)",
+    ]) {
       expect(txt).not.toContain(path);
     }
   });

@@ -38,7 +38,11 @@ describe("the edge functions only use names that exist", () => {
       output = execFileSync(
         "npx",
         ["tsc", "-p", "supabase/functions/tsconfig.check.json"],
-        { cwd: process.cwd(), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+        {
+          cwd: process.cwd(),
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "pipe"],
+        },
       );
     } catch (err) {
       // tsc exits non-zero for the expected module-resolution errors too.
@@ -51,6 +55,9 @@ describe("the edge functions only use names that exist", () => {
       .filter((line) => /error TS(2304|18004):/.test(line))
       .map((line) => line.trim());
 
-    expect(undeclared, `undeclared names in edge functions:\n${undeclared.join("\n")}`).toEqual([]);
+    expect(
+      undeclared,
+      `undeclared names in edge functions:\n${undeclared.join("\n")}`,
+    ).toEqual([]);
   }, 120_000);
 });

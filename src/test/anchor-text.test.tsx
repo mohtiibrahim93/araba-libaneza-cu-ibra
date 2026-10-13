@@ -57,7 +57,10 @@ describe("links a crawler and a screen reader can both read", () => {
 
     const nameless = anchors
       .filter((a) => !accessibleName(a))
-      .map((a) => `${a.getAttribute("href")} (class="${a.getAttribute("class") ?? ""}")`);
+      .map(
+        (a) =>
+          `${a.getAttribute("href")} (class="${a.getAttribute("class") ?? ""}")`,
+      );
     expect(nameless, nameless.join("\n")).toEqual([]);
 
     // An icon-only link is named but still carries no anchor text. None exist

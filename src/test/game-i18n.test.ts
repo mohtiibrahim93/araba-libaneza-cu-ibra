@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * The game frame must follow the language the visitor reads the site in.
@@ -34,17 +35,20 @@ describe("the game follows the site's language", () => {
 
   it("defaults to Romanian and only accepts a known language", () => {
     const src = read("public/yalla/i18n.js");
-    expect(src).toContain("var lang = 'ro'");
+    expect(code(src)).toContain(code("var lang = 'ro'"));
     // Anything other than 'en' must leave Romanian in place rather than
     // reaching the DOM as an attribute value.
-    expect(src).toContain("if (q === 'en') lang = 'en'");
+    expect(code(src)).toContain(code("if (q === 'en') lang = 'en'"));
   });
 
   it("resolves converted strings through the helper", () => {
     const app = read("public/yalla/app.js");
-    expect(app).toContain("const T=(ro,en)=>window.YallaI18n");
+    expect(code(app)).toContain(code("const T = (ro, en) =>"));
+    expect(code(app)).toContain(
+      code("window.YallaI18n ? window.YallaI18n.t(ro, en) : ro"),
+    );
     // A meaningful batch is converted; this is a floor, not a target.
-    expect((app.match(/T\('/g) ?? []).length).toBeGreaterThan(100);
+    expect((app.match(/\bT\(\s*["'`]/g) ?? []).length).toBeGreaterThan(100);
   });
 
   it("leaves the content to deck-language.js", () => {
@@ -65,8 +69,10 @@ describe("training draws by level, not by lesson group", () => {
     // 11 B1 ones, group "A2" held 223 A1 cards. Selecting on the level the owner
     // gave each card is the honest filter, and it must stay a ceiling — an A2
     // round includes A1 cards, because an A2 conversation needs A1 words.
-    expect(app).toContain("D.cards.filter(upToLevel(trainingLevel))");
-    expect(app).toContain("i<=top");
+    expect(code(app)).toContain(
+      code("D.cards.filter(upToLevel(trainingLevel))"),
+    );
+    expect(code(app)).toContain(code("i<=top"));
     expect(app).not.toContain("trainingGroup");
   });
 

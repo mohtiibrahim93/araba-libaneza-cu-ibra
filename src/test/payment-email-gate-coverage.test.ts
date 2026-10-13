@@ -16,21 +16,29 @@ import { join, resolve } from "node:path";
  * page that calls a gated function first shows CheckoutEmailGate (or the
  * trial's own code screen). This file fails if a new caller skips it.
  */
-const GATED = ["create-checkout", "create-checkout-session", "create-payment-intent", "create-subscription"];
+const GATED = [
+  "create-checkout",
+  "create-checkout-session",
+  "create-payment-intent",
+  "create-subscription",
+];
 const root = resolve(process.cwd(), "src");
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
 function sources(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const full = join(dir, name);
-    if (statSync(full).isDirectory()) return name === "test" ? [] : sources(full);
+    if (statSync(full).isDirectory())
+      return name === "test" ? [] : sources(full);
     return /\.(ts|tsx)$/.test(name) ? [full] : [];
   });
 }
 
 const callers = sources(root).filter((file) => {
   const src = readFileSync(file, "utf8");
-  return GATED.some((fn) => src.includes(`invoke("${fn}"`) || src.includes(`"${fn}",`));
+  return GATED.some(
+    (fn) => src.includes(`invoke("${fn}"`) || src.includes(`"${fn}",`),
+  );
 });
 
 describe("payment callers", () => {
@@ -52,7 +60,9 @@ describe("payment callers", () => {
 
 describe("private lesson purchase (NativeScheduler)", () => {
   const scheduler = read("src/components/NativeScheduler.tsx");
-  const purchase = scheduler.slice(scheduler.indexOf('if (selectedSlot && mode === "create" && purchase)'));
+  const purchase = scheduler.slice(
+    scheduler.indexOf('if (selectedSlot && mode === "create" && purchase)'),
+  );
 
   it("shows the gate before the card form or the pay button", () => {
     const gate = purchase.indexOf("<CheckoutEmailGate");
@@ -71,7 +81,9 @@ describe("kids deposit (RegistrationFormSection)", () => {
   const form = read("src/components/RegistrationFormSection.tsx");
 
   it("no longer redirects to Stripe straight after submit", () => {
-    const submit = form.slice(form.indexOf('if (courseType === "kids" && payDeposit) {'));
+    const submit = form.slice(
+      form.indexOf('if (courseType === "kids" && payDeposit) {'),
+    );
     const block = submit.slice(0, submit.indexOf("}"));
     expect(block).toContain("setDepositNeedsVerify(true)");
     expect(block).not.toContain("attemptKidsDepositCheckout");
@@ -79,7 +91,10 @@ describe("kids deposit (RegistrationFormSection)", () => {
 
   it("starts the deposit checkout only from the gate's onVerified", () => {
     const gate = form.slice(form.indexOf("<CheckoutEmailGate"));
-    const onVerified = gate.slice(gate.indexOf("onVerified"), gate.indexOf("/>"));
+    const onVerified = gate.slice(
+      gate.indexOf("onVerified"),
+      gate.indexOf("/>"),
+    );
     expect(onVerified).toContain("attemptKidsDepositCheckout");
     expect(onVerified).toContain("submittedData.email");
   });
@@ -88,7 +103,9 @@ describe("kids deposit (RegistrationFormSection)", () => {
 describe("the server gate", () => {
   it("is unchanged in all four payment functions", () => {
     for (const fn of GATED) {
-      expect(read(`supabase/functions/${fn}/index.ts`), fn).toContain("verifiedRegistrationOwner");
+      expect(read(`supabase/functions/${fn}/index.ts`), fn).toContain(
+        "verifiedRegistrationOwner",
+      );
     }
   });
 });

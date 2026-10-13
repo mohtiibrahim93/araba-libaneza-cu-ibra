@@ -27,16 +27,18 @@ describe("the server-rendered head follows the page", () => {
     head.links?.find((l) => l["rel"] === "canonical")?.["href"];
 
   it("canonicalises page one at the bare index", () => {
-    expect(canonicalOf(seoHead("/blog"))).toBe("https://centruldearabalibaneza.com/blog");
+    expect(canonicalOf(seoHead("/blog"))).toBe(
+      "https://centruldearabalibaneza.com/blog",
+    );
   });
 
   it("canonicalises page two at itself, in both languages", () => {
     expect(canonicalOf(seoHead("/blog", { canonicalSearch: "?page=2" }))).toBe(
       "https://centruldearabalibaneza.com/blog?page=2",
     );
-    expect(canonicalOf(seoHead("/en/blog", { canonicalSearch: "?page=2" }))).toBe(
-      "https://centruldearabalibaneza.com/en/blog?page=2",
-    );
+    expect(
+      canonicalOf(seoHead("/en/blog", { canonicalSearch: "?page=2" })),
+    ).toBe("https://centruldearabalibaneza.com/en/blog?page=2");
   });
 });
 
@@ -58,17 +60,23 @@ describe("blog pagination", () => {
     renderRoute("/blog?page=2");
     // Wait for the grid rather than the pager: the pager exists on page one too.
     const pager = await screen.findByRole("navigation", { name: "Paginare" });
-    expect(within(pager).getByRole("link", { name: "Pagina 2" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    expect(
+      within(pager).getByRole("link", { name: "Pagina 2" }),
+    ).toHaveAttribute("aria-current", "page");
 
     const onPageOne = blogPostsNewestFirst[0];
     const onPageTwo = blogPostsNewestFirst[PER_PAGE];
     expect(onPageOne, "the blog has no articles").toBeDefined();
-    expect(onPageTwo, "the blog no longer spills onto a second page").toBeDefined();
+    expect(
+      onPageTwo,
+      "the blog no longer spills onto a second page",
+    ).toBeDefined();
     // The newest article heads page one; it must not also head page two.
-    expect(screen.queryByRole("heading", { name: onPageOne!.title.ro })).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: onPageTwo!.title.ro })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: onPageOne!.title.ro }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: onPageTwo!.title.ro }),
+    ).toBeInTheDocument();
   });
 });

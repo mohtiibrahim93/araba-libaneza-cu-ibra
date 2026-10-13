@@ -76,7 +76,9 @@ describe("displayed prices match what is charged", () => {
     ];
     for (const f of files) {
       const src = read(f).replace(/^\s*(\/\/|\*|\/\*).*$/gm, "");
-      expect(src, f).not.toMatch(/[−-]20\s?%|[−-]10\s?%\s*(la|de la|for|from) 10|10 lecții au 10%|1\.350|1,350/);
+      expect(src, f).not.toMatch(
+        /[−-]20\s?%|[−-]10\s?%\s*(la|de la|for|from) 10|10 lecții au 10%|1\.350|1,350/,
+      );
     }
   });
 
@@ -110,7 +112,9 @@ describe("displayed prices match what is charged", () => {
     ];
     for (const f of files) {
       const src = read(f).replace(/^\s*(\/\/|\*|\/\*).*$/gm, ""); // ignore comments
-      expect(src, f).not.toMatch(/[−-]?5%\s*(de la|from)\s*5|de la 5 lecții|from 5 lessons/);
+      expect(src, f).not.toMatch(
+        /[−-]?5%\s*(de la|from)\s*5|de la 5 lecții|from 5 lessons/,
+      );
     }
   });
 
@@ -122,8 +126,12 @@ describe("displayed prices match what is charged", () => {
   });
 
   it("computes the package from the per-lesson price", () => {
-    expect(PRIVATE_PACKAGE_DISCOUNT).toBe(privateDiscountFor(PRIVATE_PACKAGE_SIZE));
-    expect(privatePackageFull()).toBe(ONLINE_PRICES.privateLesson * PRIVATE_PACKAGE_SIZE);
+    expect(PRIVATE_PACKAGE_DISCOUNT).toBe(
+      privateDiscountFor(PRIVATE_PACKAGE_SIZE),
+    );
+    expect(privatePackageFull()).toBe(
+      ONLINE_PRICES.privateLesson * PRIVATE_PACKAGE_SIZE,
+    );
     expect(privatePackageDiscounted()).toBe(
       Math.round(privatePackageFull() * (1 - PRIVATE_PACKAGE_DISCOUNT)),
     );
@@ -133,11 +141,17 @@ describe("displayed prices match what is charged", () => {
 
   it("keeps the display and server per-lesson price equal, in both formats", () => {
     expect(ONLINE_PRICES.privateLesson).toBe(PRIVATE_LESSON);
-    expect(privateLessonUnitAmount("online")).toBe(ONLINE_PRICES.privateLesson * 100);
-    expect(privateLessonUnitAmount("fizic")).toBe(physicalPrice(ONLINE_PRICES.privateLesson) * 100);
+    expect(privateLessonUnitAmount("online")).toBe(
+      ONLINE_PRICES.privateLesson * 100,
+    );
+    expect(privateLessonUnitAmount("fizic")).toBe(
+      physicalPrice(ONLINE_PRICES.privateLesson) * 100,
+    );
     expect(privateLessonUnitAmount("fizic")).toBe(21000);
     // An unknown format must fall back to the cheaper online rate.
-    expect(privateLessonUnitAmount(null)).toBe(ONLINE_PRICES.privateLesson * 100);
+    expect(privateLessonUnitAmount(null)).toBe(
+      ONLINE_PRICES.privateLesson * 100,
+    );
   });
 
   it("charges the kids deposit as a real share of the kids month", () => {
@@ -149,14 +163,18 @@ describe("displayed prices match what is charged", () => {
     expect(kidsGroupMonthlyUnitAmount("fizic")).toBe(70000);
     expect(kidsGroupMonthlyUnitAmount(null)).toBe(500 * 100);
 
-    expect(kidsDepositUnitAmount("online")).toBe(KIDS_GROUP_MONTHLY * KIDS_DEPOSIT_SHARE * 100);
+    expect(kidsDepositUnitAmount("online")).toBe(
+      KIDS_GROUP_MONTHLY * KIDS_DEPOSIT_SHARE * 100,
+    );
     expect(kidsDepositUnitAmount("online")).toBe(12500); // 125 LEI
     expect(kidsDepositUnitAmount("fizic")).toBe(17500); // 25% of 700
     // Kids courses start in person, so the copy quotes the in-person deposit
     // and remainder (700 - 175); both follow the fee.
     const i18n = read("src/lib/i18n.tsx");
     expect(i18n).toContain(`${kidsDepositUnitAmount("fizic") / 100} LEI`);
-    expect(i18n).toContain(`${kidsGroupMonthlyUnitAmount("fizic") / 100 - kidsDepositUnitAmount("fizic") / 100} LEI`);
+    expect(i18n).toContain(
+      `${kidsGroupMonthlyUnitAmount("fizic") / 100 - kidsDepositUnitAmount("fizic") / 100} LEI`,
+    );
     expect(i18n).not.toMatch(/\b125 LEI|\b375 LEI/);
   });
 

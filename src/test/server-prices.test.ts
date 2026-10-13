@@ -8,7 +8,11 @@ import {
   groupMonthsFor,
   privateLessonUnitAmount,
 } from "../../supabase/functions/_shared/prices";
-import { GROUP_COURSE_MONTHS, ONLINE_PRICES, physicalPrice } from "@/lib/pricing";
+import {
+  GROUP_COURSE_MONTHS,
+  ONLINE_PRICES,
+  physicalPrice,
+} from "@/lib/pricing";
 import { getCurriculum } from "@/data/curriculum";
 
 describe("server-side Stripe price table (supabase/functions/_shared/prices.ts)", () => {

@@ -1,6 +1,7 @@
 import { describe, expect, it, beforeAll } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * The game's card bank is generated, so these are the invariants the generator
@@ -13,12 +14,28 @@ import { resolve } from "node:path";
  * grouping — which described where material came from, not what it teaches —
  * with a level and a curriculum topic per card.
  */
-type Card = { id: string; ar: string; ro: string; en?: string; level?: string; topic?: string; unit: string };
+type Card = {
+  id: string;
+  ar: string;
+  ro: string;
+  en?: string;
+  level?: string;
+  topic?: string;
+  unit: string;
+};
 type Unit = { id: string; title: string; empty?: boolean };
-let Y: { cards: Card[]; units: Unit[]; topics: { id: string; level: string; title: string }[]; levels: { id: string }[] };
+let Y: {
+  cards: Card[];
+  units: Unit[];
+  topics: { id: string; level: string; title: string }[];
+  levels: { id: string }[];
+};
 
 beforeAll(() => {
-  const src = readFileSync(resolve(process.cwd(), "public/yalla/content.js"), "utf8");
+  const src = readFileSync(
+    resolve(process.cwd(), "public/yalla/content.js"),
+    "utf8",
+  );
   const win = {} as Record<string, unknown>;
   new Function("window", src)(win);
   Y = win["YALLA"] as typeof Y;
@@ -56,20 +73,30 @@ describe("the generated card bank", () => {
     // game. So they are flagged, and app.js filters them out of the mission list
     // and the passport instead.
     const perUnit = new Map<string, number>();
-    for (const c of Y.cards) perUnit.set(c.unit, (perUnit.get(c.unit) ?? 0) + 1);
+    for (const c of Y.cards)
+      perUnit.set(c.unit, (perUnit.get(c.unit) ?? 0) + 1);
     const empty = Y.units.filter((u) => !perUnit.get(u.id));
     expect(empty.length).toBeGreaterThan(0);
     expect(empty.every((u) => u.empty === true)).toBe(true);
-    expect(Y.units.filter((u) => u.empty && perUnit.get(u.id)).map((u) => u.title)).toEqual([]);
+    expect(
+      Y.units.filter((u) => u.empty && perUnit.get(u.id)).map((u) => u.title),
+    ).toEqual([]);
   });
 
   it("keeps empty lessons out of what the game offers", () => {
-    const app = readFileSync(resolve(process.cwd(), "public/yalla/app.js"), "utf8");
-    expect(app).toContain("u.group===group&&unitItems(u.id).length>0");
+    const app = readFileSync(
+      resolve(process.cwd(), "public/yalla/app.js"),
+      "utf8",
+    );
+    expect(code(app)).toContain(
+      code("u.group===group&&unitItems(u.id).length>0"),
+    );
   });
 
   it("keeps the two cards the owner dropped by accident", () => {
-    const thirsty = Y.cards.filter((c) => c.ar === "3atshan" || c.ar === "3atshane");
+    const thirsty = Y.cards.filter(
+      (c) => c.ar === "3atshan" || c.ar === "3atshane",
+    );
     expect(thirsty).toHaveLength(2);
     expect(thirsty.every((c) => c.level === "A1")).toBe(true);
   });
@@ -80,10 +107,15 @@ describe("the generated card bank", () => {
   });
 
   it("lists every row of the reviewed CSV", () => {
-    const csv = readFileSync(resolve(process.cwd(), "content/yalla-cards.csv"), "utf8");
+    const csv = readFileSync(
+      resolve(process.cwd(), "content/yalla-cards.csv"),
+      "utf8",
+    );
     const rows = csv.trim().split("\n").slice(1);
     const inBank = new Set(Y.cards.map((c) => c.id));
-    const lost = rows.map((l) => l.trim().split(",").pop()!.trim()).filter((id) => id && !inBank.has(id));
+    const lost = rows
+      .map((l) => l.trim().split(",").pop()!.trim())
+      .filter((id) => id && !inBank.has(id));
     expect(lost).toEqual([]);
   });
 });

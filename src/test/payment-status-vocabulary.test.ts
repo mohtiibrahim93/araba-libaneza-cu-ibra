@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve, join } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * `registrations.payment_status` has no database constraint, so any string at
@@ -45,7 +46,8 @@ const IN_THE_DATA = ALLOWED;
 /** Every .ts/.tsx under a root, so a new function cannot slip past. */
 function walk(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
-    if (name === "node_modules" || name === "dist" || name.startsWith(".")) continue;
+    if (name === "node_modules" || name === "dist" || name.startsWith("."))
+      continue;
     const full = join(dir, name);
     if (statSync(full).isDirectory()) walk(full, out);
     else if (/\.tsx?$/.test(name)) out.push(full);
@@ -65,15 +67,24 @@ describe("payment_status stays to its eight values", () => {
 
   it("writes expired only for an abandoned Stripe page", () => {
     // Written through a variable, so the scan below cannot see it.
-    const hook = readFileSync(resolve(process.cwd(), "supabase/functions/stripe-webhook/index.ts"), "utf8");
-    expect(hook).toContain('const newStatus = event.type === "checkout.session.expired" ? "expired" : "failed";');
+    const hook = readFileSync(
+      resolve(process.cwd(), "supabase/functions/stripe-webhook/index.ts"),
+      "utf8",
+    );
+    expect(code(hook)).toContain(
+      code(
+        'const newStatus = event.type === "checkout.session.expired" ? "expired" : "failed";',
+      ),
+    );
   });
 
   it("writes no ninth value", () => {
     const bad: string[] = [];
     for (const f of files) {
       const src = readFileSync(f, "utf8");
-      for (const m of src.matchAll(/payment_status:\s*(?:[^,\n]*\?\s*)?"([a-z_]+)"(?:\s*:\s*"([a-z_]+)")?/g)) {
+      for (const m of src.matchAll(
+        /payment_status:\s*(?:[^,\n]*\?\s*)?"([a-z_]+)"(?:\s*:\s*"([a-z_]+)")?/g,
+      )) {
         for (const v of [m[1], m[2]]) {
           if (v && !ALLOWED.includes(v)) {
             bad.push(`${f.replace(process.cwd() + "/", "")}: "${v}"`);
@@ -81,7 +92,10 @@ describe("payment_status stays to its eight values", () => {
         }
       }
     }
-    expect(bad, `payment_status values outside the eight:\n${bad.join("\n")}`).toEqual([]);
+    expect(
+      bad,
+      `payment_status values outside the eight:\n${bad.join("\n")}`,
+    ).toEqual([]);
   });
 
   it("labels every value the column can hold", async () => {
@@ -118,9 +132,10 @@ describe("payment_status stays to its eight values", () => {
         resolve(process.cwd(), `supabase/functions/${fn}/index.ts`),
         "utf8",
       );
-      expect(src, `${fn} starts a real payment, so it writes pending`).toContain(
-        'payment_status: "pending"',
-      );
+      expect(
+        src,
+        `${fn} starts a real payment, so it writes pending`,
+      ).toContain('payment_status: "pending"');
     }
   });
 
@@ -179,6 +194,8 @@ describe("payment_status stays to its eight values", () => {
       resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
       "utf8",
     );
-    expect(fn).toContain('.not("payment_status", "in", \'("paid","refunded")\')');
+    expect(fn).toContain(
+      '.not("payment_status", "in", \'("paid","refunded")\')',
+    );
   });
 });

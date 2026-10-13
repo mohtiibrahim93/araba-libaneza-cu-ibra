@@ -4,10 +4,22 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "@/lib/i18n";
-import { CONSENT_KEY, OPEN_CONSENT_EVENT, readConsent, saveConsent } from "@/lib/cookieConsent";
+import {
+  CONSENT_KEY,
+  OPEN_CONSENT_EVENT,
+  readConsent,
+  saveConsent,
+} from "@/lib/cookieConsent";
 
 vi.mock("@/components/LocalizedLink", () => ({
-  Link: ({ to, children, ...rest }: { to: string; children: React.ReactNode }) => (
+  Link: ({
+    to,
+    children,
+    ...rest
+  }: {
+    to: string;
+    children: React.ReactNode;
+  }) => (
     <a href={to} {...rest}>
       {children}
     </a>
@@ -15,9 +27,20 @@ vi.mock("@/components/LocalizedLink", () => ({
 }));
 
 import CookieConsentBanner from "@/components/CookieConsentBanner";
+import { code } from "./helpers/sourceText";
 
-const GRANTED = { analytics_storage: "granted", ad_storage: "granted", ad_user_data: "granted", ad_personalization: "granted" };
-const DENIED = { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" };
+const GRANTED = {
+  analytics_storage: "granted",
+  ad_storage: "granted",
+  ad_user_data: "granted",
+  ad_personalization: "granted",
+};
+const DENIED = {
+  analytics_storage: "denied",
+  ad_storage: "denied",
+  ad_user_data: "denied",
+  ad_personalization: "denied",
+};
 
 const renderBanner = (force = true) =>
   render(
@@ -78,7 +101,11 @@ describe("cookie consent (Google Consent Mode v2)", () => {
 
   it("links to the privacy policy", () => {
     renderBanner();
-    expect(screen.getByRole("link", { name: "Politica de confidențialitate" }).getAttribute("href")).toBe("/privacy");
+    expect(
+      screen
+        .getByRole("link", { name: "Politica de confidențialitate" })
+        .getAttribute("href"),
+    ).toBe("/privacy");
   });
 
   it("does not render under the test environment unless forced", () => {
@@ -91,7 +118,9 @@ describe("cookie consent (Google Consent Mode v2)", () => {
     expect(root).not.toMatch(/goadopt|ADOPT_WEBSITE_CODE/);
     expect(root).toContain("<CookieConsentBanner />");
     const def = root.indexOf("gtag('consent', 'default'");
-    const upd = root.indexOf('localStorage.getItem("cookie_consent") === "all"');
+    const upd = root.indexOf(
+      'localStorage.getItem("cookie_consent") === "all"',
+    );
     const cfg = root.indexOf("gtag('config'");
     expect(def).toBeGreaterThan(-1);
     expect(upd).toBeGreaterThan(def);
@@ -101,16 +130,26 @@ describe("cookie consent (Google Consent Mode v2)", () => {
 
 describe("Google's script waits for consent", () => {
   it("is fetched only after 'all', never on 'essential' or before a choice", () => {
-    const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
-    const boot = root.slice(root.indexOf("const gtagBootstrap"), root.indexOf("const organizationJsonLd"));
+    const root = readFileSync(
+      resolve(process.cwd(), "src/routes/__root.tsx"),
+      "utf8",
+    );
+    const boot = root.slice(
+      root.indexOf("const gtagBootstrap"),
+      root.indexOf("const organizationJsonLd"),
+    );
     const loader = boot.indexOf("window.__loadGtag = function");
     const append = boot.indexOf("document.head.appendChild(gt)");
     expect(loader).toBeGreaterThan(-1);
     // The script tag is created only inside the loader…
     expect(append).toBeGreaterThan(loader);
-    expect(boot.indexOf("document.createElement(\"script\")")).toBeGreaterThan(loader);
+    expect(boot.indexOf('document.createElement("script")')).toBeGreaterThan(
+      loader,
+    );
     // …which runs at start-up only for a stored "all".
-    const stored = boot.indexOf('localStorage.getItem("cookie_consent") === "all"');
+    const stored = boot.indexOf(
+      'localStorage.getItem("cookie_consent") === "all"',
+    );
     expect(boot.indexOf("window.__loadGtag();")).toBeGreaterThan(stored);
   });
 
@@ -125,13 +164,23 @@ describe("Google's script waits for consent", () => {
   });
 
   it("counts a saved trial card as the trial conversion", () => {
-    const index = readFileSync(resolve(process.cwd(), "src/pages/Index.tsx"), "utf8");
-    expect(index).toContain('trackEvent("trial_booking_complete", { event_type: "trial", source: "card_saved" })');
+    const index = readFileSync(
+      resolve(process.cwd(), "src/pages/Index.tsx"),
+      "utf8",
+    );
+    expect(code(index)).toContain(
+      code(
+        'trackEvent("trial_booking_complete", { event_type: "trial", source: "card_saved" })',
+      ),
+    );
     expect(index).not.toContain('trackEvent("TrialCardSaved")');
   });
 
   it("sends begin_checkout when a private-lesson payment opens", () => {
-    const scheduler = readFileSync(resolve(process.cwd(), "src/components/NativeScheduler.tsx"), "utf8");
+    const scheduler = readFileSync(
+      resolve(process.cwd(), "src/components/NativeScheduler.tsx"),
+      "utf8",
+    );
     const pay = scheduler.slice(scheduler.indexOf("const handlePay = async"));
     expect(pay.slice(0, 600)).toContain('trackCheckoutStart("private")');
   });

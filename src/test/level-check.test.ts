@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { levelCheckTimeAllowed, physicalTrialAllowed } from "../../supabase/functions/_shared/schedule-rules";
+import {
+  levelCheckTimeAllowed,
+  physicalTrialAllowed,
+} from "../../supabase/functions/_shared/schedule-rules";
+import { code } from "./helpers/sourceText";
 
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
@@ -19,7 +23,9 @@ describe("level check with Ibra", () => {
 
   it("offers all three ways: calendar, call back, WhatsApp", () => {
     const page = read("src/pages/VerificareNivel.tsx");
-    expect(page).toContain('<NativeScheduler eventType="verificare-nivel"');
+    expect(code(page)).toContain(
+      code('<NativeScheduler eventType="verificare-nivel"'),
+    );
     expect(page).toContain('form_type: "level_check"');
     expect(page).toContain("WHATSAPP_CONTACT_URL}?text=");
   });
@@ -37,7 +43,9 @@ describe("level check with Ibra", () => {
     expect(levelCheckTimeAllowed(wedEvening, 30)).toBe(false);
     expect(levelCheckTimeAllowed(satNoon, 30)).toBe(false);
     // No weekend-only rule for an in-person level check.
-    expect(physicalTrialAllowed("verificare-nivel", "physical", wedNoon)).toBe(true);
+    expect(physicalTrialAllowed("verificare-nivel", "physical", wedNoon)).toBe(
+      true,
+    );
   });
 
   it("is linked from everywhere the owner asked", () => {

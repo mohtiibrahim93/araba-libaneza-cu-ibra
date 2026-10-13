@@ -23,9 +23,13 @@ import { guardSource } from "../../scripts/guardWorkerRuntime.mjs";
  */
 describe("the built worker tolerates an undefined import.meta.url", () => {
   it("guards a bare createRequire call", () => {
-    const { source, count } = guardSource("const r = createRequire(import.meta.url);");
+    const { source, count } = guardSource(
+      "const r = createRequire(import.meta.url);",
+    );
     expect(count).toBe(1);
-    expect(source).toBe('const r = createRequire(import.meta.url || "file:///");');
+    expect(source).toBe(
+      'const r = createRequire(import.meta.url || "file:///");',
+    );
   });
 
   it("leaves an already-guarded call alone, so running twice is safe", () => {
@@ -44,14 +48,17 @@ describe("the built worker tolerates an undefined import.meta.url", () => {
   });
 
   it("does not touch other uses of import.meta.url", () => {
-    const src = "const base = import.meta.url; fetch(new URL('./a', import.meta.url));";
+    const src =
+      "const base = import.meta.url; fetch(new URL('./a', import.meta.url));";
     expect(guardSource(src).count).toBe(0);
   });
 
   it("runs as part of the build, after the bundle is written", () => {
     // A vite plugin is not enough: nitro writes .output/server after vite's
     // hooks have run, so the guard has to be a step of its own, last.
-    const pkg = JSON.parse(readFileSync(resolve(process.cwd(), "package.json"), "utf8"));
+    const pkg = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    );
     for (const script of ["build", "build:dev"] as const) {
       expect(pkg.scripts[script], `${script} must run the guard`).toContain(
         "node scripts/guardWorkerRuntime.mjs",

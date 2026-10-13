@@ -21,7 +21,9 @@ export interface RouteFile {
 const ROUTES_DIR = "src/routes";
 
 function collect(dir: string, out: RouteFile[]) {
-  for (const entry of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+  for (const entry of readdirSync(resolve(process.cwd(), dir), {
+    withFileTypes: true,
+  })) {
     if (entry.isDirectory()) {
       collect(`${dir}/${entry.name}`, out);
       continue;

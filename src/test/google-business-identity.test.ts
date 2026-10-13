@@ -33,25 +33,37 @@ describe("the Google Business listing", () => {
   });
 
   it("builds the profile link from it instead of an opaque short link", () => {
-    expect(GOOGLE_MAPS_PROFILE_URL).toBe(`https://www.google.com/maps?cid=${GOOGLE_BUSINESS_CID}`);
+    expect(GOOGLE_MAPS_PROFILE_URL).toBe(
+      `https://www.google.com/maps?cid=${GOOGLE_BUSINESS_CID}`,
+    );
     expect(GOOGLE_MAPS_PROFILE_URL).not.toContain("goo.gl");
   });
 
   it("has a review link whose key decodes to the same CID", () => {
     const key = /g\.page\/r\/([^/]+)\/review$/.exec(GOOGLE_REVIEW_URL)?.[1];
-    expect(key, "the review link must keep the g.page form that opens the review box").toBeTruthy();
-    const bytes = Buffer.from(key!.replace(/-/g, "+").replace(/_/g, "/"), "base64");
+    expect(
+      key,
+      "the review link must keep the g.page form that opens the review box",
+    ).toBeTruthy();
+    const bytes = Buffer.from(
+      key!.replace(/-/g, "+").replace(/_/g, "/"),
+      "base64",
+    );
     // 0x09 is protobuf field 1, wire type 1 (fixed64): the CID, little-endian.
     expect(bytes[0]).toBe(0x09);
-    expect(bytes.subarray(1, 9).readBigUInt64LE(0)).toBe(BigInt("0x" + CID_HEX));
+    expect(bytes.subarray(1, 9).readBigUInt64LE(0)).toBe(
+      BigInt("0x" + CID_HEX),
+    );
   });
 
   it("is listed once in the structured data, from the same constant", () => {
-    const listing = ORGANIZATION_SAME_AS.filter((u) => u.includes("google.com/maps") || u.includes("goo.gl"));
+    const listing = ORGANIZATION_SAME_AS.filter(
+      (u) => u.includes("google.com/maps") || u.includes("goo.gl"),
+    );
     expect(listing).toEqual([GOOGLE_MAPS_PROFILE_URL]);
     // The literal that used to be pasted here is gone for good.
-    expect(readFileSync(resolve(process.cwd(), "src/lib/courseSchema.ts"), "utf8")).not.toContain(
-      '"https://maps.app.goo.gl',
-    );
+    expect(
+      readFileSync(resolve(process.cwd(), "src/lib/courseSchema.ts"), "utf8"),
+    ).not.toContain('"https://maps.app.goo.gl');
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * A free trial is not booked until the card is saved.
@@ -30,18 +31,30 @@ describe("the trial slot is paid for with a card, not a promise", () => {
   const webhook = read("supabase/functions/stripe-webhook/index.ts");
 
   it("sends a trial to the card step instead of booking it", () => {
-    expect(scheduler).toContain('if (eventType === "trial" && mode === "create" && resolvedRegistrationId)');
+    expect(code(scheduler)).toContain(
+      code(
+        'if (eventType === "trial" && mode === "create" && resolvedRegistrationId)',
+      ),
+    );
     // The redirect has to happen before booking-create is reached.
-    const cardStep = scheduler.indexOf('eventType === "trial" && mode === "create"');
-    const bookingCall = scheduler.indexOf('supabase.functions.invoke("booking-create"');
+    const all = code(scheduler);
+    const cardStep = all.indexOf(
+      code('eventType === "trial" && mode === "create"'),
+    );
+    const bookingCall = all.indexOf(
+      code('supabase.functions.invoke("booking-create"'),
+    );
     expect(cardStep).toBeGreaterThan(-1);
     expect(bookingCall).toBeGreaterThan(cardStep);
   });
 
   it("still captures the lead before the redirect", () => {
     // An abandoned card step must leave someone to contact.
-    const ensure = scheduler.indexOf("ensureRegistration?.(");
-    const cardStep = scheduler.indexOf('eventType === "trial" && mode === "create"');
+    const all = code(scheduler);
+    const ensure = all.indexOf(code("ensureRegistration?.("));
+    const cardStep = all.indexOf(
+      code('eventType === "trial" && mode === "create"'),
+    );
     expect(ensure).toBeGreaterThan(-1);
     expect(ensure).toBeLessThan(cardStep);
   });
@@ -57,7 +70,7 @@ describe("the trial slot is paid for with a card, not a promise", () => {
     expect(checkout).toContain("booking_start_at");
     expect(checkout).toContain("booking_event_type");
     // Notes are truncated rather than allowed to break the session create.
-    expect(checkout).toContain("put(\"booking_notes\", booking.notes)");
+    expect(checkout).toContain('put("booking_notes", booking.notes)');
   });
 
   it("creates the booking in the webhook, where a closed tab cannot stop it", () => {
@@ -71,7 +84,10 @@ describe("the trial slot is paid for with a card, not a promise", () => {
     // Throwing would make Stripe retry the whole event and re-run the card
     // update above it.
     const setupBranch = webhook
-      .slice(webhook.indexOf('if (session.mode === "setup")'), webhook.indexOf("if (!paid)"))
+      .slice(
+        webhook.indexOf('if (session.mode === "setup")'),
+        webhook.indexOf("if (!paid)"),
+      )
       // Comments explain the rule and would match it.
       .split("\n")
       .filter((l) => !l.trim().startsWith("//"))

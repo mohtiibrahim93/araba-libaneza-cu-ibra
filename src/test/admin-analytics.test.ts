@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * The admin panel's analytics tab.
@@ -60,7 +61,11 @@ describe("the analytics tab", () => {
   it("counts a late cancellation the way the rule defines it", () => {
     expect(action).toContain("lateCancels");
     expect(action).toContain("86_400_000");
-    expect(action).toMatch(/Date\.parse\(b\.start_at as string\) - Date\.parse\(b\.cancelled_at as string\)/);
+    expect(code(action)).toContain(
+      code(
+        "Date.parse(b.start_at as string) - Date.parse(b.cancelled_at as string)",
+      ),
+    );
   });
 
   it("reports a median, not a mean, for days to payment", () => {
@@ -73,8 +78,15 @@ describe("the analytics tab", () => {
     // Refunds are real amounts off Stripe and are reported; a derived total is
     // not, and must not appear.
     expect(action).toContain("refunded_amount");
-    for (const banned of ["GROUP_MONTHLY", "groupMonthlyUnitAmount", "PRIVATE_LESSON", "price_lei"]) {
-      expect(action, `${banned} would make revenue a guess`).not.toContain(banned);
+    for (const banned of [
+      "GROUP_MONTHLY",
+      "groupMonthlyUnitAmount",
+      "PRIVATE_LESSON",
+      "price_lei",
+    ]) {
+      expect(action, `${banned} would make revenue a guess`).not.toContain(
+        banned,
+      );
     }
   });
 
@@ -87,7 +99,9 @@ describe("the analytics tab", () => {
     expect(admin).toContain('value: "analytics"');
     expect(admin).toContain('<TabsContent value="analytics"');
     expect(admin).toContain("<AnalyticsAdmin />");
-    expect(admin).toContain('import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin"');
+    expect(admin).toContain(
+      'import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin"',
+    );
   });
 
   it("keeps the validated series colours in both modes", () => {
@@ -116,7 +130,9 @@ describe("the analytics tab", () => {
     // The bar height is a percentage of the track. On an auto-height column
     // every bar collapses to its min-height, which is what the first render
     // actually did.
-    expect(page).toContain("flex h-full min-w-[14px] flex-1 flex-col justify-end");
+    expect(page).toContain(
+      "flex h-full min-w-[14px] flex-1 flex-col justify-end",
+    );
   });
 
   it("says plainly that traffic lives in Google Analytics", () => {

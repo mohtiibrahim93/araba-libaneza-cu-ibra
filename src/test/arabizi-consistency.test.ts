@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { ARABIZI_DIGITS, arabiziDigitList, arabiziMarkdownTable } from "@/data/arabizi";
+import {
+  ARABIZI_DIGITS,
+  arabiziDigitList,
+  arabiziMarkdownTable,
+} from "@/data/arabizi";
 
 /**
  * The arabizi digit table used to exist as six independent copies — /arabizi,
@@ -53,10 +57,17 @@ describe("arabizi digits have a single source", () => {
       "src/pages/blog/CeEsteArabizi.tsx",
     ];
     for (const f of files) {
-      for (const [, list] of read(f).matchAll(/cifre(?:le)?\s*\(?([\d,\s șiand]+)\)?/gi)) {
-        const stated = ((list ?? "").match(/\d/g) ?? []).filter((d) => d !== "0");
+      for (const [, list] of read(f).matchAll(
+        /cifre(?:le)?\s*\(?([\d,\s șiand]+)\)?/gi,
+      )) {
+        const stated = ((list ?? "").match(/\d/g) ?? []).filter(
+          (d) => d !== "0",
+        );
         for (const d of stated) {
-          expect(DIGITS, `${f} lists digit ${d}, which is not in the table`).toContain(d);
+          expect(
+            DIGITS,
+            `${f} lists digit ${d}, which is not in the table`,
+          ).toContain(d);
         }
       }
     }
@@ -73,7 +84,10 @@ describe("arabizi digits have a single source", () => {
     const phrases = JSON.parse(
       "[" +
         script
-          .slice(script.indexOf("const PHRASES"), script.indexOf("];", script.indexOf("const PHRASES")))
+          .slice(
+            script.indexOf("const PHRASES"),
+            script.indexOf("];", script.indexOf("const PHRASES")),
+          )
           .split("\n")
           .filter((l) => l.trim().startsWith("["))
           .join("")

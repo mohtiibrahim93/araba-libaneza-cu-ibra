@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderRoute } from "./helpers/appRouter";
 import { courseMenu, resourceMenu } from "@/lib/siteNav";
+import { code } from "./helpers/sourceText";
 
 // The navbar reads the URL, the UI language and the owner's text overrides, so
 // it is mounted the way a visitor meets it: on the homepage, inside the real
@@ -25,9 +26,15 @@ describe("Navbar accessibility", () => {
   it("renders aria-labels for the brand link, language switcher, and menu button", async () => {
     await renderNavbar();
 
-    expect(screen.getByLabelText("Centrul de Arabă Libaneză — arabă libaneză cu Ibra")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(
+        "Centrul de Arabă Libaneză — arabă libaneză cu Ibra",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Alege limba site-ului")).toBeInTheDocument();
-    expect(screen.getByLabelText("Deschide meniul de navigare")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Deschide meniul de navigare"),
+    ).toBeInTheDocument();
   });
 
   it("toggles the mobile menu open and closed", async () => {
@@ -35,11 +42,15 @@ describe("Navbar accessibility", () => {
 
     const menuButton = screen.getByLabelText("Deschide meniul de navigare");
     fireEvent.click(menuButton);
-    expect(screen.getByLabelText("Închide meniul de navigare")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Închide meniul de navigare"),
+    ).toBeInTheDocument();
     expect(nav.querySelector("#mobile-navigation")).toBeInTheDocument();
 
     fireEvent.click(screen.getByLabelText("Închide meniul de navigare"));
-    expect(screen.getByLabelText("Deschide meniul de navigare")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Deschide meniul de navigare"),
+    ).toBeInTheDocument();
   });
 });
 
@@ -58,7 +69,10 @@ describe("Navbar accessibility", () => {
  * a band of widths gets either two navigations or none.
  */
 describe("Navbar breakpoints", () => {
-  const src = readFileSync(resolve(process.cwd(), "src/components/Navbar.tsx"), "utf8");
+  const src = readFileSync(
+    resolve(process.cwd(), "src/components/Navbar.tsx"),
+    "utf8",
+  );
 
   // The redesigned bar (full width, seven links, two buttons) needs about
   // 1200px, so it shows from xl and the hamburger takes over below that.
@@ -67,13 +81,19 @@ describe("Navbar breakpoints", () => {
   });
 
   it("hands over to the hamburger at exactly the same width", () => {
-    expect(src).toMatch(/className="xl:hidden flex items-center justify-center/);
-    expect(src).toContain('<div id="mobile-navigation" className="xl:hidden');
+    expect(src).toMatch(
+      /className="xl:hidden flex items-center justify-center/,
+    );
+    expect(code(src)).toContain(
+      code('<div id="mobile-navigation" className="xl:hidden'),
+    );
   });
 
   it("shows the homepage anchors whenever the bar is shown", () => {
     expect(src).not.toContain("hidden 2xl:inline");
-    expect(src).toContain("className={navLinkClass(activeSection === l.href.slice(1))}");
+    expect(src).toContain(
+      "className={navLinkClass(activeSection === l.href.slice(1))}",
+    );
   });
 });
 

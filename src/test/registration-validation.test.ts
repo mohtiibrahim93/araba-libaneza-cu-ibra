@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * Every validation failure has to be visible on the field, and countable.
@@ -20,7 +21,15 @@ const form = read("src/components/RegistrationFormSection.tsx");
 const tracking = read("src/lib/tracking.ts");
 
 describe("registration validation", () => {
-  const FIELDS = ["course_type", "format", "level", "center", "gdpr", "phone", "email"] as const;
+  const FIELDS = [
+    "course_type",
+    "format",
+    "level",
+    "center",
+    "gdpr",
+    "phone",
+    "email",
+  ] as const;
 
   it("routes every check through fail(), not a bare toast", () => {
     for (const field of FIELDS) {
@@ -55,7 +64,9 @@ describe("registration validation", () => {
     // undefined`, so the value passed is the message, not the boolean.
     expect(form).toMatch(/error=\{invalidField === "gdpr"/);
     expect(form).toMatch(/levelError=\{invalidField === "level"/);
-    expect(read("src/components/RegistrationForm/GroupFields.tsx")).toContain("levelError");
+    expect(read("src/components/RegistrationForm/GroupFields.tsx")).toContain(
+      "levelError",
+    );
   });
 
   it("reports which field failed, so drop-off can be read not guessed", () => {
@@ -91,7 +102,10 @@ describe("registration validation", () => {
  *     URL anyone can type, so every real sale was also counted twice.
  */
 describe("GA4 conversions", () => {
-  const tracking = readFileSync(resolve(process.cwd(), "src/lib/tracking.ts"), "utf8");
+  const tracking = readFileSync(
+    resolve(process.cwd(), "src/lib/tracking.ts"),
+    "utf8",
+  );
   const read = (f: string) => readFileSync(resolve(process.cwd(), f), "utf8");
 
   it("fires the GA4 names directly, with no mirroring", () => {
@@ -111,8 +125,12 @@ describe("GA4 conversions", () => {
       "src/pages/PaymentStatus.tsx",
     ]) {
       const src = read(f);
-      expect(src, `${f} still sends "Lead"`).not.toMatch(/trackEvent\(\s*"Lead"/);
-      expect(src, `${f} still sends "Purchase"`).not.toMatch(/trackEvent\(\s*"Purchase"/);
+      expect(src, `${f} still sends "Lead"`).not.toMatch(
+        /trackEvent\(\s*"Lead"/,
+      );
+      expect(src, `${f} still sends "Purchase"`).not.toMatch(
+        /trackEvent\(\s*"Purchase"/,
+      );
     }
   });
 
@@ -133,7 +151,9 @@ describe("GA4 conversions", () => {
 
   it("guards both purchase call sites against a second send", () => {
     expect(read("src/pages/ThankYou.tsx")).toContain("purchaseSent.current");
-    expect(read("src/pages/PaymentStatus.tsx")).toContain("purchaseSent.current");
+    expect(read("src/pages/PaymentStatus.tsx")).toContain(
+      "purchaseSent.current",
+    );
   });
 
   it("never counts a sale from a URL parameter", () => {
@@ -141,9 +161,9 @@ describe("GA4 conversions", () => {
     // anyone. It may drive what the visitor is shown, but a purchase must come
     // from the server having confirmed the payment.
     const ps = read("src/pages/PaymentStatus.tsx");
-    expect(ps).toContain('return { status: mapped, confirmed: true }');
+    expect(ps).toContain("return { status: mapped, confirmed: true }");
     expect(ps).toContain('{ status: "succeeded", confirmed: false }');
-    expect(ps).toMatch(/s === "succeeded" && confirmed &&/);
+    expect(code(ps)).toContain(code('s === "succeeded" && confirmed &&'));
   });
 
   it("sends a real transaction_id or none at all", () => {
@@ -151,8 +171,10 @@ describe("GA4 conversions", () => {
     // transaction, because transaction_id is what GA4 deduplicates on.
     const ps = read("src/pages/PaymentStatus.tsx");
     expect(ps).not.toMatch(/transactionId:\s*\n?\s*.*"unknown"/);
-    expect(ps).toContain("const transactionId = paymentIntentId || registrationId;");
-    expect(ps).toMatch(/confirmed && transactionId &&/);
+    expect(ps).toContain(
+      "const transactionId = paymentIntentId || registrationId;",
+    );
+    expect(code(ps)).toContain(code("confirmed && transactionId &&"));
   });
 
   it("records the visitor's language on every registration", () => {
@@ -160,7 +182,10 @@ describe("GA4 conversions", () => {
     // language is what decides which cohorts they can join — group_cohorts
     // carries a teaching_language and the picker filters on it. The trial form
     // shipped without this, so its leads arrived unattributable.
-    const inserts = ["src/hooks/useTrialRegistration.ts", "src/components/RegistrationFormSection.tsx"];
+    const inserts = [
+      "src/hooks/useTrialRegistration.ts",
+      "src/components/RegistrationFormSection.tsx",
+    ];
     for (const f of inserts) {
       const src = read(f);
       expect(src, `${f} does not insert into registrations`).toContain(
@@ -175,8 +200,15 @@ describe("GA4 conversions", () => {
   it("cannot send the two key events nothing implements", () => {
     // close_convert_lead and qualify_lead are GA4 defaults the site never
     // fired; no code path may introduce them.
-    const all = ["src/lib/tracking.ts", "src/pages/ThankYou.tsx", "src/pages/PaymentStatus.tsx",
-                 "src/pages/Index.tsx", "src/components/NotifyMeForm.tsx"].map(read).join("\n");
+    const all = [
+      "src/lib/tracking.ts",
+      "src/pages/ThankYou.tsx",
+      "src/pages/PaymentStatus.tsx",
+      "src/pages/Index.tsx",
+      "src/components/NotifyMeForm.tsx",
+    ]
+      .map(read)
+      .join("\n");
     expect(all).not.toContain("close_convert_lead");
     expect(all).not.toContain("qualify_lead");
   });
@@ -187,4 +219,3 @@ describe("GA4 conversions", () => {
     expect(tracking).toContain("paid_booking_complete");
   });
 });
-

@@ -17,7 +17,10 @@ import { resolve, join } from "node:path";
  */
 const adminDir = resolve(process.cwd(), "src/components/admin");
 const screens = readdirSync(adminDir)
-  .filter((f) => f.endsWith(".tsx") && f !== "AdminShell.tsx" && f !== "AdminLogin.tsx")
+  .filter(
+    (f) =>
+      f.endsWith(".tsx") && f !== "AdminShell.tsx" && f !== "AdminLogin.tsx",
+  )
   .map((f) => ({ name: f, src: readFileSync(join(adminDir, f), "utf8") }));
 
 const shell = readFileSync(join(adminDir, "AdminShell.tsx"), "utf8");
@@ -31,7 +34,9 @@ describe("the admin names each screen exactly once", () => {
     expect(shell.match(/<h1/g) ?? []).toHaveLength(1);
     // Driven by the navigation entry, so the heading and the sidebar can never
     // disagree about what the screen is called. Acasă greets instead.
-    expect(shell).toContain("const heading = isHome ? greeting() : section.label;");
+    expect(shell).toContain(
+      "const heading = isHome ? greeting() : section.label;",
+    );
     expect(shell).toContain("{heading}");
   });
 
@@ -39,9 +44,10 @@ describe("the admin names each screen exactly once", () => {
     const offenders = screens
       .filter(({ src }) => /<h1/.test(src))
       .map(({ name }) => name);
-    expect(offenders, `these screens draw their own page title: ${offenders.join(", ")}`).toEqual(
-      [],
-    );
+    expect(
+      offenders,
+      `these screens draw their own page title: ${offenders.join(", ")}`,
+    ).toEqual([]);
   });
 
   it("keeps ScreenToolbar free of a title", () => {
@@ -58,9 +64,13 @@ describe("the admin names each screen exactly once", () => {
     // beneath it, so a hint equal to its label puts the same words on screen
     // twice -- the very thing removing the duplicate titles was for. It
     // happened again when "Setări" was relabelled to its own description.
-    const nav = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    const nav = readFileSync(
+      resolve(process.cwd(), "src/pages/Admin.tsx"),
+      "utf8",
+    );
     const offenders: string[] = [];
-    const entry = /value:\s*"([^"]+)"[^}]*?label:\s*"([^"]+)"[^}]*?hint:\s*"([^"]+)"/gs;
+    const entry =
+      /value:\s*"([^"]+)"[^}]*?label:\s*"([^"]+)"[^}]*?hint:\s*"([^"]+)"/gs;
     for (const [, value, label, hint] of nav.matchAll(entry)) {
       if (!label || !hint) continue;
       if (label.trim() === hint.trim()) offenders.push(`${value} ("${label}")`);

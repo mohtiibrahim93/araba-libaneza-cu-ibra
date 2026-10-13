@@ -7,6 +7,7 @@ import {
   HOME_META,
   TITLE_MAX,
 } from "@/lib/pageMeta";
+import { objectLiterals } from "./helpers/sourceText";
 
 /**
  * The homepage and /cursuri-araba were competing for the same query, and
@@ -24,7 +25,10 @@ describe("page meta", () => {
       ["cursuri-araba", CURSURI_ARABA_META],
     ] as const) {
       expect(meta.title.length, `${name} title`).toBeLessThanOrEqual(TITLE_MAX);
-      expect(meta.description.length, `${name} description`).toBeLessThanOrEqual(DESC_MAX);
+      expect(
+        meta.description.length,
+        `${name} description`,
+      ).toBeLessThanOrEqual(DESC_MAX);
       expect(meta.title.length, `${name} title is empty`).toBeGreaterThan(10);
     }
   });
@@ -36,11 +40,15 @@ describe("page meta", () => {
     expect(src).toContain("CURSURI_ARABA_META.title");
     // The old hard-coded strings must not survive anywhere in the route table.
     expect(src).not.toContain("Cursuri de Arabă Libaneză cu Profesor Nativ");
-    expect(src).not.toContain("Cursuri de Arabă Libaneză în București și Online — Ibra");
+    expect(src).not.toContain(
+      "Cursuri de Arabă Libaneză în București și Online — Ibra",
+    );
   });
 
   it("is imported by the components rather than written out again", () => {
-    expect(read("src/pages/seo/CursuriAraba.tsx")).toContain("CURSURI_ARABA_META.title");
+    expect(read("src/pages/seo/CursuriAraba.tsx")).toContain(
+      "CURSURI_ARABA_META.title",
+    );
     expect(read("src/lib/i18n.tsx")).toContain("HOME_META.ro.title");
   });
 
@@ -56,9 +64,9 @@ describe("page meta", () => {
     // reason to exist — without a single test failing. Hence all four.
     const prerender = read("src/lib/seoHead.ts");
     const titleOf = (path: string) => {
-      const line = prerender
-        .split("\n")
-        .find((l) => l.trimStart().startsWith(`{ path: "${path}"`));
+      const line = objectLiterals(prerender, "path").find((l) =>
+        l.startsWith(`{ path: "${path}"`),
+      );
       expect(line, `no head entry for ${path}`).toBeDefined();
       return (line!.match(/title: "([^"]*)"/)?.[1] ?? "").toLowerCase();
     };
@@ -83,7 +91,9 @@ describe("page meta", () => {
     expect(hub).not.toContain("bucurești");
 
     // Only one of them may open on the city.
-    const leadsOnCity = [home, hub, local, list].filter((t) => t.startsWith("cursuri arabă bucurești"));
+    const leadsOnCity = [home, hub, local, list].filter((t) =>
+      t.startsWith("cursuri arabă bucurești"),
+    );
     expect(leadsOnCity).toEqual([local]);
   });
 });

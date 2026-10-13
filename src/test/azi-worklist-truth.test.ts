@@ -22,7 +22,10 @@ const fn = readFileSync(
   resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
   "utf8",
 );
-const admin = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+const admin = readFileSync(
+  resolve(process.cwd(), "src/pages/Admin.tsx"),
+  "utf8",
+);
 
 const listToday = (() => {
   const at = fn.indexOf('action === "list_today"');
@@ -34,7 +37,9 @@ const listToday = (() => {
 describe("Azi only asks for work that is still outstanding", () => {
   it("treats a triaged lead as handled, however it was triaged", () => {
     // Anything but "new" or "incomplete" means a decision was made.
-    expect(listToday).toContain("lead_status.is.null,lead_status.in.(new,incomplete)");
+    expect(listToday).toContain(
+      "lead_status.is.null,lead_status.in.(new,incomplete)",
+    );
   });
 
   it("still reads the WhatsApp timestamp, so either way of recording counts", () => {
@@ -57,7 +62,9 @@ describe("the Înscrieri count matches what the list can show", () => {
   it("counts the same universe above and below the line", () => {
     // stats.total already excludes the abandoned trials the list hides.
     expect(admin).toContain("{filteredRegistrations.length}/{stats.total}");
-    expect(admin).not.toContain("{filteredRegistrations.length}/{registrations.length}");
+    expect(admin).not.toContain(
+      "{filteredRegistrations.length}/{registrations.length}",
+    );
   });
 
   it("gives the sidebar badge the same number as the heading", () => {

@@ -1,5 +1,10 @@
 import { render } from "@testing-library/react";
-import { RouterProvider, createMemoryHistory, createRouter, stringifySearchWith } from "@tanstack/react-router";
+import {
+  RouterProvider,
+  createMemoryHistory,
+  createRouter,
+  stringifySearchWith,
+} from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { routeTree } from "@/routeTree.gen";
 import type { ReactNode } from "react";
@@ -19,15 +24,23 @@ import type { ReactNode } from "react";
  * pass-through so the page below it mounts; head tags are asserted elsewhere.
  */
 function withoutDocumentShell() {
-  const root = routeTree as unknown as { options: { shellComponent?: unknown } };
-  root.options.shellComponent = ({ children }: { children: ReactNode }) => <>{children}</>;
+  const root = routeTree as unknown as {
+    options: { shellComponent?: unknown };
+  };
+  root.options.shellComponent = ({ children }: { children: ReactNode }) => (
+    <>{children}</>
+  );
   return routeTree;
 }
 
 export function renderRoute(path: string) {
   const router = createRouter({
     routeTree: withoutDocumentShell(),
-    context: { queryClient: new QueryClient({ defaultOptions: { queries: { retry: false } } }) },
+    context: {
+      queryClient: new QueryClient({
+        defaultOptions: { queries: { retry: false } },
+      }),
+    },
     history: createMemoryHistory({ initialEntries: [path] }),
     // Same search serialisation as src/router.tsx, or the tests would exercise
     // a router the site does not ship.
@@ -39,6 +52,8 @@ export function renderRoute(path: string) {
   return { ...result, router };
 }
 
-export function currentPath(router: { state: { location: { pathname: string } } }) {
+export function currentPath(router: {
+  state: { location: { pathname: string } };
+}) {
   return router.state.location.pathname;
 }

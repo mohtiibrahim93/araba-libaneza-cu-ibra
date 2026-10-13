@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * Cash, transfer and PayPal stay on offer — they just do not hold the place.
@@ -23,7 +24,11 @@ const i18n = readFileSync(resolve(process.cwd(), "src/lib/i18n.tsx"), "utf8");
 
 describe("the alternatives", () => {
   it("still offers all three methods", () => {
-    for (const key of ["t.paymentCash", "t.paymentTransfer", "t.paymentPaypal"]) {
+    for (const key of [
+      "t.paymentCash",
+      "t.paymentTransfer",
+      "t.paymentPaypal",
+    ]) {
       expect(instructions, `${key} must stay available`).toContain(key);
     }
     expect(instructions).toContain("t.paymentIban");
@@ -37,13 +42,18 @@ describe("the alternatives", () => {
   it("adds the seat-cap sentence only where there is a cap", () => {
     // Private lessons are not a seat in a group, so the capacity line would be
     // false there.
-    expect(instructions).toContain(
-      '(courseType === "group" || courseType === "kids") && ` ${t.paymentAlternativesUnpaidSeat}`',
+    expect(code(instructions)).toContain(
+      code(
+        '(courseType === "group" || courseType === "kids") && ` ${t.paymentAlternativesUnpaidSeat}`',
+      ),
     );
   });
 
   it("carries both halves of the wording in both languages", () => {
-    for (const key of ["paymentAlternativesUnpaid", "paymentAlternativesUnpaidSeat"]) {
+    for (const key of [
+      "paymentAlternativesUnpaid",
+      "paymentAlternativesUnpaidSeat",
+    ]) {
       expect(
         i18n.split(`${key}:`).length - 1,
         `${key} needs a Romanian and an English string`,

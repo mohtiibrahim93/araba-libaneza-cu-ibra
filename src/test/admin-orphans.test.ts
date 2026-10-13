@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * The two features that had a working backend and no way in.
@@ -41,7 +42,9 @@ describe("the two orphaned features now have screens", () => {
   it("is reachable from the nav", () => {
     for (const v of ["kids-slots", "audit-log"]) {
       expect(admin, `${v} has no nav item`).toContain(`value: "${v}"`);
-      expect(admin, `${v} has no screen`).toContain(`<TabsContent value="${v}"`);
+      expect(admin, `${v} has no screen`).toContain(
+        `<TabsContent value="${v}"`,
+      );
     }
     expect(admin).toContain("<KidsSlotsAdmin />");
     expect(admin).toContain("<AuditLogAdmin />");
@@ -51,7 +54,7 @@ describe("the two orphaned features now have screens", () => {
     // The source of truth for the convention.
     expect(hook).toContain("1=Mon..7=Sun");
     // Monday first in the label list, and indexed with the offset.
-    expect(kids).toMatch(/WEEKDAYS = \["Luni",/);
+    expect(code(kids)).toContain(code('WEEKDAYS = ["Luni",'));
     expect(kids).toContain("WEEKDAYS[s.weekday - 1]");
     // The <option> values run 1..7, not 0..6.
     expect(kids).toContain("value={i + 1}");
@@ -68,7 +71,9 @@ describe("the two orphaned features now have screens", () => {
     expect(kids).toContain("AlertDialog");
     expect(kids).toContain("Ștergi intervalul");
     // And says what survives the delete, which is the part people get wrong.
-    expect(kids).toContain("Înscrierile deja făcute pe acest interval");
+    expect(code(kids)).toContain(
+      code("Înscrierile deja făcute pe acest interval"),
+    );
   });
 
   it("surfaces the server's own validation message", () => {
@@ -80,10 +85,15 @@ describe("the two orphaned features now have screens", () => {
 
   it("keeps the audit log read-only", () => {
     for (const w of ["upsert_audit", "delete_audit", "update_audit"]) {
-      expect(audit, `the audit log must not be editable (${w})`).not.toContain(w);
+      expect(audit, `the audit log must not be editable (${w})`).not.toContain(
+        w,
+      );
     }
     // The subtitle lives on the navigation entry now, not in the screen.
-    const nav = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    const nav = readFileSync(
+      resolve(process.cwd(), "src/pages/Admin.tsx"),
+      "utf8",
+    );
     expect(nav).toContain("Doar de citit");
   });
 
@@ -122,14 +132,20 @@ describe("the two orphaned features now have screens", () => {
 
   it("leaves no admin action without a screen", () => {
     const fn = read("supabase/functions/admin-registrations/index.ts");
-    const actions = [...fn.matchAll(/action === "([a-z_]+)"/g)].map((m) => m[1]);
+    const actions = [...fn.matchAll(/action === "([a-z_]+)"/g)].map(
+      (m) => m[1],
+    );
     expect(actions.length).toBeGreaterThan(40);
     const ui = [
       "src/pages/Admin.tsx",
       "src/components/YallaGame.tsx",
-      ...["KidsSlotsAdmin", "AuditLogAdmin", "CardOverridesAdmin", "TodayAdmin", "AnalyticsAdmin"].map(
-        (c) => `src/components/admin/${c}.tsx`,
-      ),
+      ...[
+        "KidsSlotsAdmin",
+        "AuditLogAdmin",
+        "CardOverridesAdmin",
+        "TodayAdmin",
+        "AnalyticsAdmin",
+      ].map((c) => `src/components/admin/${c}.tsx`),
     ]
       .map(read)
       .join("\n");

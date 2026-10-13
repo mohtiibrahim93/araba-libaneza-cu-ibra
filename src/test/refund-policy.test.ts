@@ -22,7 +22,9 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
     const levels = getCurriculum("ro");
     expect(levels.length).toBeGreaterThan(0);
     for (const level of levels) {
-      expect(COURSE_LESSONS[level.id.toUpperCase()], level.id).toBe(level.lessons);
+      expect(COURSE_LESSONS[level.id.toUpperCase()], level.id).toBe(
+        level.lessons,
+      );
     }
   });
 
@@ -75,7 +77,9 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
         courseStartsAt: START,
         cancelledAt: "2026-10-15T17:00:00.000Z",
       });
-      expect(r.nonRefundableBani + r.feeBani + r.refundBani).toBe(COURSE.paidBani);
+      expect(r.nonRefundableBani + r.feeBani + r.refundBani).toBe(
+        COURSE.paidBani,
+      );
       expect(r.refundBani).toBeGreaterThanOrEqual(0);
       expect(r.refundBani).toBeLessThanOrEqual(COURSE.paidBani);
     }
@@ -104,7 +108,11 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
   });
 
   it("falls back to the fee-only tier when there is no start date and no lesson taken", () => {
-    const r = computeRefund({ ...COURSE, lessonsTaken: 0, courseStartsAt: null });
+    const r = computeRefund({
+      ...COURSE,
+      lessonsTaken: 0,
+      courseStartsAt: null,
+    });
     expect(r.tier).toBe("fee-only");
     expect(r.refundBani).toBe(180_000);
   });

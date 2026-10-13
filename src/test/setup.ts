@@ -5,7 +5,9 @@ class ResizeObserverStub {
   unobserve() {}
   disconnect() {}
 }
-window.ResizeObserver = window.ResizeObserver || (ResizeObserverStub as unknown as typeof ResizeObserver);
+window.ResizeObserver =
+  window.ResizeObserver ||
+  (ResizeObserverStub as unknown as typeof ResizeObserver);
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -28,10 +30,13 @@ class IntersectionObserverStub {
   observe() {}
   unobserve() {}
   disconnect() {}
-  takeRecords() { return []; }
+  takeRecords() {
+    return [];
+  }
   root = null;
   rootMargin = "";
   thresholds = [];
 }
 window.IntersectionObserver =
-  window.IntersectionObserver || (IntersectionObserverStub as unknown as typeof IntersectionObserver);
+  window.IntersectionObserver ||
+  (IntersectionObserverStub as unknown as typeof IntersectionObserver);

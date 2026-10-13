@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * A sign-up always reaches the admin inbox; the student's confirmation waits
@@ -24,15 +25,23 @@ const checkout = read("src/pages/Checkout.tsx");
 
 describe("notify-registration", () => {
   it("does not make the admin alert depend on the caller's identity", () => {
-    expect(fn).toContain("const sendAdmin = fresh && !alreadyTried.has(`admin-reg-${reg.id}`);");
-    expect(fn).toMatch(/if \(sendAdmin\) await invokeEmail\(\{\s*templateName: "admin-new-registration"/);
+    expect(fn).toContain(
+      "const sendAdmin = fresh && !alreadyTried.has(`admin-reg-${reg.id}`);",
+    );
+    expect(code(fn)).toContain(
+      code(
+        'if (sendAdmin) await invokeEmail({ templateName: "admin-new-registration"',
+      ),
+    );
     // The anonymous path must not be refused outright.
     expect(fn).toContain("(!fresh && !verifiedOwner)");
   });
 
   it("sends the student confirmation only to a verified owner", () => {
     expect(fn).toContain("verifiedRegistrationOwner(req, reg, supabase.auth)");
-    expect(fn).toContain("const sendStudent = verifiedOwner && !alreadyTried.has(`reg-${reg.id}`);");
+    expect(fn).toContain(
+      "const sendStudent = verifiedOwner && !alreadyTried.has(`reg-${reg.id}`);",
+    );
     expect(fn).toContain("if (sendStudent && reg.email) {");
   });
 
@@ -43,6 +52,9 @@ describe("notify-registration", () => {
 
   it("asks for the student confirmation once checkout has verified the email", () => {
     expect(checkout).toContain("onVerified={onEmailVerified}");
-    expect(checkout).toMatch(/onEmailVerified = useCallback\(\(\) => \{[\s\S]*?invoke\("notify-registration", \{ body: \{ registrationId \} \}\)/);
+    // Matched with formatting removed (see helpers/sourceText.ts).
+    expect(code(checkout)).toMatch(
+      /onEmailVerified=useCallback\(\(\)=>\{[\s\S]*?invoke\("notify-registration",\{body:\{registrationId\}\}\)/,
+    );
   });
 });

@@ -25,7 +25,12 @@ const ROUTE_DIR = "src/routes/blog";
 
 const routeSlugs = readdirSync(resolve(process.cwd(), ROUTE_DIR))
   .filter((f) => f.endsWith(".tsx") && f !== "index.tsx")
-  .filter((f) => !readFileSync(resolve(process.cwd(), ROUTE_DIR, f), "utf8").includes("throw redirect("))
+  .filter(
+    (f) =>
+      !readFileSync(resolve(process.cwd(), ROUTE_DIR, f), "utf8").includes(
+        "throw redirect(",
+      ),
+  )
   .map((f) => f.replace(/\.tsx$/, ""));
 
 describe("the blog registry and the routes agree", () => {
@@ -35,14 +40,22 @@ describe("the blog registry and the routes agree", () => {
   });
 
   it("gives every article a route file", () => {
-    const missing = BLOG_POSTS.map((p) => p.slug).filter((s) => !routeSlugs.includes(s));
-    expect(missing, `registry entries with no page: ${missing.join(", ")}`).toEqual([]);
+    const missing = BLOG_POSTS.map((p) => p.slug).filter(
+      (s) => !routeSlugs.includes(s),
+    );
+    expect(
+      missing,
+      `registry entries with no page: ${missing.join(", ")}`,
+    ).toEqual([]);
   });
 
   it("gives every article page a registry entry", () => {
     const slugs = BLOG_POSTS.map((p) => p.slug);
     const orphans = routeSlugs.filter((s) => !slugs.includes(s));
-    expect(orphans, `pages missing from the index: ${orphans.join(", ")}`).toEqual([]);
+    expect(
+      orphans,
+      `pages missing from the index: ${orphans.join(", ")}`,
+    ).toEqual([]);
   });
 
   it("keeps slugs unique", () => {
@@ -60,7 +73,8 @@ describe("the blog registry and the routes agree", () => {
         if (!v?.en?.trim()) bad.push(`${p.slug}: ${field}.en is empty`);
         // A tag may legitimately be the same word in both languages; a title or
         // a description that matches is a translation nobody wrote.
-        if (field !== "tag" && v?.ro && v.ro === v.en) bad.push(`${p.slug}: ${field} is untranslated`);
+        if (field !== "tag" && v?.ro && v.ro === v.en)
+          bad.push(`${p.slug}: ${field} is untranslated`);
       }
     }
     expect(bad, bad.join("\n")).toEqual([]);
@@ -68,7 +82,9 @@ describe("the blog registry and the routes agree", () => {
 
   it("dates every article, in the past", () => {
     const bad = BLOG_POSTS.filter(
-      (p) => !/^\d{4}-\d{2}-\d{2}/.test(p.published) || new Date(p.published) > new Date(),
+      (p) =>
+        !/^\d{4}-\d{2}-\d{2}/.test(p.published) ||
+        new Date(p.published) > new Date(),
     ).map((p) => `${p.slug} (${p.published})`);
     expect(bad, `bad or future publish dates: ${bad.join(", ")}`).toEqual([]);
   });
@@ -78,8 +94,10 @@ describe("the blog registry and the routes agree", () => {
     const bad: string[] = [];
     for (const p of BLOG_POSTS) {
       if (!p.canonicalTo) continue;
-      if (p.canonicalTo === p.slug) bad.push(`${p.slug} canonicalises to itself`);
-      else if (!slugs.includes(p.canonicalTo)) bad.push(`${p.slug} -> unknown ${p.canonicalTo}`);
+      if (p.canonicalTo === p.slug)
+        bad.push(`${p.slug} canonicalises to itself`);
+      else if (!slugs.includes(p.canonicalTo))
+        bad.push(`${p.slug} -> unknown ${p.canonicalTo}`);
       else if (BLOG_POSTS.find((x) => x.slug === p.canonicalTo)?.canonicalTo) {
         // A chain means search engines are handed two hops to resolve, and the
         // middle article's signals land nowhere.
@@ -90,7 +108,11 @@ describe("the blog registry and the routes agree", () => {
   });
 
   it("gives every article an English URL", () => {
-    const missing = BLOG_POSTS.filter((p) => !languageCounterpart(`/blog/${p.slug}`, "en")).map((p) => p.slug);
-    expect(missing, `no English counterpart: ${missing.join(", ")}`).toEqual([]);
+    const missing = BLOG_POSTS.filter(
+      (p) => !languageCounterpart(`/blog/${p.slug}`, "en"),
+    ).map((p) => p.slug);
+    expect(missing, `no English counterpart: ${missing.join(", ")}`).toEqual(
+      [],
+    );
   });
 });

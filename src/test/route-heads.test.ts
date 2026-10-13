@@ -21,8 +21,13 @@ describe("per-page heads", () => {
 
   it("stays inside the title and description limits", () => {
     for (const route of allSeoRoutes()) {
-      expect(route.title.length, `${route.path} title`).toBeLessThanOrEqual(TITLE_MAX);
-      expect(route.description.length, `${route.path} description`).toBeLessThanOrEqual(DESC_MAX);
+      expect(route.title.length, `${route.path} title`).toBeLessThanOrEqual(
+        TITLE_MAX,
+      );
+      expect(
+        route.description.length,
+        `${route.path} description`,
+      ).toBeLessThanOrEqual(DESC_MAX);
     }
   });
 
@@ -61,7 +66,9 @@ describe("per-page heads", () => {
   });
 
   it("emits reciprocal hreflang with Romanian as x-default", () => {
-    const links = seoHead("/intrebari-frecvente").links.filter((l) => l["rel"] === "alternate");
+    const links = seoHead("/intrebari-frecvente").links.filter(
+      (l) => l["rel"] === "alternate",
+    );
     expect(links.map((l) => `${l["hreflang"]} ${l["href"]}`)).toEqual([
       "ro https://centruldearabalibaneza.com/intrebari-frecvente",
       "en https://centruldearabalibaneza.com/en/faq",
@@ -73,8 +80,16 @@ describe("per-page heads", () => {
     const faq = seoHead("/en/faq").scripts.map((s) => JSON.parse(s.children));
     expect(faq.some((j) => j["@type"] === "FAQPage")).toBe(true);
     const post = seoHead("/blog/ce-este-arabizi");
-    expect(post.meta).toContainEqual({ "data-rh": "true", property: "og:type", content: "article" });
-    expect(post.scripts.map((s) => JSON.parse(s.children)).some((j) => j["@type"] === "Article")).toBe(true);
+    expect(post.meta).toContainEqual({
+      "data-rh": "true",
+      property: "og:type",
+      content: "article",
+    });
+    expect(
+      post.scripts
+        .map((s) => JSON.parse(s.children))
+        .some((j) => j["@type"] === "Article"),
+    ).toBe(true);
   });
 
   it("leaves an unknown path to the site-wide head rather than half a page's", () => {
@@ -92,9 +107,15 @@ describe("per-page heads", () => {
       expect(tag["data-rh"]).toBe("true");
     }
     const root = read("src/routes/__root.tsx");
-    for (const key of ['name: "description"', 'property: "og:image"', 'name: "twitter:card"']) {
+    for (const key of [
+      'name: "description"',
+      'property: "og:image"',
+      'name: "twitter:card"',
+    ]) {
       const at = root.indexOf(key);
-      expect(root.slice(Math.max(0, at - 120), at)).toContain('"data-rh": "true"');
+      expect(root.slice(Math.max(0, at - 120), at)).toContain(
+        '"data-rh": "true"',
+      );
     }
   });
 
@@ -103,14 +124,17 @@ describe("per-page heads", () => {
     // own — the regression that porting these heads fixed.
     const wired = new Set<string>();
     const walk = (dir: string) => {
-      for (const entry of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+      for (const entry of readdirSync(resolve(process.cwd(), dir), {
+        withFileTypes: true,
+      })) {
         if (entry.isDirectory()) walk(`${dir}/${entry.name}`);
         else if (entry.name.endsWith(".tsx")) {
           const src = read(`${dir}/${entry.name}`);
           // [,)] rather than ) alone: the blog index routes pass a second
           // argument to canonicalise page two at itself, and the head is just
           // as wired for it.
-          for (const m of src.matchAll(/seoHead\("([^"]+)"[,)]/g)) wired.add(m[1]!);
+          for (const m of src.matchAll(/seoHead\(\s*"([^"]+)"\s*[,)]/g))
+            wired.add(m[1]!);
           // A route that only 301s never renders a head; its title lives on
           // the page it redirects to.
           if (src.includes("throw redirect(")) {
@@ -119,13 +143,16 @@ describe("per-page heads", () => {
           }
           // The dynamic level and blog routes build their path from params.
           if (/seoHead\(`\/cursuri\/grup\/\$\{/.test(src)) {
-            for (const id of ["a1", "a2", "b1", "b2", "c1", "c2"]) wired.add(`/cursuri/grup/${id}`);
+            for (const id of ["a1", "a2", "b1", "b2", "c1", "c2"])
+              wired.add(`/cursuri/grup/${id}`);
           }
           if (/seoHead\(`\/en\/courses\/group\/\$\{/.test(src)) {
-            for (const id of ["a1", "a2", "b1", "b2", "c1", "c2"]) wired.add(`/en/courses/group/${id}`);
+            for (const id of ["a1", "a2", "b1", "b2", "c1", "c2"])
+              wired.add(`/en/courses/group/${id}`);
           }
           if (/seoHead\(`\/en\/blog\/\$\{/.test(src)) {
-            for (const r of allSeoRoutes()) if (r.path.startsWith("/en/blog/")) wired.add(r.path);
+            for (const r of allSeoRoutes())
+              if (r.path.startsWith("/en/blog/")) wired.add(r.path);
           }
         }
       }
@@ -147,7 +174,9 @@ describe("per-page heads", () => {
       ["src/pages/seo", "/", "enHref"],
       ["src/pages/en", "/en/", "roHref"],
     ] as const) {
-      for (const file of readdirSync(resolve(process.cwd(), dir)).filter((f) => f.endsWith(".tsx"))) {
+      for (const file of readdirSync(resolve(process.cwd(), dir)).filter((f) =>
+        f.endsWith(".tsx"),
+      )) {
         const src = read(`${dir}/${file}`);
         const slug = src.match(/slug="([^"]+)"/);
         if (!slug) continue;
@@ -163,13 +192,21 @@ describe("per-page heads", () => {
     }
     const pairs = hreflangPairs();
     for (const [ro, en] of mutual) {
-      expect(pairs.get(ro), `${ro} should be paired with ${en}`).toEqual({ ro, en });
+      expect(pairs.get(ro), `${ro} should be paired with ${en}`).toEqual({
+        ro,
+        en,
+      });
     }
     // And nothing listed as a landing pair may have lost its reciprocity.
     for (const [ro, twin] of declared) {
       if (ro.startsWith("/en/") || !twin) continue;
       const pair = pairs.get(ro);
-      if (pair && !pair.ro.startsWith("/cursuri") && pair.ro !== "/blog" && !pair.ro.startsWith("/blog/")) {
+      if (
+        pair &&
+        !pair.ro.startsWith("/cursuri") &&
+        pair.ro !== "/blog" &&
+        !pair.ro.startsWith("/blog/")
+      ) {
         expect(declared.get(pair.en)).toBe(ro);
       }
     }
@@ -184,7 +221,10 @@ describe("per-page heads", () => {
  * an audit flagged it.
  */
 describe("the html lang attribute follows the URL", () => {
-  const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
+  const root = readFileSync(
+    resolve(process.cwd(), "src/routes/__root.tsx"),
+    "utf8",
+  );
 
   it("recognises the German landing", () => {
     expect(root).toMatch(/pathname\.startsWith\("\/de\/"\)/);

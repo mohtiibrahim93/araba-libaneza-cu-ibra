@@ -27,7 +27,10 @@ import { cn } from "@/lib/utils";
  */
 describe("cn() merges classes the same way through either entry point", () => {
   it("imports the separate entry, on purpose", () => {
-    const src = readFileSync(resolve(process.cwd(), "src/lib/utils.ts"), "utf8");
+    const src = readFileSync(
+      resolve(process.cwd(), "src/lib/utils.ts"),
+      "utf8",
+    );
     expect(src).toContain('from "tailwind-merge/es5"');
   });
 

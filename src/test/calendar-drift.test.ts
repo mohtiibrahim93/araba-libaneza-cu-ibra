@@ -18,7 +18,10 @@ import { resolve } from "node:path";
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 const admin = read("supabase/functions/admin-registrations/index.ts");
 const ui = read("src/components/admin/CalendarHealth.tsx");
-const drift = admin.slice(admin.indexOf("async function calendarDrift("), admin.indexOf("async function refundInputsFor("));
+const drift = admin.slice(
+  admin.indexOf("async function calendarDrift("),
+  admin.indexOf("async function refundInputsFor("),
+);
 
 describe("the drift check", () => {
   it("writes nothing", () => {
@@ -52,7 +55,9 @@ describe("the drift check", () => {
   it("compares instants with slack, not strings", () => {
     // Google returns its own offset format; string equality would report every
     // single booking as moved.
-    expect(drift).toContain("Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000");
+    expect(drift).toContain(
+      "Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000",
+    );
   });
 
   it("returns null when it could not look, and [] when nothing disagrees", () => {

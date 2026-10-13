@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { splitHhmm } from "@/components/admin/TimeField";
+import { code } from "./helpers/sourceText";
 
 /**
  * The panel's clock is 24-hour, in every browser.
@@ -48,7 +49,9 @@ describe("the time control", () => {
   it("keeps a stored minute that is off the step grid", () => {
     // Snapping 10:20 to 10:15 while someone edits the weekday next to it is
     // an edit nobody asked for, and it would be saved by the same click.
-    expect(field).toContain('MINUTE_STEPS.includes(mm) ? MINUTE_STEPS : [...MINUTE_STEPS, mm]');
+    expect(code(field)).toContain(
+      code("MINUTE_STEPS.includes(mm) ? MINUTE_STEPS : [...MINUTE_STEPS, mm]"),
+    );
   });
 });
 
@@ -66,11 +69,17 @@ describe("the admin screens", () => {
         if (src.includes('type="time"')) offenders.push(`${dir}/${name.name}`);
       }
     }
-    expect(offenders, "these would show 12-hour time on an English-locale browser").toEqual([]);
+    expect(
+      offenders,
+      "these would show 12-hour time on an English-locale browser",
+    ).toEqual([]);
   });
 
   it("uses the shared control where the hours are set", () => {
-    for (const f of ["src/components/AvailabilityAdmin.tsx", "src/components/admin/KidsSlotsAdmin.tsx"]) {
+    for (const f of [
+      "src/components/AvailabilityAdmin.tsx",
+      "src/components/admin/KidsSlotsAdmin.tsx",
+    ]) {
       expect(read(f), `${f} sets hours`).toContain("TimeField");
     }
   });

@@ -19,8 +19,12 @@ describe("teaching language is chosen, not inherited", () => {
   it("does not filter the query by the UI language", () => {
     // Passing `lang` here is the bug this replaced. Fetching every language is
     // also what lets the picker know whether there is a choice worth offering.
-    expect(picker).not.toMatch(/useGroupCohorts\([^)]*format \?\? null,\s*lang\s*\)/s);
-    expect(picker).toMatch(/useGroupCohorts\(\s*formType,\s*level \?\? null,\s*format \?\? null,\s*null,\s*\)/s);
+    expect(picker).not.toMatch(
+      /useGroupCohorts\([^)]*format \?\? null,\s*lang\s*\)/s,
+    );
+    expect(picker).toMatch(
+      /useGroupCohorts\(\s*formType,\s*level \?\? null,\s*format \?\? null,\s*null,\s*\)/s,
+    );
   });
 
   it("filters the rendered list by the chosen teaching language", () => {

@@ -73,7 +73,9 @@ describe("the calendar feed link does not display its token", () => {
     // read every booking. It used to be printed in full, so it was on screen
     // during any screen-share.
     expect(screen).toContain("maskToken");
-    expect(screen).toContain("showFeedUrl ? health.feed.url : maskToken(health.feed.url)");
+    expect(screen).toContain(
+      "showFeedUrl ? health.feed.url : maskToken(health.feed.url)",
+    );
   });
 
   it("still lets the owner copy it without revealing it", () => {

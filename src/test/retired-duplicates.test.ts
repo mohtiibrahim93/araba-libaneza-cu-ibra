@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { hasRoute, redirectsTo } from "./helpers/routes";
+import { objectLiterals } from "./helpers/sourceText";
 
 /**
  * The four URLs that used to be second copies of the courses hub.
@@ -27,46 +28,65 @@ const RETIRED = [
   "/araba-online",
 ];
 
-const prerender = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
-const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
+const prerender = readFileSync(
+  resolve(process.cwd(), "src/lib/seoHead.ts"),
+  "utf8",
+);
+const sitemap = readFileSync(
+  resolve(process.cwd(), "public/sitemap.xml"),
+  "utf8",
+);
 
 describe("retired duplicates of the courses hub", () => {
   it.each(RETIRED)("%s redirects instead of rendering a page", (path) => {
     expect(hasRoute(path), `no route declared for ${path}`).toBe(true);
-    expect(redirectsTo(path), `${path} should redirect to the hub`).toBe("/cursuri-limba-araba");
+    expect(redirectsTo(path), `${path} should redirect to the hub`).toBe(
+      "/cursuri-limba-araba",
+    );
   });
 
   it.each(RETIRED)("%s canonicalises to the hub", (path) => {
-    const line = prerender
-      .split("\n")
-      .find((l) => l.trimStart().startsWith(`{ path: "${path}"`));
+    const line = objectLiterals(prerender, "path").find((l) =>
+      l.startsWith(`{ path: "${path}"`),
+    );
     expect(line, `no head entry for ${path}`).toBeDefined();
     expect(line).toContain('canonical: "/cursuri-limba-araba"');
   });
 
   it.each(RETIRED)("%s stays out of the sitemap", (path) => {
-    expect(sitemap).not.toContain(`<loc>https://centruldearabalibaneza.com${path}</loc>`);
+    expect(sitemap).not.toContain(
+      `<loc>https://centruldearabalibaneza.com${path}</loc>`,
+    );
   });
 
   it("the hub itself is self-canonical and in the sitemap", () => {
-    const line = prerender
-      .split("\n")
-      .find((l) => l.trimStart().startsWith('{ path: "/cursuri-limba-araba"'));
+    const line = objectLiterals(prerender, "path").find((l) =>
+      l.startsWith('{ path: "/cursuri-limba-araba"'),
+    );
     expect(line).toBeDefined();
     expect(line).not.toContain("canonical:");
-    expect(sitemap).toContain("<loc>https://centruldearabalibaneza.com/cursuri-limba-araba</loc>");
+    expect(sitemap).toContain(
+      "<loc>https://centruldearabalibaneza.com/cursuri-limba-araba</loc>",
+    );
   });
 
   it("no surviving page still links to a retired URL", () => {
     // A link to a redirect costs the visitor a hop and tells Google the URL is
     // still a destination. The merge repointed them all at the hub.
-    const pages = import.meta.glob("../pages/**/*.tsx", { eager: true, query: "?raw", import: "default" });
+    const pages = import.meta.glob("../pages/**/*.tsx", {
+      eager: true,
+      query: "?raw",
+      import: "default",
+    });
     // Guard the guard: an empty glob would make this assertion vacuous.
     expect(Object.keys(pages).length).toBeGreaterThan(50);
     const offenders: string[] = [];
-    for (const [file, body] of Object.entries(pages as Record<string, string>)) {
+    for (const [file, body] of Object.entries(
+      pages as Record<string, string>,
+    )) {
       for (const path of RETIRED) {
-        if ((body as string).includes(`to="${path}"`)) offenders.push(`${file} -> ${path}`);
+        if ((body as string).includes(`to="${path}"`))
+          offenders.push(`${file} -> ${path}`);
       }
     }
     expect(offenders).toEqual([]);
@@ -90,4 +110,3 @@ describe("other retired addresses", () => {
     );
   });
 });
-

@@ -21,7 +21,10 @@ import { seoHead } from "@/lib/seoHead";
 const BASE = "https://centruldearabalibaneza.com";
 
 const routes = (() => {
-  const xml = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
+  const xml = readFileSync(
+    resolve(process.cwd(), "public/sitemap.xml"),
+    "utf8",
+  );
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
     .map((m) => (m[1] ?? "").replace(BASE, "") || "/")
     .map((p) => (p.length > 1 ? p.replace(/\/$/, "") : p));
@@ -42,7 +45,11 @@ describe("every sitemap route renders", () => {
 
   it.each(routes)("%s paints an h1", async (route) => {
     renderRoute(route);
-    const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    const h1 = await screen.findByRole(
+      "heading",
+      { level: 1 },
+      { timeout: 8000 },
+    );
     expect(h1).toBeInTheDocument();
     expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
   });
@@ -75,9 +82,16 @@ const CANONICALISED_ALIASES: [from: string, canonical: string][] = [
 
 describe("retired URLs still redirect", () => {
   it.each(REDIRECTS)("%s lands on a real page", async (from, expected) => {
-    window.localStorage.setItem("site-language", from.startsWith("/en/") ? "en" : "ro");
+    window.localStorage.setItem(
+      "site-language",
+      from.startsWith("/en/") ? "en" : "ro",
+    );
     const { router } = renderRoute(from);
-    const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    const h1 = await screen.findByRole(
+      "heading",
+      { level: 1 },
+      { timeout: 8000 },
+    );
     expect(h1.textContent).toContain(expected);
     expect(currentPath(router)).not.toBe(from);
   });
@@ -115,27 +129,30 @@ describe("licensed images keep their attribution", () => {
  * headings, articles quietly lose their navigation with nothing else failing.
  */
 describe("blog articles get a working outline", () => {
-  it.each([
-    ["/blog/cum-inveti-araba-libaneza", "ro"],
-  ])("%s builds an outline whose links resolve", async (route, lang) => {
-    window.localStorage.setItem("site-language", lang);
-    const { container } = renderRoute(route);
-    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
-    // The outline is built in an effect after paint, so it lands a tick later
-    // than the h1 the wait above resolves on.
-    const nav = await waitFor(() => {
-      const n = container.querySelector('nav[aria-label="Cuprins"], nav[aria-label="On this page"]');
-      expect(n).toBeTruthy();
-      return n!;
-    });
-    const links = [...nav.querySelectorAll("a[href^='#']")];
-    expect(links.length).toBeGreaterThan(1);
-    // Every entry must point at a heading that actually exists on the page.
-    for (const a of links) {
-      const id = a.getAttribute("href")!.slice(1);
-      expect(container.querySelector(`[id="${id}"]`)).toBeTruthy();
-    }
-  });
+  it.each([["/blog/cum-inveti-araba-libaneza", "ro"]])(
+    "%s builds an outline whose links resolve",
+    async (route, lang) => {
+      window.localStorage.setItem("site-language", lang);
+      const { container } = renderRoute(route);
+      await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+      // The outline is built in an effect after paint, so it lands a tick later
+      // than the h1 the wait above resolves on.
+      const nav = await waitFor(() => {
+        const n = container.querySelector(
+          'nav[aria-label="Cuprins"], nav[aria-label="On this page"]',
+        );
+        expect(n).toBeTruthy();
+        return n!;
+      });
+      const links = [...nav.querySelectorAll("a[href^='#']")];
+      expect(links.length).toBeGreaterThan(1);
+      // Every entry must point at a heading that actually exists on the page.
+      for (const a of links) {
+        const id = a.getAttribute("href")!.slice(1);
+        expect(container.querySelector(`[id="${id}"]`)).toBeTruthy();
+      }
+    },
+  );
 });
 
 /**
@@ -148,25 +165,39 @@ describe("blog articles get a working outline", () => {
 describe("structured data links the business to the organisation", () => {
   it.each([
     ["/", "https://centruldearabalibaneza.com/#localbusiness"],
-    ["/cursuri-araba-bucuresti", "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness"],
-  ])("%s declares a LocalBusiness owned by #organization", async (route, expectedId) => {
-    window.localStorage.setItem("site-language", "ro");
-    const { container } = renderRoute(route);
-    await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
+    [
+      "/cursuri-araba-bucuresti",
+      "https://centruldearabalibaneza.com/cursuri-araba-bucuresti#localbusiness",
+    ],
+  ])(
+    "%s declares a LocalBusiness owned by #organization",
+    async (route, expectedId) => {
+      window.localStorage.setItem("site-language", "ro");
+      const { container } = renderRoute(route);
+      await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
 
-    const local = await waitFor(() => {
-      const found = [...document.querySelectorAll('script[type="application/ld+json"]')]
-        .map((s) => {
-          try { return JSON.parse(s.textContent || "{}"); } catch { return {}; }
-        })
-        .find((d) => d["@type"] === "LocalBusiness");
-      expect(found).toBeTruthy();
-      return found!;
-    });
+      const local = await waitFor(() => {
+        const found = [
+          ...document.querySelectorAll('script[type="application/ld+json"]'),
+        ]
+          .map((s) => {
+            try {
+              return JSON.parse(s.textContent || "{}");
+            } catch {
+              return {};
+            }
+          })
+          .find((d) => d["@type"] === "LocalBusiness");
+        expect(found).toBeTruthy();
+        return found!;
+      });
 
-    expect(local["@id"]).toBe(expectedId);
-    expect(local.parentOrganization?.["@id"]).toBe("https://centruldearabalibaneza.com/#organization");
-  });
+      expect(local["@id"]).toBe(expectedId);
+      expect(local.parentOrganization?.["@id"]).toBe(
+        "https://centruldearabalibaneza.com/#organization",
+      );
+    },
+  );
 });
 
 describe("retired URLs that render instead of redirecting", () => {
@@ -174,16 +205,23 @@ describe("retired URLs that render instead of redirecting", () => {
   // used to render their own copy through <Helmet> and the HTML ended up with
   // two of every head tag. So the page is checked for content here and the
   // canonical is read from the head the route serves.
-  it.each(CANONICALISED_ALIASES)("%s serves content but canonicalises away", async (from, canonical) => {
-    window.localStorage.setItem("site-language", "ro");
-    renderRoute(from);
-    const h1 = await screen.findByRole("heading", { level: 1 }, { timeout: 8000 });
-    expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+  it.each(CANONICALISED_ALIASES)(
+    "%s serves content but canonicalises away",
+    async (from, canonical) => {
+      window.localStorage.setItem("site-language", "ro");
+      renderRoute(from);
+      const h1 = await screen.findByRole(
+        "heading",
+        { level: 1 },
+        { timeout: 8000 },
+      );
+      expect(h1.textContent?.trim().length ?? 0).toBeGreaterThan(0);
 
-    const served = seoHead(from).links?.find((l) => l["rel"] === "canonical");
-    expect(served, `${from} serves no canonical`).toBeTruthy();
-    expect(served?.["href"]).toBe(canonical);
-  });
+      const served = seoHead(from).links?.find((l) => l["rel"] === "canonical");
+      expect(served, `${from} serves no canonical`).toBeTruthy();
+      expect(served?.["href"]).toBe(canonical);
+    },
+  );
 });
 
 /**
@@ -197,7 +235,10 @@ describe("retired URLs that render instead of redirecting", () => {
 describe("an unfinished trial does not look like a booking", () => {
   it("records the lead as incomplete, not as a new lead", () => {
     // The insert lives in the hook /trial and the Programare page share.
-    const trial = readFileSync(resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"), "utf8");
+    const trial = readFileSync(
+      resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"),
+      "utf8",
+    );
     expect(trial).toContain('lead_status: "incomplete"');
     expect(trial).not.toContain("NEALES");
   });
@@ -206,7 +247,10 @@ describe("an unfinished trial does not look like a booking", () => {
     // The page used to collect name, email and phone on a screen of its own
     // before the grid appeared — details handed over before the visitor knew
     // whether any slot suited them, then typed again in the confirm form.
-    const trial = readFileSync(resolve(process.cwd(), "src/pages/Trial.tsx"), "utf8");
+    const trial = readFileSync(
+      resolve(process.cwd(), "src/pages/Trial.tsx"),
+      "utf8",
+    );
     expect(trial).toContain("<NativeScheduler");
     expect(trial).toContain("ensureRegistration={ensureRegistration}");
     // No lead-capture fields of its own ahead of the scheduler.
@@ -217,16 +261,26 @@ describe("an unfinished trial does not look like a booking", () => {
   it("creates the registration once, even if the first slot clashes", () => {
     // A retry after "that time was just taken" must reuse the row rather than
     // leaving a second incomplete lead behind.
-    const trial = readFileSync(resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"), "utf8");
-    expect(trial).toContain("if (registrationIdRef.current) return registrationIdRef.current;");
+    const trial = readFileSync(
+      resolve(process.cwd(), "src/hooks/useTrialRegistration.ts"),
+      "utf8",
+    );
+    expect(trial).toContain(
+      "if (registrationIdRef.current) return registrationIdRef.current;",
+    );
   });
 
   it("still sends a registration id with every booking", () => {
     // The backend rejects a booking without one; the scheduler now resolves it
     // from either the prop or the callback, never neither.
-    const sched = readFileSync(resolve(process.cwd(), "src/components/NativeScheduler.tsx"), "utf8");
+    const sched = readFileSync(
+      resolve(process.cwd(), "src/components/NativeScheduler.tsx"),
+      "utf8",
+    );
     expect(sched).toContain("registration_id: resolvedRegistrationId");
-    expect(sched).toMatch(/if \(mode === "create" && !resolvedRegistrationId\)/);
+    expect(sched).toMatch(
+      /if \(mode === "create" && !resolvedRegistrationId\)/,
+    );
   });
 
   it("promotes the lead to a real one only when a slot is booked", () => {
@@ -239,7 +293,10 @@ describe("an unfinished trial does not look like a booking", () => {
   });
 
   it("keeps incomplete leads out of the admin's default list", () => {
-    const admin = readFileSync(resolve(process.cwd(), "src/pages/Admin.tsx"), "utf8");
+    const admin = readFileSync(
+      resolve(process.cwd(), "src/pages/Admin.tsx"),
+      "utf8",
+    );
     expect(admin).toContain('status !== "incomplete"');
   });
 });
@@ -260,19 +317,31 @@ describe("site structure", () => {
     // as one written into the footer by hand. Before that was true the footer
     // had to duplicate all seventeen of those links to satisfy this guard.
     const chrome = new Set(
-      [...read("src/components/Navbar.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
-       ...read("src/lib/siteNav.ts").matchAll(/"(\/[a-z0-9\-/]+)"/g),
-       ...read("src/components/Footer.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]),
+      [
+        ...read("src/components/Navbar.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
+        ...read("src/lib/siteNav.ts").matchAll(/"(\/[a-z0-9\-/]+)"/g),
+        ...read("src/components/Footer.tsx").matchAll(/"(\/[a-z0-9\-/]+)"/g),
+      ].map((m) => m[1]),
     );
     const routes = routeFiles()
       .map((r) => r.path)
       .filter((p) => !p.includes("$") && !p.startsWith("/lovable/"));
-    const redirects = new Set(routes.filter((p) => redirectsTo(p) !== undefined));
+    const redirects = new Set(
+      routes.filter((p) => redirectsTo(p) !== undefined),
+    );
 
     // Admin, auth and pages you only reach by completing an action.
     const PRIVATE = new Set([
-      "/admin", "/admin/notifications", "/auth", "/checkout", "/thank-you",
-      "/payment-status", "/unsubscribe", "/stergere-date", "/private-status", "/booking/manage",
+      "/admin",
+      "/admin/notifications",
+      "/auth",
+      "/checkout",
+      "/thank-you",
+      "/payment-status",
+      "/unsubscribe",
+      "/stergere-date",
+      "/private-status",
+      "/booking/manage",
     ]);
     // Kept alive for old inbound links; canonicalises to /cursuri-limba-araba,
     // so linking it from the chrome would promote a URL that disclaims itself.
@@ -293,7 +362,10 @@ describe("site structure", () => {
   });
 
   it("does not link the same destination twice in the footer", () => {
-    const foot = readFileSync(resolve(process.cwd(), "src/components/Footer.tsx"), "utf8");
+    const foot = readFileSync(
+      resolve(process.cwd(), "src/components/Footer.tsx"),
+      "utf8",
+    );
     const links = [...foot.matchAll(/"(\/[a-z0-9\-/]+)"/g)].map((m) => m[1]);
     const dupes = links.filter((l, i) => links.indexOf(l) !== i);
     expect([...new Set(dupes)]).toEqual([]);
@@ -313,7 +385,9 @@ describe("hreflang is only announced for a real reciprocal twin", () => {
   it.each(emitters)("%s never points ro and en at the same href", (file) => {
     const src = readFileSync(resolve(process.cwd(), file), "utf8");
     const hrefFor = (lang: string) =>
-      src.match(new RegExp(`hrefLang="${lang}"\\s+href=\\{([^}]+)\\}`))?.[1]?.trim();
+      src
+        .match(new RegExp(`hrefLang="${lang}"\\s+href=\\{([^}]+)\\}`))?.[1]
+        ?.trim();
     const ro = hrefFor("ro");
     const en = hrefFor("en");
     if (!ro && !en) return; // emits no hreflang at all — fine.

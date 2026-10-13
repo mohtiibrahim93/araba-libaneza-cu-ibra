@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * A webhook event that fails is retried, not forgotten.
@@ -15,7 +16,10 @@ import { resolve } from "node:path";
  * assertions, like the other webhook tests: the function runs on Deno against
  * live Stripe, and deleting the release would fail silently.
  */
-const webhook = readFileSync(resolve(process.cwd(), "supabase/functions/stripe-webhook/index.ts"), "utf8");
+const webhook = readFileSync(
+  resolve(process.cwd(), "supabase/functions/stripe-webhook/index.ts"),
+  "utf8",
+);
 
 describe("stripe-webhook idempotency", () => {
   it("still skips an event that was already processed", () => {
@@ -26,10 +30,15 @@ describe("stripe-webhook idempotency", () => {
   it("releases the claim when processing fails, so Stripe's retry is processed", () => {
     const catchStart = webhook.lastIndexOf("} catch (err) {");
     expect(catchStart).toBeGreaterThan(-1);
-    const handler = webhook.slice(catchStart);
-    expect(handler).toMatch(/if \(claimed\)[\s\S]*from\("stripe_events"\)\.delete\(\)\.eq\("id", event\.id\)/);
+    // Compared with formatting removed (see helpers/sourceText.ts).
+    const handler = code(webhook.slice(catchStart));
+    expect(handler).toMatch(
+      /if\(claimed\)[\s\S]*from\("stripe_events"\)\.delete\(\)\.eq\("id",event\.id\)/,
+    );
     // Released before answering 500, which is what makes Stripe retry.
-    expect(handler.indexOf('from("stripe_events").delete()')).toBeLessThan(handler.indexOf("status: 500"));
+    expect(
+      handler.indexOf(code('from("stripe_events").delete()')),
+    ).toBeLessThan(handler.indexOf(code("status: 500")));
   });
 
   it("only releases a claim this delivery made", () => {

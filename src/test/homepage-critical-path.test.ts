@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderRoute } from "./helpers/appRouter";
-
+import { code } from "./helpers/sourceText";
 
 /**
  * The Supabase client must stay off the first-load path.
@@ -38,14 +38,16 @@ describe("Supabase stays out of the first-load bundle", () => {
   it("keeps i18n free of any static Supabase import", () => {
     // i18n wraps every route, so anything it pulls in eagerly is on the
     // critical path of the entire site.
-    expect(read("src/lib/i18n.tsx")).not.toContain("integrations/supabase/client");
+    expect(read("src/lib/i18n.tsx")).not.toContain(
+      "integrations/supabase/client",
+    );
   });
 
   it("lazy-loads the two homepage sections that read Supabase", () => {
     const src = read("src/pages/Index.tsx");
     for (const c of ["ActiveCoursesBanner", "ProgramsSection"]) {
-      expect(src, `${c} should be a lazy boundary`).toContain(
-        `const ${c} = lazy(() => import("@/components/${c}"));`,
+      expect(code(src), `${c} should be a lazy boundary`).toContain(
+        code(`const ${c} = lazy(() => import("@/components/${c}"));`),
       );
       // A leftover eager import would defeat the split.
       expect(src).not.toContain(`import ${c} from "@/components/${c}";`);
@@ -74,11 +76,18 @@ describe("Supabase stays out of the first-load bundle", () => {
  */
 describe("the homepage's critical path", () => {
   const importsOf = (source: string) =>
-    [...source.matchAll(/^\s*import\s[^;]*?from\s+"(@\/[^"]+)"/gm)].map((m) => m[1]!);
+    [...source.matchAll(/^\s*import\s[^;]*?from\s+"(@\/[^"]+)"/gm)].map(
+      (m) => m[1]!,
+    );
 
   const resolveModule = (spec: string) => {
     const base = `src/${spec.slice(2)}`;
-    for (const candidate of [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`]) {
+    for (const candidate of [
+      `${base}.tsx`,
+      `${base}.ts`,
+      `${base}/index.tsx`,
+      `${base}/index.ts`,
+    ]) {
       if (existsSync(resolve(process.cwd(), candidate))) return candidate;
     }
     return undefined;
@@ -111,7 +120,11 @@ describe("the homepage's critical path", () => {
     renderRoute("/");
     // Inside ProgramsSection, which is a lazy boundary.
     expect(
-      await screen.findByText("Meditații arabă 1:1 — cum funcționează", {}, { timeout: 10000 }),
+      await screen.findByText(
+        "Meditații arabă 1:1 — cum funcționează",
+        {},
+        { timeout: 10000 },
+      ),
     ).toBeTruthy();
   });
 });
@@ -141,12 +154,19 @@ describe("the chat assistant loads only when it is opened", () => {
   ];
 
   const importsOf = (source: string) =>
-    [...source.matchAll(/^\s*import\s[^;]*?from\s+"([^"]+)"/gm)].map((m) => m[1]!);
+    [...source.matchAll(/^\s*import\s[^;]*?from\s+"([^"]+)"/gm)].map(
+      (m) => m[1]!,
+    );
 
   const resolveModule = (spec: string) => {
     if (!spec.startsWith("@/")) return undefined;
     const base = `src/${spec.slice(2)}`;
-    for (const candidate of [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`]) {
+    for (const candidate of [
+      `${base}.tsx`,
+      `${base}.ts`,
+      `${base}/index.tsx`,
+      `${base}/index.ts`,
+    ]) {
       if (existsSync(resolve(process.cwd(), candidate))) return candidate;
     }
     return undefined;
@@ -163,7 +183,10 @@ describe("the chat assistant loads only when it is opened", () => {
       const source = read(file);
       // A type-only import is erased at build time and costs nothing.
       const values = importsOf(source).filter(
-        (spec) => !new RegExp(`import\\s+type[^;]*"${spec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(source),
+        (spec) =>
+          !new RegExp(
+            `import\\s+type[^;]*"${spec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`,
+          ).test(source),
       );
       for (const spec of values) {
         if (HEAVY.some((h) => spec.startsWith(h))) {
@@ -180,13 +203,17 @@ describe("the chat assistant loads only when it is opened", () => {
 
   it("loads the chat through lazy(), and shares its text through a light module", () => {
     const launcher = read("src/components/AskAssistant.tsx");
-    expect(launcher).toContain('lazy(() => import("@/components/ask/AskChat"))');
+    expect(launcher).toContain(
+      'lazy(() => import("@/components/ask/AskChat"))',
+    );
     expect(launcher).toContain("<Suspense");
     // The copy module is what both halves import; anything heavy in it would
     // travel straight back into every page.
     const copy = read("src/components/ask/copy.ts");
     for (const heavy of HEAVY) {
-      expect(copy, `copy.ts must not import ${heavy}`).not.toContain(`from "${heavy}`);
+      expect(copy, `copy.ts must not import ${heavy}`).not.toContain(
+        `from "${heavy}`,
+      );
     }
   });
 });

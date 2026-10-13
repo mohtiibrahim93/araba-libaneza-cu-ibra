@@ -104,7 +104,9 @@ describe("changes close 24 hours before the lesson", () => {
     // must not stop him cancelling one: the admin panel cancels through this
     // same endpoint with the service-role key, which is how he acts on the
     // emergency the blocked screen tells people to write in about.
-    expect(manage).toContain("!internalCall(req) && tooLateToChange(booking.start_at)");
+    expect(manage).toContain(
+      "!internalCall(req) && tooLateToChange(booking.start_at)",
+    );
     // Earned by the key, not assumed — the manage token travels in email.
     expect(manage).toContain("bearer === serviceRoleKey");
     const admin = read("supabase/functions/admin-registrations/index.ts");
@@ -123,8 +125,17 @@ describe("changes close 24 hours before the lesson", () => {
     expect(mine).toContain("WHATSAPP_CONTACT_URL");
     expect(mine).toContain('body?.code === "too_late"');
     // Both languages, as everywhere else on the site.
-    for (const key of ["tooLateTitle", "tooLateBody", "tooLateEmergency", "whatsapp", "tooLateToast"]) {
-      expect(mine.split(`${key}:`).length - 1, `${key} is not in both COPY blocks`).toBe(2);
+    for (const key of [
+      "tooLateTitle",
+      "tooLateBody",
+      "tooLateEmergency",
+      "whatsapp",
+      "tooLateToast",
+    ]) {
+      expect(
+        mine.split(`${key}:`).length - 1,
+        `${key} is not in both COPY blocks`,
+      ).toBe(2);
     }
   });
 
@@ -132,7 +143,9 @@ describe("changes close 24 hours before the lesson", () => {
     // Candidates come out in the order the availability rules are stored, so
     // Friday listed 09:30 after 17:00. Sorting the flat list before grouping
     // fixes both `slots` and `slots_by_date`.
-    const availability = read("supabase/functions/booking-availability/index.ts");
+    const availability = read(
+      "supabase/functions/booking-availability/index.ts",
+    );
     const sort = availability.indexOf("filtered.sort();");
     const group = availability.indexOf("const byDate = new Map");
     expect(sort).toBeGreaterThan(-1);

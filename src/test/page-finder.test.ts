@@ -26,7 +26,10 @@ describe("page finder", () => {
     for (const q of ["admin", "login", "checkout", "plata", "cont"]) {
       for (const lang of ["ro", "en"] as const) {
         for (const hit of searchPages(q, lang)) {
-          expect(forbidden.test(hit.path), `search "${q}" returned ${hit.path}`).toBe(false);
+          expect(
+            forbidden.test(hit.path),
+            `search "${q}" returned ${hit.path}`,
+          ).toBe(false);
         }
       }
     }
@@ -53,7 +56,9 @@ describe("page finder", () => {
   });
 
   it("searches by plain words", () => {
-    expect(searchPages("copii", "ro").map((p) => p.path)).toContain("/cursuri/copii");
+    expect(searchPages("copii", "ro").map((p) => p.path)).toContain(
+      "/cursuri/copii",
+    );
     expect(searchPages("private lessons", "en").length).toBeGreaterThan(0);
     expect(searchPages("", "ro")).toEqual([]);
   });
@@ -65,7 +70,10 @@ describe("the dedicated help page", () => {
     expect(hasRoute("/en/find-your-page")).toBe(true);
     expect(languageCounterpart("/te-ajutam", "en")).toBe("/en/find-your-page");
     expect(languageCounterpart("/en/find-your-page", "ro")).toBe("/te-ajutam");
-    expect(hreflangPairs().get("/te-ajutam")).toEqual({ ro: "/te-ajutam", en: "/en/find-your-page" });
+    expect(hreflangPairs().get("/te-ajutam")).toEqual({
+      ro: "/te-ajutam",
+      en: "/en/find-your-page",
+    });
   });
 
   it("carries indexable metadata", () => {

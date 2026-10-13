@@ -37,13 +37,24 @@ describe("the Azi worklist", () => {
     // The comments explain which calculations this deliberately does NOT do,
     // and name them — so a check for "does it query X" has to read code only.
     .split("\n")
-    .filter((l) => !l.trim().startsWith("//") && !l.trim().startsWith("*") && !l.trim().startsWith("/*"))
+    .filter(
+      (l) =>
+        !l.trim().startsWith("//") &&
+        !l.trim().startsWith("*") &&
+        !l.trim().startsWith("/*"),
+    )
     .join("\n");
 
   it("has an action that returns work, not totals", () => {
     expect(action.length).toBeGreaterThan(500);
     expect(actionWithComments.length).toBeGreaterThan(action.length);
-    for (const key of ["lessons", "uncontacted", "unpaid", "cohortsStartingSoon", "problems"]) {
+    for (const key of [
+      "lessons",
+      "uncontacted",
+      "unpaid",
+      "cohortsStartingSoon",
+      "problems",
+    ]) {
       expect(action, `${key} missing from the worklist`).toContain(key);
     }
   });
@@ -56,7 +67,9 @@ describe("the Azi worklist", () => {
   it("does not bill anyone for a free trial", () => {
     // Only the course types that carry money can be "unpaid".
     expect(action).toContain('.in("form_type", ["group", "private", "kids"])');
-    expect(action).toContain('.not("payment_status", "in", \'("paid","refunded")\')');
+    expect(action).toContain(
+      '.not("payment_status", "in", \'("paid","refunded")\')',
+    );
   });
 
   it("puts the longest wait first", () => {
@@ -69,7 +82,10 @@ describe("the Azi worklist", () => {
 
   it("leaves erased people out", () => {
     const anonymized = [...action.matchAll(/anonymized_at", null/g)].length;
-    expect(anonymized, "a GDPR-erased row would reappear on the worklist").toBeGreaterThanOrEqual(2);
+    expect(
+      anonymized,
+      "a GDPR-erased row would reappear on the worklist",
+    ).toBeGreaterThanOrEqual(2);
   });
 
   it("does not compute seat fill a second time", () => {
@@ -88,7 +104,10 @@ describe("the Azi worklist", () => {
 
   it("writes nothing", () => {
     for (const w of [".insert(", ".update(", ".delete(", ".upsert("]) {
-      expect(action, `the worklist must be read-only, found ${w}`).not.toContain(w);
+      expect(
+        action,
+        `the worklist must be read-only, found ${w}`,
+      ).not.toContain(w);
     }
   });
 

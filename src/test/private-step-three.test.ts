@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * A three-step flow that reaches step three.
@@ -26,10 +27,14 @@ describe("the scheduler", () => {
   it("derives that from the same condition that renders the card screen", () => {
     // If these two drift, the heading and the screen disagree, which is the
     // bug this file is about — in the other direction.
-    expect(scheduler).toContain(
-      'const payPhase = Boolean(selectedSlot) && mode === "create" && Boolean(purchase);',
+    expect(code(scheduler)).toContain(
+      code(
+        'const payPhase = Boolean(selectedSlot) && mode === "create" && Boolean(purchase);',
+      ),
     );
-    expect(scheduler).toContain('if (selectedSlot && mode === "create" && purchase) {');
+    expect(scheduler).toContain(
+      'if (selectedSlot && mode === "create" && purchase) {',
+    );
   });
 });
 

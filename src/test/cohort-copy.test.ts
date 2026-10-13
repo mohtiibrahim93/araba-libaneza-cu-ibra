@@ -52,27 +52,64 @@ const NOW = new Date("2026-09-21T10:00:00");
 
 describe("the enrolment note follows the cohort data", () => {
   it("says a started course is running, with the date it began", () => {
-    expect(cohortNoteLine(cohort(), RO, "ro", NOW)).toBe("A1 fizic · în română · în desfășurare din 2 septembrie · 8 din 10 locuri libere");
+    expect(cohortNoteLine(cohort(), RO, "ro", NOW)).toBe(
+      "A1 fizic · în română · în desfășurare din 2 septembrie · 8 din 10 locuri libere",
+    );
   });
 
   it("says when a future course starts", () => {
-    const line = cohortNoteLine(cohort({ start_date: "2026-10-05" }), RO, "ro", NOW);
-    expect(line).toBe("A1 fizic · în română · începe pe 5 octombrie · 8 din 10 locuri libere");
+    const line = cohortNoteLine(
+      cohort({ start_date: "2026-10-05" }),
+      RO,
+      "ro",
+      NOW,
+    );
+    expect(line).toBe(
+      "A1 fizic · în română · începe pe 5 octombrie · 8 din 10 locuri libere",
+    );
   });
 
   it("calls today today", () => {
-    expect(cohortNoteLine(cohort({ start_date: "2026-09-21" }), RO, "ro", NOW)).toContain("Începe azi");
+    expect(
+      cohortNoteLine(cohort({ start_date: "2026-09-21" }), RO, "ro", NOW),
+    ).toContain("Începe azi");
   });
 
   it("offers the waiting list instead of a date when the group is full", () => {
-    const line = cohortNoteLine(cohort({ full: true, seatsLeft: 0 }), RO, "ro", NOW);
+    const line = cohortNoteLine(
+      cohort({ full: true, seatsLeft: 0 }),
+      RO,
+      "ro",
+      NOW,
+    );
     expect(line).toBe("A1 fizic · în română · Listă de așteptare");
     expect(line).not.toMatch(/septembrie|octombrie/);
   });
 
   it("counts each group's own seats and names its language", () => {
-    const ro = cohortNoteLine(cohort({ start_date: "2026-10-17", max_seats: 6, seatsLeft: 6, taken: 0 }), RO, "ro", NOW);
-    const en = cohortNoteLine(cohort({ start_date: "2026-10-31", max_seats: 6, seatsLeft: 4, taken: 2, teaching_language: "en" }), RO, "ro", NOW);
+    const ro = cohortNoteLine(
+      cohort({
+        start_date: "2026-10-17",
+        max_seats: 6,
+        seatsLeft: 6,
+        taken: 0,
+      }),
+      RO,
+      "ro",
+      NOW,
+    );
+    const en = cohortNoteLine(
+      cohort({
+        start_date: "2026-10-31",
+        max_seats: 6,
+        seatsLeft: 4,
+        taken: 2,
+        teaching_language: "en",
+      }),
+      RO,
+      "ro",
+      NOW,
+    );
     expect(ro).toContain("în română");
     expect(ro).toContain("6 din 6 locuri libere");
     expect(en).toContain("în engleză");
@@ -80,8 +117,22 @@ describe("the enrolment note follows the cohort data", () => {
   });
 
   it("uses the reader's language for the month", () => {
-    expect(cohortNoteLine(cohort(), { ...RO, runningSince: "running since {date}", inPerson: "in person", taughtRo: "taught in Romanian", seatsOf: "{left} of {max} places free" }, "en", NOW))
-      .toBe("A1 in person · taught in Romanian · running since 2 September · 8 of 10 places free");
+    expect(
+      cohortNoteLine(
+        cohort(),
+        {
+          ...RO,
+          runningSince: "running since {date}",
+          inPerson: "in person",
+          taughtRo: "taught in Romanian",
+          seatsOf: "{left} of {max} places free",
+        },
+        "en",
+        NOW,
+      ),
+    ).toBe(
+      "A1 in person · taught in Romanian · running since 2 September · 8 of 10 places free",
+    );
   });
 });
 
@@ -107,6 +158,8 @@ describe("no page states a start date in prose any more", () => {
   it("keeps start dates out of the static curriculum too", () => {
     // The durable facts — days, times, lesson count, venue — stay; the date
     // comes from the cohort.
-    expect(read("src/data/curriculum.ts")).not.toMatch(/start\s+\w+,?\s+\d{1,2}\s+(septembrie|September)/i);
+    expect(read("src/data/curriculum.ts")).not.toMatch(
+      /start\s+\w+,?\s+\d{1,2}\s+(septembrie|September)/i,
+    );
   });
 });

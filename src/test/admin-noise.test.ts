@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * Four things the admin said that were not true, or said in the database's
@@ -17,7 +18,11 @@ describe("the admin does not raise alarms it cannot justify", () => {
     // trial was accused of never picking a slot -- six false alarms at once.
     const src = read("src/components/admin/RegistrationsTable.tsx");
     expect(src).toContain("bookingsKnown");
-    expect(src).toContain('r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id)');
+    expect(code(src)).toContain(
+      code(
+        'r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id)',
+      ),
+    );
   });
 
   it("leaves the flag off when bookings cannot be loaded at all", () => {
@@ -31,7 +36,9 @@ describe("the admin does not raise alarms it cannot justify", () => {
     const cat = block.indexOf("} catch {");
     expect(set, "the flag is never set in this effect").toBeGreaterThan(-1);
     expect(cat, "the catch is gone").toBeGreaterThan(-1);
-    expect(set, "it must be set on success, before the catch").toBeLessThan(cat);
+    expect(set, "it must be set on success, before the catch").toBeLessThan(
+      cat,
+    );
   });
 });
 
@@ -40,7 +47,9 @@ describe("the admin offers filters that lead somewhere", () => {
     // Eight statuses and six private leads meant a wall of zeros above the
     // table; a zero-count filter just shows an empty list when clicked.
     const src = read("src/components/admin/PrivateLeadStats.tsx");
-    expect(src).toContain("LEAD_STATUSES.filter((status) => counts[status] > 0)");
+    expect(src).toContain(
+      "LEAD_STATUSES.filter((status) => counts[status] > 0)",
+    );
   });
 });
 
@@ -84,14 +93,24 @@ describe("the admin reads in both themes and at both widths", () => {
     const src = read("src/components/admin/RegistrationsTable.tsx");
     // Reject a fixed shade; an opacity form like bg-red-500/10 is fine in
     // both themes, so the lookahead must not stop mid-number.
-    const lightOnly = src.match(/bg-(?:gray|green|yellow|red|blue)-[0-9]{2,3}(?![0-9/])/g) ?? [];
-    expect(lightOnly, `light-only badge fills left: ${lightOnly.join(", ")}`).toEqual([]);
+    const lightOnly =
+      src.match(/bg-(?:gray|green|yellow|red|blue)-[0-9]{2,3}(?![0-9/])/g) ??
+      [];
+    expect(
+      lightOnly,
+      `light-only badge fills left: ${lightOnly.join(", ")}`,
+    ).toEqual([]);
   });
 
   it("lets a title wrap on a phone instead of clipping it", () => {
     // 23 articles all clipped to "Siriaca din ..." is a list you cannot read.
-    for (const f of ["src/components/admin/BlogAdmin.tsx", "src/components/admin/PagesAdmin.tsx"]) {
-      expect(read(f), `${f} still truncates at every width`).toContain("line-clamp-2");
+    for (const f of [
+      "src/components/admin/BlogAdmin.tsx",
+      "src/components/admin/PagesAdmin.tsx",
+    ]) {
+      expect(read(f), `${f} still truncates at every width`).toContain(
+        "line-clamp-2",
+      );
     }
   });
 });
@@ -101,7 +120,9 @@ describe("adding lessons to the calendar offers the step the owner takes", () =>
     const src = read("src/components/admin/CohortSessionsAdmin.tsx");
     expect(src).toContain("Adaugă următoarele 2 lecții");
     expect(src).toContain("r.plan.slice(0, 2)");
-    expect(src, "the four-lesson batch is gone").not.toContain("Adaugă următoarele 4 lecții");
+    expect(src, "the four-lesson batch is gone").not.toContain(
+      "Adaugă următoarele 4 lecții",
+    );
   });
 
   it("still offers one lesson and all remaining", () => {

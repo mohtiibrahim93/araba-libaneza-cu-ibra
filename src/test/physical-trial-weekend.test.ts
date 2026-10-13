@@ -44,9 +44,13 @@ describe("physical trial weekend rule", () => {
   it("judges the weekday in Bucharest time, not UTC", () => {
     // 21:30 UTC on Friday is 00:30 Saturday in Bucharest (UTC+3 in September),
     // so this is a Saturday booking despite the UTC date reading Friday.
-    expect(physicalTrialAllowed("trial", "physical", "2026-09-04T21:30:00.000Z")).toBe(true);
+    expect(
+      physicalTrialAllowed("trial", "physical", "2026-09-04T21:30:00.000Z"),
+    ).toBe(true);
     // And 21:30 UTC on Sunday is already Monday locally.
-    expect(physicalTrialAllowed("trial", "physical", "2026-09-06T21:30:00.000Z")).toBe(false);
+    expect(
+      physicalTrialAllowed("trial", "physical", "2026-09-06T21:30:00.000Z"),
+    ).toBe(false);
   });
 
   it("names Saturday and Sunday", () => {

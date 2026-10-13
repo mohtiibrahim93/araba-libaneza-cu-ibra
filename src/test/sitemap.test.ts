@@ -13,9 +13,14 @@ import { buildSitemap, belongsInSitemap, blogIndexPages } from "@/lib/sitemap";
  * failed when they didn't. These assertions are what "nothing enforces it"
  * was missing.
  */
-const committed = () => readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
+const committed = () =>
+  readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf8");
 const locs = (xml: string) =>
-  [...xml.matchAll(/<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/g)].map((m) => m[1] ?? "");
+  [
+    ...xml.matchAll(
+      /<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/g,
+    ),
+  ].map((m) => m[1] ?? "");
 
 describe("sitemap", () => {
   /**
@@ -25,7 +30,8 @@ describe("sitemap", () => {
    * without regenerating the file. The deployed sitemap is always fresh anyway:
    * the build regenerates it before every deploy. Structure is what this holds.
    */
-  const withoutDates = (xml: string) => xml.replace(/^ {4}<lastmod>[^<]*<\/lastmod>\n/gm, "");
+  const withoutDates = (xml: string) =>
+    xml.replace(/^ {4}<lastmod>[^<]*<\/lastmod>\n/gm, "");
 
   it("matches what the generator produces", () => {
     // Fails when a page was added without running the build. Run `bun run sitemap`.
@@ -34,7 +40,9 @@ describe("sitemap", () => {
 
   it("dates the pages it lists, and dates them differently", () => {
     // A lastmod on every URL with the same value is what a crawler ignores.
-    const dates = [...committed().matchAll(/^ {4}<lastmod>([^<]*)<\/lastmod>$/gm)].map((m) => m[1]!);
+    const dates = [
+      ...committed().matchAll(/^ {4}<lastmod>([^<]*)<\/lastmod>$/gm),
+    ].map((m) => m[1]!);
     expect(dates.length).toBeGreaterThan(100);
     expect(new Set(dates).size).toBeGreaterThan(10);
     for (const d of dates) expect(d).toMatch(/^\d{4}-\d{2}-\d{2}T/);
@@ -49,7 +57,9 @@ describe("sitemap", () => {
 
   it("lists every indexable route", () => {
     const listed = new Set(locs(committed()));
-    const missing = allSeoRoutes().filter((r) => belongsInSitemap(r) && !listed.has(r.path));
+    const missing = allSeoRoutes().filter(
+      (r) => belongsInSitemap(r) && !listed.has(r.path),
+    );
     expect(missing.map((r) => r.path)).toEqual([]);
   });
 
@@ -57,7 +67,9 @@ describe("sitemap", () => {
     // A retired alias in the sitemap asks to be indexed and then points away;
     // a noindex page in the sitemap asks to be indexed and then refuses.
     const listed = new Set(locs(committed()));
-    const wrong = allSeoRoutes().filter((r) => !belongsInSitemap(r) && listed.has(r.path));
+    const wrong = allSeoRoutes().filter(
+      (r) => !belongsInSitemap(r) && listed.has(r.path),
+    );
     expect(wrong.map((r) => r.path)).toEqual([]);
   });
 

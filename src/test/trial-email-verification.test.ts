@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * The free trial, bookable by a first-time visitor again.
@@ -33,10 +34,13 @@ describe("the ownership gate", () => {
       ["create-checkout-session", checkout],
       ["booking-create", booking],
     ] as const) {
-      expect(src, `${name} must still verify the registration's owner`).toContain(
-        "verifiedRegistrationOwner",
+      expect(
+        src,
+        `${name} must still verify the registration's owner`,
+      ).toContain("verifiedRegistrationOwner");
+      expect(src).toContain(
+        "Sign in with your verified registration email to continue",
       );
-      expect(src).toContain("Sign in with your verified registration email to continue");
     }
   });
 
@@ -44,21 +48,34 @@ describe("the ownership gate", () => {
     // booking-create's exemption is the service-role call from stripe-webhook,
     // and nothing else. AGENTS.md says "preserve only the existing trusted
     // webhook booking path".
-    expect(booking).toContain("const internalCall = serviceRoleKey.length > 0 && bearer === serviceRoleKey");
-    expect(booking).toContain("if (!internalCall && (!reg || !(await verifiedRegistrationOwner(");
+    expect(booking).toContain(
+      "const internalCall = serviceRoleKey.length > 0 && bearer === serviceRoleKey",
+    );
+    expect(code(booking)).toContain(
+      code("if (!internalCall && (!reg || !(await verifiedRegistrationOwner("),
+    );
   });
 });
 
 describe("the confirmation step", () => {
   it("asks for a code before the card step, not after", () => {
-    const branch = scheduler.slice(
-      scheduler.indexOf('if (eventType === "trial" && mode === "create" && resolvedRegistrationId) {'),
+    // Compared with formatting removed; 700 characters of that is roughly
+    // the first 900 as written.
+    const all = code(scheduler);
+    const branch = all.slice(
+      all.indexOf(
+        code(
+          'if (eventType === "trial" && mode === "create" && resolvedRegistrationId) {',
+        ),
+      ),
     );
-    const head = branch.slice(0, 900);
-    expect(head).toContain("await alreadyVerified(addr)");
-    expect(head).toContain("setVerifyFor(");
+    const head = branch.slice(0, 700);
+    expect(head).toContain(code("await alreadyVerified(addr)"));
+    expect(head).toContain(code("setVerifyFor("));
     // The card step is reached only past that check.
-    expect(head.indexOf("alreadyVerified")).toBeLessThan(head.indexOf("startTrialCardStep"));
+    expect(head.indexOf("alreadyVerified")).toBeLessThan(
+      head.indexOf("startTrialCardStep"),
+    );
   });
 
   it("skips the screen when Auth already holds a confirmed session", () => {
@@ -90,9 +107,14 @@ describe("the confirmation step", () => {
     // The screen is a branch of the same component, so the slot, name, phone,
     // notes and format are still in state. If this ever became a route, the
     // visitor would land back on an empty form.
-    expect(scheduler).toContain("await startTrialCardStep(verifyFor.registrationId, selectedSlot ?? \"\")");
+    expect(scheduler).toContain(
+      'await startTrialCardStep(verifyFor.registrationId, selectedSlot ?? "")',
+    );
     expect(scheduler).toContain("if (verifyFor) {");
-    const screen = scheduler.slice(scheduler.indexOf("if (verifyFor) {"), scheduler.indexOf("if (loading) {"));
+    const screen = scheduler.slice(
+      scheduler.indexOf("if (verifyFor) {"),
+      scheduler.indexOf("if (loading) {"),
+    );
     expect(screen).not.toContain("navigate(");
     expect(screen).not.toContain("window.location.href");
     // And it shows the slot, so nothing looks lost.
@@ -100,7 +122,10 @@ describe("the confirmation step", () => {
   });
 
   it("is a numeric field a phone can autofill", () => {
-    const screen = scheduler.slice(scheduler.indexOf("if (verifyFor) {"), scheduler.indexOf("if (loading) {"));
+    const screen = scheduler.slice(
+      scheduler.indexOf("if (verifyFor) {"),
+      scheduler.indexOf("if (loading) {"),
+    );
     expect(screen).toContain('autoComplete="one-time-code"');
     expect(screen).toContain('inputMode="numeric"');
     expect(screen).toContain("maxLength={CODE_MAX_DIGITS}");
@@ -138,14 +163,20 @@ describe("the email", () => {
     const signup = read("src/lib/email-templates/signup.tsx");
     expect(signup).toContain("token?: string | undefined");
     expect(signup).toContain("<Text style={codeStyle}>{token}</Text>");
-    const hookSignup = hook.slice(hook.indexOf("signup: {"), hook.indexOf("invite: {"));
+    const hookSignup = hook.slice(
+      hook.indexOf("signup: {"),
+      hook.indexOf("invite: {"),
+    );
     expect(hookSignup).toContain("token: data.token ?? undefined");
   });
 
   it("carries it in the magic-link template too, for a returning address", () => {
     expect(template).toContain("token?: string | undefined");
     expect(template).toContain("<Text style={codeStyle}>{token}</Text>");
-    const hookMagic = hook.slice(hook.indexOf("magiclink: {"), hook.indexOf("recovery: {"));
+    const hookMagic = hook.slice(
+      hook.indexOf("magiclink: {"),
+      hook.indexOf("recovery: {"),
+    );
     expect(hookMagic).toContain("token: data.token ?? undefined");
   });
 
@@ -158,26 +189,38 @@ describe("the email", () => {
     const edgeHook = read("supabase/functions/auth-email-hook/index.ts");
     expect(edgeHook).toContain("token: payload.data.token");
     for (const subject of ["'Your confirmation code'", "'Your login code'"]) {
-      expect(hook, `site route subject ${subject}`).toContain(subject);
-      expect(edgeHook, `edge function subject ${subject}`).toContain(subject);
+      expect(code(hook), `site route subject ${subject}`).toContain(
+        code(subject),
+      );
+      expect(code(edgeHook), `edge function subject ${subject}`).toContain(
+        code(subject),
+      );
     }
     for (const f of [
       "supabase/functions/_shared/email-templates/signup.tsx",
       "supabase/functions/_shared/email-templates/magic-link.tsx",
     ]) {
-      expect(read(f), `${f} must render the code too`).toContain("<Text style={codeStyle}>{token}</Text>");
+      expect(read(f), `${f} must render the code too`).toContain(
+        "<Text style={codeStyle}>{token}</Text>",
+      );
     }
   });
 
   it("keeps the link for the two flows that have always used one", () => {
     // The admin fallback sign-in and the student account send this same email
     // and expect a link, so the code is added rather than swapped in.
-    expect(template).toContain("<Button style={button} href={confirmationUrl}>");
+    expect(template).toContain(
+      "<Button style={button} href={confirmationUrl}>",
+    );
     expect(read("src/lib/email-templates/signup.tsx")).toContain(
       "<Button style={button} href={confirmationUrl}>",
     );
-    expect(read("src/components/admin/AdminLogin.tsx")).toContain("supabase.auth.signInWithOtp");
-    expect(read("src/components/StudentAccount.tsx")).toContain("supabase.auth.signInWithOtp");
+    expect(read("src/components/admin/AdminLogin.tsx")).toContain(
+      "supabase.auth.signInWithOtp",
+    );
+    expect(read("src/components/StudentAccount.tsx")).toContain(
+      "supabase.auth.signInWithOtp",
+    );
   });
 });
 
@@ -195,7 +238,10 @@ describe("one trial per person", () => {
     const stripeCall = setup.indexOf("stripe.checkout.sessions.create");
     expect(refused).toBeGreaterThan(-1);
     expect(stripeCall).toBeGreaterThan(-1);
-    expect(refused, "the refusal must come before the Stripe session").toBeLessThan(stripeCall);
+    expect(
+      refused,
+      "the refusal must come before the Stripe session",
+    ).toBeLessThan(stripeCall);
   });
 
   it("keeps the check in booking-create too, for the webhook path", () => {

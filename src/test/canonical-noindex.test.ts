@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { objectLiterals } from "./helpers/sourceText";
 
 /**
  * A page must never carry both rel=canonical and noindex.
@@ -19,9 +20,7 @@ import { resolve } from "node:path";
 const src = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
 
 describe("canonical and noindex are never combined", () => {
-  const routeLines = src
-    .split("\n")
-    .filter((l) => /^\s*\{ path: "/.test(l));
+  const routeLines = objectLiterals(src, "path");
 
   it("finds the route table", () => {
     expect(routeLines.length).toBeGreaterThan(40);

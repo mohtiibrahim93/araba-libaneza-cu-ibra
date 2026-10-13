@@ -38,10 +38,15 @@ describe("call-to-action buttons keep their own colours", () => {
     for (const f of files) {
       const src = readFileSync(resolve(process.cwd(), f), "utf8");
       // Each solid-background link must carry the opt-out marker.
-      const solid = src.match(/className="[^"]*bg-primary[^"]*text-primary-foreground[^"]*"/g) ?? [];
+      const solid =
+        src.match(
+          /className="[^"]*bg-primary[^"]*text-primary-foreground[^"]*"/g,
+        ) ?? [];
       const marked = (src.match(/data-cta/g) ?? []).length;
-      expect(marked, `${f} has ${solid.length} solid button(s) but ${marked} data-cta marker(s)`)
-        .toBeGreaterThanOrEqual(solid.length);
+      expect(
+        marked,
+        `${f} has ${solid.length} solid button(s) but ${marked} data-cta marker(s)`,
+      ).toBeGreaterThanOrEqual(solid.length);
     }
   });
 });

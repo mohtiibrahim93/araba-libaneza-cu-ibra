@@ -25,7 +25,8 @@ const stateWith = (
   extra: Partial<YallaSavedState> = {},
 ): YallaSavedState => ({ xp: 0, rounds: 0, progress, ...extra });
 
-const summaryOf = (state: YallaSavedState): YallaSummary => summarizeYalla(state);
+const summaryOf = (state: YallaSavedState): YallaSummary =>
+  summarizeYalla(state);
 
 describe("yallaLevelMap data", () => {
   it("covers the real card bank and both taught levels", () => {
@@ -44,7 +45,11 @@ describe("parseYallaState", () => {
   });
 
   it("accepts the shape the game saves", () => {
-    const raw = JSON.stringify({ xp: 25, rounds: 2, progress: { [A1_CARD]: { streak: 4, seen: true } } });
+    const raw = JSON.stringify({
+      xp: 25,
+      rounds: 2,
+      progress: { [A1_CARD]: { streak: 4, seen: true } },
+    });
     expect(parseYallaState(raw)?.xp).toBe(25);
   });
 });
@@ -52,7 +57,9 @@ describe("parseYallaState", () => {
 describe("readYallaProgress", () => {
   it("reads the game's storage key", () => {
     const raw = JSON.stringify({ xp: 10, rounds: 1, progress: {} });
-    const storage = { getItem: (k: string) => (k === YALLA_STORAGE_KEY ? raw : null) };
+    const storage = {
+      getItem: (k: string) => (k === YALLA_STORAGE_KEY ? raw : null),
+    };
     expect(readYallaProgress(storage)?.xp).toBe(10);
     expect(readYallaProgress({ getItem: () => null })).toBeNull();
   });
@@ -61,11 +68,14 @@ describe("readYallaProgress", () => {
 describe("summarizeYalla", () => {
   it("counts retained (streak >= 3) and practised cards like the game does", () => {
     const s = summaryOf(
-      stateWith({
-        [A1_CARD]: { streak: 3, seen: true },
-        [A2_CARD]: { streak: 1, seen: true },
-        "unknown-card": { streak: 9, seen: true },
-      }, { xp: 450, rounds: 7 }),
+      stateWith(
+        {
+          [A1_CARD]: { streak: 3, seen: true },
+          [A2_CARD]: { streak: 1, seen: true },
+          "unknown-card": { streak: 9, seen: true },
+        },
+        { xp: 450, rounds: 7 },
+      ),
     );
     expect(s.rang).toBe(3); // floor(450/200)+1, same as the game's sidebar
     expect(s.rounds).toBe(7);
@@ -76,9 +86,13 @@ describe("summarizeYalla", () => {
   });
 
   it("passes through a placement result only when the level is valid", () => {
-    const withResult = summaryOf(stateWith({}, { placementResult: { level: "A2", title: "t" } }));
+    const withResult = summaryOf(
+      stateWith({}, { placementResult: { level: "A2", title: "t" } }),
+    );
     expect(withResult.placementLevel).toBe("A2");
-    const bogus = summaryOf(stateWith({}, { placementResult: { level: "C2" } }));
+    const bogus = summaryOf(
+      stateWith({}, { placementResult: { level: "C2" } }),
+    );
     expect(bogus.placementLevel).toBeNull();
   });
 });
@@ -96,21 +110,32 @@ describe("suggestLevel", () => {
   };
 
   it("trusts the in-game placement result over practice", () => {
-    const s = suggestLevel({ ...base, placementLevel: "A2", placementTitle: "Discuție de plasare pentru A2" });
+    const s = suggestLevel({
+      ...base,
+      placementLevel: "A2",
+      placementTitle: "Discuție de plasare pentru A2",
+    });
     expect(s.source).toBe("placement");
     expect(s.level).toBe("A2");
     expect(s.detail).toContain("A2");
   });
 
   it("suggests A1 at the start of the journey", () => {
-    const s = suggestLevel({ ...base, masteredByGroup: { A1: 10, A2: 0, Vocabular: 0 } });
+    const s = suggestLevel({
+      ...base,
+      masteredByGroup: { A1: 10, A2: 0, Vocabular: 0 },
+    });
     expect(s).toMatchObject({ level: "A1", source: "practice" });
   });
 
   it("suggests A2 once half of the A1 bank is retained", () => {
     const s = suggestLevel({
       ...base,
-      masteredByGroup: { A1: Math.ceil(GROUP_TOTALS.A1 * 0.55), A2: 0, Vocabular: 0 },
+      masteredByGroup: {
+        A1: Math.ceil(GROUP_TOTALS.A1 * 0.55),
+        A2: 0,
+        Vocabular: 0,
+      },
     });
     expect(s.level).toBe("A2");
   });
@@ -129,7 +154,10 @@ describe("suggestLevel", () => {
   });
 
   it("stays at A1 between the early threshold and half the bank", () => {
-    const s = suggestLevel({ ...base, masteredByGroup: { A1: 100, A2: 0, Vocabular: 0 } });
+    const s = suggestLevel({
+      ...base,
+      masteredByGroup: { A1: 100, A2: 0, Vocabular: 0 },
+    });
     expect(s.level).toBe("A1");
   });
 });
@@ -139,14 +167,21 @@ describe("/joc/scor route", () => {
     const head = seoHead("/joc/scor");
     const title = head.meta.find((m) => "title" in m) as { title: string };
     expect(title.title.length).toBeLessThanOrEqual(60);
-    expect(head.meta).toContainEqual(expect.objectContaining({ name: "description" }));
+    expect(head.meta).toContainEqual(
+      expect.objectContaining({ name: "description" }),
+    );
     expect(head.links).toContainEqual(
-      expect.objectContaining({ rel: "canonical", href: "https://centruldearabalibaneza.com/joc/scor" }),
+      expect.objectContaining({
+        rel: "canonical",
+        href: "https://centruldearabalibaneza.com/joc/scor",
+      }),
     );
   });
 
   it("is in the generated sitemap", () => {
-    expect(buildSitemap()).toContain("<loc>https://centruldearabalibaneza.com/joc/scor</loc>");
+    expect(buildSitemap()).toContain(
+      "<loc>https://centruldearabalibaneza.com/joc/scor</loc>",
+    );
   });
 
   it("is linked from the game page and from the level test", () => {

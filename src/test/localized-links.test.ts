@@ -14,7 +14,9 @@ import { resolve } from "node:path";
  */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 const blogDir = resolve(process.cwd(), "src/pages/blog");
-const articles = readdirSync(blogDir).filter((f) => f.endsWith(".tsx") && f !== "BlogIndex.tsx");
+const articles = readdirSync(blogDir).filter(
+  (f) => f.endsWith(".tsx") && f !== "BlogIndex.tsx",
+);
 
 describe("localized in-article links", () => {
   it("has articles to check", () => {
@@ -33,7 +35,7 @@ describe("localized in-article links", () => {
     const src = read("src/components/LocalizedLink.tsx");
     // Falling back to the original matters: a Romanian-only guide must stay
     // reachable rather than being silently dropped from the English pages.
-    expect(src).toContain("languageCounterpart(path, \"en\")");
+    expect(src).toContain('languageCounterpart(path, "en")');
     expect(src).toContain("if (counterpart) dest = counterpart + tail;");
     // Already-English paths are left alone rather than mapped twice.
     expect(src).toContain('!to.startsWith("/en/")');
@@ -48,8 +50,12 @@ describe("localized in-article links", () => {
     // That link is meant to cross languages. Routed through LocalizedLink it
     // would map /blog back to /en/blog and strand the reader where they were.
     const src = read("src/pages/blog/BlogIndex.tsx");
-    expect(src).toContain('import { Link as CrossLanguageLink } from "@/lib/router-compat"');
-    expect(src).toMatch(/<CrossLanguageLink\s+to=\{lang === "en" \? "\/blog" : "\/en\/blog"\}/);
+    expect(src).toContain(
+      'import { Link as CrossLanguageLink } from "@/lib/router-compat"',
+    );
+    expect(src).toMatch(
+      /<CrossLanguageLink\s+to=\{lang === "en" \? "\/blog" : "\/en\/blog"\}/,
+    );
   });
 
   it("routes the shared blog chrome through LocalizedLink too", () => {
@@ -76,7 +82,10 @@ describe("localized in-article links", () => {
     const src = read("src/lib/languageRoutes.ts");
     const block = (src.split("const EN_FOR_RO")[1] ?? "").split("};")[0] ?? "";
     const offenders = [...block.matchAll(/"([^"]+)":\s*"([^"]+)"/g)]
-      .filter(([, , target]) => target !== "/en" && !(target ?? "").startsWith("/en/"))
+      .filter(
+        ([, , target]) =>
+          target !== "/en" && !(target ?? "").startsWith("/en/"),
+      )
       .map(([, from, to]) => `${from} -> ${to}`);
     expect(offenders).toEqual([]);
   });

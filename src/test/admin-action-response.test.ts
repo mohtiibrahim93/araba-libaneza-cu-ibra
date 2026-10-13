@@ -4,29 +4,55 @@ import { loadEdgeHandler } from "./helpers/edge-handler";
 function adminHandler() {
   const reads: string[] = [];
   const db = {
-    auth: { getUser: async () => ({ data: { user: { email: "admin@example.test", email_confirmed_at: "2026-01-01" } } }) },
+    auth: {
+      getUser: async () => ({
+        data: {
+          user: {
+            email: "admin@example.test",
+            email_confirmed_at: "2026-01-01",
+          },
+        },
+      }),
+    },
     from: (table: string) => {
       reads.push(table);
       const query = {
-        select: () => query, eq: () => query,
-        order: () => query, range: async () => ({ data: [], error: null }),
+        select: () => query,
+        eq: () => query,
+        order: () => query,
+        range: async () => ({ data: [], error: null }),
         maybeSingle: async () => ({ data: null, error: null }),
       };
       return query;
     },
   };
-  const handler = loadEdgeHandler("supabase/functions/admin-registrations/index.ts", {
-    "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db },
-    "https://esm.sh/stripe@18.5.0": { default: class {} },
-    "../_shared/cors.ts": { buildCorsHeaders: () => ({}) },
-    "../_shared/booking.ts": {}, "../_shared/calendar-reconciliation.ts": {}, "../_shared/cohort-sessions.ts": {},
-    "../_shared/refund.ts": {}, "../_shared/prices.ts": {},
-    "../_shared/managed-email.ts": {}, "../_shared/registration-access.ts": {},
-  }, { ADMIN_EMAILS: "admin@example.test" });
-  const call = (body: unknown) => handler(new Request("https://example.test/admin", {
-    method: "POST", headers: { Authorization: "Bearer test-admin", "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  }));
+  const handler = loadEdgeHandler(
+    "supabase/functions/admin-registrations/index.ts",
+    {
+      "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db },
+      "https://esm.sh/stripe@18.5.0": { default: class {} },
+      "../_shared/cors.ts": { buildCorsHeaders: () => ({}) },
+      "../_shared/booking.ts": {},
+      "../_shared/calendar-reconciliation.ts": {},
+      "../_shared/cohort-sessions.ts": {},
+      "../_shared/refund.ts": {},
+      "../_shared/prices.ts": {},
+      "../_shared/managed-email.ts": {},
+      "../_shared/registration-access.ts": {},
+    },
+    { ADMIN_EMAILS: "admin@example.test" },
+  );
+  const call = (body: unknown) =>
+    handler(
+      new Request("https://example.test/admin", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer test-admin",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }),
+    );
   return { call, reads };
 }
 

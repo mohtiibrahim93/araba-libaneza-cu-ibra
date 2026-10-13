@@ -57,7 +57,9 @@ describe("group-size copy", () => {
       for (const line of src.split("\n")) {
         if (AGE.test(line)) continue;
         if (CLAIMS.some((re) => re.test(line))) {
-          offenders.push(`${file.replace(SRC, "src")}: ${line.trim().slice(0, 90)}`);
+          offenders.push(
+            `${file.replace(SRC, "src")}: ${line.trim().slice(0, 90)}`,
+          );
         }
       }
     }
@@ -67,7 +69,9 @@ describe("group-size copy", () => {
   it("never advertises an online group larger than the cap", () => {
     for (const file of sourceFiles(SRC)) {
       const src = readFileSync(file, "utf8");
-      const m = src.match(/(\d+)\s*(?:cursanți|students|learners|Personen)\s*online/gi);
+      const m = src.match(
+        /(\d+)\s*(?:cursanți|students|learners|Personen)\s*online/gi,
+      );
       for (const hit of m ?? []) {
         const n = Number(hit.match(/\d+/)![0]);
         expect(n, `${file}: ${hit}`).toBeLessThanOrEqual(MAX_GROUP_SIZE.online);

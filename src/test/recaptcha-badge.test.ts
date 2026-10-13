@@ -44,7 +44,9 @@ describe("the rest of that corner", () => {
     // offset starts at md, which is where `hidden md:flex` puts them.
     const banner = read("src/components/CookieConsentBanner.tsx");
     expect(banner).toContain("md:bottom-32");
-    expect(read("src/components/WhatsAppButton.tsx")).toContain("hidden flex-col items-end gap-2 md:flex");
+    expect(read("src/components/WhatsAppButton.tsx")).toContain(
+      "hidden flex-col items-end gap-2 md:flex",
+    );
   });
 });
 
@@ -56,8 +58,14 @@ describe("the disclosure that pays for it", () => {
   });
 
   it("says it in both languages", () => {
-    for (const key of ["recaptchaNotice", "recaptchaPrivacyShort", "recaptchaTermsShort"]) {
-      expect(i18n.split(`${key}:`).length - 1, `${key} needs RO and EN`).toBe(2);
+    for (const key of [
+      "recaptchaNotice",
+      "recaptchaPrivacyShort",
+      "recaptchaTermsShort",
+    ]) {
+      expect(i18n.split(`${key}:`).length - 1, `${key} needs RO and EN`).toBe(
+        2,
+      );
     }
     // The required sentence, verbatim, in English.
     expect(i18n).toContain(

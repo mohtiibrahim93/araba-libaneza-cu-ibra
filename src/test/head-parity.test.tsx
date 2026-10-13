@@ -28,7 +28,8 @@ import { HOME_META } from "@/lib/pageMeta";
  * landings, in every case because a component kept its own copy of a string
  * the route already served.
  */
-const titleFor = (path: string) => seoHead(path).meta?.find((m) => "title" in m)?.["title"];
+const titleFor = (path: string) =>
+  seoHead(path).meta?.find((m) => "title" in m)?.["title"];
 
 describe("server head and runtime head agree", () => {
   beforeEach(() => {
@@ -53,7 +54,10 @@ describe("server head and runtime head agree", () => {
    * checked here too rather than only the Romanian one the "/" route serves.
    */
   it("paints the full homepage title, in both languages", () => {
-    const index = readFileSync(resolve(process.cwd(), "src/pages/Index.tsx"), "utf8");
+    const index = readFileSync(
+      resolve(process.cwd(), "src/pages/Index.tsx"),
+      "utf8",
+    );
     expect(index).toContain("document.title = HOME_META[lang].title");
     expect(index).not.toContain("document.title = t.siteTitle");
     // Both halves are full titles, not the short site name.
@@ -66,7 +70,10 @@ describe("server head and runtime head agree", () => {
 
   it("has a title for every blog post in the route table", () => {
     for (const post of BLOG_POSTS) {
-      expect(titleFor(`/blog/${post.slug}`), `no head for /blog/${post.slug}`).toBeTruthy();
+      expect(
+        titleFor(`/blog/${post.slug}`),
+        `no head for /blog/${post.slug}`,
+      ).toBeTruthy();
     }
   });
 

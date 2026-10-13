@@ -5,6 +5,7 @@ import {
   privateLessonStarts,
   weeklySeriesStarts,
 } from "../../supabase/functions/_shared/private-series";
+import { code } from "./helpers/sourceText";
 
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
@@ -26,10 +27,17 @@ describe("weekly private series", () => {
   });
 
   it("books one lesson unless the weekly option was chosen", () => {
-    const meta = { booking_start_at: "2026-10-20T15:00:00.000Z", quantity: "10" };
+    const meta = {
+      booking_start_at: "2026-10-20T15:00:00.000Z",
+      quantity: "10",
+    };
     expect(privateLessonStarts(meta)).toHaveLength(1);
-    expect(privateLessonStarts({ ...meta, booking_weekly: "1" })).toHaveLength(10);
-    expect(privateLessonStarts({ quantity: "10", booking_weekly: "1" })).toEqual([]);
+    expect(privateLessonStarts({ ...meta, booking_weekly: "1" })).toHaveLength(
+      10,
+    );
+    expect(
+      privateLessonStarts({ quantity: "10", booking_weekly: "1" }),
+    ).toEqual([]);
   });
 });
 
@@ -37,15 +45,27 @@ describe("a private lesson is booked only once paid", () => {
   it("refuses a public booking of a paid lesson without a payment", () => {
     const src = read("supabase/functions/booking-create/index.ts");
     // Only the two free bookings skip it: the trial and the level check.
-    expect(src).toContain('const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;');
-    expect(read("supabase/functions/_shared/schedule-rules.ts")).toContain('export const LEVEL_CHECK_SLUG = "verificare-nivel";');
-    expect(src).toContain("if (!isFree && !internalCall && reg.payment_status !== \"paid\")");
+    expect(src).toContain(
+      'const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;',
+    );
+    expect(read("supabase/functions/_shared/schedule-rules.ts")).toContain(
+      'export const LEVEL_CHECK_SLUG = "verificare-nivel";',
+    );
+    expect(src).toContain(
+      'if (!isFree && !internalCall && reg.payment_status !== "paid")',
+    );
     expect(src).toContain('code: "payment_required"');
   });
 
   it("sends the chosen slot through Stripe and books it from the webhook", () => {
-    const checkout = read("supabase/functions/create-checkout-session/index.ts");
-    expect(checkout).toContain("...(isPrivate ? { ...bookingMeta, quantity: String(quantity) } : {})");
+    const checkout = read(
+      "supabase/functions/create-checkout-session/index.ts",
+    );
+    expect(code(checkout)).toContain(
+      code(
+        "...(isPrivate ? { ...bookingMeta, quantity: String(quantity) } : {})",
+      ),
+    );
     const webhook = read("supabase/functions/stripe-webhook/index.ts");
     expect(webhook).toContain('session.metadata?.course_type === "private"');
     expect(webhook).toContain("privateLessonStarts(");
@@ -53,7 +73,9 @@ describe("a private lesson is booked only once paid", () => {
 
   it("keeps an unpaid private purchase out of the leads", () => {
     const form = read("src/components/RegistrationFormSection.tsx");
-    expect(form).toContain('...(courseType === "private" ? { lead_status: "incomplete" } : {})');
+    expect(form).toContain(
+      '...(courseType === "private" ? { lead_status: "incomplete" } : {})',
+    );
     expect(form).toContain("purchase={{");
   });
 });

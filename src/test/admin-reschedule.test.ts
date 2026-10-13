@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * Moving a student's lesson from the panel.
@@ -27,7 +28,9 @@ describe("the availability exemption", () => {
   it("is earned by the service-role key, not assumed", () => {
     expect(manage).toContain("const admin = internalCall(req);");
     // internalCall compares the bearer against the service-role key.
-    expect(manage).toContain("serviceRoleKey.length > 0 && bearer === serviceRoleKey");
+    expect(manage).toContain(
+      "serviceRoleKey.length > 0 && bearer === serviceRoleKey",
+    );
   });
 
   it("still binds a student to the offered slots", () => {
@@ -39,14 +42,18 @@ describe("the availability exemption", () => {
 
   it("refuses the owner once, with reasons, before it will override", () => {
     // Not a button that silently double-books him: the first call reports.
-    expect(manage).toContain("if (found.length > 0 && (!admin || body.force !== true)) {");
+    expect(manage).toContain(
+      "if (found.length > 0 && (!admin || body.force !== true)) {",
+    );
     expect(manage).toContain('code: "outside_availability"');
     expect(manage).toContain("clashes: found");
   });
 
   it("names what clashes instead of just saying the slot is taken", () => {
     for (const cause of ["another_booking", "calendar", "group_lesson"]) {
-      expect(manage, `${cause} must be reported by name`).toContain(`found.push("${cause}")`);
+      expect(manage, `${cause} must be reported by name`).toContain(
+        `found.push("${cause}")`,
+      );
     }
   });
 
@@ -54,8 +61,10 @@ describe("the availability exemption", () => {
     // A student gets the same 409 + code: "conflict" as before; the clash
     // detail rides along but the outcome does not change.
     const guard = manage.slice(manage.indexOf("if (found.length > 0"));
-    expect(guard.slice(0, 260)).toContain('code: "conflict"');
-    expect(guard.slice(0, 260)).toContain("409");
+    // The first ~260 characters as written, with formatting taken out.
+    const head = code(guard).slice(0, 220);
+    expect(head).toContain(code('code: "conflict"'));
+    expect(head).toContain("409");
   });
 });
 
@@ -75,7 +84,9 @@ describe("the admin action", () => {
 
   it("rejects a time it cannot parse", () => {
     const block = admin.slice(admin.indexOf('action === "reschedule_booking"'));
-    expect(block.slice(0, 1200)).toContain("Number.isFinite(Date.parse(newStart))");
+    expect(block.slice(0, 1200)).toContain(
+      "Number.isFinite(Date.parse(newStart))",
+    );
   });
 
   it("refuses to move a booking that is not active", () => {
@@ -88,7 +99,9 @@ describe("the admin action", () => {
     expect(block.slice(0, 2600)).toContain('action: "reschedule_booking"');
     expect(block.slice(0, 2600)).toContain("forced: force");
     // And the Jurnal screen can name it.
-    expect(read("src/components/admin/AuditLogAdmin.tsx")).toContain('reschedule_booking: "Mutare lecție"');
+    expect(read("src/components/admin/AuditLogAdmin.tsx")).toContain(
+      'reschedule_booking: "Mutare lecție"',
+    );
   });
 
   it("passes the structured codes back to the panel", () => {
@@ -126,7 +139,11 @@ describe("the panel", () => {
   });
 
   it("tells the owner what he is overriding, in words", () => {
-    for (const label of ["altă programare", "ceva din Google Calendar", "o lecție de grup"]) {
+    for (const label of [
+      "altă programare",
+      "ceva din Google Calendar",
+      "o lecție de grup",
+    ]) {
       expect(ui, `${label} must be spelled out`).toContain(label);
     }
     expect(ui).toContain("în afara orelor tale din Disponibilitate");
@@ -145,7 +162,10 @@ describe("booking a private lesson from the panel", () => {
   const block = admin.slice(admin.indexOf('action === "book_for_student"'));
   // Exactly this action, up to the next one: a fixed-length window either cut
   // it short (it grew with the existing-student path) or ran into the next.
-  const head = block.slice(0, block.indexOf('if (action === "list_notifications")'));
+  const head = block.slice(
+    0,
+    block.indexOf('if (action === "list_notifications")'),
+  );
 
   it("books through booking-create rather than writing a booking row", () => {
     // That one path creates the calendar event with its link, emails the
@@ -171,7 +191,9 @@ describe("booking a private lesson from the panel", () => {
   it("does not leave a registration behind when the booking fails", () => {
     // It is written first, so a refused slot would otherwise leave a lesson
     // in Înscrieri that never happened.
-    expect(head).toContain('from("registrations").delete().eq("id", registrationId)');
+    expect(code(head)).toContain(
+      code('from("registrations").delete().eq("id", registrationId)'),
+    );
   });
 
   it("validates the name, the email and the time before writing anything", () => {
@@ -194,17 +216,24 @@ describe("the notice period and the panel", () => {
   it("does not apply the owner's own notice period to the owner", () => {
     // "I am with him now, put the lesson in for this afternoon" is the normal
     // reason to book from the panel; a 12-hour notice would refuse it.
-    expect(create).toContain("if (!internalCall && startMs < now + (et.min_notice_hours ?? 0)");
+    expect(code(create)).toContain(
+      code("if (!internalCall && startMs < now + (et.min_notice_hours ?? 0)"),
+    );
   });
 
   it("still refuses a time in the past, for everyone", () => {
-    expect(create).toContain('code: "past"');
-    const past = create.slice(create.indexOf('code: "past"') - 200, create.indexOf('code: "past"'));
+    expect(code(create)).toContain(code('code: "past"'));
+    const past = create.slice(
+      create.indexOf('code: "past"') - 200,
+      create.indexOf('code: "past"'),
+    );
     expect(past).not.toContain("internalCall");
   });
 
   it("keeps a visitor's clash refusal unchanged", () => {
-    expect(create).toContain("if (found.length > 0 && (!internalCall || body.force !== true))");
+    expect(create).toContain(
+      "if (found.length > 0 && (!internalCall || body.force !== true))",
+    );
     expect(create).toContain('code: "conflict"');
   });
 });
@@ -223,6 +252,8 @@ describe("the booking form", () => {
 
   it("converts the time with the DST-aware helper, like the move dialog", () => {
     const form = ui.slice(ui.indexOf("const submitBooking"));
-    expect(form.slice(0, 900)).toContain("bucharestCivilToUtc(y, m, d, hh, mm)");
+    expect(form.slice(0, 900)).toContain(
+      "bucharestCivilToUtc(y, m, d, hh, mm)",
+    );
   });
 });

@@ -55,19 +55,25 @@ const GUARDS = ["!served", "Override ?"];
  *     exists in the browser;
  *   - NotFound is the 404 body, which no route serves a head for.
  */
-const NO_SERVED_HEAD = ["src/pages/courses/CourseDetail.tsx", "src/pages/NotFound.tsx"];
+const NO_SERVED_HEAD = [
+  "src/pages/courses/CourseDetail.tsx",
+  "src/pages/NotFound.tsx",
+];
 
 function walk(dir: string, out: string[]) {
-  for (const entry of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+  for (const entry of readdirSync(resolve(process.cwd(), dir), {
+    withFileTypes: true,
+  })) {
     if (entry.isDirectory()) walk(`${dir}/${entry.name}`, out);
     else if (/\.tsx$/.test(entry.name)) out.push(`${dir}/${entry.name}`);
   }
   return out;
 }
 
-const componentFiles = [...walk("src/pages", []), ...walk("src/components", [])].filter(
-  (f) => !NO_SERVED_HEAD.includes(f),
-);
+const componentFiles = [
+  ...walk("src/pages", []),
+  ...walk("src/components", []),
+].filter((f) => !NO_SERVED_HEAD.includes(f));
 
 describe("the served head is the only head", () => {
   it("finds the components to check", () => {

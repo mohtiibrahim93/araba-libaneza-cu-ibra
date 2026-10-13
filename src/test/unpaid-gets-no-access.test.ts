@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /**
  * Filling in a form is not paying for the course.
@@ -40,11 +41,13 @@ describe("an unpaid registration gets no way into the class", () => {
   it("withholds the Zoom room until it has been paid for", () => {
     // Group and private both send the same static room.
     expect(fn).toContain("zoomLink: paid ? zoomLink || undefined : undefined");
-    expect(fn).toContain('zoomLink: paid && reg.format === "online"');
+    expect(code(fn)).toContain(
+      code('zoomLink: paid && reg.format === "online"'),
+    );
     // No ungated zoomLink anywhere.
-    for (const line of fn.split("\n")) {
-      if (!line.includes("zoomLink:")) continue;
-      expect(line, `ungated zoom link: ${line.trim()}`).toContain("paid");
+    // Each `zoomLink:` value, up to the next property, with formatting removed.
+    for (const [, value] of code(fn).matchAll(/zoomLink:([^,}]*)/g)) {
+      expect(value, `ungated zoom link: zoomLink:${value}`).toContain("paid");
     }
   });
 

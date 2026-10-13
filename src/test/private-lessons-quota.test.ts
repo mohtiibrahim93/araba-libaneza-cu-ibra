@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
@@ -20,7 +21,10 @@ describe("paid lessons are capped at the quantity bought", () => {
   });
 
   it("applies to internal calls too (the check is not gated on internalCall)", () => {
-    const block = src.slice(src.indexOf("// A paid registration books at most"), src.indexOf('code: "lessons_used_up"'));
+    const block = src.slice(
+      src.indexOf("// A paid registration books at most"),
+      src.indexOf('code: "lessons_used_up"'),
+    );
     // Free bookings (the trial and the level check with Ibra) are not lessons.
     expect(block).toContain("if (!isFree) {");
     expect(block).not.toContain("internalCall");
@@ -30,7 +34,9 @@ describe("paid lessons are capped at the quantity bought", () => {
     const ui = read("src/components/NativeScheduler.tsx");
     expect(ui).toContain('code === "lessons_used_up"');
     expect(ui).toContain("Ai programat deja toate lecțiile plătite.");
-    expect(ui).toContain("You have already booked all the lessons you paid for.");
+    expect(ui).toContain(
+      "You have already booked all the lessons you paid for.",
+    );
     expect(ui).toContain("/cursuri/private#register");
   });
 });
@@ -38,7 +44,7 @@ describe("paid lessons are capped at the quantity bought", () => {
 describe("private purchase pays inside the site", () => {
   it("sends the slot on the PaymentIntent and falls back to hosted Checkout", () => {
     const ui = read("src/components/NativeScheduler.tsx");
-    expect(ui).toContain('invoke("create-payment-intent"');
+    expect(code(ui)).toContain(code('invoke("create-payment-intent"'));
     expect(ui).toContain("openHostedCheckout");
     const pi = read("supabase/functions/create-payment-intent/index.ts");
     expect(pi).toContain('put("booking_start_at", booking.start_at, 40);');
@@ -48,6 +54,10 @@ describe("private purchase pays inside the site", () => {
   it("books from payment_intent.succeeded through the same shared function", () => {
     const wh = read("supabase/functions/stripe-webhook/index.ts");
     expect(wh.match(/await bookPrivateLessons\(/g)?.length).toBe(2);
-    expect(wh).toContain('intent.metadata?.course_type === "private" && intent.metadata?.booking_start_at');
+    expect(code(wh)).toContain(
+      code(
+        'intent.metadata?.course_type === "private" && intent.metadata?.booking_start_at',
+      ),
+    );
   });
 });
