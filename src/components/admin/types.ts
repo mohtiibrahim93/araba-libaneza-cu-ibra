@@ -159,6 +159,18 @@ export const paymentStatusLabels: Record<string, string> = {
   past_due: "Restant",
 };
 
+/**
+ * A partial refund: the money arrived and part of it went back. The status
+ * stays what it was (usually "Plătit": the student keeps their lessons) and
+ * the amount is shown next to it. Only a full refund is `refunded`.
+ * refunded_amount is in bani (Stripe's smallest unit); prices are in lei.
+ */
+export function partialRefundNote(r: { payment_status?: string | null; refunded_amount?: number | null }): string | null {
+  const amount = Number(r.refunded_amount) || 0;
+  if (amount <= 0 || r.payment_status === "refunded") return null;
+  return `rambursat parțial: ${(amount / 100).toLocaleString("ro-RO")} lei`;
+}
+
 export const leadSourceLabels: Record<LeadSource, string> = {
   form: "Formular",
   whatsapp: "WhatsApp",

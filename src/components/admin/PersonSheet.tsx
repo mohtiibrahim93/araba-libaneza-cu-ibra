@@ -10,6 +10,7 @@ import {
   formTypeLabels,
   LEAD_STATUSES,
   leadStatusLabels,
+  partialRefundNote,
   paymentStatusLabels,
   type LeadStatus,
   type Registration,
@@ -110,7 +111,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
     ? [
         { what: `Formular „${formTypeLabels[person.form_type] ?? person.form_type}” trimis`, when: person.created_at },
         person.paid_at && { what: "Plată primită", when: person.paid_at },
-        person.refunded_at && { what: "Rambursat", when: person.refunded_at },
+        person.refunded_at && { what: partialRefundNote(person) ? `Rambursare parțială: ${(Number(person.refunded_amount) / 100).toLocaleString("ro-RO")} lei` : "Rambursat", when: person.refunded_at },
         person.canceled_at && { what: "Abonament anulat", when: person.canceled_at },
         progress?.placement?.date && { what: `Test de nivel în Jocul Yalla: ${progress.placement.level ?? "—"}`, when: progress.placement.date },
       ]
@@ -229,6 +230,7 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                     Plată
                     <span className="flex h-12 items-center rounded-xl bg-muted px-3 text-base font-semibold text-foreground">
                       {person.payment_status ? paymentStatusLabels[person.payment_status] ?? person.payment_status : "—"}
+                      {partialRefundNote(person) && <span className="ml-2 text-sm font-normal text-muted-foreground">· {partialRefundNote(person)}</span>}
                     </span>
                   </div>
                 </div>

@@ -38,6 +38,7 @@ import {
   leadSourceLabels,
   trackPreferenceLabels,
   LEAD_STATUSES,
+  partialRefundNote,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
 import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
@@ -83,7 +84,13 @@ const badge = (cls: string, label: string) => (
 );
 
 const paymentBadge = (r: Registration) => {
-  if (r.refunded_at || r.payment_status === "refunded") return badge("bg-muted text-muted-foreground", "Rambursat");
+  const partial = partialRefundNote(r);
+  if (!partial) return paymentStatusBadge(r);
+  return <span className="inline-flex flex-wrap items-center gap-1">{paymentStatusBadge(r)}{badge("bg-muted text-muted-foreground", partial)}</span>;
+};
+
+const paymentStatusBadge = (r: Registration) => {
+  if (r.payment_status === "refunded") return badge("bg-muted text-muted-foreground", "Rambursat");
   switch (r.payment_status) {
     case "paid":
       return badge("bg-emerald-500/10 text-emerald-700 dark:text-emerald-400", "Plătit");
