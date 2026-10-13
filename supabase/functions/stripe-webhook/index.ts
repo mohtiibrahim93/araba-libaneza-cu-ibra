@@ -7,6 +7,8 @@ import { privateLessonStarts } from "../_shared/private-series.ts";
 
 // Where the owner reads their mail. Same address notify-registration uses.
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
+/** Money that already settled; a late failure/expiry event must never overwrite it. */
+const SETTLED_PAYMENT_STATES = '("paid","refunded")';
 
 type PaidRegistration = {
   id: string;
@@ -413,10 +415,13 @@ serve(async (req) => {
         const session = event.data.object as Stripe.Checkout.Session;
         const newStatus = event.type === "checkout.session.expired" ? "expired" : "failed";
 
+        // Never overwrite money that already settled: a late or redelivered
+        // event for an old session must not turn paid/refunded into failed.
         const { error: updateError } = await supabase
           .from("registrations")
           .update({ payment_status: newStatus })
-          .eq("stripe_session_id", session.id);
+          .eq("stripe_session_id", session.id)
+          .not("payment_status", "in", SETTLED_PAYMENT_STATES);
 
         if (updateError) {
           console.error(`Failed to mark registration as ${newStatus}:`, updateError);
@@ -471,10 +476,13 @@ serve(async (req) => {
         const registrationId = intent.metadata?.registration_id;
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || intent.id;
+        // Stripe does not guarantee event order: a declined first attempt can
+        // arrive after the retry that succeeded. Settled money stays settled.
         await supabase
           .from("registrations")
           .update({ payment_status: "failed" })
-          .eq(matchColumn, matchValue);
+          .eq(matchColumn, matchValue)
+          .not("payment_status", "in", SETTLED_PAYMENT_STATES);
         break;
       }
 
@@ -519,10 +527,23 @@ serve(async (req) => {
         const invoice = event.data.object as Stripe.Invoice;
         const subId = invoice.subscription as string | null;
         if (!subId) break;
+        // Ask Stripe for the invoice as it is now: a failed attempt that was
+        // later paid (or an event delivered late) must not mark a paying
+        // student past due.
+        try {
+          const current = invoice.id ? await stripe.invoices.retrieve(invoice.id) : null;
+          if (current && current.status !== "open") {
+            console.log(`Invoice ${invoice.id} is ${current.status} now; past_due not applied`);
+            break;
+          }
+        } catch (e) {
+          console.warn(`Invoice ${invoice.id}: could not re-check status, applying past_due`, e);
+        }
         await supabase
           .from("registrations")
           .update({ payment_status: "past_due" })
-          .eq("stripe_subscription_id", subId);
+          .eq("stripe_subscription_id", subId)
+          .neq("payment_status", "refunded");
         break;
       }
 
@@ -539,19 +560,47 @@ serve(async (req) => {
 
       case "charge.refunded": {
         const charge = event.data.object as Stripe.Charge;
-        // Best effort: find by payment_intent → session
-        if (charge.payment_intent) {
-          const sessions = await stripe.checkout.sessions.list({
-            payment_intent: charge.payment_intent as string,
-            limit: 1,
-          });
+        const intentId = typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+        if (!intentId) break;
+        // Find the registration however it was paid: the embedded card form
+        // and /checkout use a PaymentIntent (registration id in its metadata,
+        // stripe_session_id = the intent id); hosted Checkout uses a session.
+        let registrationId: string | null = null;
+        try {
+          const intent = await stripe.paymentIntents.retrieve(intentId);
+          registrationId = intent.metadata?.registration_id || null;
+        } catch (e) {
+          console.warn(`Refund: could not read PaymentIntent ${intentId}`, e);
+        }
+        if (!registrationId) {
+          const { data: byIntent } = await supabase.from("registrations").select("id").eq("stripe_session_id", intentId).maybeSingle();
+          registrationId = byIntent?.id ?? null;
+        }
+        if (!registrationId) {
+          const sessions = await stripe.checkout.sessions.list({ payment_intent: intentId, limit: 1 });
           if (sessions.data.length > 0) {
-            await supabase
-              .from("registrations")
-              .update({ payment_status: "refunded" })
-              .eq("stripe_session_id", sessions.data[0].id);
+            const { data: bySession } = await supabase.from("registrations").select("id").eq("stripe_session_id", sessions.data[0].id).maybeSingle();
+            registrationId = bySession?.id ?? null;
           }
         }
+        if (!registrationId) {
+          console.warn(`Refund for ${intentId}: no registration found`);
+          break;
+        }
+        // A partial refund keeps the registration paid and records the amount;
+        // only a full refund is "refunded". Amounts are Stripe minor units,
+        // like the admin refund. The admin refund already wrote these fields
+        // when it started the refund, so this is idempotent for it.
+        const fullyRefunded = charge.amount_refunded >= charge.amount;
+        const { error: refundErr } = await supabase
+          .from("registrations")
+          .update({
+            refunded_amount: charge.amount_refunded,
+            refunded_at: new Date(event.created * 1000).toISOString(),
+            ...(fullyRefunded ? { payment_status: "refunded" } : {}),
+          })
+          .eq("id", registrationId);
+        if (refundErr) throw refundErr;
         break;
       }
 
