@@ -16,7 +16,7 @@ export const OPEN_CONSENT_EVENT = "cookie-consent:open";
 
 export type ConsentChoice = "all" | "essential";
 
-type GtagWindow = Window & { gtag?: (...args: unknown[]) => void };
+type GtagWindow = Window & { gtag?: (...args: unknown[]) => void; __loadGtag?: () => void };
 
 export function readConsent(): ConsentChoice | null {
   try {
@@ -48,4 +48,7 @@ export function saveConsent(choice: ConsentChoice) {
   }
   // "essential" after an earlier "all" (reopened from the footer) withdraws it.
   updateGoogleConsent(choice === "all" ? "granted" : "denied");
+  // Google's script is fetched only now, on "all" (see the bootstrap in
+  // __root.tsx). "essential" never loads it.
+  if (choice === "all") (window as GtagWindow).__loadGtag?.();
 }

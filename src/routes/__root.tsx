@@ -83,10 +83,18 @@ const gtagBootstrap = `
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 if (window.__ANALYTICS_ENABLED__) {
-  var gt = document.createElement("script");
-  gt.async = true;
-  gt.src = "https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}";
-  document.head.appendChild(gt);
+  // gtag.js itself is fetched only after the visitor accepts all cookies
+  // (owner's rule, October 2026): before that nothing is sent to Google, not
+  // even Consent Mode's cookieless pings. Commands queue in dataLayer until
+  // the script loads, so the page view still counts once consent is given.
+  window.__loadGtag = function () {
+    if (window.__gtagLoaded) return;
+    window.__gtagLoaded = true;
+    var gt = document.createElement("script");
+    gt.async = true;
+    gt.src = "https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}";
+    document.head.appendChild(gt);
+  };
   gtag('js', new Date());
   gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
   // A visitor who already accepted all (CookieConsentBanner, localStorage
@@ -94,6 +102,7 @@ if (window.__ANALYTICS_ENABLED__) {
   try {
     if (localStorage.getItem("cookie_consent") === "all") {
       gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' });
+      window.__loadGtag();
     }
   } catch (e) {}
   gtag('config', '${GA_MEASUREMENT_ID}');
