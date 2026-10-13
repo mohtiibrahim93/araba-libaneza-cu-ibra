@@ -212,10 +212,23 @@ serve(async (req) => {
               .select("id, payment_status, name, email, phone, language")
               .eq("id", registrationId)
               .maybeSingle();
+            // The card's fingerprint identifies the card across Stripe
+            // customers: one free trial per card, not only per email.
+            let cardFingerprint: string | null = null;
+            const setupIntentId = typeof session.setup_intent === "string" ? session.setup_intent : session.setup_intent?.id;
+            if (setupIntentId) {
+              try {
+                const intent = await stripe.setupIntents.retrieve(setupIntentId, { expand: ["payment_method"] });
+                const method = intent.payment_method;
+                cardFingerprint = method && typeof method !== "string" ? method.card?.fingerprint ?? null : null;
+              } catch (e) {
+                console.error(`Registration ${registrationId}: could not read the card fingerprint`, e);
+              }
+            }
             if (trialRow && trialRow.payment_status !== "paid") {
               await supabase
                 .from("registrations")
-                .update({ payment_status: "card_saved", stripe_session_id: sessionId })
+                .update({ payment_status: "card_saved", stripe_session_id: sessionId, ...(cardFingerprint ? { card_fingerprint: cardFingerprint } : {}) })
                 .eq("id", registrationId);
               console.log(`Registration ${registrationId}: trial card saved (setup session ${sessionId})`);
             }
@@ -254,6 +267,7 @@ serve(async (req) => {
                   // Consent was given on the form, before the redirect to
                   // Stripe; the booking is the same submission finishing.
                   gdpr_consent: true,
+                  ...(cardFingerprint ? { card_fingerprint: cardFingerprint } : {}),
                 }),
               }).catch((e) => {
                 console.error(`Registration ${registrationId}: booking-create call failed`, e);
@@ -264,9 +278,17 @@ serve(async (req) => {
               } else {
                 // Never throw: Stripe would retry the whole event and the card
                 // update above would run again. The card is saved either way.
-                const detail = res
-                  ? `${res.status} ${await res.text().catch(() => "")}`.slice(0, 300)
-                  : "booking-create could not be reached";
+                const body = res ? await res.text().catch(() => "") : "";
+                const code = (() => { try { return JSON.parse(body)?.code; } catch { return undefined; } })();
+                // A refused trial is not a failure to fix by hand: say why, in
+                // the owner's words, so he knows to offer a paid lesson.
+                const detail = code === "trial_card_used"
+                  ? "Cardul a mai fost folosit pentru o probă gratuită, cu alt email. Nu s-a programat: proba se poate face doar plătit."
+                  : code === "trial_used"
+                    ? "Acest email și-a folosit deja proba gratuită. Nu s-a programat: proba se poate face doar plătit."
+                    : res
+                      ? `${res.status} ${body}`.slice(0, 300)
+                      : "booking-create could not be reached";
                 console.error(`Registration ${registrationId}: booking-create failed — ${detail}`);
 
                 // This is the one failure that strands a person: the card is on

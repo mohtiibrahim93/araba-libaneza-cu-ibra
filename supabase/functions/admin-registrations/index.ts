@@ -1239,12 +1239,39 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: result.errors.length === 0, data: result });
     }
 
+    // The owner's word on a free trial: came (done), excused (the trial stays
+    // available) or lost (it counts as used). null clears it back to the
+    // automatic rule (done 24h after the lesson). Only for trial bookings
+    // that already took place or were cancelled.
+    if (action === "set_trial_outcome") {
+      const outcome = body.outcome === null ? null : typeof body.outcome === "string" ? body.outcome : undefined;
+      if (typeof id !== "string" || (outcome !== null && !["done", "excused", "lost"].includes(outcome ?? ""))) {
+        return jsonResponse({ error: "Rezultat invalid." }, 400);
+      }
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings").select("id, registration_id, event_type_slug, status, start_at, trial_outcome").eq("id", id).maybeSingle();
+      if (bErr || !booking || booking.event_type_slug !== "trial") return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
+      const started = Date.parse(booking.start_at) <= Date.now();
+      if (outcome === "done" && (!started || booking.status === "cancelled")) {
+        return jsonResponse({ error: "O probă se poate marca făcută doar după ce a avut loc." }, 400);
+      }
+      if (outcome !== null && !started && booking.status !== "cancelled") {
+        return jsonResponse({ error: "Proba nu a avut loc încă." }, 400);
+      }
+      const { error: uErr } = await supabase.from("bookings").update({
+        trial_outcome: outcome, trial_outcome_at: outcome ? new Date().toISOString() : null, trial_outcome_by: outcome ? callerEmail : null,
+      }).eq("id", id);
+      if (uErr) throw uErr;
+      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "set_trial_outcome", registration_id: booking.registration_id, details: { booking_id: id, from: booking.trial_outcome, to: outcome } });
+      return jsonResponse({ success: true, trial_outcome: outcome });
+    }
+
     if (action === "list_bookings") {
       const { status_filter } = body;
       let q = supabase
         .from("bookings")
         .select(
-          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error",
+          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error, trial_outcome, trial_outcome_at, trial_outcome_by",
         )
         .order("start_at", { ascending: false })
         .limit(500);
@@ -1981,10 +2008,25 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Trials that ended in the last 24 hours and are not marked yet: after
+      // 24 hours they count as done by themselves, so this is the window in
+      // which "Nu a venit" still needs a click.
+      const { data: trialsToMark, error: trialsErr } = await supabase
+        .from("bookings")
+        .select("id, start_at, end_at, student_name, student_email, student_phone, format, trial_outcome")
+        .eq("event_type_slug", "trial")
+        .eq("status", "confirmed")
+        .is("trial_outcome", null)
+        .lte("end_at", new Date(now).toISOString())
+        .gte("end_at", new Date(now - 86_400_000).toISOString())
+        .order("start_at", { ascending: true });
+      if (trialsErr) throw trialsErr;
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
           lessons: lessons ?? [],
+          trialsToMark: trialsToMark ?? [],
           uncontacted: (uncontacted ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],
@@ -3151,6 +3193,27 @@ Deno.serve(async (req) => {
           for (const r of result.data ?? []) manualIds.add(r.registration_id);
         }
         for (const r of data) if (manualIds.has(r.id)) r.source = "admin";
+      }
+      // A trial from someone who already used one under another email: same
+      // name or same phone. Names repeat, so this only flags it for the owner;
+      // the same card is refused outright at booking (trial_already_used).
+      const trialRegs = data.filter((r) => r.form_type === "trial");
+      if (trialRegs.length) {
+        const { data: trialBookings, error: tbErr } = await supabase
+          .from("bookings").select("registration_id, status, trial_outcome").eq("event_type_slug", "trial");
+        if (tbErr) throw tbErr;
+        const counts = (b: { status: string; trial_outcome: string | null }) =>
+          (["confirmed", "completed"].includes(b.status) && b.trial_outcome !== "excused") || b.trial_outcome === "lost";
+        const usedIds = new Set((trialBookings ?? []).filter(counts).map((b) => b.registration_id));
+        const used = data.filter((r) => usedIds.has(r.id));
+        const nameKey = (v: unknown) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+        const phoneKey = (v: unknown) => { const d = String(v ?? "").replace(/\D/g, ""); return d.length >= 9 ? d.slice(-9) : ""; };
+        const mail = (r: Record<string, any>) => String(r.account_email ?? r.email ?? "").toLowerCase();
+        for (const r of trialRegs) {
+          const match = used.find((o) => o.id !== r.id && mail(o) !== mail(r)
+            && ((nameKey(o.name) && nameKey(o.name) === nameKey(r.name)) || (phoneKey(o.phone) && phoneKey(o.phone) === phoneKey(r.phone))));
+          if (match) r.trial_duplicate_hint = `Posibil duplicat — a mai avut o probă: ${match.name ?? ""} (${match.email ?? ""})`;
+        }
       }
     }
 

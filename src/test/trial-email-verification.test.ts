@@ -187,8 +187,9 @@ describe("one trial per person", () => {
     // is saved — so a second attempt used to pay the friction, save a card and
     // then be refused.
     const setup = checkout.slice(checkout.indexOf("if (setup === true) {"));
-    expect(setup).toContain('.eq("event_type_slug", "trial")');
-    expect(setup).toContain('.in("status", ["confirmed", "completed"])');
+    // The rule itself (which trials count as used) lives in the database
+    // function trial_already_used since 12 October; see trial-rules.test.ts.
+    expect(setup).toContain('rpc("trial_already_used"');
     expect(setup).toContain('code: "trial_used"');
     const refused = setup.indexOf('code: "trial_used"');
     const stripeCall = setup.indexOf("stripe.checkout.sessions.create");

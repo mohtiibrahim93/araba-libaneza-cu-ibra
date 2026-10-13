@@ -40,6 +40,7 @@ const ACTION_LABELS: Record<string, string> = {
   reschedule_booking: "Mutare lecție",
   book_for_student: "Programare manuală",
   import_calendar_event: "Lecție importată din Google",
+  set_trial_outcome: "Rezultat probă",
   update_contact: "Contact actualizat",
   repair_booking_calendar: "Calendar reparat",
 };

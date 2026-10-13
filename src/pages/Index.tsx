@@ -95,8 +95,8 @@ const PageContent = () => {
     if (trialCard === "saved") {
       toast.success(
         lang === "en"
-          ? "Card saved — your free trial spot is confirmed. Nothing was charged."
-          : "Cardul a fost salvat — locul tău la proba gratuită e confirmat. Nu s-a încasat nimic.",
+          ? "Card saved — nothing was charged. Your confirmation arrives by email in a few minutes."
+          : "Cardul a fost salvat — nu s-a încasat nimic. Confirmarea programării vine pe email în câteva minute.",
         { duration: 10000 },
       );
       trackEvent("TrialCardSaved");

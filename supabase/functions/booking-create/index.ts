@@ -35,6 +35,12 @@ interface CreateBody {
    */
   force?: boolean;
   /**
+   * Internal callers only (stripe-webhook): the Stripe fingerprint of the card
+   * just saved for a free trial, so the same card under a second email is
+   * refused. Ignored on public calls.
+   */
+  card_fingerprint?: string;
+  /**
    * Internal callers only: skip the student and admin emails. The webhook sets
    * it on lessons 2..N of a weekly private series, whose first lesson's email
    * already describes the series — ten confirmations for one purchase would
@@ -168,16 +174,27 @@ Deno.serve(async (req) => {
     // trial can be rebooked, but a kept (confirmed/completed) one blocks a
     // second freebie — the paid flow is the path for returning students.
     if (et.slug === "trial") {
-      // ilike with the wildcards escaped = case-insensitive equality.
-      const emailPattern = body.student_email.trim().replace(/([%_\\])/g, "\\$1");
-      const { data: priorTrials } = await supabase
-        .from("bookings")
-        .select("id")
-        .eq("event_type_slug", "trial")
-        .in("status", ["confirmed", "completed"])
-        .ilike("student_email", emailPattern)
-        .limit(1);
-      if ((priorTrials ?? []).length > 0) {
+      // One trial per person: by email, and — when the webhook passes the
+      // saved card's fingerprint — by card, so a second email with the same
+      // card is refused. Only trusted internal calls may supply a fingerprint.
+      const cardFingerprint = internalCall && typeof body.card_fingerprint === "string" && body.card_fingerprint
+        ? body.card_fingerprint
+        : null;
+      const { data: usedBy, error: usedErr } = await supabase.rpc("trial_already_used", {
+        p_email: body.student_email,
+        p_card_fingerprint: cardFingerprint,
+      });
+      if (usedErr) {
+        console.error("[booking-create] trial check failed", usedErr);
+        return json({ error: "Internal server error" }, 500);
+      }
+      if (usedBy === "card") {
+        return json(
+          { error: "Cardul a mai fost folosit pentru o probă gratuită, cu alt email.", code: "trial_card_used" },
+          409,
+        );
+      }
+      if (usedBy) {
         return json(
           { error: "Proba gratuită a fost deja folosită pentru acest email.", code: "trial_used" },
           409,
