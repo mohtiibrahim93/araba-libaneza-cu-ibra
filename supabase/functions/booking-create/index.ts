@@ -6,12 +6,13 @@ import {
   gcalCreateEvent,
   gcalFreebusy,
   overlaps,
-  physicalTrialAllowed,
+  candidateSlotsForDays,
+  utcToZonedParts,
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 // The free level check with Ibra (oral, and written in arabizi), booked
 // without a card — unlike the trial, it is not a lesson.
-import { LEVEL_CHECK_SLUG, levelCheckTimeAllowed } from "../_shared/schedule-rules.ts";
+import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG, inBlackout, physicalDayAllowed, rulesForEventType } from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
@@ -262,17 +263,35 @@ Deno.serve(async (req) => {
     }
 
     const format = body.format ?? "online";
-    // The level check is offered only on weekdays 12:00–13:00 (see
-    // _shared/schedule-rules.ts); refuse anything else posted straight here.
-    if (et.slug === LEVEL_CHECK_SLUG && !levelCheckTimeAllowed(startISO, et.duration_min)) {
-      return json({ error: "slot not offered", code: "level_check_hours" }, 409);
+    // The rules the owner edits in Disponibilitate, enforced here too:
+    // booking-availability never offers these slots, but this endpoint is
+    // unauthenticated and a client can post any start_at.
+    const zp = utcToZonedParts(new Date(startMs));
+    const dayKey = `${zp.year}-${String(zp.month).padStart(2, "0")}-${String(zp.day).padStart(2, "0")}`;
+    const [{ data: scheduleRules }, { data: daysOff }] = await Promise.all([
+      supabase.from("availability_rules").select("weekday,start_time,end_time,event_type_slug").eq("is_active", true),
+      supabase.from("availability_blackouts").select("start_date,end_date").lte("start_date", dayKey).gte("end_date", dayKey),
+    ]);
+    // A lesson type with hours of its own (the level check) may only be
+    // booked inside them, by anyone.
+    const ownHours = (scheduleRules ?? []).some((rule) => rule.event_type_slug === et.slug);
+    if (ownHours || et.slug === LEVEL_CHECK_SLUG) {
+      const offered = candidateSlotsForDays(
+        [{ y: zp.year, m: zp.month, d: zp.day }],
+        rulesForEventType(scheduleRules ?? [], et.slug, et.slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined),
+        et.duration_min,
+      );
+      if (!offered.includes(startISO)) return json({ error: "slot not offered", code: "level_check_hours" }, 409);
     }
-    // Enforced here too: booking-availability never offers these slots, but
-    // this endpoint is unauthenticated and a client can post any start_at.
-    if (!physicalTrialAllowed(et.slug, format, startISO)) {
+    // A day off closes the site's booking; the owner booking from the panel
+    // is not bound by it.
+    if (!internalCall && inBlackout(startISO, daysOff ?? [])) {
+      return json({ error: "Ziua nu este disponibilă pentru programări.", code: "day_off" }, 409);
+    }
+    if (!physicalDayAllowed(et, format, startISO)) {
       return json(
         {
-          error: "Proba fizică se poate programa doar sâmbăta sau duminica.",
+          error: "Lecția la centru nu se poate programa în această zi.",
           code: "physical_trial_weekend_only",
         },
         409,

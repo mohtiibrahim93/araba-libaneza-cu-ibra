@@ -6,11 +6,11 @@ it("returns an empty date map when opening hours produce no candidates", async (
   const eventType = { slug: "trial", duration_min: 30 };
   const db = { from: (table: string) => {
     const query = {
-      select: () => query, eq: () => query,
+      select: () => query, eq: () => query, gte: () => query, lte: () => query,
       maybeSingle: async () => ({ data: eventType, error: null }),
       then: (resolve: (value: unknown) => unknown) => Promise.resolve({ data: [], error: null }).then(resolve),
     };
-    expect(["booking_event_types", "availability_rules"]).toContain(table);
+    expect(["booking_event_types", "availability_rules", "availability_blackouts"]).toContain(table);
     return query;
   } };
   const handler = loadEdgeHandler("supabase/functions/booking-availability/index.ts", {

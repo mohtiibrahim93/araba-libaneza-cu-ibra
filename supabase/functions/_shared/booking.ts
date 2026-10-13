@@ -9,7 +9,7 @@ export {
   physicalTrialAllowed,
 } from "./schedule-rules.ts";
 // TZ is also used internally below (slot generation, GCal payloads).
-import { TZ, weekdayInTz as weekdayInTzLocal, physicalTrialAllowed as physicalTrialAllowedLocal } from "./schedule-rules.ts";
+import { TZ, weekdayInTz as weekdayInTzLocal, physicalDayAllowed } from "./schedule-rules.ts";
 
 export const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 export const SITE_URL = "https://centruldearabalibaneza.com";
@@ -378,6 +378,8 @@ export interface SlotEventType {
   duration_min: number;
   min_notice_hours?: number | null;
   max_advance_days?: number | null;
+  /** In-person days (0 = Sunday); null = any day; absent on an old database. */
+  physical_weekdays?: number[] | null;
 }
 export type LocalDay = { y: number; m: number; d: number };
 export type AvailabilityRule = { weekday: number; start_time: string; end_time: string };
@@ -408,7 +410,7 @@ export function candidateSlotsForDays(
   return out;
 }
 
-/** Min-notice, max-advance and the weekend-only rule for in-person trials. */
+/** Min-notice, max-advance and the in-person days of the lesson type. */
 export function passesTimingRules(
   et: SlotEventType,
   format: string,
@@ -419,7 +421,7 @@ export function passesTimingRules(
   const minNoticeMs = (et.min_notice_hours ?? 0) * 3_600_000;
   const maxAdvanceMs = (et.max_advance_days ?? 30) * 86_400_000;
   if (t < now + minNoticeMs || t > now + maxAdvanceMs) return false;
-  return physicalTrialAllowedLocal(et.slug, format, iso);
+  return physicalDayAllowed(et, format, iso);
 }
 
 // deno-lint-ignore no-explicit-any

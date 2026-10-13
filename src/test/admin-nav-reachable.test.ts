@@ -68,7 +68,7 @@ describe("the admin nav and its screens agree", () => {
       "ManualSignupsAdmin",
       "CohortsAdmin",
       "CalendarHealth",
-      "AvailabilityAdmin",
+      "BookingSettingsAdmin", // holds AvailabilityAdmin since 13 Oct 2026
       "BookingsAdmin",
       "StudentJourneyAdmin",
       "TrialFunnelAdmin",
