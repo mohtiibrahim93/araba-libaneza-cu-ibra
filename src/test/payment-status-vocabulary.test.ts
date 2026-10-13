@@ -6,7 +6,7 @@ import { resolve, join } from "node:path";
  * `registrations.payment_status` has no database constraint, so any string at
  * all will insert cleanly and be wrong only later.
  *
- * Seven values are in use, and two of them look like synonyms but are not:
+ * Eight values are in use, and two of them look like synonyms but are not:
  *
  *   unpaid     Nobody has tried to pay. The first payment has not happened and
  *              may never happen, in which case the student is charged the full
@@ -17,13 +17,14 @@ import { resolve, join } from "node:path";
  *              real attempt behind it.
  *   card_saved A card is on file but not yet charged.
  *   paid / failed / past_due / refunded  What Stripe reports afterwards.
+ *   expired    A Stripe payment page opened and abandoned until Stripe closed it.
  *
  * This file once claimed the two were one state and that "unpaid" had been
  * caught before any row could carry it. Both claims were wrong: production is
  * mostly "unpaid", and merging it into "pending" would report money as on its
  * way when nobody has tried to pay.
  *
- * The real risk is an eighth value, not the seventh: the column takes anything,
+ * The real risk is a ninth value, not the eighth: the column takes anything,
  * the badge falls through to its default and looks plausible, and a breakdown
  * grows a bucket nobody labelled.
  */
@@ -33,11 +34,12 @@ const ALLOWED = [
   "pending",
   "card_saved",
   "failed",
+  "expired",
   "past_due",
   "refunded",
 ];
 
-/** Everything a reader has to be able to name. Same list: all seven are real. */
+/** Everything a reader has to be able to name. Same list: all eight are real. */
 const IN_THE_DATA = ALLOWED;
 
 /** Every .ts/.tsx under a root, so a new function cannot slip past. */
@@ -56,12 +58,18 @@ const files = [
   ...walk(resolve(process.cwd(), "src")),
 ].filter((f) => !f.includes("/test/"));
 
-describe("payment_status stays to its seven values", () => {
+describe("payment_status stays to its eight values", () => {
   it("has files to check", () => {
     expect(files.length).toBeGreaterThan(50);
   });
 
-  it("writes no seventh value", () => {
+  it("writes expired only for an abandoned Stripe page", () => {
+    // Written through a variable, so the scan below cannot see it.
+    const hook = readFileSync(resolve(process.cwd(), "supabase/functions/stripe-webhook/index.ts"), "utf8");
+    expect(hook).toContain('const newStatus = event.type === "checkout.session.expired" ? "expired" : "failed";');
+  });
+
+  it("writes no ninth value", () => {
     const bad: string[] = [];
     for (const f of files) {
       const src = readFileSync(f, "utf8");
@@ -73,7 +81,7 @@ describe("payment_status stays to its seven values", () => {
         }
       }
     }
-    expect(bad, `payment_status values outside the seven:\n${bad.join("\n")}`).toEqual([]);
+    expect(bad, `payment_status values outside the eight:\n${bad.join("\n")}`).toEqual([]);
   });
 
   it("labels every value the column can hold", async () => {
@@ -166,7 +174,7 @@ describe("payment_status stays to its seven values", () => {
 
   it("counts anything-but-paid as owing, so a new value is never missed silently", () => {
     // The worklist asks what is NOT paid rather than listing what is unpaid:
-    // a seventh value would show up there rather than disappear from it.
+    // a ninth value would show up there rather than disappear from it.
     const fn = readFileSync(
       resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
       "utf8",
