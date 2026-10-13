@@ -153,6 +153,13 @@ const Admin = () => {
       try {
         await loadData();
         if (!cancelled) setAuthenticated(true);
+        // Read Google Calendar once on opening, so a lesson moved, added or
+        // deleted there shows here at once rather than at the next 15-minute
+        // run. In the background: the panel is usable meanwhile, and the
+        // lists reload when it finishes.
+        void invokeAdmin({ action: "sync_calendar" })
+          .then(() => (!cancelled ? loadData() : undefined))
+          .catch(() => undefined);
       } catch (err) {
         if (!cancelled) {
           setAuthenticated(false);

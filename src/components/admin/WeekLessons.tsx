@@ -1,4 +1,5 @@
 import CalendarSyncPanel from "./CalendarSyncPanel";
+import GroupSessionActions from "./GroupSessionActions";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, MapPin, RefreshCw, Video } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -9,7 +10,8 @@ import { ErrorNote } from "./ui";
 /**
  * Program › Săptămâna (October 2026 redesign): the booked lessons laid out on
  * the week, so a free afternoon or a crowded Thursday shows at a glance. Same
- * data as "Toate lecțiile" (list_bookings), read-only; cancelling and the rest
+ * data as "Toate lecțiile" (list_bookings); a group lesson can be moved or
+ * removed here (GroupSessionActions, through Google); cancelling and the rest
  * stay there. Group lessons come from cohort_sessions — the owner's own
  * calendar events, read in by the Grupe › Lecțiile grupelor sync — and are
  * drawn alongside, as "L15" of their group.
@@ -271,6 +273,7 @@ const WeekLessons = () => {
                           <div className="flex-1 rounded-2xl bg-admin-info-bg p-3.5 text-admin-info-fg">
                             <p className="font-bold">Grupa {groupName(g)}</p>
                             <p className="text-[0.8125rem]">Lecția {g.lesson_number}</p>
+                            <GroupSessionActions session={g} onChanged={() => setSessionRefresh((value) => value + 1)} />
                           </div>
                         </div>
                       ))}
