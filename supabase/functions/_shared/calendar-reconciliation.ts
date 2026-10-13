@@ -3,7 +3,7 @@ type Config = { lovableKey?: string | undefined; calendarKey?: string | undefine
 type GoogleEvent = { id?: string; status?: string; etag?: string; summary?: string; description?: string; attendees?: Array<Record<string, unknown>>; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; extendedProperties?: { private?: Record<string, string>; shared?: Record<string, string> } };
 /** Synchronize exact existing links. A missing event is an error, never a deletion. */
 export async function reconcileCalendar(db: any, config: Config, request: typeof fetch = fetch) {
-  const result = { updated: 0, pushed: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string; guest_email: string | null }> };
+  const result = { updated: 0, pushed: 0, imported: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string; guest_email: string | null }> };
   if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
   const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
   const all = async (table: string, fields: string) => {
@@ -139,11 +139,115 @@ export async function reconcileCalendar(db: any, config: Config, request: typeof
       }
     } catch (error) { result.errors.push(`${session.id}: ${error instanceof Error ? error.message : "Group synchronization failed"}`); }
   }
+  const registrationFor = new Map<string, { id: string; name: string; phone: string | null; format: string | null }>();
   for (const event of events.values()) {
     const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
-    if (event.id && !linked.has(event.id) && event.status !== "cancelled" && start && end) result.unmatched.push({ id: event.id, summary: event.summary || "Eveniment Google Calendar", start_at: start, end_at: end, guest_email: firstGuestEmail(event) });
+    if (!event.id || linked.has(event.id) || event.status === "cancelled" || !start || !end || Date.parse(end) <= Date.parse(start)) continue;
+    const guest = lessonGuest(event);
+    if (guest) {
+      try {
+        if (await autoImportLesson(db, event as GoogleEvent & { id: string }, guest, start, end, registrationFor)) { result.imported++; continue; }
+      } catch (error) { result.errors.push(`${event.id}: ${error instanceof Error ? error.message : "Importul lecției a eșuat"}`); continue; }
+    }
+    // An event with no guest (a personal appointment, other work) is not a lesson; only guest events are listed.
+    const guestEmail = firstGuestEmail(event);
+    if (guestEmail) result.unmatched.push({ id: event.id, summary: event.summary || "Eveniment Google Calendar", start_at: start, end_at: end, guest_email: guestEmail });
   }
   return result;
+}
+
+const plain = (value: string) => value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+/**
+ * A lesson the owner put straight into Google (owner-approved rule, 13 Oct
+ * 2026): the title names the course ("araba libaneza", any case, with or
+ * without diacritics) and the event has exactly one guest besides him. That
+ * guest's email is the student. Anything else stays unmatched.
+ */
+export function lessonGuest(event: GoogleEvent): { email: string; displayName: string | null } | null {
+  if (!/araba\s*libaneza/.test(plain(event.summary ?? ""))) return null;
+  const guests = (event.attendees ?? []).filter((a) => a.organizer !== true && a.self !== true && typeof a.email === "string" && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(a.email)));
+  if (guests.length !== 1) return null;
+  const guest = guests[0]!;
+  return { email: String(guest.email).trim().toLowerCase(), displayName: typeof guest.displayName === "string" && guest.displayName.trim() ? guest.displayName.trim() : null };
+}
+
+/**
+ * The student's name, editable afterwards in admin: the name the owner wrote
+ * at the start of the title ("Ioan , lectia 27…"), else the guest's Google
+ * name, else the email's local part ("radu.nicolae" → "Radu Nicolae").
+ */
+export function lessonStudentName(summary: string, email: string, displayName: string | null) {
+  const prefix = (summary.split(/[,\-–—(]/)[0] ?? "").trim();
+  if (prefix.length >= 2 && !/\d/.test(prefix) && !/^(lectia|lectie|lesson|araba|curs)/.test(plain(prefix))) return prefix.slice(0, 160);
+  if (displayName && displayName.length >= 2 && !displayName.includes("@")) return displayName.slice(0, 160);
+  const words = (email.split("@")[0] ?? "").split(/[._+-]+/).map((w) => w.replace(/\d+/g, "")).filter(Boolean);
+  return words.map((w) => w[0]!.toUpperCase() + w.slice(1)).join(" ") || email;
+}
+
+/** "2/20" or "L1/10" in the title gives the package size; otherwise one lesson. */
+export function lessonPackageSize(summary: string) {
+  const match = summary.match(/(\d+)\s*\/\s*(\d+)/);
+  const size = match ? Number.parseInt(match[2]!, 10) : 1;
+  return Math.max(1, Math.min(60, Number.isFinite(size) ? size : 1));
+}
+
+/**
+ * Links one lesson event to the student's most recent private registration
+ * with that email (or contact email), creating one when there is none. A new
+ * one is unpaid: nothing here knows what was paid. No Google write and no
+ * email: the reminder flags are stamped so the reminder job leaves the lesson
+ * alone, since the student already has the Google invitation. Returns false
+ * when the event cannot be linked (another lesson at that time, or a
+ * concurrent sync linked it first), so it stays listed for the owner.
+ */
+async function autoImportLesson(
+  db: any,
+  event: GoogleEvent & { id: string },
+  guest: { email: string; displayName: string | null },
+  start: string,
+  end: string,
+  registrationFor: Map<string, { id: string; name: string; phone: string | null; format: string | null }>,
+) {
+  const summary = event.summary ?? "";
+  let registration = registrationFor.get(guest.email);
+  let created = false;
+  if (!registration) {
+    const like = guest.email.replace(/[\\%_]/g, (c) => `\\${c}`);
+    const found = await db.from("registrations").select("id,name,phone,format").eq("form_type", "private").is("anonymized_at", null)
+      .or(`email.ilike."${like}",contact_email.ilike."${like}"`).order("created_at", { ascending: false }).limit(1);
+    if (found.error) throw found.error;
+    registration = found.data?.[0];
+    if (!registration) {
+      const name = lessonStudentName(summary, guest.email, guest.displayName);
+      const format = /fizic/.test(plain(summary)) && !event.hangoutLink ? "fizic" : "online";
+      registration = { id: crypto.randomUUID(), name, phone: null, format };
+      const reg = await db.from("registrations").insert({
+        id: registration.id, form_type: "private", source: "admin", name, email: guest.email, phone: "", language: "ro", format,
+        quantity: lessonPackageSize(summary), payment_status: "unpaid", lead_status: "contacted",
+      });
+      if (reg.error) throw new Error("Cursantul nu a putut fi salvat.");
+      created = true;
+    }
+    registrationFor.set(guest.email, registration);
+  }
+  const now = new Date().toISOString();
+  const booking = await db.from("bookings").insert({
+    registration_id: registration.id, event_type_slug: "paid", start_at: start, end_at: end,
+    student_name: registration.name, student_email: guest.email, student_phone: registration.phone || null,
+    format: registration.format === "fizic" ? "physical" : "online",
+    status: Date.parse(end) <= Date.now() ? "completed" : "confirmed", language: "ro",
+    google_event_id: event.id, google_contact_email: guest.email, meet_link: event.hangoutLink ?? null,
+    reminder_2d_sent_at: now, reminder_day_of_sent_at: now, reminder_3h_sent_at: now, reminder_1h_sent_at: now, reminder_30m_sent_at: now,
+  }).select("id").single();
+  if (booking.error || !booking.data) {
+    if (created) { await db.from("registrations").delete().eq("id", registration.id); registrationFor.delete(guest.email); }
+    const message = String(booking.error?.message ?? "").toLowerCase();
+    if (message.includes("duplicate") || message.includes("unique")) return false;
+    throw new Error("Lecția nu a putut fi salvată.");
+  }
+  await db.from("audit_logs").insert({ actor: "calendar-sync", action: "auto_import_calendar_event", registration_id: registration.id, details: { event_id: event.id, at: start, email: guest.email, new_student: created } });
+  return true;
 }
 
 /** The first guest who is not the organizer: a suggestion for the owner, never used on its own. */
@@ -183,7 +287,7 @@ export async function importCalendarEvent(
   const registrationId = crypto.randomUUID();
   const reg = await db.from("registrations").insert({
     id: registrationId, form_type: "private", source: "admin", name: input.name, email: input.email,
-    phone: input.phone, language: "ro", format: input.format === "physical" ? "fizic" : "online",
+    phone: input.phone ?? "", language: "ro", format: input.format === "physical" ? "fizic" : "online",
     quantity: input.quantity, payment_status: input.paid ? "paid" : "unpaid", lead_status: "contacted",
   });
   if (reg.error) throw new Error("Cursantul nu a putut fi salvat.");
