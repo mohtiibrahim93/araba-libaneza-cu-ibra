@@ -38,7 +38,9 @@ import {
   leadSourceLabels,
   trackPreferenceLabels,
   LEAD_STATUSES,
+  leadSegment,
   partialRefundNote,
+  studentLabel,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
 import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
@@ -441,6 +443,11 @@ const RegistrationsTable = ({
                   </button>
                 ) : (
                   r.name
+                )}
+                {leadSegment(r) === "students" && (
+                  <span className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 align-middle">
+                    {studentLabel(r)}
+                  </span>
                 )}
                 {r.trial_duplicate_hint && (
                   <span

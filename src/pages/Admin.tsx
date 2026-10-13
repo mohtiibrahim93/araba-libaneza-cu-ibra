@@ -82,9 +82,12 @@ import { describeRegistrationCourse, emptyCourseFilters, matchesCourseFilters } 
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable, { type RefundPreview } from "@/components/admin/RegistrationsTable";
 import {
+  leadSegment,
+  leadSegmentLabels,
   leadStatusLabels,
   LEAD_STATUSES,
   type CourseTypeFilter,
+  type LeadSegment,
   type EmailSettings,
   type LeadStatus,
   type LeadStatusFilter,
@@ -111,6 +114,9 @@ const Admin = () => {
   const [cancelingId, setCancelingId] = useState<string | null>(null);
   const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
+  // Lead-uri / Cursanți / Închise. A specific status or group chosen below
+  // shows everyone with it, whichever tab they belong to.
+  const [segment, setSegment] = useState<LeadSegment>("leads");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
   const [courseDetailsFilter, setCourseDetailsFilter] = useState(emptyCourseFilters);
   const [selectedGroup, setSelectedGroup] = useState<{ id: string; name: string } | null>(null);
@@ -201,15 +207,25 @@ const Admin = () => {
       // are still one click away by selecting the "Incomplet" status.
       const matchesStatus =
         leadStatusFilter === "all" ? (!!selectedGroup || status !== "incomplete") : status === leadStatusFilter;
+      const matchesSegment = leadStatusFilter !== "all" || !!selectedGroup || leadSegment(r) === segment;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
         (r.form_type === "private" &&
           messageTerms.every((term) =>
             (r.notes || "").toLocaleLowerCase("ro-RO").includes(term),
           ));
-      return matchesCourse && matchesStatus && matchesPrivateMessage && matchesCourseFilters(describeRegistrationCourse(r), courseDetailsFilter) && (!selectedGroup || r.cohort_id === selectedGroup.id);
+      return matchesCourse && matchesStatus && matchesSegment && matchesPrivateMessage && matchesCourseFilters(describeRegistrationCourse(r), courseDetailsFilter) && (!selectedGroup || r.cohort_id === selectedGroup.id);
     });
-  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch, courseDetailsFilter, selectedGroup]);
+  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch, courseDetailsFilter, selectedGroup, segment]);
+
+  const segmentCounts = useMemo(() => {
+    const counts: Record<LeadSegment, number> = { leads: 0, students: 0, closed: 0 };
+    for (const r of registrations) {
+      if ((r.lead_status || "new") === "incomplete") continue;
+      counts[leadSegment(r)] += 1;
+    }
+    return counts;
+  }, [registrations]);
 
   const privateLeadCounts = useMemo(() => {
     const initial = LEAD_STATUSES.reduce(
@@ -808,6 +824,7 @@ const Admin = () => {
           setSelectedGroup(null);
           setCourseTypeFilter("all");
           setLeadStatusFilter(person?.lead_status === "incomplete" ? "incomplete" : "all");
+          if (person) setSegment(leadSegment(person));
           setPrivateMessageSearch("");
           setCourseDetailsFilter(emptyCourseFilters());
           setPersonId(null);
@@ -854,6 +871,23 @@ const Admin = () => {
                 setLeadStatusFilter(status === "all" ? "all" : status);
               }}
             />
+            <div role="tablist" aria-label="Înscrieri" className="flex flex-wrap gap-2">
+              {(Object.keys(leadSegmentLabels) as LeadSegment[]).map((key) => {
+                const active = leadStatusFilter === "all" && !selectedGroup && segment === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => { setSegment(key); setLeadStatusFilter("all"); setSelectedGroup(null); }}
+                    className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${active ? "border-brand-green bg-brand-green text-white" : "border-border hover:border-brand-green/60"}`}
+                  >
+                    {leadSegmentLabels[key]} · {segmentCounts[key]}
+                  </button>
+                );
+              })}
+            </div>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-bold text-foreground">
                 Înscrieri{" "}

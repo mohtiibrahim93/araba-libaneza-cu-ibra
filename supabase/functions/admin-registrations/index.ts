@@ -1931,6 +1931,8 @@ Deno.serve(async (req) => {
           .in("form_type", ["group", "private", "kids"])
           .not("payment_status", "in", '("paid","refunded")')
           .is("anonymized_at", null)
+          // Put aside with "Am vorbit cu el" until this date.
+          .or(`followup_snoozed_until.is.null,followup_snoozed_until.lt."${new Date(now).toISOString()}"`)
           .gte("created_at", staleAfter)
           .order("created_at", { ascending: true })
           .limit(50),
@@ -2837,6 +2839,20 @@ Deno.serve(async (req) => {
         .limit(100);
       if (error) throw error;
       return jsonResponse({ data });
+    }
+
+    // "Am vorbit cu el" on Acasă: someone who said yes and has not paid is
+    // put aside for a few days after the owner talked to them, then comes back
+    // to the list if they still have not paid. Changes nothing about the money.
+    if (action === "snooze_followup") {
+      const days = Math.max(1, Math.min(30, Number.parseInt(String(body.days ?? 7), 10) || 7));
+      if (typeof id !== "string") return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const until = new Date(Date.now() + days * 86_400_000).toISOString();
+      const { data, error } = await supabase.from("registrations").update({ followup_snoozed_until: until }).eq("id", id).select("id");
+      if (error) throw error;
+      if (!data?.length) return jsonResponse({ error: "Înscrierea nu există." }, 404);
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "snooze_followup", registration_id: id, details: { until, days } });
+      return jsonResponse({ success: true, until });
     }
 
     if (action === "update_status") {
