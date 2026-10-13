@@ -1125,6 +1125,7 @@ export type Database = {
           contact_email: string | null
           created_at: string
           email: string | null
+          followup_snoozed_until: string | null
           form_type: string
           format: string | null
           id: string
@@ -1167,6 +1168,7 @@ export type Database = {
           contact_email?: string | null
           created_at?: string
           email?: string | null
+          followup_snoozed_until?: string | null
           form_type: string
           format?: string | null
           id?: string
@@ -1209,6 +1211,7 @@ export type Database = {
           contact_email?: string | null
           created_at?: string
           email?: string | null
+          followup_snoozed_until?: string | null
           form_type?: string
           format?: string | null
           id?: string
