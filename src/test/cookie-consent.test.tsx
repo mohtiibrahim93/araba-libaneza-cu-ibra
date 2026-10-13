@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "@/lib/i18n";
 import { CONSENT_KEY, OPEN_CONSENT_EVENT, readConsent, saveConsent } from "@/lib/cookieConsent";
@@ -95,5 +96,43 @@ describe("cookie consent (Google Consent Mode v2)", () => {
     expect(def).toBeGreaterThan(-1);
     expect(upd).toBeGreaterThan(def);
     expect(cfg).toBeGreaterThan(upd);
+  });
+});
+
+describe("Google's script waits for consent", () => {
+  it("is fetched only after 'all', never on 'essential' or before a choice", () => {
+    const root = readFileSync(resolve(process.cwd(), "src/routes/__root.tsx"), "utf8");
+    const boot = root.slice(root.indexOf("const gtagBootstrap"), root.indexOf("const organizationJsonLd"));
+    const loader = boot.indexOf("window.__loadGtag = function");
+    const append = boot.indexOf("document.head.appendChild(gt)");
+    expect(loader).toBeGreaterThan(-1);
+    // The script tag is created only inside the loader…
+    expect(append).toBeGreaterThan(loader);
+    expect(boot.indexOf("document.createElement(\"script\")")).toBeGreaterThan(loader);
+    // …which runs at start-up only for a stored "all".
+    const stored = boot.indexOf('localStorage.getItem("cookie_consent") === "all"');
+    expect(boot.indexOf("window.__loadGtag();")).toBeGreaterThan(stored);
+  });
+
+  it("loads it when the visitor accepts, and not when they choose essential", () => {
+    const load = vi.fn();
+    (window as unknown as { __loadGtag?: () => void }).__loadGtag = load;
+    saveConsent("essential");
+    expect(load).not.toHaveBeenCalled();
+    saveConsent("all");
+    expect(load).toHaveBeenCalledOnce();
+    delete (window as unknown as { __loadGtag?: () => void }).__loadGtag;
+  });
+
+  it("counts a saved trial card as the trial conversion", () => {
+    const index = readFileSync(resolve(process.cwd(), "src/pages/Index.tsx"), "utf8");
+    expect(index).toContain('trackEvent("trial_booking_complete", { event_type: "trial", source: "card_saved" })');
+    expect(index).not.toContain('trackEvent("TrialCardSaved")');
+  });
+
+  it("sends begin_checkout when a private-lesson payment opens", () => {
+    const scheduler = readFileSync(resolve(process.cwd(), "src/components/NativeScheduler.tsx"), "utf8");
+    const pay = scheduler.slice(scheduler.indexOf("const handlePay = async"));
+    expect(pay.slice(0, 600)).toContain('trackCheckoutStart("private")');
   });
 });

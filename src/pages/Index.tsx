@@ -99,7 +99,11 @@ const PageContent = () => {
           : "Cardul a fost salvat — nu s-a încasat nimic. Confirmarea programării vine pe email în câteva minute.",
         { duration: 10000 },
       );
-      trackEvent("TrialCardSaved");
+      // The trial is booked by the webhook once the card is saved, so the
+      // browser never sees booking-create for it: this return is the trial
+      // conversion. (It used to be a non-standard "TrialCardSaved" event, and
+      // trial_booking_complete had stopped firing for website trials.)
+      trackEvent("trial_booking_complete", { event_type: "trial", source: "card_saved" });
       window.history.replaceState({}, "", "/");
     } else if (trialCard === "canceled") {
       // The card IS the booking now: nothing is reserved until it is saved, so
