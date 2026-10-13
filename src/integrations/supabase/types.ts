@@ -295,6 +295,9 @@ export type Database = {
           student_phone: string | null
           trial_followup_2_sent_at: string | null
           trial_followup_sent_at: string | null
+          trial_outcome: string | null
+          trial_outcome_at: string | null
+          trial_outcome_by: string | null
           updated_at: string
         }
         Insert: {
@@ -328,6 +331,9 @@ export type Database = {
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
+          trial_outcome?: string | null
+          trial_outcome_at?: string | null
+          trial_outcome_by?: string | null
           updated_at?: string
         }
         Update: {
@@ -361,6 +367,9 @@ export type Database = {
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
+          trial_outcome?: string | null
+          trial_outcome_at?: string | null
+          trial_outcome_by?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1109,6 +1118,7 @@ export type Database = {
         Row: {
           anonymized_at: string | null
           canceled_at: string | null
+          card_fingerprint: string | null
           center: string | null
           child_age: string | null
           cohort_id: string | null
@@ -1150,6 +1160,7 @@ export type Database = {
         Insert: {
           anonymized_at?: string | null
           canceled_at?: string | null
+          card_fingerprint?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -1191,6 +1202,7 @@ export type Database = {
         Update: {
           anonymized_at?: string | null
           canceled_at?: string | null
+          card_fingerprint?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -1648,6 +1660,14 @@ export type Database = {
       student_name_key: { Args: { p_name: string }; Returns: string }
       student_names_match: {
         Args: { p_a: string; p_b: string }
+        Returns: boolean
+      }
+      trial_already_used: {
+        Args: { p_card_fingerprint?: string; p_email: string }
+        Returns: string
+      }
+      trial_booking_counts: {
+        Args: { p_outcome: string; p_status: string }
         Returns: boolean
       }
     }
