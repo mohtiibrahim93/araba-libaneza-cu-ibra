@@ -1,0 +1,20 @@
+# Generated or minified files: formatting them is overwritten on regeneration.
+# Keep in sync with the ignores in eslint.config.js.
+dist
+.output
+.vinxi
+public/yalla/content.js
+public/yalla/content-en.js
+public/yalla/synthesis.js
+public/yalla/yalla-offline.html
+content/yalla-source-bank.js
+supabase/functions/mcp/index.ts
+src/routeTree.gen.ts
+src/integrations/lovable/index.ts
+src/integrations/supabase/auth-middleware.ts
+src/integrations/supabase/client.server.ts
+src/integrations/supabase/client.ts
+src/integrations/supabase/previewAuthStorage.ts
+src/integrations/supabase/types.ts
+drizzle/schema.ts
+bun.lock
