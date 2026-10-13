@@ -8,8 +8,9 @@ import { cn } from "@/lib/utils";
  *
  * The chats are the owner's own, spelled the way he spells them: stretched
  * vowels (3aamel, 3ann-naaar, d2eeye2) are deliberate, they mirror speech. The
- * Arabizi stays the same in every language; only the small glosses under the
- * coffee chat are translated.
+ * Arabizi stays the same in every language; the small glosses under every
+ * bubble are translated (owner's request, 13 October 2026: both phones carry
+ * a Romanian translation).
  */
 
 type Tone = "beige" | "green" | "red" | "gold";
@@ -30,13 +31,28 @@ interface Bubble {
 }
 
 const CINEMA: Bubble[] = [
-  { text: "shu 3aamel liom", tone: "beige", side: "left" },
-  { text: "3am fakker ruu7 e7dar filem bi-s-cinema , enta ?", tone: "green", side: "right" },
-  { text: "ma shi, ma 3ande msheeri3..", tone: "red", side: "left" },
-  { text: "baddak teje ma3e ne7dar shi?", tone: "green", side: "right" },
-  { text: "shu?", tone: "gold", side: "left" },
-  { text: "Nezel filem spiderman L-jdeed, kent 3am fakker e7daro", tone: "green", side: "right" },
-  { text: "yalla, I m in", tone: "red", side: "left" },
+  { text: "shu 3aamel liom", tone: "beige", side: "left", gloss: { ro: "Ce faci azi?", en: "What are you up to today?" } },
+  {
+    text: "3am fakker ruu7 e7dar filem bi-s-cinema , enta ?",
+    tone: "green",
+    side: "right",
+    gloss: { ro: "Mă gândesc să merg la un film la cinema. Tu?", en: "I'm thinking of going to see a film at the cinema. You?" },
+  },
+  { text: "ma shi, ma 3ande msheeri3..", tone: "red", side: "left", gloss: { ro: "Nimic, n-am planuri…", en: "Nothing, I've got no plans…" } },
+  {
+    text: "baddak teje ma3e ne7dar shi?",
+    tone: "green",
+    side: "right",
+    gloss: { ro: "Vrei să vii cu mine să vedem ceva?", en: "Want to come with me and watch something?" },
+  },
+  { text: "shu?", tone: "gold", side: "left", gloss: { ro: "Ce anume?", en: "What?" } },
+  {
+    text: "Nezel filem spiderman L-jdeed, kent 3am fakker e7daro",
+    tone: "green",
+    side: "right",
+    gloss: { ro: "A ieșit noul Spiderman, mă gândeam să-l văd.", en: "The new Spiderman is out, I was thinking of watching it." },
+  },
+  { text: "yalla, I m in", tone: "red", side: "left", gloss: { ro: "Hai, vin și eu!", en: "Come on, I'm in!" } },
 ];
 
 const COFFEE: Bubble[] = [
@@ -45,8 +61,8 @@ const COFFEE: Bubble[] = [
     tone: "beige",
     side: "left",
     gloss: {
-      ro: "Pune ibricul pe foc. În 10 minute sunt la tine. (rakwe = ibricul de cafea. Adică: pune apa la fiert, ca s-o bem proaspătă când ajung.)",
-      en: "Put the coffee pot on the fire. I'll be with you in 10 minutes. (rakwe = the coffee pot. Meaning: put the water on to boil, so we drink it fresh when I arrive.)",
+      ro: "Pune ibricul pe foc. În 10 minute sunt la tine. (rakwe = ibricul de cafea. Adică: pune apa la fiert, ca să bem cafeaua proaspătă când ajung.)",
+      en: "Put the coffee pot on the fire. I'll be with you in 10 minutes. (rakwe = the coffee pot. Meaning: put the water on to boil, so we drink the coffee fresh when I arrive.)",
     },
   },
   {
@@ -54,8 +70,8 @@ const COFFEE: Bubble[] = [
     tone: "green",
     side: "right",
     gloss: {
-      ro: "Bine ai venit (mot-a-mot) / cu drag (trad. sensul), te aștept!",
-      en: "Welcome (word for word) / with pleasure (the sense), I'm waiting for you!",
+      ro: "Mot-a-mot: ești familie și drum lin. Adică: bine ai venit / cu drag. Te aștept!",
+      en: "Word for word: you are family, and may your road be easy. Meaning: welcome / with pleasure. I'm waiting for you!",
     },
   },
 ];
