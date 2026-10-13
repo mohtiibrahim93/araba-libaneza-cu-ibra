@@ -435,6 +435,14 @@ const RegistrationsTable = ({
                 ) : (
                   r.name
                 )}
+                {r.trial_duplicate_hint && (
+                  <span
+                    title={r.trial_duplicate_hint}
+                    className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-900 align-middle"
+                  >
+                    Posibil duplicat
+                  </span>
+                )}
                 {/* Anyone who registered in English needs an English-taught
                     cohort, and there is none yet — so it is flagged rather than
                     left to be discovered on the first day of class. */}

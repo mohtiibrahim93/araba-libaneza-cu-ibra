@@ -14,6 +14,7 @@ import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import CheckoutEmailGate from "@/components/CheckoutEmailGate";
+import { trackCheckoutStart } from "@/lib/tracking";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
 import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
@@ -470,6 +471,9 @@ const NativeScheduler = ({
   const handlePay = async () => {
     if (!selectedSlot || !purchase || !registrationId) return;
     setSubmitting(true);
+    // Payment is being opened for a private lesson: the same begin_checkout
+    // (and its Google Ads conversion) the group checkout page sends.
+    trackCheckoutStart("private");
     try {
       const { data, error: fnError } = await supabase.functions.invoke("create-payment-intent", {
         body: {

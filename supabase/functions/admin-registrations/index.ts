@@ -1239,12 +1239,39 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: result.errors.length === 0, data: result });
     }
 
+    // The owner's word on a free trial: came (done), excused (the trial stays
+    // available) or lost (it counts as used). null clears it back to the
+    // automatic rule (done 24h after the lesson). Only for trial bookings
+    // that already took place or were cancelled.
+    if (action === "set_trial_outcome") {
+      const outcome = body.outcome === null ? null : typeof body.outcome === "string" ? body.outcome : undefined;
+      if (typeof id !== "string" || (outcome !== null && !["done", "excused", "lost"].includes(outcome ?? ""))) {
+        return jsonResponse({ error: "Rezultat invalid." }, 400);
+      }
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings").select("id, registration_id, event_type_slug, status, start_at, trial_outcome").eq("id", id).maybeSingle();
+      if (bErr || !booking || booking.event_type_slug !== "trial") return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
+      const started = Date.parse(booking.start_at) <= Date.now();
+      if (outcome === "done" && (!started || booking.status === "cancelled")) {
+        return jsonResponse({ error: "O probă se poate marca făcută doar după ce a avut loc." }, 400);
+      }
+      if (outcome !== null && !started && booking.status !== "cancelled") {
+        return jsonResponse({ error: "Proba nu a avut loc încă." }, 400);
+      }
+      const { error: uErr } = await supabase.from("bookings").update({
+        trial_outcome: outcome, trial_outcome_at: outcome ? new Date().toISOString() : null, trial_outcome_by: outcome ? callerEmail : null,
+      }).eq("id", id);
+      if (uErr) throw uErr;
+      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "set_trial_outcome", registration_id: booking.registration_id, details: { booking_id: id, from: booking.trial_outcome, to: outcome } });
+      return jsonResponse({ success: true, trial_outcome: outcome });
+    }
+
     if (action === "list_bookings") {
       const { status_filter } = body;
       let q = supabase
         .from("bookings")
         .select(
-          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error",
+          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error, trial_outcome, trial_outcome_at, trial_outcome_by",
         )
         .order("start_at", { ascending: false })
         .limit(500);
@@ -1981,10 +2008,25 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Trials that ended in the last 24 hours and are not marked yet: after
+      // 24 hours they count as done by themselves, so this is the window in
+      // which "Nu a venit" still needs a click.
+      const { data: trialsToMark, error: trialsErr } = await supabase
+        .from("bookings")
+        .select("id, start_at, end_at, student_name, student_email, student_phone, format, trial_outcome")
+        .eq("event_type_slug", "trial")
+        .eq("status", "confirmed")
+        .is("trial_outcome", null)
+        .lte("end_at", new Date(now).toISOString())
+        .gte("end_at", new Date(now - 86_400_000).toISOString())
+        .order("start_at", { ascending: true });
+      if (trialsErr) throw trialsErr;
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
           lessons: lessons ?? [],
+          trialsToMark: trialsToMark ?? [],
           uncontacted: (uncontacted ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],
@@ -2393,6 +2435,7 @@ Deno.serve(async (req) => {
         paid?: unknown;
         force?: unknown;
         language?: unknown;
+        extra?: unknown;
       };
       const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
       const email = typeof b.student_email === "string" ? b.student_email.trim() : "";
@@ -2409,7 +2452,12 @@ Deno.serve(async (req) => {
       // paid package is used lesson by lesson and booking-create's cap still
       // applies. Their stored details are used as they are; the account and
       // payment email on the registration is never changed here.
-      let existing: { id: string; name: string; email: string; phone: string | null } | null = null;
+      // With extra=true the student's details are reused but the lesson gets a
+      // registration of its own ("lecție în plus": the package is used up, or
+      // the lesson is outside it), so nothing is retyped and the package stays
+      // exactly what was bought.
+      const extra = b.extra === true;
+      let existing: { id: string; name: string; email: string; accountEmail: string; contactEmail: string | null; phone: string | null } | null = null;
       if (b.registration_id !== undefined && b.registration_id !== null && b.registration_id !== "") {
         if (typeof b.registration_id !== "string") return jsonResponse({ error: "Cursant invalid." });
         const { data: reg, error: lookupErr } = await supabase
@@ -2420,7 +2468,7 @@ Deno.serve(async (req) => {
         if (lookupErr || !reg || reg.form_type !== "private" || reg.anonymized_at) {
           return jsonResponse({ error: "Cursantul nu a fost găsit." });
         }
-        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", phone: reg.phone ?? null };
+        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", accountEmail: reg.email || reg.contact_email || "", contactEmail: reg.contact_email || null, phone: reg.phone ?? null };
       }
       const studentName = existing ? existing.name.trim() : name;
       const studentEmail = existing ? existing.email.trim() : email;
@@ -2434,14 +2482,18 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }
 
-      const registrationId = existing?.id ?? crypto.randomUUID();
-      const { error: regErr } = existing ? { error: null } : await supabase.from("registrations").insert({
+      const onExisting = existing !== null && !extra;
+      const registrationId = onExisting ? existing!.id : crypto.randomUUID();
+      const { error: regErr } = onExisting ? { error: null } : await supabase.from("registrations").insert({
         id: registrationId,
         form_type: "private",
         source: "admin",
-        name,
-        email,
-        phone: phone || null,
+        name: studentName,
+        // An extra lesson keeps the same account email as the student's other
+        // registration, so ownership checks treat them as the same person.
+        email: existing ? existing.accountEmail : email,
+        ...(existing?.contactEmail ? { contact_email: existing.contactEmail } : {}),
+        phone: studentPhone || null,
         language,
         format: format === "physical" ? "fizic" : "online",
         quantity,
@@ -2483,10 +2535,10 @@ Deno.serve(async (req) => {
         // The registration was written a moment ago and has no booking, so it
         // would otherwise sit in Înscrieri as a lesson that never happened.
         // An existing student's registration is theirs and stays untouched.
-        if (!existing) await supabase.from("registrations").delete().eq("id", registrationId);
+        if (!onExisting) await supabase.from("registrations").delete().eq("id", registrationId);
         return jsonResponse({
           error: out?.code === "lessons_used_up"
-            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Programează-l ca lecție nouă, fără să alegi cursantul existent."
+            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Bifează „Lecție în plus” ca să o programezi separat, cu aceleași date."
             : out?.error || "Programarea a eșuat.",
           code: out?.code,
           clashes: out?.clashes ?? [],
@@ -2497,9 +2549,9 @@ Deno.serve(async (req) => {
         actor: callerEmail!,
         action: "book_for_student",
         registration_id: registrationId,
-        details: existing
+        details: onExisting
           ? { at: startAt, format, forced: force, existing_registration: true }
-          : { at: startAt, format, quantity, paid, forced: force },
+          : { at: startAt, format, quantity, paid, forced: force, ...(existing ? { extra_for: existing.id } : {}) },
       });
       return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
     }
@@ -3142,6 +3194,27 @@ Deno.serve(async (req) => {
           for (const r of result.data ?? []) manualIds.add(r.registration_id);
         }
         for (const r of data) if (manualIds.has(r.id)) r.source = "admin";
+      }
+      // A trial from someone who already used one under another email: same
+      // name or same phone. Names repeat, so this only flags it for the owner;
+      // the same card is refused outright at booking (trial_already_used).
+      const trialRegs = data.filter((r) => r.form_type === "trial");
+      if (trialRegs.length) {
+        const { data: trialBookings, error: tbErr } = await supabase
+          .from("bookings").select("registration_id, status, trial_outcome").eq("event_type_slug", "trial");
+        if (tbErr) throw tbErr;
+        const counts = (b: { status: string; trial_outcome: string | null }) =>
+          (["confirmed", "completed"].includes(b.status) && b.trial_outcome !== "excused") || b.trial_outcome === "lost";
+        const usedIds = new Set((trialBookings ?? []).filter(counts).map((b) => b.registration_id));
+        const used = data.filter((r) => usedIds.has(r.id));
+        const nameKey = (v: unknown) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+        const phoneKey = (v: unknown) => { const d = String(v ?? "").replace(/\D/g, ""); return d.length >= 9 ? d.slice(-9) : ""; };
+        const mail = (r: Record<string, any>) => String(r.account_email ?? r.email ?? "").toLowerCase();
+        for (const r of trialRegs) {
+          const match = used.find((o) => o.id !== r.id && mail(o) !== mail(r)
+            && ((nameKey(o.name) && nameKey(o.name) === nameKey(r.name)) || (phoneKey(o.phone) && phoneKey(o.phone) === phoneKey(r.phone))));
+          if (match) r.trial_duplicate_hint = `Posibil duplicat — a mai avut o probă: ${match.name ?? ""} (${match.email ?? ""})`;
+        }
       }
     }
 

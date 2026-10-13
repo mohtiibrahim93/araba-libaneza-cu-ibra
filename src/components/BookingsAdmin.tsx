@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, X, ExternalLink, CalendarX2, Phone, RefreshCw, CalendarClock, TriangleAlert, CalendarPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { TrialOutcomeControl, type TrialOutcome } from "@/components/admin/TrialOutcome";
 import { Label } from "@/components/ui/label";
 import { TimeField } from "@/components/admin/TimeField";
 import { BUCHAREST_TZ, bucharestCivilToUtc } from "@/lib/timezone";
@@ -26,6 +27,7 @@ interface Booking {
   created_at: string;
   google_event_id: string | null;
   google_sync_error: string | null;
+  trial_outcome?: TrialOutcome;
 }
 
 /**
@@ -139,6 +141,8 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
   // When one is chosen the lesson goes on their registration and their stored
   // details are used; empty means a new student, as before.
   const [bkStudentId, setBkStudentId] = useState("");
+  // "Lecție în plus": same student, but a registration of its own (package used up).
+  const [bkExtra, setBkExtra] = useState(false);
   const [bkStudents, setBkStudents] = useState<PrivateStudent[] | null>(null);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   // Guards the very first load only: a background poll must not blank the
@@ -316,6 +320,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
     setBkNotes("");
     setBkWarn(null);
     setBkStudentId("");
+    setBkExtra(false);
     setBooking(true);
     setBkStudents(null);
     void invokeAdmin<{ data?: PrivateStudent[]; error?: string }>({ action: "private_students" })
@@ -355,7 +360,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
         clashes?: string[];
       }>({
         action: "book_for_student",
-        ...(bkStudentId ? { registration_id: bkStudentId } : {}),
+        ...(bkStudentId ? { registration_id: bkStudentId, ...(bkExtra ? { extra: true } : {}) } : {}),
         student_name: bkName.trim(),
         student_email: bkEmail.trim(),
         student_phone: bkPhone.trim(),
@@ -503,7 +508,15 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
               {visible.map((b) => (
                 <tr key={b.id} className="border-t border-border">
                   <td className="py-2 pr-2 whitespace-nowrap">{fmt(b.start_at)}</td>
-                  <td className="py-2 pr-2">{EVENT_LABEL[b.event_type_slug] ?? b.event_type_slug}</td>
+                  <td className="py-2 pr-2">
+                    {EVENT_LABEL[b.event_type_slug] ?? b.event_type_slug}
+                    {b.event_type_slug === "trial" && (
+                      <TrialOutcomeControl
+                        booking={b}
+                        onChanged={(outcome) => setRows((all) => all.map((row) => (row.id === b.id ? { ...row, trial_outcome: outcome } : row)))}
+                      />
+                    )}
+                  </td>
                   <td className="py-2 pr-2">
                     <div className="font-medium">{b.student_name}</div>
                     <div className="text-xs text-muted-foreground">{b.student_email}</div>
@@ -700,6 +713,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                   if (e.target.value) chooseStudent(e.target.value);
                   else {
                     setBkStudentId("");
+                    setBkExtra(false);
                     setBkName("");
                     setBkEmail("");
                     setBkPhone("");
@@ -713,8 +727,16 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                   </option>
                 ))}
               </select>
+              {bkStudentId && (
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={bkExtra} onChange={(e) => { setBkExtra(e.target.checked); setBkWarn(null); }} />
+                  Lecție în plus (separat de pachetul lui, cu aceleași date)
+                </label>
+              )}
               <p className="text-[11px] text-muted-foreground">
-                {bkStudentId
+                {bkStudentId && bkExtra
+                  ? "Se creează o înscriere nouă pentru această lecție, cu datele lui salvate. Pachetul lui rămâne neatins."
+                  : bkStudentId
                   ? "Lecția se adaugă la înscrierea lui. Datele de mai jos sunt cele salvate; emailul contului și al plății nu se schimbă."
                   : "Alege un cursant înscris pe site sau programat deja de tine, ca lecția să intre la el, nu ca înscriere nouă."}
               </p>
@@ -771,7 +793,7 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
                 <option value="physical">La centru</option>
               </select>
             </div>
-            {!bkStudentId && (<>
+            {(!bkStudentId || bkExtra) && (<>
             <div className="space-y-1.5">
               <Label className="text-xs">Câte lecții a luat</Label>
               <Input

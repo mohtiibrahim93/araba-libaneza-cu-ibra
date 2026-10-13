@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { formTypeLabels, paymentStatusLabels } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
+import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 
 /**
  * The screen the panel opens on.
@@ -82,6 +83,8 @@ interface Today {
   problems: Problem[];
   /** Past lessons that never reached the calendar — a backlog, not work. */
   olderUnsyncedLessons?: number;
+  /** Free trials that ended in the last 24h with no outcome yet; after 24h they count as done. */
+  trialsToMark?: Array<{ id: string; start_at: string; end_at: string; student_name: string; student_email: string; student_phone: string | null; format: string; trial_outcome: null }>;
 }
 
 const TZ = "Europe/Bucharest";
@@ -324,6 +327,22 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                 </button>
               ))}
             </div>
+
+            {!!data.trialsToMark?.length && filter === "all" && (
+              <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
+                <p className="text-sm font-semibold">Probe gratuite de ieri: a venit?</p>
+                <p className="text-xs text-muted-foreground">Dacă nu marchezi nimic, după 24 de ore proba se consideră făcută.</p>
+                {data.trialsToMark.map((t) => (
+                  <div key={t.id} className="rounded-xl border border-border p-3">
+                    <p className="text-sm font-medium">{t.student_name} · {timeFmt.format(new Date(t.start_at))}</p>
+                    <TrialOutcomeControl
+                      booking={{ ...t, status: "confirmed" }}
+                      onChanged={() => setData((d) => (d ? { ...d, trialsToMark: (d.trialsToMark ?? []).filter((x) => x.id !== t.id) } : d))}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
             {!!data.olderUnsyncedLessons && (filter === "all" || filter === "problems") && (
               <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">

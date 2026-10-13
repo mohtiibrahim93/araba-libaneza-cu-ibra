@@ -295,6 +295,9 @@ export type Database = {
           student_phone: string | null
           trial_followup_2_sent_at: string | null
           trial_followup_sent_at: string | null
+          trial_outcome: string | null
+          trial_outcome_at: string | null
+          trial_outcome_by: string | null
           updated_at: string
         }
         Insert: {
@@ -328,6 +331,9 @@ export type Database = {
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
+          trial_outcome?: string | null
+          trial_outcome_at?: string | null
+          trial_outcome_by?: string | null
           updated_at?: string
         }
         Update: {
@@ -361,6 +367,9 @@ export type Database = {
           student_phone?: string | null
           trial_followup_2_sent_at?: string | null
           trial_followup_sent_at?: string | null
+          trial_outcome?: string | null
+          trial_outcome_at?: string | null
+          trial_outcome_by?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1109,6 +1118,7 @@ export type Database = {
         Row: {
           anonymized_at: string | null
           canceled_at: string | null
+          card_fingerprint: string | null
           center: string | null
           child_age: string | null
           cohort_id: string | null
@@ -1136,6 +1146,7 @@ export type Database = {
           refund_reason: string | null
           refunded_amount: number | null
           refunded_at: string | null
+          seat_hold_until: string | null
           sms_confirmation_opt_in: boolean
           source: string
           stripe_session_id: string | null
@@ -1149,6 +1160,7 @@ export type Database = {
         Insert: {
           anonymized_at?: string | null
           canceled_at?: string | null
+          card_fingerprint?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -1176,6 +1188,7 @@ export type Database = {
           refund_reason?: string | null
           refunded_amount?: number | null
           refunded_at?: string | null
+          seat_hold_until?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
@@ -1189,6 +1202,7 @@ export type Database = {
         Update: {
           anonymized_at?: string | null
           canceled_at?: string | null
+          card_fingerprint?: string | null
           center?: string | null
           child_age?: string | null
           cohort_id?: string | null
@@ -1216,6 +1230,7 @@ export type Database = {
           refund_reason?: string | null
           refunded_amount?: number | null
           refunded_at?: string | null
+          seat_hold_until?: string | null
           sms_confirmation_opt_in?: boolean
           source?: string
           stripe_session_id?: string | null
@@ -1588,6 +1603,10 @@ export type Database = {
         Args: { p_bucket: string; p_max: number; p_window_seconds: number }
         Returns: boolean
       }
+      cohort_seats_taken: {
+        Args: { p_cohort: string; p_exclude?: string }
+        Returns: number
+      }
       find_or_create_student: {
         Args: { p_email: string; p_name: string; p_phone: string }
         Returns: string
@@ -1624,6 +1643,10 @@ export type Database = {
           variants: Json
         }[]
       }
+      hold_group_seat: {
+        Args: { p_minutes?: number; p_registration: string }
+        Returns: boolean
+      }
       move_booking_atomically: {
         Args: {
           p_end: string
@@ -1637,6 +1660,14 @@ export type Database = {
       student_name_key: { Args: { p_name: string }; Returns: string }
       student_names_match: {
         Args: { p_a: string; p_b: string }
+        Returns: boolean
+      }
+      trial_already_used: {
+        Args: { p_card_fingerprint?: string; p_email: string }
+        Returns: string
+      }
+      trial_booking_counts: {
+        Args: { p_outcome: string; p_status: string }
         Returns: boolean
       }
     }
