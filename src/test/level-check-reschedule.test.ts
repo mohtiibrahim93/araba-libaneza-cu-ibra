@@ -19,7 +19,7 @@ function setup(pendingContact = false) {
   }, from: (table: string) => {
     let mutation = false;
     const query = {
-      select: () => query, is: () => query, eq: () => query, neq: () => query, lt: () => query, gt: () => query, in: () => query,
+      select: () => query, is: () => query, eq: () => query, neq: () => query, lt: () => query, gt: () => query, in: () => query, lte: () => query, gte: () => query,
       update: (patch: Record<string, unknown>) => { updates.push(patch); mutation = true; writes.push("update"); return query; },
       insert: () => { mutation = true; writes.push("insert"); return query; },
       maybeSingle: async () => ({ data: booking, error: null }),

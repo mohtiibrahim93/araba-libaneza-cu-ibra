@@ -13,15 +13,22 @@ interface Rule {
   start_time: string;
   end_time: string;
   is_active: boolean;
+  /** null = every lesson type; a slug = that type only (it then uses only its own hours). */
+  event_type_slug: string | null;
+}
+
+export interface EventTypeOption {
+  slug: string;
+  name_ro: string;
 }
 
 const WD = ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"];
 
-const AvailabilityAdmin = () => {
+const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[] }) => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
-  const [newRule, setNewRule] = useState({ weekday: 1, start_time: "10:00", end_time: "18:00" });
+  const [newRule, setNewRule] = useState({ weekday: 1, start_time: "10:00", end_time: "18:00", event_type_slug: "" });
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,6 +61,7 @@ const AvailabilityAdmin = () => {
         start_time: r.start_time,
         end_time: r.end_time,
         is_active: r.is_active,
+        event_type_slug: r.event_type_slug,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -88,6 +96,7 @@ const AvailabilityAdmin = () => {
         start_time: newRule.start_time,
         end_time: newRule.end_time,
         is_active: true,
+        event_type_slug: newRule.event_type_slug || null,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -107,6 +116,7 @@ const AvailabilityAdmin = () => {
         <h2 className="text-base font-semibold text-foreground">Disponibilitate săptămânală</h2>
         <p className="text-sm text-muted-foreground">
           Intervalele orare în care studenții pot rezerva. Programările existente în Google Calendar blochează automat sloturile.
+          Un tip de lecție care are intervale „Doar: …” folosește numai acele intervale (de exemplu verificarea de nivel).
         </p>
       </div>
       {loading ? (
@@ -130,6 +140,22 @@ const AvailabilityAdmin = () => {
                   {WD.map((d, i) => (
                     <option key={i} value={i}>
                       {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Pentru</Label>
+                <select
+                  aria-label="Pentru ce lecții"
+                  className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+                  value={r.event_type_slug ?? ""}
+                  onChange={(e) => update(r.id, { event_type_slug: e.target.value || null })}
+                >
+                  <option value="">Toate lecțiile</option>
+                  {eventTypes.map((t) => (
+                    <option key={t.slug} value={t.slug}>
+                      Doar: {t.name_ro}
                     </option>
                   ))}
                 </select>
@@ -184,6 +210,22 @@ const AvailabilityAdmin = () => {
                 ))}
               </select>
             </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Pentru</Label>
+                <select
+                  aria-label="Pentru ce lecții, interval nou"
+                  className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+                  value={newRule.event_type_slug}
+                  onChange={(e) => setNewRule({ ...newRule, event_type_slug: e.target.value })}
+                >
+                  <option value="">Toate lecțiile</option>
+                  {eventTypes.map((t) => (
+                    <option key={t.slug} value={t.slug}>
+                      Doar: {t.name_ro}
+                    </option>
+                  ))}
+                </select>
+              </div>
             <div className="space-y-1">
               <Label className="text-xs">Start</Label>
               <TimeField

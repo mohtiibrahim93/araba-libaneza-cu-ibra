@@ -82,3 +82,50 @@ export function physicalTrialAllowed(
   if (eventTypeSlug !== "trial" || format !== "physical") return true;
   return PHYSICAL_TRIAL_WEEKDAYS.includes(weekdayInTz(new Date(startISO), tz));
 }
+
+// ---------------------------------------------------------------------------
+// Rules the owner edits in Admin › Program › Disponibilitate (13 October 2026).
+// ---------------------------------------------------------------------------
+
+export type ScopedRule = { weekday: number; start_time: string; end_time: string; event_type_slug?: string | null };
+
+/**
+ * The weekly hours for one lesson type: its own rules when it has any,
+ * otherwise the general ones (no event_type_slug). `fallback` keeps a type's
+ * built-in hours for a database that predates per-type rules.
+ */
+export function rulesForEventType<T extends ScopedRule>(rules: T[], slug: string, fallback?: ScopedRule[]): ScopedRule[] {
+  const own = rules.filter((r) => r.event_type_slug === slug);
+  if (own.length) return own;
+  if (fallback && !rules.some((r) => r.event_type_slug != null)) return fallback;
+  return rules.filter((r) => !r.event_type_slug);
+}
+
+/**
+ * Whether an in-person lesson of this type may start on that day.
+ * physical_weekdays: null = any day; undefined = a database without the
+ * column, where the old built-in rule (in-person trial at weekends) applies.
+ */
+export function physicalDayAllowed(
+  et: { slug: string; physical_weekdays?: number[] | null },
+  format: string,
+  startISO: string,
+  tz = TZ,
+): boolean {
+  if (format !== "physical") return true;
+  if (et.physical_weekdays === undefined) return physicalTrialAllowed(et.slug, format, startISO, tz);
+  if (et.physical_weekdays === null) return true;
+  return et.physical_weekdays.includes(weekdayInTz(new Date(startISO), tz));
+}
+
+/** Romania's calendar date (YYYY-MM-DD) of an instant. */
+export function localDateKey(iso: string, tz = TZ): string {
+  const p = utcToZonedParts(new Date(iso), tz);
+  return `${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
+}
+
+/** True when the instant falls on a day off (inclusive date range). */
+export function inBlackout(iso: string, blackouts: Array<{ start_date: string; end_date: string }>, tz = TZ): boolean {
+  const day = localDateKey(iso, tz);
+  return blackouts.some((b) => day >= b.start_date && day <= b.end_date);
+}

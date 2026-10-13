@@ -15,7 +15,7 @@ import {
 } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG } from "../_shared/schedule-rules.ts";
+import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG, inBlackout, rulesForEventType } from "../_shared/schedule-rules.ts";
 
 /**
  * Free changes stop 24 hours before the lesson — the rule the trial notice,
@@ -194,17 +194,18 @@ Deno.serve(async (req) => {
       // rules. Same helpers as that function, so the rules cannot drift.
       const p = utcToZonedParts(new Date(startMs));
       const day = { y: p.year, m: p.month, d: p.day };
-      const { data: rules } = await supabase
-        .from("availability_rules")
-        .select("weekday,start_time,end_time")
-        .eq("is_active", true);
+      const dayKey = `${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
+      const [{ data: rules }, { data: blackouts }] = await Promise.all([
+        supabase.from("availability_rules").select("weekday,start_time,end_time,event_type_slug").eq("is_active", true),
+        supabase.from("availability_blackouts").select("start_date,end_date").lte("start_date", dayKey).gte("end_date", dayKey),
+      ]);
       const offered = candidateSlotsForDays(
         [day],
-        booking.event_type_slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : (rules ?? []),
+        rulesForEventType(rules ?? [], booking.event_type_slug, booking.event_type_slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined),
         et.duration_min,
       );
       const outsideAvailability =
-        !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO);
+        !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO) || inBlackout(startISO, blackouts ?? []);
       // A student may only move a booking to a slot this site would have
       // offered them: inside the published hours, and inside the notice and
       // advance windows. The owner is not bound by his own opening hours --

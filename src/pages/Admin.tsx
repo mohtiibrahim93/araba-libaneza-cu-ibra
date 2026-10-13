@@ -63,7 +63,7 @@ import PagesAdmin from "@/components/admin/PagesAdmin";
 import SiteTextsAdmin from "@/components/admin/SiteTextsAdmin";
 import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
-import AvailabilityAdmin from "@/components/AvailabilityAdmin";
+import BookingSettingsAdmin from "@/components/admin/BookingSettingsAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
 import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
@@ -1091,7 +1091,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="availability" className="mt-0 space-y-6">
-            <AvailabilityAdmin />
+            <BookingSettingsAdmin />
           </TabsContent>
 
           <TabsContent value="kids-slots" className="mt-0 space-y-6">

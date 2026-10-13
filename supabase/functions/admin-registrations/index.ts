@@ -1144,7 +1144,7 @@ Deno.serve(async (req) => {
     if (action === "list_availability_rules") {
       const { data, error } = await supabase
         .from("availability_rules")
-        .select("id, weekday, start_time, end_time, is_active")
+        .select("id, weekday, start_time, end_time, is_active, event_type_slug")
         .order("weekday", { ascending: true })
         .order("start_time", { ascending: true });
       if (error) throw error;
@@ -1152,7 +1152,9 @@ Deno.serve(async (req) => {
     }
 
     if (action === "upsert_availability_rule") {
-      const { id: ruleId, weekday, start_time, end_time, is_active } = body;
+      const { id: ruleId, weekday, start_time, end_time, is_active, event_type_slug } = body;
+      // null / "" = general hours; a slug = hours for that lesson type only.
+      const ruleSlug = typeof event_type_slug === "string" && event_type_slug ? event_type_slug : null;
       const wd = Number(weekday);
       if (!Number.isInteger(wd) || wd < 0 || wd > 6) {
         return jsonResponse({ error: "Weekday invalid" });
@@ -1168,6 +1170,7 @@ Deno.serve(async (req) => {
         start_time,
         end_time,
         is_active: is_active !== false,
+        event_type_slug: ruleSlug,
         updated_at: new Date().toISOString(),
       };
       if (typeof ruleId === "string" && ruleId) {
@@ -1187,6 +1190,69 @@ Deno.serve(async (req) => {
         .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
+    }
+
+    // The rest of Disponibilitate (owner's request, 13 October 2026): each
+    // lesson type's booking limits and in-person days, and days off.
+    if (action === "list_booking_settings") {
+      const [{ data: types, error: tErr }, { data: daysOff, error: bErr }] = await Promise.all([
+        supabase.from("booking_event_types")
+          .select("slug, name_ro, duration_min, buffer_before_min, buffer_after_min, min_notice_hours, max_advance_days, physical_weekdays, is_active")
+          .order("slug", { ascending: true }),
+        supabase.from("availability_blackouts").select("id, start_date, end_date, note")
+          .gte("end_date", new Date().toISOString().slice(0, 10)).order("start_date", { ascending: true }),
+      ]);
+      if (tErr) throw tErr;
+      if (bErr) throw bErr;
+      return jsonResponse({ data: { event_types: types ?? [], blackouts: daysOff ?? [] } });
+    }
+
+    if (action === "update_event_type_rules") {
+      const slug = typeof body.slug === "string" ? body.slug : "";
+      const int = (v: unknown, min: number, max: number) => {
+        const n = Number(v);
+        return Number.isInteger(n) && n >= min && n <= max ? n : null;
+      };
+      const minNotice = int(body.min_notice_hours, 0, 24 * 14);
+      const maxAdvance = int(body.max_advance_days, 1, 365);
+      const before = int(body.buffer_before_min, 0, 120);
+      const after = int(body.buffer_after_min, 0, 120);
+      const days = body.physical_weekdays === null
+        ? null
+        : Array.isArray(body.physical_weekdays)
+          ? Array.from(new Set((body.physical_weekdays as unknown[]).map(Number).filter((d) => Number.isInteger(d) && d >= 0 && d <= 6))).sort()
+          : undefined;
+      if (!slug || minNotice === null || maxAdvance === null || before === null || after === null || days === undefined) {
+        return jsonResponse({ error: "Valori invalide." }, 400);
+      }
+      if (days && days.length === 0) return jsonResponse({ error: "Alege cel puțin o zi pentru lecțiile la centru." }, 400);
+      const { data, error } = await supabase.from("booking_event_types")
+        .update({ min_notice_hours: minNotice, max_advance_days: maxAdvance, buffer_before_min: before, buffer_after_min: after, physical_weekdays: days, updated_at: new Date().toISOString() })
+        .eq("slug", slug).select("slug");
+      if (error) throw error;
+      if (!data?.length) return jsonResponse({ error: "Tipul de lecție nu există." }, 404);
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "update_event_type_rules", details: { slug, min_notice_hours: minNotice, max_advance_days: maxAdvance, buffer_before_min: before, buffer_after_min: after, physical_weekdays: days } });
+      return jsonResponse({ success: true });
+    }
+
+    if (action === "add_blackout") {
+      const start = typeof body.start_date === "string" ? body.start_date : "";
+      const end = typeof body.end_date === "string" && body.end_date ? body.end_date : start;
+      const note = typeof body.note === "string" ? body.note.trim().slice(0, 200) || null : null;
+      const valid = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && Number.isFinite(Date.parse(`${d}T00:00:00Z`));
+      if (!valid(start) || !valid(end) || end < start) return jsonResponse({ error: "Alege data de început și de sfârșit." }, 400);
+      const { data, error } = await supabase.from("availability_blackouts").insert({ start_date: start, end_date: end, note }).select("id, start_date, end_date, note").single();
+      if (error) throw error;
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "add_blackout", details: { start, end, note } });
+      return jsonResponse({ success: true, data });
+    }
+
+    if (action === "delete_blackout") {
+      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" }, 400);
+      const { error } = await supabase.from("availability_blackouts").delete().eq("id", id);
+      if (error) throw error;
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "delete_blackout", details: { id } });
+      return jsonResponse({ success: true });
     }
 
     if (action === "delete_availability_rule") {
