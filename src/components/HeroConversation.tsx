@@ -76,40 +76,70 @@ const COFFEE: Bubble[] = [
   },
 ];
 
+/**
+ * One phone. A real phone's proportions (about 9:19) whatever the chat's
+ * length, with a status bar and a message bar, so a short chat reads as a
+ * phone with room left on its screen rather than as a short box. Both phones
+ * stand side by side at the same height from sm up.
+ */
 const Phone = ({ bubbles, lang }: { bubbles: Bubble[]; lang: "ro" | "en" }) => (
-  <div className="w-full max-w-[19rem] rounded-[1.9rem] bg-[#1A1A1A] p-2 shadow-[0_12px_28px_rgba(26,26,26,0.16)] sm:min-w-0 sm:max-w-[16rem] sm:flex-1">
-    <div className="relative flex flex-col gap-1.5 overflow-hidden rounded-[1.45rem] bg-[#FFFDF8] px-2 pb-3 pt-8 text-[#1A1A1A]">
-      <span aria-hidden="true" className="absolute left-1/2 top-2 h-4 w-14 -translate-x-1/2 rounded-full bg-[#1A1A1A]" />
-      <div className="mb-0.5 flex items-center gap-1.5 border-b border-[#EFEAE0] pb-1.5">
+  <div className="flex min-h-[27rem] w-full max-w-[17rem] flex-col rounded-[2.2rem] bg-[#1A1A1A] p-[7px] shadow-[0_14px_32px_rgba(26,26,26,0.18)] sm:min-h-[32rem] sm:max-w-[15.5rem] sm:flex-1">
+    <div className="relative flex grow flex-col overflow-hidden rounded-[1.8rem] bg-[#FFFDF8] text-[#1A1A1A]">
+      {/* Status bar around the camera island. */}
+      <div aria-hidden="true" className="flex items-center justify-between px-5 pt-2 text-[9px] font-semibold">
+        <span>9:41</span>
+        <span className="h-[18px] w-16 rounded-full bg-[#1A1A1A]" />
+        <span className="flex items-center gap-1">
+          <span className="inline-flex items-end gap-[1.5px]">
+            <span className="h-[3px] w-[2px] rounded-sm bg-current" />
+            <span className="h-[5px] w-[2px] rounded-sm bg-current" />
+            <span className="h-[7px] w-[2px] rounded-sm bg-current" />
+          </span>
+          <span className="relative h-[7px] w-[14px] rounded-[2px] border border-current">
+            <span className="absolute inset-[1px] right-[3px] rounded-[1px] bg-current" />
+          </span>
+        </span>
+      </div>
+      <div className="mx-2 mt-1.5 flex items-center gap-1.5 border-b border-[#EFEAE0] pb-1.5">
         <BrandMark className="h-6 w-6 shrink-0" />
         <div className="flex min-w-0 flex-col leading-tight">
           <span className="font-display text-[10px] font-bold">Centrul de Arabă Libaneză</span>
           <span className="text-[9px] font-semibold text-[#204F3A]">Ibra · online</span>
         </div>
       </div>
-      {bubbles.map((b) => (
-        <div
-          key={b.text}
-          className={cn(
-            "flex max-w-[88%] flex-col gap-0.5",
-            b.side === "left" ? "items-start self-start" : "items-end self-end",
-          )}
-        >
-          <span
-            lang="apc-Latn"
+      <div className="flex grow flex-col gap-1.5 px-2 pt-2">
+        {bubbles.map((b) => (
+          <div
+            key={b.text}
             className={cn(
-              "px-2 py-1 text-[11px] font-semibold leading-snug",
-              TONE[b.tone],
-              b.side === "left" ? "rounded-[13px_13px_13px_4px]" : "rounded-[13px_13px_4px_13px]",
+              "flex max-w-[88%] flex-col gap-0.5",
+              b.side === "left" ? "items-start self-start" : "items-end self-end",
             )}
           >
-            {b.text}
-          </span>
-          {b.gloss && (
-            <span className="px-1 text-[8.5px] italic leading-snug text-[#8A857B]">{b.gloss[lang]}</span>
-          )}
-        </div>
-      ))}
+            <span
+              lang="apc-Latn"
+              className={cn(
+                "px-2 py-1 text-[11px] font-semibold leading-snug",
+                TONE[b.tone],
+                b.side === "left" ? "rounded-[13px_13px_13px_4px]" : "rounded-[13px_13px_4px_13px]",
+              )}
+            >
+              {b.text}
+            </span>
+            {b.gloss && (
+              <span className="px-1 text-[8.5px] italic leading-snug text-[#8A857B]">{b.gloss[lang]}</span>
+            )}
+          </div>
+        ))}
+      </div>
+      {/* Message bar and home indicator. */}
+      <div aria-hidden="true" className="mx-2 mb-1.5 mt-2 flex items-center gap-1.5">
+        <span className="flex-1 rounded-full border border-[#E5DFD3] bg-white px-2.5 py-1 text-[9px] text-[#A9A397]">
+          {lang === "en" ? "Message" : "Mesaj"}
+        </span>
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#204F3A] text-[9px] text-white">➤</span>
+      </div>
+      <span aria-hidden="true" className="mx-auto mb-1.5 h-1 w-16 rounded-full bg-[#1A1A1A]/80" />
     </div>
   </div>
 );
@@ -136,7 +166,7 @@ const HeroConversation = ({ className }: { className?: string }) => {
       </figcaption>
       {/* Phones stack on a narrow screen, so each is wide enough for the
           bubbles not to wrap word by word; side by side from sm up. */}
-      <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:justify-center">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch sm:justify-center">
         <Phone bubbles={CINEMA} lang={l} />
         <Phone bubbles={COFFEE} lang={l} />
       </div>
