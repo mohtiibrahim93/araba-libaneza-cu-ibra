@@ -43,6 +43,8 @@ export interface RegistrationCohort {
 
 export interface Registration {
   id: string;
+  /** Set by the admin list: a trial from someone who already used one under another email (same name or phone). */
+  trial_duplicate_hint?: string;
   created_at: string;
   form_type: string;
   name: string;

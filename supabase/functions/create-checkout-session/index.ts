@@ -173,15 +173,10 @@ serve(async (req) => {
       // through Stripe, save a card, and then have the booking refused, with
       // nothing to show for it. Asking first costs one query.
       if (bookingMeta.booking_event_type === "trial" && reg.email) {
-        const emailPattern = String(reg.email).trim().replace(/([%_\\])/g, "\\$1");
-        const { data: priorTrials } = await supabaseAdmin
-          .from("bookings")
-          .select("id")
-          .eq("event_type_slug", "trial")
-          .in("status", ["confirmed", "completed"])
-          .ilike("student_email", emailPattern)
-          .limit(1);
-        if ((priorTrials ?? []).length > 0) {
+        // trial_already_used holds the owner's rule (an excused or early
+        // cancellation does not use the trial; a lost one does).
+        const { data: usedBy } = await supabaseAdmin.rpc("trial_already_used", { p_email: String(reg.email) });
+        if (usedBy) {
           return new Response(
             JSON.stringify({
               error: "Proba gratuită a fost deja folosită pentru acest email.",

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, X, ExternalLink, CalendarX2, Phone, RefreshCw, CalendarClock, TriangleAlert, CalendarPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { TrialOutcomeControl, type TrialOutcome } from "@/components/admin/TrialOutcome";
 import { Label } from "@/components/ui/label";
 import { TimeField } from "@/components/admin/TimeField";
 import { BUCHAREST_TZ, bucharestCivilToUtc } from "@/lib/timezone";
@@ -26,6 +27,7 @@ interface Booking {
   created_at: string;
   google_event_id: string | null;
   google_sync_error: string | null;
+  trial_outcome?: TrialOutcome;
 }
 
 /**
@@ -506,7 +508,15 @@ const BookingsAdmin = ({ privateOnly = false, onChanged }: { privateOnly?: boole
               {visible.map((b) => (
                 <tr key={b.id} className="border-t border-border">
                   <td className="py-2 pr-2 whitespace-nowrap">{fmt(b.start_at)}</td>
-                  <td className="py-2 pr-2">{EVENT_LABEL[b.event_type_slug] ?? b.event_type_slug}</td>
+                  <td className="py-2 pr-2">
+                    {EVENT_LABEL[b.event_type_slug] ?? b.event_type_slug}
+                    {b.event_type_slug === "trial" && (
+                      <TrialOutcomeControl
+                        booking={b}
+                        onChanged={(outcome) => setRows((all) => all.map((row) => (row.id === b.id ? { ...row, trial_outcome: outcome } : row)))}
+                      />
+                    )}
+                  </td>
                   <td className="py-2 pr-2">
                     <div className="font-medium">{b.student_name}</div>
                     <div className="text-xs text-muted-foreground">{b.student_email}</div>
