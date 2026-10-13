@@ -164,6 +164,26 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const [busyRow, setBusyRow] = useState<string | null>(null);
+  const [rowError, setRowError] = useState<{ id: string; message: string } | null>(null);
+
+  // One click from the worklist: a lead nobody answered gets its status (and
+  // leaves the list, because only "new" leads are listed); someone who said
+  // yes and has not paid can be put aside for 7 days after the owner talked to
+  // them. Both are saved before the row disappears.
+  const act = async (id: string, list: "uncontacted" | "unpaid", body: Record<string, unknown>) => {
+    setBusyRow(id);
+    setRowError(null);
+    try {
+      const { data: res, error: err } = await invokeAdmin<{ error?: string; success?: boolean; data?: unknown }>({ ...body, id });
+      if (err || res?.error) throw new Error(res?.error || err?.message || "Nu s-a salvat.");
+      setData((d) => (d ? { ...d, [list]: d[list].filter((r) => r.id !== id) } : d));
+    } catch (e) {
+      setRowError({ id, message: e instanceof Error ? e.message : "Nu s-a salvat." });
+    } finally {
+      setBusyRow(null);
+    }
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -421,6 +441,37 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                             : ` · nu i-a răspuns nimeni ${waitLabel(r.waitingDays)}`}
                         </p>
                       </div>
+                      {!unpaid && (
+                        <div className="flex flex-wrap gap-1.5" role="group" aria-label={`Marchează ${r.name}`}>
+                          {([
+                            ["contacted", "Contactat"],
+                            ["no_response", "Fără răspuns"],
+                            ["not_suitable", "Nepotrivit"],
+                          ] as const).map(([status, label]) => (
+                            <button
+                              key={status}
+                              type="button"
+                              disabled={busyRow === r.id}
+                              onClick={() => void act(r.id, "uncontacted", { action: "update_status", lead_status: status })}
+                              className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      {unpaid && (
+                        <button
+                          type="button"
+                          disabled={busyRow === r.id}
+                          onClick={() => void act(r.id, "unpaid", { action: "snooze_followup", days: 7 })}
+                          title="Dispare din listă 7 zile; revine dacă tot nu a plătit"
+                          className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
+                        >
+                          Am vorbit cu el · 7 zile
+                        </button>
+                      )}
+                      {rowError?.id === r.id && <p role="alert" className="w-full text-xs text-destructive">{rowError.message}</p>}
                       {!unpaid && r.phone && (
                         <a
                           href={buildWhatsAppUrl(r.phone)}

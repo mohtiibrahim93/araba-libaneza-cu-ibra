@@ -171,6 +171,34 @@ export function partialRefundNote(r: { payment_status?: string | null; refunded_
   return `rambursat parțial: ${(amount / 100).toLocaleString("ro-RO")} lei`;
 }
 
+/**
+ * The three tabs of Înscrieri (owner's request, 13 October 2026). A student is
+ * someone who became a paying student: "Convertit" (set automatically on
+ * payment) or money that arrived. The course they took is already on the
+ * registration, so no extra status per course type is needed.
+ */
+export type LeadSegment = "leads" | "students" | "closed";
+export const leadSegmentLabels: Record<LeadSegment, string> = {
+  leads: "Lead-uri",
+  students: "Cursanți",
+  closed: "Închise",
+};
+export function leadSegment(r: { lead_status?: string | null; payment_status?: string | null }): LeadSegment {
+  if (r.lead_status === "converted" || r.payment_status === "paid" || r.payment_status === "past_due") return "students";
+  if (r.lead_status === "not_suitable" || r.lead_status === "spam") return "closed";
+  return "leads";
+}
+/** "Cursant · Grupă A1", "Cursant · Privat", "Cursant · Copii". */
+export function studentLabel(r: { form_type: string; level?: string | null; cohort?: { level: string | null } | null }): string {
+  if (r.form_type === "group") {
+    const level = r.cohort?.level ?? r.level;
+    return level ? `Cursant · Grupă ${level}` : "Cursant · Grupă";
+  }
+  if (r.form_type === "private") return "Cursant · Privat";
+  if (r.form_type === "kids") return "Cursant · Copii";
+  return "Cursant";
+}
+
 export const leadSourceLabels: Record<LeadSource, string> = {
   form: "Formular",
   whatsapp: "WhatsApp",
