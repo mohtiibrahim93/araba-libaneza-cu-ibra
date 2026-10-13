@@ -1528,6 +1528,55 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: failed.length === 0, renamed, failed });
     }
 
+    // One group lesson moved or removed from the admin (owner's request,
+    // 13 October 2026: the calendar works both ways). Google is changed first,
+    // with the group's guests notified as for any moved or cancelled lesson;
+    // the site follows only once Google accepted it, so the two never disagree.
+    if (action === "move_cohort_session" || action === "delete_cohort_session") {
+      const sessionId = typeof body.id === "string" ? body.id : "";
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!sessionId) return jsonResponse({ error: "Lipsește lecția." }, 400);
+      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      const { data: ses, error: sErr } = await supabase
+        .from("cohort_sessions").select("id, cohort_id, lesson_number, starts_at, google_event_id").eq("id", sessionId).maybeSingle();
+      if (sErr) throw sErr;
+      if (!ses) return jsonResponse({ error: "Lecția nu mai există." }, 404);
+      const url = `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(ses.google_event_id)}?sendUpdates=all`;
+      const gHeaders = { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey, "Content-Type": "application/json" };
+      if (action === "delete_cohort_session") {
+        const res = await fetch(url, { method: "DELETE", headers: gHeaders });
+        if (!res.ok && res.status !== 404 && res.status !== 410) {
+          console.error("[delete_cohort_session] google", res.status, await res.text());
+          return jsonResponse({ error: `Google Calendar a refuzat ștergerea (${res.status}). Nimic nu s-a schimbat.` });
+        }
+        const { error: dErr } = await supabase.from("cohort_sessions").delete().eq("id", ses.id);
+        if (dErr) throw dErr;
+        await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "delete_cohort_session", details: { cohort_id: ses.cohort_id, lesson: ses.lesson_number, at: ses.starts_at } });
+        return jsonResponse({ success: true });
+      }
+      const startsAt = typeof body.starts_at === "string" ? body.starts_at : "";
+      const endsAt = typeof body.ends_at === "string" ? body.ends_at : "";
+      const startMs = Date.parse(startsAt), endMs = Date.parse(endsAt);
+      if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs || endMs - startMs > 8 * 3_600_000) {
+        return jsonResponse({ error: "Ora nu este validă." }, 400);
+      }
+      const start = new Date(startMs).toISOString(), end = new Date(endMs).toISOString();
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: gHeaders,
+        body: JSON.stringify({ start: { dateTime: start, timeZone: "Europe/Bucharest" }, end: { dateTime: end, timeZone: "Europe/Bucharest" } }),
+      });
+      if (!res.ok) {
+        console.error("[move_cohort_session] google", res.status, await res.text());
+        return jsonResponse({ error: `Google Calendar a refuzat mutarea (${res.status}). Nimic nu s-a schimbat.` });
+      }
+      const { error: uErr } = await supabase.from("cohort_sessions").update({ starts_at: start, ends_at: end, synced_at: new Date().toISOString() }).eq("id", ses.id);
+      if (uErr) throw uErr;
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "move_cohort_session", details: { cohort_id: ses.cohort_id, lesson: ses.lesson_number, from: ses.starts_at, to: start } });
+      return jsonResponse({ success: true, starts_at: start, ends_at: end });
+    }
+
     if (action === "delete_cohort_calendar") {
       const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
       if (!cohortId) return jsonResponse({ error: "Lipsește grupa." });
@@ -2785,6 +2834,30 @@ Deno.serve(async (req) => {
         : (rows ?? []).filter((r) => !hasMoney(r)).map((r) => r.id);
 
       if (deletable.length > 0) {
+        // The lessons go with the registration (bookings cascade), so their
+        // Google events go first: otherwise a lesson deleted here would stay
+        // in the calendar. Quiet (sendUpdates=none): deleting is for test,
+        // spam or duplicate records; a real cancellation goes through
+        // "Anulează", which tells the student. If Google refuses, nothing is
+        // deleted, so the two never disagree.
+        const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+        const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+        const { data: linkedLessons, error: lErr } = await supabase
+          .from("bookings").select("id, google_event_id").in("registration_id", deletable).eq("status", "confirmed").not("google_event_id", "is", null);
+        if (lErr) throw lErr;
+        if ((linkedLessons ?? []).length && (!lovableKey || !gcalKey)) {
+          return jsonResponse({ error: "Google Calendar nu e conectat; lecțiile din calendar nu pot fi șterse. Nimic nu s-a șters." });
+        }
+        for (const lesson of linkedLessons ?? []) {
+          const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(lesson.google_event_id as string)}?sendUpdates=none`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey! },
+          });
+          if (!res.ok && res.status !== 404 && res.status !== 410) {
+            console.error("[delete] google", res.status, await res.text());
+            return jsonResponse({ error: `Google Calendar a refuzat ștergerea unei lecții (${res.status}). Nimic nu s-a șters.` });
+          }
+        }
         const { error } = await supabase.from("registrations").delete().in("id", deletable);
         if (error) throw error;
         await supabase.from("audit_logs").insert(

@@ -1,3 +1,4 @@
+import { lessonNumber } from "./cohort-sessions.ts";
 const GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 type Config = { lovableKey?: string | undefined; calendarKey?: string | undefined; from: string; to: string };
 type GoogleEvent = { id?: string; status?: string; etag?: string; summary?: string; description?: string; attendees?: Array<Record<string, unknown>>; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; extendedProperties?: { private?: Record<string, string>; shared?: Record<string, string> } };
@@ -6,10 +7,10 @@ export async function reconcileCalendar(db: any, config: Config, request: typeof
   const result = { updated: 0, pushed: 0, imported: 0, errors: [] as string[], unmatched: [] as Array<{ id: string; summary: string; start_at: string; end_at: string; guest_email: string | null }> };
   if (!config.lovableKey || !config.calendarKey) throw new Error("Google Calendar connection is unavailable");
   const headers = { Authorization: `Bearer ${config.lovableKey}`, "X-Connection-Api-Key": config.calendarKey, "Content-Type": "application/json" };
-  const all = async (table: string, fields: string) => {
+  const all = async (table: string, fields: string, orderBy = "id") => {
     const rows: any[] = [];
     for (let offset = 0; ; offset += 1000) {
-      const page = await db.from(table).select(fields).order("id").range(offset, offset + 999);
+      const page = await db.from(table).select(fields).order(orderBy).range(offset, offset + 999);
       if (page.error) throw page.error;
       rows.push(...(page.data ?? []));
       if ((page.data ?? []).length < 1000) return rows;
@@ -139,10 +140,28 @@ export async function reconcileCalendar(db: any, config: Config, request: typeof
       }
     } catch (error) { result.errors.push(`${session.id}: ${error instanceof Error ? error.message : "Group synchronization failed"}`); }
   }
+  // Running groups and the name their lessons carry in Google ("<name> - L<N>").
+  // A new lesson of a group, added or copied in Google, joins the group here;
+  // checked before the private-lesson rule, since a group title can also say
+  // "araba libaneza".
+  const activeGroups = new Set((await all("group_cohorts", "id,is_active,status"))
+    .filter((g) => g.is_active === true && !["completed", "cancelled"].includes(g.status)).map((g) => g.id));
+  const groupNames = (await all("cohort_calendar", "cohort_id,calendar_title", "cohort_id"))
+    .filter((c) => activeGroups.has(c.cohort_id) && typeof c.calendar_title === "string" && c.calendar_title.trim());
   const registrationFor = new Map<string, { id: string; name: string; phone: string | null; format: string | null }>();
   for (const event of events.values()) {
     const start = instant(event.start?.dateTime), end = instant(event.end?.dateTime);
     if (!event.id || linked.has(event.id) || event.status === "cancelled" || !start || !end || Date.parse(end) <= Date.parse(start)) continue;
+    const group = groupNames.map((c) => ({ c, n: lessonNumber(event.summary, c.calendar_title) })).find((x) => x.n !== null);
+    if (group) {
+      const write = await db.from("cohort_sessions").upsert(
+        { cohort_id: group.c.cohort_id, lesson_number: group.n, starts_at: start, ends_at: end, google_event_id: event.id, synced_at: new Date().toISOString() },
+        { onConflict: "google_event_id" },
+      );
+      if (write.error) result.errors.push(`${event.id}: Lecția de grupă nu a putut fi salvată`);
+      else result.imported++;
+      continue;
+    }
     const guest = lessonGuest(event);
     if (guest) {
       try {
